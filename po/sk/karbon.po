@@ -1,0 +1,1628 @@
+# translation of karbon.po to Slovak
+# Stanislav Višňovský <visnovsky@nenya.ms.mff.cuni.cz>, 2002.
+# Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>, 2002.
+# Stanislav Visnovsky <visnovsky@kde.org>, 2003.
+# Jozef Riha <jose1711@gmail.com>, 2006.
+# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2015, 2016, 2020.
+# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2020-12-17 19:19+0100\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.08.2\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Pravdivostná operácia"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Poradie"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Zarovnanie"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Súbor"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "&Upraviť"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "P&ohľad"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Objekt"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&Rozložiť"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "Cesta"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "&Efekty"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "Nastavenia"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr "Stránka"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Upraviť"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Objekt"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Zaro&vnať"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Efekty"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Zobrazenie"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "&Sploštiť cestu..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Sploštiť cestu"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Vlastnosti"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Sploštenie:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Sploštiť cestu"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Zjemniť cestu"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "Zjemniť cestu..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Zjemniť cestu"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Poddelenia:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Zaoblené rohy"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&Zaobliť rohy..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Oblé rohy"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Polomer:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Vír a štipka"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Vír/Zmenšenie"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Vírivé zmenšenie"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Info"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr "Výsledok efektu Whirlpinch možno zlepšiť úpravou cesty tvaru vopred."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Uhol:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Zmenšenie:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Presunúť vrstvu dopredu"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Presunúť vrstvu dozadu"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Konfigurovať"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Rozhranie"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Rôzne"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Mriežka"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokument"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Nastavenie dokumentu"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Autor"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "Vektorová grafická aplikácia na kreslenie."
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "(c) 2001-%1, Vývojári Karbon"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr "Anthony Fieroni"
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr "Správca"
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Opravy chýb a zlepšenia"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Opravy chýb"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Užitočné opravy a rady"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Stanislav Višňovský, Jozef Říha, Roman Paholík"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "visnovsky@kde.org, jose1711@gmail.com, wizzardsk@gmail.com"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Vložiť grafiku"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Vybrať grafiku na pridanie"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "Nedá sa načítať obrázok."
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Importovať grafiku"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "Nie je možné vytvoriť tvar obrázku."
+
+#: ui/KarbonView.cpp:612
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "Zrkadliť horizontálne"
+
+#: ui/KarbonView.cpp:614
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "Zrkadliť vertikálne"
+
+#: ui/KarbonView.cpp:616
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "Zrkadlenie horizontálne a vertikálne"
+
+#: ui/KarbonView.cpp:671
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Oddeliť cesty"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "Obrysový režim"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Importovať grafiku..."
+
+#: ui/KarbonView.cpp:864
+#, kde-format
+msgid "Edit Guides"
+msgstr "Upraviť vodidlá"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "Duplikovať"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Zarovnať na stred (horizontálne)"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Zarovnať na stred (horizontálne)"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "Rozdeliť ľavé okraje"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "Rozdeliť pravé okraje"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Zarovnať stred (vertikálne)"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Rozdeliť medzery (vertikálne)"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Rozdeliť spodné okraje"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "Rozdeliť vrchné okraje"
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Show Color Palette"
+msgstr "Zobraziť farebnú paletu"
+
+#: ui/KarbonView.cpp:909
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "Zobraziť alebo skryť farebnú paletu"
+
+#: ui/KarbonView.cpp:913
+#, kde-format
+msgid "&Clip Object"
+msgstr "Pripnúť objekt"
+
+#: ui/KarbonView.cpp:917
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "Odopnúť objekt"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Zrkadliť vertikálne"
+
+#: ui/KarbonView.cpp:925
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Zrkadliť horizontálne"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "&Uzavrieť cestu"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Zlúčiť cestu"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "Oddeliť cestu"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Opačná cesta"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Pretnúť cesty"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Odčítať cesty"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Zjednotiť cesty"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Vylúčiť cesty"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Pripnúť cestu k mriežke"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Priblížiť na výber"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Priblížiť na kresbu"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Priblížiť"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "Zobrazovať stavový riadok:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Počet nedávno použitých súborov:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Veľkosť písma palety:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr "Vybrať paletu"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Stlačte na použitie výplne na výber"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Žiadne"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Stlačte na použitie ťahu na výber"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "Vlastné"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Žiadne"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Ťah:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Výplň:"
+
+#~ msgid "D&elete"
+#~ msgstr "&Odstrániť"
+
+#~ msgid "Layer view"
+#~ msgstr "Zobrazenie vrstiev"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Pridať novú vrstvu"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Zmazať vybrané objekty"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Zdvihnúť vybrané objekty"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Znížiť vybrané objekty"
+
+#~ msgid "Minimal View"
+#~ msgstr "Minimálny pohľad"
+
+#~ msgid "Detailed View"
+#~ msgstr "Detailné zobrazenie"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Zobrazenie náhľadov"
+
+#~ msgid "View mode"
+#~ msgstr "Režim zobrazenia"
+
+#~ msgid "New Layer"
+#~ msgstr "Nová vrstva"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Zadajte meno novej vrstvy:"
+
+#~ msgid "New layer"
+#~ msgstr "Nová vrstva"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Vytvoriť vrstvu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Odstrániť vrstvu"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Nie je možné vymazať všetky vrstvy. Vyžaduje sa aspoň jedna vrstva."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Chyba pri mazaní vrstiev"
+
+#~ msgid "Layer"
+#~ msgstr "Vrstva"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Skupina"
+
+#~ msgid "Shape"
+#~ msgstr "Tvar"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Viditeľný"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Zamknuté"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Nepriehľadnosť"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Orezané"
+
+#~ msgid "no"
+#~ msgstr "nie"
+
+#~ msgid "yes"
+#~ msgstr "áno"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Reparentovať tvary"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Chybný OASIS dokument. Nenájdený tag office:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Chybný OASIS dokument. Nenájdený tag office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Chybný OASIS dokument. Nenájdený tag draw:page."
+
+#~ msgid "Master Page"
+#~ msgstr "Hlavná strana"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Zobraziť okraje stránky"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Zobraziť pravítka"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Zobrazí alebo skryje pravítka"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Prichytiť k mriežke"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Pripne k mriežke"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Nastaviť Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Ro&zloženie stránky..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "Farba plátna:"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Neudržiavané v čase vydania tejto verzie. Komunita Calligra víta "
+#~ "zainteresované osoby, ktoré prevezmú udržiavanie."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "&Poradie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Zarovnanie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Súbor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Upraviť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Zobraziť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "Objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "&Rozložiť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "Cesta"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "&Efekty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Nastavenia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Upraviť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "Zaro&vnať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Efekty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "Zobraziť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Sploštiť cestu..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Sploštiť cestu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Vlastnosti"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Sploštenie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "Zjemniť cestu..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Zjemniť cestu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "Poddelenia:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "&Zaobliť rohy..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Polomer:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Vír/Zmenšenie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Vírivé zmenšenie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "Info"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Výsledok efektu Whirlpinch možno zlepšiť úpravou cesty tvaru vopred."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Uhol:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Zmenšenie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Konfigurovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Rozhranie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Rôzne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Mriežka"
+
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Nastavenie dokumentu"
+
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Zobrazenie vrstiev"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Pridať novú vrstvu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Zmazať vybrané objekty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Zdvihnúť vybrané objekty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Znížiť vybrané objekty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Minimálny pohľad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Detailné zobrazenie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Zobrazenie náhľadov"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Režim zobrazenia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Nová vrstva"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Zadajte meno novej vrstvy:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Nová vrstva"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Nie je možné vymazať všetky vrstvy. Vyžaduje sa aspoň jedna vrstva."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "Chyba pri mazaní vrstiev"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Vrstva"
+
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Skupina"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Tvar"
+
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Viditeľný"
+
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Zamknuté"
+
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Nepriehľadnosť"
+
+#~ msgctxt "(qtundo-format) Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Orezané"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "nie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "áno"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Vektorová grafická aplikácia na kreslenie."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013, Vývojári Karbon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Neudržiavané v čase vydania tejto verzie. Komunita Calligra víta "
+#~ "zainteresované osoby, ktoré prevezmú udržiavanie."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Opravy chýb a zlepšenia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "Opravy chýb"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Užitočné opravy a rady"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Roman Paholík"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "wizzardsk@gmail.com"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Chybný OASIS dokument. Nenájdený tag office:body."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Chybný OASIS dokument. Nenájdený tag office:drawing."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Chybný OASIS dokument. Nenájdený tag draw:page."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Hlavná strana"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Vybrať grafiku na pridanie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load image."
+#~ msgstr "Nedá sa načítať obrázok."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "Importovať grafiku"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create image shape."
+#~ msgstr "Nie je možné vytvoriť tvar obrázku."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "Obrysový režim"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Zobraziť okraje stránky"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Importovať grafiku..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "Vymazať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Upraviť vodidlá"
+
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Duplikovať"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Zarovnať na stred (horizontálne)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Zarovnať na stred (horizontálne)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Rozdeliť ľavé okraje"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Rozdeliť pravé okraje"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Zarovnať stred (vertikálne)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Rozdeliť medzery (vertikálne)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Rozdeliť spodné okraje"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Rozdeliť vrchné okraje"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Zobraziť pravítko"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Zobrazí alebo skryje pravítko"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Color Palette"
+#~ msgstr "Zobraziť farebnú paletu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Zobraziť alebo skryť farebnú paletu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Pripnúť k mriežke"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Pripne k mriežke"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "Pripnúť objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "Odopnúť objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "&Uzavrieť cestu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Zlúčiť cestu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Oddeliť cestu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "Opačná cesta"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Pretnúť cesty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Odčítať cesty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Zjednotiť cesty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "Vylúčiť cesty"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Pripnúť cestu k mriežke"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Nastaviť Karbon..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "Ro&zloženie stránky..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Priblížiť výber"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Priblížiť na kresbu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Lupa"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Zobrazovať stavový riadok:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Počet nedávno použitých súborov:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Veľkosť písma palety:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Canvas color:"
+#~ msgstr "Farba plátna:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Vybrať paletu"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Stlačte na použitie výplne na výber"
+
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Žiadne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Stlačte na použitie ťahu na výber"
+
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Vlastné"
+
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Žiadne"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Ťah:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Výplň:"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Ste pozvaní k účasti v každej oblasti."
+
+#~ msgid "Expand all"
+#~ msgstr "Rozbaliť všetko"
+
+#~ msgid "Collapse all"
+#~ msgstr "Zbaliť všetko"
+
+#~ msgid "List View"
+#~ msgstr "Pohľad zoznamu"
+
+#~ msgid "Icon View"
+#~ msgstr "Zobrazenie s ikonami"
+
+#~ msgid "Stencil Box"
+#~ msgstr "Krabica šablón"
+
+#~ msgid "Stencils Online"
+#~ msgstr "Šablóny online"
+
+#~ msgid "Add/Remove Stencil"
+#~ msgstr "Pridať/odobrať šablónu"
+
+#~ msgid "More shapes"
+#~ msgstr "Viac tvarov"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Stencils successfully installed."
+#~ msgstr "Šablóny úspešne nainštalované."
+
+#~ msgid "Stencils successfully uninstalled."
+#~ msgstr "Šablóny úspešne odinštalované."
+
+#~ msgid "File to open"
+#~ msgstr "Otvoriť súbor"
+
+#~ msgid "Blend"
+#~ msgstr "Premiešavanie"
+
+#~ msgid "Blend mode"
+#~ msgstr "Režim miešania"
+
+#~ msgid "Normal"
+#~ msgstr "Normálne"
+
+#~ msgid "Multiply"
+#~ msgstr "Násobenie"
+
+#~ msgid "Screen"
+#~ msgstr "Obrazovka"
+
+#~ msgid "Darken"
+#~ msgstr "Zatemniť"
+
+#~ msgid "Lighten"
+#~ msgstr "Zosvetliť"
+
+#~ msgid "Gaussian blur"
+#~ msgstr "Gaussian blur"
+
+#~ msgid "Radius"
+#~ msgstr "Polomer"
+
+#~ msgid "Color Matrix"
+#~ msgstr "Matica farieb"
+
+#~ msgid "Apply color matrix"
+#~ msgstr "Použiť farebnú maticu"
+
+#~ msgid "Saturate colors"
+#~ msgstr "Nasýtiť farby"
+
+#~ msgid "Rotate hue"
+#~ msgstr "Otočiť odtieň"
+
+#~ msgid "Luminance to alpha"
+#~ msgstr "Svetlosť na priesvitnosť"
+
+#~ msgid "Saturate value"
+#~ msgstr "Nasýtiť hodnotu"
+
+#~ msgid "Angle"
+#~ msgstr "Uhol"
+
+#~ msgid "Color matrix"
+#~ msgstr "Matica farieb"
+
+#~ msgid "Component transfer"
+#~ msgstr "Prenos zložky"
+
+#~ msgid "Function"
+#~ msgstr "Funkcia"
+
+#~ msgid "Identity"
+#~ msgstr "Identita"
+
+#~ msgid "Table"
+#~ msgstr "Tabuľka"
+
+#~ msgid "Discrete"
+#~ msgstr "Diskrétny"
+
+#~ msgid "Linear"
+#~ msgstr "Lineárny"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "Values"
+#~ msgstr "Hodnoty"
+
+#~ msgid "Slope"
+#~ msgstr "Sklon"
+
+#~ msgid "Intercept"
+#~ msgstr "Zachytiť"
+
+#~ msgid "Amplitude"
+#~ msgstr "Amplitúda"
+
+#~ msgid "Exponent"
+#~ msgstr "Exponent"
+
+#~ msgid "Offset"
+#~ msgstr "Posun"
+
+#~ msgid "Composite"
+#~ msgstr "Kombinovať"
+
+#~ msgid "Operation"
+#~ msgstr "Operácia"
+
+#~ msgid "Convolve Matrix"
+#~ msgstr "Konvolučná matica"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplikovať"
+
+#~ msgid "Wrap"
+#~ msgstr "Zalomiť"
+
+#~ msgid "Edge mode:"
+#~ msgstr "Režim hrany:"
+
+#~ msgid "Kernel size:"
+#~ msgstr "Veľkosť jadra:"
+
+#~ msgid "Target point:"
+#~ msgstr "Cieľový bod:"
+
+#~ msgid "Divisor:"
+#~ msgstr "Deliteľ:"
+
+#~ msgid "Bias:"
+#~ msgstr "Skreslenie:"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Zachovávať alfa"
+
+#~ msgid "Edit kernel"
+#~ msgstr "Upraviť jadro"
+
+#~ msgid "Flood fill"
+#~ msgstr "Vyplnenie"
+
+#~ msgid "Flood color"
+#~ msgstr "Farba výplne"
+
+#~ msgid "Image"
+#~ msgstr "Obrázok"
+
+#~ msgid "Select image..."
+#~ msgstr "Vybrať obrázok..."
+
+#~ msgid "Select image"
+#~ msgstr "Vybrať obrázok"
+
+#~ msgid "Merge"
+#~ msgstr "Spojiť"
+
+#~ msgid "Morphology"
+#~ msgstr "Morfológia"
+
+#~ msgid "Erode"
+#~ msgstr "Erodovať"
+
+#~ msgid "Dilate"
+#~ msgstr "Dilatovať"
+
+#~ msgid "Operator:"
+#~ msgstr "Operátor:"
+
+#~ msgid "Radius x:"
+#~ msgstr "Polomer x:"
+
+#~ msgid "Radius y:"
+#~ msgstr "Polomer y:"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Target:"
+#~ msgstr "Cieľ:"
+
+#~ msgid "Line"
+#~ msgstr "Čiara"
+
+#~ msgid "Fill"
+#~ msgstr "Výplň"
+
+#~ msgid "Type:"
+#~ msgstr "Typ:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineárny"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radiálny"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Kužeľový"
+
+#~ msgid "Repeat:"
+#~ msgstr "Opakovanie:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Žiadne"
+
+#~ msgid "Reflect"
+#~ msgstr "Odraz"
+
+#~ msgid "Repeat"
+#~ msgstr "Opakovanie"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Celková priesvitnosť:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Farba zastavenia:"
+
+#~ msgid "Stop color."
+#~ msgstr "Farba zastavenia."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Pridať preddefinované prechody"
+
+#~ msgid "Original"
+#~ msgstr "Originál"
+
+#~ msgid "Tiled"
+#~ msgstr "Vydláždení"
+
+#~ msgid "Stretched"
+#~ msgstr "Natiahnuté"
+
+#~ msgid "Top Left"
+#~ msgstr "Vľavo hore"
+
+#~ msgid "Top"
+#~ msgstr "Hore"
+
+#~ msgid "Top Right"
+#~ msgstr "Vpravo hore"
+
+#~ msgid "Left"
+#~ msgstr "Vľavo"
+
+#~ msgid "Center"
+#~ msgstr "Vycentrovať"
+
+#~ msgid "Right"
+#~ msgstr "Vpravo"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Vľavo dole"
+
+#~ msgid "Bottom"
+#~ msgstr "Dole"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Vpravo dole"

@@ -1,0 +1,6365 @@
+# translation of kpresenter.po to Uzbek
+# translation of kpresenter.po to
+# Copyright (C) 2004, 2006, 2007 Free Software Foundation, Inc.
+#
+#
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2004, 2006, 2007.
+# Nurali Abdurahmonov <mavnur@gmail.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-02-11 00:26+0100\n"
+"Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
+"Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&Oxiri"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "&Bet"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "Faylni qoʻyish"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "&Format"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "&Slide"
+msgstr "&Slaydlar"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "&Namoyish"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Yoʻl moslamalari"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+#| msgid "Custom slide show"
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Boshqa namoyish"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "HTML namoyishni yaratish"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Slaydni olib tashlash"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Slaydni olib tashlash"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Slaydni olib tashlash"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+#| msgid "Presentation duration: "
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Namoyish davomiyligi: "
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+#| msgid "Custom slide show"
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Boshqa namoyish"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgid "Change Image Effect"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Rasm effektini oʻzgartirish"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgid "Image &effect:"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Rasm &effekti:"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Slaydni olib tashlash"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Slayd nomi"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Boshqa namoyish"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Slayd nomi"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Namoyish &moslamalari..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "Namoyish"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(C) 1998-2006, KPresenter jamoasi"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "joriy taʼminlovchi"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "Birinchi muallif"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr ""
+
+#: part/KPrAboutData.h:36
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Werner Trobin"
+msgstr "Markazda"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr ""
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr ""
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr ""
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+#| msgid "KPresenter Options"
+msgid "Peter Simonsson"
+msgstr "KPresenter moslamasi"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+#| msgid "&Closed Line"
+msgid "Carlos Licea "
+msgstr "&Yopiq chiziq"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Mashrab Quvatov,Nurali Abdurahmonov"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kmashrab@uni-bremen.de,mavnur@gmail.com"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Slayd %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Namoyish tugadi. Chiqish uchun sichqoncha bilan istagan joyga bosing."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Layout"
+msgstr "&Master slayd"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Rasmni qoʻyish"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "Rang"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "Shriftni kattalashtirish"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Black"
+msgstr "R&anglar:"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "Eni:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Yashil"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Qizil"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Koʻk"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+#| msgid "Slow"
+msgid "Yellow"
+msgstr "Sekin"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "&Next Slide"
+msgid "Next Slide"
+msgstr "&Keyingi slayd"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Current Slide %1 of %2"
+msgstr "HTML namoyish yaratish"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "End of Slide Show"
+msgstr "Namoyish"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start after previous animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start with previous animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Shakl"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+#| msgid "Move Slide"
+msgid "&Move Here"
+msgstr "Slaydni koʻchirish"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+#| msgid "Copy Slide"
+msgid "&Copy Here"
+msgstr "Slayddan nusxa olish"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr ""
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Oddiy"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Show Master Slides"
+msgstr "Slaydni qoʻyish"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+#| msgid "Goto Slide..."
+msgid "Import Slideshow..."
+msgstr "Slaydga oʻtish..."
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Slayd qoʻyish"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "Slayddan nusxa olish"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Copy the current slide"
+msgstr "Joriy slayddan oldin"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Slide"
+msgstr "Slaydni olib tashlash"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete the current slide"
+msgstr "Joriy slayddan oldin"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+#| msgid "Insert &Slide..."
+msgid "Master Slide..."
+msgstr "&Slayd qoʻyish..."
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Previous Slide"
+msgstr "&Oldingi slayd"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+#| msgid "Previous slide"
+msgid "Go to previous slide"
+msgstr "Oldingi slayd"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to next slide"
+msgstr "Slaydga oʻtish:"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "First Slide"
+msgstr "Slaydni qoʻyish"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to first slide"
+msgstr "Slaydga oʻtish:"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Last Slide"
+msgstr "Slaydni qoʻyish"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to last slide"
+msgstr "Slaydga oʻtish:"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Stage..."
+msgstr "Namoyish &moslamalari..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "Rasmni qoʻyish"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Create Appear Animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+#| msgid "Custom Slide Show..."
+msgid "Edit Custom Slide Shows..."
+msgstr "Boshqa namoyish..."
+
+#: part/KPrView.cpp:268
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Start Presentation"
+msgstr "Namoyish"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "From Current Slide"
+msgstr "Joriy slayddan keyin"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+#| msgid "Start From &First Slide"
+msgid "From First Slide"
+msgstr "&Birinchi slayddan boshlash"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "Namoyish"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show Status Bar"
+msgstr "Holat panelini koʻrsatish"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Hide Status Bar"
+msgstr "Holat panelini koʻrsatish"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Shows or hides the status bar"
+msgstr "Holat panelini koʻrsatish"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Slide Show..."
+msgstr "Namoyish &moslamalari..."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter..."
+msgid "Configure Presenter View..."
+msgstr "KPresenter moslamasi..."
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+#| msgid "Overwrite Presentation"
+msgid "Draw on the presentation..."
+msgstr "Namoyish faylini almashtirish"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+#| msgid "Overwrite Presentation"
+msgid "Highlight the presentation..."
+msgstr "Namoyish faylini almashtirish"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Overwrite Presentation"
+msgid "Blackscreen on the presentation..."
+msgstr "Namoyish faylini almashtirish"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+#| msgid "Note"
+msgid "Notes"
+msgstr "Izoh"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slides Sorter"
+msgstr "Namoyish"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show: "
+msgstr "Namoyish"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new custom slide show"
+msgstr "Namoyish"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current custom slide show"
+msgstr "Joriy slayddan oldin"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+#| msgid "Custom slide show"
+msgid "Add slides to current custom slide show"
+msgstr "Boshqa namoyish"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+#| msgid "Custom slide show"
+msgid "Remove slides from current custom slide show"
+msgstr "Boshqa namoyish"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Duplicate Slide"
+msgstr "Slaydni olib tashlash"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Start Slideshow"
+msgstr "HTML namoyish yaratish"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new slide"
+msgstr "Namoyish"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+#| msgid "Selected slides:"
+msgid "Delete selected slides"
+msgstr "Tanlangan slaydlar:"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "Bogʻni olib tashlash"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+#| msgid "&Custom"
+msgid "Cut"
+msgstr "&Boshqa"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Copy"
+msgstr "&Nusxa olish"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+#| msgid "Path"
+msgid "Paste"
+msgstr "Yoʻl"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show %1"
+msgstr "Namoyish"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+#| msgid "All Files"
+msgid "All slides"
+msgstr "Hamma fayllar"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+msgid "Error"
+msgstr "Koʻrsatkich uslubi"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "&Master slayd"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+msgid "Automatic animation preview"
+msgstr "Avtomatik boʻgʻin koʻchirish"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Namoyish"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "Slayd nomi"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Click Actions"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Animations"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Presentation duration: "
+msgid "Manage animation delay and duration: "
+msgstr "Namoyish davomiyligi: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "&Diagramma"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "after previous animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "with previous animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Duration: "
+msgstr "Yoʻnalish"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Preview Shape Animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Effektsiz"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid " sec"
+msgstr " soniya"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "Slayd nomi"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "Uslublarni qoʻllash"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+#| msgid "Apply Style to Frames"
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Uslubni freymlarga qoʻllash"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+#| msgid "Custom slide:"
+msgid "Custom"
+msgstr "Boshqa slayd:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+#| msgid "Elevation:"
+msgid "Ole Action"
+msgstr "Choʻqqi:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Edit animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Add new animation"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Remove animation"
+msgstr "Bogʻni olib tashlash"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation up"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation down"
+msgstr "HTML namoyishni yaratish"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new animation"
+msgstr "Namoyish"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current animation"
+msgstr "Joriy slayddan oldin"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Crop"
+msgstr "&Nusxa olish"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgid "W&idth:"
+msgstr "Eni:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+#| msgid "Set the width of the line."
+msgid "Will keep the width of the crop constant"
+msgstr "Chiziq kengligini koʻrsatish."
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "&Uzunasi:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+#| msgid "Set the width of the line."
+msgid "Will keep the height of the crop constant"
+msgstr "Chiziq kengligini koʻrsatish."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+#| msgid "&Location:"
+msgid "R&atio:"
+msgstr "&Manzili:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+#| msgid "Set the width of the line."
+msgid "Will keep the ratio constant"
+msgstr "Chiziq kengligini koʻrsatish."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Image"
+msgstr "&Bet"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+#| msgid "&Top:"
+msgid "&Crop"
+msgstr "Yuq&ori:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Shakl"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+msgid "Presentation monitor:"
+msgstr "Namoyish"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Enable presenter view"
+msgstr "KPresenter moslamasi"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Configure Presenter View"
+msgstr "KPresenter moslamasi"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "Namoyish moslamalari"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slides"
+msgstr "&Slaydlar"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "Namoyish"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+#| msgid "Custom Slide Show..."
+msgid "Edit Custom Slide Shows ..."
+msgstr "Boshqa namoyish..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+#| msgid "Select &All"
+msgid "Select all"
+msgstr "Hamma&sini tanlash"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+#| msgid "Selected pages:"
+msgid "Select template (.css) :"
+msgstr "Tanlangan betlar:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+#| msgid "&Deselect All"
+msgid "Deselect all"
+msgstr "Hammasini tanlashni &bekor qilish"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+msgid "Title"
+msgstr "Sarlavha rangi:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+#| msgid "Automatic preview"
+msgid "Output preview"
+msgstr "Avtomatik koʻrib chiqish"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Yangi..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "Muallif:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Favorite"
+msgstr "Slaydni olib tashlash"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Template"
+msgstr "Slaydni olib tashlash"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Add Template"
+msgstr "Slaydni olib tashlash"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Do you want to remove the current slide?"
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Joriy slaydni olib tashlashni istaysizmi?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "Moslamalarni saqlash..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Rotation"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Burishni oʻzgartirish"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid "No sound"
+msgstr " soniya"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Import..."
+msgstr "Uslublarni import qilish..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Left"
+msgstr "Chap tomondan chiqish"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "From Top"
+msgstr "Yuqoridan chiqish"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Clock"
+msgstr "R&anglar:"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Clockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Clockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Clockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Clockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Counterclockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Counterclockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Counterclockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Counterclockwise"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Fan"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Fan Out Vertical"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Fan In Vertical"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Fan In Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Sweep"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Parallel Vertical"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Opposite Vertical"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Opposite Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Fan"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Center Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Top"
+msgstr "Markazda"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Left"
+msgstr "Markazda"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Center Bottom"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Fan Out Top"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Fan Out Right"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan Out Bottom"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Fan Out Left"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Fan In Top"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Fan In Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan In Bottom"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Fan In Left"
+msgstr "Chap tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Pin Wheel"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Saloon Door"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "To Top"
+msgstr "Yuqoridan chiqish"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "To Left"
+msgstr "Chap tomonga yoʻqolish"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "&Past:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "To Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Single Sweep"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top"
+msgstr "Chap tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Clockwise Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Clockwise Bottom"
+msgstr "Obʼektlarni pastga tekislash"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Clockwise Left"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left"
+msgstr "Chap tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Left"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Windshield"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Right"
+msgstr "&Oʻng:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Background color:"
+msgid "Barn Door"
+msgstr "Orqa fon rangi:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left Reverse"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Barn Zig Zag"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Top Left"
+msgstr "Chap tomondan chiqish"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Top Right"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Left"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Right"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Diagonal 1"
+msgid "Diagonal"
+msgstr "Diagonal 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In"
+msgstr "&Burchaklar:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In Reverse"
+msgstr "&Burchaklar:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out"
+msgstr "&Burchaklar:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out Reverse"
+msgstr "&Burchaklar:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Diagonal 1"
+msgid "Misc Diagonal"
+msgstr "Diagonal 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Background color:"
+msgid "Double Barn Door"
+msgstr "Orqa fon rangi:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Diamond"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Zig Zag"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Soʻnish"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Set Text Color"
+msgid "Fade over Color"
+msgstr "Matn rangini koʻrsatish"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "ArrowHead"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+#| msgid "Done"
+msgid "Down"
+msgstr "Tayyor"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+#| msgid "&Length:"
+msgid "Left"
+msgstr "&Uzunligi:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Ellips"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Aylana"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "Namoyish"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "Toʻgʻri burchak"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "Toʻgʻri burchak"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Xar hil"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Heart"
+msgstr "Soʻnish"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "Boʻyiga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "Namoyish"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Sound effect"
+msgid "RoundRect"
+msgstr "Tovush effekti"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "&Diagramma"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Triangle"
+msgstr "Oʻchirilgan"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Box Snakes"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Two Box Top In"
+msgstr "Kattalashtirish"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "&Past:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Two Box Left In"
+msgstr "Chap tomonga yoʻqolish"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Two Box Right In"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Four Box Vertical In"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Two Box Top Out"
+msgstr "Kichiklashtirish"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "&Past:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Left Out"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Right Out"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Snakes"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "Boʻyiga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "Boʻyiga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "Boʻyiga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "Boʻyiga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Vertical Top Left Opposite In"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Vertical Top Left Opposite Out"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Boʻyiga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "Eniga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "Eniga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "Eniga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "Eniga gradient"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Left Opposite In"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Right Opposite In"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Top Left Opposite In"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Toʻrning eni:"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "Shakl"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Spread"
+msgid "Spiral"
+msgstr "Sochilish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left In"
+msgstr "Chap tomondan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left Out"
+msgstr "Chap tomondan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right In"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right Out"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left In"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left Out"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right In"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right Out"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left In"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left Out"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right In"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right Out"
+msgstr "Oʻng tomondan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left In"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right In"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Waterfall"
+msgstr "Rasm &effekti:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Top Left Vertical"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Top Left Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Top Right Vertical"
+msgstr "Umumiy"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Top Right Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Bottom Left Vertical"
+msgstr "Obʼektni yopish"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Bottom Right Vertical"
+msgstr "Pastdan chiqish"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Eniga chiziqlar"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slide"
+msgstr "&Slaydlar"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Space Rotation"
+msgstr "Burish"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Swap effect"
+msgstr "Rasm &effekti:"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+msgid "Header"
+msgstr "Soʻnish"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Footer"
+msgstr "Izoh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Oxiri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Bet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "Faylni qoʻyish"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "&Format"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Slaydlar"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "&Namoyish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Yoʻl moslamalari"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "&Nusxa olish"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Eni:"
+
+#, fuzzy
+#~| msgid "Set the width of the line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Chiziq kengligini koʻrsatish."
+
+#, fuzzy
+#~| msgid "&Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "&Uzunasi:"
+
+#, fuzzy
+#~| msgid "&Location:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "&Manzili:"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "&Bet"
+
+#, fuzzy
+#~| msgid "&Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "Yuq&ori:"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "&Slaydlar"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Custom Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Boshqa namoyish..."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Hamma&sini tanlash"
+
+#, fuzzy
+#~| msgid "Selected pages:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Tanlangan betlar:"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Hammasini tanlashni &bekor qilish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Sarlavha rangi:"
+
+#, fuzzy
+#~| msgid "Automatic preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Avtomatik koʻrib chiqish"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Yangi..."
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Muallif:"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Slaydni olib tashlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Namoyish &moslamalari..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(C) 1998-2006, KPresenter jamoasi"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "joriy taʼminlovchi"
+
+#, fuzzy
+#~| msgid "original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "Birinchi muallif"
+
+#, fuzzy
+#~| msgid "KPresenter Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "KPresenter moslamasi"
+
+#, fuzzy
+#~| msgid "&Closed Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "&Yopiq chiziq"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Mashrab Quvatov,Nurali Abdurahmonov"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kmashrab@uni-bremen.de,mavnur@gmail.com"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Slayd %1"
+
+#, fuzzy
+#~| msgid "End of presentation. Click to exit."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr ""
+#~ "Namoyish tugadi. Chiqish uchun sichqoncha bilan istagan joyga bosing."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "&Master slayd"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Rang"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Shriftni kattalashtirish"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "R&anglar:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Eni:"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Yashil"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Qizil"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Koʻk"
+
+#, fuzzy
+#~| msgid "Slow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Sekin"
+
+#, fuzzy
+#~| msgid "&Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "&Keyingi slayd"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "HTML namoyish yaratish"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Shakl"
+
+#, fuzzy
+#~| msgid "Move Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "Slaydni koʻchirish"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "Slayddan nusxa olish"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Oddiy"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Slaydni qoʻyish"
+
+#, fuzzy
+#~| msgid "Goto Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Slaydga oʻtish..."
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Slayd qoʻyish"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Slayddan nusxa olish"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Joriy slayddan oldin"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Slaydni olib tashlash"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Joriy slayddan oldin"
+
+#, fuzzy
+#~| msgid "Insert &Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "&Slayd qoʻyish..."
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "&Oldingi slayd"
+
+#, fuzzy
+#~| msgid "Previous slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Oldingi slayd"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Slaydga oʻtish:"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Slaydni qoʻyish"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Slaydga oʻtish:"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Slaydni qoʻyish"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Slaydga oʻtish:"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Namoyish &moslamalari..."
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Custom Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Boshqa namoyish..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Joriy slayddan keyin"
+
+#, fuzzy
+#~| msgid "Start From &First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "&Birinchi slayddan boshlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Namoyish &moslamalari..."
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "KPresenter moslamasi..."
+
+#, fuzzy
+#~| msgid "Overwrite Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Namoyish faylini almashtirish"
+
+#, fuzzy
+#~| msgid "Note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Izoh"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Joriy slayddan oldin"
+
+#, fuzzy
+#~| msgid "Custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Boshqa namoyish"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Slaydni olib tashlash"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "HTML namoyish yaratish"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Selected slides:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Tanlangan slaydlar:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Bogʻni olib tashlash"
+
+#, fuzzy
+#~| msgid "&Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "&Boshqa"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "&Nusxa olish"
+
+#, fuzzy
+#~| msgid "Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Yoʻl"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "All Files"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Hamma fayllar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Koʻrsatkich uslubi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Avtomatik boʻgʻin koʻchirish"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Slayd nomi"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Presentation duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Namoyish davomiyligi: "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "&Diagramma"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Yoʻnalish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Effektsiz"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " soniya"
+
+#, fuzzy
+#~| msgid "Apply Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Uslublarni qoʻllash"
+
+#, fuzzy
+#~| msgid "Custom slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Boshqa slayd:"
+
+#, fuzzy
+#~| msgid "Elevation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Choʻqqi:"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Remove Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Bogʻni olib tashlash"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "HTML namoyishni yaratish"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Joriy slayddan oldin"
+
+#, fuzzy
+#~| msgid "Configure KPresenter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "KPresenter moslamasi"
+
+#, fuzzy
+#~| msgid "Configure Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Namoyish moslamalari"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Slaydni olib tashlash"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Joriy slaydni olib tashlashni istaysizmi?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Moslamalarni saqlash..."
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr " soniya"
+
+#, fuzzy
+#~| msgid "Import Styles..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Uslublarni import qilish..."
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Yuqoridan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "R&anglar:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Markazda"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Markazda"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Chap tomonga yoʻqolish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "&Past:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Obʼektlarni pastga tekislash"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "&Oʻng:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Orqa fon rangi:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Diagonal 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Diagonal 1"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "&Burchaklar:"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "&Burchaklar:"
+
+#, fuzzy
+#~| msgid "Diagonal 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Diagonal 1"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Soʻnish"
+
+#, fuzzy
+#~| msgid "Set Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Matn rangini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Done"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Tayyor"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "&Length:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "&Uzunligi:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Ellips"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Aylana"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Toʻgʻri burchak"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Toʻgʻri burchak"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Xar hil"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Soʻnish"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Sound effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Tovush effekti"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "&Diagramma"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Oʻchirilgan"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Kattalashtirish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "&Past:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Chap tomonga yoʻqolish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Kichiklashtirish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "&Past:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Boʻyiga gradient"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Boʻyiga gradient"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Boʻyiga gradient"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Eniga gradient"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Eniga gradient"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Eniga gradient"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Eniga gradient"
+
+#, fuzzy
+#~| msgid "Horizontal grid size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Toʻrning eni:"
+
+#, fuzzy
+#~| msgid "Horizontal grid size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Toʻrning eni:"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Shakl"
+
+#, fuzzy
+#~| msgid "Spread"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Sochilish"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Umumiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Obʼektni yopish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Pastdan chiqish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "&Slaydlar"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Burish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Soʻnish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Izoh"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgid "Maintainer"
+#~ msgstr "joriy taʼminlovchi"
+
+#, fuzzy
+#~| msgid "KOffice Presentation Tool"
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "KOffice namoyish vositasi"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "&Bet"
+
+#~ msgid "File to open"
+#~ msgstr "Ochish uchun fayl"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&Fayl:"
+
+#~ msgid "Line"
+#~ msgstr "Chiziq"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "Obʼektlar tar&tiblash"
+
+#~ msgid "&Align Objects"
+#~ msgstr "Obʼektlarni tek&islash"
+
+#~ msgid "Te&xt"
+#~ msgstr "&Matn"
+
+#~ msgid "&Align"
+#~ msgstr "&Tekislash"
+
+#~ msgid "T&ype"
+#~ msgstr "Tur&i"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Imloni tekshirish"
+
+#~ msgid "Autocorrection"
+#~ msgstr "Avto-toʻgʻrilash"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "&Fayl:"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "&Oxiri"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Faylni qoʻyish"
+
+#~ msgid "Tools"
+#~ msgstr "Vositalar"
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Text"
+#~ msgstr "Matn"
+
+#~ msgid "Slide Show"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~ msgid "Navigation"
+#~ msgstr "Choʻqqi:"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Boʻyiga tekislash"
+
+#, fuzzy
+#~ msgid "Flip Objects"
+#~ msgstr "Obʼektlarni tek&islash"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Imloni tekshirish natijasi"
+
+#, fuzzy
+#~ msgid "Slide Layouts"
+#~ msgstr "&Master slayd"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgid "Configure KPresenter..."
+#~ msgstr "KPresenter moslamasi..."
+
+#~ msgid "Slide Title"
+#~ msgstr "Slayd nomi"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Hammasini tanlashni &bekor qilish"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Tanlash"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "New Slide Show %1"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "Joriy slaydni olib tashlashni istaysizmi?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgid "Confirm action"
+#~ msgstr "Moslamalarni saqlash..."
+
+#, fuzzy
+#~| msgid "Custom Slide Show"
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Boshqa namoyish"
+
+#, fuzzy
+#~| msgid "Custom Slide Show"
+#~ msgid "Customs Slideshows"
+#~ msgstr "Boshqa namoyish"
+
+#, fuzzy
+#~| msgid "Duplicate Slide"
+#~ msgid "Available Slides"
+#~ msgstr "Slaydni ayni nusxasini olish"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgid "Add Slide"
+#~ msgstr "Slayd"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgid "Close"
+#~ msgstr "R&anglar:"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#~ msgid "&Page"
+#~ msgstr "&Bet"
+
+#, fuzzy
+#~| msgid "Change Image Effect"
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Rasm effektini oʻzgartirish"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Star Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Box Wipe Effect"
+#~ msgstr "Rasm &effekti:"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Navigate to:"
+#~ msgstr "Choʻqqi:"
+
+#, fuzzy
+#~ msgid "Cover down effect"
+#~ msgstr "Chap tomondan chiqish"
+
+#~ msgid "Insert &new slide:"
+#~ msgstr "&Yangi slayd qoʻyish:"
+
+#~ msgid "Use &default template"
+#~ msgstr "&Andoza namuna qoʻllash"
+
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "&Joriy slaydni andoza sifatida qoʻllash"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "&Boshqa namuna tanlash"
+
+#~ msgid "A&ngle:"
+#~ msgstr "&Burchak:"
+
+#~ msgid " °"
+#~ msgstr " °"
+
+#, fuzzy
+#~ msgid "Pie"
+#~ msgstr "Qalam"
+
+#~ msgid "&Type:"
+#~ msgstr "&Turi:"
+
+#~ msgid "&Length:"
+#~ msgstr "&Uzunligi:"
+
+#~ msgid "Set here the start position."
+#~ msgstr "Bu yerda boshlangʻich joyini koʻrsatish kerak."
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "Chiziq kengligini koʻrsatish."
+
+#~ msgid "Start position:"
+#~ msgstr "Boshlangʻich joyi:"
+
+#~ msgid "Preview"
+#~ msgstr "Koʻrib chiqish"
+
+#, fuzzy
+#~ msgid "Channel Intensity"
+#~ msgstr "Kuchi"
+
+#~ msgid "Intensity"
+#~ msgstr "Kuchi"
+
+#~ msgid "Contrast"
+#~ msgstr "Kontrast"
+
+#, fuzzy
+#~ msgid "Normalize"
+#~ msgstr "Moʻʼtadillashtirish"
+
+#~ msgid "Equalize"
+#~ msgstr "Tenglashtirish"
+
+#, fuzzy
+#~ msgid "Solarize"
+#~ msgstr "Slayd"
+
+#~ msgid "Emboss"
+#~ msgstr "Qavariq"
+
+#, fuzzy
+#~ msgid "Despeckle"
+#~ msgstr "Dogʻni olib tashlash"
+
+#~ msgid "Charcoal"
+#~ msgstr "Qora qalam"
+
+#~ msgid "Noise"
+#~ msgstr "Shovqin"
+
+#, fuzzy
+#~ msgid "Blur"
+#~ msgstr "Koʻk"
+
+#~ msgid "Edge"
+#~ msgstr "Qirra"
+
+#~ msgid "Implode"
+#~ msgstr "Portlash"
+
+#~ msgid "Sharpen"
+#~ msgstr "Oʻtkirlash"
+
+#~ msgid "Shade"
+#~ msgstr "Soyalash"
+
+#~ msgid "Wave"
+#~ msgstr "Toʻlqin"
+
+#~ msgid "Value:"
+#~ msgstr "Qiymati:"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#~ msgid "Color component:"
+#~ msgstr "Rang komponenti:"
+
+#~ msgid "Gray"
+#~ msgstr "Kul"
+
+#~ msgid "All"
+#~ msgstr "Hammasi"
+
+#~ msgid "Color:"
+#~ msgstr "Rang:"
+
+#~ msgid "Color 1:"
+#~ msgstr "Rang 1:"
+
+#~ msgid "Color 2:"
+#~ msgstr "Rang 2:"
+
+#~ msgid "Intensity:"
+#~ msgstr "Kuchi:"
+
+#~ msgid "This effect has no options."
+#~ msgstr "Ushbu effektning moslamalari mavjud emas."
+
+#~ msgid "Factor:"
+#~ msgstr "Faktor:"
+
+#~ msgid "Type:"
+#~ msgstr "Turi:"
+
+#~ msgid "Uniform"
+#~ msgstr "Bir xil"
+
+#~ msgid "Impulse"
+#~ msgstr "Impuls"
+
+#~ msgid "LaPlace"
+#~ msgstr "Laplas"
+
+#, fuzzy
+#~ msgid "Poisson"
+#~ msgstr "Joylashishi"
+
+#~ msgid "Radius:"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~ msgid "Color Shading"
+#~ msgstr "Rang xiralashishi"
+
+#~ msgid "Azimuth:"
+#~ msgstr "Azimut:"
+
+#, fuzzy
+#~ msgid "Determines the light source and direction"
+#~ msgstr "Rang manbasi va yoʻnalishini aniqlash."
+
+#~ msgid "Angle:"
+#~ msgstr "Burchak:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "Amplituda:"
+
+#~ msgid "Wave length:"
+#~ msgstr "Toʻlqin uzunligi:"
+
+#~ msgid "Pen"
+#~ msgstr "Qalam"
+
+#, fuzzy
+#~ msgid "Arrow Style"
+#~ msgstr "Koʻrsatkich uslubi"
+
+#~ msgid "&Begin:"
+#~ msgstr "&Boshi:"
+
+#~ msgid "&End:"
+#~ msgstr "&Oxiri:"
+
+#~ msgid "&Width:"
+#~ msgstr "&Eni:"
+
+#~ msgid "St&yle:"
+#~ msgstr "Us&lub:"
+
+#~ msgid ""
+#~ "Set the color of the line. Clicking on the color will bring the standard "
+#~ "KDE Select Color dialog."
+#~ msgstr ""
+#~ "Chiziqning rangini tanlash. Rang ustida sichqoncha bosilsa, rangni "
+#~ "tanlash oynasi paydo boʻladi."
+
+#~ msgid "C&olor:"
+#~ msgstr "R&ang:"
+
+#~ msgid "Rect"
+#~ msgstr "Toʻgʻri burchak"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Boʻyiga gradient"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "Eniga gradient"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "Eniga gradient"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "Boʻyiga gradient"
+
+#~ msgid "Polygon"
+#~ msgstr "Koʻpburchak"
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "&Shakl"
+
+#~ msgid "&Style:"
+#~ msgstr "&Uslub:"
+
+#~ msgid "Choose the style or the pattern."
+#~ msgstr "Namuna yoki uslubni tanlash."
+
+#~ msgid ""
+#~ "Choose the color (white is the default). Clicking on the color will "
+#~ "display the standard KDE color chooser dialog."
+#~ msgstr ""
+#~ "Rang tanlash (andoza sifatida oq rang ishlatiladi). Rang ustida "
+#~ "sichqoncha bosilsa, rangni tanlash oynasi paydo boʻladi."
+
+#~ msgid "&Preview"
+#~ msgstr "&Koʻrib chiqish"
+
+#~ msgid "&Effect:"
+#~ msgstr "&Effekt:"
+
+#~ msgid "&Speed:"
+#~ msgstr "&Tezlik:"
+
+#~ msgid "So&und effect"
+#~ msgstr "&Tovush effekti"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "&Fayl:"
+
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "Keyingi slaydga avto-oʻtish &vaqti:"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradient"
+
+#~ msgid "Gradient:"
+#~ msgstr "Gradient:"
+
+#~ msgid "X-fac&tor:"
+#~ msgstr "X-fa&ktor:"
+
+#~ msgid "Un&balanced:"
+#~ msgstr "Muvoza&natlashtirilmagan:"
+
+#~ msgid "&Y-factor:"
+#~ msgstr "Y-fakt&or:"
+
+#~ msgid "Margin"
+#~ msgstr "Boʻsh joy"
+
+#~ msgid "Margins"
+#~ msgstr "Boʻsh joylar"
+
+#~ msgid "General"
+#~ msgstr "Umumiy"
+
+#~ msgid "Na&me:"
+#~ msgstr "&Nomi:"
+
+#~ msgid "Protect si&ze and position"
+#~ msgstr "Oʻlcham va &joyini himoyalash"
+
+#~ msgid "Position"
+#~ msgstr "Joylashishi"
+
+#~ msgid "Shadow"
+#~ msgstr "Soya"
+
+#~ msgid "Color && Distance"
+#~ msgstr "Rang va masofa"
+
+#~ msgid "Distance:"
+#~ msgstr "Masofa:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Namoyish"
+
+#~ msgid "Picture"
+#~ msgstr "Rasm"
+
+#~ msgid "&1 bit color mode"
+#~ msgstr "&1 bitli rang"
+
+#~ msgid "&8 bit color mode"
+#~ msgstr "&8 bitli rang"
+
+#~ msgid "1&6 bit color mode"
+#~ msgstr "1&6 bitli rang"
+
+#~ msgid "&32 bit color mode"
+#~ msgstr "&32 bitli rang"
+
+#~ msgid "&Default color mode"
+#~ msgstr "&Andoza rang usuli"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Conv&ert from RGB image to BRG image"
+#~ msgstr "RGB ras&mdan BRG rasmga aylantirish"
+
+#~ msgid "&Brightness:"
+#~ msgstr "&Yorugʻligi:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "&Chap:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Namoyish"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "Slayd orqa foni"
+
+#~ msgid "Background type:"
+#~ msgstr "Orqa fon turi:"
+
+#~ msgid "Color/Gradient"
+#~ msgstr "Rang/gradient"
+
+#, fuzzy
+#~ msgid "Plain"
+#~ msgstr "Oʻynash"
+
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "Diagonal gradient 1"
+
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "Diagonal gradient 2"
+
+#~ msgid "Circle Gradient"
+#~ msgstr "Doirasimon gradient"
+
+#~ msgid "Rectangle Gradient"
+#~ msgstr "Toʻgʻri burchak gradient"
+
+#~ msgid "PipeCross Gradient"
+#~ msgstr "Xochsimon gradient"
+
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Piramidasimon gradient"
+
+#, fuzzy
+#~ msgid "Unbalanced"
+#~ msgstr "Muvoza&natlashtirilmagan:"
+
+#~ msgid "X-factor:"
+#~ msgstr "X-faktor:"
+
+#~ msgid "Y-factor:"
+#~ msgstr "Y-faktor:"
+
+#~ msgid "View mode:"
+#~ msgstr "Koʻrish usuli:"
+
+#~ msgid "Apply &Global"
+#~ msgstr "&Hammasiga qoʻllash"
+
+#~ msgid "&Reset"
+#~ msgstr "&Tiklash"
+
+#~ msgid "Single Color"
+#~ msgstr "Bir xil rang"
+
+#~ msgid "Transparent"
+#~ msgstr "Shaffof"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Kesishgan chiziqlar"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Diagonal chiziqlar ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Diagonal chiziqlar ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Diagonal kesishgan chiziqlar"
+
+#~ msgid "Diagonal 2"
+#~ msgstr "Diagonal 2"
+
+#~ msgid "PipeCross"
+#~ msgstr "Xochsimon"
+
+#~ msgid "Pyramid"
+#~ msgstr "Piramida"
+
+#, fuzzy
+#~ msgid "Resize Object Up"
+#~ msgstr "Obʼektni yopish"
+
+#, fuzzy
+#~ msgid "Resize Object Down"
+#~ msgstr "Obʼektni yopish"
+
+#, fuzzy
+#~ msgid "Resize Object Left"
+#~ msgstr "Obʼektlarni chapga tekislash"
+
+#, fuzzy
+#~ msgid "Resize Object Right"
+#~ msgstr "Obʼektlarni oʻngga tekislash"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "Obʼektlarni chapga tekislash"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "Obʼektlarni oʻngga tekislash"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "Obʼektlarni oʻngga tekislash"
+
+#~ msgid "&Continue"
+#~ msgstr "Davom &etish"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "&Chizish usuli"
+
+#~ msgid "&Goto Slide..."
+#~ msgstr "Slaydga &oʻtish..."
+
+#~ msgid "&End"
+#~ msgstr "&Oxiri"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Matn shriftini oʻzgartirish"
+
+#~ msgid "Set Text Background Color"
+#~ msgstr "Matn orqa fon rangini koʻrsatish"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Matnni qalin yozuv bilan yozish"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Matnni qiya yozuv bilan yozish"
+
+#~ msgid "Underline Text"
+#~ msgstr "Matnni tagidan chizish"
+
+#~ msgid "Set Text Font"
+#~ msgstr "Matn shriftini koʻrsatish"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Matnning oʻlchamini oʻzgartirish"
+
+#~ msgid "Apply Default Format"
+#~ msgstr "Andoza moslamalarni qoʻllash"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Shriftni kattalashtirish"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Shriftni kichiklashtirish"
+
+#~ msgid "Set Text Align"
+#~ msgstr "Matnni tekislash usulini koʻrsatish"
+
+#, fuzzy
+#~ msgid "Change Tabulators"
+#~ msgstr "Tabulyasiyalarni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Uzunasini oshirish:"
+
+#, fuzzy
+#~ msgid "Change First Line Indent"
+#~ msgstr "Izoh matnini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Left Indent"
+#~ msgstr "Matn shriftini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Right Indent"
+#~ msgstr "Izoh matnini oʻzgartirish"
+
+#~ msgid "Printing..."
+#~ msgstr "Bosib chiqarish..."
+
+#~ msgid "Scale to Original Size"
+#~ msgstr "Asl oʻlchamini qoʻllash"
+
+#, fuzzy
+#~ msgid "Extend Text to Contents"
+#~ msgstr "Mundarija"
+
+#~ msgid "Align Objects Left"
+#~ msgstr "Obʼektlarni chapga tekislash"
+
+#~ msgid "Align Objects Top"
+#~ msgstr "Obʼektlarni yuqoriga tekislash"
+
+#~ msgid "Align Objects Right"
+#~ msgstr "Obʼektlarni oʻngga tekislash"
+
+#~ msgid "Align Objects Bottom"
+#~ msgstr "Obʼektlarni pastga tekislash"
+
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "Obʼektlarni markazga tekislash (eniga)"
+
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "Obʼektlarni markazga tekislash (boʻyiga)"
+
+#~ msgid "Close Object"
+#~ msgstr "Obʼektni yopish"
+
+#, fuzzy
+#~ msgid "Closed Polyline"
+#~ msgstr "&Yopiq chiziq"
+
+#~ msgid "Interface"
+#~ msgstr "Interfeys"
+
+#~ msgid "Spelling"
+#~ msgstr "Imlo"
+
+#~ msgid "Document"
+#~ msgstr "Hujjat"
+
+#~ msgid "Document Settings"
+#~ msgstr "Hujjat moslamalari"
+
+#, fuzzy
+#~ msgid "Default Tools Settings"
+#~ msgstr "Yoʻl moslamalari"
+
+#~ msgid "Paths"
+#~ msgstr "Yoʻllar"
+
+#~ msgid "Path Settings"
+#~ msgstr "Yoʻl moslamalari"
+
+#~ msgid "Change Config"
+#~ msgstr "Moslamani oʻzgartirish"
+
+#~ msgid "Show rulers"
+#~ msgstr "Lineykalarni koʻrsatish"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Yaqinda ochilgan fayllarning soni:"
+
+#~ msgid "Background object color:"
+#~ msgstr "Orqa fondagi obʼektning orangi:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Toʻr rang:"
+
+#~ msgid "Here you can change the grid color, which is black by default."
+#~ msgstr "Bu yerda toʻr rangini oʻzgartirish mumkin. Andoza rang - qora."
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Bekor qilish/qaytarish chegarasi:"
+
+#~ msgid "Display links"
+#~ msgstr "Bogʻlarni koʻrsatish"
+
+#~ msgid "&Underline all links"
+#~ msgstr "Hamma bogʻlarning &tagini chizish"
+
+#~ msgid "Display comments"
+#~ msgstr "Izohlarni koʻrsatish"
+
+#~ msgid "Display field code"
+#~ msgstr "Maydon kodini koʻrsatish"
+
+#~ msgid "Grid"
+#~ msgstr "Toʻr"
+
+#~ msgid "Vertical grid size:"
+#~ msgstr "Toʻrning uzunasi:"
+
+#, fuzzy
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Maydon kodini koʻrsatish"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Hujjatning andozalari"
+
+#~ msgid "Default font:"
+#~ msgstr "Andoza shrift:"
+
+#~ msgid "Choose..."
+#~ msgstr "Tanlash..."
+
+#~ msgid "Global language:"
+#~ msgstr "Andoza til:"
+
+#~ msgid "Create backup file"
+#~ msgstr "Zahira faylini yaratish"
+
+#~ msgid "Autosave (min):"
+#~ msgstr "Avto-saqlash (daq):"
+
+#~ msgid "No autosave"
+#~ msgstr "Avto-saqlash oʻchirilgan"
+
+#~ msgid "min"
+#~ msgstr "daqiqa"
+
+#~ msgid "Cursor"
+#~ msgstr "Kursor"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "Kursor himoyalangan maydonda"
+
+#, fuzzy
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Tabulyasiyalarni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Outl&ine"
+#~ msgstr "Chi&ziq"
+
+#~ msgid "&Fill"
+#~ msgstr "Toʻ&ldirish"
+
+#~ msgid "&Rectangle"
+#~ msgstr "&Toʻgʻri burchak"
+
+#~ msgid "Polygo&n"
+#~ msgstr "Koʻp&burchak"
+
+#, fuzzy
+#~ msgid "&Pie"
+#~ msgstr "&Bet"
+
+#~ msgid "Type"
+#~ msgstr "Turi"
+
+#~ msgid "Picture Path"
+#~ msgstr "Rasm yoʻli"
+
+#~ msgid "Backup Path"
+#~ msgstr "Zahira fayli yoʻli"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Yoʻlni oʻzgartirish..."
+
+#~ msgid "&Add..."
+#~ msgstr "&Qoʻshish..."
+
+#~ msgid "&Modify..."
+#~ msgstr "Oʻzgar&tirish..."
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "Bogʻni olib tashlash"
+
+#~ msgid "Test"
+#~ msgstr "Sinash"
+
+#~ msgid "(Copy %1)"
+#~ msgstr "(Nusxa olish %1)"
+
+#~ msgid "Name:"
+#~ msgstr "Nomi:"
+
+#~ msgid "Existing slides:"
+#~ msgstr "Mavjud slaydlar:"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "Boshqa namoyish..."
+
+#, fuzzy
+#~ msgid "Insert Part Object"
+#~ msgstr "Oʻzgaruvchini qoʻyish"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Obʼektlarni qoʻyish"
+
+#~ msgid "Set New Options"
+#~ msgstr "Yangi moslamalarni koʻrsatish"
+
+#~ msgid "Insert File"
+#~ msgstr "Faylni qoʻyish"
+
+#~ msgid "Insert New Slide"
+#~ msgstr "Yangi slayd qoʻyish"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Obʼektdan aynan nusxasini olish"
+
+#~ msgid "Number of copies:"
+#~ msgstr "Nusxalar soni:"
+
+#~ msgid "Rotation angle:"
+#~ msgstr "Burish burchagi:"
+
+#~ msgid "Increase width:"
+#~ msgstr "Enini oshirish:"
+
+#~ msgid "Increase height:"
+#~ msgstr "Uzunasini oshirish:"
+
+#~ msgid "Appear"
+#~ msgstr "Paydo boʻlish"
+
+#~ msgid "Order of appearance:"
+#~ msgstr "Paydo boʻlish tartibi:"
+
+#~ msgid "Effect (appearing):"
+#~ msgstr "Effekt (paydo boʻlish):"
+
+#~ msgid "Come From Right/Top"
+#~ msgstr "Yuqori oʻng tomondan chiqish"
+
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "Pastki oʻng tomondan chiqish"
+
+#~ msgid "Come From Left/Top"
+#~ msgstr "Yuqori chap tomondan chiqish"
+
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "Pastki chap tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Wipe From Left"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Wipe From Right"
+#~ msgstr "Oʻng tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Wipe From Top"
+#~ msgstr "Yuqoridan chiqish"
+
+#, fuzzy
+#~ msgid "Wipe From Bottom"
+#~ msgstr "Pastdan chiqish"
+
+#~ msgid "Speed:"
+#~ msgstr "Tezlik:"
+
+#~ msgid "Medium"
+#~ msgstr "Oʻrtacha"
+
+#~ msgid "Fast"
+#~ msgstr "Tez"
+
+#~ msgid "Effect (object specific):"
+#~ msgstr "Effekt (obʼekt uchun):"
+
+#~ msgid "File name:"
+#~ msgstr "Faylning nomi:"
+
+#~ msgid "Play"
+#~ msgstr "Oʻynash"
+
+#~ msgid "Disappear"
+#~ msgstr "Yoʻqolish"
+
+#~ msgid "Order of disappearance:"
+#~ msgstr "Yoʻqolish tartibi:"
+
+#~ msgid "Effect (disappearing):"
+#~ msgstr "Effekt (yoʻqolish):"
+
+#~ msgid "Disappear to Right"
+#~ msgstr "Oʻng tomonga yoʻqolish"
+
+#~ msgid "Disappear to Left"
+#~ msgstr "Chap tomonga yoʻqolish"
+
+#~ msgid "Disappear to Top"
+#~ msgstr "Yuqori tomonga yoʻqolish"
+
+#~ msgid "Disappear to Bottom"
+#~ msgstr "Past tomonga yoʻqolish"
+
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "Yuqori oʻng tomonga yoʻqolish"
+
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "Pastki oʻng tomonga yoʻqolish"
+
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "Yuqori chap tomonga yoʻqolish"
+
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "Pastki chap tomonga yoʻqolish"
+
+#, fuzzy
+#~ msgid "Wipe to Right"
+#~ msgstr "Oʻng tomonga yoʻqolish"
+
+#, fuzzy
+#~ msgid "Wipe to Top"
+#~ msgstr "Yuqori tomonga yoʻqolish"
+
+#, fuzzy
+#~ msgid "Wipe to Bottom"
+#~ msgstr "Past tomonga yoʻqolish"
+
+#~ msgid "Assign Object Effects"
+#~ msgstr "Obʼekt effektlarini koʻrsatish"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "*.%1|%2 fayllar"
+
+#~ msgid "All Supported Files"
+#~ msgstr "Hamma qoʻllangan fayllar"
+
+#~ msgid "Image Effect"
+#~ msgstr "Rasm effekti"
+
+#~ msgid "Import Style"
+#~ msgstr "Uslubni import qilish"
+
+#~ msgid "File name is empty."
+#~ msgstr "Faylning nomi koʻrsatilmagan."
+
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "Fayl KPresenter fayli emas!"
+
+#~ msgid "Path:"
+#~ msgstr "Yoʻl:"
+
+#, fuzzy
+#~ msgid "&Set Colors"
+#~ msgstr "Matn rangini koʻrsatish"
+
+#, fuzzy
+#~ msgid "Preliminary Slides"
+#~ msgstr "&Oldingi slayd"
+
+#~ msgid "Text color:"
+#~ msgstr "Matnning rangi:"
+
+#, fuzzy
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "HTML namoyish yaratish"
+
+#~ msgid ""
+#~ "<qt>The directory <b>%1</b> does not exist.<br>Do you want create it?</qt>"
+#~ msgstr ""
+#~ "<qt><b>%1</b> direktoriyasi mavjud emas.<br>Uni yaratishni istaysizmi?</"
+#~ "qt>"
+
+#~ msgid "Directory Not Found"
+#~ msgstr "Direktoriya topilmadi"
+
+#~ msgid "Cannot create directory."
+#~ msgstr "Direktoriyani yaratib boʻlmadi."
+
+#, fuzzy
+#~ msgid "Create directory structure"
+#~ msgstr "Direktoriyani yaratib boʻlmadi."
+
+#~ msgid "Create pictures of the slides"
+#~ msgstr "Slaydlardan rasm yaratish"
+
+#~ msgid "Create index file"
+#~ msgstr "Indeks faylini yaratish"
+
+#, fuzzy
+#~ msgid "Change Help Line Position"
+#~ msgstr "Burishni oʻzgartirish"
+
+#~ msgid "Position:"
+#~ msgstr "Joylashishi:"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "Joylashishi:"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "Joylashishi:"
+
+#, fuzzy
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "Slayd %1"
+
+#~ msgid "Delete Objects"
+#~ msgstr "Obʼektlarni olib tashlash"
+
+#~ msgid "Resize"
+#~ msgstr "Oʻlchamini oʻzgartirish"
+
+#~ msgid "Group Objects"
+#~ msgstr "Obʼektlarni guruhlash"
+
+#~ msgid "Ungroup Objects"
+#~ msgstr "Obʼektlarni guruhlashni bekor qilish"
+
+#, fuzzy
+#~ msgid "Lower Objects"
+#~ msgstr "Obʼektlarni koʻchirish"
+
+#, fuzzy
+#~ msgid "Raise Objects"
+#~ msgstr "Obʼektlarni qoʻyish"
+
+#~ msgid "Insert Line"
+#~ msgstr "Chiziq qoʻyish"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Toʻgʻri burchak qoʻyish"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Ellips qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Textbox"
+#~ msgstr "Faylni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Autoform"
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Freehand"
+#~ msgstr "Faylni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Polyline"
+#~ msgstr "Chiziq qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Cubic Bezier Curve"
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Polygon"
+#~ msgstr "Koʻpburchak"
+
+#, fuzzy
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "Yangi slayd qoʻyish"
+
+#, fuzzy
+#~ msgid "Embed Object"
+#~ msgstr "Obʼektlarni koʻchirish"
+
+#, fuzzy
+#~ msgid "Change Pixmap"
+#~ msgstr "Bogʻni oʻzgartirish"
+
+#~ msgid "Move Objects"
+#~ msgstr "Obʼektlarni koʻchirish"
+
+#~ msgid "Change Shadow"
+#~ msgstr "Soyani oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Boʻyiga tekislash"
+
+#~ msgid "Square"
+#~ msgstr "Toʻrtburchak"
+
+#~ msgid "&General"
+#~ msgstr "&Umumiy"
+
+#~ msgid "&Transition Type"
+#~ msgstr "Slaydni &almashtirish usuli"
+
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "Keyingi slaydga &qoʻlbola almashtirish"
+
+#~ msgid "&Automatic transition to next step or slide"
+#~ msgstr "Keyingi bosqich yoki slaydga &avto-oʻtish"
+
+#, fuzzy
+#~ msgid "&Show 'End of presentation' slide"
+#~ msgstr ""
+#~ "Namoyish tugadi. Chiqish uchun sichqoncha bilan istagan joyga bosing."
+
+#, fuzzy
+#~ msgid "Measure presentation &duration"
+#~ msgstr "Namoyish davomiyligi: "
+
+#~ msgid "Arc"
+#~ msgstr "Yoy"
+
+#, fuzzy
+#~ msgid "Chord"
+#~ msgstr "Rang"
+
+#~ msgid "Display Duration"
+#~ msgstr "Koʻrsatish davomiyligi"
+
+#~ msgid "Slides in the pages:"
+#~ msgstr "Bitta varaqdagi slayd soni:"
+
+#~ msgid "Rows: "
+#~ msgstr "Satr: "
+
+#~ msgid "Columns: "
+#~ msgstr "Ustun: "
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "Slaydlardan rasm yaratish"
+
+#~ msgid "Apply Properties"
+#~ msgstr "Moslamalarni qoʻllash"
+
+#, fuzzy
+#~ msgid "Name Object"
+#~ msgstr "Obʼektlarni qoʻyish"
+
+#~ msgid "Protect Object"
+#~ msgstr "Obʼektni himoyalash"
+
+#~ msgid "Change Size"
+#~ msgstr "Oʻlchamini oʻzgartirish"
+
+#~ msgid "Pict&ure"
+#~ msgstr "&Rasm"
+
+#~ msgid "(%1)"
+#~ msgstr "(%1)"
+
+#~ msgid "Rename Slide"
+#~ msgstr "Slayd nomini oʻzgartirish"
+
+#~ msgid "Slide title:"
+#~ msgstr "Slayd sarlavhasi:"
+
+#, fuzzy
+#~ msgid "Uncover Left"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Cover Left-Up"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Cover Left-Down"
+#~ msgstr "Chap tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "Pastki oʻng tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "Pastki oʻng tomondan chiqish"
+
+#, fuzzy
+#~ msgid "Dissolve"
+#~ msgstr "Oʻchirilgan"
+
+#, fuzzy
+#~ msgid "Melting"
+#~ msgstr "Imlo"
+
+#, fuzzy
+#~ msgid "Random Transition"
+#~ msgstr "Slaydni &almashtirish usuli"
+
+#~ msgid "Paste Text"
+#~ msgstr "Matnni qoʻyish"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Oʻzgaruvchini qoʻyish"
+
+#~ msgid "Protect content"
+#~ msgstr "Tarkibini himoyalash"
+
+#~ msgid "Effect:"
+#~ msgstr "Effekt:"
+
+#, fuzzy
+#~ msgid "Automatically advance to the next slide after:"
+#~ msgstr "Keyingi slaydga avto-oʻtish &vaqti:"
+
+#~ msgid "Remove Slide"
+#~ msgstr "Slaydni olib tashlash"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "Sa&na"
+
+#~ msgid "Insert new slide"
+#~ msgstr "Yangi slayd qoʻyish"
+
+#~ msgid "Save Picture"
+#~ msgstr "Rasmni saqlash"
+
+#~ msgid "Error during saving: could not open '%1' for writing."
+#~ msgstr "Saqlash xatosi. Yozish uchun '%1' faylini ochib boʻlmadi."
+
+#~ msgid "Unable to save the file to '%1'. %2."
+#~ msgstr "Faylni '%1'ga saqlab boʻlmadi. %2."
+
+#~ msgid "Save Failed"
+#~ msgstr "Saqlab boʻlmadi"
+
+#, fuzzy
+#~ msgid "Error during saving: could not create temporary file."
+#~ msgstr ""
+#~ "Saqlash xatosi. Yozish uchun '%1' vaqtinchalik faylini yaratib boʻlmadi."
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Xossa&lari"
+
+#~ msgid "Slide Background"
+#~ msgstr "Slayd orqa foni"
+
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|KPresenter veb-namoyish (*.kpweb)"
+
+#~ msgid "Object Effect"
+#~ msgstr "Obʼekt effekti"
+
+#, fuzzy
+#~ msgid "No Slide"
+#~ msgstr "Slaydni koʻchirish"
+
+#, fuzzy
+#~ msgid "Change List Type"
+#~ msgstr "Izoh matnini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Outline Color"
+#~ msgstr "Bir xil rang"
+
+#, fuzzy
+#~ msgid "Change Fill Color"
+#~ msgstr "Toʻldirish rangi..."
+
+#, fuzzy
+#~ msgid "Change Line Begin"
+#~ msgstr "Bogʻni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Line End"
+#~ msgstr "Bogʻni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Outline Style"
+#~ msgstr "Matnning oʻlchamini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Outline Width"
+#~ msgstr "Izoh matnini oʻzgartirish"
+
+#~ msgid "Show Sidebar"
+#~ msgstr "Yon panelni koʻrsatish"
+
+#~ msgid "Hide Sidebar"
+#~ msgstr "Yon panelni bekitish"
+
+#, fuzzy
+#~ msgid "Show Notebar"
+#~ msgstr "Yon panelni koʻrsatish"
+
+#~ msgid "Hide Notebar"
+#~ msgstr "Izoh panelini bekitish"
+
+#~ msgid "Slide &Master"
+#~ msgstr "&Master slayd"
+
+#~ msgid "Guide Lines"
+#~ msgstr "Yordamchi chiziqlar"
+
+#~ msgid "Show &Grid"
+#~ msgstr "Toʻrni &koʻrsatish"
+
+#~ msgid "Hide &Grid"
+#~ msgstr "Toʻrni &bekitish"
+
+#, fuzzy
+#~ msgid "Snap to Grid"
+#~ msgstr "Toʻrni &koʻrsatish"
+
+#~ msgid "&Slide..."
+#~ msgstr "&Slayd..."
+
+#~ msgid "P&icture..."
+#~ msgstr "R&asm..."
+
+#~ msgid "&Rotate"
+#~ msgstr "&Burish"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "Kattalashtirish"
+
+#~ msgid "&Shape"
+#~ msgstr "&Shakl"
+
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "Ay&lana/Ellips"
+
+#~ msgid "&Text"
+#~ msgstr "&Matn"
+
+#~ msgid "&Chart"
+#~ msgstr "&Diagramma"
+
+#~ msgid "Ta&ble"
+#~ msgstr "&Jadval"
+
+#~ msgid "&Object"
+#~ msgstr "&Obʼekt"
+
+#~ msgid "&Line"
+#~ msgstr "Chi&ziq"
+
+#~ msgid "Po&lyline"
+#~ msgstr "&Siniq chiziq"
+
+#, fuzzy
+#~ msgid "Closed Po&lyline"
+#~ msgstr "&Siniq chiziq"
+
+#~ msgid "&Font..."
+#~ msgstr "&Shrift..."
+
+#~ msgid "Font Family"
+#~ msgstr "Shrift oilasi"
+
+#~ msgid "&Bold"
+#~ msgstr "Qal&in"
+
+#~ msgid "&Italic"
+#~ msgstr "&Qiya"
+
+#~ msgid "&Underline"
+#~ msgstr "&Tagi chizilgan"
+
+#~ msgid "&Strike Out"
+#~ msgstr "U&sti chizilgan"
+
+#~ msgid "&Color..."
+#~ msgstr "R&ang..."
+
+#~ msgid "Align &Left"
+#~ msgstr "&Chapga tekislash"
+
+#~ msgid "Align &Center"
+#~ msgstr "&Markazga tekislash"
+
+#~ msgid "Align &Right"
+#~ msgstr "&Oʻngga tekislash"
+
+#, fuzzy
+#~ msgid "Align &Block"
+#~ msgstr "Ob&ʼektlarni tekislash"
+
+#~ msgid "Number"
+#~ msgstr "Raqam"
+
+#, fuzzy
+#~ msgid "Bullet"
+#~ msgstr "Koʻk"
+
+#, fuzzy
+#~ msgid "&Increase Depth"
+#~ msgstr "Enini oshirish:"
+
+#, fuzzy
+#~ msgid "&Decrease Depth"
+#~ msgstr "Shriftni kichiklashtirish"
+
+#~ msgid "&Insert Slide Number"
+#~ msgstr "Slayd raqamini &kiritish"
+
+#~ msgid "&Properties"
+#~ msgstr "Xossa&lari"
+
+#, fuzzy
+#~ msgid "Ra&ise Objects"
+#~ msgstr "Obʼektlarni qoʻyish"
+
+#, fuzzy
+#~ msgid "&Lower Objects"
+#~ msgstr "Obʼektlarni koʻchirish"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Eng oldinga"
+
+#~ msgid "Send to Back"
+#~ msgstr "Eng oxirga"
+
+#~ msgid "R&otate Objects..."
+#~ msgstr "Obʼektlarni &burish..."
+
+#~ msgid "&Shadow Objects..."
+#~ msgstr "Obʼektni &soyalash..."
+
+#, fuzzy
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "Obʼektlarni markazga tekislash (eniga)"
+
+#, fuzzy
+#~ msgid "Align &Top"
+#~ msgstr "&Chapga tekislash"
+
+#, fuzzy
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "Obʼektlarni markazga tekislash (boʻyiga)"
+
+#, fuzzy
+#~ msgid "Align &Bottom"
+#~ msgstr "Obʼektlarni pastga tekislash"
+
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "Slayd &orqa foni..."
+
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "HTML n&amoyishni yaratish..."
+
+#, fuzzy
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "HTML n&amoyishni yaratish..."
+
+#~ msgid "Template Manager"
+#~ msgstr "Namuna boshqaruvchisi"
+
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "Joriy slaydni andoza namuna sifatida qoʻllash"
+
+#~ msgid "Align O&bjects"
+#~ msgstr "Ob&ʼektlarni tekislash"
+
+#, fuzzy
+#~ msgid "Line End"
+#~ msgstr "Chiziq"
+
+#~ msgid "&Group Objects"
+#~ msgstr "Obʼektlarni &guruhlash"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "Obʼektlarni guruhlashni &bekor qilish"
+
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "&Obʼekt effektlarini tahrirlash..."
+
+#~ msgid "&Go to Start"
+#~ msgstr "&Boshiga oʻtish"
+
+#~ msgid "Go to &End"
+#~ msgstr "&Oxiriga oʻtish"
+
+#~ msgid "Goto &Slide..."
+#~ msgstr "&Slaydga oʻtish..."
+
+#~ msgid "Fill Color..."
+#~ msgstr "Toʻldirish rangi..."
+
+#, fuzzy
+#~ msgid "Outline Color..."
+#~ msgstr "Toʻldirish rangi..."
+
+#~ msgid "&Rename Slide..."
+#~ msgstr "Slayd no&mini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "Asl oʻlchamini qoʻllash"
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "&Change Picture..."
+#~ msgstr "Rasmni &oʻzgartirish..."
+
+#~ msgid "Image &Effect..."
+#~ msgstr "Rasm &effekti..."
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "&Maxsus belgi..."
+
+#~ msgid "Link..."
+#~ msgstr "Bogʻ..."
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Avto-toʻgʻrilashni qoʻllash"
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Paragraf..."
+
+#~ msgid "Default Format"
+#~ msgstr "Andoza format"
+
+#~ msgid "Open Link"
+#~ msgstr "Bogʻni ochish"
+
+#~ msgid "Change Link..."
+#~ msgstr "Bogʻni oʻzgartirish..."
+
+#~ msgid "Copy Link"
+#~ msgstr "Bogʻdan nusxa koʻchirish"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Xatchoʻpga qoʻshish"
+
+#, fuzzy
+#~ msgid "&Custom Variables..."
+#~ msgstr "Oʻzgaruvchini qoʻyish"
+
+#, fuzzy
+#~ msgid "Edit Variable..."
+#~ msgstr "Oʻzgaruvchini qoʻyish"
+
+#~ msgid "&Variable"
+#~ msgstr "Oʻ&zgaruvchi"
+
+#~ msgid "&Property"
+#~ msgstr "&Xossasi"
+
+#~ msgid "&Date"
+#~ msgstr "Sa&na"
+
+#~ msgid "&Time"
+#~ msgstr "&Vaqt"
+
+#~ msgid "&Statistic"
+#~ msgstr "S&tatistika"
+
+#, fuzzy
+#~ msgid "Change Case..."
+#~ msgstr "Bogʻni oʻzgartirish..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Kattalashtirish"
+
+#~ msgid "&Style Manager"
+#~ msgstr "Uslub &boshqaruvchisi"
+
+#~ msgid "St&yle"
+#~ msgstr "&Uslub"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Avto-toʻgʻrilashni qoʻllash"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Avto-toʻgʻrilashni oʻchirish"
+
+#, fuzzy
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Slayd qoʻyish"
+
+#, fuzzy
+#~ msgid "Completion"
+#~ msgstr "Choʻqqi:"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Uzunasini oshirish:"
+
+#~ msgid "Comment..."
+#~ msgstr "Izoh..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Izohni tahrirlash..."
+
+#~ msgid "Add Guide Line..."
+#~ msgstr "Yordamchi chiziqni qoʻshish"
+
+#~ msgid "Remove Comment"
+#~ msgstr "Izohni olib tashlash"
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Izohdan nusxa koʻchirish..."
+
+#, fuzzy
+#~ msgid "&Configure Completion..."
+#~ msgstr "Namoyish &moslamalari..."
+
+#~ msgid "Zoom Out"
+#~ msgstr "Kichiklashtirish"
+
+#~ msgid "Zoom In"
+#~ msgstr "Kattalashtirish"
+
+#, fuzzy
+#~ msgid "Zoom Slide Width"
+#~ msgstr "Boshqa namoyish"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "Obʼektlarni olib tashlash"
+
+#, fuzzy
+#~ msgid "Zoom All Objects"
+#~ msgstr "Ob&ʼektlarni tekislash"
+
+#, fuzzy
+#~ msgid "Horizontal Flip"
+#~ msgstr "Eniga chiziqlar"
+
+#, fuzzy
+#~ msgid "Vertical Flip"
+#~ msgstr "Boʻyiga chiziqlar"
+
+#~ msgid "Duplicate Object..."
+#~ msgstr "Obʼektdan aynan nusxasini olish..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Avto-toʻgʻrilashni qoʻllash"
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Tanlangandan uslub yaratish..."
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "Obʼektlarni yuqoriga tekislash"
+
+#, fuzzy
+#~ msgid "Align Middle"
+#~ msgstr "&Chapga tekislash"
+
+#~ msgid "Save Picture..."
+#~ msgstr "Rasmni saqlash..."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Imloni avto-tekshirish"
+
+#~ msgid "File..."
+#~ msgstr "Fayl..."
+
+#~ msgid "Save Background Picture..."
+#~ msgstr "Orqa fon rasmini saqlash..."
+
+#~ msgid "Ignore All"
+#~ msgstr "Hammasiga eʼtibor berilmasin"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Soʻzni lugʻatga qoʻshish"
+
+#~ msgid "Hide Background"
+#~ msgstr "Orqa fonni bekitish"
+
+#~ msgid "Display Background"
+#~ msgstr "Orqa fonni koʻrsatish"
+
+#~ msgid "Set Background"
+#~ msgstr "Orqa fonni koʻrsatish"
+
+#~ msgid "Select New Picture"
+#~ msgstr "Yangi rasm tanlash"
+
+#~ msgid "Next slide"
+#~ msgstr "Keyingi slayd"
+
+#~ msgid "Slide %1/%2"
+#~ msgstr "Slayd %1/%2"
+
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1: %2, %3 - %4, %5 (eni: %6, uzunsi: %7)"
+
+#~ msgid "Change Link"
+#~ msgstr "Bogʻni oʻzgartirish"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Notoʻgʻri yozilgan soʻzni toʻgʻrilash"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "Paragrafning moslamalari"
+
+#, fuzzy
+#~ msgid "Change Custom Variable"
+#~ msgstr "Oʻzgaruvchini qoʻyish"
+
+#, fuzzy
+#~ msgid "Change Case of Text"
+#~ msgstr "Izoh matnini oʻzgartirish"
+
+#~ msgid "Whole Slide"
+#~ msgstr "Butun slayd"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Presentation Duration"
+#~ msgstr "Namoyishning davomi"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "Hujjat turi:"
+
+#, fuzzy
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Uslubni freymlarga qoʻllash"
+
+#~ msgid "Change Note Text"
+#~ msgstr "Izoh matnini oʻzgartirish"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Avto-formatni qoʻllash"
+
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "Yangi slayd uchun avto-formatni qoʻllashni istaysizmi?"
+
+#~ msgid "Replace Word"
+#~ msgstr "Soʻzni almashtirish"
+
+#~ msgid "First"
+#~ msgstr "Birinchi"
+
+#~ msgid "Previous"
+#~ msgstr "Oldingi"
+
+#~ msgid "Next"
+#~ msgstr "Keyingi"
+
+#~ msgid "Last"
+#~ msgstr "Oxirgi"
+
+#~ msgid "Home"
+#~ msgstr "Uy"
+
+#~ msgid "Table of Contents"
+#~ msgstr "Mundarija"
+
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "Namoyishni boshlash uchun shu yerni bosing"
+
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "HTML namoyish yaratish yordamchisi"
+
+#~ msgid "Email address:"
+#~ msgstr "Elektron pochta:"
+
+#~ msgid "Step 1: General Information"
+#~ msgstr "Birinchi bosqich: Umumiy maʼlumot"
+
+#, fuzzy
+#~ msgid "Zoom:"
+#~ msgstr "Kattalashtirish"
+
+#~ msgid "Encoding:"
+#~ msgstr "Kodlash usuli:"
+
+#~ msgid "Document type:"
+#~ msgstr "Hujjat turi:"
+
+#~ msgid "Step 2: Configure HTML"
+#~ msgstr "Ikkinchi bosqich: HTML moslamalari"
+
+#~ msgid "Title color:"
+#~ msgstr "Sarlavha rangi:"
+
+#~ msgid "Step 3: Customize Colors"
+#~ msgstr "Uchinchi bosqich: Ranglarni moslash"
+
+#~ msgid "Step 4: Customize Slide Titles"
+#~ msgstr "Toʻrtinchi bosqich: Slayd sarlavhasini moslash"
+
+#~ msgid "Disabled"
+#~ msgstr "Oʻchirilgan"
+
+#, fuzzy
+#~ msgid "Write header to the slides"
+#~ msgstr "Slaydlardan rasm yaratish"
+
+#, fuzzy
+#~ msgid "Write footer to the slides"
+#~ msgstr "Slaydlardan rasm yaratish"
+
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "Slayd rasmlarini yaratish"
+
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "Slaydning HTML sahifalarini yaratish"
+
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "Mundarija sahifasini yaratish"
+
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|KPresenter veb-namoyish (*.kpweb)"
+
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Veb-namoyish moslamalarini saqlash"
+
+#, fuzzy
+#~ msgid "Freehand"
+#~ msgstr "Yashil"
+
+#, fuzzy
+#~ msgid "Autoform"
+#~ msgstr "Muallif:"
+
+#~ msgid "Group"
+#~ msgstr "Guruh"
+
+#~ msgid "Polyline"
+#~ msgstr "Siniq chiziq"
+
+#, fuzzy
+#~ msgid "Embedded Object"
+#~ msgstr "Obʼektlarni olib tashlash"
+
+#, fuzzy
+#~| msgid "View mode:"
+#~ msgid "View Mode"
+#~ msgstr "Koʻrish usuli:"
+
+#~ msgid "Prot&ect content"
+#~ msgstr "Tarkibini h&imoyalash"
+
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "Imloni tekshirish moslamalari"
+
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Matnni tovush bilan oʻqish moslamalari"
+
+#~ msgid "Error during saving: could not open '%1' temporary file for writing."
+#~ msgstr ""
+#~ "Saqlash xatosi. Yozish uchun '%1' vaqtinchalik faylini ochib boʻlmadi."

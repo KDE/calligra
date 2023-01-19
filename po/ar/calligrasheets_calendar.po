@@ -1,0 +1,331 @@
+# translation of kspreadinsertcalendar.po to
+# Language AR translations for PACKAGE package.
+# Automatically generated, 2007.
+# Youssef Chahibi <chahibi@gmail.com>, 2007.
+# Abdelrahman <abd_elrahman_em@yahoo.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadinsertcalendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-01-20 20:11+0200\n"
+"Last-Translator: Abdelrahman <abd_elrahman_em@yahoo.com>\n"
+"Language-Team: \n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"تاريخ النهاية يقع قبل تاريخ البدء! يرجى التأكد من أن تاريخ النهاية يأتي بعد "
+"تاريخ البدء."
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "خطأ"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"التقويمات يجب ألا تكون أطول من 10 سنوات. إذا احتجت فعلا لفترات طويلة كذلك "
+"فأنت بحاجة للفصل بينها."
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr "تاريخى البدء والنهاية متساويين! سيدرج فقط يوم واحد، هل تريد المتابعة؟"
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "تحذير"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"إن إنشاء تقويم لفترة أطول من عام قد يأخد مساحة كبيرة، هل تريد المتابعة؟"
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"المنطقة التي سيدرج بها التقويم ليـست خالية، هل أنت متأكد أنك تريد المتابعة، "
+"بالكتابة فوق البيانات الموجودة؟ إذا اخترت لا فإن المنطقة التي قد يتطلبها "
+"التقويم المرغوب ستكون منتقاة وبهذا يمكنك رؤية البيانات التي سيُكتَب فوقها."
+
+#: CalendarTool.cpp:102
+#, fuzzy
+#| msgid "Insert Calendar"
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "أدرج تقويماً"
+
+#: CalendarTool.cpp:107
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "التقويم من %1 إلى %2"
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "أسبوع"
+
+#: CalendarToolFactory.cpp:24
+#, fuzzy, kde-format
+msgid "Calendar"
+msgstr "التقويم من %1 إلى %2"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, fuzzy, kde-format
+msgid "Calendar Tool"
+msgstr "التقويم من %1 إلى %2"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, fuzzy, kde-format
+msgid "Insert"
+msgstr "أ&درج"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, fuzzy, kde-format
+msgid "Start date:"
+msgstr "تاريخ البدء"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, fuzzy, kde-format
+msgid "End date:"
+msgstr "تاريخ النهاية"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "التقويم من %1 إلى %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "أ&درج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "تاريخ البدء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "تاريخ النهاية"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "تاريخ النهاية يقع قبل تاريخ البدء! يرجى التأكد من أن تاريخ النهاية يأتي "
+#~ "بعد تاريخ البدء."
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "خطأ"
+
+#, fuzzy
+#~| msgid ""
+#~| "Calendars should not be longer than 10 years. If you really need such "
+#~| "long periods you need to split them up."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "التقويمات يجب ألا تكون أطول من 10 سنوات. إذا احتجت فعلا لفترات طويلة كذلك "
+#~ "فأنت بحاجة للفصل بينها."
+
+#, fuzzy
+#~| msgid ""
+#~| "Start and end dates are equal! Only one day will be inserted, do you "
+#~| "want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "تاريخى البدء والنهاية متساويين! سيدرج فقط يوم واحد، هل تريد المتابعة؟"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "تحذير"
+
+#, fuzzy
+#~| msgid ""
+#~| "Creating a calendar for a longer period than a year can take up a lot of "
+#~| "space, do you want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "إن إنشاء تقويم لفترة أطول من عام قد يأخد مساحة كبيرة، هل تريد المتابعة؟"
+
+#, fuzzy
+#~| msgid ""
+#~| "The area where the calendar is inserted is NOT empty, are you sure you "
+#~| "want to continue, overwriting existing data? If you choose No the area "
+#~| "that would be required for the desired calendar will be selected so you "
+#~| "can see what data would be overwritten."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "المنطقة التي سيدرج بها التقويم ليـست خالية، هل أنت متأكد أنك تريد "
+#~ "المتابعة، بالكتابة فوق البيانات الموجودة؟ إذا اخترت لا فإن المنطقة التي "
+#~ "قد يتطلبها التقويم المرغوب ستكون منتقاة وبهذا يمكنك رؤية البيانات التي "
+#~ "سيُكتَب فوقها."
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "التقويم من %1 إلى %2"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "أسبوع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "التقويم من %1 إلى %2"
+
+#, fuzzy
+#~| msgctxt "This what's this help applies for the entire dialog."
+#~| msgid ""
+#~| "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~| "want to insert. When you have choosen the desired dates, simply press "
+#~| "the Insert button to insert the calendar into the spreadsheet, starting "
+#~| "at the cell you have currently selected."
+#~ msgctxt "This what's this help applies for the entire dialog."
+#~ msgid ""
+#~ "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~ "want to insert. When you have chosen the desired dates, simply press the "
+#~ "Insert button to insert the calendar into the spreadsheet, starting at "
+#~ "the cell you have currently selected."
+#~ msgstr ""
+#~ "النافذة الحوارية أدرج تقويما تمكنك من ضبط تواريخ التقويم الذي ترغب "
+#~ "بإدراجه. عند إتمامك اختيار التواريخ المرغوبة، قم ببساطة بالضغط على زر "
+#~ "أدرج لإدراج التقويم في ورقة الحساب، بالبدء من  الخلية المنتقاة حالياً."
+
+#~ msgid "Set the start date of the calendar you want to insert"
+#~ msgstr "اضبط تاريخ البدء للتقويم الذي ترغب بإدراجه"
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should start. The "
+#~ "selected date will be the first day of the inserted calendar. You can "
+#~ "also choose a date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "يمكنك هنا اختيار التاريخ الذي يبدأ التقويم به. التاريخ المنتقى سيكون هو "
+#~ "اليوم الأول للتقويم المدرج. يمكنك أيضا اختيار تاريخ من نافذة حوار التقويم "
+#~ "بالضغط على انتق تاريخاً."
+
+#~ msgid "Date Picker"
+#~ msgstr "ملتقط التاريخ"
+
+#~ msgid "Use a graphical date picker to select a date"
+#~ msgstr "استخدم ملتقط تاريخ رسومي لانتقاء تاريخ"
+
+#~ msgid "Set the end date of the calendar you want to insert"
+#~ msgstr "اضبط تاريخ النهاية للتقويم الذي ترغب بإدراجه"
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should end. The selected "
+#~ "date will be the last day of the inserted calendar. You can also choose a "
+#~ "date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "يمكنك هنا اختيار التاريخ الذي ينتهي عنده التقويم. التاريخ المنتقى سيكون "
+#~ "هو اليوم الأخير للتقويم المدرج. يمكنك أيضاً اختيار تاريخ من نافذة حوار "
+#~ "التقويم بالضغط على انتق تاريخاً."
+
+#~ msgctxt "Tooltip for the insert button of the insert calendar plugin"
+#~ msgid "Insert the calendar at the currently selected cell"
+#~ msgstr "أدرج التقويم عند الخلية المنتقاة حالياً"
+
+#~ msgctxt "What's this for the insert button of the insert calendar plugin"
+#~ msgid ""
+#~ "A new calendar will be inserted starting at the currently selected cell."
+#~ msgstr "سيُدرَج تقويم جديد بالبدء من الخلية المنتقاة حالياً."
+
+#~ msgid "&Cancel"
+#~ msgstr "&ألغ"
+
+#, fuzzy
+#~| msgid "Don't insert a calendar"
+#~ msgid "Do not insert a calendar"
+#~ msgstr "لا تدرج تقويماً"
+
+#~ msgid ""
+#~ "Quits the dialog and does not insert a calendar. Use this to cancel this "
+#~ "operation."
+#~ msgstr ""
+#~ "ينهي النافذة الحوارية دون إدراج تقويم. استخدم هذا لإلغاء هذه العملية."
+
+#~ msgid "&Tools"
+#~ msgstr "أ&دوات"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Mohamed SAAD محمد سعد, Abdelrahman Abuzaid"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "metehyi@free.fr , abd_elrahman_em@yahoo.com"
+
+#~ msgid "Insert Calendar..."
+#~ msgstr "أدرج تقويما..."
+
+#~ msgid "KSpread Insert Calendar Plugin"
+#~ msgstr "ملحق إدراج التقويم لـ KSpread"
+
+#~ msgid "(c) 2005, The KSpread Team"
+#~ msgstr "(c) 2005، فريق KSpread"
+
+#~ msgid "Raphael Langerhorst"
+#~ msgstr "Raphael Langerhorst"
+
+#~ msgid "Cannot insert calendar because no document is set!"
+#~ msgstr "لا يمكن إدراج تقويم لعدم تعيين مستند!"

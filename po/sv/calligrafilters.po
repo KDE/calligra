@@ -1,0 +1,2493 @@
+# translation of kofficefilters.po to Swedish
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2010, 2011, 2012, 2013, 2017, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-11-12 16:57+0100\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, kde-format
+msgid "%1 Export Options"
+msgstr "Exportalternativ för %1"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "Sida %1"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Sida:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Storlek i bildpunkter"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Bildbredd:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Bildhöjd:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Storlek i enheter"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Upplösning:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Enhet:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Bakgrundsfärg"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Färg"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Ogenomskinlighet"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:297
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr "Namnrymden \"%1\" hittades inte"
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr "Kunde inte öppna den begärda filen %1"
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr "Kunde inte läsa ZIP-katalogen för den begärda filen %1"
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Ange lösenord"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr "Dokumentet är krypterad, ange lösenordet för att avkoda det:"
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr "Felaktigt lösenord, ange lösenordet för att avkoda det här dokumentet:"
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr "Kunde inte hitta sökväg för typen %1"
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr "%1 (rad %2, kolumn %3)"
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr "%1 (%2, rad %3, kolumn %4)"
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr "Element \"%1\" hittades inte"
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "Egenskapen \"%1\" hittades inte"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr "Oväntat värde \"%1\" för egenskapen \"%2\""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr "Oväntad andra förekomst av elementet \"%1\""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr "Förväntade avslutning av element \"%1\""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr "Ingen av de förväntade elementen hittades: %1"
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Kunde inte hitta målet för identifieraren \"%1\" i filen \"%2\""
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "Kunde inte hitta sambandsfil \"%1\""
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Kunde inte hitta målet för förhållandet \"%1\" i filen \"%2\""
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Tolkningsfel i huvuddokumentet på rad %1, kolumn %2.\n"
+"Felmeddelande: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr "Posten '%1' hittades inte"
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr "Posten '%1' är inte en fil."
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr "Kunde inte öppna posten \"%1\" för skrivning."
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr "Kunde inte skriva block"
+
+#: sheets/csv/csvexport.cc:269
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<ARBETSBLAD>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Rekommenderad (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Lokal (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Annan (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:274 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Kan inte hitta kodning: %1"
+
+#: sheets/csv/csvimport.cc:82
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "CSV-filter kan inte öppna inmatningsfilen. Rapportera felet."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Kodning"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "&Kodning:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Slutet på raden"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "&Unix-stil (rekommenderas, bara nyradstecken)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "&Windows-stil (nyradstecken och returtecken)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "&MacOS-stil (bara returtecken)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Arbetsblad"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Välj arbetsblad att exportera:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Avskiljare"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<ARBETSBLAD>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<ARBETSBLAD> ersätts med namnet på nästa arbetsblad."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Skriv ut avskiljare ovanför varje arbetsblad"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Celler"
+
+#. i18n: ectx: property (title), widget (KButtonGroup, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Avskiljare"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Kommatecken"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Semikolon"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabulator"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Mellanslag"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Annan:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Citationstecken:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Exportera bara markering"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Filformatet stöds inte."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Kunde inte läsa från fil."
+
+#: sheets/html/exportdialog.cc:24
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Exportera arbetsblad till HTML"
+
+#: sheets/html/exportdialog.cc:35
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Rekommenderad: UTF-8"
+
+#: sheets/html/exportdialog.cc:36
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Plats (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "&Kodning:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Du kan definiera kodningen av HTML-filen med det här alternativet. Den "
+"rekommenderade kodningen (UTF-8) är förvald."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Val av arbetsblad"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Klicka här för att välja alla arbetsblad i listan."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "Markera &alla"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "A&vmarkera alla"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Det här alternativet gör att HTML-exportfiltret skapar en ny sida för varje "
+"arbetsblad. Om du inaktiverar alternativet, skrivs alla arbetsblad på en "
+"sida."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "Använd &separata filer för varje tabell"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Stil"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+"Aktivera det här alternativet för att använda förvalt teckensnitt och "
+"förvalda färger för HTML-sidan."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "Använd &förvald stil"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Aktivera det här alternativet för att ange en separat stilmall för HTML-"
+"sidan. Du kan välja eller skriva in en i fältet nedanför."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Använd &extern stilmall:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Du kan skriva in en webbadress till stilmallen i det här fältet. Det är "
+"möjligt att peka ut en stilmall på din hårddisk eller någonstans på Internet."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Layout"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+"Använd det här alternativet för att aktivera eller inaktivera kanter omkring "
+"cellerna."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "Använd &kanter"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Använd det här alternativet för att definiera hur många bildpunkter som ska "
+"finnas mellan celler. Effekten syns bättre om du aktiverar <b>Använd kanter</"
+"b>."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "&Bildpunkter mellan celler:"
+
+#: sheets/html/htmlexport.cc:196 sheets/html/htmlexport.cc:371
+#, kde-format
+msgid "Top"
+msgstr "Överst"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Inställning av Latex-exportfilter"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Dokument"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Dokumentstil"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "Latex-stil"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Words-stil"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Dokumenttyp"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Dokumentet kan kompileras ensamt"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Dokumentet skapas som ett fullständigt Latex-dokument, eftersom all "
+"inkludering skapas innan kommandona \\begin{document} och \\end{document}."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Oberoende dokument"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Skapa varken Latex-huvudet eller dokumentomgivningen"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"Dokumentet skapas som ett Latex-dokument som måste inkluderas i ett Latex "
+"huvuddokument. Det gör att du kan skapa flera små filer för varje kapitel i "
+"dokumentet."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Dokument att inkludera"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Dokumentklass:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Kvalitet:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Slutgiltig"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Utkast"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Standardteckenstorlek:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Bilder"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, kde-format
+msgid "Convert the pictures:"
+msgstr "Konvertera bilderna:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Bildkatalog:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Språk"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Lägg till"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Ta bort"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Innehåll"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, kde-format
+msgid "Export information about author:"
+msgstr "Exportera information om författare:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, kde-format
+msgid "Add a table of content:"
+msgstr "Lägg till en innehållsförteckning:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Anteckningar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Exportera inte"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Exportera anteckningar som marginalanteckningar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Exportera anteckningar som kommentarer"
+
+#: sheets/opencalc/opencalcexport.cc:905
+#, kde-format
+msgid "Page "
+msgstr "Sida "
+
+#: sheets/opencalc/opencalcimport.cc:1217
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Filen verkar vara felaktig. Hoppar över en tabell."
+
+#: sheets/opencalc/opencalcimport.cc:1228
+#, kde-format
+msgid "Skipping a table."
+msgstr "Hoppar över tabell."
+
+#: sheets/opencalc/opencalcimport.cc:1928
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Detta dokument skapades med OpenOffice.org version '%1'. Filtret är skrivet "
+"för version 1.0. Läsning av filen kan orsaka konstigt beteende, krascher "
+"eller felaktig visning av data. Vill du fortsätta konvertering av dokumentet?"
+
+#: sheets/opencalc/opencalcimport.cc:1929
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Dokumentversion som inte stöds"
+
+#: sheets/qpro/qproimport.cc:115
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "QPRO-filtret kan inte öppna indatafilen - rapportera felet."
+
+#: sheets/qpro/qproimport.cc:226
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Kan inte öppna filer skyddade med lösenord.\n"
+"Lösenordsalgoritmen har inte publicerats."
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr "Kunde inte hitta del för typen %1"
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr "Deklarerat antal delade strängar för litet (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr "Deklarerat antal teckenstilar för litet (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr "Deklarerat antal cellformat för litet (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr "Deklarerat antal fyllnadsstilar för litet (%1)"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:346
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+"Data kunde inte läsas in helt och hållet, eftersom bladets maximala storlek "
+"överskreds."
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1423
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr "Förväntade heltal eller flyttal"
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "Bildlayout \"%1\" hittades inte"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "Bild %1"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Words importfilter för ren text"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Dialogruta för import av ren text"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Slut på stycke"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "&Oförändrat: vid radslut"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "&Mening: om radslut är slutet på en mening"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr "&Tom rad: Om raden är tom"
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, kde-format
+msgid "End notes"
+msgstr "Slutnoter"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Jämna sidhuvuden"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Udda sidhuvuden"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Sidfot för jämna sidor"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Sidfot för udda sidor"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Första sidhuvudet"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Sidfot för första sidan"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Tabell %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr ""
+"Filen kan inte läsas in, eftersom den inte verkar vara ett RTF-dokument."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "Words RTF-importfilter"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr "Filen kan inte läsas in."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Misslyckades med att läsa data."
+
+#~ msgid "Export Error"
+#~ msgstr "Exportfel"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Felaktigt XML-data."
+
+#~ msgid "Export to Image"
+#~ msgstr "Exportera till bild"
+
+#~ msgid "Complete Page"
+#~ msgstr "Hela sidan"
+
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektområde på sidan"
+
+#~ msgid "Area to export:"
+#~ msgstr "Område att exportera:"
+
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Egen storlek (i bildpunkter):"
+
+#~ msgid "Height:"
+#~ msgstr "Höjd:"
+
+#~ msgid "Width:"
+#~ msgstr "Bredd:"
+
+#~ msgid "Margin:"
+#~ msgstr "Marginal:"
+
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "Storlek i bildpunkter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Bildbredd:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Bildhöjd:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "Storlek i enheter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Upplösning:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Enhet:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Bakgrundsfärg"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Färg"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Ogenomskinlighet"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "&Kodning:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Du kan definiera kodningen av HTML-filen med det här alternativet. Den "
+#~ "rekommenderade kodningen (UTF-8) är förvald."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Val av arbetsblad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "Klicka här för att välja alla arbetsblad i listan."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "Markera &alla"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "A&vmarkera alla"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Det här alternativet gör att HTML-exportfiltret skapar en ny sida för "
+#~ "varje arbetsblad. Om du inaktiverar alternativet, skrivs alla arbetsblad "
+#~ "på en sida."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "Använd &separata filer för varje tabell"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stil"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr ""
+#~ "Aktivera det här alternativet för att använda förvalt teckensnitt och "
+#~ "förvalda färger för HTML-sidan."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "Använd &förvald stil"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr ""
+#~ "Aktivera det här alternativet för att ange en separat stilmall för HTML-"
+#~ "sidan. Du kan välja eller skriva in en i fältet nedanför."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Använd &extern stilmall:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Du kan skriva in en webbadress till stilmallen i det här fältet. Det är "
+#~ "möjligt att peka ut en stilmall på din hårddisk eller någonstans på "
+#~ "Internet."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Layout"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr ""
+#~ "Använd det här alternativet för att aktivera eller inaktivera kanter "
+#~ "omkring cellerna."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "Använd &kanter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Använd det här alternativet för att definiera hur många bildpunkter som "
+#~ "ska finnas mellan celler. Effekten syns bättre om du aktiverar <b>Använd "
+#~ "kanter</b>."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "&Bildpunkter mellan celler:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Dokumentstil"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "Latex-stil"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Words-stil"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Dokumenttyp"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Dokumentet kan kompileras ensamt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Dokumentet skapas som ett fullständigt Latex-dokument, eftersom all "
+#~ "inkludering skapas innan kommandona \\begin[document} och \\end{document}."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Oberoende dokument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Skapa varken Latex-huvudet eller dokumentomgivningen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "Dokumentet skapas som ett Latex-dokument som måste inkluderas i ett Latex "
+#~ "huvuddokument. Det gör att du kan skapa flera små filer för varje kapitel "
+#~ "i dokumentet."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Dokument att inkludera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Dokumentklass:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Kvalitet:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Slutgiltig"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Utkast"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Standardteckenstorlek:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Bilder"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Konvertera bilderna:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Bildkatalog:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Språk"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Kodning"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Lägg till"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Ta bort"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Innehåll"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Exportera information om författare:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Lägg till en innehållsförteckning:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Anteckningar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Exportera inte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Exportera anteckningar som marginalanteckningar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Exportera anteckningar som kommentarer"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "&Kodning:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Slutet på raden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "&Unix-stil (rekommenderas, bara nyradstecken)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "&Windows-stil (nyradstecken och returtecken)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "&MacOS-stil (bara returtecken)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Arbetsblad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Välj arbetsblad att exportera:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Avskiljare"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<ARBETSBLAD>********"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<ARBETSBLAD> ersätts med namnet på nästa arbetsblad."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Skriv ut avskiljare ovanför varje arbetsblad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Celler"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Avskiljare"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Kommatecken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Semikolon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Tabulator"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Mellanslag"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Annan:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Citationstecken:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Exportera bara markering"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Sida:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Hela sidan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektområde på sidan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Område att exportera:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Egen storlek (i bildpunkter):"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Höjd:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Bredd:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Marginal:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Dialogruta för import av ren text"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Slut på stycke"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "&Oförändrat: vid radslut"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "&Mening: om radslut är slutet på en mening"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Empty Line: If the line is empty"
+#~ msgstr "&Tom rad: Om raden är tom"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Exportfel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Misslyckades med att läsa data."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Felaktigt XML-data."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Exportera till bild"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "Exportalternativ för PNG"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Namnrymden \"%1\" hittades inte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Kunde inte öppna den begärda filen %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Kunde inte läsa ZIP-katalogen för den begärda filen %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Ange lösenord"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This document is encrypted, please enter the password to decrypt it:"
+#~ msgstr "Dokumentet är krypterad, ange lösenordet för att avkoda det:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Incorrect password, please enter the password to decrypt this document:"
+#~ msgstr ""
+#~ "Felaktigt lösenord, ange lösenordet för att avkoda det här dokumentet:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Kunde inte hitta sökväg för typen %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (line %2, column %3)"
+#~ msgstr "%1 (rad %2, kolumn %3)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (%2, line %3, column %4)"
+#~ msgstr "%1 (%2, rad %3, kolumn %4)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Element \"%1\" hittades inte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Egenskapen \"%1\" hittades inte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgstr "Oväntat värde \"%1\" för egenskapen \"%2\""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgstr "Oväntad andra förekomst av elementet \"%1\""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected closing of element \"%1\""
+#~ msgstr "Förväntade avslutning av element \"%1\""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None of expected elements found: %1"
+#~ msgstr "Ingen av de förväntade elementen hittades: %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Kunde inte hitta målet för identifieraren \"%1\" i filen \"%2\""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Kunde inte hitta sambandsfil \"%1\""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Kunde inte hitta målet för förhållandet \"%1\" i filen \"%2\""
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Tolkningsfel i huvuddokumentet på rad %1, kolumn %2.\n"
+#~ "Felmeddelande: %3"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Posten '%1' hittades inte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' is not a file."
+#~ msgstr "Posten '%1' är inte en fil."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open entry \"%1\" for writing."
+#~ msgstr "Kunde inte öppna posten \"%1\" för skrivning."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Kunde inte skriva block"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<ARBETSBLAD>"
+
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Rekommenderad (%1)"
+
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Lokal (%1)"
+
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Annan (%1)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Kan inte hitta kodning: %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr "CSV-filter kan inte öppna inmatningsfilen. Rapportera felet."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Filformatet stöds inte."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Kunde inte läsa från fil."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Exportera arbetsblad till HTML"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Rekommenderad: UTF-8"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Plats (%1)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Överst"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Inställning av Latex-exportfilter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Sida "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Filen verkar vara felaktig. Hoppar över en tabell."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Hoppar över tabell."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "Detta dokument skapades med OpenOffice.org version '%1'. Filtret är "
+#~ "skrivet för version 1.0. Läsning av filen kan orsaka konstigt beteende, "
+#~ "krascher eller felaktig visning av data. Vill du fortsätta konvertering "
+#~ "av dokumentet?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Dokumentversion som inte stöds"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr "QPRO-filtret kan inte öppna indatafilen - rapportera felet."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Kan inte öppna filer skyddade med lösenord.\n"
+#~ "Lösenordsalgoritmen har inte publicerats."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Kunde inte hitta del för typen %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of shared strings too small (%1)"
+#~ msgstr "Deklarerat antal delade strängar för litet (%1)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of font styles too small (%1)"
+#~ msgstr "Deklarerat antal teckenstilar för litet (%1)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of cell formats too small (%1)"
+#~ msgstr "Deklarerat antal cellformat för litet (%1)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of fill styles too small (%1)"
+#~ msgstr "Deklarerat antal fyllnadsstilar för litet (%1)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The data could not be loaded completely because the maximum size of sheet "
+#~ "was exceeded."
+#~ msgstr ""
+#~ "Data kunde inte läsas in helt och hållet, eftersom bladets maximala "
+#~ "storlek överskreds."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected integer or floating point number"
+#~ msgstr "Förväntade heltal eller flyttal"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Bildlayout \"%1\" hittades inte"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Bild %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Words importfilter för ren text"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Slutnoter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Jämna sidhuvuden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Udda sidhuvuden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Sidfot för jämna sidor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Sidfot för udda sidor"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Första sidhuvudet"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Sidfot för första sidan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Tabell %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr ""
+#~ "Filen kan inte läsas in, eftersom den inte verkar vara ett RTF-dokument."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "Words RTF-importfilter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "Filen kan inte läsas in."
+
+#~ msgid "Failed to write file."
+#~ msgstr "Skrivning av fil misslyckades."
+
+#~ msgid "%1 Export Error"
+#~ msgstr "%1 exportfel"
+
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Argument för exportfilter"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Behåll längd/bredd-förhållande"
+
+#~ msgid "Width (%):"
+#~ msgstr "Bredd (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Höjd (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "Fel vid export av PNG"
+
+#~ msgid "EPS Export"
+#~ msgstr "EPS-export"
+
+#~ msgid "Options"
+#~ msgstr "Alternativ"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "Postskriptnivå 1"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "Postskriptnivå 2"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "Postskriptnivå 3"
+
+#~ msgid "Import"
+#~ msgstr "Importera"
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Number"
+#~ msgstr "Nummer"
+
+#~ msgid "Currency"
+#~ msgstr "Valuta"
+
+#~ msgid "Date"
+#~ msgstr "Datum"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Decimalkomma tal"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "Decimalpunkt tal"
+
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Kontrollera intervallet du angav. Startvärdet måste vara lägre än "
+#~ "slutvärdet."
+
+#~ msgid "Common"
+#~ msgstr "Gemensam"
+
+#~ msgid "Other"
+#~ msgstr "Annan"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Ignorera duplicerade avgränsare"
+
+#~ msgid "Text&quote:"
+#~ msgstr "Text&citationstecken:"
+
+#~ msgid "&Format:"
+#~ msgstr "&Format:"
+
+#~ msgid "Ranges"
+#~ msgstr "Intervall"
+
+#~ msgid "to"
+#~ msgstr "till"
+
+#~ msgid "Import lines:"
+#~ msgstr "Importera rader:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Importera kolumner:"
+
+#~ msgid "Update"
+#~ msgstr "Uppdatera"
+
+#~ msgid "&Help"
+#~ msgstr "&Hjälp"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "&OK"
+#~ msgstr "&Ok"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Avbryt"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Ett fel har uppstått när Words-filen tolkades.\n"
+#~ "På rad: %1, kolumn %2\n"
+#~ "Felmeddelande: %3"
+
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Words exportfilterbibliotek"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "Exportera XSLT-inställningar"
+
+#~ msgid "Open Document"
+#~ msgstr "Öppna dokument"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "Importera XSLT-inställningar"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Gemensamma XSLT-filer"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Personliga XSLT-filer"
+
+#~ msgid "Choose..."
+#~ msgstr "Välj..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "Fel vid export av SVG"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "Latex-exportfel"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "Argument för PNG-exportfilter"
+
+#~ msgid "Height"
+#~ msgstr "Höjd"
+
+#~ msgid "Width"
+#~ msgstr "Bredd"
+
+#~ msgid "Height (%)"
+#~ msgstr "Höjd (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Bredd (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Stordiabildens titel"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Bild %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Tabell %3, rad %1, kolumn %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Ett fel uppstod vid tolkning av Abiword-filen.\n"
+#~ "På rad: %1, kolumn %2\n"
+#~ "Felmeddelande: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "AbiWord-importfilter"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Ramverk för huvudtext"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Ett fel uppstod vid inläsning av AbiWord-filen: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Kan inte spara dokumentinformation."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Kan inte spara huvuddokument."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Fotnot %1"
+
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "Words exportfilter för ren text"
+
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "Words HTML-exportfilter"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Namnlöst dokument"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "Argument för Latex-importfilter"
+
+#~ msgid "Unicode"
+#~ msgstr "Unicode"
+
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#~ msgid "New document"
+#~ msgstr "Nytt dokument"
+
+#~ msgid "Embedded document"
+#~ msgstr "Inbäddat dokument"
+
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "Words MS Write-importfilter"
+
+#~ msgid "Header"
+#~ msgstr "Sidhuvud"
+
+#~ msgid "Footer"
+#~ msgstr "Sidfot"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Huvudtextens ramverk"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Tabell %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Tabellram %1"
+
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Dialogruta för export av ren text"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "Dialogruta för HTML-export"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (för äldre HTML-användaragenter) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Läge"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "Lättv&iktig: konvertera till strikt (X)HTML"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Konvertera i huvudsak dokumentstrukturen (rekommenderas för att exportera "
+#~ "till webbläsare med begränsad funktionalitet)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "&Enkel: konvertera till övergångsform av (X)HTML"
+
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Konvertera större delen av dokumentet (rekommenderas för att "
+#~ "återimportera till Words eller för att exportera till äldre webbläsare)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "&Utökad: konvertera till (X)HTML med CSS"
+
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "Konvertera så mycket som möjligt av Words-dokumentet (rekommenderas för "
+#~ "att exportera till andra moderna ordbehandlare eller moderna webbläsare)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Använd extern CSS-mall:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Skriv in CSS-filens plats i det här fältet"
+
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Den här katalogen kommer att innehålla EPS-bilder från dokumentet"
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "MS Write-importdialogruta"
+
+#~ msgid "&Encoding"
+#~ msgstr "&Kodning"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Välj kodning av Write-dokumentet.<br><br>Försök med standardkodningen (CP "
+#~ "1252) om du är osäker."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "Annan k&odning:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "&Standardkodning (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "De flesta Write-dokument lagras med den här kodningen (också känd som "
+#~ "Windows 1252).<br><br>Välj den om du är osäker."
+
+#~ msgid "&Advanced"
+#~ msgstr "Avan&cerat"
+
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "De här avancerade alternativen låter dig finjustera import av "
+#~ "formateringsinformation. De kompenserar för skillnader mellan Words och "
+#~ "MS Write genom att lägga till extra formateringsinformation (som inte "
+#~ "finns i det ursprungliga dokumentet), för att försöka få det importerade "
+#~ "dokumentet att bli så likt det ursprungliga som möjligt.<br><br>Använd "
+#~ "standardvärden om du är osäker."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "Kompensera för ski&llnader i radavstånd"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Försök att simulera Writes radavstånd genom att lägga till några "
+#~ "mellanslag före varje stycke."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "Aktivera b&ildpositionering"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "Använd styckesindentering för att placera bilder."
+
+#~ msgid "DCM Import"
+#~ msgstr "DCM-import"
+
+#~ msgid "Import options"
+#~ msgstr "Importalternativ"
+
+#~ msgid "Read digital signatures from the dataset"
+#~ msgstr "Läs digitala signaturer från datamängden"
+
+#~ msgid "Ignore relationship constraints"
+#~ msgstr "Ignorera relationsbegränsningar"
+
+#~ msgid ""
+#~ "Do not abort on content item errors\n"
+#~ "(e.g. missing value type specific attributes)"
+#~ msgstr ""
+#~ "Avbryt inte vid fel på innehållsobjekt\n"
+#~ "(t.ex. saknade typspecifika värdesegenskaper)"
+
+#~ msgid "Skip invalid content item subtree"
+#~ msgstr "Hoppa över delträd med ogiltigt innehållsobjekt"
+
+#~ msgid "Note \"%1\" already exists"
+#~ msgstr "Noten \"%1\" finns redan"
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr ""
+#~ "Dokumentet kan inte laddas, eftersom det inte verkar följa RTF-syntaxen."
+
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "RTF-dokumentet (Rich Text Format) har ett oväntat versionsnummer: %1. Att "
+#~ "fortsätta kan orsaka felaktig konvertering. Vill du fortsätta?"
+
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "PWD-dokumentet (Pcketwords Rich Text Format) har ett oväntat "
+#~ "versionsnummer: %1. Att fortsätta kan orsaka felaktig konvertering. Vill "
+#~ "du fortsätta?"
+
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "URTF-dokumentet (\"Unicode Rich Text Format\") har ett oväntat "
+#~ "versionsnummer: %1. Att fortsätta kan orsaka felaktig konvertering. Vill "
+#~ "du fortsätta?"
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "RTF-dokumentet kan inte laddas, eftersom det har ett oväntat första "
+#~ "nyckelord: \\%1."
+
+#~ msgid "Declared number of border styles too small (%1)"
+#~ msgstr "Deklarerat antal kantstilar för litet (%1)"
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr "Gammalt s&ätt: om raden är tom eller har mindre än 40 tecken"
+
+#~ msgid "KFormula Import Error"
+#~ msgstr "Kformula-importfel"
+
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "Kformula 1.3-importfilter"
+
+#~ msgid "Available Sheets"
+#~ msgstr "Tillgängliga arbetsblad"
+
+#~ msgid "Endnote \"%1\" not found"
+#~ msgstr "Slutnot \"%1\" hittades inte"
+
+#~ msgid "Comment \"%1\" not found"
+#~ msgstr "Kommentar \"%1\" hittades inte"
+
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Fotnot \"%1\" hittades inte"
+
+#~ msgid "Invalid comment date \"%1\""
+#~ msgstr "Ogiltigt kommentardatum \"%1\""
+
+#~ msgid "Picture %1"
+#~ msgstr "Bild %1"
+
+#~ msgid "Declared number of formats too small (%1)"
+#~ msgstr "Deklarerat antal format för litet (%1)"
+
+#~ msgid "A password is required to read that pdf"
+#~ msgstr "Ett lösenord krävs för att läsa PDF-filen"
+
+#~ msgid "Cannot export images in %1.\n"
+#~ msgstr "Kan inte exportera bilder med %1.\n"
+
+#~ msgid "JPEG Export Options"
+#~ msgstr "Exportalternativ för JPEG"
+
+#~ msgid "TIFF Export Options"
+#~ msgstr "Exportalternativ för TIFF"
+
+#~ msgid "All Images"
+#~ msgstr "Alla bilder"
+
+#~ msgid ""
+#~ "The image is using an unsupported color space. Please convert to 16-bit "
+#~ "floating point RGB/Alpha before saving in the OpenEXR format."
+#~ msgstr ""
+#~ "Bilden använder en färgrymd som inte stöds. Konvertera till RGB/alfa med "
+#~ "16-bitars flyttal innan du sparar med OpenEXR-formatet."
+
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDF-importkomponent"
+
+#~ msgid "Pages"
+#~ msgstr "Sidor"
+
+#~ msgid "&All pages"
+#~ msgstr "&Alla sidor"
+
+#~ msgid "&First page"
+#~ msgstr "&Första sidan"
+
+#~ msgid "&Selection of page"
+#~ msgstr "&Sidval"
+
+#~ msgid "Dimensions"
+#~ msgstr "Dimensioner"
+
+#~ msgctxt "vertical resolution"
+#~ msgid "Vertical:"
+#~ msgstr "Vertikal:"
+
+#~ msgctxt "horizontal resolution"
+#~ msgid "Horizontal:"
+#~ msgstr "Horisontell:"
+
+#~ msgid "Size:"
+#~ msgstr "Storlek:"
+
+#~ msgid "Options of Your PNG"
+#~ msgstr "Alternativ för dina PNG"
+
+#~ msgid ""
+#~ "Note: the compression level does not change the quality of the result"
+#~ msgstr "Observera: komprimeringsnivån påverkar inte resultatets kvalitet"
+
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level does not change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>Justera komprimeringstiden. Bättre komprimering tar längre tid.\n"
+#~ "<br>Observera: komprimeringsnivån påverkar inte resultatets kvalitet.</p>"
+
+#~ msgid "Compress:"
+#~ msgstr "Komprimera:"
+
+#~ msgctxt ""
+#~ "The compression will take a long time; saving the file will be slow."
+#~ msgid "Slow"
+#~ msgstr "Långsam"
+
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "Snabb"
+
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "Liten"
+
+#~ msgctxt "the file will be big"
+#~ msgid "Big"
+#~ msgstr "Stor"
+
+#~ msgid "Use interlacing when publishing on the Internet"
+#~ msgstr "Använd inflätning vid publicering på Internet"
+
+#~ msgid ""
+#~ "<p>Interlacing is useful if you intend to publish your image on the "
+#~ "Internet.<br>\n"
+#~ "Enabling interlacing will cause the image to be displayed by the browser "
+#~ "even while downloading.</p>"
+#~ msgstr ""
+#~ "<p>Inflätning är användbar om du avser att publicera bilden på Internet."
+#~ "<br>\n"
+#~ "Att aktivera inflätning gör att bilden också visas av webbläsaren medan "
+#~ "den laddas ner.</p>"
+
+#~ msgid "Interlacing"
+#~ msgstr "Inflätning"
+
+#~ msgid "Disable to get smaller files if your image has no transparency"
+#~ msgstr ""
+#~ "Inaktivera för att få mindre filer om bilden inte har någon "
+#~ "genomskinlighet"
+
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparency in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparency and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>Filformatet Portabel Nätverksgrafik (PNG) tillåter att genomskinlighet "
+#~ "i bilden lagras genom att spara en alfakanal.\n"
+#~ "Du kan avmarkera rutan om du inte använder genomskinlighet och du vill "
+#~ "göra resultatfilen mindre.<br>Att alltid spara alfakanalen rekommenderas."
+#~ "</p>"
+
+#~ msgid "Store alpha channel (transparency)"
+#~ msgstr "Lagra alfakanal (genomskinlighet)"
+
+#~ msgid "No image loaded"
+#~ msgstr "Ingen bild laddad"
+
+#~ msgctxt ""
+#~ "Show a preview of the image after saving to assess the quality difference"
+#~ msgid "Preview image"
+#~ msgstr "Förhandsgranska bild"
+
+#~ msgid "Size: 100KB"
+#~ msgstr "Storlek: 100 Kibyte"
+
+#~ msgid "Basic"
+#~ msgstr "Grundläggande"
+
+#~ msgid "File size:"
+#~ msgstr "Filstorlek:"
+
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "Liten"
+
+#~ msgctxt "the file will be good quality, but big"
+#~ msgid "Big"
+#~ msgstr "Stor"
+
+#~ msgid ""
+#~ "These settings determine how much information is lost during compression"
+#~ msgstr ""
+#~ "De här inställningarna avgör hur mycket information som går förlorad "
+#~ "under komprimering"
+
+#~ msgctxt "the file will be much compressed, so the quality will be bad"
+#~ msgid "Bad"
+#~ msgstr "Dålig"
+
+#~ msgctxt "the quality will be good but the file will not be much compressed"
+#~ msgid "Good"
+#~ msgstr "Bra"
+
+#~ msgctxt "A progressive jpeg file can be displayed while loading."
+#~ msgid "Progressive"
+#~ msgstr "Progressiv"
+
+#~ msgid "Advanced quality"
+#~ msgstr "Avancerad kvalitet"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimera"
+
+#~ msgctxt "the result will be artificially smoothed to hide jpeg artefacts"
+#~ msgid "Smooth:"
+#~ msgstr "Utjämning:"
+
+#~ msgid "Force baseline JPEG"
+#~ msgstr "Tvinga JPEG-basversion"
+
+#~ msgid "Subsampling:"
+#~ msgstr "Delsampling:"
+
+#~ msgid "2x2, 1x1, 1x1 (smallest file)"
+#~ msgstr "2x2, 1x1, 1x1 (minsta fil)"
+
+#~ msgid "2x1, 1x1, 1x1"
+#~ msgstr "2x1, 1x1, 1x1"
+
+#~ msgid "1x2, 1x1, 1x1"
+#~ msgstr "1x2, 1x1, 1x1"
+
+#~ msgid "1x1, 1x1, 1x1 (best quality)"
+#~ msgstr "1x1, 1x1, 1x1 (bästa kvalitet)"
+
+#~ msgid "Metadata"
+#~ msgstr "Metadata"
+
+#~ msgid "Formats:"
+#~ msgstr "Format:"
+
+#~ msgid "Exif"
+#~ msgstr "EXIF"
+
+#~ msgid "IPTC"
+#~ msgstr "IPTC"
+
+#~ msgid "XMP"
+#~ msgstr "XMP"
+
+#~ msgid "Filters:"
+#~ msgstr "Filter:"
+
+#~ msgid "Options of Your TIFF"
+#~ msgstr "Alternativ för dina TIFF"
+
+#~ msgid "TIFF Options"
+#~ msgstr "Alternativ för TIFF"
+
+#~ msgid "Compression type:"
+#~ msgstr "Komprimeringstyp:"
+
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "JPEG DCT-komprimering"
+
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "Deflate (ZIP)"
+
+#~ msgid "Lempel-Ziv & Welch (LZW)"
+#~ msgstr "Lempel-Ziv & Welch (LZW)"
+
+#~ msgid "Leadtools JPEG2000"
+#~ msgstr "Leadtools JPEG2000"
+
+#~ msgid "CCITT Modified Huffman RLE"
+#~ msgstr "CCITT modifierad Huffman RLE"
+
+#~ msgid "CCITT Group 3 Fax Encoding"
+#~ msgstr "CCITT Grupp 3 telefaxkodning"
+
+#~ msgid "CCITT Group 4 Fax Encoding"
+#~ msgstr "CCITT Grupp 4 telefaxkodning"
+
+#~ msgid "Pixar Log"
+#~ msgstr "Pixar log"
+
+#~ msgid "Predictor:"
+#~ msgstr "Prediktor:"
+
+#~ msgid ""
+#~ "Using a predictor can improve the compression (mostly for LZW and deflate)"
+#~ msgstr ""
+#~ "Att använda en prediktor kan förbättra komprimeringen (i huvudsak för LZW "
+#~ "och Deflate)"
+
+#~ msgid "Horizontal Differencing"
+#~ msgstr "Horisontell skillnad"
+
+#~ msgid "Floating Point Horizontal Differencing"
+#~ msgstr "Horisontell skillnad med flyttal"
+
+#~ msgid "Store alpha &channel (transparency)"
+#~ msgstr "Lagra alfa&kanal (genomskinlighet)"
+
+#~ msgid ""
+#~ "This option will merge all layers. It is advisable to check this option, "
+#~ "otherwise other applications might not be able to read your file correctly"
+#~ msgstr ""
+#~ "Det här alternativet sammanfogar alla lager. Det är lämpligt att markera "
+#~ "alternativet, annars kanske andra program inte kan läsa filen på ett "
+#~ "riktigt sätt."
+
+#~ msgid "Flatten the &image"
+#~ msgstr "Platta ut b&ilden"
+
+#~ msgid "JPEG Compression Options"
+#~ msgstr "Komprimeringsalternativ för JPEG"
+
+#~ msgid "Smallest"
+#~ msgstr "Minst"
+
+#~ msgid "Best"
+#~ msgstr "Bäst"
+
+#~ msgid "Deflate Compression Options"
+#~ msgstr "Komprimeringsalternativ för Deflate"
+
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "Snabb"
+
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "Liten"
+
+#~ msgid "CCITT Group 3 fax encoding Options"
+#~ msgstr "Alternativ för CCITT grupp 3 telefaxkodning"
+
+#~ msgid "Fax mode:"
+#~ msgstr "Telefaxläge:"
+
+#~ msgid "Classic"
+#~ msgstr "Klassiskt"
+
+#~ msgid "No RTC"
+#~ msgstr "Ingen RTC"
+
+#~ msgid "No EOL"
+#~ msgstr "Inga radslut"
+
+#~ msgid "Pixar Log Compression Options"
+#~ msgstr "Komprimeringsalternativ för Pixar log"
+
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "Snabb"
+
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "Liten"

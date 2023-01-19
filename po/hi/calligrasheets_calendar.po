@@ -1,0 +1,249 @@
+# translation of kspreadinsertcalendar.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadinsertcalendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-03-05 21:01+0530\n"
+"Last-Translator: Ravishankar Shrivastava <aviratlami@aol.in>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"अंतिम तिथि प्रारंभ तिथि से पहले सेट है! कृपया सुनिश्चित हों कि समाप्ति तिथी प्रारंभ तिथि के "
+"बाद आए."
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "त्रुटि"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "चेतावनी"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+
+#: CalendarTool.cpp:102
+#, fuzzy
+#| msgid "Insert Calendar"
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "कैलेन्डर प्रविष्ट करें"
+
+#: CalendarTool.cpp:107
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "कैलेण्डर %1 से %2"
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "सप्ताह"
+
+#: CalendarToolFactory.cpp:24
+#, fuzzy, kde-format
+#| msgid "Calendar from %1 to %2"
+msgid "Calendar"
+msgstr "कैलेण्डर %1 से %2"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, fuzzy, kde-format
+#| msgid "Calendar from %1 to %2"
+msgid "Calendar Tool"
+msgstr "कैलेण्डर %1 से %2"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, fuzzy, kde-format
+#| msgid "&Insert"
+msgid "Insert"
+msgstr "प्रविष्ट (&I)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, fuzzy, kde-format
+#| msgid "Start Date"
+msgid "Start date:"
+msgstr "प्रारंभ तारीख़"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, fuzzy, kde-format
+#| msgid "End Date"
+msgid "End date:"
+msgstr "समाप्ति तारीख़"
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "कैलेण्डर %1 से %2"
+
+#, fuzzy
+#~| msgid "&Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "प्रविष्ट (&I)"
+
+#, fuzzy
+#~| msgid "Start Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "प्रारंभ तारीख़"
+
+#, fuzzy
+#~| msgid "End Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "समाप्ति तारीख़"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "अंतिम तिथि प्रारंभ तिथि से पहले सेट है! कृपया सुनिश्चित हों कि समाप्ति तिथी प्रारंभ "
+#~ "तिथि के बाद आए."
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "त्रुटि"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "चेतावनी"
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "कैलेण्डर %1 से %2"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "सप्ताह"
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "कैलेण्डर %1 से %2"
+
+#~ msgid "Set the start date of the calendar you want to insert"
+#~ msgstr "जो कैलेन्डर आप प्रविष्ट करना चाहते हैं उसकी प्रारंभ तिथि सेट करें"
+
+#~ msgid "Date Picker"
+#~ msgstr "तिथि चयनक"
+
+#~ msgid "Use a graphical date picker to select a date"
+#~ msgstr "तिथि चुनने के लिए चित्रमय तिथि चयनक प्रयोग करें"
+
+#~ msgid "Set the end date of the calendar you want to insert"
+#~ msgstr "जो कैलेन्डर आप प्रविष्ट करना चाहते हैं उसकी अंतिम तिथि सेट करें"
+
+#, fuzzy
+#~| msgid "Insert the calendar at the currently selected cell"
+#~ msgctxt "Tooltip for the insert button of the insert calendar plugin"
+#~ msgid "Insert the calendar at the currently selected cell"
+#~ msgstr "वर्तमान चयनित कक्ष पर कैलेण्डर प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid ""
+#~| "A new calendar will be inserted starting at the currently selected cell."
+#~ msgctxt "What's this for the insert button of the insert calendar plugin"
+#~ msgid ""
+#~ "A new calendar will be inserted starting at the currently selected cell."
+#~ msgstr "वर्तमान चयनित कक्ष पर प्रारंभ होता नया कैलेण्डर प्रविष्ट किया जाएगा."
+
+#~ msgid "&Cancel"
+#~ msgstr "रद्द करें (&C)"
+
+#, fuzzy
+#~| msgid "Don't insert a calendar"
+#~ msgid "Do not insert a calendar"
+#~ msgstr "कैलेन्डर प्रविष्ट नहीं करें"
+
+#~ msgid "&Tools"
+#~ msgstr "औज़ार (&T)"
+
+#, fuzzy
+#~| msgid "Your names"
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "रविशंकर श्रीवास्तव, जी. करूणाकर"
+
+#, fuzzy
+#~| msgid "Your emails"
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "raviratlami@aol.in"
+
+#~ msgid "Insert Calendar..."
+#~ msgstr "कैलेन्डर प्रविष्ट करें..."
+
+#~ msgid "KSpread Insert Calendar Plugin"
+#~ msgstr "केस्प्रेड प्रविष्ट कैलेन्डर प्लगइन"
+
+#~ msgid "(c) 2005, The KSpread Team"
+#~ msgstr "(c) 2005, केस्प्रेड टोली"
+
+#~ msgid "Raphael Langerhorst"
+#~ msgstr "राफ़ेल लेंगरहोर्स्ट"
+
+#~ msgid "Cannot insert calendar because no document is set!"
+#~ msgstr "कैलेण्डर प्रविष्ट नहीं कर सकता चूंकि कोई दस्तावेज़ सेट नहीं है!"

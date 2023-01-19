@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadsolver\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-04-21 11:41+0100\n"
+"Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
+"Language-Team: Frisian <kde-i18n-doc@kde.org>\n"
+"Language: fy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Solver.cpp:59
+#, kde-format
+msgid "Function Optimizer..."
+msgstr "Funksje optimalisaasje..."
+
+#. i18n: ectx: Menu (tools)
+#: solver.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "&Ark"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: SolverDetailsWidget.ui:67
+#, kde-format
+msgid "Precision:"
+msgstr "Presysje:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: SolverDetailsWidget.ui:74
+#, kde-format
+msgid "Maximum Iterations:"
+msgstr "Maksimum werhellings:"
+
+#: SolverDialog.cpp:18
+#, kde-format
+msgid "Function Optimizer"
+msgstr "Funksje optimalisaasje"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: SolverMainWidget.ui:37
+#, kde-format
+msgid "Optimization"
+msgstr "Optimalisaasje..."
+
+#. i18n: ectx: property (text), widget (QRadioButton, maximizeButton)
+#: SolverMainWidget.ui:43
+#, kde-format
+msgid "Maximize"
+msgstr "Maksimalisearje"
+
+#. i18n: ectx: property (text), widget (QRadioButton, minimizeButton)
+#: SolverMainWidget.ui:50
+#, kde-format
+msgid "Minimize"
+msgstr "Minimalisearje"
+
+#. i18n: ectx: property (text), widget (QRadioButton, valueButton)
+#: SolverMainWidget.ui:60
+#, kde-format
+msgid "Value:"
+msgstr "Wearde:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: SolverMainWidget.ui:73
+#, kde-format
+msgid "Parameters:"
+msgstr "Parameters:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: SolverMainWidget.ui:83
+#, kde-format
+msgid "Function:"
+msgstr "Funksje:"
+
+#, fuzzy
+#~| msgid "Precision:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Precision:"
+#~ msgstr "Presysje:"
+
+#, fuzzy
+#~| msgid "Maximum Iterations:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Maximum Iterations:"
+#~ msgstr "Maksimum werhellings:"
+
+#, fuzzy
+#~| msgid "Optimization"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Optimization"
+#~ msgstr "Optimalisaasje..."
+
+#, fuzzy
+#~| msgid "Maximize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Maximize"
+#~ msgstr "Maksimalisearje"
+
+#, fuzzy
+#~| msgid "Minimize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimize"
+#~ msgstr "Minimalisearje"
+
+#, fuzzy
+#~| msgid "Value:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value:"
+#~ msgstr "Wearde:"
+
+#, fuzzy
+#~| msgid "Parameters:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parameters:"
+#~ msgstr "Parameters:"
+
+#, fuzzy
+#~| msgid "Function:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function:"
+#~ msgstr "Funksje:"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "&Ark"
+
+#, fuzzy
+#~| msgid "Function Optimizer..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function Optimizer..."
+#~ msgstr "Funksje optimalisaasje..."
+
+#, fuzzy
+#~| msgid "Function Optimizer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function Optimizer"
+#~ msgstr "Funksje optimalisaasje"

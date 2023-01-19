@@ -1,0 +1,175 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Giovanni Sora <g.sora@tiscali.it>, 2012, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-11-24 14:06+0100\n"
+"Last-Translator: giovanni <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Giovanni Sora"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "g.sora@tiscali.it"
+
+#: main.cpp:69
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "Mymetype pro <filename>%1</filename> non trovate!"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Aperi con <application>%1</application>"
+
+#: main.cpp:132
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"Non pote trovar un application de Calligra convenibile pro aperir <filename>"
+"%1</filename>. <nl/>Tu vole aperir le file con le application predefinite "
+"<application>%2</application>?"
+
+#: main.cpp:135
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Application de Calligra non trovate"
+
+#: main.cpp:165
+#, kde-format
+msgid "Calligra Opener"
+msgstr "Calligra Opener (Aperitor de Calligra)"
+
+#: main.cpp:167
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "Aperitor de documentos de Calligra"
+
+#: main.cpp:169
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "Copyright 2010-%1 disveloppatores de Calligra "
+
+#: main.cpp:170
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jaroslaw Staniek"
+
+#: main.cpp:177
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Lista nomine de omne applicationes disponibile de Calligra"
+
+#: main.cpp:178
+#, kde-format
+msgid "Files to open"
+msgstr "Files de aperir"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Giovanni Sora"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "g.sora@tiscali.it"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid "Mimetype for <filename>%1</filename> not found!"
+#~ msgstr "Mymetype pro <filename>%1</filename> non trovate!"
+
+#, fuzzy
+#~| msgctxt "@action:button"
+#~| msgid "Open with <application>%1</application>"
+#~ msgctxt "(qtundo-format) @action:button"
+#~ msgid "Open with <application>%1</application>"
+#~ msgstr "Aperi con <application>%1</application>"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "Could not find Calligra application suitable for opening <filename>%1</"
+#~| "filename>.<nl/>Do you want to open the file using default application "
+#~| "<application>%2</application>?"
+#~ msgctxt "(qtundo-format) @info"
+#~ msgid ""
+#~ "Could not find Calligra application suitable for opening <filename>%1</"
+#~ "filename>.<nl/>Do you want to open the file using default application "
+#~ "<application>%2</application>?"
+#~ msgstr ""
+#~ "Non pote trovar un application de Calligra convenibile pro aperir "
+#~ "<filename>%1</filename>. <nl/>Tu vole aperir le file con le application "
+#~ "predefinite <application>%2</application>?"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Calligra Application Not Found"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Calligra Application Not Found"
+#~ msgstr "Application de Calligra non trovate"
+
+#, fuzzy
+#~| msgid "Calligra Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Opener"
+#~ msgstr "Calligra Opener (Aperitor de Calligra)"
+
+#, fuzzy
+#~| msgid "Calligra Document Opener"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Opener"
+#~ msgstr "Aperitor de documentos de Calligra"
+
+#, fuzzy
+#~| msgid "Copyright 2010-%1 Calligra developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2010-%1 Calligra developers"
+#~ msgstr "Copyright 2010-%1 disveloppatores de Calligra "
+
+#, fuzzy
+#~| msgid "Jarosław Staniek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jarosław Staniek"
+#~ msgstr "Jaroslaw Staniek"
+
+#, fuzzy
+#~| msgid "Lists names of all available Calligra applications"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lists names of all available Calligra applications"
+#~ msgstr "Lista nomine de omne applicationes disponibile de Calligra"
+
+#, fuzzy
+#~| msgid "Files to open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Files to open"
+#~ msgstr "Files de aperir"

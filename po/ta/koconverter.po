@@ -1,0 +1,231 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2004-11-29 01:46-0800\n"
+"Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
+"Language-Team: KDE <kde-i18n-doc@kde.org>\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "chris"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "chris_loyola2003@yahoo.com"
+
+#: calligraconverter.cpp:144
+#, fuzzy, kde-format
+#| msgid "KOffice Document Converter"
+msgid "CalligraConverter"
+msgstr "KOffice ஆவண மாற்றி"
+
+#: calligraconverter.cpp:146
+#, fuzzy, kde-format
+#| msgid "KOffice Document Converter"
+msgid "Calligra Document Converter"
+msgstr "KOffice ஆவண மாற்றி"
+
+#: calligraconverter.cpp:148
+#, fuzzy, kde-format
+#| msgid "(c) 2001-2004 KOffice developers"
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "(c) 2001, KOffice மேம்படுத்தியவர்கள்"
+
+#: calligraconverter.cpp:149
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: calligraconverter.cpp:150
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr ""
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "உள்ளீட்டு கோப்பு"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "வெளியீட்டு கோப்பு"
+
+#: calligraconverter.cpp:160
+#, kde-format
+msgid "Make a backup of the destination file"
+msgstr "இலக்குக் கோப்புக்கு காப்புநகல் அமை"
+
+#: calligraconverter.cpp:161
+#, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "திரள் பாங்கு:உரையாடல்களை காட்டாதே"
+
+#: calligraconverter.cpp:162
+#, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "ஊடாடு பாங்கு:உரையாடல் காட்டு(முன்னிருப்பு)"
+
+#: calligraconverter.cpp:163
+#, kde-format
+msgid "Mimetype of the output file"
+msgstr "வெளியீட்டு கோப்பின் மைம்வகை"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr ""
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr ""
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr ""
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "இரண்டு உருப்படி தேவை"
+
+#: calligraconverter.cpp:203
+#, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "உள்ளீட்டிற்கான மைம் வகை %1 யை காண முடியவில்லை"
+
+#: calligraconverter.cpp:212
+#, kde-format
+msgid "Mimetype not found %1"
+msgstr "மைம் வகை %1 காண முடியவில்லை"
+
+#: calligraconverter.cpp:218
+#, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "மைம் வகையை காண முடியவில்லை, மைம் வகை "
+
+#: calligraconverter.cpp:242
+#, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "*** மாற்ற இயலவில்லை! ***"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "chris"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "chris_loyola2003@yahoo.com"
+
+#, fuzzy
+#~| msgid "KOffice Document Converter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "KOffice ஆவண மாற்றி"
+
+#, fuzzy
+#~| msgid "KOffice Document Converter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "KOffice ஆவண மாற்றி"
+
+#, fuzzy
+#~| msgid "(c) 2001-2004 KOffice developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "(c) 2001, KOffice மேம்படுத்தியவர்கள்"
+
+#, fuzzy
+#~| msgid "Input file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "உள்ளீட்டு கோப்பு"
+
+#, fuzzy
+#~| msgid "Output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "வெளியீட்டு கோப்பு"
+
+#, fuzzy
+#~| msgid "Make a backup of the destination file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "இலக்குக் கோப்புக்கு காப்புநகல் அமை"
+
+#, fuzzy
+#~| msgid "Batch mode: do not show dialogs"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "திரள் பாங்கு:உரையாடல்களை காட்டாதே"
+
+#, fuzzy
+#~| msgid "Interactive mode: show dialogs (default)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "ஊடாடு பாங்கு:உரையாடல் காட்டு(முன்னிருப்பு)"
+
+#, fuzzy
+#~| msgid "Mimetype of the output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "வெளியீட்டு கோப்பின் மைம்வகை"
+
+#, fuzzy
+#~| msgid "Two arguments required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "இரண்டு உருப்படி தேவை"
+
+#, fuzzy
+#~| msgid "Mimetype for input file %1 not found!"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "உள்ளீட்டிற்கான மைம் வகை %1 யை காண முடியவில்லை"
+
+#, fuzzy
+#~| msgid "Mimetype not found %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "மைம் வகை %1 காண முடியவில்லை"
+
+#, fuzzy
+#~| msgid "Mimetype not found, try using the -mimetype option"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "மைம் வகையை காண முடியவில்லை, மைம் வகை "
+
+#, fuzzy
+#~| msgid "*** The conversion failed! ***"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "*** மாற்ற இயலவில்லை! ***"
+
+#~ msgid "KOConverter"
+#~ msgstr "KOConverter"

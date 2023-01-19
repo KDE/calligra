@@ -1,0 +1,333 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Anpassa &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>Dialogrutan Anpassa - Stage</title>
+
+<sect2 id="configure-misc">
+<title
+>Diverse</title>
+
+<screenshot>
+<screeninfo
+>Diverse</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Diverse</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Enheter</guilabel
+></term>
+<listitem
+><para
+>Välj förvald enhet som används på sidorna.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Greppradie</guilabel
+></term>
+<listitem
+><para
+>Om du markerar en form med standardverktyget (pilen) visas de gula och röda rektanglarna. De kallas grepp (används för storleksändring, rotation, ...). Greppradien ändrar greppens storlek. Om du gör dem större är det lättare att träffa dem.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Gripkänslighet</guilabel
+></term>
+<listitem
+><para
+>Det här alternativet definierar exakt hur du måste träffa ett grepp för att välja det.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Inklistringsposition</guilabel
+></term>
+<listitem
+><para
+>Det här är bara aktivt om <guilabel
+>Klistra in vid markör</guilabel
+> är inaktiverat. Om du kopierar en form med genvägen <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> och klistrar in den med <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> på en plats där det redan finns en form, används den här positionen för att klistra in den nya formen längst ner eller till höger.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Klistra in vid markör</guilabel
+></term>
+<listitem
+><para
+>Inaktiverar inklistringsposition och infogar en form som klistras in vid muspekarens position.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Rutnät</title>
+
+<screenshot>
+<screeninfo
+>Rutnät</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Rutnät</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Rutnät</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Visa rutnät</guilabel
+></term>
+<listitem
+><para
+>Om aktiverat, visar &stage; ett rutnät med punkter som representerar korsningar av tänkta horisontella och vertikala linjer. Du kan använda punkterna för att exakt placera objekt på sidan.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Lås till rutnät</guilabel
+></term>
+<listitem
+><para
+>Om det här är aktiverat, så <quote
+>låses</quote
+> eller flyttas det över vänstra hörnet på ett objekt till närmaste punkt på rutnätet när det släpps eller flyttas på sidan.</para>
+<para
+>Det här minskar friheten att placera objekt var som helst på sidan, men det hjälper också till att rada upp objekt exakt. Det kan lätt inaktiveras och aktiveras med alternativet, vilket ger dig det bästa av båda världar.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Färg på rutnät:</guilabel
+></term>
+<listitem
+><para
+>Här kan du ändra rutnätsfärgen som normalt är svart.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Mellanrum</guilabel
+></title>
+<para
+>Du kan välja att behålla samma förhållande för de två inställningarna nedan genom att använda ikonen <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> eller skilja de två inställningarna åt genom att använda ikonen <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Horisontell:</guilabel
+></term>
+<listitem
+><para
+>Ställer in avståndet i centimeter mellan två punkter på en horisontell linje i rutnätet. Normalvärdet är 0,5 centimeter.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Vertikal:</guilabel
+></term>
+<listitem
+><para
+>Ställer in avståndet i centimeter mellan två punkter på en vertikal linje i rutnätet. Normalvärdet är 0,5 centimeter.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Dokument</title>
+
+<screenshot>
+<screeninfo
+>Dokument</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Dokument</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Dokumentinställningar</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Spara automatiskt:</guilabel
+></term>
+<listitem
+><para
+>Du kan använda detta för att justera hur ofta &stage; sparar en tillfällig fil. Om du ställer in värdet till <guilabel
+>Spara inte automatiskt</guilabel
+>, sparar inte &stage; automatiskt. Du kan justera spara automatiskt från 1 minut till 60 minuter.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Skapa säkerhetskopia:</guilabel
+></term>
+<listitem
+><para
+>Om markerad, kommer detta att skapa filen <filename
+>&lt;namn&gt;.odp.autosave.odp</filename
+> i katalogen där filen finns. Den här säkerhetskopian av filen kan därefter användas i händelse av problem. Säkerhetskopian uppdateras varje gång du sparar dokumentet eller varje gång det sparas automatiskt.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Författare</title>
+
+<screenshot>
+<screeninfo
+>Författare</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Dokument</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Välj en författarprofil för dokumentet. </para>
+<para
+>Du kan lägga till en ny profil eller ta bort den nuvarande med knapparna till höger om kombinationsrutan med profiler. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

@@ -1,0 +1,747 @@
+# translation of karbon.po to Maithili
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sangeeta Kumari <sangeeta09@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2009-04-22 00:14+0530\n"
+"Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
+"Language-Team: Maithili <maithili.sf.net>\n"
+"Language: mai\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
+"\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Blend"
+msgstr "टाइल्ड"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Blend mode"
+msgstr "टाइल्ड"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Lighten"
+msgstr "दहिन्ना"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius"
+msgstr "त्रिज्या:"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, fuzzy, kde-format
+#| msgid "Angle:"
+msgid "Angle"
+msgstr "कोण:"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Table"
+msgstr "टाइल्ड"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+#| msgctxt "Linear gradient type"
+#| msgid "Linear"
+msgid "Linear"
+msgstr "रैखिक"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Slope"
+msgstr "आकार"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "अंतरफलक"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, fuzzy, kde-format
+#| msgid "Effects"
+msgid "Offset"
+msgstr "प्रभाव"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr ""
+
+#: CompositeEffectConfigWidget.cpp:23
+#, fuzzy, kde-format
+#| msgid "Repeat:"
+msgid "Operation"
+msgstr "दोहराबू:"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "D&elete"
+msgid "Duplicate"
+msgstr "मेटाबू (&e)"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, fuzzy, kde-format
+#| msgid "None"
+msgid "None"
+msgstr "किछु नहि"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "Target:"
+msgid "Target point:"
+msgstr "लक्ष्यः"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr ""
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Grid color:"
+msgid "Flood fill"
+msgstr "जाल रंग:"
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+#| msgid "Grid color:"
+msgid "Flood color"
+msgstr "जाल रंग:"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr ""
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr ""
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "D&elete"
+msgid "Dilate"
+msgstr "मेटाबू (&e)"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Repeat:"
+msgid "Operator:"
+msgstr "दोहराबू:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius x:"
+msgstr "त्रिज्या:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius y:"
+msgstr "त्रिज्या:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr ""
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "टाइल्ड"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "टाइल्ड"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "दहिन्ना"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "त्रिज्या:"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "कोण:"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "टाइल्ड"
+
+#, fuzzy
+#~| msgctxt "Linear gradient type"
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "रैखिक"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "आकार"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "अंतरफलक"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "प्रभाव"
+
+#, fuzzy
+#~| msgid "Repeat:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "दोहराबू:"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "मेटाबू (&e)"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "किछु नहि"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "टाइल्ड"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "लक्ष्यः"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "जाल रंग:"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "जाल रंग:"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "मेटाबू (&e)"
+
+#, fuzzy
+#~| msgid "Repeat:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "दोहराबू:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "त्रिज्या:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "त्रिज्या:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "संगीता कुमारी"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sangeeta09@gmail.com"
+
+#~ msgid "&Align"
+#~ msgstr "पंक्तिबद्ध (&A)"
+
+#~ msgid "&File"
+#~ msgstr "फाइल (&F)"
+
+#~ msgid "&Edit"
+#~ msgstr "सँपादित करू (&E)"
+
+#~ msgid "&View"
+#~ msgstr "दृश्य (&V)"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgid "&Object"
+#~ msgstr "वस्तु"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgid "Effe&cts"
+#~ msgstr "प्रभाव"
+
+#~ msgid "&Settings"
+#~ msgstr "जमावट (&S)"
+
+#~ msgid "Edit"
+#~ msgstr "संपादन"
+
+#~ msgid "Object"
+#~ msgstr "वस्तु"
+
+#~ msgid "Align"
+#~ msgstr "संरेखित करू"
+
+#~ msgid "Effects"
+#~ msgstr "प्रभाव"
+
+#~ msgid "View"
+#~ msgstr "दृश्य"
+
+#~ msgid "Properties"
+#~ msgstr "गुण"
+
+#~ msgid "Radius:"
+#~ msgstr "त्रिज्या:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "दृश्य"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "दृश्य"
+
+#~ msgid "Info"
+#~ msgstr "सूचना"
+
+#~ msgid "Angle:"
+#~ msgstr "कोण:"
+
+#, fuzzy
+#~| msgid "Raise Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "परत उठाबू"
+
+#, fuzzy
+#~| msgid "Lower Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "निचला परत"
+
+#~ msgid "Configure"
+#~ msgstr "बिन्यस्त करू"
+
+#~ msgid "Interface"
+#~ msgstr "अंतरफलक"
+
+#~ msgid "Misc"
+#~ msgstr "विविध"
+
+#~ msgid "Grid"
+#~ msgstr "जाल"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "दस्तावेज"
+
+#~ msgid "Add a new layer"
+#~ msgstr "नवीन परत जोड़ू"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "चयनित वस्तु मेटाबू"
+
+#~ msgid "Detailed View"
+#~ msgstr "विस्तृत दृश्य "
+
+#~ msgid "New Layer"
+#~ msgstr "नइ परत"
+
+#~ msgid "New layer"
+#~ msgstr "नवीन स्तर"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "परत मेटाबू"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "परत मेटाबू"
+
+#~ msgid "Layer"
+#~ msgstr "स्तर"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "समूह"
+
+#~ msgid "Shape"
+#~ msgstr "आकार"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "दृष्टिगोचर"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "तालाबन्न"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "no"
+#~ msgstr "सूचना"
+
+#~ msgid "Bug fixes"
+#~ msgstr "बग फिक्सेस"
+
+#~ msgid "D&elete"
+#~ msgstr "मेटाबू (&e)"
+
+#, fuzzy
+#~| msgid "Show Guides"
+#~ msgid "Edit Guides"
+#~ msgstr "गाइड देखाबू"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "ग्रिडमे स्नेप करू"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgid "&Clip Object"
+#~ msgstr "वस्तु"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "ग्रिडमे स्नेप करू"
+
+#~ msgid "Zoom"
+#~ msgstr "जूम"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "किछु नहि"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "पसंदीदा"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "किछु नहि"
+
+#~ msgid "Target:"
+#~ msgstr "लक्ष्यः"
+
+#, fuzzy
+#~| msgctxt "Linear gradient type"
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "रैखिक"
+
+#~ msgid "Fill"
+#~ msgstr "भरू"
+
+#~ msgid "Type:"
+#~ msgstr "प्रकार:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "रैखिक"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "अरीय"
+
+#~ msgid "Repeat:"
+#~ msgstr "दोहराबू:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "किछु नहि"
+
+#~ msgid "Repeat"
+#~ msgstr "दोहराबू"
+
+#~ msgid "Original"
+#~ msgstr "मौलिक"
+
+#~ msgid "Tiled"
+#~ msgstr "टाइल्ड"
+
+#~ msgid "Stretched"
+#~ msgstr "घीँचल"
+
+#~ msgid "Top Left"
+#~ msgstr "उप्पर बामाँ"
+
+#~ msgid "Top"
+#~ msgstr "उप्पर"
+
+#~ msgid "Top Right"
+#~ msgstr "उप्पर दहिन्ना "
+
+#~ msgid "Left"
+#~ msgstr "बामाँ"
+
+#~ msgid "Center"
+#~ msgstr "केंद्र"
+
+#~ msgid "Right"
+#~ msgstr "दहिन्ना"
+
+#~ msgid "Bottom Left"
+#~ msgstr "नीच्चाँ बम्माँ तरफ"
+
+#~ msgid "Bottom"
+#~ msgstr "नीच्चाँ"
+
+#~ msgid "Bottom Right"
+#~ msgstr "नीच्चाँ दहिन्ना"
+
+#~ msgid "Stroke"
+#~ msgstr "स्ट्रोक"
+
+#~ msgid "Tools"
+#~ msgstr "अओजार"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "किछु नहि"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "ठोस"
+
+#~ msgid "Gradient"
+#~ msgstr "झुकाव"
+
+#~ msgid "Pattern"
+#~ msgstr "प्रारूप"
+
+#~ msgid "Units:"
+#~ msgstr "एकाइ:"
+
+#~ msgid "Spacing"
+#~ msgstr "अंतरण"
+
+#~ msgid "min"
+#~ msgstr "min"

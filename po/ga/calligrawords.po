@@ -1,0 +1,5254 @@
+# Irish translation of kword
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kword package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice/kword.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2004-12-03 14:52-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Comhad"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "&Eagar"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "&Amharc"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "Mó&d Taispeána"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+msgid "Semantics"
+msgstr "Réad Séimeantach"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+msgid "S&tyles"
+msgstr "Stíl:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "&Socruithe"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Seiceáil an litriú"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "Eagar"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Torthaí an Litreora"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Athraigh Athróg Go"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "&Uirlisí"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Socraigh Stíl an Leathanaigh"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Ionsáigh Stíl Leathanaigh"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Airíonna an Leathanaigh"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Cruthaigh Fráma"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+msgid "Baseline"
+msgstr "Déan inlíne"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+msgid "Character"
+msgstr "Cruthaigh"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Ró"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "Soláthair príomhlimistéar téacs"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "Soláthair príomhlimistéar téacs"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+msgid "Paragraph area"
+msgstr "Alt"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+msgid "Paragraph text area"
+msgstr "Soláthair príomhlimistéar téacs"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "Imlínte an Fhráma"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "Athraigh an Imlíne"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, kde-format
+msgid "Right paragraph border"
+msgstr "Imlíne ailt ar dheis"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, kde-format
+msgid "Left paragraph border"
+msgstr "Imlíne ailt ar chlé"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+msgid "Vertical Positioning"
+msgstr "Línte Ingearacha"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+msgid "Top align with:"
+msgstr "Ailínigh Téacs Ar Chlé"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+msgid "Center align with:"
+msgstr "Ailínigh Téacs Ar Chlé"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+msgid "Bottom align with:"
+msgstr "Ailínigh Téacs Ar Chlé"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr "Fritháireamh"
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+msgid "from:"
+msgstr "Ó:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+msgid "Horizontal Positioning"
+msgstr "Línte Cothrománacha"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+msgid "Left align with:"
+msgstr "Ailínigh Téacs Ar Chlé"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+msgid "Right align with:"
+msgstr "Ailínigh Téacs Ar Chlé"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "C&umraigh..."
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Éagsúil"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "Greille 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Cáipéis"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Socruithe Cáipéise"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, fuzzy, kde-format
+#| msgid "Author"
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Údar"
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr "Údar"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Cruthaigh Leabharmharc Nua"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Ainm:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "Colúin:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, kde-format
+msgid "Column spacing:"
+msgstr "Spásáil na gcolún:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, kde-format
+msgid "frameset"
+msgstr "frámadán"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr "Níl frámadáin sa cháipéis"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Ainm an fhrámadáin:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "Cruthaigh frámadán nua:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Roghnaigh frámadán atá ann chun nasc a bhunú leis:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Ainm an Fhrámadáin"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+msgid "Smart Positioning"
+msgstr "Ionad"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Run Around Side"
+msgid "Text Run Around"
+msgstr "Rith Timpeall an Taoibh"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Ceangail Frámaí Téacs"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Athraigh Airíonna an Leathanaigh"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, fuzzy, kde-format
+#| msgid "Anchor"
+msgid "Anchor to..."
+msgstr "Ancaire"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+msgid "&Page"
+msgstr "Leathanaigh"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+msgid "Para&graph"
+msgstr "Alt"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+msgid "&To Character"
+msgstr "Cruthaigh"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+msgid "&As Character"
+msgstr "Cruthaigh"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+msgid "Horizontal Alignment"
+msgstr "Línte Cothrománacha"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+msgid "&Left"
+msgstr "Ar &Chlé"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+msgid "&Center"
+msgstr "Láraithe"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+msgid "&Right"
+msgstr "Ar &Dheis"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+msgid "Vertical Alignment"
+msgstr "Línte Ingearacha"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr "&Barr"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+msgid "&Bottom"
+msgstr "Bun:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Run Around Side"
+msgid "Text Wrap-around"
+msgstr "Rith Timpeall an Taoibh"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+msgid "Run through this shape"
+msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+msgid "Skip below this shape"
+msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+msgid "Run on left side of this shape"
+msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+msgid "Run on right side of this shape"
+msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+msgid "Run on longest side of this shape"
+msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+msgid "Run on both sides of this shape"
+msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Fad ó fhráma go téacs:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Colúin"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Stíl:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+msgid "Clone"
+msgstr "Dúnadh"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, kde-format
+msgid "Delete"
+msgstr "Scrios"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Socraigh Stíl an Leathanaigh"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+msgid "Clone Page Style"
+msgstr "Socraigh Stíl an Leathanaigh"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr "Comhrian"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+msgid "Left by:"
+msgstr "Ar Chlé:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+msgid "Right by:"
+msgstr "Ar Dheis:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "&Athainmnigh"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&Scrios"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Athainmnigh an Leabharmharc"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "Tabhair ainm nua ar an leabharmharc"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Tá leabharmharc darb ainm \"%1\" ann cheana."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Roghnaigh Leabharmharc"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Céimseata"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Méid an Leathanaigh agus Imill"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Cruthaigh"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Salutation"
+msgid "Navigation"
+msgstr "Beannacht"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Page #"
+msgstr "Leathanaigh"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgid "Section"
+msgstr "Feidhmeanna"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr "RDF"
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Staitisticí"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Focail:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Abairtí:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Siollaí:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+msgid "Characters (spaces):"
+msgstr "Líon na gcarachtar, spásanna san áireamh"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+msgid "Characters (no spaces):"
+msgstr "Líon na gcarachtar, spásanna san áireamh"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Línte:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+msgid "Flesch reading ease"
+msgstr "Éascaíocht léimh Flesch"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+msgid "East asian characters:"
+msgstr "Cruthaigh"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+msgid "Words"
+msgstr "Focail"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "Abairtí"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "Siollaí"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "Línte"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+msgid "Characters With Spaces"
+msgstr "Líon na gcarachtar, gan spásanna"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "Líon na gcarachtar, gan spásanna"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+msgid "East Asian characters"
+msgstr "Cruthaigh"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+msgid "Flesch Reading Ease"
+msgstr "Éascaíocht léimh Flesch"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Caighdeánach"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Ceann 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Ceann 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Ceann 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Liosta Áirithe"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Liosta Aibítreach"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Liosta le hUrchair"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Ábhar: Teideal"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Ábhar: Ceanntásc 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Ábhar: Ceanntásc 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Ábhar: Ceanntásc 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Teideal na Cáipéise"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Ceanntásc"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Buntásc"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Gnáth"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Imlínte 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Imlínte 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Imlínte 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Ró"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Colún"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Fionnliath"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Dúliath"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Dubh"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Bánghorm"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Dúghorm"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Dearg"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Buí"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Ildathach"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Scothghorm"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Simplí 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Simplí 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Simplí 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Ceanntásc 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Ceanntásc 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Ceanntásc 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Ceanntásc 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Colúin 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Colúin 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Greille 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Greille 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Greille 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Ceannteideal Liath"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Ceannteideal Gorm"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Gorm Traidisiúnta"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Liath Traidisiúnta"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Gorm Bun agus Barr"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Liath Bun agus Barr"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Próiseálaí Focal KOffice"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+msgid "Word processor"
+msgstr "Próiseálaí Focal KOffice"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "© 1998-2009, Foireann KWord"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr "Pierre Ducroquet"
+
+#: part/KWAboutData.h:33
+#, fuzzy, kde-format
+msgid "C. Boemann"
+msgstr "Casper Boemann"
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr "Gach Rud"
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr "Sebastian Sauer"
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+msgid "Formatting stuff"
+msgstr "Carachtair Fhormáidithe"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "&Comhad"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+msgid "Statistics docker"
+msgstr "Staitisticí"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+msgid "Foot and endnotes"
+msgstr "&Fonóta"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr "Leabharliosta"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "&Bainisteoir na Stíleanna"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr "Lukáš Tvrdý"
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr "Girish Ramakrishnan"
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr "Tacaíocht ODF"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "Sven Lüppken"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "Frank Dekervel"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "Krister Wicksell Eriksson"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr "Dag Andersen"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "Nash Hoogwater"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "Ulrich Kuettler"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr "Clarence Dang"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "Robert Jacolin"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr "Enno Bartels"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr "Ewald Snel"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "Tomasz Grobelny"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr "Michael Johnson"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+msgid "Page break icon"
+msgstr "Briseadh Leathanaigh"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "seoc@iolfree.ie,kscanne@gmail.com"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "Cóip"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+msgid "Standard"
+msgstr "Caighdeánach"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Teideal na Cáipéise"
+
+#: part/KWDocument.cpp:553
+#, kde-format
+msgid "Head 1"
+msgstr "Ceann 1"
+
+#: part/KWDocument.cpp:559
+#, kde-format
+msgid "Head 2"
+msgstr "Ceann 2"
+
+#: part/KWDocument.cpp:565
+#, kde-format
+msgid "Head 3"
+msgstr "Ceann 3"
+
+#: part/KWDocument.cpp:571
+#, kde-format
+msgid "Bullet List"
+msgstr "Liosta le hUrchair"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr "Uirlisí"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr ""
+"Cáipéis neamhbhailí OASIS OpenDocument. Níor aimsíodh clib office:body."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+"Cáipéis neamhbhailí OASIS OpenDocument. Níor aimsíodh aon chlib isteach i "
+"office:body."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Ní cáipéis phróiseálaí focal é seo, ach %1. Ba chóir duit é a oscailt leis "
+"an bhfeidhmchlár oiriúnach."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Caighdeánach"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr "Earráid Suiteála"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "Athraithe"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "Sábháilte"
+
+#: part/KWStatusBar.cpp:37
+#, kde-format
+msgid "Page %1 of %2"
+msgstr "Leathanach %1 as %2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+#| msgid "Page %1 of %2"
+msgid "Page %1-%2 of %3"
+msgstr "Leathanach %1 as %2"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+msgid "Line %1"
+msgstr "Línte"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+msgid "Page Number"
+msgstr "Uimhir an leathanaigh:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+msgid "Line Number"
+msgstr "Uimhir"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+msgid "Change the page style"
+msgstr "Socraigh Stíl an Leathanaigh"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+msgid "Page Style"
+msgstr "Stíl an leathanaigh:"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+msgid "Page Size"
+msgstr "Athraigh an Chlómhéid"
+
+#: part/KWStatusBar.cpp:184
+#, fuzzy, kde-format
+msgid "Saved/Modified"
+msgstr "Stádas: sábháilte/athraithe"
+
+#: part/KWStatusBar.cpp:197
+#, fuzzy, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr "Ionad na Luiche: X:Y"
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+msgid "Shape Properties..."
+msgstr "Airíonna an Leathanaigh"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+msgid "Create Template From Document..."
+msgstr "&Cruthaigh Teimpléad Ó Cháipéis..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+msgid "Show Formatting Characters"
+msgstr "Carachtair Fhormáidithe"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr ""
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Cumraigh Imlínte an Tábla"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr ""
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+msgid "Show Table Borders"
+msgstr "Cumraigh Imlínte an Tábla"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr ""
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr ""
+
+#: part/KWView.cpp:334
+#, kde-format
+msgid "Toggle the display of section bounds"
+msgstr ""
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Taispeáin Rialóirí"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "Taispeáin nó folaigh rialóirí"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Léim go Greille"
+
+#: part/KWView.cpp:359
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Taispeáin an Barra Stádais"
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Taispeáin nó folaigh an barra stádais"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr ""
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr ""
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+msgid "Configure..."
+msgstr "C&umraigh..."
+
+#: part/KWView.cpp:401
+#, kde-format
+msgid "Page Layout..."
+msgstr "Leagan Amach an Leathanaigh..."
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "Athraigh Airíonna an Leathanaigh"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+msgid "Create Header"
+msgstr "Cruthaigh Sraith"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+msgid "Create Footer"
+msgstr "Cruthaigh Sraith"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+#| msgid "Remove Comment"
+msgid "Show Comments"
+msgstr "Bain Nóta"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+#| msgid "No framesets in document"
+msgid "Shows comments in the document"
+msgstr "Níl frámadáin sa cháipéis"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Shows or hides the status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "Taispeáin nó folaigh an barra stádais"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+msgid "Page Setup"
+msgstr "Athraigh an Chlómhéid"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+msgid "Header & Footer"
+msgstr "Buntásc ar Leathanaigh Chothroma"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Page layout"
+msgstr "Leagan Amach an Leathanaigh..."
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Next Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "An Chéad Leathanach Eile"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Previous Page"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "An Leathanach Roimhe Seo"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "Search options"
+msgid "Options"
+msgstr "Roghanna"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Ionadaigh Focal"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Ionadaigh Focal"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Ionadaigh Focal"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgid "Replace"
+msgstr "Ionadaigh Focal"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Ceanntásc ar Leathanaigh Chorra"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Ceanntásc ar Leathanaigh Chothroma"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Buntásc ar Leathanaigh Chorra"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Buntásc ar Leathanaigh Chothroma"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "Príomhthéacs"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+msgid "Other text"
+msgstr "Leathanaigh Eile"
+
+#, fuzzy
+#~| msgid "Anchor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor to..."
+#~ msgstr "Ancaire"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "Leathanaigh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Alt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Cruthaigh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Cruthaigh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Línte Cothrománacha"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "Ar &Chlé"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "Láraithe"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "Ar &Dheis"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Línte Ingearacha"
+
+#, fuzzy
+#~| msgid "&Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Top"
+#~ msgstr "&Barr"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Bun:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Rithfidh an téacs tríd an bhfrámadán seo"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Fad ó fhráma go téacs:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Línte Ingearacha"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Fritháireamh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Ó:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Línte Cothrománacha"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Ainm an fhrámadáin:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Cruthaigh frámadán nua:"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Roghnaigh frámadán atá ann chun nasc a bhunú leis:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Ainm an Fhrámadáin"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "&Athainmnigh"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Scrios"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Ainm:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Méid an Leathanaigh agus Imill"
+
+#, fuzzy
+#~| msgid "Contour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour"
+#~ msgstr "Comhrian"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Ar Chlé:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Ar Dheis:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Colúin:"
+
+#, fuzzy
+#~| msgid "Column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Spásáil na gcolún:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Focail"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Abairtí"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Siollaí"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Línte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Líon na gcarachtar, gan spásanna"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Líon na gcarachtar, gan spásanna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Cruthaigh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Éascaíocht léimh Flesch"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Comhad"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Eagar"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Amharc"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Mó&d Taispeána"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Réad Séimeantach"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Stíl:"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Socruithe"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Seiceáil an litriú"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Eagar"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Torthaí an Litreora"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Athraigh Athróg Go"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "&Uirlisí"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Déan inlíne"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Cruthaigh"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Ró"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Soláthair príomhlimistéar téacs"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Alt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Soláthair príomhlimistéar téacs"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Imlínte an Fhráma"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Athraigh an Imlíne"
+
+#, fuzzy
+#~| msgid "Right paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right paragraph border"
+#~ msgstr "Imlíne ailt ar dheis"
+
+#, fuzzy
+#~| msgid "Left paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left paragraph border"
+#~ msgstr "Imlíne ailt ar chlé"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "C&umraigh..."
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Éagsúil"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Greille 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Cáipéis"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Socruithe Cáipéise"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Údar"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Údar"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Cruthaigh Leabharmharc Nua"
+
+#, fuzzy
+#~| msgid "frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "frámadán"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No framesets in document"
+#~ msgstr "Níl frámadáin sa cháipéis"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Ionad"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Ceangail Frámaí Téacs"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Colúin"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stíl:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Dúnadh"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Scrios"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Socraigh Stíl an Leathanaigh"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Athainmnigh an Leabharmharc"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "Tabhair ainm nua ar an leabharmharc"
+
+#, fuzzy
+#~| msgid "A bookmark with the name \"%1\" already exists."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Tá leabharmharc darb ainm \"%1\" ann cheana."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Roghnaigh Leabharmharc"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Céimseata"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Beannacht"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Leathanaigh"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Feidhmeanna"
+
+#, fuzzy
+#~| msgid "RDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RDF"
+#~ msgstr "RDF"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Staitisticí"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Focail:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Abairtí:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Siollaí:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Líon na gcarachtar, spásanna san áireamh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Líon na gcarachtar, spásanna san áireamh"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Línte:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Éascaíocht léimh Flesch"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Caighdeánach"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Ceann 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Ceann 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Ceann 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Liosta Áirithe"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Liosta Aibítreach"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Liosta le hUrchair"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Ábhar: Teideal"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Ábhar: Ceanntásc 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Ábhar: Ceanntásc 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Ábhar: Ceanntásc 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Teideal na Cáipéise"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Ceanntásc"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Buntásc"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Gnáth"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Imlínte 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Imlínte 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Imlínte 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Ró"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Colún"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Fionnliath"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Dúliath"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Dubh"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Bánghorm"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Dúghorm"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Dearg"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Buí"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Ildathach"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Scothghorm"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Simplí 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Simplí 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Simplí 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Ceanntásc 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Ceanntásc 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Ceanntásc 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Ceanntásc 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Colúin 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Colúin 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Greille 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Greille 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Greille 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Ceannteideal Liath"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Ceannteideal Gorm"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Gorm Traidisiúnta"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Liath Traidisiúnta"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Gorm Bun agus Barr"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Liath Bun agus Barr"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Próiseálaí Focal KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Próiseálaí Focal KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "© 1998-2009, Foireann KWord"
+
+#, fuzzy
+#~| msgid "Pierre Ducroquet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Ducroquet"
+#~ msgstr "Pierre Ducroquet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann"
+#~ msgstr "Casper Boemann"
+
+#, fuzzy
+#~| msgid "Everything"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Everything"
+#~ msgstr "Gach Rud"
+
+#, fuzzy
+#~| msgid "Sebastian Sauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sebastian Sauer"
+#~ msgstr "Sebastian Sauer"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Carachtair Fhormáidithe"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "&Comhad"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Staitisticí"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "&Fonóta"
+
+#, fuzzy
+#~| msgid "Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography"
+#~ msgstr "Leabharliosta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "&Bainisteoir na Stíleanna"
+
+#, fuzzy
+#~| msgid "Lukáš Tvrdý"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tvrdý"
+#~ msgstr "Lukáš Tvrdý"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Girish Ramakrishnan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Girish Ramakrishnan"
+#~ msgstr "Girish Ramakrishnan"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ODF Support"
+#~ msgstr "Tacaíocht ODF"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Sven Lüppken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Lüppken"
+#~ msgstr "Sven Lüppken"
+
+#, fuzzy
+#~| msgid "Frank Dekervel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frank Dekervel"
+#~ msgstr "Frank Dekervel"
+
+#, fuzzy
+#~| msgid "Krister Wicksell Eriksson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Krister Wicksell Eriksson"
+#~ msgstr "Krister Wicksell Eriksson"
+
+#, fuzzy
+#~| msgid "Dag Andersen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dag Andersen"
+#~ msgstr "Dag Andersen"
+
+#, fuzzy
+#~| msgid "Nash Hoogwater"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nash Hoogwater"
+#~ msgstr "Nash Hoogwater"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~| msgid "Ulrich Kuettler"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ulrich Kuettler"
+#~ msgstr "Ulrich Kuettler"
+
+#, fuzzy
+#~| msgid "Shaheed Haque"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shaheed Haque"
+#~ msgstr "Shaheed Haque"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Clarence Dang"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "Clarence Dang"
+
+#, fuzzy
+#~| msgid "Robert Jacolin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Jacolin"
+#~ msgstr "Robert Jacolin"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Enno Bartels"
+
+#, fuzzy
+#~| msgid "Ewald Snel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ewald Snel"
+#~ msgstr "Ewald Snel"
+
+#, fuzzy
+#~| msgid "Tomasz Grobelny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomasz Grobelny"
+#~ msgstr "Tomasz Grobelny"
+
+#, fuzzy
+#~| msgid "Michael Johnson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Michael Johnson"
+#~ msgstr "Michael Johnson"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Briseadh Leathanaigh"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "seoc@iolfree.ie,kscanne@gmail.com"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Cóip"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Caighdeánach"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Teideal na Cáipéise"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Ceann 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Ceann 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Ceann 3"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Liosta le hUrchair"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Uirlisí"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Cáipéis neamhbhailí OASIS OpenDocument. Níor aimsíodh clib office:body."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Cáipéis neamhbhailí OASIS OpenDocument. Níor aimsíodh aon chlib isteach i "
+#~ "office:body."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Ní cáipéis phróiseálaí focal é seo, ach %1. Ba chóir duit é a oscailt "
+#~ "leis an bhfeidhmchlár oiriúnach."
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Earráid Suiteála"
+
+#, fuzzy
+#~| msgid "Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "Athraithe"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Sábháilte"
+
+#, fuzzy
+#~| msgid "Page %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Leathanach %1 as %2"
+
+#, fuzzy
+#~| msgid "Page %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Leathanach %1 as %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Línte"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Uimhir an leathanaigh:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Uimhir"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Stíl an leathanaigh:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Athraigh an Chlómhéid"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "Stádas: sábháilte/athraithe"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse Cursor X:Y"
+#~ msgstr "Ionad na Luiche: X:Y"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Airíonna an Leathanaigh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "&Cruthaigh Teimpléad Ó Cháipéis..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Carachtair Fhormáidithe"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Cumraigh Imlínte an Tábla"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Taispeáin Rialóirí"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Taispeáin nó folaigh rialóirí"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Léim go Greille"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Taispeáin an Barra Stádais"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Taispeáin nó folaigh an barra stádais"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Cruthaigh"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "C&umraigh..."
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Leagan Amach an Leathanaigh..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Cruthaigh Sraith"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Cruthaigh Sraith"
+
+#, fuzzy
+#~| msgid "Remove Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Bain Nóta"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Níl frámadáin sa cháipéis"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Taispeáin nó folaigh an barra stádais"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Athraigh an Chlómhéid"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Buntásc ar Leathanaigh Chothroma"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Leagan Amach an Leathanaigh..."
+
+#, fuzzy
+#~| msgid "Next Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "An Chéad Leathanach Eile"
+
+#, fuzzy
+#~| msgid "Previous Page"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "An Leathanach Roimhe Seo"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Roghanna"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Ionadaigh Focal"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Ionadaigh Focal"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Ionadaigh Focal"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Ionadaigh Focal"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Ceanntásc ar Leathanaigh Chorra"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Ceanntásc ar Leathanaigh Chothroma"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Buntásc ar Leathanaigh Chorra"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Buntásc ar Leathanaigh Chothroma"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Príomhthéacs"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Leathanaigh Eile"
+
+#, fuzzy
+#~ msgid "Book"
+#~ msgstr "Leabharmharcanna"
+
+#, fuzzy
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Próiseálaí Focal KOffice"
+
+#, fuzzy
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "© 1998-2009, Foireann KWord"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "Ionsáigh Leathanach"
+
+#, fuzzy
+#~| msgid "Open Existing..."
+#~ msgid "Open..."
+#~ msgstr "Oscail Ceann Atá Ann..."
+
+#, fuzzy
+#~| msgid "Open Link"
+#~ msgid "Open Cover"
+#~ msgstr "Oscail Nasc"
+
+#, fuzzy
+#~| msgid "Import Style"
+#~ msgid "Import problem"
+#~ msgstr "Iompórtáil Stíl"
+
+#, fuzzy
+#~| msgid "Completion"
+#~ msgid "Cover selection"
+#~ msgstr "Comhlánú"
+
+#, fuzzy
+#~| msgid "Move selected page up"
+#~ msgid "No cover selected yet"
+#~ msgstr "Bog an leathanach roghnaithe suas"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgid "Edit section"
+#~ msgstr "Feidhmeanna"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgid "Main"
+#~ msgstr "Príomhthéacs"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgid "Supporting"
+#~ msgstr "Tacaíocht ODF"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgid "Author's actor"
+#~ msgstr "Údar"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "Iontráil ainm na hiontrála:"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "Cineál"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Short description:"
+#~ msgstr "Cur Síos Ar Bhall"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Actor description:"
+#~ msgstr "Cur Síos Ar Bhall"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "Cló &Trom"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "Cló &Iodálach"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "&Líne Faoi"
+
+#, fuzzy
+#~ msgid "LeftAlign"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~ msgid "CenterAlign"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~ msgid "RightAlign"
+#~ msgstr "Ailínigh Téacs Ar Chlé"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "displayname of the semantic item type AuthorActor"
+#~ msgid "AuthorActor"
+#~ msgstr "Údar"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "1st Edit"
+#~ msgstr "Eagar"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "2nd Edit"
+#~ msgstr "Eagar"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "3rd Edit"
+#~ msgstr "Eagar"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Uathcheartú"
+
+#, fuzzy
+#~| msgid "Page Edge:"
+#~ msgid "Badge:"
+#~ msgstr "Ciumhais an Leathanaigh:"
+
+#, fuzzy
+#~| msgid "Page Description"
+#~ msgid "Section description:"
+#~ msgstr "Cur Síos an Leathanaigh"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Feidhmeanna"
+
+#~ msgid "File to open"
+#~ msgstr "Comhad le hoscailt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Cruthaigh Fráma"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Scrios Fráma"
+
+#~ msgid "General"
+#~ msgstr "Ginearálta"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Cosain an mhéid agus an t-ionad"
+
+#~ msgid "Position"
+#~ msgstr "Ionad"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Leithead:"
+
+#~ msgid "Height:"
+#~ msgstr "Airde:"
+
+#~ msgid "Margins"
+#~ msgstr "Imill"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Sioncrónaigh athruithe"
+
+#~ msgid "Bottom:"
+#~ msgstr "Bun:"
+
+#~ msgid "Top:"
+#~ msgstr "Barr:"
+
+#~ msgid "Right:"
+#~ msgstr "Ar Dheis:"
+
+#~ msgid "Left:"
+#~ msgstr "Ar Chlé:"
+
+#~ msgid "If Frame Overflows"
+#~ msgstr "Má Théann an Fráma Thar Maoil"
+
+#~ msgid "Create a new page"
+#~ msgstr "Cruthaigh leathanach nua"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Athraigh méid an fhráma roimhe seo"
+
+#~ msgid "Do not show the extra text"
+#~ msgstr "Ná taispeáin an téacs breise"
+
+#~ msgid "When Creating a Page"
+#~ msgstr "Agus Leathanach Á Chruthú"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Athcheangail fráma leis an sruth reatha"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Ná cruthaigh fráma leantach"
+
+#~ msgid "Copy this Frame"
+#~ msgstr "Cóipeáil an Fráma Seo"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "Ar leathanaigh chothroma/chorra amháin"
+
+#~ msgid "Protect content"
+#~ msgstr "Cosain an t-ábhar"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Is é seo cóip den fhráma roimhe seo"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Cuirfear na hathruithe i bhfeidhm ar gach fráma sa fhrámadán"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Caomhnaigh an cóimheas treoíochta"
+
+#, fuzzy
+#~ msgid "Select All Shapes"
+#~ msgstr "Roghnaigh Gach Fráma"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Cruthaigh Cóip Nasctha"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Cruthaigh Cóip Nasctha"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Ionsáigh Leathanach"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Bain Leathanach"
+
+#~ msgid "Bookmark..."
+#~ msgstr "Leabharmharc..."
+
+#~ msgid "Select Bookmark..."
+#~ msgstr "Roghnaigh Leabharmharc..."
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "Leabharmharcanna"
+
+#, fuzzy
+#~ msgid "Page %1/%2"
+#~ msgstr "Leathanach: %1/%2"
+
+#~ msgid "Automatically update"
+#~ msgstr "Nuashonraigh go huathoibríoch"
+
+#~ msgid "update"
+#~ msgstr "nuashonrú"
+
+#~ msgid "F&ormat"
+#~ msgstr "F&ormáid"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Cáipéis neamhbhailí. Gan cineál MIME."
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Cáipéis neamhbhailí. Méid páipéir: %1×%2"
+
+#~ msgid "Form"
+#~ msgstr "Foirm"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Cumasaigh Ceanntásca na Cáipéise"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "Cumasaigh Buntásca na Cáipéise"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Líon na Leathanach:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Líon na bhfrámaí:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Líon na bpictiúr:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Líon na dtáblaí:"
+
+#~ msgid "Text"
+#~ msgstr "Téacs"
+
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "Cuir téacs isteach ó fhonótaí agus ó iarnótaí"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Carachtair, gan spásanna:"
+
+#~ msgid "approximately %1"
+#~ msgstr "timpeall is %1"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Tabhair chun Tosaigh"
+
+#~ msgid "Send to Back"
+#~ msgstr "Cuir go dtí an Cúl"
+
+#~ msgid "Before current page"
+#~ msgstr "Roimh an leathanach reatha"
+
+#~ msgid "After current page"
+#~ msgstr "Tar éis an leathanaigh reatha"
+
+#~ msgid "After last page"
+#~ msgstr "Tar éis an leathanaigh deiridh"
+
+#~ msgid "Page style:"
+#~ msgstr "Stíl an leathanaigh:"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "&Ionsáigh"
+
+#~ msgid "Variable"
+#~ msgstr "Athróg"
+
+#~ msgid "Page..."
+#~ msgstr "Leathanach..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Scrios Leathanach"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "Díchumasaigh Ceanntásca na Cáipéise"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "Díchumasaigh Buntásca na Cáipéise"
+
+#~ msgid "Hide Status Bar"
+#~ msgstr "Folaigh an Barra Stádais"
+
+#~ msgid "Numbering"
+#~ msgstr "Uimhriú"
+
+#~ msgid "Automatic"
+#~ msgstr "Uathoibríoch"
+
+#~ msgid "Endnote"
+#~ msgstr "Iarnóta"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Ionsáigh Fonóta/Iarnóta"
+
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Airíonna an Fhráma(dáin)"
+
+#~ msgid "Alter frameset properties"
+#~ msgstr "Athraigh airíonna an fhrámadáin"
+
+#~ msgid "Insert a picture into document"
+#~ msgstr "Ionsáigh pictiúr sa cháipéis"
+
+#~ msgid "Page: current/total"
+#~ msgstr "Leathanach: reatha/iomlán"
+
+#~ msgid "Fra&mes"
+#~ msgstr "Frá&maí"
+
+#~ msgid "Tables"
+#~ msgstr "Táblaí"
+
+#~ msgid "Insert"
+#~ msgstr "Ionsáigh"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Leagan Amach an Téacs i bhFrámaí Eile"
+
+#~ msgid "Text will run around this frame"
+#~ msgstr "Rithfidh an téacs timpeall an fhrámadáin seo"
+
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Ní rithfidh an téacs timpeall an fhrámadáin seo"
+
+#~ msgid "Left"
+#~ msgstr "Ar Chlé"
+
+#~ msgid "Right"
+#~ msgstr "Ar Dheis"
+
+#~ msgid "Longest side"
+#~ msgstr "Taobh is faide"
+
+#~ msgid "Create custom outline"
+#~ msgstr "Cruthaigh imlíne shaincheaptha"
+
+#~ msgid "Create Custom Outline"
+#~ msgstr "Cruthaigh Imlíne Shaincheaptha"
+
+#~ msgid "Create outlines"
+#~ msgstr "Cruthaigh imlínte"
+
+#~ msgid "Borders"
+#~ msgstr "Teorainneacha"
+
+#~ msgid "MailMerge"
+#~ msgstr "PostChumasc"
+
+#~ msgid "Table"
+#~ msgstr "Tábla"
+
+#~ msgid "Font"
+#~ msgstr "Cló"
+
+#~ msgid "Format"
+#~ msgstr "Formáid"
+
+#~ msgid "Formula"
+#~ msgstr "Foirmle"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#~ msgid "Insert Picture..."
+#~ msgstr "Ionsáigh Pictiúr..."
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Má tá an téacs rófhada don fhrámadán"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Ag Am Cruthaithe Leathanach Nua"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Cuir cóip den fhráma seo"
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#~ msgid "Show Grid"
+#~ msgstr "Taispeáin Greille"
+
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Ceanntásc ar Leathanaigh Chorra %1"
+
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Ceanntásc ar Leathanaigh Chothroma %1"
+
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Buntásc ar Leathanaigh Chorra %1"
+
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Buntásc ar Leathanaigh Chothroma %1"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Frámadán an Phríomhthéacs"
+
+#~ msgid "Matrix"
+#~ msgstr "Maitrís"
+
+#~ msgid "Configure Frame Border"
+#~ msgstr "Cumraigh Imlíne an Fhráma"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Tábla"
+
+#~ msgid "Cell"
+#~ msgstr "Cill"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "Cumraigh Imlínte an Fhráma"
+
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#~ msgid "Add a new page"
+#~ msgstr "Cuir leathanach nua leis"
+
+#~ msgid "Move selected page down"
+#~ msgstr "Bog an leathanach roghnaithe síos"
+
+#~ msgid "Delete selected pages"
+#~ msgstr "Scrios na leathanaigh roghnaithe"
+
+#~ msgid "New Layer"
+#~ msgstr "Sraith Nua"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Iontráil ainm na sraithe nuaí:"
+
+#~ msgid "New layer"
+#~ msgstr "Sraith nua"
+
+#~ msgid "Delete Layer"
+#~ msgstr "Scrios Sraith"
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Earráid agus sraitheanna á scriosadh"
+
+#~ msgid "Information"
+#~ msgstr "Eolas"
+
+#~ msgid "&Available tables:"
+#~ msgstr "&Táblaí le fáil:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "&Réimsí den tábla roghnaithe:"
+
+#~ msgid "Query Result"
+#~ msgstr "Toradh an Iarratais"
+
+#~ msgid "&Query:"
+#~ msgstr "&Iarratas:"
+
+#~ msgid "&Execute"
+#~ msgstr "&Rith"
+
+#~ msgid "&Setup"
+#~ msgstr "&Socrú"
+
+#~ msgid "&Table:"
+#~ msgstr "&Tábla:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "Féach ar, nó Cuir &Rialacha Scagtha in Eagar"
+
+#~ msgid "&Used database records:"
+#~ msgstr "Taifid úsáidte bh&unachair sonraí:"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "&Caomhnaigh na Socruithe..."
+
+#~ msgid "&Hostname:"
+#~ msgstr "Óst&ainm:"
+
+#~ msgid "&Driver:"
+#~ msgstr "&Tiománaí:"
+
+#~ msgid "Database &name:"
+#~ msgstr "&Ainm an bhunachair sonraí:"
+
+#~ msgid "&Username:"
+#~ msgstr "&Ainm Úsáideora:"
+
+#~ msgid "&Port:"
+#~ msgstr "&Port:"
+
+#~ msgid "default"
+#~ msgstr "réamhshocraithe"
+
+#~ msgid "Address Selection"
+#~ msgstr "Roghnú Seolta"
+
+#~ msgid "&Add >>"
+#~ msgstr "&Cuir Leis >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< &Bain"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "Sábháil mar Liosta &Dáilte..."
+
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "Sábháil na hiontrálacha roghnaithe mar liosta nua dáilte"
+
+#~ msgid "&Filter on:"
+#~ msgstr "&Scag de réir:"
+
+#~ msgid "Name"
+#~ msgstr "Ainm"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "Liostaí Dáilte"
+
+#~ msgid "Single Entries"
+#~ msgstr "Iontrálacha Aonair"
+
+#~ msgid "Address B&ook"
+#~ msgstr "Leabhar Se&oltaí"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "Tosaigh KAddressbook"
+
+#~ msgid "&Address Book"
+#~ msgstr "Le&abhar Seoltaí"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "&Seoltaí Roghnaithe"
+
+#~ msgid "Personal"
+#~ msgstr "Pearsanta"
+
+#~ msgid "Hi!"
+#~ msgstr "Dia duit!"
+
+#~ msgid "Hello!"
+#~ msgstr "Haló!"
+
+#~ msgid "Bye!"
+#~ msgstr "Slán!"
+
+#~ msgid "Good bye"
+#~ msgstr "Slán agat"
+
+#~ msgid "Professional"
+#~ msgstr "Proifisiúnta"
+
+#~ msgid "Good Morning"
+#~ msgstr "Maidin Mhaith Duit"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "Tráthnóna Maith Duit"
+
+#~ msgid "Good Evening"
+#~ msgstr "Go mbeannaí Dia dhuit"
+
+#~ msgid "Email"
+#~ msgstr "Ríomhphost"
+
+#~ msgid "To:"
+#~ msgstr "Go:"
+
+#~ msgid "Subject:"
+#~ msgstr "Ábhar:"
+
+#~ msgid "CC:"
+#~ msgstr "CC:"
+
+#~ msgid "BCC:"
+#~ msgstr "BCC:"
+
+#~ msgid "Fwd:"
+#~ msgstr "Ar Aghaidh:"
+
+#~ msgid "Best regards,"
+#~ msgstr "Mise, le meas,"
+
+#~ msgid "Best wishes"
+#~ msgstr "Beir bua"
+
+#~ msgid "Cordially,"
+#~ msgstr "Le dea-ghuí,"
+
+#~ msgid "Love,"
+#~ msgstr "Le grá,"
+
+#~ msgid "Regards,"
+#~ msgstr "Mise, le meas,"
+
+#~ msgid "Thank you,"
+#~ msgstr "Go raibh maith agat,"
+
+#~ msgid "Thanks,"
+#~ msgstr "GRMA,"
+
+#~ msgid "Subject"
+#~ msgstr "Ábhar"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "A dhuine uasail nó a bhean uasal:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "A dhaoine uaisle:"
+
+#~ msgid "Attention"
+#~ msgstr "Aire"
+
+#~ msgid "Attention:"
+#~ msgstr "Aire:"
+
+#~ msgid "ATTN:"
+#~ msgstr "AIRE:"
+
+#~ msgid "Instructions"
+#~ msgstr "Treoracha"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "CLÁRAITHE"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "FAOI RÚN"
+
+#~ msgid "PERSONAL"
+#~ msgstr "PEARSANTA"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "FAICSIMILE"
+
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr ">>>Ionad neamhcheadaithe san fhoinse sonraí<<<"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ">>>Réimse %1 anaithnid san iarratas reatha bunachair sonraí<<<"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Postchumasc - Eagarthóir"
+
+#~ msgid "Error"
+#~ msgstr "Earráid"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "Iontráil an focal faire don nasc bunachair sonraí"
+
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Postchumasc - Socraigh Nasc leis an Bhunachar Sonraí"
+
+#~ msgid "<not saved>"
+#~ msgstr "<gan sábháil>"
+
+#~ msgid "Store Settings"
+#~ msgstr "Sábháil na Socruithe"
+
+#~ msgid "ascending"
+#~ msgstr "ag dul suas"
+
+#~ msgid "descending"
+#~ msgstr "ag dul síos"
+
+#~ msgid "contains"
+#~ msgstr "ina bhfuil"
+
+#~ msgid "Field"
+#~ msgstr "Réimse"
+
+#~ msgid "Sorting Order"
+#~ msgstr "Ord Sórtála"
+
+#~ msgid "Include"
+#~ msgstr "Cuir San Áireamh"
+
+#~ msgid "Operator"
+#~ msgstr "Oibreoir"
+
+#~ msgid "Condition"
+#~ msgstr "Coinníoll"
+
+#~ msgid "Value"
+#~ msgstr "Luach"
+
+# boolean "include"
+#~ msgid "Yes"
+#~ msgstr "Tá"
+
+# entry in table column labelled "operator"
+#~ msgid "NOT"
+#~ msgstr "NOT"
+
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "Níl iontráil KAddressbook '%1' le fáil."
+
+#~ msgid "%1 South"
+#~ msgstr "%1 Deisceart"
+
+#~ msgid "%1 North"
+#~ msgstr "%1 Tuaisceart"
+
+#~ msgid "%1 West"
+#~ msgstr "%1 Iarthar"
+
+#~ msgid "%1 East"
+#~ msgstr "%1 Oirthear"
+
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Athróg anaithnid phostchumaisc: %1"
+
+#~ msgid "no category"
+#~ msgstr "gan chatagóir"
+
+#~ msgid "New Distribution List"
+#~ msgstr "Liosta Dáilte Nua"
+
+#~ msgid "Please enter name:"
+#~ msgstr "Iontráil ainm le do thoil:"
+
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "<qt>Tá liosta dáilte darb ainm <b>%1</b> ann cheana. Roghnaigh ainm eile."
+#~ "</qt>"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "No Value"
+#~ msgstr "Gan Luach"
+
+#~ msgid "Add record"
+#~ msgstr "Cuir taifead leis"
+
+#~ msgid "Add entry"
+#~ msgstr "Cuir iontráil leis"
+
+#~ msgid "Remove entry"
+#~ msgstr "Bain iontráil"
+
+#~ msgid "Add Entry"
+#~ msgstr "Cuir Iontráil Leis"
+
+#~ msgid "The host-address the OpenOffice.org Server runs on."
+#~ msgstr "Seoladh an fhreastalaí OpenOffice.org."
+
+#~ msgid "Host:"
+#~ msgstr "Óstríomhaire:"
+
+#~ msgid "localhost"
+#~ msgstr "localhost"
+
+#~ msgid "The port the OpenOffice.org Server runs on."
+#~ msgstr "Port an fhreastalaí OpenOffice.org."
+
+#~ msgid "Port:"
+#~ msgstr "Port:"
+
+#~ msgid "Timeout:"
+#~ msgstr "Teorainn Ama:"
+
+#~ msgid "Startup and shutdown OpenOffice.org instance if not running already."
+#~ msgstr ""
+#~ "Tosaigh agus múch próiseas OpenOffice.org mura bhfuil sé ag rith cheana."
+
+#~ msgid "Hide the temporary OpenOffice.org window."
+#~ msgstr "Folaigh an fhuinneog shealadach OpenOffice.org."
+
+#~ msgid "Automatic close documents not needed any longer."
+#~ msgstr "Dún cáipéis nach gá leo níos mó."
+
+#~ msgid "Table of Content"
+#~ msgstr "Clár Ábhair"
+
+#~ msgid "Classes"
+#~ msgstr "Aicmí"
+
+#~ msgid "Class Description"
+#~ msgstr "Cur Síos Ar Aicme"
+
+#~ msgid "Slots"
+#~ msgstr "Sliotáin"
+
+#~ msgid "Signals"
+#~ msgstr "Comharthaí"
+
+#~ msgid "Properties"
+#~ msgstr "Airíonna"
+
+#~ msgid "Variables"
+#~ msgstr "Athróga"
+
+#~ msgid "ISO OASIS OpenDocument Text"
+#~ msgstr "Téacs ISO OASIS OpenDocument"
+
+#~ msgid "HTML Document"
+#~ msgstr "Cáipéis HTML"
+
+#~ msgid "Encoded Text"
+#~ msgstr "Téacs Ionchódaithe"
+
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Scrios an fráma/na frámaí atá roghnaithe faoi láthair"
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Scrios an fráma/na frámaí atá roghnaithe faoi láthair."
+
+#~ msgid "First Page Header"
+#~ msgstr "Ceanntásc an Chéad Leathanaigh"
+
+#~ msgid "First Page Footer"
+#~ msgstr "Buntásc an Chéad Leathanaigh"
+
+#~ msgid "Unit:"
+#~ msgstr "Aonad:"
+
+#~ msgid "Size:"
+#~ msgstr "Méid:"
+
+#~ msgid "Orientation:"
+#~ msgstr "Treoshuíomh:"
+
+#~ msgid "Portrait"
+#~ msgstr "Portráid"
+
+#~ msgid "Landscape"
+#~ msgstr "Tírdhreach"
+
+#~ msgid "Facing pages:"
+#~ msgstr "Leathanaigh ar aghaigh a chéile:"
+
+#~ msgid "Single sided"
+#~ msgstr "Taobh amháin"
+
+#~ msgid "Facing pages"
+#~ msgstr "Leathanaigh ar aghaigh a chéile"
+
+#~ msgid "Binding edge:"
+#~ msgstr "Ciumhais cheangail:"
+
+#~ msgid "Whole document:"
+#~ msgstr "Cáipéis iomlán:"
+
+#~ msgid "Text direction:"
+#~ msgstr "Treo an téacs:"
+
+#~ msgid "Left to right"
+#~ msgstr "Clé go deas"
+
+#~ msgid "Right to left"
+#~ msgstr "Deas go clé"
+
+#~ msgid "Binding Edge:"
+#~ msgstr "Ciumhais Cheangail:"
+
+#~ msgid "Facing Pages:"
+#~ msgstr "Leathanaigh ar aghaigh a chéile:"
+
+#~ msgid ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">body {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">h1 {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    color:#000099;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-top:1em; "
+#~ "margin-bottom:1em;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">h2 {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    color:#000066;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-top:1em; "
+#~ "margin-bottom:0.7em;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">h3 {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    color:#000033;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-top:1em; "
+#~ "margin-bottom:0.5em;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">pre {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-left:1em;</"
+#~ "p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p></body></html>"
+#~ msgstr ""
+#~ "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#~ "css\">\n"
+#~ "p, li { white-space: pre-wrap; }\n"
+#~ "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; "
+#~ "font-weight:400; font-style:normal;\">\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">body {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">h1 {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    color:#000099;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-top:1em; "
+#~ "margin-bottom:1em;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">h2 {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    color:#000066;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-top:1em; "
+#~ "margin-bottom:0.7em;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">h3 {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    color:#000033;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-top:1em; "
+#~ "margin-bottom:0.5em;</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">pre {</p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">    margin-left:1em;</"
+#~ "p>\n"
+#~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+#~ "right:0px; -qt-block-indent:0; text-indent:0px;\">}</p></body></html>"
+
+#~ msgid "Export as PDF..."
+#~ msgstr "Easpórtáil mar PDF..."
+
+#~ msgid "Printing..."
+#~ msgstr "Á Phriontáil..."
+
+#~ msgid "Insert Inline Table"
+#~ msgstr "Ionsáigh Tábla Inlíne"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Frámadán Téacs %1"
+
+#~ msgid "Create Formula Frame"
+#~ msgstr "Cruthaigh Fráma Foirmle"
+
+#~ msgid "Delete Page %1"
+#~ msgstr "Scrios Leathanach %1"
+
+#~ msgid "Resize Column"
+#~ msgstr "Athraigh Méid an Cholúin"
+
+#~ msgid "Resize Row"
+#~ msgstr "Athraigh Méid an Ró"
+
+#~ msgid "Configure KWord"
+#~ msgstr "Cumraigh KWord"
+
+#~ msgid "Interface"
+#~ msgstr "Comhéadan"
+
+#~ msgid "Interface Settings"
+#~ msgstr "Socruithe an Chomhéadain"
+
+#~ msgid "Spelling"
+#~ msgstr "Litriú"
+
+#~ msgid "Formula Defaults"
+#~ msgstr "Réamhshocruithe na Foirmle"
+
+#~ msgid "Path"
+#~ msgstr "Conair"
+
+#~ msgid "Path Settings"
+#~ msgstr "Socruithe Conaire"
+
+#~ msgid "Change Config"
+#~ msgstr "Athraigh Cumraíocht"
+
+#~ msgid "Show s&crollbar"
+#~ msgstr "Taispeáin an s&crollbharra"
+
+#~ msgid "Display &links"
+#~ msgstr "Taispeáin &naisc"
+
+#~ msgid "&Underline all links"
+#~ msgstr "C&uir líne faoi gach nasc"
+
+#~ msgid "Display c&omments"
+#~ msgstr "Taispeáin nó&taí"
+
+#~ msgid "Display field code"
+#~ msgstr "Taispeáin cód réimse"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Réamhshocruithe na Cáipéise"
+
+#~ msgid "Default font:"
+#~ msgstr "Cló réamhshocraithe:"
+
+#~ msgid "Choose..."
+#~ msgstr "Roghnaigh..."
+
+#~ msgid "Global language:"
+#~ msgstr "Teanga comhchoiteann:"
+
+#~ msgid "Automatic hyphenation"
+#~ msgstr "Fleiscíniú uathoibríoch"
+
+#~ msgid "Autosave every (min):"
+#~ msgstr "Sábháil go huathoibríoch gach (nóiméad):"
+
+#~ msgid "No autosave"
+#~ msgstr "Ná sábháil go huathoibríoch"
+
+#~ msgid " min"
+#~ msgstr " nóiméad"
+
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Tábstop (%1):"
+
+#~ msgid "Cursor"
+#~ msgstr "Cúrsóir"
+
+#~ msgid "Tab stop:"
+#~ msgstr "Tábstop:"
+
+#~ msgid "Backup Path"
+#~ msgstr "Conair Chúltaca"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Mionathraigh an Chonair..."
+
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Cumraigh Iarnóta/Fonóta"
+
+#~ msgid "Separator Line"
+#~ msgstr "Deighilteoir"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#~ msgid "&Width:"
+#~ msgstr "&Leithead:"
+
+#~ msgid "&Size on page:"
+#~ msgstr "&Méid ar an leathanach:"
+
+#~ msgid "Solid"
+#~ msgstr "Soladach"
+
+#~ msgid "Delete Column"
+#~ msgstr "Scrios Colún"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "Scrios an ró ón tábla."
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Scrios an colún ón tábla."
+
+#~ msgid "Delete the whole table?"
+#~ msgstr "Scrios an tábla iomlán?"
+
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Scrios gach ró roghnaithe?"
+
+#~ msgid "Delete row number %1?"
+#~ msgstr "Scrios ró %1?"
+
+#~ msgid "Delete column number %1?"
+#~ msgstr "Scrios colún %1?"
+
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Scrios rónna: %1 ?"
+
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Scrios colúin: %1 ?"
+
+#~ msgid "Column %1"
+#~ msgstr "Colún %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Fráma Téacs %1"
+
+#~ msgid "Empty"
+#~ msgstr "Folamh"
+
+#~ msgid "Formula Frame %1"
+#~ msgstr "Fráma Foirmle %1"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Pictiúr (%1) %2"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Réada Leabaithe"
+
+#~ msgid "Formula Frames"
+#~ msgstr "Frámaí Foirmle"
+
+#~ msgid "Pictures"
+#~ msgstr "Pictiúir"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Frámaí Téacs/Frámadáin"
+
+#~ msgid "Document Structure"
+#~ msgstr "Struchtúr an Doiciméid"
+
+#~ msgid "Delete Table"
+#~ msgstr "Scrios Tábla"
+
+#~ msgid "Delete Text Frame"
+#~ msgstr "Scrios Fráma Téacs"
+
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Scrios Fráma Foirmle"
+
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Scrios Fráma Pictiúir"
+
+#~ msgid "Delete Object Frame"
+#~ msgstr "Scrios Fráma Réada"
+
+#~ msgid "Group name:"
+#~ msgstr "Ainm grúpa:"
+
+#~ msgid "New"
+#~ msgstr "Nua"
+
+#~ msgid "empty"
+#~ msgstr "folamh"
+
+#~ msgid "new group"
+#~ msgstr "grúpa nua"
+
+#~ msgid "&Automatic"
+#~ msgstr "&Uathoibríoch"
+
+#~ msgid "&Manual"
+#~ msgstr "&De Láimh"
+
+#~ msgid "Formula %1"
+#~ msgstr "Foirmle %1"
+
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Socruithe Fráma le haghaidh %1"
+
+#~ msgid "Gap size (%1):"
+#~ msgstr "Méid an bhearna (%1):"
+
+#~ msgid "Table is inline"
+#~ msgstr "Is inlíne é an tábla"
+
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Socraigh dath nua ar gach fráma roghnaithe"
+
+#~ msgid "Transparent background"
+#~ msgstr "Cúlra trédhearcach"
+
+#~ msgid "Background color:"
+#~ msgstr "Dath an chúlra:"
+
+#~ msgid "Background style:"
+#~ msgstr "Stíl an chúlra:"
+
+#~ msgid "No Background Fill"
+#~ msgstr "Gan Líonadh an Chúlra"
+
+#~ msgid "100% Fill Pattern"
+#~ msgstr "100% Patrún Líonta"
+
+#~ msgid "94% Fill Pattern"
+#~ msgstr "94% Patrún Líonta"
+
+#~ msgid "88% Fill Pattern"
+#~ msgstr "88% Patrún Líonta"
+
+#~ msgid "63% Fill Pattern"
+#~ msgstr "63% Patrún Líonta"
+
+#~ msgid "50% Fill Pattern"
+#~ msgstr "50% Patrún Líonta"
+
+#~ msgid "37% Fill Pattern"
+#~ msgstr "37% Patrún Líonta"
+
+#~ msgid "12% Fill Pattern"
+#~ msgstr "12% Patrún Líonta"
+
+#~ msgid "6% Fill Pattern"
+#~ msgstr "6% Patrún Líonta"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Línte Trasnánacha ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Línte Trasnánacha ( \\ )"
+
+#~ msgid "&Borders"
+#~ msgstr "&Imlínte"
+
+#~ msgid "St&yle:"
+#~ msgstr "S&tíl:"
+
+#~ msgid "Co&lor:"
+#~ msgstr "&Dath:"
+
+#~ msgid "Rename Frameset"
+#~ msgstr "Athainmnigh Frámadán"
+
+#~ msgid "Protect Content"
+#~ msgstr "Cosain an tÁbhar"
+
+#~ msgid "&Reconnect"
+#~ msgstr "&Athcheangail"
+
+#~ msgid "Import From File..."
+#~ msgstr "Iompórtáil ó Chomhad..."
+
+#~ msgid "Go to Footnote"
+#~ msgstr "Téigh go Fonóta"
+
+#~ msgid "Go to Endnote"
+#~ msgstr "Téigh go Iarnóta"
+
+#~ msgid "File name is empty."
+#~ msgstr "Tá ainm an chomhaid folamh."
+
+#~ msgid "This file is not a KWord file!"
+#~ msgstr "Ní comhad KWord é an comhad seo!"
+
+#~ msgid "Select style to import:"
+#~ msgstr "Roghnaigh stíl le hiompórtáil"
+
+#~ msgid "Insert Row"
+#~ msgstr "Ionsáigh Ró"
+
+#~ msgid "Insert Column"
+#~ msgstr "Ionsáigh Colún"
+
+#~ msgid "Insert New Row"
+#~ msgstr "Ionsáigh Ró Nua"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Ionsáigh Colún Nua"
+
+#~ msgid "Before"
+#~ msgstr "Roimh"
+
+#~ msgid "After"
+#~ msgstr "Tar éis"
+
+#~ msgid "Row:"
+#~ msgstr "Ró:"
+
+#~ msgid "Column:"
+#~ msgstr "Colún:"
+
+#~ msgid "Choose &Picture..."
+#~ msgstr "Roghnaigh &Pictiúr..."
+
+#~ msgid "Choose Picture"
+#~ msgstr "Roghnaigh Pictiúr"
+
+#~ msgid "Mail Merge Setup"
+#~ msgstr "Socrú Postchumaisc"
+
+#~ msgid "&Available sources:"
+#~ msgstr "Foinsí &atá le fáil:"
+
+#~ msgid "Datasource:"
+#~ msgstr "Foinse sonraí:"
+
+#~ msgid "Edit Current..."
+#~ msgstr "Cuir an Ceann Reatha in Eagar..."
+
+#~ msgid "Create New..."
+#~ msgstr "Cruthaigh Nua..."
+
+#~ msgid "Merging:"
+#~ msgstr "Á Chumasc:"
+
+#~ msgid "Print Preview..."
+#~ msgstr "Réamhamharc Priontála..."
+
+#~ msgid "Create New Document"
+#~ msgstr "Cruthaigh Cáipéis Nua"
+
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "Postchumasc - Ainm Athróige"
+
+#~ msgid "Unnamed Table"
+#~ msgstr "Tábla Gan Ainm"
+
+#~ msgid "Object %1"
+#~ msgstr "Réad %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "Pictiúr %1"
+
+#~ msgid "Reset"
+#~ msgstr "Athshocraigh"
+
+#~ msgid "Sort Text"
+#~ msgstr "Sórtáil Téacs"
+
+#~ msgid "Increase"
+#~ msgstr "Méadaigh"
+
+#~ msgid "Decrease"
+#~ msgstr "Laghdaigh"
+
+#~ msgid "Split Cell"
+#~ msgstr "Roinn Cill"
+
+#~ msgid "Number of rows:"
+#~ msgstr "Líon na rónna:"
+
+#~ msgid "Number of columns:"
+#~ msgstr "Líon na gcolún:"
+
+#~ msgid "Selected Text"
+#~ msgstr "Téacs Roghnaithe"
+
+#~ msgid "Counting..."
+#~ msgstr "Áireamh..."
+
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Líon na réada leabaithe:"
+
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Líon na bhfrámadán foirmle:"
+
+#~ msgid "Manual"
+#~ msgstr "De Láimh"
+
+#~ msgid "The table is &inline"
+#~ msgstr "Tá an tábla &inlíne"
+
+#~ msgid "Reapply template to table"
+#~ msgstr "Cuir an teimpléad i bhfeidhm ar an tábla arís"
+
+#~ msgid "Templates"
+#~ msgstr "Teimpléid"
+
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Cuir Rónna Nua leis an Tábla"
+
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Bain Rónna ón Tábla"
+
+#~ msgid "Remove Row"
+#~ msgstr "Bain Ró"
+
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Cuir Colúin Nua leis an Tábla"
+
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Bain Colúin ón Tábla"
+
+#~ msgid "Remove Column"
+#~ msgstr "Bain Colún"
+
+#~ msgid "Apply Template to Table"
+#~ msgstr "Cuir an Teimpléad i bhFeidhm ar an Tábla"
+
+#~ msgid "Adjust"
+#~ msgstr "Coigeartaigh"
+
+#~ msgid "Textstyle:"
+#~ msgstr "Stíl téacs:"
+
+#~ msgid "Change..."
+#~ msgstr "Athraigh..."
+
+#~ msgid "&Customize"
+#~ msgstr "&Saincheap"
+
+#~ msgid "Apply To"
+#~ msgstr "Cuir i bhfeidhm ar"
+
+#~ msgid "First row"
+#~ msgstr "An chéad ró"
+
+#~ msgid "Last row"
+#~ msgstr "An ró deiridh"
+
+#~ msgid "First column"
+#~ msgstr "An chéad cholún"
+
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Ionsáigh Clár Ábhair"
+
+#~ msgid "Insert Break After Paragraph"
+#~ msgstr "Ionsáigh Briseadh Tar Éis Ailt"
+
+#~ msgid "Endnote %1"
+#~ msgstr "Iarnóta %1"
+
+#~ msgid "Footnote %1"
+#~ msgstr "Fonóta %1"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Ionsáigh Athróg"
+
+# --------------------------------------------------------------------
+#   Miscellaneous
+# --------------------------------------------------------------------
+#~ msgid "ERROR"
+#~ msgstr "EARRÁID"
+
+#~ msgid "Select Frame"
+#~ msgstr "Roghnaigh Fráma"
+
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Cumraigh &Postchumasc..."
+
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "Tarraing Athróg Phostchumaisc"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "&Scrios Fráma"
+
+#~ msgid "Text Mode"
+#~ msgstr "Mód Téacs"
+
+#~ msgid "Pre&view Mode"
+#~ msgstr "Mód Réa&mhamhairc"
+
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Cumasaigh &Ceanntásca na Cáipéise"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Carachtar Sp&eisialta..."
+
+#~ msgid "Link..."
+#~ msgstr "Nasc..."
+
+#~ msgid "Comment..."
+#~ msgstr "Nóta..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Cuir Nóta in Eagar..."
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Cóipeáil Téacs an Nóta..."
+
+#~ msgid "Table of &Contents"
+#~ msgstr "&Clár Ábhair"
+
+#~ msgid "Document &Information"
+#~ msgstr "Eolas fao&in Cháipéis"
+
+#~ msgid "&Date"
+#~ msgstr "&Dáta"
+
+#~ msgid "&Statistic"
+#~ msgstr "&Staitistic"
+
+#~ msgid "&Custom"
+#~ msgstr "Sain&cheaptha"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "Athnuaigh Gach Ath&róg"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "Fráma Téa&cs"
+
+#~ msgid "Create a new text frame."
+#~ msgstr "Cruthaigh fráma téacs nua."
+
+#~ msgid "For&mula"
+#~ msgstr "Foir&mle"
+
+#~ msgid "&Table..."
+#~ msgstr "&Tábla..."
+
+#~ msgid "&Object Frame"
+#~ msgstr "&Fráma Réada"
+
+#~ msgid "Fi&le..."
+#~ msgstr "Co&mhad..."
+
+#~ msgid "&Font..."
+#~ msgstr "C&ló..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Alt..."
+
+#~ msgid "St&yle"
+#~ msgstr "S&tíl"
+
+#~ msgid "Default Format"
+#~ msgstr "Formáid Réamhshocraithe"
+
+#~ msgid "Align &Left"
+#~ msgstr "Ailínigh Ar Chlé"
+
+#~ msgid "Align &Center"
+#~ msgstr "Ailínigh &sa lár"
+
+#~ msgid "Align &Right"
+#~ msgstr "Ailínigh Ar Dheis"
+
+#~ msgid "Align &Block"
+#~ msgstr "Ailínigh &Bloc"
+
+#~ msgid "Superscript"
+#~ msgstr "Forscript"
+
+#~ msgid "Subscript"
+#~ msgstr "Foscript"
+
+#~ msgid "Increase Indent"
+#~ msgstr "Méadaigh Eangú"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "Laghdaigh Eangú"
+
+#~ msgid "Text Color..."
+#~ msgstr "Dath Téacs..."
+
+#~ msgid "Bullet"
+#~ msgstr "Urchar"
+
+#~ msgid "Border Left"
+#~ msgstr "Imlíne Ar Chlé"
+
+#~ msgid "Border Right"
+#~ msgstr "Imlíne Ar Dheis"
+
+#~ msgid "Border Style"
+#~ msgstr "Stíl na hImlíne"
+
+#~ msgid "Border Width"
+#~ msgstr "Leithead na hImlíne"
+
+#~ msgid "Border Color"
+#~ msgstr "Dath na hImlíne"
+
+#~ msgid "&Insert Row..."
+#~ msgstr "&Ionsáigh Ró..."
+
+#~ msgid "I&nsert Column..."
+#~ msgstr "Io&nsáigh Colún..."
+
+#~ msgid "Resize Column..."
+#~ msgstr "Athraigh Méid an Cholúin..."
+
+#~ msgid "&Split Cell..."
+#~ msgstr "&Roinn Cill..."
+
+#~ msgid "Protect Cells"
+#~ msgstr "Cosain Cealla"
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "&Díghrúpáil Tábla"
+
+#~ msgid "Delete &Table"
+#~ msgstr "Scrios &Tábla"
+
+#~ msgid "Sort Text..."
+#~ msgstr "Sórtáil Téacs..."
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Cumasaigh Uathcheartú"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Díchumasaigh Uathcheartú"
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Cumraigh U&athcheartú..."
+
+#~ msgid "Custom &Variables..."
+#~ msgstr "&Athróga Saincheaptha..."
+
+#~ msgid "Change Case..."
+#~ msgstr "Athraigh an Cás..."
+
+#~ msgid "Change Picture..."
+#~ msgstr "Athraigh Pictiúr..."
+
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Cumraigh Ceanntásc/Buntásc..."
+
+#~ msgid "Change Link..."
+#~ msgstr "Athraigh Nasc..."
+
+#~ msgid "Copy Link"
+#~ msgstr "Cóipeáil Nasc"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Cuir le Leabharmharcanna"
+
+#~ msgid "Remove Link"
+#~ msgstr "Bain Nasc"
+
+#~ msgid "Show Doc Structure"
+#~ msgstr "Taispeáin Struchtúr na Cáipéise"
+
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Folaigh Struchtúr na Cáipéise"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Folaigh Rialóirí"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Folaigh Greille"
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Ionsáigh Spás Neamhbhristeach"
+
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Ionsáigh Fleiscín Neamhbhristeach"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Ionsáigh Fleiscín Bog"
+
+#~ msgid "Line Break"
+#~ msgstr "Briseadh Líne"
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Cuir Athróg in Eagar..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Cuir Uathcheartú i bhFeidhm"
+
+#~ msgid "&Footnote..."
+#~ msgstr "&Fonóta..."
+
+#~ msgid "Edit Footnote"
+#~ msgstr "Cuir Fonóta in Eagar"
+
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Athraigh Paraiméadar Fonóta/Iarnóta"
+
+#~ msgid "Save Picture As..."
+#~ msgstr "Sábháil Pictiúr Mar..."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Seiceáil an litriú go huathoibríoch"
+
+#~ msgid "Show"
+#~ msgstr "Taispeáin"
+
+#~ msgid "Ignore All"
+#~ msgstr "Déan neamhshuim ar gach"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Cuir Focal leis an bhFoclóir"
+
+#~ msgid "Go to Document Structure"
+#~ msgstr "Téigh go Struchtúr na Cáipéise"
+
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1: %2, %3 - %4, %5 (leithead: %6, airde: %7)"
+
+#~ msgid "Image"
+#~ msgstr "Íomhá"
+
+#~ msgid "Select paste format:"
+#~ msgstr "Roghnaigh formáid ghreamaithe:"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Athraigh Athróg Shaincheaptha"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Ionsáigh Pictiúr Inlíne"
+
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Ionsáigh Fráma Inlíne"
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Ionsáigh Fonóta"
+
+#~ msgid "Change Font"
+#~ msgstr "Athraigh an Cló"
+
+#~ msgid "Change Layout"
+#~ msgstr "Athraigh an Leagan Amach"
+
+#~ msgid "Insert Table"
+#~ msgstr "Ionsáigh Tábla"
+
+#~ msgid "Insert Formula"
+#~ msgstr "Ionsáigh Foirmle"
+
+#~ msgid "Remove Rows"
+#~ msgstr "Bain Rónna"
+
+#~ msgid "Remove Columns"
+#~ msgstr "Bain Colúin"
+
+#~ msgid "Adjust Table"
+#~ msgstr "Coigeartaigh Tábla"
+
+#~ msgid "Split Cells"
+#~ msgstr "Roinn Cealla"
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Díghrúpáil Tábla"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Cuir an Stíl i bhFeidhm ar an Fhráma"
+
+#~ msgid "Apply Style to Frames"
+#~ msgstr "Cuir an Stíl i bhFeidhm ar na Frámaí"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Athraigh Cló Téacs"
+
+#~ msgid "Underline Text"
+#~ msgstr "Cuir Líne Faoi"
+
+#~ msgid "Set Text Color"
+#~ msgstr "Socraigh Dath Téacs"
+
+#~ msgid "Change List Type"
+#~ msgstr "Athraigh an Cineál Liosta"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Athraigh Cás an Téacs"
+
+#~ msgid "Change Tabulator"
+#~ msgstr "Athraigh Táblóir"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Ceartaigh Focal Mílitrithe"
+
+#~ msgid "Edit Endnote"
+#~ msgstr "Cuir Iarnóta in Eagar"
+
+#~ msgid "D&elete Current Column..."
+#~ msgstr "S&crios an Colún Reatha..."
+
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "S&crios na Colúin Roghnaithe..."
+
+#~ msgid "&Delete Current Row..."
+#~ msgstr "&Scrios an Ró Reatha..."
+
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "&Scrios na Rónna Roghnaithe..."
+
+#~ msgid "Change Picture"
+#~ msgstr "Athraigh Pictiúr..."
+
+#~ msgid "Save Picture"
+#~ msgstr "Sábháil Pictiúr"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Uathfhormáidigh"
+
+#~ msgid "Insert File"
+#~ msgstr "Ionsáigh Comhad"
+
+#~ msgid "File name is not a KWord file!"
+#~ msgstr "Ní comhad KWord é an comhad seo!"
+
+#~ msgid "Normal"
+#~ msgstr "Gnách"
+
+#~ msgid "Delete Frames"
+#~ msgstr "Scrios Frámaí"
+
+#~ msgctxt "Abbreviation for Text-to-Speech"
+#~ msgid "TTS"
+#~ msgstr "TgC"
+
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Socruithe Téacs-go-Caint"
+
+#~ msgid "Speak &tool tips"
+#~ msgstr "Abair &leideanna uirlisí"
+
+#~ msgid "Speak &What's This"
+#~ msgstr "Abair &Cad É Seo"
+
+#~ msgid "Spea&k accelerators"
+#~ msgstr "Abai&r aicearraí"
+
+#~ msgctxt "Keyboard accelerator, such as Alt+F"
+#~ msgid "Accelerator"
+#~ msgstr "Aicearra"
+
+#~ msgid "Table %1"
+#~ msgstr "Tábla %1"
+
+#~ msgctxt ""
+#~ "Hello dear translator :), 1 is the table name, 2 and 3 are row and column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "Cill %2,%3 i %1"
+
+#~ msgid "Speak Text"
+#~ msgstr "Abair an Téacs"

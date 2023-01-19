@@ -1,0 +1,6999 @@
+# translation of kword.po to Belarusian
+#
+# Siarhei Liantsevich <serzh.by@gmail.com>, 2006, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-01-26 06:23+0100\n"
+"Last-Translator: Siarhei Liantsevich <serzh.by@gmail.com>\n"
+"Language-Team: Belarusian\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "Фільтр:"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "Канцавая зноска"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "Стварыць"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, fuzzy, kde-format
+msgid "&Display Mode"
+msgstr "Рэжым паказу"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+msgid "Semantics"
+msgstr "Статыстыка"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+msgid "S&tyles"
+msgstr "Стыль:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Дадатковыя параметры"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, fuzzy, kde-format
+msgid "Spellcheck"
+msgstr "Праверка правапісу"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Змяніць"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, fuzzy, kde-format
+msgid "Spell Check Result"
+msgstr "Вынік праверкі правапісу"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, fuzzy, kde-format
+msgid "Change Variable To"
+msgstr "Змяніць значэнне поля на"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr ""
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Стыль урэзкі:"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Уставіць старонку"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Уласцівасці ўрэзкі"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Стварыць тэкставую ўрэзку"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+msgid "Baseline"
+msgstr "Урэзка знаходзіцца ў тэксце"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+msgid "Character"
+msgstr "Стварыць"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, fuzzy, kde-format
+msgid "Row"
+msgstr "Радок"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "Аўтаматычна дадаваць вобласць тэксту"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "Аўтаматычна дадаваць вобласць тэксту"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+msgid "Paragraph area"
+msgstr "Абзац"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+msgid "Paragraph text area"
+msgstr "Уласцівасці абзаца"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "Змяніць левую мяжу ўрэзкі"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "Змяніць правую мяжу ўрэзкі"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+msgid "Right paragraph border"
+msgstr "Змяніць правую мяжу ўрэзкі"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+msgid "Left paragraph border"
+msgstr "Змяніць левую мяжу ўрэзкі"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+msgid "Vertical Positioning"
+msgstr "Вертыкальныя лініі"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+msgid "Top align with:"
+msgstr "Па левым боку"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+msgid "Center align with:"
+msgstr "Па левым боку"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+msgid "Bottom align with:"
+msgstr "Па левым боку"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+msgid "from:"
+msgstr "Ад каго:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+msgid "Horizontal Positioning"
+msgstr "Гарызантальныя лініі"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+msgid "Left align with:"
+msgstr "Па левым боку"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+msgid "Right align with:"
+msgstr "Па правым боку"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "Налада..."
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, fuzzy, kde-format
+msgid "Misc"
+msgstr "Дадаткова"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "Сетка 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Дакумент"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, fuzzy, kde-format
+msgid "Document Settings"
+msgstr "Налада дакумента"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, fuzzy, kde-format
+msgid "Create New Bookmark"
+msgstr "Стварыць новую закладку"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, fuzzy, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Закладкі дазваляюць хутка змяшацца паміж рознымі часткамі вашага дакумента.\n"
+"Пакажыце імя закладкі."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, fuzzy, kde-format
+msgid "Name:"
+msgstr "Імя:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+msgid "Columns:"
+msgstr "Слупкі"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+msgid "Column spacing:"
+msgstr "Адлегласць паміж слупкамі па змаўчанні:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+msgid "frameset"
+msgstr "Урэзка"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, fuzzy, kde-format
+msgid "No framesets in document"
+msgstr "Паказваць толькі тэкст дакумента"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, fuzzy, kde-format
+msgid "Name of frameset:"
+msgstr "Назоў набору ўрэзак:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+msgid "Create a new frameset:"
+msgstr "Стварыць новы набор урэзак"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, fuzzy, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Вылучыце набор для далучэння да яго вылучанай урэзкі:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, fuzzy, kde-format
+msgid "Frameset Name"
+msgstr "Назоў набору"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+msgid "Smart Positioning"
+msgstr "Пазіцыя"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Text Run Around"
+msgstr "Обцяканне тэкстам"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Connect Text Frames"
+msgstr "Звязаць тэкставыя ўрэзкі"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Уласцівасці ўрэзкі"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+msgid "&Page"
+msgstr "Нумар старонкі"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+msgid "Para&graph"
+msgstr "Абзац"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+msgid "&To Character"
+msgstr "Стварыць"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+msgid "&As Character"
+msgstr "Стварыць"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+msgid "Horizontal Alignment"
+msgstr "Гарызантальныя лініі"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+msgid "&Left"
+msgstr "Злева"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+msgid "&Center"
+msgstr "Па цэнтры"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+msgid "&Right"
+msgstr "Справа"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+msgid "Vertical Alignment"
+msgstr "Вертыкальныя лініі"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+msgid "&Bottom"
+msgstr "Знізу:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+msgid "Text Wrap-around"
+msgstr "Обцяканне тэкстам"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+msgid "Run through this shape"
+msgstr "пад урэзкай"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+msgid "Skip below this shape"
+msgstr "пад урэзкай"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+msgid "Run on left side of this shape"
+msgstr "пад урэзкай"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+msgid "Run on right side of this shape"
+msgstr "пад урэзкай"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+msgid "Run on longest side of this shape"
+msgstr "пад урэзкай"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+msgid "Run on both sides of this shape"
+msgstr "пад урэзкай"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Адлегласць паміж урэзкай і тэкстам"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, fuzzy, kde-format
+msgid "Columns"
+msgstr "Слупкі"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Стыль:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+msgid "Clone"
+msgstr "Развітанне"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Выдаліць радок"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Стыль урэзкі:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+msgid "Clone Page Style"
+msgstr "Стыль урэзкі:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+msgid "Left by:"
+msgstr "Злева:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+msgid "Right by:"
+msgstr "Справа:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+msgid "&Rename"
+msgstr "Пераназваць..."
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+msgid "&Delete"
+msgstr "Выдаліць радок"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, fuzzy, kde-format
+msgid "Rename Bookmark"
+msgstr "Пераназваць закладку"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, fuzzy, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Набор урэзак з імем '%1' ужо існуе. Увядзіце іншае імя."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, fuzzy, kde-format
+msgid "Select Bookmark"
+msgstr "Перайсці да закладкі"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Geometry"
+msgstr "Памер і становішча"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, fuzzy, kde-format
+msgid "Page Size && Margins"
+msgstr "Старонка"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, fuzzy, kde-format
+msgid "Create"
+msgstr "Стварыць"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+msgid "Navigation"
+msgstr "Прывітанне"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Page #"
+msgstr "Нумар старонкі"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Section"
+msgstr "Штампы"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, fuzzy, kde-format
+msgid "Statistics"
+msgstr "Статыстыка"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, fuzzy, kde-format
+msgid "Words:"
+msgstr "Слоў:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, fuzzy, kde-format
+msgid "Sentences:"
+msgstr "Прапаноў:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, fuzzy, kde-format
+msgid "Syllables:"
+msgstr "Складоў:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+msgid "Characters (spaces):"
+msgstr "Знакаў, уключаючы прабелы:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+msgid "Characters (no spaces):"
+msgstr "Знакаў, уключаючы прабелы:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, fuzzy, kde-format
+msgid "Lines:"
+msgstr "Радкоў:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+msgid "Flesch reading ease"
+msgstr "Лёгка чытэльных:"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+msgid "East asian characters:"
+msgstr "Недрукавальныя знакі"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+msgid "Words"
+msgstr "Слоў:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, fuzzy, kde-format
+msgid "Sentences"
+msgstr "Прапаноў:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+msgid "Syllables"
+msgstr "Складоў:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, fuzzy, kde-format
+msgid "Lines"
+msgstr "Радкоў:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+msgid "Characters With Spaces"
+msgstr "Знакаў без прабелаў:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+msgid "Characters without spaces"
+msgstr "Знакаў без прабелаў:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+msgid "East Asian characters"
+msgstr "Недрукавальныя знакі"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+msgid "Flesch Reading Ease"
+msgstr "Лёгка чытэльных:"
+
+#: part/i18n/stylenames.cpp:8
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Звычайны"
+
+#: part/i18n/stylenames.cpp:9
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Загаловак 1"
+
+#: part/i18n/stylenames.cpp:10
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Загаловак 2"
+
+#: part/i18n/stylenames.cpp:11
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Загаловак 3"
+
+#: part/i18n/stylenames.cpp:12
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Нумараваны спіс"
+
+#: part/i18n/stylenames.cpp:13
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Алфавітны спіс"
+
+#: part/i18n/stylenames.cpp:14
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Маркіраваны спіс"
+
+#: part/i18n/stylenames.cpp:15
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Утрыманне"
+
+#: part/i18n/stylenames.cpp:16
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Загаловак ва ўтрыманні 1"
+
+#: part/i18n/stylenames.cpp:17
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Загаловак ва ўтрыманні 2"
+
+#: part/i18n/stylenames.cpp:18
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Загаловак ва ўтрыманні 3"
+
+#: part/i18n/stylenames.cpp:19
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Назоў дакумента"
+
+#: part/i18n/stylenames.cpp:20
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Верхні калантытул"
+
+#: part/i18n/stylenames.cpp:21
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Ніжні калантытул"
+
+#: part/i18n/stylenames.cpp:24
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Звычайны"
+
+#: part/i18n/stylenames.cpp:25
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Межы 1"
+
+#: part/i18n/stylenames.cpp:26
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Межы 2"
+
+#: part/i18n/stylenames.cpp:27
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Межы 3"
+
+#: part/i18n/stylenames.cpp:28
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Радок"
+
+#: part/i18n/stylenames.cpp:29
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Слупок"
+
+#: part/i18n/stylenames.cpp:30
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Светла-шэры"
+
+#: part/i18n/stylenames.cpp:31
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Цёмна-шэры"
+
+#: part/i18n/stylenames.cpp:32
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Чорны"
+
+#: part/i18n/stylenames.cpp:33
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Галубай"
+
+#: part/i18n/stylenames.cpp:34
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Цёмна-сіні"
+
+#: part/i18n/stylenames.cpp:35
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Чырвоны"
+
+#: part/i18n/stylenames.cpp:36
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Жоўты"
+
+#: part/i18n/stylenames.cpp:37
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Каляровы"
+
+#: part/i18n/stylenames.cpp:38
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Блакітныя тоны"
+
+#: part/i18n/stylenames.cpp:41
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Прыклад 1"
+
+#: part/i18n/stylenames.cpp:42
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Прыклад 2"
+
+#: part/i18n/stylenames.cpp:43
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Прыклад 3"
+
+#: part/i18n/stylenames.cpp:44
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Верхні калантытул 1"
+
+#: part/i18n/stylenames.cpp:45
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Верхні калантытул 2"
+
+#: part/i18n/stylenames.cpp:46
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Верхні калантытул 3"
+
+#: part/i18n/stylenames.cpp:47
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Верхні калантытул 4"
+
+#: part/i18n/stylenames.cpp:50
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Слупок 1"
+
+#: part/i18n/stylenames.cpp:51
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Слупок 2"
+
+#: part/i18n/stylenames.cpp:52
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Сетка 1"
+
+#: part/i18n/stylenames.cpp:53
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Сетка 2"
+
+#: part/i18n/stylenames.cpp:54
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Сетка 3"
+
+#: part/i18n/stylenames.cpp:55
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Шэры загаловак"
+
+#: part/i18n/stylenames.cpp:56
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Сіні загаловак"
+
+#: part/i18n/stylenames.cpp:57
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Сіні традыцыйны"
+
+#: part/i18n/stylenames.cpp:58
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Шэры традыцыйны"
+
+#: part/i18n/stylenames.cpp:59
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Сіні загаловак і апошні радок"
+
+#: part/i18n/stylenames.cpp:60
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Шэры загаловак і апошні радок"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Тэкставы працэсар KOffice"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+msgid "Word processor"
+msgstr "Тэкставы працэсар KOffice"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2006, Каманда распрацоўнікаў KWord"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+msgid "Formatting stuff"
+msgstr "Недрукавальныя знакі"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "Фільтр:"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+msgid "Statistics docker"
+msgstr "Статыстыка"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+msgid "Foot and endnotes"
+msgstr "Старонкавыя зноскі"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "Мэнэджэр стыляў"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, fuzzy, kde-format
+msgid "ODF Support"
+msgstr "Парадак сартавання"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, fuzzy, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, fuzzy, kde-format
+msgid "Enno Bartels"
+msgstr "Канцавыя зноскі"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+msgid "Page break icon"
+msgstr "Разрыў старонкі"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Сяржук Лянцэвіч"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "serzh.by@gmail.com"
+
+#: part/KWDocument.cpp:495
+#, fuzzy, kde-format
+msgid "Copy"
+msgstr "Копія%1-%2"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+msgid "Standard"
+msgstr "Звычайны"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+msgid "Document Title"
+msgstr "Назоў дакумента"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+msgid "Head 1"
+msgstr "Загаловак 1"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+msgid "Head 2"
+msgstr "Загаловак 2"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+msgid "Head 3"
+msgstr "Загаловак 3"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+msgid "Bullet List"
+msgstr "Маркіраваны спіс"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: part/KWOdfLoader.cpp:83
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "Памылка чытання дакумента OASIS. Не знойдзены тэг office:body."
+
+#: part/KWOdfLoader.cpp:95
+#, fuzzy, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr "Памылка чытання дакумента OASIS. Не знойдзеныя тэгі ў office:body."
+
+#: part/KWOdfLoader.cpp:97
+#, fuzzy, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Гэта не тэкставы дакумент, а %1. Паспрабуйце адкрыць гэты файл у адпаведным "
+"яго фармату прыкладанні."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Звычайны"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, fuzzy, kde-format
+msgid "Saved"
+msgstr "Памылка захавання"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "Старонка %1 з %2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Старонка %1 з %2"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+msgid "Line %1"
+msgstr "Радкоў:"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+msgid "Page Number"
+msgstr "Нумар старонкі:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+msgid "Line Number"
+msgstr "Нумараваны спіс"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+msgid "Change the page style"
+msgstr "Стыль урэзкі:"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+msgid "Page Style"
+msgstr "Стыль урэзкі:"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+msgid "Page Size"
+msgstr "Заблакаваць змену памеру"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+msgid "Shape Properties..."
+msgstr "Уласцівасці ўрэзкі"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+msgid "Create Template From Document..."
+msgstr "Стварыць шаблон з дакумента..."
+
+#: part/KWView.cpp:272
+#, fuzzy, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "Захаваць дакумент і выкарыстаць яго пазней як шаблон"
+
+#: part/KWView.cpp:273
+#, fuzzy, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"Вы можаце захаваць гэты дакумент як шаблон. <br> <br>Вы можаце выкарыстаць "
+"новы шаблон пры стварэнні новага дакумента."
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+msgid "Show Formatting Characters"
+msgstr "Недрукавальныя знакі"
+
+#: part/KWView.cpp:298
+#, fuzzy, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Пераключэнне паказу недрукавальных знакаў"
+
+#: part/KWView.cpp:299
+#, fuzzy, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"Пераключэнне паказу недрукавальных знакаў.<br> <br>Пры ўключэнні паказу "
+"недрукавальных знакаў у дакуменце будуць паказаныя знакі табуляцыі, прабелу, "
+"перакладу радкі і іншыя недрукавальныя знакі."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Межы табліцы"
+
+#: part/KWView.cpp:311
+#, fuzzy, kde-format
+msgid "Turns the border display on and off"
+msgstr "Перамыкае паказ меж урэзак"
+
+#: part/KWView.cpp:317
+#, fuzzy, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Перамыкае паказ меж урэзак.<br><br>Межы ўрэзак ніколі не друкуюцца. Гэтая "
+"опцыя можа спатрэбіцца, калі вы жадаеце праглядзець, як будзе выглядаць "
+"дакумент пры друку."
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+msgid "Show Table Borders"
+msgstr "Межы табліцы"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Пераключэнне паказу недрукавальных знакаў"
+
+#: part/KWView.cpp:326
+#, fuzzy, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"Пераключэнне паказу недрукавальных знакаў.<br> <br>Пры ўключэнні паказу "
+"недрукавальных знакаў у дакуменце будуць паказаныя знакі табуляцыі, прабелу, "
+"перакладу радкі і іншыя недрукавальныя знакі."
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Змена опцый аўтавыпраўлення"
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "Пераключэнне паказу недрукавальных знакаў"
+
+#: part/KWView.cpp:335
+#, fuzzy, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"Пераключэнне паказу недрукавальных знакаў.<br> <br>Пры ўключэнні паказу "
+"недрукавальных знакаў у дакуменце будуць паказаныя знакі табуляцыі, прабелу, "
+"перакладу радкі і іншыя недрукавальныя знакі."
+
+#: part/KWView.cpp:337
+#, fuzzy, kde-format
+msgid "Show Rulers"
+msgstr "Паказаць лінейкі"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "Паказаць або схаваць лінейкі"
+
+#: part/KWView.cpp:340
+#, fuzzy, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"Лінейкі ўяўляюць сабою белыя палосы з дзяленнямі зверху і злева ад асноўнага "
+"акна дакумента. Лінейкі паказваюць пазіцыю і шырыню старонак і ўрэзак і "
+"могуць быць скарыстаныя для размяшчэння пазіцый табуляцыі. <p>Выключэнне "
+"гэтай опцыі выключыць паказ лінеек."
+
+#: part/KWView.cpp:351
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "Прывязаць да сеткі"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+msgid "Show Status Bar"
+msgstr "Паказаць радок стану"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Паказаць радок стану"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, fuzzy, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Імпартаваць стылі..."
+
+#: part/KWView.cpp:376
+#, fuzzy, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Імпартаваць стылі..."
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+msgid "Configure..."
+msgstr "Налада..."
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+msgid "Page Layout..."
+msgstr "Старонка..."
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "Змена ўласцівасцяў старонкі"
+
+#: part/KWView.cpp:404
+#, fuzzy, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Змена ўласцівасцяў старонкі.<p> Вы можаце змяніць памер паперы, арыентацыю, "
+"памеры калантытулаў і калонак."
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+msgid "Create Header"
+msgstr "Стварыць тэкставую ўрэзку"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+msgid "Create Footer"
+msgstr "Стварыць тэкставую ўрэзку"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+msgid "Show Comments"
+msgstr "Выдаліць каментар"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+msgid "Shows comments in the document"
+msgstr "Паказваць толькі тэкст дакумента"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+msgid "Shows or hides word counting in status bar"
+msgstr "Паказаць радок стану"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+msgid "Page Setup"
+msgstr "Заблакаваць змену памеру"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+msgid "Header & Footer"
+msgstr "Ніжні калантытул цотных старонак"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Page layout"
+msgstr "Старонка..."
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+msgid "..."
+msgstr "Новы..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Уставіць старонку"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Папярэдні прагляд"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Замяніць слова"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Замяніць слова"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Замяніць слова"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+msgid "Replace"
+msgstr "Замяніць слова"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, fuzzy, kde-format
+msgid "Odd Pages Header"
+msgstr "Верхні калантытул няцотных старонак"
+
+#: part/Words.cpp:47
+#, fuzzy, kde-format
+msgid "Even Pages Header"
+msgstr "Верхні калантытул цотных старонак"
+
+#: part/Words.cpp:49
+#, fuzzy, kde-format
+msgid "Odd Pages Footer"
+msgstr "Ніжні калантытул цотных старонак"
+
+#: part/Words.cpp:51
+#, fuzzy, kde-format
+msgid "Even Pages Footer"
+msgstr "Ніжні калантытул цотных старонак"
+
+#: part/Words.cpp:53
+#, fuzzy, kde-format
+msgid "Main text"
+msgstr "Толькі тэкст"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+msgid "Other text"
+msgstr "Уставіць старонку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "Нумар старонкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Абзац"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "Злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "Па цэнтры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "Справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Знізу:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Обцяканне тэкстам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "пад урэзкай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "пад урэзкай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "пад урэзкай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "пад урэзкай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "пад урэзкай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "пад урэзкай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Адлегласць паміж урэзкай і тэкстам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Ад каго:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Па правым боку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Назоў набору ўрэзак:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Стварыць новы набор урэзак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Вылучыце набор для далучэння да яго вылучанай урэзкі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Назоў набору"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "Пераназваць..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "Выдаліць радок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Закладкі дазваляюць хутка змяшацца паміж рознымі часткамі вашага "
+#~ "дакумента.\n"
+#~ "Пакажыце імя закладкі."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Імя:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Старонка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Злева:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Справа:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Слупкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Адлегласць паміж слупкамі па змаўчанні:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Слоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Прапаноў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Складоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Радкоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Знакаў без прабелаў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Знакаў без прабелаў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Недрукавальныя знакі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Лёгка чытэльных:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "Фільтр:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "Канцавая зноска"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Рэжым паказу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Статыстыка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Стыль:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Дадатковыя параметры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Праверка правапісу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Вынік праверкі правапісу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Змяніць значэнне поля на"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Новы..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Урэзка знаходзіцца ў тэксце"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Радок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Аўтаматычна дадаваць вобласць тэксту"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Абзац"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Уласцівасці абзаца"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Змяніць левую мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Змяніць правую мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Налада..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Дадаткова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Сетка 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Дакумент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Налада дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Стварыць новую закладку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "Урэзка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Пазіцыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Обцяканне тэкстам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Звязаць тэкставыя ўрэзкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Слупкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Стыль:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Развітанне"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Выдаліць радок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Стыль урэзкі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Пераназваць закладку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Набор урэзак з імем '%1' ужо існуе. Увядзіце іншае імя."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Перайсці да закладкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Памер і становішча"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Прывітанне"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Нумар старонкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Штампы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Статыстыка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Слоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Прапаноў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Складоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Знакаў, уключаючы прабелы:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Знакаў, уключаючы прабелы:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Радкоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Лёгка чытэльных:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Недрукавальныя знакі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Звычайны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Загаловак 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Загаловак 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Загаловак 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Нумараваны спіс"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Алфавітны спіс"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Маркіраваны спіс"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Утрыманне"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Загаловак ва ўтрыманні 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Загаловак ва ўтрыманні 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Загаловак ва ўтрыманні 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Назоў дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Верхні калантытул"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Ніжні калантытул"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Звычайны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Межы 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Межы 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Межы 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Радок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Слупок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Светла-шэры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Цёмна-шэры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Чорны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Галубай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Цёмна-сіні"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Чырвоны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Жоўты"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Каляровы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Блакітныя тоны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Прыклад 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Прыклад 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Прыклад 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Верхні калантытул 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Верхні калантытул 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Верхні калантытул 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Верхні калантытул 4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Слупок 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Слупок 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Сетка 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Сетка 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Сетка 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Шэры загаловак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Сіні загаловак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Сіні традыцыйны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Шэры традыцыйны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Сіні загаловак і апошні радок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Шэры загаловак і апошні радок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Тэкставы працэсар KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Тэкставы працэсар KOffice"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2006, Каманда распрацоўнікаў KWord"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Недрукавальныя знакі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "Фільтр:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Статыстыка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Старонкавыя зноскі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Мэнэджэр стыляў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Канцавыя зноскі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Разрыў старонкі"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сяржук Лянцэвіч"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "serzh.by@gmail.com"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Копія%1-%2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Звычайны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Назоў дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Загаловак 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Загаловак 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Загаловак 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Маркіраваны спіс"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "Памылка чытання дакумента OASIS. Не знойдзены тэг office:body."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "Памылка чытання дакумента OASIS. Не знойдзеныя тэгі ў office:body."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Гэта не тэкставы дакумент, а %1. Паспрабуйце адкрыць гэты файл у "
+#~ "адпаведным яго фармату прыкладанні."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Памылка захавання"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Старонка %1 з %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Старонка %1 з %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Радкоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Нумар старонкі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Нумараваны спіс"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Стыль урэзкі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Заблакаваць змену памеру"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Уласцівасці ўрэзкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "Стварыць шаблон з дакумента..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr "Захаваць дакумент і выкарыстаць яго пазней як шаблон"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "Вы можаце захаваць гэты дакумент як шаблон. <br> <br>Вы можаце "
+#~ "выкарыстаць новы шаблон пры стварэнні новага дакумента."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Недрукавальныя знакі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Пераключэнне паказу недрукавальных знакаў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "Пераключэнне паказу недрукавальных знакаў.<br> <br>Пры ўключэнні паказу "
+#~ "недрукавальных знакаў у дакуменце будуць паказаныя знакі табуляцыі, "
+#~ "прабелу, перакладу радкі і іншыя недрукавальныя знакі."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Перамыкае паказ меж урэзак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Перамыкае паказ меж урэзак.<br><br>Межы ўрэзак ніколі не друкуюцца. Гэтая "
+#~ "опцыя можа спатрэбіцца, калі вы жадаеце праглядзець, як будзе выглядаць "
+#~ "дакумент пры друку."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Межы табліцы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Пераключэнне паказу недрукавальных знакаў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "Пераключэнне паказу недрукавальных знакаў.<br> <br>Пры ўключэнні паказу "
+#~ "недрукавальных знакаў у дакуменце будуць паказаныя знакі табуляцыі, "
+#~ "прабелу, перакладу радкі і іншыя недрукавальныя знакі."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Пераключэнне паказу недрукавальных знакаў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "Пераключэнне паказу недрукавальных знакаў.<br> <br>Пры ўключэнні паказу "
+#~ "недрукавальных знакаў у дакуменце будуць паказаныя знакі табуляцыі, "
+#~ "прабелу, перакладу радкі і іншыя недрукавальныя знакі."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Паказаць лінейкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Паказаць або схаваць лінейкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "Лінейкі ўяўляюць сабою белыя палосы з дзяленнямі зверху і злева ад "
+#~ "асноўнага акна дакумента. Лінейкі паказваюць пазіцыю і шырыню старонак і "
+#~ "ўрэзак і могуць быць скарыстаныя для размяшчэння пазіцый табуляцыі. "
+#~ "<p>Выключэнне гэтай опцыі выключыць паказ лінеек."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Прывязаць да сеткі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Паказаць радок стану"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Паказаць радок стану"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Імпартаваць стылі..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Налада..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Старонка..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Змена ўласцівасцяў старонкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Змена ўласцівасцяў старонкі.<p> Вы можаце змяніць памер паперы, "
+#~ "арыентацыю, памеры калантытулаў і калонак."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Стварыць тэкставую ўрэзку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Стварыць тэкставую ўрэзку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Выдаліць каментар"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Паказваць толькі тэкст дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Паказаць радок стану"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Заблакаваць змену памеру"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Ніжні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Старонка..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Уставіць старонку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Папярэдні прагляд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Замяніць слова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Замяніць слова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Замяніць слова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Замяніць слова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Верхні калантытул няцотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Верхні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Ніжні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Ніжні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Толькі тэкст"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Уставіць старонку"
+
+#, fuzzy
+#~ msgid "Book"
+#~ msgstr "Закладка..."
+
+#, fuzzy
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Тэкставы працэсар KOffice"
+
+#, fuzzy
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2006, Каманда распрацоўнікаў KWord"
+
+#, fuzzy
+#~ msgid "Select Cover Image..."
+#~ msgstr "Уставіць старонку"
+
+#, fuzzy
+#~ msgid "Open..."
+#~ msgstr "Адкрыць крыніцу..."
+
+#, fuzzy
+#~ msgid "Open Cover"
+#~ msgstr "Адкрыць спасылку"
+
+#, fuzzy
+#~ msgid "Import problem"
+#~ msgstr "Імпартаваць стыль"
+
+#, fuzzy
+#~ msgid "Cover selection"
+#~ msgstr "Аўтазавяршэнне"
+
+#, fuzzy
+#~ msgid "Outliner"
+#~ msgstr "Мяжа"
+
+#, fuzzy
+#~ msgid "Edit section"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~ msgid "Main"
+#~ msgstr "Толькі тэкст"
+
+#, fuzzy
+#~ msgid "Enter actor's name here"
+#~ msgstr "Імя поля:"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "Тып"
+
+#, fuzzy
+#~ msgid "Actor description:"
+#~ msgstr "Аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Bold"
+#~ msgstr "Паўтлусты"
+
+#, fuzzy
+#~ msgid "Italic"
+#~ msgstr "Курсіў"
+
+#, fuzzy
+#~ msgid "Underline"
+#~ msgstr "Падкрэслены"
+
+#, fuzzy
+#~ msgid "LeftAlign"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgid "CenterAlign"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgid "RightAlign"
+#~ msgstr "Па правым боку"
+
+#, fuzzy
+#~ msgid "1st Edit"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~ msgid "2nd Edit"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~ msgid "3rd Edit"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~ msgid "Author's section"
+#~ msgstr "Аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Badge:"
+#~ msgstr "Прагляд старонак"
+
+#, fuzzy
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Штампы"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "Адкрыць файл"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Стварыць тэкставую ўрэзку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Выдаліць урэзку"
+
+#, fuzzy
+#~ msgid "General"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~ msgid "Protect size and position"
+#~ msgstr "Заблакаваць памер і становішча"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Пазіцыя"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Шырыня:"
+
+#, fuzzy
+#~ msgid "Height:"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Водступы"
+
+#, fuzzy
+#~ msgid "Synchronize changes"
+#~ msgstr "Сінхранізаваць змены"
+
+#, fuzzy
+#~ msgid "Bottom:"
+#~ msgstr "Знізу:"
+
+#, fuzzy
+#~ msgid "Top:"
+#~ msgstr "Зверху:"
+
+#, fuzzy
+#~ msgid "Right:"
+#~ msgstr "Справа:"
+
+#, fuzzy
+#~ msgid "Left:"
+#~ msgstr "Злева:"
+
+#, fuzzy
+#~ msgid "Create a new page"
+#~ msgstr "Стварыць новую старонку"
+
+#, fuzzy
+#~ msgid "Resize last frame"
+#~ msgstr "Змяніць памер урэзкі"
+
+#, fuzzy
+#~ msgid "Do not show the extra text"
+#~ msgstr "Не паказваць не змяшчальны тэкст"
+
+#, fuzzy
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Пераўсталяваць прывязку ўрэзкі"
+
+#, fuzzy
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Не ствараць урэзку"
+
+#, fuzzy
+#~ msgid "Copy this Frame"
+#~ msgstr "Прывязка да ўрэзкі"
+
+#, fuzzy
+#~ msgid "Protect content"
+#~ msgstr "Абараніць змесціва"
+
+#, fuzzy
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Гэтая ўрэзка з'яўляецца копіяй папярэдняй"
+
+#, fuzzy
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "Змены будуць ужытыя да ўсіх урэзак у наборы"
+
+#, fuzzy
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Захоўваць прапорцыі малюнка"
+
+#, fuzzy
+#~ msgid "Select All Shapes"
+#~ msgstr "Вылучыць усе ўрэзкі"
+
+#, fuzzy
+#~ msgid "Create Linked Copy"
+#~ msgstr "Капіяваць урэзку з усталяваннем сувязі"
+
+#, fuzzy
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr "Стварыць копію бягучай урэзкі і ўсталяваць сувязь паміж імі"
+
+#, fuzzy
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Стварэнне копіі бягучай урэзкі, звязанай з ёю. Гэта азначае, што абедзве "
+#~ "ўрэзкі будуць паказваць аднолькавае змесціва: змена змесціва ў адной з "
+#~ "урэзак прывядзе да абнаўлення змесціва іншых звязаных з ёй дзід урэзак."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Капіяваць урэзку з усталяваннем сувязі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Уставіць старонку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Выдаліць поле"
+
+#, fuzzy
+#~ msgid "Bookmark..."
+#~ msgstr "Закладка..."
+
+#, fuzzy
+#~ msgid "Select Bookmark..."
+#~ msgstr "Перайсці да закладкі..."
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "Закладка..."
+
+#, fuzzy
+#~ msgid "Page %1/%2"
+#~ msgstr "Старонка %1"
+
+#, fuzzy
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Знакаў, уключаючы прабелы:"
+
+#, fuzzy
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Лёгка чытэльных:"
+
+#, fuzzy
+#~ msgid "Preferences"
+#~ msgstr "Прапаноў:"
+
+#, fuzzy
+#~ msgid "Automatically update"
+#~ msgstr "Аўтаматычны перанос"
+
+#, fuzzy
+#~ msgid "F&ormat"
+#~ msgstr "Фармат"
+
+#, fuzzy
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Няслушны фармат дакумента. Не атрымоўваецца вызначыць тып MIME."
+
+#, fuzzy
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Няслушны фармат дакумента. Чакаўся тып MIME application/x-kword або "
+#~ "application/vnd.kde.kword, быў атрыманы %1"
+
+#, fuzzy
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Няслушны фармат дакумента. Памер старонкі: %1x%2"
+
+#, fuzzy
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Не атрымоўваецца стварыць аб'ект базы дадзеных"
+
+#, fuzzy
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Не атрымоўваецца стварыць аб'ект базы дадзеных"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Урэзка ў тэксце"
+
+#, fuzzy
+#~ msgid "Create Frame-clip"
+#~ msgstr "Стварыць тэкставую ўрэзку"
+
+#, fuzzy
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Выдаліць запіс"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Перанос пакінутага тэксту на наступную старонку"
+
+#, fuzzy
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr ""
+#~ "У бягучую пазіцыю курсора будзе ўстаўлены адмысловы недрукавальны знак. "
+#~ "Увесь тэкст пасля яго будзе перанесены на наступную старонку."
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "Фармат"
+
+#, fuzzy
+#~ msgid "Enable Document Headers"
+#~ msgstr "Паказваць верхнія калантытулы"
+
+#, fuzzy
+#~ msgid "Enable Document Footers"
+#~ msgstr "Паказваць ніжнія калантытулы"
+
+#, fuzzy
+#~ msgid "Change Tracking"
+#~ msgstr "Змяніць спасылку"
+
+#, fuzzy
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Слоў:"
+
+#, fuzzy
+#~ msgid "Number of pages:"
+#~ msgstr "Старонак:"
+
+#, fuzzy
+#~ msgid "Number of frames:"
+#~ msgstr "Урэзак:"
+
+#, fuzzy
+#~ msgid "Number of pictures:"
+#~ msgstr "Малюнкаў:"
+
+#, fuzzy
+#~ msgid "Number of tables:"
+#~ msgstr "Табліц:"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "Уключаць тэкст зносак"
+
+#, fuzzy
+#~ msgid "Characters without spaces:"
+#~ msgstr "Знакаў без прабелаў:"
+
+#, fuzzy
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Знакаў, уключаючы прабелы:"
+
+#, fuzzy
+#~ msgid "approximately %1"
+#~ msgstr "прыблізна %1"
+
+#, fuzzy
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Падлік прапаноў, слоў і літар у гэтым дакуменце"
+
+#, fuzzy
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Інфармацыя аб колькасці літар, слоў, складоў і прапаноў у гэтым "
+#~ "дакуменце. <p> Падлічваецца чытэльнасць на аснове каэфіцыента чытэльнасці "
+#~ "Flesch."
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr "Паказаць або схаваць верхнія калантытулы"
+
+#, fuzzy
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Паказаць або схаваць верхнія калантытулы.<br><br>Верхнія калантытулы "
+#~ "ўяўляюць сабою адмысловыя ўрэзкі наверсе кожнай старонкі, якія могуць "
+#~ "утрымоўваць нумары старонак і іншую інфармацыю."
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Паказаць або схаваць ніжнія калантытулы"
+
+#, fuzzy
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Паказаць або схаваць ніжнія калантытулы.<br><br>Ніжнія калантытулы "
+#~ "ўяўляюць сабою адмысловыя ўрэзкі ўнізе кожнай старонкі, якія могуць "
+#~ "утрымоўваць нумары старонак і іншую інфармацыю."
+
+#, fuzzy
+#~ msgid "Raise Shape"
+#~ msgstr "Перамясціць урэзку наверх"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Перамяшчае вылучаную ўрэзку па-над усімі астатніх перекрываючых яе ўрэзак."
+
+#, fuzzy
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Перамяшчае вылучаную ўрэзку па-над усімі астатніх перекрываючых яе "
+#~ "ўрэзак. Гэта бывае карысна толькі для перекрываючых адзін аднаго ўрэзак. "
+#~ "Пры перамяшчэнні  некалькіх вылучаных урэзак яны ўсё перамяшчаюцца над "
+#~ "іншымі ўрэзкамі.дзід урэзак."
+
+#, fuzzy
+#~ msgid "Lower Shape"
+#~ msgstr "Перамясціць урэзку ўніз"
+
+#, fuzzy
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Перамяшчае вылучаную ўрэзку пад усё астатнія перекрываючыя яе ўрэзкі."
+
+#, fuzzy
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Перамяшчае вылучаную ўрэзку пад усё астатнія перекрываючыя яе ўрэзкі. "
+#~ "Гэта бывае карысна толькі для перекрываючых адзін аднаго ўрэзак. Пры "
+#~ "перамяшчэнні некалькіх вылучаных урэзак яны ўсё перамяшчаюцца пад іншыя "
+#~ "ўрэзкі."
+
+#, fuzzy
+#~ msgid "Bring to Front"
+#~ msgstr "Перамясціць наверх"
+
+#, fuzzy
+#~ msgid "Send to Back"
+#~ msgstr "Перамясціць уніз"
+
+#, fuzzy
+#~ msgid "After last page"
+#~ msgstr "Верхні калантытул першай старонкі"
+
+#, fuzzy
+#~ msgid "Page style:"
+#~ msgstr "Стыль урэзкі:"
+
+#, fuzzy
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Устаўка"
+
+#, fuzzy
+#~ msgid "Variable"
+#~ msgstr "Поле"
+
+#, fuzzy
+#~ msgid "As Character"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Уставіць змест у бягучую пазіцыю курсора."
+
+#, fuzzy
+#~ msgid "To Character"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Уставіць змест у бягучую пазіцыю курсора."
+
+#, fuzzy
+#~ msgid "To Paragraph"
+#~ msgstr "Абзац"
+
+#, fuzzy
+#~ msgid "To Page"
+#~ msgstr "Выдаліць поле"
+
+#, fuzzy
+#~ msgid "Page..."
+#~ msgstr "Старонка..."
+
+#, fuzzy
+#~ msgid "Delete Page"
+#~ msgstr "Выдаліць старонку"
+
+#, fuzzy
+#~ msgid "Insert Image Options"
+#~ msgstr "Уставіць старонку"
+
+#, fuzzy
+#~ msgid "Disable Document Headers"
+#~ msgstr "Не паказваць верхнія калантытулы"
+
+#, fuzzy
+#~ msgid "Disable Document Footers"
+#~ msgstr "Не паказваць ніжнія калантытулы"
+
+#, fuzzy
+#~ msgid "Page Borders"
+#~ msgstr "Межы ўрэзкі"
+
+#, fuzzy
+#~ msgid "Hide Status Bar"
+#~ msgstr "Паказаць радок стану"
+
+#, fuzzy
+#~ msgid "Numbering"
+#~ msgstr "Нумарацыя"
+
+#, fuzzy
+#~ msgid "Automatic"
+#~ msgstr "Аўта"
+
+#, fuzzy
+#~ msgid "Footnote"
+#~ msgstr "Зноска"
+
+#, fuzzy
+#~ msgid "Endnote"
+#~ msgstr "Канцавая зноска"
+
+#, fuzzy
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Уставіць зноску"
+
+#, fuzzy
+#~ msgid "Footnote/Endnote..."
+#~ msgstr "Зноска..."
+
+#, fuzzy
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Уставіць зноску пасля вылучанага тэксту."
+
+#, fuzzy
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Уласцівасці ўрэзкі або набору"
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Падкладка ўрэзкі"
+
+#, fuzzy
+#~ msgid "Picture..."
+#~ msgstr "Малюнак..."
+
+#, fuzzy
+#~ msgid "Insert a picture into document"
+#~ msgstr "Уставіць малюнак у тэкст"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Пераўтварыць вылучаную плавальную ўрэзку ва ўрэзку ў тэксце"
+
+#, fuzzy
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Пераўтварыць вылучаную плавальную ўрэзку ва ўрэзку ў тэксце. <br> "
+#~ "<br>Змесціце ўрэзку ў тэксце каля бягучай пазіцыі ўрэзкі."
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "Дадатковыя параметры"
+
+#, fuzzy
+#~ msgid "Filter stuff"
+#~ msgstr "Выснова фільтра"
+
+#, fuzzy
+#~ msgid "Fra&mes"
+#~ msgstr "Стыль урэзак"
+
+#, fuzzy
+#~ msgid "Tables"
+#~ msgstr "Табліцы"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Устаўка"
+
+#, fuzzy
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Размяшчэнне тэксту ў іншых урэзках"
+
+#, fuzzy
+#~ msgid "Text will run around this frame"
+#~ msgstr "абцякаць гэтую ўрэзку ўзбоч"
+
+#, fuzzy
+#~ msgid "Text will not run around this frame"
+#~ msgstr "не абцякаць гэтую ўрэзку ўзбоч"
+
+#, fuzzy
+#~ msgid "Run Around Side"
+#~ msgstr "Бок обцяканне тэкстам"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "Злева"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Справа"
+
+#, fuzzy
+#~ msgid "Longest side"
+#~ msgstr "Па найбольшым боку"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "Стварыць табліцу"
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "Стварыць табліцу"
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "Стварыць табліцу"
+
+#, fuzzy
+#~ msgid "Borders"
+#~ msgstr "Межы"
+
+#, fuzzy
+#~ msgid "MailMerge"
+#~ msgstr "Паштовае зліццё"
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "Аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "Зноска"
+
+#, fuzzy
+#~ msgid "Format"
+#~ msgstr "Фармат"
+
+#, fuzzy
+#~ msgid "Formula"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~ msgid "Insert Picture..."
+#~ msgstr "Уставіць малюнак"
+
+#, fuzzy
+#~ msgid "Page Background"
+#~ msgstr "Фон"
+
+#, fuzzy
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Калі тэкст не змяшчаецца ва ўрэзку"
+
+#, fuzzy
+#~ msgid "On New Page Creation"
+#~ msgstr "Пры стварэнні новай старонкі"
+
+#, fuzzy
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Змясціць копію ўрэзкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr ""
+#~ "Падкладка ўрэзкі.<p>У гэтай версіі вы можаце пакуль толькі змяніць фон "
+#~ "урэзкі."
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "Паказаць сетку"
+
+#, fuzzy
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Верхні калантытул няцотных старонак"
+
+#, fuzzy
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Верхні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Ніжні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Ніжні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "Галоўны набор тэкставых урэзак"
+
+#, fuzzy
+#~ msgid "Matrix"
+#~ msgstr "Матрыца"
+
+#, fuzzy
+#~ msgid "Configure Frame Border"
+#~ msgstr "Межы ўрэзкі"
+
+#, fuzzy
+#~ msgid "Ta&ble"
+#~ msgstr "Табліца"
+
+#, fuzzy
+#~ msgid "Cell"
+#~ msgstr "Вочка"
+
+#, fuzzy
+#~ msgid "Configure Frame Borders"
+#~ msgstr "Межы ўрэзкі"
+
+#, fuzzy
+#~ msgid "Add a new page"
+#~ msgstr "Стварыць новую старонку"
+
+#, fuzzy
+#~ msgid "Delete selected pages"
+#~ msgstr "Выдаліць вылучаныя вочкі?"
+
+#, fuzzy
+#~ msgid "Delete Layer"
+#~ msgstr "Выдаліць старонку"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Звесткі аб дакуменце"
+
+#, fuzzy
+#~ msgid "&Available tables:"
+#~ msgstr "Табліцы:"
+
+#, fuzzy
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "Палі вылучанай табліцы:"
+
+#, fuzzy
+#~ msgid "Query Result"
+#~ msgstr "Вынік запыту"
+
+#, fuzzy
+#~ msgid "&Query:"
+#~ msgstr "Запыт:"
+
+#, fuzzy
+#~ msgid "&Execute"
+#~ msgstr "Выканаць"
+
+#, fuzzy
+#~ msgid "&Setup"
+#~ msgstr "Налады"
+
+#, fuzzy
+#~ msgid "&Table:"
+#~ msgstr "Табліца:"
+
+#, fuzzy
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "Правілы фільтрацыі"
+
+#, fuzzy
+#~ msgid "&Used database records:"
+#~ msgstr "Выкарыстоўваныя запісы базы дадзеных:"
+
+#, fuzzy
+#~ msgid "&Keep Settings..."
+#~ msgstr "Захаваць налады..."
+
+#, fuzzy
+#~ msgid "&Hostname:"
+#~ msgstr "Сервер:"
+
+#, fuzzy
+#~ msgid "&Driver:"
+#~ msgstr "Драйвер:"
+
+#, fuzzy
+#~ msgid "Database &name:"
+#~ msgstr "База дадзеных:"
+
+#, fuzzy
+#~ msgid "&Username:"
+#~ msgstr "Імя карыстача:"
+
+#, fuzzy
+#~ msgid "&Port:"
+#~ msgstr "Порт:"
+
+#, fuzzy
+#~ msgid "default"
+#~ msgstr "па змаўчанні"
+
+#, fuzzy
+#~ msgid "Address Selection"
+#~ msgstr "Выбар адрасу"
+
+#, fuzzy
+#~ msgid "&Add >>"
+#~ msgstr "Дадаць >>"
+
+#, fuzzy
+#~ msgid "<< &Remove"
+#~ msgstr "<< Выдаліць"
+
+#, fuzzy
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "Захаваць як спіс рассылання..."
+
+#, fuzzy
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "Сфармаваць новы спіс рассылання з паказаных атрымальнікаў"
+
+#, fuzzy
+#~ msgid "&Filter on:"
+#~ msgstr "Фільтр:"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Імя"
+
+#, fuzzy
+#~ msgid "Distribution Lists"
+#~ msgstr "Спісы рассылання"
+
+#, fuzzy
+#~ msgid "Single Entries"
+#~ msgstr "Асобныя атрымальнікі"
+
+#, fuzzy
+#~ msgid "Address B&ook"
+#~ msgstr "Адрасная кніга"
+
+#, fuzzy
+#~ msgid "Launch KAddressbook"
+#~ msgstr "Адкрыць адрасную кнігу KAddressbook"
+
+#, fuzzy
+#~ msgid "&Address Book"
+#~ msgstr "Адрасная кніга"
+
+#, fuzzy
+#~ msgid "&Selected Addresses"
+#~ msgstr "Вылучаныя адрасы"
+
+#, fuzzy
+#~ msgid "Personal"
+#~ msgstr "Асабістыя"
+
+#, fuzzy
+#~ msgid "Hi!"
+#~ msgstr "Прывітанне!"
+
+#, fuzzy
+#~ msgid "Hello!"
+#~ msgstr "Дабрыдзень!"
+
+#, fuzzy
+#~ msgid "Bye!"
+#~ msgstr "Пакуль!"
+
+#, fuzzy
+#~ msgid "Good bye"
+#~ msgstr "Да спаткання!"
+
+#, fuzzy
+#~ msgid "Professional"
+#~ msgstr "Дзелавыя"
+
+#, fuzzy
+#~ msgid "Good Morning"
+#~ msgstr "Добрая раніца!"
+
+#, fuzzy
+#~ msgid "Good Afternoon"
+#~ msgstr "Дабрыдзень!"
+
+#, fuzzy
+#~ msgid "Good Evening"
+#~ msgstr "Добры вечар!"
+
+#, fuzzy
+#~ msgid "Email"
+#~ msgstr "Пошта"
+
+#, fuzzy
+#~ msgid "To:"
+#~ msgstr "Каму:"
+
+#, fuzzy
+#~ msgid "Subject:"
+#~ msgstr "Тэма:"
+
+#, fuzzy
+#~ msgid "CC:"
+#~ msgstr "Копія:"
+
+#, fuzzy
+#~ msgid "BCC:"
+#~ msgstr "Утоеная копія:"
+
+#, fuzzy
+#~ msgid "Fwd:"
+#~ msgstr "Пераслана:"
+
+#, fuzzy
+#~ msgid "Best regards,"
+#~ msgstr "З павагай,"
+
+#, fuzzy
+#~ msgid "Best wishes"
+#~ msgstr "З найлепшымі пажаданнямі,"
+
+#, fuzzy
+#~ msgid "Cordially,"
+#~ msgstr "З дасканалай павагай,"
+
+#, fuzzy
+#~ msgid "Love,"
+#~ msgstr "З каханнем,"
+
+#, fuzzy
+#~ msgid "Regards,"
+#~ msgstr "З павагай,"
+
+#, fuzzy
+#~ msgid "Thank you,"
+#~ msgstr "З падзякамі,"
+
+#, fuzzy
+#~ msgid "Thanks,"
+#~ msgstr "Дзякую,"
+
+#, fuzzy
+#~ msgid "Subject"
+#~ msgstr "Тэма"
+
+#, fuzzy
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "Паважаны спадар або мадам:"
+
+#, fuzzy
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "Дамы і спадары,"
+
+#, fuzzy
+#~ msgid "Attention"
+#~ msgstr "Увага"
+
+#, fuzzy
+#~ msgid "Attention:"
+#~ msgstr "Увага:"
+
+#, fuzzy
+#~ msgid "ATTN:"
+#~ msgstr "УВАГА:"
+
+#, fuzzy
+#~ msgid "Instructions"
+#~ msgstr "Штампы"
+
+#, fuzzy
+#~ msgid "CERTIFIED"
+#~ msgstr "ЗАСВЕДЧАНА"
+
+#, fuzzy
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "КАНФІДЭНЦЫЙНА"
+
+#, fuzzy
+#~ msgid "PERSONAL"
+#~ msgstr "АСАБІСТА"
+
+#, fuzzy
+#~ msgid "FACSIMILE"
+#~ msgstr "ФАКСІМІЛЕ"
+
+#, fuzzy
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr ">>>Няслушная пазіцыя ў крыніцы дадзеных<<<"
+
+#, fuzzy
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ">>>Не атрымоўваецца знайсці поле %1 у запыце да базы дадзеных<<<"
+
+#, fuzzy
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Рэдактар зліцця"
+
+#, fuzzy
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "Увядзіце пароль для падлучэння да базы дадзеных"
+
+#, fuzzy
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Зліццё - Злучэнне з базай дадзеных"
+
+#, fuzzy
+#~ msgid "<not saved>"
+#~ msgstr "<не захаваны>"
+
+#, fuzzy
+#~ msgid "Store Settings"
+#~ msgstr "Налады захавання"
+
+#, fuzzy
+#~ msgid "ascending"
+#~ msgstr "па ўзрастанні"
+
+#, fuzzy
+#~ msgid "descending"
+#~ msgstr "па змяншэнні"
+
+#, fuzzy
+#~ msgid "contains"
+#~ msgstr "утрымоўвае"
+
+#, fuzzy
+#~ msgid "Field"
+#~ msgstr "Поле"
+
+#, fuzzy
+#~ msgid "Include"
+#~ msgstr "уключае"
+
+#, fuzzy
+#~ msgid "Operator"
+#~ msgstr "Аператар"
+
+#, fuzzy
+#~ msgid "Condition"
+#~ msgstr "Умова"
+
+#, fuzzy
+#~ msgid "Value"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~ msgid "NOT"
+#~ msgstr "НЕ"
+
+#, fuzzy
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "Запіс '%1' не даступная ў KAddressbook."
+
+#, fuzzy
+#~ msgid "%1 South"
+#~ msgstr "%1 Поўдзень"
+
+#, fuzzy
+#~ msgid "%1 North"
+#~ msgstr "%1 Поўнач"
+
+#, fuzzy
+#~ msgid "%1 West"
+#~ msgstr "%1 Захад"
+
+#, fuzzy
+#~ msgid "%1 East"
+#~ msgstr "%1 Усход"
+
+#, fuzzy
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#, fuzzy
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Невядомая пераменная паштовага зліцця: %1"
+
+#, fuzzy
+#~ msgid "no category"
+#~ msgstr "катэгорыя адсутнічае"
+
+#, fuzzy
+#~ msgid "New Distribution List"
+#~ msgstr "Новы спіс рассылання"
+
+#, fuzzy
+#~ msgid "Please enter name:"
+#~ msgstr "Увядзіце імя:"
+
+#, fuzzy
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr "<qt>Спіс рассылання <b>%1</b> ужо існуе. Пакажыце іншае імя.</qt>"
+
+#, fuzzy
+#~ msgid "URL:"
+#~ msgstr "Файл:"
+
+#, fuzzy
+#~ msgid "No Value"
+#~ msgstr "Няма значэння"
+
+#, fuzzy
+#~ msgid "Add record"
+#~ msgstr "Дадаць запіс"
+
+#, fuzzy
+#~ msgid "Add entry"
+#~ msgstr "Дадаць поле"
+
+#, fuzzy
+#~ msgid "Remove entry"
+#~ msgstr "Выдаліць поле"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "Дадаць поле"
+
+#, fuzzy
+#~ msgid "Host:"
+#~ msgstr "Сервер:"
+
+#, fuzzy
+#~ msgid "Port:"
+#~ msgstr "Порт:"
+
+#, fuzzy
+#~ msgid "Timeout:"
+#~ msgstr "Час"
+
+#, fuzzy
+#~ msgid "Table of Content"
+#~ msgstr "Змест"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Нумар старонкі"
+
+#, fuzzy
+#~ msgid "Slots"
+#~ msgstr "Сартаванне"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Уласцівасці"
+
+#, fuzzy
+#~ msgid "Variables"
+#~ msgstr "Поле"
+
+#, fuzzy
+#~ msgid "HTML Document"
+#~ msgstr "Дакумент"
+
+#, fuzzy
+#~ msgid "Encoded Text"
+#~ msgstr "Перамясціць тэкст"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Выдаліць адну або некалькі вылучаных урэзак."
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Выдаліць адну або некалькі вылучаных урэзак."
+
+#, fuzzy
+#~ msgid "First Page Header"
+#~ msgstr "Верхні калантытул першай старонкі"
+
+#, fuzzy
+#~ msgid "First Page Footer"
+#~ msgstr "Ніжні калантытул першай старонкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "Invalid document. 'fo' has the wrong namespace. The application which "
+#~ "produced this document is not OASIS-compliant."
+#~ msgstr ""
+#~ "Памылка ў файле. Тэг 'fo' мае недапушчальную прастору імёнаў. "
+#~ "Прыкладанне, у якім быў створаны (захаваны) гэты дакумент, не з'яўляецца "
+#~ "OASIS-сумяшчальным."
+
+#, fuzzy
+#~ msgid "Unit:"
+#~ msgstr "Адзінкі вымярэння:"
+
+#, fuzzy
+#~ msgid "Size:"
+#~ msgstr "Памер (%1):"
+
+#, fuzzy
+#~ msgid "Orientation:"
+#~ msgstr "Увага:"
+
+#, fuzzy
+#~ msgid "Single sided"
+#~ msgstr "Асобныя атрымальнікі"
+
+#, fuzzy
+#~ msgid "Whole document:"
+#~ msgstr "Дакумент"
+
+#, fuzzy
+#~ msgid "Right to left"
+#~ msgstr "Галубай"
+
+#, fuzzy
+#~ msgid "Left Edge:"
+#~ msgstr "Злева:"
+
+#, fuzzy
+#~ msgid "Right Edge:"
+#~ msgstr "Справа:"
+
+#, fuzzy
+#~ msgid "Page Edge:"
+#~ msgstr "Прагляд старонак"
+
+#, fuzzy
+#~ msgid "Page spread"
+#~ msgstr "Разрыў старонкі"
+
+#, fuzzy
+#~ msgid "Printing..."
+#~ msgstr "Друк..."
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "Вочка"
+
+#, fuzzy
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr "Абароненае ад змен змесціва нельга рэдагаваць."
+
+#, fuzzy
+#~ msgid "Insert Inline Table"
+#~ msgstr "Уставіць табліцу ў тэкст"
+
+#, fuzzy
+#~ msgid "Bookmark target: "
+#~ msgstr "Спасылка закладкі: "
+
+#, fuzzy
+#~ msgid "Text Frameset %1"
+#~ msgstr "Тэкставая ўрэзка %1"
+
+#, fuzzy
+#~ msgid "Create Formula Frame"
+#~ msgstr "Стварыць урэзку з формулай"
+
+#, fuzzy
+#~ msgid ""
+#~ "KWord is unable to insert the table because there is not enough space "
+#~ "available."
+#~ msgstr ""
+#~ "Не атрымоўваецца ўставіць табліцу, паколькі для яе няма вольнага месца."
+
+#, fuzzy
+#~ msgid "Create Table"
+#~ msgstr "Стварыць табліцу"
+
+#, fuzzy
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Змяніць колер фону ўрэзкі"
+
+#, fuzzy
+#~ msgid "Delete Page %1"
+#~ msgstr "Выдаліць старонку %1"
+
+#, fuzzy
+#~ msgid "Resize Column"
+#~ msgstr "Змяніць шырыню слупка"
+
+#, fuzzy
+#~ msgid "Resize Row"
+#~ msgstr "Змяніць вышыню радка"
+
+#, fuzzy
+#~ msgid "Configure KWord"
+#~ msgstr "Наладзіць KWord"
+
+#, fuzzy
+#~ msgid "Interface"
+#~ msgstr "Інтэрфейс"
+
+#, fuzzy
+#~ msgid "Interface Settings"
+#~ msgstr "Налады знешняга выгляду"
+
+#, fuzzy
+#~ msgid "Spelling"
+#~ msgstr "Праверка правапісу"
+
+#, fuzzy
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Налада праверкі правапісу"
+
+#, fuzzy
+#~ msgid "Formula Defaults"
+#~ msgstr "Налада формул па змаўчанні"
+
+#, fuzzy
+#~ msgid "Misc Settings"
+#~ msgstr "Дадатковыя параметры"
+
+#, fuzzy
+#~ msgid "Path"
+#~ msgstr "Каталогі"
+
+#, fuzzy
+#~ msgid "Path Settings"
+#~ msgstr "Налада каталогаў"
+
+#, fuzzy
+#~ msgid "Change Config"
+#~ msgstr "Змяніць параметры"
+
+#, fuzzy
+#~ msgid ""
+#~ "Select the unit type used every time a distance or width/height is "
+#~ "displayed or entered. This one setting is for the whole of KWord: all "
+#~ "dialogs, the rulers etc. Note that KWord documents specify the unit which "
+#~ "was used to create them, so this setting only affects this document and "
+#~ "all documents that will be created later."
+#~ msgstr ""
+#~ "Вылучыце адзінкі вымярэння для задання шырыні і вышыні. Гэты параметр "
+#~ "будзе скарыстаны ў розным месцах прыкладання: ва ўсіх дыялогах, на "
+#~ "лінейках і т.д. Паказаныя адзінкі вымярэння стануць ужывацца ў бягучым "
+#~ "дакуменце і ва ўсіх наступных дакументах."
+
+#, fuzzy
+#~ msgid ""
+#~ "Show or hide the status bar. If enabled, the status bar is shown at the "
+#~ "bottom, which displays various information."
+#~ msgstr ""
+#~ "Паказаць або схаваць радок стану ўнізе вокны, якая змяшчае розную "
+#~ "службовую інфармацыю."
+
+#, fuzzy
+#~ msgid "Show s&crollbar"
+#~ msgstr "Паказаць паласу прагорткі"
+
+#, fuzzy
+#~ msgid ""
+#~ "Show or hide the scroll bar. If enabled, the scroll bar is shown on the "
+#~ "right and lets you scroll up and down, which is useful for navigating "
+#~ "through the document."
+#~ msgstr ""
+#~ "Паказаць або схаваць паласу прагорткі справа для перамяшчэння па "
+#~ "дакуменце."
+
+#, fuzzy
+#~ msgid "PageUp/PageDown &moves the caret"
+#~ msgstr "Клавішы PageUp і PageDown перамяшчаюць курсор"
+
+#, fuzzy
+#~ msgid ""
+#~ "If this option is enabled, the PageUp and PageDown keys move the text "
+#~ "caret, as in other KDE applications. If it is disabled, they move the "
+#~ "scrollbars, as in most other word processors."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтай опцыі, клавішы прагорткі старонак PageUp і PageDown "
+#~ "перасоўваюць курсор таксама, як гэта зроблена ў іншых прыкладаннях KDE. "
+#~ "Калі яна выключаная, курсор застанецца на месцы, а старонкі будуць "
+#~ "пракручвацца, як гэта зроблена ў большасці іншых тэкставых працэсараў."
+
+#, fuzzy
+#~ msgid ""
+#~ "The number of files remembered in the file open dialog and in the recent "
+#~ "files menu item."
+#~ msgstr ""
+#~ "Максімальная колькасць дакументаў, якія будуць паказаныя ў дыялогу "
+#~ "адкрыцця файла і ў меню апошніх дакументаў."
+
+#, fuzzy
+#~ msgid "Number of recent &files:"
+#~ msgstr "Колькасць апошніх дакументаў:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The grid size on which frames, tabs and other content snaps while moving "
+#~ "and scaling."
+#~ msgstr ""
+#~ "Крок сеткі, па якой будуць перамяшчацца і змяняць памеры ўрэзкі і іншыя "
+#~ "аб'екты."
+
+#, fuzzy
+#~ msgid "&Horizontal grid size:"
+#~ msgstr "Гарызантальны крок сеткі:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The grid size on which frames and other content snaps while moving and "
+#~ "scaling."
+#~ msgstr ""
+#~ "Крок сеткі, па якой будуць перамяшчацца і змяняць памеры ўрэзкі і іншыя "
+#~ "аб'екты."
+
+#, fuzzy
+#~ msgid "&Vertical grid size:"
+#~ msgstr "Вертыкальны крок сеткі:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Configure the indent width used when using the 'Increase' or 'Decrease' "
+#~ "indentation buttons on a paragraph.<p>The lower the value, the more often "
+#~ "the buttons will have to be pressed to gain the same indentation."
+#~ msgstr ""
+#~ "Змяняць водступ параграфа кнопкамі павелічэння і памяншэнні водступу на "
+#~ "панэлі прылад. <p> Для атрымання адзінага водступу націсніце адзін або "
+#~ "некалькі раз на кнопцы памяншэння водступу на патрэбных абзацах."
+
+#, fuzzy
+#~ msgid "&Paragraph indent by toolbar buttons:"
+#~ msgstr ""
+#~ "Змяняць водступ параграфа кнопкамі павелічэння і памяншэнні водступу на "
+#~ "панэлі прылад. <p> Для атрымання адзінага водступу націсніце адзін або "
+#~ "некалькі раз на кнопцы памяншэння водступу на патрэбных абзацах."
+
+#, fuzzy
+#~ msgid ""
+#~ "After selecting Preview Mode (from the \"View\" menu,) this is the number "
+#~ "of pages KWord will position on one horizontal row."
+#~ msgstr ""
+#~ "Падчас папярэдняга прагляду (у меню \"Выгляд\") тут паказваецца "
+#~ "максімальная колькасць старонак, якія размяшчаюцца ў адным гарызантальным "
+#~ "шэрагу."
+
+#, fuzzy
+#~ msgid "Number of pa&ges per row in preview mode:"
+#~ msgstr "Колькасць старонак у шэрагу ў рэжыме прадпрагляду:"
+
+#, fuzzy
+#~ msgid "Undo/&redo limit:"
+#~ msgstr "Глыбіня адкатаў і паўтораў:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Limit the number of undo/redo actions remembered. A lower value helps to "
+#~ "save memory, a higher value allows you to undo and redo more editing "
+#~ "steps."
+#~ msgstr ""
+#~ "Абмежаванне крокаў адмены і паўтораў. Калі вы пакажыце малы лік, то "
+#~ "паменшыце памер занятай прыкладаннем памяці, але абмяжуеце колькасць "
+#~ "крокаў адмены дзеянняў."
+
+#, fuzzy
+#~ msgid "Display &links"
+#~ msgstr "Паказваць спасылкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, a link is highlighted as such and is clickable.\n"
+#~ "\n"
+#~ "You can insert a link from the Insert menu."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтай опцыі спасылкі ў дакуменце будуць падкрэсленыя і пры "
+#~ "націску на ёй будзе ажыццёўлены пераход па спасылцы.\n"
+#~ "\n"
+#~ "nВы можаце ўставіць спасылку праз меню \"Устаўка\"."
+
+#, fuzzy
+#~ msgid "&Underline all links"
+#~ msgstr "Падкрэсліваць усе спасылкі"
+
+#, fuzzy
+#~ msgid "If enabled, a link is underlined."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтай опцыі ўсе спасылкі ў дакументах будуць паказаныя "
+#~ "падкрэсленымі."
+
+#, fuzzy
+#~ msgid "Display c&omments"
+#~ msgstr "Паказаць каментары"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, comments are indicated by a small yellow box.\n"
+#~ "\n"
+#~ "You can show and edit a comment from the context menu."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтай опцыі каментары будуць паказаныя ў тэксце невялікімі "
+#~ "жоўтымі квадрацікамі.\n"
+#~ "\n"
+#~ "Вы можаце праглядзець і змяніць каментар праз кантэкстнае меню."
+
+#, fuzzy
+#~ msgid "Display field code"
+#~ msgstr "Паказваць код палёў"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, the type of link is displayed instead of displaying the link "
+#~ "text.\n"
+#~ "\n"
+#~ "There are various types of link that can be inserted, such as hyperlinks, "
+#~ "files, mail, news and bookmarks."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтай опцыі будзе паказаны адрас спасылкі замест тэксту "
+#~ "спасылкі.\n"
+#~ "\n"
+#~ "Вы можаце ўставіць розныя тыпы спасылак: спасылкі на рэсурсы Інтэрнэту, "
+#~ "на лакальныя файлы, адрасы электроннай пошты і закладкі."
+
+#, fuzzy
+#~ msgid "View Formatting"
+#~ msgstr "Прагляд фарматавання"
+
+#, fuzzy
+#~ msgid ""
+#~ "These settings can be used to select the formatting characters that "
+#~ "should be shown.\n"
+#~ "\n"
+#~ "Note that the selected formatting characters are only shown if formatting "
+#~ "characters are enabled in general, which can be done from the View menu."
+#~ msgstr ""
+#~ "Гэта параметр задае паказ знакаў фарматавання ў тэксце.\n"
+#~ "\n"
+#~ "Вылучаныя знакі фарматавання будуць рэальна паказаныя пры ўключэнні "
+#~ "паказу фарматавання ў меню \"Выгляд\"."
+
+#, fuzzy
+#~ msgid "View formatting end paragraph"
+#~ msgstr "Прагляд знакаў канца абзаца"
+
+#, fuzzy
+#~ msgid "View formatting space"
+#~ msgstr "Прагляд знакаў прабелаў"
+
+#, fuzzy
+#~ msgid "View formatting tabs"
+#~ msgstr "Прагляд знакаў табуляцыі"
+
+#, fuzzy
+#~ msgid "View formatting break"
+#~ msgstr "Прагляд знакаў разрываў"
+
+#, fuzzy
+#~ msgid "Change Display Link Command"
+#~ msgstr "Змяніць каманду паказу спасылак"
+
+#, fuzzy
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Змяніць каманду паказу кода палёў"
+
+#, fuzzy
+#~ msgid "Document Defaults"
+#~ msgstr "Налада дакумента па змаўчанні"
+
+#, fuzzy
+#~ msgid ""
+#~ "When setting a document to use more than one column this distance will be "
+#~ "used to separate the columns. This value is merely a default setting as "
+#~ "the column spacing can be changed per document"
+#~ msgstr ""
+#~ "Гэты параметр актуальны для дакументаў, выкарыстоўвалых больш чым адну "
+#~ "калонку тэксту. Адлегласць паміж калонкамі выкарыстоўваецца для падзелу "
+#~ "калонак. Гэтае значэнне будзе скарыстана па змаўчанні для падзелу калонак "
+#~ "і можа быць перавызначанае для любога дакумента"
+
+#, fuzzy
+#~ msgid "Default font:"
+#~ msgstr "Шрыфт па змаўчанні:"
+
+#, fuzzy
+#~ msgid "Choose..."
+#~ msgstr "Змяніць..."
+
+#, fuzzy
+#~ msgid "Global language:"
+#~ msgstr "Мова па змаўчанні:"
+
+#, fuzzy
+#~ msgid "Autosave every (min):"
+#~ msgstr "Інтэрвал аўтазахавання (хвілін):"
+
+#, fuzzy
+#~ msgid ""
+#~ "A backup copy of the current document is created when a change has been "
+#~ "made. The interval used to create backup documents is set here."
+#~ msgstr ""
+#~ "Рэзервовая копія дакумента ствараецца адразу жа пры першай змене "
+#~ "дакумента. У гэтым полі паказаны інтэрвал стварэння рэзервовых дзід "
+#~ "дакумента."
+
+#, fuzzy
+#~ msgid "No autosave"
+#~ msgstr "Без аўтазахавання"
+
+#, fuzzy
+#~ msgid " min"
+#~ msgstr " мін"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Ствараць рэзервовую копію файла"
+
+#, fuzzy
+#~ msgid "Starting page number:"
+#~ msgstr "Нумар першай старонкі:"
+
+#, fuzzy
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Пазіцыі табуляцыі (%1):"
+
+#, fuzzy
+#~ msgid "Cursor"
+#~ msgstr "Курсор"
+
+#, fuzzy
+#~ msgid "Cursor in protected area"
+#~ msgstr "Курсор у абароненай вобласці"
+
+#, fuzzy
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Змяніць нумар першай старонкі"
+
+#, fuzzy
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Змяніць інтэрвал табуляцыі"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Пазіцыі табуляцыі:"
+
+#, fuzzy
+#~ msgid "Personal Expression"
+#~ msgstr "Асабістыя фразы"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Каталог рэзервовых дзід"
+
+#, fuzzy
+#~ msgid "Modify Path..."
+#~ msgstr "Вылучыць..."
+
+#, fuzzy
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Уласцівасці зноскі"
+
+#, fuzzy
+#~ msgid "Separator Line"
+#~ msgstr "Падзяляльная лінія"
+
+#, fuzzy
+#~ msgid ""
+#~ "Configure the separator line. The separator line is drawn directly above "
+#~ "the frame for the footnotes."
+#~ msgstr ""
+#~ "Налада падзяляльнай лініі. Гэтая падзяляльная лінія будзе адлюстраваная "
+#~ "над зноскамі."
+
+#, fuzzy
+#~ msgid ""
+#~ "The separator can be positioned horizontally by picking one of the three "
+#~ "alignments."
+#~ msgstr ""
+#~ "Падзяляльная лінія можа быць выраўнаваная гарызантальна ў адным з трох "
+#~ "кірункаў."
+
+#, fuzzy
+#~ msgctxt "Position"
+#~ msgid "Left"
+#~ msgstr "Злева"
+
+#, fuzzy
+#~ msgctxt "Position"
+#~ msgid "Right"
+#~ msgstr "Справа"
+
+#, fuzzy
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Шырыня:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The width is the thickness of the separator line, set to 0 for no "
+#~ "separator line."
+#~ msgstr ""
+#~ "Гэты параметр усталёўвае таўшчыню падзяляльнай лініі. Пры ўказанні "
+#~ "таўшчыні роўнай 0 падзяляльная лінія не будзе паказаная."
+
+#, fuzzy
+#~ msgid "&Size on page:"
+#~ msgstr "Даўжыня на старонцы:"
+
+#, fuzzy
+#~ msgid ""
+#~ "The size of the separator line can be defined as a percentage of the "
+#~ "width of the page."
+#~ msgstr "Памер падзяляльнай лініі, зададзены ў адсотках ад шырыні старонкі."
+
+#, fuzzy
+#~ msgid "Solid"
+#~ msgstr "суцэльная"
+
+#, fuzzy
+#~ msgid "Dash Line"
+#~ msgstr "штрыхавая"
+
+#, fuzzy
+#~ msgid "Dot Line"
+#~ msgstr "пункцірная"
+
+#, fuzzy
+#~ msgid "Dash Dot Line"
+#~ msgstr "рыска-пункцірная"
+
+#, fuzzy
+#~ msgid "Dash Dot Dot Line"
+#~ msgstr "рыска-падвойная пункцірная"
+
+#, fuzzy
+#~ msgid ""
+#~ "The separator line can be drawn as a solid line or as a line which has a "
+#~ "pattern; the pattern can be set in the style-type."
+#~ msgstr ""
+#~ "Падзяляльная лінія можа быць паказаная ў выглядзе суцэльнай лініі або "
+#~ "лініі па шаблоне. Гэты шаблон паказваецца ў стылю лініі"
+
+#, fuzzy
+#~ msgid "Change End-/Footnote Variable Settings"
+#~ msgstr "Налада палёў у зносках"
+
+#, fuzzy
+#~ msgid "Change Footnote Line Separator Settings"
+#~ msgstr "Налада падзяляльнай лініі старонкавай зноскі"
+
+#, fuzzy
+#~ msgid "Rename Bookmark..."
+#~ msgstr "Пераназваць закладку"
+
+#, fuzzy
+#~ msgid "That name already exists, please choose another name."
+#~ msgstr "Гэтае імя ўжо існуе! Увядзіце іншае імя."
+
+#, fuzzy
+#~ msgid "Delete Bookmark"
+#~ msgstr "Выдаліць закладку"
+
+#, fuzzy
+#~ msgid "Delete Row"
+#~ msgstr "Выдаліць радок"
+
+#, fuzzy
+#~ msgid "Delete Column"
+#~ msgstr "Выдаліць слупок"
+
+#, fuzzy
+#~ msgid "Delete the row from the table."
+#~ msgstr "Выдаліць радок з табліцы."
+
+#, fuzzy
+#~ msgid "Delete the column from the table."
+#~ msgstr "Выдаліць слупок з табліцы."
+
+#, fuzzy
+#~ msgid "Delete the whole table?"
+#~ msgstr "Выдаліць усю табліцу?"
+
+#, fuzzy
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Выдаліць вылучаныя шэрагі?"
+
+#, fuzzy
+#~ msgid "Delete row number %1?"
+#~ msgstr "Выдаліць шэраг %1?"
+
+#, fuzzy
+#~ msgid "Delete column number %1?"
+#~ msgstr "Выдаліць слупок %1?"
+
+#, fuzzy
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Выдаліць шэрагі: %1 ?"
+
+#, fuzzy
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Выдаліць слупкі: %1 ?"
+
+#, fuzzy
+#~ msgid "Column %1"
+#~ msgstr "Слупок %1"
+
+#, fuzzy
+#~ msgid "Text Frame %1"
+#~ msgstr "Тэкставая ўрэзка %1"
+
+#, fuzzy
+#~ msgid "Empty"
+#~ msgstr "Пуста"
+
+#, fuzzy
+#~ msgid "Formula Frame %1"
+#~ msgstr "Урэзка з формулай %1"
+
+#, fuzzy
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Малюнак (%1) %2"
+
+#, fuzzy
+#~ msgid "Embedded Objects"
+#~ msgstr "Аб'екты"
+
+#, fuzzy
+#~ msgid "Formula Frames"
+#~ msgstr "Урэзкі ў формуламі"
+
+#, fuzzy
+#~ msgid "Pictures"
+#~ msgstr "Малюнкі"
+
+#, fuzzy
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Тэкставыя ўрэзкі і іх наборы"
+
+#, fuzzy
+#~ msgid "Document Structure"
+#~ msgstr "Структура дакумента"
+
+#, fuzzy
+#~ msgid ""
+#~ "This document was created with a newer version of KWord (syntax version: "
+#~ "%1)\n"
+#~ "Opening it in this version of KWord will lose some information."
+#~ msgstr ""
+#~ "Гэты дакумент быў створаны навейшай версіяй KWord (версія %1)\n"
+#~ "Пры адкрыцці яго ў гэтай версіі KWord магчымая страта інфармацыі."
+
+#, fuzzy
+#~ msgid "File Format Mismatch"
+#~ msgstr "Неадпаведнасць фармату файла"
+
+#, fuzzy
+#~ msgid "Create Part Frame"
+#~ msgstr "Стварыць урэзку з аб'ектам"
+
+#, fuzzy
+#~ msgid "Delete Table"
+#~ msgstr "Выдаліць табліцу"
+
+#, fuzzy
+#~ msgid "Delete Text Frame"
+#~ msgstr "Выдаліць тэкставую ўрэзку"
+
+#, fuzzy
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Выдаліць урэзку з формулай"
+
+#, fuzzy
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Выдаліць урэзку з малюнкам"
+
+#, fuzzy
+#~ msgid "Delete Object Frame"
+#~ msgstr "Выдаліць урэзку з аб'ектам"
+
+#, fuzzy
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Рэдагаваць асабістую фразу"
+
+#, fuzzy
+#~ msgid "Group name:"
+#~ msgstr "Назоў групы:"
+
+#, fuzzy
+#~ msgid "Expressions"
+#~ msgstr "Фразы"
+
+#, fuzzy
+#~ msgid "&New"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgid "New"
+#~ msgstr "Стварыць"
+
+#, fuzzy
+#~ msgid "empty"
+#~ msgstr "пустая"
+
+#, fuzzy
+#~ msgid "new group"
+#~ msgstr "Новая група"
+
+#, fuzzy
+#~ msgid "&Automatic"
+#~ msgstr "Аўтаматычна"
+
+#, fuzzy
+#~ msgid "&Manual"
+#~ msgstr "Уручную"
+
+#, fuzzy
+#~ msgid "&Footnote"
+#~ msgstr "Зноска"
+
+#, fuzzy
+#~ msgid "&Endnote"
+#~ msgstr "Канцавая зноска"
+
+#, fuzzy
+#~ msgid "Formula %1"
+#~ msgstr "Формула %1"
+
+#, fuzzy
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Уласцівасці ўрэзкі %1"
+
+#, fuzzy
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Уласцівасці новай урэзкі"
+
+#, fuzzy
+#~ msgid "Frames Properties"
+#~ msgstr "Уласцівасці ўрэзкі"
+
+#, fuzzy
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Уласцівасці ўрэзкі для %1"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Reconnect frame to current flow:</b><br/>When a new page is created, a "
+#~ "new frame will be created for this frameset, so that the text can flow "
+#~ "from one page to the next if necessary. This is what happens for the "
+#~ "\"main text frameset\", but this option makes it possible to choose the "
+#~ "same behavior for other framesets, for instance in magazine layouts."
+#~ msgstr ""
+#~ "<b>Пераўсталяваць прывязку ўрэзкі:</b><br/>Пры стварэнні новай старонкі,  "
+#~ "у бягучы набор будзе дададзеная новая ўрэзка, каб, пры неабходнасці, "
+#~ "тэкст з іншых старонак мог пераносіцца на яе. Гэта адбываецца па "
+#~ "змаўчанні для \"Галоўнага набору тэкставых урэзак\", а гэты параметр "
+#~ "дазваляе ўсталяваць такія паводзіны і для іншых набораў, напрыклад пры "
+#~ "вёрстцы газет."
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Do not create a followup frame:</b><br/>When a new page is created, no "
+#~ "frame will be created for this frameset."
+#~ msgstr ""
+#~ "<b>Не ствараць урэзку:</b><br/>Не дадаваць новую ўрэзку ў бягучы набор "
+#~ "пры стварэнні старонкі."
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Place a copy of this frame:</b><br/>When a new page is created, a "
+#~ "frame will be created for this frameset, which will always show the exact "
+#~ "same thing as the frame on the previous page. This is what happens for "
+#~ "headers and footers, but this option makes it possible to choose the same "
+#~ "behavior for other framesets, for instance a company logo and/or title "
+#~ "that should appear exactly the same on every page."
+#~ msgstr ""
+#~ "<b>Змясціць копію ўрэзкі:</b><br/>Пры стварэнні новай старонкі,  у бягучы "
+#~ "набор будзе дададзеная новая ўрэзка. У некаторых выпадках, яна будзе "
+#~ "ўтрымоўваць тое ж, што і ўрэзка з папярэдняй старонкі. Гэта адбываецца па "
+#~ "змаўчанні для калантытулаў, а гэты параметр дазваляе ўсталяваць такія "
+#~ "паводзіны і для іншых набораў урэзак, напрыклад, гэта можа быць лагатып "
+#~ "кампаніі."
+
+#, fuzzy
+#~ msgid "SideHead Definition"
+#~ msgstr "Азначэнне выраўнавання загалоўка"
+
+#, fuzzy
+#~ msgid "Gap size (%1):"
+#~ msgstr "Водступ тэксту (%1):"
+
+#, fuzzy
+#~ msgid "Closest to Binding"
+#~ msgstr "Найблізкі да прывязкі"
+
+#, fuzzy
+#~ msgid "Closest to Page Edge"
+#~ msgstr "Найблізкі да боку старонкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Protect content:</b><br/>Disallow changes to be made to the contents "
+#~ "of the frame(s)."
+#~ msgstr "<b>Абараніць змесціва:</b><br/>Забараняе змяняць змесціва ўрэзкі."
+
+#, fuzzy
+#~ msgid "No."
+#~ msgstr "No."
+
+#, fuzzy
+#~ msgid "Table is inline"
+#~ msgstr "Табліца знаходзіцца ў тэксце"
+
+#, fuzzy
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Колер усіх вылучаных урэзак"
+
+#, fuzzy
+#~ msgid "Transparent background"
+#~ msgstr "Празрысты фон"
+
+#, fuzzy
+#~ msgid "Background color:"
+#~ msgstr "Колер фону:"
+
+#, fuzzy
+#~ msgid "Background style:"
+#~ msgstr "Стыль фону:"
+
+#, fuzzy
+#~ msgid "No Background Fill"
+#~ msgstr "Без залівання"
+
+#, fuzzy
+#~ msgid "100% Fill Pattern"
+#~ msgstr "Суцэльны колер"
+
+#, fuzzy
+#~ msgid "94% Fill Pattern"
+#~ msgstr "94%"
+
+#, fuzzy
+#~ msgid "88% Fill Pattern"
+#~ msgstr "88%"
+
+#, fuzzy
+#~ msgid "63% Fill Pattern"
+#~ msgstr "63%"
+
+#, fuzzy
+#~ msgid "50% Fill Pattern"
+#~ msgstr "50%"
+
+#, fuzzy
+#~ msgid "37% Fill Pattern"
+#~ msgstr "37%"
+
+#, fuzzy
+#~ msgid "12% Fill Pattern"
+#~ msgstr "12%"
+
+#, fuzzy
+#~ msgid "6% Fill Pattern"
+#~ msgstr "6%"
+
+#, fuzzy
+#~ msgid "Crossing Lines"
+#~ msgstr "Рашотка"
+
+#, fuzzy
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Дыяганальныя лініі ( / )"
+
+#, fuzzy
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Дыяганальныя лініі ( \\ )"
+
+#, fuzzy
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Дыяганальная рашотка"
+
+#, fuzzy
+#~ msgid "&Borders"
+#~ msgstr "Межы"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Стыль:"
+
+#, fuzzy
+#~ msgid "Co&lor:"
+#~ msgstr "Колер:"
+
+#, fuzzy
+#~ msgid "Rename Frameset"
+#~ msgstr "Пераназваць набор урэзак"
+
+#, fuzzy
+#~ msgid ""
+#~ "A new frameset with the name '%1' can not be made because a frameset with "
+#~ "that name already exists. Please enter another name or select an existing "
+#~ "frameset from the list."
+#~ msgstr ""
+#~ "Новы набор звязаных урэзак з назовам '%1' не можа быць створаны, паколькі "
+#~ "набор з такім імем ужо існуе. Дайце набору іншы назоў або вылучыце назоў "
+#~ "набору з спісу."
+
+#, fuzzy
+#~ msgid "Protect Content"
+#~ msgstr "Абараніць змесціва"
+
+#, fuzzy
+#~ msgid ""
+#~ "The frame will not be resized because the new size would be greater than "
+#~ "the size of the page."
+#~ msgstr ""
+#~ "Памеры ўрэзкі не могуць быць змененыя, паколькі новы памер перавышае "
+#~ "памеры старонкі."
+
+#, fuzzy
+#~ msgid "Make Frameset Inline"
+#~ msgstr "Размясціць набор урэзак у тэксце"
+
+#, fuzzy
+#~ msgid "Make Frameset Non-Inline"
+#~ msgstr "Зрабіць набор урэзак плавальным"
+
+#, fuzzy
+#~ msgid "Resize Frame"
+#~ msgstr "Змяніць памер урэзкі"
+
+#, fuzzy
+#~ msgid "Change Margin Frame"
+#~ msgstr "Змяніць межы ўрэзкі"
+
+#, fuzzy
+#~ msgid "Change Border"
+#~ msgstr "Змяніць межы"
+
+#, fuzzy
+#~ msgid "Change Left Border Frame"
+#~ msgstr "Змяніць левую мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgid "Change Right Border Frame"
+#~ msgstr "Змяніць правую мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgid "Change Top Border Frame"
+#~ msgstr "Змяніць верхнюю мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Змяніць ніжнюю мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Вы сапраўды жадаеце адмяніць прывязку апошняй урэзкі да набору '%1'? Гэты "
+#~ "набор будзе выдалены.\n"
+#~ "Працягнуць?"
+
+#, fuzzy
+#~ msgid "Reconnect Frame"
+#~ msgstr "Адмяніць прывязку ўрэзкі"
+
+#, fuzzy
+#~ msgid "&Reconnect"
+#~ msgstr "Адмяніць прывязку"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>Synchronize changes:</b><br/>When this is checked any change in "
+#~ "margins will be used for all directions."
+#~ msgstr ""
+#~ "<b>Сінхранізаваць змены:</b><br/>Змена любой мяжы прывядзе да змен ва "
+#~ "ўсіх кірунках."
+
+#, fuzzy
+#~ msgid "Frame Style Manager"
+#~ msgstr "Мэнэджэр стылю ўрэзак"
+
+#, fuzzy
+#~ msgid "Import From File..."
+#~ msgstr "Імпарт з файла..."
+
+#, fuzzy
+#~ msgid "New Framestyle Template (%1)"
+#~ msgstr "Новы шаблон стылю ўрэзак (%1)"
+
+#, fuzzy
+#~ msgid "Frame background color:"
+#~ msgstr "Колер фону ўрэзкі:"
+
+#, fuzzy
+#~ msgid "Go to Footnote"
+#~ msgstr "Перайсці да зноскі"
+
+#, fuzzy
+#~ msgid "Go to Endnote"
+#~ msgstr "Перайсці да канцавой зноскі"
+
+#, fuzzy
+#~ msgid "File name is empty."
+#~ msgstr "Імя файла не паказана."
+
+#, fuzzy
+#~ msgid "File does not contain any styles. It may be the wrong version."
+#~ msgstr ""
+#~ "Файл не ўтрымоўвае апісанне стылю. Магчыма, стыль захаваны ў няслушнай "
+#~ "версіі."
+
+#, fuzzy
+#~ msgid "This file is not a KWord file!"
+#~ msgstr "Гэты файл не з'яўляецца дакументам KWord!"
+
+#, fuzzy
+#~ msgid "Select style to import:"
+#~ msgstr "Імпартаваць стыль:"
+
+#, fuzzy
+#~ msgid "Insert Row"
+#~ msgstr "Уставіць радок"
+
+#, fuzzy
+#~ msgid "Insert Column"
+#~ msgstr "Уставіць слупок"
+
+#, fuzzy
+#~ msgid "Insert New Row"
+#~ msgstr "Уставіць новы радок"
+
+#, fuzzy
+#~ msgid "Insert New Column"
+#~ msgstr "Уставіць новы слупок"
+
+#, fuzzy
+#~ msgid "Before"
+#~ msgstr "Перад"
+
+#, fuzzy
+#~ msgid "After"
+#~ msgstr "Пасля"
+
+#, fuzzy
+#~ msgid "Row:"
+#~ msgstr "Радок:"
+
+#, fuzzy
+#~ msgid "Column:"
+#~ msgstr "Слупок:"
+
+#, fuzzy
+#~ msgid "Choose &Picture..."
+#~ msgstr "Вылучыць малюнак..."
+
+#, fuzzy
+#~ msgid "Choose Picture"
+#~ msgstr "Вылучыць малюнак"
+
+#, fuzzy
+#~ msgid "Contents Head %1"
+#~ msgstr "Загаловак ва ўтрыманні %1"
+
+#, fuzzy
+#~ msgid "No plugins supporting the requested action were found."
+#~ msgstr "Няма модуляў, якія рэалізуюць запытанае дзеянне"
+
+#, fuzzy
+#~ msgid "Do you really want to replace the current datasource?"
+#~ msgstr "Замяніць бягучую крыніцу дадзеных ?"
+
+#, fuzzy
+#~ msgid "Mail Merge Setup"
+#~ msgstr "Параметры паштовага зліцця"
+
+#, fuzzy
+#~ msgid "&Available sources:"
+#~ msgstr "Даступныя крыніцы дадзеных:"
+
+#, fuzzy
+#~ msgid "Datasource:"
+#~ msgstr "Крыніца дадзеных:"
+
+#, fuzzy
+#~ msgid "Edit Current..."
+#~ msgstr "Змяніць бягучы..."
+
+#, fuzzy
+#~ msgid "Create New..."
+#~ msgstr "Стварыць новы..."
+
+#, fuzzy
+#~ msgid "Merging:"
+#~ msgstr "Зліццё:"
+
+#, fuzzy
+#~ msgid "Print Preview..."
+#~ msgstr "Прагляд перад друкам..."
+
+#, fuzzy
+#~ msgid "Create New Document"
+#~ msgstr "Стварыць новы дакумент"
+
+#, fuzzy
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "Зліццё - Імя пераменнай"
+
+#, fuzzy
+#~ msgid "Unnamed Table"
+#~ msgstr "Безназоўная табліца"
+
+#, fuzzy
+#~ msgid "Object %1"
+#~ msgstr "Аб'ект %1"
+
+#, fuzzy
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Змяніць памер урэзкі"
+
+#, fuzzy
+#~ msgid "Make Document External"
+#~ msgstr "Зрабіць дакумент унутраным"
+
+#, fuzzy
+#~ msgid "Make Document Internal"
+#~ msgstr "Зрабіць дакумент знешнім"
+
+#, fuzzy
+#~ msgid "Picture %1"
+#~ msgstr "Малюнак %1"
+
+#, fuzzy
+#~ msgid "Reset"
+#~ msgstr "Скінуць"
+
+#, fuzzy
+#~ msgid "Sort Text"
+#~ msgstr "Сартаванне"
+
+#, fuzzy
+#~ msgid "Increase"
+#~ msgstr "Па ўзрастанні"
+
+#, fuzzy
+#~ msgid "Decrease"
+#~ msgstr "Па змяншэнні"
+
+#, fuzzy
+#~ msgid "Split Cell"
+#~ msgstr "Разбіць вочка"
+
+#, fuzzy
+#~ msgid "Number of rows:"
+#~ msgstr "Колькасць радкоў:"
+
+#, fuzzy
+#~ msgid "Number of columns:"
+#~ msgstr "Колькасць слупкоў:"
+
+#, fuzzy
+#~ msgid "Selected Text"
+#~ msgstr "Вылучаны тэкст"
+
+#, fuzzy
+#~ msgid "Counting..."
+#~ msgstr "Падлік..."
+
+#, fuzzy
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Укаранёных аб'ектаў:"
+
+#, fuzzy
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Формул:"
+
+#, fuzzy
+#~ msgid "Table Settings"
+#~ msgstr "Уласцівасці табліцы"
+
+#, fuzzy
+#~ msgid "Cell heights:"
+#~ msgstr "Вышыня вочак:"
+
+#, fuzzy
+#~ msgid "Manual"
+#~ msgstr "Уручную"
+
+#, fuzzy
+#~ msgid "Cell widths:"
+#~ msgstr "Шырыня вочак:"
+
+#, fuzzy
+#~ msgid "The table is &inline"
+#~ msgstr "Табліца размешчаная ў тэксце"
+
+#, fuzzy
+#~ msgid "Reapply template to table"
+#~ msgstr "Ужыць шаблон да табліцы"
+
+#, fuzzy
+#~ msgid "Templates"
+#~ msgstr "Шаблоны"
+
+#, fuzzy
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Уставіць радкі ў табліцу"
+
+#, fuzzy
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Выдаліць радкі з табліцы"
+
+#, fuzzy
+#~ msgid "Remove Row"
+#~ msgstr "Выдаліць радок"
+
+#, fuzzy
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Дадаць слупкі ў табліцу"
+
+#, fuzzy
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Выдаліць слупкі з табліцы"
+
+#, fuzzy
+#~ msgid "Remove Column"
+#~ msgstr "Выдаліць слупок"
+
+#, fuzzy
+#~ msgid "Apply Template to Table"
+#~ msgstr "Ужыць шаблон табліцы"
+
+#, fuzzy
+#~ msgid "Table Style Manager"
+#~ msgstr "Мэнэджэр стылю табліц"
+
+#, fuzzy
+#~ msgid "Tablestyles preview"
+#~ msgstr "Прадпрагляд стылю табліц"
+
+#, fuzzy
+#~ msgid "Adjust"
+#~ msgstr "Подогнать"
+
+#, fuzzy
+#~ msgid "Textstyle:"
+#~ msgstr "Стыль тэксту:"
+
+#, fuzzy
+#~ msgid "Change..."
+#~ msgstr "Змяніць..."
+
+#, fuzzy
+#~ msgid "New Tablestyle Template (%1)"
+#~ msgstr "Новы шаблон стылю табліц (%1)"
+
+#, fuzzy
+#~ msgid "&Customize"
+#~ msgstr "Наладзіць"
+
+#, fuzzy
+#~ msgid "Apply To"
+#~ msgstr "Дастасаваць да"
+
+#, fuzzy
+#~ msgid "First row"
+#~ msgstr "Першы радок"
+
+#, fuzzy
+#~ msgid "Last row"
+#~ msgstr "Апошні радок"
+
+#, fuzzy
+#~ msgid "Body"
+#~ msgstr "Цела табліцы"
+
+#, fuzzy
+#~ msgid "First column"
+#~ msgstr "Першы слупок"
+
+#, fuzzy
+#~ msgid "Last column"
+#~ msgstr "Апошні слупок"
+
+#, fuzzy
+#~ msgid "--- Frame Break ---"
+#~ msgstr "--- Разрыў падзелу ---"
+
+#, fuzzy
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "Змяніць уласцівасці абзаца"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "Каталогі"
+
+#, fuzzy
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Уставіць змест"
+
+#, fuzzy
+#~ msgid "Insert Break After Paragraph"
+#~ msgstr "Уставіць разрыў пасля абзаца"
+
+#, fuzzy
+#~ msgid "Endnote %1"
+#~ msgstr "Канцавая зноска %1"
+
+#, fuzzy
+#~ msgid "Footnote %1"
+#~ msgstr "Зноска %1"
+
+#, fuzzy
+#~ msgid "Insert Expression"
+#~ msgstr "Уставіць фразу"
+
+#, fuzzy
+#~ msgid "Insert Variable"
+#~ msgstr "Уставіць поле"
+
+#, fuzzy
+#~ msgid "ERROR"
+#~ msgstr "ПАМЫЛКА"
+
+#, fuzzy
+#~ msgid "INSRT"
+#~ msgstr "УСТАЎКА"
+
+#, fuzzy
+#~ msgid "Select Frame"
+#~ msgstr "Вылучыць урэзку"
+
+#, fuzzy
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Налада паштовага зліцця..."
+
+#, fuzzy
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "Перацягнеце поле паштовага зліцця"
+
+#, fuzzy
+#~ msgid "&Delete Frame"
+#~ msgstr "Выдаліць урэзку"
+
+#, fuzzy
+#~ msgid "Ra&ise Frame"
+#~ msgstr "Перамясціць урэзку наверх"
+
+#, fuzzy
+#~ msgid "&Lower Frame"
+#~ msgstr "Перамясціць урэзку ўніз"
+
+#, fuzzy
+#~ msgid "Text Mode"
+#~ msgstr "Прагляд тэксту"
+
+#, fuzzy
+#~ msgid ""
+#~ "Do not show any pictures, formatting or layout. KWord will display only "
+#~ "the text for editing."
+#~ msgstr ""
+#~ "Паказвае толькі тэкст дакумента без малюнкаў і афармленні для рэдагавання."
+
+#, fuzzy
+#~ msgid ""
+#~ "Switch to page mode.<br><br> Page mode is designed to make editing your "
+#~ "text easy.<br><br>This function is most frequently used to return to text "
+#~ "editing after switching to preview mode."
+#~ msgstr ""
+#~ "Пераключэнне ў рэжым прагляду старонак. <br> <br>Рэжым прагляду старонак "
+#~ "прызначаны для зручнага рэдагавання тэксту.<br> <br>Гэты рэжым часцей за "
+#~ "ўсё выкарыстоўваецца для вяртання ў рэжым рэдагавання пасля папярэдняга "
+#~ "прагляду дакумента."
+
+#, fuzzy
+#~ msgid "Switch to page editing mode"
+#~ msgstr "Пераключэнне ў рэжым рэдагавання старонак"
+
+#, fuzzy
+#~ msgid "Pre&view Mode"
+#~ msgstr "Папярэдні прагляд"
+
+#, fuzzy
+#~ msgid ""
+#~ "Zoom out from your document to get a look at several pages of your "
+#~ "document.<br><br>The number of pages per line can be customized."
+#~ msgstr ""
+#~ "Паказвае паменшаныя копіі старонак для прагляду адразу некалькіх старонак "
+#~ "дакумента.<br><br>Колькасць старонак у шэрагу можна наладзіць."
+
+#, fuzzy
+#~ msgid "Zoom out to a multiple page view"
+#~ msgstr "Паказвае паменшаныя копіі некалькіх старонак"
+
+#, fuzzy
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Паказаць верхнія калантытулы"
+
+#, fuzzy
+#~ msgid "Disable Document &Headers"
+#~ msgstr "Схаваць верхнія калантытулы"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Паказаць ніжнія калантытулы"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "Схаваць ніжнія калантытулы"
+
+#, fuzzy
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Адмысловы знак..."
+
+#, fuzzy
+#~ msgid "Insert one or more symbols or letters not found on the keyboard"
+#~ msgstr ""
+#~ "Уставіць адзін або некалькі знакаў або літар, якіх нельга знайсці на "
+#~ "клавіятуры."
+
+#, fuzzy
+#~ msgid "Insert one or more symbols or letters not found on the keyboard."
+#~ msgstr ""
+#~ "Уставіць адзін або некалькі знакаў або літар, якіх нельга знайсці на "
+#~ "клавіятуры."
+
+#, fuzzy
+#~ msgid "&Hard Frame Break"
+#~ msgstr "Цвёрды разрыў змесціва ўрэзкі"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next frame"
+#~ msgstr "Ручны перанос пакінутага тэксту на наступную ўрэзку"
+
+#, fuzzy
+#~ msgid ""
+#~ "This inserts a non-printing character at the current cursor position. All "
+#~ "text after this point will be moved into the next frame in the frameset."
+#~ msgstr ""
+#~ "У бягучую пазіцыю курсора будзе ўстаўлены адмысловы недрукавальны знак. "
+#~ "Увесь тэкст пасля яго будзе перанесены на наступную ўрэзку ў наборы."
+
+#, fuzzy
+#~ msgid "Link..."
+#~ msgstr "Спасылка..."
+
+#, fuzzy
+#~ msgid "Insert a Web address, email address or hyperlink to a file"
+#~ msgstr "Уставіць вэб-адрас, адрас электроннай пошты або спасылку на файл."
+
+#, fuzzy
+#~ msgid "Insert a Web address, email address or hyperlink to a file."
+#~ msgstr "Уставіць вэб-адрас, адрас электроннай пошты або спасылку на файл."
+
+#, fuzzy
+#~ msgid "Comment..."
+#~ msgstr "Каментар..."
+
+#, fuzzy
+#~ msgid "Insert a comment about the selected text"
+#~ msgstr "Уставіць каментар для вылучанага тэксту"
+
+#, fuzzy
+#~ msgid ""
+#~ "Insert a comment about the selected text. These comments are not designed "
+#~ "to appear on the final page."
+#~ msgstr ""
+#~ "Уставіць каментар для вылучанага тэксту. Гэтыя каментары не будуць "
+#~ "друкавацца."
+
+#, fuzzy
+#~ msgid "Edit Comment..."
+#~ msgstr "Змяніць каментар..."
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "Змяніць змесціва каментара."
+
+#, fuzzy
+#~ msgid "Change the content of a comment."
+#~ msgstr "Змяніць змесціва каментара."
+
+#, fuzzy
+#~ msgid "Remove the selected document comment"
+#~ msgstr "Выдаліць вылучаны каментар."
+
+#, fuzzy
+#~ msgid "Remove the selected document comment."
+#~ msgstr "Выдаліць вылучаны каментар."
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Капіяваць тэкст каментара..."
+
+#, fuzzy
+#~ msgid "Insert a footnote referencing the selected text."
+#~ msgstr "Уставіць зноску пасля вылучанага тэксту."
+
+#, fuzzy
+#~ msgid "Table of &Contents"
+#~ msgstr "Змест"
+
+#, fuzzy
+#~ msgid "Insert table of contents at the current cursor position."
+#~ msgstr "Уставіць змест у бягучую пазіцыю курсора."
+
+#, fuzzy
+#~ msgid "Document &Information"
+#~ msgstr "Звесткі аб дакуменце"
+
+#, fuzzy
+#~ msgid "&Date"
+#~ msgstr "Дата"
+
+#, fuzzy
+#~ msgid "&Statistic"
+#~ msgstr "Статыстыка"
+
+#, fuzzy
+#~ msgid "&Custom"
+#~ msgstr "Карыстацкае поле"
+
+#, fuzzy
+#~ msgid "&Refresh All Variables"
+#~ msgstr "Абнавіць усе палі"
+
+#, fuzzy
+#~ msgid "Update all variables to current values"
+#~ msgstr "Абнавіць значэнні ўсіх палёў"
+
+#, fuzzy
+#~ msgid ""
+#~ "Update all variables in the document to current values.<br><br>This will "
+#~ "update page numbers, dates or any other variables that need updating."
+#~ msgstr ""
+#~ "Абнавіць значэнні ўсіх палёў. <br><br>Гэтая аперацыя абновіць палі "
+#~ "нумароў старонак, дат і іншых пераменных."
+
+#, fuzzy
+#~ msgid "&Expression"
+#~ msgstr "Фраза"
+
+#, fuzzy
+#~ msgid "Te&xt Frame"
+#~ msgstr "Тэкставая ўрэзка"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "Стварыць тэкставую ўрэзку."
+
+#, fuzzy
+#~ msgid "Create a new text frame."
+#~ msgstr "Стварыць тэкставую ўрэзку."
+
+#, fuzzy
+#~ msgid "For&mula"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "Стварыць урэзку з формулай."
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Стварыць урэзку з формулай."
+
+#, fuzzy
+#~ msgid "&Table..."
+#~ msgstr "Табліца..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Create a table.<br><br>The table can either exist in a frame of its own "
+#~ "or inline."
+#~ msgstr ""
+#~ "Стварыць табліцу. <br><br>Табліца можа размяшчацца ў тэксце або асобнай "
+#~ "урэзцы."
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Стварыць новую ўрэзку з малюнкам"
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Стварыць новую ўрэзку з малюнкам або дыяграмай."
+
+#, fuzzy
+#~ msgid "&Object Frame"
+#~ msgstr "Аб'ект"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "Стварыць урэзку з аб'ектам."
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "Стварыць урэзку з аб'ектам."
+
+#, fuzzy
+#~ msgid "Fi&le..."
+#~ msgstr "Файл..."
+
+#, fuzzy
+#~ msgid "&Font..."
+#~ msgstr "Шрыфт..."
+
+#, fuzzy
+#~ msgid "Change character size, font, boldface, italics etc."
+#~ msgstr "Змяніць памер, сямейства, гарнітуру і іншыя атрыбуты шрыфта."
+
+#, fuzzy
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "Змяніць атрыбуты вылучаных знакаў."
+
+#, fuzzy
+#~ msgid "&Paragraph..."
+#~ msgstr "Абзац..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgstr ""
+#~ "Змяніць водступы абзаца, выраўнаванне, обгортванне, межы, нумарацыю і т.д."
+
+#, fuzzy
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ "<p>Select text in multiple paragraphs to change the formatting of all "
+#~ "selected paragraphs.<p>If no text is selected, the paragraph where the "
+#~ "cursor is located will be changed."
+#~ msgstr ""
+#~ "Змяніць водступы абзаца, выраўнаванне, обгортванне, межы, нумарацыю і т."
+#~ "д. <p>Вылучыце тэкст у некалькіх абзацах, каб памяняць фарматаванне "
+#~ "тэксту адразу ў некалькіх абзацах.<p>Калі няма вылучанага тэксту, будзе "
+#~ "зменены фармат усяго тэксту абзаца, у якім знаходзіцца курсор."
+
+#, fuzzy
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Мэнэджэр стыляў урэзак"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "Змена атрыбутаў стыляў урэзак"
+
+#, fuzzy
+#~ msgid ""
+#~ "Change background and borders of framestyles.<p>Multiple framestyles can "
+#~ "be changed using the dialog box."
+#~ msgstr ""
+#~ "Змена фону і меж у стылях урэзак. <p>У гэтым дыялогу вы можаце памяняць "
+#~ "атрыбуты адразу некалькіх стыляў урэзак."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "Змена атрыбутаў стыляў"
+
+#, fuzzy
+#~ msgid ""
+#~ "Change font and paragraph attributes of styles.<p>Multiple styles can be "
+#~ "changed using the dialog box."
+#~ msgstr ""
+#~ "Змена налад шрыфта і абзаца ў стылях. <p>У гэтым дыялогу вы можаце "
+#~ "памяняць атрыбуты адразу некалькіх стыляў."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "Заблакаваць змену памеру"
+
+#, fuzzy
+#~ msgid "Increase Font Size"
+#~ msgstr "Павялічыць памер шрыфта"
+
+#, fuzzy
+#~ msgid "Decrease Font Size"
+#~ msgstr "Паменшыць памер шрыфта"
+
+#, fuzzy
+#~ msgid "St&yle"
+#~ msgstr "Стыль"
+
+#, fuzzy
+#~ msgid "Default Format"
+#~ msgstr "Фармат па змаўчанні"
+
+#, fuzzy
+#~ msgid "Change font and paragraph attributes to their default values"
+#~ msgstr "Вярнуць значэнні па змаўчанні атрыбутаў шрыфта і абзаца."
+
+#, fuzzy
+#~ msgid "Change font and paragraph attributes to their default values."
+#~ msgstr "Вярнуць значэнні па змаўчанні атрыбутаў шрыфта і абзаца."
+
+#, fuzzy
+#~ msgid "&Strike Out"
+#~ msgstr "Закрэслены"
+
+#, fuzzy
+#~ msgid "Align &Left"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgid "Align &Center"
+#~ msgstr "Па цэнтры"
+
+#, fuzzy
+#~ msgid "Align &Right"
+#~ msgstr "Па правым боку"
+
+#, fuzzy
+#~ msgid "Align &Block"
+#~ msgstr "Па шырыні"
+
+#, fuzzy
+#~ msgid "Line Spacing &1"
+#~ msgstr "Адзінарны інтэрвал"
+
+#, fuzzy
+#~ msgid "Line Spacing 1.&5"
+#~ msgstr "Паўтарачны інтэрвал"
+
+#, fuzzy
+#~ msgid "Line Spacing &2"
+#~ msgstr "Падвойны інтэрвал"
+
+#, fuzzy
+#~ msgid "Superscript"
+#~ msgstr "Верхні індэкс"
+
+#, fuzzy
+#~ msgid "Subscript"
+#~ msgstr "Ніжні індэкс"
+
+#, fuzzy
+#~ msgid "Increase Indent"
+#~ msgstr "Змяніць водступ"
+
+#, fuzzy
+#~ msgid "Decrease Indent"
+#~ msgstr "Змяніць водступ"
+
+#, fuzzy
+#~ msgid "Text Color..."
+#~ msgstr "Колер тэксту"
+
+#, fuzzy
+#~ msgid "Bullet"
+#~ msgstr "Спіс з маркерамі"
+
+#, fuzzy
+#~ msgid "Framest&yle"
+#~ msgstr "Стыль урэзак"
+
+#, fuzzy
+#~ msgid "Border Left"
+#~ msgstr "Левая мяжа"
+
+#, fuzzy
+#~ msgid "Border Right"
+#~ msgstr "Правая мяжа"
+
+#, fuzzy
+#~ msgid "Border Top"
+#~ msgstr "Верхняя мяжа"
+
+#, fuzzy
+#~ msgid "Border Bottom"
+#~ msgstr "Ніжняя мяжа"
+
+#, fuzzy
+#~ msgid "Border Style"
+#~ msgstr "Тып лініі мяжы"
+
+#, fuzzy
+#~ msgid "Border Width"
+#~ msgstr "Таўшчыня мяжы"
+
+#, fuzzy
+#~ msgid "Border Color"
+#~ msgstr "Колер лініі мяжы"
+
+#, fuzzy
+#~ msgid "Text Background Color..."
+#~ msgstr "Колер фону"
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "Змяніць колер фону вылучанага тэксту."
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text."
+#~ msgstr "Змяніць колер фону вылучанага тэксту."
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Уласцівасці"
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Выраўнаваць табліцу"
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table."
+#~ msgstr "Выраўнаваць табліцу"
+
+#, fuzzy
+#~ msgid "&Insert Row..."
+#~ msgstr "Уставіць радок..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Уставіць адну або некалькі радкоў у пазіцыю курсора"
+
+#, fuzzy
+#~ msgid "Insert one or more rows at current cursor location."
+#~ msgstr "Уставіць адну або некалькі радкоў у бягучую пазіцыю курсора."
+
+#, fuzzy
+#~ msgid "I&nsert Column..."
+#~ msgstr "Уставіць слупок..."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Уставіць адзін або некалькі слупкоў у бягучую табліцу."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table."
+#~ msgstr "Уставіць адзін або некалькі слупкоў у бягучую табліцу."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "Выдаліць вылучаныя радкі з табліцы."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Выдаліць вылучаныя радкі з табліцы."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "Выдаліць вылучаныя слупкі з табліцы."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "Выдаліць вылучаныя слупкі з табліцы."
+
+#, fuzzy
+#~ msgid "Resize Column..."
+#~ msgstr "Змяніць шырыню слупка..."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "Змяніць шырыню вылучанага слупка."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "Змяніць шырыню вылучанага слупка."
+
+#, fuzzy
+#~ msgid "&Join Cells"
+#~ msgstr "Аб'яднаць вочкі"
+
+#, fuzzy
+#~ msgid "Join two or more cells into one large cell"
+#~ msgstr "Аб'яднаць дзве або больш вочкі ў адно вялікае вочка"
+
+#, fuzzy
+#~ msgid ""
+#~ "Join two or more cells into one large cell.<p>This is a good way to "
+#~ "create titles and labels within a table."
+#~ msgstr ""
+#~ "Аб'яднаць дзве або больш вочкі ў адно вялікае вочка. <p>Гэта добры спосаб "
+#~ "стварыць загалоўкі і надпісы ў табліцах."
+
+#, fuzzy
+#~ msgid "&Split Cell..."
+#~ msgstr "Разбіць вочка..."
+
+#, fuzzy
+#~ msgid "Split one cell into two or more cells"
+#~ msgstr "Разбіць адно вочка на дзве або больш вочак"
+
+#, fuzzy
+#~ msgid ""
+#~ "Split one cell into two or more cells.<p>Cells can be split horizontally, "
+#~ "vertically or both directions at once."
+#~ msgstr ""
+#~ "Разбіць адно вочка на дзве або больш вочак. <p>Вочка можа быць пабітая па "
+#~ "гарызанталі, вертыкалі або абодвух кірунках."
+
+#, fuzzy
+#~ msgid "Protect Cells"
+#~ msgstr "Абараніць вочкі"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "Абараніць змесціва вылучаных вочак ад змен"
+
+#, fuzzy
+#~ msgid ""
+#~ "Toggles cell protection on and off.<br><br>When cell protection is on, "
+#~ "the user can not alter the content or formatting of the text within the "
+#~ "cell."
+#~ msgstr ""
+#~ "Усталёўка і здыманне абароны вочак. <br> <br>Пры ўключэнні абароны вочка, "
+#~ "не можа памяняць тэкст або яго фарматаванне ў гэтым вочку."
+
+#, fuzzy
+#~ msgid "&Ungroup Table"
+#~ msgstr "Разгрупаваць табліцу"
+
+#, fuzzy
+#~ msgid "Break a table into individual frames"
+#~ msgstr "Разбіць табліцу на асобныя ўрэзкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "Break a table into individual frames<p>Each frame can be moved "
+#~ "independently around the page."
+#~ msgstr ""
+#~ "Разбіць табліцу на асобныя ўрэзкі. <p>Кожная ўрэзка можа быць вольна "
+#~ "перамешчаная за межы табліцы."
+
+#, fuzzy
+#~ msgid "Delete &Table"
+#~ msgstr "Выдаліць табліцу"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Выдаліць усю табліцу"
+
+#, fuzzy
+#~ msgid ""
+#~ "Deletes all cells and the content within the cells of the currently "
+#~ "selected table."
+#~ msgstr "Выдаліць усе вочкі і іх змесціва вылучанай табліцы."
+
+#, fuzzy
+#~ msgid "T&able Style Manager"
+#~ msgstr "Мэнэджэр стылю табліц"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "Змяніць атрыбуты стыляў табліц"
+
+#, fuzzy
+#~ msgid ""
+#~ "Change textstyle and framestyle of the tablestyles.<p>Multiple "
+#~ "tablestyles can be changed using the dialog box."
+#~ msgstr ""
+#~ "Змяніць фарматаванне тэксту і ўрэзак у стылях табліцы. <p>У гэтым дыялогу "
+#~ "вы можаце змяніць атрыбуты адразу ў некалькіх стыляў табліц."
+
+#, fuzzy
+#~ msgid "Table&style"
+#~ msgstr "Стылі табліц"
+
+#, fuzzy
+#~ msgid "Convert Table to Text"
+#~ msgstr "Пераўтварыць табліцу ў тэкст"
+
+#, fuzzy
+#~ msgid "Sort Text..."
+#~ msgstr "Сартаванне..."
+
+#, fuzzy
+#~ msgid "Add Expression"
+#~ msgstr "Дадаць фразу"
+
+#, fuzzy
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Уключыць аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Выключыць аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Уключэнне або выключэнне аўтавыпраўленне."
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off."
+#~ msgstr "Уключэнне або выключэнне аўтавыпраўленне."
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Налада аўтавыпраўленне..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Change autocorrection options including:<p> <UL><LI><P>exceptions to "
+#~ "autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> "
+#~ "<LI><P>and basic autocorrection options</P>."
+#~ msgstr ""
+#~ "Змяняныя опцыі аўтавыпраўлення ўключаюць: <p> <UL><LI><P>выключэнні пры "
+#~ "аўтавыпраўленні</P> <LI><P>даданне і выдаленне выпраўляемага тэксту</P> "
+#~ "<LI><P>і базавыя опцыі аўтавыпраўлення</P>."
+
+#, fuzzy
+#~ msgid "Custom &Variables..."
+#~ msgstr "Карыстацкія палі..."
+
+#, fuzzy
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Рэдагаваць персанальныя фразы..."
+
+#, fuzzy
+#~ msgid "Add or change one or more personal expressions"
+#~ msgstr "Змена персанальных фраз"
+
+#, fuzzy
+#~ msgid ""
+#~ "Add or change one or more personal expressions.<p>Personal expressions "
+#~ "are a way to quickly insert commonly used phrases or text into your "
+#~ "document."
+#~ msgstr ""
+#~ "Змена персанальных фраз. <p> Персанальныя фразы -- гэта хуткі спосаб "
+#~ "уставіць часта выкарыстоўваныя фразы або тэкст у дакумент."
+
+#, fuzzy
+#~ msgid "Change Case..."
+#~ msgstr "Змяніць рэгістр..."
+
+#, fuzzy
+#~ msgid "Alter the capitalization of selected text"
+#~ msgstr "Змена рэгістра вылучанага тэксту"
+
+#, fuzzy
+#~ msgid ""
+#~ "Alter the capitalization of selected text to one of five pre-defined "
+#~ "patterns.<p>You can also switch all letters from upper case to lower case "
+#~ "and from lower case to upper case in one move."
+#~ msgstr ""
+#~ "Змена рэгістра вылучанага тэксту па пяці правілам. <p>Акрамя таго, вы "
+#~ "можаце пераўтварыць усе літары ў верхні або ніжні рэгістр за адзін крок."
+
+#, fuzzy
+#~ msgid "Change Picture..."
+#~ msgstr "Змяніць малюнак..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "Змяніць малюнак на іншы ў вылучанай урэзцы"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can specify a different picture in the current frame.<br><br>KWord "
+#~ "automatically resizes the new picture to fit within the old frame."
+#~ msgstr ""
+#~ "Вы можаце паказаць іншы малюначак ва ўрэзцы. <br> <br>Памеры малюначка "
+#~ "будуць змененыя па памерах урэзкі."
+
+#, fuzzy
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Уласцівасці калантытулаў..."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "Наладзіць вылучаны верхні або ніжні калантытул."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "Наладзіць вылучаны верхні або ніжні калантытул."
+
+#, fuzzy
+#~ msgid "Open the link with the appropriate application"
+#~ msgstr "Адкрыць спасылку, выкарыстаючы адпаведнае праграму"
+
+#, fuzzy
+#~ msgid ""
+#~ "Open the link with the appropriate application.<br><br>Web addresses are "
+#~ "opened in a browser.<br>Email addresses begin a new message addressed to "
+#~ "the link.<br>File links are opened by the appropriate viewer or editor."
+#~ msgstr ""
+#~ "Адкрыць спасылку, выкарыстаючы адпаведную праграму. <br> <br>Вэб-адрасы "
+#~ "адчыняюцца ў браўзэры.<br>Адрасы электроннай пошты адчыняюць стварэнне "
+#~ "акна новага паведамлення па гэтым адрасе. <br>Спасылкі на файлы адчыняюць "
+#~ "адпаведную іх тыпу праграму прагляду або рэдагавання."
+
+#, fuzzy
+#~ msgid "Change Link..."
+#~ msgstr "Змяніць спасылку..."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "Змяніць змесціва вылучанай спасылкі"
+
+#, fuzzy
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "Змяніць уласцівасці вылучанай спасылкі."
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Капіяваць спасылку"
+
+#, fuzzy
+#~ msgid "Add to Bookmark"
+#~ msgstr "Дадаць у закладкі"
+
+#, fuzzy
+#~ msgid "Remove Link"
+#~ msgstr "Выдаліць спасылку"
+
+#, fuzzy
+#~ msgid "Show Doc Structure"
+#~ msgstr "Паказаць структуру дакумента"
+
+#, fuzzy
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Схаваць структуру дакумента"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "Адкрыць панэль прагляду структуры дакумента"
+
+#, fuzzy
+#~ msgid ""
+#~ "Open document structure sidebar.<p>This sidebar helps you organize your "
+#~ "document and quickly find pictures, tables etc."
+#~ msgstr ""
+#~ "Адкрыць панэль прагляду структуры дакумента. <p>Гэтая панэль дапаможа вам "
+#~ "арганізаваць структуру вашага дакумента і хутка знайсці розныя аб'екты: "
+#~ "малюнкі, табліцы і г.д."
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "Схаваць лінейкі"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "Схаваць сетку"
+
+#, fuzzy
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "Наладзіць аўтазавяршэнне..."
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Змяніць словы і налады аўтазавяршэння"
+
+#, fuzzy
+#~ msgid "Add words or change the options for autocompletion."
+#~ msgstr "Змяніць словы і налады аўтазавяршэння."
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Уставіць непарыўны прабел"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Уставіць непарыўны злучок"
+
+#, fuzzy
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Уставіць мяккі перанос"
+
+#, fuzzy
+#~ msgid "Line Break"
+#~ msgstr "Перанос радка"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Павялічыць узровень нумарацыі"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Паменшыць узровень нумарацыі"
+
+#, fuzzy
+#~ msgid "Edit Variable..."
+#~ msgstr "Змяніць поле..."
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Ужыць аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection"
+#~ msgstr "Ручны запуск аўтавыпраўлення па ўсім дакуменце."
+
+#, fuzzy
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection."
+#~ msgstr "Ручны запуск аўтавыпраўлення па ўсім дакуменце."
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Стварыць стыль на аснове вылучэння..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Стварыць стыль з атрыбутаў вылучанага тэксту."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Стварыць стыль з атрыбутаў вылучанага тэксту."
+
+#, fuzzy
+#~ msgid "&Footnote..."
+#~ msgstr "Зноска..."
+
+#, fuzzy
+#~ msgid "Change the look of footnotes"
+#~ msgstr "Змена ўласцівасцяў зносак."
+
+#, fuzzy
+#~ msgid "Change the look of footnotes."
+#~ msgstr "Змена ўласцівасцяў зносак."
+
+#, fuzzy
+#~ msgid "Edit Footnote"
+#~ msgstr "Змяніць зноску"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "Змяніць змесціва вылучанай зноскі."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Змяніць змесціва вылучанай зноскі."
+
+#, fuzzy
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Змяніць параметры зносак і канцавых зносак."
+
+#, fuzzy
+#~ msgid "Save Picture As..."
+#~ msgstr "Захаваць малюнак..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "Захаваць малюнак у асобным файле"
+
+#, fuzzy
+#~ msgid ""
+#~ "Save the picture in the currently selected frame in a separate file, "
+#~ "outside the KWord document."
+#~ msgstr ""
+#~ "Захаваць малюнак вылучанай урэзкі ў асобным файле па-за дакументам KWord."
+
+#, fuzzy
+#~ msgid "Autospellcheck"
+#~ msgstr "Аўтаматычная праверка правапісу"
+
+#, fuzzy
+#~ msgid "Show"
+#~ msgstr "Паказаць"
+
+#, fuzzy
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "Стварыць стыль на аснове вылучанай урэзкі..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Стварэнне стылю на аснове вылучанай урэзкі"
+
+#, fuzzy
+#~ msgid "Create a new framestyle based on the currently selected frame."
+#~ msgstr "Стварэнне стылю ўрэзак на аснове вылучанай урэзкі."
+
+#, fuzzy
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "Курсор можна ўсталяваць усюды"
+
+#, fuzzy
+#~ msgid "Convert to Text Box"
+#~ msgstr "Пераўтварыць у тэкставую ўрэзку"
+
+#, fuzzy
+#~ msgid "Ignore All"
+#~ msgstr "Ігнараваць усё"
+
+#, fuzzy
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Дадаць слова ў слоўнік"
+
+#, fuzzy
+#~ msgid "Store Document Internally"
+#~ msgstr "Захаваць дакумент у бібліятэцы"
+
+#, fuzzy
+#~ msgid "Go to Document Structure"
+#~ msgstr "Структура дакумента"
+
+#, fuzzy
+#~ msgid "Insert variable \"%1\" into the text"
+#~ msgstr "Уставіць пераменную \"%1\" у тэкст"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1. Урэзка: %2, %3  -  %4, %5 (шырыня: %6, вышыня: %7)"
+
+#, fuzzy
+#~ msgid "%1 frames selected"
+#~ msgstr "Вылучана %1 урэзак"
+
+#, fuzzy
+#~ msgid "Frame Background Color..."
+#~ msgstr "Колер фону ўрэзкі..."
+
+#, fuzzy
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Ужыць стыль абзаца"
+
+#, fuzzy
+#~ msgid "Apply a frame style"
+#~ msgstr "Ужыць стыль урэзкі"
+
+#, fuzzy
+#~ msgid "Apply a table style"
+#~ msgstr "Ужыць стыль табліцы"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "Малюнак"
+
+#, fuzzy
+#~ msgid "Select paste format:"
+#~ msgstr "Фармат устаўкі з буфера абмену:"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Вы жадаеце выдаліць табліцу.\n"
+#~ "У гэтым выпадку ўвесь тэкст у табліцы\n"
+#~ "таксама будзе выдалены.\n"
+#~ "Вы сапраўды жадаеце выдаліць табліцу?"
+
+#, fuzzy
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Жадаеце выдаліць урэзку?"
+
+#, fuzzy
+#~ msgid "Change Custom Variable"
+#~ msgstr "Змяніць карыстацкае поле"
+
+#, fuzzy
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Уставіць малюнак у тэкст"
+
+#, fuzzy
+#~ msgid "Set cursor where you want to insert inline frame."
+#~ msgstr ""
+#~ "Усталюеце курсор на пазіцыю, куды вы жадаеце ўставіць убудаваную ў тэкст "
+#~ "урэзку."
+
+#, fuzzy
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Уставіць урэзку ў тэкст"
+
+#, fuzzy
+#~ msgid "You can only insert footnotes or endnotes into the first frameset."
+#~ msgstr "Вы можаце ўставіць калантытулы толькі ў першы набор урэзак."
+
+#, fuzzy
+#~ msgid "Insert Footnote"
+#~ msgstr "Уставіць зноску"
+
+#, fuzzy
+#~ msgid "Update Table of &Contents"
+#~ msgstr "Абнавіць змест"
+
+#, fuzzy
+#~ msgid "Change Font"
+#~ msgstr "Змяніць шрыфт"
+
+#, fuzzy
+#~ msgid "Change Layout"
+#~ msgstr "Змяніць налады старонкі"
+
+#, fuzzy
+#~ msgid "You must select a frame first."
+#~ msgstr "Вы павінны вылучыць урэзку."
+
+#, fuzzy
+#~ msgid "Format Frameset"
+#~ msgstr "Фармат набору ўрэзак"
+
+#, fuzzy
+#~ msgid "Insert Table"
+#~ msgstr "Уставіць табліцу"
+
+#, fuzzy
+#~ msgid "Insert Formula"
+#~ msgstr "Уставіць формулу"
+
+#, fuzzy
+#~ msgid "Remove Rows"
+#~ msgstr "Выдаліць радкі"
+
+#, fuzzy
+#~ msgid "Remove Columns"
+#~ msgstr "Выдаліць слупкі"
+
+#, fuzzy
+#~ msgid "Adjust Table"
+#~ msgstr "Выраўнаваць табліцу"
+
+#, fuzzy
+#~ msgid ""
+#~ "More then one table has selected cells, please make sure the selected "
+#~ "cells are in one table and are connecting"
+#~ msgstr ""
+#~ "Немагчыма аб'яднаць вочкі. Праверце, ці размешчаныя вылучаныя вочкі побач "
+#~ "сябар з сябрам"
+
+#, fuzzy
+#~ msgid "Join Cells Failed"
+#~ msgstr "Памылка аб'яднання вочак"
+
+#, fuzzy
+#~ msgid ""
+#~ "You have to select some cells which are next to each other and are not "
+#~ "already joined."
+#~ msgstr ""
+#~ "Вылучыце некалькі сумежных і пакуль яшчэ не аб'яднаных вочак у табліцы."
+
+#, fuzzy
+#~ msgid "Join Cells"
+#~ msgstr "Аб'яднаць вочкі"
+
+#, fuzzy
+#~ msgid "You have to put the cursor into a table before splitting cells."
+#~ msgstr "Для таго, каб разбіць вочкі, змесціце курсор у табліцу."
+
+#, fuzzy
+#~ msgid "Split Cells"
+#~ msgstr "Разбіць вочкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "There is not enough space to split the cell into that many parts, make it "
+#~ "bigger first"
+#~ msgstr "Няма месца ў табліцы, каб разбіць вочкі."
+
+#, fuzzy
+#~ msgid "Ungroup Table"
+#~ msgstr "Разгрупаваць табліцу"
+
+#, fuzzy
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Ужыць стыль да ўрэзкі"
+
+#, fuzzy
+#~ msgid "Apply Style to Frames"
+#~ msgstr "Ужыць стыль да ўрэзак"
+
+#, fuzzy
+#~ msgid "Apply Framestyle to Frame"
+#~ msgstr "Ужыць стыль урэзак да ўрэзкі"
+
+#, fuzzy
+#~ msgid "Apply Framestyle to Frames"
+#~ msgstr "Ужыць стыль урэзак да ўрэзак"
+
+#, fuzzy
+#~ msgid "Apply Framestyle"
+#~ msgstr "Ужыць стыль урэзак"
+
+#, fuzzy
+#~ msgid "Apply Tablestyle to Frame"
+#~ msgstr "Ужыць стыль табліц да ўрэзкі"
+
+#, fuzzy
+#~ msgid "Apply Tablestyle to Frames"
+#~ msgstr "Ужыць стыль табліц да ўрэзак"
+
+#, fuzzy
+#~ msgid "Change Text Size"
+#~ msgstr "Змяніць памер шрыфта"
+
+#, fuzzy
+#~ msgid "Change Text Font"
+#~ msgstr "Змяніць шрыфт"
+
+#, fuzzy
+#~ msgid "Make Text Bold"
+#~ msgstr "Паўтлусты"
+
+#, fuzzy
+#~ msgid "Make Text Italic"
+#~ msgstr "Курсіў"
+
+#, fuzzy
+#~ msgid "Underline Text"
+#~ msgstr "Падкрэслены"
+
+#, fuzzy
+#~ msgid "Strike Out Text"
+#~ msgstr "Закрэслены тэкст"
+
+#, fuzzy
+#~ msgid "Set Text Color"
+#~ msgstr "Колер тэксту"
+
+#, fuzzy
+#~ msgid "Center Text"
+#~ msgstr "Па цэнтры"
+
+#, fuzzy
+#~ msgid "Justify Text"
+#~ msgstr "Па шырыні"
+
+#, fuzzy
+#~ msgid "Set Single Line Spacing"
+#~ msgstr "Усталяваць адзінарны міжрадковы інтэрвал"
+
+#, fuzzy
+#~ msgid "Set One and a Half Line Spacing"
+#~ msgstr "Усталяваць паўтарачны міжрадковы інтэрвал"
+
+#, fuzzy
+#~ msgid "Set Double Line Spacing"
+#~ msgstr "Усталяваць падвойны міжрадковы інтэрвал"
+
+#, fuzzy
+#~ msgid "Change List Type"
+#~ msgstr "Тып спісу"
+
+#, fuzzy
+#~ msgid "Make Text Superscript"
+#~ msgstr "Верхні індэкс"
+
+#, fuzzy
+#~ msgid "Make Text Subscript"
+#~ msgstr "Ніжні індэкс"
+
+#, fuzzy
+#~ msgid "Change Case of Text"
+#~ msgstr "Змяніць рэгістр"
+
+#, fuzzy
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Павялічыць водступ абзаца"
+
+#, fuzzy
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Паменшыць водступ абзаца"
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "Змяніць верхнюю мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "Змяніць ніжнюю мяжу ўрэзкі"
+
+#, fuzzy
+#~ msgid "Change Tabulator"
+#~ msgstr "Змяніць табулятар"
+
+#, fuzzy
+#~ msgid "Change First Line Indent"
+#~ msgstr "Змяніць водступ чырвонага радка"
+
+#, fuzzy
+#~ msgid "Change Indent"
+#~ msgstr "Змяніць водступ"
+
+#, fuzzy
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Змяніць хібнае слова"
+
+#, fuzzy
+#~ msgid "Edit Endnote"
+#~ msgstr "Змяніць зноску"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "Змяніць уласцівасць зноскі"
+
+#, fuzzy
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "Змяніць уласцівасць канцавой зноскі"
+
+#, fuzzy
+#~ msgid "D&elete Current Column..."
+#~ msgstr "Выдаліць слупок..."
+
+#, fuzzy
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "Выдаліць вылучаныя слупкі..."
+
+#, fuzzy
+#~ msgid "&Delete Current Row..."
+#~ msgstr "Выдаліць радок..."
+
+#, fuzzy
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "Выдаліць вылучаныя радкі..."
+
+#, fuzzy
+#~ msgid "OVER"
+#~ msgstr "ЗАМЕНА"
+
+#, fuzzy
+#~ msgid "Change Picture"
+#~ msgstr "Змяніць малюнак"
+
+#, fuzzy
+#~ msgid "Save Picture"
+#~ msgstr "Захаваць малюнак"
+
+#, fuzzy
+#~ msgid "Error during saving. Could not open '%1' for writing"
+#~ msgstr "Памылка захавання. Немагчыма адкрыць файл '%1' для запісу"
+
+#, fuzzy
+#~ msgid "Unable to save the file to '%1'. %2."
+#~ msgstr "Немагчыма захаваць файл '%1'. %2."
+
+#, fuzzy
+#~ msgid "Error during saving. Could not create temporary file."
+#~ msgstr "Памылка захавання. Немагчыма стварыць часовы файл '%1'."
+
+#, fuzzy
+#~ msgid "URL %1 is invalid."
+#~ msgstr "Памылка ў спасылцы %1."
+
+#, fuzzy
+#~ msgid "Move Frame"
+#~ msgstr "Перамясціць урэзку"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "Змяніць тэкст нататкі"
+
+#, fuzzy
+#~ msgid "Apply Autoformat"
+#~ msgstr "Ужыць аўтафармат"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "Змяніць уласцівасці зноскі"
+
+#, fuzzy
+#~ msgid "Insert File"
+#~ msgstr "Уставіць файл"
+
+#, fuzzy
+#~ msgid "File name is not a KWord file!"
+#~ msgstr "Імя файла не адпавядае файлу KWord!"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "Звычайны"
+
+#, fuzzy
+#~ msgid "Delete Frames"
+#~ msgstr "Выдаліць урэзкі"
+
+#, fuzzy
+#~ msgctxt "Abbreviation for Text-to-Speech"
+#~ msgid "TTS"
+#~ msgstr "Сінтэз прамовы"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Налада сінтэзу прамовы"
+
+#, fuzzy
+#~ msgid "Speak widget under &mouse pointer"
+#~ msgstr "Зачытаць віджэт пад курсорам мышы"
+
+#, fuzzy
+#~ msgid "Speak widget with &focus"
+#~ msgstr "Зачытаць бягучы віджэт"
+
+#, fuzzy
+#~ msgid "Speak &tool tips"
+#~ msgstr "Зачытаць усплывальныя падказкі"
+
+#, fuzzy
+#~ msgid "Speak &What's This"
+#~ msgstr "Зачытаць падказкі"
+
+#, fuzzy
+#~ msgctxt "Verbal indication if widget is disabled (grayed)"
+#~ msgid "&Say whether disabled"
+#~ msgstr "Акцэнтаваць на неактыўных віджэтах"
+
+#, fuzzy
+#~ msgid "Spea&k accelerators"
+#~ msgstr "Зачытаць камбінацыі клавіш"
+
+#, fuzzy
+#~ msgctxt "A word spoken before another word"
+#~ msgid "Pr&efaced by the word:"
+#~ msgstr "Папярэдне зачытаць слова:"
+
+#, fuzzy
+#~ msgctxt "Keyboard accelerator, such as Alt+F"
+#~ msgid "Accelerator"
+#~ msgstr "Камбінацыя клавіш"
+
+#, fuzzy
+#~ msgid "&Polling interval:"
+#~ msgstr "Інтэрвал апытання:"
+
+#, fuzzy
+#~ msgid "Table %1"
+#~ msgstr "Табліца %1"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "Hello dear translator :), 1 is the table name, 2 and 3 are row and column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1, Вочка %2х%3"
+
+#, fuzzy
+#~ msgid "Font Family"
+#~ msgstr "Шрыфт"
+
+#, fuzzy
+#~ msgid "Speak Text"
+#~ msgstr "Зачытаць"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Вы сапраўды жадаеце выдаліць апошнюю ўрэзку ў наборы '%1'? Змесціва ў "
+#~ "гэтым наборы таксама будзе выдаленае!\n"
+#~ "Працягнуць?"
+
+#, fuzzy
+#~ msgid "Error during saving. Could not open '%1' temporary file for writing"
+#~ msgstr "Памылка захавання. Немагчыма адкрыць часовы файл '%1' для запісу"

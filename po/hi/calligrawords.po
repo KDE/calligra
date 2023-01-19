@@ -1,0 +1,4335 @@
+# translation of kword.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-03-26 18:26+0530\n"
+"Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "फ़ाइल (&F)"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "संपादन (&E)"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "देखें (&V)"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "प्रदर्शक मोड (&D)"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Semantics"
+msgstr "आंकड़े"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+#| msgid "Page edge:"
+msgid "S&tyles"
+msgstr "पृष्ठ किनारा:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "विन्यास (&S)"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "वर्तनी जाँच"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "संपादन"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "वर्तनी जांच परिणाम"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "चर इसमें बदलें"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "औज़ार (&T)"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+#| msgid "Page edge:"
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "पृष्ठ किनारा:"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+#| msgid "Insert Page"
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "पृष्ठ प्रविष्ट करें"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Page Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "पृष्ठ गुण"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+#| msgid "Create Frame"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "फ्रेम बनाएँ "
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+#| msgid "Make inline"
+msgid "Baseline"
+msgstr "इनलाइन बनाएं"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Character"
+msgstr "बनाएँ"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "पंक्ति"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Page (entire) area"
+msgstr "मुख्य पाठ क्षेत्र प्रदान करें"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Page text area"
+msgstr "मुख्य पाठ क्षेत्र प्रदान करें"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "पैराग्राफ"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Paragraph text area"
+msgstr "मुख्य पाठ क्षेत्र प्रदान करें"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+#| msgid "Frame Borders"
+msgid "Left page border"
+msgstr "फ्रेम किनारा"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+#| msgid "Frame Borders"
+msgid "Right page border"
+msgstr "फ्रेम किनारा"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+#| msgid "Frame Borders"
+msgid "Right paragraph border"
+msgstr "फ्रेम किनारा"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+#| msgid "Frame Borders"
+msgid "Left paragraph border"
+msgstr "फ्रेम किनारा"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Vertical Positioning"
+msgstr "स्थिति"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Top align with:"
+msgstr "दायाँ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Center align with:"
+msgstr "दायाँ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Bottom align with:"
+msgstr "दायाँ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "सेः"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Horizontal Positioning"
+msgstr "स्थिति"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Left align with:"
+msgstr "दायाँ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Right align with:"
+msgstr "दायाँ"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Configure"
+msgstr "पृष्ठ प्रविष्ट करें"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Grid 1"
+msgid "Grid"
+msgstr "ग्रिड १"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+#| msgid "Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "दस्तावेज़"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, fuzzy, kde-format
+#| msgid "Store Settings"
+msgid "Document Settings"
+msgstr "विन्यास भंडारित करें"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, fuzzy, kde-format
+#| msgid "Create a new page"
+msgid "Create New Bookmark"
+msgstr "नया पृष्ठ बनाएँ"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "स्तम्भ:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, kde-format
+msgid "Column spacing:"
+msgstr "स्तम्भ हेतु रिक्त जगह:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, kde-format
+msgid "frameset"
+msgstr "फ्रेमसेट"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr "दस्तावेज़ में कोई फ्रेमसेट नहीं है"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "फ्रेमसेट का नाम:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "नया फ्रेमसेट बनाएँ:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "कनेक्ट होने के लिए मौजूदा फ्रेमसेट चुनें:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "फ्रेमसेट नाम"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "स्थिति"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "पाठ रन अराउण्ड"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "पाठ फ्रेम्स जोड़ें"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Page Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "पृष्ठ गुण"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+#| msgid "Pages"
+msgid "&Page"
+msgstr "पृष्ठ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "पैराग्राफ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&To Character"
+msgstr "बनाएँ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&As Character"
+msgstr "बनाएँ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Horizontal Alignment"
+msgstr "स्थिति"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+#| msgid "Left"
+msgid "&Left"
+msgstr "बायाँ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "&Right"
+msgstr "दायाँ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Vertical Alignment"
+msgstr "स्थिति"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "निचला:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Text Run Around"
+msgid "Text Wrap-around"
+msgstr "पाठ रन अराउण्ड"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run through this shape"
+msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Skip below this shape"
+msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on left side of this shape"
+msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on right side of this shape"
+msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on longest side of this shape"
+msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+#| msgid "Text will run through this frame"
+msgid "Run on both sides of this shape"
+msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+#| msgid "Distance Between Frame and Text:"
+msgid "Distance Between Shape and Text:"
+msgstr "पाठ तथा फ्रेम के बीच की दूरी:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "स्तम्भ"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+#| msgid "Page edge:"
+msgid "Style"
+msgstr "पृष्ठ किनारा:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+#| msgid "Closing"
+msgid "Clone"
+msgstr "रोक रहे"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Delete"
+msgstr "पृष्ठ मिटाएँ"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+#| msgid "Page edge:"
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "पृष्ठ किनारा:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+#| msgid "Page edge:"
+msgid "Clone Page Style"
+msgstr "पृष्ठ किनारा:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "बायाँ:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "दायाँ:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+#| msgid "&Username:"
+msgid "&Rename"
+msgstr "उपयोक्ता नाम: (&U)"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "&Delete"
+msgstr "पृष्ठ मिटाएँ"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, fuzzy, kde-format
+#| msgid "Create a new page"
+msgid "Rename Bookmark"
+msgstr "नया पृष्ठ बनाएँ"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, fuzzy, kde-format
+#| msgid "Create a new page"
+msgid "Select Bookmark"
+msgstr "नया पृष्ठ बनाएँ"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "ज्यामिति"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "पृष्ठ आकार तथा हाशिए (&&)"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "बनाएँ"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Salutation"
+msgid "Navigation"
+msgstr "अभिवादन"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Pages"
+msgid "Page #"
+msgstr "पृष्ठ"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgid "Section"
+msgstr "फंक्शन्स"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "आंकड़े"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "शब्द:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "वाक्य:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "सिलेबल्स:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (spaces):"
+msgstr "रिक्त जगह सहित अक्षर:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (no spaces):"
+msgstr "रिक्त जगह सहित अक्षर:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "पंक्तियाँ:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease"
+msgid "Flesch reading ease"
+msgstr "फ्लैश पठन ईजी"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "Formatting Characters"
+msgid "East asian characters:"
+msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words"
+msgid "Words"
+msgstr "शब्द"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "वाक्य"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "सिलेबल्स"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "पंक्तियाँ"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces"
+msgid "Characters With Spaces"
+msgstr "रिक्त जगह रहित अक्षर"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "रिक्त जगह रहित अक्षर"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "Formatting Characters"
+msgid "East Asian characters"
+msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease"
+msgid "Flesch Reading Ease"
+msgstr "फ्लैश पठन ईजी"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "मानक"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "शीर्षक १"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "शीर्षक २"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "शीर्षक ३"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "गिनती सूची"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "वर्णानुक्रम सूची"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "बुलेट सूची"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "सामग्री शीर्षक"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "सामग्री शीर्षक १"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "सामग्री शीर्षक २"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "सामग्री शीर्षक ३"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "दस्तावेज़ शीर्षक"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "शीर्षक"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "फ़ूटर"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "सादा"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "किनारा १"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "किनारा २"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "किनारा ३"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "पंक्ति"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "स्तम्भ"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "हल्का धूसर"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "गाढ़ा धूसर"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "काला"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "हल्का नीला"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "गहरा नीला"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "लाल"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "पीला"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "रंगीन"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "बुलिश"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "साधारण १"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "साधारण २"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "साधारण ३"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "शीर्षक १"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "शीर्षक २"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "शीर्षक ३"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "शीर्षक ४"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "स्तम्भ १"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "स्तम्भ २"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "ग्रिड १"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "ग्रिड २"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "ग्रिड ३"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "धूसर शीर्षक"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "नीला शीर्षक"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "नीला पारंपरिक"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "धूसर पारंपरिक"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "नीला शीर्ष तथा तल"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "धूसर शीर्ष तथा तल"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "केऑफ़िस वर्ड प्रोसेसर"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "केऑफ़िस वर्ड प्रोसेसर"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2007, The KWord Team"
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(c) 1998-2007, केवर्ड टोली"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "Formatting Characters"
+msgid "Formatting stuff"
+msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Filter"
+msgstr "फ़ाइल (&F)"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "आंकड़े"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Footer"
+msgid "Foot and endnotes"
+msgstr "फ़ूटर"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Style Manager"
+msgstr ""
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr "थॉमस जेंडर"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, fuzzy, kde-format
+#| msgid "Sorting Order"
+msgid "ODF Support"
+msgstr "छंटाई अनुक्रम"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr "डेविड फॉउरे"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr "लारेंट मोंटेल"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "स्वेन लुपकेन"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "फ्रैंक डेकरवेल"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "क्रिस्टर विकसेल एरिक्सन"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr "डैग एंडरसन"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "नैश हूगवाटर"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "के-फॉर्मूला"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "अलरिच कुएटलर"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "शाहिद हक़"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr "वेर्नर ट्रोबिन"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "निकोलस गाउते"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "अरिया हिदायत"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr "क्लेरेंस डैंग"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "रॉबर्ट जेकोलिन"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr "एनो बारतेल्स"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr "एवाल्द स्नेल"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "टोमास्ज ग्रोबेल्नी"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr "माइकल जान्सन"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page break icon"
+msgstr "पृष्ठ ब्रेक"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "रविशंकर श्रीवास्तव, जी. करूणाकर"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "raviratlami@aol.in,"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "नक़ल"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgid "Standard"
+msgstr "मानक"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "दस्तावेज़ शीर्षक"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 1"
+msgid "Head 1"
+msgstr "शीर्षक १"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 2"
+msgid "Head 2"
+msgstr "शीर्षक २"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 3"
+msgid "Head 3"
+msgstr "शीर्षक ३"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Bullet List"
+msgid "Bullet List"
+msgstr "बुलेट सूची"
+
+#: part/KWGui.cpp:69
+#, fuzzy, kde-format
+#| msgid "&Tools"
+msgid "Tools"
+msgstr "औज़ार (&T)"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "अवैध ओएसिस ओपनडाक्यूमेंट फ़ाइल. कोई ऑफ़िस:बॉडी टैग नहीं मिला."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr "अवैध ओएसिस ओपनडाक्यूमेंट फ़ाइल. office:body के भीतर कोई टैग नहीं मिला."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "मानक"
+
+#: part/KWPart.cpp:141
+#, fuzzy, kde-format
+#| msgid "Can not find needed text component, KWord will quit now"
+msgid "Can not find needed text component, Words will quit now"
+msgstr "आवश्यक पाठ अवयव नहीं मिला, केवर्ड अब बाहर होता है"
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr "संस्थापन त्रुटि"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "परिवर्धित"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "सहेज लिया"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+#| msgid "Page: %1/%2"
+msgid "Page %1 of %2"
+msgstr "पृष्ठ: %1/%2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+#| msgid "Page: %1/%2"
+msgid "Page %1-%2 of %3"
+msgstr "पृष्ठ: %1/%2"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines"
+msgid "Line %1"
+msgstr "पंक्तियाँ"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+#| msgid "Page number:"
+msgid "Page Number"
+msgstr "पृष्ठ क्रमांक:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+#| msgid "Page number:"
+msgid "Line Number"
+msgstr "पृष्ठ क्रमांक:"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgid "Page edge:"
+msgid "Change the page style"
+msgstr "पृष्ठ किनारा:"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+#| msgid "Page edge:"
+msgid "Page Style"
+msgstr "पृष्ठ किनारा:"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page Size"
+msgstr "पृष्ठ ब्रेक"
+
+#: part/KWStatusBar.cpp:184
+#, fuzzy, kde-format
+#| msgid "State: saved/modified"
+msgid "Saved/Modified"
+msgstr "स्थिति: सहेजा/परिवर्धित"
+
+#: part/KWStatusBar.cpp:197
+#, fuzzy, kde-format
+#| msgid "Mouseposition: X:Y"
+msgid "Mouse Cursor X:Y"
+msgstr "माउसस्थिति: X:Y"
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr "ज़ूम नियंत्रक"
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Page Properties"
+msgid "Shape Properties..."
+msgstr "पृष्ठ गुण"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, kde-format
+msgid "Create Template From Document..."
+msgstr ""
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "छपाई के अयोग्य अक्षरों के प्रदर्शन को टॉगल करता है"
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Text Shape Borders"
+msgstr "तालिका किनारा कॉन्फ़िगर करें"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr "किनारा प्रदर्शन दिखाना चालू या बन्द करता है"
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Table Borders"
+msgstr "तालिका किनारा कॉन्फ़िगर करें"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+#| msgid "Toggle the display of non-printing characters"
+msgid "Toggle the display of table borders"
+msgstr "छपाई के अयोग्य अक्षरों के प्रदर्शन को टॉगल करता है"
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr ""
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+#| msgid "Toggle the display of non-printing characters"
+msgid "Toggle the display of section bounds"
+msgstr "छपाई के अयोग्य अक्षरों के प्रदर्शन को टॉगल करता है"
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "रूलर्स दिखाएँ"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "मापनी दिखाता या छुपाता है"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "ग्रिड में स्नेप करें"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+#| msgid "Status Bar"
+msgid "Show Status Bar"
+msgstr "स्थिति पट्टी"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+#| msgid "Show the status bar"
+msgid "Shows or hides the status bar"
+msgstr "स्थिति पट्टी दिखाएँ"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr ""
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr ""
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Configure..."
+msgstr "पृष्ठ प्रविष्ट करें"
+
+#: part/KWView.cpp:401
+#, kde-format
+msgid "Page Layout..."
+msgstr "पृष्ठ ले-आउट..."
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "संपूर्ण पृष्ठ का गुण बदलें"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgid "Create Header"
+msgstr "परत बनाएँ"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgid "Create Footer"
+msgstr "परत बनाएँ"
+
+#: part/KWView.cpp:420
+#, kde-format
+msgid "Show Comments"
+msgstr ""
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+#| msgid "No framesets in document"
+msgid "Shows comments in the document"
+msgstr "दस्तावेज़ में कोई फ्रेमसेट नहीं है"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Show the status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "स्थिति पट्टी दिखाएँ"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page Setup"
+msgstr "पृष्ठ ब्रेक"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "सम पृष्ठ पाद-सूचना"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Page Layout:"
+msgid "Page layout"
+msgstr "पृष्ठ खाका:"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Index Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "निर्देशिका पृष्ठ"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, kde-format
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "Search options"
+msgid "Options"
+msgstr "विकल्प"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, kde-format
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, kde-format
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, kde-format
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, kde-format
+msgid "Replace"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "विषम पृष्ठ शीर्ष-सूचना"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "सम पृष्ठ शीर्ष-सूचना"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "विषम पृष्ठ पाद-सूचना"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "सम पृष्ठ पाद-सूचना"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "मुख्य पाठ"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+#| msgid "Other Pages"
+msgid "Other text"
+msgstr "अन्य पृष्ठ"
+
+#, fuzzy
+#~| msgid "Pages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "पृष्ठ"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "पैराग्राफ"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "बनाएँ"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "बनाएँ"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "बायाँ"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "दायाँ"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "निचला:"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "पाठ रन अराउण्ड"
+
+#, fuzzy
+#~| msgid "Text will run through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#, fuzzy
+#~| msgid "Text will run through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#, fuzzy
+#~| msgid "Text will run through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#, fuzzy
+#~| msgid "Text will run through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#, fuzzy
+#~| msgid "Text will run through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#, fuzzy
+#~| msgid "Text will run through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "इस फ्रेम पर पाठ चलेगा"
+
+#, fuzzy
+#~| msgid "Distance Between Frame and Text:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "पाठ तथा फ्रेम के बीच की दूरी:"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "सेः"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "फ्रेमसेट का नाम:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "नया फ्रेमसेट बनाएँ:"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "कनेक्ट होने के लिए मौजूदा फ्रेमसेट चुनें:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "फ्रेमसेट नाम"
+
+#, fuzzy
+#~| msgid "&Username:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "उपयोक्ता नाम: (&U)"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "पृष्ठ मिटाएँ"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "नाम:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "पृष्ठ आकार तथा हाशिए (&&)"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "बायाँ:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "दायाँ:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "स्तम्भ:"
+
+#, fuzzy
+#~| msgid "Column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "स्तम्भ हेतु रिक्त जगह:"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "शब्द"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "वाक्य"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "सिलेबल्स"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "पंक्तियाँ"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "रिक्त जगह रहित अक्षर"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "रिक्त जगह रहित अक्षर"
+
+#, fuzzy
+#~| msgid "Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#, fuzzy
+#~| msgid "Flesch reading ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "फ्लैश पठन ईजी"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "फ़ाइल (&F)"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "संपादन (&E)"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "देखें (&V)"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "प्रदर्शक मोड (&D)"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "आंकड़े"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "विन्यास (&S)"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "वर्तनी जाँच"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "संपादन"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "वर्तनी जांच परिणाम"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "चर इसमें बदलें"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "औज़ार (&T)"
+
+#, fuzzy
+#~| msgid "Make inline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "इनलाइन बनाएं"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "बनाएँ"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "पंक्ति"
+
+#, fuzzy
+#~| msgid "Provide main text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "मुख्य पाठ क्षेत्र प्रदान करें"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "पैराग्राफ"
+
+#, fuzzy
+#~| msgid "Provide main text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "मुख्य पाठ क्षेत्र प्रदान करें"
+
+#, fuzzy
+#~| msgid "Frame Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "फ्रेम किनारा"
+
+#, fuzzy
+#~| msgid "Frame Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "फ्रेम किनारा"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "ग्रिड १"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "दस्तावेज़"
+
+#, fuzzy
+#~| msgid "Store Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "विन्यास भंडारित करें"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "नया पृष्ठ बनाएँ"
+
+#, fuzzy
+#~| msgid "frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "फ्रेमसेट"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No framesets in document"
+#~ msgstr "दस्तावेज़ में कोई फ्रेमसेट नहीं है"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "पाठ रन अराउण्ड"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "पाठ फ्रेम्स जोड़ें"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "स्तम्भ"
+
+#, fuzzy
+#~| msgid "Closing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "रोक रहे"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "पृष्ठ मिटाएँ"
+
+#, fuzzy
+#~| msgid "Page edge:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "पृष्ठ किनारा:"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "ज्यामिति"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "अभिवादन"
+
+#, fuzzy
+#~| msgid "Pages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "पृष्ठ"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "फंक्शन्स"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "आंकड़े"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "शब्द:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "वाक्य:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "सिलेबल्स:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "रिक्त जगह सहित अक्षर:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "रिक्त जगह सहित अक्षर:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "पंक्तियाँ:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "फ्लैश पठन ईजी"
+
+#, fuzzy
+#~| msgid "Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "मानक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "शीर्षक १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "शीर्षक २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "शीर्षक ३"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "गिनती सूची"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "वर्णानुक्रम सूची"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "बुलेट सूची"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "सामग्री शीर्षक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "सामग्री शीर्षक १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "सामग्री शीर्षक २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "सामग्री शीर्षक ३"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "दस्तावेज़ शीर्षक"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "शीर्षक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "फ़ूटर"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "सादा"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "किनारा १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "किनारा २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "किनारा ३"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "पंक्ति"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "स्तम्भ"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "हल्का धूसर"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "गाढ़ा धूसर"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "काला"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "हल्का नीला"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "गहरा नीला"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "लाल"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "पीला"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "रंगीन"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "बुलिश"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "साधारण १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "साधारण २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "साधारण ३"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "शीर्षक १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "शीर्षक २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "शीर्षक ३"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "शीर्षक ४"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "स्तम्भ १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "स्तम्भ २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "ग्रिड १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "ग्रिड २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "ग्रिड ३"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "धूसर शीर्षक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "नीला शीर्षक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "नीला पारंपरिक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "धूसर पारंपरिक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "नीला शीर्ष तथा तल"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "धूसर शीर्ष तथा तल"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "केऑफ़िस वर्ड प्रोसेसर"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "केऑफ़िस वर्ड प्रोसेसर"
+
+#, fuzzy
+#~| msgid "(c) 1998-2007, The KWord Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(c) 1998-2007, केवर्ड टोली"
+
+#, fuzzy
+#~| msgid "Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "फ़ाइल (&F)"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "आंकड़े"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "फ़ूटर"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "थॉमस जेंडर"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "डेविड फॉउरे"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "लारेंट मोंटेल"
+
+#, fuzzy
+#~| msgid "Sven Lüppken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Lüppken"
+#~ msgstr "स्वेन लुपकेन"
+
+#, fuzzy
+#~| msgid "Frank Dekervel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frank Dekervel"
+#~ msgstr "फ्रैंक डेकरवेल"
+
+#, fuzzy
+#~| msgid "Krister Wicksell Eriksson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Krister Wicksell Eriksson"
+#~ msgstr "क्रिस्टर विकसेल एरिक्सन"
+
+#, fuzzy
+#~| msgid "Dag Andersen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dag Andersen"
+#~ msgstr "डैग एंडरसन"
+
+#, fuzzy
+#~| msgid "Nash Hoogwater"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nash Hoogwater"
+#~ msgstr "नैश हूगवाटर"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "के-फॉर्मूला"
+
+#, fuzzy
+#~| msgid "Ulrich Kuettler"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ulrich Kuettler"
+#~ msgstr "अलरिच कुएटलर"
+
+#, fuzzy
+#~| msgid "Shaheed Haque"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shaheed Haque"
+#~ msgstr "शाहिद हक़"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "वेर्नर ट्रोबिन"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "निकोलस गाउते"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "अरिया हिदायत"
+
+#, fuzzy
+#~| msgid "Clarence Dang"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "क्लेरेंस डैंग"
+
+#, fuzzy
+#~| msgid "Robert Jacolin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Jacolin"
+#~ msgstr "रॉबर्ट जेकोलिन"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "एनो बारतेल्स"
+
+#, fuzzy
+#~| msgid "Ewald Snel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ewald Snel"
+#~ msgstr "एवाल्द स्नेल"
+
+#, fuzzy
+#~| msgid "Tomasz Grobelny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomasz Grobelny"
+#~ msgstr "टोमास्ज ग्रोबेल्नी"
+
+#, fuzzy
+#~| msgid "Michael Johnson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Michael Johnson"
+#~ msgstr "माइकल जान्सन"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "पृष्ठ ब्रेक"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "रविशंकर श्रीवास्तव, जी. करूणाकर"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "raviratlami@aol.in,"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "नक़ल"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "मानक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "दस्तावेज़ शीर्षक"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "शीर्षक १"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "शीर्षक २"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "शीर्षक ३"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "बुलेट सूची"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "औज़ार (&T)"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "अवैध ओएसिस ओपनडाक्यूमेंट फ़ाइल. कोई ऑफ़िस:बॉडी टैग नहीं मिला."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "अवैध ओएसिस ओपनडाक्यूमेंट फ़ाइल. office:body के भीतर कोई टैग नहीं मिला."
+
+#, fuzzy
+#~| msgid "Can not find needed text component, KWord will quit now"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Words will quit now"
+#~ msgstr "आवश्यक पाठ अवयव नहीं मिला, केवर्ड अब बाहर होता है"
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "संस्थापन त्रुटि"
+
+#, fuzzy
+#~| msgid "Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "परिवर्धित"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "सहेज लिया"
+
+#, fuzzy
+#~| msgid "Page: %1/%2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "पृष्ठ: %1/%2"
+
+#, fuzzy
+#~| msgid "Page: %1/%2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "पृष्ठ: %1/%2"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "पंक्तियाँ"
+
+#, fuzzy
+#~| msgid "Page number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "पृष्ठ क्रमांक:"
+
+#, fuzzy
+#~| msgid "Page number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "पृष्ठ क्रमांक:"
+
+#, fuzzy
+#~| msgid "Page edge:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "पृष्ठ किनारा:"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "पृष्ठ ब्रेक"
+
+#, fuzzy
+#~| msgid "State: saved/modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "स्थिति: सहेजा/परिवर्धित"
+
+#, fuzzy
+#~| msgid "Mouseposition: X:Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse Cursor X:Y"
+#~ msgstr "माउसस्थिति: X:Y"
+
+#, fuzzy
+#~| msgid "Zoom Controller"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Controller"
+#~ msgstr "ज़ूम नियंत्रक"
+
+#, fuzzy
+#~| msgid "Page Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "पृष्ठ गुण"
+
+#, fuzzy
+#~| msgid "Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "फ़ॉर्मेटिंग अक्षर"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "छपाई के अयोग्य अक्षरों के प्रदर्शन को टॉगल करता है"
+
+#, fuzzy
+#~| msgid "Turns the border display on and off"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "किनारा प्रदर्शन दिखाना चालू या बन्द करता है"
+
+#, fuzzy
+#~| msgid "Configure Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "तालिका किनारा कॉन्फ़िगर करें"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "छपाई के अयोग्य अक्षरों के प्रदर्शन को टॉगल करता है"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "छपाई के अयोग्य अक्षरों के प्रदर्शन को टॉगल करता है"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "रूलर्स दिखाएँ"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "मापनी दिखाता या छुपाता है"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "ग्रिड में स्नेप करें"
+
+#, fuzzy
+#~| msgid "Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "स्थिति पट्टी"
+
+#, fuzzy
+#~| msgid "Show the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "स्थिति पट्टी दिखाएँ"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "बनाएँ"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "पृष्ठ प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "पृष्ठ ले-आउट..."
+
+#, fuzzy
+#~| msgid "Change properties of entire page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "संपूर्ण पृष्ठ का गुण बदलें"
+
+#, fuzzy
+#~| msgid "Create Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "परत बनाएँ"
+
+#, fuzzy
+#~| msgid "Create Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "परत बनाएँ"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "दस्तावेज़ में कोई फ्रेमसेट नहीं है"
+
+#, fuzzy
+#~| msgid "Show the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "स्थिति पट्टी दिखाएँ"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "पृष्ठ ब्रेक"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "सम पृष्ठ पाद-सूचना"
+
+#, fuzzy
+#~| msgid "Page Layout:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "पृष्ठ खाका:"
+
+#, fuzzy
+#~| msgid "Index Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "निर्देशिका पृष्ठ"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "विकल्प"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "विषम पृष्ठ शीर्ष-सूचना"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "सम पृष्ठ शीर्ष-सूचना"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "विषम पृष्ठ पाद-सूचना"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "सम पृष्ठ पाद-सूचना"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "मुख्य पाठ"
+
+#, fuzzy
+#~| msgid "Other Pages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "अन्य पृष्ठ"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "केऑफ़िस वर्ड प्रोसेसर"
+
+#, fuzzy
+#~| msgid "(c) 1998-2007, The KWord Team"
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(c) 1998-2007, केवर्ड टोली"
+
+#, fuzzy
+#~| msgid "Can not find needed text component, KWord will quit now"
+#~ msgid "Can not find needed text component, Author will quit now"
+#~ msgstr "आवश्यक पाठ अवयव नहीं मिला, केवर्ड अब बाहर होता है"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "पृष्ठ प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Move selected page down"
+#~ msgid "Cover selection"
+#~ msgstr "चयनित पृष्ठ को नीचे ले जाएँ"
+
+#, fuzzy
+#~| msgid "Move selected page up"
+#~ msgid "No cover selected yet"
+#~ msgstr "चयनित पृष्ठ को ऊपर ले जाएँ"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgid "Edit section"
+#~ msgstr "फंक्शन्स"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgid "Main"
+#~ msgstr "मुख्य पाठ"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "प्रविष्टि नाम भरें:"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Short description:"
+#~ msgstr "सदस्य वर्णन"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Actor description:"
+#~ msgstr "सदस्य वर्णन"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "1st Edit"
+#~ msgstr "संपादन"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "2nd Edit"
+#~ msgstr "संपादन"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "3rd Edit"
+#~ msgstr "संपादन"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "स्वचालित सुधार"
+
+#, fuzzy
+#~| msgid "Page Edge:"
+#~ msgid "Badge:"
+#~ msgstr "पृष्ठ किनारा:"
+
+#, fuzzy
+#~| msgid "Page Description"
+#~ msgid "Section description:"
+#~ msgstr "पृष्ठ वर्णन"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "फंक्शन्स"
+
+#~ msgid "File to open"
+#~ msgstr "फ़ाइल जिसे खोलना है"
+
+#, fuzzy
+#~| msgid "Create Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "फ्रेम बनाएँ "
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "फ्रेम मिटाएं"
+
+#~ msgid "General"
+#~ msgstr "सामान्य"
+
+#~ msgid "Protect size and position"
+#~ msgstr "आकार तथा स्थिति संरक्षित करें"
+
+#~ msgid "Position"
+#~ msgstr "स्थिति"
+
+#~ msgid "X:"
+#~ msgstr "एक्स:"
+
+#~ msgid "Y:"
+#~ msgstr "वाय:"
+
+#~ msgid "Width:"
+#~ msgstr "चौडाईः"
+
+#~ msgid "Height:"
+#~ msgstr "ऊँचाईः"
+
+#~ msgid "Margins"
+#~ msgstr "हाशिए"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "परिवर्तनों को सिंक्रोनाइज़ करें"
+
+#~ msgid "Bottom:"
+#~ msgstr "निचला:"
+
+#~ msgid "Top:"
+#~ msgstr "शीर्ष:"
+
+#~ msgid "Right:"
+#~ msgstr "दायाँ:"
+
+#~ msgid "Left:"
+#~ msgstr "बायाँ:"
+
+#~ msgid "Create a new page"
+#~ msgstr "नया पृष्ठ बनाएँ"
+
+#~ msgid "Resize last frame"
+#~ msgstr "अंतिम फ्रेम को नया आकार दें"
+
+#, fuzzy
+#~| msgid "Don't show the extra text"
+#~ msgid "Do not show the extra text"
+#~ msgstr "अतिरिक्त पाठ नहीं दिखाएँ"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "वर्तमान फ्लो में फ्रेम को फिर से कनेक्ट करें"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "फ़ॉलोअप फ्रेम नहीं बनाएँ"
+
+#, fuzzy
+#~| msgid "Place a copy of this frame"
+#~ msgid "Copy this Frame"
+#~ msgstr "इस फ्रेम की नक़ल रखें"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "सिर्फ सम/विषम पृष्ठों में"
+
+#~ msgid "Protect content"
+#~ msgstr "सामग्री संरक्षित करें"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "फ्रेम पिछले फ्रेम की नक़ल है"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "फ्रेमसेट में सभी फ्रेमों में परिवर्तनों को लागू किया जाएगा"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "मूल ऑस्पेक्ट रेशो बनाए रखें"
+
+#, fuzzy
+#~| msgid "Select All Frames"
+#~ msgid "Select All Shapes"
+#~ msgstr "सभी फ्रेम चुनें"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "कड़ी युक्त नक़ल बनाएं"
+
+#, fuzzy
+#~| msgid "Create Linked Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "कड़ी युक्त नक़ल बनाएं"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "पृष्ठ प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Remove Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "पृष्ठ मिटाएँ"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "रिक्त जगह सहित अक्षर:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "फ्लेश पढ़ने में आसानी:"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgid "Preferences"
+#~ msgstr "वाक्य"
+
+#, fuzzy
+#~| msgid "Automatically refresh data"
+#~ msgid "Automatically update"
+#~ msgstr "डाटा स्वचालित ताज़ा करें"
+
+#~ msgid "F&ormat"
+#~ msgstr "फॉर्मेट (&o)"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "अवैध दस्तावेज़. कोई माइम-क़िस्म निर्दिष्ट नहीं."
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "अवैध दस्तावेज़. कागज आकार: %1x%2"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "डाटाबेस ऑब्जैक्ट बनाने में असफल"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate note-text"
+#~ msgstr "डाटाबेस ऑब्जैक्ट बनाने में असफल"
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "फ्रेम उठाएं"
+
+#, fuzzy
+#~| msgid "Create Frame"
+#~ msgid "Create Frame-clip"
+#~ msgstr "फ्रेम बनाएँ "
+
+#, fuzzy
+#~| msgid "Remove record"
+#~ msgid "Remove Frame-clip"
+#~ msgstr "रेकार्ड मिटाएँ"
+
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "बाकी के पाठ को अगले पृष्ठ पर बलपूर्वक ले जाएं"
+
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr "इस बिन्दु के बाद के सभी पाठ अगले पृष्ठ पर ले जाए जाएंगे."
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "फॉर्मेट"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "दस्तावेज़ शीर्षसूचना सक्षम करें"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "दस्तावेज़ पादसूचना सक्षम करें"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "शब्द"
+
+#~ msgid "Number of pages:"
+#~ msgstr "पृष्ठों की संख्या:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "फ्रेम्स की संख्या:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "छवियों की संख्या:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "तालिकाओं की संख्या:"
+
+#~ msgid "Text"
+#~ msgstr "पाठ"
+
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "पाद-टिप्पणियों तथा अंत-टिप्पणियों से पाठ शामिल करें"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "रिक्त जगह रहित अक्षर:"
+
+#~ msgid "Characters incl. spaces"
+#~ msgstr "रिक्त जगह युक्त अक्षर"
+
+#~ msgid "approximately %1"
+#~ msgstr "लगभग %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "इस दस्तावेज़ के लिए वाक्य, शब्द तथा अक्षर गिनती"
+
+#~ msgid "Shows and hides header display"
+#~ msgstr "शीर्षसूचना प्रदर्शन दिखाता या छुपाता है"
+
+#~ msgid "Shows and hides footer display"
+#~ msgstr "पादसूचना का प्रदर्शन दिखाता या छुपाता है"
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "फ्रेम उठाएं"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr "वर्तमान चयनित फ्रेम को उठाएं ताकि यह अन्य सभी फ्रेम के ऊपर प्रकट हो"
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "फ्रेम नीचे करें"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr "वर्तमान चयनित फ्रेम को उठाएं ताकि यह अन्य सभी फ्रेम के ऊपर प्रकट हो"
+
+#~ msgid "Bring to Front"
+#~ msgstr "सामने लाएँ"
+
+#~ msgid "Send to Back"
+#~ msgstr "पीछे ले जाएँ"
+
+#, fuzzy
+#~| msgid "First page:"
+#~ msgid "After last page"
+#~ msgstr "प्रथम पृष्ठ:"
+
+#, fuzzy
+#~| msgid "Page edge:"
+#~ msgid "Page style:"
+#~ msgstr "पृष्ठ किनारा:"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "प्रविष्ट (&I)"
+
+#~ msgid "Variable"
+#~ msgstr "परिवर्तनीय"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "As Character"
+#~ msgstr "बनाएँ"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "To Character"
+#~ msgstr "बनाएँ"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "पैराग्राफ"
+
+#, fuzzy
+#~| msgid "Remove Page"
+#~ msgid "To Page"
+#~ msgstr "पृष्ठ मिटाएँ"
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgid "Page..."
+#~ msgstr "पृष्ठ ले-आउट..."
+
+#~ msgid "Delete Page"
+#~ msgstr "पृष्ठ मिटाएँ"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Insert Image Options"
+#~ msgstr "पृष्ठ प्रविष्ट करें"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "दस्तावेज़ शीर्षसूचना अक्षम करें"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "दस्तावेज़ पादसूचना अक्षम करें"
+
+#, fuzzy
+#~| msgid "Frame Borders"
+#~ msgid "Page Borders"
+#~ msgstr "फ्रेम किनारा"
+
+#, fuzzy
+#~| msgid "Status Bar"
+#~ msgid "Hide Status Bar"
+#~ msgstr "स्थिति पट्टी"
+
+#~ msgid "Automatic"
+#~ msgstr "स्वचलित"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgid "Endnote"
+#~ msgstr "एनो बारतेल्स"
+
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "फ्रेम/फ्रेमसेट गुण"
+
+#~ msgid "Alter frameset properties"
+#~ msgstr "फ्रेमसेट गुण बदलें"
+
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "वर्तमान फ्रेम को इनलाइन फ्रेम में बदलें"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Set Floating"
+#~ msgstr "विन्यास (&S)"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "फ़िल्टर आउटपुट (&F)"
+
+#~ msgid "Page: current/total"
+#~ msgstr "पृष्ठ: वर्तमान/कुल"
+
+#~ msgid "Fra&mes"
+#~ msgstr "फ्रेम्स (&m)"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgid "Tables"
+#~ msgstr "तालिका"
+
+#~ msgid "Insert"
+#~ msgstr "प्रविष्ट"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "अन्य फ्रेमों में पाठ का खाका"
+
+#~ msgid "Text will run around this frame"
+#~ msgstr "इस फ्रेम के चारोंओर पाठ चलेगा"
+
+#~ msgid "Text will not run around this frame"
+#~ msgstr "इस फ्रेम के चारों ओर पाठ नहीं चलेगा"
+
+#~ msgid "Run Around Side"
+#~ msgstr "स्लाइड के चारों ओर चलें"
+
+#~ msgid "Longest side"
+#~ msgstr "सबसे लंबा स्लाइड"
+
+#~ msgid "Create custom outline"
+#~ msgstr "मनपसंद आउटलाइन बनाएँ"
+
+#, fuzzy
+#~| msgid "Create custom outline"
+#~ msgid "Create Custom Outline"
+#~ msgstr "मनपसंद आउटलाइन बनाएँ"
+
+#~ msgid "Create outlines"
+#~ msgstr "आउटलाइन बनाएं"
+
+#~ msgid "Borders"
+#~ msgstr "किनारा"
+
+#~ msgid "MailMerge"
+#~ msgstr "मेलमर्ज"
+
+#~ msgid "Font"
+#~ msgstr "फ़ॉन्ट"
+
+#~ msgid "Format"
+#~ msgstr "फॉर्मेट"
+
+#~ msgid "Formula"
+#~ msgstr "सूत्र"
+
+#~ msgid "KWord"
+#~ msgstr "के-वर्ड"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page Background"
+#~ msgstr "पृष्ठ ब्रेक"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "फ्रेम के लिए यह पाठ बहुत बड़ा है"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "नया पृष्ठ बनाने पर"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr "फ्रेमसेट गुण बदलें.<p>वर्तमान में आप फ्रेम पृष्ठभूमि बदल सकते हैं."
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#~ msgid "Show Grid"
+#~ msgstr "ग्रिड दिखाएँ"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "विषम पृष्ठ शीर्ष-सूचना"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgid "Even Pages Header %1"
+#~ msgstr "सम पृष्ठ शीर्ष-सूचना"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "विषम पृष्ठ पाद-सूचना"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "सम पृष्ठ पाद-सूचना"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "मुख्य पाठ फ्रेमसेट"
+
+#~ msgid "Matrix"
+#~ msgstr "माट्रिक्स"
+
+#~ msgid "Configure Frame Border"
+#~ msgstr "फ्रेम किनारा कॉन्फ़िगर करें"
+
+#~ msgid "Ta&ble"
+#~ msgstr "तालिका (&b)"
+
+#~ msgid "Cell"
+#~ msgstr "कक्ष"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "फ्रेम किनारा कॉन्फ़िगर करें"
+
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "रेजिनॉल्ड स्टाडबाउर"
+
+#~ msgid "Add a new page"
+#~ msgstr "नया पृष्ठ जोड़ें"
+
+#~ msgid "Delete selected pages"
+#~ msgstr "चयनित पृष्ठों को मिटाएँ"
+
+#~ msgid "New Layer"
+#~ msgstr "नया परत"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "नए परत का नाम भरें:"
+
+#~ msgid "New layer"
+#~ msgstr "नई परत"
+
+#~ msgid "Delete Layer"
+#~ msgstr "परत मिटाएँ"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "सभी परतों को मिटा नहीं सका. कम से कम एक परत वांछित है."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "परतों को मिटाने में त्रुटि"
+
+#~ msgid "Information"
+#~ msgstr "जानकारी"
+
+#~ msgid "&Available tables:"
+#~ msgstr "उपलब्ध तालिकाएँ: (&A)"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "चयनित तालिका के फ़ील्ड: (&F)"
+
+#~ msgid "Query Result"
+#~ msgstr "क्वैरी परिणाम"
+
+#~ msgid "&Query:"
+#~ msgstr "क्वेरी: (&Q)"
+
+#~ msgid "&Execute"
+#~ msgstr "चलाएँ (&E)"
+
+#~ msgid "&Setup"
+#~ msgstr "सेटअप (&S)"
+
+#~ msgid "&Table:"
+#~ msgstr "तालिका: (&T)"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "फ़िल्टर नियमों को देखें या संपादन करें (&R)"
+
+#~ msgid "&Used database records:"
+#~ msgstr "प्रयोग किए गए डाटाबेस रेकॉर्ड्स: (&U)"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "विन्यास रखे रहें... (&K)"
+
+#~ msgid "&Hostname:"
+#~ msgstr "होस्टनामः (&H)"
+
+#~ msgid "&Driver:"
+#~ msgstr "ड्राइवर: (&D)"
+
+#~ msgid "Database &name:"
+#~ msgstr "डाटाबेस नाम: (&n)"
+
+#~ msgid "&Username:"
+#~ msgstr "उपयोक्ता नाम: (&U)"
+
+#~ msgid "&Port:"
+#~ msgstr "पोर्टः (&P)"
+
+#~ msgid "default"
+#~ msgstr "डिफ़ॉल्ट"
+
+#~ msgid "Address Selection"
+#~ msgstr "पता चयन"
+
+#~ msgid "&Add >>"
+#~ msgstr "जोड़ें >> (&A)"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< मिटाएँ (&R)"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "वितरण सूची के रुप में सहेजें... (&D)"
+
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "चयनित एकल प्रविष्टियों को एक नए वितरण सूची में सहेजें"
+
+#~ msgid "&Filter on:"
+#~ msgstr "इन पर फ़िल्टरः (&F)"
+
+#~ msgid "Name"
+#~ msgstr "नाम"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "वितरण सूची"
+
+#~ msgid "Single Entries"
+#~ msgstr "एकल प्रविष्टियाँ"
+
+#~ msgid "Address B&ook"
+#~ msgstr "पता पुस्तिका (&o)"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "के-एड्रेस-बुक चालू करें"
+
+#~ msgid "&Address Book"
+#~ msgstr "पता पुस्तिका (&A)"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "चुने हुए पते (&S)"
+
+#~ msgid "Personal"
+#~ msgstr "निजी"
+
+#~ msgid "Hi!"
+#~ msgstr "नमस्ते !"
+
+#~ msgid "Hello!"
+#~ msgstr "नमस्कार!"
+
+#~ msgid "Bye!"
+#~ msgstr "बाय!"
+
+#~ msgid "Good bye"
+#~ msgstr "फिर मिलेंगे"
+
+#~ msgid "Professional"
+#~ msgstr "व्यावसायिक"
+
+#~ msgid "Good Morning"
+#~ msgstr "सु-प्रभात"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "शुभ दोपहर"
+
+#~ msgid "Good Evening"
+#~ msgstr "शुभ रात्रि"
+
+#~ msgid "Email"
+#~ msgstr "ईमेल"
+
+#~ msgid "To:"
+#~ msgstr "को:"
+
+#~ msgid "Subject:"
+#~ msgstr "विषय:"
+
+#~ msgid "CC:"
+#~ msgstr " - प्रतिलिपि:"
+
+#~ msgid "BCC:"
+#~ msgstr " - बेनामी प्रतिलिपि: "
+
+#~ msgid "Fwd:"
+#~ msgstr "आगे भेजें:"
+
+#~ msgid "Best regards,"
+#~ msgstr "सादर,"
+
+#~ msgid "Best wishes"
+#~ msgstr "शुभकामनाएं"
+
+#~ msgid "Cordially,"
+#~ msgstr "सस्नेह,"
+
+#~ msgid "Love,"
+#~ msgstr "प्यार,"
+
+#~ msgid "Regards,"
+#~ msgstr "आदर-सहित,"
+
+#~ msgid "Thank you,"
+#~ msgstr "धन्यवाद,"
+
+#~ msgid "Thanks,"
+#~ msgstr "सधन्यवाद,"
+
+#~ msgid "Subject"
+#~ msgstr "विषय"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "प्रिय महोदय / महोदया:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "भाइयों और बहनों:"
+
+#~ msgid "Attention"
+#~ msgstr "ध्यान दें"
+
+#~ msgid "Attention:"
+#~ msgstr "ध्यान दें:"
+
+#~ msgid "ATTN:"
+#~ msgstr "ध्यान दें:"
+
+#~ msgid "Instructions"
+#~ msgstr "निर्देश"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "प्रमाणित"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "गोपनीय"
+
+#~ msgid "PERSONAL"
+#~ msgstr "व्यक्तिगत"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "फैसिमिल"
+
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr ">>>डाटा स्रोत में अवैध स्थिति<<<"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ">>>वर्तमान डाटाबेस क्वैरी में फ़ील्ड %1 अज्ञात है<<<"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "मेल-मर्ज संपादक"
+
+#~ msgid "Error"
+#~ msgstr "त्रुटि"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "डाटाबेस कनेक्शन के लिए कृपया पासवर्ड भरें"
+
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "मेल-मर्ज  डाटाबेस कनेक्शन सेटअप करें"
+
+#~ msgid "<not saved>"
+#~ msgstr "<सहेजा नहीं गया>"
+
+#~ msgid "ascending"
+#~ msgstr "बढ़ते क्रम में"
+
+#~ msgid "descending"
+#~ msgstr "घटते क्रम में"
+
+#~ msgid "contains"
+#~ msgstr "रखता है"
+
+#~ msgid "Field"
+#~ msgstr "फील्ड"
+
+#~ msgid "Include"
+#~ msgstr "शामिल"
+
+#~ msgid "Operator"
+#~ msgstr "आपरेटर"
+
+#~ msgid "Condition"
+#~ msgstr "स्थिति"
+
+#~ msgid "Value"
+#~ msgstr "मान"
+
+#~ msgid "Yes"
+#~ msgstr "हाँ"
+
+#~ msgid "NOT"
+#~ msgstr "नहीं"
+
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "केएड्रेसबुक प्रविष्टि '%1' उपलब्ध नहीं है."
+
+#~ msgid "%1 South"
+#~ msgstr "%1 दक्षिण"
+
+#~ msgid "%1 North"
+#~ msgstr "%1 उत्तर"
+
+#~ msgid "%1 West"
+#~ msgstr "%1 पश्चिम"
+
+#~ msgid "%1 East"
+#~ msgstr "%1 पूर्व"
+
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "अज्ञात मेल मर्ज उपलब्ध: %1"
+
+#~ msgid "no category"
+#~ msgstr "कोई वर्ग नहीं"
+
+#~ msgid "New Distribution List"
+#~ msgstr "नई वितरण सूची"
+
+#~ msgid "Please enter name:"
+#~ msgstr "कृपया नाम भरें:"
+
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "<qt>दिए गए नाम <b>%1</b> की वितरण सूची पहले से ही मौजूद है, कृपया एक भिन्न नाम "
+#~ "चुनें.</qt>"
+
+#~ msgid "URL:"
+#~ msgstr "यूआरएल:"
+
+#~ msgid "No Value"
+#~ msgstr "कोई मूल्य नहीं"
+
+#~ msgid "Add record"
+#~ msgstr "रेकॉर्ड जोड़ें"
+
+#~ msgid "Add entry"
+#~ msgstr "प्रविष्टि जोड़ें"
+
+#~ msgid "Remove entry"
+#~ msgstr "प्रविष्टि हटाएँ"
+
+#~ msgid "Add Entry"
+#~ msgstr "एन्ट्री जोड़ें"
+
+#~ msgid "The host-address the OpenOffice.org Server runs on."
+#~ msgstr "होस्ट पता जहाँ ओपनऑफ़िस.ऑर्ग सर्वर चलते हैं."
+
+#~ msgid "Host:"
+#~ msgstr "होस्टः"
+
+#~ msgid "localhost"
+#~ msgstr "लोकलहोस्ट"
+
+#~ msgid "The port the OpenOffice.org Server runs on."
+#~ msgstr "पोर्ट जहाँ ओपनऑफ़िस.ऑर्ग सर्वर चलते हैं."
+
+#~ msgid "Port:"
+#~ msgstr "पोर्टः"
+
+#~ msgid "Timeout:"
+#~ msgstr "टाइम-आउटः"
+
+#~ msgid "Startup and shutdown OpenOffice.org instance if not running already."
+#~ msgstr "ओपनऑफ़िस.ऑर्ग का प्रारंभ तथा शटडाउन यदि वे पहले से नहीं चल रहे हैं."
+
+#~ msgid "Hide the temporary OpenOffice.org window."
+#~ msgstr "अस्थाई ओपनऑफ़िस.ऑर्ग खिड़की को छुपाएं."
+
+#~ msgid "Automatic close documents not needed any longer."
+#~ msgstr "उन दस्तावेज़ों को स्वचालित बंद करें जिनकी आवश्यकता अब नहीं है."
+
+#~ msgid "Table of Content"
+#~ msgstr "विषय सूची तालिका"
+
+#~ msgid "Classes"
+#~ msgstr "वर्ग"
+
+#~ msgid "Class Description"
+#~ msgstr "क्लास वर्णन"
+
+#~ msgid "Slots"
+#~ msgstr "स्लॉट"
+
+#~ msgid "Signals"
+#~ msgstr "सिग्नल"
+
+#~ msgid "Properties"
+#~ msgstr "गुण"
+
+#~ msgid "Variables"
+#~ msgstr "चर"
+
+#~ msgid "ISO OASIS OpenDocument Text"
+#~ msgstr "आईएसओ ओएसिस ओपनडाकुमेंट पाठ"
+
+#~ msgid "HTML Document"
+#~ msgstr "एचटीएमएल दस्तावेज़ "
+
+#~ msgid "Encoded Text"
+#~ msgstr "एनकोडेड पाठ"
+
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "वर्तमान चयनित फ्रेम मिटाएं"
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "वर्तमान चयनित फ्रेम मिटाएं."
+
+#~ msgid "First Page Header"
+#~ msgstr "प्रथम पृष्ठ शीर्ष-सूचना"
+
+#~ msgid "First Page Footer"
+#~ msgstr "प्रथम पृष्ठ पाद-सूचना"
+
+#~ msgid "Unit:"
+#~ msgstr "इकाईः"
+
+#~ msgid "Size:"
+#~ msgstr "आकारः"
+
+#~ msgid "Orientation:"
+#~ msgstr "दिशा निर्धारणः"
+
+#~ msgid "Portrait"
+#~ msgstr "खड़ा "
+
+#~ msgid "Landscape"
+#~ msgstr "आड़ा"
+
+#~ msgid "Facing pages:"
+#~ msgstr "आमने सामने के पृष्ठ:"
+
+#~ msgid "Single sided"
+#~ msgstr "एक-तरफा"
+
+#~ msgid "Facing pages"
+#~ msgstr "आमने सामने के पृष्ठ"
+
+#~ msgid "Binding edge:"
+#~ msgstr "बाइंडिंग किनारा:"
+
+#~ msgid "Whole document:"
+#~ msgstr "सम्पूर्ण दस्तावेज़:"
+
+#~ msgid "Text direction:"
+#~ msgstr "पाठ दिशा:"
+
+#~ msgid "Left to right"
+#~ msgstr "बाएं से दाएं"
+
+#~ msgid "Right to left"
+#~ msgstr "दाएं से बाएं"
+
+#~ msgid "Left Edge:"
+#~ msgstr "बायाँ किनारा:"
+
+#~ msgid "Right Edge:"
+#~ msgstr "दायाँ किनारा:"
+
+#~ msgid "Binding Edge:"
+#~ msgstr "बाइंडिंग किनारा:"
+
+#~ msgid "Page spread"
+#~ msgstr "पृष्ठ स्प्रेड"
+
+#~ msgid "Facing Pages:"
+#~ msgstr "आमने सामने के पृष्ठ:"

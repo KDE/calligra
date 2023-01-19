@@ -1,0 +1,5591 @@
+# translation of kword.po to Walon
+# Lorint HENDSCHEL <LorintHendschel@skynet.be>, 2001.
+# Pablo Saratxaga <pablo@mandrakesoft.com>, 2003.
+# Pablo Saratxaga <pablo@walon.org>, 2003, 2004.
+# Jean Cayron <jean.cayron@gmail.com>, 2008, 2009, 2010.
+# Jean Cayron <jean.cayron@tele2allin.be>, 2008, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-09-21 20:33+0200\n"
+"Last-Translator: Jean Cayron <jean.cayron@base.be>\n"
+"Language-Team: Walloon <linux-wa@walon.org>\n"
+"Language: wa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Fitchî"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "&Candjî"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "&Vey"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "Môde di &håynaedje"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Semantic Object"
+msgid "Semantics"
+msgstr "Cayet semantike"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "S&tyles"
+msgstr "Stîle:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "A&pontiaedjes"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Waitî l' ortografeye"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "Candjî"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Rizultat del coridjrece d' ortografeye"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Candjî l' valixhance del variåve e"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "&Usteyes"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+#| msgid "Set Page Style"
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Defini stîle del pådje"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+#| msgid "Insert Page Style"
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Sititchî stîle del pådje"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Page Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Prôpietés del pådje"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+#| msgid "Create Frame"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Ahiver cåde"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+#| msgid "Make inline"
+msgid "Baseline"
+msgstr "Fé divni dins l' messaedje"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, kde-format
+msgid "Character"
+msgstr "Caractere"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Roye"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Page (entire) area"
+msgstr "Dene li mwaisse redjon pol tecse"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+#| msgid "Provide main text area"
+msgid "Page text area"
+msgstr "Dene li mwaisse redjon pol tecse"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "Hagnon"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings"
+msgid "Paragraph text area"
+msgstr "Apontiaedjes des hagnons"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+msgid "Left page border"
+msgstr "Candjî l' boirdeure di hintche do cåde"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+msgid "Right page border"
+msgstr "Candjî l' boirdeure di droete do cåde"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+msgid "Right paragraph border"
+msgstr "Candjî l' boirdeure di droete do cåde"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+msgid "Left paragraph border"
+msgstr "Candjî l' boirdeure di hintche do cåde"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Positioning"
+msgstr "Royes d' astampé"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+#| msgid "Left"
+msgid "Top align with:"
+msgstr "Hintche"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+#| msgid "Align &Center"
+msgid "Center align with:"
+msgstr "Aroymint &Mitan"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+#| msgid "Left"
+msgid "Bottom align with:"
+msgstr "Hintche"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "Di:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Positioning"
+msgstr "Royes di coûtchî"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+#| msgid "Left"
+msgid "Left align with:"
+msgstr "Hintche"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Right align with:"
+msgstr "Droete"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure"
+msgstr "&Apontyî..."
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Totes sôres"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Grid 1"
+msgid "Grid"
+msgstr "Grile 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+#| msgid "Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Documint"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Apontiaedjes do documint"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Ahiver ene nouve rimåke"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Les rimåkes vos permetèt d' potchî d' ene pårt a ene ôte dins vosse "
+"documint.\n"
+"Dinez s' i vs plait l' no di vosse rimåke."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "No:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "Colones:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, kde-format
+msgid "Column spacing:"
+msgstr "Espåce inte les colones:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, kde-format
+msgid "frameset"
+msgstr "eshonna di cådes"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr "Nol eshonna di cådes e documint"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "No di l' eshonna di cådes:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "Ahiver on novea eshonna di cådes:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Tchoezi l' eshonna di cådes k' on s' doet raloyî:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "No di l' eshonna di cådes"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "Eplaeçmint"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "Tecse åtoû"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Raloyî les cådes di tecse"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Change Page Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Candjî prôpietés del pådje"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, fuzzy, kde-format
+#| msgid "Pages"
+msgid "&Page"
+msgstr "Pådjes"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "Hagnon"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&To Character"
+msgstr "Ahiver"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&As Character"
+msgstr "Ahiver"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Alignment"
+msgstr "Royes di coûtchî"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+#| msgctxt "Run Around"
+#| msgid "&Left"
+msgid "&Left"
+msgstr "&hintche"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+#| msgid "Align &Center"
+msgid "&Center"
+msgstr "Aroymint &Mitan"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+#| msgctxt "Run Around"
+#| msgid "&Right"
+msgid "&Right"
+msgstr "&droet"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Alignment"
+msgstr "Royes d' astampé"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "Valeye:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Text Run Around"
+msgid "Text Wrap-around"
+msgstr "Tecse åtoû"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, kde-format
+msgid "Run through this shape"
+msgstr "Irè åd triviè di cisse fôme cial"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, kde-format
+msgid "Skip below this shape"
+msgstr "Pasrè pa dzo d' cisse fôme cial"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, kde-format
+msgid "Run on left side of this shape"
+msgstr "Irè sol costé hintche di cisse fôme cial"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, kde-format
+msgid "Run on right side of this shape"
+msgstr "Irè sol costé droet di cisse fôme cial"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, kde-format
+msgid "Run on longest side of this shape"
+msgstr "Irè sol pus grand costé di cisse fôme cial"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, kde-format
+msgid "Run on both sides of this shape"
+msgstr "Irè so les deus costés di cisse fôme cial"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr "Irè so les costés ki sont pus lådjes ki :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+#| msgid "Distance Between Frame and Text:"
+msgid "Distance Between Shape and Text:"
+msgstr "Plaece inte cåde eyet tecse:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Colones"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "Style"
+msgstr "Stîle:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+#| msgid "Closing"
+msgid "Clone"
+msgstr "Cloyant"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, kde-format
+msgid "Delete"
+msgstr "Disfacer"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+#| msgid "Set Page Style"
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Defini stîle del pådje"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+#| msgid "Set Page Style"
+msgid "Clone Page Style"
+msgstr "Defini stîle del pådje"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr "Li scrijhaedje ôte pårt :"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Hintche:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Droete:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "&Rilomer"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&Disfacer"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Rilomer li rmåke"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "Dinez s' i vs plait on novea no pol rimåke"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "I gn a ddja ene rimåke avou l' no \"%1\"."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Tchoezi rimåke"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Djeyometreye"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Grandeu del pådje && Mådjes"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Ahiver"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Salutation"
+msgid "Navigation"
+msgstr "Salutåcion"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Pages"
+msgid "Page #"
+msgstr "Pådjes"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "Functions"
+msgid "Section"
+msgstr "Fonccions"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr "RDF"
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Sitatistikes"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Mots:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Fråzes:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Sillabes:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (spaces):"
+msgstr "Caracteres, tot contant les vudes:"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Characters including spaces:"
+msgid "Characters (no spaces):"
+msgstr "Caracteres, tot contant les vudes:"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Royes:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease"
+msgid "Flesch reading ease"
+msgstr "Åjhisté d' lijaedhe Flesch:"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "East Asian characters"
+msgid "East asian characters:"
+msgstr "Caracteres d' Azeye levantrece"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words"
+msgid "Words"
+msgstr "Mots"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "Fråzes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "Sillabes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "Royes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Characters without spaces"
+msgid "Characters With Spaces"
+msgstr "Caracteres, sins conter les vudes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "Caracteres, sins conter les vudes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, kde-format
+msgid "East Asian characters"
+msgstr "Caracteres d' Azeye levantrece"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, fuzzy, kde-format
+#| msgid "Flesch reading ease"
+msgid "Flesch Reading Ease"
+msgstr "Åjhisté d' lijaedhe Flesch:"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Sitandård"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Tite 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Tite 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Tite 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Djivêye a limeros"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Djivêye åbécé"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Djivêye a ponts"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Tite di l' ådvins"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Tite 1 di l' ådvins"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Tite 2 di l' ådvins"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Tite 3 di l' ådvins"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Tite do documint"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Tiestire"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Pînote"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Normå"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Boirdeure 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Boirdeure 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Boirdeure 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Roye"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Colone"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Gris clair"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Gris foncé"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Noer"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Bleu clair"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Bleu foncé"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Rodje"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Djaene"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Plin d' coleurs"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Bleuwåsse"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Simpe 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Simpe 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Simpe 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Tiestire 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Tiestire 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Tiestire 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Tiestire 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Colones 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Colones 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Grile 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Grile 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Grile 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Gris tite"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Bleu tite"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Bleu wårdiveus"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Gris wårdiveus"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Bleu al copete et al valeye"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Gris copete et al valeye"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Aspougneu d' tecse di KOffice"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "Aspougneu d' tecse di KOffice"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2009, The KWord Team"
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "© 1998-2009, L' ekipe KWord"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "Formatting Characters"
+msgid "Formatting stuff"
+msgstr "Abwesnaedje des caracteres"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Filter"
+msgstr "&Fitchî"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "Sitatistikes"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+#| msgid "Insert Footnote/Endnote"
+msgid "Foot and endnotes"
+msgstr "Sititchî pînote"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "Manaedjeu des &stîles"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr "Girish Ramakrishnan"
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr "Sopoirt ODF"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "Sven Lüppken"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "Frank Dekervel"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "Krister Wicksell Eriksson"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr "Dag Andersen"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "Nash Hoogwater"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "Ulrich Kuettler"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr "Clarence Dang"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "Robert Jacolin"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr "Enno Bartels"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr "Ewald Snel"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "Tomasz Grobelny"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr "Michael Johnson"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+#| msgid "Page Break"
+msgid "Page break icon"
+msgstr "Djocaedje di pådjes"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Djan Cayron, Lorint Hendschel"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "jean.cayron@gmail.com, Lorint.Hendschel@skynet.be"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "Copyî"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgid "Standard"
+msgstr "Sitandård"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Tite do documint"
+
+#: part/KWDocument.cpp:553
+#, kde-format
+msgid "Head 1"
+msgstr "Tite 1"
+
+#: part/KWDocument.cpp:559
+#, kde-format
+msgid "Head 2"
+msgstr "Tite 2"
+
+#: part/KWDocument.cpp:565
+#, kde-format
+msgid "Head 3"
+msgstr "Tite 3"
+
+#: part/KWDocument.cpp:571
+#, kde-format
+msgid "Bullet List"
+msgstr "Djivêye a ponts"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr "&Usteyes"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr ""
+"Fitchî OpenDocument OASIS nén valåbe. Dji n' a trové pont d' etikete office:"
+"body."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+"Fitchî OpenDocument OASIS nén valåbe. Dji n' a trové pont d' etikete office:"
+"body."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Çouci n' est nén on documint d' sicrijhaedje mins on %1. Sayîz del drovi "
+"avou l' bon programe. "
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Sitandård"
+
+#: part/KWPart.cpp:141
+#, fuzzy, kde-format
+#| msgid "Can not find needed text component, KWord will quit now"
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+"Dji n' sai trover les componints d' sicrijhaedje ki dj' a dandjî, KWord va "
+"moussî foû do côp."
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr "Aroke d' astalaedje"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "Candjî"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "Schapé"
+
+#: part/KWStatusBar.cpp:37
+#, fuzzy, kde-format
+msgid "Page %1 of %2"
+msgstr "Pådje %1/%2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "Pådje %1/%2"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines"
+msgid "Line %1"
+msgstr "Royes"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Page Number"
+msgstr "Limero"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Line Number"
+msgstr "Limero"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgid "Set Page Style"
+msgid "Change the page style"
+msgstr "Defini stîle del pådje"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+#| msgid "Page style:"
+msgid "Page Style"
+msgstr "Stîle del pådje :"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+#| msgid "Change Text Size"
+msgid "Page Size"
+msgstr "Candjî l' grandeu do tecse"
+
+#: part/KWStatusBar.cpp:184
+#, fuzzy, kde-format
+#| msgid "State: saved/modified"
+msgid "Saved/Modified"
+msgstr "Estat: schapé/candjî"
+
+#: part/KWStatusBar.cpp:197
+#, fuzzy, kde-format
+#| msgid "Mouseposition: X:Y"
+msgid "Mouse Cursor X:Y"
+msgstr "Eplaeçmint del sori: X:Y"
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr "Controleu do zoumaedje"
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Page Properties"
+msgid "Shape Properties..."
+msgstr "Prôpietés del pådje"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+#| msgid "&Create Template From Document..."
+msgid "Create Template From Document..."
+msgstr "&Fé on modele a pårti di ci documint ci..."
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr ""
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "Abwesnaedje des caracteres"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "(Dis)mete li håynaedje des caracteres nén imprimåves"
+
+#: part/KWView.cpp:299
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"(Dis)mete li håynaedje des caracteres nén imprimåve.<br/><br/> Cwand çouchal "
+"est metou, KWord vos mostere les tabulåcions, les espåces, les féns d' roye "
+"et d' ôtes caracteres nén imprimåve."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Text Shape Borders"
+msgstr "Apontyî les boirdeures do tåvlea"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr "Mete/dismete li håynaedje del boirdeure"
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Mete/dismete li håynaedje del boirdeure<br/><br/>Les boirdeures ni sont måy "
+"imprimêye. Cisse tchuze est ahessåve po vey comint çk' el documint aparexhrè "
+"sol pådje rexhowe."
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Table Borders"
+msgstr "Apontyî les boirdeures do tåvlea"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+#| msgid "Toggle the display of non-printing characters"
+msgid "Toggle the display of table borders"
+msgstr "(Dis)mete li håynaedje des caracteres nén imprimåves"
+
+#: part/KWView.cpp:326
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"(Dis)mete li håynaedje des caracteres nén imprimåve.<br/><br/> Cwand çouchal "
+"est metou, KWord vos mostere les tabulåcions, les espåces, les féns d' roye "
+"et d' ôtes caracteres nén imprimåve."
+
+#: part/KWView.cpp:328
+#, kde-format
+msgid "Show Section Bounds"
+msgstr ""
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+#| msgid "Toggle the display of non-printing characters"
+msgid "Toggle the display of section bounds"
+msgstr "(Dis)mete li håynaedje des caracteres nén imprimåves"
+
+#: part/KWView.cpp:335
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#| "printing characters."
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"(Dis)mete li håynaedje des caracteres nén imprimåve.<br/><br/> Cwand çouchal "
+"est metou, KWord vos mostere les tabulåcions, les espåces, les féns d' roye "
+"et d' ôtes caracteres nén imprimåve."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Mostrer rîles"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "Mostere ou catche les rîles"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"Les rîles sont les blancs espåces di muzuraedje al copete ey al hintche do "
+"documint. Les rîles mostrèt l' eplaeçmint eyet l' lårdjeur des pådjes et des "
+"cådes eyet ploeur esse eployî po mete des tabulåcions.<p>Diclitchî çoula po "
+"dismete li håynaedje des rîles.</p>"
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Claper al grile"
+
+#: part/KWView.cpp:359
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Mostrer li bår ås messaedjes"
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Mostere ou catche li bår ås messaedjes"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Foyes di stîle semantikes..."
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Candjî eyet radjouter des foyes di stîle semantikes"
+
+#: part/KWView.cpp:377
+#, fuzzy, kde-format
+#| msgid ""
+#| "Stylesheets are used to format contact, event, and location information "
+#| "which is stored in Rdf"
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+"Les foyes di stîle sont-st eployeyes pos abwesner les soçons, les evenmints "
+"et les informåcions d' eplaeçmint k' est wårdé e Rdf"
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure..."
+msgstr "&Apontyî..."
+
+#: part/KWView.cpp:401
+#, kde-format
+msgid "Page Layout..."
+msgstr "Adjinçmint del pådje..."
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "Candjî les prôpietés di tote li pådje"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Candjî les prôpietés di tote li pådje.<p>Vos savoz pol moumint candjî l' "
+"grandeu do papî, l' ashidaedje do papî, les grandeus des tiestires et pîs d' "
+"pådjes eyet les apontiaedjes des colones.</p>"
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgid "Create Header"
+msgstr "Ahiver cåde di tecse"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgid "Create Footer"
+msgstr "Ahiver cåde di tecse"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+#| msgid "Remove Comment"
+msgid "Show Comments"
+msgstr "Oister rawete"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+#| msgid "No framesets in document"
+msgid "Shows comments in the document"
+msgstr "Nol eshonna di cådes e documint"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Shows or hides the status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "Mostere ou catche li bår ås messaedjes"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Change Text Size"
+msgid "Page Setup"
+msgstr "Candjî l' grandeu do tecse"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgid "Even Pages Footer"
+msgid "Header & Footer"
+msgstr "Pî d' pådje des pådjes paires"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Page Layout:"
+msgid "Page layout"
+msgstr "&Arindjmint del pådje..."
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Next Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Pådje shuvante"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Previous Page"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Pådje di dvant"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "Search options"
+msgid "Options"
+msgstr "Tchuzes"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Replaecî mot"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Replaecî mot"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Replaecî mot"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgid "Replace"
+msgstr "Replaecî mot"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Tiestire des pådjes impaires"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Tiestire des pådjes paires"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Pî d' pådje des pådjes impaires"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Pî d' pådje des pådjes paires"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "Mwaisse tecse"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+#| msgid "Other Pages"
+msgid "Other text"
+msgstr "Ôtès pådjes"
+
+#, fuzzy
+#~| msgid "Pages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "Pådjes"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Hagnon"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Ahiver"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Ahiver"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Royes di coûtchî"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "&Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "&hintche"
+
+#, fuzzy
+#~| msgid "Align &Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "Aroymint &Mitan"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "&Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "&droet"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Royes d' astampé"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Valeye:"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Tecse åtoû"
+
+#, fuzzy
+#~| msgid "Run through this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Irè åd triviè di cisse fôme cial"
+
+#, fuzzy
+#~| msgid "Skip below this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Pasrè pa dzo d' cisse fôme cial"
+
+#, fuzzy
+#~| msgid "Run on left side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Irè sol costé hintche di cisse fôme cial"
+
+#, fuzzy
+#~| msgid "Run on right side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Irè sol costé droet di cisse fôme cial"
+
+#, fuzzy
+#~| msgid "Run on longest side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Irè sol pus grand costé di cisse fôme cial"
+
+#, fuzzy
+#~| msgid "Run on both sides of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Irè so les deus costés di cisse fôme cial"
+
+#, fuzzy
+#~| msgid "Run on sides that are wider than:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on sides that are wider than:"
+#~ msgstr "Irè so les costés ki sont pus lådjes ki :"
+
+#, fuzzy
+#~| msgid "Distance Between Frame and Text:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Plaece inte cåde eyet tecse:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Royes d' astampé"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Di:"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Royes di coûtchî"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "No di l' eshonna di cådes:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Ahiver on novea eshonna di cådes:"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Tchoezi l' eshonna di cådes k' on s' doet raloyî:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "No di l' eshonna di cådes"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "&Rilomer"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Disfacer"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Les rimåkes vos permetèt d' potchî d' ene pårt a ene ôte dins vosse "
+#~ "documint.\n"
+#~ "Dinez s' i vs plait l' no di vosse rimåke."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "No:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Grandeu del pådje && Mådjes"
+
+#, fuzzy
+#~| msgid "Text elsewhere will:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text elsewhere will:"
+#~ msgstr "Li scrijhaedje ôte pårt :"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Hintche:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Droete:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Colones:"
+
+#, fuzzy
+#~| msgid "Column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Espåce inte les colones:"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Mots"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Fråzes"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Sillabes"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Royes"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Caracteres, sins conter les vudes"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Caracteres, sins conter les vudes"
+
+#, fuzzy
+#~| msgid "East Asian characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Caracteres d' Azeye levantrece"
+
+#, fuzzy
+#~| msgid "Flesch reading ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Åjhisté d' lijaedhe Flesch:"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Fitchî"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Candjî"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Vey"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Môde di &håynaedje"
+
+#, fuzzy
+#~| msgid "Semantic Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Cayet semantike"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Stîle:"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "A&pontiaedjes"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Waitî l' ortografeye"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Candjî"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Rizultat del coridjrece d' ortografeye"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Candjî l' valixhance del variåve e"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "&Usteyes"
+
+#, fuzzy
+#~| msgid "Make inline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Fé divni dins l' messaedje"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Caractere"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Roye"
+
+#, fuzzy
+#~| msgid "Provide main text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Dene li mwaisse redjon pol tecse"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Hagnon"
+
+#, fuzzy
+#~| msgid "Paragraph Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Apontiaedjes des hagnons"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Candjî l' boirdeure di hintche do cåde"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Candjî l' boirdeure di droete do cåde"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "&Apontyî..."
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Totes sôres"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Grile 1"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Documint"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Apontiaedjes do documint"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Ahiver ene nouve rimåke"
+
+#, fuzzy
+#~| msgid "frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "eshonna di cådes"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No framesets in document"
+#~ msgstr "Nol eshonna di cådes e documint"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Eplaeçmint"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Tecse åtoû"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Raloyî les cådes di tecse"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Colones"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stîle:"
+
+#, fuzzy
+#~| msgid "Closing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Cloyant"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Disfacer"
+
+#, fuzzy
+#~| msgid "Set Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Defini stîle del pådje"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Rilomer li rmåke"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "Dinez s' i vs plait on novea no pol rimåke"
+
+#, fuzzy
+#~| msgid "A bookmark with the name \"%1\" already exists."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "I gn a ddja ene rimåke avou l' no \"%1\"."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Tchoezi rimåke"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Djeyometreye"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Salutåcion"
+
+#, fuzzy
+#~| msgid "Pages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Pådjes"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Fonccions"
+
+#, fuzzy
+#~| msgid "RDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RDF"
+#~ msgstr "RDF"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Sitatistikes"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Mots:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Fråzes:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Sillabes:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Caracteres, tot contant les vudes:"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Caracteres, tot contant les vudes:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Royes:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Åjhisté d' lijaedhe Flesch:"
+
+#, fuzzy
+#~| msgid "East Asian characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Caracteres d' Azeye levantrece"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Sitandård"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Tite 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Tite 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Tite 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Djivêye a limeros"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Djivêye åbécé"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Djivêye a ponts"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Tite di l' ådvins"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Tite 1 di l' ådvins"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Tite 2 di l' ådvins"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Tite 3 di l' ådvins"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Tite do documint"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Mostrer l' tiestire"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Pînote"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Normå"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Boirdeure 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Boirdeure 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Boirdeure 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Roye"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Colone"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Gris clair"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Gris foncé"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Noer"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Bleu clair"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Bleu foncé"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Rodje"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Djaene"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Plin d' coleurs"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Bleuwåsse"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Simpe 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Simpe 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Simpe 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Tiestire 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Tiestire 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Tiestire 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Tiestire 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Colones 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Colones 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Grile 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Grile 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Grile 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Gris tite"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Bleu tite"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Bleu wårdiveus"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Gris wårdiveus"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Bleu al copete et al valeye"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Gris copete et al valeye"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Aspougneu d' tecse di KOffice"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Aspougneu d' tecse di KOffice"
+
+#, fuzzy
+#~| msgid "(c) 1998-2009, The KWord Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "© 1998-2009, L' ekipe KWord"
+
+#, fuzzy
+#~| msgid "Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Abwesnaedje des caracteres"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "&Fitchî"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Sitatistikes"
+
+#, fuzzy
+#~| msgid "Insert Footnote/Endnote"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Sititchî pînote"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Manaedjeu des &stîles"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Girish Ramakrishnan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Girish Ramakrishnan"
+#~ msgstr "Girish Ramakrishnan"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ODF Support"
+#~ msgstr "Sopoirt ODF"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Sven Lüppken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Lüppken"
+#~ msgstr "Sven Lüppken"
+
+#, fuzzy
+#~| msgid "Frank Dekervel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frank Dekervel"
+#~ msgstr "Frank Dekervel"
+
+#, fuzzy
+#~| msgid "Krister Wicksell Eriksson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Krister Wicksell Eriksson"
+#~ msgstr "Krister Wicksell Eriksson"
+
+#, fuzzy
+#~| msgid "Dag Andersen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dag Andersen"
+#~ msgstr "Dag Andersen"
+
+#, fuzzy
+#~| msgid "Nash Hoogwater"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nash Hoogwater"
+#~ msgstr "Nash Hoogwater"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~| msgid "Ulrich Kuettler"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ulrich Kuettler"
+#~ msgstr "Ulrich Kuettler"
+
+#, fuzzy
+#~| msgid "Shaheed Haque"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shaheed Haque"
+#~ msgstr "Shaheed Haque"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Clarence Dang"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "Clarence Dang"
+
+#, fuzzy
+#~| msgid "Robert Jacolin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Jacolin"
+#~ msgstr "Robert Jacolin"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Enno Bartels"
+
+#, fuzzy
+#~| msgid "Ewald Snel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ewald Snel"
+#~ msgstr "Ewald Snel"
+
+#, fuzzy
+#~| msgid "Tomasz Grobelny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomasz Grobelny"
+#~ msgstr "Tomasz Grobelny"
+
+#, fuzzy
+#~| msgid "Michael Johnson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Michael Johnson"
+#~ msgstr "Michael Johnson"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Djocaedje di pådjes"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Djan Cayron, Lorint Hendschel"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jean.cayron@gmail.com, Lorint.Hendschel@skynet.be"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Copyî"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Sitandård"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Tite do documint"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Tite 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Tite 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Tite 3"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Djivêye a ponts"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "&Usteyes"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Fitchî OpenDocument OASIS nén valåbe. Dji n' a trové pont d' etikete "
+#~ "office:body."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Fitchî OpenDocument OASIS nén valåbe. Dji n' a trové pont d' etikete "
+#~ "office:body."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Çouci n' est nén on documint d' sicrijhaedje mins on %1. Sayîz del drovi "
+#~ "avou l' bon programe. "
+
+#, fuzzy
+#~| msgid "Can not find needed text component, KWord will quit now"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Words will quit now"
+#~ msgstr ""
+#~ "Dji n' sai trover les componints d' sicrijhaedje ki dj' a dandjî, KWord "
+#~ "va moussî foû do côp."
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Aroke d' astalaedje"
+
+#, fuzzy
+#~| msgid "Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "Candjî"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Schapé"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Pådje %1/%2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Pådje %1/%2"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Royes"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Limero"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Limero"
+
+#, fuzzy
+#~| msgid "Page style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Stîle del pådje :"
+
+#, fuzzy
+#~| msgid "Change Text Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Candjî l' grandeu do tecse"
+
+#, fuzzy
+#~| msgid "State: saved/modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "Estat: schapé/candjî"
+
+#, fuzzy
+#~| msgid "Mouseposition: X:Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse Cursor X:Y"
+#~ msgstr "Eplaeçmint del sori: X:Y"
+
+#, fuzzy
+#~| msgid "Zoom Controller"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Controller"
+#~ msgstr "Controleu do zoumaedje"
+
+#, fuzzy
+#~| msgid "Page Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Prôpietés del pådje"
+
+#, fuzzy
+#~| msgid "&Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "&Fé on modele a pårti di ci documint ci..."
+
+#, fuzzy
+#~| msgid "Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Abwesnaedje des caracteres"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "(Dis)mete li håynaedje des caracteres nén imprimåves"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "(Dis)mete li håynaedje des caracteres nén imprimåve.<br/><br/> Cwand "
+#~ "çouchal est metou, KWord vos mostere les tabulåcions, les espåces, les "
+#~ "féns d' roye et d' ôtes caracteres nén imprimåve."
+
+#, fuzzy
+#~| msgid "Turns the border display on and off"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Mete/dismete li håynaedje del boirdeure"
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br/><br/>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Mete/dismete li håynaedje del boirdeure<br/><br/>Les boirdeures ni sont "
+#~ "måy imprimêye. Cisse tchuze est ahessåve po vey comint çk' el documint "
+#~ "aparexhrè sol pådje rexhowe."
+
+#, fuzzy
+#~| msgid "Configure Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Apontyî les boirdeures do tåvlea"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "(Dis)mete li håynaedje des caracteres nén imprimåves"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "(Dis)mete li håynaedje des caracteres nén imprimåve.<br/><br/> Cwand "
+#~ "çouchal est metou, KWord vos mostere les tabulåcions, les espåces, les "
+#~ "féns d' roye et d' ôtes caracteres nén imprimåve."
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "(Dis)mete li håynaedje des caracteres nén imprimåves"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "(Dis)mete li håynaedje des caracteres nén imprimåve.<br/><br/> Cwand "
+#~ "çouchal est metou, KWord vos mostere les tabulåcions, les espåces, les "
+#~ "féns d' roye et d' ôtes caracteres nén imprimåve."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Mostrer rîles"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Mostere ou catche les rîles"
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed.</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "Les rîles sont les blancs espåces di muzuraedje al copete ey al hintche "
+#~ "do documint. Les rîles mostrèt l' eplaeçmint eyet l' lårdjeur des pådjes "
+#~ "et des cådes eyet ploeur esse eployî po mete des tabulåcions.<p>Diclitchî "
+#~ "çoula po dismete li håynaedje des rîles.</p>"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Claper al grile"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Mostrer li bår ås messaedjes"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Mostere ou catche li bår ås messaedjes"
+
+#, fuzzy
+#~| msgid "Semantic Stylesheets..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Foyes di stîle semantikes..."
+
+#, fuzzy
+#~| msgid "Modify and add semantic stylesheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modify and add semantic stylesheets"
+#~ msgstr "Candjî eyet radjouter des foyes di stîle semantikes"
+
+#, fuzzy
+#~| msgid ""
+#~| "Stylesheets are used to format contact, event, and location information "
+#~| "which is stored in Rdf"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Stylesheets are used to format the display of information which is stored "
+#~ "in RDF."
+#~ msgstr ""
+#~ "Les foyes di stîle sont-st eployeyes pos abwesner les soçons, les "
+#~ "evenmints et les informåcions d' eplaeçmint k' est wårdé e Rdf"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Ahiver"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "&Apontyî..."
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Adjinçmint del pådje..."
+
+#, fuzzy
+#~| msgid "Change properties of entire page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Candjî les prôpietés di tote li pådje"
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings.</"
+#~| "p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Candjî les prôpietés di tote li pådje.<p>Vos savoz pol moumint candjî l' "
+#~ "grandeu do papî, l' ashidaedje do papî, les grandeus des tiestires et pîs "
+#~ "d' pådjes eyet les apontiaedjes des colones.</p>"
+
+#, fuzzy
+#~| msgid "Create Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Ahiver cåde di tecse"
+
+#, fuzzy
+#~| msgid "Create Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Ahiver cåde di tecse"
+
+#, fuzzy
+#~| msgid "Remove Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Oister rawete"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Nol eshonna di cådes e documint"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Mostere ou catche li bår ås messaedjes"
+
+#, fuzzy
+#~| msgid "Change Text Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Candjî l' grandeu do tecse"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Pî d' pådje des pådjes paires"
+
+#, fuzzy
+#~| msgid "Page Layout:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "&Arindjmint del pådje..."
+
+#, fuzzy
+#~| msgid "Next Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Pådje shuvante"
+
+#, fuzzy
+#~| msgid "Previous Page"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Pådje di dvant"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Tchuzes"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Replaecî mot"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Replaecî mot"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Replaecî mot"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Replaecî mot"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Tiestire des pådjes impaires"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Tiestire des pådjes paires"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Pî d' pådje des pådjes impaires"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Pî d' pådje des pådjes paires"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Mwaisse tecse"
+
+#, fuzzy
+#~| msgid "Other Pages"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Ôtès pådjes"
+
+#, fuzzy
+#~| msgid "Bookmarks"
+#~ msgid "Book"
+#~ msgstr "Rimåkes"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Aspougneu d' tecse di KOffice"
+
+#, fuzzy
+#~| msgid "(c) 1998-2009, The KWord Team"
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "© 1998-2009, L' ekipe KWord"
+
+#, fuzzy
+#~| msgid "Can not find needed text component, KWord will quit now"
+#~ msgid "Can not find needed text component, Author will quit now"
+#~ msgstr ""
+#~ "Dji n' sai trover les componints d' sicrijhaedje ki dj' a dandjî, KWord "
+#~ "va moussî foû do côp."
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "Sititchî ene pådje"
+
+#, fuzzy
+#~| msgid "Open Link"
+#~ msgid "Open Cover"
+#~ msgstr "Drovi hårdêye"
+
+#, fuzzy
+#~| msgid "Address Selection"
+#~ msgid "Cover selection"
+#~ msgstr "Tchoes di l' adresse"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outliner"
+#~ msgstr "Håyner Boirdeure"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgid "Edit section"
+#~ msgstr "Fonccions"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgid "Main"
+#~ msgstr "Mwaisse tecse"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgid "Supporting"
+#~ msgstr "Sopoirt ODF"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "Tapez l' no del intrêye:"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "Sôre"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Short description:"
+#~ msgstr "Discrijhaedje do mimbe"
+
+#, fuzzy
+#~| msgid "Member Description"
+#~ msgid "Actor description:"
+#~ msgstr "Discrijhaedje do mimbe"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "&Cråsse"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "C&lintcheye"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "&Sorlignî"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "1st Edit"
+#~ msgstr "Candjî"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "2nd Edit"
+#~ msgstr "Candjî"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "3rd Edit"
+#~ msgstr "Candjî"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Coridjaedje tot seu"
+
+#, fuzzy
+#~| msgid "Page Edge:"
+#~ msgid "Badge:"
+#~ msgstr "Môde &pådje"
+
+#, fuzzy
+#~| msgid "Page Description"
+#~ msgid "Section description:"
+#~ msgstr "Discrijhaedje del pådje"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Fonccions"
+
+#~ msgid "File to open"
+#~ msgstr "Fitchî a drovi"
+
+#, fuzzy
+#~| msgid "Create Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Ahiver cåde"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Disfacer Cåde"
+
+#~ msgid "General"
+#~ msgstr "Djenerå"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Protedjî grandeu eyet eplaeçmint"
+
+#~ msgid "Position"
+#~ msgstr "Eplaeçmint"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Lårdjeu:"
+
+#~ msgid "Height:"
+#~ msgstr "Hôteu:"
+
+#~ msgid "Margins"
+#~ msgstr "Mådjes"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "Sincronijhî les candjmints"
+
+#~ msgid "Bottom:"
+#~ msgstr "Valeye:"
+
+#~ msgid "Top:"
+#~ msgstr "Copete:"
+
+#~ msgid "Right:"
+#~ msgstr "Droete:"
+
+#~ msgid "Left:"
+#~ msgstr "Hintche:"
+
+#~ msgid "If Frame Overflows"
+#~ msgstr "Sel cåde dispasse"
+
+#~ msgid "Create a new page"
+#~ msgstr "Ahiver ene novele pådje"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Candjî l' grandeu do dierin cåde"
+
+#~ msgid "Do not show the extra text"
+#~ msgstr "Èn nén håyner l' tecse di trop"
+
+#~ msgid "When Creating a Page"
+#~ msgstr "Cwand dj' ahive ene pådje"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Riraloyî l' cåde å corant do moumint"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Èn nén ahiver on cåde di shûvaedje"
+
+#~ msgid "Copy this Frame"
+#~ msgstr "Copyî c' cåde ci"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "Seulmint so les pådjes paires/impaires"
+
+#~ msgid "Protect content"
+#~ msgstr "Protedjî ådvins"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Li cåde est ene copeye do cåde di dvant"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr ""
+#~ "Les candjmints seront metous en ouve po tos les cådes di l' eshonna d' "
+#~ "cådes"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Wårder rapoirt lårdjeur/hôteur d' oridjinne"
+
+#, fuzzy
+#~| msgid "Select All Frames"
+#~ msgid "Select All Shapes"
+#~ msgstr "Tchoezi ttafwait les cådes"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Ahiver copeye loyeye"
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr ""
+#~ "Ahiver ene copeye do cåde do moumint e håynant todi les minmes ådvins"
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Ahiver ene copeye do cåde do moumint, ki dmore loyî a lî. Dj' ô bén k' il "
+#~ "årè tofer li minme sacwè didins: candjî l' ådvins dins on sfwait cåte "
+#~ "metrè a djoû totes ses copeyes loyeyes."
+
+#, fuzzy
+#~| msgid "Create Linked Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Ahiver copeye loyeye"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Sititchî ene pådje"
+
+#, fuzzy
+#~| msgid "Remove Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Oister pådje"
+
+#~ msgid "Bookmark..."
+#~ msgstr "Rimåke..."
+
+#~ msgid "Select Bookmark..."
+#~ msgstr "Tchoezi rmåke..."
+
+#, fuzzy
+#~| msgid "Bookmarks"
+#~ msgid "Bookmark"
+#~ msgstr "Rimåkes"
+
+#, fuzzy
+#~| msgid "Page: %1/%2"
+#~ msgid "Page %1/%2"
+#~ msgstr "Pådje: %1/%2"
+
+#, fuzzy
+#~| msgid "Characters including spaces:"
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Caracteres, tot contant les vudes:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease:"
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Åjhisté d' lijaedhe Flesch:"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgid "Preferences"
+#~ msgstr "Fråzes"
+
+#~ msgid "Automatically update"
+#~ msgstr "Mete a djoû otomaticmint"
+
+#~ msgid "update"
+#~ msgstr "mete a djoû"
+
+#~ msgid "F&ormat"
+#~ msgstr "C&ogne"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Documint nén valåbe. Pont d' sôre mime di specifieye."
+
+#, fuzzy
+#~| msgid ""
+#~| "Invalid document. Expected mimetype application/x-kword or application/"
+#~| "vnd.kde.kword, got %1"
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Documint nén valåbe. Li sôre mime ratindowe esteut application/x-kword "
+#~ "oudonbén application/vnd.kde.kword mins dj' a yeu %1"
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Documint nén valåbe. Grandeu do papî: %1x%2"
+
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Dji n' sai trover ewou çk' est l' tecse del note do pî"
+
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Dji n' sai trover ewou çk' est l' tecse del note"
+
+#, fuzzy
+#~| msgid "Clip Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Cåde di clip"
+
+#~ msgid "Create Frame-clip"
+#~ msgstr "Ahiver cåde clip"
+
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Oister cåde clip"
+
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "Fwait passer d' foice li tecse ki dmore al pådje shuvante"
+
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr "Tot l' tecse après c' pont ci serè bodjî al pådje shuvante."
+
+#~ msgid "Form"
+#~ msgstr "Cogne"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Mete en alaedje les tiestires do documint"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "Mete en alaedje les pîs d' pådje do documint"
+
+#~ msgid "Change Tracking"
+#~ msgstr "Shuvaedje des candjmints"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Mots"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Nombe di pådjes:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Nombe di cådes:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Nombe d' imådjes:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Nombe di tåves:"
+
+#~ msgid "Text"
+#~ msgstr "Tecse"
+
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "Mete divins l' tecse des notes do pî et del difén"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Caracteres, sins conter les vudes:"
+
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Caracteres, tot contant les vudes"
+
+#~ msgid "Only count main text"
+#~ msgstr "Ni conter kel mwaisse sicrijhaedje"
+
+#~ msgid "approximately %1"
+#~ msgstr "a pô près %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Contaedje des fråzes, mots eyet letes po ç' documint ci."
+
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Informåcions sol nombe di letes, mots, sillabes eyet fråzes po ç' "
+#~ "documint ci.<p>Préjhe li léjhåvisté e s' siervant des ponts d' lijhaedje "
+#~ "Flesch.</p>"
+
+#~ msgid "Shows and hides header display"
+#~ msgstr "Mostere eyet catche l' håynaedje del tiestire"
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of headers in KWord.<br/><br/"
+#~| ">Headers are special frames at the top of each page which can contain "
+#~| "page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Tchoezi cisse tchuze metrè/dismetrè l' håynaedje des tiestires dins KWord."
+#~ "<br/><br/>Les tiestires sont des cådes sipeciås al copete di tchaeke "
+#~ "pådje k' on sait awè ddins des limeros d' pådjes eyet ds ôtes pondants et "
+#~ "djondants."
+
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Mostere eyet catche l' håynaedje do pî d' pådje"
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of footers in KWord. <br/><br/"
+#~| ">Footers are special frames at the bottom of each page which can contain "
+#~| "page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Tchoezi cisse tchuze metrè/dismetrè l' håynaedje des pîs d' pådje dins "
+#~ "KWord.<br/><br/>Les pîs d' pådje sont des cådes sipeciås al copete di "
+#~ "tchaeke pådje k' on sait awè ddins des limeros d' pådjes eyet ds ôtes "
+#~ "pondants et djondants."
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "Rimonter cåde"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "Rimonter l' cåde tchoezi pol moumint po k' il aparexhe pa dzeu tos ls "
+#~ "ôtes cådes"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "Rimonter l' cåde tchoezi pol moumint po k' il aparexhe pa dzeu tos ls "
+#~ "ôtes cådes. Ça n' est ahessåve ki si les cådes sont l' onk so l' ôte. Si "
+#~ "sacwants cådes sont tchoezis, i sont tertos rmontés a leu toû."
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "Baxhî cåde"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr ""
+#~ "Baxhî li cåde tchoezi pol moumint po k' il aparexhe pa dzo tolminme kén "
+#~ "ôte k' est pa dzo lî"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it. If multiple frames are selected they are all lowered "
+#~| "in turn."
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "Baxhî li cåde tchoezi pol moumint po k' il aparexhe pa dzo tolminme kén "
+#~ "ôte k' est pa dzo lî. Si sacwants cådes sont tchoezis, i sont tertos "
+#~ "baxhîs a leu toû."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Mete å prumî plan"
+
+#~ msgid "Send to Back"
+#~ msgstr "Evoyî en erî"
+
+#~ msgid "Before current page"
+#~ msgstr "Divant l' pådje do moumint"
+
+#~ msgid "After current page"
+#~ msgstr "Après l' pådje do moumint"
+
+#~ msgid "After last page"
+#~ msgstr "Après l' dierinne pådje"
+
+#~ msgid "Page style:"
+#~ msgstr "Stîle del pådje :"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "&Sititchî"
+
+#~ msgid "Variable"
+#~ msgstr "Variåve"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "As Character"
+#~ msgstr "Ahiver"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "To Character"
+#~ msgstr "Ahiver"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "Hagnon"
+
+#, fuzzy
+#~| msgid "Remove Page"
+#~ msgid "To Page"
+#~ msgstr "Oister pådje"
+
+#~ msgid "Page..."
+#~ msgstr "Pådje..."
+
+#~ msgid "Delete Page"
+#~ msgstr "Disfacer pådje"
+
+#, fuzzy
+#~| msgid "Insert Page Style"
+#~ msgid "Insert Image Options"
+#~ msgstr "Sititchî stîle del pådje"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "Essocter les tiestires do documint"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "Essocter les pîs d' pådje do documint"
+
+#, fuzzy
+#~| msgid "Frame Borders"
+#~ msgid "Page Borders"
+#~ msgstr "Boirdeure do cåde"
+
+#~ msgid "Hide Status Bar"
+#~ msgstr "Catchî li bår ås messaedjes"
+
+#~ msgid "Numbering"
+#~ msgstr "Limerotaedje"
+
+#~ msgid "Automatic"
+#~ msgstr "Tot seu"
+
+#~ msgid "Footnote"
+#~ msgstr "Pînote"
+
+#~ msgid "Endnote"
+#~ msgstr "Pînote di documint"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Sititchî pînote"
+
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Prôpietés do cåde/eshonna di cådes"
+
+#~ msgid "Alter frameset properties"
+#~ msgstr "Candjî les prôpietés di l' eshonna di cådes"
+
+#, fuzzy
+#~| msgid "P&icture..."
+#~ msgid "Picture..."
+#~ msgstr "&Imådje..."
+
+#~ msgid "Insert a picture into document"
+#~ msgstr "Sitichî ene imådje e documint"
+
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Covierser l' cåde do moumint en on cåde dins l' messaedje"
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Covierser l' cåde do moumint en on cåde dins l' messaedje.<br><br>Bouter "
+#~ "l' cåde e messaedje dins l' tecse å pont l' moens lon del plaece do "
+#~ "moumint des cådes."
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Set Floating"
+#~ msgstr "A&pontiaedjes"
+
+#~ msgid "Please select at least one non-locked shape and try again"
+#~ msgstr ""
+#~ "Tchoezixhoz s' i vs plait pol moens ene fôme nén aclawêye eyet sayî co on "
+#~ "côp"
+
+#~ msgid ""
+#~ "<p><b>Check this option to have a text area created automatically for "
+#~ "each page.</b><br>\n"
+#~ "For letters and notes with one main text, possibly on several pages, you "
+#~ "should keep this checked. You should only uncheck it if you want to "
+#~ "define completely where each text frame should be positioned.</p>"
+#~ msgstr ""
+#~ "<p><b>Clitchîz cisse tchuze pos awè ene redjon di tecse ahivêye "
+#~ "otomaticmint po tchaeke pådje.</b><br>\n"
+#~ "Po les letes et les notes avou on mwaisse tecse, motoit so sacwantès "
+#~ "pådjes, vos dvrîz wårder çoula clitchî. Vos nel divrîz disclitchî ki si "
+#~ "vs voloz pår defini ewou tchaeke cåde di tecse doet esse plaecî.</p>"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "Rexhowe del &passete"
+
+#~ msgid "Page: current/total"
+#~ msgstr "Pådje: li cine do moumint/totå"
+
+#~ msgid "Fra&mes"
+#~ msgstr "&Cådes"
+
+#~ msgid "Tables"
+#~ msgstr "Tåves"
+
+#~ msgid "Insert"
+#~ msgstr "Sititchî"
+
+#~ msgid "Add Text on Shape"
+#~ msgstr "Radjouter do tecse sol fôme"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "Adjinçmint do tecse dins d' ôtes cådes"
+
+#~ msgid "Text will run around this frame"
+#~ msgstr "Li tecse irè ttåtoû di c' cåde"
+
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Li tecse n' irè nén ttåtoû di c' cåde"
+
+#~ msgid "Run Around Side"
+#~ msgstr "Tecse totåtoû do costé"
+
+#~ msgid "Longest side"
+#~ msgstr "Li pus longou costé"
+
+#~ msgid "Create custom outline"
+#~ msgstr "Ahiver cotoû da vosse"
+
+#~ msgid "Create Custom Outline"
+#~ msgstr "Ahiver cotoû da vosse"
+
+#~ msgid "Create a custom vector outline that text will run around"
+#~ msgstr "Ahiver on cotoû roye avou l' tecse totåtoû d' lyi"
+
+#~ msgid ""
+#~ "Text normally runs around the content of a shape, when you want a custom "
+#~ "outline that is independent of the content you can create one and alter "
+#~ "it with the vector tools"
+#~ msgstr ""
+#~ "Li tecse si met normålmint totåtoû di l' ådvins d' ene fôme, cwand vos "
+#~ "vloz on cotoû da vosse, k' est dislaxhî di l' ådvins, vos ploz nd ahiver "
+#~ "eyet l' candjî avou les usteyes po les royes"
+
+#~ msgid "Create outlines"
+#~ msgstr "Ahiver cotoûs"
+
+#~ msgid "Borders"
+#~ msgstr "Boirdeures"
+
+#~ msgid "MailMerge"
+#~ msgstr "RimaxhîCorî"
+
+#~ msgid "Table"
+#~ msgstr "Tåve"
+
+#~ msgid "Font"
+#~ msgstr "Fonte"
+
+#~ msgid "Format"
+#~ msgstr "Cogne"
+
+#~ msgid "Formula"
+#~ msgstr "Formule"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#~ msgid "Insert Picture..."
+#~ msgstr "Sititchî imådje..."
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Page Background"
+#~ msgstr "Fond"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Si l' tecse est trop long pol cåde"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Å moumint d' ahiver ene nouve pådje"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Bouter ene copeye di ci cåde ci"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr ""
+#~ "Candjî les prôpietés di l' eshonna di cådes.<p>Vos ploz candjî pol "
+#~ "moumint l' fond do cåde."
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#~ msgid "Show Grid"
+#~ msgstr "Mostrer grile"
+
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Tiestire des pådjes impaires %1"
+
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Tiestire des pådjes paires %1"
+
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Pî d' pådje des pådjes impaires %1"
+
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Pî d' pådje des pådjes paires %1"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Mwaisse cåde di tecse"
+
+#~ msgid "Matrix"
+#~ msgstr "Matrice"
+
+#~ msgid "Configure Frame Border"
+#~ msgstr "Apontyî  li boirdeure des cådes"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Tå&vlea"
+
+#~ msgid "Cell"
+#~ msgstr "Boesse"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "Apontyî  li boirdeure des cådes"
+
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#~ msgid "Add a new page"
+#~ msgstr "Radjouter ene novele pådje"
+
+#~ msgid "Delete selected pages"
+#~ msgstr "Disfacer les pådjes di tchoezeyes"
+
+#~ msgid "New Layer"
+#~ msgstr "Novele coûtche"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Dinez l' no po l' novele coûtche:"
+
+#~ msgid "Delete Layer"
+#~ msgstr "Disfacer pådje"
+
+#~ msgid "Information"
+#~ msgstr "Infôrmåcion"
+
+#~ msgid "&Available tables:"
+#~ msgstr "Tåvleas k' i gn &a:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "&Tchamps do tåvlea tchoezi:"
+
+#~ msgid "Query Result"
+#~ msgstr "Rizultat do cweraedje"
+
+#~ msgid "&Query:"
+#~ msgstr "&Cweraedje:"
+
+#~ msgid "&Execute"
+#~ msgstr "&Enonder:"
+
+#~ msgid "&Setup"
+#~ msgstr "&Apontyî"
+
+#~ msgid "&Table:"
+#~ msgstr "&Tåvlea:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "Vey ou candjî les &rîles po les passetes"
+
+#~ msgid "&Used database records:"
+#~ msgstr "&Eredjistraedjes eployîs del båze di dnêyes:"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "&Wårder les apontiaedjes..."
+
+#~ msgid "&Hostname:"
+#~ msgstr "No do &lodjoe:"
+
+#~ msgid "&Driver:"
+#~ msgstr "&Mineu:"
+
+#~ msgid "Database &name:"
+#~ msgstr "&No del båze di dnêyes:"
+
+#~ msgid "&Username:"
+#~ msgstr "No di l' &uzeu:"
+
+#~ msgid "&Port:"
+#~ msgstr "&Pôrt:"
+
+#~ msgid "default"
+#~ msgstr "prémetou"
+
+#~ msgid "&Add >>"
+#~ msgstr "R&adjouter >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< &Oister"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "Schaper et rlomer come &djivêye d' emilaedje..."
+
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "Schaper les mierseulès intrêyes viè ene novele djivêye d' emilaedje"
+
+#~ msgid "&Filter on:"
+#~ msgstr "&Passer al passete:"
+
+#~ msgid "Name"
+#~ msgstr "No"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "Djivêyes d' emilaedje"
+
+#~ msgid "Single Entries"
+#~ msgstr "Mierseulès intrêyes"
+
+#~ msgid "Address B&ook"
+#~ msgstr "Cal&pin d' adresses"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "Enonder KAddressbook"
+
+#~ msgid "&Address Book"
+#~ msgstr "Cal&pin d' Adresses"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "Adresses &tchoezeyes"
+
+#~ msgid "Personal"
+#~ msgstr "Personel"
+
+#~ msgid "Hi!"
+#~ msgstr "A!"
+
+#~ msgid "Hello!"
+#~ msgstr "Bondjoû!"
+
+#~ msgid "Bye!"
+#~ msgstr "Adiè!"
+
+#~ msgid "Good bye"
+#~ msgstr "A rvey"
+
+#~ msgid "Professional"
+#~ msgstr "Professionel"
+
+#~ msgid "Good Morning"
+#~ msgstr "Bondjoû"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "Bondjoû"
+
+#~ msgid "Good Evening"
+#~ msgstr "Bonswer"
+
+#~ msgid "Email"
+#~ msgstr "Emile"
+
+#~ msgid "To:"
+#~ msgstr "A:"
+
+#~ msgid "Subject:"
+#~ msgstr "Sudjet:"
+
+#~ msgid "CC:"
+#~ msgstr "CC:"
+
+#~ msgid "BCC:"
+#~ msgstr "BCC:"
+
+#~ msgid "Fwd:"
+#~ msgstr "Rcs:"
+
+#~ msgid "Best regards,"
+#~ msgstr "Ki ça vos våye bén,"
+
+#, fuzzy
+#~ msgid "Best wishes"
+#~ msgstr "Nos bons veus"
+
+#~ msgid "Cordially,"
+#~ msgstr "Amitieusmint,"
+
+#~ msgid "Love,"
+#~ msgstr "Avou toplin des vey-voltî,"
+
+#~ msgid "Regards,"
+#~ msgstr "Ki ça vos våye bén,"
+
+#~ msgid "Thank you,"
+#~ msgstr "Gråces,"
+
+#~ msgid "Thanks,"
+#~ msgstr "Gråces,"
+
+#~ msgid "Subject"
+#~ msgstr "Sudjet"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "Madame, Monsieu,"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "Monsieus Dames,"
+
+#~ msgid "Attention"
+#~ msgstr "Atincion"
+
+#~ msgid "Attention:"
+#~ msgstr "Atincion:"
+
+#~ msgid "ATTN:"
+#~ msgstr "ATCN:"
+
+#~ msgid "Instructions"
+#~ msgstr "Instruccions"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "ACERTINÉ"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "SICRET"
+
+#~ msgid "PERSONAL"
+#~ msgstr "PERSONEL"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "FACSIMILE"
+
+#~ msgid "Error"
+#~ msgstr "Aroke"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "Tapez li scret pol raloyaedje al båze di dnêyes s' i vs plait"
+
+#~ msgid "<not saved>"
+#~ msgstr "<nén schapé>"
+
+#~ msgid "Store Settings"
+#~ msgstr "Schaper les apontiaedjes"
+
+#~ msgid "contains"
+#~ msgstr "a å dvins"
+
+#~ msgid "Field"
+#~ msgstr "Tchamp"
+
+#~ msgid "Condition"
+#~ msgstr "Condicion"
+
+#~ msgid "Value"
+#~ msgstr "Valixhance"
+
+#, fuzzy
+#~ msgid "Please enter name:"
+#~ msgstr "Tapez l' no del intrêye:"
+
+#~ msgid "No Value"
+#~ msgstr "Nole valixhance"
+
+#, fuzzy
+#~ msgid "Add record"
+#~ msgstr "Radjouter intrêye"
+
+#~ msgid "Add entry"
+#~ msgstr "Radjouter intrêye"
+
+#~ msgid "Remove entry"
+#~ msgstr "Oister intrêye"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "Radjouter intrêye"
+
+#~ msgid "Host:"
+#~ msgstr "Lodjoe:"
+
+#~ msgid "localhost"
+#~ msgstr "localhost"
+
+#~ msgid "Port:"
+#~ msgstr "Pôrt:"
+
+#~ msgid "Timeout:"
+#~ msgstr "Astådje:"
+
+#~ msgid "Table of Content"
+#~ msgstr "Tåve di l' Ådvins"
+
+#~ msgid "Classes"
+#~ msgstr "Classes"
+
+#~ msgid "Class Description"
+#~ msgstr "Discrijhaedje del classe"
+
+#~ msgid "Slots"
+#~ msgstr "Relére"
+
+#~ msgid "Signals"
+#~ msgstr "Signås"
+
+#~ msgid "Properties"
+#~ msgstr "Prôpietés"
+
+#~ msgid "Variables"
+#~ msgstr "Variåves"
+
+#~ msgid "ISO OASIS OpenDocument Text"
+#~ msgstr "Tecse ISO OASIS OpenDocument"
+
+#~ msgid "HTML Document"
+#~ msgstr "Documint HTML"
+
+#~ msgid "Encoded Text"
+#~ msgstr "Tecse ecôdé"
+
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Disfacer les cåde(s) di tchoezi(s) pol moumint."
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Disfacer les cåde(s) di tchoezi(s) pol moumint."
+
+#~ msgid "First Page Header"
+#~ msgstr "Tiestire prumire pådje"
+
+#~ msgid "First Page Footer"
+#~ msgstr "Pî d' pådje del prumire Pådje"
+
+#~ msgid "Size:"
+#~ msgstr "Grandeu (%1):"
+
+#~ msgid "Single sided"
+#~ msgstr "li pus &lådje"
+
+#~ msgid "Whole document:"
+#~ msgstr "Documint"
+
+#~ msgid "Right to left"
+#~ msgstr "Bleu clair"
+
+#~ msgid "Left Edge:"
+#~ msgstr "Hintche:"
+
+#~ msgid "Right Edge:"
+#~ msgstr "Droete:"
+
+#~ msgid "Printing..."
+#~ msgstr "Dji rexhe..."
+
+#~ msgid "Create Formula Frame"
+#~ msgstr "Ahiver on cåde di formule"
+
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Candjî l' coleur di fond do cåde"
+
+#~ msgid "Delete Page %1"
+#~ msgstr "Disfacer pådje %1"
+
+#~ msgid "Resize Column"
+#~ msgstr "Candjî l' grandeu del colone"
+
+#, fuzzy
+#~ msgid "Resize Row"
+#~ msgstr "Oister roye"
+
+#~ msgid "Configure KWord"
+#~ msgstr "Apontyî KWord"
+
+#~ msgid "Interface"
+#~ msgstr "Eterface"
+
+#~ msgid "Interface Settings"
+#~ msgstr "Apontiaedjes di l' eterface"
+
+#~ msgid "Spelling"
+#~ msgstr "Speli"
+
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Dujhance del coridjrece"
+
+#~ msgid "Path"
+#~ msgstr "Tchimin"
+
+#~ msgid "Path Settings"
+#~ msgstr "Apontiaedjes des tchmins"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Schaper les apontiaedjes"
+
+#~ msgid "Change Config"
+#~ msgstr "Candjî l' apontiaedje"
+
+#~ msgid "Undo/&redo limit:"
+#~ msgstr "Limite po disfé/&rifé:"
+
+#~ msgid "Display &links"
+#~ msgstr "Håyner les &loyéns"
+
+#~ msgid "&Underline all links"
+#~ msgstr "&Sorlignî tos les loyéns"
+
+#~ msgid "Display c&omments"
+#~ msgstr "Håyner les tecse di ra&wete"
+
+#~ msgid "Display field code"
+#~ msgstr "Håyner l' côde des tchamps"
+
+#~ msgid "View formatting end paragraph"
+#~ msgstr "Vey les caracteres di metaedje e pådje di fén di hagnon"
+
+#~ msgid "View formatting space"
+#~ msgstr "Vey li caractere di metaedje e pådje des espåces"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Prémetowes valixhances des documints"
+
+#~ msgid "Default font:"
+#~ msgstr "Prémetowe fonte:"
+
+#~ msgid "Choose..."
+#~ msgstr "Tchoezi..."
+
+#~ msgid "Autosave every (min):"
+#~ msgstr "Schapaedje tot seu (min.):"
+
+#~ msgid "No autosave"
+#~ msgstr "Nou schapaedje tot seu"
+
+#~ msgid " min"
+#~ msgstr " min"
+
+#~ msgid "Cursor"
+#~ msgstr "Cursoe"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Copete:"
+
+#~ msgid "Backup Path"
+#~ msgstr "Tchimin po les copeyes di såvrité"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Candjî l' tchimin..."
+
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "Apontyî pînotes"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Lårdjeu:"
+
+#~ msgid "Solid"
+#~ msgstr "Solide"
+
+#~ msgid "Delete Column"
+#~ msgstr "Disfacer Colone"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "Disfacer cisse roye foû del tåve"
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Disfacer cisse colone foû del tåve"
+
+#~ msgid "Delete the whole table?"
+#~ msgstr "Disfacer li tåve en etir?"
+
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Disfacer totes les royes di tchoezeyes?"
+
+#~ msgid "Delete row number %1?"
+#~ msgstr "Disfacer l' roye limero %1?"
+
+#~ msgid "Delete column number %1?"
+#~ msgstr "Disfacer l' colone limero %1?"
+
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Disfacer royes: %1 ?"
+
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Disfacer colones: %1 ?"
+
+#~ msgid "Column %1"
+#~ msgstr "Colone %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Cåde di Tecse %1"
+
+#~ msgid "Empty"
+#~ msgstr "Vude"
+
+#~ msgid "Formula Frame %1"
+#~ msgstr "Cåde di formule %1"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Imådje (%1) %2"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Ravalés objets"
+
+#~ msgid "Formula Frames"
+#~ msgstr "Cådes di formules"
+
+#~ msgid "Pictures"
+#~ msgstr "Imådjes"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Cådes di Tecse/Eshonna di cådes"
+
+#~ msgid "Document Structure"
+#~ msgstr "Tcherpinte do documint"
+
+#~ msgid "Delete Table"
+#~ msgstr "Disfacer tåve"
+
+#~ msgid "Delete Text Frame"
+#~ msgstr "Disfacer cåde di tecse"
+
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Disfacer cåde di formule"
+
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Disfacer cåde d' imådje"
+
+#~ msgid "Group name:"
+#~ msgstr "No do groupe:"
+
+#~ msgid "Expressions"
+#~ msgstr "Ratourneures"
+
+#~ msgid "New"
+#~ msgstr "Novea"
+
+#~ msgid "empty"
+#~ msgstr "vude"
+
+#~ msgid "&Automatic"
+#~ msgstr "&Otomatike"
+
+#~ msgid "&Manual"
+#~ msgstr "Al &mwin"
+
+#~ msgid "&Footnote"
+#~ msgstr "Pînote di &pådje"
+
+#~ msgid "Formula %1"
+#~ msgstr "Formule %1"
+
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Prôpietés do cåde po %1"
+
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Prôpietés do cåde po on novea cåde"
+
+#~ msgid "Frames Properties"
+#~ msgstr "Prôpietés des cådes"
+
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Apontiaedjes do cåde po %1"
+
+#~ msgid "No."
+#~ msgstr "Lº"
+
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Mete li nouve coleur dins tos les cådes di tchoezis"
+
+#~ msgid "Background color:"
+#~ msgstr "Coleur di fond:"
+
+#~ msgid "Background style:"
+#~ msgstr "Estîle do fond:"
+
+#~ msgid "No Background Fill"
+#~ msgstr "Èn nén rimpli l' fond"
+
+#~ msgid "100% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 100%"
+
+#~ msgid "94% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 94%"
+
+#~ msgid "88% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 88%"
+
+#~ msgid "63% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 63%"
+
+#~ msgid "50% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 50%"
+
+#~ msgid "37% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 37%"
+
+#~ msgid "12% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 12%"
+
+#~ msgid "6% Fill Pattern"
+#~ msgstr "Motif di rimplixhaedje a 6%"
+
+#, fuzzy
+#~ msgid "&Borders"
+#~ msgstr "Boirdeures"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Stîle:"
+
+#~ msgid "Change Left Border Frame"
+#~ msgstr "Candjî l' boirdeure di hintche do cåde"
+
+#~ msgid "Change Right Border Frame"
+#~ msgstr "Candjî l' boirdeure di droete do cåde"
+
+#~ msgid "Change Top Border Frame"
+#~ msgstr "Candjî l' boirdeure do dzeu do cåde"
+
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Candjî l' boirdeure do dzo do cåde"
+
+#~ msgid "Frame Style Manager"
+#~ msgstr "Manaedjeu di stîle des cådes"
+
+#, fuzzy
+#~ msgid "Frame background color:"
+#~ msgstr "Coleur di fond do cåde..."
+
+#~ msgid "Go to Footnote"
+#~ msgstr "Aler al pînote"
+
+#~ msgid "Go to Endnote"
+#~ msgstr "Aler al pînote do documint"
+
+#~ msgid "File name is empty."
+#~ msgstr "Li no do fitchî est vude"
+
+#~ msgid "Insert Column"
+#~ msgstr "Sititchî colone"
+
+#~ msgid "Insert New Row"
+#~ msgstr "Sititchî Colone"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Sititchî Novele Colone"
+
+#~ msgid "Before"
+#~ msgstr "Divant"
+
+#~ msgid "After"
+#~ msgstr "Drî"
+
+#~ msgid "Row:"
+#~ msgstr "Roye:"
+
+#~ msgid "Column:"
+#~ msgstr "Colone:"
+
+#~ msgid "Choose &Picture..."
+#~ msgstr "Tchoezi &imådje..."
+
+#~ msgid "Choose Picture"
+#~ msgstr "Tchoezi imådje"
+
+#, fuzzy
+#~ msgid "Contents Head %1"
+#~ msgstr "Tite 1 di l' ådvins"
+
+#~ msgid "Print Preview..."
+#~ msgstr "Vey divant d' imprimer..."
+
+#~ msgid "Create New Document"
+#~ msgstr "Ahiver novea documint"
+
+#, fuzzy
+#~ msgid "Unnamed Table"
+#~ msgstr "Ahiver tåve"
+
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Bodjî ou candjî l' grandeu do cåde"
+
+#~ msgid "Picture %1"
+#~ msgstr "Imådje %1"
+
+#~ msgid "Sort Text"
+#~ msgstr "Relére li tecse"
+
+#~ msgid "Number of rows:"
+#~ msgstr "Nombe di royes:"
+
+#~ msgid "Number of columns:"
+#~ msgstr "Nombe di colones:"
+
+#~ msgid "Selected Text"
+#~ msgstr "Tecse di tchoezi"
+
+#~ msgid "Counting..."
+#~ msgstr "Dji conte..."
+
+#~ msgid "Table Settings"
+#~ msgstr "Apontiaedjes del tåve"
+
+#~ msgid "Cell heights:"
+#~ msgstr "Hôteu des boesses:"
+
+#~ msgid "Manual"
+#~ msgstr "Al mwin"
+
+#~ msgid "Cell widths:"
+#~ msgstr "Lårdjeu des boesses:"
+
+#~ msgid "Templates"
+#~ msgstr "Modeles"
+
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Radjouter novelès royes al tåve"
+
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Oister royes foû del tåve"
+
+#~ msgid "Remove Row"
+#~ msgstr "Oister roye"
+
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Radjouter novelès colones al tåve"
+
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Oister colones foû del tåve"
+
+#~ msgid "Remove Column"
+#~ msgstr "Oister colone"
+
+#~ msgid "Table %1"
+#~ msgstr "Tåve %1"
+
+#~ msgid "Join Cells"
+#~ msgstr "Rifonde Boesses"
+
+#~ msgid "Split Cells"
+#~ msgstr "Dispårti Boesses"
+
+#~ msgid "Table Style Manager"
+#~ msgstr "Manaedjeu di stîle des tåves"
+
+#~ msgid "Change..."
+#~ msgstr "Candjî..."
+
+#~ msgid "&Customize"
+#~ msgstr "A vosse &môde"
+
+#~ msgid "First row"
+#~ msgstr "Prumire roye"
+
+#~ msgid "Last row"
+#~ msgstr "Dierinne roye"
+
+#~ msgid "Body"
+#~ msgstr "Coir"
+
+#~ msgid "First column"
+#~ msgstr "Prumire colone"
+
+#~ msgid "Last column"
+#~ msgstr "Dierinne colone"
+
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Sititchî tåve di l' ådvins"
+
+#~ msgid "Endnote %1"
+#~ msgstr "Pînote di documint %1"
+
+#~ msgid "Footnote %1"
+#~ msgstr "Pînote %1"
+
+#~ msgid "Insert Expression"
+#~ msgstr "Sititchî ratourneure"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Sititchî variåve"
+
+#~ msgid "ERROR"
+#~ msgstr "AROKE"
+
+#, fuzzy
+#~ msgid "Select Frame"
+#~ msgstr "Disfacer Cåde"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "&Disfacer Cåde"
+
+#~ msgid "Text Mode"
+#~ msgstr "Môde tecse"
+
+#, fuzzy
+#~ msgid "Only show the text of the document."
+#~ msgstr "Èn nén håyner l' tecse di trop"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Caract&ere Especiå..."
+
+#~ msgid "&Hard Frame Break"
+#~ msgstr "Côpaedje do Cåde C&hal"
+
+#~ msgid "Link..."
+#~ msgstr "Loyén..."
+
+#~ msgid "Insert a Web address, email address or hyperlink to a file."
+#~ msgstr ""
+#~ "Sititchîz ene hårdêye waibe, adresse emile ou loyén viè on fitchî locå."
+
+#~ msgid "Comment..."
+#~ msgstr "Rawete..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Candjî l' rawete..."
+
+#~ msgid "Change the content of a comment."
+#~ msgstr "Candjî l' tecse di rawete."
+
+#~ msgid "Remove the selected document comment."
+#~ msgstr "Oister li tchoezeye rawete do documint."
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Copyî tecse del rawete..."
+
+#~ msgid "Table of &Contents"
+#~ msgstr "Tåve di l' Å&dvins"
+
+#~ msgid "&Date"
+#~ msgstr "&Date"
+
+#, fuzzy
+#~ msgid "&Statistic"
+#~ msgstr "Sitatistikes"
+
+#~ msgid "&Custom"
+#~ msgstr "A vosse &Môde"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "&Rafrister totes les variåves"
+
+#~ msgid "&Expression"
+#~ msgstr "Ra&tourneure"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "Cåde di Te&cse"
+
+#~ msgid "For&mula"
+#~ msgstr "For&mule"
+
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Sititchî ene formule en on novea cåde."
+
+#~ msgid "&Table..."
+#~ msgstr "&Tåve..."
+
+#, fuzzy
+#~ msgid "Create a table."
+#~ msgstr "Ahiver ene tåve."
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture."
+#~ msgstr "Ahiver on novea cåde po ene imådje."
+
+#~ msgid "&Object Frame"
+#~ msgstr "Cå&de po on Cayet"
+
+#~ msgid "Fi&le..."
+#~ msgstr "&Fitchî..."
+
+#~ msgid "&Font..."
+#~ msgstr "&Fonte..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Hagnon..."
+
+#, fuzzy
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Manaedjeu di stîle des cådes"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles."
+#~ msgstr "Candjî les atributs di stîle des cådes."
+
+#, fuzzy
+#~ msgid "Change attributes of styles."
+#~ msgstr "Candjî les atributs di stîle des cådes."
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Ragrandi l' fonte"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Raptiti l' fonte"
+
+#~ msgid "Font Family"
+#~ msgstr "Famile del Fonte"
+
+#~ msgid "St&yle"
+#~ msgstr "S&tîle"
+
+#~ msgid "Default Format"
+#~ msgstr "Prémetowe cogne"
+
+#~ msgid "&Strike Out"
+#~ msgstr "&Bårer"
+
+#~ msgid "Align &Left"
+#~ msgstr "Aroymint &Hintche"
+
+#~ msgid "Align &Right"
+#~ msgstr "Aroymint &Droete"
+
+#~ msgid "Align &Block"
+#~ msgstr "Aroymint &bloc"
+
+#~ msgid "Superscript"
+#~ msgstr "Dizeu li Roye"
+
+#~ msgid "Subscript"
+#~ msgstr "Dizo li Roye"
+
+#~ msgid "Increase Indent"
+#~ msgstr "Ritrait pus grand"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "Ritrait pus ptit"
+
+#~ msgid "Text Color..."
+#~ msgstr "Coleur do Tecse..."
+
+#~ msgid "Border Left"
+#~ msgstr "Boirdeure Hintche"
+
+#~ msgid "Border Right"
+#~ msgstr "Boirdeure Droete"
+
+#~ msgid "Border Top"
+#~ msgstr "Boirdeure Copete"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Boirdeure Valeye"
+
+#~ msgid "Border Style"
+#~ msgstr "Stîle del boirdeure"
+
+#~ msgid "Border Width"
+#~ msgstr "Lårdjeu del boirdeure"
+
+#~ msgid "Border Color"
+#~ msgstr "Coleur del boirdeure"
+
+#~ msgid "Text Background Color..."
+#~ msgstr "Coleur di fond do tecse..."
+
+#~ msgid "&Insert Row..."
+#~ msgstr "S&ititchî Roye..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location."
+#~ msgstr "Disfacer les colones colones di tchoezeyes foû del tåve do moumint."
+
+#~ msgid "I&nsert Column..."
+#~ msgstr "Si&titchî Colone..."
+
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Disfacer les royes di tchoezeyes foû del tåve do moumint."
+
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "Disfacer les colones colones di tchoezeyes foû del tåve do moumint."
+
+#~ msgid "Resize Column..."
+#~ msgstr "Candjî l' grandeu del colone..."
+
+#~ msgid "&Join Cells"
+#~ msgstr "Rif&onde Boesses..."
+
+#, fuzzy
+#~ msgid "&Split Cell..."
+#~ msgstr "Dis&pårti Boesses..."
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells."
+#~ msgstr "Candjî l' tecse del pînote tchoezeye pol moumint."
+
+#~ msgid "Delete &Table"
+#~ msgstr "Disfacer &Tåve"
+
+#, fuzzy
+#~ msgid "Delete the entire table."
+#~ msgstr "Disfacer l' tåve en etir."
+
+#, fuzzy
+#~ msgid "T&able Style Manager"
+#~ msgstr "Manaedjeu di stîle des tåves"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles."
+#~ msgstr "Candjî les atributs di stîle des cådes."
+
+#, fuzzy
+#~ msgid "Sort Text..."
+#~ msgstr "Relére li tecse"
+
+#~ msgid "Add Expression"
+#~ msgstr "Radjouter ratourneure"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Mete en alaedje li coridjaedje otomatike"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Mete en alaedje li coridjaedje otomatike"
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Apontyî li &coridjaedje otomatike..."
+
+#, fuzzy
+#~ msgid "Change autocorrection options."
+#~ msgstr "Candjî les tchuzes do coridjaedje otomatike."
+
+#~ msgid "Custom &Variables..."
+#~ msgstr "&Variåves da vosse..."
+
+#~ msgid "Change Picture..."
+#~ msgstr "Candjî imådje..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame."
+#~ msgstr "Candjî l' tecse del pînote tchoezeye pol moumint."
+
+#, fuzzy
+#~ msgid "Open the link with the appropriate application."
+#~ msgstr "Drovi l' hårdêye avou l' bon programe."
+
+#~ msgid ""
+#~ "Open the link with the appropriate application.<br><br>Web addresses are "
+#~ "opened in a browser.<br>Email addresses begin a new message addressed to "
+#~ "the link.<br>File links are opened by the appropriate viewer or editor."
+#~ msgstr ""
+#~ "Drovi l' hårdêye avou l' bon programe. <br> <br>Les pådjes waibe "
+#~ "(http://) sont  drovowes avou on betchteu. <br>Les adresses emile "
+#~ "(mailto:) enondèt on novea messaedje po l' adresse del hårdêye. <br>Des "
+#~ "loyéns locås (file://) sont drovous avou li bon håyneu ou aspougneu, "
+#~ "sorlon li sôre do fitchî."
+
+#~ msgid "Change Link..."
+#~ msgstr "Candjî loyén..."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link."
+#~ msgstr "Candjî l' tecse del pînote tchoezeye pol moumint."
+
+#~ msgid "Copy Link"
+#~ msgstr "Copyî loyén"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Radjouter åzès rmåkes"
+
+#~ msgid "Remove Link"
+#~ msgstr "Oister on loyén"
+
+#, fuzzy
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Tcherpinte do documint"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar."
+#~ msgstr "Tcherpinte do documint"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "Catchî l' pînote"
+
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "Apontyî l' c&ompletaedje..."
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion."
+#~ msgstr "Candjî l' tecse di rawete."
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Sititchî espåce nén côpåve"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Sititchî espåce nén côpåve"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Ragrandi l' fonte"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Raptiti l' fonte"
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Candjî variåve..."
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Fé on stîle a pårti di çou k' est tchoezi..."
+
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Fé on novea stîle a pårti do tecse tchoezi."
+
+#~ msgid "&Footnote..."
+#~ msgstr "&Pînote..."
+
+#~ msgid "Change the look of footnotes."
+#~ msgstr "Candjî l' rivnance des pînotes."
+
+#~ msgid "Edit Footnote"
+#~ msgstr "Candjî pînote"
+
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Candjî l' tecse del pînote tchoezeye pol moumint."
+
+#, fuzzy
+#~ msgid "Save Picture As..."
+#~ msgstr "Schaper imådje..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file."
+#~ msgstr "Candjî l' tecse del pînote tchoezeye pol moumint."
+
+#, fuzzy
+#~ msgid "Speak Text"
+#~ msgstr "Relére li tecse"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame."
+#~ msgstr "Fé on novea stîle a pårti do tecse tchoezi."
+
+#, fuzzy
+#~ msgid "Go to Document Structure"
+#~ msgstr "Tcherpinte do documint"
+
+#~ msgid "Frame Background Color..."
+#~ msgstr "Coleur di fond do cåde..."
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "&Pådje"
+
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Voloz disfacer ci cåde ci?"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Candjî variåve da vosse"
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Sititchî Pînote"
+
+#~ msgid "Update Table of &Contents"
+#~ msgstr "Mete a djoû li tåve di l' å&dvins"
+
+#~ msgid "Change Font"
+#~ msgstr "Candjî fonte"
+
+#~ msgid "Change Layout"
+#~ msgstr "Candjî Arindjmint"
+
+#~ msgid "You must select a frame first."
+#~ msgstr "Vos dvoz tchoezi on cåde d' aprume."
+
+#~ msgid "Insert Table"
+#~ msgstr "Sititchî ene Tåve"
+
+#~ msgid "Insert Formula"
+#~ msgstr "Sititchî ene Formule"
+
+#~ msgid "Remove Rows"
+#~ msgstr "Oister royes"
+
+#~ msgid "Remove Columns"
+#~ msgstr "Oister colones"
+
+#, fuzzy
+#~ msgid "Join Cells Failed"
+#~ msgstr "Rifonde Boesses"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Mete li tecse e cråssès letes"
+
+#~ msgid "Underline Text"
+#~ msgstr "Sorlignî l' tecse"
+
+#~ msgid "Strike Out Text"
+#~ msgstr "Bårer l' tecse"
+
+#~ msgid "Set Text Color"
+#~ msgstr "Defini l' coleur do tecse"
+
+#, fuzzy
+#~ msgid "Change Top Frame Border"
+#~ msgstr "Candjî l' boirdeure do dzeu do cåde"
+
+#, fuzzy
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "Candjî l' boirdeure do dzo do cåde"
+
+#, fuzzy
+#~ msgid "D&elete Current Column..."
+#~ msgstr "Dis&facer les tchoezeyès colones..."
+
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "Dis&facer les tchoezeyès colones..."
+
+#, fuzzy
+#~ msgid "&Delete Current Row..."
+#~ msgstr "&Disfacer les royes di tchoezeyes..."
+
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "&Disfacer les royes di tchoezeyes..."
+
+#~ msgid "Change Picture"
+#~ msgstr "Candjî imådje"
+
+#~ msgid "Save Picture"
+#~ msgstr "Schaper imådje"
+
+#~ msgid "Insert File"
+#~ msgstr "Sititchî on fitchî"
+
+#~ msgid "Normal"
+#~ msgstr "Miernowe"
+
+#~ msgid "Delete Frames"
+#~ msgstr "Disfacer cådes"

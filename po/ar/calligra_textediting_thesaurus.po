@@ -1,0 +1,395 @@
+# translation of thesaurus_tool.po to
+# Copyright (C) 2003, 2007 Free Software Foundation, Inc.
+# Usama Ahmed Ali <usama01@maktoob.com>, 2002.
+# Nuriddin Aminagha <nuriddin@eminaga.de>, 2003.
+# Youssef Chahibi <chahibi@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: thesaurus_tool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-10-14 16:07+0000\n"
+"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
+"Language-Team: <en@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: Thesaurus.cpp:81
+#, kde-format
+msgid "(No match)"
+msgstr "(لا تطابق)"
+
+#: Thesaurus.cpp:91
+#, kde-format
+msgid "&Search for:"
+msgstr "البحث عن:"
+
+#: Thesaurus.cpp:94
+#, fuzzy, kde-format
+msgid "S&earch"
+msgstr "ابحث"
+
+#: Thesaurus.cpp:101
+#, fuzzy, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr "الخلف"
+
+#: Thesaurus.cpp:105
+#, fuzzy, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "مرر"
+
+#: Thesaurus.cpp:108
+#, fuzzy, kde-format
+msgid "Change Language..."
+msgstr "غيّر اللغة."
+
+#: Thesaurus.cpp:122
+#, kde-format
+msgid "&Thesaurus"
+msgstr "&قاموس"
+
+#: Thesaurus.cpp:126
+#, kde-format
+msgid "Synonyms"
+msgstr "المرادفات"
+
+#: Thesaurus.cpp:133
+#, kde-format
+msgid "More General Words"
+msgstr "المزيد من الكلمات العامة"
+
+#: Thesaurus.cpp:140
+#, kde-format
+msgid "More Specific Words"
+msgstr "المزيد من الكلمات المحددة"
+
+#: Thesaurus.cpp:170
+#, fuzzy, kde-format
+msgid "&Wordnet"
+msgstr "وردنيت - علامة تجارية لمعجم مفردات"
+
+#: Thesaurus.cpp:192
+#, kde-format
+msgid "&Replace with:"
+msgstr "استبدل &ب:"
+
+#: Thesaurus.cpp:255
+#, kde-format
+msgid "&Replace"
+msgstr "ا&ستبدل"
+
+#: Thesaurus.cpp:267
+#, fuzzy, kde-format
+msgid "Replace Word"
+msgstr "استبدل الكلمه"
+
+#: Thesaurus.cpp:295
+#, fuzzy, kde-format
+msgid "Related Words - %1"
+msgstr "متعلق كلمات 1"
+
+#: Thesaurus.cpp:409
+#, fuzzy, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr "الـ ملفّ ليس موجود رجاء استخدام غيّر اللغة إلى تحديد a ملفّ."
+
+#: Thesaurus.cpp:429
+#, fuzzy, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b> خطأ</b> فشل إلى نفِّذ."
+
+#: Thesaurus.cpp:581
+#, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "المترادفات/Hypernyms_ مرتبة حسب التردد"
+
+#: Thesaurus.cpp:582
+#, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "المرادفات_ مرتبة حسب تشابه المعنى (الأفعال فقط)"
+
+#: Thesaurus.cpp:583
+#, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Antonyms_ كلمات ذات معنى معاكس"
+
+#: Thesaurus.cpp:584
+#, fuzzy, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "هو a من 1"
+
+#: Thesaurus.cpp:585
+#, fuzzy, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "a."
+
+#: Thesaurus.cpp:587
+#, fuzzy, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "a 1"
+
+#: Thesaurus.cpp:588
+#, kde-format
+msgid "Attributes"
+msgstr "خواص"
+
+#: Thesaurus.cpp:589
+#, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "تؤدي إلى (صالحة لبعض الأفعال فقط)"
+
+#: Thesaurus.cpp:590
+#, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "مستلزمات الفعل ( صالحة لبعض الأفعال فقط)"
+
+#: Thesaurus.cpp:591
+#, fuzzy, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "الألفة العدد"
+
+#: Thesaurus.cpp:593
+#, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "إطار الفعل (أمثلة لإستخدام الفعل)"
+
+#: Thesaurus.cpp:594
+#, kde-format
+msgid "List of Compound Words"
+msgstr "لائحة الكلمات المركبة"
+
+#: Thesaurus.cpp:595
+#, fuzzy, kde-format
+msgid "Overview of Senses"
+msgstr "الرؤية العامة من الأحاسيس"
+
+#: Thesaurus.cpp:623
+#, fuzzy, kde-format
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>خطاء:</b> لم ينجح في تطبيق برنامج  WordNet 'wn'. يجب ان يكون WordNet "
+"متوفرا في جهازك لكي تستطيع إستخدامه, كما أن 'wn' يجب أن يكون مدرجا في PATH. "
+"يمكنك الحصول على WordNet من <a href=\"http://www.cogsci.princeton.edu/~wn/"
+"\">http://www.cogsci.princeton.edu/~wn/</a>. ترجى ملاحظة أن WordNet يدعم "
+"اللغة الإنجليزية فقط."
+
+#: Thesaurus.cpp:635
+#, kde-format
+msgid "No match for '%1'."
+msgstr "لا يوجد مطابق ل '%1'."
+
+#, fuzzy
+#~ msgctxt "@action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "أ&غلق"
+
+#, fuzzy
+#~| msgid "(No match)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(لا تطابق)"
+
+#, fuzzy
+#~| msgid "&Search for:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "البحث عن:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "ابحث"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go back to the previous word in history"
+#~ msgid "Back"
+#~ msgstr "الخلف"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "مرر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "غيّر اللغة."
+
+#, fuzzy
+#~| msgid "&Thesaurus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "&قاموس"
+
+#, fuzzy
+#~| msgid "Synonyms"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "المرادفات"
+
+#, fuzzy
+#~| msgid "More General Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "المزيد من الكلمات العامة"
+
+#, fuzzy
+#~| msgid "More Specific Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "المزيد من الكلمات المحددة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "وردنيت - علامة تجارية لمعجم مفردات"
+
+#, fuzzy
+#~| msgid "&Replace with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "استبدل &ب:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @action:button Close thesaurus dialog"
+#~ msgid "&Close"
+#~ msgstr "أ&غلق"
+
+#, fuzzy
+#~| msgid "&Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "ا&ستبدل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "استبدل الكلمه"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "متعلق كلمات 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr "الـ ملفّ ليس موجود رجاء استخدام غيّر اللغة إلى تحديد a ملفّ."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr "<b> خطأ</b> فشل إلى نفِّذ."
+
+#, fuzzy
+#~| msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "المترادفات/Hypernyms_ مرتبة حسب التردد"
+
+#, fuzzy
+#~| msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "المرادفات_ مرتبة حسب تشابه المعنى (الأفعال فقط)"
+
+#, fuzzy
+#~| msgid "Antonyms - Words with Opposite Meanings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Antonyms_ كلمات ذات معنى معاكس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "هو a من 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "a."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "a 1"
+
+#, fuzzy
+#~| msgid "Attributes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "خواص"
+
+#, fuzzy
+#~| msgid "Cause To (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "تؤدي إلى (صالحة لبعض الأفعال فقط)"
+
+#, fuzzy
+#~| msgid "Verb Entailment (for some verbs only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "مستلزمات الفعل ( صالحة لبعض الأفعال فقط)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "الألفة العدد"
+
+#, fuzzy
+#~| msgid "Verb Frames (examples of use)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "إطار الفعل (أمثلة لإستخدام الفعل)"
+
+#, fuzzy
+#~| msgid "List of Compound Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "لائحة الكلمات المركبة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "الرؤية العامة من الأحاسيس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>خطاء:</b> لم ينجح في تطبيق برنامج  WordNet 'wn'. يجب ان يكون WordNet "
+#~ "متوفرا في جهازك لكي تستطيع إستخدامه, كما أن 'wn' يجب أن يكون مدرجا في "
+#~ "PATH. يمكنك الحصول على WordNet من <a href=\"http://www.cogsci.princeton."
+#~ "edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. ترجى ملاحظة أن "
+#~ "WordNet يدعم اللغة الإنجليزية فقط."
+
+#, fuzzy
+#~| msgid "No match for '%1'."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "لا يوجد مطابق ل '%1'."

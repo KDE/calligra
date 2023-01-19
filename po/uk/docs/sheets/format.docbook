@@ -1,0 +1,1139 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Юрій</firstname
+><surname
+>Чорноіван</surname
+><affiliation
+><address
+><email
+>yurchor@ukr.net</email
+></address
+></affiliation
+><contrib
+>Переклад українською</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Форматування електронної таблиці</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>Формат комірки</title>
+<para
+>Щоб змінити формат та вигляд вибраних комірок, рядків або стовпчиків, скористайтеся пунктом <guimenuitem
+>Формат комірки...</guimenuitem
+> меню <guimenu
+>Формат</guimenu
+> або контекстного меню, яке можна викликати клацанням <mousebutton
+>правою</mousebutton
+> кнопкою миші.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Контекстне меню, що викликається клацанням правою кнопкою миші.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>За допомогою цієї дії можна відкрити діалогове вікно <guilabel
+>Формат комірки</guilabel
+>, у якому ви побачите декілька сторінок-вкладок:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>Формат даних і представлення</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Сторінка <guilabel
+>Формат даних</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>За допомогою сторінки <guilabel
+>Формат даних</guilabel
+> діалогового вікна <guilabel
+>Формат комірки</guilabel
+> ви зможете керувати показом значень у комірці.</para>
+<para
+>За допомогою верхньої частини цієї сторінки ви зможете визначити формат, який буде використано для показу числових значень, дат та часу. На панелі <guilabel
+>Перегляд</guilabel
+> ви зможете спостерігати за наслідками внесених вами змін. </para>
+<para
+>Ви можете встановити однаковий формат даних для певного рядка або стовпчика. Для цього слід обрати цей рядок або стовпчика, а потім скористатися пунктом <guilabel
+>Формат комірки</guilabel
+> контекстного меню, відкрити яке можна клацанням правою кнопкою миші.</para>
+<note
+><para
+>Ви можете збільшити десяткову точність для будь-якого числа для форматів <guilabel
+>Загальний</guilabel
+>, <guilabel
+>Число</guilabel
+>, <guilabel
+>Відсоток</guilabel
+>, <guilabel
+>Гроші</guilabel
+> та <guilabel
+>Науковий</guilabel
+> за допомогою натискання піктограми <guiicon
+>Збільшити точність</guiicon
+>, розташованої на панелі інструментів <guilabel
+>Формат</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>Ви можете зменшити десяткову точність для будь-якого числа для форматів <guilabel
+>Загальний</guilabel
+>, <guilabel
+>Число</guilabel
+>, <guilabel
+>Відсоток</guilabel
+>, <guilabel
+>Гроші</guilabel
+> та <guilabel
+>Науковий</guilabel
+> за допомогою натискання піктограми <guiicon
+>Зменшити точність</guiicon
+>, розташованої на панелі інструментів <guilabel
+>Формат</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Загальний</guilabel
+></term>
+<listitem
+><para
+>Типовий формат, &sheets; автоматично визначає дійсний тип даних залежно від поточних даних комірки. Для чисел, дат і часу &sheets; використовує вирівнювання праворуч, для всього іншого — ліворуч.</para>
+<para
+>Якщо <guilabel
+>Загальний</guilabel
+> формат вас не влаштовує, ви можете змінити його на один з варіантів, описаних нижче.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Число</guilabel
+></term>
+<listitem
+><para
+>Для показу чисел використовуватимуться загальні параметри середовища, які можна обрати у «Системних параметрах» на сторінці <menuchoice
+><guimenu
+>Локаль</guimenu
+><guisubmenu
+>Країна/Регіон та мова</guisubmenu
+><guimenuitem
+>Числа</guimenuitem
+></menuchoice
+>. Типово, числа вирівнюватимуться у комірках праворуч.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Відсоток</guilabel
+></term>
+<listitem
+><para
+>Якщо у поточній комірці перебуває число, а ви перемкнули формат комірки з <guilabel
+>Загального</guilabel
+> на <guilabel
+>Відсоток</guilabel
+>, число у комірці буде помножено на 100.</para>
+<para
+>Наприклад, якщо ви ввели 2, потім встановили для комірки формат <guilabel
+>Відсоток</guilabel
+>, число буде показано як 200 %. Якщо знову повернутися до <guilabel
+>Загального</guilabel
+> формату комірки, програма знову показуватиме у комірці значення 2.</para>
+<para
+>Крім того, ви можете скористатися кнопкою з піктограмою <guiicon
+>Відсоток</guiicon
+> на панелі інструментів <guilabel
+>Формат</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Гроші</guilabel
+></term>
+<listitem
+><para
+>Перетворення числа у формат <guilabel
+>Гроші</guilabel
+> буде виконано відповідно до параметрів грошової одиниці, вказаних у «Системних параметрах» на сторінці <menuchoice
+><guimenu
+>Локаль</guimenu
+><guisubmenu
+>Країна/Регіон та мова</guisubmenu
+> <guimenuitem
+>Гроші</guimenuitem
+></menuchoice
+>. Символ грошової одиниці та точність також будуть визначатися параметрами, вказаними у «Системних параметрах».</para>
+<para
+>Крім того, ви можете натиснути кнопку <guiicon
+>Формат валют</guiicon
+> на панелі інструментів <guilabel
+>Формат</guilabel
+>, щоб форматування у комірці відповідало вашій поточній грошовій одиниці: <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Науковий</guilabel
+></term>
+<listitem
+><para
+>За використання формату <guilabel
+>Науковий</guilabel
+> числа буде перетворено відповідно до позначень, які використовуються у комп’ютерних науках. Наприклад, 0,0012 буде перетворено на 1.2E-03. Якщо ви повернетеся до формату <guilabel
+>Загальний</guilabel
+>, у комірці знову буде показано 0,0012. За використання формату <guilabel
+>Загальний</guilabel
+> формат даних комірки вже не міститиме наукових позначень, отже, якщо вам потрібно, щоб числа було записано саме у науковому форматі, вам слід явно вказати цей формат за допомогою пункту меню.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Дроби</guilabel
+></term>
+<listitem
+><para
+>Формат <guilabel
+>Дроби</guilabel
+> відображає число у вигляді дробу. Наприклад, число 0,1 може бути показане у вигляді дробів 1/8, 2/16, 1/10 тощо. Вибрати знаменник дробу можна зі списку на правій панелі. У випадку, якщо для вибраного знаменника не може бути підібрано цілий чисельник, буде використано найближче ціле значення. Наприклад, ви ввели число 1,5, перемкнулися на дробовий формат і використали знаменник 1/16. У комірці буде показано "1 8/16", що точно відповідає введеному числу. Якщо ж ви ввели число 1,4 і обрали знаменник 1/16, у комірці буде показано "1 6/16" — дріб, округлений до найближчого цілого чисельника.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Дата</guilabel
+></term>
+<listitem
+><para
+>Дати слід вводити у одному з форматів, які визначено у «Системних параметрах» на сторінці <menuchoice
+><guimenu
+>Локаль</guimenu
+><guisubmenu
+>Країна/Регіон та мова</guisubmenu
+><guimenuitem
+>Час та дата</guimenuitem
+></menuchoice
+>. Там можна вибрати два формати дати: звичайний формат і скорочений формат дати.</para>
+<para
+>Випадкове натуральне число NN буде перетворено на дату після 30 грудня 1899 року (початку відліку) додаванням NN днів. Наприклад, якщо у комірці було число 100, а ви обрали для комірки формат <guilabel
+>Дата</guilabel
+>, у комірці буде показано «09.04.1900», дату, яка відповідає 100 дням після 30 грудня 1899 року. Цю початкову дату було обрано через ваду у Lotus 123 (дата мала бути на два дні пізніше). Цю ваду було збережено у Excel з міркувань сумісності. Так чи інакше, мало кому потрібні точні обчислення номера дати після 1 січня 1900 року, оскільки додавання 9 днів до, скажімо, 1 листопада 2000 року дасть 10 листопада 2000 року у обох випадках, отже звичайні дії з датами виконуються правильно.</para>
+<note
+><para
+>Якщо для комірки встановлено формат <guilabel
+>Дата</guilabel
+>, ви можете перетягти комірку вниз, так само які з числами, — у наступних комірках програма розташує дати з послідовним збільшенням дат на один день.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Час</guilabel
+></term>
+<listitem
+><para
+>За допомогою цього пункту можна встановити для даних комірки формат часу. Ввести час параметри відліку часу можна на вкладці <guilabel
+>Формат часу</guilabel
+> сторінки <menuchoice
+><guimenu
+>Країна/Регіон і мова</guimenu
+><guisubmenu
+>Країна/Регіон та мова</guisubmenu
+> <guimenuitem
+>Час та дата</guimenuitem
+> </menuchoice
+> «Системних параметрів». За допомогою діалогового вікна <guilabel
+>Формат комірки</guilabel
+> ви можете вказати спосіб показу часу вибором одного з можливих варіантів форматування даних про час. Типовим форматом буде системний формат, визначений у «Системних параметрах». Якщо перетворити дані комірки на час не вдасться, &sheets; покаже час 00:00 у загальному форматі, визначеному за допомогою «Системних параметрів».</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Дата і час</guilabel
+></term>
+<listitem
+><para
+>За допомогою цього пункту можна встановити для даних комірки формат дати і часу. Ввести параметри відліку дати і часу можна на вкладці <guilabel
+>Формат часу</guilabel
+> сторінки <menuchoice
+><guimenu
+>Країна/Регіон і мова</guimenu
+><guisubmenu
+>Країна/Регіон та мова</guisubmenu
+> <guimenuitem
+>Час та дата</guimenuitem
+> </menuchoice
+> «Системних параметрів». За допомогою діалогового вікна <guilabel
+>Формат комірки</guilabel
+> ви можете вказати спосіб показу часу вибором одного з можливих варіантів форматування даних про дату і час. Типовим форматом буде системний формат, визначений у «Системних параметрах». Якщо перетворити дані комірки на час не вдасться, &sheets; покаже час 00:00 у загальному форматі, визначеному за допомогою «Системних параметрів».</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Текстовий</guilabel
+></term>
+<listitem
+><para
+>Текстовий формат визначає вміст комірки як текст. Це корисно, якщо ви бажаєте працювати з числами як з текстом, наприклад, для поштових індексів. Встановлення формату числових даних як тексту вирівняє вміст комірки ліворуч. Якщо числа відформатовано як текст, його не можна використовувати у розрахунках або формулах. Також після такої операції змінюється вирівнювання у комірці.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Нетиповий</guilabel
+></term>
+<listitem
+><para
+>Ще не працює у поточній версії. Буде увімкнено у наступному випуску програми.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>За допомогою нижньої частини сторінки <guilabel
+>Формат дати</guilabel
+> ви можете додати <guilabel
+>Префікс:</guilabel
+>, наприклад, символ $, з якого починатиметься кожен з записів, і <guilabel
+>Суфікс:</guilabel
+>, наприклад $HK, який буде додано в кінці. Крім того, ви можете вказати кількість цифр, які буде показано після десяткової коми у числових значеннях, те, чи буде показано додатні числа з префіксом + і те, чи буде позначено від’ємні числа червоним кольором. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>Параметри шрифтів і тексту</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Сторінка шрифтів.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>За допомогою сторінки <guilabel
+>Шрифт</guilabel
+> ви зможете обрати гарнітуру, <guilabel
+>Стиль:</guilabel
+>, <guilabel
+>Розмір:</guilabel
+>, <guilabel
+>Товщину:</guilabel
+> і <guilabel
+>Колір:</guilabel
+> символів шрифту у поточній комірці, а також деякі додаткові параметри, зокрема наявність або відсутність підкреслення і перекреслення тексту. У нижній частині сторінки ви зможете побачити <guilabel
+>Перегляд</guilabel
+> тексту у обраному форматі.</para>
+<para
+>Типовий шрифт встановлюється для всіх комірок. Для визначення шрифту скористайтеся пунктом меню <menuchoice
+><guimenu
+>Формат</guimenu
+><guimenuitem
+>Керування стилями</guimenuitem
+></menuchoice
+>, у вікні, що відкриється, змініть параметри поточного стилю.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>Стиль:</guilabel
+></term>
+<listitem
+><para
+>Виберіть стиль для вашого шрифту у вибраних комірках. Якщо ви виберете декілька комірок з різними стилями, то стиль встановлюється як <guilabel
+>Різний (не змінювати)</guilabel
+> і, якщо його так залишити, то не буде змінено параметри стилю для цих комірок. Якщо змінити, напр., на <guilabel
+>Roman</guilabel
+>, стиль всіх вибраних комірок буде змінено на <guilabel
+>Roman</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Розмір:</guilabel
+></term>
+<listitem
+><para
+>Тут ви можете визначити розмір символів шрифту у поточних вибраних комірках. Якщо ви позначили декілька комірок з символами різного розміру, буде показано розмір <guilabel
+> </guilabel
+> (не вказано жодного числа). Якщо ви не змінюватимете цей параметр, поточний розмір символів у комірці буде збережено. Якщо ж змінити розмір, наприклад, на <guilabel
+>14</guilabel
+>, символи у всіх позначених комірках набудуть розміру <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Вага:</guilabel
+></term>
+<listitem
+><para
+>Виберіть масивність шрифту для вибраних в даний час комірок. Якщо ви виберете декілька комірок з різною масивністю шрифту, то масивність встановлюється як <guilabel
+>Різна (не змінювати)</guilabel
+> і, якщо її так залишити, то не буде змінено параметри масивності для цих комірок. Якщо змінити, напр., на <guilabel
+>жирний</guilabel
+>, то масивність шрифту всіх вибраних комірок буде змінено на <guilabel
+>жирний</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Колір:</guilabel
+></term>
+<listitem
+><para
+>Виберіть колір тексту вибраної в даний час комірки. Натискання на кнопку з кольором викличе стандартне вікно KDE для вибору кольору, в якому можна буде вибрати новий колір. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Підкреслений</guilabel
+></term>
+<listitem
+><para
+>Якщо позначити цей пункт, вміст поточної вибраної комірки буде підкреслено. Типово цей пункт не позначено.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Перекреслений</guilabel
+></term>
+<listitem
+><para
+>Якщо позначити цей пункт, вміст поточної вибраної комірки буде перекреслено. Типово цей пункт не позначено.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>Розташування тексту і обертання</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Сторінка розташування.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>За допомогою сторінки <guilabel
+>Позиція</guilabel
+> ви можете керувати розташуванням тексту у комірці. Зробити це можна за допомогою вибору відповідний варіантів на панелях <guilabel
+>По горизонталі</guilabel
+> і <guilabel
+>По вертикалі</guilabel
+> або встановленням значення параметра <guilabel
+>Відступ</guilabel
+>. Крім того, ви можете вказати, що текст слід розташовувати вертикально, а не горизонтально, або навіть вказати кут, під яким програмі слід розташувати текст.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>По горизонталі</guilabel
+></term>
+<listitem
+><para
+>Встановити горизонтальну позицію вмісту в комірці. <guilabel
+>Стандартна</guilabel
+> — типова, встановлюється з вибраного вами формату. <guilabel
+>Ліворуч</guilabel
+> означає, що вміст буде показано з лівого боку комірки. <guilabel
+>По центру</guilabel
+> означає, що вміст буде показано по центру комірки. <guilabel
+>Праворуч</guilabel
+> означає, що вміст буде показано з правого боку комірки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>По вертикалі</guilabel
+></term>
+<listitem
+><para
+>Встановити вертикальну позицію вмісту в комірці. <guilabel
+>Зверху</guilabel
+> означає, що вміст буде показано зверху комірки. <guilabel
+>Посередині</guilabel
+> означає, що вміст буде показано посередині комірки.
+<guilabel
+>Внизу</guilabel
+> означає, що вміст буде показано внизу комірки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Параметри тексту</guilabel
+></term>
+<listitem
+><para
+>Цей пункт буде доступним, лише якщо кут повороту дорівнює 0°. <guilabel
+>Переносити слова</guilabel
+> — розбивати рядки тексту так, щоб цей текст вмістився у межах попередніх розмірів комірки. Якщо цей пункт не буде позначено, текст буде показано у одному рядку.</para>
+<para
+>Вибір варіанта <guilabel
+>Вертикальний текст</guilabel
+> призведе до вертикального розташування тексту.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Обертання</guilabel
+></term>
+<listitem
+><para
+>Ваш текст буде показано під встановленим кутом. Додатні значення обертатимуть його проти годинникової стрілки, а від'ємні — за годинниковою стрілкою.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Об'єднати комірки</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт буде позначено, програма виконає ті самі дії, що і у відповідь на використання пункту меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Об’єднати комірки</guimenuitem
+></menuchoice
+>. Для виконання дії має бути позначено принаймні дві послідовні комірки. Після виконання дії ці комірки буде об’єднано у одну більшу комірку.</para>
+<para
+>Після вибору комірки і зняття позначки з цього пункту розмір всіх складових великої комірки буде відновлено до початкового, до об’єднання. Наслідки будуть тими самими, що і після використання пункту меню <menuchoice
+><guimenu
+>Формат</guimenu
+><guimenuitem
+>Роз'єднати комірки</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Відступ</guilabel
+></term>
+<listitem
+><para
+>Ширину відступу у комірці можна змінити за допомогою пунктів <guilabel
+>Збільшити відступ</guilabel
+>/<guilabel
+>Зменшити відступ</guilabel
+> на панелі інструментів. Типово, ці пункти на панелі вимкнено.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Розмір комірки</guilabel
+></term>
+<listitem
+><para
+>Тут ви можете вказати розмір комірки. Ви можете обрати або власне значення ширини і висоти, або скористатися типовими значеннями ширини і висоти.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>Границя комірки</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Сторінка границь.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>За допомогою сторінки <guilabel
+>Рамка</guilabel
+> ви можете визначити вигляд рамки комірки. Якщо ви позначили декілька комірок, ви можете застосувати різні стилі до меж рамки між комірками і меж області комірок. </para>
+<para
+>Спочатку оберіть візерунок і колір за допомогою панелі <guilabel
+>Візерунок</guilabel
+> сторінки <guilabel
+>Границя</guilabel
+>, а потім застосуйте вказані значення до різних частин рамки натисканням відповідних кнопок на панелі <guilabel
+>Рамка</guilabel
+> або однієї з кнопок <guilabel
+>Попереднього вибору</guilabel
+>. Ліву кнопку панелі <guilabel
+>Попередній вибір</guilabel
+> призначено для вилучення всіх попередньо вказаних рамок. Зауважте, що ви також можете додати діагональне перекреслення до позначених комірок.</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>Сторінка тла</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Сторінка тла.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>На сторінці <guilabel
+>Тло</guilabel
+> можна обрати візерунок і колір тла комірки.</para>
+<para
+>Вам достатньо просто обрати бажаний <guilabel
+>Візерунок</guilabel
+>, а потім <guilabel
+>Колір</guilabel
+> візерунка і <guilabel
+>Колір тла</guilabel
+>.</para>
+<para
+>У нижній частині цієї сторінки ви можете бачити панель <guilabel
+>Перегляд</guilabel
+> з вказаним вами тлом комірки.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>Захист комірки</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Сторінка захисту комірки.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Змінити спосіб захисту вмісту комірки можна за допомогою сторінки <guilabel
+>Захист комірки</guilabel
+>.</para>
+<para
+>Типово, всі комірки захищено (це означає, що користувач не може змінювати їх вміст). Щоб задіяти цей захист, вам потрібно захистити і аркуш комірок за допомогою пункту меню <menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Захистити аркуш...</guimenuitem
+></menuchoice
+>, а також вказати пароль. Крім того, ви можете сховати формулу комірки з метою захисту способу обчислення даних комірки. Для того, щоб цей захист почав працювати, вам теж доведеться увімкнути захист аркуша. Ви можете наказати програмі приховати вміст за допомогою пункту <guilabel
+>Сховати все</guilabel
+>, і знову таки, для набуття чинності таким захистом вам доведеться захистити аркуш. Дізнатися докладніше про ці параметри можна у <link linkend="protection"
+>главі «Додаткові можливості &sheets;», розділ «Захист»</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Сховати все</guilabel
+></term>
+<listitem
+><para
+>За допомогою цього пункту можна сховати вміст комірки. Подібний захист працюватиме, лише якщо аркуш буде захищено. Це означає, що позначення пункту <guilabel
+>Сховати все</guilabel
+> для певної комірки ні на що не вплине, якщо аркуш не захищено. Те, чи захищено комірку, у разі відсутності захисту аркуша не матиме значення.</para>
+<para
+>Якщо буде позначено пункт <guilabel
+>Сховати все</guilabel
+>, пункти <guilabel
+>Захищена</guilabel
+> і <guilabel
+>Сховати формулу</guilabel
+> буде вимкнено, оскільки, у разі захисту аркуша, позначення пункту <guilabel
+>Сховати все</guilabel
+> призведе до приховування вмісту комірки і формул, а отже маскування і захисту вмісту комірки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Захищена</guilabel
+></term>
+<listitem
+><para
+>Якщо буде позначено цей пункт, програма захистить вміст комірки. Це типова поведінка. Для того, щоб захист окремої комірки був ефективним, вам слід захистити цілий аркуш за допомогою пункту меню <menuchoice
+><guimenu
+>Інструменти</guimenu
+><guimenuitem
+>Захистити аркуш...</guimenuitem
+></menuchoice
+>. Якщо комірку буде захищено, користувач не зможе змінювати її вміст.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Сховати формулу</guilabel
+></term>
+<listitem
+><para
+>Якщо буде позначено цей пункт, комірка залишиться видимою. Але її вміст не з’явиться на панелі <guilabel
+>Формула</guilabel
+>. Приховування формул працюватиме лише для комірок, що містять формули, так, що користувач не бачитиме формули. Щоб це спрацювало, аркуш має бути захищено.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Не друкувати текст</guilabel
+></term>
+<listitem
+><para
+>Якщо ви позначите пункт <guilabel
+>Не друкувати текст</guilabel
+>, текстовий вміст комірки не буде надруковано. Типово, цей пункт не позначено, отже типово текст комірки буде надруковано.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>Умовні атрибути комірки</title>
+<para
+>Ви можете наказати програмі змінювати вигляд комірки залежно від її вмісту. Подібна зміна буде корисною, якщо ви використовуєте для стеження за сімейними витратами &sheets; і бажаєте щоб програма підсвічувала витрати, більші, скажімо, за тисячу гривень.</para>
+<para
+>Щоб налаштувати програму відповідним чином, оберіть пункт <guimenuitem
+>Умовне форматування комірки...</guimenuitem
+> з меню <guimenu
+>Формат</guimenu
+>. У відповідь програма відкриє діалогове вікно <guilabel
+>Умовні атрибути комірки</guilabel
+>, за допомогою якого ви зможете вказати параметри зміни типу шрифту і кольору комірки, якщо вміст комірки відповідатиме одні або декільком умовам. Зауважте, що другу і третю умови буде застосовано, лише якщо не буде виявлено відповідності першій з умов тощо.</para>
+<para
+>Скористайтесь пунктом <menuchoice
+><guisubmenu
+>Очистити</guisubmenu
+><guimenuitem
+>Умовні стилі</guimenuitem
+></menuchoice
+> з меню <guimenu
+>Зміни</guimenu
+>, щоб вилучити всі умовні атрибути з вибраних комірок.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>Зміна розмірів комірок</title>
+<para
+>За допомогою сторінки <guilabel
+>Розташування</guilabel
+> діалогового вікна <guilabel
+>Формат комірки</guilabel
+> ви зможете змінити розмір вибраних комірок. Зауважте, що зміна висоти певної окремої комірки призведе до зміни висоти всіх комірок у рядку, а зміна ширини стовпчика змінить ширину всіх комірок стовпчика.</para>
+<para
+>Крім того, ви можете позначити рядки або стовпчики, які слід змінити, а потім скористатися пунктами <guimenuitem
+>Змінити розмір рядка...</guimenuitem
+> or <guimenuitem
+>Змінити розмір колонки... </guimenuitem
+> з контекстного меню, що викликається клацанням <mousebutton
+>правою</mousebutton
+> кнопкою миші, або за допомогою пунктів <menuchoice
+><guimenu
+>Формат</guimenu
+><guisubmenu
+>Рядок</guisubmenu
+></menuchoice
+> та <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Колонка</guisubmenu
+></menuchoice
+>.</para>
+<para
+>Якщо ви наведете вказівник миші на точку, розташовану на лінії, що відокремлює номери рядків на бічній панелі вікна &sheets;, вигляд курсора зміниться на дві паралельні лінії зі стрілочками у різні боки. Якщо тепер натиснути і утримувати <mousebutton
+>ліву</mousebutton
+> кнопку миші, а потім перетягти вказівник, межу між рядками також буде пересунуто, отже зміниться висота верхнього рядка. У подібний же спосіб можна змінити ширину стовпчика.</para>
+
+<para
+>Щоб вказати висоту рядка або ширину стовпчика у таке мінімальне значення, за якого буде показано весь вміст комірок, позначте цілий рядок або стовпчик, наведіть на заголовок рядка або стовпчика вказівник і клацніть правою кнопкою миші, а потім оберіть пункт <guimenuitem
+>Скоригувати рядок</guimenuitem
+> або <guimenuitem
+>Скоригувати стовпчик</guimenuitem
+>. Розміри рядка або стовпчика буде змінено до оптимальних. Крім того, ви можете позначити окрему комірку або діапазон комірок, і оберіть пункт <guimenuitem
+>Скоригувати рядок і стовпчик</guimenuitem
+> або з контекстного меню, або меню <guimenu
+>Формат</guimenu
+>.</para>
+
+<para
+>Зробити розмір декількох сусідніх рядків або колонок однаковим можна так: позначте відповідні рядки або колонки, а потім скористайтеся пунктами меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Рядок</guisubmenu
+><guimenuitem
+>Вирівняти висоту рядка</guimenuitem
+></menuchoice
+> або <menuchoice
+><guimenu
+>Формат</guimenu
+><guisubmenu
+>Колонка</guisubmenu
+> <guimenuitem
+>Вирівняти ширину колонки</guimenuitem
+></menuchoice
+>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>Об’єднання комірок</title>
+<para
+>Часто зручно створити одну комірку з розміром, більшим за один стовпчик або рядок. Створити таку комірку можна за допомогою об’єднання двох або декількох комірок у одну. Оберіть комірки, які слід об’єднати і скористайтеся пунктом меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Об’єднати комірки</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Щоб обернути цей процес, позначте об’єднану комірку, а потім скористайтеся пунктом <guimenuitem
+>Роз'єднати комірки</guimenuitem
+> з меню <guimenu
+>Формат</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>Приховування рядків і колонок</title>
+<para
+>Часто зовнішній вигляд завершеної електронної таблиці можна значно покращити, якщо приховати комірки з проміжними обчисленням так, щоб було показано лише важливі початкові дані і область результатів.</para>
+<para
+>У &sheets; передбачено можливість приховування вибраних рядків або комірок за допомогою пунктів <guimenuitem
+>Сховати рядки</guimenuitem
+> і <guimenuitem
+>Сховати колонки</guimenuitem
+> меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Рядок</guisubmenu
+></menuchoice
+>, <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Колонка</guisubmenu
+></menuchoice
+> або контекстного меню, яке викликається клацанням <mousebutton
+>правою</mousebutton
+> кнопкою миші. Приховані рядки і комірки не буде показано на екрані і не буде надруковано.</para>
+<para
+>Приховування комірок у цей спосіб також зробить їх трохи захищенішими від випадкових змін.</para>
+<para
+>Щоб скасувати приховування рядка або стовпчика, скористайтеся пунктом меню <menuchoice
+><guisubmenu
+>Рядок</guisubmenu
+> <guimenuitem
+>Показати рядки...</guimenuitem
+></menuchoice
+> або <menuchoice
+><guisubmenu
+>Колонка</guisubmenu
+> <guimenuitem
+>Показати колонки... </guimenuitem
+></menuchoice
+> меню <guimenu
+>Формат</guimenu
+>. За допомогою діалогового вікна, яке буде відкрито, ви зможете скасувати приховування будь-яких рядків або стовпчиків.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>Властивості аркуша</title>
+<para
+>Отримати доступ до властивостей поточного аркуша можна або клацанням правою кнопкою миші на вкладці аркуша з наступним вибором пункту <guilabel
+>Властивості аркуша</guilabel
+> або за допомогою пункту меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Аркуш</guisubmenu
+><guimenuitem
+>Властивості аркуша</guimenuitem
+></menuchoice
+>. Будь ласка, пам’ятайте, що доступ до <guilabel
+>Властивостей аркуша</guilabel
+> можна отримати, лише якщо документ або аркуш не захищено.</para>
+<para
+>Ви можете вказати інші параметри, які будуть чинними на поточному аркуші. Натисканням кнопки <guibutton
+>Гаразд</guibutton
+> ви можете підтвердити застосування внесених змін. Натискання кнопки <guibutton
+>Типові</guibutton
+> поверне типові значення параметрів.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Діалогове вікно властивостей аркуша.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Напрямок розташування:</guilabel
+></term>
+<listitem
+><para
+>Надає вам змогу обрати типову орієнтацію аркуша. Типовою поведінкою є така, коли першою колонкою аркуша буде ліва. Якщо ви оберете напрямок <guilabel
+>Справа ліворуч</guilabel
+>, перша колонка знаходитиметься праворуч, а інші додаватимуться ліворуч.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Ховати нуль</guilabel
+></term>
+<listitem
+><para
+>Якщо увімкнено, то комірка, яка містить нуль буде виглядати порожньою.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Автоматичне переобчислення</guilabel
+></term>
+<listitem
+><para
+>Цей параметр вказує чи перераховувати всі формули автоматично, якщо в якійсь комірці змінилось значення.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показувати колонки як номери</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, у заголовках стовпців буде показано їх порядкові номери замість літер. Типовою поведінкою є відображення літер.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Режим нижнього регістру</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, адрес поточної комірки ліворуч на панелі формул буде показано у вигляді номерів рядка і колонки (наприклад, L2C3) замість типової форми B3.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Змінити регістр першої літери на верхній</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, першу літеру тексту, що вводиться в комірку, буде перетворено на літеру верхнього регістру.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показати сітку</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, на аркуші буде показано ґратку, що показує границі комірок. Ця поведінка є типовою. Якщо його вимкнено ґратку буде сховано.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показати межі сторінки</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, на поточнім аркуші буде накреслено межі сторінки. Типово межі сторінки не буде показано. Бачити межі сторінки корисно, якщо ви бажаєте згодом надрукувати аркуш.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показати формулу</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, у комірках &sheets; буде показано код формул, замість результату їх обчислення.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показувати індикатор формул</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, в нижньому лівому куті комірок &sheets;, що містять формули, буде показано маленький синій трикутник. Це може бути корисним, якщо ви бажаєте захистити комірки з формулами.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показувати індикатор коментаря</guilabel
+></term>
+<listitem
+><para
+>Якщо цей пункт позначено, у верхньому правому куті комірок, що мають коментар, буде показано маленький червоний трикутничок.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

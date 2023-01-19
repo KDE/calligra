@@ -1,0 +1,331 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Catalan  "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Una introducció general</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+&traductor.Rafael.Carreras; &revisor.Antoni.Bella; 
+</authorgroup>
+
+<date
+>3 de gener de 2012</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; és una suite ofimàtica i d'art gràfic integrada per al &kde;. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Introducció</title>
+<sect1>
+<title
+>Components del &calligra;</title>
+
+<important
+> <para
+>Si us plau, mireu <ulink url="http://docs.kde.org/development/ca/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+> per a versions actualitzades d'aquest document.</para
+></important>
+
+<para
+>&calligra; és una suite ofimàtica i d'art gràfic integrada per al &kde;. &calligra; consisteix actualment dels següents components: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (un processador de text basat en marcs)</para
+></listitem>
+<listitem
+><para
+>&sheets; (una aplicació de fulls de càlcul)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (presentacions de pantalla i diapositives)</para
+></listitem>
+<listitem
+><para
+>&flow; (una aplicació de diagrames de flux)</para
+></listitem>
+<listitem
+><para
+>&karbon; (una aplicació de dibuix vectorial)</para
+></listitem>
+<listitem
+><para
+>&plan; (una aplicació de gestió de projectes)</para
+></listitem>
+</itemizedlist>
+
+<para
+>Com que aquests components utilitzen la tecnologia Flake, els components del &calligra; estan dissenyats per a treballar molt bé entre ells. Qualsevol component del &calligra; es pot incrustar en un altre document de &calligra;. Per exemple, podeu inserir un full de càlcul que heu creat en &sheets; directament a un document de &words;. D'aquesta manera, es poden crear documents complexos usant &calligra;. </para>
+
+<para
+>Un mecanisme de connectors facilita estendre la funcionalitat del &calligra;. Trobareu molts connectors en alguns components i podreu aprendre a escriure'ls. </para>
+
+<para
+>Aquest manual cobreix les característiques generals del &calligra;, aquelles que són comunes a tots els components en la suite. Per a informació detallada sobre els diferents components, doneu un cop d'ull al manual respectiu. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Resum de les característiques del &calligra;</title>
+<sect2 id="featureintegration">
+<title
+>Integració</title>
+<para
+>El &calligra; facilita un entorn de treball amb tots els components construïts a l'interior. Amb aquest entorn de treball s'aconsegueix una gran integració. És possible desenvolupar el vostre propi component de manera que també hi estigui integrat. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Lleuger</title>
+<para
+>Malgrat que ofereix tants components, el &calligra; és molt lleuger, ràpid i té un consum de memòria bastant baix. Això també s'aconsegueix perquè el &calligra; està construït sobre el &kde;, el qual ja és un entorn de treball de desenvolupament d'aplicacions molt potent. </para>
+<para
+>Un objectiu del &calligra; també és no sobrecarregar la interfície d'usuari amb característiques que difícilment es poden necessitar. Això ha resultat en una interfície d'usuari magra i lleugera que us permet fer la vostra feina de manera eficient. </para>
+<para
+>Que sigui lleuger també vol dir que a vegades aquella funcionalitat específica que us cal no hi és. En aquest cas, sempre l'hi podeu afegir tot estenent el &calligra;. Aquestes característiques sempre es poden fer disponibles mitjançant connectors o scripts, deixant lleuger el &calligra;. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Totalitat</title>
+<para
+>El &calligra; ofereix un ample abast de components, que cobreixen la majoria de necessitats a casa i a l'oficina. Sempre es poden implementar noves característiques mitjançant scripts i connectors o, fins i tot components sencers basats en l'entorn de treball del &calligra;. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>Format OASIS OpenDocument</title>
+<para
+>És d'una importància capital per a qualsevol suite ofimàtica adherir-se als estàndards establerts. Especialment en el nivell de format de fitxer per a permetre treballar amb el mateix document amb altres suites ofimàtiques. Això també evita la dependència d'un proveïdor, la qual cosa és especialment important per a les empreses tot i que també per als individus. </para>
+<para
+>Per aquesta raó, el &calligra; ha estat adaptat al format OASIS OpenDocument com a format de fitxers nadiu. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>Característiques del &kde;</title>
+<para
+>Com que el &calligra; està construït sobre el &kde;, també hi trobareu disponibles al &calligra; totes les característiques del &kde;. Això inclou el &DBus;, el KParts, Flake, la integració amb l'escriptori, la capacitat de configuració, etc. Tot això fa que l'aspecte del &calligra; sigui molt familiar i estigui realment integrat dintre de l'entorn d'escriptori, el qual permet fer la feina sense constrenyiments. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>Configurant &calligra; i el vostre sistema</title>
+
+<para
+>Encara que el &calligra; hauria de funcionar bé d'entrada, hi podria haver algunes coses a optimitzar per tal d'obtenir el millor del &calligra;. Aquest capítol us mostra què podríeu voler fer per aconseguir els millors resultats amb la vostra nova suite ofimàtica i fer que aquesta compleixi amb les vostres necessitats. El &calligra; és molt configurable, fins i tot per a detalls de la barra d'eines i la disposició del menú. </para>
+
+<sect1 id="custom-gui">
+<title
+>Personalitzant la interfície del &calligra;</title>
+
+<para
+>Encara que el &calligra; ja ve amb una interfície gràfica d'usuari que ha de complaure la majoria de necessitats de la gent, hi ha bones raons per les quals potser voldreu canviar l'aspecte dels programes. </para>
+
+<para
+>La meva mare, per exemple, s'espanta dels botons i les entrades de menú que no entén. Per adaptar el &calligra; a les seves necessitats, vaig reduir la interfície gràfica d'usuari a un mínim de funcionalitats. Com que ella només vol escriure cartes i usar certes plantilles, no calen moltes més funcionalitats que desar, carregar, imprimir, &etc; </para>
+
+<para
+>Gràcies al concepte <quote
+>acció</quote
+> de les &Qt; i el &kde;, podeu personalitzar lliurement les barres de menús i les barres d'eines del &calligra;. Malauradament, i de moment, no hi ha diàlegs fàcils d'usar per a fer-ho. El &calligra; desa les seves configuracions de la interfície gràfica d'usuari en fitxers &XML; i els heu d'editar. Esperem que aquesta situació canviï en el futur; per ara, us caldrà algun coneixement bàsic de com funciona un document &XML; (o &HTML;, que és un subformat d'&XML;). </para>
+
+<para
+>Normalment, cada aplicació del &calligra; té almenys dos d'aquests fitxers &XML;: Un descriu la interfície gràfica d'usuari general (bàsicament, és el que veieu si no hi ha cap document obert) i un altre descriu la interfície de la part respectiva (això és el que veureu normalment). Per exemple, per al &words;, aquests dos fitxers &XML; s'anomenen <filename
+>calligra_shell.rc</filename
+> i <filename
+>words.rc</filename
+>. </para>
+
+<para
+>Aquí hi ha un exemple simple de fitxer rc. </para>
+
+<example>
+<title
+>Exemple d'un fitxer rc simple</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Com obtenir més informació</title>
+
+<sect1 id="other-manuals">
+<title
+>Altres manuals del &calligra;</title>
+
+<para
+>Per a informació detallada sobre les diferents aplicacions del &calligra;, si us plau, consulteu els seus respectius manuals. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Enllaços</title>
+
+<para
+>Els següents enllaços haurien de ser útils si esteu cercant més informació sobre el &kde; o el &calligra;. </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>La pàgina principal del &calligra;</ulink
+>. Aquí podeu trobar informació sobre com obtenir i instal·lar el &calligra;, notícies sobre el desenvolupament del &calligra;, captures de pantalla, &etc; </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>La pàgina principal del &kde;</ulink
+>. El &kde; és l'entorn d'escriptori més avançat i completament lliure per a sistemes operatius tipus Unix. El &calligra; usa les biblioteques del &kde;. </para
+></listitem>
+<listitem>
+<para
+>La <ulink url="http://qt-project.org/"
+>pàgina de &Qt;</ulink
+>. Els creadors del joc d'eines C++ de &Qt;. El &kde; i el &calligra; usen &Qt;. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>Programant el &calligra;</title>
+
+<sect1 id="programmingintro">
+<title
+>Introducció</title>
+<para
+>Si voleu desenvolupar el &calligra;, podeu trobar interessants els següents recursos: </para>
+
+<itemizedlist>
+<listitem
+><para
+>A <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> trobareu molts documents sobre programació amb &Qt; i &kde;. Aquí podeu trobar la versió en línia de la documentació completa de les biblioteques de &kde; a <ulink url="http://api.kde.org/"
+>KDE API Reference</ulink
+>. </para
+></listitem
+> 
+<listitem
+><para
+>El primer pas per a contribuir en el codi és seguir <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>aquestes instruccions</ulink
+> per obtenir el codi font i construir-lo. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Drets d'autor i llicències</title>
+
+<para
+>El &calligra; és el resultat de l'esforç conjunt de molts desenvolupadors. Els drets d'autor de cada fitxer font del &calligra; són de la gent que ha escrit aquest fitxer en particular i es poden trobar els seus noms al començament de cada fitxer font amb la llicència que s'aplica a aquest. </para>
+
+<para
+>Els drets d'autor d'aquest manual són d'en &Jost.Schenck;. Es pot distribuir lliurement, sempre que s'inclogui aquesta nota. Podeu canviar-lo sempre que m'envieu els canvis o els pugeu al <acronym
+>Git</acronym
+> del &kde;. No seré responsable de res de resultes de l'ús d'aquest manual. </para>
+
+<para
+>Els drets d'autor dels altres manuals del &calligra; són dels seus respectius autors. </para>
+
+<para
+>Traductor/Revisor de la documentació: &credits.Rafael.Carreras; i &credits.Antoni.Bella;</para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

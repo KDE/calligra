@@ -1,0 +1,2260 @@
+# translation of kofficefilters.po to 
+# Ambalam <tamilpc@ambalam.com>, 2004.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2004-11-16 23:20-0800\n"
+"Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
+"Language-Team:  <tamilpc@ambalam.com>\n"
+"Language: ta\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+msgid "%1 Export Options"
+msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, fuzzy, kde-format
+msgid "Page %1"
+msgstr "பக்கம்"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, fuzzy, kde-format
+msgid "Page:"
+msgstr "பக்கம்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, fuzzy, kde-format
+msgid "Image height:"
+msgstr "உயரம்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr ""
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:297
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not open the requested file %1"
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, fuzzy, kde-format
+#| msgid "Passwords"
+msgid "Enter password"
+msgstr "கடவுச்சொல்"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find path for type %1"
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, fuzzy, kde-format
+#| msgid "Footnote %1"
+msgid "Attribute \"%1\" not found"
+msgstr "அடிக்குறிப்பை %1"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find relationships file \"%1\""
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, fuzzy, kde-format
+#| msgid ""
+#| "Parsing error in MathML file %4 at line %1, column %2\n"
+#| "Error message: %3"
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"மாத் எம் எல் கோப்பு %4ல் வரி %1, நெடுவரிசை %2ல் பிழை உள்ளது.\n"
+"பிழைச் செய்தி: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not write block"
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: sheets/csv/csvexport.cc:269
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<SHEETNAME>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr ""
+"_: Descriptive encoding name\n"
+"பரிந்துரைக்கப்பட்டது ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr ""
+"_: Descriptive encoding name\n"
+"உள்ளார்ந்த ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "மற்றும்[%1]"
+
+#: sheets/csv/csvexportdialog.cpp:274 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "குறியீடு இல்லை: %1"
+
+#: sheets/csv/csvimport.cc:82
+#, fuzzy, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "CSV  உள்ளீடும் கோப்பில் பிழை - அறிக்கை செய்யவும்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "இன்கோடிங்"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "குறியீடு:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "கோட்டின் எல்லை"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "&UNIX  பாணி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "&Windows பாணி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "&MacOS பாணி"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "தாள்கள்"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "டிலிமிடர் கோடு"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<SHEETNAME>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<SHEETNAME> என்பது அடுத்த தாளின் பெயரால் மாற்றப்படுகிறது."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "ஒவ்வொரு தாளின் மேலும் வரையறு எல்லை வர்யை அச்ச்டி"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "செல்கள்"
+
+#. i18n: ectx: property (title), widget (KButtonGroup, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "வரம்புக்குறி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "கால்புள்ளி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "அரைப்புள்ளி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "அட்டவணையாக்கி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "இடம்"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "மற்ற:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "மேற்கோள் குறி:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "தேர்ந்தெடுத்த ஏற்றுமதிகள் மட்டும்"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "கோப்பிற்கு உகர்ந்தது அல்ல"
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: sheets/html/exportdialog.cc:24
+#, fuzzy, kde-format
+msgid "Export Sheet to HTML"
+msgstr "ஏற்றுமதி தாள்(கள்):"
+
+#: sheets/html/exportdialog.cc:35
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr ""
+
+#: sheets/html/exportdialog.cc:36
+#, fuzzy, kde-format
+msgid "Locale (%1)"
+msgstr "அட்டவணை%1"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, fuzzy, kde-format
+msgid "En&coding:"
+msgstr "குறியீடு:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, fuzzy, kde-format
+msgid "Sheet Selection"
+msgstr "பக்க தேர்வு"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr ""
+
+#: sheets/html/htmlexport.cc:196 sheets/html/htmlexport.cc:371
+#, kde-format
+msgid "Top"
+msgstr ""
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Latex ஏற்றுமதி வடிகட்டியின் அமைப்பு"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "ஆவணம்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "ஆவணபாணி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "பாணி"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, fuzzy, kde-format
+#| msgid "KWord style"
+msgid "Words style"
+msgstr "KWord பாணி"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "ஆவண வகை"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, fuzzy, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "The document will be able to be compiled alone."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "The document will be generated as a full latex document since all the "
+#| "include will be generated before the \\begin[document} and "
+#| "\\end{document} commands."
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"அனைத்து ஆவணங்களும் latex  ஆவணமாக இருக்க வேண்டும்,\\துவக்க [ஆவணம்] \\ முடிவு[ஆவணம்]"
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "தன்னிச்சையான ஆவணம்"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, fuzzy, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "லாடெக்ஸ் அல்லது ஆவண சூழலை உருவாக்காதே."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"ஆவணம் கண்டிப்பாக லேடெக்ஸ் ஆவணமாக உருவாக்கப்படும் அது கண்டிப்பாக முக்கிய லாடெக்ஸ் ஆவணத்துடன் "
+"இணைக்கப்படும். இது கண்டிப்பாக உங்களை பல சிறிய கோப்புகளை ஒவ்வொரு பகுதிக்கும் உங்கள் "
+"ஆவணத்தில் உருவாக்க அனுமதிக்கும்."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "ஆவணம் உட்பட"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "ஆவண வகுப்புகள்"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "மதிப்பு:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, fuzzy, kde-format
+msgid "Final"
+msgstr "இறுதியான"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, fuzzy, kde-format
+msgid "Draft"
+msgstr "வரைவு"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "சரியான எழுத்தின் அளவு அல்ல"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "படங்கள்"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Convert the pictures"
+msgid "Convert the pictures:"
+msgstr "படங்களை மாற்று"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "படங்களின் அடைவை"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "மொழி"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, fuzzy, kde-format
+msgid "Contents"
+msgstr "குறிப்புகள்"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, fuzzy, kde-format
+#| msgid "Export informations about author"
+msgid "Export information about author:"
+msgstr "எழுத்தாளரின் ஏற்றுமதியின் குறிப்புகள்"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, fuzzy, kde-format
+#| msgid "Add a table of content"
+msgid "Add a table of content:"
+msgstr "உள்ளடக்கத்துக்கான அட்டவணையில் சேர்"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "குறிப்புகள்"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "ஏற்றுமதி செய்யாதே"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "ஏற்றுமதியின் குறிப்புகளின் குறிப்பு"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "ஏற்றுமதியின் குறிப்புகளின் குறிப்பு"
+
+#: sheets/opencalc/opencalcexport.cc:905
+#, kde-format
+msgid "Page "
+msgstr "பக்கம்"
+
+#: sheets/opencalc/opencalcimport.cc:1217
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "இக்கோப்பு சரியானது அல்ல: அட்டவணையிலிருந்து நழுவியது"
+
+#: sheets/opencalc/opencalcimport.cc:1228
+#, kde-format
+msgid "Skipping a table."
+msgstr "அட்டவணையிலிருந்து நழுவுதல்"
+
+#: sheets/opencalc/opencalcimport.cc:1928
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"இந்த ஆவணம் OpenOffice.org பதிப்பு '%1' ஆல் உருவாக்கப்பட்டது. இந்த வடிகட்டி பதிப்பு 1.0 "
+"க்காக எழுதப்பட்டது. இந்த கோப்பினை படிப்பது புதிய தன்மையை உருவாக்கும், அழிந்த அல்லது "
+"சரியில்லாமல் இருப்பது தரவை காட்டுகிறது. நீங்கள் ஆவண மாற்றத்தை தொடர விரும்புகிறீரா?"
+
+#: sheets/opencalc/opencalcimport.cc:1929
+#, kde-format
+msgid "Unsupported document version"
+msgstr "ஆவண பதிப்பு சரியானதல்ல"
+
+#: sheets/qpro/qproimport.cc:115
+#, fuzzy, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "QPRO  திறக்கும் கோப்பில் வடிகட்டி வேலை செய்யாது - அறிக்கை செய்யவும்"
+
+#: sheets/qpro/qproimport.cc:226
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr "கடவுச்சொல்லின் கோப்பினை  திறக்க முடியாது"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Unable to find part for type %1"
+msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:346
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1423
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr ""
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, fuzzy, kde-format
+#| msgid "Endnote %1"
+msgid "Slide layout \"%1\" not found"
+msgstr "இறுதி குறிப்பை %1"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, fuzzy, kde-format
+#| msgid "Slide Title"
+msgid "Slide %1"
+msgstr "ஸ்லைடு தலைப்பு"
+
+#: words/ascii/ImportDialog.cc:32
+#, fuzzy, kde-format
+#| msgid "KWord's Plain Text Import Filter"
+msgid "Words's Plain Text Import Filter"
+msgstr "KWord\"s  உரை இறக்குமதி வடிகட்டி"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "ஒன்றும் இல்லாத இறக்குமதியின் உரையாடல் "
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "பத்திகளின் முடிவு"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "கோட்டின் எல்லை"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "வாக்கியம்: வாக்கியத்தின் முடிவே கோட்டின் முடிவு"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr ""
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End notes"
+msgstr "கோட்டின் எல்லை"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "இரட்டை பக்கங்களின் தலைப்பு"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "ஒற்றைப் பக்கத்தின் தலைப்பு"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "இரட்டை பக்கங்களின் அடிக்குறிப்பு"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "ஒற்றைப் பக்கத்தின் அடிக்குறிப்பு"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "முதல் பக்கத்தின் தலைப்பு"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "முதல் பக்கத்தின் அடிக்குறிப்பு"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "அட்டவணை%1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr ""
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, fuzzy, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "KWord\"sPDF  இறக்குமதி வடிகட்டி"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr ""
+
+#~ msgid "Failed to read data."
+#~ msgstr "படிக்கும் தரம் தவறானது"
+
+#, fuzzy
+#~ msgid "Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "MalபகுதிXMLதரம் "
+
+#, fuzzy
+#~ msgid "Export to Image"
+#~ msgstr "இறக்குமதி படங்கள்"
+
+#, fuzzy
+#~ msgid "Height:"
+#~ msgstr "உயரம்"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "அகலம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "உயரம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "உயரம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "குறியீடு:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "பக்க தேர்வு"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "ஆவணம்"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "ஆவணபாணி"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "பாணி"
+
+#, fuzzy
+#~| msgid "KWord style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "KWord பாணி"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "ஆவண வகை"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "The document will be able to be compiled alone."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "அனைத்து ஆவணங்களும் latex  ஆவணமாக இருக்க வேண்டும்,\\துவக்க [ஆவணம்] \\ முடிவு[ஆவணம்]"
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "தன்னிச்சையான ஆவணம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "லாடெக்ஸ் அல்லது ஆவண சூழலை உருவாக்காதே."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "ஆவணம் கண்டிப்பாக லேடெக்ஸ் ஆவணமாக உருவாக்கப்படும் அது கண்டிப்பாக முக்கிய லாடெக்ஸ் "
+#~ "ஆவணத்துடன் இணைக்கப்படும். இது கண்டிப்பாக உங்களை பல சிறிய கோப்புகளை ஒவ்வொரு "
+#~ "பகுதிக்கும் உங்கள் ஆவணத்தில் உருவாக்க அனுமதிக்கும்."
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "ஆவணம் உட்பட"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "ஆவண வகுப்புகள்"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "மதிப்பு:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "இறுதியான"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "வரைவு"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "சரியான எழுத்தின் அளவு அல்ல"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "படங்கள்"
+
+#, fuzzy
+#~| msgid "Convert the pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "படங்களை மாற்று"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "படங்களின் அடைவை"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "மொழி"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "இன்கோடிங்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "குறிப்புகள்"
+
+#, fuzzy
+#~| msgid "Export informations about author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "எழுத்தாளரின் ஏற்றுமதியின் குறிப்புகள்"
+
+#, fuzzy
+#~| msgid "Add a table of content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "உள்ளடக்கத்துக்கான அட்டவணையில் சேர்"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "குறிப்புகள்"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "ஏற்றுமதி செய்யாதே"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "ஏற்றுமதியின் குறிப்புகளின் குறிப்பு"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "ஏற்றுமதியின் குறிப்புகளின் குறிப்பு"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "குறியீடு:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "கோட்டின் எல்லை"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "&UNIX  பாணி"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "&Windows பாணி"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "&MacOS பாணி"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "தாள்கள்"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "டிலிமிடர் கோடு"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<SHEETNAME>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<SHEETNAME> என்பது அடுத்த தாளின் பெயரால் மாற்றப்படுகிறது."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "ஒவ்வொரு தாளின் மேலும் வரையறு எல்லை வர்யை அச்ச்டி"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "செல்கள்"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "வரம்புக்குறி"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "கால்புள்ளி"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "அரைப்புள்ளி"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "அட்டவணையாக்கி"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "இடம்"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "மற்ற:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "மேற்கோள் குறி:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "தேர்ந்தெடுத்த ஏற்றுமதிகள் மட்டும்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "பக்கம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "உயரம்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "அகலம்"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "ஒன்றும் இல்லாத இறக்குமதியின் உரையாடல் "
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "பத்திகளின் முடிவு"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "கோட்டின் எல்லை"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "வாக்கியம்: வாக்கியத்தின் முடிவே கோட்டின் முடிவு"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "படிக்கும் தரம் தவறானது"
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "MalபகுதிXMLதரம் "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "இறக்குமதி படங்கள்"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "இறுதி குறிப்பை %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid "Passwords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "கடவுச்சொல்"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "இறுதி குறிப்பை %1"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "அடிக்குறிப்பை %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid ""
+#~| "Parsing error in MathML file %4 at line %1, column %2\n"
+#~| "Error message: %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "மாத் எம் எல் கோப்பு %4ல் வரி %1, நெடுவரிசை %2ல் பிழை உள்ளது.\n"
+#~ "பிழைச் செய்தி: %3"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "இறுதி குறிப்பை %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<SHEETNAME>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr ""
+#~ "_: Descriptive encoding name\n"
+#~ "பரிந்துரைக்கப்பட்டது ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr ""
+#~ "_: Descriptive encoding name\n"
+#~ "உள்ளார்ந்த ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "மற்றும்[%1]"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "குறியீடு இல்லை: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr "CSV  உள்ளீடும் கோப்பில் பிழை - அறிக்கை செய்யவும்"
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "கோப்பிற்கு உகர்ந்தது அல்ல"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "ஏற்றுமதி தாள்(கள்):"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr ""
+#~ "_: Descriptive encoding name\n"
+#~ "பரிந்துரைக்கப்பட்டது ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "அட்டவணை%1"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Latex ஏற்றுமதி வடிகட்டியின் அமைப்பு"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "பக்கம்"
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "இக்கோப்பு சரியானது அல்ல: அட்டவணையிலிருந்து நழுவியது"
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "அட்டவணையிலிருந்து நழுவுதல்"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "இந்த ஆவணம் OpenOffice.org பதிப்பு '%1' ஆல் உருவாக்கப்பட்டது. இந்த வடிகட்டி பதிப்பு "
+#~ "1.0 க்காக எழுதப்பட்டது. இந்த கோப்பினை படிப்பது புதிய தன்மையை உருவாக்கும், அழிந்த "
+#~ "அல்லது சரியில்லாமல் இருப்பது தரவை காட்டுகிறது. நீங்கள் ஆவண மாற்றத்தை தொடர "
+#~ "விரும்புகிறீரா?"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "ஆவண பதிப்பு சரியானதல்ல"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr "QPRO  திறக்கும் கோப்பில் வடிகட்டி வேலை செய்யாது - அறிக்கை செய்யவும்"
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr "கடவுச்சொல்லின் கோப்பினை  திறக்க முடியாது"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "இக்கோப்பினை படிக்க இயலாது"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "இறுதி குறிப்பை %1"
+
+#, fuzzy
+#~| msgid "Slide Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "ஸ்லைடு தலைப்பு"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "KWord\"s  உரை இறக்குமதி வடிகட்டி"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "கோட்டின் எல்லை"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "இரட்டை பக்கங்களின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "ஒற்றைப் பக்கத்தின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "இரட்டை பக்கங்களின் அடிக்குறிப்பு"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "ஒற்றைப் பக்கத்தின் அடிக்குறிப்பு"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "முதல் பக்கத்தின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "முதல் பக்கத்தின் அடிக்குறிப்பு"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "அட்டவணை%1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "KWord\"sPDF  இறக்குமதி வடிகட்டி"
+
+#~ msgid "Failed to write file."
+#~ msgstr "கோப்பில் எழுத முடியவில்லை "
+
+#, fuzzy
+#~ msgid "%1 Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~ msgid "Export Filter Parameters"
+#~ msgstr "PNG ஏற்றுமதி வடிகட்டியின் அளபுரு"
+
+#~ msgid "Keep ratio"
+#~ msgstr "விகிதத்தைப் பெறு "
+
+#, fuzzy
+#~ msgid "Width (%):"
+#~ msgstr "அகலம்"
+
+#, fuzzy
+#~ msgid "Height (%):"
+#~ msgstr "உயரம்"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#~ msgid "EPS Export"
+#~ msgstr "EPS ஏற்றுமதி"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "போஸ்ட்ஸ்கிரிப்ட் நிலை 1"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "போஸ்ட்ஸ்கிரிப்ட் நிலை 2"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "போஸ்ட்ஸ்கிரிப்ட் நிலை 3"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "PDF பதிவிறக்கம்"
+
+#~ msgid "Text"
+#~ msgstr "உரை"
+
+#~ msgid "Number"
+#~ msgstr "எண்கள்"
+
+#~ msgid "Currency"
+#~ msgstr "கரன்சி"
+
+#~ msgid "Date"
+#~ msgstr "தேதி"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "பத்தின் பின்ன காமா எண்"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "பத்தின் பின்ன புள்ளி எண்"
+
+#~ msgid "None"
+#~ msgstr "ஒன்றும் இல்லை"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "நிபந்தனை அனைத்தையும் ஆராய்ந்து கவனி. துவக்கும் மதிப்பு இறுதி மதிப்பை விட குறைவாக "
+#~ "இருக்க வேண்டும்."
+
+#~ msgid "Common"
+#~ msgstr "பொதுவான"
+
+#~ msgid "Other"
+#~ msgstr "மற்ற"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "பொழியான வரம்புகளை ஒதுக்கு"
+
+#~ msgid "Text&quote:"
+#~ msgstr "உரை மேற்கோள்:"
+
+#~ msgid "&Format:"
+#~ msgstr "&வடிவம்:"
+
+#~ msgid "Ranges"
+#~ msgstr "எல்லைகள்"
+
+#~ msgid "to"
+#~ msgstr "பெறு"
+
+#~ msgid "Import lines:"
+#~ msgstr "இறக்குமதி வரிகள்"
+
+#~ msgid "Import columns:"
+#~ msgstr "இறக்குமதி நெடுவரிசை"
+
+#~ msgid "Update"
+#~ msgstr "இற்றைப்படுத்தல்"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "உயர்நிலை"
+
+#, fuzzy
+#~| msgid ""
+#~| "An error has occurred while parsing the KWord file.\n"
+#~| "At line: %1, column %2\n"
+#~| "Error message: %3"
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ " KWord கோப்பில் பிழை உள்ளது. வரிகளில்: %1,நெடுக்கை%2\n"
+#~ "பிழைச்செய்தி: %3"
+
+#, fuzzy
+#~| msgid "KWord Export Filter Library"
+#~ msgid "Words Export Filter Library"
+#~ msgstr "KWord's HTML  ஏற்றுமதி வடிகட்டி நூலகம்"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "ஏற்றுமதி XSLT கட்டமை"
+
+#~ msgid "Open Document"
+#~ msgstr "ஆவணத்தை திற"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "இறக்குமதி XSLT கட்டமை"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "பொதுவான xslt கோப்பு"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "தனிமையான xslt  கோப்புகள்"
+
+#~ msgid "Choose..."
+#~ msgstr "தேர்ந்தெடு"
+
+#, fuzzy
+#~ msgid "SVG Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "LaTeX  ஏற்றுமதியின் பிழை"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "PNG ஏற்றுமதி வடிகட்டியின் அளபுரு"
+
+#, fuzzy
+#~ msgid "Height"
+#~ msgstr "உயரம்"
+
+#, fuzzy
+#~ msgid "Width"
+#~ msgstr "அகலம்"
+
+#~ msgid "Height (%)"
+#~ msgstr "உயரம்"
+
+#~ msgid "Width (%)"
+#~ msgstr "அகலம்"
+
+#~ msgid "Slide Title"
+#~ msgstr "ஸ்லைடு தலைப்பு"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "படங்கள்%1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "அட்டவணை%3,வரிசை%1,நெடுக்கை%2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "AbiWord கோப்பில் பினழ உள்ளது. வரிகளில்: %1,நெடுக்கை%2\n"
+#~ "பிழைச்செய்தி: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "AbiWord இறக்குமதி வடிகட்டி"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "முக்கிய உரையின் சட்டங்கள்"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "AbiWord சேமிப்பு கோப்பில் %1யில் பிழை உள்ளது  "
+
+#~ msgid "Unable to save document information."
+#~ msgstr "ஆவணத்தை சேமிக்க முடியாது"
+
+#~ msgid "Unable to save main document."
+#~ msgstr "முக்கிய ஆவணத்தை சேமிக்க முடியாது"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "அடிக்குறிப்பு %1"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Export Filter"
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "KWord\"s  உரையின் ஏற்றுமதி வடிகட்டி"
+
+#, fuzzy
+#~| msgid "KWord's HTML Export Filter"
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "KWord's HTML  ஏற்றுமதி வடிகட்டி"
+
+#~ msgid "Untitled Document"
+#~ msgstr "தலைப்பு இல்லாத தொகுப்பு"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "லாடக்ஸ் இறக்குமதி வடிகட்டியின் உறுப்புகள்"
+
+#~ msgid "Unicode"
+#~ msgstr "யுனிக் கொடு"
+
+#~ msgid "latin1"
+#~ msgstr "லத்தீன்1"
+
+#~ msgid "New document"
+#~ msgstr "புதிய ஆவணம்"
+
+#~ msgid "Embedded document"
+#~ msgstr "உட்பொதி ஆவணம்"
+
+#, fuzzy
+#~| msgid "KWord's MS Write Import Filter"
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "KWord's MS எழுதும் இறக்குமதி வடிகட்டி"
+
+#~ msgid "Header"
+#~ msgstr "தலைப்பு"
+
+#~ msgid "Footer"
+#~ msgstr "அடிக்குறிப்பு"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "முக்கிய உரையின் சட்டங்கள்"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "அட்டவணை %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "அட்டவணை  சட்டம் %1"
+
+#, fuzzy
+#~| msgctxt "Pseudo-author for annotations"
+#~| msgid "KWord 1.3"
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr " KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "ஒன்றும் இல்லாத ஏற்றுமதியின் உரையாடல் "
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "HTML ஏற்றுமதி உரையாடல்"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "முறை"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "ஒளி: மாற்றியமை (X)HTML"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "முக்கியமாக ஆவண வடிவத்தை மாற்று (உலாவி வரம்புடன் ஏற்றுமதி செய்வது "
+#~ "பரிந்துரைக்கப்படுகிறது)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "பேசிக்:இடைமாற்றத்தை மாற்றியமை (X)HTML"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert most of the document (Recommended for re-importing in KWord or "
+#~| "for exporting to older browsers)"
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "அனைத்து ஆவணங்களும் latex  ஆவணமாக இருக்க வேண்டும்,\\துவக்க [ஆவணம்] \\ முடிவு[ஆவணம்]"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr " (X)HTML மாற்றிஅமை CSS"
+
+#, fuzzy
+#~| msgid ""
+#~| "Convert as much as possible of the KWord document (Recommended for "
+#~| "exporting to other modern word processors or to modern browsers)"
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "அனைத்து ஆவணங்களும் latex  ஆவணமாக இருக்க வேண்டும்,\\துவக்க [ஆவணம்] \\ முடிவு[ஆவணம்]"
+
+#, fuzzy
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "அடைவில் கண்டிப்பாக eps படங்கள் உங்கள் ஆவணத்தில் இருக்கும்"
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "MS எழுத்தின் இறக்குமதி உரையாடல்"
+
+#~ msgid "&Encoding"
+#~ msgstr "இன்கொடிங்"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "&மற்றொரு இன்கோடிங்"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "முன்னிருப்பு இன்கொடிங்"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+
+#~ msgid "&Advanced"
+#~ msgstr "உயர்நிலை"
+
+#, fuzzy
+#~| msgid ""
+#~| "These advanced options allow you to fine-tune the importing of "
+#~| "formatting information. They compensate for differences between KWord "
+#~| "and MS Write by adding extra formatting information (not found in the "
+#~| "original document), to try to make the imported document look as close "
+#~| "to the original as possible.<br><br>It is safe to use the defaults, if "
+#~| "unsure."
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "இந்த முன்னேறிய விருப்பங்கள் உங்களை சரியாக -திருத்த தகவலை வடிவமைக்க அனுமதிக்கும். "
+#~ "அவை வெவ்வேறு KWord மற்றும் MS Write கூடுதல் வடிவமைக்கும் தகவலை கொடுக்க முடியும் "
+#~ "(மெய்யான ஆவணத்தில் காணவில்லை), மேலேற்றிய ஆவணமாக மாற்ற மெய்யான ஆவணத்தை மூடிவிட்டு "
+#~ "முயலவும்.<br><br>முடிந்தால், முன்னிருப்பாக பயன்படுத்துவது பாதுகாப்பானது."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "இவற்றை வேறுப்படுத்து"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Write உடைய வரி இடைவெளியை சில வெற்றிடங்களை முன்னால் ஒவ்வொரு பத்தியில் சேர்த்து "
+#~ "ஒத்துபோக வைக்க முயலுகிறது."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "படங்களின் அமைத்தல்"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "பத்தி சீரமைப்பை படிமத்தில் இடமிட பயன்படுத்து."
+
+#, fuzzy
+#~| msgid "PDF Import"
+#~ msgid "DCM Import"
+#~ msgstr "PDF பதிவிறக்கம்"
+
+#, fuzzy
+#~ msgid "Import options"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr "பழைய&முறை:கோடு இல்லை அல்லது 40 சொற்களுக்கு மிகாமல் இருக்க வேண்டும்"
+
+#, fuzzy
+#~ msgid "KFormula Import Error"
+#~ msgstr "MathML இறக்குமதியில் பிழை"
+
+#, fuzzy
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "AbiWord இறக்குமதி வடிகட்டி"
+
+#~ msgid "Available Sheets"
+#~ msgstr "கிடைக்கும் தாள்கள்"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "அடிக்குறிப்பை %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "படங்கள் %1"
+
+#, fuzzy
+#~ msgid "JPEG Export Options"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~ msgid "All Images"
+#~ msgstr "அனைத்தும்[%1 பக்கங்கள்]"
+
+#, fuzzy
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDF பதிவிறக்கம்"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "பக்கம்"
+
+#, fuzzy
+#~ msgid "&All pages"
+#~ msgstr "அனைத்தும்[%1 பக்கங்கள்]"
+
+#, fuzzy
+#~ msgid "&First page"
+#~ msgstr "முதல் பக்கத்தின் தலைப்பு"
+
+#, fuzzy
+#~| msgid "&Advanced"
+#~ msgid "Advanced quality"
+#~ msgstr "உயர்நிலை"
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Formats:"
+#~ msgstr "&வடிவம்:"
+
+#, fuzzy
+#~ msgid "Predictor:"
+#~ msgstr "படங்களின் அடைவை"
+
+#~ msgid "Initializing..."
+#~ msgstr "துவக்கம்"
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "முதல்நுழை: பக்கம் #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "இரண்டாம் நுழை: பக்கம் #%1..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "உடல் சட்டக்கோவை #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "தலைப்பு சட்டக்கோவை #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "அடிக்குறிப்பு சட்டக்கோவை #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "உரை சட்ட அமைப்பு %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "KWord\"sPDF  இறக்குமதி வடிகட்டி"
+
+#~ msgid "Page Selection"
+#~ msgstr "பக்க தேர்வு"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "அனைத்தும்[%1 பக்கங்கள்]"
+
+#~ msgid "Range:"
+#~ msgstr "வீச்சு:"
+
+#~ msgid "Import images"
+#~ msgstr "இறக்குமதி படங்கள்"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "\"சூட்டிகை\" மாறி"
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+
+#~ msgid "Owner:"
+#~ msgstr "உரிமையாளர்:"
+
+#~ msgid "User:"
+#~ msgstr "உபயோகிப்பாளர்:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 ¸Äõ %2,%3"
+
+#, fuzzy
+#~ msgid "&Document mode"
+#~ msgstr "ஆவண வகை"
+
+#, fuzzy
+#~ msgid "Alt+1"
+#~ msgstr "Alt+A"
+
+#, fuzzy
+#~ msgid "Alt+8"
+#~ msgstr "Alt+A"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "ஒன்றும் இல்லை"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "ஒன்றும் இல்லை"
+
+#, fuzzy
+#~ msgid "Alt+O"
+#~ msgstr "Alt+A"
+
+#, fuzzy
+#~ msgid "Importing..."
+#~ msgstr "இறக்குமதி படங்கள்"
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Form"
+#~ msgstr "&வடிவம்:"
+
+#, fuzzy
+#~ msgid "Export hidden layers"
+#~ msgstr "PNG ஏற்றுமதி வடிகட்டியின் அளபுரு"
+
+#, fuzzy
+#~ msgid "BMP Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~ msgid "MNG Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~ msgid "Xbm Export Error"
+#~ msgstr "LaTeX  ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~ msgid "Xpm Export Error"
+#~ msgstr "LaTeX  ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~ msgid "JPEG Export Error"
+#~ msgstr "PNG ஏற்றுமதியின் பிழை"
+
+#, fuzzy
+#~ msgid "KSpread Kexi Import Filter"
+#~ msgstr "KWord\"sPDF  இறக்குமதி வடிகட்டி"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "எண்கள்"
+
+#~ msgid "Unable to open output file."
+#~ msgstr "வெளியீட்டு கோப்புகளை திறக்க முடியாது"
+
+#~ msgid "Failed to open input file: %1"
+#~ msgstr "உள்ளீட்டு கோப்பை திறக்க முடியவில்லை: %1"
+
+#~ msgid "Failed to write formula."
+#~ msgstr "எழுதும் விதியில் பிழை"
+
+#~ msgid "MathML Export Error"
+#~ msgstr "MathML  ஏற்றுமதியில் பிழை"

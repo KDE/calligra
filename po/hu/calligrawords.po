@@ -1,0 +1,7332 @@
+# Marcell Lengyel <miketkf@yahoo.com>
+#
+# Reuss András <tinstall@freemail.c3.hu>, 1999.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2012, 2015.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: KOffice 1.4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-09-09 09:40+0200\n"
+"Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, kde-format
+msgid "&File"
+msgstr "&Fájl"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, kde-format
+msgid "&Edit"
+msgstr "&Szerkesztés"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, kde-format
+msgid "&View"
+msgstr "Né&zet"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "Meg&jelenítési mód"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, kde-format
+msgid "Semantics"
+msgstr "Szemantika"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, kde-format
+msgid "S&tyles"
+msgstr "S&tílusok"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, kde-format
+msgid "&Settings"
+msgstr "&Beállítások"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Helyesírás-ellenőrzés"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, kde-format
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "A helyesírás-ellenőrzés eredménye"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "A változó módosítása erre"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr "&Eszközök"
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Oldalstílus beállítása"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Oldalstílus beszúrása"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Oldalbeállítások"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Alakzat létrehozása"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, kde-format
+msgid "Baseline"
+msgstr "Alapvonal"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, kde-format
+msgid "Character"
+msgstr "Karakter"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Sor"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, kde-format
+msgid "Page (entire) area"
+msgstr "Oldal (teljes) területe"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, kde-format
+msgid "Page text area"
+msgstr "Oldal szövegterülete"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, kde-format
+msgid "Paragraph area"
+msgstr "Bekezdés területe"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, kde-format
+msgid "Paragraph text area"
+msgstr "Bekezdés szövegterülete"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, kde-format
+msgid "Left page border"
+msgstr "Bal oldalszegély"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, kde-format
+msgid "Right page border"
+msgstr "Jobb oldalszegély"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, kde-format
+msgid "Right paragraph border"
+msgstr "Jobb bekezdésszegély"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, kde-format
+msgid "Left paragraph border"
+msgstr "Bal bekezdésszegély"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr "Alakzat és szöveg kapcsolata:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr "Beágyazva a szövegbe (karakterként viselkedik)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr "Lebegő, karakterpozícióhoz horgonyozva"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr "Lebegő, bekezdéshez horgonyozva"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr "Szabadon lebegő (nincs szöveghez horgonyozva)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, kde-format
+msgid "Vertical Positioning"
+msgstr "Függőleges elhelyezkedés"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, kde-format
+msgid "Top align with:"
+msgstr "Felülre igazítás ezzel:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, kde-format
+msgid "Center align with:"
+msgstr "Középre igazítás ezzel:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, kde-format
+msgid "Bottom align with:"
+msgstr "Alulra igazítás ezzel:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr "Eltolás"
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, kde-format
+msgid "from:"
+msgstr "ettől:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, kde-format
+msgid "Horizontal Positioning"
+msgstr "Vízszintes elhelyezkedés"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, kde-format
+msgid "Left align with:"
+msgstr "Balra igazítás ezzel:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, kde-format
+msgid "Right align with:"
+msgstr "Jobbra igazítás ezzel:"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, kde-format
+msgid "Configure"
+msgstr "Beállítás"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Egyéb"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, kde-format
+msgid "Grid"
+msgstr "Rács"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokumentum"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Dokumentumbeállítások"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Szerző"
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr "Szerző"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Új könyvjelző létrehozása"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"A könyvjelzők segítségével gyorsan át lehet váltani a dokumentum más "
+"részére.\n"
+"Adja meg a könyvjelző nevét."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Név:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, kde-format
+msgid "Columns:"
+msgstr "Oszlopok:"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, kde-format
+msgid "Column spacing:"
+msgstr "Oszloptávolság:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, kde-format
+msgid "frameset"
+msgstr "keretcsoport"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, kde-format
+msgid "No framesets in document"
+msgstr "A dokumentumban nincs keretcsoport"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "A keretcsoport neve:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, kde-format
+msgid "Create a new frameset:"
+msgstr "Új keretcsoport létrehozása:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr "Válassza ki a csatolandó keretcsoportot:"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "A keretcsoport neve"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, kde-format
+msgid "Smart Positioning"
+msgstr "Intelligens elrendezés"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "A szöveg körbefolyatása"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Szövegkeretek összekapcsolása"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Alakzattulajdonságok módosítása"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr "Horgony ehhez…"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "Ol&dal"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, kde-format
+msgid "Para&graph"
+msgstr "&Bekezdés"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, kde-format
+msgid "&To Character"
+msgstr "Karak&terhez"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, kde-format
+msgid "&As Character"
+msgstr "Ka&rakter"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, kde-format
+msgid "Horizontal Alignment"
+msgstr "Vízszintes igazítás"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, kde-format
+msgid "&Left"
+msgstr "&Balról"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, kde-format
+msgid "&Center"
+msgstr "&Középre"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, kde-format
+msgid "&Right"
+msgstr "&Jobbról"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, kde-format
+msgid "Vertical Alignment"
+msgstr "Függőleges igazítás"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr "&Legfelül"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr "&Középre"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, kde-format
+msgid "&Bottom"
+msgstr "&Alul"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, kde-format
+msgid "Text Wrap-around"
+msgstr "Szöveg körbefuttatása"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, kde-format
+msgid "Run through this shape"
+msgstr "Átfuttatás ezen az alakzaton"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, kde-format
+msgid "Skip below this shape"
+msgstr "Az alakzat alá"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, kde-format
+msgid "Run on left side of this shape"
+msgstr "Futtatás az alakzat bal oldalán"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, kde-format
+msgid "Run on right side of this shape"
+msgstr "Futtatás az alakzat jobb oldalán"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, kde-format
+msgid "Run on longest side of this shape"
+msgstr "Futtatás az alakzat leghosszabb oldalán"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, kde-format
+msgid "Run on both sides of this shape"
+msgstr "Futtatás az alakzat mindkét oldalán"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr "Futtatás az alakzat oldalán, amelyik szélesebb, mint:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, kde-format
+msgid "Distance Between Shape and Text:"
+msgstr "Az alakzat és a szöveg távolsága:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Oszlopok"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, kde-format
+msgid "Style"
+msgstr "Stílus"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, kde-format
+msgid "Clone"
+msgstr "Klónozás"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, kde-format
+msgid "Delete"
+msgstr "Törlés"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Oldalstílus megváltoztatása"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr "Új oldalstílus hozzáadása ezzel a névvel:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Clone Page Style"
+msgstr "Oldalstílus klónozása"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr "A szöveg máshol lesz:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr "Az alakzat a szövegre ezzel legyen hatással:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr "Határoló doboz"
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr "Körvonal"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr "Alakzat és szöveg elválasztása:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, kde-format
+msgid "Left by:"
+msgstr "Balra:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr "Fölé:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr "Alá:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, kde-format
+msgid "Right by:"
+msgstr "Jobbra:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "Átneve&zés"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "&Törlés"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Átnevezés"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "Adjon meg új nevet a könyvjelzőhöz"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "Már létezik „%1” nevű könyvjelző."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Könyvjelző kiválasztása"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Méretek"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Oldalméret és margók"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Létrehozás"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr "Hibakeresés"
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, kde-format
+msgid "Navigation"
+msgstr "Navigáció"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, kde-format
+msgid "Page #"
+msgstr "Oldal #"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, kde-format
+msgid "Section"
+msgstr "Szakasz"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr "RDF"
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Statisztika"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Szavak:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Mondatok:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Szótagok:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, kde-format
+msgid "Characters (spaces):"
+msgstr "Karakterek (szóközökkel):"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, kde-format
+msgid "Characters (no spaces):"
+msgstr "Karakterek (szóközök nélkül):"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Sorok:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr "Olvashatóság:"
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, kde-format
+msgid "Flesch reading ease"
+msgstr "Flesch-féle olvashatósági szám"
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, kde-format
+msgid "East asian characters:"
+msgstr "Kelet-ázsiai karakterek:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, kde-format
+msgid "Words"
+msgstr "Szavak"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, kde-format
+msgid "Sentences"
+msgstr "Mondatok"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, kde-format
+msgid "Syllables"
+msgstr "Szótagok"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, kde-format
+msgid "Lines"
+msgstr "Sorok"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, kde-format
+msgid "Characters With Spaces"
+msgstr "Karakterek (szóközökkel együtt)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, kde-format
+msgid "Characters without spaces"
+msgstr "Karakterek (szóközök nélkül)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, kde-format
+msgid "East Asian characters"
+msgstr "Kelet-ázsiai karakterek"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr "Flesch-féle olvashatósági szám"
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Standard"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Fejléc 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Fejléc 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Fejléc 3"
+
+#: part/i18n/stylenames.cpp:12
+#, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Számozott lista"
+
+#: part/i18n/stylenames.cpp:13
+#, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Betűvel kezdődő lista"
+
+#: part/i18n/stylenames.cpp:14
+#, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Jellel kezdődő lista"
+
+#: part/i18n/stylenames.cpp:15
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Tartalomjegyzék címe"
+
+#: part/i18n/stylenames.cpp:16
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Tartalomjegyzék-fejléc 1"
+
+#: part/i18n/stylenames.cpp:17
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Tartalomjegyzék-fejléc 2"
+
+#: part/i18n/stylenames.cpp:18
+#, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Tartalomjegyzék-fejléc 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Dokumentumcím"
+
+#: part/i18n/stylenames.cpp:20
+#, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Fejléc"
+
+#: part/i18n/stylenames.cpp:21
+#, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Lábléc"
+
+#: part/i18n/stylenames.cpp:24
+#, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Egyszerű"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Szegély 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Szegély 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Szegély 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Sor"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Oszlop"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Világosszürke"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Sötétszürke"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Fekete"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Világoskék"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Sötétkék"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Piros"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Sárga"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Színes"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Kék árnyalatú"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Egyszerű 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Egyszerű 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Egyszerű 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Fejléc 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Fejléc 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Fejléc 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Fejléc 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Oszlopos 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Oszlopos 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Rács 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Rács 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Rács 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Szürke fejléc"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Kék fejléc"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Kék (tradicionális)"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Szürke (tradicionális)"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Kék (felül és alul)"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Szürke (felül és alul)"
+
+#: part/KWAboutData.h:20
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "Calligra Words"
+
+#: part/KWAboutData.h:22
+#, kde-format
+msgid "Word processor"
+msgstr "Szövegszerkesztő"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+#| msgid "© 1998-%1, The Words Team"
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "© A Words fejlesztői, 1998-%1."
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr "Segédkarbantartó"
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr "Pierre Ducroquet"
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr "C. Boemann"
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr "Minden"
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr "Sebastian Sauer"
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Formatting stuff"
+msgstr "Formázások"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, kde-format
+msgid "Filter"
+msgstr "Szűrő"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr "Matus Uzak"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr "Elrendezés és festés"
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr "Pavol Korinek"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr "Shreya Pandit"
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Statistics docker"
+msgstr "Statisztika dokkoló"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr "Brijesh Patel"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Foot and endnotes"
+msgstr "Láb- és végjegyzetek"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr "Irodalomjegyzék"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr "Smit Patel"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr "Mojtaba Shahi"
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Style Manager"
+msgstr "Stíluskezelő"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr "Lassi Nieminen"
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr "Hanzes Matus"
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr "Lukáš Tvrdý"
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr "Girish Ramakrishnan"
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, kde-format
+msgid "ODF Support"
+msgstr "ODF-Support"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr "Robert Mathias Marmorstein"
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr "Sven Lüppken"
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr "Frank Dekervel"
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr "Krister Wicksell Eriksson"
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr "Dag Andersen"
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr "Nash Hoogwater"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr "Ulrich Kuettler"
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr "Shaheed Haque"
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr "Clarence Dang"
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr "Robert Jacolin"
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr "Enno Bartels"
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr "Ewald Snel"
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr "Tomasz Grobelny"
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr "Michael Johnson"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr "Fatcow Web Hosting"
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Page break icon"
+msgstr "Oldaltörés ikon"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Kiszel Kristóf,Úr Balázs"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+
+#: part/KWDocument.cpp:495
+#, kde-format
+msgid "Copy"
+msgstr "Másolás"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, kde-format
+msgid "Standard"
+msgstr "Standard"
+
+#: part/KWDocument.cpp:546
+#, kde-format
+msgid "Document Title"
+msgstr "Dokumentumcím"
+
+#: part/KWDocument.cpp:553
+#, kde-format
+msgid "Head 1"
+msgstr "Fejléc 1"
+
+#: part/KWDocument.cpp:559
+#, kde-format
+msgid "Head 2"
+msgstr "Fejléc 2"
+
+#: part/KWDocument.cpp:565
+#, kde-format
+msgid "Head 3"
+msgstr "Fejléc 3"
+
+#: part/KWDocument.cpp:571
+#, kde-format
+msgid "Bullet List"
+msgstr "Felsorolásjeles lista"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr "Eszközök"
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "Érvénytelen OASIS OpenDocument-fájl. Nem található office:body címke."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr ""
+"Érvénytelen OASIS OpenDocument-fájl. Egy címke sincs az office:body címkén "
+"belül."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr ""
+"Ez nem szöveges dokumentum, hanem: %1. Más alkalmazással kell megnyitni."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Standard"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr "A szükséges szöveges komponens nem található. A Words kilép"
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr "Telepítési hiba"
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr "Módosítva"
+
+#: part/KWStatusBar.cpp:36
+#, kde-format
+msgid "Saved"
+msgstr "Elmentve"
+
+#: part/KWStatusBar.cpp:37
+#, kde-format
+msgid "Page %1 of %2"
+msgstr "%2 / %1. oldal"
+
+#: part/KWStatusBar.cpp:38
+#, kde-format
+msgid "Page %1-%2 of %3"
+msgstr "%3 / %1-%2. oldal"
+
+#: part/KWStatusBar.cpp:39
+#, kde-format
+msgid "Line %1"
+msgstr "%1. sor"
+
+#: part/KWStatusBar.cpp:124
+#, kde-format
+msgid "Page Number"
+msgstr "Oldalszám"
+
+#: part/KWStatusBar.cpp:137
+#, kde-format
+msgid "Line Number"
+msgstr "Sorszám"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Page Style"
+msgid "Change the page style"
+msgstr "Oldalstílus megváltoztatása"
+
+#: part/KWStatusBar.cpp:155
+#, kde-format
+msgid "Page Style"
+msgstr "Oldalstílus"
+
+#: part/KWStatusBar.cpp:169
+#, kde-format
+msgid "Page Size"
+msgstr "Oldalméret"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr "Mentett/módosított"
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr "Egérmutató: X:Y"
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr "Nagyításvezérlő"
+
+#: part/KWView.cpp:183
+#, fuzzy, kde-format
+#| msgid "Exit Distraction-Free Mode"
+msgid "Exit Fullscreen Mode"
+msgstr "Kilépés a zaklatottságmentes módból"
+
+#: part/KWView.cpp:260
+#, kde-format
+msgid "Shape Properties..."
+msgstr "Alakzattulajdonságok…"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr "Az alakzat viselkedésének módosítása"
+
+#: part/KWView.cpp:271
+#, kde-format
+msgid "Create Template From Document..."
+msgstr "Sablon létrehozása dokumentumból…"
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "A dokumentum elmentése később felhasználható sablonként"
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"A dokumentum sablonként való elmentése nem sikerült.<br><br>A létrejött "
+"sablont új dokumentumok kiindulási mintájának lehet használni."
+
+#: part/KWView.cpp:292
+#, kde-format
+msgid "Show Formatting Characters"
+msgstr "Formázókarakterek megjelenítése"
+
+#: part/KWView.cpp:298
+#, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "A nem nyomtatható karakterek megjelenítésének ki- és bekapcsolása"
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+"A nem nyomtatható karakterek megjelenítésének ki- és bekapcsolása.<br/><br/"
+">Ha ez be van jelölve, a Words megjeleníti a tabulátorokat, szóközöket, "
+"sorvége jeleket és a többi nem nyomtatható karaktert."
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr "Mezőárnyékolók megjelenítése"
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr "A mezők árnyékolt hátterének átváltása"
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+"A mezők (változók, stb.) megjelenésének váltása a hátterük kontrasztos "
+"színnel való rajzolásával."
+
+#: part/KWView.cpp:310
+#, kde-format
+msgid "Show Text Shape Borders"
+msgstr "Szövegalakzat szegélyeinek megjelenítése"
+
+#: part/KWView.cpp:311
+#, kde-format
+msgid "Turns the border display on and off"
+msgstr "A szegélyek megjelenítésének ki- és bekapcsolása"
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+"Ki-be kapcsolja a szegélyek megjelenítését.<br/><br/>A szegélyek soha nem "
+"jelennek lesznek kinyomtatva, tehát ez a beállítás csak a papír alakjának "
+"megjelenítését szolgálja."
+
+#: part/KWView.cpp:319
+#, kde-format
+msgid "Show Table Borders"
+msgstr "Táblázatszegélyek megjelenítése"
+
+#: part/KWView.cpp:325
+#, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+"Táblázatszegélyek megjelenítésének bekapcsolása<br/><br/>Ha engedélyezve "
+"van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
+"táblázatszegélyeket."
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Az automatikus javítás beállításainak megváltoztatása."
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+#| msgid "Toggle the display of table borders"
+msgid "Toggle the display of section bounds"
+msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
+
+#: part/KWView.cpp:335
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#| "shows you any invisible table borders with a thin gray line."
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+"Táblázatszegélyek megjelenítésének bekapcsolása<br/><br/>Ha engedélyezve "
+"van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
+"táblázatszegélyeket."
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Vonalzók megjelenítése"
+
+#: part/KWView.cpp:339
+#, kde-format
+msgid "Shows or hides rulers"
+msgstr "A vonalzók ki- és bekapcsolása"
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+"A dokumentumtól balra és felül látszanak a fehér mérővonalzók. Ezekkel lehet "
+"például az oldalak és a keretek pozícióját, szélességét, a tabulátorok "
+"pozícióját megmérni.<p>Ha nem szeretné használni a vonalzókat, szüntesse meg "
+"a kijelölést.</p>"
+
+#: part/KWView.cpp:351
+#, kde-format
+msgid "Snap to Grid"
+msgstr "Rácshoz illesztés"
+
+#: part/KWView.cpp:359
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Az állapotsor megjelenítése"
+
+#: part/KWView.cpp:360
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Az állapotsor megjelenítése és elrejtése"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, fuzzy, kde-format
+#| msgid "Set view in distraction free mode"
+msgid "Set view in fullscreen mode"
+msgstr "Nézet beállítása a zaklatottságmentes módban"
+
+#: part/KWView.cpp:374
+#, kde-format
+msgid "Semantic Stylesheets..."
+msgstr "Szemantikus stíluslapok…"
+
+#: part/KWView.cpp:376
+#, kde-format
+msgid "Modify and add semantic stylesheets"
+msgstr "Szemantikus stíluslapok módosítása és hozzáadása"
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+"A stíluslapok az RDF-fájlokban tárolt információk megjelenítésének "
+"formázásához használhatók."
+
+#: part/KWView.cpp:392
+#, kde-format
+msgid "Configure..."
+msgstr "Beállítás…"
+
+#: part/KWView.cpp:401
+#, kde-format
+msgid "Page Layout..."
+msgstr "Oldalelrendezés…"
+
+#: part/KWView.cpp:403
+#, kde-format
+msgid "Change properties of entire page"
+msgstr "Az oldal tulajdonságainak megváltoztatása"
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+"Az oldal jellemzőinek módosítása.<p>Jelenleg a papírméretet, a tájolást, a "
+"fejléc illetve a lábléc méretét és az oszlopok beállításait lehet "
+"megváltoztatni.</p>"
+
+#: part/KWView.cpp:407
+#, kde-format
+msgid "Create Header"
+msgstr "Fejléc létrehozása"
+
+#: part/KWView.cpp:413
+#, kde-format
+msgid "Create Footer"
+msgstr "Lábléc létrehozása"
+
+#: part/KWView.cpp:420
+#, kde-format
+msgid "Show Comments"
+msgstr "Megjegyzések megjelenítése"
+
+#: part/KWView.cpp:421
+#, kde-format
+msgid "Shows comments in the document"
+msgstr "Megjeleníti a megjegyzéseket a dokumentumban"
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr "Szavak száma"
+
+#: part/KWView.cpp:428
+#, kde-format
+msgid "Shows or hides word counting in status bar"
+msgstr "Megjeleníti vagy elrejti a szavak számát az állapotsoron"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, kde-format
+msgid "Page Setup"
+msgstr "Oldalbeállítás"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, kde-format
+msgid "Header & Footer"
+msgstr "Fejléc és lábléc"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, kde-format
+msgid "Page layout"
+msgstr "Oldalelrendezés"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, kde-format
+msgid "..."
+msgstr "…"
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Next Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Következő oldal"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Previous Page"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Előző oldal"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "Search options"
+msgid "Options"
+msgstr "Beállítások"
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "A szó cseréje"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "A szó cseréje"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "A szó cseréje"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgid "Replace"
+msgstr "A szó cseréje"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Fejléc - a páratlan oldalakon"
+
+#: part/Words.cpp:47
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Fejléc - a páros oldalakon"
+
+#: part/Words.cpp:49
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Lábjegyzet - a páratlan oldalakon"
+
+#: part/Words.cpp:51
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Lábjegyzet - a páros oldalakon"
+
+#: part/Words.cpp:53
+#, kde-format
+msgid "Main text"
+msgstr "Egyszerű szöveg"
+
+#: part/Words.cpp:55
+#, kde-format
+msgid "Other text"
+msgstr "Egyéb szöveg"
+
+#~ msgid "Distraction Free Mode"
+#~ msgstr "Zaklatottságmentes mód"
+
+#, fuzzy
+#~| msgid "Anchor to..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Anchor to..."
+#~ msgstr "Horgony ehhez…"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "Ol&dal"
+
+#, fuzzy
+#~| msgid "Para&graph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "&Bekezdés"
+
+#, fuzzy
+#~| msgid "&To Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Karak&terhez"
+
+#, fuzzy
+#~| msgid "&As Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Ka&rakter"
+
+#, fuzzy
+#~| msgid "Horizontal Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Vízszintes igazítás"
+
+#, fuzzy
+#~| msgid "&Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "&Balról"
+
+#, fuzzy
+#~| msgid "&Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "&Középre"
+
+#, fuzzy
+#~| msgid "&Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "&Jobbról"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Függőleges igazítás"
+
+#, fuzzy
+#~| msgid "&Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Top"
+#~ msgstr "&Legfelül"
+
+#, fuzzy
+#~| msgid "&Middle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Middle"
+#~ msgstr "&Középre"
+
+#, fuzzy
+#~| msgid "&Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "&Alul"
+
+#, fuzzy
+#~| msgid "Text Wrap-around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Szöveg körbefuttatása"
+
+#, fuzzy
+#~| msgid "Run through this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "Átfuttatás ezen az alakzaton"
+
+#, fuzzy
+#~| msgid "Skip below this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "Az alakzat alá"
+
+#, fuzzy
+#~| msgid "Run on left side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "Futtatás az alakzat bal oldalán"
+
+#, fuzzy
+#~| msgid "Run on right side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "Futtatás az alakzat jobb oldalán"
+
+#, fuzzy
+#~| msgid "Run on longest side of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "Futtatás az alakzat leghosszabb oldalán"
+
+#, fuzzy
+#~| msgid "Run on both sides of this shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "Futtatás az alakzat mindkét oldalán"
+
+#, fuzzy
+#~| msgid "Run on sides that are wider than:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on sides that are wider than:"
+#~ msgstr "Futtatás az alakzat oldalán, amelyik szélesebb, mint:"
+
+#, fuzzy
+#~| msgid "Distance Between Shape and Text:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Az alakzat és a szöveg távolsága:"
+
+#, fuzzy
+#~| msgid "Shape relation to text is:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape relation to text is:"
+#~ msgstr "Alakzat és szöveg kapcsolata:"
+
+#, fuzzy
+#~| msgid "Inline with text (behaves as a character)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inline with text (behaves as a character)"
+#~ msgstr "Beágyazva a szövegbe (karakterként viselkedik)"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a character position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a character position"
+#~ msgstr "Lebegő, karakterpozícióhoz horgonyozva"
+
+#, fuzzy
+#~| msgid "Floating, but anchored to a paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating, but anchored to a paragraph"
+#~ msgstr "Lebegő, bekezdéshez horgonyozva"
+
+#, fuzzy
+#~| msgid "Floating free (not anchored to text)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Floating free (not anchored to text)"
+#~ msgstr "Szabadon lebegő (nincs szöveghez horgonyozva)"
+
+#, fuzzy
+#~| msgid "Vertical Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Függőleges elhelyezkedés"
+
+#, fuzzy
+#~| msgid "Top align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Felülre igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Center align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Középre igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Bottom align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Alulra igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Eltolás"
+
+#, fuzzy
+#~| msgid "from:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "ettől:"
+
+#, fuzzy
+#~| msgid "Horizontal Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Vízszintes elhelyezkedés"
+
+#, fuzzy
+#~| msgid "Left align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Balra igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Right align with:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Jobbra igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "A keretcsoport neve:"
+
+#, fuzzy
+#~| msgid "Create a new frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Új keretcsoport létrehozása:"
+
+#, fuzzy
+#~| msgid "Select existing frameset to connect to:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select existing frameset to connect to:"
+#~ msgstr "Válassza ki a csatolandó keretcsoportot:"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "A keretcsoport neve"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "Átneve&zés"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "&Törlés"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "A könyvjelzők segítségével gyorsan át lehet váltani a dokumentum más "
+#~ "részére.\n"
+#~ "Adja meg a könyvjelző nevét."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Név:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Oldalméret és margók"
+
+#, fuzzy
+#~| msgid "Text elsewhere will:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text elsewhere will:"
+#~ msgstr "A szöveg máshol lesz:"
+
+#, fuzzy
+#~| msgid "The shape affects the text by its:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The shape affects the text by its:"
+#~ msgstr "Az alakzat a szövegre ezzel legyen hatással:"
+
+#, fuzzy
+#~| msgid "Bounding box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bounding box"
+#~ msgstr "Határoló doboz"
+
+#, fuzzy
+#~| msgid "Contour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contour"
+#~ msgstr "Körvonal"
+
+#, fuzzy
+#~| msgid "Shape and text is separated:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape and text is separated:"
+#~ msgstr "Alakzat és szöveg elválasztása:"
+
+#, fuzzy
+#~| msgid "Left by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Balra:"
+
+#, fuzzy
+#~| msgid "Above by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Above by:"
+#~ msgstr "Fölé:"
+
+#, fuzzy
+#~| msgid "Below by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Below by:"
+#~ msgstr "Alá:"
+
+#, fuzzy
+#~| msgid "Right by:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Jobbra:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Oszlopok:"
+
+#, fuzzy
+#~| msgid "Column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Oszloptávolság:"
+
+#, fuzzy
+#~| msgid "Words"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Szavak"
+
+#, fuzzy
+#~| msgid "Sentences"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Mondatok"
+
+#, fuzzy
+#~| msgid "Syllables"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Szótagok"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Sorok"
+
+#, fuzzy
+#~| msgid "Characters With Spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Karakterek (szóközökkel együtt)"
+
+#, fuzzy
+#~| msgid "Characters without spaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Karakterek (szóközök nélkül)"
+
+#, fuzzy
+#~| msgid "East Asian characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Kelet-ázsiai karakterek"
+
+#, fuzzy
+#~| msgid "Flesch Reading Ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch Reading Ease"
+#~ msgstr "Flesch-féle olvashatósági szám"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Fájl"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Szerkesztés"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "Né&zet"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Meg&jelenítési mód"
+
+#, fuzzy
+#~| msgid "Semantics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Szemantika"
+
+#, fuzzy
+#~| msgid "S&tyles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "S&tílusok"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Beállítások"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Helyesírás-ellenőrzés"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Szerkesztés"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "A helyesírás-ellenőrzés eredménye"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "A változó módosítása erre"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "…"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "&Eszközök"
+
+#, fuzzy
+#~| msgid "Baseline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Alapvonal"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Karakter"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Sor"
+
+#, fuzzy
+#~| msgid "Page (entire) area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page (entire) area"
+#~ msgstr "Oldal (teljes) területe"
+
+#, fuzzy
+#~| msgid "Page text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Oldal szövegterülete"
+
+#, fuzzy
+#~| msgid "Paragraph area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Bekezdés területe"
+
+#, fuzzy
+#~| msgid "Paragraph text area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Bekezdés szövegterülete"
+
+#, fuzzy
+#~| msgid "Left page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Bal oldalszegély"
+
+#, fuzzy
+#~| msgid "Right page border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Jobb oldalszegély"
+
+#, fuzzy
+#~| msgid "Right paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right paragraph border"
+#~ msgstr "Jobb bekezdésszegély"
+
+#, fuzzy
+#~| msgid "Left paragraph border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left paragraph border"
+#~ msgstr "Bal bekezdésszegély"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Beállítás"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Egyéb"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Rács"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokumentum"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Dokumentumbeállítások"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Szerző"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Szerző"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Új könyvjelző létrehozása"
+
+#, fuzzy
+#~| msgid "frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "keretcsoport"
+
+#, fuzzy
+#~| msgid "No framesets in document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No framesets in document"
+#~ msgstr "A dokumentumban nincs keretcsoport"
+
+#, fuzzy
+#~| msgid "Smart Positioning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Intelligens elrendezés"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "A szöveg körbefolyatása"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Szövegkeretek összekapcsolása"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Oszlopok"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stílus"
+
+#, fuzzy
+#~| msgid "Clone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Klónozás"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Törlés"
+
+#, fuzzy
+#~| msgid "Add a new page style with the name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new page style with the name:"
+#~ msgstr "Új oldalstílus hozzáadása ezzel a névvel:"
+
+#, fuzzy
+#~| msgid "Clone Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Oldalstílus klónozása"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Átnevezés"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "Adjon meg új nevet a könyvjelzőhöz"
+
+#, fuzzy
+#~| msgid "A bookmark with the name \"%1\" already exists."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "Már létezik „%1” nevű könyvjelző."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Könyvjelző kiválasztása"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Méretek"
+
+#, fuzzy
+#~| msgid "Debug"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Debug"
+#~ msgstr "Hibakeresés"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Navigáció"
+
+#, fuzzy
+#~| msgid "Page #"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "Oldal #"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Szakasz"
+
+#, fuzzy
+#~| msgid "RDF"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RDF"
+#~ msgstr "RDF"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Statisztika"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Szavak:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Mondatok:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Szótagok:"
+
+#, fuzzy
+#~| msgid "Characters (spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Karakterek (szóközökkel):"
+
+#, fuzzy
+#~| msgid "Characters (no spaces):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (no spaces):"
+#~ msgstr "Karakterek (szóközök nélkül):"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Sorok:"
+
+#, fuzzy
+#~| msgid "Readability:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Readability:"
+#~ msgstr "Olvashatóság:"
+
+#, fuzzy
+#~| msgid "Flesch reading ease"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flesch reading ease"
+#~ msgstr "Flesch-féle olvashatósági szám"
+
+#, fuzzy
+#~| msgid "East asian characters:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Kelet-ázsiai karakterek:"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Fejléc 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Fejléc 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Fejléc 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Enumerated List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Számozott lista"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Alphabetical List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Betűvel kezdődő lista"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Felsorolásjeles lista"
+
+#, fuzzy
+#~| msgid "Contents Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "A tartalomjegyzék címe"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Tartalomjegyzék-fejléc 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Tartalomjegyzék-fejléc 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Contents Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Tartalomjegyzék-fejléc 3"
+
+#, fuzzy
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Dokumentumcím"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Fejléc"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Lábléc"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Plain"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Egyszerű"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Szegély 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Szegély 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Szegély 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Sor"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Oszlop"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Világosszürke"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Sötétszürke"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Fekete"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Világoskék"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Sötétkék"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Piros"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Sárga"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Színes"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Kék árnyalatú"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Egyszerű 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Egyszerű 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Egyszerű 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Fejléc 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Fejléc 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Fejléc 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Fejléc 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Oszlopos 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Oszlopos 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Rács 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Rács 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Rács 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Szürke fejléc"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Kék fejléc"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Kék (tradicionális)"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Szürke (tradicionális)"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Kék (felül és alul)"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Szürke (felül és alul)"
+
+#, fuzzy
+#~| msgctxt "application name"
+#~| msgid "Calligra Words"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "Calligra Words"
+
+#, fuzzy
+#~| msgid "Word processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "Szövegszerkesztő"
+
+#, fuzzy
+#~| msgid "© 1998-%1, The Words Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "© A Words fejlesztői, 1998-%1."
+
+#, fuzzy
+#~| msgid "Co maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Co maintainer"
+#~ msgstr "Segédkarbantartó"
+
+#, fuzzy
+#~| msgid "Pierre Ducroquet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Ducroquet"
+#~ msgstr "Pierre Ducroquet"
+
+#, fuzzy
+#~| msgid "C. Boemann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann"
+#~ msgstr "C. Boemann"
+
+#, fuzzy
+#~| msgid "Everything"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Everything"
+#~ msgstr "Minden"
+
+#, fuzzy
+#~| msgid "Sebastian Sauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sebastian Sauer"
+#~ msgstr "Sebastian Sauer"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~| msgid "Formatting stuff"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Formázások"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "Szűrő"
+
+#, fuzzy
+#~| msgid "Matus Uzak"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Matus Uzak"
+#~ msgstr "Matus Uzak"
+
+#, fuzzy
+#~| msgid "Layout and Painting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout and Painting"
+#~ msgstr "Elrendezés és festés"
+
+#, fuzzy
+#~| msgid "Pavol Korinek"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pavol Korinek"
+#~ msgstr "Pavol Korinek"
+
+#, fuzzy
+#~| msgid "Shreya Pandit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shreya Pandit"
+#~ msgstr "Shreya Pandit"
+
+#, fuzzy
+#~| msgid "Statistics docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Statisztika dokkoló"
+
+#, fuzzy
+#~| msgid "Brijesh Patel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Brijesh Patel"
+#~ msgstr "Brijesh Patel"
+
+#, fuzzy
+#~| msgid "Foot and endnotes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "Láb- és végjegyzetek"
+
+#, fuzzy
+#~| msgid "Bibliography"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography"
+#~ msgstr "Irodalomjegyzék"
+
+#, fuzzy
+#~| msgid "Smit Patel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smit Patel"
+#~ msgstr "Smit Patel"
+
+#, fuzzy
+#~| msgid "Mojtaba Shahi"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mojtaba Shahi"
+#~ msgstr "Mojtaba Shahi"
+
+#, fuzzy
+#~| msgid "Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Stíluskezelő"
+
+#, fuzzy
+#~| msgid "Lassi Nieminen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lassi Nieminen"
+#~ msgstr "Lassi Nieminen"
+
+#, fuzzy
+#~| msgid "Hanzes Matus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hanzes Matus"
+#~ msgstr "Hanzes Matus"
+
+#, fuzzy
+#~| msgid "Lukáš Tvrdý"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tvrdý"
+#~ msgstr "Lukáš Tvrdý"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Girish Ramakrishnan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Girish Ramakrishnan"
+#~ msgstr "Girish Ramakrishnan"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ODF Support"
+#~ msgstr "ODF-Support"
+
+#, fuzzy
+#~| msgid "Robert Mathias Marmorstein"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Mathias Marmorstein"
+#~ msgstr "Robert Mathias Marmorstein"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Sven Lüppken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Lüppken"
+#~ msgstr "Sven Lüppken"
+
+#, fuzzy
+#~| msgid "Frank Dekervel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frank Dekervel"
+#~ msgstr "Frank Dekervel"
+
+#, fuzzy
+#~| msgid "Krister Wicksell Eriksson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Krister Wicksell Eriksson"
+#~ msgstr "Krister Wicksell Eriksson"
+
+#, fuzzy
+#~| msgid "Dag Andersen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dag Andersen"
+#~ msgstr "Dag Andersen"
+
+#, fuzzy
+#~| msgid "Nash Hoogwater"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nash Hoogwater"
+#~ msgstr "Nash Hoogwater"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~| msgid "Ulrich Kuettler"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ulrich Kuettler"
+#~ msgstr "Ulrich Kuettler"
+
+#, fuzzy
+#~| msgid "Shaheed Haque"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shaheed Haque"
+#~ msgstr "Shaheed Haque"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "Nicolas Goutte"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Clarence Dang"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clarence Dang"
+#~ msgstr "Clarence Dang"
+
+#, fuzzy
+#~| msgid "Robert Jacolin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Robert Jacolin"
+#~ msgstr "Robert Jacolin"
+
+#, fuzzy
+#~| msgid "Enno Bartels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enno Bartels"
+#~ msgstr "Enno Bartels"
+
+#, fuzzy
+#~| msgid "Ewald Snel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ewald Snel"
+#~ msgstr "Ewald Snel"
+
+#, fuzzy
+#~| msgid "Tomasz Grobelny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomasz Grobelny"
+#~ msgstr "Tomasz Grobelny"
+
+#, fuzzy
+#~| msgid "Michael Johnson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Michael Johnson"
+#~ msgstr "Michael Johnson"
+
+#, fuzzy
+#~| msgid "Fatcow Web Hosting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fatcow Web Hosting"
+#~ msgstr "Fatcow Web Hosting"
+
+#, fuzzy
+#~| msgid "Page break icon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Oldaltörés ikon"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kiszel Kristóf,Úr Balázs"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ulysses@kubuntu.org,urbalazs@gmail.com"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Másolás"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#, fuzzy
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Dokumentumcím"
+
+#, fuzzy
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Fejléc 1"
+
+#, fuzzy
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Fejléc 2"
+
+#, fuzzy
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Fejléc 3"
+
+#, fuzzy
+#~| msgid "Bullet List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Felsorolásjeles lista"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Eszközök"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Érvénytelen OASIS OpenDocument-fájl. Nem található office:body címke."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Érvénytelen OASIS OpenDocument-fájl. Egy címke sincs az office:body "
+#~ "címkén belül."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Ez nem szöveges dokumentum, hanem: %1. Más alkalmazással kell megnyitni."
+
+#, fuzzy
+#~| msgid "Can not find needed text component, Words will quit now"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Words will quit now"
+#~ msgstr "A szükséges szöveges komponens nem található. A Words kilép"
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Telepítési hiba"
+
+#, fuzzy
+#~| msgid "Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified"
+#~ msgstr "Módosítva"
+
+#, fuzzy
+#~| msgid "Saved"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Elmentve"
+
+#, fuzzy
+#~| msgid "Page %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "%2 / %1. oldal"
+
+#, fuzzy
+#~| msgid "Page %1-%2 of %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "%3 / %1-%2. oldal"
+
+#, fuzzy
+#~| msgid "Line %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "%1. sor"
+
+#, fuzzy
+#~| msgid "Page Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Oldalszám"
+
+#, fuzzy
+#~| msgid "Line Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Sorszám"
+
+#, fuzzy
+#~| msgid "Page Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Oldalstílus"
+
+#, fuzzy
+#~| msgid "Page Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Oldalméret"
+
+#, fuzzy
+#~| msgid "Saved/Modified"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved/Modified"
+#~ msgstr "Mentett/módosított"
+
+#, fuzzy
+#~| msgid "Mouse Cursor X:Y"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse Cursor X:Y"
+#~ msgstr "Egérmutató: X:Y"
+
+#, fuzzy
+#~| msgid "Zoom Controller"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Controller"
+#~ msgstr "Nagyításvezérlő"
+
+#, fuzzy
+#~| msgid "Exit Distraction-Free Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exit Distraction-Free Mode"
+#~ msgstr "Kilépés a zaklatottságmentes módból"
+
+#, fuzzy
+#~| msgid "Shape Properties..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Alakzattulajdonságok…"
+
+#, fuzzy
+#~| msgid "Change how the shape behave"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change how the shape behave"
+#~ msgstr "Az alakzat viselkedésének módosítása"
+
+#, fuzzy
+#~| msgid "Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "Sablon létrehozása dokumentumból…"
+
+#, fuzzy
+#~| msgid "Save this document and use it later as a template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr "A dokumentum elmentése később felhasználható sablonként"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can save this document as a template.<br><br>You can use this new "
+#~| "template as a starting point for another document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "A dokumentum sablonként való elmentése nem sikerült.<br><br>A létrejött "
+#~ "sablont új dokumentumok kiindulási mintájának lehet használni."
+
+#, fuzzy
+#~| msgid "Show Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Formázókarakterek megjelenítése"
+
+#, fuzzy
+#~| msgid "Toggle the display of non-printing characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "A nem nyomtatható karakterek megjelenítésének ki- és bekapcsolása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~| "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~| "printing characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
+#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
+#~ "printing characters."
+#~ msgstr ""
+#~ "A nem nyomtatható karakterek megjelenítésének ki- és bekapcsolása.<br/"
+#~ "><br/>Ha ez be van jelölve, a Words megjeleníti a tabulátorokat, "
+#~ "szóközöket, sorvége jeleket és a többi nem nyomtatható karaktert."
+
+#, fuzzy
+#~| msgid "Show Field Shadings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Field Shadings"
+#~ msgstr "Mezőárnyékolók megjelenítése"
+
+#, fuzzy
+#~| msgid "Toggle the shaded background of fields"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the shaded background of fields"
+#~ msgstr "A mezők árnyékolt hátterének átváltása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the visualization of fields (variables etc.) by drawing their "
+#~| "background in a contrasting color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the visualization of fields (variables etc.) by drawing their "
+#~ "background in a contrasting color."
+#~ msgstr ""
+#~ "A mezők (változók, stb.) megjelenésének váltása a hátterük kontrasztos "
+#~ "színnel való rajzolásával."
+
+#, fuzzy
+#~| msgid "Show Text Shape Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Text Shape Borders"
+#~ msgstr "Szövegalakzat szegélyeinek megjelenítése"
+
+#, fuzzy
+#~| msgid "Turns the border display on and off"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "A szegélyek megjelenítésének ki- és bekapcsolása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Turns the border display on and off.<br/><br/>The borders are never "
+#~| "printed. This option is useful to see how the document will appear on "
+#~| "the printed page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Turns the border display on and off.<br/><br/>The borders are never "
+#~ "printed. This option is useful to see how the document will appear on the "
+#~ "printed page."
+#~ msgstr ""
+#~ "Ki-be kapcsolja a szegélyek megjelenítését.<br/><br/>A szegélyek soha nem "
+#~ "jelennek lesznek kinyomtatva, tehát ez a beállítás csak a papír alakjának "
+#~ "megjelenítését szolgálja."
+
+#, fuzzy
+#~| msgid "Show Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Táblázatszegélyek megjelenítése"
+
+#, fuzzy
+#~| msgid "Toggle the display of table borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of table borders.<br/><br/>When this is enabled, "
+#~| "Words shows you any invisible table borders with a thin gray line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+#~ "shows you any invisible table borders with a thin gray line."
+#~ msgstr ""
+#~ "Táblázatszegélyek megjelenítésének bekapcsolása<br/><br/>Ha engedélyezve "
+#~ "van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
+#~ "táblázatszegélyeket."
+
+#, fuzzy
+#~| msgid "Toggle the display of table borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Táblázatszegélyek megjelenítésének bekapcsolása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Toggle the display of table borders.<br/><br/>When this is enabled, "
+#~| "Words shows you any invisible table borders with a thin gray line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+#~ "section bounds will be indicated with a thin gray horizontal brackets."
+#~ msgstr ""
+#~ "Táblázatszegélyek megjelenítésének bekapcsolása<br/><br/>Ha engedélyezve "
+#~ "van, a Words egy vékony szürke vonalként jeleníti meg a láthatatlan "
+#~ "táblázatszegélyeket."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Vonalzók megjelenítése"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "A vonalzók ki- és bekapcsolása"
+
+#, fuzzy
+#~| msgid ""
+#~| "The rulers are the white measuring spaces top and left of the document. "
+#~| "The rulers show the position and width of pages and of frames and can be "
+#~| "used to position tabulators among others.<p>Uncheck this to disable the "
+#~| "rulers from being displayed.</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The rulers are the white measuring spaces top and left of the document. "
+#~ "The rulers show the position and width of pages and of frames and can be "
+#~ "used to position tabulators among others.<p>Uncheck this to disable the "
+#~ "rulers from being displayed.</p>"
+#~ msgstr ""
+#~ "A dokumentumtól balra és felül látszanak a fehér mérővonalzók. Ezekkel "
+#~ "lehet például az oldalak és a keretek pozícióját, szélességét, a "
+#~ "tabulátorok pozícióját megmérni.<p>Ha nem szeretné használni a "
+#~ "vonalzókat, szüntesse meg a kijelölést.</p>"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Rácshoz illesztés"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Az állapotsor megjelenítése"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Az állapotsor megjelenítése és elrejtése"
+
+#, fuzzy
+#~| msgid "Distraction Free Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distraction Free Mode"
+#~ msgstr "Zaklatottságmentes mód"
+
+#, fuzzy
+#~| msgid "Set view in distraction free mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set view in distraction free mode"
+#~ msgstr "Nézet beállítása a zaklatottságmentes módban"
+
+#, fuzzy
+#~| msgid "Semantic Stylesheets..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Szemantikus stíluslapok…"
+
+#, fuzzy
+#~| msgid "Modify and add semantic stylesheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modify and add semantic stylesheets"
+#~ msgstr "Szemantikus stíluslapok módosítása és hozzáadása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Stylesheets are used to format the display of information which is "
+#~| "stored in RDF."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Stylesheets are used to format the display of information which is stored "
+#~ "in RDF."
+#~ msgstr ""
+#~ "A stíluslapok az RDF-fájlokban tárolt információk megjelenítésének "
+#~ "formázásához használhatók."
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Létrehozás"
+
+#, fuzzy
+#~| msgid "Configure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "Beállítás…"
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Oldalelrendezés…"
+
+#, fuzzy
+#~| msgid "Change properties of entire page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Az oldal tulajdonságainak megváltoztatása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Change properties of the entire page.<p>Currently you can change paper "
+#~| "size, paper orientation, header and footer sizes, and column settings.</"
+#~| "p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change properties of the entire page.<p>Currently you can change paper "
+#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
+#~ msgstr ""
+#~ "Az oldal jellemzőinek módosítása.<p>Jelenleg a papírméretet, a tájolást, "
+#~ "a fejléc illetve a lábléc méretét és az oszlopok beállításait lehet "
+#~ "megváltoztatni.</p>"
+
+#, fuzzy
+#~| msgid "Create Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Fejléc létrehozása"
+
+#, fuzzy
+#~| msgid "Create Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Lábléc létrehozása"
+
+#, fuzzy
+#~| msgid "Show Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Megjegyzések megjelenítése"
+
+#, fuzzy
+#~| msgid "Shows comments in the document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Megjeleníti a megjegyzéseket a dokumentumban"
+
+#, fuzzy
+#~| msgid "Word Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word Count"
+#~ msgstr "Szavak száma"
+
+#, fuzzy
+#~| msgid "Shows or hides word counting in status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "Megjeleníti vagy elrejti a szavak számát az állapotsoron"
+
+#, fuzzy
+#~| msgid "Page Setup"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Oldalbeállítás"
+
+#, fuzzy
+#~| msgid "Header & Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Fejléc és lábléc"
+
+#, fuzzy
+#~| msgid "Page layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Oldalelrendezés"
+
+#, fuzzy
+#~| msgid "Next Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Következő oldal"
+
+#, fuzzy
+#~| msgid "Previous Page"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Előző oldal"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgctxt "(qtundo-format) Search options"
+#~ msgid "Options"
+#~ msgstr "Beállítások"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "A szó cseréje"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "A szó cseréje"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "A szó cseréje"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "A szó cseréje"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Fejléc - a páratlan oldalakon"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Fejléc - a páros oldalakon"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Lábjegyzet - a páratlan oldalakon"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Lábjegyzet - a páros oldalakon"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Egyszerű szöveg"
+
+#, fuzzy
+#~| msgid "Other text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Egyéb szöveg"
+
+#~ msgid "Book"
+#~ msgstr "Könyv"
+
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "Calligra Author"
+
+#~ msgid "Author tool"
+#~ msgstr "Author eszköz"
+
+#, fuzzy
+#~| msgid "© 2012-%1, The Author Team"
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "© A szerző csapat, 2012-%1."
+
+#~ msgid "Co-maintainer"
+#~ msgstr "Segédkarbantartó"
+
+#~ msgid "Gopalakrishna Bhat"
+#~ msgstr "Gopalakrishna Bhat"
+
+#~ msgid "EPUB export"
+#~ msgstr "EPUB exportálás"
+
+#~ msgid "Mojtaba Shahi Senobari"
+#~ msgstr "Mojtaba Shahi Senobari"
+
+#~ msgid "Can not find needed text component, Author will quit now"
+#~ msgstr "A szükséges szöveges komponens nem található. Az Author most kilép"
+
+#~ msgid "Select Cover Image..."
+#~ msgstr "Borítókép kiválasztása…"
+
+#~ msgid "Set cover for your ebook"
+#~ msgstr "Borító beállítása az elektronikus könyvhöz"
+
+#~ msgid "Open..."
+#~ msgstr "Megnyitás…"
+
+#~ msgid "Open Cover"
+#~ msgstr "Borító megnyitása"
+
+#~ msgid "Import problem"
+#~ msgstr "Importálási probléma"
+
+#~ msgid "Cover selection"
+#~ msgstr "Borító kiválasztás"
+
+#~ msgid "No cover selected yet"
+#~ msgstr "Még nincs borító kiválasztva"
+
+#, fuzzy
+#~| msgid "Border Outline"
+#~ msgid "Outliner"
+#~ msgstr "A keretszegély körvonala"
+
+#, fuzzy
+#~| msgid "Edit Text"
+#~ msgid "Edit section"
+#~ msgstr "A szöveg szerkesztése"
+
+#~ msgid "None"
+#~ msgstr "Nincs"
+
+#, fuzzy
+#~| msgid "Main text"
+#~ msgid "Main"
+#~ msgstr "Egyszerű szöveg"
+
+#~ msgid "Secondary"
+#~ msgstr "Másodlagos"
+
+#, fuzzy
+#~| msgid "ODF Support"
+#~ msgid "Supporting"
+#~ msgstr "ODF-Support"
+
+#, fuzzy
+#~| msgid "Author tool"
+#~ msgid "Author's actor"
+#~ msgstr "Author eszköz"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "A mező neve:"
+
+#~ msgid "Type:"
+#~ msgstr "Típus:"
+
+#~ msgid "Role:"
+#~ msgstr "Szerepkör:"
+
+#~ msgid "Age:"
+#~ msgstr "Életkor:"
+
+#~ msgid "Not specified"
+#~ msgstr "Nincs megadva"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "Automatikus javítás"
+
+#~ msgid "Undo"
+#~ msgstr "Visszavonás"
+
+#~ msgid "Redo"
+#~ msgstr "Újra"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "&Félkövér"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "Dő&lt"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "Aláh&úzott"
+
+#, fuzzy
+#~| msgid "Left align with:"
+#~ msgid "LeftAlign"
+#~ msgstr "Balra igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Center align with:"
+#~ msgid "CenterAlign"
+#~ msgstr "Középre igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Right align with:"
+#~ msgid "RightAlign"
+#~ msgstr "Jobbra igazítás ezzel:"
+
+#, fuzzy
+#~| msgid "Author tool"
+#~ msgctxt "displayname of the semantic item type AuthorActor"
+#~ msgid "AuthorActor"
+#~ msgstr "Author eszköz"
+
+#~ msgid "1st Draft"
+#~ msgstr "1. vázlat"
+
+#~ msgid "2nd Draft"
+#~ msgstr "2. vázlat"
+
+#~ msgid "3rd Draft"
+#~ msgstr "3. vázlat"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "1st Edit"
+#~ msgstr "Szerkesztés"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "2nd Edit"
+#~ msgstr "Szerkesztés"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgid "3rd Edit"
+#~ msgstr "Szerkesztés"
+
+#~ msgid "Finished"
+#~ msgstr "Befejezve"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Automatikus javítás"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Badge:"
+#~ msgstr "Ol&dalnézeti mód"
+
+#~ msgid "Title:"
+#~ msgstr "Cím:"
+
+#~ msgid "Status:"
+#~ msgstr "Állapot:"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Szakasz"
+
+#~ msgid "File to open"
+#~ msgstr "A megnyitandó fájl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Keret létrehozása"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Keret törlése"
+
+#~ msgid "General"
+#~ msgstr "Általános"
+
+#~ msgid "Protect size and position"
+#~ msgstr "A méret és a pozíció nem változhat"
+
+#~ msgid "Position"
+#~ msgstr "Pozíció"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Width:"
+#~ msgstr "Szélesség:"
+
+#~ msgid "Height:"
+#~ msgstr "Magasság:"
+
+#~ msgid "Margins"
+#~ msgstr "Margók"
+
+#~ msgid "Synchronize changes"
+#~ msgstr "A módosítások szinkronizálása"
+
+#~ msgid "Bottom:"
+#~ msgstr "Lent:"
+
+#~ msgid "Top:"
+#~ msgstr "Fent:"
+
+#~ msgid "Right:"
+#~ msgstr "Jobbról:"
+
+#~ msgid "Left:"
+#~ msgstr "Balról:"
+
+#~ msgid "If Frame Overflows"
+#~ msgstr "Ha a keret túlfolyik"
+
+#~ msgid "Create a new page"
+#~ msgstr "Új oldal létrehozása"
+
+#~ msgid "Resize last frame"
+#~ msgstr "A legutolsó keret átméretezése"
+
+#~ msgid "Do not show the extra text"
+#~ msgstr "A kilógó szöveg ne látszódjon"
+
+#~ msgid "When Creating a Page"
+#~ msgstr "Oldal létrehozásakor"
+
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "A keret hozzákapcsolása az aktuális folyamhoz"
+
+#~ msgid "Do not create a followup frame"
+#~ msgstr "Nem kell követő keretet létrehozni"
+
+#~ msgid "Copy this Frame"
+#~ msgstr "Keret másolása"
+
+#~ msgid "Only on even/odd pages"
+#~ msgstr "Csak páros/páratlan oldalakon"
+
+#~ msgid "Protect content"
+#~ msgstr "A tartalom írásvédelme"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Ez a keret az előző másolata"
+
+#~ msgid "Changes will be applied to all frames in frameset"
+#~ msgstr "A módosítások a keretcsoport összes elemére vonatkozzanak"
+
+#~ msgid "Retain original aspect ratio"
+#~ msgstr "Az eredeti oldalarány megtartása"
+
+#~ msgid "Select All Shapes"
+#~ msgstr "Az összes alakzat kijelölése"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Linkelt másolat létrehozása"
+
+#~ msgid "Create a copy of the current frame, always showing the same contents"
+#~ msgstr ""
+#~ "Másolat készítése az aktuális keretről, ugyanazzal a tartalommal "
+#~ "(linkelve)"
+
+#~ msgid ""
+#~ "Create a copy of the current frame, that remains linked to it. This means "
+#~ "they always show the same contents: modifying the contents in such a "
+#~ "frame will update all its linked copies."
+#~ msgstr ""
+#~ "Másolat készítése az aktuális keretről, linkeléssel. Ez azt jelenti, hogy "
+#~ "a két keret tartalma mindig meg fog egyezni: ha az egyik keretben "
+#~ "módosítás történik, akkor a másolat is automatikusan megváltozik."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Linkelt másolat létrehozása"
+
+#~ msgid "Images (*.png *.xpm *.jpg *.jpeg)"
+#~ msgstr "Képek (*.png *.xpm *.jpg *.jpeg)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Oldal beszúrása"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Oldal eltávolítása"
+
+#~ msgid "Bookmark..."
+#~ msgstr "Könyvjelző…"
+
+#~ msgid "Select Bookmark..."
+#~ msgstr "Könyvjelző kiválasztása…"
+
+#~ msgid "Bookmark"
+#~ msgstr "Könyvjelző"
+
+#~ msgid "Page %1/%2"
+#~ msgstr "Oldal: %1/%2"
+
+#~ msgid "Characters (excluding spaces):"
+#~ msgstr "Karakterek (szóközök nélkül):"
+
+#~ msgid "Flesch Reading Ease:"
+#~ msgstr "Flesch-féle olvashatósági szám:"
+
+#~ msgid "Preferences"
+#~ msgstr "Beállítások"
+
+#~ msgid "Automatically update"
+#~ msgstr "Automatikus frissítés"
+
+#~ msgid "update"
+#~ msgstr "frissítés"
+
+#~ msgid "by:"
+#~ msgstr "ezzel:"
+
+#~ msgid "F&ormat"
+#~ msgstr "F&ormátum"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Érvénytelen dokumentum. A MIME-típus nincs megadva."
+
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Érvénytelen dokumentum. A MIME-típus application/x-words vagy application/"
+#~ "vnd.kde.kwords helyett: %1."
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Érvénytelen dokumentum. A papírméret: %1 x %2."
+
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "A lábjegyzet szövege nem található"
+
+#~ msgid "Unable to locate note-text"
+#~ msgstr "A jegyzetszöveg nem található"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Beszúrt keret"
+
+#~ msgid "Create Frame-clip"
+#~ msgstr "Keretklip létrehozása"
+
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Keretklip eltávolítása"
+
+#~ msgid "Force the remainder of the text into the next page"
+#~ msgstr "A szöveg hátralévő részének átvitele a következő oldalra"
+
+#~ msgid "All text after this point will be moved into the next page."
+#~ msgstr "A karakter utáni szövegrész átkerül a következő oldalra."
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Formátum"
+
+#~ msgid "Enable Document Headers"
+#~ msgstr "Dokumentumfejlécek engedélyezése"
+
+#~ msgid "Enable Document Footers"
+#~ msgstr "A dokumentumláblécek engedélyezése"
+
+#~ msgid "Change Tracking"
+#~ msgstr "Követés módosítása"
+
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Words"
+
+#~ msgid "Notes and fixes"
+#~ msgstr "Megjegyzések és javítások"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Az oldalak száma:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "A keretek száma:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "A képek száma:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "A táblázatok száma:"
+
+#~ msgid "Text"
+#~ msgstr "Szöveg"
+
+#~ msgid "Include text from foot- and endnotes"
+#~ msgstr "A láb- és végjegyzetek szövegével együtt"
+
+#~ msgid "Characters without spaces:"
+#~ msgstr "Karakterek (szóközök nélkül):"
+
+#~ msgid "Characters incl. spaces"
+#~ msgstr "Karakterek (szóközökkel együtt)"
+
+#~ msgid "Only count main text"
+#~ msgstr "Csak az elsődleges szöveg számolása"
+
+#~ msgid "approximately %1"
+#~ msgstr "kb. %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "A dokumentumban található mondatok, szavak és betűk száma"
+
+#~ msgid ""
+#~ "Information on the number of letters, words, syllables and sentences for "
+#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
+#~ msgstr ""
+#~ "Információ a dokumentumban található betűk, szavak, szótagok és mondatok "
+#~ "számáról.<p>Megjelenik az ezekből számított Flesch-féle olvashatósági "
+#~ "szám is.</p>"
+
+#~ msgid "Shows and hides header display"
+#~ msgstr "A fejléc megjelenítése vagy elrejtése"
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of headers in KWord.<br/><br/"
+#~| ">Headers are special frames at the top of each page which can contain "
+#~| "page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
+#~ ">Headers are special frames at the top of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Itt lehet ki-be kapcsolni a fejlécek megjelenítését.<br/><br/>A fejlécek "
+#~ "lényegében speciális keretek az oldalak tetején, itt található általában "
+#~ "az oldalszám és néhány más kiegészítő információ."
+
+#~ msgid "Shows and hides footer display"
+#~ msgstr "A lábléc megjelenítése vagy elrejtése"
+
+#, fuzzy
+#~| msgid ""
+#~| "Selecting this option toggles the display of footers in KWord. <br/><br/"
+#~| ">Footers are special frames at the bottom of each page which can contain "
+#~| "page numbers or other information."
+#~ msgid ""
+#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
+#~ ">Footers are special shapes at the bottom of each page which can contain "
+#~ "page numbers or other information."
+#~ msgstr ""
+#~ "Itt lehet ki-be kapcsolni a láblécek megjelenítését.<br/><br/>A láblécek "
+#~ "lényegében speciális keretek az oldalak alján, itt található általában az "
+#~ "oldalszám és néhány más kiegészítő információ."
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "A keret előrehozása"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames"
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr ""
+#~ "A kijelölt keretet előrehozása, hogy az a többi keret fölött jelenjen meg"
+
+#, fuzzy
+#~| msgid ""
+#~| "Raise the currently selected frame so that it appears above all the "
+#~| "other frames. This is only useful if frames overlap each other. If "
+#~| "multiple frames are selected they are all raised in turn."
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shapes. This is only useful if shapes overlap each other. If multiple "
+#~ "shapes are selected they are all raised in turn."
+#~ msgstr ""
+#~ "A kijelölt keretet előrehozása, hogy az a többi keret fölött jelenjen "
+#~ "meg. Csak egymást átfedő keretek estében van hatása. Több keret is "
+#~ "kijelölhető, ilyenkor azok mindegyike előre lesz hozva."
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "A keret hátrahelyezése"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it"
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr "A kijelölt keret hátratevése - az átfedő keretek el fogják takarni"
+
+#, fuzzy
+#~| msgid ""
+#~| "Lower the currently selected frame so that it disappears under any frame "
+#~| "that overlaps it. If multiple frames are selected they are all lowered "
+#~| "in turn."
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr ""
+#~ "A kijelölt keret hátratevése - az átfedő keretek el fogják takarni. Több "
+#~ "keret is kijelölhető, ilyenkor azok mindegyike hátra lesz téve."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Előrehozás"
+
+#~ msgid "Send to Back"
+#~ msgstr "Hátratevés"
+
+#~ msgid "Before current page"
+#~ msgstr "Az aktuális oldal elé"
+
+#~ msgid "After current page"
+#~ msgstr "Az aktuális oldal után"
+
+#~ msgid "After last page"
+#~ msgstr "Az utolsó oldal után"
+
+#~ msgid "Page style:"
+#~ msgstr "Oldalstílus:"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Beszú&rás"
+
+#~ msgid "Variable"
+#~ msgstr "Változó"
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgid "As Character"
+#~ msgstr "Karakter"
+
+#, fuzzy
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Tartalomjegyzék beszúrása az aktuális pozíciónál."
+
+#, fuzzy
+#~| msgid "Character"
+#~ msgid "To Character"
+#~ msgstr "Karakter"
+
+#, fuzzy
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Tartalomjegyzék beszúrása az aktuális pozíciónál."
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "Bekezdés"
+
+#, fuzzy
+#~| msgid "Remove Page"
+#~ msgid "To Page"
+#~ msgstr "Oldal eltávolítása"
+
+#~ msgid "Page..."
+#~ msgstr "Oldal…"
+
+#~ msgid "Delete Page"
+#~ msgstr "A lap törlése"
+
+#, fuzzy
+#~| msgid "Insert Page Style"
+#~ msgid "Insert Image Options"
+#~ msgstr "Oldalstílus beszúrása"
+
+#~ msgid "Disable Document Headers"
+#~ msgstr "A dokumentumfejlécek kikapcsolása"
+
+#~ msgid "Disable Document Footers"
+#~ msgstr "A dokumentumláblécek kikapcsolása"
+
+#, fuzzy
+#~| msgid "Frame Borders"
+#~ msgid "Page Borders"
+#~ msgstr "Keretszegélyek"
+
+#~ msgid "Hide Status Bar"
+#~ msgstr "Az állapotsor elrejtése"
+
+#~ msgid "Numbering"
+#~ msgstr "Számozás"
+
+#~ msgid "Automatic"
+#~ msgstr "automatikus"
+
+#~ msgid "Footnote"
+#~ msgstr "Lábjegyzet"
+
+#~ msgid "Endnote"
+#~ msgstr "Végjegyzet"
+
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Láb- vagy végjegyzet beszúrása"
+
+#~ msgid "Footnote/Endnote..."
+#~ msgstr "Lábjegyzet/végjegyzet….."
+
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Lábjegyzés beszúrása, mely a kijelölt szövegrészre hivatkozik"
+
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "Keret/keretcsoport tulajdonságok"
+
+#~ msgid "Alter frameset properties"
+#~ msgstr "A keretcsoport tulajdonságainak módosítása"
+
+#~ msgid "Picture..."
+#~ msgstr "Kép….."
+
+#~ msgid "Insert a picture into document"
+#~ msgstr "Kép beszúrása a dokumentumba"
+
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "A kijelölt keret átalakítása beágyazott keretté"
+
+#~ msgid ""
+#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
+#~ "frame within the text at the point nearest to the frames current position."
+#~ msgstr ""
+#~ "Az aktuális keret átalakítása beágyazott keretté.<br><br>Helyezze a "
+#~ "beágyazott keretet a szövegben a jelenlegi kerethez legközelebbi pontra."
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Set Floating"
+#~ msgstr "&Beállítások"
+
+#~ msgid "Please select at least one non-locked shape and try again"
+#~ msgstr "Válasszon ki legalább egy nem zárolt alakzatot és próbálja újra"
+
+#~ msgid ""
+#~ "<p><b>Check this option to have a text area created automatically for "
+#~ "each page.</b><br>\n"
+#~ "For letters and notes with one main text, possibly on several pages, you "
+#~ "should keep this checked. You should only uncheck it if you want to "
+#~ "define completely where each text frame should be positioned.</p>"
+#~ msgstr ""
+#~ "<p><b>Jelölje be, ha szövegterületet szeretne létrehozni minden oldalon.</"
+#~ "b><br>\n"
+#~ "Olyan leveleknél és feljegyzéseknél, ahol csak egy fő szövegrész van "
+#~ "(esetleg több oldalon), érdemes bejelölve hagyni. Csak akkor ajánlott "
+#~ "kikapcsolni, ha teljesen egyedi módon szeretné beállítani a "
+#~ "szövegkereteket.</p>"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "A kim&enet szűrése"
+
+#~ msgid "Page: current/total"
+#~ msgstr "Oldal: aktuális/összes"
+
+#~ msgid "Fra&mes"
+#~ msgstr "Ke&retek"
+
+#~ msgid "Tables"
+#~ msgstr "Táblázatok"
+
+#~ msgid "Insert"
+#~ msgstr "Beszúrás"
+
+#~ msgid "Add Text on Shape"
+#~ msgstr "Szöveg hozzáadása az alakzaton"
+
+#~ msgid "Layout of Text in Other Frames"
+#~ msgstr "A többi keretben található szöveg"
+
+#~ msgid "Text will run around this frame"
+#~ msgstr "A szöveg körbefolyja ezt a keretet"
+
+#~ msgid "Text will not run around this frame"
+#~ msgstr "A szöveg nem folyja körbe ezt a keretet"
+
+#~ msgid "Run Around Side"
+#~ msgstr "Körbefolyatási oldal"
+
+#~ msgid "Left"
+#~ msgstr "Bal"
+
+#~ msgid "Right"
+#~ msgstr "Jobb"
+
+#~ msgid "Longest side"
+#~ msgstr "A leghosszabb oldal"
+
+#~ msgid "Create custom outline"
+#~ msgstr "Egyéni körvonal létrehozása"
+
+#~ msgid "Create Custom Outline"
+#~ msgstr "Egyéni körvonal létrehozása"
+
+#~ msgid "Create a custom vector outline that text will run around"
+#~ msgstr "Egyéni vektoros körvonal létrehozása, melyet a szöveg körbefolyhat"
+
+#~ msgid ""
+#~ "Text normally runs around the content of a shape, when you want a custom "
+#~ "outline that is independent of the content you can create one and alter "
+#~ "it with the vector tools"
+#~ msgstr ""
+#~ "A szöveg általában körbefolyja az alakzatokat. A vektoros eszközök "
+#~ "segítségével lehetőség van a tartalomtól független egyéni körvonal "
+#~ "létrehozására és módosítására."
+
+#~ msgid "Create outlines"
+#~ msgstr "Körvonalak létrehozása"
+
+#~ msgid "Borders"
+#~ msgstr "Szegélyek"
+
+#~ msgid "MailMerge"
+#~ msgstr "Körlevél"
+
+#~ msgid "Table"
+#~ msgstr "Táblázat"
+
+#~ msgid "Font"
+#~ msgstr "Betűtípus"
+
+#~ msgid "Format"
+#~ msgstr "Formátum"
+
+#~ msgid "Formula"
+#~ msgstr "Képlet"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#~ msgid "Insert Picture..."
+#~ msgstr "Kép beszúrása…"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Page Background"
+#~ msgstr "Háttér"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Ha a szöveg túl hosszú a kerethez"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Új oldal létrehozásakor"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "A keret másolatának létrehozása"
+
+#~ msgid ""
+#~ "Alter frameset properties.<p>Currently you can change the frame "
+#~ "background."
+#~ msgstr ""
+#~ "A keretcsoport jellemzőinek megváltoztatása.<p>Egyelőre csak a keret "
+#~ "hátterét lehet beállítani."
+
+#~ msgid "Show Grid"
+#~ msgstr "Rács megjelenítése"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgid "Odd Pages Header %1"
+#~ msgstr "Fejléc - a páratlan oldalakon"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgid "Even Pages Header %1"
+#~ msgstr "Fejléc - a páros oldalakon"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgid "Odd Pages Footer %1"
+#~ msgstr "Lábjegyzet - a páratlan oldalakon"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgid "Even Pages Footer %1"
+#~ msgstr "Lábjegyzet - a páros oldalakon"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Fő szöveges keretcsoport"
+
+#~ msgid "Matrix"
+#~ msgstr "Mátrix"
+
+#~ msgid "Configure Frame Border"
+#~ msgstr "A keretszegély beállítása"
+
+#~ msgid "Ta&ble"
+#~ msgstr "Tábláz&at"
+
+#~ msgid "Cell"
+#~ msgstr "Cella"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "A keretszegélyek beállítása"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "Új oldal létrehozása"
+
+#, fuzzy
+#~| msgid "Delete all selected cells?"
+#~ msgid "Delete selected pages"
+#~ msgstr "Törölni szeretné a kijelölt cellákat?"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Delete Layer"
+#~ msgstr "A lap törlése"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Dokumentum&jellemző"
+
+#~ msgid "&Available tables:"
+#~ msgstr "A rendelkezésre álló &táblák:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "A k&ijelölt táblázat mezői:"
+
+#~ msgid "Query Result"
+#~ msgstr "A lekérdezés eredménye"
+
+#~ msgid "&Query:"
+#~ msgstr "Lekér&dezés:"
+
+#~ msgid "&Execute"
+#~ msgstr "&Végrehajtás"
+
+#~ msgid "&Setup"
+#~ msgstr "&Beállítás"
+
+#~ msgid "&Table:"
+#~ msgstr "Tábl&a:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "A szűrési szabályok megte&kintése, megváltoztatása"
+
+#~ msgid "&Used database records:"
+#~ msgstr "A &használt adatbázis-rekordok:"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "A beállítások megőr&zése..."
+
+#~ msgid "&Hostname:"
+#~ msgstr "Gé&pnév:"
+
+#~ msgid "&Driver:"
+#~ msgstr "Megha&jtó:"
+
+#~ msgid "Database &name:"
+#~ msgstr "Az ad&atbázis neve:"
+
+#~ msgid "&Username:"
+#~ msgstr "Felha&sználónév:"
+
+#~ msgid "&Port:"
+#~ msgstr "P&ort:"
+
+#~ msgid "default"
+#~ msgstr "(az alapértelmezés)"
+
+#~ msgid "Address Selection"
+#~ msgstr "Cím kiválasztása"
+
+#~ msgid "&Add >>"
+#~ msgstr "&Hozzáadás >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< &Eltávolítás"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "Elmentés &címlistaként..."
+
+#, fuzzy
+#~ msgid "Save selected single entries to a new distribution list"
+#~ msgstr "A kijelölt bejegyzések elmentése egy új címlistába."
+
+#~ msgid "&Filter on:"
+#~ msgstr "Szű&rés:"
+
+#~ msgid "Name"
+#~ msgstr "Név"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "Címlisták"
+
+#~ msgid "Single Entries"
+#~ msgstr "Önálló címbejegyzések"
+
+#~ msgid "Address B&ook"
+#~ msgstr "Címje&gyzék"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "A KDE címjegyzék elindítása"
+
+#~ msgid "&Address Book"
+#~ msgstr "Címjegyzé&k"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "A k&ijelölt címek"
+
+#~ msgid "Personal"
+#~ msgstr "Üdvözlések"
+
+#~ msgid "Hi!"
+#~ msgstr "Szia!"
+
+#~ msgid "Hello!"
+#~ msgstr "Helló!"
+
+#~ msgid "Bye!"
+#~ msgstr "Viszlát!"
+
+#~ msgid "Good bye"
+#~ msgstr "Viszontlátásra!"
+
+#~ msgid "Professional"
+#~ msgstr "Köszönések"
+
+#~ msgid "Good Morning"
+#~ msgstr "Jó reggelt!"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "Jó napot!"
+
+#~ msgid "Good Evening"
+#~ msgstr "Jó estét!"
+
+#~ msgid "Email"
+#~ msgstr "E-mail"
+
+#~ msgid "To:"
+#~ msgstr "Címzett"
+
+#~ msgid "Subject:"
+#~ msgstr "Tárgy"
+
+#~ msgid "CC:"
+#~ msgstr "Másolat"
+
+#~ msgid "BCC:"
+#~ msgstr "Titkos másolat"
+
+#~ msgid "Fwd:"
+#~ msgstr "Továbbítás"
+
+#~ msgid "Best regards,"
+#~ msgstr "Tisztelettel,"
+
+#~ msgid "Best wishes"
+#~ msgstr "Őszinte tisztelettel,"
+
+#~ msgid "Cordially,"
+#~ msgstr "Szívélyes tisztelettel,"
+
+#~ msgid "Love,"
+#~ msgstr "Szeretettel,"
+
+#~ msgid "Regards,"
+#~ msgstr "Köszönettel,"
+
+#~ msgid "Thank you,"
+#~ msgstr "Köszönöm,"
+
+#~ msgid "Thanks,"
+#~ msgstr "Köszi,"
+
+#~ msgid "Subject"
+#~ msgstr "Tárgy"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "Tisztelt Hölgyem/Uram!"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "Hölgyeim és Uraim!"
+
+#~ msgid "Attention"
+#~ msgstr "Figyelem"
+
+#~ msgid "Attention:"
+#~ msgstr "Figyelem:"
+
+#~ msgid "ATTN:"
+#~ msgstr "FIGYELEM:"
+
+#~ msgid "Instructions"
+#~ msgstr "Kezelési utasítás"
+
+#~ msgid "CERTIFIED"
+#~ msgstr "HITELESÍTETT"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "BIZALMAS"
+
+#~ msgid "PERSONAL"
+#~ msgstr "SZEMÉLYES"
+
+#~ msgid "FACSIMILE"
+#~ msgstr "FAX"
+
+#~ msgid ">>>Illegal position within datasource<<<"
+#~ msgstr ">>>Hibás pozíció az adatforráson belül<<<"
+
+#~ msgid ">>>Field %1 is unknown in the current database query<<<"
+#~ msgstr ">>>A(z) %1 mező nem ismert az aktuális adatbázis-lekérdezésben<<<"
+
+#~ msgid "Mail Merge - Editor"
+#~ msgstr "Körlevél-szerkesztő"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "Adja meg az adatbázis eléréséhez szükséges jelszót"
+
+#~ msgid "Mail Merge - Setup Database Connection"
+#~ msgstr "Körlevelek - az adatbázis-kapcsolat beállítása"
+
+#~ msgid "<not saved>"
+#~ msgstr "<nincs elmentve>"
+
+#~ msgid "Store Settings"
+#~ msgstr "Tárolási beállítások"
+
+#~ msgid "ascending"
+#~ msgstr "növekvő"
+
+#~ msgid "descending"
+#~ msgstr "csökkenő"
+
+#~ msgid "contains"
+#~ msgstr "tartalmazza"
+
+#~ msgid "Field"
+#~ msgstr "mező"
+
+#~ msgid "Sorting Order"
+#~ msgstr "Rendezés"
+
+#~ msgid "Include"
+#~ msgstr "Tartalmazás"
+
+#~ msgid "Operator"
+#~ msgstr "Műveleti jel"
+
+#~ msgid "Condition"
+#~ msgstr "Feltétel"
+
+#~ msgid "Value"
+#~ msgstr "Érték"
+
+#~ msgid "NOT"
+#~ msgstr "NEM"
+
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "Nem érhető el ez a címbejhegyzés: '%1'."
+
+#~ msgid "%1 South"
+#~ msgstr "%1 (dél)"
+
+#~ msgid "%1 North"
+#~ msgstr "%1 (észak)"
+
+#~ msgid "%1 West"
+#~ msgstr "%1 (nyugat)"
+
+#~ msgid "%1 East"
+#~ msgstr "%1 (kelet)"
+
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "Unkown mail merge variable: %1"
+#~ msgstr "Ismeretlen körlevélváltozó: %1"
+
+#~ msgid "no category"
+#~ msgstr "nincs kategória"
+
+#~ msgid "New Distribution List"
+#~ msgstr "Új címlista"
+
+#~ msgid "Please enter name:"
+#~ msgstr "Adja meg a nevet:"
+
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "<qt>Már létezik <b>%1</b> nevű címlista, válasszon másik nevet.</qt>"
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "No Value"
+#~ msgstr "Nincs érték"
+
+#~ msgid "Add record"
+#~ msgstr "Rekord felvétele"
+
+#~ msgid "Add entry"
+#~ msgstr "Mező felvétele"
+
+#~ msgid "Remove entry"
+#~ msgstr "A mező eltávolítása"
+
+#~ msgid "Add Entry"
+#~ msgstr "Bejegyzés felvétele"
+
+#, fuzzy
+#~| msgid "&Hostname:"
+#~ msgid "Host:"
+#~ msgstr "Gé&pnév:"
+
+#, fuzzy
+#~| msgid "&Port:"
+#~ msgid "Port:"
+#~ msgstr "P&ort:"
+
+#, fuzzy
+#~| msgid "&Time"
+#~ msgid "Timeout:"
+#~ msgstr "&Idő"
+
+#, fuzzy
+#~| msgid "Table of Contents"
+#~ msgid "Table of Content"
+#~ msgstr "Tartalomjegyzék"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Ol&dal"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgid "Slots"
+#~ msgstr "Rendezés"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "T&ulajdonságok"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "&Változó"
+
+#, fuzzy
+#~| msgid "Go to Document"
+#~ msgid "HTML Document"
+#~ msgstr "Ugrás a dokumentumra"
+
+#, fuzzy
+#~| msgid "Move Text"
+#~ msgid "Encoded Text"
+#~ msgstr "A szöveg mozgatása"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "A kijelölt keret(ek) törlése."
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "A kijelölt keret(ek) törlése."
+
+#~ msgid "First Page Header"
+#~ msgstr "Fejléc - az első oldalon"
+
+#~ msgid "First Page Footer"
+#~ msgstr "Lábjegyzet - az első oldalon"
+
+#~ msgid ""
+#~ "Invalid document. 'fo' has the wrong namespace. The application which "
+#~ "produced this document is not OASIS-compliant."
+#~ msgstr ""
+#~ "A dokumentum érvénytelen. A 'fo' elem névtere nem megfelelő. A "
+#~ "dokumentumot létrehozó alkalmazás nem teljesen OASIS-kompatibilis."
+
+#, fuzzy
+#~| msgid "&Units:"
+#~ msgid "Unit:"
+#~ msgstr "Mé&rtékegység:"
+
+#, fuzzy
+#~| msgid "Size (%1):"
+#~ msgid "Size:"
+#~ msgstr "Méret (%1):"
+
+#, fuzzy
+#~| msgid "Attention:"
+#~ msgid "Orientation:"
+#~ msgstr "Figyelem:"
+
+#, fuzzy
+#~| msgid "Single Entries"
+#~ msgid "Single sided"
+#~ msgstr "Önálló címbejegyzések"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "Whole document:"
+#~ msgstr "Dokumentum"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgid "Right to left"
+#~ msgstr "Világoskék"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Balról:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Jobbról:"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Page Edge:"
+#~ msgstr "Ol&dalnézeti mód"
+
+#, fuzzy
+#~| msgid "Page Break"
+#~ msgid "Page spread"
+#~ msgstr "Oldaltörés"
+
+#~ msgid "Printing..."
+#~ msgstr "Nyomtatás..."
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "Cella"
+
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr ""
+#~ "Csak olvasható az adattartalom, módosításokat nem lehet végrehajtani."
+
+#~ msgid "Insert Inline Table"
+#~ msgstr "Beszúrt (inline) táblázat beszúrása"
+
+#~ msgid "Bookmark target: "
+#~ msgstr "Könyvjelző-célpont: "
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "%1. szöveges keretcsoport"
+
+#~ msgid "Create Formula Frame"
+#~ msgstr "Képletkeret létrehozása"
+
+#~ msgid ""
+#~ "KWord is unable to insert the table because there is not enough space "
+#~ "available."
+#~ msgstr ""
+#~ "A KWord nem tudja beszúrni a táblázatot, mert nincs elég szabad hely."
+
+#~ msgid "Create Table"
+#~ msgstr "Táblázat létrehozása"
+
+#~ msgid "Change Frame Background Color"
+#~ msgstr "A keret háttérszínének megváltoztatása"
+
+#~ msgid "Delete Page %1"
+#~ msgstr "A(z) %1 lap törlése"
+
+#~ msgid "Resize Column"
+#~ msgstr "Oszlop átméretezése"
+
+#~ msgid "Resize Row"
+#~ msgstr "A sor átméretezése"
+
+#~ msgid "Configure KWord"
+#~ msgstr "A KWord beállításai"
+
+#~ msgid "Interface"
+#~ msgstr "A felhasználói felület"
+
+#~ msgid "Interface Settings"
+#~ msgstr "Kezelőfelület"
+
+#~ msgid "Spelling"
+#~ msgstr "Helyesírás-ellenőrzés"
+
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "A helyesírás-ellenőrzés beállításai"
+
+#~ msgid "Formula Defaults"
+#~ msgstr "A képletek alapértelmezései"
+
+#~ msgid "Misc Settings"
+#~ msgstr "Egyéb beállítások"
+
+#~ msgid "Path"
+#~ msgstr "Elérési út"
+
+#~ msgid "Path Settings"
+#~ msgstr "Az elérési utak beállításai"
+
+#~ msgid "Change Config"
+#~ msgstr "A beállítások megváltoztatása"
+
+#~ msgid ""
+#~ "Select the unit type used every time a distance or width/height is "
+#~ "displayed or entered. This one setting is for the whole of KWord: all "
+#~ "dialogs, the rulers etc. Note that KWord documents specify the unit which "
+#~ "was used to create them, so this setting only affects this document and "
+#~ "all documents that will be created later."
+#~ msgstr ""
+#~ "Válassza ki, mi legyen a szélességek és hosszúságok mértékegysége. Ez a "
+#~ "beállítás az egész KWordre érvényes: minden párbeszédablakra, minden "
+#~ "vonalzóra stb. A már korábban létrehozott KWord-dokumentumok tartalmazzák "
+#~ "a bennük felhasznált mértékegységet, ezért a beállítás csak erre ill. a "
+#~ "később létrehozandó dokumentumokra érvényes."
+
+#~ msgid ""
+#~ "Show or hide the status bar. If enabled, the status bar is shown at the "
+#~ "bottom, which displays various information."
+#~ msgstr ""
+#~ "Az állapotsor megjelenítése vagy elrejtése. Ha be van jelölve, állapotsor "
+#~ "jelenik meg alul, melyen különféle tájékoztató adatok jelennek meg."
+
+#~ msgid "Show s&crollbar"
+#~ msgstr "A &gördítősávok megjelenítése"
+
+#~ msgid ""
+#~ "Show or hide the scroll bar. If enabled, the scroll bar is shown on the "
+#~ "right and lets you scroll up and down, which is useful for navigating "
+#~ "through the document."
+#~ msgstr ""
+#~ "A gördítősáv megjelenítése vagy elrejtése. Ha be van jelölve, gördítősáv "
+#~ "jelenik meg a jobb oldalon, lehetővé téve a tartalom görgetését, "
+#~ "megkönnyítve a dokumentumon belüli navigálást."
+
+#~ msgid "PageUp/PageDown &moves the caret"
+#~ msgstr "A szövegkurzor m&ozgatása a PageUp/PageDown billentyűkkel"
+
+#~ msgid ""
+#~ "If this option is enabled, the PageUp and PageDown keys move the text "
+#~ "caret, as in other KDE applications. If it is disabled, they move the "
+#~ "scrollbars, as in most other word processors."
+#~ msgstr ""
+#~ "Ha bejelöli ezt az opciót, akkor a PageUp/PageDown billentyűkkel "
+#~ "mozgatható a szöveges kurzor, hasonlóan más KDE-s alkalmazásokhoz. Ha nem "
+#~ "jelöli be, akkor ezek a billentyűk a gördítősávokat mozgatják, hasonlóan "
+#~ "más elterjedt szövegszerkesztőkhöz."
+
+#~ msgid ""
+#~ "The number of files remembered in the file open dialog and in the recent "
+#~ "files menu item."
+#~ msgstr ""
+#~ "A fájlmegnyitási ablakból vagy a nemrég használt fájlok menüpontból "
+#~ "előhívható lista max. hossza."
+
+#~ msgid "Number of recent &files:"
+#~ msgstr "A legutóbbi fájlok listájának ma&x. hossza:"
+
+#~ msgid ""
+#~ "The grid size on which frames, tabs and other content snaps while moving "
+#~ "and scaling."
+#~ msgstr ""
+#~ "A keretek, lapok és egyéb tartalmak mozgatásánál és nagyításánál használt "
+#~ "rács mérete."
+
+#~ msgid "&Horizontal grid size:"
+#~ msgstr "&Vízszintes rácstávolság:"
+
+#~ msgid ""
+#~ "The grid size on which frames and other content snaps while moving and "
+#~ "scaling."
+#~ msgstr ""
+#~ "A keretek és egyéb tartalmak mozgatásánál és nagyításánál használt rács "
+#~ "mérete."
+
+#~ msgid "&Vertical grid size:"
+#~ msgstr "&Függőleges rácstávolság:"
+
+#~ msgid ""
+#~ "Configure the indent width used when using the 'Increase' or 'Decrease' "
+#~ "indentation buttons on a paragraph.<p>The lower the value, the more often "
+#~ "the buttons will have to be pressed to gain the same indentation."
+#~ msgstr ""
+#~ "Itt lehet beállítani, hogy a Behúzás növelése/csökkentése gombok milyen "
+#~ "mértékben növeljék/csökkentsék a kijelölt bekezdés behúzásának méretét."
+#~ "<p>Minél kisebb a megadott érték, annál több gombnyomás szükséges egy "
+#~ "bizonyos méretnövekedés eléréséhez."
+
+#~ msgid "&Paragraph indent by toolbar buttons:"
+#~ msgstr "Bekezdésbehúzás eszköztárgombokkal:"
+
+#~ msgid ""
+#~ "After selecting Preview Mode (from the \"View\" menu,) this is the number "
+#~ "of pages KWord will position on one horizontal row."
+#~ msgstr ""
+#~ "Az előnézeti mód kiválasztása után (a \"Nézet\" menüben) az itt megadott "
+#~ "számú oldal fog egy vízszintes sorba kerülni."
+
+#~ msgid "Number of pa&ges per row in preview mode:"
+#~ msgstr "Az oldalak száma egy so&rban előnézeti módban:"
+
+#~ msgid "Undo/&redo limit:"
+#~ msgstr "Max. &visszavonási mélység:"
+
+#~ msgid ""
+#~ "Limit the number of undo/redo actions remembered. A lower value helps to "
+#~ "save memory, a higher value allows you to undo and redo more editing "
+#~ "steps."
+#~ msgstr ""
+#~ "A visszavonási mélység korlátozása. Kisebb érték esetén kisebb lesz a "
+#~ "memóriaigény, nagyobb érték esetén több visszavonási és újra végrehajtási "
+#~ "lépést lehet elvégezni."
+
+#~ msgid "Display &links"
+#~ msgstr "A &linkek megjelenítése"
+
+#~ msgid ""
+#~ "If enabled, a link is highlighted as such and is clickable.\n"
+#~ "\n"
+#~ "You can insert a link from the Insert menu."
+#~ msgstr ""
+#~ "Ha bejelöli, a linkek ki lesznek emelve, hogy rájuk lehessen kattintani.\n"
+#~ "\n"
+#~ "Új linket a Beszúrás menüben lehet létrehozni."
+
+#~ msgid "&Underline all links"
+#~ msgstr "Az összes link aláhú&zása"
+
+#~ msgid "If enabled, a link is underlined."
+#~ msgstr "Ha ez be van jelölve, a linkek alá lesznek húzva."
+
+#~ msgid "Display c&omments"
+#~ msgstr "A megjegyzések meg&jelenítése"
+
+#~ msgid ""
+#~ "If enabled, comments are indicated by a small yellow box.\n"
+#~ "\n"
+#~ "You can show and edit a comment from the context menu."
+#~ msgstr ""
+#~ "Ha be van jelölve, a megjegyzéseket kis sárga négyzetek jelzik.\n"
+#~ "\n"
+#~ "Megjegyzést szerkeszteni a felbukkanó menüben lehet."
+
+#~ msgid "Display field code"
+#~ msgstr "A mezőkódok megjelenítése"
+
+#~ msgid ""
+#~ "If enabled, the type of link is displayed instead of displaying the link "
+#~ "text.\n"
+#~ "\n"
+#~ "There are various types of link that can be inserted, such as hyperlinks, "
+#~ "files, mail, news and bookmarks."
+#~ msgstr ""
+#~ "Ha be van jelölve, akkor a linkek szövege helyett a típusuk jelenik meg.\n"
+#~ "\n"
+#~ "Többféle típusú linket lehet használni, például internetes, fájlra, e-"
+#~ "mail címre vagy hírforrásra mutató linkeket és könyvjelzőket."
+
+#~ msgid "View Formatting"
+#~ msgstr "Megjelenítendő formázási jelek"
+
+#~ msgid ""
+#~ "These settings can be used to select the formatting characters that "
+#~ "should be shown.\n"
+#~ "\n"
+#~ "Note that the selected formatting characters are only shown if formatting "
+#~ "characters are enabled in general, which can be done from the View menu."
+#~ msgstr ""
+#~ "Itt lehet kiválasztani a megjeleníteni kívánt formázási karaktereket.\n"
+#~ "\n"
+#~ "A kiválasztott jelek csak akkor jelennek meg, ha a formázási karakterek "
+#~ "megjelenítése engedélyezett (a Nézet menüben)."
+
+#~ msgid "View formatting end paragraph"
+#~ msgstr "A formázási bekezdéslezáró jelek megjelenítése"
+
+#~ msgid "View formatting space"
+#~ msgstr "A formázási szóközök megjelenítése"
+
+#~ msgid "View formatting tabs"
+#~ msgstr "A formázási tabulátorok megjelenítése"
+
+#~ msgid "View formatting break"
+#~ msgstr "A formázási sortörések megjelenítése"
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "A linkmegjelenítési parancs megváltoztatása"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "A mezőkódmegjelenítési parancs megváltoztatása"
+
+#~ msgid "Document Defaults"
+#~ msgstr "A dokumentum alapértelmezései"
+
+#~ msgid ""
+#~ "When setting a document to use more than one column this distance will be "
+#~ "used to separate the columns. This value is merely a default setting as "
+#~ "the column spacing can be changed per document"
+#~ msgstr ""
+#~ "Ha a dokumentum több oszlopot tartalmaz, akkor ilyen széles lesz az "
+#~ "oszlopok közötti távolság. Ez lesz az alapértelmezés, de a konkrét érték "
+#~ "minden dokumentumnál külön-külön beállítható."
+
+#~ msgid "Default font:"
+#~ msgstr "Alapértelmezett betűtípus:"
+
+#~ msgid "Choose..."
+#~ msgstr "Választás..."
+
+#~ msgid "Global language:"
+#~ msgstr "Globális nyelv:"
+
+#~ msgid "Autosave every (min):"
+#~ msgstr "Az automatikus mentés időköze:"
+
+#~ msgid ""
+#~ "A backup copy of the current document is created when a change has been "
+#~ "made. The interval used to create backup documents is set here."
+#~ msgstr ""
+#~ "Automatikusan másolat készíthető az aktív dokumentumról. Itt lehet "
+#~ "megadni, hogy hány percenként készüljön másolat."
+
+#~ msgid "No autosave"
+#~ msgstr "(nincs automatikus mentés)"
+
+#~ msgid " min"
+#~ msgstr " min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Biztonsági másolat készítése"
+
+#~ msgid "Starting page number:"
+#~ msgstr "A kezdő oldalszám:"
+
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Tabulátorpozíció (%1):"
+
+#~ msgid "Cursor"
+#~ msgstr "Kurzor"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "Kurzor a védett területen is"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "A kezdő oldalszám megváltoztatása"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Tabulátorpozíció módosítása"
+
+#~ msgid "Tab stop:"
+#~ msgstr "Tabulátorpozíció:"
+
+#~ msgid "Personal Expression"
+#~ msgstr "Egyéni kifejezés"
+
+#~ msgid "Backup Path"
+#~ msgstr "A biztonsági mentés elérési útja"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Az elérési út módosítása..."
+
+#~ msgid "Configure Endnote/Footnote"
+#~ msgstr "A láb- és végjegyzetek beállítása"
+
+#~ msgid "Separator Line"
+#~ msgstr "Választóvonal"
+
+#~ msgid ""
+#~ "Configure the separator line. The separator line is drawn directly above "
+#~ "the frame for the footnotes."
+#~ msgstr ""
+#~ "A választóvonal beállításai. A vonal közvetlenül a lábjegyzetek kerete "
+#~ "fölött helyezkedik el."
+
+#~ msgid ""
+#~ "The separator can be positioned horizontally by picking one of the three "
+#~ "alignments."
+#~ msgstr "A választóvonal vízszintes irányú igazítása háromféle lehet."
+
+#~ msgctxt "Position"
+#~ msgid "Left"
+#~ msgstr "Balról"
+
+#~ msgctxt "Position"
+#~ msgid "Right"
+#~ msgstr "Jobbról"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#~ msgid "&Width:"
+#~ msgstr "Szé&lesség:"
+
+#~ msgid ""
+#~ "The width is the thickness of the separator line, set to 0 for no "
+#~ "separator line."
+#~ msgstr ""
+#~ "Az elválasztó vonal vastagsága (0 érték esetén nincs elválasztó vonal)."
+
+#~ msgid "&Size on page:"
+#~ msgstr "&Hossz:"
+
+#~ msgid ""
+#~ "The size of the separator line can be defined as a percentage of the "
+#~ "width of the page."
+#~ msgstr ""
+#~ "Az elválasztó vonal hossza az oldal szélességének százalékában is "
+#~ "megadható."
+
+#~ msgid "Solid"
+#~ msgstr "folyamatos"
+
+#~ msgid "Dash Line"
+#~ msgstr "szaggatott"
+
+#~ msgid "Dot Line"
+#~ msgstr "pontozott"
+
+#~ msgid "Dash Dot Line"
+#~ msgstr "szaggatott (vonás, pont)"
+
+#~ msgid "Dash Dot Dot Line"
+#~ msgstr "szaggatott (vonás, pont, pont)"
+
+#~ msgid ""
+#~ "The separator line can be drawn as a solid line or as a line which has a "
+#~ "pattern; the pattern can be set in the style-type."
+#~ msgstr ""
+#~ "Az elválasztó vonal lehet egyszínű vagy mintás. A minta a "
+#~ "stílusbeállításoknál adható meg."
+
+#~ msgid "Change End-/Footnote Variable Settings"
+#~ msgstr "A láb- és végjegyzetváltozók módosítása"
+
+#~ msgid "Change Footnote Line Separator Settings"
+#~ msgstr "A lábjegyzet választóvonalának módosítása"
+
+#, fuzzy
+#~ msgid "Rename Bookmark..."
+#~ msgstr "Átnevezés"
+
+#~ msgid "That name already exists, please choose another name."
+#~ msgstr "Már létezik ilyen nevű bejegyzés, válasszon más nevet."
+
+#~ msgid "Delete Bookmark"
+#~ msgstr "Törlés"
+
+#~ msgid "Delete Row"
+#~ msgstr "Sor törlése"
+
+#~ msgid "Delete Column"
+#~ msgstr "Oszlop törlse"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "A sor törlése a táblázatból."
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Az oszlop törlése a táblázatból."
+
+#~ msgid "Delete the whole table?"
+#~ msgstr "Törölni szeretné az egész táblázatot?"
+
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Törölni szeretné a kijelölt sorokat?"
+
+#~ msgid "Delete row number %1?"
+#~ msgstr "Törölni szeretné a(z) %1. sort?"
+
+#~ msgid "Delete column number %1?"
+#~ msgstr "Törölni szeretné a(z) %1. oszlopot?"
+
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "Törölni szeretné ezeket a sorokat: %1?"
+
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "Törölni szeretné ezeket az oszlopokat: %1?"
+
+#~ msgid "Column %1"
+#~ msgstr "%1. oszlop"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "%1. szövegkeret"
+
+#~ msgid "Empty"
+#~ msgstr "Üres"
+
+#~ msgid "Formula Frame %1"
+#~ msgstr "%1. képletkeret"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "%1 - (%2.) kép"
+
+#~ msgid "Embedded Objects"
+#~ msgstr "Beágyazott objektum"
+
+#~ msgid "Formula Frames"
+#~ msgstr "Képletkeretek"
+
+#~ msgid "Pictures"
+#~ msgstr "Képek"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Szövegkeretek/keretcsoportok"
+
+#~ msgid "Document Structure"
+#~ msgstr "A dokumentum szerkezete"
+
+#~ msgid ""
+#~ "This document was created with a newer version of KWord (syntax version: "
+#~ "%1)\n"
+#~ "Opening it in this version of KWord will lose some information."
+#~ msgstr ""
+#~ "Ez a dokumentum a KWord egy ennél újabb változatával készült "
+#~ "(szintaktikai verziószám: %1)\n"
+#~ "Ha ebben a KWord-ben nyitja meg a fájlt, egyes információk elveszhetnek."
+
+#~ msgid "File Format Mismatch"
+#~ msgstr "Nem megfelelő fájlformátum"
+
+#~ msgid "Create Part Frame"
+#~ msgstr "Objektumkeret létrehozása"
+
+#~ msgid "Delete Table"
+#~ msgstr "A táblázat törlése"
+
+#~ msgid "Delete Text Frame"
+#~ msgstr "A szövegkeret törlése"
+
+#~ msgid "Delete Formula Frame"
+#~ msgstr "A képletkeret törlése"
+
+#~ msgid "Delete Picture Frame"
+#~ msgstr "A képkeret törlése"
+
+#~ msgid "Delete Object Frame"
+#~ msgstr "Az objektumkeret törlése"
+
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Egyéni kifejezés szerkesztése"
+
+#~ msgid "Group name:"
+#~ msgstr "Csoportnév:"
+
+#~ msgid "Expressions"
+#~ msgstr "Kifejezések"
+
+#~ msgid "&New"
+#~ msgstr "Ú&j"
+
+#~ msgid "New"
+#~ msgstr "Új"
+
+#~ msgid "empty"
+#~ msgstr "üres"
+
+#~ msgid "new group"
+#~ msgstr "új csoport"
+
+#~ msgid "&Automatic"
+#~ msgstr "a&utomatikus"
+
+#~ msgid "&Manual"
+#~ msgstr "ké&zi"
+
+#~ msgid "&Footnote"
+#~ msgstr "&lábjegyzet"
+
+#~ msgid "&Endnote"
+#~ msgstr "&végjegyzet"
+
+#~ msgid "Formula %1"
+#~ msgstr "%1. képlet"
+
+#~ msgid "Frame Properties for %1"
+#~ msgstr "Kerettulajdonságok (%1)"
+
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Az új keret tulajdonságai"
+
+#~ msgid "Frames Properties"
+#~ msgstr "Kerettulajdonságok"
+
+#~ msgid "Frame Settings for %1"
+#~ msgstr "Keretbeállítások (%1)"
+
+#~ msgid ""
+#~ "<b>Reconnect frame to current flow:</b><br/>When a new page is created, a "
+#~ "new frame will be created for this frameset, so that the text can flow "
+#~ "from one page to the next if necessary. This is what happens for the "
+#~ "\"main text frameset\", but this option makes it possible to choose the "
+#~ "same behavior for other framesets, for instance in magazine layouts."
+#~ msgstr ""
+#~ "<b>A keret hozzákapcsolása az aktuális folyamhoz:</b><br/>Új oldal "
+#~ "létrehozásakor új keret lesz hozzáfűzve ehhez a keretcsoporthoz, hogy a "
+#~ "szöveg szükség esetén átfolyhasson arra az oldalra. Ez történik a \"fő "
+#~ "szöveges keretcsoportnál\", de ezzel az opcióval ez a tulajdonság más "
+#~ "keretcsoportoknál is bekapcsolható, például a magazinszerű "
+#~ "elrendezéseknél."
+
+#~ msgid ""
+#~ "<b>Do not create a followup frame:</b><br/>When a new page is created, no "
+#~ "frame will be created for this frameset."
+#~ msgstr ""
+#~ "<b>Nem kell követő keretet létrehozni:</b><br/>Új oldal létrehozásakor "
+#~ "nem lesz új keret hozzáadva ehhez a keretcsoporthoz."
+
+#~ msgid ""
+#~ "<b>Place a copy of this frame:</b><br/>When a new page is created, a "
+#~ "frame will be created for this frameset, which will always show the exact "
+#~ "same thing as the frame on the previous page. This is what happens for "
+#~ "headers and footers, but this option makes it possible to choose the same "
+#~ "behavior for other framesets, for instance a company logo and/or title "
+#~ "that should appear exactly the same on every page."
+#~ msgstr ""
+#~ "<b>A keret másolatának létrehozása:</b><br/>Új oldal létrehozásakor "
+#~ "automatikusan hozzá lesz adva egy új keret ehhez a keretcsoporthoz, "
+#~ "melynek tartalma pontosan meg fog egyezni az előző oldalon levő keret "
+#~ "tartalmával. Ez történik a fejlécek és a láblécek esetében, de ezzel az "
+#~ "opcióval ez a tulajdonság más keretcsoportokra is alkalmazható, például "
+#~ "egy vállalati embléma vagy felirat esetében, melynek minden oldalon "
+#~ "ugyanúgy kell megjelennie."
+
+#~ msgid "SideHead Definition"
+#~ msgstr "Oldalfej definiálása"
+
+#~ msgid "Gap size (%1):"
+#~ msgstr "A kihagyás mérete (%1):"
+
+#~ msgid "Closest to Binding"
+#~ msgstr "Legközelebb a kötési vonalhoz"
+
+#~ msgid "Closest to Page Edge"
+#~ msgstr "Legközelebb az oldal széléhez"
+
+#~ msgid ""
+#~ "<b>Protect content:</b><br/>Disallow changes to be made to the contents "
+#~ "of the frame(s)."
+#~ msgstr ""
+#~ "<b>A tartalom írásvédelme:</b><br/>A keret(ek) adattartalmát védetté "
+#~ "teszi módosítások ellen."
+
+#~ msgid "No."
+#~ msgstr " "
+
+#~ msgid "Table is inline"
+#~ msgstr "Beszúrt (inline) táblázat"
+
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "A kijelölt keretek színének beállítása"
+
+#~ msgid "Transparent background"
+#~ msgstr "Átlátszó háttér"
+
+#~ msgid "Background color:"
+#~ msgstr "Háttérszín:"
+
+#~ msgid "Background style:"
+#~ msgstr "A háttér stílusa:"
+
+#~ msgid "No Background Fill"
+#~ msgstr "(nincs kitöltés a háttérben)"
+
+#~ msgid "100% Fill Pattern"
+#~ msgstr "100%-os kitöltésű minta"
+
+#~ msgid "94% Fill Pattern"
+#~ msgstr "94%-os kitöltésű minta"
+
+#~ msgid "88% Fill Pattern"
+#~ msgstr "88%-os kitöltésű minta"
+
+#~ msgid "63% Fill Pattern"
+#~ msgstr "63%-os kitöltésű minta"
+
+#~ msgid "50% Fill Pattern"
+#~ msgstr "50%-os kitöltésű minta"
+
+#~ msgid "37% Fill Pattern"
+#~ msgstr "37%-os kitöltésű minta"
+
+#~ msgid "12% Fill Pattern"
+#~ msgstr "12%-os kitöltésű minta"
+
+#~ msgid "6% Fill Pattern"
+#~ msgstr "6%-os kitöltésű minta"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "egymást keresztező vonalak"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "átlós vonalak ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "átlós vonalak ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "átlós, egymást keresztező vonalak"
+
+#~ msgid "&Borders"
+#~ msgstr "Sze&gélyek"
+
+#~ msgid "St&yle:"
+#~ msgstr "Stíl&us:"
+
+#~ msgid "Co&lor:"
+#~ msgstr "Sz&ín:"
+
+#~ msgid "Rename Frameset"
+#~ msgstr "A keretcsoport átnevezése"
+
+#~ msgid ""
+#~ "A new frameset with the name '%1' can not be made because a frameset with "
+#~ "that name already exists. Please enter another name or select an existing "
+#~ "frameset from the list."
+#~ msgstr ""
+#~ "'%1' néven nem hozható létre új keretcsoport, mert ilyen nevű "
+#~ "keretcsoport már létezik. Adjon meg egy másik nevet vagy válasszon egy "
+#~ "létező keretcsoportot a listából."
+
+#~ msgid "Protect Content"
+#~ msgstr "A tartalom védelme"
+
+#~ msgid ""
+#~ "The frame will not be resized because the new size would be greater than "
+#~ "the size of the page."
+#~ msgstr ""
+#~ "A keret nem lesz átméretezve, mert az új keret nem férne el az oldalon."
+
+#~ msgid "Make Frameset Inline"
+#~ msgstr "A keretcsoport beszúrttá (inline-ná) alakítása"
+
+#~ msgid "Make Frameset Non-Inline"
+#~ msgstr "A keretcsoport beszúrtságának (inline voltának) megszüntetése"
+
+#~ msgid "Resize Frame"
+#~ msgstr "A keret átméretezése"
+
+#~ msgid "Change Margin Frame"
+#~ msgstr "A szegély keretének megváltoztatása"
+
+#~ msgid "Change Border"
+#~ msgstr "A szegély megváltoztatása"
+
+#~ msgid "Change Left Border Frame"
+#~ msgstr "A bal szegély keretének megváltoztatása"
+
+#~ msgid "Change Right Border Frame"
+#~ msgstr "A jobb szegély keretének megváltoztatása"
+
+#~ msgid "Change Top Border Frame"
+#~ msgstr "A felső szegély keretének megváltoztatása"
+
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Az alsó szegély keretének megváltoztatása"
+
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "A(z) '%1' keretcsoport utolsó keretét készül máshová kapcsolni. A "
+#~ "keretcsoport tartalma el fog veszni.\n"
+#~ "Biztosan ezt szeretné?"
+
+#~ msgid "Reconnect Frame"
+#~ msgstr "A keret átkapcsolása máshová"
+
+#~ msgid "&Reconnect"
+#~ msgstr "Át&kapcsolás"
+
+#~ msgid ""
+#~ "<b>Synchronize changes:</b><br/>When this is checked any change in "
+#~ "margins will be used for all directions."
+#~ msgstr ""
+#~ "<b>A módosítások szinkronizálása:</b><br/>Ha be van jelölve, akkor a "
+#~ "szegélyek módosítása mind a négy irányba ki fog hatni."
+
+#~ msgid "Frame Style Manager"
+#~ msgstr "Keretstílus-beállítások"
+
+#~ msgid "Import From File..."
+#~ msgstr "Importálás fájlból..."
+
+#~ msgid "New Framestyle Template (%1)"
+#~ msgstr "Új keretstílus-sablon (%1)"
+
+#~ msgid "Frame background color:"
+#~ msgstr "A keret háttérszíne:"
+
+#~ msgid "Go to Footnote"
+#~ msgstr "Ugrás a lábjegyzetre"
+
+#~ msgid "Go to Endnote"
+#~ msgstr "Ugrás a végjegyzetre"
+
+#~ msgid "File name is empty."
+#~ msgstr "A fájlnév nem lehet üres."
+
+#~ msgid "File does not contain any styles. It may be the wrong version."
+#~ msgstr ""
+#~ "A fájl nem tartalmaz stílusleírást. Lehet, hogy a fájl verziója nem "
+#~ "megfelelő."
+
+#~ msgid "This file is not a KWord file!"
+#~ msgstr "Ez nem egy KWord fájl!"
+
+#~ msgid "Select style to import:"
+#~ msgstr "Válassza ki az importálandó stílust:"
+
+#~ msgid "Insert Row"
+#~ msgstr "Sor beszúrása"
+
+#~ msgid "Insert Column"
+#~ msgstr "Oszlop beszúrása"
+
+#~ msgid "Insert New Row"
+#~ msgstr "Új sor beszúrása a kijelölt"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Új oszlop beszúrása a kijelölt"
+
+#~ msgid "Before"
+#~ msgstr "előtt"
+
+#~ msgid "After"
+#~ msgstr "után"
+
+#~ msgid "Row:"
+#~ msgstr "Sor:"
+
+#~ msgid "Column:"
+#~ msgstr "Oszlop:"
+
+#~ msgid "Choose &Picture..."
+#~ msgstr "Kép &választása..."
+
+#~ msgid "Choose Picture"
+#~ msgstr "Kép választása"
+
+#~ msgid "Contents Head %1"
+#~ msgstr "Tartalomjegyzék-fejléc %1"
+
+#~ msgid "No plugins supporting the requested action were found."
+#~ msgstr "A kért műveletet támogató bővítőmodul nem található."
+
+#~ msgid "Do you really want to replace the current datasource?"
+#~ msgstr "Biztosan le szeretné cserélni a jelenlegi adatforrást?"
+
+#~ msgid "Mail Merge Setup"
+#~ msgstr "Körlevél-beállítások"
+
+#~ msgid "&Available sources:"
+#~ msgstr "A rendelkezésre álló &adatforrások:"
+
+#~ msgid "Datasource:"
+#~ msgstr "Adatforrás:"
+
+#~ msgid "Edit Current..."
+#~ msgstr "A jelenlegi módosítása..."
+
+#~ msgid "Create New..."
+#~ msgstr "Új létrehozása..."
+
+#~ msgid "Merging:"
+#~ msgstr "Körlevél:"
+
+#~ msgid "Print Preview..."
+#~ msgstr "Nyomtatási előnézet..."
+
+#~ msgid "Create New Document"
+#~ msgstr "Új dokumentum létrehozása"
+
+#~ msgid "Mail Merge - Variable Name"
+#~ msgstr "Körlevél - változónév"
+
+#~ msgid "Unnamed Table"
+#~ msgstr "Névtelen táblázat"
+
+#~ msgid "Object %1"
+#~ msgstr "%1. objektum"
+
+#~ msgid "Move/Resize Frame"
+#~ msgstr "A keret elmozgatása, átméretezése"
+
+#~ msgid "Make Document External"
+#~ msgstr "A dokumentum külsővé tétele"
+
+#~ msgid "Make Document Internal"
+#~ msgstr "A dokumentum belsővé tétele"
+
+#~ msgid "Picture %1"
+#~ msgstr "%1. kép"
+
+#~ msgid "Reset"
+#~ msgstr "Alapállapotba"
+
+#~ msgid "Sort Text"
+#~ msgstr "A szöveg rendezése"
+
+#~ msgid "Increase"
+#~ msgstr "Növelés"
+
+#~ msgid "Decrease"
+#~ msgstr "Csökkentés"
+
+#~ msgid "Split Cell"
+#~ msgstr "A cella felosztása"
+
+#~ msgid "Number of rows:"
+#~ msgstr "A sorok száma:"
+
+#~ msgid "Number of columns:"
+#~ msgstr "Az oszlopok száma:"
+
+#~ msgid "Selected Text"
+#~ msgstr "Kijelölt szöveg"
+
+#~ msgid "Counting..."
+#~ msgstr "Számolás..."
+
+#~ msgid "Number of embedded objects:"
+#~ msgstr "A beágyazott objektumok száma:"
+
+#~ msgid "Number of formula frameset:"
+#~ msgstr "A képlet-keretcsoportok száma:"
+
+#~ msgid "Table Settings"
+#~ msgstr "Táblázatbeállítások"
+
+#~ msgid "Cell heights:"
+#~ msgstr "Cellamagasság:"
+
+#~ msgid "Manual"
+#~ msgstr "megadott értékű"
+
+#~ msgid "Cell widths:"
+#~ msgstr "Cellaszélesség:"
+
+#~ msgid "The table is &inline"
+#~ msgstr "A táblázat kö&zvetlen (inline) legyen"
+
+#~ msgid "Reapply template to table"
+#~ msgstr "A sablon alkalmazása újból a táblázatra"
+
+#~ msgid "Templates"
+#~ msgstr "Sablonok"
+
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Új sorok felvétele a táblázatba"
+
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Sorok eltávolítása a táblázatból"
+
+#~ msgid "Remove Row"
+#~ msgstr "Sor eltávolítása"
+
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Új oszlopok felvétele a táblázatba"
+
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Oszlopok eltávolítása a táblázatból"
+
+#~ msgid "Remove Column"
+#~ msgstr "Oszlop eltávolítása"
+
+#~ msgid "Apply Template to Table"
+#~ msgstr "A sablon alkalmazása a táblázatra"
+
+#~ msgid "Table Style Manager"
+#~ msgstr "Táblázatstílus-beállítások"
+
+#~ msgid "Tablestyles preview"
+#~ msgstr "Táblázatstílus-előnézet"
+
+#~ msgid "Adjust"
+#~ msgstr "Igazítás"
+
+#~ msgid "Textstyle:"
+#~ msgstr "A szöveg stílusa:"
+
+#~ msgid "Change..."
+#~ msgstr "Módosítás..."
+
+#~ msgid "New Tablestyle Template (%1)"
+#~ msgstr "Új táblastílus-sablon (%1)"
+
+#~ msgid "&Customize"
+#~ msgstr "E&gyéni"
+
+#~ msgid "Apply To"
+#~ msgstr "Alkalmazás"
+
+#~ msgid "First row"
+#~ msgstr "Első sor"
+
+#~ msgid "Last row"
+#~ msgstr "Utolsó sor"
+
+#~ msgid "Body"
+#~ msgstr "Törzs"
+
+#~ msgid "First column"
+#~ msgstr "Első oszlop"
+
+#~ msgid "Last column"
+#~ msgstr "Utolsó oszlop"
+
+#~ msgid "--- Frame Break ---"
+#~ msgstr "--- Kerettörés ---"
+
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "A bekezdés jellemzőinek megváltoztatása"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "Elérési út"
+
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Tartalomjegyzék beszúrása"
+
+#~ msgid "Insert Break After Paragraph"
+#~ msgstr "Újsor beszúrása bekezdés után"
+
+#~ msgid "Endnote %1"
+#~ msgstr "Végjegyzet (%1)"
+
+#~ msgid "Footnote %1"
+#~ msgstr "Lábjegyzet (%1)"
+
+#~ msgid "Insert Expression"
+#~ msgstr "Kifejezés beszúrása"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Változó beszúrása"
+
+#~ msgid "ERROR"
+#~ msgstr "HIBA"
+
+#~ msgid "INSRT"
+#~ msgstr "BESZÚR"
+
+#~ msgid "Select Frame"
+#~ msgstr "Keret kijelölése"
+
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "Körle&vél-beállítások..."
+
+#~ msgid "Drag Mail Merge Variable"
+#~ msgstr "Körlevélváltozó húzása"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "A keret &törlése"
+
+#~ msgid "Ra&ise Frame"
+#~ msgstr "A keret &előrehozása"
+
+#~ msgid "&Lower Frame"
+#~ msgstr "A keret &hátratevése"
+
+#~ msgid "Text Mode"
+#~ msgstr "Szöveges mód"
+
+#, fuzzy
+#~ msgid "Only show the text of the document"
+#~ msgstr "A dokumentumnak csak a szövege látszódjon."
+
+#~ msgid ""
+#~ "Do not show any pictures, formatting or layout. KWord will display only "
+#~ "the text for editing."
+#~ msgstr ""
+#~ "Ne jelenjen meg a képek, ne látszódjon a formázás és a szövegelrendezés. "
+#~ "Csak a nyers szöveg lesz látható."
+
+#~ msgid ""
+#~ "Switch to page mode.<br><br> Page mode is designed to make editing your "
+#~ "text easy.<br><br>This function is most frequently used to return to text "
+#~ "editing after switching to preview mode."
+#~ msgstr ""
+#~ "Átváltás oldalnézeti módba.<br><br>Oldalnézeti módban könnyebb szöveget "
+#~ "szerkeszteni.<br><br>Ezzel lehet visszatérni a szöveg szerkesztéséhez az "
+#~ "előnézeti kép megtekintése után."
+
+#, fuzzy
+#~ msgid "Switch to page editing mode"
+#~ msgstr "Váltás oldalszerkesztési módba."
+
+#~ msgid "Pre&view Mode"
+#~ msgstr "E&lőnézeti mód"
+
+#~ msgid ""
+#~ "Zoom out from your document to get a look at several pages of your "
+#~ "document.<br><br>The number of pages per line can be customized."
+#~ msgstr ""
+#~ "Felnagyítja a dokumentumot úgy, hogy egyszerre több oldal is látható "
+#~ "legyen.<br><br>A megjelenítendő oldalak száma beállítható."
+
+#, fuzzy
+#~ msgid "Zoom out to a multiple page view"
+#~ msgstr "Kicsinyítés többoldalas nézetre."
+
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Dokumentumfejlécek en&gedélyezése"
+
+#~ msgid "Disable Document &Headers"
+#~ msgstr "A dokumentumfejlécek kikap&csolása"
+
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Dok&umentumláblécek engedélyezése"
+
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "A dokumentumláblécek kika&pcsolása"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Különlege&s karakter..."
+
+#, fuzzy
+#~ msgid "Insert one or more symbols or letters not found on the keyboard"
+#~ msgstr ""
+#~ "A billentyűzetről közvetlenül el nem érhető betűk, szimbólumok beszúrása."
+
+#~ msgid "Insert one or more symbols or letters not found on the keyboard."
+#~ msgstr ""
+#~ "A billentyűzetről közvetlenül el nem érhető betűk, szimbólumok beszúrása."
+
+#~ msgid "&Hard Frame Break"
+#~ msgstr "\"&Kemény\" kerettörés"
+
+#, fuzzy
+#~ msgid "Force the remainder of the text into the next frame"
+#~ msgstr "A szöveg hátralévő részének áthelyezése a következő keretbe."
+
+#~ msgid ""
+#~ "This inserts a non-printing character at the current cursor position. All "
+#~ "text after this point will be moved into the next frame in the frameset."
+#~ msgstr ""
+#~ "Nem nyomtatható karaktert szúr be az aktuális kurzorpozíciónál. A jel "
+#~ "utáni szövegrészek átkerülnek a keretcsoport következ keretébe."
+
+#~ msgid "Link..."
+#~ msgstr "Link..."
+
+#, fuzzy
+#~ msgid "Insert a Web address, email address or hyperlink to a file"
+#~ msgstr "Internet-cím (URL) vagy e-mail cím beszúrása a fájlba."
+
+#~ msgid "Insert a Web address, email address or hyperlink to a file."
+#~ msgstr "Internet-cím (URL) vagy e-mail cím beszúrása a fájlba."
+
+#~ msgid "Comment..."
+#~ msgstr "Megjegyzés..."
+
+#, fuzzy
+#~ msgid "Insert a comment about the selected text"
+#~ msgstr "Megjegyzés beszúrása a kijelölt szövegrészről."
+
+#~ msgid ""
+#~ "Insert a comment about the selected text. These comments are not designed "
+#~ "to appear on the final page."
+#~ msgstr ""
+#~ "Megjegyzés beszúrása a kijelölt szövegrészről. A megjegyzések nem "
+#~ "jelennek meg a végleges oldalon."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "A megjegyzés szerkesztése..."
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "A megjegyzés szövegének szerkesztése."
+
+#~ msgid "Change the content of a comment."
+#~ msgstr "A megjegyzés szövegének szerkesztése."
+
+#, fuzzy
+#~ msgid "Remove the selected document comment"
+#~ msgstr "A kijelölt megjegyzés eltávolítása."
+
+#~ msgid "Remove the selected document comment."
+#~ msgstr "A kijelölt megjegyzés eltávolítása."
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "A megjegyzés szövegének másolása..."
+
+#~ msgid "Insert a footnote referencing the selected text."
+#~ msgstr "Lábjegyzés beszúrása, mely a kijelölt szövegrészre hivatkozik."
+
+#~ msgid "Table of &Contents"
+#~ msgstr "T&artalomjegyzék"
+
+#~ msgid "Insert table of contents at the current cursor position."
+#~ msgstr "Tartalomjegyzék beszúrása az aktuális pozíciónál."
+
+#~ msgid "Document &Information"
+#~ msgstr "Dokumentum&jellemző"
+
+#~ msgid "&Date"
+#~ msgstr "&Dátum"
+
+#~ msgid "&Statistic"
+#~ msgstr "St&atisztika"
+
+#~ msgid "&Custom"
+#~ msgstr "E&gyéni"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "Az összes változó &felfrissítése"
+
+#, fuzzy
+#~ msgid "Update all variables to current values"
+#~ msgstr "Az összes változó értékének frissítése."
+
+#~ msgid ""
+#~ "Update all variables in the document to current values.<br><br>This will "
+#~ "update page numbers, dates or any other variables that need updating."
+#~ msgstr ""
+#~ "A dokumentumban található összes változó értékének felfrissítése."
+#~ "<br><br>Ennek hatására frissül az oldalszámok, a dátumok és a többi "
+#~ "változó értéke."
+
+#~ msgid "&Expression"
+#~ msgstr "Kifeje&zés"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "Szöve&gkeret"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "Új szövegkeret létrehozása."
+
+#~ msgid "Create a new text frame."
+#~ msgstr "Új szövegkeret létrehozása."
+
+#~ msgid "For&mula"
+#~ msgstr "Egy&enlet"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "Képlet beszúrása egy új keretbe."
+
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Képlet beszúrása egy új keretbe."
+
+#~ msgid "&Table..."
+#~ msgstr "&Táblázat..."
+
+#~ msgid ""
+#~ "Create a table.<br><br>The table can either exist in a frame of its own "
+#~ "or inline."
+#~ msgstr ""
+#~ "Táblázat létrehozása.<br><br>A táblázat kerülhet saját keretbe vagy lehet "
+#~ "közvetlen."
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Új képkeret létrehozása."
+
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Új keret létrehozása egy képhez vagy diagramhoz."
+
+#~ msgid "&Object Frame"
+#~ msgstr "&Objektumkeret"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "Objektum beszúrása egy új keretbe."
+
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "Objektum beszúrása egy új keretbe."
+
+#~ msgid "Fi&le..."
+#~ msgstr "&Fájl..."
+
+#~ msgid "&Font..."
+#~ msgstr "&Betűtípus..."
+
+#~ msgid "Change character size, font, boldface, italics etc."
+#~ msgstr ""
+#~ "A betűk méretének, típusának, vastagságának, dőltségének stb. beállítása"
+
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "A kijelölt karakterek jellemzőinek megváltoztatása."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Bekezdés..."
+
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgstr ""
+#~ "A bekezdés szegélyeinek, szövegfolyatási módjának, széleinek, "
+#~ "bekezdésjeleinek, számozásának stb. beállítása."
+
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ "<p>Select text in multiple paragraphs to change the formatting of all "
+#~ "selected paragraphs.<p>If no text is selected, the paragraph where the "
+#~ "cursor is located will be changed."
+#~ msgstr ""
+#~ "Itt lehet megváltoztatni a bekezdések szegélyeinek, szövegfolyatási "
+#~ "módjának, széleinek, bekezdésjeleinek, számozásának, stb. értékeit.<p>Ha "
+#~ "több bekezdésre kiterjedő szöveget jelöl ki, akkor az összes érintett "
+#~ "bekezdésre ki fog terjedni a módosítás.<p>Ha nincs kijelölve szöveg, "
+#~ "akkor arra a bekezdésre vonatkoznak a módosítások, amelyben a kurzor áll."
+
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Ke&retstílus-beállítások"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "A keretstílusok tulajdonságainak módosítása."
+
+#~ msgid ""
+#~ "Change background and borders of framestyles.<p>Multiple framestyles can "
+#~ "be changed using the dialog box."
+#~ msgstr ""
+#~ "A keretstílusok hátterének és szegélyeinek jellemzői.<p>A "
+#~ "párbeszédablakban egyszerre több keretstílus is módosítható."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "A stílustulajdonságok módosítása."
+
+#~ msgid ""
+#~ "Change font and paragraph attributes of styles.<p>Multiple styles can be "
+#~ "changed using the dialog box."
+#~ msgstr ""
+#~ "A stílusok betűtípusainak és bekezdéseinek jellemzői.<p>A "
+#~ "párbeszédablakban az összes stílus megváltoztatható."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "A méret megőrzése"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "A betűméret növelése"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "A betűméret csökkentése"
+
+#~ msgid "St&yle"
+#~ msgstr "Stíl&us"
+
+#~ msgid "Default Format"
+#~ msgstr "Alapértelmezett formátum"
+
+#, fuzzy
+#~ msgid "Change font and paragraph attributes to their default values"
+#~ msgstr ""
+#~ "A betűtípus- és bekezdésjellemzők visszaállítása az alapértelmezésre."
+
+#~ msgid "Change font and paragraph attributes to their default values."
+#~ msgstr ""
+#~ "A betűtípus- és bekezdésjellemzők visszaállítása az alapértelmezésre."
+
+#~ msgid "&Strike Out"
+#~ msgstr "Áthú&zott"
+
+#~ msgid "Align &Left"
+#~ msgstr "&Balra igazított"
+
+#~ msgid "Align &Center"
+#~ msgstr "&Középre igazított"
+
+#~ msgid "Align &Right"
+#~ msgstr "&Jobbra igazított"
+
+#~ msgid "Align &Block"
+#~ msgstr "&Sorkizárt"
+
+#~ msgid "Line Spacing &1"
+#~ msgstr "Sorköz &1"
+
+#~ msgid "Line Spacing 1.&5"
+#~ msgstr "Sorköz 1,&5"
+
+#~ msgid "Line Spacing &2"
+#~ msgstr "Sorköz &2"
+
+#~ msgid "Superscript"
+#~ msgstr "Felső index"
+
+#~ msgid "Subscript"
+#~ msgstr "Alsó index"
+
+#~ msgid "Increase Indent"
+#~ msgstr "A behúzás szélességének megnövelése"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "A behúzás szélességének csökkentése"
+
+#~ msgid "Text Color..."
+#~ msgstr "Szövegszín..."
+
+#~ msgid "Bullet"
+#~ msgstr "Jel"
+
+#~ msgid "Framest&yle"
+#~ msgstr "Ker&etstílus"
+
+#~ msgid "Border Left"
+#~ msgstr "Bal keretszegély"
+
+#~ msgid "Border Right"
+#~ msgstr "Jobb keretszegély"
+
+#~ msgid "Border Top"
+#~ msgstr "Felső keretszegély"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Alsó keretszegély"
+
+#~ msgid "Border Style"
+#~ msgstr "A keretszegély stílusa"
+
+#~ msgid "Border Width"
+#~ msgstr "A keretszegély vastagsága"
+
+#~ msgid "Border Color"
+#~ msgstr "A keretszegély színe"
+
+#~ msgid "Text Background Color..."
+#~ msgstr "A szöveg háttérszíne..."
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "A kijelölt szöveg háttérszínének megváltoztatása."
+
+#~ msgid "Change background color for currently selected text."
+#~ msgstr "A kijelölt szöveg háttérszínének megváltoztatása."
+
+#~ msgid "&Properties"
+#~ msgstr "T&ulajdonságok"
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Az aktuális táblázat tulajdonságainak módosítása."
+
+#~ msgid "Adjust properties of the current table."
+#~ msgstr "Az aktuális táblázat tulajdonságainak módosítása."
+
+#~ msgid "&Insert Row..."
+#~ msgstr "Sor &beszúrása..."
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Egy vagy több sor beszúrása a kurzorpozíciónál."
+
+#~ msgid "Insert one or more rows at current cursor location."
+#~ msgstr "Egy vagy több sor beszúrása az aktuális kurzorpozíciónál."
+
+#~ msgid "I&nsert Column..."
+#~ msgstr "Oszlo&p beszúrása..."
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Beszúr egy vagy több oszlopot az aktuális táblázatba."
+
+#~ msgid "Insert one or more columns into the current table."
+#~ msgstr "Beszúr egy vagy több oszlopot az aktuális táblázatba."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "A kijelölt sorok törlése az aktuális táblázatból."
+
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "A kijelölt sorok törlése az aktuális táblázatból."
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "A kijelölt oszlopok törlése az aktuális táblázatból."
+
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "A kijelölt oszlopok törlése az aktuális táblázatból."
+
+#~ msgid "Resize Column..."
+#~ msgstr "Az oszlop átméretezése..."
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "A kijelölt oszlop szélességének megváltoztatása."
+
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "A kijelölt oszlop szélességének megváltoztatása."
+
+#~ msgid "&Join Cells"
+#~ msgstr "A cellák &egyesítése"
+
+#, fuzzy
+#~ msgid "Join two or more cells into one large cell"
+#~ msgstr "Kettő vagy több cella tartalmának egyesítése egy nagyobb cellába."
+
+#~ msgid ""
+#~ "Join two or more cells into one large cell.<p>This is a good way to "
+#~ "create titles and labels within a table."
+#~ msgstr ""
+#~ "Két vagy több cella tartalmának összevonása egy cellába.<p>Így "
+#~ "kényelmesen lehet feliratokat és címkéket készíteni egy táblázaton belül."
+
+#~ msgid "&Split Cell..."
+#~ msgstr "A cella felo&sztása..."
+
+#, fuzzy
+#~ msgid "Split one cell into two or more cells"
+#~ msgstr "Egy cella tartalmának szétbontása két vagy több kisebb cellába."
+
+#~ msgid ""
+#~ "Split one cell into two or more cells.<p>Cells can be split horizontally, "
+#~ "vertically or both directions at once."
+#~ msgstr ""
+#~ "Egy cella tartalmának szétosztása több cellába.<p>A cellákat "
+#~ "vízszintesen, függőlegesen, vagy akár mindkét irányban is meg lehet "
+#~ "osztani."
+
+#~ msgid "Protect Cells"
+#~ msgstr "A cellák módosításának letiltása"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "A kijelölt cellák tartalmának védelme módosítás ellen."
+
+#~ msgid ""
+#~ "Toggles cell protection on and off.<br><br>When cell protection is on, "
+#~ "the user can not alter the content or formatting of the text within the "
+#~ "cell."
+#~ msgstr ""
+#~ "Ki-be kapcsolja a cellavédelmet.<br><br>Ha a cellavédelem be van "
+#~ "kapcsolva, akkor sem a cella szövegét, sem a formázását nem lehet "
+#~ "megváltoztatni a cellán belül."
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "A táblázat &felbontása"
+
+#, fuzzy
+#~ msgid "Break a table into individual frames"
+#~ msgstr "A táblázat felbontása önálló keretekbe."
+
+#~ msgid ""
+#~ "Break a table into individual frames<p>Each frame can be moved "
+#~ "independently around the page."
+#~ msgstr ""
+#~ "Egy táblázat felbontása több önálló keretbe.<p>Mindegyik keret önállóan "
+#~ "mozgathatóvá válik az oldalon belül."
+
+#~ msgid "Delete &Table"
+#~ msgstr "A táblá&zat törlése"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Az egész táblázat törlése."
+
+#~ msgid ""
+#~ "Deletes all cells and the content within the cells of the currently "
+#~ "selected table."
+#~ msgstr ""
+#~ "A jelenleg kijelölt táblázat összes cellájából törli az adattartalmat."
+
+#~ msgid "T&able Style Manager"
+#~ msgstr "Táblá&zatstílus-kezelő"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "A táblastílusok tulajdonságainak módosítása."
+
+#~ msgid ""
+#~ "Change textstyle and framestyle of the tablestyles.<p>Multiple "
+#~ "tablestyles can be changed using the dialog box."
+#~ msgstr ""
+#~ "A táblastílusok szövegstílusának és keretstílusának megváltoztatása.<p>A "
+#~ "párbeszédablakban egyszerre több táblastílus is megváltoztatható."
+
+#~ msgid "Table&style"
+#~ msgstr "Táb&lázatstílus"
+
+#~ msgid "Convert Table to Text"
+#~ msgstr "Táblázat szöveggé konvertálása"
+
+#~ msgid "Sort Text..."
+#~ msgstr "A szöveg rendezése..."
+
+#~ msgid "Add Expression"
+#~ msgstr "Kifejezés hozzáadása"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Az automatikus javítás bekapcsolása"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Az automatikus javítás kikapcsolása"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Az automatikus javítás ki-be kapcsolása."
+
+#~ msgid "Toggle autocorrection on and off."
+#~ msgstr "Az automatikus javítás ki-be kapcsolása."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Az &automatikus javítás beállításai..."
+
+#~ msgid ""
+#~ "Change autocorrection options including:<p> <UL><LI><P>exceptions to "
+#~ "autocorrection</P> <LI><P>add/remove autocorrection replacement text</P> "
+#~ "<LI><P>and basic autocorrection options</P>."
+#~ msgstr ""
+#~ "Az automatikus javítás jellemzőit lehet megváltoztatni:<p> <UL><LI><P>az "
+#~ "automatikus javítás alóli kivételeket</P> <LI><P>az automatikus javítás "
+#~ "helyettesítő szövegeit</P> <LI><P>a javítást befolyásoló néhány opciót</"
+#~ "P>."
+
+#~ msgid "Custom &Variables..."
+#~ msgstr "&Egyéni változók..."
+
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Az egyéni kifejezések szerkesztése..."
+
+#, fuzzy
+#~ msgid "Add or change one or more personal expressions"
+#~ msgstr "Egyéni kifejezések felvétele, módosítása."
+
+#~ msgid ""
+#~ "Add or change one or more personal expressions.<p>Personal expressions "
+#~ "are a way to quickly insert commonly used phrases or text into your "
+#~ "document."
+#~ msgstr ""
+#~ "Egyéni kifejezések felvétele, módosítása.<p>Ezek segítségével az Ön által "
+#~ "leggyakrabban használt neveket, kifejezéseket gyorsan beillesztheti a "
+#~ "szövegbe."
+
+#~ msgid "Change Case..."
+#~ msgstr "A betűméret megváltoztatása..."
+
+#, fuzzy
+#~ msgid "Alter the capitalization of selected text"
+#~ msgstr ""
+#~ "A kijelölt szövegben megváltoztatja a betűméretet (kisbetű/nagybetű)."
+
+#~ msgid ""
+#~ "Alter the capitalization of selected text to one of five pre-defined "
+#~ "patterns.<p>You can also switch all letters from upper case to lower case "
+#~ "and from lower case to upper case in one move."
+#~ msgstr ""
+#~ "A kijelölt szövegrészben a kisbetűk/nagybetűk megváltoztatása az öt "
+#~ "választható minta egyike szerint.<p>Az összes betű nagybetűvé vagy "
+#~ "kisbetűvé konvertálása is lehetséges egyetlen művelettel."
+
+#~ msgid "Change Picture..."
+#~ msgstr "A kép módosítása..."
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "A kép módosítása a kijelölt keretben."
+
+#~ msgid ""
+#~ "You can specify a different picture in the current frame.<br><br>KWord "
+#~ "automatically resizes the new picture to fit within the old frame."
+#~ msgstr ""
+#~ "Az aktuális kerethez tartozó képet lehet itt megváltoztatni.<br><br>A "
+#~ "KWord úgy méretezi az új képet, hogy az beférjen az eredeti keretbe."
+
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "A fej- és a lábléc beállításai..."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "A kijelölt fej- ill. lábléc jellemzőinek megváltoztatása."
+
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "A kijelölt fej- ill. lábléc jellemzőinek megváltoztatása."
+
+#, fuzzy
+#~ msgid "Open the link with the appropriate application"
+#~ msgstr "A link megnyitása a megfelelő alkalmazással."
+
+#~ msgid ""
+#~ "Open the link with the appropriate application.<br><br>Web addresses are "
+#~ "opened in a browser.<br>Email addresses begin a new message addressed to "
+#~ "the link.<br>File links are opened by the appropriate viewer or editor."
+#~ msgstr ""
+#~ "A link megnyitása a beállított alkalmazással.<br><br>Az internetes címek "
+#~ "a beállított böngészővel nyílnak meg.<br>E-mail cím esetén a beállított "
+#~ "levelezőprogram nyílik meg, a megadott címzettel.<br>A fájlra mutató "
+#~ "linkek a megfelelő nézegető- vagy szerkesztőprogramban nyílnak meg."
+
+#~ msgid "Change Link..."
+#~ msgstr "A link módosítása..."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "A kijelölt link tartalmának megváltoztatása."
+
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "A kijelölt link jellemzőinek megváltoztatása."
+
+#~ msgid "Copy Link"
+#~ msgstr "A link másolása"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Hozzáadás a könyvjelzőkhöz"
+
+#~ msgid "Remove Link"
+#~ msgstr "A link eltávolítása"
+
+#~ msgid "Show Doc Structure"
+#~ msgstr "Dokumentumstruktúra"
+
+#~ msgid "Hide Doc Structure"
+#~ msgstr "A dokumentumstruktúra elrejtése"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "A dokumentum struktúráját mutató oldalsáv megnyitása."
+
+#~ msgid ""
+#~ "Open document structure sidebar.<p>This sidebar helps you organize your "
+#~ "document and quickly find pictures, tables etc."
+#~ msgstr ""
+#~ "Dokumentumstruktúra-oldalsáv megnyitása.<p>Az oldalsáv segítségével "
+#~ "könnyen áttekinthetővé válik a dokumentum, könnyen megtalálható egy "
+#~ "keresett kép vagy táblázat."
+
+#~ msgid "Hide Rulers"
+#~ msgstr "A vonalzók elrejtése"
+
+#~ msgid "Hide Grid"
+#~ msgstr "A rács elrejtése"
+
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "A szövegki&egészítés beállításai..."
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Az automatikus szövegkiegészítés beállításainak módosítása."
+
+#~ msgid "Add words or change the options for autocompletion."
+#~ msgstr ""
+#~ "Szavak felvétele automatikus kiegészítéshez, a beállítások módosítása."
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Nem tördelhető szóköz beszúrása"
+
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Nem tördelhető kötőjel beszúrása"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Szoft-kötőjel beszúrása"
+
+#~ msgid "Line Break"
+#~ msgstr "Sortörés"
+
+#~ msgid "Increase Numbering Level"
+#~ msgstr "A számozási szint növelése"
+
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "A számozási szint csökkentése"
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Változó szerkesztése..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Automatikus javítás végrehajtása"
+
+#, fuzzy
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection"
+#~ msgstr ""
+#~ "A KWord ennek hatására automatikus javítást hajt végig az egész "
+#~ "dokumentumon."
+
+#~ msgid ""
+#~ "Manually force KWord to scan the entire document and apply autocorrection."
+#~ msgstr ""
+#~ "A KWord ennek hatására automatikus javítást hajt végig az egész "
+#~ "dokumentumon."
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Stílus létrehozása a kijelölt rész alapján..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Új stílus létrehozása a kijelölt szövegrész alapján."
+
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Új stílus létrehozása a kijelölt szövegrész alapján."
+
+#~ msgid "&Footnote..."
+#~ msgstr "&Lábjegyzet..."
+
+#, fuzzy
+#~ msgid "Change the look of footnotes"
+#~ msgstr "A lábjegyzetek megjelenési módjának megváltoztatása."
+
+#~ msgid "Change the look of footnotes."
+#~ msgstr "A lábjegyzetek megjelenési módjának megváltoztatása."
+
+#~ msgid "Edit Footnote"
+#~ msgstr "A lábjegyzet szerkesztése"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "A kijelölt lábjegyzet tartalmának megváltoztatása."
+
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "A kijelölt lábjegyzet tartalmának megváltoztatása."
+
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "A láb- vagy végjegyzet jellemzőinek módosítása"
+
+#~ msgid "Save Picture As..."
+#~ msgstr "A kép mentése mint..."
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "A kép mentése egy külön fájlba."
+
+#~ msgid ""
+#~ "Save the picture in the currently selected frame in a separate file, "
+#~ "outside the KWord document."
+#~ msgstr ""
+#~ "A kijelölt keretetben található kép elmentése fájlba (a KWord "
+#~ "dokumentumon kívül)"
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Automatikus helyesírás-ellenőrzés"
+
+#~ msgid "Show"
+#~ msgstr "Megjelenítés"
+
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "Kerets&tílus létrehozása keret alapján..."
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Új stílus létrehozása a kijelölt keret alapján."
+
+#~ msgid "Create a new framestyle based on the currently selected frame."
+#~ msgstr "Új keretstílus létrehozása a kijelölt keret alapján."
+
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "Bárhol használható kurzor"
+
+#~ msgid "Convert to Text Box"
+#~ msgstr "Átalakítás szövegdobozzá"
+
+#~ msgid "Ignore All"
+#~ msgstr "Az összes figyelmen kívül hagyása"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "A szó felvétele a szótárba"
+
+#~ msgid "Store Document Internally"
+#~ msgstr "A dokumentum belső eltárolása"
+
+#~ msgid "Go to Document Structure"
+#~ msgstr "Ugrás a dokumentumstruktúrára"
+
+#~ msgid "Insert variable \"%1\" into the text"
+#~ msgstr "A(z) \"%1\" változó beszúrása a szövegbe"
+
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1. keret: %2, %3  -  %4, %5 (szélesség: %6, magasság: %7)"
+
+#~ msgid "%1 frames selected"
+#~ msgstr "%1 keret van kiválasztva"
+
+#~ msgid "Frame Background Color..."
+#~ msgstr "A keret háttérszíne..."
+
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Bekezdésstílus alkalmazása"
+
+#~ msgid "Apply a frame style"
+#~ msgstr "Keretstílus alkalmazása"
+
+#~ msgid "Apply a table style"
+#~ msgstr "Táblázatstílus alkalmazása"
+
+#~ msgid "Image"
+#~ msgstr "Kép"
+
+#~ msgid "Select paste format:"
+#~ msgstr "Válassza ki a beillesztési formátumot:"
+
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Egy táblázat törlésére készül.\n"
+#~ "Ez a művelet törli az összes szöveget a táblázatból.\n"
+#~ "Biztosan ezt akarja?"
+
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Törölni akarja ezt a keretet?"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Egyéni változó módosítása"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Insert Picture Inline"
+#~ msgstr "A kép közvetlen (inline) beszúrása"
+
+#~ msgid "Set cursor where you want to insert inline frame."
+#~ msgstr ""
+#~ "Álljon a kurzorral arra a pozícióra, ahol be szeretné szúrni az \"inline"
+#~ "\" keretet."
+
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Beszúrt (inline) keret beszúrása"
+
+#~ msgid "You can only insert footnotes or endnotes into the first frameset."
+#~ msgstr "Láb- és végjegyzetet csak az első keretcsoportba lehet beszúrni."
+
+#~ msgid "Insert Footnote"
+#~ msgstr "Lábjegyzet beszúrása "
+
+#~ msgid "Update Table of &Contents"
+#~ msgstr "A t&artalomjegyzék frissítése"
+
+#~ msgid "Change Font"
+#~ msgstr "A betűtípus megváltoztatása"
+
+#~ msgid "Change Layout"
+#~ msgstr "Az elrendezés megváltoztatása"
+
+#~ msgid "You must select a frame first."
+#~ msgstr "Először ki kell választani egy keretet."
+
+#~ msgid "Format Frameset"
+#~ msgstr "Keretcsoport formázása"
+
+#~ msgid "Insert Table"
+#~ msgstr "Táblázat beszúrása"
+
+#~ msgid "Insert Formula"
+#~ msgstr "Képlet beszúrása"
+
+#~ msgid "Remove Rows"
+#~ msgstr "Sorok eltávolítása"
+
+#~ msgid "Remove Columns"
+#~ msgstr "Oszlopok eltávolítása"
+
+#~ msgid "Adjust Table"
+#~ msgstr "Táblázat igazítása"
+
+#~ msgid ""
+#~ "More then one table has selected cells, please make sure the selected "
+#~ "cells are in one table and are connecting"
+#~ msgstr ""
+#~ "Egynél több táblázatra esnek a kijelölt cellák, biztosítani kell, hogy a "
+#~ "cellák összefüggjenek és egy táblázatban legyenek"
+
+#~ msgid "Join Cells Failed"
+#~ msgstr "A cellák egyesítése nem sikerült"
+
+#~ msgid ""
+#~ "You have to select some cells which are next to each other and are not "
+#~ "already joined."
+#~ msgstr ""
+#~ "Olyan egymás melletti cellákat kell kiválasztani, amelyek még nincsenek "
+#~ "egyesítve."
+
+#~ msgid "Join Cells"
+#~ msgstr "A cellák egyesítése"
+
+#~ msgid "You have to put the cursor into a table before splitting cells."
+#~ msgstr "A kurzort egy táblázatba kell vinni cellák felosztása előtt."
+
+#~ msgid "Split Cells"
+#~ msgstr "A cellák felosztása"
+
+#~ msgid ""
+#~ "There is not enough space to split the cell into that many parts, make it "
+#~ "bigger first"
+#~ msgstr ""
+#~ "Nincs elég hely a cella megadott számú részre osztásához, először vegye "
+#~ "nagyobbra."
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Táblázat felbontása"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "A stílus alkalmazása a keretre"
+
+#~ msgid "Apply Style to Frames"
+#~ msgstr "A stílus alkalmazása a keretekre"
+
+#~ msgid "Apply Framestyle to Frame"
+#~ msgstr "A keretstílus alkalmazása a keretre"
+
+#~ msgid "Apply Framestyle to Frames"
+#~ msgstr "A keretstílus alkalmazása a keretekre"
+
+#~ msgid "Apply Framestyle"
+#~ msgstr "A keretstílus alkalmazása"
+
+#~ msgid "Apply Tablestyle to Frame"
+#~ msgstr "A táblázatstílus alkalmazása a keretre"
+
+#~ msgid "Apply Tablestyle to Frames"
+#~ msgstr "A táblázatstílus alkalmazása a keretekre"
+
+#~ msgid "Change Text Size"
+#~ msgstr "A betűméret megváltoztatása"
+
+#~ msgid "Change Text Font"
+#~ msgstr "A szöveg betűtípusának megváltoztatása"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Félkövér betűstílus használata"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Dőlt betűstílus használata"
+
+#~ msgid "Underline Text"
+#~ msgstr "A szöveg aláhúzása"
+
+#~ msgid "Strike Out Text"
+#~ msgstr "A szöveg áthúzása"
+
+#~ msgid "Set Text Color"
+#~ msgstr "A szövegszín beállítása"
+
+#~ msgid "Center Text"
+#~ msgstr "A szöveg középre igazítása"
+
+#~ msgid "Justify Text"
+#~ msgstr "A szöveg elosztása (sorkizárás)"
+
+#~ msgid "Set Single Line Spacing"
+#~ msgstr "Egyszeres sorköz beállítása"
+
+#~ msgid "Set One and a Half Line Spacing"
+#~ msgstr "Másfeles sorköz beállítása"
+
+#~ msgid "Set Double Line Spacing"
+#~ msgstr "Dupla sorköz beállítása"
+
+#~ msgid "Change List Type"
+#~ msgstr "A listatípus módosítása"
+
+#~ msgid "Make Text Superscript"
+#~ msgstr "A szöveg felső indexbe"
+
+#~ msgid "Make Text Subscript"
+#~ msgstr "A szöveg alsó indexbe"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Kisbetű/nagybetű-átalakítás"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "A bekezdésmélység növelése"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "A bekezdésmélység csökkentése"
+
+#~ msgid "Change Top Frame Border"
+#~ msgstr "A keret felső szegélyének megváltoztatása"
+
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "A keret alsó szegélyének megváltoztatása"
+
+#~ msgid "Change Tabulator"
+#~ msgstr "A tabulátor megváltoztatása"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "Az első sor behúzásának megváltoztatása"
+
+#~ msgid "Change Indent"
+#~ msgstr "A behúzás megváltoztatása"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "A hibásan írt szavak javítása"
+
+#~ msgid "Edit Endnote"
+#~ msgstr "A végjegyzet szerkesztése"
+
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "Lábjegyzet-beállítás módosítása"
+
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "A végjegyzet tulajdonságainak módosítása"
+
+#~ msgid "D&elete Current Column..."
+#~ msgstr "A kijelölt oszlop tör&lése..."
+
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "A kijelölt oszlopok törlé&se..."
+
+#~ msgid "&Delete Current Row..."
+#~ msgstr "A kijelölt sor &törlése..."
+
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "A kijelölt sorok &törlése..."
+
+#~ msgid "OVER"
+#~ msgstr "FELÜLÍR"
+
+#~ msgid "Change Picture"
+#~ msgstr "A kép módosítása"
+
+#~ msgid "Save Picture"
+#~ msgstr "A kép mentése"
+
+#~ msgid "Error during saving. Could not open '%1' for writing"
+#~ msgstr ""
+#~ "Hiba történt mentés közben. Nem sikerült megnyitni ezt a fájlt írásra: "
+#~ "'%1'."
+
+#~ msgid "Unable to save the file to '%1'. %2."
+#~ msgstr "Nem sikerült elmenteni a fájlt ezen a néven: '%1'. %2."
+
+#, fuzzy
+#~ msgid "Error during saving. Could not create temporary file."
+#~ msgstr ""
+#~ "Hiba történt mentés közben. Nem sikerült létrehozni ezt az ideiglenes "
+#~ "fájlt: %1."
+
+#~ msgid "URL %1 is invalid."
+#~ msgstr "A(z) %1 URL érvénytelen."
+
+#~ msgid "Move Frame"
+#~ msgstr "A keret mozgatása"
+
+#~ msgid "Change Note Text"
+#~ msgstr "A megjegyzésszöveg módosítása"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Automatikus formázás alkalmazása"
+
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "A lábjegyzet beállításainak módosítása"
+
+#~ msgid "Insert File"
+#~ msgstr "Fájl beszúrása"
+
+#~ msgid "File name is not a KWord file!"
+#~ msgstr "A fájl nem KWord fájl!"
+
+#~ msgid "Normal"
+#~ msgstr "Normál"
+
+#~ msgid "Delete Frames"
+#~ msgstr "Keretek törlése"
+
+#~ msgctxt "Abbreviation for Text-to-Speech"
+#~ msgid "TTS"
+#~ msgstr "Szövegfelolvasó"
+
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Szövegfelolvasási beállítások"
+
+#~ msgid "Speak widget under &mouse pointer"
+#~ msgstr "Az egérmutató alatti szövegelem felolvasása"
+
+#~ msgid "Speak widget with &focus"
+#~ msgstr "A fók&uszban levő szövegelem felolvasása"
+
+#~ msgid "Speak &tool tips"
+#~ msgstr "A tippbuborékok felolvasása"
+
+#~ msgid "Speak &What's This"
+#~ msgstr "A Mi ez? tippek felolvasása"
+
+#~ msgctxt "Verbal indication if widget is disabled (grayed)"
+#~ msgid "&Say whether disabled"
+#~ msgstr "Szóbeli jel&zés, ha az elem inaktív"
+
+#~ msgid "Spea&k accelerators"
+#~ msgstr "A &gyorsítóbillentyűk felolvasása"
+
+#~ msgctxt "A word spoken before another word"
+#~ msgid "Pr&efaced by the word:"
+#~ msgstr "Felolvasandó új szó &előtt:"
+
+#~ msgctxt "Keyboard accelerator, such as Alt+F"
+#~ msgid "Accelerator"
+#~ msgstr "Gyorsítóbillentyű"
+
+#~ msgid "&Polling interval:"
+#~ msgstr "Ellenőr&zési időköz:"
+
+#~ msgid "Table %1"
+#~ msgstr "%1. táblázat"
+
+#~ msgctxt ""
+#~ "Hello dear translator :), 1 is the table name, 2 and 3 are row and column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 - %2, %3"
+
+#~ msgid "Font Family"
+#~ msgstr "Betűcsalád"
+
+#~ msgid "Speak Text"
+#~ msgstr "A szöveg felolvasása"
+
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "A(z) '%1' keretcsoport utolsó keretét készül kitörölni. Ez a művelet "
+#~ "egyben törli az egész keretcsoportot is!\n"
+#~ "Biztosan ezt szeretné?"
+
+#~ msgid "Error during saving. Could not open '%1' temporary file for writing"
+#~ msgstr ""
+#~ "Hiba történt mentés közben. Nem sikerült írásra megnyitni a(z) '%1' "
+#~ "ideiglenes fájlt."

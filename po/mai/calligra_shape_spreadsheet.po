@@ -1,0 +1,229 @@
+# translation of TableShape.po to Maithili
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sangeeta Kumari <sangeeta09@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: TableShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2009-04-22 00:21+0530\n"
+"Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
+"Language-Team: Maithili <maithili.sf.net>\n"
+"Language: mai\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
+"\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: SheetsEditor.cpp:55 SheetsEditor.cpp:117
+#, kde-format
+msgid "Rename"
+msgstr "नाम बदलू"
+
+#: SheetsEditor.cpp:59
+#, kde-format
+msgid "Add"
+msgstr "जोड़ू"
+
+#: SheetsEditor.cpp:63
+#, kde-format
+msgid "Remove"
+msgstr "हटाबू"
+
+#: SheetsEditor.cpp:117
+#, kde-format
+msgid "Enter Name:"
+msgstr ""
+
+#: TableShape.cpp:300
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Confirmation Required"
+msgstr ""
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Download"
+msgstr ""
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Skip"
+msgstr ""
+
+#: TableShapeFactory.cpp:42
+#, kde-format
+msgid "Spreadsheet"
+msgstr ""
+
+#: TableShapeFactory.cpp:44
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr ""
+
+#: TableTool.cpp:256
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr ""
+
+#: TableTool.cpp:257
+#, kde-format
+msgid "Import"
+msgstr "आयात"
+
+#: TableTool.cpp:261
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr ""
+
+#: TableTool.cpp:262
+#, kde-format
+msgid "Export"
+msgstr "निर्यात"
+
+#: TableTool.cpp:742
+#, kde-format
+msgid "Sheets"
+msgstr "शीट"
+
+#: TableTool.cpp:784
+#, kde-format
+msgid "Sheet:"
+msgstr "शीट:"
+
+#: TableTool.cpp:786
+#, kde-format
+msgid "Selected Sheet"
+msgstr ""
+
+#: TableTool.cpp:801
+#, kde-format
+msgid "View Options"
+msgstr ""
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr ""
+
+#: ToolHeaders.cpp:296 ToolHeaders.cpp:894
+#, kde-format
+msgid "Area is too large."
+msgstr ""
+
+#: ToolHeaders.cpp:439
+#, kde-format
+msgid "Hide Row"
+msgstr ""
+
+#: ToolHeaders.cpp:441
+#, kde-format
+msgid "Height: %1 %2"
+msgstr ""
+
+#: ToolHeaders.cpp:1069
+#, fuzzy, kde-format
+#| msgid "Columns:"
+msgid "Hide Column"
+msgstr "कालम: "
+
+#: ToolHeaders.cpp:1071
+#, kde-format
+msgid "Width: %1 %2"
+msgstr ""
+
+#~ msgid "Number of columns"
+#~ msgstr "स्तम्भसभ क' सँख्या"
+
+#~ msgid "Rows:"
+#~ msgstr "पंक्तिसभ:"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "नाम बदलू"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "जोड़ू"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "हटाबू"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "आयात"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "निर्यात"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "शीट"
+
+#, fuzzy
+#~| msgid "Sheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet:"
+#~ msgstr "शीट:"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "कालम: "
+
+#, fuzzy
+#~| msgid "Number of columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns"
+#~ msgstr "स्तम्भसभ क' सँख्या"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "पंक्तिसभ:"
+
+#, fuzzy
+#~| msgid "Number of columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows"
+#~ msgstr "स्तम्भसभ क' सँख्या"
+
+#~ msgid "Table"
+#~ msgstr "सारणी"

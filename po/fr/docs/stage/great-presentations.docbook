@@ -1,0 +1,77 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+&traducteurGerardDelafond; &traducteurFrederickAngelique; 
+</authorgroup>
+</chapterinfo>
+<title
+>Trucs et astuces générales pour de super-présentations.</title>
+
+<para
+>Vous avez décidé d'utiliser &stage; pour votre présentation. Avant de commencer à faire des transparents ou des diaporamas, allez chercher un morceau de papier et asseyez-vous à un bureau, loin de l'ordinateur. Peu importe que vous vouliez faire un cours ou convaincre votre patron que votre plan doit être adopté, vous avez besoin de concrétiser ce que vous voulez dire. Écrivez tous les sujets que vous avez besoin de couvrir, essayez de les mettre dans un ordre sensé. Ne mettez pas les détails, décidez simplement des titres et de la structure de votre discours.</para>
+
+<para
+>Sous chaque en-tête, mettez une note concernant les faits que vous voulez couvrir. Vous essayez de construire un argumentaire convaincant. Essayez de grouper les faits en éléments qui doivent être inclus, éléments qui peuvent être inclus et éléments qu'il serait bien de couvrir si vous avez beaucoup de temps.</para>
+
+<para
+>Une fois que vous avez écrit toutes les choses que vous voulez dire, étudiez le temps disponible pour faire tout tenir. Une durée de dix minutes semble énorme quand vous commencez, mais il est très difficile de faire beaucoup en un temps si court. Prenez votre feuille de papier et un chronomètre dans l'autre main. Répétez plusieurs fois votre présentation. Ceci a plusieurs avantages. D'abord, vous connaîtrez bien le minutage. Si quelqu'un vous dit que vous avez dix minutes, vous ne dépasserez le temps imparti. Ensuite, quand vous la ferez devant un auditoire, ce ne sera pas la première fois que vous l'aurez faite. Enfin, vous aurez les mots bien en tête. Vous trouverez des manières de dire les choses sur le sujet. Si vous vous êtes entendu faire cette présentation plusieurs fois, vous saurez ce que vous allez dire ensuite et comment vous allez le dire. </para>
+
+<para
+>&stage; ne produit pas de notes pour l'orateur au moment d'écrire, mais j'aime bien utiliser simplement des diapos ordinaires. Faites des diapos pour vous-même, imprimées sur du papier et d'autres pour l'utilisation avec un rétroprojecteur. Rendez votre texte sur vos diapos joli et gros, vous aurez besoin d'être capable de le lire à distance. J'utilise du texte en 14 ou 16 points. Faites des essais pour trouver une taille que vous lirez facilement. Je n'écris jamais de script.</para>
+
+<para
+>Si vous utilisez un rétroprojecteur, apprenez comment l'utiliser auparavant. Assurez-vous que l'ampoule fonctionne, qu'il y a une ampoule de rechange, que l'ampoule de rechange fonctionne. Nettoyez l'objectif et le plateau de projection. Si vous n'avez pas l'habitude d'utiliser des projecteurs, entraînez-vous. Assurez-vous que l'écran de projection est propre. Il est probablement mieux, quand vous temporisez vous-même, de laisser cinq secondes entre chaque diapo. De cette manière, vous savez que vous ne vous précipitez pas. Si vous avez besoin de pointer quelque chose à l'écran, vous pouvez utiliser une règle, un laser ou mettre simplement un crayon sur le transparent lui-même. Soyez averti que celui-ci aura tendance à rouler quand vous remuerez la table.</para>
+
+<para
+>Réfléchissez à l'endroit où vous allez vous tenir. Vous ne pouvez pas vous tenir en face de votre affichage. Ainsi, de côté est probablement la meilleure option si vous voulez que l'auditoire vous voie. Je projette souvent une image sur un tableau effaçable et dessine dessus. Si vous utilisez un PC avec un projecteur numérique, vous pouvez dessiner sur vos diapos avec l'outil de dessin de &stage;. Souvenez-vous que le dessin à main levée avec une souris nécessite de l'adresse et de l'entraînement. Si vous utilisez un projecteur par transparence, vous pouvez utiliser une sur-couche transparente et un stylo sur votre ordinateur en produit.</para>
+
+<para
+>Quand vous faites la présentation, ne regardez surtout pas la lumière (c'est facile à faire). Si vous n'utilisez pas la machine pendant quelques minutes, éteignez-la. Entraînez-vous pour savoir où vous vous tiendrez. Vérifiez la pièce que vous avez l'intention d'utiliser pour les prises électriques et apprenez comment les rideaux fonctionnent et où sont les interrupteurs. Une bonne préparation ne fait pas que seulement que vous ferez moins d'erreurs (les choses inanimées peuvent être un cauchemar devant un auditoire), mais vous donne aussi confiance. Ayez toujours un <quote
+>Plan B</quote
+> prêt si quelque chose refuse de fonctionner. Ayez une copie papier de vos diapos avec vous. Vous pouvez photocopier et les distribuer à votre auditoire si l'équipement défaille.</para>
+
+<para
+>Je n'ai pas encore dit grand-chose à propos du contenu. À présent, tout ce que vous avez est un morceau de papier où est écrit tout ce que vous voulez faire. Avant que vous ne fassiez quoi que ce soit, demandez-vous si la compréhension de ce que vous voulez dire sera améliorée par le fait de le présenter sur une image. Les mauvaises présentations consistent en une série de diapos pleines de texte. Le présentateur lit alors le texte à l'auditoire (qui l'a déjà lu, car on lit plus vite qu'on ne parle). Essayez d'éviter de tout écrire sur les diapos à l'exception d'un titre et d'un nombre. Dessinez une image de ce que vous avez besoin de dire, puis expliquez-leur l'image. De cette manière, ils ne vous précéderont pas (vous vous souvenez qu'il lisent plus vite que vous ne parlez ?) et vous aurez l'air de connaître votre présentation. Vous ne la connaissez pas, vous utilisez les diapos comme guide. Une diapositive doit illustrer ce que vous dites, ne pas faire doublon. Une diapo doit être le point d'attraction de l'auditoire, pas une distraction.</para>
+
+<para
+>Un exemple. J'enseigne à une équipe de transport ferroviaire comment réagir aux accidents. Je veux utiliser une diapo pour discuter de comment vous pouvez déplacer des chargements dangereux provenant d'un déraillement ou d'un véhicule routier après un accident. La diapo que j'ai faite avait un simple dessin d'un wagon-réservoir, le genre qu'on utilise pour transporter les carburants. D'un côté, j'ai écrit <quote
+>Compagnie des produits chimiques mortels</quote
+> de telle manière que je n'aie pas à l'expliquer. Je voulais faire plusieurs points importants. D'abord, vous devez obtenir la déconnexion de tous les fils électriques environnant le site avant toute autre chose. J'ai dessinée un pylône et dessiné une flèche avec la distance de sécurité dessus. Puis, je voulais dire que vous ne devez pas transvaser le contenu du wagon dans l'obscurité ni dans la tempête. J'ai dessiné une Lune et un éclair au-dessus du véhicule. Vous avez besoin d'un avis spécialisé, ainsi, j'ai dessiné une feuille de papier et écrit le mot <quote
+>Plan</quote
+> à côté du véhicule. Vous devez aussi vous assurer que le véhicule ne bascule pas quand le poids du produit qu'elle contient est enlevé. J'ai dessiné des petites cales rouges près des roues. Tout ce dont j'avais besoin de parler est sur ce dessin. tout ce que j'ai à faire est de regarder ce dessin et il me dit ce j'ai besoin de couvrir. Quand j'ai couvert toutes les choses qui sont sur le dessin, j'ai fini sur ce sujet. </para>
+
+<para
+>En général, n'utilisez qu'une diapo ou image si elle montre quelque chose qui ajoute à ce que vous dites. Finalement, détendez-vous et essayez de ne pas vous précipiter. Parlez-leur, et souvenez-vous qu'une présentation concerne un message que voulez faire passer. &stage; est un outil utile. Il peut vous aider à faire passer ce message mais il ne peut pas faire le travail à votre place.</para>
+
+</chapter>

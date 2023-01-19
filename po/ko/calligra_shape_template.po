@@ -1,0 +1,69 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Shinjo Park <kde@peremen.name>, 2015, 2019, 2020.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2020-04-04 00:30+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 19.04.3\n"
+
+#: ChangeSomethingCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr "무언가 변경"
+
+#: TemplateShapeFactory.cpp:32
+#, kde-format
+msgid "Template shape"
+msgstr "템플릿 도형"
+
+#: TemplateShapeFactory.cpp:34
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr "다른 도형을 개발할 템플릿으로 사용되는 간단한 도형."
+
+#: TemplateTool.cpp:77
+#, kde-format
+msgid "Open"
+msgstr "열기"
+
+#: TemplateToolFactory.cpp:26
+#, kde-format
+msgid "Template shape editing"
+msgstr "템플릿 도형 편집"
+
+#, fuzzy
+#~| msgid "Template shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape"
+#~ msgstr "템플릿 도형"
+
+#, fuzzy
+#~| msgid ""
+#~| "Simple shape that is used as a template for developing other shapes."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Simple shape that is used as a template for developing other shapes."
+#~ msgstr "다른 도형을 개발하는 템플릿으로 사용 가능한 도형입니다."
+
+#, fuzzy
+#~| msgid "Open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open"
+#~ msgstr "열기"
+
+#, fuzzy
+#~| msgid "Template shape editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape editing"
+#~ msgstr "템플릿 도형"

@@ -1,0 +1,1405 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Avancerad användning av &sheets;</title>
+<sect1 id="series">
+<title
+>Serier</title>
+<para
+>När man skapar ett kalkylblad, behöver man ofta lägga till serier med värden, som 10, 11, 12 ..., i en rad eller kolumn. Det finns flera sätt man kan göra det i &sheets;.</para>
+<para
+>För en enkel kort serie som 5, 6, 7, 8... så är metoden <quote
+>dra och kopiera</quote
+> enklast. Skriv in startvärdet i startcellen och nästa värde i serien i en intilliggande cell. Markera därefter båda cellerna, och flytta muspekaren så att den befinner sig på den lilla fyrkanten i nedre högra hörnet. Markören ändras till en diagonal pil med två huvuden. Håll sedan nere <mousebutton
+>vänster</mousebutton
+> musknapp medan cellerna dras neråt eller tvärs över sidan enligt behov.</para>
+<para
+>Stegstorleken beräknas som skillnaden mellan de två startvärden du skriver in. Om du till exempel skriver in <userinput
+>4</userinput
+> i cell A1 och <userinput
+>3,5</userinput
+> i A2, och därefter väljer båda cellerna och drar och kopierar dem neråt, så beräknas stegstorleken som värdet i A2 minus värdet i A1, -0,5 i det här fallet, så du får serien 4, 3,5, 3, 2,5, 2...</para>
+
+<para
+>Metoden att <quote
+>dra och kopiera</quote
+>hanterar till och med serier där stegvärdet inte är ett konstant värde, utan en serie själv. Så om du startar med 1, 3, 4, 6, utökar dra och kopiera det till 1, 3, 4, 6, 7, 9, 10, 12, ..., där stegvärdet i exemplet är serien 2, 1, 2, 1, ...</para>
+
+ <!--FIXME does not work here -->
+<para
+>&sheets; känner också igen några särskilda <quote
+>serier</quote
+>, som veckodagarna. Försök att skriva in <userinput
+>fredag</userinput
+> i en cell och <userinput
+>lördag</userinput
+> i cellen nedanför (observera de små bokstäverna) och använd sedan dra och kopiera på dem. För att se vilka särskilda serier som är tillgängliga, och kanske skapa egna, välj <menuchoice
+><guimenu
+>Verktyg</guimenu
+><guimenuitem
+>Egna listor...</guimenuitem
+></menuchoice
+> .</para>
+
+<para
+>Om du markerar en cell och väljer <guimenuitem
+>Serier...</guimenuitem
+> i menyn <guimenu
+>Infoga</guimenu
+> ser du dialogrutan <guilabel
+>Serier</guilabel
+>. Den är användbar för att skapa serier som är för långa för att skapas på ett enkelt sätt med dra och kopiera metoden, eller för att skapa geometriska serier, såsom 1, 1,5, 2,25, 3,375... där stegvärdet, 1,5 i detta fall, används som multiplikator.</para>
+<para
+>Om serietypen som du vill ha är för komplicerad för någon av de tidigare metoderna, fundera på att använda en formel och dra och kopiera den. För att till exempel skapa en serie med värden 2, 4, 16, 256 ... skriv in <userinput
+>2</userinput
+> i A1, <userinput
+>=A1*A1</userinput
+> i A2, och dra och kopiera A2 neråt.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title
+>Formler</title>
+<sect2 id="builtin">
+<title
+>Inbyggda funktioner</title>
+<para
+>&sheets; har ett enormt antal inbyggda matematiska och andra <link linkend="functions"
+>funktioner</link
+>, som kan användas i en formelcell. De kan visas och kommas åt genom att markera en cell och sedan välja <guimenuitem
+>Funktion...</guimenuitem
+> i menyn <guimenu
+>Infoga</guimenu
+>. Då visas dialogrutan <guilabel
+>Funktion</guilabel
+>.</para>
+<para
+>Markera funktionen du vill använda i listrutan till vänster i dialogrutan. Fliksidan <guilabel
+>Hjälp</guilabel
+> visar då en beskrivning, returtypen, syntax, parametrar och exempel för funktionen. Dessutom tillhandahåller sidan ofta länkar till liknande funktioner. Tryck sedan på knappen med den nedåtriktade pilen för att klistra in den i textredigeringsrutan längst ner i dialogrutan.</para>
+<para
+>Fliken <guilabel
+>Parametrar</guilabel
+> visas därefter för att låta dig skriva in parametrarna för funktionen du just har valt. Om du vill skriva in ett specifikt värde för en parameter, skriv bara in det i motsvarande textruta på sidan <guilabel
+>Parametrar</guilabel
+>. För att skriva in en cellreferens istället för ett värde, <mousebutton
+>vänster</mousebutton
+>klicka på motsvarande textruta på sidan <guilabel
+>Parametrar</guilabel
+>, och <mousebutton
+>vänster</mousebutton
+>klicka sedan på kalkylbladets cell.</para>
+<para
+>Istället för att använda fliken <guilabel
+>Parametrar</guilabel
+>, kan cellreferenser som <userinput
+>B6</userinput
+> skrivas in genom att direkt skriva dem i redigeringsrutan längst ner i dialogrutan <guilabel
+>Funktion</guilabel
+>. Om ett uttryck har mer än en parameter, avdela dem med ett semikolon (<keysym
+>;</keysym
+>).</para>
+<para
+>Att trycka på knappen <guibutton
+>Ok</guibutton
+> infogar funktionen i nuvarande cell och stänger dialogrutan <guilabel
+>Funktion</guilabel
+>.</para>
+<para
+>Du kan förstås klara dig utan dialogrutan <guilabel
+>Funktion</guilabel
+> och helt enkelt skriva in hela uttrycket i huvudrutan för textinmatning under verktygsalternativen för <guilabel
+>Celleditorn</guilabel
+>. Funktionsnamn är inte skiftlägeskänsliga. Glöm inte att alla uttryck måste början med tecknet <keysym
+>=</keysym
+>.</para>
+</sect2>
+
+<sect2 id="logical">
+<title
+>Logiska jämförelser</title>
+<para
+>Logiska funktioner som IF(), AND(), OR() accepterar parametrar som har ett logiskt (Booleskt) värde "True" (sant) eller "False" (falskt). Den här sortens värde kan skapas av andra logiska funktioner som ISEVEN() eller genom att jämföra värden i kalkylarkets celler med jämförelseuttrycken som visas i den följande tabellen.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>Uttryck </entry>
+<entry
+>Beskrivning </entry>
+<entry
+>Exempel </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+><keysym
+>=</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>är lika med</entry>
+<entry
+><userinput
+>A2==B3</userinput
+> är sant om värdet i A2 är lika med värdet i B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>!</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>är inte lika med</entry>
+<entry
+><userinput
+>A2!=B3</userinput
+> är sant om värdet i A2 är skilt från värdet i B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>är inte lika med</entry>
+<entry
+>Samma som <userinput
+>A2!=B3</userinput
+></entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+></entry>
+<entry
+>är mindre än</entry>
+<entry
+><userinput
+>A2&lt;B3</userinput
+> är sant om värdet i A2 är mindre än värdet i B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>är mindre än eller lika med</entry>
+<entry
+><userinput
+>A2&lt;=B3</userinput
+> är sant om värdet i A2 är mindre än eller lika med värdet i B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>är större än</entry>
+<entry
+><userinput
+>A2&gt;B3</userinput
+> är sant om värdet i A2 är större än värdet i B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>är större än eller lika med</entry>
+<entry
+><userinput
+>A2&gt;=B3</userinput
+> är sant om värdet i A2 är större än eller lika med värdet i B3</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>Så om du skriver in <userinput
+>=IF(B3&gt;B1;"STÖRRE";"")</userinput
+> i en cell så visar den STÖRRE om värdet i B3 är större än det i B1, annars är cellen tom.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title
+>Absoluta cellreferenser</title>
+<para
+>Om en formel innehåller en cellreferens, så ändras referensen normalt när cellen kopieras till en annan plats på arbetsbladet. För att förhindra detta beteende, lägg till symbolen <keysym
+>$</keysym
+> före kolumnens bokstav, radens nummer eller båda. </para>
+
+<itemizedlist>
+<listitem
+><para
+>Om A1 innehåller formeln <userinput
+>=D5</userinput
+> så blir den <userinput
+>=E6</userinput
+> om cellen kopieras till B2 (det normala beteendet). </para
+></listitem>
+<listitem
+><para
+>Om A1 innehåller formeln <userinput
+>=$D5</userinput
+> så blir den <userinput
+>=D6</userinput
+> om cellen kopieras till B2 (kolumnbokstaven ändras inte). </para
+></listitem>
+<listitem
+><para
+>Om A1 innehåller formeln <userinput
+>=D$5</userinput
+> så blir den <userinput
+>=E5</userinput
+> om cellen kopieras till B2 (radnumret ändras inte). </para
+></listitem>
+<listitem
+><para
+>Om A1 innehåller formeln <userinput
+>=$D$5</userinput
+> så förblir den <userinput
+>=D5</userinput
+> om cellen kopieras till B2 (varken kolumnbokstaven eller radnumret ändras). </para
+></listitem>
+
+</itemizedlist>
+<para
+>När du skriver in eller redigerar en cellreferens i en formel, så kan snabbtangenten <keysym
+>F4</keysym
+> användas för att stega igenom de här fyra möjligheterna.</para>
+<para
+><link linkend="namedareas"
+>Namngivna celler</link
+> kan användas på ett liknande sätt för att inkludera en oföränderlig cellreferens i en formel. </para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title
+>Aritmetik med klistra in special</title>
+<para
+>Ibland kan du vilja lägga till ett enda värde till ett antal celler, eller subtrahera ett värde från dem, eller multiplicera eller dividera dem alla med ett enda värde. Alternativet <guimenuitem
+>Klistra in special...</guimenuitem
+> låter dig göra detta på ett snabbt och enkelt sätt.</para>
+<para
+>Skriv först in ändringsvärdet i en ledig cell på kalkylarket och <guimenuitem
+>Kopiera</guimenuitem
+> det. Välj sedan cellområdet du vill ändra, välj <guimenuitem
+>Klistra in special...</guimenuitem
+> i menyn <guimenu
+>Redigera</guimenu
+> eller menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp, och välj <guilabel
+>Addition</guilabel
+>, <guilabel
+>Subtraktion</guilabel
+>, <guilabel
+>Multiplikation</guilabel
+> eller <guilabel
+>Division</guilabel
+> i sektionen <guilabel
+>Operation</guilabel
+> i dialogrutan.</para>
+<para
+>Du kan också tilldela olika ändringsvärden till olika rader eller kolumner i området som ska ändras, genom att kopiera ett område som innehåller önskade ändringsvärden innan området som ska ändras väljes, och göra <guimenuitem
+>Klistra in special...</guimenuitem
+>. Om du till exempel skriver in <userinput
+>5</userinput
+> i cell A1, <userinput
+>10</userinput
+> i cell B1, markerar båda cellerna och gör <guimenuitem
+>Kopiera</guimenuitem
+>, följt av <guimenuitem
+>Klistra in special...</guimenuitem
+> <guilabel
+>Addition</guilabel
+> i cellerna A10 till D15, så adderas 5 till A10:A15 och C10:C15, medan 10 adderas till B10:B15 och D10:D15.</para>
+<para
+>Observera att ett ändringsvärde kan vara en formel istället för ett enkelt numeriskt värde. Om det är en formel, så justerar &sheets; cellreferenserna som vid en vanlig <guimenuitem
+>Klistra in</guimenuitem
+>.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title
+>Fältformler</title>
+<para
+>&sheets; låter dig använda formler vars resultat är en matris, eller ett intervall av värden. Normalt visas bara det första värdet i en cell. Om du vill visa hela matrisen, använd helt enkelt <keycombo
+>&Ctrl;&Alt;<keycap
+>Retur</keycap
+></keycombo
+> när formeln redigeras, så konverteras den till en fältformel, som upptar grannceller efter behov.</para>
+<para
+>Celler som ingår i en fältformel är låsta för redigering.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title
+>Målsökning</title>
+<para
+>&sheets; kan användas för att lösa algebraiska uttryck som <emphasis
+>x + x^2 = 4</emphasis
+> eller <emphasis
+>för vilket värde på x är x + x i kvadrat lika med 4?</emphasis
+></para>
+<para
+>Med exemplet skulle du kunna skriva in <userinput
+>=A2+A2*A2</userinput
+> i A1 och sedan antingen prova olika värden i A2 till resultatet i A1 är så nära <emphasis
+>4</emphasis
+> som du vill, eller helst använda &sheets; funktion <guimenuitem
+>Målsök...</guimenuitem
+>, som automatiskt justerar värdet i en cell för att försöka få värdet i en annan cell så nära ett slutresultat som möjligt.</para>
+<para
+>Den aktiveras genom att välja <guimenuitem
+>Målsök...</guimenuitem
+> i menyn <guimenu
+>Data</guimenu
+>. Då visas en dialogruta där du ska skriva in referensen till målcellen (<userinput
+>A1</userinput
+> i det här fallet) i rutan <guilabel
+>Ge cell:</guilabel
+>, målvärdet själv (<userinput
+>4</userinput
+>) i rutan <guilabel
+>Värdet:</guilabel
+> och referensen till cellen som ska ändras (<userinput
+>A2</userinput
+>) i rutan <guilabel
+>Genom att ändra cell:</guilabel
+>. Observera att du måste ha skrivit in något startvärde i cellen som ska ändras innan du startar <guimenuitem
+>Målsök</guimenuitem
+>.</para>
+<para
+>Genom att trycka på knappen <guibutton
+>Ok</guibutton
+> startas beräkningen. När den är klar och om en lösning har hittats, tryck på knappen <guibutton
+>Ok</guibutton
+> för att acceptera resultatet eller <guibutton
+>Avbryt</guibutton
+> för att behålla det ursprungliga värdet. </para>
+</sect1>
+
+ <sect1 id="pivottable">
+   <title
+>Pivot-tabeller</title>
+   <para
+>&sheets; kan användas för att skapa <ulink url="http://en.wikipedia.org/wiki/Pivot_table"
+>pivot-tabeller</ulink
+> med användning av data i den aktuella tabellen. </para>
+   <para
+>Funktionen kan utföras genom att alternativet <guimenuitem
+>Pivot...</guimenuitem
+> i menyn <guimenu
+>Data</guimenu
+>. Nedan finns ett exempel på generering av en pivot-tabell. </para>
+   <para
+>Anta att vi har följande data. </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase
+>Ursprunglig tabell</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para
+>Vi vill skapa en pivot-tabell enligt våra krav. Vi väljer alltså <menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Pivot...</guimenuitem
+></menuchoice
+>. </para>
+     <para
+>Dialogrutan som visas låter oss välja datakälla. Data kan tas från det nuvarande arbetsbladet eller från en extern källa som en databas eller en <abbrev
+>ODS</abbrev
+>-fil. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Välja datakällan</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>Här är dialogrutan som låter användaren anpassa pivot-tabellen. Kolumnrubrikerna i källdata konverteras till etiketter som fungerar som arbetsfält. Etiketterna kan dras och släppas på tre områden (<guilabel
+>Rader</guilabel
+>, <guilabel
+>Kolumner</guilabel
+> eller <guilabel
+>Värden</guilabel
+>) för att skapa pivot-tabellen. Valen kan återställas med knappen <guibutton
+>Återställ drag och släpp</guibutton
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Inställningsdialogrutan för pivot-tabeller</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>I vårt exempel dras <replaceable
+>Namn</replaceable
+> till <guilabel
+>Rader</guilabel
+>, <replaceable
+>Kategori</replaceable
+> till <guilabel
+>Kolumner</guilabel
+>, <replaceable
+>Poäng</replaceable
+> till <guilabel
+>Värden</guilabel
+>. Användardefinierade funktioner som summa, medelvärde, max, min, antal, etc. kan väljas i listan <guilabel
+>Välj alternativ</guilabel
+>. </para>
+     <para
+>Knappen <guibutton
+>Lägg till filter</guibutton
+> kan användas för att öppna filterdialogrutan för att filtrera önskad data. Genom att använda rutan kan flera filter baserade på kolumnrubrikerna och deras förhållande definieras (<guimenuitem
+>Och</guimenuitem
+> eller <guimenuitem
+>Eller</guimenuitem
+>). Det ger fullständig frihet att anpassa utdata. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Filtreringsdialogrutan för pivot-tabeller</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+><guilabel
+>Summera rader</guilabel
+> och <guilabel
+>Summera kolumner</guilabel
+>: Att markera dessa gör det möjligt att automatiskt summera motsvarande rader eller kolumner i pivot-tabellen. </para>
+   </sect1>
+
+<sect1 id="worksheets">
+<title
+>Att använda mer än ett arbetsblad</title>
+<para
+>När du påbörjar ett nytt tomt dokument med &sheets; så skapas ett antal tomma arbetsblad. Antalet blad som skapas bestäms av den valda mallen.</para>
+<para
+><menuchoice
+><guimenu
+>Infoga</guimenu
+><guimenuitem
+>Blad</guimenuitem
+> </menuchoice
+> lägger till ett nytt blad i dokumentet.</para>
+<para
+>Du kan också byta mellan arbetsblad genom att använda <keycombo action="simul"
+>&Ctrl;<keysym
+>Page Down</keysym
+></keycombo
+> för att gå till nästa blad, och <keycombo action="simul"
+>&Ctrl;<keysym
+>Page Up</keysym
+></keycombo
+> för att gå till föregående.</para>
+<para
+>Arbetsblad ges standardnamnen <emphasis
+>Blad 1</emphasis
+>, <emphasis
+>Blad 2</emphasis
+>... Du kan ge ett blad ett annat namn genom att <mousebutton
+>höger</mousebutton
+>klicka på fliken och välja <guimenuitem
+>Byt namn på blad...</guimenuitem
+>.</para>
+<para
+>För att ta bort ett blad från dokumentet, använd alternativet <guimenuitem
+>Ta bort blad</guimenuitem
+> i den sammanhangsberoende menyn som visas när du <mousebutton
+>höger</mousebutton
+>klickar på fliken för bladet som du vill ta bort.</para>
+<para
+>Andra alternativ i undermenyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Arbetsblad</guisubmenu
+></menuchoice
+> låter dig visa eller dölja ett blad på i stort sett samma sätt som rader och kolumner kan döljas.</para>
+<para
+>Om du vill att en formel på ett blad ska referera till en cell på ett annat blad, måste cellreferensen börja med tabellnamnet följt av ett utropstecken (<keysym
+>!</keysym
+>). Om du till exempel skriver in <userinput
+>=Blad2!A2 </userinput
+> i en cell på blad 1, så hämtar den cellen värdet från A2 på blad 2. Observera att bladnamn är skiftlägeskänsliga.</para>
+
+
+<sect2 id="consolidate">
+<title
+>Konsolidera data</title>
+<para
+>Du kan ha skapat ett dokument som innehåller flera arbetsblad med liknande data, men till exempel för olika månader under året, och vill ha ett sammanfattningsblad som konsoliderar (t.ex. summa eller medelvärde) värden för motsvarande data på övriga blad.</para>
+<para
+>Den här uppgiften kan göras något lättare genom att använda alternativet <guimenuitem
+>Konsolidera...</guimenuitem
+> i menyn <guimenu
+>Data</guimenu
+>.</para>
+<para
+>Genom att välja det här alternativet så visas dialogrutan <guilabel
+>Konsolidera</guilabel
+>.</para>
+<para
+>För var och en av indatatabladen, skriv in en referens till dataområdet som önskas i rutan <guilabel
+>Referens:</guilabel
+>. Tryck sedan på <guibutton
+>Lägg till</guibutton
+> för att överföra referensen till rutan <guilabel
+>Angivna referenser:</guilabel
+>. Referensen ska innehålla namnet på bladet som innehåller indata, som <userinput
+>Januari!A1:A10</userinput
+>, och kan skrivas in automatiskt genom att välja motsvarande område på lämplig blad.</para>
+<para
+>När referenserna har angetts för alla indatabladen, välj då cellen på bladet där du vill att övre vänstra hörnet för det konsoliderade resultatet ska visas. Välj därefter lämplig funktion i kombinationsrutan <guilabel
+>Funktion:</guilabel
+> och tryck på knappen <guibutton
+>Ok</guibutton
+>.</para>
+<para
+>Om du klickar på <guibutton
+>Detaljer 
+>
+></guibutton
+> i dialogrutan och markerar rutan <guilabel
+>Kopiera data</guilabel
+>, så placeras värden från konsolideringen i målcellerna istället för formler för att beräkna dem. </para>
+</sect2>
+</sect1>
+<sect1 id="insertchart">
+<title
+>Infoga ett diagram</title>
+<para
+>Du kan infoga ett diagram på ett arbetsblad för att ge en grafisk bild av data.</para>
+<para
+>Aktivera först panelen <guilabel
+>Lägg till form</guilabel
+> genom att använda menyalternativet <menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Paneler</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Markera därefter området med celler som innehåller data och välj <guilabel
+>Diagram</guilabel
+> under <guilabel
+>Lägg till form</guilabel
+>. Dra markören över bladet medan du håller nere <mousebutton
+>vänster</mousebutton
+> musknapp, för att ange området där du vill att diagrammet ska visas. Det finns ingen anledning att vara alltför noggrann vid detta tillfälle, eftersom diagramstorleken lätt kan ändras när som helst. När du släpper musen, så visas dialogrutan <guilabel
+>Diagram alternativ</guilabel
+>.</para>
+<para
+>Dataområdet är redan ifyllt med det markerade cellområdet i förväg. Välj första raden och kolumnen som rubriker, markera <guilabel
+>Datamänger i rader</guilabel
+> och klicka på knappen <guibutton
+>Ok</guibutton
+>. Dialogrutan försvinner och diagrammet visas inbäddat i arbetsbladet.</para>
+<para
+>Välj nu <guibutton
+>Redigeringsverktyg för diagram</guibutton
+> i panelen <guilabel
+>Verktyg</guilabel
+> och redigera diagrammets egenskaper som diagramtyp, etiketter och axlar under <guilabel
+>Diagramredigering</guilabel
+>.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Skärmbild av inbäddat diagram</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>För att flytta, ändra storlek eller till och med ta bort det inbäddade diagrammet, byt till verktyget <guibutton
+>Grundläggande formbehandling</guibutton
+> och klicka var som helst i diagramområdet. Det ska nu visas med en grön kant och med en liten gul fyrkant i varje hörn och mitt på varje sida. </para>
+<para
+>Om du flyttar markören över någon av fyrkanterna, så ska den ändras till en pil med dubbla huvuden. Du kan ändra storlek på diagrammet genom att dra en av de här fyrkanterna med <mousebutton
+>vänster</mousebutton
+> musknapp nertryckt. För att ta bort diagrammet, <mousebutton
+>höger</mousebutton
+>klicka på en av fyrkanterna och välj <guimenuitem
+>Ta bort</guimenuitem
+>.</para>
+<para
+>För att flytta diagrammet, flytta markören in i diagrammet. Markören ska då ändras till ett kors. Tryck på <mousebutton
+>vänster</mousebutton
+> musknapp, så kan du dra diagrammet dit du vill ha det.</para>
+<para
+>För att återställa diagrammet till dess normala utseende, klicka bara var som helst utanför diagramområdet.</para>
+<para
+>För att ändra formatet på själva diagrammet, <mousebutton
+>vänster</mousebutton
+>klicka två gånger inne i diagramområdet. Diagrammets <guilabel
+>Diagramredigering</guilabel
+> ska då visas i fönstret. Därefter kan du använda verktygen för att ändra diagrammet.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title
+>Infoga extern data</title>
+<para
+>Du kan infoga data från en textfil eller från klippbordet i ett arbetsblad, genom att först markera cellen där du vill att det övre vänstra värdet för infogad data ska hamna, och sedan välja <guimenuitem
+>Från textfil...</guimenuitem
+> eller <guimenuitem
+>Från klippbordet...</guimenuitem
+> i undermenyn <menuchoice
+><guimenu
+>Infoga</guimenu
+><guisubmenu
+>Extern data</guisubmenu
+></menuchoice
+>.</para>
+<para
+>I båda fall antar &sheets; att data är på <acronym
+>CSV</acronym
+>-form och visar en dialogruta som låter dig styra hur data hämtas från filen eller klippbordet och placeras i arbetsbladets celler.</para>
+<para
+>Om det finns stöd för det i systemet, så kan &sheets; också infoga data från en <acronym
+>SQL</acronym
+>-databas på ett arbetsblad. Detta görs genom att använda alternativet <menuchoice
+><guimenu
+>Infoga</guimenu
+> <guisubmenu
+>Extern data</guisubmenu
+><guimenuitem
+>Från databas...</guimenuitem
+></menuchoice
+>.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title
+>Länkceller</title>
+<para
+>En cell på ett kalkylblad kan länkas till en åtgärd, så att ett <mousebutton
+>vänster</mousebutton
+>klick på cellen, till exempel, kan öppna en webbläsare. För att få en cell att bete sig på detta sätt, markera den och välj <menuchoice
+><guimenu
+>Infoga</guimenu
+><guimenuitem
+>Länk...</guimenuitem
+></menuchoice
+>. Då visas dialogrutan <guilabel
+>Infoga länk</guilabel
+>, som låter dig välja mellan fyra olika sorters länkar:</para>
+
+<itemizedlist>
+<listitem
+><para
+>En <guilabel
+>Internet</guilabel
+>-länkcell, försöker öppna den förvalda webbläsare med webbadressen som skrivs in i textrutan <guilabel
+>Internetadress:</guilabel
+> i dialogrutan <guilabel
+>Infoga länk</guilabel
+>, när den klickas. Det kan till exempel vara <userinput
+>http://www.calligra.org</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Genom att klicka på en cell som innehåller en <guilabel
+>Brev</guilabel
+>-länk, öppnas e-postprogrammet med adressen som skrivs in i textrutan <guilabel
+>E-post:</guilabel
+> som adressen Till:. Exempelvis <userinput
+>anonym@exempel.com</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>En <guilabel
+>Arkiv</guilabel
+>-länkcell innehåller sökvägen till en fil eller katalog, som skrivs in i textrutan <guilabel
+>Filplats:</guilabel
+>, och försöker öppna filen eller katalogen med ett lämpligt program när den klickas. </para
+></listitem>
+
+<listitem
+><para
+>Länktypen <guilabel
+>Cell</guilabel
+> innehåller en &sheets; cellreferens, som skrivs in i textrutan <guilabel
+>Cell eller namngivet område</guilabel
+>. Ett <mousebutton
+>vänster</mousebutton
+>klick på den här sortens länkcell gör att &sheets; fokus flyttas till den cellen. </para
+></listitem>
+</itemizedlist>
+
+<para
+>Alla fyra sorters länk kräver att en lämplig text skrivs in i fältet <guilabel
+>Text att visa</guilabel
+> i dialogrutan <guilabel
+>Infoga länk</guilabel
+>. Det är texten som syns i cellen.</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title
+>Giltighetskontroll</title>
+<para
+>&sheets; kan automatiskt kontrollera giltigheten på inmatad data med ett antal kriterier, och visa en meddelanderuta om data är ogiltigt.</para>
+<para
+>För att aktivera funktionen, markera cellerna som ska övervakas och välj <menuchoice
+><guimenu
+>Data</guimenu
+><guimenuitem
+>Giltighet...</guimenuitem
+></menuchoice
+>. Då visas &sheets; dialogruta <guilabel
+>Giltighet</guilabel
+>, som har tre fliksidor.</para>
+<para
+>Välj vilken sorts data som anses vara giltig på sidan  <guilabel
+>Villkor</guilabel
+> med kombinationsrutan <guilabel
+>Tillåt:</guilabel
+>, och definiera därefter det giltiga intervallet för värden genom att välja en av alternativen i kombinationsrutan <guilabel
+>Data:</guilabel
+> och skriva in ett lämpligt värde eller lämpliga värden i en eller båda redigeringsrutor.</para>
+<para
+>När du har gjort detta, byt till fliken <guilabel
+>Felvarning</guilabel
+>. Här kan du välja typ av meddelanderuta (<guimenuitem
+>Stoppa</guimenuitem
+>, <guimenuitem
+>Varning</guimenuitem
+> eller <guimenuitem
+>Information</guimenuitem
+>) som visas när ett ogiltigt värde skrivs in, och ange meddelanderutans titel och meddelande.</para>
+<!--FIXME missing Input Help tab-->
+<para
+>Observera att den här funktionen bara kontrollerar data som du skriver in in cellen. För ett sätt att kontrollera resultat från formelceller, se avsnittet <link linkend="formatdata"
+>Villkorliga cellegenskaper</link
+> i den här handboken.</para>
+</sect1>
+
+<sect1 id="protection">
+<title
+>Skydd</title>
+
+<sect2 id="doc-protection">
+<title
+>Dokumentskydd</title>
+<para
+>Att skydda dokumentet betyder att en användare inte kan lägga till eller ta bort arbetsblad utan lösenordet. Att skydda dokumentet skyddar inte celler.</para>
+<para
+>Välj <menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda dokument...</guimenuitem
+></menuchoice
+>. En dialogruta dyker upp och frågar efter ett lösenord. Mätaren av lösenordets säkerhet anger om lösenordet är säkert nog. Ju längre indikeringen är desto säkrare är lösenordet.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Dialogrutan Skydda dokument</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Lösenordet krävs för att ta bort skyddet från dokumentet.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Dialogrutan Skydda inte dokument</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>När ett dokument är skyddat, kan du inte:</para>
+<itemizedlist>
+<listitem
+><para
+>Byta namn på ett arbetsblad </para
+></listitem>
+<listitem
+><para
+>Infoga ett arbetsblad </para
+></listitem>
+<listitem
+><para
+>Ta bort ett arbetsblad </para
+></listitem>
+<listitem
+><para
+>Dölja ett arbetsblad </para
+></listitem>
+<listitem
+><para
+>Visa ett arbetsblad </para
+></listitem>
+<listitem
+><para
+>Se arbetsbladens egenskaper </para
+></listitem>
+<listitem
+><para
+>Sammafoga eller dela upp celler </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title
+>Arbetsbladsskydd</title>
+<para
+>Att skydda ett arbetsblad betyder att skydda innehållet i alla skyddade celler och objekt på arbetsbladet. Skyddet kan tas bort från enskilda celler eller ett antal markerade celler, se <link linkend="cell-protection"
+>nästa avsnitt</link
+>.</para>
+<para
+>Välj <menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda arbetsblad...</guimenuitem
+></menuchoice
+> för att skydda ett arbetsblad. En dialogruta dyker upp och frågar efter ett lösenord. Mätaren av lösenordets säkerhet anger om lösenordet är säkert nog. Ju längre indikeringen är desto säkrare är ditt lösenordet.</para>
+<para
+>Detta lösenord krävs sedan för att ta bort skyddet från arbetsbladet.</para>
+<para
+>När ett arbetsblad är skyddat, kan du inte:</para>
+<itemizedlist>
+<listitem
+><para
+>Infoga något objekt eller diagram </para
+></listitem>
+<listitem
+><para
+>Formatera någon cell </para
+></listitem>
+<listitem
+><para
+>Infoga en rad eller kolumn </para
+></listitem>
+<listitem
+><para
+>Redigera och ändra cellinnehåll </para
+></listitem>
+<listitem
+><para
+>Ändra något innehåll på arbetsbladet </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>Att skydda ett arbetsblad är särskilt användbart för att förhindra att formler raderas av misstag.</para
+></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title
+>Skydd av celler eller markerade celler</title>
+<warning
+><para
+>Cellskydd är normalt aktivt för alla celler och får effekt när du aktiverar skydd av arbetsbladet. Om du alltså behåller normalvärdet och skyddar arbetsbladet, är alla celler skyddade.</para
+></warning>
+<para
+>Om du bara vill att vissa celler ska vara skyddade, måste det normala skyddet stängas av för alla andra celler. Du kanske till exempel vill att de flesta celler ska acceptera inmatning av användaren, så du avmarkerar <guilabel
+>Skyddad</guilabel
+> för dem, och väljer att behålla celler skyddade som ska förbli oförändrade (som rubriker). Du behöver alltså tre steg för att bara skydda vissa celler: Ta bort skyddet från alla celler, markera cellerna du vill skydda och skydda dem, skydda därefter till sist hela arbetsbladet.</para>
+<para
+>För att ta bort skydd från alla celler:</para>
+<itemizedlist>
+<listitem
+><para
+>Markera hela kalkylbladet med musen. </para
+></listitem>
+<listitem
+><para
+>Välj <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Cellformat...</guimenuitem
+></menuchoice
+> i menyraden. </para
+></listitem>
+<listitem
+><para
+>Gå till fliken <guilabel
+>Cellskydd</guilabel
+> i dialogrutan som dyker upp. </para
+></listitem>
+<listitem
+><para
+>Markera <guilabel
+>Dölj allt</guilabel
+> och avmarkera <guilabel
+>Skyddat</guilabel
+> för att ta bort skyddet från alla celler. Cellerna är nu oskyddade. </para
+></listitem>
+</itemizedlist>
+<para
+>För att skydda ett område med markerade celler, eller för att skydda celler som inte gränsar till varandra:</para>
+<itemizedlist>
+<listitem
+><para
+>Markera cellområdet som ska skyddas eller använda <keycombo action="simul"
+>&Ctrl;</keycombo
+>-tangenten för att markera celler som inte ligger intill varandra. </para
+></listitem>
+<listitem
+><para
+>När alla önskade celler är markerade, gå till menyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Cellformat...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Gå till fliken <guilabel
+>Cellskydd</guilabel
+> i dialogrutan som dyker upp. </para
+></listitem>
+<listitem
+><para
+>Klicka på rutan intill <guilabel
+>Skyddat</guilabel
+> och klicka därefter på <guibutton
+>Ok</guibutton
+>. </para
+></listitem>
+</itemizedlist>
+<para
+>När cellerna väl är markerade för att skyddas, måste skyddsalternativet aktiveras på arbetsbladsnivå, vilket betyder att du måste skydda hela arbetsbladet för att skyddet för cellerna ska få effekt:</para>
+<itemizedlist>
+<listitem
+><para
+>Välj <menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda arbetsblad...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>I dialogrutan som visas, tillhandahåll ett säkert lösenord, och bekräfta det genom att skriva in det igen. Klicka på knappen <guibutton
+>Ok</guibutton
+>. </para
+></listitem>
+<listitem
+><para
+>Skyddade celler på ett skyddat arbetsblad kan inte redigeras utan att ta bort skyddet från hela arbetsbladet, och alla ändringar av arbetsbladet är inaktiverade. Ingen kan till exempel infoga rader eller kolumner, ändra kolumnbredd eller skapa inbäddade diagram. </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title
+>Dölj cellformel</title>
+<para
+>Du kan vilja dölja dina formler så att andra inte kan se dem. Normalt är varje cell skyddad och inte dold, men det är viktigt att komma ihåg att egenskaperna inte har någon effekt om inte själva arbetsbladet är skyddat.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>En normal cell med en formel</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>För att dölja cellformler, markera lämplig cell, cellintervall eller celler som inte ligger intill varandra med <keycombo action="simul"
+>&Ctrl;</keycombo
+> och välj därefter menyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Cellformat...</guimenuitem
+></menuchoice
+>. Klicka på fliken <guilabel
+>Cellskydd</guilabel
+> i dialogrutan Cellformat och välj <guilabel
+>Dölj formel</guilabel
+>. När arbetsbladet har skyddats är formlernas resultat synligt, men formeln är det inte. </para>
+<para
+>Du måste nu skydda arbetsbladet: Välj <menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda arbetsblad...</guimenuitem
+></menuchoice
+> för att visa dialogrutan <guilabel
+>Skydda arbetsblad</guilabel
+>. Skriv in ett säkert lösenord två gånger för att förhindra att andra tar bort skyddet från arbetsbladet. </para>
+<para
+>När <guilabel
+>Dölj formel</guilabel
+> är aktiverat och <guilabel
+>Skyddat</guilabel
+> är inaktiverat, är formeln dold efter att arbetsbladet har skyddats, men cellinnehållet kan ändras.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject
+>    
+<textobject>
+<phrase
+><guilabel
+>Dölj formel</guilabel
+> är aktiverat men cellen är inte skyddad och arbetsbladet är skyddat</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>När <guilabel
+>Dölj formel</guilabel
+> och <guilabel
+>Skyddat</guilabel
+> är aktiverade, är formeln dold efter att arbetsbladet har skyddats, och cellinnehållet kan inte ändras.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Dölj formel</guilabel
+> och <guilabel
+>Skyddat</guilabel
+> är aktiverade i <guilabel
+>Cellskydd</guilabel
+> och arbetsbladet är skyddat</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Kom ihåg att det är mycket enkelt att knäcka lösenordet för ett skyddat arbetsblad, så om du är ute efter verklig säkerhet är det här inte den bästa lösningen.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title
+>Dölj allt i cellen</title>
+<para
+>Du kan dölja både formeln och innehållet i cellen genom att välja <guilabel
+>Dölj allt</guilabel
+> under fliken Cellskydd i menyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Cellformat...</guimenuitem
+></menuchoice
+>. I skärmbilden nedan är själva cellen inte skyddad (<guilabel
+>Skyddat</guilabel
+> är avmarkerat), och alltså kan cellinnehållet ändras.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Bara <guilabel
+>Dölj allt</guilabel
+> är aktiverat (inget cellskydd) och arbetsbladet är skyddat</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Här är själva cellen skyddad, så den kan inte skrivas över.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Dölj allt</guilabel
+> och <guilabel
+>Skyddat</guilabel
+> är aktiverade i Cellskydd och arbetsbladet är skyddat</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title
+>Övriga funktioner</title>
+<!-- no split view in 2.4
+<sect2 id="splitview">
+<title
+>Splitting the View</title>
+<para
+>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &sheets;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Split View</guimenuitem
+></menuchoice
+> which will split the current view into 
+two parts. <menuchoice
+><guimenu
+>View</guimenu
+><guisubmenu
+>Splitter Orientation
+</guisubmenu
+></menuchoice
+> lets you choose between 
+<guimenuitem
+>Horizontal</guimenuitem
+> and <guimenuitem
+>Vertical</guimenuitem
+> 
+splitting.</para>
+<para
+>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton
+>left</mousebutton
+> mouse button.</para>
+<para
+>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para
+>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para
+>To remove a view select <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Remove View</guimenuitem
+></menuchoice
+></para>
+</sect2>
+-->
+
+<sect2 id="namedareas">
+<title
+>Namnge celler och områden</title>
+<para
+>Du kan ge en cell ett namn som <userinput
+>blaha</userinput
+> eller vilket område som helst på en blad, genom att markera cellen eller området och därefter välja <guimenuitem
+>Områdesnamn...</guimenuitem
+> i menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp. Då visas dialogrutan <guilabel
+>Områdets namn</guilabel
+>, där du kan skriva in vilket namn som helst som du vill ha.</para>
+<para
+>Du kan också namnge en cell eller ett område genom att markera det och sedan skriva in namnet i den lilla textrutan i vänstra kanten på formelverktygsraden, och skriva över cellreferensen som normalt visas där.</para>
+<para
+>Om du skriver in ett namn som redan har använts i den här rutan, så ändras markeringen i &sheets; för att visa den namngivna cellen eller cellerna.</para>
+<para
+>Alternativet <menuchoice
+><guimenu
+>Data</guimenu
+><guimenuitem
+>Namngivna områden...</guimenuitem
+></menuchoice
+>, visar en lista med befintliga namn och låter dig ändra &sheets; fokus till vilket som helst av dem, eller låter dig ta bort ett namn. </para>
+<para
+>Namngivna celler är särskilt användbara i formler som ett alternativ till <link linkend="absolute"
+>absoluta cellreferenser</link
+>, eftersom namnen kan användas istället för normala cellreferenser och ändras inte när cellen som innehåller formeln kopieras. När ett namn används på det här sättet, ska det omslutas av enkla citationstecken.</para>
+<para
+>Om cellen A1 till exempel har givits namnet <userinput
+>fred</userinput
+>, så kan du skriva in en formel som <userinput
+>='fred' + 2 </userinput
+> i en annan cell, vilket alltid ger resultatet av att addera 2 till innehållet i A1, oberoende vart formelcellen kopieras.</para>
+<para
+>Observera att cell och områdesnamn hanteras som om de bara har små bokstäver.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title
+>Cellkommentarer</title>
+<para
+>En cell kan innehålla en textkommentar, som kan visas medan man arbetar med kalkylbladet, men som inte skrivs ut och inte normalt syns.</para>
+<para
+>För att lägga till en kommentar, markera cellen och välj <guimenuitem
+>Kommentar...</guimenuitem
+> i menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp, eller i menyn <guimenu
+>Infoga</guimenu
+>, och skriv in kommentaren i dialogrutan <guilabel
+>Cellkommentar</guilabel
+> som visas.</para>
+<para
+>För att se kommentaren, låt muspekaren vila över cellen. Kommentaren visas som om den vore ett verktygstips. </para>
+<para
+>Om du markerar rutan <guilabel
+>Visa kommentarindikering</guilabel
+> i dialogrutan <guilabel
+>Egenskaper för arbetsblad</guilabel
+>, så visas en liten röd triangel i övre högra hörnet på celler som innehåller kommentarer.</para>
+<para
+>För att visa dialogrutan, klicka med <mousebutton
+>höger</mousebutton
+> musknapp på arbetsbladets flik längst ner i huvudfönstret och välj <guimenuitem
+>Egenskaper för arbetsblad</guimenuitem
+> i den sammanhangsberoende menyn, eller välj den i menyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Arbetsblad</guisubmenu
+></menuchoice
+>.</para>
+
+<para
+>För att ta bort en kommentar från en cell, välj <guimenuitem
+>Ta bort kommentar</guimenuitem
+> i menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp, eller välj <menuchoice
+><guimenu
+>Redigera</guimenu
+><guisubmenu
+>Rensa</guisubmenu
+><guimenuitem
+>Kommentar</guimenuitem
+></menuchoice
+>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

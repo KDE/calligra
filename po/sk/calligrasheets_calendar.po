@@ -1,0 +1,200 @@
+# translation of sheetscalendartool.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2009.
+# Roman Paholík <wizzardsk@gmail.com>, 2014, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: sheetscalendartool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-20 19:43+0100\n"
+"Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Koncový dátum je pre začiatočným! Prosím, presvedčte sa, že koncový dátum "
+"ide po začiatočnom."
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "Chyba"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Kalendár nemôže byť dlhší ako 10 rokov. Ak naozaj potrebujete takú dlhú "
+"periódu, rozdeľte ju."
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Začiatočný a koncový dátum sú rovnajú. Iba jeden deň sa vloží, chcete "
+"pokračovať?"
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "Varovanie"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Vytvorenie kalendára dlhšieho ako rok môže zabrať veľa miesta, chcete "
+"pokračovať?"
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Oblasť kde je kalendár vložený NIE je prázdna, ste si istý, že chcete "
+"pokračovať a prepísať existujúce dáta? Ak zvolíte Nie, oblasť, ktorá by bola "
+"požadovaná pre želaný kalendár bude vybratá tak aby ste videli, ktoré dáta "
+"by sa prepísali."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Vložiť kalendár"
+
+#: CalendarTool.cpp:107
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Kalendár od %1 do %2"
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "týždeň"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "Kalendár"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Nástroj kalendár"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, kde-format
+msgid "Insert"
+msgstr "Vložiť"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, kde-format
+msgid "Start date:"
+msgstr "Dátum začiatku:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, kde-format
+msgid "End date:"
+msgstr "Dátum konca:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Nástroj kalendár"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Vložiť"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Dátum začiatku:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Dátum konca:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "Koncový dátum je pre začiatočným! Prosím, presvedčte sa, že koncový dátum "
+#~ "ide po začiatočnom."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Chyba"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Kalendár nemôže byť dlhší ako 10 rokov. Ak naozaj potrebujete takú dlhú "
+#~ "periódu, rozdeľte ju."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Začiatočný a koncový dátum sú rovnajú. Iba jeden deň sa vloží, chcete "
+#~ "pokračovať?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Upozornenie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Vytvorenie kalendára dlhšieho ako rok môže zabrať veľa miesta, chcete "
+#~ "pokračovať?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Oblasť kde je kalendár vložený NIE je prázdna, ste si istý, že chcete "
+#~ "pokračovať a prepísať existujúce dáta? Ak zvolíte Nie, oblasť, ktorá by "
+#~ "bola požadovaná pre želaný kalendár bude vybratá tak aby ste videli, "
+#~ "ktoré dáta by sa prepísali."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Kalendár od %1 do %2"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "týždeň"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Kalendár"

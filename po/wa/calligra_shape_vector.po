@@ -1,0 +1,66 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jean Cayron <jean.cayron@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2010-06-06 14:38+0200\n"
+"Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
+"Language-Team: Walloon <linux-wa@walon.org>\n"
+"Language: wa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr ""
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Imådje di royes"
+
+#: VectorShapeFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "A shape that shows a vector image"
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "Ene fôme ki mostere ene imådje di royes"
+
+#: VectorTool.cpp:64
+#, fuzzy, kde-format
+#| msgid "A shape that shows a vector image"
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "Ene fôme ki mostere ene imådje di royes"
+
+#: VectorToolFactory.cpp:20
+#, fuzzy, kde-format
+#| msgid "A shape that shows a vector image"
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "Ene fôme ki mostere ene imådje di royes"
+
+#, fuzzy
+#~| msgid "Vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Imådje di royes"
+
+#, fuzzy
+#~| msgid "A shape that shows a vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "Ene fôme ki mostere ene imådje di royes"
+
+#, fuzzy
+#~| msgid "Vector image tool"
+#~ msgid "EMF/WMF Vector Shape tool"
+#~ msgstr "Usteye d' imådje di royes"
+
+#~ msgid "Vector image selection tool"
+#~ msgstr "Usteye di tchoes d' imådje di royes"

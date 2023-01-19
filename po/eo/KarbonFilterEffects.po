@@ -1,0 +1,858 @@
+# Translation of karbon into esperanto.
+# Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2009-11-15 12:06+0100\n"
+"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: pology\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Line Border"
+msgid "Blend mode"
+msgstr "Linirando"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Normala"
+
+#: BlendEffectConfigWidget.cpp:25
+#, fuzzy, kde-format
+msgid "Multiply"
+msgstr "&Divenu ĉefurbon per ĝia regiono..."
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "Ekrano"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "Malheligi"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "Heligi"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "Radiuso"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "Angulo"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "Funkcio"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "Identeco"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "Tabelo"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "Lineara"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "Gamo"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "Valoroj"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "Interfaco"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Deŝovo"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr ""
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "Operacio"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "D&elete"
+msgid "Duplicate"
+msgstr "&Forigi"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+msgid "Wrap"
+msgstr "Vertikala teksto"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "Neniu"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "Line Border"
+msgid "Edge mode:"
+msgstr "Linirando"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "Target:"
+msgid "Target point:"
+msgstr "Celo:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr ""
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr ""
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr ""
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Bildo"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr ""
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Mergi"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "D&elete"
+msgid "Dilate"
+msgstr "&Forigi"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Operation"
+msgid "Operator:"
+msgstr "Operacio"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius x:"
+msgstr "Radiuso:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius y:"
+msgstr "Radiuso:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Line Border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Linirando"
+
+#, fuzzy
+#~| msgid "Line Border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Linirando"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normala"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "&Divenu ĉefurbon per ĝia regiono..."
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Ekrano"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Malheligi"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Heligi"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Radiuso"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Angulo"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Funkcio"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "Identeco"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Tabelo"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Lineara"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "Gamo"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "Valoroj"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Interfaco"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Deŝovo"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Operacio"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "&Forigi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "Vertikala teksto"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Neniu"
+
+#, fuzzy
+#~| msgid "Line Border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Linirando"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Celo:"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Bildo"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "Mergi"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "&Forigi"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Operacio"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Radiuso:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Radiuso:"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Axel Rousseau"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "axel@esperanto-jeunes.org"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Operacio"
+
+#~ msgid "&Align"
+#~ msgstr "Ĝis&randigi"
+
+#~ msgid "&File"
+#~ msgstr "&Dosiero"
+
+#~ msgid "&Edit"
+#~ msgstr "&Redakti"
+
+#~ msgid "&View"
+#~ msgstr "&Rigardi"
+
+#~ msgid "&Object"
+#~ msgstr "&Objekto"
+
+#~ msgid "&Distribute"
+#~ msgstr "&Dismeti"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgid "Effe&cts"
+#~ msgstr "Efektoj"
+
+#~ msgid "&Settings"
+#~ msgstr "A&gordo"
+
+#~ msgid "Edit"
+#~ msgstr "Redakti"
+
+#~ msgid "Object"
+#~ msgstr "Objekto"
+
+#, fuzzy
+#~| msgid "Alkaline"
+#~ msgid "Align"
+#~ msgstr "Teralkala metalo"
+
+#~ msgid "Effects"
+#~ msgstr "Efektoj"
+
+#~ msgid "View"
+#~ msgstr "Vido"
+
+#~ msgid "Properties"
+#~ msgstr "Ecoj"
+
+#~ msgid "Radius:"
+#~ msgstr "Radiuso:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Vido"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Vido"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Reparent shapes"
+#~ msgid "More shapes"
+#~ msgstr "Reparencigi formojn"
+
+#~ msgid "Info"
+#~ msgstr "Informo"
+
+#~ msgid "Angle:"
+#~ msgstr "Angulo:"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Nova ebeno"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Nova ebeno"
+
+#~ msgid "Configure"
+#~ msgstr "Agordi"
+
+#~ msgid "Misc"
+#~ msgstr "Diverso"
+
+#~ msgid "Grid"
+#~ msgstr "Krado"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokumento"
+
+#, fuzzy
+#~| msgid "Document Information"
+#~ msgid "Document Settings"
+#~ msgstr "Dokumentinformo"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Forigi elektitajn objektojn"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Malfonigi elektitajn objektojn"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Fonigi elektitajn objektojn"
+
+#~ msgid "Detailed View"
+#~ msgstr "Detala rigardo"
+
+#~ msgid "New Layer"
+#~ msgstr "Nova ebeno"
+
+#~ msgid "New layer"
+#~ msgstr "Nove abano"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Krei Ebenon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Forigi Ebenon"
+
+#~ msgid "Layer"
+#~ msgstr "Tavolo"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Grupo"
+
+#~ msgid "Shape"
+#~ msgstr "Formo"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Videbla"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Ŝlosita"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Travideblo"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "no"
+#~ msgstr "Informo"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Reparencigi formojn"
+
+#, fuzzy
+#~| msgid "Karbon14"
+#~ msgid "Karbon"
+#~ msgstr "Karbon14"
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "Cimokorektado"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgid "Master Page"
+#~ msgstr "Mergi"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Montri paĝmarĝenojn"
+
+#~ msgid "D&elete"
+#~ msgstr "&Forigi"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgid "Edit Guides"
+#~ msgstr "Kapti per Krado"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Montri liniilojn"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Montras aŭ kaŝas la mezurilojn."
+
+#, fuzzy
+#~ msgid "Show or hide color palette"
+#~ msgstr "Montras aŭ kaŝas la mezurilojn."
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Vicigi al Krado"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Clip Object"
+#~ msgstr "&Objekto"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Objekto"
+
+#~ msgid "Zoom"
+#~ msgstr "Zomo"
+
+#~ msgid "Canvas color:"
+#~ msgstr "Kanvaskoloro:"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Neniu"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Propra"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Neniu"
+
+#~ msgid "Fill:"
+#~ msgstr "Plenigi:"
+
+#~ msgid "File to open"
+#~ msgstr "Malfermenda dosiero"
+
+#~ msgid "Target:"
+#~ msgstr "Celo:"
+
+#~ msgid "Line"
+#~ msgstr "Linio"
+
+#, fuzzy
+#~| msgid "&Filter"
+#~ msgid "Fill"
+#~ msgstr "&Filtrilo"
+
+#~ msgid "Type:"
+#~ msgstr "Tipo:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineara"
+
+#~ msgid "Repeat:"
+#~ msgstr "Ripeto:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Neniu"
+
+#~ msgid "Repeat"
+#~ msgstr "Ripeti"
+
+#~ msgid "Original"
+#~ msgstr "Originala"
+
+#~ msgid "Tiled"
+#~ msgstr "Kahele"
+
+#, fuzzy
+#~| msgid "Top-left"
+#~ msgid "Top Left"
+#~ msgstr "Supre-maldekstra"
+
+#~ msgid "Top"
+#~ msgstr "Supro"
+
+#, fuzzy
+#~| msgid "Top-right"
+#~ msgid "Top Right"
+#~ msgstr "Supre-dekstra"
+
+#~ msgid "Left"
+#~ msgstr "Maldekstre"
+
+#~ msgid "Center"
+#~ msgstr "Centrigita"
+
+#~ msgid "Right"
+#~ msgstr "Dekstra"
+
+#, fuzzy
+#~| msgid "Bottom-left"
+#~ msgid "Bottom Left"
+#~ msgstr "Malsupre-maldekstra"
+
+#~ msgid "Bottom"
+#~ msgstr "Malsupre"
+
+#, fuzzy
+#~| msgid "Bottom-right"
+#~ msgid "Bottom Right"
+#~ msgstr "Malsupre-dekstra"
+
+#, fuzzy
+#~ msgid "Stroke"
+#~ msgstr "Ligita"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Kaŝi paĝmarĝenojn"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Kaŝi liniilojn"
+
+#~ msgid "Tools"
+#~ msgstr "Iloj"
+
+#, fuzzy
+#~| msgid "Show &Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Montri &Kradon"

@@ -1,0 +1,134 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-12-22 14:01+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: KoContactSemanticItemFactory.cpp:46
+#, kde-format
+msgctxt "displayname of the semantic item type Contact"
+msgid "Contact"
+msgstr "Yhteystieto"
+
+#: KoRdfFoaF.cpp:179
+#, kde-format
+msgid "Select an address book for saving:"
+msgstr "Valitse osoitekirja tallennusta varten:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfFoaFEditWidget.ui:26
+#, kde-format
+msgid "&Name:"
+msgstr "&Nimi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfFoaFEditWidget.ui:36
+#, kde-format
+msgid "&Nick:"
+msgstr "&Kutsumanimi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfFoaFEditWidget.ui:46
+#, kde-format
+msgid "&Phone Number:"
+msgstr "&Puhelinnumero:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfFoaFEditWidget.ui:59
+#, kde-format
+msgid "&Home Page:"
+msgstr "&Verkkosivusto:"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Contact Information"
+msgstr "Yhteystiedot"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:48
+#, kde-format
+msgid "Edit..."
+msgstr "Muokkaa…"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:51
+#, kde-format
+msgid "Import contact"
+msgstr "Tuo yhteystieto"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:54
+#, kde-format
+msgid "Export as vcard..."
+msgstr "Vie vCardiksi…"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "&Nimi:"
+
+#, fuzzy
+#~| msgid "&Nick:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Nick:"
+#~ msgstr "&Kutsumanimi:"
+
+#, fuzzy
+#~| msgid "&Phone Number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Phone Number:"
+#~ msgstr "&Puhelinnumero:"
+
+#, fuzzy
+#~| msgid "&Home Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Home Page:"
+#~ msgstr "&Verkkosivusto:"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Contact"
+#~| msgid "Contact"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Contact"
+#~ msgid "Contact"
+#~ msgstr "Yhteystieto"
+
+#, fuzzy
+#~| msgid "Select an address book for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select an address book for saving:"
+#~ msgstr "Valitse osoitekirja tallennusta varten:"
+
+#, fuzzy
+#~| msgid "Contact Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contact Information"
+#~ msgstr "Yhteystiedot"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "Muokkaa…"
+
+#, fuzzy
+#~| msgid "Import contact"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import contact"
+#~ msgstr "Tuo yhteystieto"
+
+#, fuzzy
+#~| msgid "Export as vcard..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as vcard..."
+#~ msgstr "Vie vCardiksi…"

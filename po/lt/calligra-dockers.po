@@ -1,0 +1,278 @@
+# Language  translations for koffice-dockers package.
+# This file is distributed under the same license as the koffice-dockers package.
+#
+# Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>, 2011.
+# Liudas Ališauskas <liudas.alisauskas@gmail.com>, 2012.
+# Liudas Alisauskas <liudas@akmc.lt>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-04-19 09:59+0300\n"
+"Last-Translator: Liudas Alisauskas <liudas@akmc.lt>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Nerasta formų kolekcijoje! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Netinkamas Calligra failas: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Niekas žymė rasta faile: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Nerasta office:piešimas žymės faile: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Nerasta formų faile: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Pridėti formą"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Daugiau"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Atverti formų kolekciją"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Pašalinti formų kolekciją"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Numatyta"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometrija"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Rodyklės"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Juokinga"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Kolekcijos klaida"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Formos savybės"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Pritraukimo nuostatos"
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Nerasta formų kolekcijoje! %1"
+
+#, fuzzy
+#~| msgid "Not a valid Calligra file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Netinkamas Calligra failas: %1"
+
+#, fuzzy
+#~| msgid "No body tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Niekas žymė rasta faile: %1"
+
+#, fuzzy
+#~| msgid "No office:drawing tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Nerasta office:piešimas žymės faile: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Nerasta formų faile: %1"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Pridėti formą"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Daugiau"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Atverti formų kolekciją"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Pašalinti formų kolekciją"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Numatyta"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Geometrija"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Rodyklės"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Juokinga"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Kolekcijos klaida"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Formos savybės"
+
+#, fuzzy
+#~| msgid "Snap Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Settings"
+#~ msgstr "Pritraukimo nuostatos"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Spalvų parinkiklis"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Šešėlio savybės"
+
+#~ msgid "Creation error"
+#~ msgstr "Kūrimo klaida"
+
+#~ msgid "File not found"
+#~ msgstr "Failas nerastas"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Nepavyksta sukurti atmintinės"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Blogas MIME tipas"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Klaida įterptame dokumente"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Formatas neatpažintas"
+
+#~ msgid "Not implemented"
+#~ msgstr "Neįgyvendinta"
+
+#~ msgid "Parsing error"
+#~ msgstr "Nagrinėjimo klaida"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Dokumentas yra apsaugotas slaptažodžiu"
+
+#~ msgid "Internal error"
+#~ msgstr "Vidinė klaida"
+
+#~ msgid "Out of memory"
+#~ msgstr "Trūksta atminties"
+
+#~ msgid "Unknown error"
+#~ msgstr "Nežinoma klaida"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Nepavyksta atverti\n"
+#~ "%2.\n"
+#~ "Priežastis: %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "Nepavyko importuoti failo: %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Permatomumas:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Joks"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Vientisas"
+
+#~ msgid "Gradient"
+#~ msgstr "Pereinantis"
+
+#~ msgid "Pattern"
+#~ msgstr "Šablonas"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Lyginių-nelyginių užpildymas"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Vijų užpildymas"
+
+#~ msgid "Stroke and Fill"
+#~ msgstr "Kontūras ir užpildymas"

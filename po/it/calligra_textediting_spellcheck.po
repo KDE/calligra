@@ -1,0 +1,94 @@
+# translation of SpellCheckPlugin.po to Italian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the koffice package.
+#
+# Luciano Montanaro <mikelima@cirulla.net>, 2007, 2010, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-24 20:38+0100\n"
+"Last-Translator: Luciano Montanaro <mikelima@cirulla.net>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Configura la &correzione ortografica..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Correzione ortografica automatica"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Controlla ortografia"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Ortografia"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Aggiungi al dizionario"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Configura la &correzione ortografica..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Correzione ortografica automatica"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Controlla ortografia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Ortografia"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Aggiungi al dizionario"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Ignora parola"
+
+#~ msgid "Spell Check"
+#~ msgstr "Correzione ortografica"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Configurazione della correzione ortografica"
+
+#~ msgid "Default Language:"
+#~ msgstr "Lingua predefinita:"
+
+#~ msgid "Options"
+#~ msgstr "Opzioni"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "A&bilita la correzione automatica continua"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Salta le parole tutte in &maiuscolo"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "Sa&lta le parole attaccate"
+
+#~ msgid "&Add"
+#~ msgstr "&Aggiungi"
+
+#~ msgid "&Remove"
+#~ msgstr "&Rimuovi"

@@ -1,0 +1,49 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# Alexander Yavorsky <kekcuha@gmail.com>, 2020.
+# Мария Шикунова <translation-team@basealt.ru>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2021-06-23 10:52+0300\n"
+"Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 19.12.3\n"
+
+#: ChangeSomethingCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr ""
+"Изменить что-нибудь\n"
+"изменение чего-нибудь"
+
+#: TemplateShapeFactory.cpp:32
+#, kde-format
+msgid "Template shape"
+msgstr "Шаблонная форма"
+
+#: TemplateShapeFactory.cpp:34
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr ""
+"Простая форма, которая используется в качестве шаблона для создания других "
+"форм."
+
+#: TemplateTool.cpp:77
+#, kde-format
+msgid "Open"
+msgstr "Открыть"
+
+#: TemplateToolFactory.cpp:26
+#, kde-format
+msgid "Template shape editing"
+msgstr "Редактирование шаблонной формы"

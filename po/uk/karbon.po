@@ -1,0 +1,2031 @@
+# Translation of karbon.po to Ukrainian
+# Copyright (C) 2005-2019 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Ivan Petrouchtchak <fr.ivan@ukrainian-orthodox.org>, 2005, 2006, 2007, 2008.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2015, 2016, 2018, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-11-06 07:52+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.11.70\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr ""
+"Булева дія\n"
+"булеву дію"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Порядок"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Вирівняти"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Файл"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "З&міни"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "П&ерегляд"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Об'єкт"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&Розподілити"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&Контур"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "&Ефекти"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "П&араметри"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr "С&торінка"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Редагувати"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Об'єкт"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Вирівняти"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Ефекти"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Перегляд"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "&Згладити криву..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Згладити контур"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Властивості"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Пласкість:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr ""
+"Згладити контур\n"
+"згладжування контуру"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr ""
+"Вдосконалити контур\n"
+"вдосконалення контуру"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "В&досконалити контур..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Вдосконалити контур"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Піделементи:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr ""
+"Заокруглити кути\n"
+"заокруглення кутів"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&Заокруглити кути..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Заокруглити кути"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Радіус:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr ""
+"Скручування і стискання\n"
+"скручування і стискання"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Скручування/стискання..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Скручування стискання"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Інформація"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+"Результат застосування ефекту Скручування/Стискання можна покращити "
+"попередньо вдосконаливши форму контуру."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Кут:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Стискання:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr ""
+"Підняти шар\n"
+"підняття шару"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr ""
+"Опустити шар\n"
+"опускання шару"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Налаштувати"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Інтерфейс"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Інше"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Ґратка"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Документ"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Параметри документа"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Автор"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "Автор"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "Програма для малювання векторної графіки."
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "© Розробники Karbon, 2001–%1"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr "Anthony Fieroni"
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr "Супровідник"
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Виправлення вад і покращення"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Виправлення вад"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Корисні латки і поради"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "о. Іван Петрущак,Юрій Чорноіван"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "fr.ivan@ukrainian-orthodox.org,yurchor@ukr.net"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr ""
+"Вставити графіку\n"
+"вставлення графіки"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Виберіть графік для додавання"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "Не вдалося завантажити зображення."
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Імпортувати графіку"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "Не вдалося створити форму зображення."
+
+#: ui/KarbonView.cpp:612
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr ""
+"Віддзеркалити горизонтально\n"
+"віддзеркалення горизонтально"
+
+#: ui/KarbonView.cpp:614
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr ""
+"Віддзеркалити вертикально\n"
+"віддзеркалення вертикально"
+
+#: ui/KarbonView.cpp:616
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr ""
+"Віддзеркалити горизонтально і вертикально\n"
+"віддзеркалення горизонтально і вертикально"
+
+#: ui/KarbonView.cpp:671
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr ""
+"Відокремити контури\n"
+"відокремлення контурів"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "&Режим ескіза"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Імпортувати графіку..."
+
+#: ui/KarbonView.cpp:864
+#, kde-format
+msgid "Edit Guides"
+msgstr "Змінити напрямні"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Здублювати"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Розподілити по центру (горизонтально)"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Розподілити за проміжками (горизонтально)"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "Розподілити за лівими краями"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "Розподілити за правими краями"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Розподілити по центру (вертикально)"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Розподілити за проміжками (вертикально)"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Розподілити за нижніми краями"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "Розподілити верхні межі"
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Show Color Palette"
+msgstr "Показати палітру кольорів"
+
+#: ui/KarbonView.cpp:909
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "Показує або ховає палітру кольорів"
+
+#: ui/KarbonView.cpp:913
+#, kde-format
+msgid "&Clip Object"
+msgstr "За&фіксувати об'єкт"
+
+#: ui/KarbonView.cpp:917
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "&Зняти фіксування об'єктів"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Віддзеркалити вертикально"
+
+#: ui/KarbonView.cpp:925
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Віддзеркалити горизонтально"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "За&мкнути контур"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Об’&єднати контур"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "Роз&ділити контур"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Роз&вернути контур"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Перетнути контури"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Відняти контури"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Об’єднати контури"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Виключити контури"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Приліпити контур до ґратки"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Збільшити до вибраної області"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Збільшити до намальованого"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Масштабування"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "Показувати панель стану:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Кількість нещодавніх файлів:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Розмір шрифту палітри:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr "Виберіть палітру"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Натисніть, щоб залити кольором вибране"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Немає"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Натисніть, щоб застосувати штрих до вибраного"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "Нетипове"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Немає"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Штрих:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Заповнення:"
+
+#~ msgid "D&elete"
+#~ msgstr "В&илучити"
+
+#~ msgid "Layer view"
+#~ msgstr "Перегляд шарів"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Додати новий шар"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Вилучити обрані об’єкти"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Підняти обрані об’єкти"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Опустити обрані об’єкти"
+
+#~ msgid "Minimal View"
+#~ msgstr "Мінімалістичний перегляд"
+
+#~ msgid "Detailed View"
+#~ msgstr "Детальний перегляд"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Віконце мініатюр"
+
+#~ msgid "View mode"
+#~ msgstr "Режим перегляду"
+
+#~ msgid "New Layer"
+#~ msgstr "Новий шар"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Введіть назву нового шару:"
+
+#~ msgid "New layer"
+#~ msgstr "Новий шар"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr ""
+#~ "Створити шар\n"
+#~ "створення шару"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr ""
+#~ "Вилучити шар\n"
+#~ "вилучення шару"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Неможливо вилучити всі шари. Хоча б один шар має залишитися."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Помилка під час вилучення шарів"
+
+#~ msgid "Layer"
+#~ msgstr "Шар"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Група"
+
+#~ msgid "Shape"
+#~ msgstr "Форма"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Видима"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Зафіксована"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "z-індекс"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Непрозорість"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Зафіксовано"
+
+#~ msgid "no"
+#~ msgstr "ні"
+
+#~ msgid "yes"
+#~ msgstr "так"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr ""
+#~ "Перепідпорядкувати форми\n"
+#~ "перепідпорядковування форм"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Некоректний документ OASIS. Не знайдено теґу doffice:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Некоректний документ OASIS. Не знайдено теґу office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Некоректний документ OASIS. Не знайдено теґу draw:page."
+
+#~ msgid "Master Page"
+#~ msgstr "Шаблон сторінки"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Показати поля сторінок"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Показати лінійки"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Показує або ховає лінійки"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Чіплятися до ґратки"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Вмикає прилипання до ґратки"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Налаштувати Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "&Формат сторінки..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "Колір полотна:"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Не має супровідників на час випуску цієї версії. Спільнота Calligra з "
+#~ "радістю прийме до своїх лав тих, хто взявся б супроводжувати випуски "
+#~ "програми."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "&Порядок"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Вирівняти"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Файл"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "З&міни"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "П&ерегляд"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Об'єкт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "&Розподілити"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "&Контур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "&Ефекти"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "П&араметри"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Редагувати"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Об'єкт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "Вирівняти"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Ефекти"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "Перегляд"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Згладити криву..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Згладити контур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Властивості"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Пласкість:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "В&досконалити контур..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Вдосконалити контур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "Піделементи:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "&Заокруглити кути..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Радіус:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Скручування/стискання..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Скручування стискання"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "Інформація"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Результат застосування ефекту Скручування/Стискання можна покращити "
+#~ "попередньо вдосконаливши форму контуру."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Кут:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Стискання:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Налаштувати"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Інтерфейс"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Інше"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Ґратка"
+
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Документ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Параметри документа"
+
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Автор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Автор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Перегляд шарів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Додати новий шар"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Вилучити обрані об’єкти"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Підняти обрані об’єкти"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Опустити обрані об’єкти"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Мінімалістичний перегляд"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Детальний перегляд"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Віконце мініатюр"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Режим перегляду"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Новий шар"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Введіть назву нового шару:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Новий шар"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Неможливо вилучити всі шари. Хоча б один шар має залишитися."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "Помилка під час вилучення шарів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Шар"
+
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Група"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Форма"
+
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Видима"
+
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Зафіксована"
+
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "z-індекс"
+
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Непрозорість"
+
+#~ msgctxt "(qtundo-format) Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Зафіксовано"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "ні"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "так"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Програма для малювання векторної графіки."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "© Розробники Karbon, 2001–2013"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Не має супровідників на час випуску цієї версії. Спільнота Calligra з "
+#~ "радістю прийме до своїх лав тих, хто взявся б супроводжувати випуски "
+#~ "програми."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Виправлення вад і покращення"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "Виправлення вад"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Корисні латки і поради"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "о. Іван Петрущак,Юрій Чорноіван"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "fr.ivan@ukrainian-orthodox.org,yurchor@ukr.net"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Некоректний документ OASIS. Не знайдено теґу doffice:body."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Некоректний документ OASIS. Не знайдено теґу office:drawing."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Некоректний документ OASIS. Не знайдено теґу draw:page."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Шаблон сторінки"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Виберіть графік для додавання"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load image."
+#~ msgstr "Не вдалося завантажити зображення."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "Імпортувати графіку"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create image shape."
+#~ msgstr "Не вдалося створити форму зображення."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "&Режим ескіза"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Показати поля сторінок"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Імпортувати графіку..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "В&илучити"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Змінити напрямні"
+
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Здублювати"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Розподілити по центру (горизонтально)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Розподілити за проміжками (горизонтально)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Розподілити за лівими краями"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Розподілити за правими краями"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Розподілити по центру (вертикально)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Розподілити за проміжками (вертикально)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Розподілити за нижніми краями"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Розподілити верхні межі"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Показати лінійки"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Показує або ховає лінійки"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Color Palette"
+#~ msgstr "Показати палітру кольорів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Показує або ховає палітру кольорів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Чіплятися до ґратки"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Вмикає прилипання до ґратки"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "За&фіксувати об'єкт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Зняти фіксування об'єктів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "За&мкнути контур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Об’&єднати контур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Роз&ділити контур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "Роз&вернути контур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Перетнути контури"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Відняти контури"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Об’єднати контури"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "Виключити контури"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Приліпити контур до ґратки"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Налаштувати Karbon..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "&Формат сторінки..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Збільшити до вибраної області"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Збільшити до намальованого"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Масштабування"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Показувати панель стану:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Кількість нещодавніх файлів:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Розмір шрифту палітри:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Canvas color:"
+#~ msgstr "Колір полотна:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Виберіть палітру"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Натисніть, щоб залити кольором вибране"
+
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Немає"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Натисніть, щоб застосувати штрих до вибраного"
+
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Нетипове"
+
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Немає"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Штрих:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Заповнення:"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Запрошуємо і вас взяти участь."
+
+#~ msgid "Expand all"
+#~ msgstr "Розгорнути всі"
+
+#~ msgid "Collapse all"
+#~ msgstr "Згорнути всі"
+
+#~ msgid "List View"
+#~ msgstr "Перегляд списком"
+
+#~ msgid "Icon View"
+#~ msgstr "Перегляд з піктограмами"
+
+#~ msgid "Stencil Box"
+#~ msgstr "Панель форм"
+
+#~ msgid "Stencils Online"
+#~ msgstr "Форми у мережі"
+
+#~ msgid "Add/Remove Stencil"
+#~ msgstr "Додати або вилучити форму"
+
+#~ msgid "More shapes"
+#~ msgstr "Інші форми"
+
+#~ msgid "Filter"
+#~ msgstr "Фільтр"
+
+#~ msgid "Stencils successfully installed."
+#~ msgstr "Форми успішно встановлено."
+
+#~ msgid "Stencils successfully uninstalled."
+#~ msgstr "Форми успішно вилучено."
+
+#~ msgid ""
+#~ "This is the user stencils directory.\n"
+#~ "From here you can add / remove stencils for use in the Stencil Box "
+#~ "docker.\n"
+#~ "\n"
+#~ "Stencils are organized in collections, a collection is a folder "
+#~ "containing a text file 'collection.desktop':\n"
+#~ "\n"
+#~ "collection.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Your Stencil Collection Name\n"
+#~ "\n"
+#~ "A stencil is an ODG/SVG file, a desktop file, an optional PNG icon file, "
+#~ "all with the same name under its collection folder:\n"
+#~ "\n"
+#~ "foo.odg or foo.svgz or foo.svg\n"
+#~ "\n"
+#~ "ODF elements for stencil should be a <draw:g> element or <draw:custom-"
+#~ "shape> element\n"
+#~ "No special requirements to SVG file\n"
+#~ "\n"
+#~ "foo.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Foo\n"
+#~ "CS-KeepAspectRatio=1\n"
+#~ "\n"
+#~ "If CS-KeepAspectRatio=1, the stencil added to canvas will have geometry "
+#~ "aspect ratio locked, by default it's 0.\n"
+#~ "\n"
+#~ "foo.png\n"
+#~ "\n"
+#~ "Should have size 32x32 pixel, if the png file is not included, Karbon "
+#~ "will render the ODG/SVG file as the icon,\n"
+#~ "but it won't look good under small pixels when the stencil stroke is "
+#~ "complicated.\n"
+#~ msgstr ""
+#~ "Це каталог форм користувача.\n"
+#~ "Тут ви можете додавати або вилучати форми, які буде показано на бічній "
+#~ "панелі форм.\n"
+#~ "\n"
+#~ "Форми згруповано за збірками. Дані кожної збірки зберігаються у теці, що "
+#~ "містить текстовий файл «collection.desktop»:\n"
+#~ "\n"
+#~ "collection.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Назва вашої збірки форм\n"
+#~ "\n"
+#~ "Дані форми зберігаються у файлі ODG або SVG, файлі desktop, "
+#~ "необов’язковому файлі PNG. Всі ці файли у теці збірки повинні мати одну "
+#~ "назву:\n"
+#~ "\n"
+#~ "foo.odg, foo.svgz або foo.svg\n"
+#~ "\n"
+#~ "Елементами ODF для форми є <draw:g> і <draw:custom-shape>\n"
+#~ "Спеціальних вимог до файлів SVG не передбачено.\n"
+#~ "\n"
+#~ "foo.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Foo\n"
+#~ "CS-KeepAspectRatio=1\n"
+#~ "\n"
+#~ "Якщо вказати у файлі CS-KeepAspectRatio=1, форму буде додано на полотно "
+#~ "із заблокованим співвідношенням розмірів. Типовим значенням цього "
+#~ "параметра є 0.\n"
+#~ "\n"
+#~ "foo.png\n"
+#~ "\n"
+#~ "Цей файл повинен мати розміри 32 на 32 пікселі. Якщо файл png не буде "
+#~ "включено, Karbon показуватиме власну піктограму на основі файла ODG або "
+#~ "SVG,\n"
+#~ "але ця піктограма виглядатиме погано, якщо її розміри будуть малими, а "
+#~ "форма буде складною.\n"
+
+#~ msgid "File to open"
+#~ msgstr "Відкрити файл"
+
+#~ msgid "Blend"
+#~ msgstr "Змішати"
+
+#~ msgid "Blend mode"
+#~ msgstr "Режим змішування"
+
+#~ msgid "Normal"
+#~ msgstr "Звичайний"
+
+#~ msgid "Multiply"
+#~ msgstr "Перемножити"
+
+#~ msgid "Screen"
+#~ msgstr "Екран"
+
+#~ msgid "Darken"
+#~ msgstr "Затемнити"
+
+#~ msgid "Lighten"
+#~ msgstr "Зробити світлішим"
+
+#~ msgid "Gaussian blur"
+#~ msgstr "Гаусове розмивання"
+
+#~ msgid "Radius"
+#~ msgstr "Радіус"
+
+#~ msgid "Color Matrix"
+#~ msgstr "Матриця кольорів"
+
+#~ msgid "Apply color matrix"
+#~ msgstr "Застосувати матричне перетворення кольорів"
+
+#~ msgid "Saturate colors"
+#~ msgstr "Наситити кольори"
+
+#~ msgid "Rotate hue"
+#~ msgstr "Обертати відтінок"
+
+#~ msgid "Luminance to alpha"
+#~ msgstr "Освітленість до прозорості"
+
+#~ msgid "Saturate value"
+#~ msgstr "Значення насиченості"
+
+#~ msgid "Angle"
+#~ msgstr "Кут"
+
+#~ msgid "Color matrix"
+#~ msgstr "Матриця кольорів"
+
+#~ msgid "Component transfer"
+#~ msgstr "Перенесення компонента"
+
+#~ msgid "Function"
+#~ msgstr "Функція"
+
+#~ msgid "Identity"
+#~ msgstr "Профіль"
+
+#~ msgid "Table"
+#~ msgstr "Табличний"
+
+#~ msgid "Discrete"
+#~ msgstr "Дискретний"
+
+#~ msgid "Linear"
+#~ msgstr "Лінійний"
+
+#~ msgid "Gamma"
+#~ msgstr "Гама"
+
+#~ msgid "Values"
+#~ msgstr "Значення"
+
+#~ msgid "Slope"
+#~ msgstr "Нахил"
+
+#~ msgid "Intercept"
+#~ msgstr "Початкове значення"
+
+#~ msgid "Amplitude"
+#~ msgstr "Амплітуда"
+
+#~ msgid "Exponent"
+#~ msgstr "Порядок"
+
+#~ msgid "Offset"
+#~ msgstr "Зсув"
+
+#~ msgid "Composite"
+#~ msgstr "Суміщення"
+
+#~ msgid "Operation"
+#~ msgstr "Дія"
+
+#~ msgid "Convolve Matrix"
+#~ msgstr "Матриця згортки"
+
+#~ msgid "Duplicate"
+#~ msgstr "Здублювати"
+
+#~ msgid "Wrap"
+#~ msgstr "Обгортка"
+
+#~ msgid "Edge mode:"
+#~ msgstr "Режим країв:"
+
+#~ msgid "Kernel size:"
+#~ msgstr "Розмір ядра:"
+
+#~ msgid "Target point:"
+#~ msgstr "Точка цілі:"
+
+#~ msgid "Divisor:"
+#~ msgstr "Дільник:"
+
+#~ msgid "Bias:"
+#~ msgstr "Зміщення:"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Зберігати альфа-канал"
+
+#~ msgid "Edit kernel"
+#~ msgstr "Редагувати ядро"
+
+#~ msgid "Flood fill"
+#~ msgstr "Заповнення повінню"
+
+#~ msgid "Flood color"
+#~ msgstr "Заповнення кольором"
+
+#~ msgid "Image"
+#~ msgstr "Зображення"
+
+#~ msgid "Select image..."
+#~ msgstr "Вибрати зображення..."
+
+#~ msgid "Select image"
+#~ msgstr "Вибрати зображення"
+
+#~ msgid "Merge"
+#~ msgstr "Об'єднати"
+
+#~ msgid "Morphology"
+#~ msgstr "Морфологія"
+
+#~ msgid "Erode"
+#~ msgstr "Ерозія"
+
+#~ msgid "Dilate"
+#~ msgstr "Розтягування"
+
+#~ msgid "Operator:"
+#~ msgstr "Оператор:"
+
+#~ msgid "Radius x:"
+#~ msgstr "Радіус за x:"
+
+#~ msgid "Radius y:"
+#~ msgstr "Радіус за y:"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Target:"
+#~ msgstr "Ціль:"
+
+#~ msgid "Line"
+#~ msgstr "Лінія"
+
+#~ msgid "Fill"
+#~ msgstr "Заповнення"
+
+#~ msgid "Type:"
+#~ msgstr "Тип:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Лінійний"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Радіальний"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Конічний"
+
+#~ msgid "Repeat:"
+#~ msgstr "Повтор:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Немає"
+
+#~ msgid "Reflect"
+#~ msgstr "Віддзеркалити"
+
+#~ msgid "Repeat"
+#~ msgstr "Повторити"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Загальна непрозорість:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Колір межі:"
+
+#~ msgid "Stop color."
+#~ msgstr "Колір межі."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Додати до попередньо визначених"
+
+#~ msgid "Original"
+#~ msgstr "Оригінал"
+
+#~ msgid "Tiled"
+#~ msgstr "Мозаїка"
+
+#~ msgid "Stretched"
+#~ msgstr "Розтягнений"
+
+#~ msgid "Top Left"
+#~ msgstr "Згори ліворуч"
+
+#~ msgid "Top"
+#~ msgstr "Згори"
+
+#~ msgid "Top Right"
+#~ msgstr "Згори праворуч"
+
+#~ msgid "Left"
+#~ msgstr "Ліворуч"
+
+#~ msgid "Center"
+#~ msgstr "По центру"
+
+#~ msgid "Right"
+#~ msgstr "Праворуч"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Внизу ліворуч"
+
+#~ msgid "Bottom"
+#~ msgstr "Внизу"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Внизу праворуч"
+
+#~ msgid "Stroke"
+#~ msgstr "Штрих"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Сховати поля сторінок"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Сховати лінійки"
+
+#~ msgid "Hide Color Palette"
+#~ msgstr "Приховати палітру кольорів"
+
+#~ msgid "Color Palette: %1"
+#~ msgstr "Палітра кольорів: %1"
+
+#~ msgid "No color palette available"
+#~ msgstr "Не виявлено доступних палітр кольорів"
+
+#~ msgid "Stop color:"
+#~ msgstr "Колір межі:"
+
+#~ msgid "Mirror Vertcially"
+#~ msgstr "Віддзеркалити вертикально"
+
+#~ msgid "Tools"
+#~ msgstr "Інструменти"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Відступ копіювання:"
+
+#~ msgid "Show Guides"
+#~ msgstr "Показати напрямні"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Показує або ховає напрямні"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Немає"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Суцільний"
+
+#~ msgid "Gradient"
+#~ msgstr "Градієнт"
+
+#~ msgid "Pattern"
+#~ msgstr "Взірець"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Почергове заповнення"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Звивисте заповнення"
+
+#~ msgid "Units:"
+#~ msgstr "Одиниці:"
+
+#~ msgid "Handle radius:"
+#~ msgstr "Радіус елемента керування:"
+
+#~ msgid "Grab sensitivity:"
+#~ msgstr "Радіус захоплення:"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Розгрупувати форми"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Згрупувати об'єкти"
+
+#~ msgid "Show grid:"
+#~ msgstr "Показати ґратку:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Чіплятися до ґратки:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Колір ґратки:"
+
+#~ msgid "Spacing"
+#~ msgstr "Проміжки"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Вертикальний:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Автозбереження (у хв.):"
+
+#~ msgid "No auto save"
+#~ msgstr "Без автозбереження"
+
+#~ msgid "min"
+#~ msgstr "хв."
+
+#~ msgid "Create backup file"
+#~ msgstr "Створити резервний файл"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Виберіть візерунок для додавання"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Виберіть градієнт для додавання"
+
+#~ msgid "Reference Point:"
+#~ msgstr "Точка відліку:"
+
+#~ msgid "Reference Point Offset"
+#~ msgstr "Відступ точки відліку"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Pattern Size"
+#~ msgstr "Розмір взірця"
+
+#~ msgid "W:"
+#~ msgstr "Ш:"
+
+#~ msgid "H:"
+#~ msgstr "В:"
+
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Перетягніть, щоб змінити позицію градієнта."
+
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Перетягніть, щоб пересунути контрольну точку кольору. Подвійне клацання "
+#~ "вилучить контрольну точку кольору."
+
+#~ msgid "Drag to move color stop."
+#~ msgstr "Перетягніть, щоб пересунути контрольну точку кольору."
+
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Перетягніть, щоб пересунути позицію градієнта. Подвійне клацання вставить "
+#~ "контрольну точку кольору."
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Змінити градієнт"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Попередньо визначені градієнти"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Інструмент «Градієнт»"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Інструмент для зміни градієнта"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Інструмент «Візерунок»"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Інструмент зміни візерунку"
+
+#~ msgid "Precision:"
+#~ msgstr "Точність:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Без обробки"
+
+#~ msgid "Curve"
+#~ msgstr "Крива"
+
+#~ msgid "Straight"
+#~ msgstr "Пряма"
+
+#~ msgid "Optimize"
+#~ msgstr "Оптимізувати"
+
+#~ msgid "Exactness:"
+#~ msgstr "Акуратність:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Кут сполучення:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Інструмент для малювання довільних контурів"
+
+#~ msgid "A calligraphic shape"
+#~ msgstr "Каліграфічна форма"
+
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Каліграфічна форма"
+
+#~ msgid "Save profile as..."
+#~ msgstr "Зберегти профіль як..."
+
+#~ msgid "Remove profile"
+#~ msgstr "Вилучити профіль"
+
+#~ msgid "&Follow selected path"
+#~ msgstr "&Розташувати за обраним контуром"
+
+#~ msgid "Use tablet &pressure"
+#~ msgstr "Використовувати натиск &планшета"
+
+#~ msgid "Width:"
+#~ msgstr "Ширина:"
+
+#~ msgid "Thinning:"
+#~ msgstr "Загострення:"
+
+#~ msgid "Use tablet &angle"
+#~ msgstr "Використовувати &кут з планшета"
+
+#~ msgid "Fixation:"
+#~ msgstr "Фіксація:"
+
+#~ msgid "Mass:"
+#~ msgstr "Маса:"
+
+#~ msgid "Drag:"
+#~ msgstr "Опір:"
+
+#~ msgid "Current"
+#~ msgstr "Поточний"
+
+#~ msgid "Profile name"
+#~ msgstr "Назва профілю"
+
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Будь ласка, вкажіть назву, під якою ви бажаєте зберегти профіль:"
+
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Вибачте, введена вами назва є некоректною."
+
+#~ msgctxt "invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Некоректна назва."
+
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Профіль з вказаною вами назвою вже існує.\n"
+#~ "Бажаєте його перезаписати?"
+
+#~ msgid "Mouse"
+#~ msgstr "Мишка"
+
+#~ msgid "Graphics Pen"
+#~ msgstr "Графічне перо"
+
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Каліграфія: збільшити товщину"
+
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Каліграфія: зменшити товщину"
+
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Каліграфія: збільшити кут"
+
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Каліграфія: зменшити кут"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Інструмент каліграфії"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Інструмент каліграфії"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Перемістити на п&ередній план"
+
+#~ msgid "&Raise"
+#~ msgstr "Пі&дняти"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "З&низити"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Перемістити у &тло"
+
+#~ msgid "Show Grid"
+#~ msgstr "Показати ґратку"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Сховати ґратку"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Показує або ховає ґратку"

@@ -1,0 +1,5089 @@
+# translation of kpresenter.po to greek
+# Copyright (C) 2000, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+#
+# Michael Bijes <beejaymike@yahoo.gr>, 2000.
+# Stergios Dramis <sdramis@egnatia.ee.auth.gr>, 2002-2004.
+# Spiros Georgaras <sng@hellug.gr>, 2005, 2006, 2007.
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2006, 2007, 2008.
+# Σπύρος Γεωργαράς <sng@hellug.gr>, 2008.
+# Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2017, 2020, 2021.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Dimitris Kardarakos <dimkard@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2021-06-03 12:23+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&Επεξεργασία"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "Προ&βολή"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, kde-format
+msgid "&Insert"
+msgstr "Ε&ισαγωγή"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "Τύπ&ος αρχειοθέτησης"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, kde-format
+msgid "&Slide"
+msgstr "&Διαφάνεια"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "Παρουσία&ση διαφανειών"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "Ρυθμί&σεις"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Προσθήκη προσαρμοσμένης παρουσίασης διαφανειών"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Δημιουργία εφέ κίνησης σχήματος"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Επεξεργασία γεγονότος έναρξης εφέ κίνησης"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Αφαίρεση εφέ κίνησης σχήματος"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Διαγραφή προσαρμοσμένης παρουσίασης διαφανειών"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Διαγραφή διαφάνειας"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Διαγραφή διαφάνειας"
+msgstr[1] "Διαγραφή διαφανειών"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Επεξεργασία καθυστέρησης/διάρκειας εφέ κίνησης"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Επεξεργασία προσαρμοσμένης παρουσίασης διαφανειών"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Δημιουργία εφέ διαφάνειας"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Τροποποίηση εφέ διαφάνειας"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Διαγραφή εφέ διαφάνειας"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Τροποποίηση μετάβασης διαφάνειας"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Μετονομασία προσαρμοσμένης παρουσίασης διαφανειών"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Αναδιάταξη εφέ κίνησης"
+
+#: part/KPrAboutData.h:21
+#, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Calligra Stage"
+
+#: part/KPrAboutData.h:23
+#, kde-format
+msgid "Presentation Tool"
+msgstr "Εργαλείο ππαρουσιάσεων"
+
+#: part/KPrAboutData.h:25
+#, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "Copyright 1998-%1, Η ομάδα του Stage"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, kde-format
+msgid "Former maintainer"
+msgstr "Πρώην συντηρητής"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Original author"
+msgstr "Αρχικός συγγραφέας"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr "Boudewijn Rempt "
+
+#: part/KPrAboutData.h:45
+#, kde-format
+msgid "Carlos Licea "
+msgstr "Carlos Licea "
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr "C. Boemann "
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr "Fredy Yanardi "
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr "Jan Hambrecht "
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr "Marijn Kruisselbrink "
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr "Martin Pfeiffer "
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr "Sven Langkamp "
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr "Timothée Lacroix "
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Τούσης Μανώλης,Stelios"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "manolis@koppermind.homelinux.org,sstavra@gmail.com"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr "Άγνωστο"
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Διαφάνεια %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Τέλος παρουσίασης. Κλικ για έξοδο."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, kde-format
+msgid "Layout"
+msgstr "Διάταξη"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+"Αδυναμία εύρεσης συστατικού κειμένου, το Calligra Stage θα τερματιστεί τώρα."
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+"Αδυναμία εύρεσης συστατικού εικόνας, το Calligra Stage θα τερματιστεί τώρα."
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr "Σφάλμα εγκατάστασης"
+
+#: part/KPrPicturesImport.cpp:62
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Εισαγωγή φωτογραφιών"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr "Σχήμα αντικαταστάτη"
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr "Διπλό κλικ για προσθήκη ενός τίτλου"
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr "Διπλό κλικ για προσθήκη ενός περιγράμματος"
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr "Διπλό κλικ για προσθήκη κειμένου"
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr "Διπλό κλικ για προσθήκη σημειώσεων"
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr "Διπλό κλικ για προσθήκη φωτογραφίας"
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr "Διπλό κλικ για προσθήκη γραφήματος"
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr "Διπλό κλικ για προσθήκη αντικειμένου"
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, kde-format
+msgid "Pen Color"
+msgstr "Χρώμα γραφίδας"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, kde-format
+msgid "Pen Size"
+msgstr "Μέγεθος γραφίδας"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, kde-format
+msgid "Black"
+msgstr "Μαύρο"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, kde-format
+msgid "White"
+msgstr "Λευκό"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Πράσινο"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Κόκκινο"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Μπλε"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, kde-format
+msgid "Yellow"
+msgstr "Κίτρινο"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, kde-format
+msgid "Next Slide"
+msgstr "Επόμενη διαφάνεια"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr "Σημειώσεις ομιλητή"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, kde-format
+msgid "Current Slide %1 of %2"
+msgstr "Τρέχουσα διαφάνεια %1 από %2"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, kde-format
+msgid "End of Slide Show"
+msgstr "Τέλος παρουσίασης διαφανειών"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr "έναρξη με κλικ του ποντικιού"
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, kde-format
+msgid "start after previous animation"
+msgstr "έναρξη μετά από το προηγούμενο εφέ κίνησης"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, kde-format
+msgid "start with previous animation"
+msgstr "έναρξη με το προηγούμενο εφέ κίνησης"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr "Έναρξη μετά από %1 δευτερόλεπτα. Διάρκεια %2 δευτερολέπτων."
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, kde-format
+msgid "Animation"
+msgstr "Εφέ κίνησης"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Σχήμα"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, kde-format
+msgid "&Move Here"
+msgstr "&Μετακίνηση εδώ"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, kde-format
+msgid "&Copy Here"
+msgstr "Αντιγρα&φή εδώ"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr "&Ακύρωση"
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Κανονική"
+
+#: part/KPrView.cpp:78
+#, kde-format
+msgid "Show Master Slides"
+msgstr "Εμφάνιση κύριων διαφανειών"
+
+#: part/KPrView.cpp:79
+#, kde-format
+msgid "Import Slideshow..."
+msgstr "Εισαγωγή παρουσίασης διαφανειών..."
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Εισαγωγή διαφάνειας"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr "Εισαγωγή νέας διαφάνειας μετά την τρέχουσα"
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "Αντιγραφή διαφάνειας"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, kde-format
+msgid "Copy the current slide"
+msgstr "Αντιγραφή της τρέχουσας διαφάνειας"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, kde-format
+msgid "Delete Slide"
+msgstr "Διαγραφή διαφάνειας"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, kde-format
+msgid "Delete the current slide"
+msgstr "Διαγραφή της τρέχουσας διαφάνειας"
+
+#: part/KPrView.cpp:89
+#, kde-format
+msgid "Master Slide..."
+msgstr "Κύρια διαφάνεια..."
+
+#: part/KPrView.cpp:90
+#, kde-format
+msgid "Previous Slide"
+msgstr "Προηγούμενη διαφάνεια"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, kde-format
+msgid "Go to previous slide"
+msgstr "Μετάβαση στην προηγούμενη διαφάνεια"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, kde-format
+msgid "Go to next slide"
+msgstr "Μετάβαση στην επόμενη διαφάνεια"
+
+#: part/KPrView.cpp:96
+#, kde-format
+msgid "First Slide"
+msgstr "Πρώτη διαφάνεια"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, kde-format
+msgid "Go to first slide"
+msgstr "Μετάβαση στην πρώτη διαφάνεια"
+
+#: part/KPrView.cpp:99
+#, kde-format
+msgid "Last Slide"
+msgstr "Τελευταία διαφάνεια"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, kde-format
+msgid "Go to last slide"
+msgstr "Μετάβαση στην τελευταία διαφάνεια"
+
+#: part/KPrView.cpp:102
+#, kde-format
+msgid "Configure Stage..."
+msgstr "Διαμόρφωση Stage..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr "Εξαγωγή ως HTML..."
+
+#: part/KPrView.cpp:251
+#, kde-format
+msgid "Insert Pictures as Slides..."
+msgstr "Εισαγωγή φωτογραφιών ως διαφάνειες..."
+
+#: part/KPrView.cpp:260
+#, kde-format
+msgid "Create Appear Animation"
+msgstr "Δημιουργία εφέ κίνησης εμφάνισης"
+
+#: part/KPrView.cpp:264
+#, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Επεξεργασία προσαρμοσμένων παρουσιάσεων διαφανειών..."
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "Έναρξη παρουσίασης"
+
+#: part/KPrView.cpp:271
+#, kde-format
+msgid "From Current Slide"
+msgstr "Από την τρέχουσα διαφάνεια"
+
+#: part/KPrView.cpp:275
+#, kde-format
+msgid "From First Slide"
+msgstr "Από την πρώτη διαφάνεια"
+
+#: part/KPrView.cpp:280
+#, kde-format
+msgid "Stop presentation"
+msgstr "Διακοπή παρουσίασης"
+
+#: part/KPrView.cpp:286
+#, kde-format
+msgid "Show Status Bar"
+msgstr "Εμφάνιση γραμμής κατάστασης"
+
+#: part/KPrView.cpp:287
+#, kde-format
+msgid "Hide Status Bar"
+msgstr "Απόκρυψη γραμμής κατάστασης"
+
+#: part/KPrView.cpp:288
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Εμφανίζει ή κρύβει τη γραμμή κατάστασης"
+
+#: part/KPrView.cpp:297
+#, kde-format
+msgid "Configure Slide Show..."
+msgstr "Διαμόρφωση παρουσίασης διαφανειών..."
+
+#: part/KPrView.cpp:301
+#, kde-format
+msgid "Configure Presenter View..."
+msgstr "Διαμόρφωση προβολής παρουσίασης..."
+
+#: part/KPrView.cpp:305
+#, kde-format
+msgid "Draw on the presentation..."
+msgstr "Σχέδιο στην παρουσίαση..."
+
+#: part/KPrView.cpp:312
+#, kde-format
+msgid "Highlight the presentation..."
+msgstr "Έμφαση στην παρουσίαση..."
+
+#: part/KPrView.cpp:319
+#, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Μαύρη οθόνη στην παρουσίαση..."
+
+#: part/KPrViewModeNotes.cpp:36
+#, kde-format
+msgid "Notes"
+msgstr "Σημειώσεις"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, kde-format
+msgid "Slides Sorter"
+msgstr "Ταξινομητής διαφανειών"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, kde-format
+msgid "Slide Show: "
+msgstr "Παρουσίαση διαφανειών: "
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, kde-format
+msgid "Add a new custom slide show"
+msgstr "Προσθήκη νέας προσαρμοσμένης παρουσίασης διαφανειών"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, kde-format
+msgid "Delete current custom slide show"
+msgstr "Διαγραφή της τρέχουσας προσαρμοσμένης παρουσίασης διαφανειών"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Προσθήκη διαφανειών στην τρέχουσα προσαρμοσμένη παρουσίαση"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Αφαίρεση διαφανειών από την τρέχουσα προσαρμοσμένη παρουσίαση"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, kde-format
+msgid "Duplicate Slide"
+msgstr "Διπλή διαφάνεια"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, kde-format
+msgid "Start Slideshow"
+msgstr "Έναρξη παρουσίασης διαφανειών"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, kde-format
+msgid "Add a new slide"
+msgstr "Προσθήκη νέας διαφάνειας"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, kde-format
+msgid "Delete selected slides"
+msgstr "Διαγραφή επιλεγμένων διαφανειών"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, kde-format
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, kde-format
+msgid "Cut"
+msgstr "Αποκοπή"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, kde-format
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, kde-format
+msgid "Paste"
+msgstr "Επικόλληση"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, kde-format
+msgid "Slide Show %1"
+msgstr "Παρουσίαση διαφανειών %1"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, kde-format
+msgid "All slides"
+msgstr "Όλες οι διαφάνειες"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, kde-format
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr "Δεν μπορούν να υπάρχουν 2 παρουσιάσεις διαφανειών με το ίδιο όνομα."
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "Ορισμός διάταξης"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, kde-format
+msgid "Automatic animation preview"
+msgstr "Αυτόματη προεπισκόπηση εφέ κίνησης"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, kde-format
+msgid "Preview animation"
+msgstr "Προεπισκόπηση εφέ κίνησης"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, kde-format
+msgid "Slide Transitions"
+msgstr "Μεταβάσεις διαφάνειας"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, kde-format
+msgid "Shape Click Actions"
+msgstr "Σχηματισμός ενεργειών κλικ"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, kde-format
+msgid "Shape Animations"
+msgstr "Εφέ κίνησης σχήματος"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Διαχείριση καθυστέρησης και διάρκειας εφέ κίνησης: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, kde-format
+msgid "Start: "
+msgstr "Έναρξη: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr "με κλικ του ποντικιού"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, kde-format
+msgid "after previous animation"
+msgstr "μετά από το προηγούμενο εφέ κίνησης"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, kde-format
+msgid "with previous animation"
+msgstr "με το προηγούμενο εφέ κίνησης"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr "Καθυστέρηση: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, kde-format
+msgid "Duration: "
+msgstr "Διάρκεια: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, kde-format
+msgid "Preview Shape Animation"
+msgstr "Προεπισκόπηση εφέ κίνησης"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Κανένα εφέ"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, kde-format
+msgid " sec"
+msgstr " δευτ"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr "Χειροκίνητο"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr "Αυτόματο"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, kde-format
+msgid "Slide Transition:"
+msgstr "Μετάβαση διαφάνειας:"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, kde-format
+msgid "Apply To All Slides"
+msgstr "Να εφαρμοστεί σε όλες τις διαφάνειες"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Να εφαρμοστεί το εφέ διαφάνειας σε όλες τις διαφάνειες"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr "Είσοδος"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr "Έξοδος"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr "Έμφαση"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, kde-format
+msgid "Custom"
+msgstr "Προσαρμοσμένο"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr "Διαδρομή κίνησης"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, kde-format
+msgid "Ole Action"
+msgstr "Ενέργεια Ole"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr "Κλήση μέσων"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, kde-format
+msgid "Edit animation"
+msgstr "Επεξεργασία εφέ κίνησης"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, kde-format
+msgid "Add new animation"
+msgstr "Προσθήκη νέου εφέ κίνησης"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, kde-format
+msgid "Remove animation"
+msgstr "Αφαίρεση εφέ κίνησης"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr "Σειρά: "
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, kde-format
+msgid "Move animation up"
+msgstr "Μετακίνηση εφέ κίνησης επάνω"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, kde-format
+msgid "Move animation down"
+msgstr "Μετακίνηση εφέ κίνησης κάτω"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, kde-format
+msgid "Add a new animation"
+msgstr "Προσθήκη νέου εφέ κίνησης"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, kde-format
+msgid "Delete current animation"
+msgstr "Διαγραφή τρέχοντος εφέ κίνησης"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr "δευτερόλεπτα"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, kde-format
+msgid "Crop"
+msgstr "Περικοπή"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, kde-format
+msgid "W&idth:"
+msgstr "&Πλάτος:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Θα διατηρηθεί το πλάτος περικοπής σταθερό"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "Ύ&ψος:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Θα διατηρηθεί το ύψος περικοπής σταθερό"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, kde-format
+msgid "R&atio:"
+msgstr "Α&ναλογία:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Θα διατηρηθεί η αναλογία σταθερή"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr "Στρώμα"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, kde-format
+msgid "Image"
+msgstr "Εικόνα"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, kde-format
+msgid "&Crop"
+msgstr "&Περικοπή"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Επεξεργασία σχήματος"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr "Πολλαπλές οθόνες"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, kde-format
+msgid "Presentation monitor:"
+msgstr "Οθόνη παρουσίασης:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, kde-format
+msgid "Enable presenter view"
+msgstr "Ενεργοποίηση προβολής παρουσίασης"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr "Εποπτεία %1 (κύριο)"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr "Εποπτεία %1"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, kde-format
+msgid "Configure Presenter View"
+msgstr "Διαμόρφωση προβολής παρουσίασης"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "Διαμόρφωση προβολής διαφανειών"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, kde-format
+msgid "Slides"
+msgstr "Διαφάνειες"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, kde-format
+msgid "Presentation Slides:"
+msgstr "Διαφάνειες παρουσίασης:"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Επεξεργασία προσαρμοσμένων παρουσιάσεων διαφανειών..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr "Εξαγωγή HTML"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr "Η διαφάνεια θα εξαχθεί αν σημειωθεί :"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, kde-format
+msgid "Select all"
+msgstr "Επιλογή όλων"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, kde-format
+msgid "Select template (.css) :"
+msgstr "Επιλογή προτύπου (.css) :"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, kde-format
+msgid "Deselect all"
+msgstr "Αναίρεση επιλογής όλων"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, kde-format
+msgid "Title"
+msgstr "Τίτλος"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, kde-format
+msgid "Output preview"
+msgstr "Προεπισκόπηση εξόδου"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr "Περιήγηση"
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, kde-format
+msgid "Author"
+msgstr "Συγγραφέας"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, kde-format
+msgid "Delete Favorite"
+msgstr "Διαγραφή προτιμώμενου"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr "Άνοιγμα στον περιηγητή"
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr "Εξαγωγή σε Html"
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr "Εξαγωγή"
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr "Υπάρχει ήδη ένα προτιμώμενο αρχείο με αυτό το όνομα"
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr "Λανθασμένο αρχείο, .zip μόνο ή κατεστραμμένο zip"
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr "Το αρχείο zip πρέπει να περιέχει style.css"
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, kde-format
+msgid "Delete Template"
+msgstr "Διαγραφή προτύπου"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr "Δεν μπορείτε να αφαιρέσετε τα πρότυπα που παρέχονται με την εφαρμογή"
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, kde-format
+msgid "Add Template"
+msgstr "Προσθήκη προτύπου"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Επιθυμείτε σίγουρα να αφαιρέσετε \"%1\";"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Confirm remove"
+msgstr "Επιβεβαίωση αφαίρεσης"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Τροποποίηση ενέργειας ήχου"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, kde-format
+msgid "No sound"
+msgstr "Χωρίς ήχο"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, kde-format
+msgid "Import..."
+msgstr "Εισαγωγή..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr "Γραμμή"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, kde-format
+msgid "From Left"
+msgstr "Από αριστερά"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, kde-format
+msgid "From Top"
+msgstr "Από πάνω"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, kde-format
+msgid "From Right"
+msgstr "Από δεξιά"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, kde-format
+msgid "From Bottom"
+msgstr "Από κάτω"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr "Άγνωστος υποτύπος"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Clock"
+msgstr "Ρολόι"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, kde-format
+msgid "From Twelve Clockwise"
+msgstr "Από τις 12 δεξιόστροφα"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, kde-format
+msgid "From Three Clockwise"
+msgstr "Από τις 3 δεξιόστροφα"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, kde-format
+msgid "From Six Clockwise"
+msgstr "Από τις 6 δεξιόστροφα"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, kde-format
+msgid "From Nine Clockwise"
+msgstr "Από τις 9 δεξιόστροφα"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, kde-format
+msgid "From Twelve Counterclockwise"
+msgstr "Από τις 12 αριστερόστροφα"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, kde-format
+msgid "From Three Counterclockwise"
+msgstr "Από τις 3 αριστερόστροφα"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, kde-format
+msgid "From Six Counterclockwise"
+msgstr "Από τις 6 αριστερόστροφα"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, kde-format
+msgid "From Nine Counterclockwise"
+msgstr "Από τις 9 αριστερόστροφα"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Double Fan"
+msgstr "Διπλός ανεμιστήρας"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Fan Out Vertical"
+msgstr "Ανάπτυξη κατακόρυφα"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Ανάπτυξη οριζόντια"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Fan In Vertical"
+msgstr "Σύμπτυξη κατακόρυφα"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Fan In Horizontal"
+msgstr "Σύμπτυξη οριζόντια"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Fan In Vertical Reverse"
+msgstr "Σύμπτυξη κατακόρυφα αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Fan In Horizontal Reverse"
+msgstr "Σύμπτυξη οριζόντια αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Double Sweep"
+msgstr "Διπλό πέρασμα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Parallel Vertical"
+msgstr "Παράλληλα κατακόρυφα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Parallel Diagonal"
+msgstr "Παράλληλα διαγώνια"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Opposite Vertical"
+msgstr "Κατακόρυφα εναλλάξ"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Opposite Horizontal"
+msgstr "Οριζόντια εναλλάξ"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Παράλληλα διαγώνια πάνω αριστερά"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Παράλληλα διαγώνια κάτω αριστερά"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Parallel Vertical Reverse"
+msgstr "Παράλληλα κατακόρυφα αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Parallel Diagonal Reverse"
+msgstr "Παράλληλα διαγώνια αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Opposite Vertical Reverse"
+msgstr "Κατακόρυφα εναλλάξ αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Opposite Horizontal Reverse"
+msgstr "Οριζόντια εναλλάξ αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Παράλληλα διαγώνια πάνω αριστερά αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Παράλληλα διαγώνια κάτω αριστερά αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Fan"
+msgstr "Ανεμιστήρας"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Center Right"
+msgstr "Κέντρο δεξιά"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Center Top"
+msgstr "Κέντρο επάνω"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Center Left"
+msgstr "Κέντρο αριστερά"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Center Bottom"
+msgstr "Κέντρο κάτω"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Fan Out Top"
+msgstr "Ανάπτυξη επάνω"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Fan Out Right"
+msgstr "Ανάπτυξη δεξιά"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Fan Out Bottom"
+msgstr "Ανάπτυξη κάτω"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Fan Out Left"
+msgstr "Ανάπτυξη αριστερά"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Fan In Top"
+msgstr "Σύμπτυξη επάνω"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Fan In Right"
+msgstr "Σύμπτυξη δεξιά"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Fan In Bottom"
+msgstr "Σύμπτυξη κάτω"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Fan In Left"
+msgstr "Σύμπτυξη αριστερά"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Pin Wheel"
+msgstr "Τροχός"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Δύο λεπίδες κατακόρυφα δεξιόστροφα"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Δύο λεπίδες οριζόντια δεξιόστροφα"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Τέσσερις λεπίδες οριζόντια δεξιόστροφα"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Δύο λεπίδες κατακόρυφα αριστερόστροφα"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Δύο λεπίδες οριζόντια αριστερόστροφα"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Τέσσερις λεπίδες οριζόντια αριστερόστροφα"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Saloon Door"
+msgstr "Πόρτα εισόδου"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, kde-format
+msgid "To Top"
+msgstr "Προς επάνω"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, kde-format
+msgid "To Left"
+msgstr "Προς αριστερά"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, kde-format
+msgid "To Bottom"
+msgstr "Προς τα κάτω"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, kde-format
+msgid "To Right"
+msgstr "Προς δεξιά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Single Sweep"
+msgstr "Απλό πέρασμα"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Clockwise Top"
+msgstr "Δεξιόστροφα επάνω"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Clockwise Right"
+msgstr "Δεξιόστροφα δεξιά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Clockwise Bottom"
+msgstr "Δεξιόστροφα κάτω"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Clockwise Left"
+msgstr "Δεξιόστροφα αριστερά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Clockwise Top Left"
+msgstr "Δεξιόστροφα πάνω αριστερά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Counterclockwise Bottom Left"
+msgstr "Αριστερόστροφα κάτω αριστερά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Clockwise Bottom Right"
+msgstr "Δεξιόστροφα κάτω δεξιά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Counterclockwise Top Right"
+msgstr "Αριστερόστροφα πάνω δεξιά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Counterclockwise Top"
+msgstr "Αριστερόστροφα πάνω"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Counterclockwise Right"
+msgstr "Αριστερόστροφα δεξιά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, kde-format
+msgid "Counterclockwise Bottom"
+msgstr "Αριστερόστροφα κάτω"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, kde-format
+msgid "Counterclockwise Left"
+msgstr "Αριστερόστροφα αριστερά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, kde-format
+msgid "Counterclockwise Top Left"
+msgstr "Αριστερόστροφα πάνω αριστερά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, kde-format
+msgid "Clockwise Bottom Left"
+msgstr "Δεξιόστροφα κάτω αριστερά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, kde-format
+msgid "Counterclockwise Bottom Right"
+msgstr "Αριστερόστροφα κάτω δεξιά"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Clockwise Top Right"
+msgstr "Δεξιόστροφα πάνω δεξιά"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Windshield"
+msgstr "Ανεμοφράκτης"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, kde-format
+msgid "Right"
+msgstr "Δεξιά"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr "Επάνω"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Vertical"
+msgstr "Κατακόρυφα"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, kde-format
+msgid "Horizontal"
+msgstr "Οριζόντια"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, kde-format
+msgid "Right Reverse"
+msgstr "Δεξιά αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, kde-format
+msgid "Up Reverse"
+msgstr "Επάνω αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Vertical Reverse"
+msgstr "Κατακόρυφα αντίστροφα"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Horizontal Reverse"
+msgstr "Οριζόντια αντίστροφα"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Door"
+msgstr "Πόρτα εισόδου"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Diagonal Bottom Left"
+msgstr "Διαγώνια κάτω αριστερά"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Διαγώνια κάτω αριστερά αντίστροφα"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Diagonal Top Left"
+msgstr "Διαγώνια πάνω αριστερά"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "Διαγώνια πάνω αριστερά αντίστροφα"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr "Στροφή εισόδου"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Barn Zig Zag"
+msgstr "Πόρτα ζιγκ ζαγκ"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Vertical Reversed"
+msgstr "Κατακόρυφα αντίστροφα"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Horizontal Reversed"
+msgstr "Οριζόντια αντίστροφα"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr "Πλαίσιο"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, kde-format
+msgid "From Top Left"
+msgstr "Από πάνω αριστερά"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, kde-format
+msgid "From Top Right"
+msgstr "Από πάνω δεξιά"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "From Bottom Left"
+msgstr "Από κάτω αριστερά"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "From Bottom Right"
+msgstr "Από κάτω δεξιά"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Diagonal"
+msgstr "Διαγώνια"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr "Τέσσερα πλαίσια"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, kde-format
+msgid "Corners In"
+msgstr "Γωνίες μέσα"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, kde-format
+msgid "Corners In Reverse"
+msgstr "Γωνίες μέσα αντίστροφα"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, kde-format
+msgid "Corners Out"
+msgstr "Γωνίες έξω"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, kde-format
+msgid "Corners Out Reverse"
+msgstr "Γωνίες έξω αντίστροφα"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Misc Diagonal"
+msgstr "Διαγώνιοι"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, kde-format
+msgid "Double Barn Door"
+msgstr "Διπλή πόρτα εισόδου"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, kde-format
+msgid "Double Diamond"
+msgstr "Διπλό διαμάντι"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr "Αλλαγή κατεύθυνσης"
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, kde-format
+msgid "Zig Zag"
+msgstr "Ζιγκ Ζαγκ"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Εξασθένιση"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr "Εναλλαγή με εξασθένιση"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, kde-format
+msgid "Fade over Color"
+msgstr "Εξασθένιση στο χρώμα"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, kde-format
+msgid "ArrowHead"
+msgstr "Ακμή βέλους"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, kde-format
+msgid "Down"
+msgstr "Κάτω"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, kde-format
+msgid "Down Reverse"
+msgstr "Κάτω αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, kde-format
+msgid "Left"
+msgstr "Αριστερά"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, kde-format
+msgid "Left Reverse"
+msgstr "Αριστερά αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Έλλειψη"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Κύκλος"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Circle Reverse"
+msgstr "Κύκλος αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr "Μάτι"
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Hexagon"
+msgstr "Εξάγωνο"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr "Ίριδα"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Rectangular"
+msgstr "Ορθογώνιο"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Rectangular Reverse"
+msgstr "Ορθογώνιο αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Diamond"
+msgstr "Διαμάντι"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Diamond Reverse"
+msgstr "Διαμάντι αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Διάφορα"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Heart"
+msgstr "Καρδιά"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Heart Reverse"
+msgstr "Καρδιά αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Keyhole"
+msgstr "Κλειδαρότρυπα"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Keyhole Reverse"
+msgstr "Κλειδαρότρυπα αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Pentagon"
+msgstr "Πεντάγωνο"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, kde-format
+msgid "RoundRect"
+msgstr "Στρογγυλό ορθογώνιο"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Star"
+msgstr "Άστρο"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, kde-format
+msgid "Four Point Star"
+msgstr "Τετράκτινο αστέρι"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, kde-format
+msgid "Four Point Star Reverse"
+msgstr "Τετράκτινο αστέρι αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, kde-format
+msgid "Five Point Star"
+msgstr "Πεντάκτινο αστέρι"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, kde-format
+msgid "Five Point Star Reverse"
+msgstr "Πεντάκτινο αστέρι αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, kde-format
+msgid "Six Point Star"
+msgstr "Εξάκτινο αστέρι"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, kde-format
+msgid "Six Point Star Reverse"
+msgstr "Εξάκτινο αστέρι αντίστροφα"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Triangle"
+msgstr "Τρίγωνο"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box Snakes"
+msgstr "Εφέ πλαισίων φιδιού"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Two Box Top In"
+msgstr "Δύο πλαίσια επάνω μέσα"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Two Box Bottom In"
+msgstr "Δύο πλαίσια κάτω μέσα"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Two Box Left In"
+msgstr "Δύο πλαίσια αριστερά μέσα"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Two Box Right In"
+msgstr "Δύο πλαίσια δεξιά μέσα"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Four Box Vertical In"
+msgstr "Τέσσερα πλαίσια κατακόρυφα μέσα"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Τέσσερα πλαίσια οριζόντια μέσα"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Two Box Top Out"
+msgstr "Δύο πλαίσια επάνω έξω"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Δύο πλαίσια κάτω έξω"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Two Box Left Out"
+msgstr "Δύο πλαίσια αριστερά έξω"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Two Box Right Out"
+msgstr "Δύο πλαίσια δεξιά κάτω"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Τέσσερα πλαίσια κατακόρυφα έξω"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Τέσσερα πλαίσια οριζόντια έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Parallel Snakes"
+msgstr "Παράλληλα φίδια"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Vertical Top Same In"
+msgstr "Κατακόρυφα πάνω ομοίως μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Vertical Top Same Out"
+msgstr "Κατακόρυφα πάνω ομοίως έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Vertical Bottom Same In"
+msgstr "Κατακόρυφα κάτω ομοίως μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Vertical Bottom Same Out"
+msgstr "Κατακόρυφα κάτω ομοίως έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Κατακόρυφα πάνω αριστερά εναλλάξ μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Κατακόρυφα πάνω αριστερά εναλλάξ έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Κατακόρυφα κάτω αριστερά εναλλάξ μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Κατακόρυφα κάτω αριστερά εναλλάξ έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Horizontal Left Same In"
+msgstr "Οριζόντια αριστερά ομοίως μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Horizontal Left Same Out"
+msgstr "Οριζόντια αριστερά ομοίως έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, kde-format
+msgid "Horizontal Right Same In"
+msgstr "Οριζόντια δεξιά ομοίως μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, kde-format
+msgid "Horizontal Right Same Out"
+msgstr "Οριζόντια δεξιά ομοίως έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Οριζόντια πάνω αριστερά εναλλάξ μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Οριζόντια πάνω αριστερά εναλλάξ έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Οριζόντια πάνω δεξιά εναλλάξ μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Οριζόντια πάνω δεξιά εναλλάξ έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Διαγώνια κάτω αριστερά εναλλάξ μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Διαγώνια κάτω αριστερά εναλλάξ έξω"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Διαγώνια πάνω αριστερά εναλλάξ μέσα"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Διαγώνια πάνω αριστερά εναλλάξ έξω"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Snake"
+msgstr "Φίδι"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Spiral"
+msgstr "Σπείρα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Clockwise Top Left In"
+msgstr "Δεξιόστροφα πάνω αριστερά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Clockwise Top Left Out"
+msgstr "Δεξιόστροφα πάνω αριστερά έξω"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Clockwise Top Right In"
+msgstr "Δεξιόστροφα πάνω δεξιά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, kde-format
+msgid "Clockwise Top Right Out"
+msgstr "Δεξιόστροφα πάνω δεξιά έξω"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, kde-format
+msgid "Clockwise Bottom Left In"
+msgstr "Δεξιόστροφα κάτω αριστερά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Clockwise Bottom Left Out"
+msgstr "Δεξιόστροφα κάτω αριστερά έξω"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, kde-format
+msgid "Clockwise Bottom Right In"
+msgstr "Δεξιόστροφα κάτω δεξιά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, kde-format
+msgid "Clockwise Bottom Right Out"
+msgstr "Δεξιόστροφα κάτω δεξιά έξω"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Counterclockwise Top Left In"
+msgstr "Αριστερόστροφα πάνω αριστερά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, kde-format
+msgid "Counterclockwise Top Left Out"
+msgstr "Αριστερόστροφα πάνω αριστερά έξω"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, kde-format
+msgid "Counterclockwise Top Right In"
+msgstr "Αριστερόστροφα πάνω δεξιά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, kde-format
+msgid "Counterclockwise Top Right Out"
+msgstr "Αριστερόστροφα πάνω δεξιά έξω"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, kde-format
+msgid "Counterclockwise Bottom Left In"
+msgstr "Αριστερόστροφα κάτω αριστερά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, kde-format
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Αριστερόστροφα κάτω αριστερά έξω"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, kde-format
+msgid "Counterclockwise Bottom Right In"
+msgstr "Αριστερόστροφα κάτω δεξιά μέσα"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, kde-format
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Αριστερόστροφα κάτω δεξιά έξω"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Waterfall"
+msgstr "Καταρράκτης"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, kde-format
+msgid "Top Left Vertical"
+msgstr "Πάνω αριστερά κατακόρυφα"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, kde-format
+msgid "Top Left Horizontal"
+msgstr "Πάνω αριστερά οριζόντια"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, kde-format
+msgid "Top Right Vertical"
+msgstr "Πάνω δεξιά κατακόρυφα"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, kde-format
+msgid "Top Right Horizontal"
+msgstr "Πάνω δεξιά οριζόντια"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, kde-format
+msgid "Bottom Left Vertical"
+msgstr "Κάτω αριστερά κατακόρυφα"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Κάτω αριστερά οριζόντια"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, kde-format
+msgid "Bottom Right Vertical"
+msgstr "Κάτω δεξιά κατακόρυφα"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Κάτω δεξιά οριζόντια"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Slide"
+msgstr "Κύλιση"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, kde-format
+msgid "Space Rotation"
+msgstr "Περιστροφή διαστήματος"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, kde-format
+msgid "Swap effect"
+msgstr "Εφέ εναλλαγής"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, kde-format
+msgid "Header"
+msgstr "Κεφαλίδα"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "Υποσέλιδο"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Χωρίς συντηρητή κατά τη διάθεση αυτής της έκδοσης. Η κοινότητα του "
+#~ "Calligra καλωσορίζει τους ενδιαφερόμενους να αναλάβουν τη συντήρηση."
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Επεξεργασία"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "Προ&βολή"
+
+#, fuzzy
+#~| msgid "&Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "Ε&ισαγωγή"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "Τύπ&ος αρχειοθέτησης"
+
+#, fuzzy
+#~| msgid "&Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Διαφάνεια"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "Παρουσία&ση διαφανειών"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Ρυθμί&σεις"
+
+#, fuzzy
+#~| msgid "Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Περικοπή"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "W&idth:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "&Πλάτος:"
+
+#, fuzzy
+#~| msgid "Will keep the width of the crop constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Θα διατηρηθεί το πλάτος περικοπής σταθερό"
+
+#, fuzzy
+#~| msgid "&Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "Ύ&ψος:"
+
+#, fuzzy
+#~| msgid "Will keep the height of the crop constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the height of the crop constant"
+#~ msgstr "Θα διατηρηθεί το ύψος περικοπής σταθερό"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "R&atio:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "Α&ναλογία:"
+
+#, fuzzy
+#~| msgid "Will keep the ratio constant"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the ratio constant"
+#~ msgstr "Θα διατηρηθεί η αναλογία σταθερή"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Στρώμα"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Εικόνα"
+
+#, fuzzy
+#~| msgid "&Crop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "&Περικοπή"
+
+#, fuzzy
+#~| msgid "Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "Διαφάνειες"
+
+#, fuzzy
+#~| msgid "Presentation Slides:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Διαφάνειες παρουσίασης:"
+
+#, fuzzy
+#~| msgid "Edit Custom Slide Shows ..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Επεξεργασία προσαρμοσμένων παρουσιάσεων διαφανειών..."
+
+#, fuzzy
+#~| msgid "HTML Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HTML Export"
+#~ msgstr "Εξαγωγή HTML"
+
+#, fuzzy
+#~| msgid "Tick the slide should be exported :"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tick the slide should be exported :"
+#~ msgstr "Η διαφάνεια θα εξαχθεί αν σημειωθεί :"
+
+#, fuzzy
+#~| msgid "Select all"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Επιλογή όλων"
+
+#, fuzzy
+#~| msgid "Select template (.css) :"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Επιλογή προτύπου (.css) :"
+
+#, fuzzy
+#~| msgid "Deselect all"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Αναίρεση επιλογής όλων"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Τίτλος"
+
+#, fuzzy
+#~| msgid "Output preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Προεπισκόπηση εξόδου"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Browse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Browse"
+#~ msgstr "Περιήγηση"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Συγγραφέας"
+
+#, fuzzy
+#~| msgid "Delete Favorite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Διαγραφή προτιμώμενου"
+
+#, fuzzy
+#~| msgid "Open in browser"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open in browser"
+#~ msgstr "Άνοιγμα στον περιηγητή"
+
+#, fuzzy
+#~| msgid "Multiple monitors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiple monitors"
+#~ msgstr "Πολλαπλές οθόνες"
+
+#, fuzzy
+#~| msgid "Presentation monitor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Οθόνη παρουσίασης:"
+
+#, fuzzy
+#~| msgid "Enable presenter view"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enable presenter view"
+#~ msgstr "Ενεργοποίηση προβολής παρουσίασης"
+
+#, fuzzy
+#~| msgid "Configure Stage..."
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Διαμόρφωση Stage..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Παρουσίαση"
+
+#, fuzzy
+#~| msgid "(c) 1998-2013, The Stage Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(c) 1998-2013, Η ομάδα του Stage"
+
+#, fuzzy
+#~| msgid "Former maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "Πρώην συντηρητής"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "Original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "Αρχικός συγγραφέας"
+
+#, fuzzy
+#~| msgid "Reginald Stadlbauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Toshitaka Fujioka"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toshitaka Fujioka"
+#~ msgstr "Toshitaka Fujioka"
+
+#, fuzzy
+#~| msgid "Lukáš Tinkl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tinkl"
+#~ msgstr "Lukáš Tinkl"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Percy Leonhardt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percy Leonhardt"
+#~ msgstr "Percy Leonhardt"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~| msgid "Peter Simonsson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt "
+#~ msgstr "Boudewijn Rempt "
+
+#, fuzzy
+#~| msgid "Carlos Licea "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Carlos Licea "
+
+#, fuzzy
+#~| msgid "C. Boemann "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann "
+#~ msgstr "C. Boemann "
+
+#, fuzzy
+#~| msgid "Fredy Yanardi "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fredy Yanardi "
+#~ msgstr "Fredy Yanardi "
+
+#, fuzzy
+#~| msgid "Jan Hambrecht "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht "
+#~ msgstr "Jan Hambrecht "
+
+#, fuzzy
+#~| msgid "Marijn Kruisselbrink "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marijn Kruisselbrink "
+#~ msgstr "Marijn Kruisselbrink "
+
+#, fuzzy
+#~| msgid "Martin Pfeiffer "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Martin Pfeiffer "
+#~ msgstr "Martin Pfeiffer "
+
+#, fuzzy
+#~| msgid "Sven Langkamp "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Langkamp "
+#~ msgstr "Sven Langkamp "
+
+#, fuzzy
+#~| msgid "Timothée Lacroix "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timothée Lacroix "
+#~ msgstr "Timothée Lacroix "
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Τούσης Μανώλης,Stelios"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "manolis@koppermind.homelinux.org,sstavra@gmail.com"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Άγνωστο"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Διαφάνεια %1"
+
+#, fuzzy
+#~| msgid "End of presentation. Click to exit."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Τέλος παρουσίασης. Κλικ για έξοδο."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Διάταξη"
+
+#, fuzzy
+#~| msgid "Can not find needed text component, Calligra Stage will quit now."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed text component, Calligra Stage will quit now."
+#~ msgstr ""
+#~ "Αδυναμία εύρεσης συστατικού κειμένου, το Calligra Stage θα τερματιστεί "
+#~ "τώρα."
+
+#, fuzzy
+#~| msgid ""
+#~| "Can not find needed picture component, Calligra Stage will quit now."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Can not find needed picture component, Calligra Stage will quit now."
+#~ msgstr ""
+#~ "Αδυναμία εύρεσης συστατικού εικόνας, το Calligra Stage θα τερματιστεί "
+#~ "τώρα."
+
+#, fuzzy
+#~| msgid "Installation Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Σφάλμα εγκατάστασης"
+
+#, fuzzy
+#~| msgid "Placeholder shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Placeholder shape"
+#~ msgstr "Σχήμα αντικαταστάτη"
+
+#, fuzzy
+#~| msgid "Double click to add a title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a title"
+#~ msgstr "Διπλό κλικ για προσθήκη ενός τίτλου"
+
+#, fuzzy
+#~| msgid "Double click to add an outline"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an outline"
+#~ msgstr "Διπλό κλικ για προσθήκη ενός περιγράμματος"
+
+#, fuzzy
+#~| msgid "Double click to add a text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a text"
+#~ msgstr "Διπλό κλικ για προσθήκη κειμένου"
+
+#, fuzzy
+#~| msgid "Double click to add notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add notes"
+#~ msgstr "Διπλό κλικ για προσθήκη σημειώσεων"
+
+#, fuzzy
+#~| msgid "Double click to add a picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a picture"
+#~ msgstr "Διπλό κλικ για προσθήκη φωτογραφίας"
+
+#, fuzzy
+#~| msgid "Double click to add a chart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a chart"
+#~ msgstr "Διπλό κλικ για προσθήκη γραφήματος"
+
+#, fuzzy
+#~| msgid "Double click to add an object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an object"
+#~ msgstr "Διπλό κλικ για προσθήκη αντικειμένου"
+
+#, fuzzy
+#~| msgid "Pen Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Χρώμα γραφίδας"
+
+#, fuzzy
+#~| msgid "Pen Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Μέγεθος γραφίδας"
+
+#, fuzzy
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Μαύρο"
+
+#, fuzzy
+#~| msgid "White"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Λευκό"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Πράσινο"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Κόκκινο"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Μπλε"
+
+#, fuzzy
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Κίτρινο"
+
+#, fuzzy
+#~| msgid "Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Επόμενη διαφάνεια"
+
+#, fuzzy
+#~| msgid "Speaker Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Σημειώσεις ομιλητή"
+
+#, fuzzy
+#~| msgid "Current Slide %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Τρέχουσα διαφάνεια %1 από %2"
+
+#, fuzzy
+#~| msgid "End of Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Τέλος παρουσίασης διαφανειών"
+
+#, fuzzy
+#~| msgid "start on mouse click"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start on mouse click"
+#~ msgstr "έναρξη με κλικ του ποντικιού"
+
+#, fuzzy
+#~| msgid "start after previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "έναρξη μετά από το προηγούμενο εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "start with previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "έναρξη με το προηγούμενο εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Start after %1 seconds. Duration of %2 seconds."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start after %1 seconds. Duration of %2 seconds."
+#~ msgstr "Έναρξη μετά από %1 δευτερόλεπτα. Διάρκεια %2 δευτερολέπτων."
+
+#, fuzzy
+#~| msgid "Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Σχήμα"
+
+#, fuzzy
+#~| msgid "&Move Here"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "&Μετακίνηση εδώ"
+
+#, fuzzy
+#~| msgid "&Copy Here"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "Αντιγρα&φή εδώ"
+
+#, fuzzy
+#~| msgid "C&ancel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "&Ακύρωση"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Κανονική"
+
+#, fuzzy
+#~| msgid "Show Master Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Εμφάνιση κύριων διαφανειών"
+
+#, fuzzy
+#~| msgid "Import Slideshow..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Εισαγωγή παρουσίασης διαφανειών..."
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Εισαγωγή διαφάνειας"
+
+#, fuzzy
+#~| msgid "Insert a new slide after the current one"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a new slide after the current one"
+#~ msgstr "Εισαγωγή νέας διαφάνειας μετά την τρέχουσα"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Αντιγραφή διαφάνειας"
+
+#, fuzzy
+#~| msgid "Copy the current slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Αντιγραφή της τρέχουσας διαφάνειας"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Διαγραφή διαφάνειας"
+
+#, fuzzy
+#~| msgid "Delete the current slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Διαγραφή της τρέχουσας διαφάνειας"
+
+#, fuzzy
+#~| msgid "Master Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Κύρια διαφάνεια..."
+
+#, fuzzy
+#~| msgid "Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Προηγούμενη διαφάνεια"
+
+#, fuzzy
+#~| msgid "Go to previous slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Μετάβαση στην προηγούμενη διαφάνεια"
+
+#, fuzzy
+#~| msgid "Go to next slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Μετάβαση στην επόμενη διαφάνεια"
+
+#, fuzzy
+#~| msgid "First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Πρώτη διαφάνεια"
+
+#, fuzzy
+#~| msgid "Go to first slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Μετάβαση στην πρώτη διαφάνεια"
+
+#, fuzzy
+#~| msgid "Last Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Τελευταία διαφάνεια"
+
+#, fuzzy
+#~| msgid "Go to last slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Μετάβαση στην τελευταία διαφάνεια"
+
+#, fuzzy
+#~| msgid "Configure Stage..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Διαμόρφωση Stage..."
+
+#, fuzzy
+#~| msgid "Export as HTML..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as HTML..."
+#~ msgstr "Εξαγωγή ως HTML..."
+
+#, fuzzy
+#~| msgid "Insert Pictures as Slides..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Εισαγωγή φωτογραφιών ως διαφάνειες..."
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Δημιουργία εφέ κίνησης εμφάνισης"
+
+#, fuzzy
+#~| msgid "Edit Custom Slide Shows..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Επεξεργασία προσαρμοσμένων παρουσιάσεων διαφανειών..."
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Έναρξη παρουσίασης"
+
+#, fuzzy
+#~| msgid "From Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Από την τρέχουσα διαφάνεια"
+
+#, fuzzy
+#~| msgid "From First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "Από την πρώτη διαφάνεια"
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Έναρξη παρουσίασης"
+
+#, fuzzy
+#~| msgid "Show Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Εμφάνιση γραμμής κατάστασης"
+
+#, fuzzy
+#~| msgid "Hide Status Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Απόκρυψη γραμμής κατάστασης"
+
+#, fuzzy
+#~| msgid "Shows or hides the status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Εμφανίζει ή κρύβει τη γραμμή κατάστασης"
+
+#, fuzzy
+#~| msgid "Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Διαμόρφωση παρουσίασης διαφανειών..."
+
+#, fuzzy
+#~| msgid "Configure Presenter View..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Διαμόρφωση προβολής παρουσίασης..."
+
+#, fuzzy
+#~| msgid "Draw on the presentation..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Σχέδιο στην παρουσίαση..."
+
+#, fuzzy
+#~| msgid "Highlight the presentation..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Highlight the presentation..."
+#~ msgstr "Έμφαση στην παρουσίαση..."
+
+#, fuzzy
+#~| msgid "Blackscreen on the presentation..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blackscreen on the presentation..."
+#~ msgstr "Μαύρη οθόνη στην παρουσίαση..."
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Σημειώσεις"
+
+#, fuzzy
+#~| msgid "Slides Sorter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Ταξινομητής διαφανειών"
+
+#, fuzzy
+#~| msgid "Slide Show: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Παρουσίαση διαφανειών: "
+
+#, fuzzy
+#~| msgid "Add a new custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Προσθήκη νέας προσαρμοσμένης παρουσίασης διαφανειών"
+
+#, fuzzy
+#~| msgid "Delete current custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Διαγραφή της τρέχουσας προσαρμοσμένης παρουσίασης διαφανειών"
+
+#, fuzzy
+#~| msgid "Add slides to current custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Προσθήκη διαφανειών στην τρέχουσα προσαρμοσμένη παρουσίαση"
+
+#, fuzzy
+#~| msgid "Remove slides from current custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove slides from current custom slide show"
+#~ msgstr "Αφαίρεση διαφανειών από την τρέχουσα προσαρμοσμένη παρουσίαση"
+
+#, fuzzy
+#~| msgid "Duplicate Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Διπλή διαφάνεια"
+
+#, fuzzy
+#~| msgid "Start Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Έναρξη παρουσίασης διαφανειών"
+
+#, fuzzy
+#~| msgid "Add a new slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Προσθήκη νέας διαφάνειας"
+
+#, fuzzy
+#~| msgid "Delete selected slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Διαγραφή επιλεγμένων διαφανειών"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Μετονομασία"
+
+#, fuzzy
+#~| msgid "Cut"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Αποκοπή"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Αντιγραφή"
+
+#, fuzzy
+#~| msgid "Paste"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Επικόλληση"
+
+#, fuzzy
+#~| msgid "Slide Show %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Παρουσίαση διαφανειών %1"
+
+#, fuzzy
+#~| msgid "All slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Όλες οι διαφάνειες"
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Σφάλμα"
+
+#, fuzzy
+#~| msgid "There cannot be two slideshows with the same name."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There cannot be two slideshows with the same name."
+#~ msgstr "Δεν μπορούν να υπάρχουν 2 παρουσιάσεις διαφανειών με το ίδιο όνομα."
+
+#, fuzzy
+#~| msgid "Automatic animation preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Αυτόματη προεπισκόπηση εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Preview animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Προεπισκόπηση εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Slide Transitions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Μεταβάσεις διαφάνειας"
+
+#, fuzzy
+#~| msgid "Shape Click Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Σχηματισμός ενεργειών κλικ"
+
+#, fuzzy
+#~| msgid "Shape Animations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Εφέ κίνησης σχήματος"
+
+#, fuzzy
+#~| msgid "Manage animation delay and duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Διαχείριση καθυστέρησης και διάρκειας εφέ κίνησης: "
+
+#, fuzzy
+#~| msgid "Start: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Έναρξη: "
+
+#, fuzzy
+#~| msgid "on mouse click"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "on mouse click"
+#~ msgstr "με κλικ του ποντικιού"
+
+#, fuzzy
+#~| msgid "after previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "μετά από το προηγούμενο εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "with previous animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "με το προηγούμενο εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Delay: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delay: "
+#~ msgstr "Καθυστέρηση: "
+
+#, fuzzy
+#~| msgid "Duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Διάρκεια: "
+
+#, fuzzy
+#~| msgid "Preview Shape Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Προεπισκόπηση εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Κανένα εφέ"
+
+#, fuzzy
+#~| msgid " sec"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " δευτ"
+
+#, fuzzy
+#~| msgid "All slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Όλες οι διαφάνειες"
+
+#, fuzzy
+#~| msgid "Entrance"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entrance"
+#~ msgstr "Είσοδος"
+
+#, fuzzy
+#~| msgid "Exit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exit"
+#~ msgstr "Έξοδος"
+
+#, fuzzy
+#~| msgid "Emphasis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Emphasis"
+#~ msgstr "Έμφαση"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Προσαρμοσμένο"
+
+#, fuzzy
+#~| msgid "Motion path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Motion path"
+#~ msgstr "Διαδρομή κίνησης"
+
+#, fuzzy
+#~| msgid "Ole Action"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Ενέργεια Ole"
+
+#, fuzzy
+#~| msgid "Media Call"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Media Call"
+#~ msgstr "Κλήση μέσων"
+
+#, fuzzy
+#~| msgid "Edit animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Επεξεργασία εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Add new animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Προσθήκη νέου εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Remove animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Αφαίρεση εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Order: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Order: "
+#~ msgstr "Σειρά: "
+
+#, fuzzy
+#~| msgid "Move animation up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Μετακίνηση εφέ κίνησης επάνω"
+
+#, fuzzy
+#~| msgid "Move animation down"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation down"
+#~ msgstr "Μετακίνηση εφέ κίνησης κάτω"
+
+#, fuzzy
+#~| msgid "Add a new animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Προσθήκη νέου εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "Delete current animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Διαγραφή τρέχοντος εφέ κίνησης"
+
+#, fuzzy
+#~| msgid "seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "seconds"
+#~ msgstr "δευτερόλεπτα"
+
+#, fuzzy
+#~| msgid "Monitor %1 (primary)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1 (primary)"
+#~ msgstr "Εποπτεία %1 (κύριο)"
+
+#, fuzzy
+#~| msgid "Monitor %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1"
+#~ msgstr "Εποπτεία %1"
+
+#, fuzzy
+#~| msgid "Configure Presenter View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Διαμόρφωση προβολής παρουσίασης"
+
+#, fuzzy
+#~| msgid "Configure Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Διαμόρφωση προβολής διαφανειών"
+
+#, fuzzy
+#~| msgid "Html Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Html Export"
+#~ msgstr "Εξαγωγή σε Html"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Εξαγωγή"
+
+#, fuzzy
+#~| msgid "There is already a favorite file with this name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There is already a favorite file with this name"
+#~ msgstr "Υπάρχει ήδη ένα προτιμώμενο αρχείο με αυτό το όνομα"
+
+#, fuzzy
+#~| msgid "Incorrect file, .zip only or corrupted zip"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Incorrect file, .zip only or corrupted zip"
+#~ msgstr "Λανθασμένο αρχείο, .zip μόνο ή κατεστραμμένο zip"
+
+#, fuzzy
+#~| msgid "Zip file need to contain style.css"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zip file need to contain style.css"
+#~ msgstr "Το αρχείο zip πρέπει να περιέχει style.css"
+
+#, fuzzy
+#~| msgid "Delete Template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Διαγραφή προτύπου"
+
+#, fuzzy
+#~| msgid "You may not remove the templates provided with the application"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "You may not remove the templates provided with the application"
+#~ msgstr ""
+#~ "Δεν μπορείτε να αφαιρέσετε τα πρότυπα που παρέχονται με την εφαρμογή"
+
+#, fuzzy
+#~| msgid "Add Template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Template"
+#~ msgstr "Προσθήκη προτύπου"
+
+#, fuzzy
+#~| msgid "Are you sure you want to remove \"%1\"?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Επιθυμείτε σίγουρα να αφαιρέσετε \"%1\";"
+
+#, fuzzy
+#~| msgid "Confirm remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Επιβεβαίωση αφαίρεσης"
+
+#, fuzzy
+#~| msgid "No sound"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "Χωρίς ήχο"
+
+#, fuzzy
+#~| msgid "Import..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Εισαγωγή..."
+
+#, fuzzy
+#~| msgid "Bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bar"
+#~ msgstr "Γραμμή"
+
+#, fuzzy
+#~| msgid "From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Από αριστερά"
+
+#, fuzzy
+#~| msgid "From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Από πάνω"
+
+#, fuzzy
+#~| msgid "From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Από δεξιά"
+
+#, fuzzy
+#~| msgid "From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Από κάτω"
+
+#, fuzzy
+#~| msgid "Unknown subtype"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown subtype"
+#~ msgstr "Άγνωστος υποτύπος"
+
+#, fuzzy
+#~| msgid "Clock"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Ρολόι"
+
+#, fuzzy
+#~| msgid "From Twelve Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Clockwise"
+#~ msgstr "Από τις 12 δεξιόστροφα"
+
+#, fuzzy
+#~| msgid "From Three Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Clockwise"
+#~ msgstr "Από τις 3 δεξιόστροφα"
+
+#, fuzzy
+#~| msgid "From Six Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Clockwise"
+#~ msgstr "Από τις 6 δεξιόστροφα"
+
+#, fuzzy
+#~| msgid "From Nine Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Clockwise"
+#~ msgstr "Από τις 9 δεξιόστροφα"
+
+#, fuzzy
+#~| msgid "From Twelve Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Counterclockwise"
+#~ msgstr "Από τις 12 αριστερόστροφα"
+
+#, fuzzy
+#~| msgid "From Three Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Counterclockwise"
+#~ msgstr "Από τις 3 αριστερόστροφα"
+
+#, fuzzy
+#~| msgid "From Six Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Counterclockwise"
+#~ msgstr "Από τις 6 αριστερόστροφα"
+
+#, fuzzy
+#~| msgid "From Nine Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Counterclockwise"
+#~ msgstr "Από τις 9 αριστερόστροφα"
+
+#, fuzzy
+#~| msgid "Double Fan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Διπλός ανεμιστήρας"
+
+#, fuzzy
+#~| msgid "Fan Out Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Ανάπτυξη κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Fan Out Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Ανάπτυξη οριζόντια"
+
+#, fuzzy
+#~| msgid "Fan In Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Σύμπτυξη κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Fan In Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Σύμπτυξη οριζόντια"
+
+#, fuzzy
+#~| msgid "Fan In Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Σύμπτυξη κατακόρυφα αντίστροφα"
+
+#, fuzzy
+#~| msgid "Fan In Horizontal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Σύμπτυξη οριζόντια αντίστροφα"
+
+#, fuzzy
+#~| msgid "Double Sweep"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Διπλό πέρασμα"
+
+#, fuzzy
+#~| msgid "Parallel Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Παράλληλα κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal"
+#~ msgstr "Παράλληλα διαγώνια"
+
+#, fuzzy
+#~| msgid "Opposite Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Κατακόρυφα εναλλάξ"
+
+#, fuzzy
+#~| msgid "Opposite Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Οριζόντια εναλλάξ"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Παράλληλα διαγώνια πάνω αριστερά"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Παράλληλα διαγώνια κάτω αριστερά"
+
+#, fuzzy
+#~| msgid "Parallel Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Παράλληλα κατακόρυφα αντίστροφα"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Παράλληλα διαγώνια αντίστροφα"
+
+#, fuzzy
+#~| msgid "Opposite Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Κατακόρυφα εναλλάξ αντίστροφα"
+
+#, fuzzy
+#~| msgid "Opposite Horizontal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Οριζόντια εναλλάξ αντίστροφα"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Top Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Παράλληλα διαγώνια πάνω αριστερά αντίστροφα"
+
+#, fuzzy
+#~| msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Παράλληλα διαγώνια κάτω αριστερά αντίστροφα"
+
+#, fuzzy
+#~| msgid "Fan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Ανεμιστήρας"
+
+#, fuzzy
+#~| msgid "Center Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Κέντρο δεξιά"
+
+#, fuzzy
+#~| msgid "Center Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Κέντρο επάνω"
+
+#, fuzzy
+#~| msgid "Center Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Κέντρο αριστερά"
+
+#, fuzzy
+#~| msgid "Center Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Κέντρο κάτω"
+
+#, fuzzy
+#~| msgid "Fan Out Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Ανάπτυξη επάνω"
+
+#, fuzzy
+#~| msgid "Fan Out Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Ανάπτυξη δεξιά"
+
+#, fuzzy
+#~| msgid "Fan Out Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Ανάπτυξη κάτω"
+
+#, fuzzy
+#~| msgid "Fan Out Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Ανάπτυξη αριστερά"
+
+#, fuzzy
+#~| msgid "Fan In Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Top"
+#~ msgstr "Σύμπτυξη επάνω"
+
+#, fuzzy
+#~| msgid "Fan In Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Σύμπτυξη δεξιά"
+
+#, fuzzy
+#~| msgid "Fan In Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Σύμπτυξη κάτω"
+
+#, fuzzy
+#~| msgid "Fan In Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Σύμπτυξη αριστερά"
+
+#, fuzzy
+#~| msgid "Pin Wheel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Τροχός"
+
+#, fuzzy
+#~| msgid "Two Blades Vertical Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Clockwise"
+#~ msgstr "Δύο λεπίδες κατακόρυφα δεξιόστροφα"
+
+#, fuzzy
+#~| msgid "Two Blades Horizontal Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Δύο λεπίδες οριζόντια δεξιόστροφα"
+
+#, fuzzy
+#~| msgid "Four Blades Horizontal Clockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Τέσσερις λεπίδες οριζόντια δεξιόστροφα"
+
+#, fuzzy
+#~| msgid "Two Blades Vertical Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Counterclockwise"
+#~ msgstr "Δύο λεπίδες κατακόρυφα αριστερόστροφα"
+
+#, fuzzy
+#~| msgid "Two Blades Horizontal Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Counterclockwise"
+#~ msgstr "Δύο λεπίδες οριζόντια αριστερόστροφα"
+
+#, fuzzy
+#~| msgid "Four Blades Horizontal Counterclockwise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Counterclockwise"
+#~ msgstr "Τέσσερις λεπίδες οριζόντια αριστερόστροφα"
+
+#, fuzzy
+#~| msgid "Saloon Door"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Πόρτα εισόδου"
+
+#, fuzzy
+#~| msgid "To Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Top"
+#~ msgstr "Προς επάνω"
+
+#, fuzzy
+#~| msgid "To Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Προς αριστερά"
+
+#, fuzzy
+#~| msgid "To Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "Προς τα κάτω"
+
+#, fuzzy
+#~| msgid "To Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Προς δεξιά"
+
+#, fuzzy
+#~| msgid "Single Sweep"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Απλό πέρασμα"
+
+#, fuzzy
+#~| msgid "Clockwise Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top"
+#~ msgstr "Δεξιόστροφα επάνω"
+
+#, fuzzy
+#~| msgid "Clockwise Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Δεξιόστροφα δεξιά"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Δεξιόστροφα κάτω"
+
+#, fuzzy
+#~| msgid "Clockwise Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "Δεξιόστροφα αριστερά"
+
+#, fuzzy
+#~| msgid "Clockwise Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Δεξιόστροφα πάνω αριστερά"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Αριστερόστροφα κάτω αριστερά"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Δεξιόστροφα κάτω δεξιά"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Αριστερόστροφα πάνω δεξιά"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top"
+#~ msgstr "Αριστερόστροφα πάνω"
+
+#, fuzzy
+#~| msgid "Counterclockwise Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Right"
+#~ msgstr "Αριστερόστροφα δεξιά"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom"
+#~ msgstr "Αριστερόστροφα κάτω"
+
+#, fuzzy
+#~| msgid "Counterclockwise Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Left"
+#~ msgstr "Αριστερόστροφα αριστερά"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left"
+#~ msgstr "Αριστερόστροφα πάνω αριστερά"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Δεξιόστροφα κάτω αριστερά"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Αριστερόστροφα κάτω δεξιά"
+
+#, fuzzy
+#~| msgid "Clockwise Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Δεξιόστροφα πάνω δεξιά"
+
+#, fuzzy
+#~| msgid "Windshield"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Ανεμοφράκτης"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Δεξιά"
+
+#, fuzzy
+#~| msgid "Up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up"
+#~ msgstr "Επάνω"
+
+#, fuzzy
+#~| msgid "Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Οριζόντια"
+
+#, fuzzy
+#~| msgid "Right Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Δεξιά αντίστροφα"
+
+#, fuzzy
+#~| msgid "Up Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Επάνω αντίστροφα"
+
+#, fuzzy
+#~| msgid "Vertical Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Κατακόρυφα αντίστροφα"
+
+#, fuzzy
+#~| msgid "Horizontal Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Οριζόντια αντίστροφα"
+
+#, fuzzy
+#~| msgid "Barn Door"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Πόρτα εισόδου"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Διαγώνια κάτω αριστερά"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Reverse"
+#~ msgstr "Διαγώνια κάτω αριστερά αντίστροφα"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "Διαγώνια πάνω αριστερά"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Reverse"
+#~ msgstr "Διαγώνια πάνω αριστερά αντίστροφα"
+
+#, fuzzy
+#~| msgid "Barn Vee"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Vee"
+#~ msgstr "Στροφή εισόδου"
+
+#, fuzzy
+#~| msgid "Barn Zig Zag"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Πόρτα ζιγκ ζαγκ"
+
+#, fuzzy
+#~| msgid "Vertical Reversed"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Κατακόρυφα αντίστροφα"
+
+#, fuzzy
+#~| msgid "Horizontal Reversed"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Οριζόντια αντίστροφα"
+
+#, fuzzy
+#~| msgid "Box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box"
+#~ msgstr "Πλαίσιο"
+
+#, fuzzy
+#~| msgid "From Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Από πάνω αριστερά"
+
+#, fuzzy
+#~| msgid "From Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Από πάνω δεξιά"
+
+#, fuzzy
+#~| msgid "From Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Από κάτω αριστερά"
+
+#, fuzzy
+#~| msgid "From Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Από κάτω δεξιά"
+
+#, fuzzy
+#~| msgid "Diagonal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Διαγώνια"
+
+#, fuzzy
+#~| msgid "Four Box"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box"
+#~ msgstr "Τέσσερα πλαίσια"
+
+#, fuzzy
+#~| msgid "Corners In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Γωνίες μέσα"
+
+#, fuzzy
+#~| msgid "Corners In Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In Reverse"
+#~ msgstr "Γωνίες μέσα αντίστροφα"
+
+#, fuzzy
+#~| msgid "Corners Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Γωνίες έξω"
+
+#, fuzzy
+#~| msgid "Corners Out Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out Reverse"
+#~ msgstr "Γωνίες έξω αντίστροφα"
+
+#, fuzzy
+#~| msgid "Misc Diagonal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Διαγώνιοι"
+
+#, fuzzy
+#~| msgid "Double Barn Door"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Διπλή πόρτα εισόδου"
+
+#, fuzzy
+#~| msgid "Double Diamond"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Διπλό διαμάντι"
+
+#, fuzzy
+#~| msgid "Vee"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vee"
+#~ msgstr "Αλλαγή κατεύθυνσης"
+
+#, fuzzy
+#~| msgid "Zig Zag"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zig Zag"
+#~ msgstr "Ζιγκ Ζαγκ"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Εξασθένιση"
+
+#, fuzzy
+#~| msgid "Crossfade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crossfade"
+#~ msgstr "Εναλλαγή με εξασθένιση"
+
+#, fuzzy
+#~| msgid "Fade over Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Εξασθένιση στο χρώμα"
+
+#, fuzzy
+#~| msgid "ArrowHead"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Ακμή βέλους"
+
+#, fuzzy
+#~| msgid "Down"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Κάτω"
+
+#, fuzzy
+#~| msgid "Down Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Κάτω αντίστροφα"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Αριστερά"
+
+#, fuzzy
+#~| msgid "Left Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Αριστερά αντίστροφα"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Έλλειψη"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Κύκλος"
+
+#, fuzzy
+#~| msgid "Circle Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Κύκλος αντίστροφα"
+
+#, fuzzy
+#~| msgid "Eye"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eye"
+#~ msgstr "Μάτι"
+
+#, fuzzy
+#~| msgid "Hexagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Εξάγωνο"
+
+#, fuzzy
+#~| msgid "Iris"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Iris"
+#~ msgstr "Ίριδα"
+
+#, fuzzy
+#~| msgid "Rectangular"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Ορθογώνιο"
+
+#, fuzzy
+#~| msgid "Rectangular Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Ορθογώνιο αντίστροφα"
+
+#, fuzzy
+#~| msgid "Diamond"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Διαμάντι"
+
+#, fuzzy
+#~| msgid "Diamond Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Διαμάντι αντίστροφα"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Διάφορα"
+
+#, fuzzy
+#~| msgid "Heart"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Καρδιά"
+
+#, fuzzy
+#~| msgid "Heart Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Καρδιά αντίστροφα"
+
+#, fuzzy
+#~| msgid "Keyhole"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole"
+#~ msgstr "Κλειδαρότρυπα"
+
+#, fuzzy
+#~| msgid "Keyhole Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Κλειδαρότρυπα αντίστροφα"
+
+#, fuzzy
+#~| msgid "Pentagon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Πεντάγωνο"
+
+#, fuzzy
+#~| msgid "RoundRect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Στρογγυλό ορθογώνιο"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Άστρο"
+
+#, fuzzy
+#~| msgid "Four Point Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star"
+#~ msgstr "Τετράκτινο αστέρι"
+
+#, fuzzy
+#~| msgid "Four Point Star Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Τετράκτινο αστέρι αντίστροφα"
+
+#, fuzzy
+#~| msgid "Five Point Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star"
+#~ msgstr "Πεντάκτινο αστέρι"
+
+#, fuzzy
+#~| msgid "Five Point Star Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Πεντάκτινο αστέρι αντίστροφα"
+
+#, fuzzy
+#~| msgid "Six Point Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star"
+#~ msgstr "Εξάκτινο αστέρι"
+
+#, fuzzy
+#~| msgid "Six Point Star Reverse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Εξάκτινο αστέρι αντίστροφα"
+
+#, fuzzy
+#~| msgid "Triangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Τρίγωνο"
+
+#, fuzzy
+#~| msgid "Box Snakes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Εφέ πλαισίων φιδιού"
+
+#, fuzzy
+#~| msgid "Two Box Top In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Δύο πλαίσια επάνω μέσα"
+
+#, fuzzy
+#~| msgid "Two Box Bottom In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Δύο πλαίσια κάτω μέσα"
+
+#, fuzzy
+#~| msgid "Two Box Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Δύο πλαίσια αριστερά μέσα"
+
+#, fuzzy
+#~| msgid "Two Box Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Δύο πλαίσια δεξιά μέσα"
+
+#, fuzzy
+#~| msgid "Four Box Vertical In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Τέσσερα πλαίσια κατακόρυφα μέσα"
+
+#, fuzzy
+#~| msgid "Four Box Horizontal In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Τέσσερα πλαίσια οριζόντια μέσα"
+
+#, fuzzy
+#~| msgid "Two Box Top Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Δύο πλαίσια επάνω έξω"
+
+#, fuzzy
+#~| msgid "Two Box Bottom Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Δύο πλαίσια κάτω έξω"
+
+#, fuzzy
+#~| msgid "Two Box Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Δύο πλαίσια αριστερά έξω"
+
+#, fuzzy
+#~| msgid "Two Box Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Δύο πλαίσια δεξιά κάτω"
+
+#, fuzzy
+#~| msgid "Four Box Vertical Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical Out"
+#~ msgstr "Τέσσερα πλαίσια κατακόρυφα έξω"
+
+#, fuzzy
+#~| msgid "Four Box Horizontal Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Τέσσερα πλαίσια οριζόντια έξω"
+
+#, fuzzy
+#~| msgid "Parallel Snakes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Παράλληλα φίδια"
+
+#, fuzzy
+#~| msgid "Vertical Top Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Κατακόρυφα πάνω ομοίως μέσα"
+
+#, fuzzy
+#~| msgid "Vertical Top Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Κατακόρυφα πάνω ομοίως έξω"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Κατακόρυφα κάτω ομοίως μέσα"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same Out"
+#~ msgstr "Κατακόρυφα κάτω ομοίως έξω"
+
+#, fuzzy
+#~| msgid "Vertical Top Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite In"
+#~ msgstr "Κατακόρυφα πάνω αριστερά εναλλάξ μέσα"
+
+#, fuzzy
+#~| msgid "Vertical Top Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite Out"
+#~ msgstr "Κατακόρυφα πάνω αριστερά εναλλάξ έξω"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite In"
+#~ msgstr "Κατακόρυφα κάτω αριστερά εναλλάξ μέσα"
+
+#, fuzzy
+#~| msgid "Vertical Bottom Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite Out"
+#~ msgstr "Κατακόρυφα κάτω αριστερά εναλλάξ έξω"
+
+#, fuzzy
+#~| msgid "Horizontal Left Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Οριζόντια αριστερά ομοίως μέσα"
+
+#, fuzzy
+#~| msgid "Horizontal Left Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Οριζόντια αριστερά ομοίως έξω"
+
+#, fuzzy
+#~| msgid "Horizontal Right Same In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Οριζόντια δεξιά ομοίως μέσα"
+
+#, fuzzy
+#~| msgid "Horizontal Right Same Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Οριζόντια δεξιά ομοίως έξω"
+
+#, fuzzy
+#~| msgid "Horizontal Top Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite In"
+#~ msgstr "Οριζόντια πάνω αριστερά εναλλάξ μέσα"
+
+#, fuzzy
+#~| msgid "Horizontal Top Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite Out"
+#~ msgstr "Οριζόντια πάνω αριστερά εναλλάξ έξω"
+
+#, fuzzy
+#~| msgid "Horizontal Top Right Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Οριζόντια πάνω δεξιά εναλλάξ μέσα"
+
+#, fuzzy
+#~| msgid "Horizontal Top Right Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite Out"
+#~ msgstr "Οριζόντια πάνω δεξιά εναλλάξ έξω"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite In"
+#~ msgstr "Διαγώνια κάτω αριστερά εναλλάξ μέσα"
+
+#, fuzzy
+#~| msgid "Diagonal Bottom Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite Out"
+#~ msgstr "Διαγώνια κάτω αριστερά εναλλάξ έξω"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left Opposite In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Διαγώνια πάνω αριστερά εναλλάξ μέσα"
+
+#, fuzzy
+#~| msgid "Diagonal Top Left Opposite Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite Out"
+#~ msgstr "Διαγώνια πάνω αριστερά εναλλάξ έξω"
+
+#, fuzzy
+#~| msgid "Snake"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Φίδι"
+
+#, fuzzy
+#~| msgid "Spiral"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Σπείρα"
+
+#, fuzzy
+#~| msgid "Clockwise Top Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Δεξιόστροφα πάνω αριστερά μέσα"
+
+#, fuzzy
+#~| msgid "Clockwise Top Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Δεξιόστροφα πάνω αριστερά έξω"
+
+#, fuzzy
+#~| msgid "Clockwise Top Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Δεξιόστροφα πάνω δεξιά μέσα"
+
+#, fuzzy
+#~| msgid "Clockwise Top Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Δεξιόστροφα πάνω δεξιά έξω"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Δεξιόστροφα κάτω αριστερά μέσα"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Δεξιόστροφα κάτω αριστερά έξω"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Δεξιόστροφα κάτω δεξιά μέσα"
+
+#, fuzzy
+#~| msgid "Clockwise Bottom Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Δεξιόστροφα κάτω δεξιά έξω"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Αριστερόστροφα πάνω αριστερά μέσα"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Αριστερόστροφα πάνω αριστερά έξω"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Αριστερόστροφα πάνω δεξιά μέσα"
+
+#, fuzzy
+#~| msgid "Counterclockwise Top Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Αριστερόστροφα πάνω δεξιά έξω"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Left In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Αριστερόστροφα κάτω αριστερά μέσα"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Left Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Αριστερόστροφα κάτω αριστερά έξω"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Right In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Αριστερόστροφα κάτω δεξιά μέσα"
+
+#, fuzzy
+#~| msgid "Counterclockwise Bottom Right Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Αριστερόστροφα κάτω δεξιά έξω"
+
+#, fuzzy
+#~| msgid "Waterfall"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Καταρράκτης"
+
+#, fuzzy
+#~| msgid "Top Left Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Πάνω αριστερά κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Top Left Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Πάνω αριστερά οριζόντια"
+
+#, fuzzy
+#~| msgid "Top Right Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Πάνω δεξιά κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Top Right Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Πάνω δεξιά οριζόντια"
+
+#, fuzzy
+#~| msgid "Bottom Left Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Κάτω αριστερά κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Bottom Left Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Κάτω αριστερά οριζόντια"
+
+#, fuzzy
+#~| msgid "Bottom Right Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Κάτω δεξιά κατακόρυφα"
+
+#, fuzzy
+#~| msgid "Bottom Right Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Κάτω δεξιά οριζόντια"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Κύλιση"
+
+#, fuzzy
+#~| msgid "Space Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Περιστροφή διαστήματος"
+
+#, fuzzy
+#~| msgid "Swap effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Εφέ εναλλαγής"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Κεφαλίδα"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Υποσέλιδο"
+
+#~ msgid "Maintainer"
+#~ msgstr "Συντηρητής"
+
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Εργαλείο παρουσιάσεων του Calligra"
+
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Stage"
+
+#~ msgid "File to open"
+#~ msgstr "Αρχείο για άνοιγμα"
+
+#~ msgid "Set Layout"
+#~ msgstr "Ορισμός διάταξης"
+
+#~ msgid "Layout Tool"
+#~ msgstr "Εργαλείο διάταξης"
+
+#~ msgid "&File"
+#~ msgstr "&Αρχείο"
+
+#~ msgid "Line"
+#~ msgstr "Γραμμή"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "&Διάταξη αντικειμένων"
+
+#~ msgid "&Align Objects"
+#~ msgstr "Σ&τοίχιση αντικειμένων"
+
+#~ msgid "Te&xt"
+#~ msgstr "Κ&είμενο"
+
+#~ msgid "&Align"
+#~ msgstr "Στ&οίχιση"
+
+#~ msgid "T&ype"
+#~ msgstr "Τύ&πος"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Ορθογραφικός έλεγχος"
+
+#~ msgid "Autocorrection"
+#~ msgstr "Αυτόματη διόρθωση"
+
+#~ msgid "File"
+#~ msgstr "Αρχείο"
+
+#~ msgid "Edit"
+#~ msgstr "Επεξεργασία"
+
+#~ msgid "Insert"
+#~ msgstr "Εισαγωγή"
+
+#~ msgid "Tools"
+#~ msgstr "Εργαλεία"
+
+#~ msgid "Format"
+#~ msgstr "Τύπος αρχειοθέτησης"
+
+#~ msgid "Text"
+#~ msgstr "Κείμενο"
+
+#~ msgid "Slide Show"
+#~ msgstr "Παρουσίαση διαφανειών"
+
+#~ msgid "Navigation"
+#~ msgstr "Πλοήγηση"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Κατακόρυφη στοίχιση"
+
+#~ msgid "Flip Objects"
+#~ msgstr "Αναστροφή αντικειμένων"
+
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "&Κλιμάκωση για εμφάνιση της εικόνας 1:1 σε"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Αποτέλεσμα ορθογραφικού ελέγχου"
+
+#~ msgid "Slide Layouts"
+#~ msgstr "Διατάξεις διαφανειών"
+
+#~ msgid "Not implemented in 2.0"
+#~ msgstr "Δεν έχει υλοποιηθεί στο 2.0"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "Διαγραφή εφέ σελίδας"
+
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Διαμόρφωση KPresenter..."
+
+#, fuzzy
+#~| msgid "Slides Sorter"
+#~ msgid "Slide Title"
+#~ msgstr "Ταξινομητής διαφανειών"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Αναίρεση επιλογής αντικειμένου"
+
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Επιλογή αντικειμένου"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Επεξεργασία"
+
+#~ msgid "New Slide Show %1"
+#~ msgstr "Νέα παρουσίαση διαφανειών %1"
+
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr ""
+#~ "Επιθυμείτε σίγουρα τη διαγραφή της επιλεγμένης παρουσίασης διαφανειών;"
+
+#~ msgid "Confirm action"
+#~ msgstr "Επιβεβαίωση ενέργειας"
+
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Επεξεργαστής προσαρμοσμένων παρουσιάσεων διαφανειών"
+
+#~ msgid "Available Slides"
+#~ msgstr "Διαθέσιμες παρουσιάσεις διαφανειών"
+
+#~ msgid "Add Slide"
+#~ msgstr "Προσθήκη διαφάνειας"
+
+#~ msgid "Undo"
+#~ msgstr "Αναίρεση"
+
+#~ msgid "Ok"
+#~ msgstr "Εντάξει"
+
+#~ msgid "Close"
+#~ msgstr "Κλείσιμο"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#~ msgid "&OK"
+#~ msgstr "&Εντάξει"
+
+#~ msgid ""
+#~ "Choose a predefined shape by clicking on it then clicking the OK button "
+#~ "(or just double-click on the shape). You can then insert the shape onto "
+#~ "your slide by drawing the area with the mouse pointer."
+#~ msgstr ""
+#~ "Επιλέξτε ένα προκαθορισμένο σχήμα κάνοντας κλικ σε ένα και έπειτα "
+#~ "κάνοντας κλικ στο κουμπί Εντάξει (ή διπλό κλικ στο σχήμα). Μπορείτε να "
+#~ "εισάγετε το σχήμα στο σλάιντ σας σχεδιάζοντας την περιοχή με το ποντίκι."
+
+#~ msgid "Page Layouts"
+#~ msgstr "Διατάξεις σελίδας"
+
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Κλικ για προεπισκόπηση του εφέ της σελίδας."
+
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο σπείρας"
+
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο φιδιού"
+
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο πενταγώνου"
+
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "Διάφορα εφέ σβησίματος"
+
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο έλλειψης"
+
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο ίριδας"
+
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο ματιού"
+
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο εξαγώνου"
+
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο τριγώνου"
+
+#~ msgid "Star Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο αστέρα"
+
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο ανάπτυξης"
+
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο ρολογιού"
+
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο διπλής ανάπτυξης"
+
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο ράβδων"
+
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "Εφέ διαγραφής σελίδας"
+
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο τεσσάρων κουτιών"
+
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο στροφής εισόδου"
+
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο ζιγκ ζαγκ"
+
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο πόρτας εισόδου"
+
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο διαγώνιο"
+
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο εισόδου"
+
+#~ msgid "Box Wipe Effect"
+#~ msgstr "Εφέ σβήσιμο πλαισίου"

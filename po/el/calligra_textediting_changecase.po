@@ -1,0 +1,99 @@
+# translation of ChangecasePlugin.po to greek
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2007, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: ChangecasePlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-11-11 17:27+0200\n"
+"Last-Translator: Toussis Manolis <manolis@koppermind.homelinux.org>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Changecase.cpp:51 Changecase.cpp:79
+#, kde-format
+msgid "Change case"
+msgstr "Τροποποίηση πεζών κεφαλαίων"
+
+#: Changecase.cpp:56
+#, kde-format
+msgid "Sentence case"
+msgstr "Πεζά/κεφαλαία πρότασης"
+
+#: Changecase.cpp:57
+#, kde-format
+msgid "lowercase"
+msgstr "πεζά"
+
+#: Changecase.cpp:58
+#, kde-format
+msgid "UPPER CASE"
+msgstr "ΚΕΦΑΛΑΙΑ"
+
+#: Changecase.cpp:59
+#, kde-format
+msgid "Initial Caps"
+msgstr "Αρχικά κεφαλαία"
+
+#: Changecase.cpp:60
+#, kde-format
+msgid "tOGGLE cASE"
+msgstr "Εναλλαγή πεζών/κεφαλαίων"
+
+#: ChangecaseFactory.cpp:16
+#, kde-format
+msgid "Change Case..."
+msgstr "Τροποποίηση πεζών/κεφαλαίων..."
+
+#, fuzzy
+#~| msgid "Change case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change case"
+#~ msgstr "Τροποποίηση πεζών κεφαλαίων"
+
+#, fuzzy
+#~| msgid "Sentence case"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentence case"
+#~ msgstr "Πεζά/κεφαλαία πρότασης"
+
+#, fuzzy
+#~| msgid "lowercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "lowercase"
+#~ msgstr "πεζά"
+
+#, fuzzy
+#~| msgid "UPPER CASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "UPPER CASE"
+#~ msgstr "ΚΕΦΑΛΑΙΑ"
+
+#, fuzzy
+#~| msgid "Initial Caps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Initial Caps"
+#~ msgstr "Αρχικά κεφαλαία"
+
+#, fuzzy
+#~| msgid "tOGGLE cASE"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "tOGGLE cASE"
+#~ msgstr "Εναλλαγή πεζών/κεφαλαίων"
+
+#, fuzzy
+#~| msgid "Change Case..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Case..."
+#~ msgstr "Τροποποίηση πεζών/κεφαλαίων..."
+
+#~ msgid "Changecase"
+#~ msgstr "Τροποποίηση πεζών/κεφαλαίων"

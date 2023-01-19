@@ -1,0 +1,50 @@
+# Translation of calligra_shape_comment.po to Catalan
+# Copyright (C) 2010-2016 This_file_is_part_of_KDE
+# This file is distributed under the same license as the CommentShape package.
+#
+# Rafael Carreras <rcarreras@caliu.cat>, 2010.
+# Josep M. Ferrer <txemaq@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-20 22:35+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "The plugin needed for displaying comments is not present."
+msgstr "No hi és el connector necessari per a mostrar els comentaris."
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Manca el connector"
+
+#: CommentShape.cpp:51
+#, kde-format
+msgid ""
+"The plugin needed for displaying the comment is not compatible with the "
+"current version of the comment shape."
+msgstr ""
+"El connector necessari per a mostrar els comentaris no és compatible amb la "
+"versió actual de la forma comentaris."
+
+#: CommentShape.cpp:52
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Connector incompatible"
+
+#: CommentShapeFactory.cpp:17 CommentToolFactory.cpp:17
+#, kde-format
+msgid "Comment"
+msgstr "Comentari"

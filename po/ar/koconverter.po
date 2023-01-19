@@ -1,0 +1,229 @@
+# translation of koconverter.po to
+# Copyright (C) 2004, 2007 Free Software Foundation, Inc.
+# Ahmad M. Zawawi <azawawi@emirates.net.ae>, 2004.
+# Youssef Chahibi <chahibi@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: koconverter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-10-14 16:04+0000\n"
+"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
+"Language-Team: <en@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "ابراهيم الابراهيم"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "ibrahim@arabeyes.org"
+
+#: calligraconverter.cpp:144
+#, fuzzy, kde-format
+msgid "CalligraConverter"
+msgstr "محول مستندات كي أوفيس"
+
+#: calligraconverter.cpp:146
+#, fuzzy, kde-format
+msgid "Calligra Document Converter"
+msgstr "محول مستندات كي أوفيس"
+
+#: calligraconverter.cpp:148
+#, fuzzy, kde-format
+msgid "Copyright 2001-%1 Calligra developers"
+msgstr "c مكتب ك"
+
+#: calligraconverter.cpp:149
+#, fuzzy, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: calligraconverter.cpp:150
+#, fuzzy, kde-format
+msgid "Nicolas Goutte"
+msgstr "Nicolas Goutte"
+
+#: calligraconverter.cpp:151
+#, kde-format
+msgid "Dan Leinir Turthra Jensen"
+msgstr ""
+
+#: calligraconverter.cpp:158
+#, kde-format
+msgid "Input file"
+msgstr "ملف الادخال"
+
+#: calligraconverter.cpp:159
+#, kde-format
+msgid "Output file"
+msgstr "ملف الاخراج"
+
+#: calligraconverter.cpp:160
+#, fuzzy, kde-format
+msgid "Make a backup of the destination file"
+msgstr "Make a احتياطي من مقصد ملفّ"
+
+#: calligraconverter.cpp:161
+#, fuzzy, kde-format
+msgid "Batch mode: do not show dialogs"
+msgstr "الدّفعة نمط ليس إظهار"
+
+#: calligraconverter.cpp:162
+#, fuzzy, kde-format
+msgid "Interactive mode: show dialogs (default)"
+msgstr "تفاعلي نمط إظهار افتراضي"
+
+#: calligraconverter.cpp:163
+#, fuzzy, kde-format
+msgid "Mimetype of the output file"
+msgstr "نوع Mime من مخرجات ملفّ"
+
+#: calligraconverter.cpp:166
+#, kde-format
+msgid "The print orientation. This could be either Portrait or Landscape."
+msgstr ""
+
+#: calligraconverter.cpp:167
+#, kde-format
+msgid "The paper size. A4, Legal, Letter, ..."
+msgstr ""
+
+#: calligraconverter.cpp:168
+#, kde-format
+msgid "The size of the paper margin. By default this is 0.2."
+msgstr ""
+
+#: calligraconverter.cpp:175
+#, kde-format
+msgid "Two arguments required"
+msgstr "مطلوب وسيطين"
+
+#: calligraconverter.cpp:203
+#, fuzzy, kde-format
+msgid "Mimetype for input file %1 not found!"
+msgstr "نوع Mime لـ دَخْل ملفّ ليس موجود!"
+
+#: calligraconverter.cpp:212
+#, fuzzy, kde-format
+msgid "Mimetype not found %1"
+msgstr "نوع Mime ليس موجود 1"
+
+#: calligraconverter.cpp:218
+#, fuzzy, kde-format
+msgid "Mimetype not found, try using the -mimetype option"
+msgstr "نوع Mime ليس موجود خيار"
+
+#: calligraconverter.cpp:242
+#, fuzzy, kde-format
+msgid "*** The conversion failed! ***"
+msgstr "الـ تحويل failed"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ابراهيم الابراهيم"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ibrahim@arabeyes.org"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CalligraConverter"
+#~ msgstr "محول مستندات كي أوفيس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligra Document Converter"
+#~ msgstr "محول مستندات كي أوفيس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 2001-%1 Calligra developers"
+#~ msgstr "c مكتب ك"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nicolas Goutte"
+#~ msgstr "Nicolas Goutte"
+
+#, fuzzy
+#~| msgid "Input file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Input file"
+#~ msgstr "ملف الادخال"
+
+#, fuzzy
+#~| msgid "Output file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output file"
+#~ msgstr "ملف الاخراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Make a backup of the destination file"
+#~ msgstr "Make a احتياطي من مقصد ملفّ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Batch mode: do not show dialogs"
+#~ msgstr "الدّفعة نمط ليس إظهار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive mode: show dialogs (default)"
+#~ msgstr "تفاعلي نمط إظهار افتراضي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype of the output file"
+#~ msgstr "نوع Mime من مخرجات ملفّ"
+
+#, fuzzy
+#~| msgid "Two arguments required"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two arguments required"
+#~ msgstr "مطلوب وسيطين"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype for input file %1 not found!"
+#~ msgstr "نوع Mime لـ دَخْل ملفّ ليس موجود!"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found %1"
+#~ msgstr "نوع Mime ليس موجود 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mimetype not found, try using the -mimetype option"
+#~ msgstr "نوع Mime ليس موجود خيار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "*** The conversion failed! ***"
+#~ msgstr "الـ تحويل failed"
+
+#~ msgid "KOConverter"
+#~ msgstr "كي أو  كونفيرتر"

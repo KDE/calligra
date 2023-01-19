@@ -1,0 +1,109 @@
+# Translation of SpellCheckPlugin.po into Finnish
+# Copyright © 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the calligra package.
+# Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-12-22 14:01+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2013-01-13 22:09:29+0000\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "&Oikoluvun asetukset…"
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Automaattinen oikoluku"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Oikolue"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Oikoluku"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Lisää sanastoon"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "&Oikoluvun asetukset…"
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Automaattinen oikoluku"
+
+#, fuzzy
+#~| msgid "Check Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Oikolue"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Oikoluku"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Lisää sanastoon"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Ohita sana"
+
+#, fuzzy
+#~| msgid "Configure Spell Check"
+#~ msgid "Spell Check"
+#~ msgstr "Aseta oikoluku"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Oikoluvun asetukset"
+
+#~ msgid "Default Language:"
+#~ msgstr "Oletuskieli:"
+
+#~ msgid "Options"
+#~ msgstr "Valinnat"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Käytä oikolukua &taustalla"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Ohita &suuraakkosin kirjoitetut sanat"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "Ohita &yhteenkirjoitetut sanat"
+
+#~ msgid "&Add"
+#~ msgstr "&Lisää"
+
+#~ msgid "&Remove"
+#~ msgstr "&Poista"

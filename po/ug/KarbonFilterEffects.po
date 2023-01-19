@@ -1,0 +1,920 @@
+# Uyghur translation for karbon.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sahran <sahran.ug@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-09-08 07:04+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "ئارىلاشما"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Blend"
+msgid "Blend mode"
+msgstr "ئارىلاشما"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "نورمال"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "ھەسسىلەپ ئېشىش"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "ئېكران"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "قارايت"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "يورۇت"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "رادىئۇس"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Saturate colors"
+msgstr "توختاش رەڭگى."
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "بۇلۇڭ"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "فۇنكسىيە"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "سالاھىيەت"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "جەدۋەل"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "تارقاق"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "سىزىقلىق"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "گامما"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "قىممەتلەر"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "يانتۇلۇق"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "ئارايۈز"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "كۆرسەتكۈچ"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "ئېغىش"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Composite"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "مەشغۇلات"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "كۆچۈر"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "قۇر يۆتكەش"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "يوق"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "گىرۋەك ھالىتى:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "يادرو چوڭلۇقى:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "نىشان نۇقتا:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "يادرو تەھرىرلەش"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr ""
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+#| msgid "Stop color."
+msgid "Flood color"
+msgstr "توختاش رەڭگى."
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "سۈرەت"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "سۈرەت تاللاش:"
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "سۈرەت تاللاش:"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "بىرىكتۈر"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "مەشغۇلاتچى:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "رادىئۇس x:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "رادىئۇس y:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "ئارىلاشما"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "ئارىلاشما"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "نورمال"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "ھەسسىلەپ ئېشىش"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "ئېكران"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "قارايت"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "يورۇت"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "رادىئۇس"
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "توختاش رەڭگى."
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "توختاش رەڭگى."
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "بۇلۇڭ"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "فۇنكسىيە"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "سالاھىيەت"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "جەدۋەل"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "تارقاق"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "سىزىقلىق"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "گامما"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "قىممەتلەر"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "يانتۇلۇق"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "ئارايۈز"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "كۆرسەتكۈچ"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "ئېغىش"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Composite"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "مەشغۇلات"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "كۆچۈر"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "قۇر يۆتكەش"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "گىرۋەك ھالىتى:"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "يادرو چوڭلۇقى:"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "نىشان نۇقتا:"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "يادرو تەھرىرلەش"
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "توختاش رەڭگى."
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "توختاش رەڭگى."
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "سۈرەت"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "سۈرەت تاللاش:"
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "سۈرەت تاللاش:"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "بىرىكتۈر"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "مەشغۇلاتچى:"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "رادىئۇس x:"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "رادىئۇس y:"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+
+#~ msgid "&Order"
+#~ msgstr "تەرتىپى(&O)"
+
+#~ msgid "&Align"
+#~ msgstr "توغرىلا(&A)"
+
+#~ msgid "&File"
+#~ msgstr "ھۆججەت(&F)"
+
+#~ msgid "&Edit"
+#~ msgstr "تەھرىر(&E)"
+
+#~ msgid "&View"
+#~ msgstr "كۆرۈنۈش(&V)"
+
+#~ msgid "&Object"
+#~ msgstr "نەڭ(&O)"
+
+#~ msgid "&Distribute"
+#~ msgstr "تارقىتىلما(&D)"
+
+#~ msgid "&Path"
+#~ msgstr "يول(&P)"
+
+#~ msgid "Effe&cts"
+#~ msgstr "ئۈنۈم(&C)"
+
+#~ msgid "&Settings"
+#~ msgstr "تەڭشەك(&S)"
+
+#~ msgid "Edit"
+#~ msgstr "تەھرىرلەش"
+
+#~ msgid "Object"
+#~ msgstr "نەڭ"
+
+#~ msgid "Align"
+#~ msgstr "توغرىلا"
+
+#~ msgid "Effects"
+#~ msgstr "ئۈنۈملەر"
+
+#~ msgid "View"
+#~ msgstr "كۆرۈنۈش"
+
+#~ msgid "Properties"
+#~ msgstr "خاسلىق"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "يۇمىلاق قىرلار"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "يۇمىلاق قىرلار(&R)"
+
+#~ msgid "Round Corners"
+#~ msgstr "يۇمىلاق قىرلار"
+
+#~ msgid "Radius:"
+#~ msgstr "رادىئۇس:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "كۆرۈنۈش"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "كۆرۈنۈش"
+
+#~ msgid "Info"
+#~ msgstr "ئۇچۇر"
+
+#~ msgid "Angle:"
+#~ msgstr "بۇلۇڭ:"
+
+#~ msgid "Configure"
+#~ msgstr "سەپلە"
+
+#~ msgid "Misc"
+#~ msgstr "ئارىلاش"
+
+#~ msgid "Grid"
+#~ msgstr "سېتكا"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "پۈتۈك"
+
+#~ msgid "Document Settings"
+#~ msgstr "پۈتۈك تەڭشىكى"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "ئاپتور"
+
+#~ msgid "Author"
+#~ msgstr "ئاپتور"
+
+#~ msgid "Add a new layer"
+#~ msgstr "يېڭى قەۋەت قوشىدۇ"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "تاللانغان نەڭنى ئۆچۈر"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "تاللانغان نەڭنى ئالدىغا يۆتكە"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "تاللانغان نەڭنى ئارقىغا يۆتكە"
+
+#~ msgid "Minimal View"
+#~ msgstr "ئەڭ كىچىك كۆرۈنۈش"
+
+#~ msgid "Detailed View"
+#~ msgstr "تەپسىلات كۆرۈنۈش"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "كىچىكلىتىلگەن سۈرەت كۆرۈنۈشى"
+
+#~ msgid "View mode"
+#~ msgstr "كۆرۈنۈش ھالىتى"
+
+#~ msgid "New Layer"
+#~ msgstr "يېڭى سۈرەت قەۋىتى"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "يېڭى قاتلامنىڭ ئاتىنى كىرگۈزۈڭ:"
+
+#~ msgid "New layer"
+#~ msgstr "يېڭى سۈرەت قەۋىتى"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "قاتلام قۇرۇش"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "سۈرەت قەۋىتى ئۆچۈر"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "ھەممە قاتلاملارنى ئۆچۈرگىلى بولمىدى. ئاز دېگەندە قاتلامدىن بىرى زۆرۈر."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "قاتلاملارنى ئۆچۈرۈۋاتقاندا خاتالىق كۆرۈلدى"
+
+#~ msgid "Layer"
+#~ msgstr "قەۋەت"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "گۇرۇپپا"
+
+#~ msgid "Shape"
+#~ msgstr "شەكىل"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "كۆرۈنۈشچان"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "قۇلۇپلانغان"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "غۇۋالىقى"
+
+#~ msgid "no"
+#~ msgstr "ياق"
+
+#~ msgid "yes"
+#~ msgstr "ھەئە"
+
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "كەمتۈكلەرنى تۈزىتىش ۋە ياخشىلاش"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "كەمتۈكلەرنى تۈزىتىش"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Master Page"
+#~ msgstr "ئانا بەت"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "گرافىك قىستۇر"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "گرافىكنى ئىمپورت قىل(&I)…"
+
+#~ msgid "D&elete"
+#~ msgstr "ئۆچۈر(&E)"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "كۆچۈر(&D)"
+
+#~ msgid "Show Rulers"
+#~ msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "سىزغۇچلارنى كۆرسەتسۇن ياكى يوشۇرسۇن"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "سېتكىغا توغرىلا"
+
+#~ msgid "&Close Path"
+#~ msgstr "يولنى ياپ(&C)"
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
+
+#~ msgid "Zoom"
+#~ msgstr "كېڭەيت-تارايت"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "ئىختىيارى"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#~ msgid "Fill:"
+#~ msgstr "تولدۇرۇش:"
+
+#~ msgid "File to open"
+#~ msgstr "ئاچىدىغان ھۆججەت"
+
+#~ msgid "Target:"
+#~ msgstr "نىشان:"
+
+#~ msgid "Line"
+#~ msgstr "قۇر"
+
+#~ msgid "Fill"
+#~ msgstr "تولدۇر"
+
+#~ msgid "Type:"
+#~ msgstr "تىپى:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "سىزىقلىق"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "رادىئال"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "كونۇس"
+
+#~ msgid "Repeat:"
+#~ msgstr "قايتىلا :"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#~ msgid "Reflect"
+#~ msgstr "نۇر قايتۇرۇش"
+
+#~ msgid "Repeat"
+#~ msgstr "قايتىلا"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "ئومۇمىي غۇۋالىقى:"
+
+#~ msgid "Original"
+#~ msgstr "ئەسلى"
+
+#~ msgid "Tiled"
+#~ msgstr "يېيىلغان"
+
+#~ msgid "Stretched"
+#~ msgstr "سوزۇلغان"
+
+#~ msgid "Top Left"
+#~ msgstr "سول ئۈستى"
+
+#~ msgid "Top"
+#~ msgstr "ئۈستى"
+
+#~ msgid "Top Right"
+#~ msgstr "ئوڭ ئۈستى"
+
+#~ msgid "Left"
+#~ msgstr "سول"
+
+#~ msgid "Center"
+#~ msgstr "مەركەز"
+
+#~ msgid "Right"
+#~ msgstr "ئوڭ"
+
+#~ msgid "Bottom Left"
+#~ msgstr "سول ئاستى"
+
+#~ msgid "Bottom"
+#~ msgstr "ئاستى"
+
+#~ msgid "Bottom Right"
+#~ msgstr "ئوڭ ئاستى"
+
+#~ msgid "Stroke"
+#~ msgstr "سىزىق"

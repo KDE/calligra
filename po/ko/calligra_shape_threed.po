@@ -1,0 +1,41 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Shinjo Park <kde@peremen.name>, 2015.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-04-17 10:38+0900\n"
+"Last-Translator: JungHee Lee (이정희 : MarongHappy) <daemul72@gmail.com>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.2.1\n"
+
+#: ThreedShapeFactory.cpp:35
+#, kde-format
+msgid "3D Scene"
+msgstr "3차원 장면"
+
+#: ThreedShapeFactory.cpp:37
+#, kde-format
+msgid "Shape that displays a simple 3D scene."
+msgstr "간단한 3차원 장면을 표시하는 도형."
+
+#, fuzzy
+#~| msgid "3D Scene"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "3D Scene"
+#~ msgstr "3차원 장면"
+
+#, fuzzy
+#~| msgid "Shape that displays a simple 3D scene."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape that displays a simple 3D scene."
+#~ msgstr "3차원 장면을 표시하는 도형입니다."

@@ -1,0 +1,77 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+&traductor.Rafael.Carreras; 
+</authorgroup>
+</chapterinfo>
+<title
+>Pistes generals i trucs per a grans presentacions</title>
+
+<para
+>Molt bé, heu decidit d'usar el &stage; per a la vostra presentació. Abans de començar a fer transparències o diapositives animades, aneu a cercar un paper i seieu en una taula lluny de l'ordinador. No importa si feu una classe o intenteu convèncer el vostre cap que s'ha d'adoptar el vostre pla, política o idea, cal que doneu forma al que voleu dir. Escriviu tots els temes que heu de cobrir, intenteu posar-los en l'ordre que penseu que tindran més sentit. No poseu encara cap detall, només decidiu els titulars i l'estructura de la vostra xerrada.</para>
+
+<para
+>A sota de cada títol, feu una anotació amb els fets que heu de cobrir. Intenteu construir un argument convincent. Considereu agrupar els vostres fets entre els quals cal incloure, els que s'haurien d'incloure i els que estaria bé cobrir si tinguéssiu molt de temps.</para>
+
+<para
+>Un cop escrites totes les coses que heu de dir, considereu el temps disponible per a fer-ho. Deu minuts sembla una barbaritat quan comenceu, però és molt difícil explicar moltes coses en un temps tan curt. Agafeu el vostre paper i un rellotge. Practiqueu la vostra presentació un i un altre cop. Això té molts beneficis. Primer, aconseguiu el temps correcte. Si algú us diu que teniu deu minuts, no sobrepasseu mai el temps permès. Segon, quan ho feu davant de l'audiència, no serà el primer cop que feu la presentació. Tercer, teniu les paraules al vostre cap. Trobareu maneres de dir coses sobre el tema. Si us heu sentit diverses vegades donar la presentació, sabreu què heu de dir a continuació i com ho heu de dir. </para>
+
+<para
+>El &stage; no produeix les notes del conferenciant en el moment d'escriure, sinó que estic content d'usar simples diapositives. Produïu algunes diapositives, per a imprimir en paper normal, i algunes per a usar-les amb un projector. Feu el text de les diapositives agradable i gran. Heu de ser capaç de veure-ho en la distància. Jo uso mides de 14 o 16 punts. Experimenteu per a trobar una mida que llegiu fàcilment. Jo mai escric un script.</para>
+
+<para
+>Si heu de fer servir un projector de transparències, apreneu primer com usar-lo. Assegureu-vos que la làmpada funciona, que la làmpada de reserva està encara bé. Netegeu les lents i el plat de mostra. Si no esteu acostumat a treballar amb projectors, practiqueu. Assegureu-vos que la pantalla de projecció està neta. Segurament és millor, quan us cronometreu, que us doneu un marge de cinc segons per a canviar cada transparència. D'aquesta manera, no haureu de córrer. Si us cal apuntar a alguna cosa de la transparència, podeu fer servir un punter i apuntar a la pantalla, cerqueu un punter làser o poseu un llapis a la transparència mateixa. Aneu amb compte, aquestes tendeixen a sortir de lloc quan toqueu la taula.</para>
+
+<para
+>Considereu el lloc on heu d'estar. No podeu quedar-vos davant de la vostra pantalla, així que a un costat és probablement la millor opció si voleu que la vostra audiència hi pugui veure. Jo projecto normalment una imatge en una pissarra blanca i hi escric amb els retoladors. Si useu un PC amb un projector digital, podeu dibuixar sobre les diapositives amb l'eina de llapis del &stage;. Recordeu: dibuixar a mà alçada amb un ratolí, és una cosa que requereix pràctica. Si useu un projector convencional, podeu fer servir les transparències generades amb ordinador i un llapis a sobre.</para>
+
+<para
+>Quan feu una presentació, no mireu accidentalment a la llum, és fàcil de fer-ho. Si no heu de fer servir la màquina per uns pocs minuts, apagueu-la. Practiqueu per a decidir on us col·locareu. Comproveu els endolls de la sala que usareu, mireu com funcionen les persianes i on són els interruptors. Una bona preparació no només us fa menys propensos a les errades (que poden ser un malson davant d'una audiència), sinó que us donen confiança. Tingueu sempre un <quote
+>Pla B</quote
+> llest per si alguna cosa no funciona. Porteu una còpia en paper de les vostres diapositives. Podeu fotocopiar-les i distribuir-les entre l'audiència si l'equip falla.</para>
+
+<para
+>Encara no he dit gaire sobre el contingut. De moment, tot el que teniu és un paper amb tot el que voleu dir. Abans de fer res, pregunteu-vos si s'entendrà més bé el que direu amb una imatge. Les presentacions dolentes consisteixen en una sèrie de diapositives plenes de text. El presentador llegeix llavors la diapositiva a l'audiència (que ja l'ha llegit, perquè poden llegir més de pressa del que qualsevol ho pot dir en veu alta). Intenteu evitar escriure res a la diapositiva, excepte un títol i un número. Feu un dibuix sobre què voleu dir, llavors expliqueu-los el dibuix. D'aquesta manera, ells no van per davant vostre (poden llegir més de pressa del que parleu, recordeu?) i fa l'efecte que us ho sabeu de memòria. Però no us ho sabeu, useu les imatges com a una sèrie de guies. La diapositiva donarà suport a què esteu dient, no ho duplicarà. La diapositiva ha de ser el focus d'atenció de l'audiència, no una distracció.</para>
+
+<para
+>Un exemple. Jo ensenyo el personal ferroviari com respondre als accidents. Volia fer servir una diapositiva per a debatre com es poden moure càrregues perilloses des d'un vehicle de rails a un vehicle de carretera després d'un accident. La diapositiva que vaig fer tenia un dibuix simple d'un vagó de tanc, els que s'usen per a carregar gasos o benzina. Al lateral vaig escriure-hi <quote
+>Empresa Química Letal</quote
+> de manera que no ho havia d'explicar. Volia explicar molts punts importants. Primer, heu de tenir tots els cables elèctrics sense electricitat si estan dins una certa distància. Vaig dibuixar una torre d'alta tensió i una fletxa amb la distància de seguretat. Llavors volia dir que no es poden transferir els continguts del vagó en l'obscuritat o sota una tempesta. Vaig dibuixar una lluna i un raig sobre el vehicle. Heu d'aconseguir assessorament d'especialistes, així que vaig dibuixar un paper amb la paraula <quote
+>Pla</quote
+> a prop del vehicle. També cal assegurar-se que el vehicle no es mogui quan es treu el pes de dins. Vaig dibuixar petits bloquejadors vermells a les rodes. Tot el que necessito dir sobre aquest tema és al dibuix i aquest em diu què és el que haig de dir. Quan he acabat de cobrir tots els aspectes del dibuix, ja he acabat amb aquest tema. </para>
+
+<para
+>En general, useu una diapositiva o dibuix només si mostra alguna cosa que afegeix quelcom a allò que esteu dient. Finalment, relaxeu-vos i no intenteu córrer per tota la presentació. Parleu a l'audiència, no per a ells, i recordeu que una presentació és sobre qualsevol missatge que intenteu transmetre. El &stage; és una eina útil. Us pot ajudar a aconseguir transmetre el missatge, però no us pot fer la feina.</para>
+
+</chapter>

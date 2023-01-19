@@ -1,0 +1,41 @@
+# Frederik Schwarzer <schwarzer@kde.org>, 2011, 2016.
+# Burkhard Lück <lueck@hube-lueck.de>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: okularGenerator_odp\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-22 20:53+0100\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: OkularOdpGenerator.cpp:82
+#, kde-format
+msgid "Language"
+msgstr "Sprache"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Sprache"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Frederik Schwarzer"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "schwarzer@kde.org"
+
+#~ msgid "ODP Backend"
+#~ msgstr "ODP-Backend"
+
+#~ msgid "ODP file renderer"
+#~ msgstr "ODP-Datei-Renderer"
+
+#~ msgid "© 2010 Sven Langkamp"
+#~ msgstr "© 2010 Sven Langkamp"

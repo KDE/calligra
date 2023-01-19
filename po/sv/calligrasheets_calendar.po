@@ -1,0 +1,202 @@
+# translation of kspread_plugin_tool_calendar.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2008, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspread_plugin_tool_calendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-06-19 09:31+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Slutdatum är innan startdatum. Försäkra dig om att slutdatum kommer efter "
+"startdatum."
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "Fel"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Kalendrar bör inte vara längre än 10 år. Om du verkligen behöver så långa "
+"perioder måste du dela upp dem."
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Start och slutdatum är lika. Bara en dag kommer att infogas. Vill du "
+"fortsätta?"
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "Varning"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Att skapa en kalender som är längre än ett år kan uppta mycket utrymme. Vill "
+"du fortsätta?"
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Området där kalendern infogas är INTE tomt. Är du säker på att du vill "
+"fortsätta, och skriva över befintlig data? Om du väljer Nej, markeras "
+"området som krävs för den önskade kalendern, så att du kan se vilken data "
+"som skulle ha skrivits över."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Infoga kalender"
+
+#: CalendarTool.cpp:107
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Kalender från %1 till %2"
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "vecka"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "Kalender"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Kalenderverktyg"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, kde-format
+msgid "Insert"
+msgstr "Infoga"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, kde-format
+msgid "Start date:"
+msgstr "Startdatum:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, kde-format
+msgid "End date:"
+msgstr "Slutdatum:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Kalenderverktyg"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Infoga"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Startdatum:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Slutdatum:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "Slutdatum är innan startdatum. Försäkra dig om att slutdatum kommer efter "
+#~ "startdatum."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Fel"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Kalendrar bör inte vara längre än 10 år. Om du verkligen behöver så långa "
+#~ "perioder måste du dela upp dem."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Start och slutdatum är lika. Bara en dag kommer att infogas. Vill du "
+#~ "fortsätta?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Varning"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Att skapa en kalender som är längre än ett år kan uppta mycket utrymme. "
+#~ "Vill du fortsätta?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Området där kalendern infogas är INTE tomt. Är du säker på att du vill "
+#~ "fortsätta, och skriva över befintlig data? Om du väljer Nej, markeras "
+#~ "området som krävs för den önskade kalendern, så att du kan se vilken data "
+#~ "som skulle ha skrivits över."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Kalender från %1 till %2"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "vecka"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Kalender"

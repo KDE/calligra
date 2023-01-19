@@ -1,0 +1,72 @@
+# Translation of okularGenerator_odp.po to Brazilian Portuguese
+# Copyright (C) 2011-2014 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# André Marcelo Alvarenga <alvarenga@kde.org>, 2011, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: okularGenerator_odp\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-06-24 08:34-0300\n"
+"Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: OkularOdpGenerator.cpp:82
+#, kde-format
+msgid "Language"
+msgstr "Idioma"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Idioma"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "André Marcelo Alvarenga"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "alvarenga@kde.org"
+
+#~ msgid "ODP Backend"
+#~ msgstr "Infraestrutura ODP"
+
+#~ msgid "ODP file renderer"
+#~ msgstr "Renderização de arquivos ODP"
+
+#~ msgid "© 2010 Sven Langkamp"
+#~ msgstr "© 2010 Sven Langkamp"
+
+#~ msgctxt "Document title"
+#~ msgid "Title"
+#~ msgstr "Título"
+
+#~ msgid "Subject"
+#~ msgstr "Assunto"
+
+#~ msgid "Keywords"
+#~ msgstr "Palavras-chave"
+
+#~ msgid "Comments"
+#~ msgstr "Comentários"
+
+#~ msgid "Creation date"
+#~ msgstr "Data de criação"
+
+#~ msgid "Initial creator"
+#~ msgstr "Criador inicial"
+
+#~ msgid "Last modification date"
+#~ msgstr "Data da última modificação"
+
+#~ msgid "Last modifier"
+#~ msgstr "Último modificador"

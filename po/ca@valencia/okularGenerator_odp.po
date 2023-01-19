@@ -1,0 +1,27 @@
+# Translation of okularGenerator_odp.po to Catalan (Valencian)
+# Copyright (C) 2011-2016 This_file_is_part_of_KDE
+# This file is distributed under the same license as the okularGenerator_odp package.
+#
+# Rafael Carreras <rcarreras@caliu.cat>, 2011.
+# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-20 23:01+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Poedit-Language: Catalan\n"
+
+#: OkularOdpGenerator.cpp:82
+#, kde-format
+msgid "Language"
+msgstr "Idioma"

@@ -1,0 +1,560 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Federico</firstname
+><surname
+>Zenith</surname
+><affiliation
+><address
+><email
+>federico.zenith@member.fsf.org</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Vincenzo</firstname
+><surname
+>Reale</surname
+><affiliation
+><address
+><email
+>smart2128vr@gmail.com</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Un'esercitazione passo-passo</title>
+
+<para
+>In questo capitolo, si introduce &stage; con una semplice esercitazione. Passeremo attraverso le operazioni più semplici nella creazione di una presentazione, e l'aggiunta di alcuni effetti di base. </para>
+
+<sect1 id="start-new">
+<title
+>Cominciare un nuovo documento</title>
+
+<para
+>Quando avvii &stage;, appare la normale finestra di avvio di &calligra;. </para>
+
+<screenshot>
+<screeninfo
+>La finestra di avvio di <guilabel
+>&calligra;</guilabel
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>La finestra di avvio di &calligra;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Seleziona <guilabel
+>Schermo</guilabel
+> sulla sinistra, poi scegli il modello chiamato <guilabel
+>Vuoto</guilabel
+> (evidenziato in blu nella schermata sopra) facendoci clic. Puoi marcare <guilabel
+>Usa sempre questo modello</guilabel
+> per renderlo il modello predefinito. </para>
+
+<para
+>Adesso fai clic su <guibutton
+>Usa questo modello</guibutton
+>. Ciò fa apparire la finestra di modifica delle diapositive, dove puoi visualizzare e modificare le diapositive (e gli oggetti in esse contenuti) del tuo documento. </para>
+
+<para
+>Al momento, abbiamo solo una diapositiva vuota, perciò seleziona la diapositiva in alto a sinistra con la casella di testa dal gancio <guilabel
+>Schemi della diapositive</guilabel
+>.</para>
+
+<para
+>Fai doppio clic sul riquadro di testo. Il puntatore si trasforma in una barra verticale per indicare che ora puoi scrivere del testo. </para>
+
+<screenshot>
+<screeninfo
+>Il puntatore di inserimento del testo</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Il puntatore di inserimento del testo</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Avanti, scrivi qualcosa! </para>
+
+<screenshot>
+<screeninfo
+>Aggiungere del testo</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Aggiungere del testo</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Fai clic lontano dal testo per deselezionare il riquadro di testo quando hai finito di scrivere. </para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title
+>Aggiungere una pagina nuova</title>
+
+<para
+>Adesso aggiungiamo una nuova diapositiva al documento. Per farlo, fai clic sul menu <guimenu
+>Diapositiva</guimenu
+>, e poi su <guimenuitem
+>Inserisci diapositiva</guimenuitem
+>. </para>
+
+<para
+>Ora possiamo decidere l'aspetto della nuova diapositiva. Questa volta, seleziona una struttura a colonna (evidenziata in blu). </para>
+
+<screenshot>
+<screeninfo
+>Scegliere una struttura per la nuova pagina</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Scegliere una struttura per la nuova pagina</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>La nuova struttura della diapositiva appare ora nella finestra di modifica. Per passare tra le diapositive della tua presentazione, puoi selezionare le diapositive nel pannello a sinistra (evidenziato in blu in questa schermata). </para>
+
+<para
+>La diapositiva appena inserita ha due riquadri di testo. Ce n'è uno per il titolo, e un altro che contiene una lista puntata. </para>
+
+<screenshot>
+<screeninfo
+>La nuova diapositiva</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>La nuova diapositiva</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Fai doppio clic e scrivi un titolo. Quindi fai doppio clic sul secondo riquadro di testo con il punto. Scrivi del testo e concludi il paragrafo premendo <keycap
+>Invio</keycap
+>. Quando scrivi dei nuovi paragrafi, ci appaiono automaticamente dei punti davanti. </para>
+
+<screenshot>
+<screeninfo
+>Aggiungere del testo alla seconda diapositiva</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Aggiungere del testo alla seconda diapositiva</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Puoi deselezionare il riquadro di testo facendo clic lontano da esso. </para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title
+>Inserire un'immagine</title>
+
+<para
+>Ora torniamo alla prima diapositiva. Usa l'elenco delle diapositive sulla sinistra del tuo schermo. </para>
+
+<para
+>In questa sezione, ravviveremo un po' la nostra presentazione aggiungendoci un bel logo sulla pagina del titolo. Per farlo, il primo passo è abilitare il gancio <guilabel
+>Aggiungi forma</guilabel
+> utilizzando <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Ganci</guimenuitem
+></menuchoice
+> dal menu. </para>
+
+<para
+>Ora seleziona Immagine nel gancio <guilabel
+>Aggiungi forma</guilabel
+> e fai clic con il &LMB; dove vuoi posizionare il logo nelle sue dimensioni originali, o disegna un rettangolo con il &LMB; (premi il &LMB; e tienilo premuto) per specificare la posizione e le dimensioni del logo. </para>
+
+<para
+>Questo fa apparire una finestra di selezione dei file. Per saperne di più su questa o altre finestre standard di &kde;, vedi la documentazione di &kde;. Puoi sfogliare facendo clic sulle icone <guiicon
+>cartella</guiicon
+> o usando i pulsanti del <guiicon
+>navigatore</guiicon
+> degli stili nella barra degli strumenti. Un clic sulla <guiicon
+>freccia in alto</guiicon
+> ti porta in alto di un livello nelle cartelle. </para>
+
+<para
+>Seleziona un file e fai clic su <guibutton
+>OK</guibutton
+>. </para>
+
+<para
+>L'immagine viene ora inserita nella diapositiva e sono visibili delle maniglie di selezione (quadratini) intorno al bordo dell'oggetto. </para>
+
+<screenshot>
+<screeninfo
+>L'immagine appena aggiunta</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>L'immagine appena aggiunta</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Posiziona il puntatore del mouse da qualche parte nel centro del logo, e trascinalo nel centro della pagina del titolo. Quindi, usa le maniglie di selezione per ridimensionarlo correttamente. </para>
+
+<para
+>Fatto, ora hai un'immagine nella pagina del titolo! </para>
+<!--FIXME Double click opens the file dialog to replace the image-->
+</sect1>
+
+<sect1 id="insert-object">
+<title
+>Inserire un oggetto di &calligra;</title>
+<para
+>Inseriamo un altro oggetto di &calligra; sotto l'immagine, ad esempio un grafico.</para>
+
+<para
+>Ogni oggetto supportato da &calligra; può essere integrato in una diapositiva di &stage;. Scegliamo un grafico dal gancio <guilabel
+>Aggiungi forma</guilabel
+>. </para>
+
+<para
+>Seleziona <guilabel
+>Grafico</guilabel
+> e delimita con il mouse l'area in cui vuoi posizionare il grafico nella diapositiva di &stage;. </para>
+
+<screenshot>
+<screeninfo
+>Seleziona l'area dove mettere il grafico</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Seleziona l'area dove mettere il grafico</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Una volta che rilasci il pulsante del mouse, un grafico vuoto viene aggiunto alla diapositiva. Ogni volta che lavori nel grafico, <guilabel
+>Opzioni strumenti</guilabel
+> appare nel gancio. </para>
+
+<screenshot>
+<screeninfo
+>Opzioni strumenti di &kchart;</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Opzioni strumenti di &kchart;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Per spostare, ridimensionare o addirittura eliminare un grafico integrato, passa allo strumento <guibutton
+>Manipolazione semplice forma</guibutton
+> e fai clic in un punto qualsiasi all'interno dell'area del grafico. Dovrebbe apparire un bordo verde e un quadratino giallo in ogni angolo e a metà dei lati. </para>
+<para
+>Se sposti il puntatore su uno qualsiasi dei quadratini, esso dovrebbe trasformarsi in una freccia a due punte. Puoi ridimensionare il grafico trascinando uno di questi quadratini con il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse premuto. Per eliminare il grafico, fai clic con il tasto <mousebutton
+>destro</mousebutton
+> su uno dei quadratini e seleziona <guimenuitem
+>Elimina</guimenuitem
+>.</para>
+<para
+>Per spostare un grafico. porta il puntatore sul grafico. Il puntatore dovrebbe assumere la forma di una croce, premi il pulsante <mousebutton
+>sinistro</mousebutton
+> del mouse e sarai in grado di trascinare il grafico dove preferisci.</para>
+<para
+>Per ripristinare l'aspetto normale del grafico, basta fare clic in un punto qualsiasi al di fuori dell'area del grafico.</para>
+<para
+>Per cambiare il formato del grafico stesso, fai un doppio clic con il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse nell'area del grafico. Le <guilabel
+>Opzioni strumenti</guilabel
+> dovrebbero apparire nel gancio. Puoi quindi utilizzare questi strumenti per modificare le proprietà del grafico come tipo, etichette, assi e dati.</para>
+
+<para
+>Fai clic in un punto qualsiasi con il &LMB; al di fuori del grafico per tornare alla diapositiva di &stage;.</para>
+
+<para
+>Un singolo clic sul grafico ti permetterà di trascinarlo per cambiarne la posizione, e anche di trascinarne i bordi per ingrandirlo come qualsiasi altro oggetto di &stage;. Fai doppio clic sul grafico per entrare nella modalità di &kchart; e modificare le proprietà del grafico.</para>
+
+</sect1>
+<!-- does not work in BETA6 here
+<sect1 id="addshadow">
+<title
+>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton
+>Right</mousebutton
+> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem
+>Shadow Objects...</guimenuitem
+> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo
+>The context menu</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The context menu</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel
+>Shadow</guilabel
+> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Shadow</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The <guilabel
+>Shadow</guilabel>
+dialog</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton
+>OK</guibutton
+>.
+</para>
+
+<screenshot>
+<screeninfo
+>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adding a shadow to the title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo
+>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The new shadowed title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+-->
+<sect1 id="textcolor">
+<title
+>Cambiare il colore del testo del titolo</title>
+
+<para
+>Finiamo cambiando il colore del testo del titolo da nero a blu. Per farlo, seleziona il testo del titolo facendo doppio clic sul riquadro di testo e selezionane il testo. </para>
+<!-- Font from menu Format or contextmenu with a lot of options-->
+<para
+>Apri il selettore dei colori facendo cli sull'<inlinemediaobject
+><imageobject
+> <imagedata fileref="22x22-actions-format-text-color.png" format="PNG"/></imageobject
+> </inlinemediaobject
+>icona in Opzioni strumenti di modifica del testo (questa icona ha come suggerimento «Colore testo»).</para>
+
+<screenshot>
+<screeninfo
+>Il selettore dei colori</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Il selettore dei colori</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>Il selettore dei colori</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Il selettore dei colori</phrase
+></textobject>
+<caption
+><para
+>Cambiare il colore in blu.</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<para
+>Cambiare il colore del testo selezionato in blu ne cambia l'aspetto. Il colore esatto in cui il testo evidenziato viene convertito dipende dallo schema di colori del tuo sistema. </para>
+
+<note>
+<para
+>La selezione del colore del testo è disponibile anche nella scheda <guilabel
+>Decorazione</guilabel
+> della finestra <guilabel
+>Seleziona carattere</guilabel
+>. Apri questa finestra usando <guimenuitem
+>Carattere</guimenuitem
+> nel menu <guimenu
+>Formato</guimenu
+> o dal menu contestuale. </para>
+</note>
+
+<para
+>Adesso fai clic lontano dal testo per deselezionarlo. </para>
+
+
+<screenshot>
+<screeninfo
+>Il titolo finito</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Il titolo finito</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Adesso che ci sono due diapositive, perché non proviamo una presentazione? Per avviarla, premi il pulsante <guiicon
+>Avvia presentazione</guiicon
+> della barra degli strumenti. Sul tuo schermo dovrebbe apparire la prima diapositiva. </para>
+
+<para
+>Per avanzare dalla prima diapositiva alla prossima, fai clic da qualche parte sullo schermo, o usa il tasto <keycap
+>Pag giù</keycap
+>. </para>
+
+<para
+>Per uscire dalla presentazione, premi il tasto &Esc;. </para>
+
+</sect1>
+
+</chapter>

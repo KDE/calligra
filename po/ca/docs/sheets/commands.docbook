@@ -1,0 +1,2720 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+&traductor.Antoni.Bella; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Referència d'ordres</title>
+
+<sect1 id="filemenu">
+<title
+>El menú Fitxer</title>
+<para>
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Nou</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea un document nou.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Obre...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre un document existent.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guisubmenu
+>Obre recent</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre un document existent</action
+> seleccionant-lo des d'un quadre combinat de fitxers usats recentment.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Desa</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Desa el document.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Desa com a...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Desa i canvia el nom o el format del document actual. Si voleu mantenir el nom i el format del document utilitzeu <guimenuitem
+>Exporta...</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Recarrega</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Torna a carregar el document.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Versions</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME define different versions of the document + open them in new windows</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Importa...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Importa altres documents.</action>
+</para>
+<para
+>Les taules de dades se solen mantenir en fitxers de text amb els valors en una línia separats per una coma, un espai, un tabulador o un altre caràcter, per exemple <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. Tals fitxers se solen anomenar fitxers <quote
+><acronym
+>CSV</acronym
+></quote
+> (valors separats per comes), fins i tot quan el caràcter de separació no es tracta d'una coma.</para>
+<para
+>Si demaneu a &sheets; que obri un fitxer de text aquest assumeix que el fitxer de text està en format <acronym
+>CSV</acronym
+> i llança un diàleg que us permetrà especificar el delimitador (caràcter separador) usat pel fitxer, i mostra com se situaran els elements de dades en les diferents cel·les del full de càlcul.</para>
+<para
+>Altres opcions en aquest diàleg us permeten definir el <guilabel
+>Format</guilabel
+> de les cel·les del full de càlcul, si s'hauran d'eliminar els caràcters de cometa, i si s'haurà d'ignorar la(es) primera(es) línia(es) del fitxer.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Exporta...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Desa un document en qualsevol format admès.</action
+> El document no es convertirà en el fitxer exportat. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Correu...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Envia el fitxer com a adjunt en un correu electrònic.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Crea una plantilla des d'un document...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Crea una <link linkend="templates"
+>plantilla</link
+> de &sheets; basada en aquest document. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Imprimeix...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Imprimeix el document.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Exemple d'impressió...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visualitza el document tal com serà imprès.</action
+></para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Export as PDF...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action
+></para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Informació del document</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visualitza o introdueix informació quant al document i l'autor.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Tanca</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Tanca el document actual però deixa &sheets; obert. </action
+></para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Fitxer</guimenu
+> <guimenuitem
+>Surt</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Surt</action
+> de &sheets;.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title
+>El menú Edita</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Desfés</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Desfà l'última acció.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Refés</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Refà l'última acció desfeta.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Retalla</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Situa els elements seleccionats dintre del porta-retalls i els elimina de la ubicació original.</action
+> Si després feu una operació <guimenuitem
+>Enganxa</guimenuitem
+>, els elements seran inserits a la nova ubicació. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Copia</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Copia els elements seleccionats al porta-retalls.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Enganxa</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Enganxa els elements des del porta-retalls a les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Edita</guimenu
+> <guimenuitem
+>Enganxat especial...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formes d'enganxat especial.</action
+> Per a més detalls vegeu les seccions <link linkend="specialpaste"
+>Altres modes d'enganxat</link
+> i <link linkend="sumspecialpaste"
+>Aritmètica usant l'enganxat especial</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Edita</guimenu
+> <guimenuitem
+>Enganxa amb inserció</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Mou el contingut de l'àrea d'enganxat a la dreta o avall i enganxa els elements des del porta-retalls a les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Edita</guimenu
+> <guisubmenu
+>Omple</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Omple l'àrea seleccionada amb els valors del primer joc d'elements.</action
+> S'admeten totes les quatre direccions. Tingueu present que el terme «joc d'elements» descriu el primer joc de valors que es veuen en la direcció d'emplenat. Si la direcció d'emplenat és Esquerra, aleshores el primer joc d'elements serà l'última columna de la selecció. </para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Select All</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Cerca...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cerca les cel·les que contenen el text indicat.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F3</keysym
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Cerca la següent</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cerca la següent cel·la que contingui el text indicat.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Maj;<keycap
+>F3</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Cerca l'anterior</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cerca la cel·la anterior que contingui el text indicat.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Substitueix...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Cerca i substitueix el text indicat en les cel·les.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Edita</guimenu
+> <guisubmenu
+>Neteja</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ho neteja <guimenuitem
+>Tot</guimenuitem
+> o <guimenuitem
+>Continguts</guimenuitem
+>, <guimenuitem
+>Comentari</guimenuitem
+>, <guimenuitem
+>Estils condicionals</guimenuitem
+>, <guimenuitem
+>Enllaç</guimenuitem
+> o <guimenuitem
+>Validesa</guimenuitem
+> des de les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Edita</guimenu
+> <guimenuitem
+>Suprimeix</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Elimina <guimenuitem
+>Cel·les</guimenuitem
+>, <guimenuitem
+>Columnes</guimenuitem
+>, <guimenuitem
+>Files</guimenuitem
+> o <guimenuitem
+>Full</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Conditional Cell Attributes...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add or modify conditional cell attributes.</action>
+</para
+></listitem>
+</varlistentry>
+
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycap
+>F2</keycap
+> </shortcut
+> <guimenu
+>Edita</guimenu
+> <guimenuitem
+>Modifica la cel·la</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Per a modificar in situ les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title
+>El menú Visualitza</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Visualitza</guimenu
+> <guimenuitem
+>Vista nova</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre una nova instància de &sheets; amb el mateix document.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Close all open instances of &sheets;</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Split current view into two parts.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Remove current view.</action
+> (Where the window 
+contains two or more views)
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change view split to <guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Goto Cell...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change &sheets;'s focus to show defined cell.</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Visualitza</guimenu
+> <guimenuitem
+>Vores de la pàgina</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia el marcat de les vores de pàgina impreses en el full amb línies vermelles. </action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show/Hide Comment Indicator</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing Zoom In Zoom Out-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Visualitza</guimenu
+> <guisubmenu
+>Apropa</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Augmenta o disminueix l'ampliació usada per a visualitzar el full de càlcul. L'interval va des del 33% al 500%. </action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME Full Screen Mode-->
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="gomenu">
+<title
+>El menú Ves</title>
+<para
+>En aquest menú trobareu les accions per a navegar entre els fulls del full de càlcul obert i l'acció <guimenuitem
+>Ves a la cel·la</guimenuitem
+> per a saltar a una sola cel·la o per a seleccionar un interval de cel·les.</para>
+</sect1>
+
+<sect1 id="insertmenu">
+<title
+>El menú Insereix</title>
+<para>
+<variablelist>
+
+<!-- OBSOLETE <varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Sheet</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add another worksheet.</action>
+</para
+></listitem>
+</varlistentry
+>-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insereix</guimenu
+> <guimenuitem
+>Comentari</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Afegeix/Modifica un comentari. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insereix</guimenu
+> <guimenuitem
+>Funció...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix una funció matemàtica.</action
+> Per a més detalls mireu la secció <link linkend="formulas"
+>Fórmules</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insereix</guimenu
+> <guimenuitem
+>Sèries...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix una sèrie.</action
+> Per a més detalls mireu la secció <link linkend="series"
+>Sèries</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insereix</guimenu
+> <guimenuitem
+>Enllaç...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix un enllaç.</action
+> Per a més detalls mireu la secció <link linkend="hyper"
+>Cel·les d'enllaç</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insereix</guimenu
+> <guimenuitem
+>Caràcter especial...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix un caràcter especial dintre de la cel·la seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Embed another &koffice; document into the sheet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a chart.</action
+> See the section 
+<link linkend="insertchart"
+>Inserting a Chart</link
+> for more details.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Insereix</guimenu
+> <guisubmenu
+>Dades externes</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix dades <guilabel
+>Des d'una base de dades...</guilabel
+>, <guilabel
+>Des d'un fitxer de text...</guilabel
+> o <guilabel
+>Des del porta-retalls...</guilabel
+></action
+> Per a més detalls mireu en la secció <link linkend="insertdata"
+>Insereix dades externes</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title
+>El menú Format</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Alt;&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Format</guimenu
+> <guimenuitem
+>Format de cel·la...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Dona format a les cel·les seleccionades</action
+> Per a més detalls mireu la secció <link linkend="formatspread"
+>Dona format a fulls de càlcul</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Gestor d'estils</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea, modifica o suprimeix els estils de format de cel·la.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Estil</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Aplica un estil a les cel·les seleccionades.</action
+> Per a gestionar els estils useu <menuchoice
+> <guimenu
+>Format</guimenu
+><guimenuitem
+>Gestor d'estils...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Crea estil a partir de la cel·la...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea un estil nou a partir del format de la cel·la seleccionada.</action
+> Per a gestionar els estils useu <menuchoice
+> <guimenu
+>Format</guimenu
+><guimenuitem
+>Gestor d'estils...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Format automàtic...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Dona format automàticament a les cel·les seleccionades: Un diàleg us permet escollir entre els dos formats proposats.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Fusiona les cel·les</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Fusiona les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Dissocia les cel·les</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Dissocia les cel·les prèviament fusionades. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Ajusta fila i columna</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Estableix les mides de files i columnes per a mostrar les cel·les seleccionades adequadament.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Fila</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia la mida, iguala, oculta o mostra les files.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Columna</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia la mida, iguala, oculta o mostra les columnes.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Full</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Oculta, mostra el full de treball o configura les propietats avançades del full.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Disposició de pàgina...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Format de disposició per al paper imprès.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Abast d'impressió</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Defineix o reinicia l'abast de la impressió.</action>
+</para
+></listitem>
+</varlistentry>
+
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title
+>El menú Dades</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Dades</guimenu
+> <guimenuitem
+>Ordena...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ordena les dades en les cel·les seleccionades.</action
+> Per a més detalls mireu la secció <link linkend="sort"
+>Ordenar les dades</link
+>. </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Filter-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Dades</guimenu
+> <guimenuitem
+>Text a columnes...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Aquesta opció intenta interpretar el text en les cel·les seleccionades com a dades <acronym
+>CSV</acronym
+>, situant cada element en una cel·la diferent en la fila. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>G</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Dades</guimenu
+> <guimenuitem
+>Àrees amb nom...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre</action
+> el diàleg <guilabel
+>Àrees amb nom</guilabel
+> per a seleccionar, afegir, editar i eliminar àrees amb nom. Per a més detalls mireu la secció <link linkend="namedareas"
+>Cel·les i àrees amb nom</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Dades</guimenu
+> <guimenuitem
+>Consolida...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Consolida les dades.</action
+> Per a més detalls mireu la secció <link linkend="consolidate"
+>Consolidar les dades</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Dades</guimenu
+> <guimenuitem
+>Subtotals...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Crea diferents tipus de subtotals a una base de dades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Dades</guimenu
+> <guimenuitem
+>Validesa...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Estableix o modifica els criteris de comprovació d'error i els missatges d'alerta d'errors per a les cel·les seleccionades.</action
+> Per a més detalls mireu <link linkend="validcheck"
+>Comprovar la validesa</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Dades</guimenu
+> <guimenuitem
+>Cerca objectiu...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre el diàleg Aconseguir objectius.</action
+> Per a més detalls mireu <link linkend="goalseek"
+>Aconseguir els objectius</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Dades</guimenu
+> <guimenuitem
+>Pivot...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre el diàleg de configuració Taula pivot</action
+>. Per a més detalls mireu <link linkend="pivottable"
+>Taula pivot</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title
+>El menú Eines</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Ortografia...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Comprova l'ortografia de les paraules en el full de treball.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Llistes personalitzades...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visualitza o rectifica les sèries especials de paraules que són reconegudes per &sheets;. Aquesta llista es pot utilitzar per inserir <link linkend="series"
+>sèries</link
+> especials dintre del full de treball.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Protegeix el full...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Protegeix el full amb una contrasenya. Apareixerà un quadre de diàleg per a demanar una contrasenya. En treure la marca d'aquesta opció se us demana la contrasenya per a desprotegir el full. Protegir un full vol dir protegir totes les cel·les en el full. En un full protegit, les cel·les no es poden tornar a donar format o sobreescriure.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Protegeix el document...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Protegeix el document amb una contrasenya. Apareixerà un quadre de diàleg per a demanar una contrasenya. En treure la marca d'aquesta opció se us demana la contrasenya per a desprotegir el document. En un document protegit, els fulls no es poden tornar a anomenar o eliminar. Protegir un document no vol dir que cada full individualment estigui protegit.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Maj;<keysym
+>F9</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Eines</guimenu
+> <guimenuitem
+>Recalcula el full</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Torna a calcular les fórmules en el full actual.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F9</keysym
+> </shortcut
+> <guimenu
+>Eines</guimenu
+> <guimenuitem
+>Recalcula el document</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Torna a calcular tots els fulls.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Tools</guimenu>
+<guimenuitem
+>Insert Calendar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
+</action>
+</para
+></listitem>
+</varlistentry>
+-->
+  
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Executa el fitxer de script...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Executa l'script extern triat en &sheets;. &sheets; admet la creació de scripts en Javascript, Python i Ruby. Per omissió els scripts d'exemple es poden trobar al submenú <menuchoice
+><guimenu
+>Eines</guimenu
+><guisubmenu
+>Scripts</guisubmenu
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Scripts</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Aquí podeu executar l'script per exportar i importar en diversos formats, desar el registre de &sheets; en un fitxer, utilitzeu <ulink url="https://live.gnome.org/Orca"
+>Orca speech</ulink
+> per a l'accessibilitat, scripts de Python i Ruby per a la depuració o per afegir funcions per a mostrar els valors de les accions o de les condicions meteorològiques. Fins i tot podeu utilitzar algunes <ulink url="http://www.r-project.org/"
+>funcions R</ulink
+> (heu de tenir instal·lat el <ulink url="http://rpy.sourceforge.net/rpy.html"
+>mòdul RPy</ulink
+>).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Gestor de scripts...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre</action
+> el diàleg del <guilabel
+>Gestor de scripts</guilabel
+> per executar, carregar, descarregar, instal·lar, desinstal·la, i obtenir més scripts. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Eines</guimenu
+> <guimenuitem
+>Optimitzador de la funció...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Obre</action
+> el diàleg <guilabel
+>Optimitzador de la funció</guilabel
+>, des d'on podeu escollir una cel·la com a funció objectiu, l'objectiu de l'optimització (<guilabel
+>Maximitza</guilabel
+>, <guilabel
+>Minimitza</guilabel
+> o introduir el <guilabel
+>Valor</guilabel
+>) i un conjunt de cel·les amb els paràmetres de decisió. </para
+></listitem>
+</varlistentry>
+  </variablelist
+></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>El menú Arranjament</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Barres d'eines mostrades</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Mostra o oculta les barres d'eines: <guilabel
+>Fitxer</guilabel
+>, <guilabel
+>Edita</guilabel
+>, <guilabel
+>Navegació</guilabel
+>, <guilabel
+>Tipus de lletra</guilabel
+>, <guilabel
+>Format</guilabel
+> i <guilabel
+>Color/Vores</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Settings</guimenu>
+<guimenuitem
+>Dockers</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+>FIXME
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Barra d'estat</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Mostra o oculta la barra d'estat.</action
+> La barra d'estat mostra informació addicional per als elements seleccionats i els càlculs instantanis de les cel·les seleccionades. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Barra de pestanyes</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Mostra o oculta la barra de pestanyes.</action
+> Es pot accedir a tots els fulls del document actual a través de la barra de pestanyes. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Configura les dreceres...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura les dreceres de teclat usades per &sheets;.</action
+> Per a més detalls mireu la secció <link linkend="configshort"
+>Configurar les dreceres</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Configura les barres d'eines...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura les barres d'eines.</action
+> La secció sobre <link linkend="configtoolbars"
+>configurar les barres d'eines</link
+> conté més informació. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Temes</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Tria el tema de color per a la finestra de &sheets;.</action
+> Podeu triar un dels esquemes de colors predefinits o seleccionar <guimenuitem
+>Configuració...</guimenuitem
+> per obrir <ulink url="help:/kcontrol/colors"
+>el mòdul de selecció de color d'&systemsettings;</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Perfil actiu d'autor</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura el perfil de l'autor per al document actual.</action
+> Podeu triar un dels perfils definits utilitzant la <link linkend="configauthor"
+>finestra de configuració de &sheets;</link
+>, un <guimenuitem
+>Perfil d'autor per defecte</guimenuitem
+> tal com està definit per les dades a &systemsettings; o un perfil <guimenuitem
+>Anònim</guimenuitem
+> (buit), el qual pot garantir la vostra privacitat. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Configura les notificacions...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configura el sistema de notificació de &sheets;.</action
+> A la versió actual de &sheets; no hi ha accions que pugueu notificar. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arranjament</guimenu
+> <guimenuitem
+>Configura el &sheets;...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configuració general de &sheets;.</action
+> Per a més detalls mireu la secció <link linkend="configdialog"
+>Configurar el &sheets;</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>El menú Ajuda</title
+>&help.menu.documentation; </sect1>
+
+<sect1 id="rmbmenu">
+<title
+>El menú del &BDR;</title>
+<para
+>Aquesta secció descriu els elements en el menú emergent obtingut en fer clic <mousebutton
+>dret</mousebutton
+> sobre cel·les, files o columnes seleccionades. </para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Format de la cel·la...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Dona format a les cel·les seleccionades</action
+> Per a més detalls mireu la secció <link linkend="formatspread"
+>Dona format a fulls de càlcul</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Retalla</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Situa els elements seleccionats dintre del porta-retalls.</action
+> Si després feu un <guilabel
+>Enganxa</guilabel
+>, els elements seran moguts des de la localització original a la nova. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Copia</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Copia els elements seleccionats dintre del porta-retalls.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Enganxa</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Enganxa els elements des del porta-retalls a les cel·les seleccionades. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Enganxat especial...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Formes d'enganxat especial.</action
+> Per a més detalls vegeu les seccions <link linkend="specialpaste"
+>Altres modes d'enganxat</link
+> i <link linkend="sumspecialpaste"
+>Aritmètica usant l'enganxat especial</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Enganxa amb inserció</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Enganxa des del porta-retalls a les cel·les seleccionades, movent les cel·les anteriors per a fer lloc.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Tot</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Suprimeix els continguts de les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ajusta fila i columna</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia la mida de la fila i la columna perquè mostrin completament les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Omissió</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Estableix els formats per omissió per a les cel·les seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Nom de l'àrea...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Anomena l'àrea seleccionada.</action
+> Per a més detalls mireu la secció <link linkend="namedareas"
+>Àrees amb nom</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Canvia la mida de la fila...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia l'alçada de la fila seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ajusta la fila</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia l'alçada de la fila seleccionada per a mostrar completament les cel·les.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Canvia la mida de la columna...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia l'ample de la columna seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ajusta la columna</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Canvia l'ample de la columna seleccionada per a mostrar completament les cel·les.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Insereix cel·les...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix cel·les noves a la localització seleccionada, movent les cel·les existents per a fer lloc.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Elimina les cel·les...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Elimina les cel·les seleccionades, movent les altres cel·les per ocupar l'espai deixat per les cel·les eliminades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Insereix files</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix files noves a sota de les files seleccionades. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Elimina les files</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Elimina les files seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Oculta les files</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Oculta les files seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Mostra les files</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Mostra les files seleccionades. Per a mostrar les files ocultes haureu de seleccionar un abast de files que incloguin les files ocultes.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Insereix columnes</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insereix columnes noves a l'esquerra de les columnes seleccionades. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Elimina les columnes</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Elimina les columnes seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Oculta les columnes</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Oculta les columnes seleccionades.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Mostra les columnes</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Mostra les columnes seleccionades. Per a mostrar les columnes ocultes haureu de seleccionar un abast que inclogui les columnes ocultes.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Comentari...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Afegeix o modifica un comentari a la cel·la seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Llista de selecció...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Us permet seleccionar i enganxar text des de qualsevol cel·la de la selecció actual dintre de la cel·la seleccionada.</action>
+</para
+></listitem>
+</varlistentry>
+<!-- not in 2.4.0
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Show Related Words</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the <guilabel
+>Related Words</guilabel
+> dialog box.</action
+> 
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="othershort">
+<title
+>Altres dreceres</title>
+<para
+>Aquesta secció descriu les dreceres de teclat de &sheets; usades per a operacions que no apareixen en cap dels menús.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo>
+</term>
+<listitem
+><para
+>Alterna la visualització dels acobladors.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Fletxes de cursor</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Si la cel·la seleccionada està ocupada aleshores mou el cursor de la cel·la cap al començament o final del bloc ocupat en la fila o columna actual. Si la cel·la seleccionada no està ocupada aleshores mou el cursor de la cel·la cap al començament o final del bloc de cel·les no ocupades en la fila o columna actual. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;&Maj;<keysym
+>Fletxes de cursor</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Si la cel·la seleccionada està ocupada aleshores selecciona totes les cel·les ocupades fins al començament o final d'aquest bloc de cel·les ocupades en la fila o columna actual. Si la cel·la seleccionada no està ocupada aleshores selecciona totes les cel·les no ocupades fins al començament o final d'aquest bloc de cel·les no ocupades en la fila o columna actual. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Avançar pàgina</keysym>
+</term>
+<listitem
+><para
+><action
+>Mou el cursor 10 cel·les cap avall.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Retrocedir pàgina</keysym>
+</term>
+<listitem
+><para
+><action
+>Mou el cursor 10 cel·les cap amunt.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>Av Pàg</keycap
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Mou cap al full següent.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>Re Pàg</keycap
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Mou cap al full anterior.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycap
+>F4</keycap>
+</term>
+<listitem
+><para
+><action
+>Canvia la referència a la cel·la</action
+> entre els tipus de referència normal i <link linkend="absolute"
+>absoluta</link
+>. </para
+></listitem>
+</varlistentry>
+<!-- does not work in 2.4.0
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>&amp;</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Add a border to the selected cell(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>$</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in Money
+format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>%</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>^</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>#</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Date format</action
+>. The value is taken as the number of days since 
+1 January 1900.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>@</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+Time format</action
+>. The value is taken as the number of seconds since
+midnight.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>!</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+normal Number format</action
+>.
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

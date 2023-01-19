@@ -1,0 +1,347 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Raúl</firstname
+><surname
+>González</surname
+> <affiliation
+><address
+><email
+>raulgf83@gmail.com</email
+></address
+></affiliation
+> <contrib
+>Traductor</contrib
+> </othercredit
+><othercredit role="translator"
+> <firstname
+>Juan Manuel</firstname
+><surname
+>García Molina</surname
+> <affiliation
+><address
+><email
+>juanma@superiodico.net</email
+></address
+></affiliation
+> <contrib
+>Traductor</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Configurar &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>El diálogo Configurar - Stage</title>
+
+<sect2 id="configure-misc">
+<title
+>Diversos</title>
+
+<screenshot>
+<screeninfo
+>Diversos</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Diversos</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Unidades</guilabel
+></term>
+<listitem
+><para
+>Seleccione la unidad predeterminada que se utilizará en sus diapositivas.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Radio del mango</guilabel
+></term>
+<listitem
+><para
+>Si selecciona una forma con la herramienta predeterminada (la flecha) verá unos rectángulos amarillos y rojos. Estos rectángulos se llaman mangos (se utilizan para cambiar el tamaño, rotar,...). El radio del mango cambia el tamaño de los mangos. Si los hace más grandes le será más sencillo acertar en ellos.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sensibilidad de captura</guilabel
+></term>
+<listitem
+><para
+>Esta opción define la exactitud con la que es necesario acertar en un mango para seleccionarlo.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Desplazamiento al pegar</guilabel
+></term>
+<listitem
+><para
+>Esta opción solo está activa si la opción <guilabel
+>Pegar en el cursor</guilabel
+> está desactivada. Si copia una forma con el acceso rápido de teclado <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> y la pega con <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> en un lugar donde ya se encuentra otra forma, se utilizará este desplazamiento para pegar la nueva forma debajo o a la derecha.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Pegar en el cursor</guilabel
+></term>
+<listitem
+><para
+>Desactiva la opción «desplazamiento al pegar» e inserta una forma pegada en la posición del cursor del ratón.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Rejilla</title>
+
+<screenshot>
+<screeninfo
+>Rejilla</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Rejilla</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Rejilla</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Mostrar rejilla</guilabel
+></term>
+<listitem
+><para
+>Si está activada, &stage; mostrará una rejilla de puntos que representa las intersecciones de líneas horizontales y verticales imaginarias. Puede utilizar estos puntos para posicionar los objetos de forma precisa en la diapositiva.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Ajustar a la rejilla</guilabel
+></term>
+<listitem
+><para
+>Si está activada, cuando suelte o mueva objetos en la diapositiva, la esquina superior izquierda del objeto se <quote
+>ajustará</quote
+> o moverá, al punto más cercano de la rejilla.</para>
+<para
+>Esto reduce su libertad para posiciona libremente los objetos en la diapositiva, pero también ayuda a alinear los objetos de forma precisa. Se puede desactivar o activar fácilmente con esta opción, lo que le ofrece lo mejor de ambos mundos.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Color de la rejilla:</guilabel
+></term>
+<listitem
+><para
+>Aquí puede cambiar el color de la rejilla, que de forma predefinida es negro.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Espaciado</guilabel
+></title>
+<para
+>Puede elegir si quiere mantener la misma proporción para las dos opciones que hay debajo teniendo el icono <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> o separar las dos opciones usando el icono <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>Horizontal:</guilabel
+></term>
+<listitem
+><para
+>Define el espacio en milímetros entre dos puntos de una línea horizontal en la rejilla. De forma predefinida, son 0,5 centímetros.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Vertical:</guilabel
+></term>
+<listitem
+><para
+>Define el espacio en milímetros entre dos puntos de una línea vertical en la rejilla. De forma predefinida, son 0,5 centímetros.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Documento</title>
+
+<screenshot>
+<screeninfo
+>Documento</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Preferencias del documento</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Intervalo de guardado automático:</guilabel
+></term>
+<listitem
+><para
+>Puede utilizar esta opción para ajustar la frecuencia con que &stage; guarda un archivo temporal. Si establece este valor a <guilabel
+>Sin guardado automático</guilabel
+>, &stage; no guardará automáticamente el archivo. Puede ajustar el intervalo de guardado automático de 1 minuto a 60.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Crear un archivo de respaldo</guilabel
+></term>
+<listitem
+><para
+>Si está marcada, se crea un archivo <filename
+>.&lt;nombre&gt;.odp.autosave.odp</filename
+> en la carpeta en la que se encuentra su archivo. Este archivo de respaldo se puede utilizar más adelante en caso de que surja algún problema. El archivo de respaldo se actualiza cada vez que se guarda el documento y cada vez que se realiza un guardado automático.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Autor</title>
+
+<screenshot>
+<screeninfo
+>Autor</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Documento</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Seleccione un perfil de autor para su documento. </para>
+<para
+>Puede añadir un perfil nuevo o borrar el perfil actual utilizando los botones situados a la derecha de la lista desplegable de perfiles. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

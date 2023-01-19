@@ -1,0 +1,1823 @@
+# WEB-Translator generated file. UTF-8 test:äëïöü
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# Frikkie Thirion <frix@expertron.co.za>, 2001,2002.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon VERSION\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2002-11-07 11:41+0200\n"
+"Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
+"Language-Team: AFRIKAANS <AF@lia.org.za>\n"
+"Language: af\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, fuzzy, kde-format
+msgid "Blend"
+msgstr "Opvul"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+msgid "Blend mode"
+msgstr "Opvul"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Normale"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Lighten"
+msgstr "Hoogte:"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius"
+msgstr "Radius:"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+msgid "Saturate colors"
+msgstr "Kies kleur"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, fuzzy, kde-format
+#| msgid "Rotate"
+msgid "Rotate hue"
+msgstr "Roteer"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Saturate value"
+msgstr "Kies kleur"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, fuzzy, kde-format
+#| msgid "Angle:"
+msgid "Angle"
+msgstr "Hoek:"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, fuzzy, kde-format
+msgid "Function"
+msgstr "Keuse Modus"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, fuzzy, kde-format
+msgid "Table"
+msgstr "Opvul"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Linear"
+msgid "Linear"
+msgstr "Liniêre"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Shear"
+msgid "Slope"
+msgstr "Steilheid"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "Koppelvlak"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Components"
+msgid "Composite"
+msgstr "Komponente"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, fuzzy, kde-format
+#| msgid "Boolean Operation"
+msgid "Operation"
+msgstr "Bools Operasie"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "&Duplicate"
+msgid "Duplicate"
+msgstr "Duplikaat"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, fuzzy, kde-format
+#| msgid "None"
+msgid "None"
+msgstr "Geen"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "Edges:"
+msgid "Edge mode:"
+msgstr "Randte:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "Target:"
+msgid "Target point:"
+msgstr "Teiken:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, fuzzy, kde-format
+msgid "Edit kernel"
+msgstr "Patrone"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, fuzzy, kde-format
+msgid "Flood fill"
+msgstr "Kies kleur"
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+msgid "Flood color"
+msgstr "Kies kleur"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:27
+#, fuzzy, kde-format
+msgid "Select image..."
+msgstr "Keuse Modus"
+
+#: ImageEffectConfigWidget.cpp:54
+#, fuzzy, kde-format
+msgid "Select image"
+msgstr "Keuse Modus"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr ""
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+msgid "Dilate"
+msgstr "Uitvee"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Boolean Operation"
+msgid "Operator:"
+msgstr "Bools Operasie"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius x:"
+msgstr "Radius:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+#| msgid "Radius:"
+msgid "Radius y:"
+msgstr "Radius:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr ""
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr ""
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Opvul"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Opvul"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normale"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Hoogte:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Roteer"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Hoek:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Keuse Modus"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Opvul"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Liniêre"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Steilheid"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Koppelvlak"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Komponente"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Bools Operasie"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Duplikaat"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#, fuzzy
+#~| msgid "Edges:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Randte:"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Teiken:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Patrone"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Keuse Modus"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Keuse Modus"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Uitvee"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Bools Operasie"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Radius:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "WEB-Vertaler (http://kde.af.org.za)"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "frix@expertron.co.za"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Bools Operasie"
+
+#~ msgid "&Order"
+#~ msgstr "Volgorde"
+
+#, fuzzy
+#~ msgid "&Align"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "Opvul"
+
+#~ msgid "&Object"
+#~ msgstr "Voorwerp"
+
+#, fuzzy
+#~ msgid "&Distribute"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~ msgid "&Path"
+#~ msgstr "pt"
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "Dokument Instellings"
+
+#, fuzzy
+#~ msgid "Object"
+#~ msgstr "Voorwerp"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~ msgid "Flatten Path"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Eienskappe: %1"
+
+#, fuzzy
+#~ msgid "Flatness:"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "&Refine Path..."
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~| msgid "Round Corners"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Rondte Hoeke"
+
+#, fuzzy
+#~ msgid "&Round Corners..."
+#~ msgstr "Rondte Hoeke"
+
+#~ msgid "Round Corners"
+#~ msgstr "Rondte Hoeke"
+
+#~ msgid "Radius:"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~ msgid "Expand all"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~ msgid "Stencil Box"
+#~ msgstr "Patrone"
+
+#, fuzzy
+#~ msgid "More shapes"
+#~ msgstr "Groep Objekte"
+
+#~ msgid "Angle:"
+#~ msgstr "Hoek:"
+
+#, fuzzy
+#~ msgid "Pinch:"
+#~ msgstr "duim"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Lig laag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Sagter laag"
+
+#, fuzzy
+#~ msgid "Configure"
+#~ msgstr "Konfigureer Karbon..."
+
+#~ msgid "Interface"
+#~ msgstr "Koppelvlak"
+
+#~ msgid "Misc"
+#~ msgstr "Allerande"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dokument Instellings"
+
+#, fuzzy
+#~ msgid "Layer view"
+#~ msgstr "Laag"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Nuwe laag"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~ msgid "New Layer"
+#~ msgstr "Nuwe laag"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Invoer die naam van die nuwe laag:"
+
+#~ msgid "New layer"
+#~ msgstr "Nuwe laag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Lig laag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Uitvee laag"
+
+#, fuzzy
+#~ msgid "Layer"
+#~ msgstr "Laag"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgid "Shape"
+#~ msgstr "Steilheid"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Ondeursigtigheid"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "yes"
+#~ msgstr "Styl:"
+
+#, fuzzy
+#~ msgid "Master Page"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~| msgid "Insert Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Voeg by Elipse"
+
+#, fuzzy
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Import graphic"
+#~ msgstr "In voer"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgid "Outline &Mode"
+#~ msgstr "Besigtig Modus"
+
+#, fuzzy
+#~ msgid "&Import Graphic..."
+#~ msgstr "In voer"
+
+#~ msgid "D&elete"
+#~ msgstr "Uitvee"
+
+#, fuzzy
+#~| msgid "Edit Gradient"
+#~ msgid "Edit Guides"
+#~ msgstr "Redigeer Gradiënt"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "Duplikaat"
+
+#, fuzzy
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Relatiewe sentrum"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Relatiewe sentrum"
+
+#, fuzzy
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Relatiewe sentrum"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Relatiewe sentrum"
+
+#, fuzzy
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Clip Object"
+#~ msgstr "Voorwerp"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgid "&Unclip Objects"
+#~ msgstr "Ontgroep Objekte"
+
+#, fuzzy
+#~ msgid "&Close Path"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Se&parate Path"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Re&verse Path"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Intersect Paths"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Subtract Paths"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Unite Paths"
+#~ msgstr "Platheid:"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Konfigureer Karbon..."
+
+#, fuzzy
+#~ msgid "Page &Layout..."
+#~ msgstr "Konfigureer Karbon..."
+
+#, fuzzy
+#~ msgid "Zoom to Selection"
+#~ msgstr "Keuse Modus"
+
+#, fuzzy
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Keuse Modus"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show status bar:"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~ msgid "Number of recent files:"
+#~ msgstr "Nommer van onlangse lêer:"
+
+#, fuzzy
+#~ msgid "Select palette"
+#~ msgstr "Keuse Modus"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#, fuzzy
+#~ msgid "Stroke:"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgid "Fill:"
+#~ msgstr "Opvul"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "Lêer Na Open"
+
+#~ msgid "Target:"
+#~ msgstr "Teiken:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Liniêre"
+
+#~ msgid "Fill"
+#~ msgstr "Opvul"
+
+#~ msgid "Type:"
+#~ msgstr "Tipe:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Liniêre"
+
+#, fuzzy
+#~| msgid "Radial"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radiaal"
+
+#~ msgid "Repeat:"
+#~ msgstr "Herhaal:"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgid "Reflect"
+#~ msgstr "Reflekteer"
+
+#~ msgid "Repeat"
+#~ msgstr "Herhaal"
+
+#, fuzzy
+#~ msgid "Overall opacity:"
+#~ msgstr "Ondeursigtigheid:"
+
+#, fuzzy
+#~ msgid "Stop color."
+#~ msgstr "Kies kleur"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "Voeg by na Vooraf gedefinieerde Gradiënte"
+
+#, fuzzy
+#~ msgid "Tiled"
+#~ msgstr "Opvul"
+
+#, fuzzy
+#~ msgid "Top Right"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Right"
+#~ msgstr "Hoogte:"
+
+#, fuzzy
+#~ msgid "Bottom"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~ msgid "Stroke"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Stop color:"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradiënt"
+
+#, fuzzy
+#~ msgid "Pattern"
+#~ msgstr "Patrone"
+
+#~ msgid "Units:"
+#~ msgstr "Eenhede:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Binneste radius:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Ontgroep Objekte"
+
+#~ msgid "&Group Objects"
+#~ msgstr "Groep Objekte"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Outo stoor (min):"
+
+#~ msgid "No auto save"
+#~ msgstr "Nee outo stoor"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Skep Rugsteun Lêer"
+
+#, fuzzy
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Verwysing"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgid "Pattern Size"
+#~ msgstr "Patrone"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Vooraf gedefinieerde Gradiënte"
+
+#, fuzzy
+#~ msgid "Gradient tool"
+#~ msgstr "Gradiënt"
+
+#, fuzzy
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Gradiënt"
+
+#, fuzzy
+#~ msgid "Pattern tool"
+#~ msgstr "Patrone"
+
+#, fuzzy
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Patrone"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Posisie:"
+
+#, fuzzy
+#~ msgid "Exactness:"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Uitvee Objekte"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Wydte:"
+
+#, fuzzy
+#~ msgid "Use tablet &angle"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Oriëntasie:"
+
+#, fuzzy
+#~ msgid "Current"
+#~ msgstr "Uitvee Voorwerp"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Gradiënt"
+
+#, fuzzy
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Voeg by Elipse"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Bring na Voor"
+
+#~ msgid "&Raise"
+#~ msgstr "Lig"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "Sagter"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Stuur na Terug"
+
+#, fuzzy
+#~ msgid "Align Left"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Relatiewe sentrum"
+
+#, fuzzy
+#~ msgid "Align Right"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Relatiewe sentrum"
+
+#, fuzzy
+#~ msgid "Align Bottom"
+#~ msgstr "Opvul Objekte"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Ondeursigtigheid:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Vertoon status kolom"
+
+#, fuzzy
+#~ msgid "Choose Pattern"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Vooraf gedefinieerde"
+
+#~ msgid "Transform"
+#~ msgstr "Transformeer"
+
+#, fuzzy
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Nee keuse"
+
+#, fuzzy
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Nee keuse"
+
+#, fuzzy
+#~ msgid "Set width of actual selection"
+#~ msgstr "Nee keuse"
+
+#, fuzzy
+#~ msgid "Set height of actual selection"
+#~ msgstr "Nee keuse"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#, fuzzy
+#~ msgid "Rotate actual selection"
+#~ msgstr "Nee keuse"
+
+#, fuzzy
+#~ msgid "SX:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Nee keuse"
+
+#, fuzzy
+#~ msgid "SY:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Nee keuse"
+
+#~ msgid "Shear"
+#~ msgstr "Steilheid"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Convert to Path"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Simple Text Tool"
+#~ msgstr "Kies"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Univorm Kleur"
+
+#~ msgid "Old:"
+#~ msgstr "Ou:"
+
+#~ msgid "New:"
+#~ msgstr "Nuwe:"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V:"
+
+#~ msgid "RGB"
+#~ msgstr "Rgb"
+
+#~ msgid "Type"
+#~ msgstr "Tipe"
+
+#~ msgid "Join"
+#~ msgstr "Aansluit by"
+
+#, fuzzy
+#~ msgid "Layers:"
+#~ msgstr "Laag"
+
+#, fuzzy
+#~ msgid "Format:"
+#~ msgstr "Normale"
+
+#~ msgid "Patterns"
+#~ msgstr "Patrone"
+
+#, fuzzy
+#~ msgid "Clipart"
+#~ msgstr "Kitskuns Program"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "In voer"
+
+#, fuzzy
+#~ msgid "Fill: None"
+#~ msgstr "Opvul Kleur"
+
+#, fuzzy
+#~ msgid "Fill: RGB"
+#~ msgstr "Opvul"
+
+#, fuzzy
+#~ msgid "Fill: CMYK"
+#~ msgstr "Opvul Kleur"
+
+#, fuzzy
+#~ msgid "Fill: HSB"
+#~ msgstr "Opvul"
+
+#, fuzzy
+#~ msgid "Fill: Color"
+#~ msgstr "Opvul Kleur"
+
+#, fuzzy
+#~ msgid "Fill: Gradient"
+#~ msgstr "Redigeer Gradiënt"
+
+#, fuzzy
+#~ msgid "Fill: Pattern"
+#~ msgstr "Patrone"
+
+#, fuzzy
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Redigeer Gradiënt"
+
+#, fuzzy
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Kies kleur"
+
+#, fuzzy
+#~ msgid "Polygonize"
+#~ msgstr "Polilyn"
+
+#, fuzzy
+#~ msgid "Round corners:"
+#~ msgstr "Rondte Hoeke"
+
+#, fuzzy
+#~ msgid "Object Properties"
+#~ msgstr "Eienskappe: %1"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "Uitvee"
+
+#~ msgid "&Import"
+#~ msgstr "In voer"
+
+#, fuzzy
+#~ msgid "Unnamed Tool"
+#~ msgstr "Roteer"
+
+#~ msgid "Fill Objects"
+#~ msgstr "Opvul Objekte"
+
+#~ msgid "Fill Object"
+#~ msgstr "Opvul Voorwerp"
+
+#~ msgid "Insert Text"
+#~ msgstr "Voeg by Teks"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Transformeer Objekte"
+
+#, fuzzy
+#~ msgid "Duplicate Object"
+#~ msgstr "Uitvee Voorwerp"
+
+#, fuzzy
+#~ msgid "Duplicate Objects"
+#~ msgstr "Uitvee Objekte"
+
+#~ msgid "Transform Object"
+#~ msgstr "Transformeer Voorwerp"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Vertaal Objekte"
+
+#~ msgid "Translate Object"
+#~ msgstr "Vertaal Voorwerp"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Skaal Objekte"
+
+#~ msgid "Scale Object"
+#~ msgstr "Skaal Voorwerp"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Steilheid Objekte"
+
+#~ msgid "Shear Object"
+#~ msgstr "Steilheid Voorwerp"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Roteer Objekte"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Roteer Voorwerp"
+
+#, fuzzy
+#~ msgid "Translate Bezier"
+#~ msgstr "Vertaal"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "Vertaal Objekte"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "Vertaal"
+
+#, fuzzy
+#~ msgid "Ellipse"
+#~ msgstr "Voeg by Elipse"
+
+#, fuzzy
+#~ msgid "Polygon"
+#~ msgstr "Polilyn"
+
+#~ msgid "Polyline"
+#~ msgstr "Polilyn"
+
+#, fuzzy
+#~ msgid "Spiral"
+#~ msgstr "pica"
+
+#, fuzzy
+#~ msgid "Star"
+#~ msgstr "Steilheid"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Vorm program</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr "<i>Kliek en trek</i> na plek jou eie vorm.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Kliek</i> na plek 'n vorm te gebruik die program eienskappe waardes.</"
+#~ "qt>"
+
+#~ msgid "Periods:"
+#~ msgstr "Periodes:"
+
+#, fuzzy
+#~ msgid "Sinus Tool"
+#~ msgstr "Polilyn Program"
+
+#, fuzzy
+#~ msgid "Rectangular"
+#~ msgstr "Voeg by Driehoek"
+
+#~ msgid "Fade:"
+#~ msgstr "Uitdoof:"
+
+#~ msgid "Clockwise"
+#~ msgstr "Kloksgewys"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Teller Kloksgewys"
+
+#, fuzzy
+#~ msgid "Spiral Tool"
+#~ msgstr "pica"
+
+#~ msgid "Insert Star"
+#~ msgstr "Voeg by Ster"
+
+#, fuzzy
+#~ msgid "Gear"
+#~ msgstr "Steilheid"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Buite radius:"
+
+#, fuzzy
+#~ msgid "Inner angle:"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~ msgid "Roundness:"
+#~ msgstr "Rondte Hoeke:"
+
+#, fuzzy
+#~ msgid "Star Tool"
+#~ msgstr "Steilheid"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Posisie:"
+
+#, fuzzy
+#~ msgid "New text"
+#~ msgstr "Voeg by Teks"
+
+#, fuzzy
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Vorm program</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr "<i>Kliek en trek</i> na plek jou eie vorm.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr "<i>Kliek en trek</i> na kies die gradiënt vektor.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr "<i>Kliek en trek</i> na plek jou eie vorm.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr "<i>Regterkant kliek</i> op 'n kleur punt na verwyder dit.</qt>"
+
+#, fuzzy
+#~ msgid "Change Text"
+#~ msgstr "Voeg by Teks"
+
+#, fuzzy
+#~ msgid "path"
+#~ msgstr "pt"
+
+#, fuzzy
+#~ msgid "Paste Object"
+#~ msgstr "Roteer Voorwerp"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "Roteer Objekte"
+
+#, fuzzy
+#~ msgid "Flatten Curves"
+#~ msgstr "Platheid:"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "Rondte Hoeke"
+
+#~ msgid "Join:"
+#~ msgstr "Aansluit by:"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "Rondte Hoeke"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "Stel Lyn Wydte"
+
+#~ msgid "P&urge"
+#~ msgstr "Maak skoon"
+
+#~ msgid "&History"
+#~ msgstr "Geskiedenis"
+
+#, fuzzy
+#~ msgid "&Insert Knots..."
+#~ msgstr "Voeg by Knots"
+
+#, fuzzy
+#~ msgid "Insert Knots"
+#~ msgstr "Voeg by Knots"
+
+#, fuzzy
+#~ msgid "Insert Clipart"
+#~ msgstr "Voeg by Ster"
+
+#, fuzzy
+#~ msgid "Dash Pattern"
+#~ msgstr "Patrone"
+
+#, fuzzy
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Polilyn program:</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr "<i>Kliek en trek</i> na kies die gradiënt vektor.<br>"
+
+#, fuzzy
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr "<i>Regterkant kliek</i> op 'n kleur punt na verwyder dit.</qt>"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Herstel/herstel herroep beperk:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Polilyn program:</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Kliek</i> na voeg by 'n node en <i>trek</i> na stel sy bezier vektor."
+#~ "<br>"
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Druk <i>Ctrl</i> terwyl te trek na redigeer die vorige bezier vektor."
+#~ "<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Druk <i>Verskuiwende</i> terwyl te trek na verander die kurwe in 'n "
+#~ "reguit lyn.<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr "- Druk <i>Backspace</i> na kanseleer die laaste kurwe.<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr "- Druk <i>Esc</i> na kanseleer die volledige polilyn.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Druk <i>Invoer</i> of <i>dubbel kliek</i> na einde die polilyn.</qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Polilyn Program"
+
+#~ msgid "Translate"
+#~ msgstr "Vertaal"
+
+#~ msgid "Relative &position"
+#~ msgstr "Relatiewe posisie"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Hierdie aksie kan nie wees ondoen later. Doen jy rerig wil hê na gaan "
+#~ "voort?"
+
+#~ msgid "Purge History"
+#~ msgstr "Maak skoon Geskiedenis"
+
+#~ msgid "Wireframe"
+#~ msgstr "Raamwerk"
+
+#, fuzzy
+#~ msgid "25%"
+#~ msgstr "   25%"
+
+#, fuzzy
+#~ msgid "50%"
+#~ msgstr "   50%"
+
+#, fuzzy
+#~ msgid "100%"
+#~ msgstr "  100%"
+
+#, fuzzy
+#~ msgid "200%"
+#~ msgstr "  200%"
+
+#, fuzzy
+#~ msgid "300%"
+#~ msgstr "  300%"
+
+#, fuzzy
+#~ msgid "400%"
+#~ msgstr "  400%"
+
+#, fuzzy
+#~ msgid "800%"
+#~ msgstr "  800%"
+
+#, fuzzy
+#~ msgid "Line Style"
+#~ msgstr "Stel Aansluit by Styl"
+
+#, fuzzy
+#~ msgid "History"
+#~ msgstr "Geskiedenis"
+
+#, fuzzy
+#~ msgid "Align Objects"
+#~ msgstr "Opvul Objekte"
+
+#~ msgid "Clean Up"
+#~ msgstr "Maak skoon Begin"
+
+#~ msgid "Delete Object"
+#~ msgstr "Uitvee Voorwerp"
+
+#, fuzzy
+#~ msgid "Delete Node"
+#~ msgstr "Uitvee laag"
+
+#~ msgid "Order Selection"
+#~ msgstr "Volgorde Keuse"
+
+#, fuzzy
+#~ msgid "New"
+#~ msgstr "Nuwe:"
+
+#, fuzzy
+#~ msgid "Raise"
+#~ msgstr "Lig"
+
+#, fuzzy
+#~ msgid "Lower"
+#~ msgstr "Sagter"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#, fuzzy
+#~ msgid "Change the name of the object:"
+#~ msgstr "Verander die naam van die huidige laag:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Verander die naam van die huidige laag:"
+
+#, fuzzy
+#~ msgid "Add Layer"
+#~ msgstr "Laag"
+
+#, fuzzy
+#~ msgid "Rectangle"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~ msgid "Full"
+#~ msgstr "Opvul"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Gradiënt program:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr "<i>Kliek en trek</i> na kies die gradiënt vektor.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr "<i>Kliek en trek</i> na kies die gradiënt vektor.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr "<i>Kliek en trek</i> na kies die gradiënt vektor.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Gradiënt redigering:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Kliek en trek</i> na beweeg punte.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Dubbel kliek</i> op 'n kleur punt na redigeer dit.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr "<i>Regterkant kliek</i> op 'n kleur punt na verwyder dit.</qt>"
+
+#, fuzzy
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Gradiënt program:</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Kliek en trek</i> na plek jou eie vorm.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "<i>Kliek en trek</i> na kies die gradiënt vektor.<br>"
+
+#, fuzzy
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Gradiënt program:</b><br>"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Voeg by Poligoon"
+
+#, fuzzy
+#~ msgid "Polygon Tool"
+#~ msgstr "Polilyn Program"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~ msgid "Rectangle Tool"
+#~ msgstr "Voeg by Driehoek"
+
+#, fuzzy
+#~ msgid "Insert Round Rect"
+#~ msgstr "Voeg by Rondte Driehoek"
+
+#, fuzzy
+#~ msgid "Height (%1):"
+#~ msgstr "Hoogte(%1):"
+
+#, fuzzy
+#~ msgid "Edge radius X:"
+#~ msgstr "Rand radius:"
+
+#, fuzzy
+#~ msgid "Edge radius Y:"
+#~ msgstr "Rand radius:"
+
+#, fuzzy
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Voeg by Rondte Driehoek"
+
+#, fuzzy
+#~ msgid "Round Rectangle"
+#~ msgstr "Voeg by Rondte Driehoek"
+
+#, fuzzy
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Keuse Modus"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Keuse Modus"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Kies in huidige laag"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Kies in sigbare lae"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Kies in gekose lae"
+
+#~ msgid "Select"
+#~ msgstr "Kies"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Keuse program:</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Kies in huidige laag:</i><br>Die keuse is gemaak in Die laag gekose in "
+#~ "Die lae dokker.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i>Kies in sigbare lae:</i><br>Die keuse is gemaak in Die sigbare lae "
+#~ "(oog in Die lae dokker).<br><br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Kies in gekose lae:</i><br>Die keuse is gemaak in Die nagegaan lae in "
+#~ "Die lae dokker."
+
+#~ msgid "No selection"
+#~ msgstr "Nee keuse"
+
+#, fuzzy
+#~ msgid "Shear Tool"
+#~ msgstr "Steilheid"
+
+#, fuzzy
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Vorm program</b><br>"
+
+#, fuzzy
+#~ msgid "Choose Image to Add"
+#~ msgstr "Kies kleur"
+
+#~ msgid "Knots:"
+#~ msgstr "Knots:"

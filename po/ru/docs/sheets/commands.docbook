@@ -1,0 +1,2734 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Мария</firstname
+><surname
+>Шикунова</surname
+><affiliation
+><address
+><email
+>translation-team@basealt.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский язык</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Список команд</title>
+
+<sect1 id="filemenu">
+<title
+>Меню «Файл»</title>
+<para>
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Создать</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Создать новый документ.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Открыть...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открыть существующий документ.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guisubmenu
+>Последние файлы</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открыть существующий документ</action
+>, выбрав его из раскрывающегося списка с последними открытыми файлами.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Сохранить</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Сохранить документ.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Сохранить как...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Сохранить документ под новым именем или форматом. Чтобы сохранить формат и имя документа, воспользуйтесь функцией <guimenuitem
+>Экспорт...</guimenuitem
+></action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Обновить</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Обновить документ.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Versions</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME define different versions of the document + open them in new windows</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Импорт...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Импортировать другие документы.</action>
+</para>
+<para
+>Таблицы данных часто хранятся в текстовых файлах, значения в строке разделяются запятой, пробелом, табуляцией или другим символом, например, <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. Такие файлы называются <quote
+><acronym
+>CSV</acronym
+></quote
+>-файлами (файлы со значениями, разделёнными запятыми), даже если разделителем является не запятая.</para>
+<para
+>При открытии текстового файла с помощью &sheets; приложение предполагает, что файл находится в формате <acronym
+>CSV</acronym
+>, откроется диалог, позволяющий указать разделитель (разделительный символ), используемый файлом, и показывающий, как элементы данных будут помещены в разные ячейки электронной таблицы.</para>
+<para
+>Другие функции этого диалога позволяют задать <guilabel
+>Формат</guilabel
+> ячеек электронной таблицы, следует ли удалять символы текстовых кавычек и следует ли игнорировать первые строки файла.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Экспорт...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Сохранить документ в любом поддерживаемом формате.</action
+> Документ не станет экспортированным файлом. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Отправить по почте...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Отправить файлы по почте как вложение.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Создать шаблон из документа...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Создать <link linkend="templates"
+>шаблон</link
+> &sheets; на основе текущего документа. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Печать...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Распечатать документ.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Предварительный просмотр...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показать пример напечатанного документа.</action
+></para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Export as PDF...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action
+></para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Сведения о документе</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показать или изменить информацию о документе и авторе.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Закрыть</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Закрыть текущий документ, но не закрывать &sheets;. </action
+></para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Выход</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Закрыть</action
+> &sheets;.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title
+>Меню «Правка»</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Отменить</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Отменить последнее действие.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Повторить</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Повторить последнее отменённое действие.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Вырезать</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Поместить выделенные объекты в буфер обмена и удалить их из первоначального места расположения.</action
+> При применении функции <guimenuitem
+>Вставить</guimenuitem
+> элементы будут вставлены в новое место. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Копировать</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Копировать выделенные объекты в буфер обмена.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Вставить</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить элементы из буфера обмена в выделенные ячейки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Правка</guimenu
+> <guimenuitem
+>Специальная вставка...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Особые виды вставки. </action
+> Более подробная информация содержится в разделах «<link linkend="specialpaste"
+>Другие режимы вставки</link
+>» и «<link linkend="sumspecialpaste"
+>Вычисления с использованием Специальной вставки</link
+>» </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Правка</guimenu
+> <guimenuitem
+>Вставить со сдвигом</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Переместить содержимое области вставки влево или вниз и вставить элементы из буфера обмена в выделенные ячейки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Правка</guimenu
+> <guisubmenu
+>Заполнить</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Заполняет выбранную область значениями из первого набора элементов.</action
+> Поддерживаются все четыре направления. Обратите внимание, что термин «набор элементов» описывает первый набор значений, отображаемых в направлении заполнения. Если направление заполнения оставлено, то первый набор элементов является последним столбцом выделения. </para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Select All</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Найти...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Найти ячейку, содержащую заданный текст.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F3</keysym
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Продолжить поиск</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Найти следующую ячейку, содержащую заданный текст.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>F3</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Найти предыдущее</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Найти предыдущую ячейку, содержащую заданный текст.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Заменить...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Найти и заменить заданный текст в ячейках.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Правка</guimenu
+> <guisubmenu
+>Очистить</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Очистить <guimenuitem
+>Все</guimenuitem
+> или <guimenuitem
+>Содержимое</guimenuitem
+>, <guimenuitem
+>Комментарии</guimenuitem
+>, <guimenuitem
+>Стили по условию</guimenuitem
+>, <guimenuitem
+>Ссылку</guimenuitem
+> или <guimenuitem
+>Проверку</guimenuitem
+> из выделенных ячеек.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Правка</guimenu
+> <guimenuitem
+>Удалить</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Удалить <guimenuitem
+>Ячейки</guimenuitem
+>, <guimenuitem
+>Столбцы</guimenuitem
+>, <guimenuitem
+>Строки</guimenuitem
+> или <guimenuitem
+>Лист</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Conditional Cell Attributes...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add or modify conditional cell attributes.</action>
+</para
+></listitem>
+</varlistentry>
+
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycap
+>F2</keycap
+> </shortcut
+> <guimenu
+>Правка</guimenu
+> <guimenuitem
+>Изменить ячейку</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить выбранную ячейку на месте.</action>
+</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title
+>Меню «Вид»</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вид</guimenu
+> <guimenuitem
+>Воздать вид</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открыть новый экземпляр &sheets; с тем же документом.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Close all open instances of &sheets;</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Split current view into two parts.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Remove current view.</action
+> (Where the window 
+contains two or more views)
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change view split to <guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Goto Cell...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change &sheets;'s focus to show defined cell.</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вид</guimenu
+> <guimenuitem
+>Границы страниц</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Переключить маркировку границ печатной страницы на листе красными линиями. </action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show/Hide Comment Indicator</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing Zoom In Zoom Out-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вид</guimenu
+> <guisubmenu
+>Масштаб</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Увеличить или уменьшить масштаб, используемый для отображения электронной таблицы. Диапазон: от 33% до 500%. </action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME Full Screen Mode-->
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="gomenu">
+<title
+>Меню «Переход»</title>
+<para
+>В этом меню находятся действия для перехода между листами текущей открытой электронной таблицы и действием <guimenuitem
+>Перейти к ячейке</guimenuitem
+>, позволяющим перейти к одной ячейке или выбрать диапазон ячеек.</para>
+</sect1>
+
+<sect1 id="insertmenu">
+<title
+>Меню «Вставка»</title>
+<para>
+<variablelist>
+
+<!-- OBSOLETE <varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Sheet</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add another worksheet.</action>
+</para
+></listitem>
+</varlistentry
+>-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guisubmenu
+>Комментарий...</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>Добавить или изменить комментарий. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Функция...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить математическую функцию.</action
+> Более подробная информация содержится в разделе «<link linkend="formulas"
+>Формулы</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Ряд...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить ряд.</action
+> Более подробная информация содержится в разделе «<link linkend="series"
+>Ряды</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Ссылка...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить ссылку в выбранную ячейку.</action
+> Более подробная информация содержится в разделе «<link linkend="hyper"
+>Ссылки в ячейках</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Специальный символ...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить специальный символ в выделенную ячейку.</action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Embed another &koffice; document into the sheet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a chart.</action
+> See the section 
+<link linkend="insertchart"
+>Inserting a Chart</link
+> for more details.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guisubmenu
+>Внешние данные</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить данные <guilabel
+>Из базы данных...</guilabel
+>, <guilabel
+>Из текстового файла...</guilabel
+> или <guilabel
+>Из буфера обмена...</guilabel
+>.</action
+> Более подробная информация содержится в разделе «<link linkend="insertdata"
+>Вставка внешних данных</link
+>». </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title
+>Меню «Формат»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Alt;&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Формат</guimenu
+> <guimenuitem
+>Формат ячеек...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Форматировать выделенные ячейки.</action
+> Более подробная информация содержится в разделе «<link linkend="formatspread"
+>Форматирование электронной таблицы</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Управление стилями...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Создать, изменить или удалить стили формата ячейки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Стиль</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Применить стиль к выделенным ячейкам.</action
+> Чтобы изменить стили, воспользуйтесь пунктом меню <menuchoice
+> <guimenu
+>Формат</guimenu
+><guimenuitem
+>Управление стилями...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Создать стиль из ячейки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Создать новый стиль из формата выделенной ячейки.</action
+> Чтобы изменить стили, воспользуйтесь пунктом меню <menuchoice
+> <guimenu
+>Формат</guimenu
+><guimenuitem
+>Управление стилями...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Автоформат...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Автоматически форматировать выделенные ячейки: диалог предлагает выбрать между двумя вариантами.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Объединить ячейки</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Объединить выделенные ячейки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Разбить ячейки</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Разбить (разделить) ячейки, объединённые ранее. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Подогнать размер ячеек</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Установить размеры столбцов и строк так, чтобы содержимое ячеек отображалось правильно.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Строка</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить размер, выровнять, скрыть или показать строки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Столбец</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить размер, выровнять, скрыть или показать столбцы.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Лист</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Скрыть, отобразить рабочий лист или настроить дополнительные свойства листа.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Страница...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Форматировать печатный макет страницы.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Область печати</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Задать или сбросить диапазон печати.</action>
+</para
+></listitem>
+</varlistentry>
+
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title
+>Меню «Данные»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Данные</guimenu
+> <guimenuitem
+>Сортировка...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Сортировать данные в выделенных ячейках.</action
+> Более подробная информация содержится в разделе «<link linkend="sort"
+>Сортировка данных</link
+>». </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Filter-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Данные</guimenu
+> <guimenuitem
+>Текст по столбцам...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Этот параметр пытается интерпретировать текст в выбранных ячейках как данные <acronym
+>CSV</acronym
+>, помещая каждый элемент в другую ячейку в строке. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Данные</guimenu
+> <guimenuitem
+>Именованные диапазоны...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открывает</action
+> диалог <guilabel
+>Именованные диапазоны</guilabel
+> для выбора, добавления, редактирования и удаления именованных диапазонов. Более подробная информация содержится в разделе  «<link linkend="namedareas"
+>Именованные диапазоны</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Данные</guimenu
+> <guimenuitem
+>Консолидировать...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Консолидировать данные.</action
+> Более подробная информация содержится в разделе «<link linkend="consolidate"
+>Консолидация данных</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Данные</guimenu
+> <guimenuitem
+>Подитоги...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Создать различные виды подитогов в базе данных.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Данные</guimenu
+> <guimenuitem
+>Проверка...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Установить или изменить критерии проверки ошибок и предупреждающее сообщение об ошибке для выбранных ячеек.</action
+> Более подробная информация содержится в разделе «<link linkend="validcheck"
+>Проверка правильности</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Данные</guimenu
+> <guimenuitem
+>Поиск решения...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открыть диалог поиска решения</action
+>. Более подробная информация содержится в разделе «<link linkend="goalseek"
+>Поиск решения</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Данные</guimenu
+> <guimenuitem
+>Сводные таблицы...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открыть диалог настройки сводных таблиц</action
+>. Более подробная информация содержится в разделе «<link linkend="pivottable"
+>Сводные таблицы</link
+>». </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title
+>Меню «Сервис»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Проверка орфографии...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Проверить орфографию на листе.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Списки пользователя...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Просмотреть или изменить специальный список слов, распознаваемых &sheets;. Этот список позволяет вставлять специальные <link linkend="series"
+>серии</link
+> в таблицу.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Защитить лист...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Защитить лист паролем. Появится диалог, запрашивающий пароль. При снятии этого флажка будет также запрошен пароль, чтобы снять защиту с листа. В защищённом листе нельзя переформатировать или перезаписать ячейки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Защитить документ...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Защитить целый документ паролем. Появится диалог, запрашивающий пароль. При снятии этого флажка будет также запрошен пароль, чтобы снять защиту с документа. В защищённом документе нельзя переименовывать или удалять листы. Наличие защиты на документе не означает, что защищён каждый лист.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Пересчитать лист</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Пересчитать формулы в текущем листе.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F9</keysym
+> </shortcut
+> <guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Пересчитать документ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Пересчитать все листы.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Tools</guimenu>
+<guimenuitem
+>Insert Calendar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
+</action>
+</para
+></listitem>
+</varlistentry>
+-->
+  
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Выполнить сценарий...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Выполнить выбранный внешний сценарий в &sheets;. &sheets; поддерживает сценарии на языках JavaScript, Python и Ruby. Стандартные примеры могут быть найдены во вложенном меню <menuchoice
+><guimenu
+>Сервис</guimenu
+><guisubmenu
+>Сценарии</guisubmenu
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guisubmenu
+>Сценарии</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>Здесь возможно выполнить сценарий для экспорта или импорта данных в различных форматах, сохранить журнал &sheets; в файл, воспользоваться <ulink url="https://live.gnome.org/Orca"
+>Orca speech</ulink
+> для обеспечения доступности, отладить сценарии Python и Ruby или добавить функции для отображения стоимости акции или погодных условий. Возможно даже использовать <ulink url="http://www.r-project.org/"
+>R-функции</ulink
+> (требуется наличие установленного <ulink url="http://rpy.sourceforge.net/rpy.html"
+>дополнения RPy</ulink
+>).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Управление сценариями...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открыть</action
+> диалог <guilabel
+>Управления сценариями</guilabel
+> для выполнения, загрузки, выгрузки, установки, удаления и получения дополнительных сценариев. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Сервис</guimenu
+> <guimenuitem
+>Оптимизатор функций...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Открыть</action
+> диалог <guilabel
+>Оптимизатор функций</guilabel
+>, позволяющий выбрать ячейку целевой функции, цель оптимизации (<guilabel
+>Максимизировать</guilabel
+>, <guilabel
+>Минимизировать</guilabel
+> или ввести <guilabel
+>Значение</guilabel
+>) и набор ячеек с параметрами выбора. </para
+></listitem>
+</varlistentry>
+  </variablelist
+></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>Меню «Настройка»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guisubmenu
+>Видимые панели инструментов</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показать или скрыть панели инструментов: <guilabel
+>Файл</guilabel
+>, <guilabel
+>Правка</guilabel
+>, <guilabel
+>Переход</guilabel
+>, <guilabel
+>Шрифт</guilabel
+>, <guilabel
+>Формат</guilabel
+> и <guilabel
+>Цвет/Граница</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Settings</guimenu>
+<guimenuitem
+>Dockers</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+>FIXME
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Строка состояния</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показать или скрыть строку состояния.</action
+> Строка состояния показывает дополнительную информацию о выбранных объектах и моментальные расчёты выбранных ячеек. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Панель вкладок</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показать или скрыть панель вкладок.</action
+> Доступ ко всем листам текущего документа осуществляется с помощью панели вкладок. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Комбинации клавиш...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Настроить комбинации клавиш, используемых в  &sheets;. </action
+> Более подробная информация содержится в разделе о <link linkend="configshort"
+>настройке комбинаций клавиш</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Панели инструментов...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Настроить панели инструментов.</action
+> Более подробная информация содержится в разделе о <link linkend="configtoolbars"
+>настройке панелей инструментов</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Цветовые схемы</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Выбрать цветовую тему для окна &sheets;.</action
+> Возможно выбрать одну из готовых цветовых схем или нажать <guimenuitem
+>Настройка...</guimenuitem
+>, чтобы открыть<ulink url="help:/kcontrol/colors"
+>виджет выбора цвета параметров системы</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Активный профиль автора</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Настроить авторский профиль для текущего документа.</action
+> Возможно выбрать один из нескольких профилей с помощью <link linkend="configauthor"
+>окна настройки &sheets;</link
+>, <guimenuitem
+>Авторский профиль по умолчанию</guimenuitem
+>, как указано в параметрах системы, либо <guimenuitem
+>Анонимный</guimenuitem
+> профиль, сохраняющий приватность. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Настроить уведомления...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Настроить систему уведомлений &sheets;.</action
+> В текущей версии  &sheets; нет действий, которые могут посылать уведомления. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Настройка</guimenu
+> <guimenuitem
+>Настроить &sheets;...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Общая настройка &sheets;.</action
+> Более подробная информация содержится в разделе «<link linkend="configdialog"
+>Настройка &sheets;</link
+>». </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>Меню «Справка»</title
+>&help.menu.documentation; </sect1>
+
+<sect1 id="rmbmenu">
+<title
+>Контекстное меню, вызываемое правой кнопкой мыши</title>
+<para
+>Этот раздел описывает элементы контекстного меню, вызываемого щелчком <mousebutton
+>правой</mousebutton
+> кнопкой мыши на выделенной ячейке или ячейках, строках или столбцах. </para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Формат ячеек...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Форматировать выделенные ячейки.</action
+> Более подробная информация содержится в разделе «<link linkend="formatspread"
+>Форматирование электронной таблицы</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Вырезать</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Поместить выбранные объекты в буфер обмена.</action
+> При применении функции <guilabel
+>Вставить</guilabel
+> объекты будут перемещены из старого расположения в новое. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Копировать</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Копировать выделенные объекты в буфер обмена.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Вставить</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить элементы из буфера обмена в выделенные ячейки. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Специальная вставка...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Особые виды вставки. </action
+> Более подробная информация содержится в разделах «<link linkend="specialpaste"
+>Другие режимы вставки</link
+>» и «<link linkend="sumspecialpaste"
+>Вычисления с использованием Специальной вставки</link
+>» </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставить со сдвигом</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить содержимое из буфера обмена в выбранные ячейки, сдвинув предыдущие ячейки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Все</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Удалить содержимого выбранных ячеек.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Подогнать размер ячеек</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить размеры строки и столбца, чтобы полностью отобразить содержимое выбранных ячеек.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>По умолчанию</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Установить значения по умолчанию для выбранных ячеек.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Имя диапазона...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Добавить имя выделенному диапазону.</action
+> Более подробная информация содержится в разделе «<link linkend="namedareas"
+>Имена диапазонов</link
+>». </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Изменить высоту строки...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить высоту выбранной строки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Выровнять строку</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить высоту выбранной строки, чтобы полностью отобразить содержимое ячеек.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Изменить ширину столбца...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить ширину выделенного столбца.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Выровнять столбец</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Изменить ширину выбранного столбца, чтобы полностью отобразить содержимое ячеек.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставить ячейки...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить новые ячейки в выделенном месте, сдвинув существующие ячейки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Удалить ячейки...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Удалить выделенные ячейки, переместив другие ячейки, чтобы занять место, оставленное удалёнными ячейками.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставить строки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить новую строку над выбранной строкой. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Удалить строки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Удалить выбранные строки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Скрыть строки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Скрыть выбранные строки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Показать строки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Показывать выделенные строки. Чтобы отобразить скрытые строки, необходимо выбрать диапазон строк, включающий скрытые.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставить столбцы</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставить новые столбцы слева от выбранных столбцов. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Удалить столбцы</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Удалить выбранные столбцы.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Скрыть столбцы</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Скрыть выбранные столбцы.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Показать столбцы</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Показывать выделенные столбцы. Чтобы отобразить скрытые столбцы, необходимо выбрать диапазон столбцов, включающий скрытые.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Комментарий...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Добавить или изменить комментарий к выделенной ячейке.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Список выделения...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Позволяет выделить и вставить текст из любой ячейки текущего выделения в выбранную ячейку.</action>
+</para
+></listitem>
+</varlistentry>
+<!-- not in 2.4.0
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Show Related Words</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the <guilabel
+>Related Words</guilabel
+> dialog box.</action
+> 
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="othershort">
+<title
+>Другие комбинации клавиш</title>
+<para
+>В этом разделе описываются комбинации клавиш &sheets;, используемые для операций, которые не отображаются ни в одном из меню.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo>
+</term>
+<listitem
+><para
+>Переключить отображение панели инструментов.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>клавиши со стрелками</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Если выбранная ячейка занята, переместите курсор ячейки в начало или конец занятого блока в текущей строке или столбце. Если выбранная ячейка свободна, переместите курсор ячейки в начало или конец блока незанятых ячеек в текущей строке или столбце. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keysym
+>клавиши со стрелками</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Если выбранная ячейка занята, выберите все занятые ячейки в начале или в конце этого блока занятых ячеек в текущей строке или столбце. Если выбранная ячейка не занята, выберите все незанятые ячейки в начале или в конце этого блока незанятых ячеек в текущей строке или столбце. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Page Down</keysym>
+</term>
+<listitem
+><para
+><action
+>Переместить курсор ячейки на 10 ячеек ниже.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Page Up</keysym>
+</term>
+<listitem
+><para
+><action
+>Переместить курсор ячейки на 10 ячеек выше.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Down</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Перейти на следующий лист.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Up</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Перейти на предыдущий лист.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycap
+>F4</keycap>
+</term>
+<listitem
+><para
+><action
+>Изменить тип ссылки в ячейке</action
+> между обычной или <link linkend="absolute"
+>абсолютной</link
+>. </para
+></listitem>
+</varlistentry>
+<!-- does not work in 2.4.0
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>&amp;</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Add a border to the selected cell(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>$</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in Money
+format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>%</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>^</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>#</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Date format</action
+>. The value is taken as the number of days since 
+1 January 1900.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>@</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+Time format</action
+>. The value is taken as the number of seconds since
+midnight.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>!</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+normal Number format</action
+>.
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

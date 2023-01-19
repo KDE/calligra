@@ -1,0 +1,89 @@
+# Tsugumi Harabayashi <tu.hrby@gmail.com>, 2014.
+# Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra-opener\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-11-09 14:53-0800\n"
+"Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 1.5\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Tsugumi Harabayashi"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "tu.hrby@gmail.com"
+
+#: main.cpp:69
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "<filename>%1</filename> の MIME タイプが見つかりません!"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "<application>%1</application> で開く"
+
+#: main.cpp:132
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"<filename>%1</filename> を開くための Calligra アプリケーションが見つかりませ"
+"んでした。<nl/>デフォルトのアプリケーション <application>%2</application> を"
+"使用してファイルを開きますか？"
+
+#: main.cpp:135
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Calligra アプリケーションが見つかりません"
+
+#: main.cpp:165
+#, kde-format
+msgid "Calligra Opener"
+msgstr ""
+
+#: main.cpp:167
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr ""
+
+#: main.cpp:169
+#, fuzzy, kde-format
+#| msgid "(c) 2010-2011 Calligra developers"
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "(c) 2010-2011 Calligra 開発チーム"
+
+#: main.cpp:170
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:177
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "使用可能な Calligra アプリケーションのリスト"
+
+#: main.cpp:178
+#, kde-format
+msgid "Files to open"
+msgstr "ファイルを開く"

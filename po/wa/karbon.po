@@ -1,0 +1,2191 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jean Cayron <jean.cayron@gmail.com>, 2009.
+# Djan Cayron <jean.cayron@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2010-11-18 17:47+0100\n"
+"Last-Translator: Djan Cayron <jean.cayron@gmail.com>\n"
+"Language-Team: Walloon <linux-wa@walon.org>\n"
+"Language: wa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#, fuzzy
+#| msgid "Boolean Operation"
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Operåcion bouleyinne"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Ôre"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Aroyî"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Fitchî"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "&Candjî"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "&Vey"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Cayet"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&Cossemer"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&Tchimin"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "E&fets"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "Tchu&zes"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Candjî"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Cayet"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Aroyî"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Efets"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Vey"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "As&plati tchmin..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Asplati tchmin"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Prôpietés"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Asplatixhaedje:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#, fuzzy
+#| msgid "Flatten path"
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Asplati tchmin"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#, fuzzy
+#| msgid "Refine path"
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Afiner tchmin"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "A&finer tchmin..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Afiner tchmin"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Sordivizions:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#, fuzzy
+#| msgid "Round Corners"
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Arondeyès coines"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "A&rondeyès coines..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Arondeyès coines"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Radius:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#, fuzzy
+#| msgid "Whirl & pinch"
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Zigzonzece eyet splincaedje"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Zigzonzece/splinker"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Zigzonzece splincaedje"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Informåcions"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+"Li rzultat di l' efet zigzonzece/splincaedje pout esse amidré e rafinant l' "
+"fôme tchimin a l' avance."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Inglêye:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Splincaedje:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#, fuzzy
+#| msgid "Raise Layer"
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Rimonter l' coûtche"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#, fuzzy
+#| msgid "Lower Layer"
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Baxhî l' coûtche"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Apontyî"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Eterface"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Totes sôres"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Grile"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Documint"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Apontiaedjes do documint"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#: ui/KarbonAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "Karbon14"
+msgid "Karbon"
+msgstr "Karbon14"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "On programe di dessinaedje d' imådjes pa royes."
+
+#: ui/KarbonAboutData.h:26
+#, fuzzy, kde-format
+#| msgid "(c) 2001-2009, The Karbon Developers"
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "© 2001-2009, Les diswalpeus di Karbon"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Coridjaedjes di bugs ey amidraedjes"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Coridjaedjes di bugs"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Coridjaedjes bén a pont eyet conseys"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Djan Cayron"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "jean.cayron@gmail.com"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#, fuzzy
+#| msgid "Insert graphics"
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Sititchî imådjes"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Tchoezi imådje a radjouter"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "Dji n' a savou tcherdjî l' imådje."
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Abaguer imådje"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "Dji n' a savou ahiver l' fôme d' imådje."
+
+#: ui/KarbonView.cpp:612
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "D' &astampé:"
+
+#: ui/KarbonView.cpp:614
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "D' &astampé:"
+
+#: ui/KarbonView.cpp:616
+#, fuzzy
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "D' &astampé:"
+
+#: ui/KarbonView.cpp:671
+#, fuzzy
+#| msgid "Se&parate Path"
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Se&parer tchmin"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "&Môde cotoû"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Abaguer imådje..."
+
+#: ui/KarbonView.cpp:864
+#, fuzzy, kde-format
+#| msgid "Hide Guides"
+msgid "Edit Guides"
+msgstr "Catchî moennaedjes"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Dobler"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Cossemer å mitan (di coutchî)"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Cossemer les trôs (di coutchî)"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "Cossemer les boirdeures di hintche"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "Cossemer les boirdeures di droete"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Cossemer å mitan (d' astampé)"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Cossemer les trôs (d' astampé)"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Cossemer les boirdeures dal valêye"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "Cossemer les boirdeures dal copete"
+
+#: ui/KarbonView.cpp:907
+#, fuzzy, kde-format
+#| msgid "Shows or hides rulers"
+msgid "Show Color Palette"
+msgstr "Mostere ou catche les rîles"
+
+#: ui/KarbonView.cpp:909
+#, fuzzy, kde-format
+#| msgid "Shows or hides rulers"
+msgid "Show or hide color palette"
+msgstr "Mostere ou catche les rîles"
+
+#: ui/KarbonView.cpp:913
+#, fuzzy, kde-format
+#| msgid "&Object"
+msgid "&Clip Object"
+msgstr "&Cayet"
+
+#: ui/KarbonView.cpp:917
+#, fuzzy, kde-format
+#| msgid "&Ungroup Objects"
+msgid "&Unclip Objects"
+msgstr "&Disgrouper cayets"
+
+#: ui/KarbonView.cpp:921
+#, fuzzy, kde-format
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgid "Mirror Vertically"
+msgstr "D' &astampé:"
+
+#: ui/KarbonView.cpp:925
+#, fuzzy, kde-format
+#| msgctxt "Horizontal grid spacing"
+#| msgid "&Horizontal:"
+msgid "Mirror Horizontally"
+msgstr "D' &astampé:"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "&Clôre tchimin"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Com&biner tchimin"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "Se&parer tchmin"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Mete år&vier tchimin"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Croejhler tchimins"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Sostraire tchimins"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Elaxhî tchimins"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Schovter tchimins evoye"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Claper tchmin sol grile"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Zoumer sol tchoes"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Zoumer sol dessin"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Zoumer"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show status bar:"
+msgstr "Mostrer l' båre ås messaedjes"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Nombe di fitchîs dierinmint eployîs:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Grandeu del fonte del palete:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, fuzzy, kde-format
+#| msgid "Select image"
+msgid "Select palette"
+msgstr "Tchoezi imådje"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Tchôkîz po mete en ouve li rimplissaedje e tchoes"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Nouk"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Tchôkîz po mete en ouve li båre sol tchoes"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "A vosse môde"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Nole"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Båre:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Rimplixhaedje:"
+
+#~ msgid "D&elete"
+#~ msgstr "Dis&facer"
+
+#~ msgid "Layer view"
+#~ msgstr "Vuwe del coûtche"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Radjouter ene novele coûtche"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Disfacer les cayets tchoezis"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Rimonter les cayets tchoezis"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Baxhî les cayets tchoezis"
+
+#~ msgid "Minimal View"
+#~ msgstr "Vuwe minimåle"
+
+#~ msgid "Detailed View"
+#~ msgstr "Sipepieuse vuwe"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Vuwe avou prévoeyaedje"
+
+#~ msgid "View mode"
+#~ msgstr "Môde di vuwe"
+
+#~ msgid "New Layer"
+#~ msgstr "Novele coûtche"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Sititchîz l' no del novele coûtche:"
+
+#~ msgid "New layer"
+#~ msgstr "Novele coûtche"
+
+#, fuzzy
+#~| msgid "Create Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Ahiver coûtche"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Disfacer coûtche"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Dji n' a savou disfacer totes les coûtches. I fåt pol moens ene coûtche."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Åk n' a nén stî come dji disfacéve les coûtches"
+
+#~ msgid "Layer"
+#~ msgstr "Coûtche"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Groupe"
+
+#~ msgid "Shape"
+#~ msgstr "Fôme"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Veyåve"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Aclawé"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndecse"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Opacité"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "no"
+#~ msgstr "Informåcions"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgid "yes"
+#~ msgstr "Stîles"
+
+#, fuzzy
+#~| msgid "Reparent shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Ramete fômes"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr ""
+#~ "Fitchî OASIS nén valåbe. Dji n' a trové pont d' etikete office:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr ""
+#~ "Fitchî OASIS nén valåbe. Dji n' a trové pont d' etikete office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Fitchî OASIS nén valåbe. Dji n' a trové pont d' etikete draw:page."
+
+#~ msgid "Master Page"
+#~ msgstr "Mwaisse pådje"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Mostrer les mådjes del pådje"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Mostrer rîles"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Mostere ou catche les rîles"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Claper sol grile"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Clape sol grile"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Apontyî Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "&Adjinçmint del pådje..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "Coleur del toele:"
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "&Ôre"
+
+#, fuzzy
+#~| msgid "&Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Aroyî"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Fitchî"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Candjî"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Vey"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Cayet"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "&Cossemer"
+
+#, fuzzy
+#~| msgid "&Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "&Tchimin"
+
+#, fuzzy
+#~| msgid "Effe&cts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "E&fets"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Tchu&zes"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Candjî"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Cayet"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "Aroyî"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Efets"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "Vey"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "As&plati tchmin..."
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Asplati tchmin"
+
+#, fuzzy
+#~| msgid "Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Prôpietés"
+
+#, fuzzy
+#~| msgid "Flatness:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Asplatixhaedje:"
+
+#, fuzzy
+#~| msgid "&Refine Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "A&finer tchmin..."
+
+#, fuzzy
+#~| msgid "Refine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Afiner tchmin"
+
+#, fuzzy
+#~| msgid "Subdivisions:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "Sordivizions:"
+
+#, fuzzy
+#~| msgid "&Round Corners..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "A&rondeyès coines..."
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~| msgid "&Whirl/Pinch..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Zigzonzece/splinker"
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Zigzonzece splincaedje"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "Informåcions"
+
+#, fuzzy
+#~| msgid ""
+#~| "The result of the Whirlpinch effect can be improved by refining the path "
+#~| "shape beforehand."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Li rzultat di l' efet zigzonzece/splincaedje pout esse amidré e rafinant "
+#~ "l' fôme tchimin a l' avance."
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Inglêye:"
+
+#, fuzzy
+#~| msgid "Pinch:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Splincaedje:"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Apontyî"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Eterface"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Totes sôres"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Grile"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Documint"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Apontiaedjes do documint"
+
+#, fuzzy
+#~| msgid "Layer view"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Vuwe del coûtche"
+
+#, fuzzy
+#~| msgid "Add a new layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Radjouter ene novele coûtche"
+
+#, fuzzy
+#~| msgid "Delete selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Disfacer les cayets tchoezis"
+
+#, fuzzy
+#~| msgid "Raise selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Rimonter les cayets tchoezis"
+
+#, fuzzy
+#~| msgid "Lower selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Baxhî les cayets tchoezis"
+
+#, fuzzy
+#~| msgid "Minimal View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Vuwe minimåle"
+
+#, fuzzy
+#~| msgid "Detailed View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Sipepieuse vuwe"
+
+#, fuzzy
+#~| msgid "Thumbnail View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Vuwe avou prévoeyaedje"
+
+#, fuzzy
+#~| msgid "View mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Môde di vuwe"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Novele coûtche"
+
+#, fuzzy
+#~| msgid "Enter the name of the new layer:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Sititchîz l' no del novele coûtche:"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Novele coûtche"
+
+#, fuzzy
+#~| msgid "Could not delete all layers. At least one layer is required."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Dji n' a savou disfacer totes les coûtches. I fåt pol moens ene coûtche."
+
+#, fuzzy
+#~| msgid "Error deleting layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "Åk n' a nén stî come dji disfacéve les coûtches"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Coûtche"
+
+#, fuzzy
+#~| msgctxt "A group of shapes"
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Groupe"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Fôme"
+
+#, fuzzy
+#~| msgctxt "Visibility state of the shape"
+#~| msgid "Visible"
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Veyåve"
+
+#, fuzzy
+#~| msgctxt "Lock state of the shape"
+#~| msgid "Locked"
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Aclawé"
+
+#, fuzzy
+#~| msgctxt "The z-index of the shape"
+#~| msgid "zIndex"
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndecse"
+
+#, fuzzy
+#~| msgctxt "The opacity of the shape"
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Opacité"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "Informåcions"
+
+#, fuzzy
+#~| msgid "Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "Stîles"
+
+#, fuzzy
+#~| msgid "Karbon14"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "Karbon14"
+
+#, fuzzy
+#~| msgid "A Vector Graphics Drawing Application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "On programe di dessinaedje d' imådjes pa royes."
+
+#, fuzzy
+#~| msgid "(c) 2001-2009, The Karbon Developers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "© 2001-2009, Les diswalpeus di Karbon"
+
+#, fuzzy
+#~| msgid "Rob Buis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#, fuzzy
+#~| msgid "Tomislav Lukman"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#, fuzzy
+#~| msgid "Benoît Vautrin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#, fuzzy
+#~| msgid "Jan Hambrecht"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#, fuzzy
+#~| msgid "Bug fixes and improvements"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Coridjaedjes di bugs ey amidraedjes"
+
+#, fuzzy
+#~| msgid "Peter Simonsson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~| msgid "Tim Beaulen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Bug fixes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "Coridjaedjes di bugs"
+
+#, fuzzy
+#~| msgid "Alan Horkan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#, fuzzy
+#~| msgid "Helpful patches and advice"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Coridjaedjes bén a pont eyet conseys"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Djan Cayron"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jean.cayron@gmail.com"
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr ""
+#~ "Fitchî OASIS nén valåbe. Dji n' a trové pont d' etikete office:body."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr ""
+#~ "Fitchî OASIS nén valåbe. Dji n' a trové pont d' etikete office:drawing."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Fitchî OASIS nén valåbe. Dji n' a trové pont d' etikete draw:page."
+
+#, fuzzy
+#~| msgid "Master Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Mwaisse pådje"
+
+#, fuzzy
+#~| msgid "Choose Graphic to Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Tchoezi imådje a radjouter"
+
+#, fuzzy
+#~| msgid "Could not load image."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load image."
+#~ msgstr "Dji n' a savou tcherdjî l' imådje."
+
+#, fuzzy
+#~| msgid "Import graphic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "Abaguer imådje"
+
+#, fuzzy
+#~| msgid "Could not create image shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create image shape."
+#~ msgstr "Dji n' a savou ahiver l' fôme d' imådje."
+
+#, fuzzy
+#~| msgid "Outline &Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "&Môde cotoû"
+
+#, fuzzy
+#~| msgid "Show Page Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Mostrer les mådjes del pådje"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Abaguer imådje..."
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "Dis&facer"
+
+#, fuzzy
+#~| msgid "Hide Guides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Catchî moennaedjes"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Dobler"
+
+#, fuzzy
+#~| msgid "Distribute Center (Horizontal)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Cossemer å mitan (di coutchî)"
+
+#, fuzzy
+#~| msgid "Distribute Gaps (Horizontal)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Cossemer les trôs (di coutchî)"
+
+#, fuzzy
+#~| msgid "Distribute Left Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Cossemer les boirdeures di hintche"
+
+#, fuzzy
+#~| msgid "Distribute Right Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Cossemer les boirdeures di droete"
+
+#, fuzzy
+#~| msgid "Distribute Center (Vertical)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Cossemer å mitan (d' astampé)"
+
+#, fuzzy
+#~| msgid "Distribute Gaps (Vertical)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Cossemer les trôs (d' astampé)"
+
+#, fuzzy
+#~| msgid "Distribute Bottom Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Cossemer les boirdeures dal valêye"
+
+#, fuzzy
+#~| msgid "Distribute Top Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Cossemer les boirdeures dal copete"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Mostrer rîles"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Mostere ou catche les rîles"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Mostere ou catche les rîles"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Claper sol grile"
+
+#, fuzzy
+#~| msgid "Snaps to grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Clape sol grile"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "&Cayet"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Disgrouper cayets"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "&Clôre tchimin"
+
+#, fuzzy
+#~| msgid "Com&bine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Com&biner tchimin"
+
+#, fuzzy
+#~| msgid "Se&parate Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Se&parer tchmin"
+
+#, fuzzy
+#~| msgid "Re&verse Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "Mete år&vier tchimin"
+
+#, fuzzy
+#~| msgid "Intersect Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Croejhler tchimins"
+
+#, fuzzy
+#~| msgid "Subtract Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Sostraire tchimins"
+
+#, fuzzy
+#~| msgid "Unite Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Elaxhî tchimins"
+
+#, fuzzy
+#~| msgid "Exclude Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "Schovter tchimins evoye"
+
+#, fuzzy
+#~| msgid "Snap Path to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Claper tchmin sol grile"
+
+#, fuzzy
+#~| msgid "Configure Karbon..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Apontyî Karbon..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "&Adjinçmint del pådje..."
+
+#, fuzzy
+#~| msgid "Zoom to Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Zoumer sol tchoes"
+
+#, fuzzy
+#~| msgid "Zoom to Drawing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Zoumer sol dessin"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Zoumer"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Mostrer l' båre ås messaedjes"
+
+#, fuzzy
+#~| msgid "Number of recent files:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Nombe di fitchîs dierinmint eployîs:"
+
+#, fuzzy
+#~| msgid "Palette font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Grandeu del fonte del palete:"
+
+#, fuzzy
+#~| msgid "Canvas color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Canvas color:"
+#~ msgstr "Coleur del toele:"
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Tchoezi imådje"
+
+#, fuzzy
+#~| msgid "Press to apply fill to selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Tchôkîz po mete en ouve li rimplissaedje e tchoes"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Nouk"
+
+#, fuzzy
+#~| msgid "Press to apply stroke to selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Tchôkîz po mete en ouve li båre sol tchoes"
+
+#, fuzzy
+#~| msgctxt "The style has a custom stroking"
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "A vosse môde"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Nouk"
+
+#, fuzzy
+#~| msgid "Stroke:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Båre:"
+
+#, fuzzy
+#~| msgid "Fill:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Rimplixhaedje:"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Vos estoz priyîs d' pårticiper di tolminme kéne manire."
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Vey"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Vey"
+
+#, fuzzy
+#~| msgid "Pencil tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Usteye pene"
+
+#, fuzzy
+#~| msgid "Group shapes"
+#~ msgid "More shapes"
+#~ msgstr "Grouper fômes"
+
+#~ msgid "File to open"
+#~ msgstr "Fitchî a drovi"
+
+#~ msgid "Blend"
+#~ msgstr "Maxhî"
+
+#~ msgid "Blend mode"
+#~ msgstr "Môde di maxhaedje"
+
+#~ msgid "Normal"
+#~ msgstr "Normå"
+
+#~ msgid "Multiply"
+#~ msgstr "Mopliyî"
+
+#~ msgid "Screen"
+#~ msgstr "Waitroûle"
+
+#~ msgid "Darken"
+#~ msgstr "Ranoeri"
+
+#~ msgid "Lighten"
+#~ msgstr "Raclairi"
+
+#~ msgid "Gaussian blur"
+#~ msgstr "Flou di Gauss"
+
+#~ msgid "Radius"
+#~ msgstr "Reyon"
+
+#~ msgid "Color Matrix"
+#~ msgstr "Matrice del coleur"
+
+#~ msgid "Apply color matrix"
+#~ msgstr "Mete en ouve li matrice di coleur"
+
+#~ msgid "Saturate colors"
+#~ msgstr "Saturer coleurs"
+
+#~ msgid "Rotate hue"
+#~ msgstr "Fé tourner l' tinte"
+
+#~ msgid "Luminance to alpha"
+#~ msgstr "Louminance so alfa"
+
+#~ msgid "Saturate value"
+#~ msgstr "Saturer valixhance"
+
+#~ msgid "Angle"
+#~ msgstr "Inglêye"
+
+#~ msgid "Color matrix"
+#~ msgstr "Matrice del coleur"
+
+#~ msgid "Component transfer"
+#~ msgstr "Berwetaedje di componint"
+
+#~ msgid "Function"
+#~ msgstr "Fonccion"
+
+#~ msgid "Identity"
+#~ msgstr "Idintité"
+
+#~ msgid "Table"
+#~ msgstr "Tåvlea"
+
+#~ msgid "Discrete"
+#~ msgstr "Discret"
+
+#~ msgid "Linear"
+#~ msgstr "Lineyåre"
+
+#~ msgid "Gamma"
+#~ msgstr "Gama"
+
+#~ msgid "Values"
+#~ msgstr "Valixhance"
+
+#~ msgid "Slope"
+#~ msgstr "Tiene"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgid "Intercept"
+#~ msgstr "Prinde"
+
+#~ msgid "Amplitude"
+#~ msgstr "Amplitude"
+
+#~ msgid "Exponent"
+#~ msgstr "Espôzant"
+
+#~ msgid "Offset"
+#~ msgstr "Displaeçmint"
+
+#~ msgid "Composite"
+#~ msgstr "Compôzite"
+
+#~ msgid "Operation"
+#~ msgstr "Operåcion"
+
+#~ msgid "Duplicate"
+#~ msgstr "Dobler"
+
+#~ msgid "Wrap"
+#~ msgstr "Ritourner"
+
+#~ msgid "Edge mode:"
+#~ msgstr "Môde di boirdeure"
+
+#~ msgid "Kernel size:"
+#~ msgstr "Grandeu do nawea:"
+
+#~ msgid "Target point:"
+#~ msgstr "Pont del såme:"
+
+#~ msgid "Divisor:"
+#~ msgstr "Pårtixheu:"
+
+#~ msgid "Bias:"
+#~ msgstr "Coridjaedje:"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Wårder l' alfa"
+
+#~ msgid "Edit kernel"
+#~ msgstr "Candjî nawea"
+
+#~ msgid "Flood fill"
+#~ msgstr "Rimplixhaedje enaiwaedje"
+
+#~ msgid "Flood color"
+#~ msgstr "Coleur d' enaiwaedje"
+
+#~ msgid "Image"
+#~ msgstr "Imådje"
+
+#~ msgid "Select image..."
+#~ msgstr "Tchoezi imådje..."
+
+#~ msgid "Select image"
+#~ msgstr "Tchoezi imådje"
+
+#~ msgid "Merge"
+#~ msgstr "Rimaxhî"
+
+#~ msgid "Morphology"
+#~ msgstr "Mrofolodjeye"
+
+#~ msgid "Dilate"
+#~ msgstr "Dilater"
+
+#~ msgid "Operator:"
+#~ msgstr "Operateu:"
+
+#~ msgid "Radius x:"
+#~ msgstr "Reyon x:"
+
+#~ msgid "Radius y:"
+#~ msgstr "Reyon y:"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Target:"
+#~ msgstr "Såme:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Lineyåre"
+
+#~ msgid "Fill"
+#~ msgstr "Rimpli"
+
+#~ msgid "Type:"
+#~ msgstr "Sôre:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineyåre"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radiå"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Cônike"
+
+#~ msgid "Repeat:"
+#~ msgstr "Repeter:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Nou"
+
+#~ msgid "Reflect"
+#~ msgstr "Riflet"
+
+#~ msgid "Repeat"
+#~ msgstr "Repeter"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Opacité globåle:"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgid "Color stop:"
+#~ msgstr "Matrice del coleur"
+
+#~ msgid "Stop color."
+#~ msgstr "Coleur do djocaedje."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Radjouter a on gradyint prédefini"
+
+#~ msgid "Original"
+#~ msgstr "Oridjinnå"
+
+#~ msgid "Tiled"
+#~ msgstr "A schayes"
+
+#~ msgid "Stretched"
+#~ msgstr "Alårdjî"
+
+#~ msgid "Top Left"
+#~ msgstr "Copete hintche"
+
+#~ msgid "Top"
+#~ msgstr "Copete"
+
+#~ msgid "Top Right"
+#~ msgstr "Copete droete"
+
+#~ msgid "Left"
+#~ msgstr "Hintche"
+
+#~ msgid "Center"
+#~ msgstr "Mitan"
+
+#~ msgid "Right"
+#~ msgstr "Droete"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Valêye hintche"
+
+#~ msgid "Bottom"
+#~ msgstr "Valêye"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Valêye droete"
+
+#~ msgid "Stroke"
+#~ msgstr "Bårer"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Catchî les mådjes del pådje"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Catchî rîles"
+
+#~ msgid "Stop color:"
+#~ msgstr "Coleur do djocaedje:"
+
+#~ msgid "Tools"
+#~ msgstr "Usteyes"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Displaeçmint do copiaedje:"
+
+#~ msgid "Show Guides"
+#~ msgstr "Mostrer moennaedjes"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Mostere ou catche les moennaedjes"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Rén"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Coleur li minme"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradyint"
+
+#~ msgid "Pattern"
+#~ msgstr "Patron"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Rimplixhaedje paire/impaire"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Rimplixhaedje al môde do vint"
+
+#~ msgid "Units:"
+#~ msgstr "Unités:"
+
+#~ msgid "Handle radius:"
+#~ msgstr "Reyon del pougneye:"
+
+#~ msgid "Grab sensitivity:"
+#~ msgstr "Sinsiûlisté di l' apougnaedje:"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Disgrouper fômes"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Grouper cayets"
+
+#~ msgid "Show grid:"
+#~ msgstr "Mostrer grile:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Claper sol grile:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Coleur del grile:"
+
+#~ msgid "Spacing"
+#~ msgstr "Espåçmint"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "Di &coutchî:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Schapaedje otomatike (mun):"
+
+#~ msgid "No auto save"
+#~ msgstr "Pont d' schapaedje otomatike"
+
+#~ msgid "min"
+#~ msgstr "mun"
+
+#~ msgid "Create backup file"
+#~ msgstr "Ahiver copeye di såvrité"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Mete å &prumî plan"
+
+#~ msgid "&Raise"
+#~ msgstr "&Rimonter"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Baxhî"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Evoyî en &erî"
+
+#~ msgid "Show Grid"
+#~ msgstr "Mostrer grile"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Catchî grile"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Mostere ou catche li grile"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Tchoezi patron a radjouter"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Tchoezi l' gradyint a radjouter"
+
+#~ msgid "Reference Point:"
+#~ msgstr "Pont d' referince:"
+
+#~ msgid "Reference Point Offset"
+#~ msgstr "Displaeçmint do pont d' referince"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Pattern Size"
+#~ msgstr "Grandeu do patron"
+
+#~ msgid "W:"
+#~ msgstr "L:"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Bodjî eyet saetchî po candjî l' plaece do gradyint."
+
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Bodjî eyet saetchî po displaecî l' coleur do djocaedje. Dobe clitchî po "
+#~ "oister l' coleur do djocaedje."
+
+#~ msgid "Drag to move color stop."
+#~ msgstr "Bodjî eyet saetchî po displaecî l' coleur do djocaedje."
+
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Bodjî eyet saetchî po candjî l' plaece do gradyint. Dobe clitchî po "
+#~ "stitchî ene coleur di djocaedje."
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Candjî gradyint"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Gradyints prédefinis"
+
+#~ msgid "Gradient tool"
+#~ msgstr "UStye di gradyint"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Usteye d' aspougnaedje do gradyint"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Usteye do patron"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Usteye d' aspougnaedje do patron"
+
+#~ msgid "Precision:"
+#~ msgstr "Sipepieusté:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Sins apresse"
+
+#~ msgid "Curve"
+#~ msgstr "Coube"
+
+#~ msgid "Straight"
+#~ msgstr "Direk"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimijhî"
+
+#~ msgid "Exactness:"
+#~ msgstr "Egzactitude:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Combiner inglêye:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Usteye di dessinaedje pa tchmin a mwin levêye"
+
+#~ msgid "A calligraphic shape"
+#~ msgstr "Ene fôme caligrafike"
+
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Fôme caligrafike"
+
+#~ msgid "Save profile as..."
+#~ msgstr "Schaper profil eyet l' rilomer..."
+
+#~ msgid "Remove profile"
+#~ msgstr "Oister profil"
+
+#~ msgid "&Follow selected path"
+#~ msgstr "&Shure tchimin tchoezi"
+
+#~ msgid "Use tablet &pressure"
+#~ msgstr "Si siervi del &pression sol tåvlete"
+
+#~ msgid "Width:"
+#~ msgstr "Lårdjeur:"
+
+#~ msgid "Thinning:"
+#~ msgstr "Rindaedje tene:"
+
+#~ msgid "Use tablet &angle"
+#~ msgstr "Si siervi di l' &inglêye del tåvlete:"
+
+#~ msgid "Fixation:"
+#~ msgstr "Ficsité:"
+
+#~ msgid "Mass:"
+#~ msgstr "Masse:"
+
+#~ msgid "Drag:"
+#~ msgstr "Bodjî eyet saetchî:"
+
+#~ msgid "Current"
+#~ msgstr "Do moumint"
+
+#~ msgid "Profile name"
+#~ msgstr "No do profil"
+
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Sititchîz s' i vs plait l' no ki vs voloz schaper c' profil ci:"
+
+#~ msgid "Sorry, the name you entered is invalid!"
+#~ msgstr "Dji rgrete mins vs avoz stitchî on no nén valåbe!"
+
+#~ msgctxt "invalid profile name"
+#~ msgid "Invalid name!"
+#~ msgstr "No nén valåbe!"
+
+#~ msgid ""
+#~ "A profile with that name already exists!\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "I gn a ddja on profil avou ç' no la.\n"
+#~ "El voloz vs sipotchî?"
+
+#~ msgid "Mouse"
+#~ msgstr "Sori"
+
+#~ msgid "Graphics Pen"
+#~ msgstr "Pene grafike"
+
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Caligrafeye: agrandi l' espåçmint"
+
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Caligrafeye: raptiti l' espåçmint"
+
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Caligrafeye: agrandi l' inglêye"
+
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Caligrafeye: raptiti l' inglêye"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Usteye di caligrafeye"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Usteye di caligrafeye"

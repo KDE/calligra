@@ -1,0 +1,68 @@
+# translation of VectorShape.po to Low Saxon
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2010, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VectorShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-09-30 13:17+0200\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "Vektordaten ännern"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Vektorbild"
+
+#: VectorShapeFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "A shape that shows a vector image"
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "En Form, de en Vektorbild dorstellt"
+
+#: VectorTool.cpp:64
+#, fuzzy, kde-format
+#| msgid "A shape that shows a vector image"
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "En Form, de en Vektorbild dorstellt"
+
+#: VectorToolFactory.cpp:20
+#, fuzzy, kde-format
+#| msgid "A shape that shows a vector image"
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "En Form, de en Vektorbild dorstellt"
+
+#, fuzzy
+#~| msgid "Vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Vektorbild"
+
+#, fuzzy
+#~| msgid "A shape that shows a vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "En Form, de en Vektorbild dorstellt"
+
+#~ msgid "Open EMF/WMF Shape"
+#~ msgstr "EMF-/WMF-Objekt opmaken"
+
+#~ msgid "EMF/WMF Vector Shape tool"
+#~ msgstr "EMF-/WMF-Vektorbild-Warktüüch"
+
+#~ msgid "Vector image selection tool"
+#~ msgstr "Vektorbild-Köörwarktüüch"

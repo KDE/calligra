@@ -1,0 +1,1549 @@
+# translation of karbon.po to Estonian
+# Copyright (C) 2003, 2008 Free Software Foundation, Inc.
+#
+# Hasso Tepper <hasso@estpak.ee>, 2002.
+# Ain Vagula <ain@kmprojekt.ee>, 2003.
+# Marek Laane <bald@smail.ee>, 2005-2006.
+# Marek Laane <bald@smail.ee>, 2008-2009, 2010, 2011, 2012, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-06-15 18:45+0300\n"
+"Last-Translator: Marek Laane <bald@smail.ee>\n"
+"Language-Team: Estonian <kde-et@linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "Ühtesulamine"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "Ühtesulamise režiim"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Normaalne"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "Korrutamine"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "Ekraan"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "Tumendamine"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "Helendamine"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "Gaussi pehmendus"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "Raadius"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "Värvimaatriks"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "Rakenda värvimaatriks"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "Küllastunud värvid"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "Tooni pööramine"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "Alfa heledus"
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "Küllastumisväärtus"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "Nurk"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "Värvimaatriks"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "Komponendi ülekanne"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "Funktsioon"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "Identiteet"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "Tabel"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "Diskreetne"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "Lineaarne"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "Väärtused"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "Kalle"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "Lõikumine"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "Amplituud"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "Eksponent"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "Distants"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "Komposiit"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "Toiming"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "Konvolutsioonimaatriks"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "Kloonimine"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "Mähkimine"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "Puudub"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "Servarežiim:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "Tuuma suurus:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "Sihtpunkt:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "Jagaja:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "Eelistus:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "Alfa säilitamine"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "Muuda tuuma"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "Ülekanduv täitmine"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "Ülekandevärv"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Pilt"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "Vali pilt..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "Pildi valimine"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "Ühendamine"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "Morfoloogia"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "Erosioon"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "Dilatatsioon"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "Tehe:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "Raadius x:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "Raadius y:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Ühtesulamine"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Ühtesulamise režiim"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normaalne"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "Korrutamine"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "Ekraan"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "Tumendamine"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Helendamine"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "Gaussi pehmendus"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Raadius"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "Värvimaatriks"
+
+#, fuzzy
+#~| msgid "Apply color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "Rakenda värvimaatriks"
+
+#, fuzzy
+#~| msgid "Saturate colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Küllastunud värvid"
+
+#, fuzzy
+#~| msgid "Rotate hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Tooni pööramine"
+
+#, fuzzy
+#~| msgid "Luminance to alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminance to alpha"
+#~ msgstr "Alfa heledus"
+
+#, fuzzy
+#~| msgid "Saturate value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Küllastumisväärtus"
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Nurk"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "Värvimaatriks"
+
+#, fuzzy
+#~| msgid "Component transfer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Component transfer"
+#~ msgstr "Komponendi ülekanne"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "Funktsioon"
+
+#, fuzzy
+#~| msgid "Identity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Identity"
+#~ msgstr "Identiteet"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "Tabel"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "Diskreetne"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Lineaarne"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "Väärtused"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Kalle"
+
+#, fuzzy
+#~| msgid "Intercept"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Lõikumine"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "Amplituud"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "Eksponent"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Distants"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Komposiit"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Toiming"
+
+#, fuzzy
+#~| msgid "Convolve Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "Konvolutsioonimaatriks"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Kloonimine"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "Mähkimine"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Puudub"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Servarežiim:"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "Tuuma suurus:"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Sihtpunkt:"
+
+#, fuzzy
+#~| msgid "Divisor:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divisor:"
+#~ msgstr "Jagaja:"
+
+#, fuzzy
+#~| msgid "Bias:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Eelistus:"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "Alfa säilitamine"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Muuda tuuma"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Ülekanduv täitmine"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Ülekandevärv"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Pilt"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Vali pilt..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Pildi valimine"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "Ühendamine"
+
+#, fuzzy
+#~| msgid "Morphology"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Morphology"
+#~ msgstr "Morfoloogia"
+
+#, fuzzy
+#~| msgid "Erode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erode"
+#~ msgstr "Erosioon"
+
+#, fuzzy
+#~| msgid "Dilate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Dilatatsioon"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Tehe:"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Raadius x:"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Raadius y:"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ain Vagula, Marek Laane"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ain@riiska.ee, bald@smail.ee"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Loogiline tehe"
+
+#~ msgid "&Order"
+#~ msgstr "&Järjekord"
+
+#~ msgid "&Align"
+#~ msgstr "&Joondamine"
+
+#~ msgid "&File"
+#~ msgstr "&Fail"
+
+#~ msgid "&Edit"
+#~ msgstr "&Redigeerimine"
+
+#~ msgid "&View"
+#~ msgstr "&Vaade"
+
+#~ msgid "&Object"
+#~ msgstr "&Objekt"
+
+#~ msgid "&Distribute"
+#~ msgstr "J&aotamine"
+
+#~ msgid "&Path"
+#~ msgstr "Kom&pleksjoon"
+
+#~ msgid "Effe&cts"
+#~ msgstr "E&fektid"
+
+#~ msgid "&Settings"
+#~ msgstr "&Seadistused"
+
+#~ msgid "Edit"
+#~ msgstr "Redigeerimine"
+
+#~ msgid "Object"
+#~ msgstr "Objekt"
+
+#~ msgid "Align"
+#~ msgstr "Joondamine"
+
+#~ msgid "Effects"
+#~ msgstr "Efektid"
+
+#~ msgid "View"
+#~ msgstr "Vaade"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Lamenda kõverat..."
+
+#~ msgid "Flatten Path"
+#~ msgstr "Kõvera lamendamine"
+
+#~ msgid "Properties"
+#~ msgstr "Omadused"
+
+#~ msgid "Flatness:"
+#~ msgstr "Lamedus:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Lamenda kõver"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Täpsusta kompleksjoont"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "&Täpsusta kompleksjoont..."
+
+#~ msgid "Refine Path"
+#~ msgstr "Kompleksjoone täpsustamine"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "Alamjaotised:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Ümarda nurgad"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "Üma&rda nurgad..."
+
+#~ msgid "Round Corners"
+#~ msgstr "Nurkade ümardamine"
+
+#~ msgid "Radius:"
+#~ msgstr "Raadius:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Vaade"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Vaade"
+
+#, fuzzy
+#~| msgid "Pencil tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Pliiatsi tööriist"
+
+#, fuzzy
+#~| msgid "Group shapes"
+#~ msgid "More shapes"
+#~ msgstr "Rühmita kujundid"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Keerise efekt"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Keeris..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Keerise efekt"
+
+#~ msgid "Info"
+#~ msgstr "Info"
+
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Keerise efekti tulemust saab parandada, kui eelnevalt täpsustada "
+#~ "kompleksjoone kujundit."
+
+#~ msgid "Angle:"
+#~ msgstr "Nurk:"
+
+#~ msgid "Pinch:"
+#~ msgstr "Ahenduse aste:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Too kiht ettepoole"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Vii kiht tahapoole"
+
+#~ msgid "Configure"
+#~ msgstr "Seadistamine"
+
+#~ msgid "Interface"
+#~ msgstr "Töökeskkond"
+
+#~ msgid "Misc"
+#~ msgstr "Muud"
+
+#~ msgid "Grid"
+#~ msgstr "Alusvõrk"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dokumendi seadistused"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgid "Layer view"
+#~ msgstr "Kihivaade"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Lisa uus kiht"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Kustuta valitud objektid"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Too valitud objektid ettepoole"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Vii valitud objektid tahapoole"
+
+#~ msgid "Minimal View"
+#~ msgstr "Minimaalne vaade"
+
+#~ msgid "Detailed View"
+#~ msgstr "Detailne vaade"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Pisipildivaade"
+
+#~ msgid "View mode"
+#~ msgstr "Vaaterežiim"
+
+#~ msgid "New Layer"
+#~ msgstr "Uus kiht"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Uue kihi nimi:"
+
+#~ msgid "New layer"
+#~ msgstr "Uus kiht"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Loo kiht"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Kustuta kiht"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Kõiki kihte ei saa kustutada. Vajalik on vähemalt üks kiht."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Viga kihtide kustutamisel"
+
+#~ msgid "Layer"
+#~ msgstr "Kiht"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Grupp"
+
+#~ msgid "Shape"
+#~ msgstr "Kujund"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Nähtav"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Lukustatud"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "Z-indeks"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Läbipaistmatus"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Kärbitud"
+
+#~ msgid "no"
+#~ msgstr "ei"
+
+#~ msgid "yes"
+#~ msgstr "jah"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Kujundihierarhia taastamine"
+
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Vektorgraafika rakendus."
+
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013: Karboni arendajad"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Ka sinu panus on oodatud."
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Vea- ja muud parandused"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "Veaparandused"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Tänuväärt paigad ja nõuanded"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Vigane OASIS-e dokument. Silti office:body ei leitud."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Vigane OASIS-e dokument. Silti office:drawing ei leitud."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Vigane OASIS-e dokument. Silti draw:page ei leitud."
+
+#~ msgid "Master Page"
+#~ msgstr "Leheküljemall"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Lisa graafika"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Lisatava graafika valimine"
+
+#~ msgid "Could not load image."
+#~ msgstr "Pildi laadimine nurjus."
+
+#~ msgid "Import graphic"
+#~ msgstr "Graafika import"
+
+#~ msgid "Could not create image shape."
+#~ msgstr "Pildikujundi loomine nurjus."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Peegelda rõhtsuunas"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "Peegelda püstsuunas"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "Peegelda rõht- ja püstsuunas"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Eralda kompleksjooned"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "Kontuurirežii&m"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Näita lehe veeriseid"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Impordi graafika..."
+
+#~ msgid "D&elete"
+#~ msgstr "K&ustuta"
+
+#~ msgid "Edit Guides"
+#~ msgstr "Muuda tõmbejooni"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Klooni"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Jaota keskme järgi (rõhtsuunas)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Jaota vahede järgi (rõhtsuunas)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Jaota vasaku serva järgi"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Jaota parema serva järgi"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Jaota keskme järgi (püstsuunas)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Jaota vahede järgi (püstsuunas)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Jaota alumise serva järgi"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Jaota ülemise serva järgi"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Näita joonlaudu"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Joonlaudade näitamine või peitmine"
+
+#~ msgid "Show Color Palette"
+#~ msgstr "Näita värvipaletti"
+
+#~ msgid "Show or hide color palette"
+#~ msgstr "Värvipaleti näitamine või peitmine"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Kinnita alusvõrgu külge"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Kinnitamine alusvõrgu külge"
+
+#~ msgid "&Clip Object"
+#~ msgstr "Kär&bi objekt"
+
+#~ msgid "&Unclip Objects"
+#~ msgstr "Tü&hista objektide kärpimine"
+
+#~ msgid "Mirror Vertically"
+#~ msgstr "Peegelda püstsuunas"
+
+#~ msgid "Mirror Horizontally"
+#~ msgstr "Peegelda rõhtsuunas"
+
+#~ msgid "&Close Path"
+#~ msgstr "&Sulge kompleksjoon"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "Kom&bineeri kompleksjoon"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "E&ralda kompleksjoon"
+
+#~ msgid "Re&verse Path"
+#~ msgstr "Ko&mpleksjoon teistpidi"
+
+#~ msgid "Intersect Paths"
+#~ msgstr "Kata kompleksjooned"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "Lahuta kompleksjooned"
+
+#~ msgid "Unite Paths"
+#~ msgstr "Ühenda kompleksjooned"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "Jäta kompleksjooned välja"
+
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Kinnita kompleksjoon alusvõrgu külge"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karboni seadistamine..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "&Lehekülje paigutus..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "Suurenda valikuni"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Suurenda joonistuseni"
+
+#~ msgid "Zoom"
+#~ msgstr "Suurendus"
+
+#~ msgid "Show status bar:"
+#~ msgstr "Olekuriba näitamine:"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Failide arv viimati kasutatud failide nimekirjas:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "Paleti fondi suurus:"
+
+#~ msgid "Canvas color:"
+#~ msgstr "Lõuendi värv:"
+
+#~ msgid "Select palette"
+#~ msgstr "Vali palett"
+
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Vajuta valiku täitmiseks"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Puudub"
+
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Vajuta joone lisamiseks valikule"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Kohandatud"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Puudub"
+
+#~ msgid "Stroke:"
+#~ msgstr "Joon:"
+
+#~ msgid "Fill:"
+#~ msgstr "Täitmine:"
+
+#~ msgid "File to open"
+#~ msgstr "Avatav fail"
+
+#~ msgid "Target:"
+#~ msgstr "Sihtmärk:"
+
+#~ msgid "Line"
+#~ msgstr "Joon"
+
+#~ msgid "Fill"
+#~ msgstr "Täitmine"
+
+#~ msgid "Type:"
+#~ msgstr "Tüüp:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineaarne"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radiaalne"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Kooniline"
+
+#~ msgid "Repeat:"
+#~ msgstr "Kordus:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Puudub"
+
+#~ msgid "Reflect"
+#~ msgstr "Peegeldus"
+
+#~ msgid "Repeat"
+#~ msgstr "Kordus"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Üldine läbipaistmatus:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Värvi murdepunkt:"
+
+#~ msgid "Stop color."
+#~ msgstr "Murdepunkti värv."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Lisa valmisüleminekute hulka"
+
+#~ msgid "Original"
+#~ msgstr "Originaal"
+
+#~ msgid "Tiled"
+#~ msgstr "Paanidena"
+
+#~ msgid "Stretched"
+#~ msgstr "Venitatud"
+
+#~ msgid "Top Left"
+#~ msgstr "Ülal vasakul"
+
+#~ msgid "Top"
+#~ msgstr "Ülal"
+
+#~ msgid "Top Right"
+#~ msgstr "Ülal paremal"
+
+#~ msgid "Left"
+#~ msgstr "Vasakul"
+
+#~ msgid "Center"
+#~ msgstr "Keskel"
+
+#~ msgid "Right"
+#~ msgstr "Paremal"
+
+#~ msgid "Bottom Left"
+#~ msgstr "All vasakul"
+
+#~ msgid "Bottom"
+#~ msgstr "All"
+
+#~ msgid "Bottom Right"
+#~ msgstr "All paremal"
+
+#~ msgid "Stroke"
+#~ msgstr "Joon"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Peida lehe veerised"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Peida joonlauad"
+
+#~ msgid "Stop color:"
+#~ msgstr "Murdepunkti värv:"
+
+#~ msgid "Tools"
+#~ msgstr "Tööriistad"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Koopia kaugus:"
+
+#~ msgid "Show Guides"
+#~ msgstr "Näita tõmbejooni"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Tõmbejoonte näitamine või peitmine"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Puudub"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Täidetud"
+
+#~ msgid "Gradient"
+#~ msgstr "Üleminek"
+
+#~ msgid "Pattern"
+#~ msgstr "Muster"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Paaris-paaritu täitmine"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Keerdtäitmine"
+
+#~ msgid "Units:"
+#~ msgstr "Ühikud:"
+
+#~ msgid "Handle radius:"
+#~ msgstr "Pideme raadius:"
+
+#~ msgid "Grab sensitivity:"
+#~ msgstr "Tõmbe tundlikkus:"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Lõhu kujundite rühmad"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Rühmita objektid"
+
+#~ msgid "Show grid:"
+#~ msgstr "Alusvõrgu näitamine:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Kinnitamine võrgu külge:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Alusvõrgu värv:"
+
+#~ msgid "Spacing"
+#~ msgstr "Vahe"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "V&ertikaalne:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Automaatsalvestus (min):"
+
+#~ msgid "No auto save"
+#~ msgstr "Automaatsalvestus puudub"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Varukoopia loomine"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Lisatava mustri valik"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Lisatava ülemineku valimine"
+
+#~ msgid "Reference Point:"
+#~ msgstr "Lähtepunkt:"
+
+#~ msgid "Reference Point Offset"
+#~ msgstr "Lähtepunkti nihe"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "Pattern Size"
+#~ msgstr "Mustri suurus"
+
+#~ msgid "W:"
+#~ msgstr "L:"
+
+#~ msgid "H:"
+#~ msgstr "K:"
+
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Lohista ülemineku asukohta."
+
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Lohista värvi murdepunkti asukohta. Topeltklõps eemaldab murdepunkti."
+
+#~ msgid "Drag to move color stop."
+#~ msgstr "Lohista värvi murdepunkti asukohta."
+
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr "Lohista ülemineku asukohta. Topeltklõps lisab värvi murdepunkti."
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Muuda üleminekut"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Valmisüleminekud"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Ülemineku tööriist"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Ülemineku muutmise tööriist"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Mustri tööriist"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Mustri muutmise tööriist"
+
+#~ msgid "Precision:"
+#~ msgstr "Täpsus:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Toor"
+
+#~ msgid "Curve"
+#~ msgstr "Kõver"
+
+#~ msgid "Straight"
+#~ msgstr "Sirgjoon"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimeerimine"
+
+#~ msgid "Exactness:"
+#~ msgstr "Täpsus:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Kombineeritud nurk:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Vabakäe-kompleksjoone joonistamise Tööriist"
+
+#~ msgid "A calligraphic shape"
+#~ msgstr "Kalligraafiakujund"
+
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Kalligraafiakujund"
+
+#~ msgid "Save profile as..."
+#~ msgstr "Salvesta profiil teise nimega..."
+
+#~ msgid "Remove profile"
+#~ msgstr "Eemalda profiil"
+
+#~ msgid "&Follow selected path"
+#~ msgstr "&Valitud kompleksjoone järgimine"
+
+#~ msgid "Use tablet &pressure"
+#~ msgstr "&Graafikalaua surve kasutamine"
+
+#~ msgid "Width:"
+#~ msgstr "Laius:"
+
+#~ msgid "Thinning:"
+#~ msgstr "Peenendamine:"
+
+#~ msgid "Use tablet &angle"
+#~ msgstr "G&raafikalaua nurga kasutamine"
+
+#~ msgid "Fixation:"
+#~ msgstr "Fikseerimine:"
+
+#~ msgid "Mass:"
+#~ msgstr "Mass:"
+
+#~ msgid "Drag:"
+#~ msgstr "Lohistamine:"
+
+#~ msgid "Current"
+#~ msgstr "Aktiivne"
+
+#~ msgid "Profile name"
+#~ msgstr "Profiili nimi"
+
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Palun sisesta nimi, millega profiil salvestada:"
+
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Vabandust, sisestatud nimi ei sobi."
+
+#~ msgctxt "invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Vigane nimi."
+
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Sellise nimega profiil on juba olemas.\n"
+#~ "Kas soovid selle üle kirjutada?"
+
+#~ msgid "Mouse"
+#~ msgstr "Hiir"
+
+#~ msgid "Graphics Pen"
+#~ msgstr "Graafikalaua pliiats"
+
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Kalligraafia: laiuse suurendamine"
+
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Kalligraafia: laiuse vähendamine"
+
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Kalligraafia: nurga suurendamine"
+
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Kalligraafia: nurga vähendamine"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Kalligraafiatööriist"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Kalligraafiatööriist"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "&Too esiplaanile"
+
+#~ msgid "&Raise"
+#~ msgstr "Too &ettepoole"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Vii tahapoole"
+
+#~ msgid "Send to &Back"
+#~ msgstr "&Saada tagaplaanile"
+
+#~ msgid "Show Grid"
+#~ msgstr "Näita alusvõrku"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Peida alusvõrk"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Alusvõrgu näitamine või peitmine"
+
+#~ msgid "Align Left"
+#~ msgstr "Joonda vasakule"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Joonda keskele (rõhtsuunas)"
+
+#~ msgid "Align Right"
+#~ msgstr "Joonda paremale"
+
+#~ msgid "Align Top"
+#~ msgstr "Joonda üles"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Joonda keskele (püstsuunas)"
+
+#~ msgid "Align Bottom"
+#~ msgstr "Joonda alla"

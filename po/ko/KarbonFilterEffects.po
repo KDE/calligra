@@ -1,0 +1,1180 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Shinjo Park <kde@peremen.name>, 2014, 2015, 2019, 2022.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2022-04-16 21:36+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, kde-format
+msgid "Blend"
+msgstr "혼합"
+
+#: BlendEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Blend mode"
+msgstr "혼합 모드"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "일반"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr "증식"
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr "화면"
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr "어둡게"
+
+#: BlendEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Lighten"
+msgstr "밝게"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr "가우시안 블러"
+
+#: BlurEffectConfigWidget.cpp:22
+#, kde-format
+msgid "Radius"
+msgstr "반지름"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr "색상 배열"
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr "색상 배열 효과 적용"
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Saturate colors"
+msgstr "색상 채도"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr "색조 회전"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr "알파에 대한 휘도"
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Saturate value"
+msgstr "포화 값"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, kde-format
+msgid "Angle"
+msgstr "각도"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr "색상 배열"
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr "구성 요소 전송"
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr "함수"
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr "항등식"
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, kde-format
+msgid "Table"
+msgstr "표"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, kde-format
+msgid "Discrete"
+msgstr "분할"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, kde-format
+msgid "Linear"
+msgstr "선형"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr "감마"
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr "값"
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr "경사"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr "차단"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr "진폭"
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr "지수"
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr "오프셋"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, kde-format
+msgid "Composite"
+msgstr "합성"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, kde-format
+msgid "Operation"
+msgstr "동작"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr "컨볼브 매트릭스"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, kde-format
+msgid "Duplicate"
+msgstr "복제"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr "둘러싸기"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, kde-format
+msgid "None"
+msgstr "없음"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, kde-format
+msgid "Edge mode:"
+msgstr "모서리 모드:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr "커널 크기:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Target point:"
+msgstr "목표 지점 :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr "디바이저 :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr "바이어스:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr "투명도 보존"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, kde-format
+msgid "Edit kernel"
+msgstr "커널 편집"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, kde-format
+msgid "Flood fill"
+msgstr "채우기"
+
+#: FloodEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Flood color"
+msgstr "색 채우기"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "그림"
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr "그림 선택..."
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr "그림 선택"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr "합치기"
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr "형태"
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr "침식"
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Dilate"
+msgstr "팽창"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, kde-format
+msgid "Operator:"
+msgstr "연산자:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Radius x:"
+msgstr "X 반지름:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, kde-format
+msgid "Radius y:"
+msgstr "Y 반지름:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr "dx"
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr "dy"
+
+#, fuzzy
+#~| msgid "Blend"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "혼합"
+
+#, fuzzy
+#~| msgid "Blend mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "혼합 모드"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "일반"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "화면"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "어둡게"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "밝게"
+
+#, fuzzy
+#~| msgid "Gaussian blur"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gaussian blur"
+#~ msgstr "가우시안 블러"
+
+#, fuzzy
+#~| msgid "Radius"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "반지름"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color Matrix"
+#~ msgstr "색상 배열"
+
+#, fuzzy
+#~| msgid "Apply color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply color matrix"
+#~ msgstr "색상 배열 효과 적용"
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "중단점 색상입니다."
+
+#, fuzzy
+#~| msgid "Stop color."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "중단점 색상입니다."
+
+#, fuzzy
+#~| msgid "Angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "각도"
+
+#, fuzzy
+#~| msgid "Color matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color matrix"
+#~ msgstr "색상 배열"
+
+#, fuzzy
+#~| msgid "Component transfer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Component transfer"
+#~ msgstr "구성 요소 전송"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Function"
+#~ msgstr "함수"
+
+#, fuzzy
+#~| msgid "Table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "표"
+
+#, fuzzy
+#~| msgid "Discrete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "분할"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "선형"
+
+#, fuzzy
+#~| msgid "Gamma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gamma"
+#~ msgstr "감마"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Values"
+#~ msgstr "값"
+
+#, fuzzy
+#~| msgid "Slope"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "경사"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "인터페이스"
+
+#, fuzzy
+#~| msgid "Amplitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Amplitude"
+#~ msgstr "진폭"
+
+#, fuzzy
+#~| msgid "Exponent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exponent"
+#~ msgstr "지수"
+
+#, fuzzy
+#~| msgid "Offset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "위치"
+
+#, fuzzy
+#~| msgid "Composite"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "합성"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "동작"
+
+#, fuzzy
+#~| msgid "Color Matrix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convolve Matrix"
+#~ msgstr "색상 배열"
+
+#, fuzzy
+#~| msgid "Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "복제"
+
+#, fuzzy
+#~| msgid "Wrap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Wrap"
+#~ msgstr "둘러싸기"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "없음"
+
+#, fuzzy
+#~| msgid "Edge mode:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "모서리 모드:"
+
+#, fuzzy
+#~| msgid "Kernel size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Kernel size:"
+#~ msgstr "커널 크기:"
+
+#, fuzzy
+#~| msgid "Target point:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "대상 점:"
+
+#, fuzzy
+#~| msgid "Bias:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "편향:"
+
+#, fuzzy
+#~| msgid "Preserve alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preserve alpha"
+#~ msgstr "투명도 보존"
+
+#, fuzzy
+#~| msgid "Edit kernel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "커널 편집"
+
+#, fuzzy
+#~| msgid "Flood fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "채우기"
+
+#, fuzzy
+#~| msgid "Flood color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "색 채우기"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "그림"
+
+#, fuzzy
+#~| msgid "Select image..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "그림 선택..."
+
+#, fuzzy
+#~| msgid "Select image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "그림 선택"
+
+#, fuzzy
+#~| msgid "Merge"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Merge"
+#~ msgstr "합치기"
+
+#, fuzzy
+#~| msgid "Operator:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "연산자:"
+
+#, fuzzy
+#~| msgid "Radius x:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "X 반지름:"
+
+#, fuzzy
+#~| msgid "Radius y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Y 반지름:"
+
+#, fuzzy
+#~| msgid "dx"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#, fuzzy
+#~| msgid "dy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Shinjo Park"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "불린 동작"
+
+#~ msgid "&Order"
+#~ msgstr "순서(&O)"
+
+#~ msgid "&Align"
+#~ msgstr "정렬(&A)"
+
+#~ msgid "&File"
+#~ msgstr "파일(&F)"
+
+#~ msgid "&Edit"
+#~ msgstr "편집(&E)"
+
+#~ msgid "&View"
+#~ msgstr "보기(&V)"
+
+#~ msgid "&Object"
+#~ msgstr "객체(&O)"
+
+#~ msgid "&Distribute"
+#~ msgstr "분배(&D)"
+
+#~ msgid "&Path"
+#~ msgstr "경로(&P)"
+
+#~ msgid "Effe&cts"
+#~ msgstr "효과(&C)"
+
+#~ msgid "&Settings"
+#~ msgstr "설정(&S)"
+
+#~ msgid "Edit"
+#~ msgstr "편집"
+
+#~ msgid "Object"
+#~ msgstr "객체"
+
+#~ msgid "Align"
+#~ msgstr "정렬"
+
+#~ msgid "Effects"
+#~ msgstr "효과"
+
+#~ msgid "View"
+#~ msgstr "보기"
+
+#~ msgid "Properties"
+#~ msgstr "속성"
+
+#~ msgid "Flatness:"
+#~ msgstr "평평함:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "경로 재정의"
+
+#~ msgid "&Refine Path..."
+#~ msgstr "경로 재정의(&R)..."
+
+#~ msgid "Refine Path"
+#~ msgstr "경로 재정의"
+
+#~ msgid "Subdivisions:"
+#~ msgstr "하위 조각:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "둥근 모서리"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "둥근 모서리(&R)..."
+
+#~ msgid "Round Corners"
+#~ msgstr "둥근 모서리"
+
+#~ msgid "Radius:"
+#~ msgstr "반지름:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "보기"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "보기"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Reparent shapes"
+#~ msgid "More shapes"
+#~ msgstr "도형 부모 조정"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "소용돌이/잡아당기기(&W)..."
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "소용돌이/잡아당기기(&W)..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "소용돌이/잡아당기기"
+
+#~ msgid "Info"
+#~ msgstr "정보"
+
+#~ msgid "Angle:"
+#~ msgstr "각:"
+
+#~ msgid "Pinch:"
+#~ msgstr "잡아당기기:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "레이어 올리기"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "레이어 내리기"
+
+#~ msgid "Configure"
+#~ msgstr "설정"
+
+#~ msgid "Misc"
+#~ msgstr "기타"
+
+#~ msgid "Grid"
+#~ msgstr "눈금"
+
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "문서"
+
+#~ msgid "Document Settings"
+#~ msgstr "문서 설정"
+
+#~ msgctxt "@title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "작성자"
+
+#~ msgid "Author"
+#~ msgstr "작성자"
+
+#~ msgid "Layer view"
+#~ msgstr "레이어 보기"
+
+#~ msgid "Add a new layer"
+#~ msgstr "새 레이어 추가"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "선택한 객체 삭제"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "선택한 객체 올리기"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "선택한 객체 내리기"
+
+#~ msgid "Minimal View"
+#~ msgstr "최소 보기"
+
+#~ msgid "Detailed View"
+#~ msgstr "자세히 보기"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "미리 보기"
+
+#~ msgid "View mode"
+#~ msgstr "보기 모드"
+
+#~ msgid "New Layer"
+#~ msgstr "새 레이어"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "새 레이어의 이름을 입력하십시오:"
+
+#~ msgid "New layer"
+#~ msgstr "새 레이어"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "레이어 만들기"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "레이어 삭제"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "모든 레이어를 삭제할 수 없습니다. 최소한 하나의 레이어가 필요합니다."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "레이어 삭제 오류"
+
+#~ msgid "Layer"
+#~ msgstr "레이어"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "그룹"
+
+#~ msgid "Shape"
+#~ msgstr "도형"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "보임"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "잠김"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "Z 순서"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "투명도"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "잘림"
+
+#~ msgid "no"
+#~ msgstr "아니요"
+
+#~ msgid "yes"
+#~ msgstr "예"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "도형 부모 조정"
+
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "벡터 그래픽 편집 프로그램입니다."
+
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013, The Karbon Developers"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "어떤 방법으로 참여하셔도 좋습니다."
+
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "버그 수정과 개선"
+
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgid "Bug fixes"
+#~ msgstr "버그 수정"
+
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgid "Helpful patches and advice"
+#~ msgstr "도움이 되는 패치와 충고"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "잘못된 OASIS 문서. office:body 태그를 찾을 수 없음."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "잘못된 OASIS 문서. office:drawing 태그를 찾을 수 없음."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "잘못된 OASIS 문서. draw:page 태그를 찾을 수 없음."
+
+#~ msgid "Master Page"
+#~ msgstr "마스터 페이지"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "그래픽 삽입"
+
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "추가할 그래픽 선택"
+
+#~ msgid "Could not load image."
+#~ msgstr "그림을 불러올 수 없습니다."
+
+#~ msgid "Import graphic"
+#~ msgstr "그래픽 가져오기"
+
+#~ msgid "Could not create image shape."
+#~ msgstr "그림 도형을 만들 수 없습니다."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "수평으로 대칭"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "수직으로 대칭"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "수직 및 수평으로 대칭"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "경로 분리"
+
+#~ msgid "Outline &Mode"
+#~ msgstr "외곽선 모드(&M)"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "페이지 여백 보기"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "그래픽 가져오기(&I)..."
+
+#~ msgid "D&elete"
+#~ msgstr "삭제(&D)"
+
+#~ msgid "Edit Guides"
+#~ msgstr "편집 안내선"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "복제(&D)"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "중앙으로 배분(수평)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "간격 배분(수평)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "왼쪽 경계선 기준 배분"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "오른쪽 경계선 기준 배분"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "중앙 분산(수직)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "분산 간격(수직)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "하단 테두리 분산"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "상단 테두리 분산"
+
+#~ msgid "Show Rulers"
+#~ msgstr "눈금자 보기"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "눈금자 보기/숨기기"
+
+#~ msgid "Show Color Palette"
+#~ msgstr "색 팔레트 보기"
+
+#~ msgid "Show or hide color palette"
+#~ msgstr "색 팔레트 보기/숨기기"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "눈금에 맞춤"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "눈금에 맞춤"
+
+#~ msgid "&Clip Object"
+#~ msgstr "객체 클립(&C)"
+
+#~ msgid "&Unclip Objects"
+#~ msgstr "객체 클립 해제(&U)"
+
+#~ msgid "Mirror Vertically"
+#~ msgstr "수직으로 대칭"
+
+#~ msgid "Mirror Horizontally"
+#~ msgstr "수평으로 대칭"
+
+#~ msgid "&Close Path"
+#~ msgstr "경로 닫기(&C)"
+
+#~ msgid "Com&bine Path"
+#~ msgstr "경로 결합(&B)"
+
+#~ msgid "Se&parate Path"
+#~ msgstr "경로 분리(&P)"
+
+#~ msgid "Re&verse Path"
+#~ msgstr "경로 반전(&V)"
+
+#~ msgid "Intersect Paths"
+#~ msgstr "경로 더하기"
+
+#~ msgid "Subtract Paths"
+#~ msgstr "경로 빼기"
+
+#~ msgid "Unite Paths"
+#~ msgstr "경로 합치기"
+
+#~ msgid "Exclude Paths"
+#~ msgstr "경로 제외"
+
+#~ msgid "Snap Path to Grid"
+#~ msgstr "경로를 눈금에 맞춤"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon 설정..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "페이지 레이아웃(&L)..."
+
+#~ msgid "Zoom to Selection"
+#~ msgstr "선택 영역으로 확대"
+
+#~ msgid "Zoom to Drawing"
+#~ msgstr "그리기로 확대"
+
+#~ msgid "Zoom"
+#~ msgstr "확대/축소"
+
+#~ msgid "Show status bar:"
+#~ msgstr "상태 표시줄 보기:"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "최신 파일 수:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "팔레트 글꼴 크기:"
+
+#~ msgid "Canvas color:"
+#~ msgstr "캔버스 색:"
+
+#~ msgid "Select palette"
+#~ msgstr "팔레트 선택"
+
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "선택 항목에 채우기를 적용하려면 누르십시오"
+
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "없음"
+
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "선택 항목에 선을 적용하려면 누르십시오"
+
+#~ msgctxt "The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "사용자 정의"
+
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "없음"
+
+#~ msgid "Stroke:"
+#~ msgstr "선:"
+
+#~ msgid "Fill:"
+#~ msgstr "채우기:"
+
+#~ msgid "File to open"
+#~ msgstr "열 파일"
+
+#~ msgid "Target:"
+#~ msgstr "대상:"
+
+#~ msgid "Line"
+#~ msgstr "선"
+
+#~ msgid "Fill"
+#~ msgstr "채우기"
+
+#~ msgid "Type:"
+#~ msgstr "종류:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "선형"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "원형"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "원뿔형"
+
+#~ msgid "Repeat:"
+#~ msgstr "반복:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "없음"
+
+#~ msgid "Reflect"
+#~ msgstr "반사"
+
+#~ msgid "Repeat"
+#~ msgstr "반복"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "전체 투명도:"
+
+#~ msgid "Color stop:"
+#~ msgstr "색 중단점:"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "사용자 정의 그라디언트 추가(&A)"
+
+#~ msgid "Original"
+#~ msgstr "원본"
+
+#~ msgid "Tiled"
+#~ msgstr "바둑판식 배열"
+
+#~ msgid "Stretched"
+#~ msgstr "늘임"
+
+#~ msgid "Top Left"
+#~ msgstr "왼쪽 위"
+
+#~ msgid "Top"
+#~ msgstr "위"
+
+#~ msgid "Top Right"
+#~ msgstr "오른쪽 위"
+
+#~ msgid "Left"
+#~ msgstr "왼쪽"
+
+#~ msgid "Center"
+#~ msgstr "가운데"
+
+#~ msgid "Right"
+#~ msgstr "오른쪽"
+
+#~ msgid "Bottom Left"
+#~ msgstr "왼쪽 아래"
+
+#~ msgid "Bottom"
+#~ msgstr "아래"
+
+#~ msgid "Bottom Right"
+#~ msgstr "오른쪽 아래"

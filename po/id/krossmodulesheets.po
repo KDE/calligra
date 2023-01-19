@@ -1,0 +1,1581 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Wantoyo <wantoyek@gmail.com>, 2019, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-11-09 21:15+0700\n"
+"Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
+"Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. i18n: ectx: Menu (tools)
+#: scripting.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "&Peralatan"
+
+#: ScriptingFunction.cpp:43
+#, kde-format
+msgid "No such script."
+msgstr "Tidak ada skrip seperti itu."
+
+#: ScriptingFunction.cpp:89
+#, kde-format
+msgid "No such script function."
+msgstr "Tidak ada fungsi skrip seperti itu."
+
+#: ScriptingFunction.cpp:103
+#, kde-format
+msgid "No return value."
+msgstr "Tidak ada nilai balik."
+
+#: ScriptingFunction.cpp:141 ScriptingFunction.cpp:142
+#: ScriptingFunction.cpp:149
+#, kde-format
+msgid "Scripts"
+msgstr "Skrip"
+
+#: ScriptingPart.cpp:48
+#, kde-format
+msgid "Scriptfile \"%1\" does not exist."
+msgstr "File skrip \"%1\" tidak ada."
+
+#: ScriptingPart.cpp:52
+#, kde-format
+msgid ""
+"Scriptfile \"%1\" is not executable. Please set the executable-attribute on "
+"that file."
+msgstr ""
+"File skrip \"%1\" tidaklah dapat dieksekusi. Mohon atur atribut dapat "
+"dieksekusi pada file tersebut."
+
+#: ScriptingPart.cpp:68
+#, kde-format
+msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
+msgstr ""
+"File skrip \"%1\" sudah ada di dalam direktori temporer. Pengeksekusian "
+"ditolak."
+
+#: ScriptingPart.cpp:73
+#, kde-format
+msgid "Failed to execute scriptfile \"%1\""
+msgstr "Gagal mengengsekusi file skrip \"%1\""
+
+#: ScriptingPart.cpp:76
+#, kde-format
+msgid "Errors on execution of scripts."
+msgstr "Error saat pengeksekusian skrip."
+
+#: ScriptingWidgets.cpp:68
+#, kde-format
+msgid "Sheet"
+msgstr "Lembar"
+
+#: ScriptingWidgets.cpp:71
+#, kde-format
+msgid "Cell"
+msgstr "Sel"
+
+#: ScriptingWidgets.cpp:72
+#, kde-format
+msgid "Range"
+msgstr "Rentang"
+
+#: ScriptingWriter.h:231
+msgctxt "(qtundo-format)"
+msgid "Set Values"
+msgstr "Atur Nilai"
+
+#: scripts/consoledocker.py:63
+msgctxt "Menu"
+msgid "File"
+msgstr "File"
+
+#: scripts/consoledocker.py:65
+msgid "New"
+msgstr "Baru"
+
+#: scripts/consoledocker.py:66
+msgid "Open..."
+msgstr "Buka..."
+
+#: scripts/consoledocker.py:67
+msgid "Save"
+msgstr "Simpan"
+
+#: scripts/consoledocker.py:68
+msgid "Save As..."
+msgstr "Simpan Sebagai..."
+
+#: scripts/consoledocker.py:70
+msgctxt "Menu"
+msgid "Edit"
+msgstr "Edit"
+
+#: scripts/consoledocker.py:72
+msgctxt "Menu"
+msgid "Build"
+msgstr "Bangun"
+
+#: scripts/consoledocker.py:74
+msgid "Compile"
+msgstr "Kompil"
+
+#: scripts/consoledocker.py:75
+msgid "Execute"
+msgstr "Eksekusi"
+
+#: scripts/consoledocker.py:90
+msgid "Open File"
+msgstr "Buka File"
+
+#: scripts/consoledocker.py:98
+msgid "<qt>Failed to open file \"%1\"<br><br>%2</qt>"
+msgstr "<qt>Gagal membuka file \"%1\"<br><br>%2</qt>"
+
+#: scripts/consoledocker.py:98 scripts/consoledocker.py:108
+#: scripts/csvexport.py:46 scripts/csvimport.py:45 scripts/htmlexport.py:444
+#: scripts/xmlviewer.py:175 scripts/xmlviewer.py:283
+msgid "Error"
+msgstr "Error"
+
+#: scripts/consoledocker.py:108
+msgid "<qt>Failed to save file \"%1\"<br><br>%2</qt>"
+msgstr "<qt>Gagal menyimpan file \"%1\"<br><br>%2</qt>"
+
+#: scripts/consoledocker.py:114
+msgid "Save File"
+msgstr "Simpan File"
+
+#: scripts/consoledocker.py:123
+msgid "Compiled! %1"
+msgstr "Terkompil! %1"
+
+#: scripts/consoledocker.py:131
+msgid "Executed! %1"
+msgstr "Tereksekusi! %1"
+
+#: scripts/consoledocker.py:229
+msgid "Name"
+msgstr "Nama"
+
+#: scripts/consoledocker.py:231
+msgid "Type"
+msgstr "Tipe"
+
+#: scripts/consoledocker.py:249
+msgid "Console"
+msgstr "Konsol"
+
+#: scripts/consoledocker.py:262
+msgid "Editor"
+msgstr "Pengedit"
+
+#: scripts/consoledocker.py:269
+msgid "Inspect"
+msgstr "Inspeksi"
+
+#: scripts/csvexport.py:25
+msgid "CSV Export"
+msgstr "Ekspor CSV"
+
+#: scripts/csvexport.py:29
+msgid "Export to CSV File"
+msgstr "Ekspor ke File CSV"
+
+#: scripts/csvexport.py:29 scripts/htmlexport.py:377 scripts/logger.py:22
+#: scripts/odfpyexport.py:241
+msgctxt "Options page name"
+msgid "Save"
+msgstr "Simpan"
+
+#: scripts/csvexport.py:32 scripts/csvimport.py:32 scripts/htmlexport.py:374
+#: scripts/htmlexport.py:380 scripts/logger.py:25 scripts/odfpyexport.py:250
+#: scripts/vcardimport.py:45 scripts/xmlviewer.py:32
+msgid "All Files"
+msgstr "Semua File"
+
+#: scripts/csvexport.py:32 scripts/csvimport.py:32
+msgid "Comma-Separated-Value Files"
+msgstr "File-file Comma-Separated-Value"
+
+#: scripts/csvexport.py:34
+msgctxt "Options page name"
+msgid "Export"
+msgstr "Ekspor"
+
+#: scripts/csvexport.py:34
+msgid "Export Sheets and ranges"
+msgstr "Ekspor Sheets dan jangkauan"
+
+#: scripts/csvexport.py:39 scripts/csvimport.py:38
+msgid "Comma Separated Value Options"
+msgstr "Opsi Comma Separated Value"
+
+#: scripts/csvexport.py:39 scripts/csvimport.py:38
+msgid "Options"
+msgstr "Opsi"
+
+#: scripts/csvexport.py:79
+msgid "No CSV file chosen"
+msgstr "Tidak ada file CSV yang dipilih"
+
+#: scripts/csvimport.py:25
+msgid "CSV Import"
+msgstr "Impor CSV"
+
+#: scripts/csvimport.py:29
+msgid "Import from CSV File"
+msgstr "Impor dqri File CSV"
+
+#: scripts/csvimport.py:29 scripts/htmlexport.py:371 scripts/vcardimport.py:40
+#: scripts/xmlviewer.py:30
+msgid "Open"
+msgstr "Buka"
+
+#: scripts/csvimport.py:34 scripts/vcardimport.py:47
+msgid "Import to sheet beginning at cell"
+msgstr "Impor ke awal lembar pada sel"
+
+#: scripts/csvimport.py:72 scripts/vcardimport.py:60
+msgid "No current sheet."
+msgstr "Tidak ada lembar saat ini."
+
+#: scripts/csvimport.py:76 scripts/vcardimport.py:70
+msgid "Invalid sheet \"%1\" defined."
+msgstr "Lembar \"%1\" yang ditentukan tidak absah."
+
+#: scripts/csvimport.py:80
+msgid "Invalid cell \"%1\" defined."
+msgstr "Sel \"%1\" yang ditentukan tidak absah."
+
+#: scripts/csvimport.py:84 scripts/vcardimport.py:56
+msgid "File '%1' not found."
+msgstr "File '%1' tidak ditemukan"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: scripts/csvoptions.ui:21
+#, kde-format
+msgid "Delimiter:"
+msgstr "Pembatas:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: scripts/csvoptions.ui:58
+#, kde-format
+msgid "Line terminator"
+msgstr "Terminator Baris"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scripts/csvoptions.ui:100
+#, kde-format
+msgid "Escape char:"
+msgstr "Karakter lolosan:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, DoubleQuoteCheckBox)
+#: scripts/csvoptions.ui:127
+#, kde-format
+msgid "Double quote"
+msgstr "Kutipan ganda"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scripts/csvoptions.ui:137
+#, kde-format
+msgid "Quote char:"
+msgstr "Karakter kutipan:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, QuotingCheckBox)
+#: scripts/csvoptions.ui:170
+#, kde-format
+msgid "Quoting"
+msgstr "Pengutipan"
+
+#. i18n: ectx: property (text), widget (QCheckBox, SkipInitialSpaceCheckBox)
+#: scripts/csvoptions.ui:177
+#, kde-format
+msgid "Skip initial space"
+msgstr "Lewati spasi inisial"
+
+#. i18n: ectx: property (text), widget (QCheckBox, StrictCheckBox)
+#: scripts/csvoptions.ui:184
+#, kde-format
+msgid "Strict"
+msgstr "Ketat"
+
+#: scripts/htmlexport.py:221
+msgid "No such file \"%1\" to read from."
+msgstr "Tidak ada file seperti \"%1\" untuk dibaca."
+
+#: scripts/htmlexport.py:230
+msgid "Failed to open the file \"%1\"."
+msgstr "Gagal membuka file  \"%1\"."
+
+#: scripts/htmlexport.py:236
+msgid "No sheets which could be exported to HTML."
+msgstr "Tidak ada lembar yang bisa diekspor ke HTML."
+
+#: scripts/htmlexport.py:309
+msgid ""
+"Failed to create HTML file \"%1\":\n"
+"%2"
+msgstr ""
+"Gagal menciptakan file HTML \"%1\":\n"
+"%2"
+
+#: scripts/htmlexport.py:366
+msgid "HTML Export"
+msgstr "Ekspor HTML"
+
+#: scripts/htmlexport.py:371
+msgid "Read from OpenDocument Spreadsheet File"
+msgstr "Baca dari File Spreadsheet OpenDocument"
+
+#: scripts/htmlexport.py:374
+msgid "OpenDocument Spreadsheet Files"
+msgstr "File-file Spreadsheet OpenDocument"
+
+#: scripts/htmlexport.py:377
+msgid "Save to HTML File"
+msgstr "Simpan ke file HTML"
+
+#: scripts/htmlexport.py:380
+msgid "HTML Documents"
+msgstr "Dokumen HTML"
+
+#: scripts/htmlexport.py:382
+msgid "HTML Document Information"
+msgstr "informasi Dokumen HTML"
+
+#: scripts/htmlexport.py:382
+msgid "Info"
+msgstr "Info"
+
+#: scripts/htmlexport.py:388
+msgid "Style of the HTML Document"
+msgstr "Gayanya Dokumen HTML"
+
+#: scripts/htmlexport.py:388
+msgid "Styles"
+msgstr "Gaya"
+
+#: scripts/htmlexport.py:426 scripts/logger.py:30
+msgid "Overwrite file?"
+msgstr "Timpa file?"
+
+#: scripts/htmlexport.py:426 scripts/logger.py:30
+msgid "The file \"%1\" does already exist. Overwrite the file?"
+msgstr "File \"%1\" sudah ada. Timpa file?"
+
+#: scripts/htmlexport.py:428
+msgid "Export aborted."
+msgstr "Pengeksporan dibatalkan."
+
+#: scripts/htmlexport.py:447
+msgid "Exporting..."
+msgstr "Mengekspor..."
+
+#: scripts/htmlexport.py:447
+msgid "Initialize..."
+msgstr "Inisialisasi..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: scripts/htmlexportinfos.ui:26
+#, kde-format
+msgid "Title:"
+msgstr "Judul:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: scripts/htmlexportinfos.ui:52
+#, kde-format
+msgid "Subject:"
+msgstr "Subjek:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: scripts/htmlexportinfos.ui:78
+#, kde-format
+msgid "Author:"
+msgstr "Penulis:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: scripts/htmlexportinfos.ui:104
+#, kde-format
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scripts/htmlexportinfos.ui:130
+#, kde-format
+msgid "Keywords:"
+msgstr "Katakunci:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scripts/htmlexportinfos.ui:156
+#, kde-format
+msgid "Filename:"
+msgstr "Nama file:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: scripts/htmlexportinfos.ui:182
+#, kde-format
+msgid "Date:"
+msgstr "Tanggal:"
+
+#: scripts/logger.py:22
+msgid "Save to Log File"
+msgstr "Simpan ke File Log"
+
+#: scripts/logger.py:25
+msgid "Log File"
+msgstr "File Log"
+
+#: scripts/logger.py:31 scripts/xmlviewer.py:34
+msgid "Aborted."
+msgstr "Digugurkan."
+
+#: scripts/logger.py:38
+msgid ""
+"Failed to write Log File \"%1\":\n"
+"%2"
+msgstr ""
+"Gagal menulis File Log \"%1\":\n"
+"%2"
+
+#: scripts/logger.py:50
+msgid "Failed to create listener for sheetname '%1' and range '%2'"
+msgstr "Gagal menciptakan listener untuk nama lembar '%1' dan jangkauan '%2'"
+
+#: scripts/myorca.py:86
+msgid "Failed to create listener"
+msgstr "Gagal menciptakan listener"
+
+#: scripts/myorca.py:96
+msgid "Sheet name changed"
+msgstr "Nama lembar yang diubah"
+
+#: scripts/myorca.py:100
+msgid "Show sheet %1"
+msgstr "Tampilkan lembar %1"
+
+#: scripts/myorca.py:104
+msgid "Hide sheet %1"
+msgstr "Sembunyikan lembar %1"
+
+#: scripts/myorca.py:136
+msgid "Action"
+msgstr "Aksi"
+
+#: scripts/myorca.py:139
+msgid "Cell Name"
+msgstr "Nama Sel"
+
+#: scripts/myorca.py:144
+msgid "Cell Value"
+msgstr "Nilai Sel"
+
+#: scripts/myorca.py:148
+msgid "Sheet Name"
+msgstr "Nama Lembar"
+
+#: scripts/myorca.py:154
+msgid "Cell Name if selection changed"
+msgstr "Nama Sel jika seleksi diubah"
+
+#: scripts/myorca.py:159
+msgid "Cell Value if selection changed"
+msgstr "Nilai Sel jika seleksi diubah"
+
+#: scripts/myorca.py:164
+msgid "Sheet Name if sheet changed"
+msgstr "Nama Lembar jika lembar diubah"
+
+#: scripts/myorca.py:188
+msgid "Calligra Spreadsheet"
+msgstr "Lembar Sebar Calligra"
+
+#: scripts/myorca.py:198
+msgid "Failed to connect with the Orca HTTP-Server."
+msgstr "Gagal mengkoneksikan dengan HTTP-Server Orca."
+
+#: scripts/myorca.py:201
+msgid "Url:"
+msgstr "Url:"
+
+#: scripts/odfpyexport.py:43
+msgid ""
+"<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport."
+"py python script to export to OpenDocument you need to install the <a href="
+"\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module."
+"</qt>"
+msgstr ""
+"<qt>Failed to import the ODFPY python module.<br><br>Untuk menggunakan skrip "
+"python odfpyexport.py ini untuk pengeksporan ke OpenDocument kamu perlu "
+"menginstal <a href=\"http://opendocumentfellowship.org/projects/odfpy"
+"\">ODFPY</a> modul python.</qt>"
+
+#: scripts/odfpyexport.py:74
+msgid ""
+"Invalid range for sheet \"%1\" cause left column value \"%2\" is bigger than "
+"right column value \"%3\"."
+msgstr ""
+"Rentang tidak absah untuk lembar \"%1\" sebab nilai \"%2\" kolom kiri lebih "
+"besar dari nilai \"%3\" kolom kanan."
+
+#: scripts/odfpyexport.py:76
+msgid ""
+"Invalid range for sheet \"%1\" cause top row value \"%2\" is bigger than "
+"bottom row value \"%3\"."
+msgstr ""
+"Rentang tidak absah untuk lembar \"%1\" sebab nilai \"%2\" baris atas lebih "
+"besar dari nilai \"%3\" baris bawah."
+
+#: scripts/odfpyexport.py:83
+msgid "OpenDocument Text"
+msgstr "OpenDocument Text"
+
+#: scripts/odfpyexport.py:140
+msgid "OpenDocument Spreadsheet"
+msgstr "OpenDocument Spreadsheet"
+
+#: scripts/odfpyexport.py:222
+msgid "No OpenDocument Spreadsheet file to read from defined."
+msgstr ""
+"Tidak ada file OpenDocument Spreadsheet untuk pembacaan dari yang ditentukan."
+
+#: scripts/odfpyexport.py:236
+msgid "OdfPy Export"
+msgstr "Ekspor OdfPy"
+
+#: scripts/odfpyexport.py:241
+msgid "Save to OpenDocument File"
+msgstr "Sumpan ke OpenDocument File"
+
+#: scripts/odfpyexport.py:249
+msgid "All Supported Files"
+msgstr "Semua File Didukung"
+
+#: scripts/odfpyexport.py:254
+msgid "Export Sheets"
+msgstr "Ekspor Lembar"
+
+#: scripts/odfpyexport.py:254
+msgid "Sheets"
+msgstr "Lembar"
+
+#: scripts/odfpyexport.py:280
+msgid "No OpenDocument file to write defined."
+msgstr "Tidak ada file OpenDocument untuk menulis yang ditentukan."
+
+#: scripts/pyregexp.py:10
+msgid ""
+"The PYREGEXP() function replaces substring in the input string with a given "
+"string using regular expression."
+msgstr ""
+"Fungsi PYREGEXP() menggantikan substring di dalam string input dengan sebuah "
+"string yang diberikan menggunakan ekspresi reguler."
+
+#: scripts/pyregexp.py:11
+msgid "PYREGEXP(string)"
+msgstr "PYREGEXP(string)"
+
+#: scripts/pyregexp.py:12
+msgid "The input string."
+msgstr "String input."
+
+#: scripts/pyregexp.py:13
+msgid "The regular expression."
+msgstr "Ekspresi reguler."
+
+#: scripts/pyregexp.py:14
+msgid "Replace with."
+msgstr "Ganti dengan."
+
+#: scripts/pyregexp.py:15
+msgid "PYREGEXP(\"Some String\",\"(S|m)\",\"A\")"
+msgstr "PYREGEXP(\"Beberapa String\",\"(S|m)\",\"A\")"
+
+#: scripts/pyregexp.py:25
+msgid "Invalid regexp"
+msgstr "Regexp tidak absah"
+
+#: scripts/pytime.py:10
+msgid "The PYTIME() function displays the current datetime."
+msgstr "Fungsi PYTIME() mendisplaikan waktu-tanggal saat ini."
+
+#: scripts/pytime.py:11
+msgid "PYTIME(string)"
+msgstr "PYTIME(string)\""
+
+#: scripts/pytime.py:12
+msgid "The datetime format string."
+msgstr "String format waktu-tanggal."
+
+#: scripts/pytime.py:13
+msgid "PYTIME()"
+msgstr "PYTIME()"
+
+#: scripts/pytime.py:14
+msgid "PYTIME(\"%H:%M.%S\")"
+msgstr "PYTIME(\"%H:%M.%S\")"
+
+#: scripts/pytime.py:15
+msgid "PYTIME(\"%Y-%M-%d\")"
+msgstr "PYTIME(\"%Y-%M-%d\")"
+
+#: scripts/pytime.py:21
+msgid "Invalid format"
+msgstr "Format tidak absah"
+
+#: scripts/rpyfunctions.py:116
+msgid ""
+"This function returns the probability density function of the normal "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan probabilitasnya distribusi normal."
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:124
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:138
+#: scripts/rpyfunctions.py:145 scripts/rpyfunctions.py:152
+#: scripts/rpyfunctions.py:159 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:180
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:208
+#: scripts/rpyfunctions.py:215
+msgid ""
+"If true, log of the result will be returned instead. This is useful if the "
+"result would otherwise underflow to 0. Defaults to false."
+msgstr ""
+"Jika true, log dari hasilnya akan dibalikkan sebagai gantinya. Ini cukup "
+"berguna jika hasilnya bisa berbalik mengalir ke 0. Bakunya ke false."
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:121
+msgid "mean of the distribution"
+msgstr "maksud dari distribusi"
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128 scripts/rpyfunctions.py:131
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:138
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:145
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:152
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:159 scripts/rpyfunctions.py:161
+#: scripts/rpyfunctions.py:166 scripts/rpyfunctions.py:168
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:175
+#: scripts/rpyfunctions.py:180 scripts/rpyfunctions.py:182
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:201
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:208
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:215
+#: scripts/rpyfunctions.py:217
+msgid "observation"
+msgstr "pengamatan"
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:121
+msgid "standard deviation of the distribution"
+msgstr "pengelakan standar dari distribusi"
+
+#: scripts/rpyfunctions.py:118
+msgid ""
+"This function returns the cumulative distribution function of the normal "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatifnya distribusi normal."
+
+#: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
+#: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:142
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:175 scripts/rpyfunctions.py:177
+#: scripts/rpyfunctions.py:182 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:189 scripts/rpyfunctions.py:191
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:212
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid ""
+"If true (the default), the lower tail of the distribution is considered."
+msgstr "Jika true (baku), buntut bagian bawah dari distribusi dipertimbangkan."
+
+#: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
+#: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:142
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:175 scripts/rpyfunctions.py:177
+#: scripts/rpyfunctions.py:182 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:189 scripts/rpyfunctions.py:191
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:212
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid ""
+"If true, log of the probability is used. This is useful if the probability "
+"would otherwise underflow to 0. Defaults to false."
+msgstr ""
+"Jika true, log probabilitas digunakan. Ini berguna jika probabilitas "
+"sebaliknya akan mengalir ke 0. Bakunya ke false."
+
+#: scripts/rpyfunctions.py:120
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the normal distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kemungkinan kuantil, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi normal."
+
+#: scripts/rpyfunctions.py:121 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:142 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:163 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:177 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:198 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:212 scripts/rpyfunctions.py:219
+msgid "probability"
+msgstr "kemungkinan"
+
+#: scripts/rpyfunctions.py:123
+msgid ""
+"This function returns the probability density function of the log-normal "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kemungkinan densitas dari distribusi log "
+"normal."
+
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128
+msgid "mean of the underlying normal distribution"
+msgstr "maksud dari distribusi normal yang mendasarinya"
+
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128
+msgid "standard deviation of the underlying normal distribution"
+msgstr "standar deviasi dari distribusi normal yang mendasarinya"
+
+#: scripts/rpyfunctions.py:125
+msgid ""
+"This function returns the cumulative distribution function of the log-normal "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi log-"
+"normal."
+
+#: scripts/rpyfunctions.py:127
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the log-normal distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi log-normal."
+
+#: scripts/rpyfunctions.py:130
+msgid ""
+"This function returns the probability density function of the gamma "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kemungkinan kepadatan dari distribusi gamma."
+
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:133
+#: scripts/rpyfunctions.py:135 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:180 scripts/rpyfunctions.py:182
+#: scripts/rpyfunctions.py:184 scripts/rpyfunctions.py:215
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid "the scale parameter of the distribution"
+msgstr "parameter skalanya distribusi"
+
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:133
+#: scripts/rpyfunctions.py:135 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+msgid "the shape parameter of the distribution"
+msgstr "parameter bentuknya distribusi"
+
+#: scripts/rpyfunctions.py:132
+msgid ""
+"This function returns the cumulative distribution function of the gamma "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatifnya distribusi gamma."
+
+#: scripts/rpyfunctions.py:134
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the gamma distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kemungkinan kuantil, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi gamma."
+
+#: scripts/rpyfunctions.py:137
+msgid ""
+"This function returns the probability density function of the beta "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi beta."
+
+#: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
+#: scripts/rpyfunctions.py:142
+msgid "the first shape parameter of the distribution"
+msgstr "parameter bentuk pertama dari distribusi"
+
+#: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
+#: scripts/rpyfunctions.py:142
+msgid "the second scale parameter of the distribution"
+msgstr "parameter skala kedua dari distribusi"
+
+#: scripts/rpyfunctions.py:139
+msgid ""
+"This function returns the cumulative distribution function of the beta "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi beta."
+
+#: scripts/rpyfunctions.py:141
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the beta distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi beta."
+
+#: scripts/rpyfunctions.py:144
+msgid ""
+"This function returns the probability density function of the Student t "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi Student "
+"t."
+
+#: scripts/rpyfunctions.py:145 scripts/rpyfunctions.py:147
+#: scripts/rpyfunctions.py:149 scripts/rpyfunctions.py:159
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+msgid "the number of degrees of freedom of the distribution"
+msgstr "angka derajat kebebasan distribusi"
+
+#: scripts/rpyfunctions.py:146
+msgid ""
+"This function returns the cumulative distribution function of the Student t "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi Student t."
+
+#: scripts/rpyfunctions.py:148
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Student t distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi Student t."
+
+#: scripts/rpyfunctions.py:151
+msgid ""
+"This function returns the probability density function of the F distribution."
+msgstr "Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi F."
+
+#: scripts/rpyfunctions.py:152 scripts/rpyfunctions.py:154
+#: scripts/rpyfunctions.py:156
+msgid "the first number of degrees of freedom of the distribution"
+msgstr "angka pertama derajat kebebasan distribusi"
+
+#: scripts/rpyfunctions.py:152 scripts/rpyfunctions.py:154
+#: scripts/rpyfunctions.py:156
+msgid "the second number of degrees of freedom of the distribution"
+msgstr "angka derajat kedua kebebasan distribusi"
+
+#: scripts/rpyfunctions.py:153
+msgid ""
+"This function returns the cumulative distribution function of the F "
+"distribution."
+msgstr "Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi F."
+
+#: scripts/rpyfunctions.py:155
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the F distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi F."
+
+#: scripts/rpyfunctions.py:158
+msgid ""
+"This function returns the probability density function of the chi-square "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi chi-"
+"square."
+
+#: scripts/rpyfunctions.py:160
+msgid ""
+"This function returns the cumulative distribution function of the chi-square "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi chi-"
+"square."
+
+#: scripts/rpyfunctions.py:162
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the chi-square distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi chi-square."
+
+#: scripts/rpyfunctions.py:165
+msgid ""
+"This function returns the probability density function of the Weibull "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi Weibull."
+
+#: scripts/rpyfunctions.py:167
+msgid ""
+"This function returns the cumulative distribution function of the Weibull "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi Weibull."
+
+#: scripts/rpyfunctions.py:169
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Weibull distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi Weibull."
+
+#: scripts/rpyfunctions.py:172
+msgid ""
+"This function returns the probability density function of the Poisson "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi Poisson."
+
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:175
+#: scripts/rpyfunctions.py:177
+msgid "the mean of the distribution"
+msgstr "maksud dari distribusi"
+
+#: scripts/rpyfunctions.py:174
+msgid ""
+"This function returns the cumulative distribution function of the Poisson "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi Poisson."
+
+#: scripts/rpyfunctions.py:176
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Poisson distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi F."
+
+#: scripts/rpyfunctions.py:179
+msgid ""
+"This function returns the probability density function of the exponential "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi "
+"eksponensial."
+
+#: scripts/rpyfunctions.py:181
+msgid ""
+"This function returns the cumulative distribution function of the "
+"exponential distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi "
+"eksponensial."
+
+#: scripts/rpyfunctions.py:183
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the exponential distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi eksponensial."
+
+#: scripts/rpyfunctions.py:186
+msgid ""
+"This function returns the probability density function of the binomial "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi binomial."
+
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+msgid "the number of trials"
+msgstr "jumlah percobaan"
+
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:208 scripts/rpyfunctions.py:210
+#: scripts/rpyfunctions.py:212
+msgid "the probability of success in each trial"
+msgstr "kemungkinan sukses dalam masing-masing percobaan"
+
+#: scripts/rpyfunctions.py:188
+msgid ""
+"This function returns the cumulative distribution function of the binomial "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi binomial."
+
+#: scripts/rpyfunctions.py:190
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the binomial distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi binomial."
+
+#: scripts/rpyfunctions.py:193
+msgid ""
+"This function returns the probability density function of the negative "
+"binomial distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi binomial "
+"negatif."
+
+#: scripts/rpyfunctions.py:195
+msgid ""
+"This function returns the cumulative distribution function of the negative "
+"binomial distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi binomial "
+"negatif."
+
+#: scripts/rpyfunctions.py:197
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the negative binomial "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi binomial negatif."
+
+#: scripts/rpyfunctions.py:200
+msgid ""
+"This function returns the probability density function of the hypergeometric "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi "
+"hipergeometrik."
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of balls drawn"
+msgstr "jumlah bola yang digambari"
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of black balls"
+msgstr "jumlah bola-bola hitam"
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of red balls"
+msgstr "jumlah bola-bola merah"
+
+#: scripts/rpyfunctions.py:202
+msgid ""
+"This function returns the cumulative distribution function of the "
+"hypergeometric distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi "
+"hipergeometrik."
+
+#: scripts/rpyfunctions.py:204
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the hypergeometric distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi hipergeometrik."
+
+#: scripts/rpyfunctions.py:207
+msgid ""
+"This function returns the probability density function of the geometric "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi "
+"geometrik."
+
+#: scripts/rpyfunctions.py:209
+msgid ""
+"This function returns the cumulative distribution function of the geometric "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi geometrik."
+
+#: scripts/rpyfunctions.py:211
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the geometric distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi geometrik."
+
+#: scripts/rpyfunctions.py:214
+msgid ""
+"This function returns the probability density function of the Cauchy "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kepadatan kemungkinan dari distribusi Cauchy."
+
+#: scripts/rpyfunctions.py:215 scripts/rpyfunctions.py:217
+#: scripts/rpyfunctions.py:219
+msgid "the center of the distribution"
+msgstr "pusat dari distribusi"
+
+#: scripts/rpyfunctions.py:216
+msgid ""
+"This function returns the cumulative distribution function of the Cauchy "
+"distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi distribusi kumulatif dari distribusi Cauchy."
+
+#: scripts/rpyfunctions.py:218
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Cauchy distribution."
+msgstr ""
+"Fungsi ini membalikkan fungsi kuantil kemungkinan, mis., kebalikan dari "
+"fungsi distribusi kumulatif, dari distribusi Cauchy."
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:4
+#, kde-format
+msgid "Import"
+msgstr "Impor"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:4
+#, kde-format
+msgid "Import content"
+msgstr "Impor konten"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:5 scripts/scripts.rc:16
+#, kde-format
+msgid "CSV File"
+msgstr "File CSV"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:5
+#, kde-format
+msgid "Import from a Comma-Separated-Value File"
+msgstr "Impor dari sebuah File Comma-Separated-Value"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:9
+#, kde-format
+msgid "vCard File"
+msgstr "File vCard"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:9
+#, kde-format
+msgid "Import from a vCard File"
+msgstr "Impor dari File vCard"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:15
+#, kde-format
+msgid "Export"
+msgstr "Ekspor"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:15
+#, kde-format
+msgid "Export content"
+msgstr "Ekspor konten"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "Export to a Comma-Separated-Value File"
+msgstr "Ekspor ke sebuah File Comma-Separated-Value"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:20
+#, kde-format
+msgid "HTML File"
+msgstr "File HTML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:20
+#, kde-format
+msgid "Export to a HTML File"
+msgstr "Ekspor ke sebuah File HTML"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:24
+#, kde-format
+msgid "OdfPy File"
+msgstr "File OdfPy"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:24
+#, kde-format
+msgid "Export to an OpenDocument File"
+msgstr "Ekspor ke sebuah File OpenDocument"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Functions"
+msgstr "Fungsi"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Scripting formula functions"
+msgstr "Fungsi-fungsi rumus penskripan"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:31
+#, kde-format
+msgid "R-Project"
+msgstr "Projek R"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:31
+#, kde-format
+msgid ""
+"Functions for the R programming environment for data analysis and graphics"
+msgstr ""
+"Fungsi-fungsi untuk lingkungan pemrograman R untuk analisis data dan grafis"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:35
+#, kde-format
+msgid "YFinance"
+msgstr "YFinance"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:35
+#, kde-format
+msgid "Yahoo! Finance formula function"
+msgstr "Fungsi rumus Yahoo! Finance"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:39
+#, kde-format
+msgid "YWeather"
+msgstr "YWeather"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:39
+#, kde-format
+msgid "Yahoo! Weather formula function"
+msgstr "Fungsi rumus Yahoo! Weather"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:43
+#, kde-format
+msgid "PyTime"
+msgstr "PyTime"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:43
+#, kde-format
+msgid "Time formula function"
+msgstr "Fungsi rumus waktu"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:48
+#, kde-format
+msgid "PyRegExp"
+msgstr "PyRegExp"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:48
+#, kde-format
+msgid "Regular Expression formula function"
+msgstr "Fungsi rumus Regular Expression"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:55
+#, kde-format
+msgid "Tools"
+msgstr "Peralatan"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:55
+#, kde-format
+msgid "Miscellaneous scripts"
+msgstr "Skrip lainnya"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:56
+#, kde-format
+msgid "XML Viewer"
+msgstr "Penampil XML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:56
+#, kde-format
+msgid ""
+"Python script to view the OpenDocument XML representation of the current "
+"document"
+msgstr ""
+"Skrip python untuk menampilkan representasi XML OpenDocument pada dokumen "
+"saat ini"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Orca Speech"
+msgstr "Orca Speech"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Orca Screen Reader"
+msgstr "Pembaca Layar Orca"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:64
+#, kde-format
+msgid "Logger"
+msgstr "Pencatat log"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:64
+#, kde-format
+msgid "Log changes in cells to a file"
+msgstr "Mengubah log dalam sel ke sebuah file"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:70
+#, kde-format
+msgid "Docker"
+msgstr "Docker"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:70
+#, kde-format
+msgid "Scripting Docker Widgets"
+msgstr "Penskripan Widgets Docker"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:71
+#, kde-format
+msgid "Python Console"
+msgstr "Konsol Python"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:71
+#, kde-format
+msgid "Interactive Python Console Docker"
+msgstr "Docker Konsol Python Interaktif"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:76
+#, kde-format
+msgid "Ruby Snippets"
+msgstr "Ruby Snippets"
+
+#: scripts/vcardimport.py:34
+msgid "Import vCard"
+msgstr "Impor vCard"
+
+#: scripts/vcardimport.py:45
+msgid "vCard Files"
+msgstr "File-file vCard"
+
+#: scripts/xmlviewer.py:30
+msgid "Open OpenDocument File"
+msgstr "Buka File OpenDocument"
+
+#: scripts/xmlviewer.py:32
+msgid "OpenDocument Files"
+msgstr "File-file OpenDocument"
+
+#: scripts/xmlviewer.py:57
+msgid "Failed to read the manifest"
+msgstr "Gagal membaca wujudnya"
+
+#: scripts/xmlviewer.py:168 scripts/xmlviewer.py:265
+msgid "Failed to extract \"%1\" to \"%2\""
+msgstr "Gagal mengekstrak \"%1\" ke \"%2\""
+
+#: scripts/xmlviewer.py:175
+msgid "<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>"
+msgstr "<qt>Gagal mengeksekusi program:<br><br>%1 \"%2\"</qt>"
+
+#: scripts/xmlviewer.py:187
+msgid "Open with..."
+msgstr "Buka dengan..."
+
+#: scripts/xmlviewer.py:192
+msgid "Filter"
+msgstr "Filter"
+
+#: scripts/xmlviewer.py:199
+msgid "No program defined."
+msgstr "Tidak ada program yang ditentukan."
+
+#: scripts/xmlviewer.py:214
+msgid "Compare..."
+msgstr "Bandingkan..."
+
+#: scripts/xmlviewer.py:225
+msgid "Compare with OpenDocument file:"
+msgstr "Bandingkan dengan file OpenDocument:"
+
+#: scripts/xmlviewer.py:238
+msgid "No OpenDocument file to compare with selected."
+msgstr ""
+"Tidak ada file OpenDocument untuk membandingkan dengan yang ditentukan."
+
+#: scripts/xmlviewer.py:242
+msgid "No command selected."
+msgstr "Tidak ada perintah yang dipilih."
+
+#: scripts/xmlviewer.py:253
+msgid "The OpenDocument file does not contain any file named \"%1\""
+msgstr "File OpenDocument tidak berisi file apa pun yang bernama \"%1\""
+
+#: scripts/xmlviewer.py:283
+msgid "<qt>%1</qt>"
+msgstr "<qt>%1</qt>"
+
+#: scripts/yfinance.py:39
+msgid ""
+"The YFINANCE() function uses the Yahoo! Finance Web Service to display stock "
+"values of a defined ticker symbol."
+msgstr ""
+"Fungsi YFINANCE() menggunakan Yahoo! Finance Web Service untuk mendisplaikan "
+"nilai stoknya sebuah simbol ticker yang ditentukan."
+
+#: scripts/yfinance.py:41
+msgid "YFINANCE(string,string,string)"
+msgstr "YFINANCE(string,string,string)"
+
+#: scripts/yfinance.py:42
+msgid "The ticker symbol."
+msgstr "Simbol ticker."
+
+#: scripts/yfinance.py:43
+msgid "The date."
+msgstr "Tanggal."
+
+#: scripts/yfinance.py:44
+msgid "The type: Date, Open, High, Low, Close, Volume or AdjClose."
+msgstr "Tipe: Tanggal, Buka, Tinggi, Rendah, Tutup, Volume atau AdjClose."
+
+#: scripts/yfinance.py:45
+msgid "YFINANCE(\"YHOO\";\"20060119\";\"Open\")"
+msgstr "YFINANCE(\"YHOO\";\"20060119\";\"Open\")"
+
+#: scripts/yfinance.py:46
+msgid "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
+msgstr "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
+
+#: scripts/yfinance.py:65
+msgid "Invalid symbol"
+msgstr "Simbol tidak absah"
+
+#: scripts/yfinance.py:69
+msgid "Invalid date"
+msgstr "Tanggal tidak absah"
+
+#: scripts/yfinance.py:81
+msgid "Invalid type"
+msgstr "Tipe tidak absah"
+
+#: scripts/yfinance.py:99 scripts/yweather.py:68
+msgid "Web services request failed"
+msgstr "Layanan web yang diminta gagal"
+
+#: scripts/yfinance.py:110
+msgid "No stock"
+msgstr "Tidak ada stok"
+
+#: scripts/yfinance.py:113
+msgid "Invalid stock"
+msgstr "Stok tidak absah"
+
+#: scripts/yweather.py:39
+msgid ""
+"The YWEATHER() function uses the Yahoo! Weather Web Service to display the "
+"weather of a location."
+msgstr ""
+"Fungsi YWEATHER() menggunakan Yahoo! Weather Web Service untuk mendisplaikan "
+"cuaca pada sebuah lokasi."
+
+#: scripts/yweather.py:41
+msgid "YWEATHER(string;string)"
+msgstr "YWEATHER(string;string)"
+
+#: scripts/yweather.py:42
+msgid "The US zip code, Location ID or cell that contains them."
+msgstr "Kode zip US, ID Lokasi atau sel yang berisi mereka."
+
+#: scripts/yweather.py:43
+msgid "Units for temperature. f=Fahrenheit and c=Celsius"
+msgstr "Unit untuk temperatur. f=Fahrenheit dan c=Celsius\""
+
+#: scripts/yweather.py:44
+msgid "YWEATHER(\"=A1\")"
+msgstr "YWEATHER(\"=A1\")"
+
+#: scripts/yweather.py:45
+msgid "YWEATHER(\"GMXX0151\";\"c\")"
+msgstr "YWEATHER(\"GMXX0151\";\"c\")"
+
+#: scripts/yweather.py:55
+msgid "Invalid location"
+msgstr "Lokasi tidak absah"
+
+#: scripts/yweather.py:83
+msgid "Invalid condition"
+msgstr "Kondisi tidak absah"
+
+#~ msgid ","
+#~ msgstr ","
+
+#~ msgid ";"
+#~ msgstr ";"
+
+#~ msgid "\\n"
+#~ msgstr "\\n"
+
+#~ msgid "\\t"
+#~ msgstr "\\t"
+
+#~ msgid "\\r"
+#~ msgstr "\\r"
+
+#~ msgid "\\n\\r"
+#~ msgstr "\\n\\r"
+
+#~ msgid "\\r\\n"
+#~ msgstr "\\r\\n"
+
+#~ msgid "\\"
+#~ msgstr "\\"
+
+#~ msgid "\""
+#~ msgstr "\""
+
+#~ msgid "'"
+#~ msgstr "'"

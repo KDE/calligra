@@ -1,0 +1,152 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Мария</firstname
+><surname
+>Шикунова</surname
+><affiliation
+><address
+><email
+>translation-team@basealt.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский язык</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Настройка комбинаций клавиш и панелей инструментов &sheets;</title>
+
+<sect1 id="configshort">
+<title
+>Комбинации клавиш</title>
+<para
+>Чтобы изменить назначения комбинаций клавиш, используемых &sheets;, воспользуйтесь пунктом меню <menuchoice
+><guimenu
+>Настройка</guimenu
+><guimenuitem
+>Комбинации клавиш... </guimenuitem
+></menuchoice
+>. После этого запустится диалог, как показано ниже. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Снимок настройки комбинаций клавиш 1</phrase>
+</textobject>
+</mediaobject>
+<para
+>Найдите в списке действие, для которого требуется добавить или изменить комбинации клавиш, а затем выберите его, щёлкнув <mousebutton
+>левой</mousebutton
+> кнопкой мыши по названию. Строка поиска вверху позволяет быстро найти нужное действие по названию. Изменить комбинацию клавиш возможно с помощью переключателей <guilabel
+>Нет</guilabel
+>, <guilabel
+>По умолчанию</guilabel
+> или <guilabel
+>Другая</guilabel
+>.</para>
+<para
+>Теперь возможно просто нажать комбинацию клавиш, которая будет использоваться в &sheets;, например, <keycombo action="simul"
+> &Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Панели инструментов</title>
+<para
+>В &sheets; есть шесть панелей инструментов: <guilabel
+>Файл</guilabel
+>, <guilabel
+>Правка</guilabel
+>, <guilabel
+>Навигация</guilabel
+>, <guilabel
+>Формат</guilabel
+>, <guilabel
+>Шрифт</guilabel
+> и <guilabel
+>Цвет и границы</guilabel
+>, каждую из которых возможно скрыть или отобразить в зависимости от параметров в меню <guimenu
+>Настройка</guimenu
+>.</para>
+<para
+>Если панели инструментов разблокированы, возможно выбрать, где располагать панель инструментов: <guimenuitem
+>Вверху</guimenuitem
+>, <guimenuitem
+>Слева</guimenuitem
+>, <guimenuitem
+>Справа</guimenuitem
+> или <guimenuitem
+>Внизу</guimenuitem
+> окна &sheets; с помощью щелчка <mousebutton
+>правой</mousebutton
+>кнопкой мыши, вызвав контекстное <guilabel
+>Меню панели инструментов</guilabel
+> и сделав выбор во вложенном меню <guisubmenu
+>Ориентация</guisubmenu
+>. Это <guilabel
+>Меню панели инструментов</guilabel
+> также имеет вложенные меню для выбора того, будут ли отображаться на панели инструментов значки, текст, или и то, и другое, а также размер значков.</para>
+
+<para
+>Другой способ переместить панель инструментов — это навести указатель мыши на две вертикальные полосы в левом конце каждой панели инструментов и, удерживая <mousebutton
+>левую</mousebutton
+> кнопку мыши нажатой, перетащить панель инструментов в нужное положение. При перетаскивании панели инструментов таким образом отпустите кнопку мыши, когда она находится на некотором расстоянии от любой из сторон окна &sheets;, и панель станет плавающей, не привязанной к какой-либо определённой части окна &sheets;, и её возможно будет переместить даже за пределы окна. Чтобы вернуть плавающую панель инструментов в одно из приложений Calligra, щёлкните по ней <mousebutton
+>правой</mousebutton
+> кнопкой мыши и в контекстном <guilabel
+>Меню панели инструментов</guilabel
+> выберите один из вариантов вложенного меню <guisubmenu
+>Ориентация</guisubmenu
+>.</para>
+
+<para
+>При выборе пункта <guimenuitem
+>Панели инструментов...</guimenuitem
+> в меню <guimenu
+>Настройка</guimenu
+> появится диалог, позволяющий добавлять или удалять кнопки с панелей инструментов &sheets;.</para>
+<para
+>Чтобы использовать диалог <guilabel
+>Настройка панелей инструментов</guilabel
+>, выберите панель инструментов из раскрывающегося списка <guilabel
+>Панель инструментов:</guilabel
+>. Правая область <guilabel
+>Текущие действия:</guilabel
+> отображает кнопки, которые сейчас находятся на панели инструментов. Чтобы убрать кнопку, выберите её в правой области и нажмите кнопку со стрелкой влево, либо переместите её с помощью клавиш со стрелками. Чтобы добавить кнопку, выберите её в списке слева <guilabel
+>Доступные действия:</guilabel
+> и нажмите кнопку со стрелкой вправо.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

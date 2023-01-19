@@ -1,0 +1,283 @@
+# translation of TableShape.po to Low Saxon
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Manfred Wiese <m.j.wiese@web.de>, 2009, 2010, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TableShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-01-13 07:29+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+
+#: SheetsEditor.cpp:55 SheetsEditor.cpp:117
+#, kde-format
+msgid "Rename"
+msgstr "Ümnömen"
+
+#: SheetsEditor.cpp:59
+#, kde-format
+msgid "Add"
+msgstr "Tofögen"
+
+#: SheetsEditor.cpp:63
+#, kde-format
+msgid "Remove"
+msgstr "Wegmaken"
+
+#: SheetsEditor.cpp:117
+#, kde-format
+msgid "Enter Name:"
+msgstr "Naam ingeven:"
+
+#: TableShape.cpp:300
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Confirmation Required"
+msgstr ""
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Download"
+msgstr ""
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Skip"
+msgstr ""
+
+#: TableShapeFactory.cpp:42
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Tabellenutreken"
+
+#: TableShapeFactory.cpp:44
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Form \"Tabellenutreken\""
+
+#: TableTool.cpp:256
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "OpenDocument-Tabellendatei importeren"
+
+#: TableTool.cpp:257
+#, kde-format
+msgid "Import"
+msgstr "Importeren"
+
+#: TableTool.cpp:261
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "OpenDocument-Tabellendatei exporteren"
+
+#: TableTool.cpp:262
+#, kde-format
+msgid "Export"
+msgstr "Exporteren"
+
+#: TableTool.cpp:742
+#, kde-format
+msgid "Sheets"
+msgstr "Tabellen"
+
+#: TableTool.cpp:784
+#, kde-format
+msgid "Sheet:"
+msgstr "Tabell:"
+
+#: TableTool.cpp:786
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Köört Tabell"
+
+#: TableTool.cpp:801
+#, fuzzy, kde-format
+#| msgid "Table Options"
+msgid "View Options"
+msgstr "Tabellenoptschonen"
+
+#: TableToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Table editing tool"
+msgid "Table editing"
+msgstr "Tabellbewerken"
+
+#: ToolHeaders.cpp:296 ToolHeaders.cpp:894
+#, kde-format
+msgid "Area is too large."
+msgstr ""
+
+#: ToolHeaders.cpp:439
+#, kde-format
+msgid "Hide Row"
+msgstr ""
+
+#: ToolHeaders.cpp:441
+#, kde-format
+msgid "Height: %1 %2"
+msgstr ""
+
+#: ToolHeaders.cpp:1069
+#, fuzzy, kde-format
+#| msgid "Columns:"
+msgid "Hide Column"
+msgstr "Striepen:"
+
+#: ToolHeaders.cpp:1071
+#, kde-format
+msgid "Width: %1 %2"
+msgstr ""
+
+#~ msgid "Number of columns"
+#~ msgstr "Tall vun Striepen"
+
+#~ msgid "Rows:"
+#~ msgstr "Regen:"
+
+#~ msgid "Number of rows"
+#~ msgstr "Tall vun Regen"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Ümnömen"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Tofögen"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Wegmaken"
+
+#, fuzzy
+#~| msgid "Enter Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter Name:"
+#~ msgstr "Naam ingeven:"
+
+#, fuzzy
+#~| msgid "Spreadsheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet"
+#~ msgstr "Tabellenutreken"
+
+#, fuzzy
+#~| msgid "Spreadsheet Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet Shape"
+#~ msgstr "Form \"Tabellenutreken\""
+
+#, fuzzy
+#~| msgid "Import OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import OpenDocument Spreadsheet File"
+#~ msgstr "OpenDocument-Tabellendatei importeren"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Importeren"
+
+#, fuzzy
+#~| msgid "Export OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export OpenDocument Spreadsheet File"
+#~ msgstr "OpenDocument-Tabellendatei exporteren"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Exporteren"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Tabellen"
+
+#, fuzzy
+#~| msgid "Sheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet:"
+#~ msgstr "Tabell:"
+
+#, fuzzy
+#~| msgid "Selected Sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Selected Sheet"
+#~ msgstr "Köört Tabell"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Striepen:"
+
+#, fuzzy
+#~| msgid "Number of columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns"
+#~ msgstr "Tall vun Striepen"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Regen:"
+
+#, fuzzy
+#~| msgid "Number of rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows"
+#~ msgstr "Tall vun Regen"
+
+#, fuzzy
+#~| msgid "Table Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Options"
+#~ msgstr "Tabellenoptschonen"
+
+#, fuzzy
+#~| msgid "Table editing tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table editing"
+#~ msgstr "Tabellbewerken"
+
+#~ msgid "Table"
+#~ msgstr "Tabell"
+
+#~ msgid "Table Shape"
+#~ msgstr "Form \"Tabell\""

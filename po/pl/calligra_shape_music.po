@@ -1,0 +1,1010 @@
+# translation of MusicShape2.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Franciszek Janowski <nobange@poczta.onet.pl>, 2008.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: MusicShape2\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-10-10 07:25+0100\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: actions/AccidentalAction.cpp:54
+#, kde-format
+msgid "Double flat"
+msgstr "Podwójny bemol"
+
+#: actions/AccidentalAction.cpp:55
+#, kde-format
+msgctxt "lowered half a step"
+msgid "Flat"
+msgstr "Bemol"
+
+#: actions/AccidentalAction.cpp:56
+#, kde-format
+msgid "Natural"
+msgstr "Kasownik"
+
+#: actions/AccidentalAction.cpp:57
+#, kde-format
+msgctxt "raised half a step"
+msgid "Sharp"
+msgstr "Krzyżyk"
+
+#: actions/AccidentalAction.cpp:58
+#, kde-format
+msgid "Double sharp"
+msgstr "Podwójny krzyżyk"
+
+#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#, kde-format
+msgid "%1 flats"
+msgstr "%1 bemole"
+
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#, kde-format
+msgid "%1 sharps"
+msgstr "%1 krzyżyki"
+
+#: actions/DotsAction.cpp:34
+#, kde-format
+msgid "Dots"
+msgstr "Kropki"
+
+#: actions/EraserAction.cpp:36
+#, kde-format
+msgid "Eraser"
+msgstr "Gumka"
+
+#: actions/KeySignatureAction.cpp:28
+#, kde-format
+msgid "Ab Major"
+msgstr "Ab dur"
+
+#: actions/KeySignatureAction.cpp:29
+#, kde-format
+msgid "Eb Major"
+msgstr "Eb dur"
+
+#: actions/KeySignatureAction.cpp:30
+#, kde-format
+msgid "Bb Major"
+msgstr "Bb dur"
+
+#: actions/KeySignatureAction.cpp:31
+#, kde-format
+msgid "F Major"
+msgstr "F dur"
+
+#: actions/KeySignatureAction.cpp:32
+#, kde-format
+msgid "C Major"
+msgstr "C dur"
+
+#: actions/KeySignatureAction.cpp:33
+#, kde-format
+msgid "G Major"
+msgstr "G dur"
+
+#: actions/KeySignatureAction.cpp:34
+#, kde-format
+msgid "D Major"
+msgstr "D dur"
+
+#: actions/KeySignatureAction.cpp:35
+#, kde-format
+msgid "A Major"
+msgstr "A dur"
+
+#: actions/KeySignatureAction.cpp:36
+#, kde-format
+msgid "E Major"
+msgstr "E dur"
+
+#: actions/KeySignatureAction.cpp:49
+#, kde-format
+msgctxt "Other key signature"
+msgid "Other"
+msgstr "Inna"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "note"
+msgstr "nuta"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "rest"
+msgstr "pauza"
+
+#: actions/NoteEntryAction.cpp:57
+#, kde-format
+msgid "Double whole "
+msgstr "Podwójna "
+
+#: actions/NoteEntryAction.cpp:58
+#, kde-format
+msgid "Whole "
+msgstr "Cała "
+
+#: actions/NoteEntryAction.cpp:59
+#, kde-format
+msgid "Half "
+msgstr "1/2 "
+
+#: actions/NoteEntryAction.cpp:60
+#, kde-format
+msgid "Quarter "
+msgstr "1/4 "
+
+#: actions/NoteEntryAction.cpp:61
+#, kde-format
+msgid "Eighth "
+msgstr "1/8 "
+
+#: actions/NoteEntryAction.cpp:62
+#, kde-format
+msgid "16th "
+msgstr "1/16 "
+
+#: actions/NoteEntryAction.cpp:63
+#, kde-format
+msgid "32nd "
+msgstr "1/32 "
+
+#: actions/NoteEntryAction.cpp:64
+#, kde-format
+msgid "64th "
+msgstr "1/64 "
+
+#: actions/NoteEntryAction.cpp:65
+#, kde-format
+msgid "128th "
+msgstr "1/128 "
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown note"
+msgstr "Nieznana nuta"
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown rest"
+msgstr "Nieznana pauza"
+
+#: actions/RemoveBarAction.cpp:22
+#, kde-format
+msgid "Remove bar"
+msgstr "Usuń takt"
+
+#: actions/SelectionAction.cpp:32
+#, kde-format
+msgid "Select"
+msgstr "Wybierz"
+
+#: actions/SetClefAction.cpp:39
+#, kde-format
+msgctxt "Treble clef"
+msgid "Treble"
+msgstr "Klucz wiolinowy"
+
+#: actions/SetClefAction.cpp:40
+#, kde-format
+msgctxt "Bass clef"
+msgid "Bass"
+msgstr "Klucz basowy"
+
+#: actions/SetClefAction.cpp:43
+#, kde-format
+msgctxt "Soprano clef"
+msgid "Soprano"
+msgstr "Klucz sopranowy"
+
+#: actions/SetClefAction.cpp:44
+#, kde-format
+msgctxt "Alto clef"
+msgid "Alto"
+msgstr "Klucz altowy"
+
+#: actions/SetClefAction.cpp:45
+#, kde-format
+msgctxt "Tenor clef"
+msgid "Tenor"
+msgstr "Klucz tenorowy"
+
+#: actions/SetClefAction.cpp:46
+#, kde-format
+msgid "C clef on line %1"
+msgstr "Klucz C w linii %1"
+
+#: actions/SetClefAction.cpp:49
+#, kde-format
+msgid "Unknown clef"
+msgstr "Nieznany klucz wiolinowy"
+
+#: actions/TiedNoteAction.cpp:33
+#, kde-format
+msgid "Tied notes"
+msgstr "Ligatura"
+
+#: commands/AddBarsCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add measures"
+msgstr "Dodaj takty"
+
+#: commands/AddDotCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add dot"
+msgstr "Dodaj kropkę"
+
+#: commands/AddNoteCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Set chord duration"
+msgstr "Ustaw długość akordu"
+
+#: commands/AddNoteCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Add note"
+msgstr "Dodaj nutę"
+
+#: commands/AddPartCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Add part"
+msgstr "Dodaj partię"
+
+#: commands/AddPartCommand.cpp:26
+#, kde-format
+msgid "Part %1"
+msgstr "Część %1"
+
+#: commands/ChangePartDetailsCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Change part details"
+msgstr "Zmień szczegóły partii"
+
+#: commands/CreateChordCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Add chord"
+msgstr "Dodaj akord"
+
+#: commands/CreateChordCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Add rest"
+msgstr "Dodaj pauzę"
+
+#: commands/MakeRestCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Convert chord to rest"
+msgstr "Przekształć akord w pauzę"
+
+#: commands/RemoveBarCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Remove bar"
+msgstr "Usuń takt"
+
+#: commands/RemoveChordCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove rest"
+msgstr "Usuń pauzę"
+
+#: commands/RemoveChordCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove chord"
+msgstr "Usuń akord"
+
+#: commands/RemoveNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove note"
+msgstr "Usuń nutę"
+
+#: commands/RemovePartCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove part"
+msgstr "Usuń partię"
+
+#: commands/RemoveStaffElementCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Remove clef"
+msgstr "Usuń klucz wiolinowy"
+
+#: commands/RemoveStaffElementCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Remove staff element"
+msgstr "Usuń element pięciolinii"
+
+#: commands/SetAccidentalsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Set accidentals"
+msgstr "Ustaw znaki chromatyczne"
+
+#: commands/SetClefCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change clef"
+msgstr "Zmień klucz wiolinowy"
+
+#: commands/SetKeySignatureCommand.cpp:25
+#: commands/SetKeySignatureCommand.cpp:72
+msgctxt "(qtundo-format)"
+msgid "Change key signature"
+msgstr "Zmień tonację"
+
+#: commands/SetTimeSignatureCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change time signature"
+msgstr "Zmiana metrum"
+
+#: commands/ToggleTiedNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Toggle Note Tie"
+msgstr "Połącz nuty"
+
+#: dialogs/KeySignatureDialog.cpp:15
+#, kde-format
+msgid "Set key signature"
+msgstr "Ustawianie tonacji"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/KeySignatureDialog.ui:63
+#, kde-format
+msgid "Region"
+msgstr "Region"
+
+#. i18n: ectx: property (text), widget (QRadioButton, throughBar)
+#. i18n: ectx: property (text), widget (QRadioButton, throughEndOfPiece)
+#. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
+#: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
+#: dialogs/KeySignatureDialog.ui:163
+#, kde-format
+msgid "Measure"
+msgstr "Metrum"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/KeySignatureDialog.ui:88
+#, kde-format
+msgid "through"
+msgstr "na"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/KeySignatureDialog.ui:139
+#, kde-format
+msgid "through end of piece"
+msgstr "do końca utworu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/KeySignatureDialog.ui:180
+#, kde-format
+msgid "to next key change"
+msgstr "do następnej zmiany tonacji"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/KeySignatureDialog.ui:205
+#, kde-format
+msgid "Staves"
+msgstr "Pięciolinie"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allStaves)
+#: dialogs/KeySignatureDialog.ui:211
+#, kde-format
+msgid "Update all staves"
+msgstr "Aktualizuj wszystkie pięciolinie"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
+#: dialogs/KeySignatureDialog.ui:221
+#, kde-format
+msgid "Only update selected staff"
+msgstr "Aktualizuj tylko zaznaczoną pięciolinię"
+
+#: dialogs/PartDetailsDialog.cpp:19
+#, kde-format
+msgid "Part details"
+msgstr "Szczegóły partii"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/PartDetailsDialog.ui:18
+#, kde-format
+msgid "Name:"
+msgstr "Nazwa:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/PartDetailsDialog.ui:34
+#, kde-format
+msgid "Short name:"
+msgstr "Krótka nazwa:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/PartDetailsDialog.ui:50
+#, kde-format
+msgid "Staves:"
+msgstr "Pięciolinie:"
+
+#. i18n: ectx: property (text), widget (QToolButton, editPart)
+#. i18n: ectx: property (text), widget (QToolButton, addPart)
+#. i18n: ectx: property (text), widget (QToolButton, removePart)
+#: dialogs/PartsWidget.ui:37 dialogs/PartsWidget.ui:44
+#: dialogs/PartsWidget.ui:54
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:187
+#, kde-format
+msgid "Voice 1"
+msgstr "Głos 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:192
+#, kde-format
+msgid "Voice 2"
+msgstr "Głos 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:197
+#, kde-format
+msgid "Voice 3"
+msgstr "Głos 3"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:202
+#, kde-format
+msgid "Voice 4"
+msgstr "Głos 4"
+
+#. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
+#: SimpleEntryTool.cpp:678
+#, kde-format
+msgid "Add measures"
+msgstr "Dodaj takty"
+
+#. i18n: ectx: property (text), widget (QToolButton, importButton)
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#, kde-format
+msgid "Import"
+msgstr "Import"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportButton)
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#, kde-format
+msgid "Export"
+msgstr "Eksport"
+
+#: MusicShape.cpp:71
+#, kde-format
+msgid "Part 1"
+msgstr "Część 1"
+
+#: MusicShapeFactory.cpp:36
+#, kde-format
+msgid "Music Shape"
+msgstr "Kształt muzyczny"
+
+#: MusicShapeFactory.cpp:38
+#, kde-format
+msgid "A shape which provides a music editor"
+msgstr "Kształt zawierający edytor muzyki"
+
+#: MusicTool.cpp:85
+#, kde-format
+msgid "Parts"
+msgstr "Partie"
+
+#: MusicToolFactory.cpp:19
+#, kde-format
+msgid "Music editing, parts"
+msgstr "Edytowanie muzyki, części"
+
+#: SimpleEntryTool.cpp:226
+#, kde-format
+msgid "Clef"
+msgstr "Klucz"
+
+#: SimpleEntryTool.cpp:255
+#, kde-format
+msgid "Time signature"
+msgstr "Metrum"
+
+#: SimpleEntryTool.cpp:285
+#, kde-format
+msgid "Key signature"
+msgstr "Tonacja"
+
+#: SimpleEntryTool.cpp:679
+#, kde-format
+msgid "Add how many measures?"
+msgstr "Ile taktów dodać?"
+
+#: SimpleEntryTool.cpp:743
+#, kde-format
+msgctxt "@title:window"
+msgid "Import"
+msgstr "Importuj"
+
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#, kde-format
+msgid "MusicXML files (*.xml)"
+msgstr "Pliki MusicXML (*.xml)"
+
+#: SimpleEntryTool.cpp:760
+#, kde-format
+msgctxt "@title:window"
+msgid "Export"
+msgstr "Eksportuj"
+
+#: SimpleEntryToolFactory.cpp:18
+#, kde-format
+msgid "Music editing"
+msgstr "Edytowanie muzyki"
+
+#, fuzzy
+#~| msgid "Region"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "Region"
+
+#, fuzzy
+#~| msgid "Measure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Measure"
+#~ msgstr "Metrum"
+
+#, fuzzy
+#~| msgid "through"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "through"
+#~ msgstr "na"
+
+#, fuzzy
+#~| msgid "through end of piece"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "through end of piece"
+#~ msgstr "do końca utworu"
+
+#, fuzzy
+#~| msgid "to next key change"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to next key change"
+#~ msgstr "do następnej zmiany tonacji"
+
+#, fuzzy
+#~| msgid "Staves"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves"
+#~ msgstr "Pięciolinie"
+
+#, fuzzy
+#~| msgid "Update all staves"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Update all staves"
+#~ msgstr "Aktualizuj wszystkie pięciolinie"
+
+#, fuzzy
+#~| msgid "Only update selected staff"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Only update selected staff"
+#~ msgstr "Aktualizuj tylko zaznaczoną pięciolinię"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nazwa:"
+
+#, fuzzy
+#~| msgid "Short name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short name:"
+#~ msgstr "Krótka nazwa:"
+
+#, fuzzy
+#~| msgid "Staves:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves:"
+#~ msgstr "Pięciolinie:"
+
+#, fuzzy
+#~| msgid "Voice 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 1"
+#~ msgstr "Głos 1"
+
+#, fuzzy
+#~| msgid "Voice 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 2"
+#~ msgstr "Głos 2"
+
+#, fuzzy
+#~| msgid "Voice 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 3"
+#~ msgstr "Głos 3"
+
+#, fuzzy
+#~| msgid "Voice 4"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 4"
+#~ msgstr "Głos 4"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Double flat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double flat"
+#~ msgstr "Podwójny bemol"
+
+#, fuzzy
+#~| msgctxt "lowered half a step"
+#~| msgid "Flat"
+#~ msgctxt "(qtundo-format) lowered half a step"
+#~ msgid "Flat"
+#~ msgstr "Bemol"
+
+#, fuzzy
+#~| msgid "Natural"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Natural"
+#~ msgstr "Kasownik"
+
+#, fuzzy
+#~| msgctxt "raised half a step"
+#~| msgid "Sharp"
+#~ msgctxt "(qtundo-format) raised half a step"
+#~ msgid "Sharp"
+#~ msgstr "Krzyżyk"
+
+#, fuzzy
+#~| msgid "Double sharp"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double sharp"
+#~ msgstr "Podwójny krzyżyk"
+
+#, fuzzy
+#~| msgid "%1 flats"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 flats"
+#~ msgstr "%1 bemole"
+
+#, fuzzy
+#~| msgid "%1 sharps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 sharps"
+#~ msgstr "%1 krzyżyki"
+
+#, fuzzy
+#~| msgid "Dots"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dots"
+#~ msgstr "Kropki"
+
+#, fuzzy
+#~| msgid "Eraser"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eraser"
+#~ msgstr "Gumka"
+
+#, fuzzy
+#~| msgid "Ab Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ab Major"
+#~ msgstr "Ab dur"
+
+#, fuzzy
+#~| msgid "Eb Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eb Major"
+#~ msgstr "Eb dur"
+
+#, fuzzy
+#~| msgid "Bb Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bb Major"
+#~ msgstr "Bb dur"
+
+#, fuzzy
+#~| msgid "F Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F Major"
+#~ msgstr "F dur"
+
+#, fuzzy
+#~| msgid "C Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C Major"
+#~ msgstr "C dur"
+
+#, fuzzy
+#~| msgid "G Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "G Major"
+#~ msgstr "G dur"
+
+#, fuzzy
+#~| msgid "D Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D Major"
+#~ msgstr "D dur"
+
+#, fuzzy
+#~| msgid "A Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Major"
+#~ msgstr "A dur"
+
+#, fuzzy
+#~| msgid "E Major"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E Major"
+#~ msgstr "E dur"
+
+#, fuzzy
+#~| msgctxt "Other key signature"
+#~| msgid "Other"
+#~ msgctxt "(qtundo-format) Other key signature"
+#~ msgid "Other"
+#~ msgstr "Inna"
+
+#, fuzzy
+#~| msgid "note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "note"
+#~ msgstr "nuta"
+
+#, fuzzy
+#~| msgid "rest"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "rest"
+#~ msgstr "pauza"
+
+#, fuzzy
+#~| msgid "Double whole "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double whole "
+#~ msgstr "Podwójna "
+
+#, fuzzy
+#~| msgid "Whole "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whole "
+#~ msgstr "Cała "
+
+#, fuzzy
+#~| msgid "Half "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Half "
+#~ msgstr "1/2 "
+
+#, fuzzy
+#~| msgid "Quarter "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quarter "
+#~ msgstr "1/4 "
+
+#, fuzzy
+#~| msgid "Eighth "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eighth "
+#~ msgstr "1/8 "
+
+#, fuzzy
+#~| msgid "16th "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "16th "
+#~ msgstr "1/16 "
+
+#, fuzzy
+#~| msgid "32nd "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "32nd "
+#~ msgstr "1/32 "
+
+#, fuzzy
+#~| msgid "64th "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "64th "
+#~ msgstr "1/64 "
+
+#, fuzzy
+#~| msgid "128th "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "128th "
+#~ msgstr "1/128 "
+
+#, fuzzy
+#~| msgid "Unknown note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown note"
+#~ msgstr "Nieznana nuta"
+
+#, fuzzy
+#~| msgid "Unknown rest"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown rest"
+#~ msgstr "Nieznana pauza"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "Wybierz"
+
+#, fuzzy
+#~| msgctxt "Treble clef"
+#~| msgid "Treble"
+#~ msgctxt "(qtundo-format) Treble clef"
+#~ msgid "Treble"
+#~ msgstr "Klucz wiolinowy"
+
+#, fuzzy
+#~| msgctxt "Bass clef"
+#~| msgid "Bass"
+#~ msgctxt "(qtundo-format) Bass clef"
+#~ msgid "Bass"
+#~ msgstr "Klucz basowy"
+
+#, fuzzy
+#~| msgctxt "Soprano clef"
+#~| msgid "Soprano"
+#~ msgctxt "(qtundo-format) Soprano clef"
+#~ msgid "Soprano"
+#~ msgstr "Klucz sopranowy"
+
+#, fuzzy
+#~| msgctxt "Alto clef"
+#~| msgid "Alto"
+#~ msgctxt "(qtundo-format) Alto clef"
+#~ msgid "Alto"
+#~ msgstr "Klucz altowy"
+
+#, fuzzy
+#~| msgctxt "Tenor clef"
+#~| msgid "Tenor"
+#~ msgctxt "(qtundo-format) Tenor clef"
+#~ msgid "Tenor"
+#~ msgstr "Klucz tenorowy"
+
+#, fuzzy
+#~| msgid "C clef on line %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C clef on line %1"
+#~ msgstr "Klucz C w linii %1"
+
+#, fuzzy
+#~| msgid "Unknown clef"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown clef"
+#~ msgstr "Nieznany klucz wiolinowy"
+
+#, fuzzy
+#~| msgid "Tied notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tied notes"
+#~ msgstr "Ligatura"
+
+#, fuzzy
+#~| msgid "Part %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part %1"
+#~ msgstr "Część %1"
+
+#, fuzzy
+#~| msgid "Set key signature"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set key signature"
+#~ msgstr "Ustawianie tonacji"
+
+#, fuzzy
+#~| msgid "Part details"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part details"
+#~ msgstr "Szczegóły partii"
+
+#, fuzzy
+#~| msgid "Part 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part 1"
+#~ msgstr "Część 1"
+
+#, fuzzy
+#~| msgid "Music Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music Shape"
+#~ msgstr "Kształt muzyczny"
+
+#, fuzzy
+#~| msgid "A shape which provides a music editor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which provides a music editor"
+#~ msgstr "Kształt zawierający edytor muzyki"
+
+#, fuzzy
+#~| msgid "Parts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parts"
+#~ msgstr "Partie"
+
+#, fuzzy
+#~| msgid "Music editing, parts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing, parts"
+#~ msgstr "Edytowanie muzyki, części"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Import"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Eksport"
+
+#, fuzzy
+#~| msgid "Clef"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clef"
+#~ msgstr "Klucz"
+
+#, fuzzy
+#~| msgid "Time signature"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time signature"
+#~ msgstr "Metrum"
+
+#, fuzzy
+#~| msgid "Key signature"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key signature"
+#~ msgstr "Tonacja"
+
+#, fuzzy
+#~| msgid "Add how many measures?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add how many measures?"
+#~ msgstr "Ile taktów dodać?"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Import"
+#~ msgstr "Import"
+
+#, fuzzy
+#~| msgid "MusicXML files (*.xml)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "MusicXML files (*.xml)"
+#~ msgstr "Pliki MusicXML (*.xml)"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Export"
+#~ msgstr "Eksport"
+
+#, fuzzy
+#~| msgid "Music editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing"
+#~ msgstr "Edytowanie muzyki"
+
+#~ msgid "Music Tool"
+#~ msgstr "Narzędzie muzyczne"

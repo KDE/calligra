@@ -1,0 +1,336 @@
+# Finnish messages for CalendarTool.
+# Copyright © 2011 This_file_is_part_of_KDE
+# This file is distributed under the same license as the calligra package.
+# Ilpo Kantonen <ilpo@iki.fi>, 2005.
+# Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2006.
+# Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2014.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: CalendarTool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-11-08 00:56+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2013-01-13 22:09:28+0000\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Päättymispäivä on ennen alkupäivää! Varmista, että päättymispäivä on "
+"alkamispäivää myöhäisempi."
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "Virhe"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Kalenteri ei voi olla pidempi kuin 10 vuotta. Jos todella tarvitset niin "
+"pitkiä ajanjaksoja, jaa ajanjakso useammaksi kalenteriksi."
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Alkamis- ja päättymispäivä ovat samat! Ainoastaan yksi päivä lisätään. "
+"Haluatko jatkaa?"
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "Varoitus"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Useamman vuoden kalenterin luominen voi viedä paljon tallennustilaa. "
+"Haluatko jatkaa?"
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Alue, jonne kalenteria lisätään, ei ole tyhjä. Haluatko varmasti jatkaa ja "
+"korvata nykyisiä tietoja? Alue, jonka kalenteri korvaisi näkyy valittuna, "
+"jos valitset ”Ei”."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr ""
+"Lisää kalenteri\n"
+"kalenterin lisäys"
+
+#: CalendarTool.cpp:107
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Kalenteri %1 - %2"
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "viikko"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "Kalenteri"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Kalenterityökalu"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, kde-format
+msgid "Insert"
+msgstr "Lisää"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, kde-format
+msgid "Start date:"
+msgstr "Alkamispäivä:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, kde-format
+msgid "End date:"
+msgstr "Päättymispäivä:"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Kalenterityökalu"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Lisää"
+
+#, fuzzy
+#~| msgid "Start date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Alkamispäivä:"
+
+#, fuzzy
+#~| msgid "End date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Päättymispäivä:"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "Päättymispäivä on ennen alkupäivää! Varmista, että päättymispäivä on "
+#~ "alkamispäivää myöhäisempi."
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Virhe"
+
+#, fuzzy
+#~| msgid ""
+#~| "Calendars should not be longer than 10 years. If you really need such "
+#~| "long periods you need to split them up."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Kalenteri ei voi olla pidempi kuin 10 vuotta. Jos todella tarvitset niin "
+#~ "pitkiä ajanjaksoja, jaa ajanjakso useammaksi kalenteriksi."
+
+#, fuzzy
+#~| msgid ""
+#~| "Start and end dates are equal! Only one day will be inserted, do you "
+#~| "want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Alkamis- ja päättymispäivä ovat samat! Ainoastaan yksi päivä lisätään. "
+#~ "Haluatko jatkaa?"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Varoitus"
+
+#, fuzzy
+#~| msgid ""
+#~| "Creating a calendar for a longer period than a year can take up a lot of "
+#~| "space, do you want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Useamman vuoden kalenterin luominen voi viedä paljon tallennustilaa. "
+#~ "Haluatko jatkaa?"
+
+#, fuzzy
+#~| msgid ""
+#~| "The area where the calendar is inserted is NOT empty, are you sure you "
+#~| "want to continue, overwriting existing data? If you choose No the area "
+#~| "that would be required for the desired calendar will be selected so you "
+#~| "can see what data would be overwritten."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Alue, jonne kalenteria lisätään, ei ole tyhjä. Haluatko varmasti jatkaa "
+#~ "ja korvata nykyisiä tietoja? Alue, jonka kalenteri korvaisi näkyy "
+#~ "valittuna, jos valitset ”Ei”."
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Kalenteri %1 - %2"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "viikko"
+
+#, fuzzy
+#~| msgid "Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Kalenteri"
+
+#~ msgctxt "This what's this help applies for the entire dialog."
+#~ msgid ""
+#~ "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~ "want to insert. When you have chosen the desired dates, simply press the "
+#~ "Insert button to insert the calendar into the spreadsheet, starting at "
+#~ "the cell you have currently selected."
+#~ msgstr ""
+#~ "Kalenterinlisäysikkunassa voit valita lisättävän kalenterin päivämäärät. "
+#~ "Kun olet valinnut haluamasi päivät, paina Lisää-painiketta. Kalenteri "
+#~ "lisätään taulukkoon alkaen valittuna olevasta solusta."
+
+#~ msgid "Set the start date of the calendar you want to insert"
+#~ msgstr "Aseta kalenterin alkamispäivä"
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should start. The "
+#~ "selected date will be the first day of the inserted calendar. You can "
+#~ "also choose a date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "Tässä voit määritellä, mistä päivästä kalenterin tulisi alkaa. Valittu "
+#~ "päivä on ensimmäinen lisätyn kalenterin päivä. Voit myös valita päivän "
+#~ "kalenteri-ikkunasta painamalla Valitse päivä."
+
+#~ msgid "Date Picker"
+#~ msgstr "Päivän poimija"
+
+#~ msgid "Use a graphical date picker to select a date"
+#~ msgstr "Käytä graafista päivän poimijaa päivän valitsemiseksi."
+
+#~ msgid "Set the end date of the calendar you want to insert"
+#~ msgstr "Valitse kalenterin päättymispäivä"
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should end. The selected "
+#~ "date will be the last day of the inserted calendar. You can also choose a "
+#~ "date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "Tässä voit valita, minä päivänä kalenterin tulisi päättyä. Valittu päivä "
+#~ "on viimeinen lisättävän kalenterin päivä. Voit myös valita päivän "
+#~ "kalenteri-ikkunasta painamalla Valitse päivä."
+
+#~ msgctxt "Tooltip for the insert button of the insert calendar plugin"
+#~ msgid "Insert the calendar at the currently selected cell"
+#~ msgstr "Lisää kalenteri valittuun soluun."
+
+#~ msgctxt "What's this for the insert button of the insert calendar plugin"
+#~ msgid ""
+#~ "A new calendar will be inserted starting at the currently selected cell."
+#~ msgstr "Uusi kalenteri lisätään alkaen nyt valitusta solusta."
+
+#~ msgid "&Cancel"
+#~ msgstr "&Peruuta"
+
+#~ msgid "Do not insert a calendar"
+#~ msgstr "Älä lisää kalenteria"
+
+#~ msgid ""
+#~ "Quits the dialog and does not insert a calendar. Use this to cancel this "
+#~ "operation."
+#~ msgstr ""
+#~ "Poistuu ikkunasta eikä lisää kalenteria. Käytä tätä keskeyttääksesi "
+#~ "toiminto."
+
+#~ msgid "&Tools"
+#~ msgstr "&Työkalut"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ilpo Kantonen, Niklas Laxström, Mikko Piippo, Jorma Karvonen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "ilpo@iki.fi, niklas.laxstrom+kdetrans@gmail.com, piippo@cc.helsinki.fi, "
+#~ "karvonen.jorma@gmail.com"
+
+#~ msgid "Insert Calendar..."
+#~ msgstr "Lisää kalenteri..."
+
+#~ msgid "KSpread Insert Calendar Plugin"
+#~ msgstr "KSpread kalenterinlisäysliitännäinen"
+
+#~ msgid "(c) 2005, The KSpread Team"
+#~ msgstr "© 2005, KSpread-työryhmä"
+
+#~ msgid "Cannot insert calendar because no document is set!"
+#~ msgstr "Ei voi lisätä kalenteria, koska asiakirjaa ei ole asetettu!"

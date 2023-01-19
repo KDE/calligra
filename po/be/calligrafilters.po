@@ -1,0 +1,2757 @@
+# translation of kofficefilters.po to Belarusian
+#
+# Siarhei Liantsevich <serzh.by@gmail.com>, 2006.
+# Darafei Praliaskouski <komzpa@licei2.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-05-25 12:32+0300\n"
+"Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
+"Language-Team: Belarusian <i18n@mova.org>\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+#| msgid "PNG Export Options"
+msgid "%1 Export Options"
+msgstr "Налада экспарту ў PNG"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "Старонка %1"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, fuzzy, kde-format
+msgid "Page:"
+msgstr "Старонка:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, fuzzy, kde-format
+msgid "Image height:"
+msgstr "Вышыня:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, fuzzy, kde-format
+msgid "Resolution:"
+msgstr "Раздзяляльнасць:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, fuzzy, kde-format
+msgid "Color"
+msgstr "Колеравая прастора"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr ""
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:297
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, fuzzy, kde-format
+msgid "Could not open the requested file %1"
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, fuzzy, kde-format
+#| msgid "Passwords"
+msgid "Enter password"
+msgstr "Паролі"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, fuzzy, kde-format
+msgid "Could not find path for type %1"
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, fuzzy, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "Зноска %1"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, fuzzy, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, fuzzy, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, fuzzy, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, fuzzy, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Памылка апрацоўкі дакумента MathML %4, радок %1, пазіцыя %2\n"
+"Апісанне памылкі: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, fuzzy, kde-format
+msgid "Could not write block"
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: sheets/csv/csvexport.cc:269
+#, fuzzy, kde-format
+msgid "<SHEETNAME>"
+msgstr "<SHEETNAME>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Рэкамендуемая ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Лакаль ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, fuzzy, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Іншая ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:274 words/ascii/ImportDialog.cc:94
+#, fuzzy, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Не атрымалася знайсці кадыроўку: %1"
+
+#: sheets/csv/csvimport.cc:82
+#, fuzzy, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "Не атрымоўваецца адкрыць файл CSV."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, fuzzy, kde-format
+msgid "Encoding"
+msgstr "Знаказбор"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, fuzzy, kde-format
+msgid "E&ncoding:"
+msgstr "&Кадыроўка:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, fuzzy, kde-format
+msgid "End of Line"
+msgstr "У канец радка"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, fuzzy, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "Стыль UNIX (рэкамендуецца, толькі перанос радка)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, fuzzy, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "Стыль Windows (зварот карэткі і перанос радка)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, fuzzy, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "Стыль Macintosh (толькі зварот карэткі)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, fuzzy, kde-format
+msgid "Sheets"
+msgstr "Лісты"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, fuzzy, kde-format
+msgid "Select sheets to export:"
+msgstr "Вылучыце лісты для экспарту:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, fuzzy, kde-format
+msgid "Delimiter Line"
+msgstr "Падзяляльны радок"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, fuzzy, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<SHEETNAME>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, fuzzy, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<SHEETNAME> замяняецца імем наступнага ліста."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, fuzzy, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Друкаваць падзяляльны радок над кожным лістом"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, fuzzy, kde-format
+msgid "Cells"
+msgstr "Вочкі"
+
+#. i18n: ectx: property (title), widget (KButtonGroup, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, fuzzy, kde-format
+msgid "Delimiter"
+msgstr "Падзяляльнік"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, fuzzy, kde-format
+msgid "Comma"
+msgstr "Коска"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, fuzzy, kde-format
+msgid "Semicolon"
+msgstr "Кропка з коскай"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, fuzzy, kde-format
+msgid "Tabulator"
+msgstr "табуляцыя"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, fuzzy, kde-format
+msgid "Space"
+msgstr "Прагал"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, fuzzy, kde-format
+msgid "Other:"
+msgstr "іншы:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, fuzzy, kde-format
+msgid "Quotes:"
+msgstr "Тэкст у двукоссях:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, fuzzy, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, fuzzy, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, fuzzy, kde-format
+msgid "Export selection only"
+msgstr "Экспартаваць толькі вылучаныя вочкі"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, fuzzy, kde-format
+msgid "File format is not supported."
+msgstr "Фармат файла не падтрымліваецца."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, fuzzy, kde-format
+msgid "Could not read from file."
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: sheets/html/exportdialog.cc:24
+#, fuzzy, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Экспарт ліста ў HTML"
+
+#: sheets/html/exportdialog.cc:35
+#, fuzzy, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Рэкамендуемая: UTF-8"
+
+#: sheets/html/exportdialog.cc:36
+#, fuzzy, kde-format
+msgid "Locale (%1)"
+msgstr "Сістэмная (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, fuzzy, kde-format
+msgid "En&coding:"
+msgstr "Кадыроўка:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, fuzzy, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr "Тут вы можаце вылучыць кадыроўку файла HTML. Па змаўчанні - UTF8."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, fuzzy, kde-format
+msgid "Sheet Selection"
+msgstr "Выбар лістоў"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, fuzzy, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Вылучыць усе лісты з спісу."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, fuzzy, kde-format
+msgid "Select &All"
+msgstr "Вылучыць &усё"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, fuzzy, kde-format
+msgid "Desele&ct All"
+msgstr "Зняць выбар"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, fuzzy, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Асобны HTML-файл для кожнай табліцы. Інакш яны змяшчаюцца ў адзін файл."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, fuzzy, kde-format
+msgid "Use &separate files for each table"
+msgstr "Асобны файл для кожнай табліцы"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "Стыль"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, fuzzy, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr "Выкарыстаць стандартныя шрыфт і колеры."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, fuzzy, kde-format
+msgid "Use &default style"
+msgstr "Стыль па змаўчанні"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, fuzzy, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr "Файл табліцы стыляў, на які будзе спасылацца HTML-старонка."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, fuzzy, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Знешняя табліца стыляў:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, fuzzy, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Тут вы можаце ўвесці URL табліцы стыляў. Яна можа быць размешчаная як "
+"лакальна, так і выдалена."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, fuzzy, kde-format
+msgid "Layout"
+msgstr "Расклад"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, fuzzy, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr "Ці маляваць межы вочак"
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, fuzzy, kde-format
+msgid "Use &borders"
+msgstr "Межы"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, fuzzy, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Адлегласць паміж вочкамі ў кропках. Больш навочна калі таксама адзначана "
+"<b>Межы</b>."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, fuzzy, kde-format
+msgid "Pi&xels between cells:"
+msgstr "Адлегласць паміж вочкамі:"
+
+#: sheets/html/htmlexport.cc:196 sheets/html/htmlexport.cc:371
+#, fuzzy, kde-format
+msgid "Top"
+msgstr "Уверсе"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, fuzzy, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "Налада экспарту ў Latex"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, fuzzy, kde-format
+msgid "Document"
+msgstr "Дакумент"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, fuzzy, kde-format
+msgid "Document Style"
+msgstr "Стыль дакумента"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, fuzzy, kde-format
+msgid "Latex style"
+msgstr "Стыль Latex"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, fuzzy, kde-format
+msgid "Words style"
+msgstr "Стыль KWord"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, fuzzy, kde-format
+msgid "Document Type"
+msgstr "Тып дакумента"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, fuzzy, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Дакумент не патрабуе дадатковых файлаў."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, fuzzy, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Экспартаваны дакумент з'яўляецца поўным дакументам Latex, з уключэннем усіх "
+"дадзеных паміж камандамі \\begin[document} і \\end{document}."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, fuzzy, kde-format
+msgid "Independent document"
+msgstr "Незалежны дакумент"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, fuzzy, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Не генераваць загаловак і налады дакумента LaTeX."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, fuzzy, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"Экспартаваны дакумент будзе падрыхтаваны для ўключэння ў асноўны дакумент "
+"Latex. Гэта дазваляе стварыць некалькі асобных невялікіх файлаў для кожнага "
+"раздзела дакумента."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, fuzzy, kde-format
+msgid "Document to include"
+msgstr "Уключаны дакумент"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, fuzzy, kde-format
+msgid "Document class:"
+msgstr "Клас дакумента:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, fuzzy, kde-format
+msgid "Quality:"
+msgstr "Якасць:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, fuzzy, kde-format
+msgid "Final"
+msgstr "Канчатковы варыянт"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, fuzzy, kde-format
+msgid "Draft"
+msgstr "Чарнавік"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, fuzzy, kde-format
+msgid "Default font size:"
+msgstr "Памер шрыфта па змаўчанні:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, fuzzy, kde-format
+msgid "Pictures"
+msgstr "Малюнкі"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, fuzzy, kde-format
+msgid "Convert the pictures:"
+msgstr "Пераўтварыць малюнкі"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, fuzzy, kde-format
+msgid "Pictures directory:"
+msgstr "Каталог малюнкаў:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, fuzzy, kde-format
+msgid "Language"
+msgstr "Мова"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, fuzzy, kde-format
+msgid "Add"
+msgstr "Дадаць"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, fuzzy, kde-format
+msgid "Remove"
+msgstr "Выдаліць"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, fuzzy, kde-format
+msgid "Contents"
+msgstr "Змест"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, fuzzy, kde-format
+msgid "Export information about author:"
+msgstr "Экспартаваць інфармацыю аб аўтару"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, fuzzy, kde-format
+msgid "Add a table of content:"
+msgstr "Дадаць утрыманне"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, fuzzy, kde-format
+msgid "Notes"
+msgstr "Нататкі"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, fuzzy, kde-format
+msgid "Don't export"
+msgstr "Не экспартаваць"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, fuzzy, kde-format
+msgid "Export notes in margin notes"
+msgstr "Экспартаваць нататкі ў нататках Latex"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, fuzzy, kde-format
+msgid "Export notes in comments"
+msgstr "Экспартаваць нататкі ў каментарах"
+
+#: sheets/opencalc/opencalcexport.cc:905
+#, fuzzy, kde-format
+msgid "Page "
+msgstr "Ліст"
+
+#: sheets/opencalc/opencalcimport.cc:1217
+#, fuzzy, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Магчыма, файл пашкоджаны. Ліст будзе прапушчаны."
+
+#: sheets/opencalc/opencalcimport.cc:1228
+#, fuzzy, kde-format
+msgid "Skipping a table."
+msgstr "Пропуск ліста."
+
+#: sheets/opencalc/opencalcimport.cc:1928
+#, fuzzy, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Гэты дакумент створаны ў OpenOffice.org версіі '%1'. Гэты фільтр напісаны "
+"для версіі 1.0. Адкрыццё гэтага файла можа выклікаць памылкі пры працы "
+"праграмы, яе аварыйнае завяршэнне або паказ няслушных дадзеных. Вы жадаеце "
+"працягнуць адкрыццё гэтага дакумента?"
+
+#: sheets/opencalc/opencalcimport.cc:1929
+#, fuzzy, kde-format
+msgid "Unsupported document version"
+msgstr "Непадтрымоўваная версія дакумента"
+
+#: sheets/qpro/qproimport.cc:115
+#, fuzzy, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "Не атрымоўваецца адкрыць файл электроннай табліцы QPro."
+
+#: sheets/qpro/qproimport.cc:226
+#, fuzzy, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Немагчыма адкрыць файл, абаронены паролем.\n"
+"Алгарытм шыфравання з'яўляецца зачыненым."
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, fuzzy, kde-format
+msgid "Unable to find part for type %1"
+msgstr "Не атрымоўваецца прачытаць файл."
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:346
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1423
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr ""
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, fuzzy, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "Канцавая зноска %1"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, fuzzy, kde-format
+msgid "Slide %1"
+msgstr "Загаловак слайда"
+
+#: words/ascii/ImportDialog.cc:32
+#, fuzzy, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Фільтр імпарту тэкставага дакумента"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, fuzzy, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Дыялог імпарту з тэкставага файла"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, fuzzy, kde-format
+msgid "End of Paragraph"
+msgstr "Канец абзаца"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, fuzzy, kde-format
+msgid "&As is: At the end of line"
+msgstr "Як ёсць: канец радка"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, fuzzy, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "Прапанова: канец радка з'яўляецца канцом прапановы"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr ""
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, fuzzy, kde-format
+msgid "End notes"
+msgstr "У канец радка"
+
+#: words/msword-odf/conversion.cpp:828
+#, fuzzy, kde-format
+msgid "Even Pages Header"
+msgstr "Верхні калантытул цотных старонак"
+
+#: words/msword-odf/conversion.cpp:830
+#, fuzzy, kde-format
+msgid "Odd Pages Header"
+msgstr "Верхні калантытул няцотных старонак"
+
+#: words/msword-odf/conversion.cpp:832
+#, fuzzy, kde-format
+msgid "Even Pages Footer"
+msgstr "Ніжні калантытул цотных старонак"
+
+#: words/msword-odf/conversion.cpp:834
+#, fuzzy, kde-format
+msgid "Odd Pages Footer"
+msgstr "Ніжні калантытул няцотных старонак"
+
+#: words/msword-odf/conversion.cpp:836
+#, fuzzy, kde-format
+msgid "First Page Header"
+msgstr "Верхні калантытул першай старонкі"
+
+#: words/msword-odf/conversion.cpp:838
+#, fuzzy, kde-format
+msgid "First Page Footer"
+msgstr "Ніжні калантытул першай старонкі"
+
+#: words/msword-odf/texthandler.cpp:632
+#, fuzzy, kde-format
+msgid "Table %1"
+msgstr "Табліца %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, fuzzy, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "Немагчыма адкрыць файл. Падобна, ён не з'яўляецца дакументам RTF."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, fuzzy, kde-format
+#| msgid "KWord's RTF Import Filter"
+msgid "Words's RTF Import Filter"
+msgstr "Фільтр імпарту дакументаў RTF"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, fuzzy, kde-format
+#| msgid "The file cannot be loaded, as it cannot be opened."
+msgid "The file cannot be loaded."
+msgstr "Немагчыма загрузіць і адкрыць файл."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Памылка чытання дадзеных."
+
+#~ msgid "Export Error"
+#~ msgstr "Памылка экспарту"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Няслушны фармат XML."
+
+#, fuzzy
+#~ msgid "Export to Image"
+#~ msgstr "Экспарт малюнка"
+
+#, fuzzy
+#~ msgid "Complete Page"
+#~ msgstr "Старонка цалкам"
+
+#, fuzzy
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Па аб'ектах"
+
+#, fuzzy
+#~ msgid "Area to export:"
+#~ msgstr "Вылучыце вобласць для экспарту:"
+
+#, fuzzy
+#~ msgid "Height:"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Шырыня:"
+
+#, fuzzy
+#~ msgid "Margin:"
+#~ msgstr "Палі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Раздзяляльнасць:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Колеравая прастора"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "Кадыроўка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr "Тут вы можаце вылучыць кадыроўку файла HTML. Па змаўчанні - UTF8."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Выбар лістоў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "Вылучыць усе лісты з спісу."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "Вылучыць &усё"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "Зняць выбар"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Асобны HTML-файл для кожнай табліцы. Інакш яны змяшчаюцца ў адзін файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "Асобны файл для кожнай табліцы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Стыль"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr "Выкарыстаць стандартныя шрыфт і колеры."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "Стыль па змаўчанні"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr "Файл табліцы стыляў, на які будзе спасылацца HTML-старонка."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Знешняя табліца стыляў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Тут вы можаце ўвесці URL табліцы стыляў. Яна можа быць размешчаная як "
+#~ "лакальна, так і выдалена."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Расклад"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr "Ці маляваць межы вочак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "Межы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Адлегласць паміж вочкамі ў кропках. Больш навочна калі таксама адзначана "
+#~ "<b>Межы</b>."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "Адлегласць паміж вочкамі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Дакумент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Стыль дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "Стыль Latex"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Стыль KWord"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Тып дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Дакумент не патрабуе дадатковых файлаў."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Экспартаваны дакумент з'яўляецца поўным дакументам Latex, з уключэннем "
+#~ "усіх дадзеных паміж камандамі \\begin[document} і \\end{document}."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Незалежны дакумент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Не генераваць загаловак і налады дакумента LaTeX."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "Экспартаваны дакумент будзе падрыхтаваны для ўключэння ў асноўны дакумент "
+#~ "Latex. Гэта дазваляе стварыць некалькі асобных невялікіх файлаў для "
+#~ "кожнага раздзела дакумента."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Уключаны дакумент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Клас дакумента:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Якасць:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Канчатковы варыянт"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Чарнавік"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Памер шрыфта па змаўчанні:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Малюнкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Пераўтварыць малюнкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Каталог малюнкаў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Мова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Знаказбор"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Дадаць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Змест"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Экспартаваць інфармацыю аб аўтару"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Дадаць утрыманне"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Нататкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Не экспартаваць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Экспартаваць нататкі ў нататках Latex"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Экспартаваць нататкі ў каментарах"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "&Кадыроўка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "У канец радка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "Стыль UNIX (рэкамендуецца, толькі перанос радка)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "Стыль Windows (зварот карэткі і перанос радка)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "Стыль Macintosh (толькі зварот карэткі)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Лісты"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Вылучыце лісты для экспарту:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Падзяляльны радок"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<SHEETNAME>********"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<SHEETNAME> замяняецца імем наступнага ліста."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Друкаваць падзяляльны радок над кожным лістом"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Вочкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Падзяляльнік"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Коска"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Кропка з коскай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "табуляцыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Прагал"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "іншы:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Тэкст у двукоссях:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Экспартаваць толькі вылучаныя вочкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Старонка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Старонка цалкам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Па аб'ектах"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Вылучыце вобласць для экспарту:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Шырыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Палі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Дыялог імпарту з тэкставага файла"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Канец абзаца"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "Як ёсць: канец радка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "Прапанова: канец радка з'яўляецца канцом прапановы"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Памылка экспарту"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Памылка чытання дадзеных."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Няслушны фармат XML."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Экспарт малюнка"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "Налада экспарту ў PNG"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Канцавая зноска %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~| msgid "Passwords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Паролі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Канцавая зноска %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Зноска %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Памылка апрацоўкі дакумента MathML %4, радок %1, пазіцыя %2\n"
+#~ "Апісанне памылкі: %3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Канцавая зноска %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<SHEETNAME>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Рэкамендуемая ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Лакаль ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Іншая ( %1 )"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Не атрымалася знайсці кадыроўку: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr "Не атрымоўваецца адкрыць файл CSV."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Фармат файла не падтрымліваецца."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Экспарт ліста ў HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Рэкамендуемая: UTF-8"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Сістэмная (%1)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Уверсе"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "Налада экспарту ў Latex"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Ліст"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Магчыма, файл пашкоджаны. Ліст будзе прапушчаны."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Пропуск ліста."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "Гэты дакумент створаны ў OpenOffice.org версіі '%1'. Гэты фільтр напісаны "
+#~ "для версіі 1.0. Адкрыццё гэтага файла можа выклікаць памылкі пры працы "
+#~ "праграмы, яе аварыйнае завяршэнне або паказ няслушных дадзеных. Вы "
+#~ "жадаеце працягнуць адкрыццё гэтага дакумента?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Непадтрымоўваная версія дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr "Не атрымоўваецца адкрыць файл электроннай табліцы QPro."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Немагчыма адкрыць файл, абаронены паролем.\n"
+#~ "Алгарытм шыфравання з'яўляецца зачыненым."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Не атрымоўваецца прачытаць файл."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Канцавая зноска %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Загаловак слайда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Фільтр імпарту тэкставага дакумента"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "У канец радка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Верхні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Верхні калантытул няцотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Ніжні калантытул цотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Ніжні калантытул няцотных старонак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Верхні калантытул першай старонкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Ніжні калантытул першай старонкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Табліца %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr "Немагчыма адкрыць файл. Падобна, ён не з'яўляецца дакументам RTF."
+
+#, fuzzy
+#~| msgid "KWord's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "Фільтр імпарту дакументаў RTF"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it cannot be opened."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "Немагчыма загрузіць і адкрыць файл."
+
+#, fuzzy
+#~ msgid "Failed to write file."
+#~ msgstr "Памылка захавання файла."
+
+#, fuzzy
+#~ msgid "%1 Export Error"
+#~ msgstr "Памылка экспарту"
+
+#, fuzzy
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Налада фільтра экспарту"
+
+#, fuzzy
+#~ msgid "Keep ratio"
+#~ msgstr "Захоўваць прапорцыі"
+
+#, fuzzy
+#~ msgid "Width (%):"
+#~ msgstr "Шырыня (%):"
+
+#, fuzzy
+#~ msgid "Height (%):"
+#~ msgstr "Вышыня (%):"
+
+#, fuzzy
+#~ msgid "PNG Export Error"
+#~ msgstr "Памылка экспарту PNG"
+
+#, fuzzy
+#~ msgid "EPS Export"
+#~ msgstr "Экспарт у EPS"
+
+#, fuzzy
+#~ msgid "Options"
+#~ msgstr "Настаўленні"
+
+#, fuzzy
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript узроўня 1"
+
+#, fuzzy
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript узроўня 2"
+
+#, fuzzy
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript узроўня 3"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "Імпартаваць"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~ msgid "Number"
+#~ msgstr "Нумар"
+
+#, fuzzy
+#~ msgid "Currency"
+#~ msgstr "Грашовы фармат"
+
+#, fuzzy
+#~ msgid "Date"
+#~ msgstr "Дата"
+
+#, fuzzy
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Дзесятковы дроб (праз коску)"
+
+#, fuzzy
+#~ msgid "Decimal Point Number"
+#~ msgstr "Дзесятковы дроб (праз кропку)"
+
+#, fuzzy
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Праверце вылучаны дыяпазон. Пачатковае значэнне павінна быць менш "
+#~ "канчатковага."
+
+#, fuzzy
+#~ msgid "Common"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~ msgid "Other"
+#~ msgstr "Іншы"
+
+#, fuzzy
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Ігнараваць паўторныя падзяляльнікі"
+
+#, fuzzy
+#~ msgid "Text&quote:"
+#~ msgstr "Тэкст у двукоссях:"
+
+#, fuzzy
+#~ msgid "&Format:"
+#~ msgstr "&Фармат:"
+
+#, fuzzy
+#~ msgid "Ranges"
+#~ msgstr "Дыяпазоны"
+
+#, fuzzy
+#~ msgid "to"
+#~ msgstr "па"
+
+#, fuzzy
+#~ msgid "Import lines:"
+#~ msgstr "Імпарт радкоў:"
+
+#, fuzzy
+#~ msgid "Import columns:"
+#~ msgstr "Імпарт слупкоў:"
+
+#, fuzzy
+#~ msgid "Update"
+#~ msgstr "Абнавіць"
+
+#, fuzzy
+#~ msgid "&Help"
+#~ msgstr "&Дапамога"
+
+#, fuzzy
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#, fuzzy
+#~ msgid "&OK"
+#~ msgstr "&Добра"
+
+#, fuzzy
+#~ msgid "&Cancel"
+#~ msgstr "&Скасаваць"
+
+#, fuzzy
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Памылка апрацоўкі дакумента KWord\n"
+#~ "на радку %1, пазіцыі %2.\n"
+#~ "Апісанне памылкі: %3"
+
+#, fuzzy
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Бібліятэка экспарту"
+
+#, fuzzy
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "Налада экспарту ў XSLT"
+
+#, fuzzy
+#~ msgid "Open Document"
+#~ msgstr "Адкрыць дакумент"
+
+#, fuzzy
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "Налада імпарту з XSLT"
+
+#, fuzzy
+#~ msgid "Common xslt Files"
+#~ msgstr "Агульныя файлы xslt"
+
+#, fuzzy
+#~ msgid "Personal xslt Files"
+#~ msgstr "Персанальныя файлы xslt"
+
+#, fuzzy
+#~ msgid "Choose..."
+#~ msgstr "Выбраць..."
+
+#, fuzzy
+#~ msgid "SVG Export Error"
+#~ msgstr "Памылка экспарту SVG"
+
+#, fuzzy
+#~ msgid "LaTeX Export Error"
+#~ msgstr "Памылка экспарту ў Latex"
+
+#, fuzzy
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "Налада экспарту ў PNG"
+
+#, fuzzy
+#~ msgid "Height"
+#~ msgstr "Вышыня"
+
+#, fuzzy
+#~ msgid "Width"
+#~ msgstr "Шырыня"
+
+#, fuzzy
+#~ msgid "Height (%)"
+#~ msgstr "Вышыня (%)"
+
+#, fuzzy
+#~ msgid "Width (%)"
+#~ msgstr "Шырыня (%)"
+
+#, fuzzy
+#~ msgid "Slide Title"
+#~ msgstr "Загаловак слайда"
+
+#, fuzzy
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Малюнак %1"
+
+#, fuzzy
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Табліца %3, радок %1, слупок %2"
+
+#, fuzzy
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Памылка апрацоўкі дакумента AbiWord\n"
+#~ "на радку %1, пазіцыі %2.\n"
+#~ "Апісанне памылкі: %3"
+
+#, fuzzy
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "Фільтр імпарту дакументаў AbiWord"
+
+#, fuzzy
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Асноўная ўрэзка"
+
+#, fuzzy
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Памылка загрузкі дакумента AbiWord: %1"
+
+#, fuzzy
+#~ msgid "Unable to save document information."
+#~ msgstr "Немагчыма захаваць інфармацыю аб дакуменце"
+
+#, fuzzy
+#~ msgid "Unable to save main document."
+#~ msgstr "Немагчыма захаваць асноўны дакумент."
+
+#, fuzzy
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Зноска %1"
+
+#, fuzzy
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "Фільтр экспарту ў тэкставы файл"
+
+#, fuzzy
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "Фільтр экспарту ў HTML"
+
+#, fuzzy
+#~ msgid "Untitled Document"
+#~ msgstr "Безназоўны дакумент"
+
+#, fuzzy
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "Налада імпарту з Latex"
+
+#, fuzzy
+#~ msgid "Unicode"
+#~ msgstr "Unicode"
+
+#, fuzzy
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#, fuzzy
+#~ msgid "New document"
+#~ msgstr "Новы дакумент"
+
+#, fuzzy
+#~ msgid "Embedded document"
+#~ msgstr "Укаранёны дакумент"
+
+#, fuzzy
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "Фільтр імпарту дакументаў MS Write"
+
+#, fuzzy
+#~ msgid "Header"
+#~ msgstr "Загаловак"
+
+#, fuzzy
+#~ msgid "Footer"
+#~ msgstr "Ніжні калантытул"
+
+#, fuzzy
+#~ msgid "Main Text Frameset"
+#~ msgstr "Асноўная ўрэзка з тэкстам"
+
+#, fuzzy
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Табліца %1"
+
+#, fuzzy
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Рамка табліцы %1"
+
+#, fuzzy
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#, fuzzy
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Дыялог экспарту ў тэкставы файл"
+
+#, fuzzy
+#~ msgid "HTML Export Dialog"
+#~ msgstr "Дыялог экспарту ў HTML"
+
+#, fuzzy
+#~ msgid "&HTML 4.01"
+#~ msgstr "HTML 4.01"
+
+#, fuzzy
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (для састарэлых браўзэраў) "
+
+#, fuzzy
+#~ msgid "&XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#, fuzzy
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#, fuzzy
+#~ msgid "Mode"
+#~ msgstr "Рэжым"
+
+#, fuzzy
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "Прастой - захаванне ў стандартным (X)HTML"
+
+#, fuzzy
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Захаванне структуры фарматавання дакумента (рэкамендуецца для прагляду на "
+#~ "браўзэрах з абмежаванымі магчымасцямі)"
+
+#, fuzzy
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "Базавы - захаванне ў пашыраным (X)HTML"
+
+#, fuzzy
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Захаванне большай часткі фарматавання (рэкамендуецца для рэімпарту ў "
+#~ "KWord або для паказу ў старых браўзэрах)"
+
+#, fuzzy
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "Пашыраны - захаванне ў (X)HTML з выкарыстанне табліц стыляў CSS"
+
+#, fuzzy
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "Захоўвае ў HTML з максімальным набліжэннем да фарматавання KWord "
+#~ "(рэкамендуецца для экспарту ў сучасныя тэкставыя працэсары і паказу ў "
+#~ "сучасных браўзэрах)"
+
+#, fuzzy
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Знешняя табліца стыляў:"
+
+#, fuzzy
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Увядзіце шлях да файла CSS"
+
+#, fuzzy
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr ""
+#~ "У гэтым каталогу будуць знаходзіцца малюнкі вашага дакумента ў фармаце "
+#~ "EPS."
+
+#, fuzzy
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "Імпарт у MS Write"
+
+#, fuzzy
+#~ msgid "&Encoding"
+#~ msgstr "&Знаказбор"
+
+#, fuzzy
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Вылучыце кадыроўку дакумента Write <br><br>Калі не ўпэўненыя, выбірайце "
+#~ "кадыроўку па змаўчанні (CP 1252)."
+
+#, fuzzy
+#~ msgid "&Other encoding:"
+#~ msgstr "Іншыя кадыроўкі"
+
+#, fuzzy
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "CP 1252 (па змаўчанні)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "большасць дакументаў Write захоўваюцца ў гэтай кадыроўцы (таксама вядомай "
+#~ "як windows-1252).<br><br>Вылучыце яе, калі не ўпэўненыя."
+
+#, fuzzy
+#~ msgid "&Advanced"
+#~ msgstr "&Адмысловае"
+
+#, fuzzy
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Дадатковыя налады дазваляюць вам больш тонка наладзіць імпарт інфармацыі "
+#~ "аб фарматаванні тэксту. Яны імкнуцца кампенсаваць адрозненні паміж KWord "
+#~ "і MS Write шляхам дадання дадатковай інфармацыі аб фарматаванні (адсутнай "
+#~ "у арыгінальным дакуменце) для таго, каб дакумент у фармаце MS Write як "
+#~ "мага дакладней пахадзіў на арыгінальны дакумент KWord. <br><br>Калі не "
+#~ "ўпэўненыя, выкарыстайце значэнні па змаўчанні."
+
+#, fuzzy
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "Кампенсаваць адрозненні ў міжрадковым інтэрвале"
+
+#, fuzzy
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Эмуляцыя пашыранага міжрадковага інтэрвалу шляхам дадання прабелаў перад "
+#~ "кожным абзацам."
+
+#, fuzzy
+#~ msgid "Enable &image positioning"
+#~ msgstr "Дакладнае пазіцыянаванне малюнкаў"
+
+#, fuzzy
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr ""
+#~ "Выкарыстаць водступы абзацаў для дакладнага пазіцыянавання малюнкаў."
+
+#, fuzzy
+#~| msgid "PDF Import"
+#~ msgid "DCM Import"
+#~ msgstr "Імпарт з PDF"
+
+#, fuzzy
+#~| msgid "PDF Import Options"
+#~ msgid "Import options"
+#~ msgstr "Налада імпарту PDF"
+
+#, fuzzy
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr "Немагчыма адкрыць файл паколькі яго фармат не адпавядае RTF."
+
+#, fuzzy
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "Дакумент RTF (Rich Text Format) мае недапушчальную версію: %1. Гэта можа "
+#~ "паўплываць на правільнасць ператварэння. Працягнуць?"
+
+#, fuzzy
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Дакумент PWD (PocketWord's Rich Text Format) мае недапушчальную версію: "
+#~ "%1. Гэта можа паўплываць на правільнасць ператварэння. Працягнуць?"
+
+#, fuzzy
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Дакумент URTF (Unicode Rich Text Format) мае недапушчальную версію: %1. "
+#~ "Гэта можа паўплываць на правільнасць ператварэння. Працягнуць?"
+
+#, fuzzy
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "Не атрымалася загрузіць дакумент RTF, т.к. ён утрымоўвае недапушчальнае "
+#~ "першае ключавое слова: \\%1."
+
+#, fuzzy
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr "Стары метад: калі радок пустая або менш 40 знакаў"
+
+#, fuzzy
+#~ msgid "KFormula Import Error"
+#~ msgstr "Памылка імпарту з MathML"
+
+#, fuzzy
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "Фільтр імпарту дакументаў AbiWord"
+
+#, fuzzy
+#~ msgid "Available Sheets"
+#~ msgstr "Даступныя лісты"
+
+#, fuzzy
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Зноска %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "Малюнак %1"
+
+#~ msgid "A password is required to read that pdf"
+#~ msgstr "Для прагляду гэтага дакумента патрабуецца пароль"
+
+#~ msgid "Cannot export images in %1.\n"
+#~ msgstr "Немагчыма экспартаваць малюнкі ў %1.\n"
+
+#, fuzzy
+#~ msgid "JPEG Export Options"
+#~ msgstr "Налада экспарту ў JPEG"
+
+#, fuzzy
+#~ msgid "TIFF Export Options"
+#~ msgstr "Налада экспарту ў TIFF"
+
+#~ msgid "All Images"
+#~ msgstr "Усе відарысы"
+
+#, fuzzy
+#~ msgid ""
+#~ "The image is using an unsupported color space. Please convert to 16-bit "
+#~ "floating point RGB/Alpha before saving in the OpenEXR format."
+#~ msgstr ""
+#~ "Малюнак выкарыстае не падтрымоўваемая колеравая прастора. Пераўтварыце "
+#~ "малюнак у RGB/Alpha (16-біт з плавальнай кропкай) перад захаваннем у "
+#~ "фармаце OpenEXR."
+
+#, fuzzy
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDFImportWidget"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "Старонак"
+
+#, fuzzy
+#~ msgid "&All pages"
+#~ msgstr "Усе старонкі"
+
+#, fuzzy
+#~ msgid "&First page"
+#~ msgstr "Першую старонку"
+
+#, fuzzy
+#~ msgid "&Selection of page"
+#~ msgstr "Вылучаныя старонкі"
+
+#, fuzzy
+#~ msgid "Dimensions"
+#~ msgstr "Памер"
+
+#, fuzzy
+#~ msgctxt "vertical resolution"
+#~ msgid "Vertical:"
+#~ msgstr "вертыкальнае:"
+
+#, fuzzy
+#~ msgctxt "horizontal resolution"
+#~ msgid "Horizontal:"
+#~ msgstr "гарызантальнае:"
+
+#, fuzzy
+#~ msgid "Size:"
+#~ msgstr "Памер:"
+
+#, fuzzy
+#~ msgid "Options of Your PNG"
+#~ msgstr "Налада PNG"
+
+#, fuzzy
+#~ msgid ""
+#~ "Note: the compression level does not change the quality of the result"
+#~ msgstr "Нататка: узровень сціску не адбіцца на якасці малюнка"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level does not change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>Усталёўвае ступень сціску. Лепшы сціск запатрабуе больш часу на "
+#~ "захаванне.\n"
+#~ "<br>Нататка: узровень сціску не адбіцца на якасці малюнка.</p>"
+
+#, fuzzy
+#~ msgid "Compress:"
+#~ msgstr "Сціск:"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "The compression will take a long time; saving the file will be slow."
+#~ msgid "Slow"
+#~ msgstr "Павольна"
+
+#, fuzzy
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "Хутка"
+
+#, fuzzy
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "Маленькі"
+
+#, fuzzy
+#~ msgid "Use interlacing when publishing on the Internet"
+#~ msgstr "Уключыце черезстрочность пры размяшчэнні ў Інтэрнэце"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>Interlacing is useful if you intend to publish your image on the "
+#~ "Internet.<br>\n"
+#~ "Enabling interlacing will cause the image to be displayed by the browser "
+#~ "even while downloading.</p>"
+#~ msgstr ""
+#~ "<p>Черезстрочность рэкамендуецца пры размяшчэнні вашых малюнкаў у "
+#~ "Інтэрнэце.<br>\n"
+#~ "Малюнкі з черезстрочностью хутчэй паказваюцца ў браўзэры падчас загрузкі."
+#~ "</p>"
+
+#, fuzzy
+#~ msgid "Interlacing"
+#~ msgstr "Черезстрочность"
+
+#, fuzzy
+#~ msgid "Disable to get smaller files if your image has no transparency"
+#~ msgstr ""
+#~ "Адключыце для памяншэння памеру вашых малюнкаў, калі не патрабуецца "
+#~ "празрыстасць"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparency in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparency and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>Фармат PNG дазваляе захоўваць празрыстасць малюнка ў альфа-канале.\n"
+#~ "Вы можаце выключыць сцяжок, калі не выкарыстаеце празрыстасць і тады файл "
+#~ "будзе менш па памеры.<br>Рэкамендуецца заўсёды захоўваць альфа-канал.</p>"
+
+#, fuzzy
+#~ msgid "Store alpha channel (transparency)"
+#~ msgstr "Захаваць альфа-канал (празрыстасць)"
+
+#, fuzzy
+#~ msgid "Size: 100KB"
+#~ msgstr "Памер:"
+
+#, fuzzy
+#~ msgid "Basic"
+#~ msgstr "Класічна"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "Маленькі"
+
+#, fuzzy
+#~ msgid "Advanced quality"
+#~ msgstr "&Адмысловае"
+
+#, fuzzy
+#~ msgid "Formats:"
+#~ msgstr "&Фармат:"
+
+#, fuzzy
+#~ msgid "Options of Your TIFF"
+#~ msgstr "Налада TIFF"
+
+#, fuzzy
+#~ msgid "TIFF Options"
+#~ msgstr "Налада TIFF"
+
+#, fuzzy
+#~ msgid "Compression type:"
+#~ msgstr "Тып сціску:"
+
+#, fuzzy
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "Сціск JPEG DCT"
+
+#, fuzzy
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "ZIP"
+
+#, fuzzy
+#~ msgid "Lempel-Ziv & Welch (LZW)"
+#~ msgstr "Lempel-Ziv і Welch (LZW)"
+
+#, fuzzy
+#~ msgid "Leadtools JPEG2000"
+#~ msgstr "Leadtools JPEG2000"
+
+#, fuzzy
+#~ msgid "CCITT Modified Huffman RLE"
+#~ msgstr "Факс CCITT са сціскам RLE"
+
+#, fuzzy
+#~ msgid "CCITT Group 3 Fax Encoding"
+#~ msgstr "Факс CCITT Group 3"
+
+#, fuzzy
+#~ msgid "CCITT Group 4 Fax Encoding"
+#~ msgstr "Факс CCITT Group 4"
+
+#, fuzzy
+#~ msgid "Pixar Log"
+#~ msgstr "Pixar Log"
+
+#, fuzzy
+#~ msgid "Predictor:"
+#~ msgstr "Каталог малюнкаў:"
+
+#, fuzzy
+#~ msgid "Store alpha &channel (transparency)"
+#~ msgstr "Захаваць альфа-канал (празрыстасць)"
+
+#, fuzzy
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "Хутка"
+
+#, fuzzy
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "Маленькі"
+
+#, fuzzy
+#~ msgid "Classic"
+#~ msgstr "Класічна"
+
+#, fuzzy
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "Хутка"
+
+#, fuzzy
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "Маленькі"
+
+#~ msgid "Initializing..."
+#~ msgstr "Ініцыялізацыя..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Першы праход: старонка %1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Другі праход: старонка %1..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "Старонка #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "Верхні калантытул #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "Ніжні калантытул #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Вобласць тэксту %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "Фільтр імпарту дакументаў PDF"
+
+#~ msgid "Page Selection"
+#~ msgstr "Выбар старонак"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Усё (%1 старонак)"
+
+#~ msgid "Range:"
+#~ msgstr "Дыяпазон:"
+
+#~ msgid "Import images"
+#~ msgstr "Імпарт малюнкаў"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "\"інтэлектуальны\" рэжым"
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Выдаліць у канцы радкоў пераносы слоў і цвёрды перанос радка. "
+#~ "Паспрабаваць вызначыць выраўнаванне тэксту. Магчыма, размяшчэнне тэксту "
+#~ "на некаторых старонках будзе зменена."
+
+#~ msgid "Owner:"
+#~ msgstr "Уласнік:"
+
+#~ msgid "User:"
+#~ msgstr "Карыстальнік:"
+
+#, fuzzy
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Вочка %2,%3"
+
+#~ msgid ""
+#~ "Cannot convert RAW files because the dcraw executable could not be "
+#~ "started."
+#~ msgstr ""
+#~ "Немагчыма пераўтварыць файлы ў фармаце RAW, бо не атрымоўваецца запусціць "
+#~ "праграму dcraw."
+
+#, fuzzy
+#~ msgid "Colorspace"
+#~ msgstr "Колеравая прастора"
+
+#, fuzzy
+#~ msgid "&Document mode"
+#~ msgstr "Як у дакуменце"
+
+#, fuzzy
+#~ msgid "&RGB"
+#~ msgstr "RGB"
+
+#, fuzzy
+#~ msgid "&16 bits per channel"
+#~ msgstr "16 біт на канал"
+
+#, fuzzy
+#~ msgid "Alt+1"
+#~ msgstr "Alt+1"
+
+#, fuzzy
+#~ msgid "&8 bits per channel"
+#~ msgstr "8 біт на канал"
+
+#, fuzzy
+#~ msgid "Alt+8"
+#~ msgstr "Alt+8"
+
+#, fuzzy
+#~ msgid "&Update Preview"
+#~ msgstr "Абнавіць прагляд"
+
+#, fuzzy
+#~ msgid "Color Settings"
+#~ msgstr "Наставіць колеры"
+
+#, fuzzy
+#~ msgid "Brightness:"
+#~ msgstr "Яркасць:"
+
+#, fuzzy
+#~ msgid "Brightness. 1.0 is default"
+#~ msgstr "Яркасць. Па змаўчанні 1.0"
+
+#, fuzzy
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgctxt "save the file quickly, but don't compress very well"
+#~ msgid "Fast"
+#~ msgstr "Хутка"
+
+#, fuzzy
+#~ msgid "Note: the compression level doesn't change the quality of the result"
+#~ msgstr "Нататка: узровень сціску не адбіцца на якасці малюнка"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level doesn't change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>Усталёўвае ступень сціску. Лепшы сціск запатрабуе больш часу на "
+#~ "захаванне.\n"
+#~ "<br>Нататка: узровень сціску не адбіцца на якасці малюнка.</p>"
+
+#, fuzzy
+#~ msgid "Alt+O"
+#~ msgstr "Alt+1"
+
+#~ msgid "Importing..."
+#~ msgstr "Імпарт..."
+
+#~ msgid "Saving..."
+#~ msgstr "Запіс..."
+
+#~ msgid "Loading..."
+#~ msgstr "Загрузка..."
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "&Фармат:"
+
+#, fuzzy
+#~ msgid "Export hidden layers"
+#~ msgstr "Налада фільтра экспарту"
+
+#, fuzzy
+#~ msgid "BMP Export Error"
+#~ msgstr "Памылка экспарту ў BMP"
+
+#, fuzzy
+#~ msgid "MNG Export Error"
+#~ msgstr "Памылка экспарту ў MNG"
+
+#, fuzzy
+#~ msgid "Xbm Export Error"
+#~ msgstr "Памылка экспарту ў Xbm"
+
+#, fuzzy
+#~ msgid "Xpm Export Error"
+#~ msgstr "Памылка экспарту ў Xpm"
+
+#, fuzzy
+#~ msgid "JPEG Export Error"
+#~ msgstr "Памылка экспарту ў JPEG"
+
+#, fuzzy
+#~ msgid "Dots/inch"
+#~ msgstr "кропак на цалю"
+
+#, fuzzy
+#~ msgid "Automatic"
+#~ msgstr "Аўта"
+
+#, fuzzy
+#~ msgid "From camera"
+#~ msgstr "З камеры"
+
+#, fuzzy
+#~ msgid "Disable to get smaller files if your image has no transparancy"
+#~ msgstr ""
+#~ "Адключыце для памяншэння памеру вашых малюнкаў, калі не патрабуецца "
+#~ "празрыстасць"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparancy in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparancy and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>Фармат PNG дазваляе захоўваць празрыстасць малюнка ў альфа-канале.\n"
+#~ "Вы можаце выключыць сцяжок, калі не выкарыстаеце празрыстасць і тады файл "
+#~ "будзе менш па памеры.<br>Рэкамендуецца заўсёды захоўваць альфа-канал.</p>"
+
+#, fuzzy
+#~ msgid "KSpread Kexi Import Filter"
+#~ msgstr "Фільтр імпарту дакументаў PDF"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Лік"
+
+#, fuzzy
+#~ msgid "Unable to open output file."
+#~ msgstr "Немагчыма адкрыць які захоўваецца дакумент."
+
+#, fuzzy
+#~ msgid "Failed to open input file: %1"
+#~ msgstr "Памылка адкрыцця файла: %1"
+
+#, fuzzy
+#~ msgid "Failed to write formula."
+#~ msgstr "Памылка запісу формулы."
+
+#, fuzzy
+#~ msgid "MathML Export Error"
+#~ msgstr "Памылка экспарту ў MathML"

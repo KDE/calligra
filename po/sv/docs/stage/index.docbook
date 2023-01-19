@@ -1,0 +1,292 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY package "calligra">
+  <!ENTITY calligra "Calligra">
+  <!ENTITY tables "<application
+>Calligra Tables</application
+>">
+  <!ENTITY words "<application
+>Calligra Words</application
+>">
+  <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+  <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+  <!-- the following author entities have been added to user.entities in 4.10 branch and trunk of svn
+       they can be removed from this file once they are present in the kdelibs minimum version required by &kappname; -->
+  <!ENTITY traducteurFrederickAngelique      '<othercredit role="translator"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Traduction française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY relecteurFrederickAngelique        '<othercredit role="reviewer"
+><firstname
+>Frederick</firstname
+><surname
+>Angelique</surname
+><affiliation
+><address
+><email
+>ti_orion@hotmail.fr</email
+></address
+></affiliation
+><contrib
+>Relecture de la documentation française&nbsp;</contrib
+></othercredit
+>'>
+  <!ENTITY FrederickAngelique 'Frederick Angelique <email
+>ti_orion@hotmail.fr</email
+>'>
+
+  <!ENTITY kappname "&stage;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY guides SYSTEM "guides.docbook">
+  <!ENTITY great SYSTEM "great-presentations.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY % Swedish "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<book id="stage" lang="&language;">
+<bookinfo>
+<title
+>Handbok &stage;</title>
+
+<authorgroup>
+<author
+>&Neil.Lucock; &Neil.Lucock.mail; </author>
+
+<author
+>&Krishna.Tateneni; &Krishna.Tateneni.mail; </author>
+
+<author
+>&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </author>
+
+<author
+><personname
+> <firstname
+>Gary</firstname
+> <surname
+>Cramblitt</surname
+> </personname
+> <email
+>garycramblitt@comcast.net</email
+> </author>
+
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>2012-12-09</date>
+<releaseinfo
+>2.6</releaseinfo>
+
+<copyright>
+<year
+>1999</year
+><year
+>2000</year>
+<holder
+>&Krishna.Tateneni;</holder>
+</copyright>
+
+<copyright>
+<year
+>2001</year
+><year
+>2002</year>
+<holder
+>&Neil.Lucock;</holder>
+</copyright>
+
+<copyright>
+<year
+>2005</year>
+<holder
+>&Anne-Marie.Mahfouf;</holder>
+</copyright>
+
+<copyright>
+<year
+>2006</year>
+<holder
+>Gary Cramblitt</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<abstract>
+<para
+>&stage; är presentationsprogrammet i &calligra;-sviten med produktivitetsprogram. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Stage</keyword>
+<keyword
+>Calligra</keyword>
+<keyword
+>Grafik</keyword>
+<keyword
+>Presentationer</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title
+>Inledning</title>
+
+<important
+> <para
+>Besök gärna <ulink url="http://docs.kde.org/en/development/en/calligra/stage/index.html"
+>http://docs.kde.org</ulink
+> för uppdaterade versioner av detta dokument.</para
+></important>
+
+<para
+>&stage; är presentationsprogrammet i &calligra; produktivitetssvit. Med hjälp av &stage;, kan du skapa en uppsättning med bilder för att visa vid ett bildspel på skärmen eller för att skriva ut. Dina bilder kan innehålla text och grafik på ett antal olika format, och du kan förstås bädda in alla sorters objekt med Kparts. </para>
+
+<para
+>&calligra; produktivitetssvit består av ett antal olika program som är konstruerade för att fungera tillsammans. Översiktsdokumentation över &calligra; finns tillgänglig, samt handböcker för varje komponent i sviten. Komponenterna i &calligra; är: </para>
+
+<itemizedlist>
+<listitem>
+<para
+>&words; - en rambaserad ordbehandlare. </para>
+</listitem>
+
+<listitem
+><para
+>&tables; - ett kalkylprogram. </para>
+</listitem>
+
+</itemizedlist>
+
+<para
+>&calligra; är ett fritt (med öppen källkod) programvaruprojekt som ges ut med villkoren i &GNU; General Public License. </para>
+
+</chapter>
+
+&tutorial;
+
+&guides;
+
+&great;
+
+&menus;
+
+&options;
+
+<chapter id="credits">
+<title
+>Tack till och licens</title>
+
+<para
+>&stage; </para>
+
+<para
+>Program copyright 1998-2000 Reginald Stadlbauer <email
+>reggie@kde.org</email
+> </para>
+
+<para
+>Nuvarande underhållare är Laurent Montel <email
+>montel@kde.org</email
+>. </para>
+
+
+<itemizedlist>
+<title
+>Bidragsgivare</title>
+
+<listitem>
+<para
+>Werner Trobin <email
+>trobin@kde.org</email
+>. </para>
+</listitem>
+
+<listitem>
+<para
+>&David.Faure; &David.Faure.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Toshitaka Fujioka <email
+>fujioka@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Luk&aacute;&scaron; Tinkl <email
+>lukas@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>&Thorsten.Zachmann; &Thorsten.Zachmann.mail; </para>
+</listitem>
+
+<listitem>
+<para
+>Ariya Hidayat <email
+>ariya@kde.org</email
+> </para>
+</listitem>
+
+<listitem>
+<para
+>Percy Leonhardt <email
+>percy@eris23.de</email
+> </para>
+</listitem>
+</itemizedlist>
+
+<para
+>Dokumentation baserad på arbete med copyright 1999-2000 av &Krishna.Tateneni;. Delar har copyright 2000-2002 &Neil.Lucock; &Neil.Lucock.mail; och 2005 &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail; </para>
+
+<para
+>Översättning Stefan Asserhäll <email
+>stefan.asserhall@bredband.net</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+
+</book>
+

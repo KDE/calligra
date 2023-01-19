@@ -1,0 +1,278 @@
+# Copyright © 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the calligra package.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2014.
+# Tommi Nieminen <translator@legisign.org>, 2012, 2021.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: TableShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2021-01-10 21:00+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2013-01-13 22:09:29+0000\n"
+"X-Generator: Lokalize 20.04.2\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Tommi Nieminen"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "translator@legisign.org"
+
+#: SheetsEditor.cpp:55 SheetsEditor.cpp:117
+#, kde-format
+msgid "Rename"
+msgstr "Muuta nimeä"
+
+#: SheetsEditor.cpp:59
+#, kde-format
+msgid "Add"
+msgstr "Lisää"
+
+#: SheetsEditor.cpp:63
+#, kde-format
+msgid "Remove"
+msgstr "Poista"
+
+#: SheetsEditor.cpp:117
+#, kde-format
+msgid "Enter Name:"
+msgstr "Anna nimi:"
+
+#: TableShape.cpp:300
+#, kde-format
+msgid ""
+"This document contains an external link to a remote document\n"
+"%1"
+msgstr ""
+"Tämä tiedosto sisältää ulkoisen linkin etätiedostoon\n"
+"%1"
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Confirmation Required"
+msgstr "Vahvistus tarvitaan"
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Download"
+msgstr "Lataa"
+
+#: TableShape.cpp:301
+#, kde-format
+msgid "Skip"
+msgstr "Ohita"
+
+#: TableShapeFactory.cpp:42
+#, kde-format
+msgid "Spreadsheet"
+msgstr "Laskentataulukko"
+
+#: TableShapeFactory.cpp:44
+#, kde-format
+msgid "Spreadsheet Shape"
+msgstr "Laskentataulukon muoto"
+
+#: TableTool.cpp:256
+#, kde-format
+msgid "Import OpenDocument Spreadsheet File"
+msgstr "Tuo OpenDocument-laskentataulukko"
+
+#: TableTool.cpp:257
+#, kde-format
+msgid "Import"
+msgstr "Tuo"
+
+#: TableTool.cpp:261
+#, kde-format
+msgid "Export OpenDocument Spreadsheet File"
+msgstr "Vie OpenDocument-laskentataulukko"
+
+#: TableTool.cpp:262
+#, kde-format
+msgid "Export"
+msgstr "Vie"
+
+#: TableTool.cpp:742
+#, kde-format
+msgid "Sheets"
+msgstr "Sivut"
+
+#: TableTool.cpp:784
+#, kde-format
+msgid "Sheet:"
+msgstr "Taulukko:"
+
+#: TableTool.cpp:786
+#, kde-format
+msgid "Selected Sheet"
+msgstr "Valittu taulukko"
+
+#: TableTool.cpp:801
+#, kde-format
+msgid "View Options"
+msgstr "Näkymävalinnat"
+
+#: TableToolFactory.cpp:21
+#, kde-format
+msgid "Table editing"
+msgstr "Taulukon muokkaus"
+
+#: ToolHeaders.cpp:296 ToolHeaders.cpp:894
+#, kde-format
+msgid "Area is too large."
+msgstr "Alue on liian suuri."
+
+#: ToolHeaders.cpp:439
+#, kde-format
+msgid "Hide Row"
+msgstr "Piilota rivi"
+
+#: ToolHeaders.cpp:441
+#, kde-format
+msgid "Height: %1 %2"
+msgstr "Korkeus: %1 %2"
+
+#: ToolHeaders.cpp:1069
+#, kde-format
+msgid "Hide Column"
+msgstr "Piilota sarake"
+
+#: ToolHeaders.cpp:1071
+#, kde-format
+msgid "Width: %1 %2"
+msgstr "Leveys: %1 %2"
+
+#~ msgid "Number of columns"
+#~ msgstr "Sarakkeiden määrä"
+
+#~ msgid "Rows:"
+#~ msgstr "Rivejä:"
+
+#~ msgid "Number of rows"
+#~ msgstr "Rivien määrä"
+
+#, fuzzy
+#~| msgid "Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Muuta nimeä"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Lisää"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Poista"
+
+#, fuzzy
+#~| msgid "Enter Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter Name:"
+#~ msgstr "Anna nimi:"
+
+#, fuzzy
+#~| msgid "Spreadsheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet"
+#~ msgstr "Laskentataulukko"
+
+#, fuzzy
+#~| msgid "Spreadsheet Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spreadsheet Shape"
+#~ msgstr "Laskentataulukon muoto"
+
+#, fuzzy
+#~| msgid "Import OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import OpenDocument Spreadsheet File"
+#~ msgstr "Tuo OpenDocument-laskentataulukko"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Tuo"
+
+#, fuzzy
+#~| msgid "Export OpenDocument Spreadsheet File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export OpenDocument Spreadsheet File"
+#~ msgstr "Vie OpenDocument-laskentataulukko"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Vie"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Sivut"
+
+#, fuzzy
+#~| msgid "Sheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet:"
+#~ msgstr "Taulukko:"
+
+#, fuzzy
+#~| msgid "Selected Sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Selected Sheet"
+#~ msgstr "Valittu taulukko"
+
+#, fuzzy
+#~| msgid "Columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Sarakkeita:"
+
+#, fuzzy
+#~| msgid "Number of columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of columns"
+#~ msgstr "Sarakkeiden määrä"
+
+#, fuzzy
+#~| msgid "Rows:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rows:"
+#~ msgstr "Rivejä:"
+
+#, fuzzy
+#~| msgid "Number of rows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of rows"
+#~ msgstr "Rivien määrä"
+
+#, fuzzy
+#~| msgid "Table Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Options"
+#~ msgstr "Taulukon asetukset"
+
+#, fuzzy
+#~| msgid "Table editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table editing"
+#~ msgstr "Taulukon muokkaus"

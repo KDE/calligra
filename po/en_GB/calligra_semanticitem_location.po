@@ -1,0 +1,149 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Steve Allewell <steve.allewell@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-06-28 21:37+0100\n"
+"Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
+"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: KoLocationSemanticItemFactory.cpp:34
+#, kde-format
+msgctxt "displayname of the semantic item type Location"
+msgid "Location"
+msgstr "Location"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidget.ui:17
+#, kde-format
+msgid "&Name"
+msgstr "&Name"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidgetMarble.ui:17 KoRdfLocationViewWidgetMarble.ui:24
+#, kde-format
+msgid "Name"
+msgstr "Name"
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
+#, kde-format
+msgid "The Earth"
+msgstr "The Earth"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
+#, kde-format
+msgid "The Marble widget displays a virtual globe."
+msgstr "The Marble widget displays a virtual globe."
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:40
+#, kde-format
+msgid "Navigation Control"
+msgstr "Navigation Control"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:43
+#, kde-format
+msgid "Use this control to navigate."
+msgstr "Use this control to navigate."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfLocationEditWidgetMarble.ui:50
+#, kde-format
+msgid "Latitude"
+msgstr "Latitude"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfLocationEditWidgetMarble.ui:60
+#, kde-format
+msgid "Longitude"
+msgstr "Longitude"
+
+#: KoRdfLocationTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Location Information"
+msgstr "Location Information"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationViewWidget.ui:24
+#, kde-format
+msgid "&Name:"
+msgstr "&Name:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name"
+#~ msgstr "Name"
+
+#, fuzzy
+#~| msgid "The Earth"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Earth"
+#~ msgstr "The Earth"
+
+#, fuzzy
+#~| msgid "The Marble widget displays a virtual globe."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Marble widget displays a virtual globe."
+#~ msgstr "The Marble widget displays a virtual globe."
+
+#, fuzzy
+#~| msgid "Navigation Control"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation Control"
+#~ msgstr "Navigation Control"
+
+#, fuzzy
+#~| msgid "Use this control to navigate."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this control to navigate."
+#~ msgstr "Use this control to navigate."
+
+#, fuzzy
+#~| msgid "Latitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latitude"
+#~ msgstr "Latitude"
+
+#, fuzzy
+#~| msgid "Longitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Longitude"
+#~ msgstr "Longitude"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "&Name:"
+
+#, fuzzy
+#~| msgid "&Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name"
+#~ msgstr "&Name"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Location"
+#~| msgid "Location"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Location"
+#~ msgid "Location"
+#~ msgstr "Location"
+
+#, fuzzy
+#~| msgid "Location Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Location Information"
+#~ msgstr "Location Information"

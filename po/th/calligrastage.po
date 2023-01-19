@@ -1,0 +1,6507 @@
+# Copyright (C).
+#
+# Thanomsub Noppaburana <donga.nb@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-04-29 15:06+0700\n"
+"Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
+"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: LoKalize 0.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "แ&ก้ไข"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "มุ&มมอง"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "แ&ทรก"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "รูปแบบ"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+msgid "&Slide"
+msgstr "ภาพนิ่ง"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "นำเสนอภาพนิ่ง"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "ตั้งค่า"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Create Appear Animation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Create Appear Animation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Create Appear Animation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Delete slideshow"
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "ลบการนำเสนอภาพนิ่ง"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "ลบภาพนิ่ง"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "ลบภาพนิ่ง"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "ช่วงเวลาการนำเสนอ:"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "เปลี่ยนตัวพิมพ์ของข้อความ"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgid "Modify page effect"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "แก้ไขลูกเล่นของภาพนิ่ง"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "ลบภาพนิ่ง"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "หัวเรื่องภาพนิ่ง"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "หัวเรื่องภาพนิ่ง"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "การนำเสนอ"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2007, The KPresenter Team"
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "สงวนลิขสิทธิ์ (c) 1998-2007, ทีมผู้พัฒนา KPresenter"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "ผู้ดูแลปัจจุบัน"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "ผู้เขียนดั้งเดิม"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "นำเสนอ K - การหมุน"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+#| msgid "&Closed Line"
+msgid "Carlos Licea "
+msgstr "ปิดเส้น"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "ถนอมทรัพย์ นพบูรณ์"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "donga.nb@gmail.com"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "ภาพนิ่ง %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, fuzzy, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "แสดงภาพนิ่งในการนำเสนอ"
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Layout"
+msgstr "จัด&วางหน้ากระดาษ..."
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "แทรกรูปภาพ"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "สี"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "เพิ่มขนาดตัวอักษร"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "Close"
+msgid "Black"
+msgstr "ปิด"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "กว้าง:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, fuzzy, kde-format
+msgid "Green"
+msgstr "การไล่ระดับสี"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, fuzzy, kde-format
+msgid "Blue"
+msgstr "ปุ่มหน้ารายการ"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+msgid "Yellow"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "&Next Slide"
+msgid "Next Slide"
+msgstr "ภาพนิ่ง&ถัดไป"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "Current Slideshow:"
+msgid "Current Slide %1 of %2"
+msgstr "การนำเสนอภาพนิ่งปัจจุบัน:"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+msgid "End of Slide Show"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "start after previous animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "start with previous animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "รูปร่าง"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+msgid "&Move Here"
+msgstr "ภาพนิ่ง"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+msgid "&Copy Here"
+msgstr "ภาพนิ่ง"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, fuzzy, kde-format
+#| msgid "&Cancel"
+msgid "C&ancel"
+msgstr "ย&กเลิก"
+
+#: part/KPrView.cpp:73
+#, fuzzy, kde-format
+msgid "Normal"
+msgstr "ธรรมดา"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+msgid "Show Master Slides"
+msgstr "วางข้อความ"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+msgid "Import Slideshow..."
+msgstr "ไปยังภาพนิ่งที่..."
+
+#: part/KPrView.cpp:80
+#, fuzzy, kde-format
+msgid "Insert Slide"
+msgstr "แทรกเส้น"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, fuzzy, kde-format
+msgid "Copy Slide"
+msgstr "ภาพนิ่ง"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+msgid "Copy the current slide"
+msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, kde-format
+msgid "Delete Slide"
+msgstr "ลบภาพนิ่ง"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+msgid "Delete the current slide"
+msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+msgid "Master Slide..."
+msgstr "แทรกแฟ้ม"
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Previous Slide"
+msgstr "ภาพนิ่ง&ก่อนนี้"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+msgid "Go to previous slide"
+msgstr "ภาพนิ่ง&ก่อนนี้"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+msgid "Go to next slide"
+msgstr "ไปยังภาพนิ่งที่:"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+msgid "First Slide"
+msgstr "วางข้อความ"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+msgid "Go to first slide"
+msgstr "ไปยังภาพนิ่งที่:"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+msgid "Last Slide"
+msgstr "วางข้อความ"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+msgid "Go to last slide"
+msgstr "ไปยังภาพนิ่งที่:"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+msgid "Configure Stage..."
+msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "แทรกรูปภาพ"
+
+#: part/KPrView.cpp:260
+#, kde-format
+msgid "Create Appear Animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/KPrView.cpp:264
+#, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "แก้ไขกำหนดการนำเสนอภาพนิ่งเอง..."
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "เริ่มการนำเสนอ"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+#| msgid "From Current Page"
+msgid "From Current Slide"
+msgstr "จากภาพนิ่งปัจจุบัน"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+#| msgid "From First Page"
+msgid "From First Slide"
+msgstr "จากภาพนิ่งแรก"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "การนำเสนอ"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show Status Bar"
+msgstr "แสดงแถบสถานะ"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Hide Status Bar"
+msgstr "แสดงแถบสถานะ"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Shows or hides the status bar"
+msgstr "แสดงแถบสถานะ"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+msgid "Configure Slide Show..."
+msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter..."
+msgid "Configure Presenter View..."
+msgstr "ปรับแต่ง นำเสนอภาพนิ่ง K..."
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "&ออกจากการนำเสนอ"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "&ออกจากการนำเสนอ"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "&ออกจากการนำเสนอ"
+
+#: part/KPrViewModeNotes.cpp:36
+#, kde-format
+msgid "Notes"
+msgstr ""
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "หัวเรื่องภาพนิ่ง"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+msgid "Slide Show: "
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Add new slideshow"
+msgid "Add a new custom slide show"
+msgstr "เพิ่มการนำเสนอภาพนิ่งตัวใหม่"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+msgid "Delete current custom slide show"
+msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Duplicate Slide"
+msgstr "ลบภาพนิ่ง"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Current Slideshow:"
+msgid "Start Slideshow"
+msgstr "การนำเสนอภาพนิ่งปัจจุบัน:"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Add new slideshow"
+msgid "Add a new slide"
+msgstr "เพิ่มการนำเสนอภาพนิ่งตัวใหม่"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+msgid "Delete selected slides"
+msgstr "ภาพนิ่งที่เลือกไว้"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "ลบเส้นช่วยเหลือ"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+#| msgid "&Custom"
+msgid "Cut"
+msgstr "&กำหนดเอง"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "Group"
+msgid "Copy"
+msgstr "จัดกลุ่ม"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+msgid "Paste"
+msgstr "เส้นทาง:"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+msgid "Slide Show %1"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+msgid "All slides"
+msgstr "แฟ้มทั้งหมด"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+#| msgid "Arrow"
+msgid "Error"
+msgstr "ลูกศร"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "จัด&วางหน้ากระดาษ..."
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, kde-format
+msgid "Automatic animation preview"
+msgstr ""
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "การนำเสนอ"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "หัวเรื่องภาพนิ่ง"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Shape Click Actions"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Shape Animations"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "ช่วงเวลาการนำเสนอ:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "ตัวอักษร"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "after previous animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "with previous animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, kde-format
+msgid "Duration: "
+msgstr "ระยะเวลา: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Preview Shape Animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "ไม่มีลูกเล่น"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid " sec"
+msgstr " วินาที"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "หัวเรื่องภาพนิ่ง"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "ปรับใช้รูปแบบ"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+#| msgid "Apply Style to Frames"
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "ปรับใช้รูปแบบกับกรอบ"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "นำเสนอภาพนิ่ง"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+msgid "Ole Action"
+msgstr "การทำให้สมบูรณ์"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Edit animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Add new animation"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+msgid "Remove animation"
+msgstr "ลบเส้นช่วยเหลือ"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Move animation up"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Create Appear Animation"
+msgid "Move animation down"
+msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Add new slideshow"
+msgid "Add a new animation"
+msgstr "เพิ่มการนำเสนอภาพนิ่งตัวใหม่"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+msgid "Delete current animation"
+msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "Group"
+msgid "Crop"
+msgstr "จัดกลุ่ม"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgid "W&idth:"
+msgstr "กว้าง:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, fuzzy, kde-format
+msgid "&Height:"
+msgstr "สูง:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+msgid "R&atio:"
+msgstr "มุมของการหมุน:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Image"
+msgstr "&ภาพนิ่ง"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+msgid "&Crop"
+msgstr "บน:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "รูปร่าง"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+msgid "Presentation monitor:"
+msgstr "การนำเสนอ"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Enable presenter view"
+msgstr "ปรับแต่ง นำเสนอภาพนิ่ง K"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Configure Presenter View"
+msgstr "ปรับแต่ง นำเสนอภาพนิ่ง K"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure Slide Show"
+msgstr "ปรับแต่ง ซีก/ส่วน/คอร์ด วงกลม..."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+msgid "Slides"
+msgstr "ภาพนิ่ง"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "การนำเสนอ"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+#| msgid "Edit Custom Slide Shows..."
+msgid "Edit Custom Slide Shows ..."
+msgstr "แก้ไขกำหนดการนำเสนอภาพนิ่งเอง..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+msgid "Select all"
+msgstr "กำลังเลือก..."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "ลบภาพนิ่ง"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+msgid "Deselect all"
+msgstr "กำลังเลือก..."
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgid "Title"
+msgstr "หัวเรื่อง:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+msgid "Output preview"
+msgstr "แสดง&ตัวอย่าง"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "สร้างใหม่..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "ผู้เขียน:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Favorite"
+msgstr "ลบภาพนิ่ง"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Template"
+msgstr "ลบภาพนิ่ง"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Add Template"
+msgstr "ลบภาพนิ่ง"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "คุณต้องการลบภาพนิ่งปัจจุบันใช่หรือไม่ ?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "บันทึกการปรับแต่ง..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Rotation"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "เปลี่ยนการหมุน"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid "No sound"
+msgstr " วินาที"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+msgid "Import..."
+msgstr "นำเข้ารูปแบบ..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Left"
+msgstr "มาจากด้านซ้าย"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "From Top"
+msgstr "มาจากด้านบน"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Close"
+msgid "Clock"
+msgstr "ปิด"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Clockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Clockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Clockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Clockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Counterclockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Counterclockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Counterclockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Counterclockwise"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Fan"
+msgstr "ลูกศรสองหัว"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Vertical"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Horizontal"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan In Vertical"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Horizontal"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Double Sweep"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Parallel Vertical"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Opposite Vertical"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Opposite Horizontal"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Fan"
+msgstr "เติมลวดลาย 6%"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Center Right"
+msgstr "กวาดไปทางด้านขวา"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Center Top"
+msgstr "จัดเรียงตรงกลาง"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Center Left"
+msgstr "จัดเรียงตรงกลาง"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Center Bottom"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Top"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Right"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan Out Bottom"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Left"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Top"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Fan In Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan In Bottom"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Fan In Left"
+msgstr "มาจากด้านซ้าย"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Pin Wheel"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Clockwise"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Clockwise"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Clockwise"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Saloon Door"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "To Top"
+msgstr "มาจากด้านบน"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "To Left"
+msgstr "กวาดไปทางด้านซ้าย"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "ล่าง:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "To Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Single Sweep"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top"
+msgstr "มาจากด้านซ้าย"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Clockwise Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Clockwise Bottom"
+msgstr "จัดเรียงด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Clockwise Left"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left"
+msgstr "มาจากด้านซ้าย"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Left"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Windshield"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+msgid "Right"
+msgstr "ขวา:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Barn Door"
+msgstr "ลูกศรสองหัว"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Diagonal Top Left"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Barn Zig Zag"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Top Left"
+msgstr "มาจากด้านซ้าย"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Top Right"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Left"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Right"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "ไล่ระดับสีในแนวทแยง 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Corners In"
+msgstr "มุม:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Corners In Reverse"
+msgstr "มุม:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Corners Out"
+msgstr "มุม:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Corners Out Reverse"
+msgstr "มุม:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "ไล่ระดับสีในแนวทแยง 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Barn Door"
+msgstr "ลูกศรสองหัว"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Diamond"
+msgstr "ลูกศรสองหัว"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Zig Zag"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Fade"
+msgstr "ส่วนหัว"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Set Text Color"
+msgid "Fade over Color"
+msgstr "ตั้งค่าสีข้อความ"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "ArrowHead"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+#| msgid "Done"
+msgid "Down"
+msgstr "เรียบร้อยแล้ว"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+msgid "Left"
+msgstr "ความยาว:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "รูปวงรี"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "วงกลม"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "การนำเสนอ"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "รูปสี่เหลี่ยม"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "รูปสี่เหลี่ยม"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Diamond"
+msgstr "ลูกศรสองหัว"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "เบ็ดเตล็ด"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Heart"
+msgstr "ส่วนหัว"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "เส้นทางแนวตั้ง"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "การนำเสนอ"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Sound effect"
+msgid "RoundRect"
+msgstr "เอฟเฟ็กต์เสียงประกอบ"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "ตัวอักษร"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "เส้นทางแนวนอน"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Triangle"
+msgstr "หัวเรื่อง:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Box Snakes"
+msgstr "รูปร่าง"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Box In"
+msgid "Two Box Top In"
+msgstr "กล่องย่อเข้า"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "ล่าง:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Two Box Left In"
+msgstr "กวาดไปทางด้านซ้าย"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Two Box Right In"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical In"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal In"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Box Out"
+msgid "Two Box Top Out"
+msgstr "กล่องขยายออก"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "ล่าง:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Left Out"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Right Out"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical Out"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal Out"
+msgstr "ปิดในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Parallel Snakes"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "ไล่ระดับสีในแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "รูปร่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Spiral"
+msgstr ""
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left In"
+msgstr "มาจากด้านซ้าย"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left Out"
+msgstr "มาจากด้านซ้าย"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right In"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right Out"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left In"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left Out"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right In"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right Out"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left In"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left Out"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right In"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right Out"
+msgstr "มาจากด้านขวา"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left In"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right In"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Waterfall"
+msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Left Vertical"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Left Horizontal"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Right Vertical"
+msgstr "เปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Right Horizontal"
+msgstr "เปิดทางแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Close Vertical"
+msgid "Bottom Left Vertical"
+msgstr "ปิดทางแนวตั้ง"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Close Horizontal"
+msgid "Bottom Left Horizontal"
+msgstr "ปิดทางแนวนอน"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Bottom Right Vertical"
+msgstr "มาจากด้านล่าง"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Interlocking Horizontal 1"
+msgid "Bottom Right Horizontal"
+msgstr "แบ่งส่วนเลื่อนออกในแนวนอน 1"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Slide"
+msgstr "ภาพนิ่ง"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Space Rotation"
+msgstr "มุมของการหมุน:"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Page effects"
+msgid "Swap effect"
+msgstr "ลูกเล่นของภาพนิ่ง"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Header"
+msgstr "ส่วนหัว"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "ท้ายกระดาษ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "แ&ก้ไข"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "มุ&มมอง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "แ&ทรก"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "รูปแบบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "ตั้งค่า"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "จัดกลุ่ม"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "กว้าง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "สูง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "มุมของการหมุน:"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "&ภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "บน:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "การนำเสนอ"
+
+#, fuzzy
+#~| msgid "Edit Custom Slide Shows..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "แก้ไขกำหนดการนำเสนอภาพนิ่งเอง..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "กำลังเลือก..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "ลบภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "หัวเรื่อง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "แสดง&ตัวอย่าง"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "สร้างใหม่..."
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "ผู้เขียน:"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "ลบภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "การนำเสนอ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "การนำเสนอ"
+
+#, fuzzy
+#~| msgid "(c) 1998-2007, The KPresenter Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "สงวนลิขสิทธิ์ (c) 1998-2007, ทีมผู้พัฒนา KPresenter"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "ผู้ดูแลปัจจุบัน"
+
+#, fuzzy
+#~| msgid "Thorsten Zachmann"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~| msgid "original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "ผู้เขียนดั้งเดิม"
+
+#, fuzzy
+#~| msgid "Reginald Stadlbauer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~| msgid "Toshitaka Fujioka"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toshitaka Fujioka"
+#~ msgstr "Toshitaka Fujioka"
+
+#, fuzzy
+#~| msgid "Lukáš Tinkl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tinkl"
+#~ msgstr "Lukáš Tinkl"
+
+#, fuzzy
+#~| msgid "Ariya Hidayat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~| msgid "Percy Leonhardt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percy Leonhardt"
+#~ msgstr "Percy Leonhardt"
+
+#, fuzzy
+#~| msgid "Thomas Zander"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "นำเสนอ K - การหมุน"
+
+#, fuzzy
+#~| msgid "&Closed Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "ปิดเส้น"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ถนอมทรัพย์ นพบูรณ์"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "donga.nb@gmail.com"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "ภาพนิ่ง %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "แสดงภาพนิ่งในการนำเสนอ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "จัด&วางหน้ากระดาษ..."
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "สี"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "เพิ่มขนาดตัวอักษร"
+
+#, fuzzy
+#~| msgid "Close"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "ปิด"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "กว้าง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "การไล่ระดับสี"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "ปุ่มหน้ารายการ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "&Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "ภาพนิ่ง&ถัดไป"
+
+#, fuzzy
+#~| msgid "Current Slideshow:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "การนำเสนอภาพนิ่งปัจจุบัน:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "รูปร่าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "&Cancel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "ย&กเลิก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "ธรรมดา"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "วางข้อความ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "ไปยังภาพนิ่งที่..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "แทรกเส้น"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "ลบภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "แทรกแฟ้ม"
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "ภาพนิ่ง&ก่อนนี้"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "ภาพนิ่ง&ก่อนนี้"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "ไปยังภาพนิ่งที่:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "วางข้อความ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "ไปยังภาพนิ่งที่:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "วางข้อความ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "ไปยังภาพนิ่งที่:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "แทรกรูปภาพ"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Edit Custom Slide Shows..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "แก้ไขกำหนดการนำเสนอภาพนิ่งเอง..."
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "เริ่มการนำเสนอ"
+
+#, fuzzy
+#~| msgid "From Current Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "จากภาพนิ่งปัจจุบัน"
+
+#, fuzzy
+#~| msgid "From First Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "จากภาพนิ่งแรก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "การนำเสนอ"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "แสดงแถบสถานะ"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "แสดงแถบสถานะ"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "แสดงแถบสถานะ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "ปรับแต่ง นำเสนอภาพนิ่ง K..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "&ออกจากการนำเสนอ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Add new slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "เพิ่มการนำเสนอภาพนิ่งตัวใหม่"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "ลบภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Current Slideshow:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "การนำเสนอภาพนิ่งปัจจุบัน:"
+
+#, fuzzy
+#~| msgid "Add new slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "เพิ่มการนำเสนอภาพนิ่งตัวใหม่"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "ภาพนิ่งที่เลือกไว้"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "ลบเส้นช่วยเหลือ"
+
+#, fuzzy
+#~| msgid "&Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "&กำหนดเอง"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "จัดกลุ่ม"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "เส้นทาง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "แฟ้มทั้งหมด"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "ลูกศร"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "การนำเสนอ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "ช่วงเวลาการนำเสนอ:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "ตัวอักษร"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "ระยะเวลา: "
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "ไม่มีลูกเล่น"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " วินาที"
+
+#, fuzzy
+#~| msgid "Apply Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "ปรับใช้รูปแบบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "การทำให้สมบูรณ์"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "ลบเส้นช่วยเหลือ"
+
+#, fuzzy
+#~| msgid "Create Appear Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "สร้างการเคลื่อนไหวของการปรากฎ"
+
+#, fuzzy
+#~| msgid "Add new slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "เพิ่มการนำเสนอภาพนิ่งตัวใหม่"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "ก่อนภาพนิ่งปัจจุบัน"
+
+#, fuzzy
+#~| msgid "Configure KPresenter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "ปรับแต่ง นำเสนอภาพนิ่ง K"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "ปรับแต่ง ซีก/ส่วน/คอร์ด วงกลม..."
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "ลบภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "คุณต้องการลบภาพนิ่งปัจจุบันใช่หรือไม่ ?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "บันทึกการปรับแต่ง..."
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr " วินาที"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "นำเข้ารูปแบบ..."
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "มาจากด้านซ้าย"
+
+#, fuzzy
+#~| msgid "Come From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "มาจากด้านบน"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Close"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "ปิด"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "ลูกศรสองหัว"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "เติมลวดลาย 6%"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "กวาดไปทางด้านขวา"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "จัดเรียงตรงกลาง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "จัดเรียงตรงกลาง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "มาจากด้านซ้าย"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "ปิดในแนวนอน"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "ปิดในแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "กวาดไปทางด้านซ้าย"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "ล่าง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "จัดเรียงด้านล่าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "มาจากด้านซ้าย"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "ขวา:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "ลูกศรสองหัว"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "มาจากด้านซ้าย"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "ไล่ระดับสีในแนวทแยง 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "มุม:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "มุม:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "ไล่ระดับสีในแนวทแยง 1"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "ลูกศรสองหัว"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "ลูกศรสองหัว"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "ส่วนหัว"
+
+#, fuzzy
+#~| msgid "Set Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "ตั้งค่าสีข้อความ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Done"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "เรียบร้อยแล้ว"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "ความยาว:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "รูปวงรี"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "วงกลม"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "รูปสี่เหลี่ยม"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "รูปสี่เหลี่ยม"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "ลูกศรสองหัว"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "เบ็ดเตล็ด"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "ส่วนหัว"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "เส้นทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "การนำเสนอ"
+
+#, fuzzy
+#~| msgid "Sound effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "เอฟเฟ็กต์เสียงประกอบ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "ตัวอักษร"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "เส้นทางแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "หัวเรื่อง:"
+
+#, fuzzy
+#~| msgid "Box In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "กล่องย่อเข้า"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "ล่าง:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "กวาดไปทางด้านซ้าย"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "ปิดในแนวนอน"
+
+#, fuzzy
+#~| msgid "Box Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "กล่องขยายออก"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "ล่าง:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "ปิดในแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "รูปร่าง"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "มาจากด้านซ้าย"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "มาจากด้านซ้าย"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "เปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "เปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Close Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "ปิดทางแนวตั้ง"
+
+#, fuzzy
+#~| msgid "Close Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "ปิดทางแนวนอน"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "มาจากด้านล่าง"
+
+#, fuzzy
+#~| msgid "Interlocking Horizontal 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "แบ่งส่วนเลื่อนออกในแนวนอน 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "มุมของการหมุน:"
+
+#, fuzzy
+#~| msgid "Page effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "ลูกเล่นของภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "ส่วนหัว"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "ท้ายกระดาษ"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgid "Maintainer"
+#~ msgstr "ผู้ดูแลปัจจุบัน"
+
+#, fuzzy
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "เครื่องมือนำเสนอภาพนิ่งของโปรแกรมชุดสำนักงาน K"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "&ภาพนิ่ง"
+
+#~ msgid "File to open"
+#~ msgstr "แฟ้มที่จะเรียกใช้"
+
+#, fuzzy
+#~ msgid "Set Layout"
+#~ msgstr "จัด&วางหน้ากระดาษ..."
+
+#~ msgid "&File"
+#~ msgstr "แ&ฟ้ม"
+
+#~ msgid "Line"
+#~ msgstr "เส้น"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "&จัดเตรียมวัตถุ"
+
+#~ msgid "&Align Objects"
+#~ msgstr "จัดแ&นววัตถุ"
+
+#~ msgid "Te&xt"
+#~ msgstr "&ข้อความ"
+
+#~ msgid "&Align"
+#~ msgstr "จัดแน&ว"
+
+#~ msgid "T&ype"
+#~ msgstr "ประเภท"
+
+#~ msgid "Spellcheck"
+#~ msgstr "ตรวจคำสะกด"
+
+#~ msgid "Autocorrection"
+#~ msgstr "การแก้ไขให้ถูกต้องอัตโนมัติ"
+
+#~ msgid "File"
+#~ msgstr "แฟ้ม"
+
+#~ msgid "Edit"
+#~ msgstr "แก้ไข"
+
+#~ msgid "Insert"
+#~ msgstr "แทรก"
+
+#~ msgid "Tools"
+#~ msgstr "เครื่องมือ"
+
+#~ msgid "Format"
+#~ msgstr "รูปแบบ"
+
+#~ msgid "Text"
+#~ msgstr "ข้อความ"
+
+#, fuzzy
+#~ msgid "Slide Show"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#~ msgid "Navigation"
+#~ msgstr "การนำทาง"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "จัดในแนวตั้ง"
+
+#~ msgid "Flip Objects"
+#~ msgstr "พลิกวัตถุ"
+
+#, fuzzy
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "ปรับขนาดในการแสดงภาพแบบ 1:1"
+
+#, fuzzy
+#~ msgid "Spell Check Result"
+#~ msgstr "ตรวจคำสะกด"
+
+#, fuzzy
+#~ msgid "Slide Layouts"
+#~ msgstr "จัด&วางหน้ากระดาษ..."
+
+#, fuzzy
+#~ msgid "Transitions"
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Delete page effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "ลบลูกเล่นของภาพนิ่ง"
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgid "Configure KPresenter..."
+#~ msgstr "ปรับแต่ง นำเสนอภาพนิ่ง K..."
+
+#~ msgid "Slide Title"
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "&วันที่"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "กำลังเลือก..."
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "แก้ไข"
+
+#, fuzzy
+#~ msgid "New Slide Show %1"
+#~ msgstr "นำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "คุณต้องการลบภาพนิ่งปัจจุบันใช่หรือไม่ ?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgid "Confirm action"
+#~ msgstr "บันทึกการปรับแต่ง..."
+
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "เครื่องมือแก้ไขกำหนดการนำเสนอภาพนิ่งเอง"
+
+#~ msgid "Customs Slideshows"
+#~ msgstr "กำหนดการนำเสนอภาพนิ่งเอง"
+
+#~ msgid "Available Slides"
+#~ msgstr "ภาพนิ่งที่มีอยู่"
+
+#~ msgid "Add Slide"
+#~ msgstr "เพิ่มภาพนิ่ง"
+
+#~ msgid "Undo"
+#~ msgstr "เลิกทำ"
+
+#~ msgid "Ok"
+#~ msgstr "ตกลง"
+
+#~ msgid "Close"
+#~ msgstr "ปิด"
+
+#~ msgid "&OK"
+#~ msgstr "ต&กลง"
+
+#, fuzzy
+#~| msgid "Set Page Layout"
+#~ msgid "Page Layouts"
+#~ msgstr "ตั้งค่าการจัดวางหน้ากระดาษ"
+
+#~ msgid "&Page"
+#~ msgstr "&ภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Click to preview the page effect."
+#~ msgstr "เปลี่ยนตัวพิมพ์ของข้อความ"
+
+#, fuzzy
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Star Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~ msgid "Box Wipe Effect"
+#~ msgstr "ไม่ใช้เอฟเฟ็คต์"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "รูปแบบ"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgid "Navigate to:"
+#~ msgstr "การนำทาง"
+
+#, fuzzy
+#~ msgid "Cover down effect"
+#~ msgstr "มาจากด้านซ้าย"
+
+#, fuzzy
+#~ msgid "Insert &new slide:"
+#~ msgstr "แทรกภาพนิ่งให&ม่:"
+
+#~ msgid "Use &default template"
+#~ msgstr "ใช้ต้นแบบโดยปริยาย"
+
+#, fuzzy
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "ใช้ภาพนิ่งปัจจุบันเป็นแม่แบบปริยาย"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "เลือกต้นแบบตัวอื่นๆ"
+
+#, fuzzy
+#~ msgid "A&ngle:"
+#~ msgstr "มุม:"
+
+#, fuzzy
+#~ msgid "Pie"
+#~ msgstr "&ซีกวงกลม"
+
+#~ msgid "&Type:"
+#~ msgstr "Tipe:"
+
+#, fuzzy
+#~ msgid "&Length:"
+#~ msgstr "ความยาว:"
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "ตำแหน่ง (%1):"
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "ตำแหน่ง (%1):"
+
+#~ msgid "Preview"
+#~ msgstr "แสดงตัวอย่าง"
+
+#, fuzzy
+#~ msgid "Channel Intensity"
+#~ msgstr "เปลี่ยนระยะเยื้องด้านซ้าย"
+
+#, fuzzy
+#~ msgid "Contrast"
+#~ msgstr "มุม:"
+
+#, fuzzy
+#~ msgid "Normalize"
+#~ msgstr "ธรรมดา"
+
+#, fuzzy
+#~ msgid "Solarize"
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Sharpen"
+#~ msgstr "รู&ปร่าง"
+
+#, fuzzy
+#~ msgid "Shade"
+#~ msgstr "รู&ปร่าง"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "Gray"
+#~ msgstr "ระดับสีเทา"
+
+#~ msgid "Color:"
+#~ msgstr "สี:"
+
+#, fuzzy
+#~ msgid "Color 1:"
+#~ msgstr "สี:"
+
+#, fuzzy
+#~ msgid "Color 2:"
+#~ msgstr "สี:"
+
+#, fuzzy
+#~ msgid "Intensity:"
+#~ msgstr "รูปแบบปากกา:"
+
+#, fuzzy
+#~ msgid "Factor:"
+#~ msgstr "ตัวประกอบ X:"
+
+#~ msgid "Type:"
+#~ msgstr "ประเภท:"
+
+#, fuzzy
+#~ msgid "LaPlace"
+#~ msgstr "รูปแบบท้องถิ่น"
+
+#, fuzzy
+#~ msgid "Color Shading"
+#~ msgstr "สี/ไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Azimuth:"
+#~ msgstr "ผู้เขียน:"
+
+#~ msgid "Angle:"
+#~ msgstr "มุม:"
+
+#, fuzzy
+#~ msgid "Wave length:"
+#~ msgstr "ความยาว:"
+
+#, fuzzy
+#~ msgid "Pen"
+#~ msgstr "&ปากกา"
+
+#, fuzzy
+#~ msgid "Arrow Style"
+#~ msgstr "ปรับใช้รูปแบบ"
+
+#, fuzzy
+#~ msgid "&Begin:"
+#~ msgstr "เริ่มเส้น:"
+
+#, fuzzy
+#~ msgid "&End:"
+#~ msgstr "สิ้นสุด:"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "กว้าง:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "รูปแ&บบ"
+
+#, fuzzy
+#~ msgid "C&olor:"
+#~ msgstr "สี:"
+
+#, fuzzy
+#~ msgid "Rect"
+#~ msgstr "รูปสี่เหลี่ยม"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "ไล่ระดับสีในแนวนอน"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#, fuzzy
+#~ msgid "Polygon"
+#~ msgstr "รูปห&ลายเหลี่ยม"
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "รู&ปร่าง"
+
+#~ msgid "Brush"
+#~ msgstr "แปรงทาสี"
+
+#, fuzzy
+#~ msgid "&Style:"
+#~ msgstr "รูปแบบ"
+
+#, fuzzy
+#~ msgid "&Preview"
+#~ msgstr "แสดงตัวอย่าง"
+
+#, fuzzy
+#~ msgid "&Effect:"
+#~ msgstr "ไม่มีเอฟเฟ็กต์"
+
+#, fuzzy
+#~ msgid "&Speed:"
+#~ msgstr "รู&ปร่าง"
+
+#, fuzzy
+#~ msgid "So&und effect"
+#~ msgstr "เอฟเฟ็กต์เสียงประกอบ"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "ค้นหา"
+
+#, fuzzy
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "ปรับไปยังลำดับต่อไปเ&อง"
+
+#~ msgid "Gradient"
+#~ msgstr "การไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "Gradient:"
+#~ msgstr "การไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "X-fac&tor:"
+#~ msgstr "ตัวประกอบ X:"
+
+#, fuzzy
+#~ msgid "&Y-factor:"
+#~ msgstr "ตัวประกอบ X:"
+
+#, fuzzy
+#~ msgid "Margin"
+#~ msgstr "ระยะขอบใน %1"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "ระยะขอบใน %1"
+
+#~ msgid "General"
+#~ msgstr "ค่าทั่วไป"
+
+#, fuzzy
+#~ msgid "Na&me:"
+#~ msgstr "หมายเลข"
+
+#, fuzzy
+#~ msgid "Protect si&ze and position"
+#~ msgstr "รักษาขนาดและตำแหน่ง"
+
+#, fuzzy
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "รักษาอัตราส่วน"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "ตำแหน่ง (%1):"
+
+#~ msgid "Shadow"
+#~ msgstr "ทำเงา"
+
+#, fuzzy
+#~ msgid "Color && Distance"
+#~ msgstr "สีและระยะห่าง"
+
+#~ msgid "Distance:"
+#~ msgstr "ระยะห่าง:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "การนำเสนอ"
+
+#~ msgid "Picture"
+#~ msgstr "รูปภาพ"
+
+#, fuzzy
+#~ msgid "&1 bit color mode"
+#~ msgstr "รูปแบบปริยาย"
+
+#, fuzzy
+#~ msgid "&8 bit color mode"
+#~ msgstr "รูปแบบปริยาย"
+
+#, fuzzy
+#~ msgid "1&6 bit color mode"
+#~ msgstr "รูปแบบปริยาย"
+
+#, fuzzy
+#~ msgid "&32 bit color mode"
+#~ msgstr "รูปแบบปริยาย"
+
+#, fuzzy
+#~ msgid "&Default color mode"
+#~ msgstr "รูปแบบปริยาย"
+
+#, fuzzy
+#~ msgid "%"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "Gra&yscale"
+#~ msgstr "ระดับสีเทา"
+
+#, fuzzy
+#~ msgid "&Brightness:"
+#~ msgstr "สูง:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "ซ้าย:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "การนำเสนอ"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "ตั้งค่าพื้นหลัง"
+
+#~ msgid "Background type:"
+#~ msgstr "ประเภทของพื้นหลัง:"
+
+#~ msgid "Color/Gradient"
+#~ msgstr "สี/ไล่ระดับสี"
+
+#~ msgid "Plain"
+#~ msgstr "ธรรมดา"
+
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "ไล่ระดับสีในแนวทแยง 1"
+
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "ไล่ระดับสีในแนวทแยง 2"
+
+#~ msgid "Circle Gradient"
+#~ msgstr "ไล่ระดับสีในแบบวงกลม"
+
+#~ msgid "Rectangle Gradient"
+#~ msgstr "ไล่ระดับสีในแบบสี่เหลี่ยม"
+
+#, fuzzy
+#~ msgid "PipeCross Gradient"
+#~ msgstr "ไล่ระดับสีในแบบวงกลม"
+
+#, fuzzy
+#~ msgid "Pyramid Gradient"
+#~ msgstr "การไล่ระดับสี"
+
+#, fuzzy
+#~ msgid "X-factor:"
+#~ msgstr "ตัวประกอบ X:"
+
+#, fuzzy
+#~ msgid "Y-factor:"
+#~ msgstr "ตัวประกอบ X:"
+
+#, fuzzy
+#~ msgid "View mode:"
+#~ msgstr "ชื่อแฟ้ม:"
+
+#, fuzzy
+#~ msgid "Scaled"
+#~ msgstr "รูปแบบท้องถิ่น"
+
+#, fuzzy
+#~ msgid "&Reset"
+#~ msgstr "ปรับขนาด"
+
+#, fuzzy
+#~ msgid "Single Color"
+#~ msgstr "ตั้งค่าสีข้อความ"
+
+#, fuzzy
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "เติมลวดลาย 12%"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "เส้นพาดกัน"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "เส้นทแยงด้านขวา ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "เส้นทแยงด้านซ้าย ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "เส้นทแยงไขว้กัน"
+
+#, fuzzy
+#~ msgid "Diagonal 2"
+#~ msgstr "ไล่ระดับสีในแนวทแยง 2"
+
+#, fuzzy
+#~ msgid "PipeCross"
+#~ msgstr "ไล่ระดับสีในแบบวงกลม"
+
+#, fuzzy
+#~ msgid "Pyramid"
+#~ msgstr "การไล่ระดับสี"
+
+#~ msgid "Resize Object Up"
+#~ msgstr "ปรับขนาดวัตถุขึ้น"
+
+#~ msgid "Resize Object Down"
+#~ msgstr "ปรับขนาดวัตถุลง"
+
+#~ msgid "Resize Object Left"
+#~ msgstr "ปรับขนาดวัตถุด้านซ้าย"
+
+#~ msgid "Resize Object Right"
+#~ msgstr "ปรับขนาดวัตถุด้านขวา"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "ปรับขนาดวัตถุด้านซ้ายขึ้น"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "ปรับขนาดวัตถุด้านซ้ายลง"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "ปรับขนาดวัตถุด้านขวาขึ้น"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "ปรับขนาดวัตถุด้านขวาลง"
+
+#, fuzzy
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr "ไม่สามารถเปลี่ยนแปลงเนื้อหาที่อ่านอย่างเดียวได้ ทำให้ไม่มีการแก้ไขใดเกิดขึ้น"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "โหมดการ&วาด"
+
+#, fuzzy
+#~ msgid "&Goto Slide..."
+#~ msgstr "ไ&ปยังภาพนิ่งที่..."
+
+#, fuzzy
+#~ msgid "&End"
+#~ msgstr "สิ้นสุด:"
+
+#~ msgid "Change Text Font"
+#~ msgstr "เปลี่ยนรูปแบบตัวอักษรของข้อความ"
+
+#~ msgid "Set Text Background Color"
+#~ msgstr "ตั้งค่าสีพื้นหลัง"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "ให้ข้อความเป็นตัวหนา"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "ให้ข้อความเป็นตัวเอียง"
+
+#~ msgid "Underline Text"
+#~ msgstr "ขีดเส้นใต้ข้อความ"
+
+#~ msgid "Set Text Font"
+#~ msgstr "ตั้งค่ารูปแบบตัวอักษรของข้อความ"
+
+#~ msgid "Change Text Size"
+#~ msgstr "เปลี่ยนขนาดข้อความ"
+
+#~ msgid "Set Text Subscript"
+#~ msgstr "ตั้งค่าข้อความตัวห้อย"
+
+#~ msgid "Set Text Superscript"
+#~ msgstr "ตั้งค่าข้อความตัวยก"
+
+#~ msgid "Apply Default Format"
+#~ msgstr "ปรับเป็นรูปแบบปริยาย"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "เพิ่มขนาดตัวอักษร"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "ลดขนาดตัวอักษร"
+
+#~ msgid "Set Text Align"
+#~ msgstr "ตั้งค่าการจัดวางข้อความ"
+
+#~ msgid "Change Tabulators"
+#~ msgstr "เปลี่ยนตัวตั้งแท็บ"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "เพิ่มความลึกของย่อหน้า"
+
+#, fuzzy
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "เพิ่มความลึกของย่อหน้า"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "เปลี่ยนระยะเยื้องของบรรทัดแรก"
+
+#~ msgid "Change Left Indent"
+#~ msgstr "เปลี่ยนระยะเยื้องด้านซ้าย"
+
+#~ msgid "Change Right Indent"
+#~ msgstr "เปลี่ยนระยะเยื้องด้านขวา"
+
+#~ msgid "Printing..."
+#~ msgstr "กำลังพิมพ์..."
+
+#, fuzzy
+#~ msgid "Scale to Original Size"
+#~ msgstr "ปรับเป็นขนา&ดเดิม"
+
+#, fuzzy
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr "ปรับสัดส่วนรูปภาพเป็น 1:1 ในโหมดการนำเสนอ"
+
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "ขยายเนื้อหาให้พอดีกับความสูงวัตถุ"
+
+#~ msgid "Extend Text to Contents"
+#~ msgstr "ปรับวัตถุให้พอดีกับเนื้อหา"
+
+#~ msgid "Align Objects Left"
+#~ msgstr "จัดเรียงวัตถุไปด้านซ้าย"
+
+#~ msgid "Align Objects Top"
+#~ msgstr "จัดเรียงวัตถุไปด้านบน"
+
+#~ msgid "Align Objects Right"
+#~ msgstr "จัดเรียงวัตถุไปด้านขวา"
+
+#~ msgid "Align Objects Bottom"
+#~ msgstr "จัดเรียงวัตถุไปด้านล่าง"
+
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "จัดเรียงวัตถุไปตรงกลาง (แนวนอน)"
+
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "จัดเรียงวัตถุไปตรงกลาง (แนวตั้ง)"
+
+#, fuzzy
+#~ msgid "Close Object"
+#~ msgstr "จัดเรียงวัตถุ"
+
+#, fuzzy
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#~ msgid "Interface"
+#~ msgstr "ส่วนติดต่อผู้ใช้"
+
+#~ msgid "Spelling"
+#~ msgstr "การสะกด"
+
+#~ msgid "Document"
+#~ msgstr "เอกสาร"
+
+#~ msgid "Document Settings"
+#~ msgstr "ตั้งค่าเอกสาร"
+
+#~ msgid "Default Tools Settings"
+#~ msgstr "ตั้งค่าเครื่องมือปริยาย"
+
+#, fuzzy
+#~ msgid "Paths"
+#~ msgstr "เส้นทาง:"
+
+#, fuzzy
+#~ msgid "Path Settings"
+#~ msgstr "ตั้งค่าย่อหน้า"
+
+#~ msgid "Change Config"
+#~ msgstr "เปลี่ยนการปรับแต่ง"
+
+#~ msgid "Show rulers"
+#~ msgstr "แสดงไม้บรรทัด"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "จำนวนของแฟ้มที่เคยเรียกใช้:"
+
+#, fuzzy
+#~ msgid "Background object color:"
+#~ msgstr "สีพื้นหลัง:"
+
+#~ msgid "Grid color:"
+#~ msgstr "สีกริด:"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "จำกัดขนาดการ เลิกทำ/ทำซ้ำ:"
+
+#~ msgid "Display links"
+#~ msgstr "แสดงการเชื่อมโยง"
+
+#~ msgid "&Underline all links"
+#~ msgstr "&ขีดเส้นใต้การเชื่อมโยงทั้งหมด"
+
+#~ msgid "Display comments"
+#~ msgstr "แสดงหมายเหตุ"
+
+#~ msgid "Display field code"
+#~ msgstr "แสดงโค้ดของช่องข้อมูล"
+
+#~ msgid "Grid"
+#~ msgstr "กริด"
+
+#, fuzzy
+#~ msgid "Vertical grid size:"
+#~ msgstr "ไล่ระดับสีในแนวตั้ง"
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "เปลี่ยนคำสั่งการแสดงการเชื่อมโยง"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "เปลี่ยนคำสั่งการแสดงโค้ดช่องข้อมูล"
+
+#~ msgid "Document Defaults"
+#~ msgstr "ค่าปริยายของเอกสาร"
+
+#~ msgid "Default font:"
+#~ msgstr "แบบอักษรปริยาย:"
+
+#~ msgid "Choose..."
+#~ msgstr "เลือก..."
+
+#~ msgid "Autosave (min):"
+#~ msgstr "บันทึกอัตโนมัติทุก (นาที):"
+
+#~ msgid "No autosave"
+#~ msgstr "ไม่ให้บันทึกอัตโนมัติ"
+
+#~ msgid "min"
+#~ msgstr "นาที"
+
+#~ msgid "Starting page number:"
+#~ msgstr "เริ่มเลขหน้าที่เลข:"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "หยุดแท็บ (%1):"
+
+#~ msgid "Cursor"
+#~ msgstr "เคอร์เซอร์"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "เคอร์เซอร์ในพื้นที่ที่มีการป้องกัน"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "เปลี่ยนค่าเริ่มต้นของหมายเลขหน้า"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "เปลี่ยนค่าตำแหน่งหยุดการแท็บ"
+
+#, fuzzy
+#~ msgid "Outl&ine"
+#~ msgstr "ลำดับภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "&Fill"
+#~ msgstr "ค้นหา"
+
+#~ msgid "&Rectangle"
+#~ msgstr "รูปสี่เหลี่&ยม"
+
+#, fuzzy
+#~ msgid "Polygo&n"
+#~ msgstr "รูปห&ลายเหลี่ยม"
+
+#, fuzzy
+#~ msgid "&Pie"
+#~ msgstr "&ซีกวงกลม"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "ประเภท:"
+
+#, fuzzy
+#~ msgid "Picture Path"
+#~ msgstr "รูปแบบรูปภาพ:"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "รูปแบบรูปภาพ:"
+
+#, fuzzy
+#~ msgid "&Add..."
+#~ msgstr "ภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "ลบเส้นช่วยเหลือ"
+
+#, fuzzy
+#~ msgid "Test"
+#~ msgstr "ข้อความ"
+
+#, fuzzy
+#~ msgid "(Copy %1)"
+#~ msgstr "เส้น (%1)"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "หมายเลข"
+
+#, fuzzy
+#~ msgid "Existing slides:"
+#~ msgstr "ภาพนิ่ง&ถัดไป"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#, fuzzy
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "เอกสารไม่ถูกต้อง, ไม่พบส่วนแท็ก DOC"
+
+#, fuzzy
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "เอกสารไม่ถูกต้อง, ไม่พบส่วนแท็ก DOC"
+
+#, fuzzy
+#~ msgid ""
+#~ "Invalid OASIS OpenDocument file. No master-style found inside office:"
+#~ "master-styles."
+#~ msgstr "เอกสารไม่ถูกต้อง, ไม่พบส่วนแท็ก DOC"
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "ไม่พบการติดตั้ง PERL บนระบบของคุณ\n"
+#~ "ซึ่งจำเป็นต้องใช้ในการแปลงเอกสารนี้\n"
+#~ "โปรดติดตั้ง PERL ก่อนแล้วลองอีกครั้ง"
+
+#, fuzzy
+#~ msgid "Insert Part Object"
+#~ msgstr "แทรกกลุ่มวัตถุ"
+
+#, fuzzy
+#~ msgid "Invalid document, DOC tag missing."
+#~ msgstr "เอกสารไม่ถูกต้อง, ไม่พบส่วนแท็ก DOC"
+
+#~ msgid ""
+#~ "Invalid document, expected mimetype application/x-kpresenter or "
+#~ "application/vnd.kde.kpresenter, got %1"
+#~ msgstr ""
+#~ "เอกสารไม่ถูกต้อง, ต้องการประเภท mime แบบ application/x-kpresenter หรือ "
+#~ "application/vnd.kde.kpresenter, แต่ได้รับ %1"
+
+#~ msgid "Paste Objects"
+#~ msgstr "วางวัตถุ"
+
+#, fuzzy
+#~ msgid "Set New Options"
+#~ msgstr "ตั้งค่าตัวเลือกใหม่"
+
+#~ msgid "Insert File"
+#~ msgstr "แทรกแฟ้ม"
+
+#, fuzzy
+#~ msgid "Insert New Slide"
+#~ msgstr "แทรกภาพนิ่งใหม่"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "ทำซ้ำวัตถุ"
+
+#~ msgid "Number of copies:"
+#~ msgstr "จำนวนสำเนา:"
+
+#~ msgid "Rotation angle:"
+#~ msgstr "มุมของการหมุน:"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "เพิ่มค่า X (%1):"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "เพิ่มค่า X (%1):"
+
+#, fuzzy
+#~ msgid "Move X:"
+#~ msgstr "ย้าย X (%1):"
+
+#, fuzzy
+#~ msgid "Move Y:"
+#~ msgstr "ย้าย Y (%1):"
+
+#, fuzzy
+#~ msgid "Appear"
+#~ msgstr "ไม่ปรากฎ"
+
+#, fuzzy
+#~ msgid "Order of appearance:"
+#~ msgstr "ลำดับของการไม่ปรากฎ:"
+
+#, fuzzy
+#~ msgid "Effect (appearing):"
+#~ msgstr "เอฟเฟ็กต์ (การไม่ปรากฎ):"
+
+#~ msgid "Come From Right/Top"
+#~ msgstr "มาจากด้านขวาบน"
+
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "มาจากด้านขวาล่าง"
+
+#~ msgid "Come From Left/Top"
+#~ msgstr "มาจากด้านซ้ายบน"
+
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "มาจากด้านซ้ายล่าง"
+
+#~ msgid "Wipe From Left"
+#~ msgstr "กวาดมาจากด้านซ้าย"
+
+#~ msgid "Wipe From Right"
+#~ msgstr "กวาดมาจากด้านขวา"
+
+#~ msgid "Wipe From Top"
+#~ msgstr "กวาดมาจากด้านบน"
+
+#~ msgid "Wipe From Bottom"
+#~ msgstr "กวาดมาจากด้านล่าง"
+
+#, fuzzy
+#~ msgid "Fast"
+#~ msgstr "รูปแบบ"
+
+#~ msgid "Effect (object specific):"
+#~ msgstr "เอฟเฟ็กต์ (กำหนดวัตถุ):"
+
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "ย่อหน้าหลังย่อหน้า"
+
+#~ msgid "Timer of the object:"
+#~ msgstr "กำหนดเวลาของวัตถุ:"
+
+#~ msgid "File name:"
+#~ msgstr "ชื่อแฟ้ม:"
+
+#~ msgid "Play"
+#~ msgstr "เล่น"
+
+#~ msgid "Disappear"
+#~ msgstr "ไม่ปรากฎ"
+
+#~ msgid "Order of disappearance:"
+#~ msgstr "ลำดับของการไม่ปรากฎ:"
+
+#~ msgid "Effect (disappearing):"
+#~ msgstr "เอฟเฟ็กต์ (การไม่ปรากฎ):"
+
+#, fuzzy
+#~ msgid "Disappear to Right"
+#~ msgstr "หายไปทางด้านขวา"
+
+#, fuzzy
+#~ msgid "Disappear to Left"
+#~ msgstr "หายไปทางด้านซ้าย"
+
+#, fuzzy
+#~ msgid "Disappear to Top"
+#~ msgstr "หายไปทางด้านบน"
+
+#, fuzzy
+#~ msgid "Disappear to Bottom"
+#~ msgstr "หายไปทางด้านล่าง"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "หายไปทางด้านขวาบน"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "หายไปทางด้านขวาล่าง"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "หายไปทางด้านซ้ายบน"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "หายไปทางด้านซ้ายล่าง"
+
+#, fuzzy
+#~ msgid "Wipe to Top"
+#~ msgstr "กวาดไปทางด้านบน"
+
+#, fuzzy
+#~ msgid "Wipe to Bottom"
+#~ msgstr "กวาดไปทางด้านล่าง"
+
+#~ msgid "Assign Object Effects"
+#~ msgstr "กำหนดเอฟเฟ็กต์ของวัตถุ"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "*.%1|แฟ้ม %2"
+
+#, fuzzy
+#~ msgid "All Supported Files"
+#~ msgstr "แฟ้มที่สนับสนุนทั้งหมด"
+
+#, fuzzy
+#~ msgid "Image Effect"
+#~ msgstr "ไม่มีเอฟเฟ็กต์"
+
+#~ msgid "Import Style"
+#~ msgstr "นำเข้ารูปแบบ"
+
+#, fuzzy
+#~ msgid "File name is empty."
+#~ msgstr "ชื่อแฟ้มว่าง"
+
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "แฟ้มไม่ใช่แฟ้มของ นำเสนอภาพนิ่ง K !"
+
+#~ msgid "Path:"
+#~ msgstr "เส้นทาง:"
+
+#, fuzzy
+#~ msgid "&Set Colors"
+#~ msgstr "ตั้งค่าสีข้อความ"
+
+#, fuzzy
+#~ msgid "Preliminary Slides"
+#~ msgstr "ภาพนิ่ง&ก่อนนี้"
+
+#~ msgid "Text color:"
+#~ msgstr "สีข้อความ:"
+
+#~ msgid "Background color:"
+#~ msgstr "สีพื้นหลัง:"
+
+#, fuzzy
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "สร้างการนำเสนอภาพนิ่งแบบ HTML"
+
+#, fuzzy
+#~ msgid "Create pictures of the slides"
+#~ msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Change Help Line Position"
+#~ msgstr "เปลี่ยนตำแหน่งเส้นช่วยเหลือ"
+
+#, fuzzy
+#~ msgid "Position:"
+#~ msgstr "ตำแหน่ง (%1):"
+
+#, fuzzy
+#~ msgid "Add New Help Line"
+#~ msgstr "เพิ่มเส้นช่วยเหลือใหม่"
+
+#, fuzzy
+#~ msgid "Add New Help Point"
+#~ msgstr "เพิ่มจุดช่วยเหลือใหม่"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "ตำแหน่ง X (%1):"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "ตำแหน่ง Y (%1):"
+
+#, fuzzy
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "ภาพนิ่ง %1"
+
+#, fuzzy
+#~ msgid "Master Page Note:\n"
+#~ msgstr "วางภาพนิ่ง"
+
+#~ msgid "Delete Objects"
+#~ msgstr "ลบวัตถุ"
+
+#~ msgid "Resize"
+#~ msgstr "ปรับขนาด"
+
+#~ msgid "Group Objects"
+#~ msgstr "รวมกลุ่มวัตถุ"
+
+#~ msgid "Ungroup Objects"
+#~ msgstr "ยกเลิกรวมกลุ่มวัตถุ"
+
+#~ msgid "Lower Objects"
+#~ msgstr "นำวัตถุไปไว้ด้านล่าง"
+
+#~ msgid "Raise Objects"
+#~ msgstr "นำวัตถุมาอยู่ด้านบน"
+
+#~ msgid "Insert Line"
+#~ msgstr "แทรกเส้น"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "แทรกรูปสี่เหลี่ยม"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "แทรกรูปวงรี"
+
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "แทรกรูป ซีก/ส่วน/คอร์ด วงกลม"
+
+#~ msgid "Insert Textbox"
+#~ msgstr "แทรกกล่องข้อความ"
+
+#~ msgid "Insert Autoform"
+#~ msgstr "แทรกฟอร์มอัตโนมัติ"
+
+#~ msgid "Insert Freehand"
+#~ msgstr "แทรกการวาดอิสระ"
+
+#~ msgid "Insert Polyline"
+#~ msgstr "แทรกเส้นต่อเนื่อง"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "แทรกรูปหลายเหลี่ยม"
+
+#~ msgid "Embed Object"
+#~ msgstr "ฝังวัตถุ"
+
+#~ msgid "Change Pixmap"
+#~ msgstr "เปลี่ยนรูปภาพ"
+
+#~ msgid "Move Objects"
+#~ msgstr "ย้ายวัตถุ"
+
+#~ msgid "Change Shadow"
+#~ msgstr "เปลี่ยนรูปแบบเงา"
+
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "เปลี่ยนการจัดเรียงทางแนวตั้ง"
+
+#, fuzzy
+#~ msgid "No Outline"
+#~ msgstr "ลำดับภาพนิ่ง"
+
+#~ msgid "Square"
+#~ msgstr "สี่เหลี่ยมจตุรัส"
+
+#~ msgid "Line Arrow"
+#~ msgstr "เส้นลูกศร"
+
+#~ msgid "Dimension Line"
+#~ msgstr "เส้นแสดงทิศทาง"
+
+#~ msgid "Double Line Arrow"
+#~ msgstr "เส้นลูกศรสองหัว"
+
+#~ msgid "&General"
+#~ msgstr "ค่า&ทั่วไป"
+
+#, fuzzy
+#~ msgid "&Transition Type"
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "ปรับไปยังลำดับต่อไปเ&อง"
+
+#~ msgid "&Infinite loop"
+#~ msgstr "ว&นรอบไปเรื่อย ๆ"
+
+#, fuzzy
+#~ msgid "Measure presentation &duration"
+#~ msgstr "&ช่วงเวลาการนำเสนอ"
+
+#, fuzzy
+#~ msgid "Chord"
+#~ msgstr "สี"
+
+#, fuzzy
+#~ msgid "Display Duration"
+#~ msgstr "แสดงการเชื่อมโยง"
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "ลบภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#~ msgid "Apply Properties"
+#~ msgstr "ปรับใช้คุณสมบัติ"
+
+#, fuzzy
+#~ msgid "Name Object"
+#~ msgstr "ฝังวัตถุ"
+
+#~ msgid "Protect Object"
+#~ msgstr "ป้องกันวัตถุ"
+
+#~ msgid "Keep Ratio"
+#~ msgstr "รักษาอัตราส่วน"
+
+#~ msgid "Change Size"
+#~ msgstr "เปลี่ยนขนาด"
+
+#, fuzzy
+#~ msgid "Pict&ure"
+#~ msgstr "รูปภาพ"
+
+#, fuzzy
+#~ msgid "(%1)"
+#~ msgstr "เส้น (%1)"
+
+#, fuzzy
+#~ msgid "Rename Slide"
+#~ msgstr "เปลี่ยนชื่อภาพนิ่ง"
+
+#~ msgid "Slide title:"
+#~ msgstr "หัวเรื่องภาพนิ่ง:"
+
+#~ msgid "Close From All Directions"
+#~ msgstr "ปิดจากทุกทิศทาง"
+
+#~ msgid "Open From All Directions"
+#~ msgstr "เปิดจากทุกทิศทาง"
+
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "แบ่งส่วนเลื่อนออกในแนวนอน 2"
+
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "แบ่งส่วนเลื่อนออกในแนวตั้ง 1"
+
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "แบ่งส่วนเลื่อนออกในแนวตั้ง 2"
+
+#~ msgid "Surround 1"
+#~ msgstr "แสดงรอบจากด้านนอกมาด้านใน 1"
+
+#~ msgid "Fly Away 1"
+#~ msgstr "บินร่อนหายไป 1"
+
+#~ msgid "Blinds Vertical"
+#~ msgstr "ปิดในแนวตั้ง"
+
+#~ msgid "Checkerboard Across"
+#~ msgstr "ตารางหมากรุกไขว้"
+
+#~ msgid "Checkerboard Down"
+#~ msgstr "ตารางหมากรุกเลื่อนลง"
+
+#, fuzzy
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "มาจากด้านขวาล่าง"
+
+#, fuzzy
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "มาจากด้านขวาล่าง"
+
+#, fuzzy
+#~ msgid "Strips Right-Up"
+#~ msgstr "มาจากด้านขวา"
+
+#, fuzzy
+#~ msgid "Melting"
+#~ msgstr "การสะกด"
+
+#~ msgid "Paste Text"
+#~ msgstr "วางข้อความ"
+
+#~ msgid "Insert Variable"
+#~ msgstr "แทรกตัวแปร"
+
+#~ msgid "Protect content"
+#~ msgstr "ป้องกันเนื้อหา"
+
+#, fuzzy
+#~ msgid "Effect:"
+#~ msgstr "ไม่มีเอฟเฟ็กต์"
+
+#, fuzzy
+#~ msgid "Remove Slide"
+#~ msgstr "เปลี่ยนชื่อภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Insert new slide"
+#~ msgstr "แทรกภาพนิ่งใหม่"
+
+#~ msgid "Save Picture"
+#~ msgstr "บันทึกภาพ"
+
+#, fuzzy
+#~ msgid "Save Failed"
+#~ msgstr "ลบหน้า..."
+
+#~ msgid "No chart component registered"
+#~ msgstr "ยังไม่มีคอมโปเนนท์แผนภูมิที่ได้ลงทะเบียนไว้"
+
+#~ msgid "No table component registered"
+#~ msgstr "ยังไม่มีคอมโปเนนท์ตารางที่ได้ลงทะเบียนไว้"
+
+#~ msgid "No formula component registered"
+#~ msgstr "ยังไม่มีคอมโปเนนท์สูตรที่ได้ลงทะเบียนไว้"
+
+#~ msgid "Autoform-Choose"
+#~ msgstr "เลือก ฟอร์มอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "&คุณสมบัติ"
+
+#, fuzzy
+#~ msgid "Slide Background"
+#~ msgstr "ตั้งค่าพื้นหลัง"
+
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "คุณต้องการโหลดการปรับแต่งที่คุณได้บันทึกไว้ล่าสุด ซึ่งจะนำไปใช้กับการนำเสนอแบบ HTML นี้ "
+#~ "ใช่หรือไม่ ?"
+
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|การนำเสนอแบบ HTML ของ KPresenter (*.kpweb)"
+
+#~ msgid "Only local files are currently supported."
+#~ msgstr "ในตอนนี้ จะใช้ได้เฉพาะแฟ้มภายในระบบเท่านั้น"
+
+#, fuzzy
+#~ msgid "Object Effect"
+#~ msgstr "กำหนดเอฟเฟ็กต์ของวัตถุ"
+
+#, fuzzy
+#~ msgid "No Slide"
+#~ msgstr "ภาพนิ่ง"
+
+#~ msgid "Change List Type"
+#~ msgstr "เปลี่ยนประเภทของรายการ"
+
+#, fuzzy
+#~ msgid "Change Outline Color"
+#~ msgstr "เปลี่ยนสีของปากกา"
+
+#, fuzzy
+#~ msgid "Change Fill Color"
+#~ msgstr "เปลี่ยนสีของปากกา"
+
+#~ msgid "Change Line Begin"
+#~ msgstr "เปลี่ยนส่วนเริ่มต้นเส้น"
+
+#~ msgid "Change Line End"
+#~ msgstr "เปลี่ยนส่วนสิ้นสุดเส้น"
+
+#, fuzzy
+#~ msgid "Change Outline Style"
+#~ msgstr "เปลี่ยนรูปแบบปากกา"
+
+#, fuzzy
+#~ msgid "Change Outline Width"
+#~ msgstr "เปลี่ยนความกว้างของปากกา"
+
+#~ msgid "Show Sidebar"
+#~ msgstr "แสดงแถบด้านข้าง"
+
+#, fuzzy
+#~ msgid "Hide Sidebar"
+#~ msgstr "แถบด้านข้าง"
+
+#, fuzzy
+#~ msgid "Show Notebar"
+#~ msgstr "แสดงท้ายกระดาษ"
+
+#, fuzzy
+#~ msgid "Hide Notebar"
+#~ msgstr "ซ่อนท้ายกระดาษ"
+
+#, fuzzy
+#~ msgid "&Formatting Characters"
+#~ msgstr "กำลังทำรูปแบบข้อความ"
+
+#, fuzzy
+#~ msgid "Slide &Master"
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Guide Lines"
+#~ msgstr "เส้นทึบ"
+
+#, fuzzy
+#~ msgid "Show &Grid"
+#~ msgstr "ปรับให้ชิดเส้นกริด"
+
+#, fuzzy
+#~ msgid "Hide &Grid"
+#~ msgstr "ซ่อนท้ายกระดาษ"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "ปรับให้ชิดเส้นกริด"
+
+#, fuzzy
+#~ msgid "&Slide..."
+#~ msgstr "ภาพนิ่ง"
+
+#~ msgid "P&icture..."
+#~ msgstr "รูป&ภาพ..."
+
+#~ msgid "&Rotate"
+#~ msgstr "ห&มุน"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "ย่อ/ขยาย:"
+
+#~ msgid "&Shape"
+#~ msgstr "รู&ปร่าง"
+
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "ว&งกลม/วงรี"
+
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "&ซีก/ส่วน/คอร์ด ของวงกลม"
+
+#~ msgid "&Text"
+#~ msgstr "ข้อ&ความ"
+
+#, fuzzy
+#~ msgid "&Chart"
+#~ msgstr "ตัวอักษร"
+
+#~ msgid "Ta&ble"
+#~ msgstr "&ตาราง"
+
+#~ msgid "&Object"
+#~ msgstr "วัต&ถุ"
+
+#~ msgid "&Line"
+#~ msgstr "เ&ส้น"
+
+#~ msgid "&Freehand"
+#~ msgstr "วาด&อิสระ"
+
+#~ msgid "Po&lyline"
+#~ msgstr "รูปห&ลายเหลี่ยม"
+
+#~ msgid "Closed &Freehand"
+#~ msgstr "ภาพวาดอิสระแบบปิด"
+
+#~ msgid "Closed Po&lyline"
+#~ msgstr "เส้นต่อเนื่องแบบปิด"
+
+#~ msgid "&Font..."
+#~ msgstr "&รูปแบบตัวอักษร..."
+
+#~ msgid "Font Family"
+#~ msgstr "ตระกูลตัวอักษร"
+
+#~ msgid "&Bold"
+#~ msgstr "ตัว&หนา"
+
+#~ msgid "&Italic"
+#~ msgstr "ตัวเ&อียง"
+
+#~ msgid "&Underline"
+#~ msgstr "ตัวขีดเส้นใ&ต้"
+
+#~ msgid "&Strike Out"
+#~ msgstr "ตัวเส้น&พาดกลาง"
+
+#~ msgid "&Color..."
+#~ msgstr "&สี..."
+
+#~ msgid "Align &Left"
+#~ msgstr "จัดเรียงทาง&ซ้าย"
+
+#~ msgid "Align &Center"
+#~ msgstr "จัดเรียงตรง&กลาง"
+
+#~ msgid "Align &Right"
+#~ msgstr "จัดเรียงทาง&ขวา"
+
+#~ msgid "Align &Block"
+#~ msgstr "จัดเรียงด้าน&บน"
+
+#~ msgid "Number"
+#~ msgstr "หมายเลข"
+
+#~ msgid "Bullet"
+#~ msgstr "ปุ่มหน้ารายการ"
+
+#~ msgid "&Increase Depth"
+#~ msgstr "เ&พิ่มความลึก"
+
+#~ msgid "&Decrease Depth"
+#~ msgstr "&ลดความลึก"
+
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "ปรับเนื้อหาให้พอดีความสู&งของวัตถุ"
+
+#, fuzzy
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "ปรับวัตถุให้พอ&ดีกับเนื้อหา"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "แ&ทรกหมายเลขหน้า"
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "&คุณสมบัติ"
+
+#~ msgid "Ra&ise Objects"
+#~ msgstr "นำวัตถุมาอยู่ด้าน&บน"
+
+#~ msgid "&Lower Objects"
+#~ msgstr "นำวัตถุไปไว้ด้าน&ล่าง"
+
+#~ msgid "Bring to Front"
+#~ msgstr "นำมาอยู่ด้านหน้า"
+
+#~ msgid "Send to Back"
+#~ msgstr "นำไปอยู่ด้านหลัง"
+
+#~ msgid "R&otate Objects..."
+#~ msgstr "ห&มุนวัตถุ..."
+
+#~ msgid "&Shadow Objects..."
+#~ msgstr "ทำเ&งาวัตถุ..."
+
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "จัดเรียงตรงกลาง (แนว&นอน)"
+
+#~ msgid "Align &Top"
+#~ msgstr "จัดเรียงด้าน&บน"
+
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "จัดเรียงตรงกลาง (แนว&ตั้ง)"
+
+#~ msgid "Align &Bottom"
+#~ msgstr "จัดเรียงด้าน&ล่าง"
+
+#, fuzzy
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "พื้น&หลังภาพนิ่ง..."
+
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "สร้างการเสนอภาพนิ่งแบบ &HTML..."
+
+#, fuzzy
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "สร้างการเสนอภาพนิ่งแบบ &HTML..."
+
+#, fuzzy
+#~ msgid "Template Manager"
+#~ msgstr "ตัวจัดการแม่แบบ..."
+
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "ใช้ภาพนิ่งปัจจุบันเป็นแม่แบบปริยาย"
+
+#~ msgid "Align O&bjects"
+#~ msgstr "จัดเรียงวัต&ถุ"
+
+#~ msgid "Line Begin"
+#~ msgstr "เริ่มเส้น"
+
+#~ msgid "Line End"
+#~ msgstr "สิ้นสุดเส้น"
+
+#, fuzzy
+#~ msgid "Outline Style"
+#~ msgstr "เติมเต็มเส้นรอบนอก"
+
+#, fuzzy
+#~ msgid "Outline Width"
+#~ msgstr "ลำดับภาพนิ่ง"
+
+#~ msgid "&Group Objects"
+#~ msgstr "รว&มกลุ่มวัตถุ"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "&ยกเลิกรวมกลุ่มวัตถุ"
+
+#, fuzzy
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "กำหนดเอฟเฟ็กต์ของวัตถุ"
+
+#, fuzzy
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "หัวเรื่องภาพนิ่ง"
+
+#~ msgid "&Go to Start"
+#~ msgstr "ไปยังส่วนเริ่ม&ต้น"
+
+#~ msgid "Go to &End"
+#~ msgstr "ไปยังส่วน&ท้าย"
+
+#, fuzzy
+#~ msgid "Goto &Slide..."
+#~ msgstr "ไปยัง&ภาพนิ่งที่..."
+
+#, fuzzy
+#~ msgid "Fill Color..."
+#~ msgstr "&สี..."
+
+#, fuzzy
+#~ msgid "Outline Color..."
+#~ msgstr "สีปากกา..."
+
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "ข&ยายเนื้อหาให้พอดีกับความสูงวัตถุ"
+
+#, fuzzy
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "&ปรับขนาดวัตถุให้พอดีกับเนื้อหา"
+
+#, fuzzy
+#~ msgid "&Rename Slide..."
+#~ msgstr "เปลี่ยน&ชื่อภาพนิ่ง..."
+
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "ปรับเป็นขนา&ดเดิม"
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "&Change Picture..."
+#~ msgstr "เ&ปลี่ยนรูปภาพ..."
+
+#, fuzzy
+#~ msgid "Image &Effect..."
+#~ msgstr "กำหนดเ&อฟเฟ็กต์..."
+
+#~ msgid "Superscript"
+#~ msgstr "ตัวยก"
+
+#~ msgid "Subscript"
+#~ msgstr "ตัวห้อย"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "อัก&ขระพิเศษ..."
+
+#~ msgid "Link..."
+#~ msgstr "การเชื่อมโยง..."
+
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "เติมส่วนประกอบที่กำหนดเอง..."
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "แก้ไขความถูก&ต้องอัตโนมัติ..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&ย่อหน้า..."
+
+#~ msgid "Default Format"
+#~ msgstr "รูปแบบปริยาย"
+
+#~ msgid "Open Link"
+#~ msgstr "เปิดการเชื่อมโยง"
+
+#~ msgid "Change Link..."
+#~ msgstr "สร้างการเชื่อมโยง"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "เปิดการเชื่อมโยง"
+
+#~ msgid "&Custom Variables..."
+#~ msgstr "กำหนดตัวแปรเ&อง..."
+
+#~ msgid "Edit Variable..."
+#~ msgstr "แก้ไขตัวแปร..."
+
+#~ msgid "&Variable"
+#~ msgstr "ตัวแ&ปร"
+
+#~ msgid "&Property"
+#~ msgstr "&คุณสมบัติ"
+
+#~ msgid "&Date"
+#~ msgstr "&วันที่"
+
+#~ msgid "&Time"
+#~ msgstr "เว&ลา"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "&ปรับปรุงตัวแปรทั้งหมด"
+
+#~ msgid "Change Case..."
+#~ msgstr "เปลี่ยนตัวพิมพ์..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "ย่อ/ขยาย:"
+
+#, fuzzy
+#~ msgid "&Style Manager"
+#~ msgstr "ตัว&จัดการรูปแบบ..."
+
+#~ msgid "St&yle"
+#~ msgstr "รูปแ&บบ"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "เปิดใช้ การแก้ไขให้ถูกต้องอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "เปิดใช้ การแก้ไขให้ถูกต้องอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "แทรกภาพนิ่งใหม่"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "แทรกภาพนิ่งใหม่"
+
+#, fuzzy
+#~ msgid "Line Break"
+#~ msgstr "เริ่มเส้น"
+
+#~ msgid "Completion"
+#~ msgstr "การทำให้สมบูรณ์"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "เพิ่มความลึก"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "ลดความลึก"
+
+#~ msgid "Comment..."
+#~ msgstr "หมายเหตุ..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "แก้ไขหมายเหตุ..."
+
+#, fuzzy
+#~ msgid "Add Guide Line..."
+#~ msgstr "เส้นทึบ"
+
+#~ msgid "Remove Comment"
+#~ msgstr "ลบหมายเหตุ"
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "แก้ไขหมายเหตุ..."
+
+#~ msgid "&Configure Completion..."
+#~ msgstr "ปรับแต่งการ&ทำให้สมบูรณ์..."
+
+#~ msgid "Zoom Out"
+#~ msgstr "ย่อ"
+
+#~ msgid "Zoom In"
+#~ msgstr "ขยาย"
+
+#, fuzzy
+#~ msgid "Zoom Entire Slide"
+#~ msgstr "ย่อ/ขยายเนื้อหาให้เต็มหน้า"
+
+#, fuzzy
+#~ msgid "Zoom Slide Width"
+#~ msgstr "ย่อ/ขยายให้พอดีกับความกว้างหน้า"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "ย่อ/ขยายวัตถุที่เลือกไว้"
+
+#, fuzzy
+#~ msgid "Zoom Slide Height"
+#~ msgstr "ย่อ/ขยายให้พอดีกับความสูงหน้า"
+
+#~ msgid "Zoom All Objects"
+#~ msgstr "ย่อ/ขยายวัตถุทั้งหมด"
+
+#~ msgid "Horizontal Flip"
+#~ msgstr "พลิกทางแนวนอน"
+
+#~ msgid "Vertical Flip"
+#~ msgstr "พลิกทางแนวตั้ง"
+
+#, fuzzy
+#~ msgid "Duplicate Object..."
+#~ msgstr "ทำซ้ำวัตถุ"
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "ปรับใช้การแก้ไขให้ถูกต้องอัตโนมัติ..."
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "สร้างรูปแบบจากการเลือก"
+
+#~ msgid "Align Top"
+#~ msgstr "จัดเรียงด้านบน"
+
+#~ msgid "Align Middle"
+#~ msgstr "จัดเรียงด้านซ้าย"
+
+#~ msgid "Save Picture..."
+#~ msgstr "บันทึกรูปภาพ..."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "ตรวจคำสะกดอัตโนมัติ"
+
+#~ msgid "File..."
+#~ msgstr "แฟ้ม..."
+
+#~ msgid "Save Background Picture..."
+#~ msgstr "บันทึกภาพพื้นหลัง..."
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "ตั้งค่าพื้นหลัง"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "พื้นหลังภาพนิ่ง"
+
+#~ msgid "Set Background"
+#~ msgstr "ตั้งค่าพื้นหลัง"
+
+#, fuzzy
+#~ msgid "Select New Picture"
+#~ msgstr "เลือกรูปภาพใหม่"
+
+#, fuzzy
+#~ msgid "Next slide"
+#~ msgstr "ภาพนิ่ง&ถัดไป"
+
+#~ msgid "Slide %1/%2"
+#~ msgstr "ภาพนิ่ง %1/%2"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "วัตถุ: %1 - (กว้าง: %2; สูง: %3)(%4)"
+
+#, fuzzy
+#~ msgctxt "1 object selected"
+#~ msgid "%n objects selected"
+#~ msgstr "เลือกไว้ %2 วัตถุ"
+
+#~ msgid "Change Link"
+#~ msgstr "เปลี่ยนการเชื่อมโยง"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "แก้คำที่สะกดผิดให้ถูกต้อง"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "ตั้งค่าย่อหน้า"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "เปลี่ยนตัวแปรที่กำหนดเอง"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "เปลี่ยนตัวพิมพ์ของข้อความ"
+
+#, fuzzy
+#~ msgid "Whole Slide"
+#~ msgstr "ภาพนิ่ง&ถัดไป"
+
+#~ msgid "Presentation Duration"
+#~ msgstr "ช่วงเวลาการนำเสนอ"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "เอกสาร"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "ปรับใช้รูปแบบกับกรอบ"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "เปลี่ยนตัวพิมพ์ของข้อความ"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "ปรับใช้รูปแบบอัตโนมัติ"
+
+#, fuzzy
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "คุณต้องการปรับใช้รูปแบบอัตโนมัติในภาพนิ่งใหม่หรือไม่ ?"
+
+#, fuzzy
+#~ msgid "First"
+#~ msgstr "รูปแบบ"
+
+#, fuzzy
+#~ msgid "Previous"
+#~ msgstr "ภาพนิ่งก่อนหน้านี้"
+
+#, fuzzy
+#~ msgid "Next"
+#~ msgstr "ข้อความ"
+
+#, fuzzy
+#~ msgid "Last"
+#~ msgstr "รูปแบบ"
+
+#, fuzzy
+#~ msgid "Home"
+#~ msgstr "ย่อ/ขยาย:"
+
+#~ msgid "Table of Contents"
+#~ msgstr "สารบัญ"
+
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "คลิ้กที่นี่ เพื่อเริ่มการนำเสนอภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "สร้างการนำเสนอภาพนิ่งแบบ HTML"
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "เติมชื่อ ที่อยู่อีเมล์ และหัวเรื่องของ\n"
+#~ "การนำเสนอบนเว็บของคุณ\n"
+#~ "และอาจจะต้องเติมเส้นทางไปยังตำแหน่ง\n"
+#~ "ที่จะให้สร้างการนำเสนอบนเวบ\n"
+#~ "(ต้องเป็นไดเรกทอรี)\n"
+
+#, fuzzy
+#~ msgid "Email address:"
+#~ msgstr "ที่อยู่อีเมล์:"
+
+#, fuzzy
+#~ msgid "Step 1: General Information"
+#~ msgstr "ข้อมูลทั่วไป"
+
+#, fuzzy
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr ""
+#~ "\n"
+#~ "ท้ายสุด คุณสามารถกำหนดให้ย่อ/ขยาย\n"
+#~ "ของหน้าการนำเสนอได้"
+
+#~ msgid "Zoom:"
+#~ msgstr "ย่อ/ขยาย:"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr ""
+#~ "\n"
+#~ "ท้ายสุด คุณสามารถกำหนดให้ย่อ/ขยาย\n"
+#~ "ของหน้าการนำเสนอได้"
+
+#, fuzzy
+#~ msgid "Encoding:"
+#~ msgstr "สิ้นสุด:"
+
+#, fuzzy
+#~ msgid "Document type:"
+#~ msgstr "เอกสาร"
+
+#~ msgid "Title color:"
+#~ msgstr "สีหัวเรื่อง:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "คุณสามารถกำหนดหัวเรื่องสำหรับ\n"
+#~ "แต่ละหน้าได้ที่นี่ โดยการคลิ้กบนหน้า\n"
+#~ "จากรายการด้านซ้าย จากนั้น\n"
+#~ "เติมชื่อในช่องข้อความด้านล่าง\n"
+#~ "และหากคุณคลิ้กบนแถบหัวเรื่อง\n"
+#~ "KPresenter จะเลื่อนมายังหน้าที่คลิ้ก\n"
+#~ "และจะสามารถเห็นมันได้"
+
+#, fuzzy
+#~ msgid "Advance after:"
+#~ msgstr "Gevorderde Opsies"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr ""
+#~ "\n"
+#~ "ท้ายสุด คุณสามารถกำหนดให้ย่อ/ขยาย\n"
+#~ "ของหน้าการนำเสนอได้"
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "หัวเรื่อง:"
+
+#, fuzzy
+#~ msgid "Write header to the slides"
+#~ msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr ""
+#~ "\n"
+#~ "ท้ายสุด คุณสามารถกำหนดให้ย่อ/ขยาย\n"
+#~ "ของหน้าการนำเสนอได้"
+
+#, fuzzy
+#~ msgid "Write footer to the slides"
+#~ msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr ""
+#~ "\n"
+#~ "ท้ายสุด คุณสามารถกำหนดให้ย่อ/ขยาย\n"
+#~ "ของหน้าการนำเสนอได้"
+
+#, fuzzy
+#~ msgid "Step 5: Options for Unattended Presentations"
+#~ msgstr "ความเร็วในการนำเสนอ:"
+
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "การเริ่มต้นใช้งาน (สร้างโครงสร้างแฟ้ม เป็นต้น)"
+
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "สร้างรูปภาพสำหรับภาพนิ่ง"
+
+#, fuzzy
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "สร้างหน้า HTML สำหรับการนำเสนอ"
+
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "สร้างภาพนิ่งหลัก (สารบัญ)"
+
+#, fuzzy
+#~ msgid "Options for Unattended Presentations"
+#~ msgstr "หน้าปรับแต่งการนำเสนอบนจอภาพ"
+
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|การนำเสนอบนเว็บของ KPresenter (*.kpweb)"
+
+#, fuzzy
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "ช่วงเวลาการนำเสนอ"
+
+#~ msgid "Freehand"
+#~ msgstr "วาดอิสระ"
+
+#~ msgid "Autoform"
+#~ msgstr "ฟอร์มอัตโนมัติ"
+
+#~ msgid "Polyline"
+#~ msgstr "เส้นต่อเนื่อง"
+
+#~ msgid "Embedded Object"
+#~ msgstr "ฝังวัตถุ"
+
+#, fuzzy
+#~ msgid "View Mode"
+#~ msgstr "ชื่อแฟ้ม:"
+
+#, fuzzy
+#~ msgid "Prot&ect content"
+#~ msgstr "ป้องกันเนื้อหา"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "พฤติกรรมการตรวจคำสะกด"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "ตั้งค่าวัตถุข้อความ"
+
+#, fuzzy
+#~ msgid "&Polling interval:"
+#~ msgstr "Betaling informasie:"

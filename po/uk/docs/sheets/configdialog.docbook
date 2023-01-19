@@ -1,0 +1,584 @@
+<chapter id="configdialog">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Юрій</firstname
+><surname
+>Чорноіван</surname
+><affiliation
+><address
+><email
+>yurchor@ukr.net</email
+></address
+></affiliation
+><contrib
+>Переклад українською</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Діалогове вікно налаштування &sheets;</title>
+
+<para
+>Вибір пункту меню <menuchoice
+><guimenu
+>Параметри</guimenu
+><guimenuitem
+>Налаштувати &sheets;...</guimenuitem
+></menuchoice
+> призведе до відкриття діалогового вікна з декількома сторінками, переходити між якими можна буде за допомогою натискання піктограм, розташованих ліворуч. За допомогою цього вікна ви зможете змінити параметри функціонування &sheets;.</para>
+
+<sect1 id="configinterface">
+<title
+>Інтерфейс</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure2.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase
+>Налаштування інтерфейсу.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Пересування курсора після натискання Enter:</guilabel
+></term>
+<listitem
+><para
+>За допомогою спадного списку цього пункту можна вказати бажану поведінку програми після натискання клавіші &Enter;: пересунути курсор <guilabel
+>Вниз</guilabel
+>, <guilabel
+>Вгору</guilabel
+>, <guilabel
+>Праворуч</guilabel
+>, <guilabel
+>Ліворуч</guilabel
+> або <guilabel
+>Вниз, перший стовпчик</guilabel
+> або <guilabel
+>Немає</guilabel
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>У рядку стану показано функцію:</guilabel
+></term>
+<listitem
+><para
+>Тут ви можете обрати функцію, результат обчислення якої буде відображатися у <link linkend="statusbarsum"
+>рядку стану</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Одиниця:</guilabel
+></term>
+<listitem
+><para
+>Виберіть типові одиниці для цього аркуша. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Крок відступу:</guilabel
+></term>
+<listitem
+><para
+>Ширину відступу у комірці можна змінити за допомогою пунктів <guilabel
+>Збільшити відступ</guilabel
+>/<guilabel
+>Зменшити відступ</guilabel
+> на панелі інструментів. Типово, ці пункти на панелі вимкнено.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Перехоплювати натискання всіх клавіш навігації під час редагування</guilabel
+></term>
+<listitem
+><para
+>Перехоплювати всі натискання навігаційних клавіш, тобто клавіш зі стрілками, клавіш page up/down, клавіш табуляції та зворотної табуляції, під час редагування вмісту комірки у вбудованому редакторі Вбудований редактор — це інструмент редагування безпосередньо у комірці Якщо натискання перехоплюватимуться, клавіші навігації використовуватимуться для навігації у полі цього редактора. Якщо натискання не будуть перехоплюватися, клавіші використовуватимуться для навігації комірками.</para>
+</listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+<para
+>За допомогою розділу <guilabel
+>Кольори</guilabel
+> ви зможете обрати колір ґратки аркуша. Якщо ви взагалі не бажаєте бачити ґратку, зніміть позначку з пункту <guilabel
+>Показувати ґратку</guilabel
+> у діалоговому вікні, яке відкривається за допомогою пункту меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Аркуш</guisubmenu
+><guimenuitem
+>Властивості аркуша</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>За допомогою цього розділу ви також можете обрати колір ліній, якими позначатимуться межі надрукованої сторінки, якщо позначено пункт <guimenuitem
+>Межі сторінки</guimenuitem
+> у меню <guimenu
+>Перегляд</guimenu
+>.</para>
+<para
+>Виберіть пункт <guilabel
+>Нетиповий</guilabel
+> для поточного кольору, щоб відкрити стандартне діалогове вікно <guilabel
+>Виберіть колір</guilabel
+> &kde;.</para>
+
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Ґратка</guilabel
+></term>
+<listitem
+><para
+>Клацніть тут, щоб змінити колір ґратки, тобто колір меж кожної комірки. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Межі сторінки</guilabel
+></term>
+<listitem
+><para
+>Якщо позначено пункт меню <menuchoice
+><guimenu
+>Перегляд</guimenu
+><guimenuitem
+>Показати межі сторінки</guimenuitem
+></menuchoice
+>, буде показано межі сторінки. Клацніть тут, щоб вибрати інший колір для меж, замість типового червоного. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="configopensave">
+<title
+>Відкрити/Зберегти</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure3.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Налаштування відкриття та збереження документів.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Кількість недавніх файлів у списку:</guilabel
+></term>
+<listitem
+><para
+>Встановлює максимальну кількість останніх файлів у меню <menuchoice
+><guimenu
+>Файл</guimenu
+><guisubmenu
+> Відкрити недавні</guisubmenu
+></menuchoice
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Інтервал автозбереження:</guilabel
+></term>
+<listitem
+><para
+>Тут ви можете задати проміжок часу між операціями автоматичного збереження, або вимкнути цю функцію взагалі, вибравши варіант <guilabel
+>Без автозбереження</guilabel
+> (мінімальне можливе значення). </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Створити резервний файл:</guilabel
+></term>
+<listitem
+><para
+>Поставте тут позначку, якщо ви бажаєте, щоб створювалися резервні файли. Типово позначку поставлено. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+
+<!-- no longer in config dialog
+<sect1 id="configmisc">
+<title
+><guilabel
+>Misc</guilabel
+></title>
+
+<para
+>The <guilabel
+>Misc</guilabel
+> page of &sheets;'s configuration
+dialog box contains the following items;</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Completion mode:</guilabel
+></term>
+<listitem
+><para
+>Lets you choose the (auto) text completion mode from a
+range of options in the drop down selection box.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Show error message for invalid formulae</guilabel
+></term>
+<listitem
+><para
+>If this box is checked a message box will pop up when what
+you have entered into a cell cannot be understood by &sheets;.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Show comment indicator</guilabel
+></term>
+<listitem
+><para
+>If this box is checked cells containing comments will be
+marked by a small red triangle at the top right corner.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+-->
+<!-- Move this to page layout section
+<sect1 id="configpagelayout">
+<title
+><guilabel
+>Page Layout</guilabel
+></title>
+
+<para
+>This page of &sheets;'s configuration dialog box lets you set up the
+default page size, orientation and units used by the printer and by the
+<guilabel
+>Page Layout</guilabel
+> dialog box (obtained by selecting
+<guimenuitem
+>Page Layout...</guimenuitem
+> from the <guimenu
+>Format
+</guimenu
+> menu.)</para>
+
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Default page size:</guilabel
+></term>
+<listitem
+><para
+>Choose the default page size for your worksheet among all the most common page sizes. Note that you can overwrite the page size for the current sheet using the <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Default page orientation:</guilabel
+></term>
+<listitem
+><para
+>Choose the default sheet orientation: portrait or landscape.
+Note that you can overwrite the orientation for the current sheet using the
+<menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page
+Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Default page unit:</guilabel
+></term>
+<listitem
+><para
+>Choose the default unit that will be used in your all your sheets. Note that you can overwrite the unit for the current sheet using the <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+-->
+<!--FIXME empty plugins page
+error message in konsole
+tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTrader: serviceType  "KSpread/Plugin"  not found
+ -->
+<sect1 id="configplugins">
+<title
+>Додатки</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure4.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Налаштування додатків.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+>Позначте пункт додатку у списку, щоб увімкнути його. Відкрити діалогове вікно <guilabel
+>Про додаток</guilabel
+> можна натисканням кнопки, розташованої праворуч від пункту додатка у списку. </para>
+
+</sect1>
+<!--FIXME link to sonnet handbook -> building blocks-->
+<sect1 id="configspelling">
+<title
+>Перевірка правопису</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure5.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Налаштування перевірки правопису.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+<para
+>На цій сторінці ви можете налаштувати поведінку інструменту перевірки правопису &sheets;.</para>
+<para
+>Щоб дізнатися більше, зверніться до  <ulink url="help:kcontrol/spellchecking"
+>документації з засобу перевірки правопису</ulink
+>.</para>
+</sect1>
+<!--
+<varlistentry>
+<term
+><guilabel
+>Create root/affix combinations not in dictionary</guilabel>
+</term>
+<listitem
+><para
+>If this box is checked then when &sheets; finds a word in
+the document which it does not recognize but which consists of a recognized
+root word plus a recognized prefix or suffix it will accept it, whereas if
+the box is not checked the spell checker will reject it.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Consider run-together words as spelling errors</guilabel>
+</term>
+<listitem
+><para
+>If this box is checked then common words which are run
+together will be considered to be spelling errors, for example <emphasis>
+cannot</emphasis
+>.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Dictionary:</guilabel
+></term>
+<listitem
+><para
+>This drop down selection box can be used to select
+alternative dictionaries.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Encoding:</guilabel
+></term>
+<listitem
+><para
+>To select the character encoding that should be used.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Client:</guilabel
+></term>
+<listitem
+><para
+>This combo box lets you select between different spell
+checking programs that may be present on your computer.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Skip all uppercase words</guilabel
+></term>
+<listitem
+><para
+>Check this box if you want the spellchecker to ignore
+uppercase words, which are usually acronyms such as &kde;.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Do not check title case</guilabel
+></term>
+<listitem
+><para
+>Check this box if you want the spellchecker to ignore
+the title case, for example My Own Spreadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+-->
+<sect1 id="configauthor">
+<title
+>Автор</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure6.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Налаштування автора.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+<para
+>Виберіть профіль автора для вашого документа. </para>
+<para
+>Додати новий профіль або вилучити поточний можна за допомогою кнопок, розташованих праворуч від спадного списку профілів. </para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -1,0 +1,102 @@
+# Irish translation of SpellCheckPlugin
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the SpellCheckPlugin package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice/SpellCheckPlugin.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-11-01 08:24-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Cumraigh an &Litreoir..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Seiceáil Uathoibríoch"
+
+#: SpellCheckFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Check Spelling"
+msgstr "Litriú"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Litriú"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Cuir leis an bhFoclóir"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Cumraigh an &Litreoir..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Seiceáil Uathoibríoch"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Litriú"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Litriú"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Cuir leis an bhFoclóir"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Déan neamhaird den fhocal seo"
+
+#~ msgid "Spell Check"
+#~ msgstr "Seiceáil Litrithe"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Cumraíocht an Litreora"
+
+#~ msgid "Default Language:"
+#~ msgstr "Teanga Réamhshocraithe:"
+
+#~ msgid "Options"
+#~ msgstr "Roghanna"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "&Cumasaigh seiceáil an litriú sa chúlra"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Gabh thar fhocail atá sa chás &uachtair"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "Gabh thar fhocail chomh&tháite"
+
+#~ msgid "&Add"
+#~ msgstr "C&uir Leis"
+
+#~ msgid "&Remove"
+#~ msgstr "&Bain"

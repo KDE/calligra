@@ -1,0 +1,2494 @@
+# Irish translation of karbon
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the karbon package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice/karbon.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2004-12-03 14:52-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Oibríocht Boole"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Ord"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Ailínigh"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Comhad"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "&Eagar"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "&Amharc"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Réad"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&Dáil"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&Conair"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "Maisío&chtaí"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "&Socruithe"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Eagar"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Réad"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Ailínigh"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Maisíochtaí"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Amharc"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "&Leacaigh an Chonair..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Leacaigh an Chonair"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Airíonna"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Maoile:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Leacaigh an chonair"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Mionchoigeartaigh an chonair"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "&Mionchoigeartaigh an Chonair..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Mionchoigeartaigh an Chonair"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Foranna:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Coirnéil Chruinne"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&Coirnéil Chruinne..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Coirnéil Chruinne"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Ga:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Rothlaigh agus fáisc"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Rothlaigh/Fáisc..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Rothlaigh/Fáisc"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Eolas"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Uillinn:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Fáisc:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Ardaigh Sraith"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Ísligh Sraith"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Cumraigh"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Comhéadan"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Éagsúil"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Greille"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Cáipéis"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Socruithe Cáipéise"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, fuzzy, kde-format
+#| msgid "Author"
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Údar"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "Údar"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "Feidhmchlár Grafaice Veicteoirí."
+
+#: ui/KarbonAboutData.h:26
+#, fuzzy, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "© 2001-2009, Forbróirí Karbon"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Ceartúcháin agus feabhsúcháin"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Ceartúcháin"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Paistí cabhracha agus comhairle"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "seoc@iolfree.ie,kscanne@gmail.com"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Ionsáigh grafaic"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Roghnaigh Grafaic le Cur Leis"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "Níorbh fhéidir íomhá a luchtú."
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Iompórtáil grafaic"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "Níorbh fhéidir giuirléid íomhá a chruthú."
+
+#: ui/KarbonView.cpp:612
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "C&othrom:"
+
+#: ui/KarbonView.cpp:614
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "C&othrom:"
+
+#: ui/KarbonView.cpp:616
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "C&othrom:"
+
+#: ui/KarbonView.cpp:671
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Deighil Co&nair"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "&Mód Imlíne"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Iompórtáil Grafaic..."
+
+#: ui/KarbonView.cpp:864
+#, fuzzy, kde-format
+msgid "Edit Guides"
+msgstr "Cuir Grádán in Eagar"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Dúblach"
+
+#: ui/KarbonView.cpp:875
+#, fuzzy, kde-format
+#| msgid "Align Center (Horizontal)"
+msgid "Distribute Center (Horizontal)"
+msgstr "Ailínigh Sa Lár (cothrománach)"
+
+#: ui/KarbonView.cpp:879
+#, fuzzy, kde-format
+#| msgid "Align Center (Horizontal)"
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Ailínigh Sa Lár (cothrománach)"
+
+#: ui/KarbonView.cpp:883
+#, fuzzy, kde-format
+#| msgid "&Distribute"
+msgid "Distribute Left Borders"
+msgstr "&Dáil"
+
+#: ui/KarbonView.cpp:887
+#, fuzzy, kde-format
+#| msgid "&Distribute"
+msgid "Distribute Right Borders"
+msgstr "&Dáil"
+
+#: ui/KarbonView.cpp:891
+#, fuzzy, kde-format
+#| msgid "Align Center (Horizontal)"
+msgid "Distribute Center (Vertical)"
+msgstr "Ailínigh Sa Lár (cothrománach)"
+
+#: ui/KarbonView.cpp:895
+#, fuzzy, kde-format
+#| msgid "Align Center (Horizontal)"
+msgid "Distribute Gaps (Vertical)"
+msgstr "Ailínigh Sa Lár (cothrománach)"
+
+#: ui/KarbonView.cpp:899
+#, fuzzy, kde-format
+#| msgid "&Distribute"
+msgid "Distribute Bottom Borders"
+msgstr "&Dáil"
+
+#: ui/KarbonView.cpp:903
+#, fuzzy, kde-format
+#| msgid "&Distribute"
+msgid "Distribute Top Borders"
+msgstr "&Dáil"
+
+#: ui/KarbonView.cpp:907
+#, fuzzy, kde-format
+msgid "Show Color Palette"
+msgstr "Taispeáin nó folaigh rialóirí"
+
+#: ui/KarbonView.cpp:909
+#, fuzzy, kde-format
+msgid "Show or hide color palette"
+msgstr "Taispeáin nó folaigh rialóirí"
+
+#: ui/KarbonView.cpp:913
+#, fuzzy, kde-format
+msgid "&Clip Object"
+msgstr "&Réad"
+
+#: ui/KarbonView.cpp:917
+#, fuzzy, kde-format
+msgid "&Unclip Objects"
+msgstr "&Díghrúpáil Réada"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Scáthánaigh go hIngearach"
+
+#: ui/KarbonView.cpp:925
+#, fuzzy, kde-format
+msgid "Mirror Horizontally"
+msgstr "C&othrom:"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "&Dún Conair"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Comhchean&gail Conair"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "Deighil Co&nair"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Iompaigh Conai&r"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Trasnaigh Conairí"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Dealaigh Conairí"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Aontaigh Conairí"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Fág Conairí As"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Léim Conair go dtí an Greille"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Súmáil go dtí an Roghnúchán"
+
+#: ui/KarbonView.cpp:992
+#, fuzzy, kde-format
+#| msgid "Zoom to Selection"
+msgid "Zoom to Drawing"
+msgstr "Súmáil go dtí an Roghnúchán"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Súmáil"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, fuzzy, kde-format
+msgid "Show status bar:"
+msgstr "Taispeáin an barra stádais"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Líon na gcomhad le déanaí:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Clómhéid an phailéid:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, fuzzy, kde-format
+msgid "Select palette"
+msgstr "Roghnaigh íomhá"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Brúigh chun an roghnúchán a líonadh"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Gan Líonadh"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Brúigh chun stríoc a chur i bhfeidhm ar an roghnúchán"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "Saincheaptha"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Gan Stríocadh"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Stríoc:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Líon:"
+
+#~ msgid "D&elete"
+#~ msgstr "S&crios"
+
+#~ msgid "Layer view"
+#~ msgstr "Amharc sraithe"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Cuir sraith nua leis"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Scrios na réada roghnaithe"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Ardaigh na réada roghnaithe"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Ísligh na réada roghnaithe"
+
+#~ msgid "Minimal View"
+#~ msgstr "Amharc Íosta"
+
+#~ msgid "Detailed View"
+#~ msgstr "Amharc Mionsonraithe"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Amharc Mionsamhlacha"
+
+#~ msgid "View mode"
+#~ msgstr "Mód amhairc"
+
+#~ msgid "New Layer"
+#~ msgstr "Sraith Nua"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Iontráil ainm na sraithe nuaí:"
+
+#~ msgid "New layer"
+#~ msgstr "Sraith nua"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Cruthaigh Sraith"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Scrios Sraith"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Ní féidir gach sraith a scriosadh. Tá sraith amháin ar a laghad de dhíth."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Earráid agus sraitheanna á scriosadh"
+
+#~ msgid "Layer"
+#~ msgstr "Sraith"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Grúpa"
+
+#~ msgid "Shape"
+#~ msgstr "Giuirléid"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Infheicthe"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Faoi Ghlas"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zInnéacs"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Teimhneacht"
+
+#, fuzzy
+#~ msgid "no"
+#~ msgstr "Eolas"
+
+#, fuzzy
+#~ msgid "yes"
+#~ msgstr "Stíleanna"
+
+#, fuzzy
+#~| msgid "Group shapes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Grúpáil cruthanna"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Cáipéis neamhbhailí OASIS. Níor aimsíodh clib office:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Cáipéis neamhbhailí OASIS. Níor aimsíodh clib office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Cáipéis neamhbhailí OASIS. Níor aimsíodh clib draw:page."
+
+#~ msgid "Master Page"
+#~ msgstr "Máistirleathanach"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Taispeáin Imill an Leathanaigh"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Taispeáin Rialóirí"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Taispeáin nó folaigh rialóirí"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Léim go Greille"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Léim go greille"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Cumraigh Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Leaga&n Amach Leathanaigh..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "Dath an chanbháis:"
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "&Ord"
+
+#, fuzzy
+#~| msgid "&Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Ailínigh"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Comhad"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Eagar"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Amharc"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Réad"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "&Dáil"
+
+#, fuzzy
+#~| msgid "&Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "&Conair"
+
+#, fuzzy
+#~| msgid "Effe&cts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "Maisío&chtaí"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Socruithe"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Eagar"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Réad"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "Ailínigh"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Maisíochtaí"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "Amharc"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Leacaigh an Chonair..."
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Leacaigh an Chonair"
+
+#, fuzzy
+#~| msgid "Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Airíonna"
+
+#, fuzzy
+#~| msgid "Flatness:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Maoile:"
+
+#, fuzzy
+#~| msgid "&Refine Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "&Mionchoigeartaigh an Chonair..."
+
+#, fuzzy
+#~| msgid "Refine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Mionchoigeartaigh an Chonair"
+
+#, fuzzy
+#~| msgid "Subdivisions:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "Foranna:"
+
+#, fuzzy
+#~| msgid "&Round Corners..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "&Coirnéil Chruinne..."
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Ga:"
+
+#, fuzzy
+#~| msgid "&Whirl/Pinch..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Rothlaigh/Fáisc..."
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Rothlaigh/Fáisc"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "Eolas"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Uillinn:"
+
+#, fuzzy
+#~| msgid "Pinch:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Fáisc:"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Cumraigh"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Comhéadan"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Éagsúil"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Greille"
+
+#, fuzzy
+#~| msgctxt "@title:tab Document settings page"
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Cáipéis"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Socruithe Cáipéise"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Údar"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Údar"
+
+#, fuzzy
+#~| msgid "Layer view"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Amharc sraithe"
+
+#, fuzzy
+#~| msgid "Add a new layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Cuir sraith nua leis"
+
+#, fuzzy
+#~| msgid "Delete selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Scrios na réada roghnaithe"
+
+#, fuzzy
+#~| msgid "Raise selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Ardaigh na réada roghnaithe"
+
+#, fuzzy
+#~| msgid "Lower selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Ísligh na réada roghnaithe"
+
+#, fuzzy
+#~| msgid "Minimal View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Amharc Íosta"
+
+#, fuzzy
+#~| msgid "Detailed View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Amharc Mionsonraithe"
+
+#, fuzzy
+#~| msgid "Thumbnail View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Amharc Mionsamhlacha"
+
+#, fuzzy
+#~| msgid "View mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Mód amhairc"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Sraith Nua"
+
+#, fuzzy
+#~| msgid "Enter the name of the new layer:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Iontráil ainm na sraithe nuaí:"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Sraith nua"
+
+#, fuzzy
+#~| msgid "Could not delete all layers. At least one layer is required."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "Ní féidir gach sraith a scriosadh. Tá sraith amháin ar a laghad de dhíth."
+
+#, fuzzy
+#~| msgid "Error deleting layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "Earráid agus sraitheanna á scriosadh"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Sraith"
+
+#, fuzzy
+#~| msgctxt "A group of shapes"
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Grúpa"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Giuirléid"
+
+#, fuzzy
+#~| msgctxt "Visibility state of the shape"
+#~| msgid "Visible"
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Infheicthe"
+
+#, fuzzy
+#~| msgctxt "Lock state of the shape"
+#~| msgid "Locked"
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Faoi Ghlas"
+
+#, fuzzy
+#~| msgctxt "The z-index of the shape"
+#~| msgid "zIndex"
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zInnéacs"
+
+#, fuzzy
+#~| msgctxt "The opacity of the shape"
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Teimhneacht"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "Eolas"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "Stíleanna"
+
+#, fuzzy
+#~| msgid "Karbon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#, fuzzy
+#~| msgid "A Vector Graphics Drawing Application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Feidhmchlár Grafaice Veicteoirí."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "© 2001-2009, Forbróirí Karbon"
+
+#, fuzzy
+#~| msgid "Rob Buis"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#, fuzzy
+#~| msgid "Tomislav Lukman"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#, fuzzy
+#~| msgid "Benoît Vautrin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#, fuzzy
+#~| msgid "Jan Hambrecht"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#, fuzzy
+#~| msgid "Bug fixes and improvements"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Ceartúcháin agus feabhsúcháin"
+
+#, fuzzy
+#~| msgid "Peter Simonsson"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~| msgid "Tim Beaulen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#, fuzzy
+#~| msgid "Boudewijn Rempt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#, fuzzy
+#~| msgid "Pierre Stirnweiss"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#, fuzzy
+#~| msgid "Inge Wallin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#, fuzzy
+#~| msgid "Bug fixes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "Ceartúcháin"
+
+#, fuzzy
+#~| msgid "Alan Horkan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#, fuzzy
+#~| msgid "Helpful patches and advice"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Paistí cabhracha agus comhairle"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Séamus Ó Ciardhuáin,Kevin Scannell"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "seoc@iolfree.ie,kscanne@gmail.com"
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Cáipéis neamhbhailí OASIS. Níor aimsíodh clib office:body."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Cáipéis neamhbhailí OASIS. Níor aimsíodh clib office:drawing."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Cáipéis neamhbhailí OASIS. Níor aimsíodh clib draw:page."
+
+#, fuzzy
+#~| msgid "Master Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Máistirleathanach"
+
+#, fuzzy
+#~| msgid "Choose Graphic to Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Roghnaigh Grafaic le Cur Leis"
+
+#, fuzzy
+#~| msgid "Could not load image."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load image."
+#~ msgstr "Níorbh fhéidir íomhá a luchtú."
+
+#, fuzzy
+#~| msgid "Import graphic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "Iompórtáil grafaic"
+
+#, fuzzy
+#~| msgid "Could not create image shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create image shape."
+#~ msgstr "Níorbh fhéidir giuirléid íomhá a chruthú."
+
+#, fuzzy
+#~| msgid "Outline &Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "&Mód Imlíne"
+
+#, fuzzy
+#~| msgid "Show Page Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Taispeáin Imill an Leathanaigh"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Iompórtáil Grafaic..."
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "S&crios"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Cuir Grádán in Eagar"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Dúblach"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Taispeáin Rialóirí"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Taispeáin nó folaigh rialóirí"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Taispeáin nó folaigh rialóirí"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Léim go Greille"
+
+#, fuzzy
+#~| msgid "Snaps to grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Léim go greille"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "&Réad"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Díghrúpáil Réada"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "&Dún Conair"
+
+#, fuzzy
+#~| msgid "Com&bine Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Comhchean&gail Conair"
+
+#, fuzzy
+#~| msgid "Se&parate Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Deighil Co&nair"
+
+#, fuzzy
+#~| msgid "Re&verse Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "Iompaigh Conai&r"
+
+#, fuzzy
+#~| msgid "Intersect Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Trasnaigh Conairí"
+
+#, fuzzy
+#~| msgid "Subtract Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Dealaigh Conairí"
+
+#, fuzzy
+#~| msgid "Unite Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Aontaigh Conairí"
+
+#, fuzzy
+#~| msgid "Exclude Paths"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "Fág Conairí As"
+
+#, fuzzy
+#~| msgid "Snap Path to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Léim Conair go dtí an Greille"
+
+#, fuzzy
+#~| msgid "Configure Karbon..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Cumraigh Karbon..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "Leaga&n Amach Leathanaigh..."
+
+#, fuzzy
+#~| msgid "Zoom to Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Súmáil go dtí an Roghnúchán"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Súmáil"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Taispeáin an barra stádais"
+
+#, fuzzy
+#~| msgid "Number of recent files:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Líon na gcomhad le déanaí:"
+
+#, fuzzy
+#~| msgid "Palette font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Clómhéid an phailéid:"
+
+#, fuzzy
+#~| msgid "Canvas color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Canvas color:"
+#~ msgstr "Dath an chanbháis:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Roghnaigh íomhá"
+
+#, fuzzy
+#~| msgid "Press to apply fill to selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Brúigh chun an roghnúchán a líonadh"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Neamhní"
+
+#, fuzzy
+#~| msgid "Press to apply stroke to selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Brúigh chun stríoc a chur i bhfeidhm ar an roghnúchán"
+
+#, fuzzy
+#~| msgctxt "The style has a custom stroking"
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Saincheaptha"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Neamhní"
+
+#, fuzzy
+#~| msgid "Stroke:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Stríoc:"
+
+#, fuzzy
+#~| msgid "Fill:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Líon:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Amharc"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Amharc"
+
+#, fuzzy
+#~| msgid "Pencil tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Uirlis phionsail"
+
+#~ msgid "File to open"
+#~ msgstr "Comhad le hoscailt"
+
+#~ msgid "Blend"
+#~ msgstr "Cumaisc"
+
+#~ msgid "Blend mode"
+#~ msgstr "Mód chumaisc"
+
+#~ msgid "Normal"
+#~ msgstr "Gnách"
+
+#~ msgid "Multiply"
+#~ msgstr "Iolraigh"
+
+#~ msgid "Screen"
+#~ msgstr "Scáileán"
+
+#~ msgid "Darken"
+#~ msgstr "Dorchaigh"
+
+#~ msgid "Lighten"
+#~ msgstr "Sorchaigh"
+
+#~ msgid "Gaussian blur"
+#~ msgstr "Geamhú Gaussach"
+
+#~ msgid "Radius"
+#~ msgstr "Ga"
+
+#~ msgid "Color Matrix"
+#~ msgstr "Maitrís Dathanna"
+
+#~ msgid "Apply color matrix"
+#~ msgstr "Cuir maitrís dathanna i bhfeidhm"
+
+#~ msgid "Saturate colors"
+#~ msgstr "Sáithigh dathanna"
+
+#~ msgid "Rotate hue"
+#~ msgstr "Rothlaigh an lí"
+
+#~ msgid "Luminance to alpha"
+#~ msgstr "Lonras go halfa"
+
+#~ msgid "Saturate value"
+#~ msgstr "Luach sáithithe"
+
+#~ msgid "Angle"
+#~ msgstr "Uillinn"
+
+#~ msgid "Color matrix"
+#~ msgstr "Maitrís dathanna"
+
+#~ msgid "Component transfer"
+#~ msgstr "Aistriú comhpháirte"
+
+#~ msgid "Function"
+#~ msgstr "Feidhm"
+
+#~ msgid "Identity"
+#~ msgstr "Aitheantas"
+
+#~ msgid "Table"
+#~ msgstr "Tábla"
+
+#~ msgid "Discrete"
+#~ msgstr "Discrete"
+
+#~ msgid "Linear"
+#~ msgstr "Líneach"
+
+#~ msgid "Gamma"
+#~ msgstr "Gáma"
+
+#~ msgid "Values"
+#~ msgstr "Luachanna"
+
+#~ msgid "Slope"
+#~ msgstr "Fána"
+
+#~ msgid "Intercept"
+#~ msgstr "Idirlíne"
+
+#~ msgid "Amplitude"
+#~ msgstr "Aimplitiúid"
+
+#~ msgid "Exponent"
+#~ msgstr "Easpónant"
+
+#~ msgid "Offset"
+#~ msgstr "Fritháireamh"
+
+#~ msgid "Composite"
+#~ msgstr "Ilchodach"
+
+#~ msgid "Operation"
+#~ msgstr "Oibríocht"
+
+#~ msgid "Convolve Matrix"
+#~ msgstr "Maitrís Chonbhlóidithe"
+
+#~ msgid "Duplicate"
+#~ msgstr "Dúblach"
+
+#~ msgid "Wrap"
+#~ msgstr "Timfhill"
+
+#~ msgid "Edge mode:"
+#~ msgstr "Mód ciumhaise:"
+
+#~ msgid "Kernel size:"
+#~ msgstr "Méid eithne:"
+
+#~ msgid "Target point:"
+#~ msgstr "Spriocphointe:"
+
+#~ msgid "Divisor:"
+#~ msgstr "Roinnteoir:"
+
+#~ msgid "Bias:"
+#~ msgstr "Laofacht:"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Caomhnaigh alfa"
+
+#~ msgid "Edit kernel"
+#~ msgstr "Cuir eithne in eagar"
+
+#~ msgid "Flood fill"
+#~ msgstr "Tuileadh"
+
+#~ msgid "Flood color"
+#~ msgstr "Dath tuile"
+
+#~ msgid "Image"
+#~ msgstr "Íomhá"
+
+#~ msgid "Select image..."
+#~ msgstr "Roghnaigh íomhá..."
+
+#~ msgid "Select image"
+#~ msgstr "Roghnaigh íomhá"
+
+#~ msgid "Merge"
+#~ msgstr "Cumaisc"
+
+#~ msgid "Morphology"
+#~ msgstr "Moirfeolaíocht"
+
+#~ msgid "Erode"
+#~ msgstr "Creim"
+
+#~ msgid "Dilate"
+#~ msgstr "Leath"
+
+#~ msgid "Operator:"
+#~ msgstr "Oibreoir:"
+
+#~ msgid "Radius x:"
+#~ msgstr "Ga x:"
+
+#~ msgid "Radius y:"
+#~ msgstr "Ga y:"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Target:"
+#~ msgstr "Sprioc:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Líneach"
+
+#~ msgid "Fill"
+#~ msgstr "Líon"
+
+#~ msgid "Type:"
+#~ msgstr "Cineál:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Líneach"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Gathach"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Cónúil"
+
+#~ msgid "Repeat:"
+#~ msgstr "Arís:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Neamhní"
+
+#~ msgid "Reflect"
+#~ msgstr "Frithchaith"
+
+#~ msgid "Repeat"
+#~ msgstr "Arís"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Teimhneacht fhoriomlán:"
+
+#, fuzzy
+#~ msgid "Color stop:"
+#~ msgstr "Maitrís Dathanna"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Cuir leis na Grádáin Réamhshainithe"
+
+#~ msgid "Original"
+#~ msgstr "Bunúsach"
+
+#~ msgid "Tiled"
+#~ msgstr "Tílithe"
+
+#~ msgid "Stretched"
+#~ msgstr "Sínte"
+
+#~ msgid "Top Left"
+#~ msgstr "Barr ar Chlé"
+
+#~ msgid "Top"
+#~ msgstr "Barr"
+
+#~ msgid "Top Right"
+#~ msgstr "Barr ar Dheis"
+
+#~ msgid "Left"
+#~ msgstr "Ar Chlé"
+
+#~ msgid "Center"
+#~ msgstr "Lár"
+
+#~ msgid "Right"
+#~ msgstr "Ar Dheis"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Bun ar Chlé"
+
+#~ msgid "Bottom"
+#~ msgstr "Bun"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Bun ar dheis"
+
+#~ msgid "Stroke"
+#~ msgstr "Stríoc"
+
+#~ msgid "Karbon14"
+#~ msgstr "Karbon14"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Folaigh Imill an Leathanaigh"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Folaigh Rialóirí"
+
+#~ msgid "Tools"
+#~ msgstr "Uirlisí"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Neamhní"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Soladach"
+
+#~ msgid "Gradient"
+#~ msgstr "Grádán"
+
+#~ msgid "Pattern"
+#~ msgstr "Patrún"
+
+#~ msgid "Units:"
+#~ msgstr "Aonaid:"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Díghrúpáil cruthanna"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Grúpáil Réada"
+
+#~ msgid "Show grid:"
+#~ msgstr "Taispeáin greille:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Léim go greille:"
+
+#~ msgid "Spacing"
+#~ msgstr "Spásáil"
+
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Cothrománach:"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Ingearach:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Uathshábháil (nóim.):"
+
+#~ msgid "No auto save"
+#~ msgstr "Gan uathshábháil"
+
+#~ msgid "min"
+#~ msgstr "nóiméad"
+
+#~ msgid "Create backup file"
+#~ msgstr "Cruthaigh comhad cúltaca"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Roghnaigh Patrún le Cur Leis"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Roghnaigh Grádán le Cur Leis"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#~ msgid "W:"
+#~ msgstr "L:"
+
+#~ msgid "H:"
+#~ msgstr "A:"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Grádáin Réamhshainithe"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Uirlis ghrádáin"
+
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Uirlis Eagarthóireachta Grádán"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Uirlis phatrúin"
+
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Uirlis Eagarthóireachta Patrún"
+
+#~ msgid "Precision:"
+#~ msgstr "Beachtas:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Amh"
+
+#~ msgid "Curve"
+#~ msgstr "Cuar"
+
+#~ msgid "Straight"
+#~ msgstr "Díreach"
+
+#~ msgid "Optimize"
+#~ msgstr "Optamaigh"
+
+#~ msgid "Exactness:"
+#~ msgstr "Cruinneas:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Uillinn chomhcheangail:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Uirlis Líníochta Saorláimhe"
+
+#~ msgid "Save profile as..."
+#~ msgstr "Sábháil an phróifíl mar..."
+
+#~ msgid "Width:"
+#~ msgstr "Leithead:"
+
+#~ msgid "Current"
+#~ msgstr "Reatha"
+
+#~ msgid "Profile name"
+#~ msgstr "Ainm na próifíle"
+
+#~ msgid "Mouse"
+#~ msgstr "Luch"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Tabhair c&hun Tosaigh"
+
+#~ msgid "&Raise"
+#~ msgstr "&Ardaigh"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "Í&sligh"
+
+#~ msgid "Show Grid"
+#~ msgstr "Taispeáin Greille"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Folaigh Greille"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Taispeáin nó folaigh greille"
+
+#~ msgid "Align Left"
+#~ msgstr "Ailínigh Ar Chlé"
+
+#~ msgid "Align Top"
+#~ msgstr "Ailínigh leis an mBarr"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Ailínigh Sa Lár (Ingearach)"
+
+#~ msgid "Transform"
+#~ msgstr "Trasfhoirmigh"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#~ msgid "SX:"
+#~ msgstr "SX:"
+
+#~ msgid "SY:"
+#~ msgstr "SY:"
+
+#~ msgid "Shear"
+#~ msgstr "Fiar"
+
+#~ msgid "Simple Text"
+#~ msgstr "Téacs Simplí"
+
+#~ msgid "SimpleTextShape"
+#~ msgstr "SimpleTextShape"
+
+#~ msgid "Simple Text Tool"
+#~ msgstr "Uirlis Shimplí Téacs"
+
+#~ msgid "Save as path"
+#~ msgstr "Sábháil mar chonair"
+
+#~ msgid "Old:"
+#~ msgstr "Sean:"
+
+#~ msgid "New:"
+#~ msgstr "Nua:"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "L:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "L:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Cineál"
+
+#~ msgid "Join"
+#~ msgstr "Ceangail"
+
+#~ msgid "Layers:"
+#~ msgstr "Sraitheanna:"
+
+#~ msgid "Format:"
+#~ msgstr "Formáid:"
+
+#~ msgid "Resources"
+#~ msgstr "Acmhainní"
+
+#~ msgid "Patterns"
+#~ msgstr "Patrúin"
+
+#~ msgid "Clipart"
+#~ msgstr "Fáiscealaín"
+
+#~ msgid "Add"
+#~ msgstr "Cuir Leis"
+
+#~ msgid "Import"
+#~ msgstr "Iompórtáil"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Líon: RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Líon: CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Líon: HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Líon: Liathscála"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Líon: Dath"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Líon: Grádán"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Líon: Patrún"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Stríoc: RGB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Stríoc: CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Stríoc: HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Stríoc: Liathscála"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Stríoc: Grádán"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Stríoc: Patrún"
+
+#~ msgid "Polygonize"
+#~ msgstr "Polagánaigh"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "&Scáthéifeacht..."
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Cruthaigh Scáthéifeacht"
+
+#~ msgid "Distance:"
+#~ msgstr "Fad:"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Cruthaigh Scáth"
+
+#~ msgid "Object Properties"
+#~ msgstr "Airíonna an Réada"
+
+#~ msgid "&Delete"
+#~ msgstr "&Scrios"
+
+#~ msgid "&Import"
+#~ msgstr "&Iompórtáil"
+
+#~ msgid "Unnamed Tool"
+#~ msgstr "Uirlis Gan Ainm"
+
+#~ msgid "&Undo"
+#~ msgstr "&Cealaigh"
+
+#~ msgid "&Redo"
+#~ msgstr "&Athdhéan"
+
+#~ msgid "&Undo: "
+#~ msgstr "&Cealaigh: "
+
+#~ msgid "&Redo: "
+#~ msgstr "&Athdhéan: "
+
+#~ msgid "Fill Objects"
+#~ msgstr "Líon Réada"
+
+#~ msgid "Fill Object"
+#~ msgstr "Líon Réad"
+
+#~ msgid "Insert Text"
+#~ msgstr "Ionsáigh Téacs"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Trasfhoirmigh Réada"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Cóipeáil Réad"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Cóipeáil Réada"
+
+#~ msgid "Transform Object"
+#~ msgstr "Trasfhoirmigh Réad"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Aistrigh Réada"
+
+#~ msgid "Translate Object"
+#~ msgstr "Aistrigh Réad"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Scálaigh Réada"
+
+#~ msgid "Scale Object"
+#~ msgstr "Scálaigh Réad"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Rothlaigh Réada"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Rothlaigh Réad"
+
+#~ msgid "Translate Bezier"
+#~ msgstr "Aistrigh Bézier"
+
+#~ msgid "Translate Points"
+#~ msgstr "Aistrigh Pointí"
+
+#~ msgid "Translate Point"
+#~ msgstr "Aistrigh Pointe"
+
+#~ msgid "Ellipse"
+#~ msgstr "Éilips"
+
+#~ msgid "Polygon"
+#~ msgstr "Polagán"
+
+#~ msgid "Polyline"
+#~ msgstr "Il-líne"
+
+#~ msgid "Spiral"
+#~ msgstr "Bís"
+
+#~ msgid "Star"
+#~ msgstr "Réiltín"
+
+#~ msgid "Round"
+#~ msgstr "Cruinn"
+
+#~ msgid "Rectangular"
+#~ msgstr "Dronuilleogach"
+
+#~ msgid "Segments:"
+#~ msgstr "Mírlínte:"
+
+#~ msgid "Fade:"
+#~ msgstr "Céimnigh:"
+
+#~ msgid "Clockwise"
+#~ msgstr "Deisealach"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Tuathalach"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Uirlis Bhíse"
+
+#~ msgid "Insert Star"
+#~ msgstr "Ionsáigh Réiltín"
+
+#~ msgid "Wheel"
+#~ msgstr "Rothar"
+
+#~ msgid "Framed Star"
+#~ msgstr "Réiltín Frámaithe"
+
+#~ msgid "Gear"
+#~ msgstr "Giar"
+
+#~ msgid "Roundness:"
+#~ msgstr "Cruinne:"
+
+#~ msgid "Star Tool"
+#~ msgstr "Uirlis Réiltín"
+
+#~ msgid "Shadow"
+#~ msgstr "Scáth"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Dear scáth tréshoilseach"
+
+#~ msgid "Text"
+#~ msgstr "Téacs"
+
+#~ msgid "Italic"
+#~ msgstr "Cló Iodálach"
+
+#~ msgid "Alignment:"
+#~ msgstr "Ailíniú:"
+
+#~ msgid "Position"
+#~ msgstr "Ionad"
+
+#~ msgid "New text"
+#~ msgstr "Téacs nua"
+
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Uirlis Téacs</b><br>"
+
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr ""
+#~ "<i>Cliceáil agus tarraing</i> sa cháipéis chun téacs treoch a chur.<br>"
+
+#~ msgid "Change Text"
+#~ msgstr "Athraigh téacs"
+
+#~ msgid "Text Conversion"
+#~ msgstr "Tiontú Téacs"
+
+#~ msgid "One object"
+#~ msgid_plural "%1 objects"
+#~ msgstr[0] "Réad amháin"
+#~ msgstr[1] "%1 réad"
+#~ msgstr[2] "%1 réad"
+#~ msgstr[3] "%1 réad"
+#~ msgstr[4] "%1 réad"
+
+#~ msgid "path"
+#~ msgstr "conair"
+
+#~ msgid "One group, containing one object"
+#~ msgid_plural "One group, containing %1 objects"
+#~ msgstr[0] "Grúpa amháin, ina bhfuil %1 réad"
+#~ msgstr[1] "Grúpa amháin, ina bhfuil %1 réad"
+#~ msgstr[2] "Grúpa amháin, ina bhfuil %1 réad"
+#~ msgstr[3] "Grúpa amháin, ina bhfuil %1 réad"
+#~ msgstr[4] "Grúpa amháin, ina bhfuil %1 réad"
+
+#~ msgid "text"
+#~ msgstr "téacs"
+
+#~ msgid "image"
+#~ msgstr "íomhá"
+
+#~ msgid "Paste Object"
+#~ msgstr "Greamaigh Réad"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Greamaigh Réada"
+
+#~ msgid "Join:"
+#~ msgstr "Ceangail:"
+
+#~ msgid "P&urge"
+#~ msgstr "P&urgaigh"
+
+#~ msgid "&History"
+#~ msgstr "&Stair"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "&Ionsáigh Snaidhmeanna..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Ionsáigh Snaidhmeanna"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Ionsáigh Fáiscealaín"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Uirlis Súmála:</b><br>"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Uirlis Il-líne:</b><br>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Uirlis Il-líne"
+
+#~ msgid "Translate"
+#~ msgstr "Aistrigh"
+
+#~ msgid "Purge History"
+#~ msgstr "Purgaigh an Stair"
+
+#~ msgid "Whole Page"
+#~ msgstr "Leathanach Iomlán"
+
+#~ msgid "Wireframe"
+#~ msgstr "Sreangfhráma"
+
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#~ msgid "800%"
+#~ msgstr "800%"
+
+#~ msgid "Line Style"
+#~ msgstr "Stíl Líne"
+
+#~ msgid "History"
+#~ msgstr "Stair"
+
+#~ msgid "Align Objects"
+#~ msgstr "Ailínigh Réada"
+
+#~ msgid "Clean Up"
+#~ msgstr "Glan"
+
+#~ msgid "Delete Object"
+#~ msgstr "Scrios Réad"
+
+#~ msgid "Delete Node"
+#~ msgstr "Scrios Nód"
+
+#~ msgid "V&ertical:"
+#~ msgstr "I&ngearach:"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "New"
+#~ msgstr "Nua"
+
+#~ msgid "Raise"
+#~ msgstr "Ardaigh"
+
+#~ msgid "Lower"
+#~ msgstr "Íochtarach"
+
+#~ msgid "Item"
+#~ msgstr "Mír"
+
+# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
+# Ctrl+V = Greamaigh, transcending language
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Réad Reatha"
+
+#~ msgid "Add Layer"
+#~ msgstr "Sraith Nua"
+
+#~ msgid "Commands"
+#~ msgstr "Orduithe"
+
+#~ msgid "Rectangle"
+#~ msgstr "Dronuilleog"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Ionsáigh éilips"
+
+#~ msgid "Full"
+#~ msgstr "Lán"
+
+#~ msgid "Pie"
+#~ msgstr "Píchairt"
+
+# OK --KPS
+#~ msgid "Arc"
+#~ msgstr "Arc"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Uirlis ghrádáin:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Cliceáil agus tarraing</i> chun pointí a bhogadh.<br>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Uirlis Phatrúin:</b><br>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Roghnaigh patrún le do thoil."
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Ionsáigh polagán"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Uirlis Pholagáin"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Uirlis Dronuilleoige"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Uirlis Rothlaithe"
+
+#~ msgid "Height (%1):"
+#~ msgstr "Airde (%1):"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Mód an Roghnaithe"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Roghnaigh sa tsraith reatha"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Roghnaigh sna sraitheanna infheicthe"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Roghnaigh sna sraitheanna roghnaithe"
+
+#~ msgid "Select"
+#~ msgstr "Roghnaigh"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Uirlis Roghnaithe:</b><br>"
+
+#~ msgid "Select Tool"
+#~ msgstr "Roghnaigh Uirlis"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Uirlis Fhiair"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Uirlis Íomhá:</b><br>"
+
+#~ msgid "Knots:"
+#~ msgstr "Snaidhmeanna:"

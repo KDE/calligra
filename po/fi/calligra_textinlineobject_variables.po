@@ -1,0 +1,762 @@
+# Translation of VariablesPlugin.po into Finnish
+# Copyright © 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the calligra package.
+# Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014.
+# Tommi Nieminen <translator@legisign.org>, 2012.
+#
+# KDE Finnish translation sprint participants:
+msgid ""
+msgstr ""
+"Project-Id-Version: VariablesPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-11-08 02:54+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
+"Language-Team: Finnish <lokalisointi@lists.coss.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2013-01-13 22:09:30+0000\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: ChapterVariable.cpp:202 UserVariableOptionsWidget.cpp:57
+#, kde-format
+msgid "Format:"
+msgstr "Muoto:"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number"
+msgstr "Numero"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Name"
+msgstr "Nimi"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name"
+msgstr "Numero ja nimi"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number without separator"
+msgstr "Numero erotimetta"
+
+#: ChapterVariable.cpp:207
+#, kde-format
+msgid "Number and name without separator"
+msgstr "Numero ja nimi erotimetta"
+
+#: ChapterVariable.cpp:211
+#, kde-format
+msgid "Level:"
+msgstr "Taso:"
+
+#: ChapterVariableFactory.cpp:21
+#, kde-format
+msgid "Chapter"
+msgstr "Luku"
+
+#: DateVariableFactory.cpp:22
+#, kde-format
+msgctxt "date that can not be changed later"
+msgid "Date (Fixed)"
+msgstr "Päiväys (kiinteä)"
+
+#: FixedDateFormat.cpp:34
+#, kde-format
+msgid "Locale date format"
+msgstr "Paikallinen päivämäärän muoto"
+
+#: FixedDateFormat.cpp:35
+#, kde-format
+msgid "Short locale date format"
+msgstr "Lyhyt paikallinen päivämäärän muoto"
+
+#: FixedDateFormat.cpp:36
+#, kde-format
+msgid "Locale date & time format"
+msgstr "Paikallinen päivämäärän ja ajan muoto"
+
+#: FixedDateFormat.cpp:37
+#, kde-format
+msgid "Short locale date & time format"
+msgstr "Lyhyt paikallinen päivämäärän ja ajan muoto"
+
+#: FixedDateFormat.cpp:108
+#, kde-format
+msgid "Day"
+msgstr "Päivä"
+
+#: FixedDateFormat.cpp:109
+#, kde-format
+msgid "Month"
+msgstr "Kuukausi"
+
+#: FixedDateFormat.cpp:110
+#, kde-format
+msgid "Year"
+msgstr "Vuosi"
+
+#: FixedDateFormat.cpp:111
+#, kde-format
+msgid "Hour"
+msgstr "Tunti"
+
+#: FixedDateFormat.cpp:112
+#, kde-format
+msgid "Minute"
+msgstr "Minuutti"
+
+#: FixedDateFormat.cpp:113
+#, kde-format
+msgid "Second"
+msgstr "Sekunti"
+
+#: FixedDateFormat.cpp:121
+#, kde-format
+msgid "Flexible Digits (1-31)"
+msgstr "Luvut (1–31)"
+
+#: FixedDateFormat.cpp:122
+#, kde-format
+msgid "2 Digits (01-31)"
+msgstr "Kaksinumeroinen luku (01–31)"
+
+#: FixedDateFormat.cpp:123 FixedDateFormat.cpp:127
+#, kde-format
+msgid "Abbreviated Name"
+msgstr "Lyhennetty nimi"
+
+#: FixedDateFormat.cpp:124 FixedDateFormat.cpp:128
+#, kde-format
+msgid "Long Name"
+msgstr "Pitkä nimi"
+
+#: FixedDateFormat.cpp:125
+#, kde-format
+msgid "Flexible Digits (1-12)"
+msgstr "Luvut (1–12)"
+
+#: FixedDateFormat.cpp:126
+#, kde-format
+msgid "2 Digits (01-12)"
+msgstr "Kaksinumeroinen luku (01–12)"
+
+#: FixedDateFormat.cpp:129
+#, kde-format
+msgid "Possessive Abbreviated Name"
+msgstr "Omistusmuotoinen lyhennetty nimi"
+
+#: FixedDateFormat.cpp:130
+#, kde-format
+msgid "Possessive Long Name"
+msgstr "Omistusmuotoinen pitkä nimi"
+
+#: FixedDateFormat.cpp:131
+#, kde-format
+msgid "2 Digits (01-99)"
+msgstr "Kaksinumeroinen luku (01–99)"
+
+#: FixedDateFormat.cpp:132
+#, kde-format
+msgid "4 Digits"
+msgstr "Nelinumeroinen luku"
+
+#: FixedDateFormat.cpp:133
+#, kde-format
+msgid "Flexible Digits (1-23)"
+msgstr "Luvut (1–23)"
+
+#: FixedDateFormat.cpp:134
+#, kde-format
+msgid "2 Digits (01-23)"
+msgstr "Kaksinumeroinen luku (01–23)"
+
+#: FixedDateFormat.cpp:135 FixedDateFormat.cpp:137
+#, kde-format
+msgid "Flexible Digits (1-59)"
+msgstr "Luvut (1–59)"
+
+#: FixedDateFormat.cpp:136 FixedDateFormat.cpp:138
+#, kde-format
+msgid "2 Digits (01-59)"
+msgstr "Kaksinumeroinen luku (01–59)"
+
+#: FixedDateFormat.cpp:139
+#, kde-format
+msgid "am/pm"
+msgstr "ap./ip."
+
+#: FixedDateFormat.cpp:140
+#, kde-format
+msgid "AM/PM"
+msgstr "AP/IP"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: FixedDateFormat.ui:21
+#, kde-format
+msgid "Date Correction:"
+msgstr "Päivämäärän korjaus:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, correction)
+#: FixedDateFormat.ui:28
+#, kde-format
+msgid " days"
+msgstr " päivää"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: FixedDateFormat.ui:53
+#, kde-format
+msgid "Select the way the date should be displayed:"
+msgstr "Valitse päivämäärän esittämistapa"
+
+#. i18n: ectx: property (text), widget (QCheckBox, custom)
+#: FixedDateFormat.ui:60
+#, kde-format
+msgid "Custom format"
+msgstr "Oma muoto"
+
+#. i18n: ectx: property (text), widget (QToolButton, formatButton)
+#: FixedDateFormat.ui:101
+#, kde-format
+msgid "..."
+msgstr "…"
+
+#: InfoVariableFactory.cpp:25
+#, kde-format
+msgid "Author Name"
+msgstr "Tekijän nimi"
+
+#: InfoVariableFactory.cpp:33
+#, kde-format
+msgid "Title"
+msgstr "Otsikko"
+
+#: InfoVariableFactory.cpp:41
+#, kde-format
+msgid "Subject"
+msgstr "Aihe"
+
+#: InfoVariableFactory.cpp:49
+#, kde-format
+msgid "File Name"
+msgstr "Tiedostonimi"
+
+#: InfoVariableFactory.cpp:57
+#, kde-format
+msgid "Keywords"
+msgstr "Avainsanat"
+
+#: InfoVariableFactory.cpp:65
+#, kde-format
+msgid "Comments"
+msgstr "Kommentit"
+
+#: PageVariableFactory.cpp:23
+#, kde-format
+msgid "Page Count"
+msgstr "Sivumäärä"
+
+#: PageVariableFactory.cpp:31
+#, kde-format
+msgid "Page Number"
+msgstr "Sivunumero"
+
+#: UserVariableFactory.cpp:22
+#, kde-format
+msgid "Custom"
+msgstr "Oma"
+
+#: UserVariableOptionsWidget.cpp:34
+#, kde-format
+msgid "Name:"
+msgstr "Nimi:"
+
+#: UserVariableOptionsWidget.cpp:46
+#, kde-format
+msgid "New"
+msgstr "Uusi"
+
+#: UserVariableOptionsWidget.cpp:50
+#, kde-format
+msgid "Delete"
+msgstr "Poista"
+
+#: UserVariableOptionsWidget.cpp:63
+#, kde-format
+msgid "String"
+msgstr "Merkkijono"
+
+#: UserVariableOptionsWidget.cpp:64
+#, kde-format
+msgid "Boolean"
+msgstr "Totuusarvo"
+
+#: UserVariableOptionsWidget.cpp:65
+#, kde-format
+msgid "Float"
+msgstr "Liukuluku"
+
+#: UserVariableOptionsWidget.cpp:66
+#, kde-format
+msgid "Percentage"
+msgstr "Prosenttiluku"
+
+#: UserVariableOptionsWidget.cpp:67
+#, kde-format
+msgid "Currency"
+msgstr "Valuutta"
+
+#: UserVariableOptionsWidget.cpp:68
+#, kde-format
+msgid "Date"
+msgstr "Päiväys"
+
+#: UserVariableOptionsWidget.cpp:69
+#, kde-format
+msgid "Time"
+msgstr "Aika"
+
+#: UserVariableOptionsWidget.cpp:70
+#, kde-format
+msgid "Formula"
+msgstr "Kaava"
+
+#: UserVariableOptionsWidget.cpp:71
+#, kde-format
+msgid "Void"
+msgstr "Void"
+
+#: UserVariableOptionsWidget.cpp:76
+#, kde-format
+msgid "Value:"
+msgstr "Arvo:"
+
+#: UserVariableOptionsWidget.cpp:149
+#, kde-format
+msgid "New Variable"
+msgstr "Uusi muuttuja"
+
+#: UserVariableOptionsWidget.cpp:149
+#, kde-format
+msgid "Name for new variable:"
+msgstr "Uuden muuttujan nimi:"
+
+#: UserVariableOptionsWidget.cpp:165
+#, kde-format
+msgid "Delete variable <b>%1</b>?"
+msgstr "Poistetaanko muuttuja <b>%1</b>?"
+
+#: UserVariableOptionsWidget.cpp:166
+#, kde-format
+msgid "Delete Variable"
+msgstr "Poista muuttuja"
+
+#, fuzzy
+#~| msgid "Date Correction:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Correction:"
+#~ msgstr "Päivämäärän korjaus:"
+
+#, fuzzy
+#~| msgid " days"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " days"
+#~ msgstr " päivää"
+
+#, fuzzy
+#~| msgid "Select the way the date should be displayed:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select the way the date should be displayed:"
+#~ msgstr "Valitse päivämäärän esittämistapa"
+
+#, fuzzy
+#~| msgid "Custom format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom format"
+#~ msgstr "Oma muoto"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "…"
+
+#, fuzzy
+#~| msgid "Format:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format:"
+#~ msgstr "Muoto:"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name"
+#~ msgstr "Nimi"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number"
+#~ msgstr "Numero"
+
+#, fuzzy
+#~| msgid "Number and name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number and name"
+#~ msgstr "Numero ja nimi"
+
+#, fuzzy
+#~| msgid "Number and name without separator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number and name without separator"
+#~ msgstr "Numero ja nimi erotimetta"
+
+#, fuzzy
+#~| msgid "Number without separator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number without separator"
+#~ msgstr "Numero erotimetta"
+
+#, fuzzy
+#~| msgid "Level:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Level:"
+#~ msgstr "Taso:"
+
+#, fuzzy
+#~| msgid "Chapter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Chapter"
+#~ msgstr "Luku"
+
+#, fuzzy
+#~| msgctxt "date that can not be changed later"
+#~| msgid "Date (Fixed)"
+#~ msgctxt "(qtundo-format) date that can not be changed later"
+#~ msgid "Date (Fixed)"
+#~ msgstr "Päiväys (kiinteä)"
+
+#, fuzzy
+#~| msgid "Locale date format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale date format"
+#~ msgstr "Paikallinen päivämäärän muoto"
+
+#, fuzzy
+#~| msgid "Short locale date format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short locale date format"
+#~ msgstr "Lyhyt paikallinen päivämäärän muoto"
+
+#, fuzzy
+#~| msgid "Locale date & time format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale date & time format"
+#~ msgstr "Paikallinen päivämäärän ja ajan muoto"
+
+#, fuzzy
+#~| msgid "Short locale date & time format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short locale date & time format"
+#~ msgstr "Lyhyt paikallinen päivämäärän ja ajan muoto"
+
+#, fuzzy
+#~| msgid "Day"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Day"
+#~ msgstr "Päivä"
+
+#, fuzzy
+#~| msgid "Month"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Month"
+#~ msgstr "Kuukausi"
+
+#, fuzzy
+#~| msgid "Year"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Year"
+#~ msgstr "Vuosi"
+
+#, fuzzy
+#~| msgid "Hour"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hour"
+#~ msgstr "Tunti"
+
+#, fuzzy
+#~| msgid "Minute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minute"
+#~ msgstr "Minuutti"
+
+#, fuzzy
+#~| msgid "Second"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Second"
+#~ msgstr "Sekunti"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-31)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-31)"
+#~ msgstr "Luvut (1–31)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-31)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-31)"
+#~ msgstr "Kaksinumeroinen luku (01–31)"
+
+#, fuzzy
+#~| msgid "Abbreviated Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Abbreviated Name"
+#~ msgstr "Lyhennetty nimi"
+
+#, fuzzy
+#~| msgid "Long Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Long Name"
+#~ msgstr "Pitkä nimi"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-12)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-12)"
+#~ msgstr "Luvut (1–12)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-12)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-12)"
+#~ msgstr "Kaksinumeroinen luku (01–12)"
+
+#, fuzzy
+#~| msgid "Possessive Abbreviated Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Possessive Abbreviated Name"
+#~ msgstr "Omistusmuotoinen lyhennetty nimi"
+
+#, fuzzy
+#~| msgid "Possessive Long Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Possessive Long Name"
+#~ msgstr "Omistusmuotoinen pitkä nimi"
+
+#, fuzzy
+#~| msgid "2 Digits (01-99)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-99)"
+#~ msgstr "Kaksinumeroinen luku (01–99)"
+
+#, fuzzy
+#~| msgid "4 Digits"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "4 Digits"
+#~ msgstr "Nelinumeroinen luku"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-23)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-23)"
+#~ msgstr "Luvut (1–23)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-23)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-23)"
+#~ msgstr "Kaksinumeroinen luku (01–23)"
+
+#, fuzzy
+#~| msgid "Flexible Digits (1-59)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flexible Digits (1-59)"
+#~ msgstr "Luvut (1–59)"
+
+#, fuzzy
+#~| msgid "2 Digits (01-59)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "2 Digits (01-59)"
+#~ msgstr "Kaksinumeroinen luku (01–59)"
+
+#, fuzzy
+#~| msgid "am/pm"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "am/pm"
+#~ msgstr "ap./ip."
+
+#, fuzzy
+#~| msgid "AM/PM"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "AM/PM"
+#~ msgstr "AP/IP"
+
+#, fuzzy
+#~| msgid "Author Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author Name"
+#~ msgstr "Tekijän nimi"
+
+#, fuzzy
+#~| msgid "Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Otsikko"
+
+#, fuzzy
+#~| msgid "Subject"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject"
+#~ msgstr "Aihe"
+
+#, fuzzy
+#~| msgid "File Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File Name"
+#~ msgstr "Tiedostonimi"
+
+#, fuzzy
+#~| msgid "Keywords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords"
+#~ msgstr "Avainsanat"
+
+#, fuzzy
+#~| msgid "Comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments"
+#~ msgstr "Kommentit"
+
+#, fuzzy
+#~| msgid "Page Count"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Count"
+#~ msgstr "Sivumäärä"
+
+#, fuzzy
+#~| msgid "Page Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Sivunumero"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Oma"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nimi:"
+
+#, fuzzy
+#~| msgid "New"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New"
+#~ msgstr "Uusi"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Poista"
+
+#, fuzzy
+#~| msgid "String"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "String"
+#~ msgstr "Merkkijono"
+
+#, fuzzy
+#~| msgid "Boolean"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean"
+#~ msgstr "Totuusarvo"
+
+#, fuzzy
+#~| msgid "Float"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Float"
+#~ msgstr "Liukuluku"
+
+#, fuzzy
+#~| msgid "Percentage"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage"
+#~ msgstr "Prosenttiluku"
+
+#, fuzzy
+#~| msgid "Currency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency"
+#~ msgstr "Valuutta"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "Päiväys"
+
+#, fuzzy
+#~| msgid "Time"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time"
+#~ msgstr "Aika"
+
+#, fuzzy
+#~| msgid "Formula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formula"
+#~ msgstr "Kaava"
+
+#, fuzzy
+#~| msgid "Void"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Void"
+#~ msgstr "Void"
+
+#, fuzzy
+#~| msgid "Value:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value:"
+#~ msgstr "Arvo:"
+
+#, fuzzy
+#~| msgid "Name for new variable:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name for new variable:"
+#~ msgstr "Uuden muuttujan nimi:"
+
+#, fuzzy
+#~| msgid "New Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Variable"
+#~ msgstr "Uusi muuttuja"
+
+#, fuzzy
+#~| msgid "Delete variable <b>%1</b>?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete variable <b>%1</b>?"
+#~ msgstr "Poistetaanko muuttuja <b>%1</b>?"
+
+#, fuzzy
+#~| msgid "Delete Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Variable"
+#~ msgstr "Poista muuttuja"
+
+#~ msgid "Fixed"
+#~ msgstr "Vakio"
+
+#~ msgid "TextLabel"
+#~ msgstr "TekstiSelite"

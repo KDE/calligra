@@ -1,0 +1,72 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# xavier <xavier.besnard@neuf.fr>, 2012, 2013, 2015.
+# Sophie ABBAD <abbadsophie@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-05-03 18:36+0200\n"
+"Last-Translator: Sophie ABBAD <abbadsophie@gmail.com>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: ChangeSomethingCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr "Modifier quelque chose"
+
+#: TemplateShapeFactory.cpp:32
+#, kde-format
+msgid "Template shape"
+msgstr "Modèle de forme"
+
+#: TemplateShapeFactory.cpp:34
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr "Forme simple utilisée comme modèle pour développer d'autres formes."
+
+#: TemplateTool.cpp:77
+#, kde-format
+msgid "Open"
+msgstr "Ouvrir"
+
+#: TemplateToolFactory.cpp:26
+#, kde-format
+msgid "Template shape editing"
+msgstr "Édition de modèles de formes"
+
+#, fuzzy
+#~| msgid "Template shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape"
+#~ msgstr "Modèle de forme"
+
+#, fuzzy
+#~| msgid ""
+#~| "Simple shape that is used as a template for developing other shapes."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Simple shape that is used as a template for developing other shapes."
+#~ msgstr "Forme simple utilisée comme modèle pour développer d'autres formes."
+
+#, fuzzy
+#~| msgid "Open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open"
+#~ msgstr "Ouvrir"
+
+#, fuzzy
+#~| msgid "Template shape editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape editing"
+#~ msgstr "Édition de modèles de formes"

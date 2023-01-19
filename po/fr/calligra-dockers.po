@@ -1,0 +1,350 @@
+# translation of koffice-dockers.po to français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Stanislas Zeller <uncensored.assault@gmail.com>, 2008, 2010.
+# xavier <ktranslator31@yahoo.fr>, 2012, 2013.
+# Timothée Giet <animtim@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-02-15 15:18+0100\n"
+"Last-Translator: Timothée Giet <animtim@gmail.com>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Impossible de trouver des formes dans la collection ! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Ce n'est pas un fichier Calligra valable : %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Impossible de trouver des étiquettes dans le fichier : %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Aucune étiquette « office:drawing » trouvée dans le fichier : %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Aucune forme trouvée dans le fichier : %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Ajouter une forme"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Plus"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Ouvrir une collection de formes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Supprimer une collection de formes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Par défaut"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Géométrie"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Flèches"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Drôle"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Erreur de collection"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Propriétés de forme"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Configuration du magnétisme"
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Impossible de trouver des formes dans la collection ! %1"
+
+#, fuzzy
+#~| msgid "Not a valid Calligra file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Ce n'est pas un fichier Calligra valable : %1"
+
+#, fuzzy
+#~| msgid "No body tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Impossible de trouver des étiquettes dans le fichier : %1"
+
+#, fuzzy
+#~| msgid "No office:drawing tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Aucune étiquette « office:drawing » trouvée dans le fichier : %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Aucune forme trouvée dans le fichier : %1"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Ajouter une forme"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Plus"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Ouvrir une collection de formes"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Supprimer une collection de formes"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Par défaut"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Géométrie"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Flèches"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Drôle"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Erreur de collection"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Propriétés de forme"
+
+#, fuzzy
+#~| msgid "Snap Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Settings"
+#~ msgstr "Configuration du magnétisme"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Sélecteur de couleurs"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Propriétés de l'ombre"
+
+#~ msgid "Creation error"
+#~ msgstr "Erreur lors de la création"
+
+#~ msgid "File not found"
+#~ msgstr "Impossible de trouver le fichier"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Impossible de créer le stockage"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Mauvais type MIME"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Erreur dans le document intégré"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Format non reconnu"
+
+#~ msgid "Not implemented"
+#~ msgstr "Non implémenté"
+
+#~ msgid "Parsing error"
+#~ msgstr "Erreur d'analyse"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Le document est protégé par un mot de passe"
+
+#~ msgid "Internal error"
+#~ msgstr "Erreur interne"
+
+#~ msgid "Out of memory"
+#~ msgstr "Plus de mémoire"
+
+#~ msgid "Unknown error"
+#~ msgstr "Erreur inconnue"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Impossible d'ouvrir\n"
+#~ "%2.\n"
+#~ "Raison : %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "Impossible d'importer le fichier : %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Opacité :"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Solide"
+
+#~ msgid "Gradient"
+#~ msgstr "Dégradé"
+
+#~ msgid "Pattern"
+#~ msgstr "Motif"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Remplissage pair-impair"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Remplissage sinueux"
+
+#~ msgid "Stroke and Fill"
+#~ msgstr "Suivre et remplir"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Propriétés du trait"
+
+#~ msgid "Style:"
+#~ msgstr "Style : "
+
+#~ msgid "Width:"
+#~ msgstr "Largeur : "
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Définir la largueur de ligne de la sélection actuelle"
+
+#~ msgid "Cap:"
+#~ msgstr "Terminaison : "
+
+#~ msgid "Butt cap"
+#~ msgstr "Terminaison sur le nœud"
+
+#~ msgid "Round cap"
+#~ msgstr "Terminaison arrondie"
+
+#~ msgid "Square cap"
+#~ msgstr "Terminaison triangulaire"
+
+#~ msgid "Join:"
+#~ msgstr "Raccord : "
+
+#~ msgid "Miter join"
+#~ msgstr "Raccord droit : "
+
+#~ msgid "Round join"
+#~ msgstr "Raccord rond : "
+
+#~ msgid "Bevel join"
+#~ msgstr "Raccord biseauté"
+
+#~ msgid "Miter limit:"
+#~ msgstr "Limite du raccord : "
+
+#~ msgid "Set miter limit"
+#~ msgstr "Définir la limite du raccord"
+
+#~ msgid "Styles"
+#~ msgstr "Styles"
+
+#~ msgid "Shapes"
+#~ msgstr "Formes"
+
+#~ msgid "Open..."
+#~ msgstr "Ouvrir..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Enregistrer le livre..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Nouveau dossier..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Grossir"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Réduire"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Supprimer le dossier"
+
+#~ msgid "Templates"
+#~ msgstr "Modèles"

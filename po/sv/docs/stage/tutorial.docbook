@@ -1,0 +1,546 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>En stegvis handledning</title>
+
+<para
+>I det här kapitlet, introduceras &stage; med en enkel handledning. Vi går igenom de mest grundläggande stegen som ingår i att skapa en presentation, och lägger till några grundläggande effekter. </para>
+
+<sect1 id="start-new">
+<title
+>Starta ett nytt dokument</title>
+
+<para
+>När du startar &stage;, visas den vanliga startdialogrutan i &calligra;. </para>
+
+<screenshot>
+<screeninfo
+>Startdialogrutan i <guilabel
+>&calligra;</guilabel
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Startdialogrutan i &calligra;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Välj <guilabel
+>Skärm</guilabel
+> till vänster, och välj därefter mallen vid namn <guilabel
+>Tom</guilabel
+> (markerad med blått i skärmbilden ovan) genom att klicka på den. Du kan markera <guilabel
+>Använd alltid den här mallen</guilabel
+> för att göra den till förvald mall. </para>
+
+<para
+>Klicka nu <guibutton
+>Använd den här mallen</guibutton
+>. Det visar redigeringsfönstret för sidor, där du kan titta på och redigera sidorna (och objekt som finns på dem) i ditt dokument. </para>
+
+<para
+>För närvarande har vi bara en tom sida, så markera sidan överst till vänster med den ensamma textrutan i panelen <guilabel
+>Bildlayout</guilabel
+>.</para>
+
+<para
+>Dubbelklicka på textrutan. Markören ändras till en vertikal linje för att visa att du nu kan skriva in text. </para>
+
+<screenshot>
+<screeninfo
+>Textinfogningsmarkören</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Textinfogningsmarkören</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Sätt igång och skriv lite text! </para>
+
+<screenshot>
+<screeninfo
+>Lägga till text</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Lägga till text</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Klicka någon annanstans än på texten för att avmarkera textrutan när du har skrivit klart. </para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title
+>Lägga till en ny sida</title>
+
+<para
+>Låt oss nu lägga till en ny sida i dokumentet. För att göra det, klicka på menyn <guimenu
+>Sida</guimenu
+>, och sedan på <guimenuitem
+>Infoga sida...</guimenuitem
+>. </para>
+
+<para
+>Nu kan vi bestämma hur den nya sidan ska se ut. Välj enkolumnlayout den här gången (markerat med blått). </para>
+
+<screenshot>
+<screeninfo
+>Välja en layout för den nya sidan</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Välja en layout för den nya sidan</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Den nya sidlayouten visas i redigeringsfönstret. För att byta mellan sidorna i presentationen, kan du välja dem i panelen till vänster (markerad med blått på skärmbilden). </para>
+
+<para
+>Den nyinfogade sidan har två textrutor. Det finns en för rubriken, och en annan som ska innehålla en punktad lista med objekt. </para>
+
+<screenshot>
+<screeninfo
+>Den nya sidan</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Den nya sidan</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Dubbelklicka och skriv in en rubrik. Dubbelklicka sedan på den andra textrutan. Observera att en punkt automatiskt dyker upp när du börjar skriva. Skriv lite text och avsluta stycket genom att trycka på <keycap
+>Enter</keycap
+> eller returtangenten. När du skriver in nya stycken så dyker punkter automatiskt upp framför dem. </para>
+
+<screenshot>
+<screeninfo
+>Lägga till text på den andra sidan</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Lägga till text på den andra sidan</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Du kan avmarkera textrutan genom att klicka någon annanstans. </para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title
+>Infoga en bild</title>
+
+<para
+>Låt oss nu gå tillbaka till den första sidan. Använd listan med bilder till vänster på skärmen. </para>
+
+<para
+>I det här avsnittet, livar vi upp presentationen lite grand genom att lägga till en trevlig logotyp på titelsidan. För att göra det, är första steget att aktivera panelen <guilabel
+>Lägg till form</guilabel
+> genom att använda <menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Paneler</guimenuitem
+></menuchoice
+> i menyn. </para>
+
+<para
+>Välj nu Bild i panelen <guilabel
+>Lägg till form</guilabel
+> och klicka med vänster musknapp där du vill placera logotypen med sin ursprungliga storlek, eller rita en rektangel med vänster muspekare (klicka med vänster musknapp och håll nere knappen) för att ange logotypens position och storlek. </para>
+
+<para
+>En filvalsdialog dyker upp. För att lära dig mer om den eller andra vanliga dialogrutor i &kde;, titta i &kde;:s dokumentation. Du kan bläddra genom att klicka på ikoner med <guiicon
+>kataloger</guiicon
+> eller genom att använda <guiicon
+>bläddringsknapparna</guiicon
+> på verktygsraden. Ett klick på <guiicon
+>uppåtpilen</guiicon
+> tar dig uppåt en katalognivå. </para>
+
+<para
+>Markera en fil och klicka på <guibutton
+>Ok</guibutton
+>. </para>
+
+<para
+>Nu är bilden infogad på sidan och det markeringsgrepp (små fyrkanter) syns runt kanten på grafiken. </para>
+
+<screenshot>
+<screeninfo
+>Den nytillagda bilden</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Den nytillagda bilden</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Placera musmarkören var som helst i mitten av logotypen, och dra den till mitten på sidan. Använd därefter markeringshandtagen för att ändra den till rätt storlek. </para>
+
+<para
+>Det är allt. Nu har du en bild på titelsidan! </para>
+<!--FIXME Double click opens the file dialog to replace the image-->
+</sect1>
+
+<sect1 id="insert-object">
+<title
+>Infoga ett &calligra;-objekt</title>
+<para
+>Låt oss infoga ett annat &calligra;-objekt under bilden, till exempel ett diagram.</para>
+
+<para
+>Alla objekt som stöds av &calligra; kan inbäddas på en sida i &stage;. Låt oss välja ett diagram i panelen <guilabel
+>Lägg till form</guilabel
+>. </para>
+
+<para
+>Välj <guilabel
+>Diagram</guilabel
+> och markera området med musen där du vill placera diagrammet på &stage;s sida. </para>
+
+<screenshot>
+<screeninfo
+>Markera området där diagrammet ska placeras</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Markera området där diagrammet ska placeras</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>När du väl släpper musknappen, läggs ett tomt diagram till på sidan. Så fort du arbetar i diagrammet, visas dess <guilabel
+>Verktygsalternativ</guilabel
+> i panelen. </para>
+
+<screenshot>
+<screeninfo
+>Verktygsalternativ i &kchart;</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Verktygsalternativ i &kchart;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>För att flytta, ändra storlek eller till och med ta bort det inbäddade diagrammet, byt till verktyget <guibutton
+>Grundläggande formbehandling</guibutton
+> och klicka var som helst i diagramområdet. Det ska nu visas med en grön kant och med en liten gul fyrkant i varje hörn och mitt på varje sida. </para>
+<para
+>Om du flyttar markören över någon av fyrkanterna, så ska den ändras till en pil med dubbla huvuden. Du kan ändra storlek på diagrammet genom att dra en av de här fyrkanterna med <mousebutton
+>vänster</mousebutton
+> musknapp nertryckt. För att ta bort diagrammet, <mousebutton
+>höger</mousebutton
+>klicka på en av fyrkanterna och välj <guimenuitem
+>Ta bort</guimenuitem
+>.</para>
+<para
+>För att flytta diagrammet, flytta markören in i diagrammet. Markören ska då ändras till ett kors. Tryck på <mousebutton
+>vänster</mousebutton
+> musknapp, så kan du dra diagrammet dit du vill ha det.</para>
+<para
+>För att återställa diagrammet till dess normala utseende, klicka bara var som helst utanför diagramområdet.</para>
+<para
+>För att ändra formatet på själva diagrammet, <mousebutton
+>vänster</mousebutton
+>klicka två gånger inne i diagramområdet. Diagrammets <interface
+>Verktygsalternativ</interface
+> ska då visas i fönstret. Därefter kan du använda verktygen för att redigera diagrammets egenskaper såsom diagramtyp, beteckningar, axlar och data.</para>
+
+<para
+>Klicka var som helst med vänster musknapp utanför diagrammet för att gå tillbaka till &stage;s sida.</para>
+
+<para
+>Ett enkelklick på diagrammet låter dig dra det för att ändra dess plats och dessutom dra kanterna för att göra det större, som med alla andra objekt i &stage;. Dubbelklicka på diagrammet för att komma till &kchart;-läget och ändra någon av diagrammets egenskaper.</para>
+
+</sect1>
+<!-- does not work in BETA6 here
+<sect1 id="addshadow">
+<title
+>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton
+>Right</mousebutton
+> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem
+>Shadow Objects...</guimenuitem
+> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo
+>The context menu</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The context menu</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel
+>Shadow</guilabel
+> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Shadow</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The <guilabel
+>Shadow</guilabel>
+dialog</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton
+>OK</guibutton
+>.
+</para>
+
+<screenshot>
+<screeninfo
+>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adding a shadow to the title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo
+>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The new shadowed title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+-->
+<sect1 id="textcolor">
+<title
+>Ändra färg på rubriktexten</title>
+
+<para
+>Låt oss avsluta genom att ändra färg på rubriktexten från svart till blå. För att göra det, markera rubriktexten genom att dubbelklicka på textrutan och markera texten. </para>
+<!-- Font from menu Format or contextmenu with a lot of options-->
+<para
+>Öppna färgväljaren genom att klicka på ikonen <inlinemediaobject
+><imageobject
+><imagedata fileref="22x22-actions-format-text-color.png" format="PNG"/></imageobject
+></inlinemediaobject
+> i verktygsalternativen för textredigering (ikonen har verktygstipset Textfärg...).</para>
+
+<screenshot>
+<screeninfo
+>Färgväljaren</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Färgväljaren</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>Färgväljaren</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Färgväljaren</phrase
+></textobject>
+<caption
+><para
+>Ändra färgen till blå.</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<para
+>Att ändra färg på den markerade texten till blå ändrar dess utseende. Den exakta färgen som den markerade texten får, beror på systemets färgschema. </para>
+
+<note>
+<para
+>Val av textfärg är också tillgänglig under fliken <guilabel
+>Dekorationer</guilabel
+> i dialogrutan <guilabel
+>Välj teckensnitt</guilabel
+>. Visa dialogrutan med <guimenuitem
+>Teckensnitt</guimenuitem
+> i menyn <guimenu
+>Format</guimenu
+> eller i den sammanhangsberoende menyn. </para>
+</note>
+
+<para
+>Klicka nu någon annanstans för att avmarkera texten. </para>
+
+
+<screenshot>
+<screeninfo
+>Den färdiga rubriken</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Den färdiga rubriken</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Nu när det finns två bilder, varför inte prova ett bildspel! För att starta bildspelet, tryck på knappen <guiicon
+>Starta presentation</guiicon
+> i verktygsraden. Den första bilden ska visas på din skärm. </para>
+
+<para
+>För att gå framåt från den första sidan till nästa, klicka bara var som helst på skärmen, eller använd tangenten <keycap
+>Page Down</keycap
+>. </para>
+
+<para
+>Tryck på tangenten Esc för att avsluta bildspelet. </para>
+
+</sect1>
+
+</chapter>

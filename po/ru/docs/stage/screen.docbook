@@ -1,0 +1,54 @@
+<chapter id="screen-description">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+  
+</authorgroup>
+</chapterinfo>
+<title
+>Окно &kpresenter; </title>
+
+<para
+>Окно &kpresenter; по умолчанию.</para>
+
+<para
+>Вверху окна находится меню. Все функции &kpresenter; доступны из этого меню. Они подробно описываются в разделе <xref linkend="menu-items"/>.</para>
+
+<para
+>Под меню располагаются панели инструментов. Доступно несколько видов панелей инструментов. Вы можете скрывать и показывать некоторые панели инструментов. Работа с панелями инструментов описана в разделе <xref linkend="toolbars"/>. </para>
+
+<para
+>Вкладки <guilabel
+>Список</guilabel
+> и <guilabel
+>Просмотр</guilabel
+> позволяют просмотреть всю презентацию. Вкладка <guilabel
+>Просмотр</guilabel
+> показывает уменьшенную копию каждого слайда и позволяет их перетаскивать, чтобы изменить порядок. Вкладка <guilabel
+>Список</guilabel
+> показывает иерархию элементов и объектов на каждом слайде. Кроме общего представления презентации эта вкладка позволяет активизировать объекты, которые перекрыты другими, что иногда непосредственно на сайте бывает сложно сделать.</para>
+
+</chapter>

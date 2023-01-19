@@ -1,0 +1,2993 @@
+# translation of kofficefilters.po to Estonian
+# Marek Laane <bald@starman.ee>, 2004-2006.
+# Marek Laane <bald@smail.ee>, 2008-2009, 2010, 2011, 2012, 2014, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-12-15 23:03+0200\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-et@lists.linux.ee>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, kde-format
+msgid "%1 Export Options"
+msgstr "%1 ekspordi valikud"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "Leht %1"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Leht:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Suurus pikslites"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Pildi laius:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Pildi kõrgus:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Suurus ühikutes"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Lahutus:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Ühik:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Taustavärv"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Värv"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Läbipaistmatus"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:297
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr "Nimeruumi \"%1\" ei leitud"
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr "Vajaliku faili %1 avamine nurjus"
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr "Vajaliku faili %1 ZIP-kataloogi lugemine nurjus"
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Parooli sisestamine"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr "Dokument on krüptitud, palun sisesta lahtikrüptimiseks parool:"
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr "Parool on vale, palun anna dokumendi lahtikrüptimiseks parool:"
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr "Tüübi %1 asukohta ei leitud"
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr "%1 (rida %2, veerg %3)"
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr "%1 (%2, rida %3, veerg %4)"
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr "Elementi \"%1\" ei leitud"
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "Atribuuti \"%1\" ei leitud"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr "Atribuudi \"%2\" ootamatu väärtus \"%1\""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr "\"%1\" elemendi ootamatu teistkordne esinemine"
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr "Oodati elemendi \"%1\" sulgemist"
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr "Ühtegi oodatud elementi ei leitud: %1"
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "Failis \"%2\" ei leitud ID \"%1\" sihtmärki"
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "Seostefaili \"%1\" ei leitud"
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "Failis \"%2\" ei leitud seose \"%1\" sihtmärki"
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"Faili parsimisel ilmnes peadokumendis viga real %1, veerus %2.\n"
+"Veateade: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr "Kirjet '%1' ei leitud."
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr "Kirje '%1' ei ole fail."
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr "Kirje \"%1\" avamine kirjutamiseks nurjus."
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr "Ploki kirjutamine nurjus"
+
+#: sheets/csv/csvexport.cc:269
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<TABELINIMI>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Soovitatav ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Lokaat ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Muu ( %1 )"
+
+#: sheets/csv/csvexportdialog.cpp:274 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Kodeeringut %1 ei leitud"
+
+#: sheets/csv/csvimport.cc:82
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "CSV filter ei suuda avada sisendfaili - palun saada vearaport."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Kodeering"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "Kodeeri&ng:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Rea lõpp"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "&UNIX-i stiil (soovitatav, ainult reavahetus)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "&Windows'i stiil (kelgu tagastamine ja reavahetus)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "&MacOS'i stiil (ainult kelgu tagastamine)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Tabelid"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Eksporditavad tabelid:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Eraldav joon"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<TABELINIMI>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<TABELINIMI> asendatakse järgmise tabeli nimega."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Eraldav joon trükitakse iga tabeli kohal"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Lahtrid"
+
+#. i18n: ectx: property (title), widget (KButtonGroup, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Eraldaja"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Koma"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Semikoolon"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabeldusmärk"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Tühik"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Muu:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Jutumärgid:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "Eksporditakse ainult valik"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Failivorming ei ole toetatud."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Faili lugemine nurjus."
+
+#: sheets/html/exportdialog.cc:24
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "Tabeli eksport HTML-i"
+
+#: sheets/html/exportdialog.cc:35
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Soovitatav: UTF-8"
+
+#: sheets/html/exportdialog.cc:36
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Lokaat (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "Kodeeri&ng:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Siin saab määrata HTML-faili kodeeringu. Vaikimisi on valitud soovitatav "
+"kodeering (UTF-8)."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Tabeli valimine"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "Klõpsa siia kõigi nimekirja tabelite valimiseks."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "V&ali kõik"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "Tü&hista kõigi valik"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Selle valimisel genereerib HTML-i ekspordifilter igale tabelile uue "
+"lehekülje. Kui see valimata jätta, asetatakse kõik tabelid ühele leheküljele."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "Eraldi &failid igale tabelile"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Stiil"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr "Selle valimisel kasutatakse HTML-leheküljel vaikefonte ja -värve."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "&Vaikestiili kasutamine"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Selle valimisel saab määrata HTML-leheküljele spetsiifilise laaditabeli. "
+"Selle saab valida või kirjutada allolevale väljale."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Välise laa&ditabeli kasutamine:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Sellele väljale tuleb kirjutada laaditabeli URL. See võib asuda nii "
+"kõvakettal kui ka kusagil internetis."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Paigutus"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr "Siin saab piirete näitamise lahtrite ümber sisse või välja lülitada."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "&Piirete kasutamine"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Siin saab määrata, mitu pikslit peab jääma lahtrite vahele. Seda on paremini "
+"näha, kui lülitada sisse ka <b>Piirete kasutamine</b>."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "Laht&rite vahe pikslites:"
+
+#: sheets/html/htmlexport.cc:196 sheets/html/htmlexport.cc:371
+#, kde-format
+msgid "Top"
+msgstr "Ülemine"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "LaTeXi ekspordifiltri seadistused"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Dokument"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Dokumendi stiil"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "LaTeXi stiil"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Wordsi stiil"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Dokumendi tüüp"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "Dokument on üksikuna kompileeritav"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"Dokument genereeritakse puhta LaTeXi dokumendina, kuna kogu sisu "
+"moodustatakse enne käskude \\begin{document} ja \\end{document} lisamist."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Sõltumatu dokument"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Ei moodustata LaTeXi päist ega dokumendi keskkonda"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"Dokument moodustatakse LaTeXi dokumendina, mis kaasatakse peadokumenti. See "
+"võimaldab luua iga peatüki jaoks erineva väiksema faili."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Kaasatav dokument"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Dokumendiklass:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Kvaliteet:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Lõplik"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Mustand"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Fondi vaikesuurus:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Pildid"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, kde-format
+msgid "Convert the pictures:"
+msgstr "Pildid teisendatakse:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "Piltide kataloog:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Keel"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Lisa"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Eemalda"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Sisu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, kde-format
+msgid "Export information about author:"
+msgstr "Eksporditakse teave autori kohta:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, kde-format
+msgid "Add a table of content:"
+msgstr "Lisatakse sisukord:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Märkused"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Ei ekspordita"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "Eksporditakse märkused ääremärkustest"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "Eksporditakse märkused kommentaaridest"
+
+#: sheets/opencalc/opencalcexport.cc:905
+#, kde-format
+msgid "Page "
+msgstr "Leht "
+
+#: sheets/opencalc/opencalcimport.cc:1217
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "Tundub, et fail on vigane. Tabel jäetakse vahele."
+
+#: sheets/opencalc/opencalcimport.cc:1228
+#, kde-format
+msgid "Skipping a table."
+msgstr "Tabel jäetakse vahele."
+
+#: sheets/opencalc/opencalcimport.cc:1928
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"See dokument on loodud OpenOffice.org-i versiooniga '%1'. Käesolev filter on "
+"kirjutatud versiooni 1.0 jaoks. Faili avamisel võib esineda programmi "
+"tõrkeid, andmete ebakorrektset kuva või muid anomaaliaid. Tahad sa dokumendi "
+"konverteerimist jätkata?"
+
+#: sheets/opencalc/opencalcimport.cc:1929
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Toetuseta dokumendi versioon"
+
+#: sheets/qpro/qproimport.cc:115
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "QPRO filter ei suuda avada sisendfaili - saada vearaport."
+
+#: sheets/qpro/qproimport.cc:226
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Parooliga kaitstud failide avamine nurjus.\n"
+"Parooli algoritmi ei ole avaldatud"
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr "Tüübile %1 ei leitud komponenti"
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr "Ühiste stringide deklareeritud arv on liiga väike (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr "Fondistiilide deklareeritud arv on liiga väike (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr "Lahtri vormingute deklareeritud arv on liiga väike (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr "Täitmise stiilide deklareeritud arv on liiga väike (%1)"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:346
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+"Andmeid ei saa täielikult laadida, sest töölehe maksimumsuurus on juba "
+"saavutatud."
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1423
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr "Oodati täis- või murdarvu"
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "Slaidipaigutust \"%1\" ei leitud"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "Slaid %1"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "Wordsi lihtteksti impordifilter"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Lihtteksti impordidialoog"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Lõigu lõpp"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "&Nagu on: rea lõpus"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "&Lause: kui rea lõpp on ka lause lõpp"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr "&Tühi rida: kui rida on tühi"
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, kde-format
+msgid "End notes"
+msgstr "Lõpumärkused"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "Paarisarvuliste lehtede päis"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "Paarituarvuliste lehtede päis"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "Paarisarvuliste lehtede jalus"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "Paarituarvuliste lehtede jalus"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Esimese lehe päis"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Esimese lehe jalus"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Tabel %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "Faili ei saa laadida, sest see ei paista olevat RTF-dokument."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "Wordsi RTF-i impordifilter"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr "Faili ei saa laadida."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Andmete lugemine nurjus."
+
+#~ msgid "Export Error"
+#~ msgstr "Ekspordi viga"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Vigased XML-andmed."
+
+#~ msgid "Export to Image"
+#~ msgstr "Eksport pildina"
+
+#~ msgid "Complete Page"
+#~ msgstr "Kogu leht"
+
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektide ala lehel"
+
+#~ msgid "Area to export:"
+#~ msgstr "Eksporditav piirkond:"
+
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Kohandatud suurus (pikslites):"
+
+#~ msgid "Height:"
+#~ msgstr "Kõrgus:"
+
+#~ msgid "Width:"
+#~ msgstr "Laius:"
+
+#~ msgid "Margin:"
+#~ msgstr "Veeris:"
+
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Size in Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "Suurus pikslites"
+
+#, fuzzy
+#~| msgid "Image width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Pildi laius:"
+
+#, fuzzy
+#~| msgid "Image height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Pildi kõrgus:"
+
+#, fuzzy
+#~| msgid "Size in Units"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "Suurus ühikutes"
+
+#, fuzzy
+#~| msgid "Resolution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Lahutus:"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Ühik:"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Taustavärv"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Värv"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Läbipaistmatus"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "Kodeeri&ng:"
+
+#, fuzzy
+#~| msgid ""
+#~| "With this option you can define the encoding of the HTML file. The "
+#~| "recommended encoding (UTF8) is selected as default."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Siin saab määrata HTML-faili kodeeringu. Vaikimisi on valitud soovitatav "
+#~ "kodeering (UTF-8)."
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Tabeli valimine"
+
+#, fuzzy
+#~| msgid "Click here to select all sheets in the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "Klõpsa siia kõigi nimekirja tabelite valimiseks."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "V&ali kõik"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "Tü&hista kõigi valik"
+
+#, fuzzy
+#~| msgid ""
+#~| "This option will make the HTML export filter generate a new page for "
+#~| "each sheet. If you disable this option, all sheets are written on one "
+#~| "page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Selle valimisel genereerib HTML-i ekspordifilter igale tabelile uue "
+#~ "lehekülje. Kui see valimata jätta, asetatakse kõik tabelid ühele "
+#~ "leheküljele."
+
+#, fuzzy
+#~| msgid "Use &separate files for each table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "Eraldi &failid igale tabelile"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stiil"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to use the default fonts and colors for the HTML page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr "Selle valimisel kasutatakse HTML-leheküljel vaikefonte ja -värve."
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "&Vaikestiili kasutamine"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to specify a separate stylesheet for the HTML page. "
+#~| "You can select or type on in the field below."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr ""
+#~ "Selle valimisel saab määrata HTML-leheküljele spetsiifilise laaditabeli. "
+#~ "Selle saab valida või kirjutada allolevale väljale."
+
+#, fuzzy
+#~| msgid "Use &external stylesheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Välise laa&ditabeli kasutamine:"
+
+#, fuzzy
+#~| msgid ""
+#~| "In this field you can enter an URL for your stylesheet. It is possible "
+#~| "to point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Sellele väljale tuleb kirjutada laaditabeli URL. See võib asuda nii "
+#~ "kõvakettal kui ka kusagil internetis."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Paigutus"
+
+#, fuzzy
+#~| msgid "Use this option to enable or disable borders around the cells."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr ""
+#~ "Siin saab piirete näitamise lahtrite ümber sisse või välja lülitada."
+
+#, fuzzy
+#~| msgid "Use &borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "&Piirete kasutamine"
+
+#, fuzzy
+#~| msgid ""
+#~| "Use this option to define how many pixels there should be between the "
+#~| "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Siin saab määrata, mitu pikslit peab jääma lahtrite vahele. Seda on "
+#~ "paremini näha, kui lülitada sisse ka <b>Piirete kasutamine</b>."
+
+#, fuzzy
+#~| msgid "Pi&xels between cells:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "Laht&rite vahe pikslites:"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Dokumendi stiil"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "LaTeXi stiil"
+
+#, fuzzy
+#~| msgid "Words style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Wordsi stiil"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Dokumendi tüüp"
+
+#, fuzzy
+#~| msgid "The document will be able to be compiled alone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "Dokument on üksikuna kompileeritav"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "Dokument genereeritakse puhta LaTeXi dokumendina, kuna kogu sisu "
+#~ "moodustatakse enne käskude \\begin[document} ja \\end{document} lisamist."
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Sõltumatu dokument"
+
+#, fuzzy
+#~| msgid "Do not generate either the latex header or the document environment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Ei moodustata LaTeXi päist ega dokumendi keskkonda"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "Dokument moodustatakse LaTeXi dokumendina, mis kaasatakse peadokumenti. "
+#~ "See võimaldab luua iga peatüki jaoks erineva väiksema faili."
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Kaasatav dokument"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Dokumendiklass:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Kvaliteet:"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Lõplik"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Mustand"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Fondi vaikesuurus:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Pildid"
+
+#, fuzzy
+#~| msgid "Convert the pictures:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "Pildid teisendatakse:"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "Piltide kataloog:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Keel"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Kodeering"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Lisa"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Eemalda"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Sisu"
+
+#, fuzzy
+#~| msgid "Export information about author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "Eksporditakse teave autori kohta:"
+
+#, fuzzy
+#~| msgid "Add a table of content:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Lisatakse sisukord:"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Märkused"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Ei ekspordita"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "Eksporditakse märkused ääremärkustest"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "Eksporditakse märkused kommentaaridest"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "Kodeeri&ng:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Rea lõpp"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "&UNIX-i stiil (soovitatav, ainult reavahetus)"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "&Windows'i stiil (kelgu tagastamine ja reavahetus)"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "&MacOS'i stiil (ainult kelgu tagastamine)"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Tabelid"
+
+#, fuzzy
+#~| msgid "Select sheets to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Eksporditavad tabelid:"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Eraldav joon"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<TABELINIMI>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<TABELINIMI> asendatakse järgmise tabeli nimega."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Eraldav joon trükitakse iga tabeli kohal"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Lahtrid"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Eraldaja"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Koma"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Semikoolon"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Tabeldusmärk"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Tühik"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Muu:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Jutumärgid:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "Eksporditakse ainult valik"
+
+#, fuzzy
+#~| msgid "Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Leht:"
+
+#, fuzzy
+#~| msgid "Complete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Kogu leht"
+
+#, fuzzy
+#~| msgid "Area of Objects on Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektide ala lehel"
+
+#, fuzzy
+#~| msgid "Area to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Eksporditav piirkond:"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Kohandatud suurus (pikslites):"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Kõrgus:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Laius:"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Veeris:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Lihtteksti impordidialoog"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Lõigu lõpp"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "&Nagu on: rea lõpus"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "&Lause: kui rea lõpp on ka lause lõpp"
+
+#, fuzzy
+#~| msgid "&Empty Line: If the line is empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Empty Line: If the line is empty"
+#~ msgstr "&Tühi rida: kui rida on tühi"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Ekspordi viga"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Andmete lugemine nurjus."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Vigased XML-andmed."
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Eksport pildina"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "PNG ekspordi valikud"
+
+#, fuzzy
+#~| msgid "Namespace \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "Nimeruumi \"%1\" ei leitud"
+
+#, fuzzy
+#~| msgid "Could not open the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "Vajaliku faili %1 avamine nurjus"
+
+#, fuzzy
+#~| msgid "Could not read ZIP directory of the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "Vajaliku faili %1 ZIP-kataloogi lugemine nurjus"
+
+#, fuzzy
+#~| msgid "Enter password"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Parooli sisestamine"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document is encrypted, please enter the password to decrypt it:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This document is encrypted, please enter the password to decrypt it:"
+#~ msgstr "Dokument on krüptitud, palun sisesta lahtikrüptimiseks parool:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Incorrect password, please enter the password to decrypt this document:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Incorrect password, please enter the password to decrypt this document:"
+#~ msgstr "Parool on vale, palun anna dokumendi lahtikrüptimiseks parool:"
+
+#, fuzzy
+#~| msgid "Could not find path for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "Tüübi %1 asukohta ei leitud"
+
+#, fuzzy
+#~| msgid "%1 (line %2, column %3)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (line %2, column %3)"
+#~ msgstr "%1 (rida %2, veerg %3)"
+
+#, fuzzy
+#~| msgid "%1 (%2, line %3, column %4)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (%2, line %3, column %4)"
+#~ msgstr "%1 (%2, rida %3, veerg %4)"
+
+#, fuzzy
+#~| msgid "Element \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "Elementi \"%1\" ei leitud"
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "Atribuuti \"%1\" ei leitud"
+
+#, fuzzy
+#~| msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgstr "Atribuudi \"%2\" ootamatu väärtus \"%1\""
+
+#, fuzzy
+#~| msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgstr "\"%1\" elemendi ootamatu teistkordne esinemine"
+
+#, fuzzy
+#~| msgid "Expected closing of element \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected closing of element \"%1\""
+#~ msgstr "Oodati elemendi \"%1\" sulgemist"
+
+#, fuzzy
+#~| msgid "None of expected elements found: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None of expected elements found: %1"
+#~ msgstr "Ühtegi oodatud elementi ei leitud: %1"
+
+#, fuzzy
+#~| msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "Failis \"%2\" ei leitud ID \"%1\" sihtmärki"
+
+#, fuzzy
+#~| msgid "Could not find relationships file \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "Seostefaili \"%1\" ei leitud"
+
+#, fuzzy
+#~| msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "Failis \"%2\" ei leitud seose \"%1\" sihtmärki"
+
+#, fuzzy
+#~| msgid ""
+#~| "Parsing error in the main document at line %1, column %2.\n"
+#~| "Error message: %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Faili parsimisel ilmnes peadokumendis viga real %1, veerus %2.\n"
+#~ "Veateade: %3"
+
+#, fuzzy
+#~| msgid "QXml"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Entry '%1' not found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "Kirjet '%1' ei leitud."
+
+#, fuzzy
+#~| msgid "Entry '%1' is not a file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' is not a file."
+#~ msgstr "Kirje '%1' ei ole fail."
+
+#, fuzzy
+#~| msgid "Could not open entry \"%1\" for writing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open entry \"%1\" for writing."
+#~ msgstr "Kirje \"%1\" avamine kirjutamiseks nurjus."
+
+#, fuzzy
+#~| msgid "Could not write block"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "Ploki kirjutamine nurjus"
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<TABELINIMI>"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Soovitatav ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Lokaat ( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Muu ( %1 )"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Kodeeringut %1 ei leitud"
+
+#, fuzzy
+#~| msgid "CSV filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr "CSV filter ei suuda avada sisendfaili - palun saada vearaport."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Failivorming ei ole toetatud."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Faili lugemine nurjus."
+
+#, fuzzy
+#~| msgid "Export Sheet to HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "Tabeli eksport HTML-i"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Soovitatav: UTF-8"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Lokaat (%1)"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Ülemine"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "LaTeXi ekspordifiltri seadistused"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Leht "
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "Tundub, et fail on vigane. Tabel jäetakse vahele."
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Tabel jäetakse vahele."
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "See dokument on loodud OpenOffice.org-i versiooniga '%1'. Käesolev filter "
+#~ "on kirjutatud versiooni 1.0 jaoks. Faili avamisel võib esineda programmi "
+#~ "tõrkeid, andmete ebakorrektset kuva või muid anomaaliaid. Tahad sa "
+#~ "dokumendi konverteerimist jätkata?"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Toetuseta dokumendi versioon"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr "QPRO filter ei suuda avada sisendfaili - saada vearaport."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Parooliga kaitstud failide avamine nurjus.\n"
+#~ "Parooli algoritmi ei ole avaldatud"
+
+#, fuzzy
+#~| msgid "Unable to find part for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "Tüübile %1 ei leitud komponenti"
+
+#, fuzzy
+#~| msgid "Declared number of shared strings too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of shared strings too small (%1)"
+#~ msgstr "Ühiste stringide deklareeritud arv on liiga väike (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of font styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of font styles too small (%1)"
+#~ msgstr "Fondistiilide deklareeritud arv on liiga väike (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of cell formats too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of cell formats too small (%1)"
+#~ msgstr "Lahtri vormingute deklareeritud arv on liiga väike (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of fill styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of fill styles too small (%1)"
+#~ msgstr "Täitmise stiilide deklareeritud arv on liiga väike (%1)"
+
+#, fuzzy
+#~| msgid ""
+#~| "The data could not be loaded completely because the maximum size of "
+#~| "sheet was exceeded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The data could not be loaded completely because the maximum size of sheet "
+#~ "was exceeded."
+#~ msgstr ""
+#~ "Andmeid ei saa täielikult laadida, sest töölehe maksimumsuurus on juba "
+#~ "saavutatud."
+
+#, fuzzy
+#~| msgid "Expected integer or floating point number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected integer or floating point number"
+#~ msgstr "Oodati täis- või murdarvu"
+
+#, fuzzy
+#~| msgid "Slide layout \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "Slaidipaigutust \"%1\" ei leitud"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Slaid %1"
+
+#, fuzzy
+#~| msgid "Words's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "Wordsi lihtteksti impordifilter"
+
+#, fuzzy
+#~| msgid "End notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Lõpumärkused"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "Paarisarvuliste lehtede päis"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "Paarituarvuliste lehtede päis"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "Paarisarvuliste lehtede jalus"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "Paarituarvuliste lehtede jalus"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Esimese lehe päis"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Esimese lehe jalus"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Tabel %1"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr "Faili ei saa laadida, sest see ei paista olevat RTF-dokument."
+
+#, fuzzy
+#~| msgid "Words's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "Wordsi RTF-i impordifilter"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "Faili ei saa laadida."
+
+#~ msgid "Failed to write file."
+#~ msgstr "Faili kirjutamine nurjus."
+
+#~ msgid "%1 Export Error"
+#~ msgstr "%1 ekspordi viga"
+
+#~ msgid "Export Filter Parameters"
+#~ msgstr "Ekspordifiltri parameetrid"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Proportsiooni säilitamine"
+
+#~ msgid "Width (%):"
+#~ msgstr "Laius (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Kõrgus (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "PNG ekspordi viga"
+
+#~ msgid "EPS Export"
+#~ msgstr "EPS-i eksport"
+
+#~ msgid "Options"
+#~ msgstr "Valikud"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript tase 1"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript tase 2"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript tase 3"
+
+#~ msgid "Import"
+#~ msgstr "Import"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "Number"
+#~ msgstr "Arv"
+
+#~ msgid "Currency"
+#~ msgstr "Rahaühik"
+
+#~ msgid "Date"
+#~ msgstr "Kuupäev"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Murdarv komaga"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "Murdarv punktiga"
+
+#~ msgid "None"
+#~ msgstr "Puudub"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Palun kontrolli määratud vahemikku. Algusväärtus peab olema väiksem kui "
+#~ "lõppväärtus."
+
+#~ msgid "Common"
+#~ msgstr "Tavaline"
+
+#~ msgid "Other"
+#~ msgstr "Muu"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "Ignoreeritakse topelteraldajaid"
+
+#~ msgid "Text&quote:"
+#~ msgstr "Te&kstieristaja:"
+
+#~ msgid "&Format:"
+#~ msgstr "&Vorming:"
+
+#~ msgid "Ranges"
+#~ msgstr "Vahemikud"
+
+#~ msgid "to"
+#~ msgstr "kuni"
+
+#~ msgid "Import lines:"
+#~ msgstr "Imporditavad read:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Imporditavad veerud:"
+
+#~ msgid "Update"
+#~ msgstr "Uuenda"
+
+#~ msgid "&Help"
+#~ msgstr "&Abi"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "&OK"
+#~ msgstr "&OK"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Loobu"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Wordsi faili parsimisel tekkis viga\n"
+#~ "real %1, veerus %2\n"
+#~ "Veateade: %3"
+
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Wordsi ekspordifiltri teek"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "XSLT seadistuste eksport"
+
+#~ msgid "Open Document"
+#~ msgstr "Dokumendi avamine"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "XSLT seadistuste import"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Ühised xslt-failid"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Isiklikud xslt-failid"
+
+#~ msgid "Choose..."
+#~ msgstr "Vali..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "SVG ekspordi viga"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "Viga LaTeXisse ekspordil"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "PNG ekspordifiltri parameetrid"
+
+#~ msgid "Height"
+#~ msgstr "Kõrgus"
+
+#~ msgid "Width"
+#~ msgstr "Laius"
+
+#~ msgid "Height (%)"
+#~ msgstr "Kõrgus (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Laius (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "Slaidi pealkiri"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Pilt %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Tabel %3, rida %1, veerg %2"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "AbiWord'i faili parsimisel tekkis viga\n"
+#~ "real %1, veerus %2\n"
+#~ "Veateade: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "AbiWord'i impordifilter"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Peamine raamigrupp"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Tekkis viga AbiWord'i faili laadimisel: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Dokumendi info salvestamine nurjus."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Peadokumendi salvestamine nurjus."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Allmärkus %1"
+
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "Wordsi lihtteksti ekspordifilter"
+
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "Wordsi HTML-i ekspordifilter"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Nimetu dokument"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "LaTeXi impordifiltri parameetrid"
+
+#~ msgid "Unicode"
+#~ msgstr "Unicode"
+
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#~ msgid "New document"
+#~ msgstr "Uus dokument"
+
+#~ msgid "Embedded document"
+#~ msgstr "Põimitud dokument"
+
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "Wordsi MS Write'i impordifilter"
+
+#~ msgid "Header"
+#~ msgstr "Päis"
+
+#~ msgid "Footer"
+#~ msgstr "Jalus"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Peamine raamigrupp"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Tabel %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Tabeli raam %1"
+
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Lihtteksti ekspordidialoog"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "HTML-i ekspordidialoog"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (Vanemate HTML-i kasutajaagentide jaoks) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Režiim"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "L&ihtne: teisendamine puhtasse (X)HTML-i"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "Teisendatakse dokumendi põhistruktuur (soovitatav piiratud võimalustega "
+#~ "veebilehitsejate puhul)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "&Tavaline: teisendamine uuendustega (X)HTML-i"
+
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "Teisendatakse enamik dokumendist (soovitatav tagasiimportimiseks Wordsi "
+#~ "või kasutamiseks vanemate veebilehitsejatega)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "Täiu&statud: teisendamine (X)HTML-i koos CSS-iga"
+
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "Teisendatakse Wordsi dokumendist nii palju kui võimalik (soovitatav "
+#~ "eksportimiseks uuemate tekstitöötlusrakenduste või veebilehitsejate jaoks)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Välise CSS-i kasutamine:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Kirjuta siia CSS-faili asukoht"
+
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Kataloog, mis sisaldab sinu dokumendi EPS-pilte"
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "KWordi MS Write'i impordidialoog"
+
+#~ msgid "&Encoding"
+#~ msgstr "Kooditab&el"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Vali Write'i dokumendi kodeering.<br><br>Proovi vaikimisi kodeeringut (CP "
+#~ "1252), kui kahtled."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "&Muu kooditabel:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "&Vaikimisi kodeering (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "Enamik Write'i dokumente on salvestatud selle kodeeringu abil (tuntud kui "
+#~ "windows-1252).<br><br>Vali see, kui kahtled."
+
+#~ msgid "&Advanced"
+#~ msgstr "&Muud"
+
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Need valikud lubavad importimise ja vormindamise info täppishäälestamist. "
+#~ "Nad kompenseerivad Wordsi ja MS Write'i erinevused, lisades erinevaid "
+#~ "vormindusvalikuid (mis puuduvad algdokumendis), et muuta dokumendi "
+#~ "väljanägemine nii originaalilähedaseks kui võimalik.<br><br>Kui on "
+#~ "kahtlusi, siis on turvaline kasutada vaikeväärtusi."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "Kompenseeritakse &reavahede erinevused"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Proovitakse simuleerida Write'i reavahesid, lisades mõned vahed iga lõigu "
+#~ "ette."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "&Pildi positsioneerimise lubamine"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "Kasutatakse lõigu taandust pildi paigutamiseks."
+
+#~ msgid "DCM Import"
+#~ msgstr "DCM-i import"
+
+#~ msgid "Import options"
+#~ msgstr "Impordi valikud"
+
+#~ msgid "Read digital signatures from the dataset"
+#~ msgstr "Digitaalallkirjade lugemine andmestikust"
+
+#~ msgid "Ignore relationship constraints"
+#~ msgstr "Seostepiirangute eiramine"
+
+#~ msgid ""
+#~ "Do not abort on content item errors\n"
+#~ "(e.g. missing value type specific attributes)"
+#~ msgstr ""
+#~ "Sisuelemendi vigade puhul ei loobuta\n"
+#~ "(nt. väärtusetüübi spetsiifiliste atribuutide puudumisel)"
+
+#~ msgid "Skip invalid content item subtree"
+#~ msgstr "Vigase sisuelemendi alampuu jäetakse vahele"
+
+#~ msgid "Note \"%1\" already exists"
+#~ msgstr "Märkus \"%1\" on juba olemas"
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr ""
+#~ "Dokumenti ei saa laadida, sest see ei paista järgivat RTF-i süntaksit."
+
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "RTF (Rich Text Format) dokumendil on ootamatu versiooninumber: %1. "
+#~ "Jätkamisel võib teisendamine kaasa tuua vigasid. Kas soovid jätkata?"
+
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "PWD (PocketWordi Rich Text Format) dokumendil on ootamatu "
+#~ "versiooninumber: %1. Jätkamisel võib teisendamine kaasa tuua vigasid. Kas "
+#~ "soovid jätkata?"
+
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "URTF (Unicode Rich Text Format) dokumendil on ootamatu versiooninumber: "
+#~ "%1. Jätkamisel võib teisendamine kaasa tuua vigasid. Kas soovid jätkata?"
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "RTF-dokumenti ei saa laadida, sest sel on ootamatu esimene võtmesõna: \\"
+#~ "%1."
+
+#~ msgid "Declared number of border styles too small (%1)"
+#~ msgstr "Piirdestiilide deklareeritud arv on liiga väike (%1)"
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr "Vana &meetod: kui rida on tühi või koosneb vähem kui 40 sümbolist"
+
+#~ msgid "KFormula Import Error"
+#~ msgstr "KFormula impordi viga"
+
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "KFormula1.3 impordifilter"
+
+#~ msgid "Available Sheets"
+#~ msgstr "Saadaolevad tabelid"
+
+#~ msgid "Endnote \"%1\" not found"
+#~ msgstr "Lõppmärkust \"%1\" ei leitud"
+
+#~ msgid "Comment \"%1\" not found"
+#~ msgstr "Kommentaari \"%1\" ei leitud"
+
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Allmärkust \"%1\" ei leitud"
+
+#~ msgid "Invalid comment date \"%1\""
+#~ msgstr "Vigane kommentaari kuupäev \"%1\""
+
+#~ msgid "Picture %1"
+#~ msgstr "Pilt %1"
+
+#~| msgid "Declared number of cell formats too small (%1)"
+#~ msgid "Declared number of formats too small (%1)"
+#~ msgstr "Vormingute deklareeritud arv on liiga väike (%1)"
+
+#~ msgid "A password is required to read that pdf"
+#~ msgstr "Selle PDF-i lugemiseks on vajalik parool"
+
+#~ msgid "Cannot export images in %1.\n"
+#~ msgstr "%1 piltide eksport nurjus.\n"
+
+#~ msgid "JPEG Export Options"
+#~ msgstr "JPEG ekspordi valikud"
+
+#~ msgid "TIFF Export Options"
+#~ msgstr "TIFF-i ekspordi valikud"
+
+#~ msgid "All Images"
+#~ msgstr "Kõik pildid"
+
+#~ msgid ""
+#~ "The image is using an unsupported color space. Please convert to 16-bit "
+#~ "floating point RGB/Alpha before saving in the OpenEXR format."
+#~ msgstr ""
+#~ "Pilt kasutab toetuseta värviruumi. Palun teisenda see 16-bitiseks "
+#~ "murdarvuliseks RGB/alfa-pildiks, enne kui salvestad selle OpenEXR'i "
+#~ "vormingusse."
+
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDFImportWidget"
+
+#~ msgid "Pages"
+#~ msgstr "Leheküljed"
+
+#~ msgid "&All pages"
+#~ msgstr "&Kõik leheküljed"
+
+#~ msgid "&First page"
+#~ msgstr "&Esimene lehekülg"
+
+#~ msgid "&Selection of page"
+#~ msgstr "Le&heküljevalik"
+
+#~ msgid "Dimensions"
+#~ msgstr "Mõõtmed"
+
+#~ msgctxt "vertical resolution"
+#~ msgid "Vertical:"
+#~ msgstr "Vertikaalne:"
+
+#~ msgctxt "horizontal resolution"
+#~ msgid "Horizontal:"
+#~ msgstr "Horisontaalne:"
+
+#~ msgid "Size:"
+#~ msgstr "Suurus:"
+
+#~ msgid "Options of Your PNG"
+#~ msgstr "PNG valikud"
+
+#~ msgid ""
+#~ "Note: the compression level does not change the quality of the result"
+#~ msgstr "Märkus: tihendustase ei muuda tulemuse kvaliteeti"
+
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level does not change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>Tihendusaja muutmine. Parem tihendus nõuab rohkem aega.\n"
+#~ "<br>Märkus: tihendustase ei muuda tulemuse kvaliteeti.</p>"
+
+#~ msgid "Compress:"
+#~ msgstr "Tihendus:"
+
+#~ msgctxt ""
+#~ "The compression will take a long time; saving the file will be slow."
+#~ msgid "Slow"
+#~ msgstr "Aeglane"
+
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "Kiire"
+
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "Väike"
+
+#~ msgctxt "the file will be big"
+#~ msgid "Big"
+#~ msgstr "Suur"
+
+#~ msgid "Use interlacing when publishing on the Internet"
+#~ msgstr "Progressiivse esituse kasutamine internetis avaldamisel"
+
+#~ msgid ""
+#~ "<p>Interlacing is useful if you intend to publish your image on the "
+#~ "Internet.<br>\n"
+#~ "Enabling interlacing will cause the image to be displayed by the browser "
+#~ "even while downloading.</p>"
+#~ msgstr ""
+#~ "<p>Progressiivne esitus tuleb kasuks, kui soovid oma pildi avaldada "
+#~ "internetis.<br>\n"
+#~ "Progressiivse esituse kasutamisel näidatakse pilti brauseris juba siis, "
+#~ "kui seda veel laaditakse.</p>"
+
+#~ msgid "Interlacing"
+#~ msgstr "Progressiivne esitus"
+
+#~ msgid "Disable to get smaller files if your image has no transparency"
+#~ msgstr ""
+#~ "Kui sinu pildil puudub läbipaistvus, jäta väiksema faili huvides märkimata"
+
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparency in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparency and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>PNG (Portable Network Graphics) failivorming võimaldab pildi "
+#~ "läbipaistvuse salvestamist alfakanalit salvestades.\n"
+#~ "Selle valiku võib märkimata jätta, kui sa ei tarvita läbipaistvust ja "
+#~ "soovid, et fail oleks väiksem.<br>Üldiselt on alfakanali salvestamine "
+#~ "siiski soovitatav.</p>"
+
+#~ msgid "Store alpha channel (transparency)"
+#~ msgstr "Alfakanali salvestamine (läbipaistvus)"
+
+#~ msgid "No image loaded"
+#~ msgstr "Ühtegi pilti pole laaditud"
+
+#~ msgctxt ""
+#~ "Show a preview of the image after saving to assess the quality difference"
+#~ msgid "Preview image"
+#~ msgstr "Pildi eelvaatlus"
+
+#~ msgid "Size: 100KB"
+#~ msgstr "Suurus: 100KB"
+
+#~ msgid "Basic"
+#~ msgstr "Põhiline"
+
+#~ msgid "File size:"
+#~ msgstr "Faili suurus:"
+
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "Väike"
+
+#~ msgctxt "the file will be good quality, but big"
+#~ msgid "Big"
+#~ msgstr "Suur"
+
+#~ msgid ""
+#~ "These settings determine how much information is lost during compression"
+#~ msgstr "Siin saab määrata, kui palju infot läheb tihenduse käigus kaotsi"
+
+#~ msgctxt "the file will be much compressed, so the quality will be bad"
+#~ msgid "Bad"
+#~ msgstr "Halb"
+
+#~ msgctxt "the quality will be good but the file will not be much compressed"
+#~ msgid "Good"
+#~ msgstr "Hea"
+
+#~ msgctxt "A progressive jpeg file can be displayed while loading."
+#~ msgid "Progressive"
+#~ msgstr "Progressiivne"
+
+#~ msgid "Advanced quality"
+#~ msgstr "Muud omadused"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimeerimine"
+
+#~ msgctxt "the result will be artificially smoothed to hide jpeg artefacts"
+#~ msgid "Smooth:"
+#~ msgstr "Mahendamine:"
+
+#~ msgid "Force baseline JPEG"
+#~ msgstr "Jõuga baas-JPEG"
+
+#~ msgid "Subsampling:"
+#~ msgstr "Info vähendamine:"
+
+#~ msgid "2x2, 1x1, 1x1 (smallest file)"
+#~ msgstr "2x2, 1x1, 1x1 (väikseim fail)"
+
+#~ msgid "2x1, 1x1, 1x1"
+#~ msgstr "2x1, 1x1, 1x1"
+
+#~ msgid "1x2, 1x1, 1x1"
+#~ msgstr "1x2, 1x1, 1x1"
+
+#~ msgid "1x1, 1x1, 1x1 (best quality)"
+#~ msgstr "1x1, 1x1, 1x1 (parim kvaliteet)"
+
+#~ msgid "Metadata"
+#~ msgstr "Metaandmed"
+
+#~ msgid "Formats:"
+#~ msgstr "Vormingud:"
+
+#~ msgid "Exif"
+#~ msgstr "EXIF"
+
+#~ msgid "IPTC"
+#~ msgstr "IPTC"
+
+#~ msgid "XMP"
+#~ msgstr "XMP"
+
+#~ msgid "Filters:"
+#~ msgstr "Filtrid:"
+
+#~ msgid "Options of Your TIFF"
+#~ msgstr "TIFF-i valikud"
+
+#~ msgid "TIFF Options"
+#~ msgstr "TIFF-i valikud"
+
+#~ msgid "Compression type:"
+#~ msgstr "Tihenduse tüüp:"
+
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "JPEG DCT tihendus"
+
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "Deflate (ZIP)"
+
+#~ msgid "Lempel-Ziv & Welch (LZW)"
+#~ msgstr "Lempel-Ziv & Welch (LZW)"
+
+#~ msgid "Leadtools JPEG2000"
+#~ msgstr "Leadtools JPEG2000"
+
+#~ msgid "CCITT Modified Huffman RLE"
+#~ msgstr "CCITT Modified Huffman RLE"
+
+#~ msgid "CCITT Group 3 Fax Encoding"
+#~ msgstr "CCITT Group 3 Fax Encoding"
+
+#~ msgid "CCITT Group 4 Fax Encoding"
+#~ msgstr "CCITT Group 4 Fax Encoding"
+
+#~ msgid "Pixar Log"
+#~ msgstr "Pixar Log"
+
+#~ msgid "Predictor:"
+#~ msgstr "Prediktor:"
+
+#~ msgid ""
+#~ "Using a predictor can improve the compression (mostly for LZW and deflate)"
+#~ msgstr ""
+#~ "Prediktori kasutamine võib tihendust parendada (peamiselt LZW ja Deflate)"
+
+#~ msgid "Horizontal Differencing"
+#~ msgstr "Rõhtne lahutamine"
+
+#~ msgid "Floating Point Horizontal Differencing"
+#~ msgstr "Rõhtne ujukomalahutamine"
+
+#~ msgid "Store alpha &channel (transparency)"
+#~ msgstr "Al&fakanali salvestamine (läbipaistvus)"
+
+#~ msgid ""
+#~ "This option will merge all layers. It is advisable to check this option, "
+#~ "otherwise other applications might not be able to read your file correctly"
+#~ msgstr ""
+#~ "Selle valikuga ühendatakse kõik kihid. Soovitatav on see märkida, sest "
+#~ "muidu ei pruugi teised rakendused sinu faili korrektselt esitada"
+
+#~ msgid "Flatten the &image"
+#~ msgstr "&Pildi ühendamine"
+
+#~ msgid "JPEG Compression Options"
+#~ msgstr "JPEG tihenduse valikud"
+
+#~ msgid "Smallest"
+#~ msgstr "Väikseim"
+
+#~ msgid "Best"
+#~ msgstr "Parim"
+
+#~ msgid "Deflate Compression Options"
+#~ msgstr "Deflate tihenduse valikud"
+
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "Kiire"
+
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "Väike"
+
+#~ msgid "CCITT Group 3 fax encoding Options"
+#~ msgstr "CCITT Group 3 faksi kodeerimise valikud"
+
+#~ msgid "Fax mode:"
+#~ msgstr "Faksirežiim:"
+
+#~ msgid "Classic"
+#~ msgstr "Klassikaline"
+
+#~ msgid "No RTC"
+#~ msgstr "RTC puudub"
+
+#~ msgid "No EOL"
+#~ msgstr "EOL puudub"
+
+#~ msgid "Pixar Log Compression Options"
+#~ msgstr "Pixar Logi tihenduse valikud"
+
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "Kiire"
+
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "Väike"
+
+#~ msgid "Initializing..."
+#~ msgstr "Initsialiseerimine..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Esimene katse: lehekülg #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Teine katse: lehekülg #%1..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "Põhiteksti raamigrupp #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "Päise raamigrupp #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "Jaluse raamigrupp #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Tekstiraamide grupp %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "KWordi PDF impordifilter"
+
+#~ msgid "Page Selection"
+#~ msgstr "Lehekülgede valimine"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Kõik (%1 lehekülge)"
+
+#~ msgid "Range:"
+#~ msgstr "Vahemik:"
+
+#~ msgid "Import images"
+#~ msgstr "Piltide import"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "\"Tark\" režiim"
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Eemaldab reavahetused ja poolitused rea lõpust. Samuti üritab arvutada "
+#~ "lõigu joondust. Arvesta, et mõne lehe paigutus võib kaduma minna."
+
+#~ msgid "Owner:"
+#~ msgstr "Omanik:"
+
+#~ msgid "User:"
+#~ msgstr "Kasutaja:"
+
+#~ msgid "Footnote %1"
+#~ msgstr "Allmärkus %1"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 lahter %2,%3"
+
+#~ msgid ""
+#~ "Cannot convert RAW files because the dcraw executable could not be "
+#~ "started."
+#~ msgstr ""
+#~ "Toorfailide teisendamine nurjus, sest dcraw käivitatava faili käivitamine "
+#~ "nurjus."
+
+#~ msgid "Colorspace"
+#~ msgstr "Värviruum"
+
+#~ msgid "&Document mode"
+#~ msgstr "&Dokumendi režiim"
+
+#~ msgid "&RGB"
+#~ msgstr "&RGB"
+
+#~ msgid "Channel Depth"
+#~ msgstr "Kanali sügavus"
+
+#~ msgid "&16 bits per channel"
+#~ msgstr "&16-bitised kanalid"
+
+#~ msgid "Alt+1"
+#~ msgstr "Alt+1"
+
+#~ msgid "&8 bits per channel"
+#~ msgstr "&8-bitised kanalid"
+
+#~ msgid "Alt+8"
+#~ msgstr "Alt+8"
+
+#~ msgid "&Interpolate RGB as four colors"
+#~ msgstr "RGB &interpoleerimine nelja värvina"
+
+#~ msgid ""
+#~ "Interpolate RGB as four colors. This blurs the image a little, but it "
+#~ "eliminates false 2x2 mesh patterns"
+#~ msgstr ""
+#~ "RGB interpoleerimine nelja värvina. See hägustab veidi pilti, kuid "
+#~ "kõrvaldab võltsid 2x2 võrgumustrid"
+
+#~ msgid "&Update Preview"
+#~ msgstr "&Uuenda eelvaatlust"
+
+#~ msgid "Color Settings"
+#~ msgstr "Värviseadistused"
+
+#~ msgid "&White Balance"
+#~ msgstr "&Valge tasakaal"
+
+#~ msgid "White card in sunlight"
+#~ msgstr "Valge kaart päikesevalguses"
+
+#~ msgid "Automatic white balance"
+#~ msgstr "Automaatne värvustasakaal"
+
+#~ msgid ""
+#~ "Automatic color balance. The default is to use a fixed color balance "
+#~ "based on a white card photographed in sunlight"
+#~ msgstr ""
+#~ "Automaatne värvustasakaal. Vaikimisi kasutatakse fikseeritud "
+#~ "värvustasakaalu, mille aluseks on päikesevalguses pildistatud valge kaart."
+
+#~ msgid "Camera white balance"
+#~ msgstr "Kaamera värvustasakaal"
+
+#~ msgid ""
+#~ "Use the color balance specified by the camera. If this cannot be found, "
+#~ "dcraw prints a warning and reverts to the default"
+#~ msgstr ""
+#~ "Kasutatakse kaamera määratud värvustasakaalu. Kui seda ei leita, näitab "
+#~ "dcraw hoiatust ja kasutab vaikeväärtust"
+
+#~ msgid "Brightness:"
+#~ msgstr "Heledus:"
+
+#~ msgid "Blackpoint:"
+#~ msgstr "Mustpunkt:"
+
+#~ msgid "Red multiplier:"
+#~ msgstr "Punase kordaja:"
+
+#~ msgid "Blue multiplier:"
+#~ msgstr "Sinise kordaja:"
+
+#~ msgid "Brightness. 1.0 is default"
+#~ msgstr "Heledus. Vaikimisi 1,0"
+
+#~ msgid "Clip colors to prevent pink highlights"
+#~ msgstr "Värvide lõikamine roosa üldtooni vältimiseks"
+
+#~ msgid ""
+#~ "By default, dcraw clips all colors to prevent pink hues in the "
+#~ "highlights. Combine this option with -b 0.25 to leave the image data "
+#~ "completely unclipped"
+#~ msgstr ""
+#~ "Vaikimisi lõikab dcraw kõiki värve roosa tooni vältimiseks üldtoonides. "
+#~ "Koos võtmega -b 0.25 jäävad pildiandmed täiesti lõikamata"
+
+#~ msgid "Use camera raw colors, not sRGB"
+#~ msgstr "sRGB asemel kasutatakse kaamera toorvärve"

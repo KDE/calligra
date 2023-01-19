@@ -1,0 +1,4495 @@
+# translation of kpresenter.po to Persian
+# translation of kpresenter.po to
+# translation of kpresenter.po to
+# translation of kpresenter.po to
+# translation of kpresenter.po to
+# Copyright (C) 2003, 2004, 2007 Free Software Foundation, Inc.
+#
+# ِِِYashar_Bizhanzadeh <yashar_bizhanzadeh@yahoo.com>, 2003.
+# Arash Zeini <info@farsikde.org>, 2003.
+# FarsiKDE Team <info@farsikde.org>, 2003.
+# Arash Bijanzadeh <a.bijanzadeh@linuxiran.org>, 2003.
+# MaryamSadat Razavi <razavi@itland.ir>, 2007.
+# Nasim Daniarzadeh <daniarzadeh@itland.ir>, 2007.
+# Nazanin Kazemi <kazemi@itland.ir>, 2007.
+# Mohamad Reza Mirdamadi <mohi@ubuntu.ir>, 2010, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-09-26 14:12+0330\n"
+"Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
+"Language-Team: Farsi (Persian) <>\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&ویرایش‌"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "&نما‌"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, kde-format
+msgid "&Insert"
+msgstr "&درج‌"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "&قالب‌"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "&Slide"
+msgstr "نمایش اسلاید"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "نمایش &اسلاید‌"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "&تنظیمات‌"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+#| msgid "Slide Show"
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "نمایش اسلاید"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Navigation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "ناوش"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Navigation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "ناوش"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Navigation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "ناوش"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Before Current Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "قبل از اسلاید جاری"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+#| msgid "Insert Slide"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "درج اسلاید"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+#| msgid "Insert Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "درج اسلاید"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+#| msgid "Navigation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "ناوش"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+#| msgid "Slide Show"
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "نمایش اسلاید"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgid "Image &effect:"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "&جلوه تصویر:"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgid "Image &effect:"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "&جلوه تصویر:"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Insert Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "درج اسلاید"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+#| msgid "Slide Transition"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "گذار اسلاید"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Before Current Slide"
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "قبل از اسلاید جاری"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+#| msgid "Slide Transition"
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "گذار اسلاید"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "پس از اسلاید جاری"
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "ارائه"
+
+#: part/KPrAboutData.h:25
+#, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr ""
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "نگه‌دارنده جاری"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Original author"
+msgstr "نویسنده اصلی"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr ""
+
+#: part/KPrAboutData.h:36
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Werner Trobin"
+msgstr "&پایین‌:"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr ""
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr ""
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr ""
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KPrAboutData.h:43
+#, kde-format
+msgid "Peter Simonsson"
+msgstr ""
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, kde-format
+msgid "Carlos Licea "
+msgstr ""
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "محمدرضا میردامادی , مریم سادات رضوی"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "mohi@ubuntu.ir , razavi@itland.ir"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide %1"
+msgstr "نمایش اسلاید"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr ""
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Layout"
+msgstr "نمایش اسلاید"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert &new slide:"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "درج اسلاید &جدید:‌"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color:"
+msgid "Pen Color"
+msgstr "رنگ:"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, kde-format
+msgid "Pen Size"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Black"
+msgstr "&رنگها:"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, kde-format
+msgid "White"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "سبز"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "قرمز"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "آبی"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, kde-format
+msgid "Yellow"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Next Slide"
+msgstr "درج اسلاید"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Current Slide %1 of %2"
+msgstr "پس از اسلاید جاری"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "End of Slide Show"
+msgstr "نمایش اسلاید"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "start after previous animation"
+msgstr "ارائه"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "start with previous animation"
+msgstr "ارائه"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Animation"
+msgstr "ناوش"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "شکل"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "&Move Here"
+msgstr "نمایش اسلاید"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "&Copy Here"
+msgstr "نمایش اسلاید"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, fuzzy, kde-format
+#| msgid "&Cancel"
+msgid "C&ancel"
+msgstr "&لغو‌"
+
+#: part/KPrView.cpp:73
+#, fuzzy, kde-format
+#| msgid "Normalize"
+msgid "Normal"
+msgstr "هنجارسازی"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Show Master Slides"
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Import Slideshow..."
+msgstr "پس از اسلاید جاری"
+
+#: part/KPrView.cpp:80
+#, fuzzy, kde-format
+#| msgid "Insert &new slide:"
+msgid "Insert Slide"
+msgstr "درج اسلاید &جدید:‌"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Copy Slide"
+msgstr "نمایش اسلاید"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Copy the current slide"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Delete Slide"
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete the current slide"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Master Slide..."
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Previous Slide"
+msgstr "ارائه"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Go to previous slide"
+msgstr "ارائه"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Go to next slide"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "First Slide"
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Go to first slide"
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Last Slide"
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Go to last slide"
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Configure Stage..."
+msgstr "پس از اسلاید جاری"
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert &new slide:"
+msgid "Insert Pictures as Slides..."
+msgstr "درج اسلاید &جدید:‌"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Create Appear Animation"
+msgstr "ناوش"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Edit Custom Slide Shows..."
+msgstr "نمایش اسلاید"
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "آغاز ارائه"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "From Current Slide"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "From First Slide"
+msgstr "درج اسلاید"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+#| msgid "Start Presentation"
+msgid "Stop presentation"
+msgstr "آغاز ارائه"
+
+#: part/KPrView.cpp:286
+#, kde-format
+msgid "Show Status Bar"
+msgstr ""
+
+#: part/KPrView.cpp:287
+#, kde-format
+msgid "Hide Status Bar"
+msgstr ""
+
+#: part/KPrView.cpp:288
+#, kde-format
+msgid "Shows or hides the status bar"
+msgstr ""
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Configure Slide Show..."
+msgstr "پس از اسلاید جاری"
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Configure Presenter View..."
+msgstr "پس از اسلاید جاری"
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+#| msgid "Start Presentation"
+msgid "Draw on the presentation..."
+msgstr "آغاز ارائه"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+#| msgid "Start Presentation"
+msgid "Highlight the presentation..."
+msgstr "آغاز ارائه"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Start Presentation"
+msgid "Blackscreen on the presentation..."
+msgstr "آغاز ارائه"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+#| msgid "Noise"
+msgid "Notes"
+msgstr "نوفه"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slides Sorter"
+msgstr "نمایش اسلاید"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show: "
+msgstr "نمایش اسلاید"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Add a new custom slide show"
+msgstr "نمایش اسلاید"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current custom slide show"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Add slides to current custom slide show"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Remove slides from current custom slide show"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Duplicate Slide"
+msgstr "درج اسلاید"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Start Slideshow"
+msgstr "پس از اسلاید جاری"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Add a new slide"
+msgstr "ناوش"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete selected slides"
+msgstr "قبل از اسلاید جاری"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, kde-format
+msgid "Rename"
+msgstr ""
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, kde-format
+msgid "Cut"
+msgstr ""
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "&Top:"
+msgid "Copy"
+msgstr "&نوع:‌"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, kde-format
+msgid "Paste"
+msgstr ""
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show %1"
+msgstr "نمایش اسلاید"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "All slides"
+msgstr "درج اسلاید"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, kde-format
+msgid "Error"
+msgstr ""
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+#| msgid "Slide Show"
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "نمایش اسلاید"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, kde-format
+msgid "Automatic animation preview"
+msgstr ""
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "ارائه"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+#| msgid "Slide Transition"
+msgid "Slide Transitions"
+msgstr "گذار اسلاید"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Shape Click Actions"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Shape Animations"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Manage animation delay and duration: "
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, kde-format
+msgid "Start: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "after previous animation"
+msgstr "ارائه"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "with previous animation"
+msgstr "ارائه"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Elevation:"
+msgid "Duration: "
+msgstr "بلندی:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview Shape Animation"
+msgstr "ارائه"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, fuzzy, kde-format
+#| msgid "&Effect:"
+msgid "No Effect"
+msgstr "&جلوه:‌"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid " sec"
+msgstr " ثانیه"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+#| msgid "Slide Transition"
+msgid "Slide Transition:"
+msgstr "گذار اسلاید"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Apply To All Slides"
+msgstr "درج اسلاید"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, kde-format
+msgid "Custom"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, kde-format
+msgid "Ole Action"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Edit animation"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Add new animation"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Remove animation"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Move animation up"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Move animation down"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Add a new animation"
+msgstr "ناوش"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current animation"
+msgstr "قبل از اسلاید جاری"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "&Top:"
+msgid "Crop"
+msgstr "&نوع:‌"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+#| msgid "&Width:"
+msgid "W&idth:"
+msgstr "&عرض:‌"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+#| msgid "Set the width of the line."
+msgid "Will keep the width of the crop constant"
+msgstr "تنظیم عرض خط."
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "&ارتفاع:‌"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+#| msgid "Set the width of the line."
+msgid "Will keep the height of the crop constant"
+msgstr "تنظیم عرض خط."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "R&atio:"
+msgstr "چرخش"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+#| msgid "Set the width of the line."
+msgid "Will keep the ratio constant"
+msgstr "تنظیم عرض خط."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, kde-format
+msgid "Image"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+#| msgid "&Top:"
+msgid "&Crop"
+msgstr "&نوع:‌"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "شکل"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation monitor:"
+msgstr "ارائه"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Enable presenter view"
+msgstr "پس از اسلاید جاری"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Configure Presenter View"
+msgstr "پس از اسلاید جاری"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Configure Slide Show"
+msgstr "پس از اسلاید جاری"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slides"
+msgstr "نمایش اسلاید"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "ارائه"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Edit Custom Slide Shows ..."
+msgstr "نمایش اسلاید"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, kde-format
+msgid "Select all"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Select template (.css) :"
+msgstr "درج اسلاید"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, kde-format
+msgid "Deselect all"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+#| msgid "File"
+msgid "Title"
+msgstr "پرونده"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, kde-format
+msgid "Output preview"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, kde-format
+msgid "..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Delete Favorite"
+msgstr "درج اسلاید"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Delete Template"
+msgstr "درج اسلاید"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+#| msgid "Insert Slide"
+msgid "Add Template"
+msgstr "درج اسلاید"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, kde-format
+msgid "Confirm remove"
+msgstr ""
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr ""
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid "No sound"
+msgstr " ثانیه"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "Import..."
+msgstr "پس از اسلاید جاری"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "From Left"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "From Top"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "From Bottom"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Clock"
+msgstr "&رنگها:"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Twelve Clockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Three Clockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Six Clockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Nine Clockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Twelve Counterclockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Three Counterclockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Six Counterclockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Nine Counterclockwise"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Fan"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Fan Out Vertical"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Fan Out Horizontal"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Fan In Vertical"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Fan In Horizontal"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Fan In Vertical Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Fan In Horizontal Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Sweep"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Parallel Vertical"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Opposite Vertical"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Opposite Horizontal"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Parallel Vertical Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Reverse"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Opposite Vertical Reverse"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Opposite Horizontal Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Flatten"
+msgid "Fan"
+msgstr "‍‍‍‍‍‍‍‍‍پهن کردن"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Center Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Center Top"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Center Left"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Center Bottom"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Fan Out Top"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Fan Out Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Fan Out Bottom"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Fan Out Left"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Fan In Top"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Fan In Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Fan In Bottom"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Fan In Left"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Pin Wheel"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Two Blades Vertical Clockwise"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Two Blades Horizontal Clockwise"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Blades Horizontal Clockwise"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Saloon Door"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "To Top"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "To Left"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "To Bottom"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "To Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Single Sweep"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "Clockwise Top"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Clockwise Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Clockwise Bottom"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Clockwise Left"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "Clockwise Top Left"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Bottom Left"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Clockwise Bottom Right"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Counterclockwise Top Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Counterclockwise Top"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Counterclockwise Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Bottom"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Left"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Top Left"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Clockwise Bottom Left"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Bottom Right"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Clockwise Top Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Windshield"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Vertical"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Horizontal"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Right Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Up Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Vertical Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Horizontal Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Barn Door"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Diagonal Bottom Left"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left Reverse"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Barn Zig Zag"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Vertical Reversed"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Horizontal Reversed"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "From Top Left"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "From Top Right"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "From Bottom Left"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "From Bottom Right"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In"
+msgstr "&گوشه‌ها:‌"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In Reverse"
+msgstr "&گوشه‌ها:‌"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out"
+msgstr "&گوشه‌ها:‌"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out Reverse"
+msgstr "&گوشه‌ها:‌"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Misc Diagonal"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Barn Door"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Diamond"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Zig Zag"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Shade"
+msgid "Fade"
+msgstr "سایه‌دار کردن"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, kde-format
+msgid "Fade over Color"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "ArrowHead"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, kde-format
+msgid "Down"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Down Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "Left"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Left Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "File"
+msgid "Circle"
+msgstr "پرونده"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Circle Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "ارائه"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Rectangular"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Rectangular Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Diamond"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Diamond Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, kde-format
+msgid "Heart"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Heart Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Keyhole"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Keyhole Reverse"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "ارائه"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Rect"
+msgid "RoundRect"
+msgstr "مستطیل"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, kde-format
+msgid "Star"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Point Star"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Point Star Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Five Point Star"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Five Point Star Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Six Point Star"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Six Point Star Reverse"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, kde-format
+msgid "Triangle"
+msgstr ""
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Box Snakes"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Two Box Top In"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Two Box Bottom In"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "Two Box Left In"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Two Box Right In"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Box Vertical In"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Box Horizontal In"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Two Box Top Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Two Box Bottom Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Two Box Left Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Two Box Right Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Box Vertical Out"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Four Box Horizontal Out"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Snakes"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Vertical Top Same In"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Vertical Top Same Out"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Vertical Bottom Same In"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Alignment"
+msgid "Vertical Bottom Same Out"
+msgstr "تراز عمودی"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Vertical Top Left Opposite In"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Vertical Top Left Opposite Out"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Horizontal Left Same In"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Horizontal Left Same Out"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Horizontal Right Same In"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Horizontal Right Same Out"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Horizontal Top Left Opposite In"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Horizontal Top Left Opposite Out"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Horizontal Top Right Opposite In"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Horizontal Top Right Opposite Out"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left Opposite In"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left Opposite Out"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "شکل"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Swirl"
+msgid "Spiral"
+msgstr "چرخش"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "Clockwise Top Left In"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "&Left:"
+msgid "Clockwise Top Left Out"
+msgstr "&چپ‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Clockwise Top Right In"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Clockwise Top Right Out"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Clockwise Bottom Left In"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Clockwise Bottom Left Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Clockwise Bottom Right In"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Clockwise Bottom Right Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Top Left In"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Top Left Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Counterclockwise Top Right In"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Counterclockwise Top Right Out"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Bottom Left In"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Bottom Right In"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Waterfall"
+msgstr "&جلوه تصویر:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Top Left Vertical"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal declination:"
+msgid "Top Left Horizontal"
+msgstr "انحراف افقی."
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Top Right Vertical"
+msgstr "&راست:‌"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Top Right Horizontal"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Bottom Left Vertical"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Bottom Left Horizontal"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Bottom Right Vertical"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "&Bottom:"
+msgid "Bottom Right Horizontal"
+msgstr "&پایین‌:"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide"
+msgstr "نمایش اسلاید"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Navigation"
+msgid "Space Rotation"
+msgstr "ناوش"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Swap effect"
+msgstr "&جلوه تصویر:"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+#| msgid "Fade"
+msgid "Header"
+msgstr "محو"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Format"
+msgid "Footer"
+msgstr "قالب"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&ویرایش‌"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&نما‌"
+
+#, fuzzy
+#~| msgid "&Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "&درج‌"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "&قالب‌"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "نمایش &اسلاید‌"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&تنظیمات‌"
+
+#, fuzzy
+#~| msgid "&Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "&عرض:‌"
+
+#, fuzzy
+#~| msgid "Set the width of the line."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "تنظیم عرض خط."
+
+#, fuzzy
+#~| msgid "&Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "&ارتفاع:‌"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "چرخش"
+
+#, fuzzy
+#~| msgid "&Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "&نوع:‌"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "ارائه"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "پرونده"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "ارائه"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "ارائه"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "نگه‌دارنده جاری"
+
+#, fuzzy
+#~| msgid "Original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "نویسنده اصلی"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "محمدرضا میردامادی , مریم سادات رضوی"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "mohi@ubuntu.ir , razavi@itland.ir"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "رنگ:"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "&رنگها:"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "سبز"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "قرمز"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "آبی"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "شکل"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "&Cancel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "&لغو‌"
+
+#, fuzzy
+#~| msgid "Normalize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "هنجارسازی"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Insert &new slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "درج اسلاید &جدید:‌"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "قبل از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "قبل از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "ارائه"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "ارائه"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "قبل از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Insert &new slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "درج اسلاید &جدید:‌"
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "آغاز ارائه"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "قبل از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "آغاز ارائه"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "آغاز ارائه"
+
+#, fuzzy
+#~| msgid "Noise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "نوفه"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "قبل از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "قبل از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "&Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "&نوع:‌"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "ارائه"
+
+#, fuzzy
+#~| msgid "Slide Transition"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "گذار اسلاید"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "Elevation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "بلندی:"
+
+#, fuzzy
+#~| msgid "&Effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "&جلوه:‌"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " ثانیه"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "قبل از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "درج اسلاید"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr " ثانیه"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "&رنگها:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Flatten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "‍‍‍‍‍‍‍‍‍پهن کردن"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "&چپ‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "&چپ‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "&چپ‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "&گوشه‌ها:‌"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "&گوشه‌ها:‌"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Shade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "سایه‌دار کردن"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "&چپ‌:"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "پرونده"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "ارائه"
+
+#, fuzzy
+#~| msgid "Rect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "مستطیل"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "&چپ‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Vertical Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "تراز عمودی"
+
+#, fuzzy
+#~| msgid "Horizontal declination:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "انحراف افقی."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "شکل"
+
+#, fuzzy
+#~| msgid "Swirl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "چرخش"
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "&چپ‌:"
+
+#, fuzzy
+#~| msgid "&Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "&چپ‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "&راست:‌"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "&Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "&پایین‌:"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "محو"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "قالب"
+
+#~ msgid "Maintainer"
+#~ msgstr "نگه‌دارنده"
+
+#, fuzzy
+#~| msgid "KOffice Presentation Tool"
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "ابزار ارائه KOffice"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "شکل"
+
+#~ msgid "File to open"
+#~ msgstr "پرونده برای باز کردن"
+
+#~ msgid "&File"
+#~ msgstr "&پرونده‌"
+
+#~ msgid "Line"
+#~ msgstr "خط"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "&مرتب کردن اشیاء‌"
+
+#~ msgid "&Align Objects"
+#~ msgstr "&هم‌ترازی اشیاء‌"
+
+#~ msgid "Te&xt"
+#~ msgstr "&متن‌"
+
+#~ msgid "&Align"
+#~ msgstr "&هم‌ترازی‌"
+
+#~ msgid "T&ype"
+#~ msgstr "&نوع‌"
+
+#~ msgid "Spellcheck"
+#~ msgstr "غلط‌یاب"
+
+#~ msgid "Autocorrection"
+#~ msgstr "اصلاح خودکار"
+
+#~ msgid "File"
+#~ msgstr "پرونده"
+
+#~ msgid "Edit"
+#~ msgstr "ویرایش"
+
+#~ msgid "Insert"
+#~ msgstr "درج"
+
+#~ msgid "Tools"
+#~ msgstr "ابزارها"
+
+#~ msgid "Format"
+#~ msgstr "قالب"
+
+#~ msgid "Text"
+#~ msgstr "متن"
+
+#~ msgid "Slide Show"
+#~ msgstr "نمایش اسلاید"
+
+#~ msgid "Navigation"
+#~ msgstr "ناوش"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "تراز عمودی"
+
+#~ msgid "Flip Objects"
+#~ msgstr "قرینه کردن اشیاء"
+
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "&مقیاس جهت نمایش عکس 1:1 در‌"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "نتیجه غلط‌یاب"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "Slide Layouts"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgid "Configure KPresenter..."
+#~ msgstr "پس از اسلاید جاری"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "Slide Title"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "ویرایش"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "New Slide Show %1"
+#~ msgstr "نمایش اسلاید"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgid "Close"
+#~ msgstr "&رنگها:"
+
+#~ msgid "&OK"
+#~ msgstr "&تأیید‌"
+
+#~ msgid ""
+#~ "Choose a predefined shape by clicking on it then clicking the OK button "
+#~ "(or just double-click on the shape). You can then insert the shape onto "
+#~ "your slide by drawing the area with the mouse pointer."
+#~ msgstr ""
+#~ "شکل از پیش تعریف‌شده را با فشار روی آن، سپس فشار دکمه تأیید )یا فقط دو بار "
+#~ "فشار روی شکل( انتخاب کنید. سپس می‌توانید با ترسیم ناحیه توسط اشاره‌گر موشی، "
+#~ "شکل را در اسلاید خود درج کنید."
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Click to preview the page effect."
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Star Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Box Wipe Effect"
+#~ msgstr "&جلوه تصویر:"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgid "Navigate to:"
+#~ msgstr "ناوش"
+
+#, fuzzy
+#~| msgid "So&und effect"
+#~ msgid "Cover down effect"
+#~ msgstr "جلوه &صوتی‌"
+
+#~ msgid "Use &default template"
+#~ msgstr "استفاده از قالب &پیش‌فرض‌"
+
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "استفاده از اسلاید &جاری به عنوان پیش‌فرض‌"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "انتخاب قالب &متفاوت‌"
+
+#~ msgid "A&ngle:"
+#~ msgstr "&زاویه:‌"
+
+#~ msgid "Pie"
+#~ msgstr "دایره‌ای"
+
+#~ msgid "These settings are used in the Insert->Shape->Pie/Arc/Chord menu."
+#~ msgstr "این تنظیمات در گزینگان درج-<شکل-<دایره‌ای/کمان/وتر استفاده می‌شوند."
+
+#~ msgid ""
+#~ "You can choose among three options in the dropdown box: Pie, Arc or Chord."
+#~ msgstr ""
+#~ "می‌توانید از میان این سه گزینه در جعبه پایین‌افت انتخاب کنید: دایره‌ای، کمان "
+#~ "یا وتر."
+
+#~ msgid "&Type:"
+#~ msgstr "&نوع:‌"
+
+#~ msgid "&Length:"
+#~ msgstr "&طول:‌"
+
+#~ msgid "This displays a preview of your choices."
+#~ msgstr "پیش‌نمایشی از انتخابهای شما نمایش می‌دهد."
+
+#~ msgid "Set here the start position."
+#~ msgstr "در اینجا، موقعیت آغاز را تنظیم کنید."
+
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "طول کمان دایره‌ای خود را تنظیم کنید."
+
+#~ msgid "Start position:"
+#~ msgstr "موقعیت آغاز:"
+
+#~ msgid "Preview"
+#~ msgstr "پیش‌نمایش"
+
+#~ msgid "Channel Intensity"
+#~ msgstr "شدت مجرا"
+
+#~ msgid "Intensity"
+#~ msgstr "شدت"
+
+#~ msgid "Desaturate"
+#~ msgstr "غیراشباع"
+
+#~ msgid "Contrast"
+#~ msgstr "سایه روشن"
+
+#~ msgid "Equalize"
+#~ msgstr "برابرسازی"
+
+#~ msgid "Threshold"
+#~ msgstr "آستانه"
+
+#~ msgid "Emboss"
+#~ msgstr "برجسته کردن"
+
+#~ msgid "Despeckle"
+#~ msgstr "بدون خال کردن"
+
+#~ msgid "Charcoal"
+#~ msgstr "زغال"
+
+#~ msgid "Blur"
+#~ msgstr "محو"
+
+#~ msgid "Edge"
+#~ msgstr "لبه"
+
+#~ msgid "Implode"
+#~ msgstr "فروریزی"
+
+#~ msgid "Oil Paint"
+#~ msgstr "رنگ روغن"
+
+#~ msgid "Sharpen"
+#~ msgstr "تیز کردن"
+
+#~ msgid "Spread"
+#~ msgstr "گسترش"
+
+#~ msgid "Wave"
+#~ msgstr "موج"
+
+#~ msgid "Value:"
+#~ msgstr "مقدار:"
+
+#~ msgid " %"
+#~ msgstr " ٪"
+
+#~ msgid "Color component:"
+#~ msgstr "مؤلفه رنگ:"
+
+#~ msgid "Gray"
+#~ msgstr "خاکستری"
+
+#~ msgid "All"
+#~ msgstr "همه"
+
+#~ msgid "Color 1:"
+#~ msgstr "رنگ ۱:"
+
+#~ msgid "Color 2:"
+#~ msgstr "رنگ ۲:"
+
+#~ msgid "Intensity:"
+#~ msgstr "شدت:"
+
+#~ msgid "This effect has no options."
+#~ msgstr "این جلوه، گزینه‌ای ندارد."
+
+#~ msgid "Factor:"
+#~ msgstr "عامل:"
+
+#~ msgid "Type:"
+#~ msgstr "نوع:"
+
+#~ msgid "Uniform"
+#~ msgstr "یکنواخت"
+
+#~ msgid "Gaussian"
+#~ msgstr "گاوسی"
+
+#~ msgid "Impulse"
+#~ msgstr "ضربه"
+
+#~ msgid "Poisson"
+#~ msgstr "پوآسون"
+
+#~ msgid "Radius:"
+#~ msgstr "شعاع:"
+
+#~ msgid "Color Shading"
+#~ msgstr "سایه رنگ"
+
+#~ msgid "Azimuth:"
+#~ msgstr "سمت:"
+
+#~ msgid "Determines the light source and direction"
+#~ msgstr "منبع و جهت نور را تعیین می‌کند"
+
+#~ msgid "Angle:"
+#~ msgstr "زاویه:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "دامنه:"
+
+#~ msgid "Wave length:"
+#~ msgstr "طول موج:"
+
+#~ msgid "Pen"
+#~ msgstr "قلم"
+
+#~ msgid "The settings in this tab are used in the Insert->Line menu."
+#~ msgstr "تنظیمات این تب در گزینگان درج-<خط استفاده می‌شوند."
+
+#~ msgid "Arrow Style"
+#~ msgstr "سبک پیکان"
+
+#~ msgid ""
+#~ "Set the styles of the beginning and end of your line. For example, you "
+#~ "can choose a square dot at the beginning and an arrow at the end."
+#~ msgstr ""
+#~ "سبکهای آغاز و پایان خط شما را تنظیم می‌کند. مثلاً، می‌توانید یک نقطه مربع‌شکل "
+#~ "در آغاز و یک پیکان را در پایان انتخاب کنید."
+
+#~ msgid "&Begin:"
+#~ msgstr "&آغاز:"
+
+#~ msgid "&End:"
+#~ msgstr "&پایان:‌"
+
+#~ msgid ""
+#~ "Choose the line style. This can range from No Outline, which will not "
+#~ "draw any lines, to dotted and plain lines."
+#~ msgstr ""
+#~ "سبک خط را برگزینید. می‌تواند از طرح کلی، که هیچ خطی در آن ترسیم نمی‌شود، تا "
+#~ "خطوط نقطه‌چین و ساده گسترده شود."
+
+#~ msgid "St&yle:"
+#~ msgstr "&سبک:‌"
+
+#~ msgid ""
+#~ "Set the color of the line. Clicking on the color will bring the standard "
+#~ "KDE Select Color dialog."
+#~ msgstr ""
+#~ "تنظیم رنگ خط. با فشار روی رنگ، محاوره برگزیدن رنگ استاندارد KDE می‌آید."
+
+#~ msgid "C&olor:"
+#~ msgstr "&رنگ:‌"
+
+#~ msgid "All these settings are used in the Insert->Shape->Rectangle menu."
+#~ msgstr "همه این تنظیمات در گزینگان درج-<شکل-<مستطیل استفاده می‌شوند."
+
+#~ msgid "Vertical declination:"
+#~ msgstr "انحراف عمودی."
+
+#~ msgid "Set the horizontal declination."
+#~ msgstr "تنظیم انحراف افقی."
+
+#~ msgid "Set the vertical declination."
+#~ msgstr "تنظیم انحراف عمودی."
+
+#~ msgid ""
+#~ "You can choose whether or not to keep the same declination for both "
+#~ "vertical and horizontal using this button."
+#~ msgstr ""
+#~ "می‌توانید انتخاب کنید که آیا با استفاده از این دکمه انحراف مشابه افقی و "
+#~ "عمودی حفظ شود یا خیر."
+
+#~ msgid "Polygon"
+#~ msgstr "چندضلعی"
+
+#~ msgid ""
+#~ "These settings are used in the Insert->Shape->Convex/Concave Polygon menu."
+#~ msgstr "این تنظیمات در گزینگان درج-<شکل-<چندضلعی محدب/مقعر استفاده می‌شوند."
+
+#~ msgid "You can choose Polygon or Convex/Concave as a type."
+#~ msgstr "می‌توانید چندضلعی یا محدب/مقعر را به عنوان یک نوع انتخاب کنید."
+
+#~ msgid "Set here the number of corners of the polygon."
+#~ msgstr "تعداد گوشه‌های چندضلعی را در اینجا تنظیم کنید."
+
+#~ msgid "&Sharpness:"
+#~ msgstr "&تیزی:‌"
+
+#~ msgid "Increase or decrease the sharpness of the polygon."
+#~ msgstr "افزایش یا کاهش تیزی چندضلعی."
+
+#~ msgid "Brush"
+#~ msgstr "قلم‌مو"
+
+#~ msgid "&Style:"
+#~ msgstr "&سبک:"
+
+#~ msgid "Choose the style or the pattern."
+#~ msgstr "انتخاب سبک یا الگو."
+
+#~ msgid ""
+#~ "Choose the color (white is the default). Clicking on the color will "
+#~ "display the standard KDE color chooser dialog."
+#~ msgstr ""
+#~ "انتخاب رنگ )سفید، پیش‌فرض است(. با فشار روی رنگ، محاوره انتخاب‌کننده رنگ "
+#~ "استاندارد KDE نمایش داده می‌شود."
+
+#~ msgid "&Preview"
+#~ msgstr "&پیش‌نمایش‌"
+
+#~ msgid "&Speed:"
+#~ msgstr "&سرعت:‌"
+
+#~ msgid "&File:"
+#~ msgstr "&پرونده:‌"
+
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "&گذار خودکار به اسلاید بعدی پس از:"
+
+#~ msgid "Gradient"
+#~ msgstr "گرادیان"
+
+#~ msgid "Gradient:"
+#~ msgstr "گرادیان:"
+
+#~ msgid "X-fac&tor:"
+#~ msgstr "&عامل X:‌"
+
+#~ msgid "Un&balanced:"
+#~ msgstr "&نامتوازن:‌"
+
+#~ msgid "&Y-factor:"
+#~ msgstr "عامل &Y:"
+
+#~ msgid "Margin"
+#~ msgstr "حاشیه"
+
+#~ msgid "Margins"
+#~ msgstr "حاشیه‌ها"
+
+#~ msgid "S&ynchronize changes"
+#~ msgstr "&همگام‌سازی تغییرات‌"
+
+#~ msgid "General"
+#~ msgstr "عمومی"
+
+#~ msgid "Na&me:"
+#~ msgstr "&نام:‌"
+
+#~ msgid "Protect si&ze and position"
+#~ msgstr "حفاظت از &اندازه و موقعیت‌"
+
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "حفظ &ضریب نسبت"
+
+#~ msgid "Position"
+#~ msgstr "موقعیت"
+
+#~ msgid "Shadow"
+#~ msgstr "سایه"
+
+#~ msgid "Color && Distance"
+#~ msgstr "رنگ و فاصله"
+
+#~ msgid "Distance:"
+#~ msgstr "فاصله:"
+
+#~ msgid "Orientation"
+#~ msgstr "جهت"
+
+#~ msgid "&Apply"
+#~ msgstr "&اعمال‌"
+
+#~ msgid "Picture"
+#~ msgstr "عکس"
+
+#~ msgid "Depth"
+#~ msgstr "عمق"
+
+#~ msgid "&1 bit color mode"
+#~ msgstr "حالت رنگ &۱ بیتی‌"
+
+#~ msgid "&8 bit color mode"
+#~ msgstr "حالت رنگ &۸ بیتی‌"
+
+#~ msgid "1&6 bit color mode"
+#~ msgstr "حالت رنگ &۱۶ بیتی‌"
+
+#~ msgid "&32 bit color mode"
+#~ msgstr "حالت رنگ &۳۲ بیتی‌"
+
+#~ msgid "&Default color mode"
+#~ msgstr "حالت رنگ &پیش‌فرض‌"
+
+#~ msgid "%"
+#~ msgstr "٪"
+
+#~ msgid "Conv&ert from RGB image to BRG image"
+#~ msgstr "&تبدیل از تصویر RGB به BGR"
+
+#~ msgid "Gra&yscale"
+#~ msgstr "&مقیاس خاکستری‌"
+
+#~ msgid "&Brightness:"
+#~ msgstr "&روشنایی:‌"

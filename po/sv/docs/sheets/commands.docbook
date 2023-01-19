@@ -1,0 +1,2736 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Kommandoreferens</title>
+
+<sect1 id="filemenu">
+<title
+>Menyn Arkiv</title>
+<para>
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Ny</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Skapa ett nytt dokument.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Öppna...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Öppna ett befintligt dokument.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guisubmenu
+>Öppna senaste</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Öppna ett befintligt dokument</action
+> genom att välja det från en kombinationsruta med senast använda filer.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Spara</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Spara dokumentet.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Spara som...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Spara och ändra aktuellt dokument med ett nytt namn eller format. Om du vill behålla dokumentets namn och format, använd <guimenuitem
+>Exportera...</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Uppdatera</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Uppdaterar dokumentet.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Versions</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME define different versions of the document + open them in new windows</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Importera...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Importera andra dokument.</action>
+</para>
+<para
+>Tabeller med data lagras ofta i textfiler, med värden på en rad åtskilda med ett kommatecken, mellanslag, tabulatortecken eller annat tecken, till exempel <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. Sådana filer kallas ofta <quote
+><acronym
+>CSV</acronym
+></quote
+>-filer (Comma Separated Values), även om skiljetecknet inte måste vara ett kommatecken.</para>
+<para
+>Om du ber &sheets; öppna en textfil, antas att filen är på <acronym
+>CSV</acronym
+>-format, och en dialogruta visas som låter dig ange avgränsaren (skiljetecknet) som används i filen, och som visar hur datavärden placeras i kalkylbladets olika celler.</para>
+<para
+>Övriga alternativ i den här dialogrutan låter dig ange <guilabel
+>Format</guilabel
+> för kalkylbladets celler, om citationstecken runt text ska tas bort, och om de första raderna i filen ska ignoreras.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Exportera...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Spara dokumentet till vilket format som helst som stöds.</action
+> Dokumentet blir inte den exporterade filen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Skicka e-post...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Skicka filen som en bilaga till e-post.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Skapa mall från dokument...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Skapa en &sheets;-<link linkend="templates"
+>mall</link
+> baserat på det här dokumentet. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Skriv ut...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Skriva ut dokumentet.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Förhandsgranska utskrift...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa dokumentet som det kommer att skrivas ut.</action
+></para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Export as PDF...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action
+></para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Dokumentinformation</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa eller skriv in information om dokumentet och upphovsmannen.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Stäng</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Stäng det nuvarande dokumentet, men låt &sheets; fortsätta köra. </action
+></para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Arkiv</guimenu
+> <guimenuitem
+>Avsluta</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Avsluta</action
+> &sheets;.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title
+>Menyn Redigera</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Ångra</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ångra senaste åtgärden.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Gör om</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Gör om den senast ångrade åtgärden.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Klipp ut</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Placera markerade objekt på klippbordet och ta bort dem från den ursprungliga platsen.</action
+> Om du därefter gör <guimenuitem
+>Klistra in</guimenuitem
+> så infogas objekten på den nya platsen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Kopiera</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Kopiera markerade objekt till klippbordet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Klistra in</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Klistra in objekt från klippbordet i de markerade cellerna.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Klistra in special...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Särskilda sorters inklistring.</action
+> Se avsnitten <link linkend="specialpaste"
+>Andra inklistringslägen</link
+> och <link linkend="sumspecialpaste"
+>Aritmetik med klistra in special</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Klistra in och infoga</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Flytta antingen innehållet i inklistringsområdet till höger eller ner och klistra in objekt från klippbordet i de markerade cellerna.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Redigera</guimenu
+> <guisubmenu
+>Fyll</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Fyller markerat område med värden från den fösta objektuppsättningen.</action
+> Alla fyra riktningar stöds. Observera att begreppet "objektuppsättning" beskriver den första uppsättningen värden som ses i fyllriktningen. Om fyllriktningen är vänster, är den första objektuppsättningen den sista markerade kolumnen. </para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Select All</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Sök...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sök efter celler som innehåller angiven text.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F3</keysym
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Sök igen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sök efter nästa cell som innehåller angiven text.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>F3</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Sök föregående</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sök efter föregående cell som innehåller angiven text.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+><keycap
+>Ctrl</keycap
+><keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Ersätt...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sök och ersätt angiven text i celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Redigera</guimenu
+> <guisubmenu
+>Rensa</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Rensa <guimenuitem
+>Alla</guimenuitem
+> eller <guimenuitem
+>Innehåll</guimenuitem
+>,  <guimenuitem
+>Kommentar</guimenuitem
+>, <guimenuitem
+>Villkorliga stilar</guimenuitem
+>, <guimenuitem
+>Länkar</guimenuitem
+> eller <guimenuitem
+>Giltighet</guimenuitem
+> från markerade celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Ta bort</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ta bort <guimenuitem
+>Celler</guimenuitem
+>, <guimenuitem
+>Kolumner</guimenuitem
+>, <guimenuitem
+>Rader</guimenuitem
+> eller <guimenuitem
+>Arbetsblad</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Conditional Cell Attributes...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add or modify conditional cell attributes.</action>
+</para
+></listitem>
+</varlistentry>
+
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycap
+>F2</keycap
+> </shortcut
+> <guimenu
+>Redigera</guimenu
+> <guimenuitem
+>Ändra cell</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>För att ändra markerad cell på plats.</action>
+</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title
+>Menyn Visa</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Visa</guimenu
+> <guimenuitem
+>Ny vy</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Öppna en ny instans av &sheets; med samma dokument.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Close all open instances of &sheets;</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Split current view into two parts.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Remove current view.</action
+> (Where the window 
+contains two or more views)
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change view split to <guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Goto Cell...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change &sheets;'s focus to show defined cell.</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Visa</guimenu
+> <guimenuitem
+>Sidkanter</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa eller dölj markering för sidor vid utskrift på bladet med röda linjer. </action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show/Hide Comment Indicator</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing Zoom In Zoom Out-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Visa</guimenu
+> <guisubmenu
+>Zooma</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Öka eller minska förstoringen som används för att visa kalkylbladet. Intervall från 33 % till 500 %. </action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME Full Screen Mode-->
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="gomenu">
+<title
+>Menyn Gå</title>
+<para
+>I den här menyn finns alternativ för att gå mellan arbetsbladen i dokumentet som för närvarande är öppet, och <guimenuitem
+>Gå till cell</guimenuitem
+> för att gå till en enskild cell eller markera ett cellområde.</para>
+</sect1>
+
+<sect1 id="insertmenu">
+<title
+>Menyn Infoga</title>
+<para>
+<variablelist>
+
+<!-- OBSOLETE <varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Sheet</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add another worksheet.</action>
+</para
+></listitem>
+</varlistentry
+>-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Infoga</guimenu
+> <guisubmenu
+>Kommentar</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>Lägg till eller ändra en kommentar. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Infoga</guimenu
+> <guimenuitem
+>Funktion...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga en matematisk funktion.</action
+> Se avsnittet <link linkend="formulas"
+>Formler</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Infoga</guimenu
+> <guimenuitem
+>Serier...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga en serie.</action
+> Se avsnittet <link linkend="series"
+>Serier</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Infoga</guimenu
+> <guimenuitem
+>Länk...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga en länk till den markerade cellen.</action
+> Se avsnittet <link linkend="hyper"
+>Länkceller</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Infoga</guimenu
+> <guimenuitem
+>Specialtecken...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga ett specialtecken i markerad cell.</action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Embed another &koffice; document into the sheet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a chart.</action
+> See the section 
+<link linkend="insertchart"
+>Inserting a Chart</link
+> for more details.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Infoga</guimenu
+> <guisubmenu
+>Extern data</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga data <guilabel
+>Från databas...</guilabel
+>, <guilabel
+>Från textfil...</guilabel
+> eller <guilabel
+>Från klippbordet...</guilabel
+>.</action
+> Se avsnittet <link linkend="insertdata"
+>Infoga extern data</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title
+>Menyn Format</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Alt;&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Format</guimenu
+> <guimenuitem
+>Cellformat...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formatera markerade celler.</action
+> Se avsnittet <link linkend="formatspread"
+>Formatera kalkylblad</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Stilhantering</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Skapa, ändra eller ta bort cellformatstilar.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Stil</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Använd en stil för markerade celler.</action
+> För att hantera stilar använd <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Stilhantering...</guimenuitem
+></menuchoice
+> </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Skapa stil från cell...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Skapar en ny stil från den markerade cellens format.</action
+> För att hantera stilar använd <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Stilhantering...</guimenuitem
+></menuchoice
+> </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Automatisk formatering...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formatera markerade celler automatiskt: En dialogruta låter dig välja mellan två föreslagna format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Sammanfoga celler</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sammanfoga markerade celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Dela upp celler</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Dela upp tidigare sammanfogade celler. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Justera rad och kolumn</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ställ in rad- och kolumnstorlekar för att visa markerade celler fullständigt.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Rad</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ändra storlek på, utjämna, dölj eller visa rader.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Kolumn</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ändra storlek på, utjämna, dölj eller visa kolumner.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Blad</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Dölj, visa eller anpassa avancerade egenskaper för arbetsblad.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Sidlayout...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formatera utskriftens layout.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Utskriftsintervall</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ange eller återställ utskriftsintervallet.</action>
+</para
+></listitem>
+</varlistentry>
+
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title
+>Menyn Data</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Sortera...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sortera data i markerade celler.</action
+> Se avsnittet <link linkend="sort"
+>Sortera data</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Filter-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Text till kolumner...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Det här alternativet försöker tolka texten i den markerade cellen eller de markerade cellerna som <acronym
+>CSV</acronym
+>-data, och placerar varje post i en egen cell på raden. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Data</guimenu
+> <guimenuitem
+>Namngivna områden...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa</action
+> dialogrutan <guilabel
+>Namngivna områden</guilabel
+> för att markera, lägga till, redigera och ta bort namngivna områden. Se avsnittet <link linkend="namedareas"
+>Namngivna områden</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Konsolidera...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Konsoliderar data.</action
+> Se avsnittet <link linkend="consolidate"
+>Konsolidera data</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Delsummor...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Skapa olika sorters delsummor i en databas.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Giltighet...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ange eller ändra felkontrollkriterier och felvarningsmeddelanden för markerade celler.</action
+> Se <link linkend="validcheck"
+>Giltighetskontroll</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Målsök...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Öppna dialogrutan för målsökning</action
+>. Se <link linkend="goalseek"
+>Målsökning</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Data</guimenu
+> <guimenuitem
+>Pivot...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Öppna inställningsdialogrutan för pivot-tabeller</action
+>. Se <link linkend="pivottable"
+>Pivot-tabeller</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title
+>Menyn Verktyg</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Stavning...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Kontrollera stavning av ord på arbetsbladet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Egna listor...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa eller justera den särskilda serien med ord som känns igen av &sheets;. Listorna kan användas för att infoga särskilda <link linkend="series"
+>serier</link
+> på arbetsbladet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda arbetsblad...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Skydda arbetsbladet med ett lösenord. En dialogruta dyker upp som frågar efter ett lösenord. Avmarkeras alternativet frågas du efter lösenordet för att ta bort skyddet från arbetsbladet. Att skydda ett arbetsblad betyder att skydda alla celler på bladet. På ett skyddat blad kan inte cellerna formateras om eller skrivas över.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda dokument...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Skydda hela dokumentet med ett lösenord. En dialogruta dyker upp som frågar efter ett lösenord. Avmarkeras alternativet frågas du efter lösenordet för att ta bort skyddet från dokumentet. I ett skyddat dokument kan du inte byta namn på eller flytta ett arbetsblad. Att skydda dokumentet betyder inte att varje enskild arbetsblad är skyddat.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Räkna om arbetsblad</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Räkna om formler på det nuvarande bladet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F9</keysym
+> </shortcut
+> <guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Räkna om dokument</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Räkna om alla blad.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Tools</guimenu>
+<guimenuitem
+>Insert Calendar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
+</action>
+</para
+></listitem>
+</varlistentry>
+-->
+  
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Kör skriptfil...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Kör det valda externa skriptet i &sheets;. &sheets; stöder skript skrivna i Javascript, Python och Ruby. Standardexempel på skript finns i undermenyn <menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guisubmenu
+>Skript</guisubmenu
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guisubmenu
+>Skript</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>Här kan man köra skriptet för att exportera eller importera data med diverse format, spara &sheets; logg i en fil, använda <ulink url="https://live.gnome.org/Orca"
+>Orca talsyntes</ulink
+> för handikappstöd, felsöka Python- och Ruby-skript eller lägga till ytterligare funktioner för att visa aktiekurser eller väderförhållanden. Man kan till och med använda vissa <ulink url="http://www.r-project.org/"
+>R-funktioner</ulink
+> (modulen <ulink url="http://rpy.sourceforge.net/rpy.html"
+>RPy</ulink
+> måste då vara installerad).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skripthantering...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visar</action
+> dialogrutan <guilabel
+>Skripthantering</guilabel
+> för att köra, ladda, ladda ur, installera, avinstallera och hämta fler skript. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Funktionsoptimering...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Öppnar</action
+> dialogrutan <guilabel
+>Funktionsoptimering</guilabel
+> där du kan välja en objektiv funktionscell, optimeringsmål (<guilabel
+>Maximera</guilabel
+>, <guilabel
+>Minimera</guilabel
+> eller ange <guilabel
+>Värde</guilabel
+>) och en uppsättning beslutsparameterceller. </para
+></listitem>
+</varlistentry>
+  </variablelist
+></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>Menyn Inställningar</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guisubmenu
+>Visade verktygsrader</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa eller dölj verktygsraderna: <guilabel
+>Arkiv</guilabel
+>, <guilabel
+>Redigera</guilabel
+>, <guilabel
+>Navigering</guilabel
+>, <guilabel
+>Teckensnitt</guilabel
+>, <guilabel
+>Format</guilabel
+> och <guilabel
+>Färg/Kant</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Settings</guimenu>
+<guimenuitem
+>Dockers</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+>FIXME
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Statusrad</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa eller dölj statusraden.</action
+> Statusraden visar ytterligare information om markerade objekt och snabba beräkningar för markerade celler. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Flikrad</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Visa eller dölj flikraden.</action
+> Alla blad i aktuellt dokument kan kommas åt via flikraden. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa genvägar...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Anpassa snabbtangenterna som används av &sheets;. </action
+> Se avsnittet om <link linkend="configshort"
+>anpassa snabbtangenter</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa verktygsrader...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Anpassa verktygsrader.</action
+> Avsnittet om <link linkend="configtoolbars"
+>anpassa verktygsrader</link
+> innehåller mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Teman</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Välj färgtema för &sheets; fönster</action
+> Du kan välja ett fördefinierat färgschema eller välja <guimenuitem
+>Inställning...</guimenuitem
+> för att öppna <ulink url="help:/kcontrol/colors"
+>färginställningsmodulen i systeminställningarna</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Aktiv författarprofil</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Ställ in författarprofilen för nuvarande dokument.</action
+> Du kan välja en av profilerna som är definierade med <link linkend="configauthor"
+>&sheets; inställningsfönster</link
+>, <guimenuitem
+>Standardförfattarprofil</guimenuitem
+> som definierad av systeminställningarna eller en tom <guimenuitem
+>Anonym</guimenuitem
+> profil som bibehåller din integritet. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa underrättelser...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Anpassa &sheets; underrättelsesystem.</action
+> Det finns inga åtgärder som du kan bli underrättad om i den nuvarande versionen av &sheets;. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa &sheets;...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Allmän inställning av &sheets;.</action
+> Se avsnittet om <link linkend="configdialog"
+>&sheets; inställning</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>Menyn Hjälp</title
+>&help.menu.documentation; </sect1>
+
+<sect1 id="rmbmenu">
+<title
+>Menyn som visas med höger musknapp</title>
+<para
+>Det här avsnittet beskriver alternativen i menyn som visas genom att <mousebutton
+>höger</mousebutton
+>klicka på en markerad cell eller markerade celler, rad(er) eller kolumn(er). </para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Cellformat...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Formatera markerade celler.</action
+> Se avsnittet <link linkend="formatspread"
+>Formatera kalkylblad</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Klipp ut</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Placera markerade objekt på klippbordet.</action
+> Om du därefter gör <guilabel
+>Klistra in</guilabel
+>, så flyttas objekten från den ursprungliga platsen till den nya. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Kopiera</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Kopiera markerade objekt till klippbordet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Klistra in</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Klistra in objekt från klippbordet till de markerade cellerna. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Klistra in special...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Särskilda sorters inklistring.</action
+> Se avsnitten <link linkend="specialpaste"
+>Andra inklistringslägen</link
+> och <link linkend="sumspecialpaste"
+>Aritmetik med klistra in special</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Klistra in och infoga</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Klistra in från klippbordet till de markerade cellerna, och flytta tidigare celler för att ge plats.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Alla</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ta bort innehållet i markerade celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Justera rad och kolumn</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ändra höjd på markerad rad och kolumn för att visa hela celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Förval</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ange förvalt format för markerade celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Områdesnamn...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Namnge markerat område.</action
+> Se avsnittet <link linkend="namedareas"
+>Namngivna områden</link
+> för mer information. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ändra storlek på rad...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ändra höjd på markerad rad.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Justera rad</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ändra höjd på markerad rad för att visa hela celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ändra storlek på kolumn...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ändra bredd på markerad kolumn.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Justera kolumn</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ändra bredd på markerad kolumn för att visa hela celler.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Infoga celler...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga nya celler vid den markerade platsen, och flytta befintliga celler så att de får plats.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ta bort celler...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ta bort markerade celler, och flytta andra celler så att de upptar utrymmet som lämnas av de borttagna cellerna.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Infoga rader</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga nya rader ovanför de markerade raderna. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ta bort rader</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ta bort markerade rader.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Dölj rader</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Döljer markerad(e) rad(er).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Visa rader</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Visar markerad(e) rad(er). För att visa dolda rader måste du markera ett radintervall som inkluderar de dolda raderna.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Infoga kolumner</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Infoga nya kolumner, till vänster om de markerade kolumnerna. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Ta bort kolumner</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ta bort markerade kolumner.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Dölj kolumner</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Döljer markerad(e) kolumn(er).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Visa kolumner</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Visar markerad(e) kolumn(er). För att visa dolda kolumner måste du markera ett kolumnintervall som inkluderar de dolda kolumnerna.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Kommentar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Lägg till eller ändra en kommentar för den markerade cellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Urvalslista...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Låter dig välja och klistra in text från vilken cell som helst bland cellerna som för närvarande är markerade i den valda cellen.</action>
+</para
+></listitem>
+</varlistentry>
+<!-- not in 2.4.0
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Show Related Words</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the <guilabel
+>Related Words</guilabel
+> dialog box.</action
+> 
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="othershort">
+<title
+>Andra snabbtangenter</title>
+<para
+>Det här avsnittet beskriver de snabbtangenter i &sheets; som används för åtgärder som inte syns i någon av menyerna.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo>
+</term>
+<listitem
+><para
+>Visa eller dölj panelerna.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>piltangenter</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Om den markerade cellen är använd, flytta då cellmarkeringen till början eller slutet av det använda området i nuvarande rad eller kolumn. Om den markerade cellen inte är använd, flytta då cellmarkeringen till början eller slutet av det oanvända området med celler i nuvarande rad eller kolumn. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keysym
+>piltangenter</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Om den markerade cellen är upptagen, markera alla upptagna celler från början till slutet av blocket med upptagna celler för aktuell rad eller kolumn. Om den markerade cellen inte är upptagen, markera alla celler som inte är upptagna från början till slutet av blocket med inte upptagna celler för aktuell rad eller kolumn. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Page Down</keysym>
+</term>
+<listitem
+><para
+><action
+>Flytta cellmarkeringen 10 celler neråt.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Page Up</keysym>
+</term>
+<listitem
+><para
+><action
+>Flytta cellmarkeringen 10 celler uppåt.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Down</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Gå till nästa blad.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Up</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Gå till föregående blad.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycap
+>F4</keycap>
+</term>
+<listitem
+><para
+><action
+>Ändra cellreferensen</action
+> mellan typerna normal och <link linkend="absolute"
+>absolut referens</link
+>. </para
+></listitem>
+</varlistentry>
+<!-- does not work in 2.4.0
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>&amp;</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Add a border to the selected cell(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>$</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in Money
+format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>%</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>^</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>#</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Date format</action
+>. The value is taken as the number of days since 
+1 January 1900.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>@</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+Time format</action
+>. The value is taken as the number of seconds since
+midnight.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>!</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+normal Number format</action
+>.
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

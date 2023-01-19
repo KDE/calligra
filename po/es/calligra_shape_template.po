@@ -1,0 +1,64 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Raul Gonzalez <raulgf83@gmail.com>, 2014.
+# Eloy <ecuadra@eloihr.net>, 2016.
+# Sofia Priego <spriego@darksylvania.net>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-22 21:55+0100\n"
+"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ChangeSomethingCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr "Cambiar algo"
+
+#: TemplateShapeFactory.cpp:32
+#, kde-format
+msgid "Template shape"
+msgstr "Forma plantilla"
+
+#: TemplateShapeFactory.cpp:34
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr ""
+"Forma sencilla que se utiliza como plantilla para desarrollar otras formas."
+
+#: TemplateTool.cpp:77
+#, kde-format
+msgid "Open"
+msgstr "Abrir"
+
+#: TemplateToolFactory.cpp:26
+#, kde-format
+msgid "Template shape editing"
+msgstr "Edición de la forma plantilla"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape"
+#~ msgstr "Forma plantilla"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Simple shape that is used as a template for developing other shapes."
+#~ msgstr ""
+#~ "Forma sencilla que se utiliza como plantilla para desarrollar otras "
+#~ "formas."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open"
+#~ msgstr "Abrir"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Template shape editing"
+#~ msgstr "Edición de la forma plantilla"

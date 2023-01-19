@@ -1,0 +1,152 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>De sneltoetsen en werkbalken van &sheets; instellen</title>
+
+<sect1 id="configshort">
+<title
+>Sneltoetsen</title>
+<para
+>Om de sneltoetsen van &sheets; te wijzigen kiest u het menu <menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Sneltoetsen instellen...</guimenuitem
+></menuchoice
+>. Er verschijnt een dialoogvenster zoals hieronder te zien is. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Sneltoetsen instellen schermafdruk 1</phrase>
+</textobject>
+</mediaobject>
+<para
+>Zoek in de keuzelijst naar de actie waaraan u een sneltoets wilt toewijzen of waarvan u die wilt wijzigen. Selecteer de actie door met de <mousebutton
+>linker</mousebutton
+> muisknop op de naam te klikken. U kunt de actie snel vinden als u de naam van de actie in de zoekbalk boven intypt . U kunt daarna de sneltoetsen wijzigen met behulp van de keuzerondjes <guilabel
+>Geen</guilabel
+>, <guilabel
+>Standaard</guilabel
+> of <guilabel
+>Aangepast</guilabel
+>.</para>
+<para
+>U kunt nu de toetsencombinatie indrukken die u als sneltoetsen wilt gebruiken, bijvoorbeeld <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Werkbalken</title>
+<para
+>&sheets; heeft zes werkbalken: <guilabel
+>Bestand</guilabel
+>, <guilabel
+>Bewerken</guilabel
+>, <guilabel
+>Navigatie</guilabel
+>, <guilabel
+>Opmaak</guilabel
+>,  <guilabel
+>Lettertype</guilabel
+> en <guilabel
+>Kleur/Rand</guilabel
+>. Elk van deze werkbalken kan wel of niet zichtbaar zijn, afhankelijk van de gemaakte keuze in het menu <guimenu
+>Instellingen</guimenu
+>.</para>
+<para
+>Als de werkbalken niet vergrendeld zijn, kunt u kiezen of een werkbalk <guimenuitem
+>Boven</guimenuitem
+>, <guimenuitem
+>Links</guimenuitem
+>, <guimenuitem
+>Rechts</guimenuitem
+>, of <guimenuitem
+>Onder</guimenuitem
+> in het venster van &sheets; geplaatst wordt. Klik met de <mousebutton
+>rechter</mousebutton
+> muisknop op de werkbalk om het <guilabel
+>Werkbalkmenu</guilabel
+> te openen en kies dan in het submenu <guisubmenu
+>Oriëntatie</guisubmenu
+>. Het <guilabel
+>Werkbalkmenu</guilabel
+> heeft ook submenus  waarin u kunt kiezen of pictogrammen of tekst of allebei op de werkbalken getoond worden, en waarin u de grootte van de pictogrammen kunt kiezen.</para>
+
+<para
+>U kunt een werkbalk ook met behulp van de muis verplaatsen. Plaats de muiswijzer op de twee verticale strepen aan het linker uiteinde van de werkbalk, houd de <mousebutton
+>linker</mousebutton
+> muisknop ingedrukt terwijl u de werkbalk naar een andere plaats versleept. Wanneer u de muisknop op enige afstand van een vensterrand van &sheets; loslaat, wordt de werkbalk in een zwevend venster geplaatst. Dit venster kan dan overal naar toe worden verplaatst, ook buiten het venster van &sheets;. Om een zwevend venster weer op één van de standaardposities te plaatsen klikt u met de <mousebutton
+>rechter</mousebutton
+> muisknop op de titelbalk, in het <guilabel
+>Werkbalkmenu</guilabel
+> kiest u <guisubmenu
+>Oriëntatie</guisubmenu
+> en daarna één van de opties.</para>
+
+<para
+>Waneer u <guimenuitem
+>Werkbalken instellen...</guimenuitem
+> in het menu <guimenu
+>Instellingen</guimenu
+> kiest, verschijnt er een dialoogvenster waarin u knoppen kunt toevoegen aan of verwijderen van de werkbalken van &sheets;.</para>
+<para
+>In het dialoogvenster <guilabel
+>Werkbalken instellen</guilabel
+> kiest u eerst een werkbalk in de keuzelijst <guilabel
+>Werkbalk:</guilabel
+>. In het rechterpaneel, <guilabel
+>Huidige acties:</guilabel
+>, ziet u de lijst met knoppen die op de werkbalk aanwezig zijn. U kunt een knop verwijderen door erop te klikken en daarna op de knop met de pijl naar links te klikken. U kunt de knop verplaatsen door op de knoppen met de pijl omhoog en omlaag te klikken. Om een nieuwe knop aan de werkbalk toe te voegen kiest u een actie in het linkerpaneel, <guilabel
+>Beschikbare acties:</guilabel
+>, en klikt u daarna op de knop met de pijl naar rechts.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

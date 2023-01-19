@@ -1,0 +1,129 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Raul Gonzalez <raulgf83@gmail.com>, 2013.
+# Eloy <ecuadra@eloihr.net>, 2016.
+# Sofia Priego <spriego@darksylvania.net>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-22 21:53+0100\n"
+"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: KoLocationSemanticItemFactory.cpp:34
+#, kde-format
+msgctxt "displayname of the semantic item type Location"
+msgid "Location"
+msgstr "Ubicación"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidget.ui:17
+#, kde-format
+msgid "&Name"
+msgstr "&Nombre"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidgetMarble.ui:17 KoRdfLocationViewWidgetMarble.ui:24
+#, kde-format
+msgid "Name"
+msgstr "Nombre"
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
+#, kde-format
+msgid "The Earth"
+msgstr "La Tierra"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
+#, kde-format
+msgid "The Marble widget displays a virtual globe."
+msgstr "La ventana de Marble muestra un globo virtual"
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:40
+#, kde-format
+msgid "Navigation Control"
+msgstr "Control de navegación"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:43
+#, kde-format
+msgid "Use this control to navigate."
+msgstr "Utilice este control para navegar."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfLocationEditWidgetMarble.ui:50
+#, kde-format
+msgid "Latitude"
+msgstr "Latitud"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfLocationEditWidgetMarble.ui:60
+#, kde-format
+msgid "Longitude"
+msgstr "Longitud"
+
+#: KoRdfLocationTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Location Information"
+msgstr "Información de la ubicación"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationViewWidget.ui:24
+#, kde-format
+msgid "&Name:"
+msgstr "&Nombre:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name"
+#~ msgstr "Nombre"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Earth"
+#~ msgstr "La Tierra"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Marble widget displays a virtual globe."
+#~ msgstr "La ventana de Marble muestra un globo virtual."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation Control"
+#~ msgstr "Control de navegación"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this control to navigate."
+#~ msgstr "Use este control para navegar."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latitude"
+#~ msgstr "Latitud"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Longitude"
+#~ msgstr "Longitud"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "&Nombre:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name"
+#~ msgstr "&Nombre"
+
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Location"
+#~ msgid "Location"
+#~ msgstr "Ubicación"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Location Information"
+#~ msgstr "Información de la ubicación"

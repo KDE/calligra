@@ -1,0 +1,342 @@
+# translation of koffice-dockers.po to Low Saxon
+# Translation of koffice-dockers.po to Low Saxon
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sönke Dibbern <s_dibbern@web.de>, 2007, 2008.
+# Manfred Wiese <m.j.wiese@web.de>, 2008, 2009, 2010, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-10-11 16:02+0200\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Keen Formen binnen de Sammeln funnen. %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "%1 is keen gellen Calligra-Datei"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Binnen Datei \" %1\" lett sik keen Hööftdeel-Beteker finnen"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Beteker \"office:drawing\" lett sik binnen Datei \"%1\" nich finnen."
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Binnen Datei \" %1\" laat sik keen Formen finnen"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Form tofögen"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Mehr"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Formensammeln opmaken"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Formensammeln wegdoon"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Vörinstellen"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometersch"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Pielen"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "To'n Högen"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Sammelnfehler"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Formegenschappen"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Keen Formen binnen de Sammeln funnen. %1"
+
+#, fuzzy
+#~| msgid "Not a valid Calligra file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "%1 is keen gellen Calligra-Datei"
+
+#, fuzzy
+#~| msgid "No body tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Binnen Datei \" %1\" lett sik keen Hööftdeel-Beteker finnen"
+
+#, fuzzy
+#~| msgid "No office:drawing tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr ""
+#~ "Beteker \"office:drawing\" lett sik binnen Datei \"%1\" nich finnen."
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Binnen Datei \" %1\" laat sik keen Formen finnen"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Form tofögen"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Mehr"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Formensammeln opmaken"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Formensammeln wegdoon"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Vörinstellen"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Geometersch"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Pielen"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "To'n Högen"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Sammelnfehler"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Formegenschappen"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Klöörköör"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Schaddenegenschappen"
+
+#~ msgid "Creation error"
+#~ msgstr "Opstellfehler"
+
+#~ msgid "File not found"
+#~ msgstr "Datei lett sik nich finnen"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Spieker lett sik nich opstellen"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Leeg MIME-Typ"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Fehler in'n inbett Dokment"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Formaat nich begäng"
+
+#~ msgid "Not implemented"
+#~ msgstr "Nich inbuut"
+
+#~ msgid "Parsing error"
+#~ msgstr "Inleesfehler"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Dokment is passwoortschuult"
+
+#~ msgid "Internal error"
+#~ msgstr "Intern Fehler"
+
+#~ msgid "Out of memory"
+#~ msgstr "Nich noog Spieker"
+
+#~ msgid "Unknown error"
+#~ msgstr "Nich begäng Fehler"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Datei %2\n"
+#~ "lett sik nich opmaken.\n"
+#~ "Oorsaak: %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "De Datei \"%1\" lett sik nich importeren"
+
+#~ msgid "Opacity:"
+#~ msgstr "Deckstärk:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Keen"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Vull"
+
+#~ msgid "Gradient"
+#~ msgstr "Övergang"
+
+#~ msgid "Pattern"
+#~ msgstr "Muster"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Even-uneven Füllen"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Snekelig füllen"
+
+#~ msgid "Stroke and Fill"
+#~ msgstr "Streek un vullmaken"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Streek-Egenschappen"
+
+#~ msgid "Style:"
+#~ msgstr "Stil:"
+
+#~ msgid "Width:"
+#~ msgstr "Breed:"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Lienenbreed vun de aktuell Köör fastleggen"
+
+#~ msgid "Cap:"
+#~ msgstr "Lienen-Enn:"
+
+#~ msgid "Butt cap"
+#~ msgstr "Stump Enn"
+
+#~ msgid "Round cap"
+#~ msgstr "Rund Enn"
+
+#~ msgid "Square cap"
+#~ msgstr "Eckig Enn"
+
+#~ msgid "Join:"
+#~ msgstr "Verbinnen:"
+
+#~ msgid "Miter join"
+#~ msgstr "Eckig Verbinnen"
+
+#~ msgid "Round join"
+#~ msgstr "Rund Verbinnen"
+
+#~ msgid "Bevel join"
+#~ msgstr "Dwars Verbinnen"
+
+#~ msgid "Miter limit:"
+#~ msgstr "Eckgrenz:"
+
+#~ msgid "Set miter limit"
+#~ msgstr "Eckgrenz fastleggen"
+
+#~ msgid "Styles"
+#~ msgstr "Stilen"
+
+#~ msgid "Shapes"
+#~ msgstr "Formen"
+
+#~ msgid "Open..."
+#~ msgstr "Opmaken..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Book sekern..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Nieg Orner..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Grötter maken"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Lütter maken"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Orner wegdoon"
+
+#~ msgid "Templates"
+#~ msgstr "Vörlagen"

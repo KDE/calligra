@@ -1,0 +1,2736 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd">
+
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="menu-items">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Hans-Frieder</firstname
+><surname
+>Hirsch</surname
+><affiliation
+><address
+><email
+>f.hirsch@t-online.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Die Menüleiste und die Werkzeugleisten</title>
+
+<para
+>&stage; hat eine Benutzeroberfläche mit verschiedenen Möglichkeiten, um das Programm zu bedienen. Am bekanntesten wohl die Menüleiste oben im Fenster von &stage;.</para>
+
+<para
+>Durch Klicken auf einen Eintrag in der Menüleiste wird eine Liste von möglichen Aktionen angezeigt, von denen Sie eine auswählen können. Viele dieser Aktionen kann Sie auch über die Tastatur auslösen, indem sie den zugehörigen Tastatur-Kurzbefehl, der aus &Ctrl; oder &Alt; und einer weiteren Taste besteht, eingeben. Alle Befehle des Menüs werden im Folgenden beschrieben.</para>
+
+<sect1 id="toolbars">
+<title
+>Die Werkzeugleisten</title>
+
+<sect2 id="manipulating-toolbars">
+<title
+>Veränderung der Werkzeugleisten</title>
+
+<para
+>Neben der Menüleiste gibt es in &stage; eine Werkzeugleisten, die aus einigen Symbolen besteht. Diese Symbole sind Abkürzungen zu Menübefehlen.</para>
+
+<para
+>Sie können die nicht gesperrte Werkzeugleiste verschieben, indem Sie sie am Griff links ziehen. Werkzeugleisten können an jeder Seite des &stage;-Fensters <quote
+>angedockt</quote
+> oder angehängt werden. Werkzeugleisten können auch in einem eigenen Fenster unabhängig vom &stage;-Fenster <quote
+>schwebend</quote
+> angeordnet werden.</para>
+
+<para
+>Falls Sie die Werkzeugleiste nicht ziehen möchten, klicken Sie stattdessen mit der &RMBn; auf die Werkzeugleiste, um das Kontextmenü zu öffnen. </para>
+
+<para
+>Wählen Sie im Menü den Eintrag <guisubmenu
+>Textposition</guisubmenu
+>, erscheint ein zusätzliches Menü mit verschiedenen Einträgen, um das Erscheinungsbild der Werkzeugleiste einzustellen. Dieses zusätzliche Menü wird im nächsten Bildschirmfoto dargestellt: </para>
+
+<screenshot>
+<screeninfo
+>Textposition</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Textposition</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Sie können die Einträge der Werkzeugleisten auch als Text an Stelle der Symbole oder als Kombination aus Symbol und Text anzeigen lassen. Bei der letzten Möglichkeit können Sie außerdem wählen, ob der Text neben oder unter dem Symbol angezeigt wird. </para>
+
+<para
+>Werden in der Werkzeugleiste nur Symbole angezeigt. setzen Sie den Mauszeiger auf das Symbol und warten einen Moment. Dann erscheint ein Hinweis in hervorgehobener Schrift. </para>
+
+<para
+>Der Eintrag <guilabel
+>Ausrichtung</guilabel
+> im Kontextmenü legt die Anordnung der Werkzeugleisten fest. Alle vier Seiten des &stage;-Fensters können hier ausgewählt werden. </para>
+
+
+<para
+>Im folgenden Abschnitt werden die Menüs von &stage; erläutert. </para>
+
+</sect2>
+</sect1>
+
+<sect1 id="file-menu">
+<title
+>Das Menü Datei</title>
+
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Datei</guimenu
+> <guimenuitem
+>Neu</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Beginnt eine neue Präsentation.</action
+> Im Startdialog können Sie eine Vorlage für Ihre Präsentation auswählen. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Datei</guimenu
+> <guimenuitem
+>Öffnen ...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Öffnet eine vorhandene Präsentation.</action
+> Im Standard-&kde;-Dateidialog können Sie die zu öffnende Datei auswählen. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guisubmenu
+>Zuletzt geöffnete Dateien</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Zeigt eine Auswahlliste der zuletzt geöffneten Dateien an.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>S</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Datei</guimenu
+> <guimenuitem
+>Speichern</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Speichert die aktuelle Präsentation.</action
+> Falls die Datei bisher noch nicht gespeichert wurde, müssen Sie einen Dateinamen eingeben. Ansonsten wird der aktuelle Dateiname verwendet. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Speichern unter ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Speichert die aktuelle Präsentation unter einem neuen Namen.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Erneut laden</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Lädt die geöffnete Datei erneut. </para>
+</listitem>
+</varlistentry>
+
+<!-- FIXME: Versions item missing-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Importieren ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Importiert eine vorher in einem von mehreren gebräuchlichen Formaten erstellte Präsentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Exportieren ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Exportiert die aktuelle geöffnete Präsentation in eines von mehreren gebräuchlichen Formaten. Das ermöglicht die Nutzung der Präsentation mit einem anderen Programm oder zum Austausch mit jemandem, der nicht über &stage; verfügt.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Versenden ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Öffnet</action
+> eine neue E-Mail in Ihrem E-Mail-Programm mit dem aktuellen &stage;-Dokument als Anhang. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Als HTML exportieren ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Startet den HTML-Assistenten</action
+>, der im Abschnitt <xref linkend="html-wizard"/> erläutert wird. </para>
+</listitem>
+</varlistentry>
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Template Manager</guimenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Allows you to save the current slide as a
+template.</action
+> In future the template will be available for you to
+use to build slides with. Creating a template is further discussed in
+section <xref linkend="creating-templates"/>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Use Current Slide as Default Template</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Sets the current slide as your default template</action
+>.
+Especially useful if you have created a template of your own to fit into
+corporate style guidelines, or if you just use a particular layout very
+often.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>P</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Datei</guimenu
+> <guimenuitem
+>Drucken ...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Druckt die Präsentation.</action
+> Genauer wird der Dialog mit den Einstellungen zum Drucken geöffnet, damit man die Einstellungen vor dem Ausdruck anpassen kann.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Druckvorschau ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Zeigt die Präsentation</action
+> mit einem Programm zur Darstellung von &PostScript;, so wie sie auf einem Ausdruck aussehen würde.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Export as PDF item missing-->
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Dokument-Informationen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Erlaubt die Eingabe von Informationen über das Dokument.</action
+> Hier können Informationen über den Autor und eine Zusammenfassung des Inhalts abgelegt werden.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>W</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Datei</guimenu
+> <guimenuitem
+>Schließen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Schließt die aktuelle Präsentation.</action
+> Vorher haben Sie die Möglichkeit, Änderungen zu speichern.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>Q</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Datei</guimenu
+> <guimenuitem
+>Beenden</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Beendet &stage;.</action
+> Vorher können Sie alle geänderten Präsentationen speichern.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="edit-menu">
+<title
+>Das Menü Bearbeiten</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>Z</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Rückgängig: <replaceable
+>Letzte Aktion</replaceable
+></guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Macht die letzte Benutzeraktion rückgängig.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Wiederherstellen: <replaceable
+>Letzte rückgängig gemachte Aktion</replaceable
+></guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Stellt die letzte rückgängig gemachte Aktion wieder her.</action
+> Falls keine Aktion zum Wiederherstellen vorhanden ist oder die letzte Aktion nicht rückgängig gemacht werden kann, ist dieser Menüeintrag deaktiviert.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>X</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Ausschneiden</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Kopiert den ausgewählten Abschnitt in die Zwischenablage und entfernt ihn aus dem Dokument.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>C</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Kopieren</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Kopiert den ausgewählten Abschnitt in die Zwischenablage.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>V</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Einfügen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Fügt den Inhalt der Zwischenablage in die Präsentation ein.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Entf</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Löschen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Entfernt den ausgewählten Abschnitt aus der Präsentation.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>A</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Alle auswählen</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para>
+<action
+>Wählt alle Objekte und Texte auf der aktuellen Folie aus.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;&Shift;<keycap
+>A</keycap
+></keycombo
+></shortcut
+><guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Auswahl aufheben</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Hebt die Auswahl der aktuell ausgewählten Objekte auf.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>F</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Suchen ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Sucht einen Text in der Präsentation.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycap
+>F3</keycap
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+><guimenuitem
+>Weitersuchen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Sucht das nächste Vorkommen eines Textes in der Präsentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Shift;<keycap
+>F3</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Frühere suchen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Sucht das vorherige Vorkommen eines Textes in der Präsentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+> </keycombo
+></shortcut
+><guimenu
+>Bearbeiten</guimenu
+> <guimenuitem
+>Ersetzen ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Ersetzt in der Präsentation eines oder mehrere Vorkommen eines Textabschnittes mit einem anderen Textabschnitt.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Edit Custom Slide Shows item missing-->
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Duplicate Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Insert an exact copy of the current slide.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Duplicate Object...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Create a duplicate of the currently selected object. A dialog will
+display allowing you to set some options for the duplicate, &eg; if it
+should be rotated, or scaled, or offset to a new position on the
+slide.</para>
+</listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+<sect1 id="view-menu">
+<title
+>Das Menü Ansicht</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Neue Ansicht</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Öffnet ein weiteres Fenster mit der gleichen Präsentation.</action
+> Damit können gleichzeitig an mehreren Folie arbeiten.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo
+></shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Close all views on the presentation.</action
+> You will be given
+a chance to save any changes, or to cancel closing.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Splits the window into two (or more) views on the same
+presentation.</action
+> The default split is horizontal.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Close only the currently active view</action
+>. The
+presentation, and any other views you have open, remain open, and any
+changes you have made remain unsaved.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the split view</action
+> between
+<guimenuitem
+>Horizontal</guimenuitem
+> (the default) and
+<guimenuitem
+>Vertical</guimenuitem
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show Sidebar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the display of the sidebar</action
+> where you can
+see an overview of all the slides in your presentation.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+> <shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F5</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Normal</guimenuitem
+> </menuchoice
+> <menuchoice
+> <shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F6</keycap
+></keycombo
+></shortcut
+> <guimenu
+>View</guimenu
+> <guimenuitem
+>Anmerkungen</guimenuitem
+> </menuchoice
+> <menuchoice
+> <shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>F7</keycap
+></keycombo
+></shortcut
+> <guimenu
+>View</guimenu
+> <guimenuitem
+>Foliensortierung</guimenuitem
+> </menuchoice
+> </term>
+<listitem>
+<para
+>Mit diesen Aktionen wechseln Sie zwischen den Ansichtsmodi: Normal, in dem Sie die Folien bearbeiten, Anmerkungen zeigt eine Vorschau der Folien mit einem Textfeld für Ihre Notizen und die Ansicht Foliensortierung, in der Sie Folien umbenennen, ausschneiden, kopieren und einfügen sowie die Folien für die Präsentation umsortieren können.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F8</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Folienmaster anzeigen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Schaltet die Anzeige des Folienvorlage ein bzw. aus.</action
+> Auf der Folienvorlage fügen Sie alle Objekte ein, die auf jeder Folie Ihrer Präsentation erscheinen soll.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Formatting Characters</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Show a visual representation of <quote
+>non-printing
+characters</quote
+>, such as tabs and paragraph markers. This can be
+a useful aid to precisely positioning text.</para>
+
+<para
+>This item can be toggled. If enabled, formatting characters are
+visible; if disabled, they are not.</para>
+</listitem>
+</varlistentry>
+-->
+
+<!--FIXME Show Rulers missing-->
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Gitter anzeigen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Wenn diese Option aktiviert ist, zeigt &stage; ein Punktgitter an. Diese Punkte repräsentieren die Schnittpunkte eines Gitters aus wagerechten und senkrechten Linien. Sie dienen zur exakten Positionierung von Objekten auf der Folie.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>An Gitter ausrichten</guimenuitem
+></menuchoice>
+</term>
+<listitem
+><para
+>Wenn diese Option markiert ist, werden verschobene oder neu erstellte Objekte mit ihrer linken oberen Ecke auf dem nächstliegenden Gitterpunkt <quote
+>einrasten</quote
+>.</para>
+<para
+>Trotzdem können Sie Objekten auf der Folie beliebig anordnen. Diese Option hilft aber bei der genauen Ausrichtung von Objekten. Bei Bedarf kann diese Funktion schnell ein- oder ausgeschaltet werden.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Hilfslinien anzeigen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Wenn Sie mit &stage; arbeiten, können Sie sowohl vertikale als auch horizontale <quote
+>Hilfslinien</quote
+> vom Lineal in das Dokument ziehen. Diese Hilfslinien werden weder gedruckt noch bei der Bildschirmpräsentation angezeigt, sie dienen lediglich der korrekten Ausrichtung von Objekten auf dem Bildschirm. Wenn dieses Element aktiviert ist, sind die Hilfslinien sichtbar, ansonsten nicht.</para>
+
+<para
+>Hilfslinien werden auf allen Folien angezeigt, so können Objekte auf mehreren Folien an der gleichen Stelle angeordnet werden.</para>
+
+<para
+>Durch das Ausblenden werden Hilfslinien nicht gelöscht. Sobald Sie diese Einstellung wieder einschalten, werden die vorher erzeugten Hilfslinien wieder angezeigt.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Add Guide Line...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+Opens a dialog to select the <guilabel
+>Orientation</guilabel>
+(<guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>)
+and choose a <guilabel
+>Position:</guilabel>
+</para>
+</listitem>
+</varlistentry>
+-->
+<!--FIXME Zoom In / Zoom Out-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guisubmenu
+>Zoom</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para
+>In diesem Untermenü können Sie die Anzeige der Folie vergrößern oder verkleinern. Es gibt einige vordefinierte Vergrößerungsstufen, darunter auch <guimenuitem
+>Ganze Seite</guimenuitem
+>, mit der die gesamte Folie im Programmfenster dargestellt wird, und <guimenuitem
+>An Breite anpassen</guimenuitem
+> für eine Vergrößerung, in der die Folie in voller Breite im Fenster angezeigt wird. Dabei müssen Sie vertikal mit den Bildlaufleisten blättern. Es gibt außerdem einige fest vorgegebene Vergrößerungsstufen von <guimenuitem
+>33 %</guimenuitem
+> bis <guimenuitem
+>500 %</guimenuitem
+>.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Full Screen Mode missing-->
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="insert-menu">
+<title
+>Das Menü Einfügen</title>
+
+<variablelist>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Alt;&Shift;<keycap
+>C</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Special Character...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a special character. This might be a character
+you don't have a key for on your keyboard layout, for instance &uuml;
+on a US Keyboard.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einfügen</guimenu
+> <guisubmenu
+>Variable</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Hier können Sie eine Variable einfügen, die mit einem Wert belegt ist, der sich mit der Bearbeitung des Dokuments ändert.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Link...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a hyperlink to a file, a website, or an email
+address. This enables these locations to be linked to directly from within active presentations, with resources being handled as appropriately by other applications installed on your system.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Comment...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Enter a small note that does not display during the
+real presentation. You might use this to comment on a colleague's
+text, or to leave a note for yourself about something to do
+later.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut
+><keycap
+>F2</keycap
+></shortcut>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Slide...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action
+>Add a new page to your presentation.</action
+> A dialog will open
+allowing you to choose a template, and whether to insert the new page
+before or after the currently selected page.
+</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einfügen</guimenu
+> <guimenuitem
+>Vorführung importieren ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Fügt eine vorhandene Präsentation ein.</action
+> Im Standard-&kde;-Dateidialog können Sie eine <guilabel
+>ODP-Präsentation</guilabel
+> (.odp) öffnen, diese Daten werden nach der letzten vorhandenen Folie in Ihr Dokument eingefügt.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einfügen</guimenu
+> <guimenuitem
+>Bilder als Folie einfügen ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Mit diesem Menüeintrag fügen Sie ein oder mehrere Bilder ein, jedes Bild auf einer neuen Folie. Damit können Sie schnell eine Diaschau erstellen.</para>
+</listitem>
+</varlistentry>
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut
+><keycap
+>F10</keycap
+></shortcut>
+<guimenu
+>Insert</guimenu
+><guimenuitem
+>Text</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Add a new text object. Click and drag to create a frame where
+you wish the text to appear.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a chart. Click and drag to define the size of the
+chart. Some default data will be displayed. Double click to edit the
+data and choose the type of chart to display, using the embedded
+&kchart; editor.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut
+><keycap
+>F5</keycap
+></shortcut>
+<guimenu
+>Insert</guimenu
+><guimenuitem
+>Table</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a table. Click and drag to define the size of
+the table.</para>
+
+<para
+>A &kspread; open dialog will display. You may import a
+spreadsheet that you have saved in one of many formats, including
+plain text files. You may also choose to create a new and empty
+table.</para>
+
+<para
+>Double clicking on the table will allow you to edit the
+contents.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>An object is an embeddable file, in one of many formats.</para>
+
+<para
+>A common use of this action is to insert scaleable clipart in
+vector format.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Shift;<keycap
+>F5</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Insert a raster image.</action
+> These are not as easily
+scaleable as vector images or <quote
+>clipart</quote
+>. &stage;
+currently understands many formats, including <literal
+role="extension"
+>.tiff</literal
+>, <literal
+role="extension"
+>.jpg</literal
+>, <literal
+role="extension"
+>.png</literal
+> and many more.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Line</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>You can insert several types of lines. Line drawing is described
+further in the drawing tools section.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Shape</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>You can insert several prepared shapes, in vector format. These are
+editable just like lines you have drawn yourself. Using the drawing
+tools is described in detail in the drawing tools
+section.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einfügen</guimenu
+> <guimenuitem
+>Scan erstellen ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Liest ein Bild von einem Scanner ein.</action
+> Dazu muss ein Scanner installiert sein. Damit wird der Scannerdialog geöffnet, in dem Sie die Einstellungen für den Scanner auswählen können.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="format-menu">
+<title
+>Das Menü Format</title>
+
+<variablelist>
+<!--FIXME Master Slide item missing--> 
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Schriftart ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+
+<para
+>Im Dialog <guilabel
+>Schriftart auswählen</guilabel
+> finden Sie Einstellungen für den ausgewählten Text:</para>
+
+<para
+>In diesem Dialog können Sie <action
+>die Schriftart, den Schriftstil und die Schriftgröße für den ausgewählten Text ändern</action
+>. In der <interface
+>Vorschau</interface
+> unten im Dialog können Sie Ihre Einstellungen kontrollieren. </para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>P</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Format</guimenu
+><guimenuitem
+>Absatz ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+
+<para
+>Im Dialog <guilabel
+>Absatzformat</guilabel
+> können Sie Einrückung und Abstand, das allgemeine Layout, Zeilenabstand, Listen und Nummern sowie Dekorationen einstellen.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>S</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Format</guimenu
+><guimenuitem
+>Stilverwaltung</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Mit Hilfe der <guilabel
+>Stilverwaltung</guilabel
+> können Sie einen Satz von Formateinstellungen festlegen, die alle gemeinsam auf einen ausgewählten Text angewandt werden. </para>
+</listitem>
+</varlistentry>
+
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Select</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>If you have been using a tool such as the line drawing tool which does
+not allow you to select other objects, you can use this menu item to
+return to the normal selection cursor.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Rotate</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Changes the cursor to a double headed curved arrow. Click with the &LMB; onto an object
+and keep the button pressed. Drag with the cursor to rotate the object on the slide around its center. When you are
+happy with the position of the object, release the mousebutton to stop
+rotating.</para>
+
+<para
+>If you change your mind and wish to cancel the rotation, use
+<menuchoice
+><guimenu
+>Edit</guimenu
+><guimenuitem
+>Undo</guimenuitem>
+</menuchoice
+> to later undo it.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Zoom</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Allow you to zoom in or out in the current slide. You can see the zoom factor in the <guilabel
+>Edit</guilabel
+> toolbar, in the zoom indicator.</para>
+<screenshot>
+<screeninfo
+>The <guilabel
+>zoom factor</guilabel
+> indicator</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="zoomfactor.png"/>
+</imageobject>
+<textobject>
+<phrase
+>The <guilabel
+>zoom factor</guilabel
+> indicator</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para
+>Left clicking on the slide will <guimenuitem
+>Zoom In</guimenuitem
+>. Right clicking on the current slide will present you a menu to allow you to <guimenuitem
+>Zoom In</guimenuitem
+>, to <guimenuitem
+>Zoom Out</guimenuitem
+>, to <guimenuitem
+>Zoom Entire Slide</guimenuitem
+>, to <guimenuitem
+>Zoom Slide Width</guimenuitem
+> or <guimenuitem
+>Zoom Slide Height</guimenuitem
+>, to <guimenuitem
+>Zoom Selected Objects</guimenuitem
+> or <guimenuitem
+>Zoom All Objects</guimenuitem
+> which put back all objects in your view.
+</para>
+<para
+>This action has the same effect as <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem
+>Zoom</guimenuitem>
+</menuchoice
+> on another form.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Properties</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Open</action
+> the <guilabel
+>Properties</guilabel
+> dialog for the currently selected object on your slide.</para>
+<screenshot>
+<screeninfo
+>The <guilabel
+>Properties</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="properties.png"/>
+</imageobject>
+<textobject>
+<phrase
+>The <guilabel
+>Properties</guilabel
+>dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para
+>The <guilabel
+>Properties</guilabel
+> dialog for an object allows you to manipulate it in a
+very detailed manner. You can change several properties for the selected object, like the text color if the object is text or the depth if the object is a picture.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guisubmenu
+>Arrange Objects</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>This is where you can manipulate the stacking order of
+objects on the slide.</para>
+
+<para
+>An object that is on top will cover, either partially or fully
+depending on its size, all other objects beneath it. Meanwhile an
+object on the bottom of the stack may not be visible at all, as it is
+covered up by other objects. An object in the middle may be partially
+covered by other objects, while partially covering yet more objects
+itself.</para>
+
+<para
+>You can send the selected object down or up a layer, or directly
+to the top or bottom of the stack.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guisubmenu
+>Align Objects</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+
+<para
+>In the submenu you can quickly align all the currently
+selected objects with a side of the slide, or center them either
+vertically or horizontally.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>G</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Group Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>If you are drawing, you might want to make something out of
+several objects. Arrange the individual parts where you
+want them, select one, then hold down the &Ctrl; key
+as you click in the others you want to group together. Click
+<guimenuitem
+>Group Objects</guimenuitem
+> and from then on they act as
+if they are just one thing. It glues things together.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Ungroup Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>If you decide that you want to alter an object that is made out
+of several pieces, you can unglue it with this tool. Click somewhere
+away from the object to deselect it, then click to select one of its
+parts.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Shadow Objects...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>This puts a colored copy of either text or a drawn object behind
+it. You can make nice <quote
+>dropped shadows</quote
+> for logos with
+this tool. To enable this item, ensure that you have object(s) 
+selected (you will see the eight small squares around the
+outline.) You choose the color, select which way the shadow is going to
+fall and select a distance. For text it looks nice if you set the
+distance to two or three. Click <guibutton
+>Apply</guibutton
+> 
+to see the result of your settings for all selected objects on the slide 
+without leaving the dialog.</para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Seitenlayout ...</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+>Hier können Sie einige Einstellungen zur Seitengröße vorgenehmen. Sie können die Ränder, die Orientierung (Hochformat oder Querformat), und die Seitengröße bestimmen. Dazu gibt es viele Vorlagen wie z.B. DIN A4 oder US Legal.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Enable/Disable Document Header</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the display of the header field</action
+> on the current slide. Header content can only be added in the master slide but you can choose to display the header only on some slides with this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Enable/Disable Document Footer</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Toggle the display of the footer field</action
+> on the current slide. Footer content can only be added in the master slide but you can choose to display the footer only on some slides with this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Format</guimenu>
+<guimenuitem
+>Slide Background...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para
+>Allows you to alter the background to your presentation
+slides. Your options are <guilabel
+>Color/Gradient</guilabel
+>, (which lets you
+set either a plain color or one of many gradients)
+or <guilabel
+>Picture</guilabel
+>, which gives a dialog box to find the picture 
+you want. Set the <guilabel
+>View mode:</guilabel
+> for this picture
+to <guilabel
+>Scaled</guilabel
+>, <guilabel
+>Centered</guilabel
+>, 
+or <guilabel
+>Tiled</guilabel
+>.</para>
+
+<para
+> If you want a plain color, click in the box to select
+it. Gradients only work when you have chosen two colors. The picture
+option allows you to center the picture, zoom it to cover the entire
+slide (if it is smaller than the screen, this is very useful) or tile
+it. This is used when you want a small pattern to repeat across the
+page	. It's probably best used with patterns rather than pictures of
+logos.</para>
+
+<para
+>You can get rid of a picture by selecting another one or
+choosing a color/gradient.</para>
+
+</listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+<!--FIXME this is now in Format -> Font / Paragraph etc
+<sect1 id="text-menu">
+<title
+><guimenu
+>Text</guimenu
+> Menu</title>
+
+<para
+>This menu modifies selected text and provides a few tools familiar from
+word processing applications for your convienience for when you are making
+presentations with large amounts
+of text in them. The <guimenu
+>Text</guimenu
+> menu will only effect selected or
+highlighted text.</para>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Default Format</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Restores selected text to the system default font size, style and
+formatting.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Color...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para
+>Use the <guilabel
+>Select Color</guilabel
+> dialog to have precise control
+over the color of selected text:</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Select Color</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="textmenu2.png"/>
+</imageobject>
+<textobject>
+<phrase
+>The <guilabel
+>Select Color</guilabel
+> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Using the <interface
+>color spectrum box</interface
+> on the left,
+<action
+>colors can be precisely defined</action
+> for use in your document. The
+color tone can then be adjusted using the <interface
+>scale</interface
+> to the
+right of the spectrum box. The <interface
+>input boxes</interface
+> below the
+color spectrum allow <action
+>color values to be entered</action
+>, so that exact
+colors can be specified.</para>
+
+<tip>
+<para
+>Use the color picker to select colors from elsewhere in your document
+(&eg; images).</para>
+</tip>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Import Styles...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Here you can import styles that you have defined in another &stage;
+document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Style</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Using this submenu, you can apply a style that you have previously defined
+to the currently selected text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Create Style From Selection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Copy the properties of the currently selected text and
+save them as a style that you may apply to other text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Align</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+><guisubmenu
+>Align</guisubmenu
+> has a submenu with several options:
+<guimenuitem
+>Align Left</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>L</keycap
+></keycombo
+>), 
+<guimenuitem
+>Align Center</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>C</keycap
+></keycombo
+>), 
+<guimenuitem
+>Align Right</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>R</keycap
+></keycombo
+>), and
+<guimenuitem
+>Align Block</guimenuitem
+> (<keycombo action="simul"
+>&Alt;<keycap
+>J</keycap
+></keycombo
+>) 
+which is also commonly known as <quote
+>Justify</quote
+>.</para>
+
+<para
+>Text is by default left-aligned.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Type</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Using this submenu, you can format the currently selected text as a list,
+either of the numbered or bulleted type. If you choose numbered, you can then
+select a numbering style, and likewise if you choose bulleted, you can
+choose the style of bullets to use.</para>
+
+<para
+>To change a list back to plain text, select
+<guimenuitem
+>None</guimenuitem
+> as the style.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>+</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Increase Depth</guimenuitem>
+</menuchoice>
+</term>
+
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>-</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Decrease Depth</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><guimenuitem
+>Increase Depth</guimenuitem
+> and <guimenuitem
+>Decrease
+Depth</guimenuitem
+> move paragraphs in a list either to the right
+(<guimenuitem
+>Increase Depth</guimenuitem
+>) or back to the left
+(<guimenuitem
+>Decrease Depth</guimenuitem
+>).</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Extend Contents to Object Height</guimenuitem>
+</menuchoice
+></term>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Extend Object to Fit Contents</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+><guimenuitem
+>Extend Contents to Object Height</guimenuitem
+> and
+<guimenuitem
+>Extend Object to Fit Contents</guimenuitem
+> help to
+resize text within the text box or make the text box fit the text you have typed
+or pasted into it.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Insert Slide Number</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Insert a dynamically-updated slide number. This page number will
+automatically update when slides are added or removed from your presentation to
+reflect the correct slide value.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guimenuitem
+>Change Case...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Presents a dialog that provides a variety of different case/capitalization
+options for the currently selected text.</para>
+
+<para
+>You may choose between several styles of capitalization,
+including all lower or uppercase, book style capitalization where each
+word except conjunctions has an initial capital letter, and sentence
+style capitalization where the first word in a sentence is capitalized. You can
+also toggle the case, so that uppercase becomes lowercase, and vice
+versa.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Spellcheck</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Use this submenu to utilize the spellcheck options. If you enable
+<guimenuitem
+>Autospellcheck</guimenuitem
+>, &stage; will automatically check
+text that you enter for spelling errors.</para>
+
+<para
+>If you prefer to check spelling explicitly, rather than automatically, you
+can also force a <guimenuitem
+>Spelling...</guimenuitem
+> check here.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Text</guimenu>
+<guisubmenu
+>Autocorrection</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Use this submenu to utilize autocorrection options. If you 
+<guimenuitem
+>Enable Autocorrection</guimenuitem
+>, common spelling errors will be
+corrected as you type. For example, if you entered <userinput
+>Teh</userinput
+>,
+it would be autocorrected to <userinput
+>The</userinput
+>.</para>
+
+<para
+>If the autocorrection feature is not active, you can also
+<guimenuitem
+>Apply Autocorrection</guimenuitem
+> check here.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+-->
+
+<sect1 id="slide-menu">
+<title
+>Das Menü Folie</title>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Folie</guimenu
+> <guimenuitem
+>Folie einfügen</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Fügt eine neue Folie hinter der aktuellen Folie in das Dokument ein.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+> <guimenu
+>Folie</guimenu
+> <guimenuitem
+>Folie kopieren</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+><action
+>Kopiert die aktuelle Folie in die Zwischenablage.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Folie</guimenu
+> <guimenuitem
+>Folie löschen</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>Löscht die aktuelle Seite aus der Präsentation.</action
+> Vorher erscheint eine Sicherheitsabfrage.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycap
+>Bild auf</keycap
+></shortcut
+> <guimenu
+>Folie</guimenu
+> <guimenuitem
+>Vorherige Folie</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Gehe zurück zur vorherigen Folie der Vorführung.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycap
+>Bild ab</keycap
+></shortcut
+> <guimenu
+>Folie</guimenu
+> <guimenuitem
+>Nächste Folie</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Gehe zur nächsten Folie der Vorführung.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>Pos 1</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Folie</guimenu
+> <guimenuitem
+>Erste Folie</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Gehe direkt zur ersten Folie der Vorführung.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+> &Ctrl;<keycap
+>Ende</keycap
+> </keycombo
+></shortcut
+> <guimenu
+>Folie</guimenu
+> <guimenuitem
+>Letzte Folie</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Geht direkt zur letzten Folie der Vorführung.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="slide-show-menu">
+<title
+>Das Menü Vorführung</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycombo action="simul"
+>&Shift;<keycap
+>F5</keycap
+></keycombo
+></shortcut
+><guimenu
+> Vorführung</guimenu
+><guisubmenu
+>Präsentation starten</guisubmenu
+><guimenuitem
+>Von aktueller Folie</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Beginnt die Vorführung bei der aktuellen Folie.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><shortcut
+><keycap
+>F5</keycap
+></shortcut
+><guimenu
+> Vorführung</guimenu
+><guisubmenu
+>Präsentation starten</guisubmenu
+><guimenuitem
+>Von erster Folie</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Beginnt die Vorführung mit der ersten Folie.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Vorführung</guimenu
+> <guimenuitem
+>Vorführung einrichten ...</guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Hier können die Eigenschaften der Vorführung festgelegt werden. Unter anderem wird die Anzeigedauer der Folien festgelegt und es können Folien von der Vorführung ausgeschlossen werden.</para>
+</listitem>
+</varlistentry>
+<!--FIXME Configure Presenter Wiew item mising-->
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Slide Show</guimenu>
+<guimenuitem
+>Edit Object Effect...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Choose what effect you want to apply for the highlighted object. This is where
+you can set the order of appearance, how the object will appear, if you want a sound while the object appears and if you want some disappearance effects too.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Slide Show</guimenu>
+<guimenuitem
+>Edit Slide Transition...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Apply transition effects to the currently open slide. This is where
+you can choose how the transition from one slide to the next
+will be handled.</para>
+
+<para
+>The transition effects you select here are applied on the
+transition <emphasis
+>from</emphasis
+> this slide
+<emphasis
+>to</emphasis
+> the next.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu
+>Slide Show</guimenu>
+<guimenuitem
+>Custom Slide Show...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para
+>Opens a dialog to <guibutton
+>Add...</guibutton
+>, <guibutton
+>Modify...</guibutton
+>, 
+<guibutton
+>Remove</guibutton
+> and <guibutton
+>Copy</guibutton
+> slides and
+<guibutton
+>Test</guibutton
+> the slide show in full screen mode.</para>
+</listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>Das Menü Einstellungen</title>
+
+<para
+>Das Menü <guimenu
+>Einstellungen</guimenu
+> erlaubt die Einrichtung von &stage;.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einstellungen</guimenu
+> <guisubmenu
+>Werkzeugleiste anzeigen</guisubmenu
+> </menuchoice>
+</term>
+<listitem>
+<para
+>In diesem Menü kann die Anzeige der Werkzeugleiste ein- oder ausgeschaltet werden.</para>
+</listitem>
+</varlistentry>
+
+<!--FIXME Dockers item missing -->
+
+<!--FIXME Show Status Bar item missing -->
+ 
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einstellungen</guimenu
+> <guimenuitem
+>Kurzbefehle festlegen ... </guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+
+<para
+>Über <guimenuitem
+>Kurzbefehle festlegen ...</guimenuitem
+> können Sie Tastaturkurzbefehle für Aktionen aus den Menüs und Werkzeugleisten von &stage; bestimmen.</para>
+
+<screenshot>
+<screeninfo
+>Kurzbefehle anpassen</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings03.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Die Kurzbefehle anpassen</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Falls Sie einen bereits verwendeten Kurzbefehl neu zuordnen wollen, erhalten Sie einen Warnhinweis. Wählen Sie den gewünschten Eintrag aus (im Bild der Kurzbefehl für <guilabel
+>Über KDE</guilabel
+>).</para>
+
+<para
+>Klicken Sie auf den Knopf <guilabel
+>Benutzerdefiniert</guilabel
+> und drücken Sie dann die Taste für den Kurzbefehl. Im Beispiel wird &Ctrl; und <keycap
+>Y</keycap
+> für den Dialog <quote
+>Über KDE</quote
+>-Dialog verwendet.</para>
+
+<para
+>Im Tastensymbol wird die aktuelle Zuordnung angezeigt. Durch <guibutton
+>OK</guibutton
+> wird der Dialog geschlossen und die aktuellen Änderungen werden übernommen, <guibutton
+>Standard</guibutton
+> stellt die Standardeinstellungen wieder her und <guibutton
+>Abbrechen</guibutton
+> beendet den Dialog und verwirft die Änderungen.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einstellungen</guimenu
+> <guimenuitem
+>Werkzeugleisten einrichten ... </guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Dieser Menüeintrag erlaubt die Anpassung der in den Werkzeugleisten angezeigten Symbole.</para>
+
+<screenshot>
+<screeninfo
+>Werkzeugleisten für &stage; einrichten</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings04.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Werkzeugleisten für &stage; einrichten</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Oben befindet sich eine Auswahlliste für die zu bearbeitenden Werkzeugleisten. Im Bild wurde die Werkzeugleiste <guilabel
+>Datei</guilabel
+> ausgewählt. Wenn Sie das Symbol <guiicon
+>Rechtschreibung</guiicon
+> zu dieser Werkzeugleiste hinzugefügen wollen, klicken Sie auf diesen Eintrag in der linken Liste. Dadurch wird das Symbol <guiicon
+>Pfeil rechts</guiicon
+> aktiviert. Durch Klicken auf diesen Pfeil wird <guiicon
+>Andockbare Dialoge</guiicon
+> in die ausgewählte Werkzeugleiste aufgenommen. Der Pfeil nach links ist aktiviert, wenn Sie die rechte Liste klicken. Damit entfernen Sie Einträge aus der Werkzeugleiste. Sie können dann außerdem den ausgewählten Eintrag in der rechten Liste mit den Pfeiltasten auf der Tastatur oder durch Klicken mit der Maus auf den Pfeil aufwärts und abwärts verschieben und dadurch die Position des Symbols in der Werkzeugleiste verändern. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Einstellungen</guimenu
+> <guimenuitem
+>Designs</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Auswahl des Farbdesigns für das &stage;-Fenster.</action
+> Sie können eines der vordefinierten Farbschemata auswählen oder mit <guimenuitem
+>Einrichtung ...</guimenuitem
+> das <ulink url="help:/kcontrol/colors"
+>Modul Farben der &systemsettings;</ulink
+> öffnen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice
+><guimenu
+>Einstellungen</guimenu
+> <guimenuitem
+>Stage einrichten ... </guimenuitem
+> </menuchoice>
+</term>
+<listitem>
+<para
+>Im Kapitel <link linkend="configure-dialog"
+>Einrichten</link
+> finden Sie eine vollständige Erklärung aller Einstellungen von &stage;.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>Das Menü Hilfe</title
+>&help.menu.documentation; </sect1>
+
+</chapter>

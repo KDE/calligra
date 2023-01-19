@@ -1,0 +1,147 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-02-24 23:33+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-10-20 04:55+0000\n"
+"X-Generator: Launchpad (build 16807)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: ChangeVideoCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Change video"
+msgstr "Promijeni video"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnVideoFile)
+#: forms/VideoToolWidget.ui:33
+#, kde-format
+msgid "Replace video..."
+msgstr "Zamijeni video..."
+
+#. i18n: ectx: property (text), widget (QPushButton, btnPlay)
+#: forms/VideoToolWidget.ui:40
+#, kde-format
+msgid "Play Video"
+msgstr "Izvodi Video"
+
+#: FullScreenPlayer.cpp:54 VideoTool.cpp:34
+#, kde-format
+msgid "Play"
+msgstr "Pusti"
+
+#: FullScreenPlayer.cpp:59
+#, kde-format
+msgid "Pause"
+msgstr "Pauza"
+
+#: FullScreenPlayer.cpp:64
+#, kde-format
+msgid "Stop"
+msgstr "Prekini"
+
+#: FullScreenPlayer.cpp:69
+#, kde-format
+msgid "Unmute"
+msgstr "Uključi zvuk"
+
+#: FullScreenPlayer.cpp:74
+#, kde-format
+msgid "Mute"
+msgstr "Ugašen zvuk"
+
+#: SelectVideoWidget.cpp:27
+#, kde-format
+msgid "Save as part of document"
+msgstr "Snimi kao dio dokumenta"
+
+#: VideoShapeFactory.cpp:24
+#, kde-format
+msgid "Video"
+msgstr "Video"
+
+#: VideoShapeFactory.cpp:26
+#, kde-format
+msgid "Video, embedded or fullscreen"
+msgstr "Video, ugrađeni ili preko cijelog ekrana"
+
+#: VideoToolFactory.cpp:18
+#, kde-format
+msgid "Video handling"
+msgstr "Upravljanje videom"
+
+#, fuzzy
+#~| msgid "Replace video..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace video..."
+#~ msgstr "Zamijeni video..."
+
+#, fuzzy
+#~| msgid "Play Video"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Play Video"
+#~ msgstr "Izvodi Video"
+
+#, fuzzy
+#~| msgid "Play"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Play"
+#~ msgstr "Pusti"
+
+#, fuzzy
+#~| msgid "Pause"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pause"
+#~ msgstr "Pauza"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop"
+#~ msgstr "Prekini"
+
+#, fuzzy
+#~| msgid "Unmute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unmute"
+#~ msgstr "Uključi zvuk"
+
+#, fuzzy
+#~| msgid "Mute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mute"
+#~ msgstr "Ugašen zvuk"
+
+#, fuzzy
+#~| msgid "Save as part of document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save as part of document"
+#~ msgstr "Snimi kao dio dokumenta"
+
+#, fuzzy
+#~| msgid "Video"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Video"
+#~ msgstr "Video"
+
+#, fuzzy
+#~| msgid "Video, embedded or fullscreen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Video, embedded or fullscreen"
+#~ msgstr "Video, ugrađeni ili preko cijelog ekrana"
+
+#, fuzzy
+#~| msgid "Video handling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Video handling"
+#~ msgstr "Upravljanje videom"
+
+#~ msgid "Video tool"
+#~ msgstr "Video alat"

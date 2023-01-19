@@ -1,0 +1,109 @@
+# translation of SpellCheckPlugin.po to français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Stanislas Zeller <uncensored.assault@gmail.com>, 2008.
+# Dupo <Dupop35@yahoo.fr>, 2010.
+# xavier <ktranslator31@yahoo.fr>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-07-09 18:51+0200\n"
+"Last-Translator: xavier <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 1.5\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "&Configurer la vérification orthographique..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Vérification orthographique automatique"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Vérifier l'orthographe"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Orthographe"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Ajouter au dictionnaire"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "&Configurer la vérification orthographique..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Vérification orthographique automatique"
+
+#, fuzzy
+#~| msgid "Check Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Vérifier l'orthographe"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Orthographe"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Ajouter au dictionnaire"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Ignorer le mot"
+
+#~ msgid "Spell Check"
+#~ msgstr "Vérification orthographique"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Paramètre de la vérification orthographique"
+
+#~ msgid "Default Language:"
+#~ msgstr "Langue par défaut"
+
+#~ msgid "Options"
+#~ msgstr "Options"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Activer la &vérification orthographique en tâche de fond"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Ignorer to&us les mots en majuscule"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "S&auter les mots combinés"
+
+#~ msgid "&Add"
+#~ msgstr "&Ajouter"
+
+#~ msgid "&Remove"
+#~ msgstr "&Supprimer"

@@ -1,0 +1,1804 @@
+# translation of karbon.po to Swedish
+# translation of karbon.po to
+# Copyright (C).
+#
+# Mattias Newzella <newzella@linux.nu>, 2003.
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2011, 2012, 2013, 2015, 2016, 2018, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-11-06 17:50+0100\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Boolesk operation"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "Or&dning"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Justera"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Arkiv"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "&Redigera"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "&Visa"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Objekt"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "&Fördela"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&Kontur"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "Effe&kter"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "In&ställningar"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr "Si&da"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Redigera"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Objekt"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Justera"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Effekter"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Visa"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "&Platta ut kontur..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Platta ut kontur"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Egenskaper"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Platthet:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Platta ut kontur"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Förfina kontur"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "&Förfina kontur..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Förfina kontur"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Underavdelningar:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Runda hörn"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&Runda hörn..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Runda hörn"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Radie:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Virvla och kläm"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Virvla/kläm..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Virvla kläm"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Information"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+"Resultatet av virvelklämeffekten kan förbättras genom att förfina "
+"konturformen i förväg."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Vinkel:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Kläm:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Höj lager"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Sänk lager"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Anpassa"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Gränssnitt"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Diverse"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Rutnät"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokument"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "DokumentInställningar"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Författare"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "Författare"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "Ett ritprogram för vektorgrafik."
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "© 2001-%1, Karbon-utvecklarna"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr "Anthony Fieroni"
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr "Underhåll"
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Felrättningar och förbättringar"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Felrättningar"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Hjälpsamma programfixar och goda råd"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Stefan Asserhäll"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "stefan.asserhall@bredband.net"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Infoga grafik"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Välj grafik att lägga till"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "Kunde inte ladda bild."
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Importera grafik"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "Kunde inte skapa bildform."
+
+#: ui/KarbonView.cpp:612
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "Spegla horisontellt"
+
+#: ui/KarbonView.cpp:614
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "Spegla vertikalt"
+
+#: ui/KarbonView.cpp:616
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "Spegla horisontellt och vertikalt"
+
+#: ui/KarbonView.cpp:671
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Separera kontur"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "Skiss&läge"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Importera grafik..."
+
+#: ui/KarbonView.cpp:864
+#, kde-format
+msgid "Edit Guides"
+msgstr "Redigera hjälplinjer"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Duplicera"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Fördela centrerat (horisontellt)"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Fördela mellanrum (horisontellt)"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "Fördela längs vänsterkanter"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "Fördela längs högerkanter"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Fördela centrerat (vertikalt)"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Fördela mellanrum (vertikalt)"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Fördela längs underkanter"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "Fördela längs överkanter"
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Show Color Palette"
+msgstr "Visa färgpalett"
+
+#: ui/KarbonView.cpp:909
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "Visa eller dölj färgpalett"
+
+#: ui/KarbonView.cpp:913
+#, kde-format
+msgid "&Clip Object"
+msgstr "&Beskär objekt"
+
+#: ui/KarbonView.cpp:917
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "Ta bort &beskärning av objekt"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Spegla vertikalt"
+
+#: ui/KarbonView.cpp:925
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Spegla horisontellt"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "Stän&g kontur"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Kom&binera kontur"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "Se&parera kontur"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "&Vänd kontur"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Korsa konturer"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Subtrahera konturer"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Förena konturer"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Undanta konturer"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Lås kontur till rutnät"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Zooma till markering"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Zooma till bild"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Zooma"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "Visa statusrad:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Antal senaste filer:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Palettens teckenstorlek:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr "Välj palett"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Tryck för att fylla i markeringen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Ingen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Tryck för att göra streck i markeringen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "Egen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Ingen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Streck:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Fyll:"
+
+#~ msgid "D&elete"
+#~ msgstr "Ta &bort"
+
+#~ msgid "Layer view"
+#~ msgstr "Lagervy"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Lägg till nytt lager"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Ta bort valda objekt"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Höj upp valda objekt"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Sänk valda objekt"
+
+#~ msgid "Minimal View"
+#~ msgstr "Minimal vy"
+
+#~ msgid "Detailed View"
+#~ msgstr "Detaljvy"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Miniatyrbildsvy"
+
+#~ msgid "View mode"
+#~ msgstr "Vyläge"
+
+#~ msgid "New Layer"
+#~ msgstr "Nytt lager"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Mata in namnet på det nya lagret"
+
+#~ msgid "New layer"
+#~ msgstr "Nytt lager"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Skapa lager"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Ta bort lager"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Kunde inte ta bort alla lager. Minst ett måste finnas kvar."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Fel vid borttagning av lager"
+
+#~ msgid "Layer"
+#~ msgstr "Lager"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Grupp"
+
+#~ msgid "Shape"
+#~ msgstr "Form"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Synligt"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Låst"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Ogenomskinlighet"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Beskuret"
+
+#~ msgid "no"
+#~ msgstr "nej"
+
+#~ msgid "yes"
+#~ msgstr "ja"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Ändra formernas ägare"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Ogiltig OASIS-dokument. Taggen office:body hittades inte."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Ogiltig OASIS-dokument. Taggen office:drawing hittades inte."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Ogiltig OASIS-dokument. Taggen draw:page hittades inte."
+
+#~ msgid "Master Page"
+#~ msgstr "Förlagssida"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Visa sidmarginaler"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Visa linjaler"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Visar eller döljer linjaler"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Lås till rutnät"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Låser till rutnätet"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Anpassa Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Sid&layout..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "Dukfärg:"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Underhålls inte vid tiden då den här versionen ges ut. Calligra-samfundet "
+#~ "välkomnar intresserade personer att ta över underhållet."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "Or&dning"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Justera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Arkiv"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Redigera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Visa"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "&Fördela"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "&Kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "Effe&kter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "In&ställningar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Redigera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "Justera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Effekter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "Visa"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Platta ut kontur..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Platta ut kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Egenskaper"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Platthet:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "&Förfina kontur..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Förfina kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "Underavdelningar:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "&Runda hörn..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Radie:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Virvla/kläm..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Virvla kläm"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "Information"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Resultatet av virvelklämeffekten kan förbättras genom att förfina "
+#~ "konturformen i förväg."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Vinkel:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Kläm:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Anpassa"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Gränssnitt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Diverse"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Rutnät"
+
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokument"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "DokumentInställningar"
+
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Författare"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Författare"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Lagervy"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Lägg till nytt lager"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Ta bort valda objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Höj upp valda objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Sänk valda objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Minimal vy"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Detaljvy"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Miniatyrbildsvy"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Vyläge"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Nytt lager"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Mata in namnet på det nya lagret"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Nytt lager"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Kunde inte ta bort alla lager. Minst ett måste finnas kvar."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "Fel vid borttagning av lager"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Lager"
+
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Grupp"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Form"
+
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Synligt"
+
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Låst"
+
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "zIndex"
+
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Ogenomskinlighet"
+
+#~ msgctxt "(qtundo-format) Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Beskuret"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "nej"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "ja"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Ett ritprogram för vektorgrafik."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "© 2001-2013, Karbon-utvecklarna"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Underhålls inte vid tiden då den här versionen ges ut. Calligra-samfundet "
+#~ "välkomnar intresserade personer att ta över underhållet."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Felrättningar och förbättringar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "Felrättningar"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Hjälpsamma programfixar och goda råd"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Stefan Asserhäll"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "stefan.asserhall@bredband.net"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Ogiltig OASIS-dokument. Taggen office:body hittades inte."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Ogiltig OASIS-dokument. Taggen office:drawing hittades inte."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Ogiltig OASIS-dokument. Taggen draw:page hittades inte."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Förlagssida"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Välj grafik att lägga till"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load image."
+#~ msgstr "Kunde inte ladda bild."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "Importera grafik"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create image shape."
+#~ msgstr "Kunde inte skapa bildform."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "Skiss&läge"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Visa sidmarginaler"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Importera grafik..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "Ta &bort"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Redigera hjälplinjer"
+
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Duplicera"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Fördela centrerat (horisontellt)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Fördela mellanrum (horisontellt)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Fördela längs vänsterkanter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Fördela längs högerkanter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Fördela centrerat (vertikalt)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Fördela mellanrum (vertikalt)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Fördela längs underkanter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Fördela längs överkanter"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Visa linjaler"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Visar eller döljer linjaler"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Color Palette"
+#~ msgstr "Visa färgpalett"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Visa eller dölj färgpalett"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Lås till rutnät"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Låser till rutnätet"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "&Beskär objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "Ta bort &beskärning av objekt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "Stän&g kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Kom&binera kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Se&parera kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "&Vänd kontur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Korsa konturer"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Subtrahera konturer"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Förena konturer"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "Undanta konturer"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Lås kontur till rutnät"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Anpassa Karbon..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "Sid&layout..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Zooma till markering"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Zooma till bild"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Zooma"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Visa statusrad:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Antal senaste filer:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Palettens teckenstorlek:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Canvas color:"
+#~ msgstr "Dukfärg:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Välj palett"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Tryck för att fylla i markeringen"
+
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Tryck för att göra streck i markeringen"
+
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Egen"
+
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Streck:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Fyll:"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "Du inbjuds att deltaga på vilket sätt som helst."
+
+#~ msgid "Expand all"
+#~ msgstr "Expandera alla"
+
+#~ msgid "Collapse all"
+#~ msgstr "Dra ihop alla"
+
+#~ msgid "List View"
+#~ msgstr "Listvy"
+
+#~ msgid "Icon View"
+#~ msgstr "Ikonvy"
+
+#~ msgid "Stencil Box"
+#~ msgstr "Stencilruta"
+
+#~ msgid "Stencils Online"
+#~ msgstr "Stenciler på nätet"
+
+#~ msgid "Add/Remove Stencil"
+#~ msgstr "Lägg till eller ta bort stencil"
+
+#~ msgid "More shapes"
+#~ msgstr "Fler former"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Stencils successfully installed."
+#~ msgstr "Stenciler installerade med lyckat resultat."
+
+#~ msgid "Stencils successfully uninstalled."
+#~ msgstr "Stenciler avinstallerade med lyckat resultat."
+
+#~ msgid ""
+#~ "This is the user stencils directory.\n"
+#~ "From here you can add / remove stencils for use in the Stencil Box "
+#~ "docker.\n"
+#~ "\n"
+#~ "Stencils are organized in collections, a collection is a folder "
+#~ "containing a text file 'collection.desktop':\n"
+#~ "\n"
+#~ "collection.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Your Stencil Collection Name\n"
+#~ "\n"
+#~ "A stencil is an ODG/SVG file, a desktop file, an optional PNG icon file, "
+#~ "all with the same name under its collection folder:\n"
+#~ "\n"
+#~ "foo.odg or foo.svgz or foo.svg\n"
+#~ "\n"
+#~ "ODF elements for stencil should be a <draw:g> element or <draw:custom-"
+#~ "shape> element\n"
+#~ "No special requirements to SVG file\n"
+#~ "\n"
+#~ "foo.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Foo\n"
+#~ "CS-KeepAspectRatio=1\n"
+#~ "\n"
+#~ "If CS-KeepAspectRatio=1, the stencil added to canvas will have geometry "
+#~ "aspect ratio locked, by default it's 0.\n"
+#~ "\n"
+#~ "foo.png\n"
+#~ "\n"
+#~ "Should have size 32x32 pixel, if the png file is not included, Karbon "
+#~ "will render the ODG/SVG file as the icon,\n"
+#~ "but it won't look good under small pixels when the stencil stroke is "
+#~ "complicated.\n"
+#~ msgstr ""
+#~ "Det här är användarens stencilkatalog.\n"
+#~ "Här går det att lägga till eller ta bort stenciler som används i "
+#~ "stencilrutan.\n"
+#~ "\n"
+#~ "Stenciler organiseras i samlingar. En samling är en katalog som "
+#~ "innehåller textfilen 'collection.desktop':\n"
+#~ "\n"
+#~ "collection.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Stencilsamlingens namn\n"
+#~ "\n"
+#~ "En stencil består av en ODG- eller SVG-fil, en skrivbordsfil, en valfri "
+#~ "PNG-ikonfil, alla med namn under dess samlingskatalog:\n"
+#~ "\n"
+#~ "exempel.odg, exempel.svgz eller exempel.svg\n"
+#~ "\n"
+#~ "ODF-element för en stencil ska vara elementet <draw:g> eller <draw:custom-"
+#~ "shape>. Det finns inga särskilda krav för SVG-filer.\n"
+#~ "\n"
+#~ "exempel.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Exempel\n"
+#~ "CS-KeepAspectRatio=1\n"
+#~ "\n"
+#~ "Om CS-KeepAspectRatio=1, får stencilen som läggs till på duken sin "
+#~ "proportion låst, normalt är den 0.\n"
+#~ "\n"
+#~ "exempel.png\n"
+#~ "\n"
+#~ "Ska ha storleken 32 x 32 bildpunkter. Om png-filen inte ingår, kommer "
+#~ "Flow att återge ODG- eller SVG-filen som ikon,\n"
+#~ "men det ser inte bra ut med små bildpunkter när stencilens streck är "
+#~ "komplicerade.\n"
+
+#~ msgid "File to open"
+#~ msgstr "Fil att öppna"
+
+#~ msgid "Blend"
+#~ msgstr "Blanda"
+
+#~ msgid "Blend mode"
+#~ msgstr "Blandningsläge"
+
+#~ msgid "Normal"
+#~ msgstr "Normalt"
+
+#~ msgid "Multiply"
+#~ msgstr "Multiplikativt"
+
+#~ msgid "Screen"
+#~ msgstr "Skärm"
+
+#~ msgid "Darken"
+#~ msgstr "Gör mörkare"
+
+#~ msgid "Lighten"
+#~ msgstr "Gör ljusare"
+
+#~ msgid "Gaussian blur"
+#~ msgstr "Gaussisk oskärpa"
+
+#~ msgid "Radius"
+#~ msgstr "Radie"
+
+#~ msgid "Color Matrix"
+#~ msgstr "Färgmatris"
+
+#~ msgid "Apply color matrix"
+#~ msgstr "Använd färgmatris"
+
+#~ msgid "Saturate colors"
+#~ msgstr "Mätta färger"
+
+#~ msgid "Rotate hue"
+#~ msgstr "Rotera färgton"
+
+#~ msgid "Luminance to alpha"
+#~ msgstr "Luminans till alfa"
+
+#~ msgid "Saturate value"
+#~ msgstr "Mätta värde"
+
+#~ msgid "Angle"
+#~ msgstr "Vinkel"
+
+#~ msgid "Color matrix"
+#~ msgstr "Färgmatris"
+
+#~ msgid "Component transfer"
+#~ msgstr "Komponentöverföring"
+
+#~ msgid "Function"
+#~ msgstr "Funktion"
+
+#~ msgid "Identity"
+#~ msgstr "Identitet"
+
+#~ msgid "Table"
+#~ msgstr "Tabell"
+
+#~ msgid "Discrete"
+#~ msgstr "Diskret"
+
+#~ msgid "Linear"
+#~ msgstr "Linjär"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "Values"
+#~ msgstr "Värden"
+
+#~ msgid "Slope"
+#~ msgstr "Lutning"
+
+#~ msgid "Intercept"
+#~ msgstr "Korsning"
+
+#~ msgid "Amplitude"
+#~ msgstr "Amplitud"
+
+#~ msgid "Exponent"
+#~ msgstr "Exponent"
+
+#~ msgid "Offset"
+#~ msgstr "Position"
+
+#~ msgid "Composite"
+#~ msgstr "Sammansättning"
+
+#~ msgid "Operation"
+#~ msgstr "Operation"
+
+#~ msgid "Convolve Matrix"
+#~ msgstr "Faltningsmatris"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplicera"
+
+#~ msgid "Wrap"
+#~ msgstr "Bryt"
+
+#~ msgid "Edge mode:"
+#~ msgstr "Kantläge:"
+
+#~ msgid "Kernel size:"
+#~ msgstr "Kärnstorlek:"
+
+#~ msgid "Target point:"
+#~ msgstr "Målpunkt:"
+
+#~ msgid "Divisor:"
+#~ msgstr "Delare:"
+
+#~ msgid "Bias:"
+#~ msgstr "Förskjutning:"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Bevara alfa"
+
+#~ msgid "Edit kernel"
+#~ msgstr "Redigera kärna"
+
+#~ msgid "Flood fill"
+#~ msgstr "Fyllverktyg"
+
+#~ msgid "Flood color"
+#~ msgstr "Fyllfärg"
+
+#~ msgid "Image"
+#~ msgstr "Bild"
+
+#~ msgid "Select image..."
+#~ msgstr "Välj bild..."
+
+#~ msgid "Select image"
+#~ msgstr "Välj bild"
+
+#~ msgid "Merge"
+#~ msgstr "Sammanfoga"
+
+#~ msgid "Morphology"
+#~ msgstr "Morfologi"
+
+#~ msgid "Erode"
+#~ msgstr "Erodera"
+
+#~ msgid "Dilate"
+#~ msgstr "Vidga"
+
+#~ msgid "Operator:"
+#~ msgstr "Operator:"
+
+#~ msgid "Radius x:"
+#~ msgstr "Radie x:"
+
+#~ msgid "Radius y:"
+#~ msgstr "Radie y:"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Target:"
+#~ msgstr "Resultat:"
+
+#~ msgid "Line"
+#~ msgstr "Linje"
+
+#~ msgid "Fill"
+#~ msgstr "Fyll"
+
+#~ msgid "Type:"
+#~ msgstr "Typ:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linjär"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radiell"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Konisk"
+
+#~ msgid "Repeat:"
+#~ msgstr "Upprepa:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgid "Reflect"
+#~ msgstr "Spegla"
+
+#~ msgid "Repeat"
+#~ msgstr "Upprepa"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Total ogenomskinlighet:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Stoppfärg:"
+
+#~ msgid "Stop color."
+#~ msgstr "Färg vid stopp."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Lägg till i fördefinierade toningar"
+
+#~ msgid "Original"
+#~ msgstr "Original"
+
+#~ msgid "Tiled"
+#~ msgstr "Sida vid sida"
+
+#~ msgid "Stretched"
+#~ msgstr "Utsträckt"
+
+#~ msgid "Top Left"
+#~ msgstr "Uppe till vänster"
+
+#~ msgid "Top"
+#~ msgstr "Längst upp"
+
+#~ msgid "Top Right"
+#~ msgstr "Uppe till höger"
+
+#~ msgid "Left"
+#~ msgstr "Vänster"
+
+#~ msgid "Center"
+#~ msgstr "Centrera"
+
+#~ msgid "Right"
+#~ msgstr "Höger"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Nere till vänster"
+
+#~ msgid "Bottom"
+#~ msgstr "Längst ner"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Nere till höger"
+
+#~ msgid "Stroke"
+#~ msgstr "Streck"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Dölj sidmarginaler"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Dölj linjaler"
+
+#~ msgid "Hide Color Palette"
+#~ msgstr "Dölj färgpalett"
+
+#~ msgid "Color Palette: %1"
+#~ msgstr "Färgpalett: %1"
+
+#~ msgid "No color palette available"
+#~ msgstr "Ingen färgpalett tillgänglig"
+
+#~ msgid "Stop color:"
+#~ msgstr "Färg vid stopp:"
+
+#~ msgid "Mirror Vertcially"
+#~ msgstr "Spegla vertikalt"
+
+#~ msgid "Tools"
+#~ msgstr "Verktyg"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Kopieringsposition:"
+
+#~ msgid "Show Guides"
+#~ msgstr "Visa hjälplinjer"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Visar eller döljer hjälplinjer"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Ingen"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Fylld"
+
+#~ msgid "Gradient"
+#~ msgstr "Toning"
+
+#~ msgid "Pattern"
+#~ msgstr "Mönster"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Fyll jämn-udda"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Fyll slingrande"
+
+#~ msgid "Units:"
+#~ msgstr "Enheter:"
+
+#~ msgid "Handle radius:"
+#~ msgstr "Greppradie:"
+
+#~ msgid "Grab sensitivity:"
+#~ msgstr "Gripkänslighet:"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Ta bort gruppering av former"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Gruppera objekt"
+
+#~ msgid "Show grid:"
+#~ msgstr "Visa rutnät:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Lås till rutnät:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Färg för rutnät:"
+
+#~ msgid "Spacing"
+#~ msgstr "Mellanrum"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Vertikal"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Spara automatiskt (min):"
+
+#~ msgid "No auto save"
+#~ msgstr "Ingen automatisk sparning"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Skapa backupfil"

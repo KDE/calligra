@@ -1,0 +1,1158 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Ivan</firstname
+><surname
+>Petrov</surname
+><affiliation
+><address
+><email
+>pis00593@udmglzs.udmene.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Мария</firstname
+><surname
+>Шикунова</surname
+><affiliation
+><address
+><email
+>translation-team@basealt.ru</email
+></address
+></affiliation
+><contrib
+>Обновление перевода на русский</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Форматирование электронной таблицы</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>Формат ячейки</title>
+<para
+>Для изменения формата и внешнего вида выбранных ячеек, строк или столбцов, используйте параметр <guimenuitem
+>Формат ячеек...</guimenuitem
+> в меню <guimenu
+>Формат</guimenu
+> или в контекстном меню, вызываемом щелчком <mousebutton
+>правой</mousebutton
+> кнопкой мыши.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Контекстное меню, вызываемое правой кнопкой мыши.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Появится диалоговое окно <guilabel
+>Формат ячеек</guilabel
+>, которое содержит несколько вкладок:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>Формат данных и внешний вид</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Вкладка <guilabel
+>Формат данных</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Вкладка <guilabel
+>Формат данных</guilabel
+> диалога <guilabel
+>Формат ячеек</guilabel
+> позволяет настроить отображение значений ячеек.</para>
+<para
+>Верхняя часть этого окна позволяет выбрать формат отображения числовых значений, даты и времени. На панели <guilabel
+>Просмотр</guilabel
+> возможно увидеть, как будет выглядеть ячейка после применения формата. </para>
+<para
+>Чтобы установить одинаковый формат данных для строки или столбца, выделите строку или столбец и вызовите диалог <guilabel
+>Формат ячейки</guilabel
+> с помощью контекстного меню, вызываемого правой кнопкой мыши.</para>
+<note
+><para
+>Увеличить точность десятичного числа в <guilabel
+>Общем</guilabel
+>, <guilabel
+>Числовом</guilabel
+>, <guilabel
+>Процентном</guilabel
+>, <guilabel
+>Денежном</guilabel
+> или <guilabel
+>Научном</guilabel
+> формате возможно с помощью значка <guiicon
+>Увеличить количество</guiicon
+> показываемых знаков после запятой на панели инструментов <guilabel
+>Формат</guilabel
+>. <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>Уменьшить точность десятичного числа в <guilabel
+>Общем</guilabel
+>, <guilabel
+>Числовом</guilabel
+>, <guilabel
+>Процентном</guilabel
+>, <guilabel
+>Денежном</guilabel
+> или <guilabel
+>Научном</guilabel
+> формате возможно с помощью значка <guiicon
+>Уменьшить количество</guiicon
+> показываемых знаков после запятой на панели инструментов <guilabel
+>Формат</guilabel
+>. <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Общий</guilabel
+></term>
+<listitem
+><para
+>Этот формат по умолчанию для &sheets; автоматически определяет текущий тип данных в зависимости от данных в текущей ячейке. По умолчанию &sheets; выравнивает числа, дату и время по правому краю, а по левому краю выравнивает всё остальное.</para>
+<para
+>Если <guilabel
+>Общий</guilabel
+> формат не подходит под нужды, возможно указать другой формат из списка ниже.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Число</guilabel
+></term>
+<listitem
+><para
+>Числовая запись использует формат, глобально указанный в параметроах системы в меню <menuchoice
+><guimenu
+>Региональные и специальные возможности</guimenu
+><guisubmenu
+>Страна/область и язык</guisubmenu
+><guimenuitem
+>Числа</guimenuitem
+></menuchoice
+>. По умолчанию числа выравниваются по правому краю ячейки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Процентный</guilabel
+></term>
+<listitem
+><para
+>При переключении формата ячейки с <guilabel
+>Общего</guilabel
+> на <guilabel
+>Процентный</guilabel
+>, число, содержащееся в этой ячейке будет умножено на 100.</para>
+<para
+>Например, если ввести в ячейку число 2 и установить формат ячейки <guilabel
+>Процентный</guilabel
+>, значение поменяется на 200%. При переключении формата обратно на <guilabel
+>Обычный</guilabel
+> значение ячейки вернётся к 2.</para>
+<para
+>Для этих же целей возможно использовать значок <guiicon
+>Процентный</guiicon
+> на панели инструментов <guilabel
+>Формат</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Денежный</guilabel
+></term>
+<listitem
+><para
+><guilabel
+>Денежный</guilabel
+> формат преобразует число в денежную запись, основываясь на параметрах, указанных в параметрах системы в <menuchoice
+><guimenu
+>Региональные и специальные возможности</guimenu
+><guisubmenu
+>Страна/область и язык</guisubmenu
+><guimenuitem
+>Денежные единицы</guimenuitem
+></menuchoice
+>. Используется символ валюты и та точность, которые указаны в параметрах системы.</para>
+<para
+>Для этих же целей возможно использовать значок <guiicon
+>Денежный</guiicon
+> на панели инструментов <guilabel
+>Формат</guilabel
+>: <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Научный</guilabel
+></term>
+<listitem
+><para
+><guilabel
+>Научный</guilabel
+> формат отображает числа в научной записи. Например, число 0.0012 будет изменено на 1.2E-03. При использовании формата ячеек <guilabel
+>Общий</guilabel
+> в ячейке снова отобразится число 0.0012. Формат данных ячеек <guilabel
+>Общий</guilabel
+> не сохраняет научную запись, поэтому, если такая запись требуется, её следует указать с помощью этого пункта меню.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Дробный</guilabel
+></term>
+<listitem
+><para
+><guilabel
+>Дробный</guilabel
+> формат преобразует число в дробную форму. Например, число 0,1 может быть представлено в виде дробей 1/8, 2/16, 1/10 и так далее. Поле справа позволяет определить тип дроби. Если в выбранном режиме дроби невозможно отобразить точную дробь, будет отображаться ближайшее совпадение. Например, есть 1,5 в качестве числа, формат ячейки <guilabel
+>Дробный</guilabel
+> и тип дроби <guilabel
+>1/16</guilabel
+>. Результатом будет значение «1 8/16», которое является ближайшим к 1/16 дроби.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Дата</guilabel
+></term>
+<listitem
+><para
+>Дату необходимо вводить в одном из форматов, указанных в параметрах системы <menuchoice
+><guimenu
+>Региональные и специальные возможности</guimenu
+> <guisubmenu
+>Страна/область и язык</guisubmenu
+><guimenuitem
+>Дата и время</guimenuitem
+></menuchoice
+>. Здесь заданы два формата: формат даты и краткий формат даты.</para>
+<para
+>Случайное натуральное число NN будет преобразовано в дату от 30 декабря 1899 (считается 0) плюс NN дней. Например, если в ячейке находится число 100, и был выбран формат <guilabel
+>Дата</guilabel
+>, то в ячейке будет отображаться значение «1900-04-09», то есть 100 дней после 30 декабря 1899 года.  Эта дата начала отсчёта, на два дня раньше, была ошибкой в Lotus 123, которая затем перешла в Excel для сохранения совместимости. В любом случае, немногим нужно считать от 1 января 1900 года, а добавив 9 дней к 1 ноября 2000 года, например, получится 10 ноября 2000 года, так что все обычные вычисления с датами будут правильными.</para>
+<note
+><para
+>Когда в ячейке задан формат <guilabel
+>Дата</guilabel
+>, возможно перетащить такую ячейку таким же образом, как и ячейку с числами; в следующих ячейках будут находиться даты, увеличивающиеся на один день.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Дата</guilabel
+></term>
+<listitem
+><para
+>Эта функция форматирует содержимое ячейки как время. Время необходимо вводить в <guilabel
+>Формате времени</guilabel
+>, заданном в параметрах системы на вкладке <menuchoice
+><guimenu
+>Региональные и специальные возможности</guimenu
+> <guisubmenu
+>Страна/область и язык</guisubmenu
+><guimenuitem
+>Дата и время</guimenuitem
+></menuchoice
+>. В диалоге <guilabel
+>Формат ячейки</guilabel
+> возможно задать способ отображения времени, выбрав один из доступных форматов. По умолчанию используется формат системы, указанный в параметрах системы. Когда в ячейке находится число, не имеющее отношение к отображению времени, &sheets; будет отображать значение 00:00 в глобальном формате, заданном в параметрах системы.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Дата и время</guilabel
+></term>
+<listitem
+><para
+>Эта функция форматирует содержимое ячейки как дату и время. Время необходимо вводить в <guilabel
+>Формате времени</guilabel
+>, заданном в параметрах системы на вкладке <menuchoice
+><guimenu
+>Региональные и специальные возможности</guimenu
+> <guisubmenu
+>Страна/область и язык</guisubmenu
+><guimenuitem
+>Дата и время</guimenuitem
+></menuchoice
+>. В диалоге <guilabel
+>Формат ячейки</guilabel
+> возможно задать способ отображения даты и времени, выбрав один из доступных форматов. По умолчанию используется формат системы, указанный в параметрах системы. Когда в ячейке находится число, не имеющее отношение к отображению даты и времени, &sheets; будет отображать значение 00:00 в глобальном формате, заданном в параметрах системы.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Текст</guilabel
+></term>
+<listitem
+><para
+>Эта функция форматирует содержимое ячейки как текст. Это может быть полезно, если требуется использовать число как текст, а не как непосредственно число, например, для почтового кода. После установки текстового формата число выравнивается по левому краю. Когда числа отформатированы как текст, их нельзя использовать в вычислениях или формулах. Также меняется выравнивание ячейки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Пользовательский</guilabel
+></term>
+<listitem
+><para
+>Пока не работает. Должен появиться в следующей версии.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>Нижняя часть вкладки <guilabel
+>Формат данных</guilabel
+>  позволяет добавить в начало каждого элемента <guilabel
+>Префикс</guilabel
+>, например, $, и <guilabel
+>Суффикс</guilabel
+>, например, $HK, в конец. Для числовых значений также возможно настроить количество десятичных знаков после запятой, должны ли положительные значения начинаться со знака + и должны ли отрицательные значения показываться красным цветом. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>Настройка текста и шрифта</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Вкладка «Шрифт»</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Вкладка <guilabel
+>Шрифт</guilabel
+> позволяет выбрать гарнитуру шрифта, его <guilabel
+>Стиль:</guilabel
+>, <guilabel
+>Размер:</guilabel
+>, <guilabel
+>Вес:</guilabel
+> и <guilabel
+>Цвет:</guilabel
+> для текущей ячейки, а также некоторые дополнительные атрибуты, такие как подчёркивание или перечёркивание текста. В нижней части окна отображается <guilabel
+>Предварительный просмотр</guilabel
+> выбранного форматирования текста.</para>
+<para
+>Шрифт по умолчанию для всех ячеек устанавливается в меню <menuchoice
+><guimenu
+>Формат</guimenu
+><guimenuitem
+>Управление стилями</guimenuitem
+></menuchoice
+> для текущего используемого стиля.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>Стиль:</guilabel
+></term>
+<listitem
+><para
+>Позволяет выбрать стиль шрифта для выделенных ячеек. При выделении нескольких ячеек с разными стилями в поле «стиль» отобразится <guilabel
+>Отличается (не изменять)</guilabel
+> и, если не менять стиль, то в каждой выделенной ячейке сохранится текущий стиль. При изменении стиля, например, на <guilabel
+>Прямой</guilabel
+>, изменится стиль шрифта всех ячеек на <guilabel
+>Прямой</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Размер:</guilabel
+></term>
+<listitem
+><para
+>Позволяет выбрать размер шрифта для выделенных ячеек. При выделении нескольких ячеек с разным размером шрифта поле размер будет выглядеть так: <guilabel
+> </guilabel
+> (нет числа), и если размер не изменить, то в каждой выделенной ячейке сохранится текущий размер шрифта. При изменении размера, например, на <guilabel
+>14</guilabel
+>, размер шрифта всех ячеек будет равен <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Начертание:</guilabel
+></term>
+<listitem
+><para
+>Позволяет выбрать начертание шрифта для выделенных ячеек. При выделении нескольких ячеек с разным начертанием в поле начертание отобразится <guilabel
+>Отличается (не изменять)</guilabel
+> и если оставить начертание без изменений, то в каждой выделенной ячейке сохранится текущее начертание. При изменении начертания, например, на <guilabel
+>Полужирный</guilabel
+>, изменится начертание шрифта всех ячеек на <guilabel
+>Полужирный</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Цвет:</guilabel
+></term>
+<listitem
+><para
+>Позволяет выбрать цвет текста для выделенных ячеек. После нажатия на индикатор цвета появится стандартный диалог KDE <guilabel
+>Выбор цвета</guilabel
+>, в котором можно будет выбрать другой цвет. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Подчёркнутый</guilabel
+></term>
+<listitem
+><para
+>При установке флажка текст в выделенных ячейках подчёркивается. По умолчанию флажок не установлен.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Перечёркнутый</guilabel
+></term>
+<listitem
+><para
+>При установке флажка текст в выделенных ячейках перечёркивается. По умолчанию флажок не установлен.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>Положение и поворот текста</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Вкладка «Положение».</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>На вкладке <guilabel
+>Положение</guilabel
+> возможно настроить положение текста в ячейке, выбрав соответствующие переключатели в блоках <guilabel
+>Горизонтально</guilabel
+> и <guilabel
+>Вертикально</guilabel
+>, или установив значение <guilabel
+>Отступ</guilabel
+>. Также возможно указать, чтобы текст в ячейке располагался вертикально, а не горизонтально, или же вовсе под каким-либо углом.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Горизонтально</guilabel
+></term>
+<listitem
+><para
+>Устанавливает горизонтальное выравнивание содержимого ячейки. <guilabel
+>Стандартное</guilabel
+> — это значение по умолчанию, и оно зависит от выбранного формата данных. <guilabel
+>Слева</guilabel
+> — содержимое ячейки будет выровнено по левому краю ячейки. <guilabel
+>По центру</guilabel
+> — содержимое ячейки будет выровнено по центру ячейки. <guilabel
+>Справа</guilabel
+> — содержимое ячейки будет выровнено по правому краю ячейки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Вертикально</guilabel
+></term>
+<listitem
+><para
+>Устанавливает вертикальное выравнивание содержимого ячейки. <guilabel
+>Сверху</guilabel
+> — содержимое ячейки будет располагаться вверху ячейки. <guilabel
+>Посередине</guilabel
+> — содержимое ячейки будет располагаться посередине ячейки. <guilabel
+>Снизу</guilabel
+> — содержимое ячейки будет располагаться внизу ячейки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Свойства текста</guilabel
+></term>
+<listitem
+><para
+>Этот параметр доступен только при угле поворота, равном 0°. Параметр <guilabel
+>Переносить текст по словам</guilabel
+> позволяет переносить текст таким образом, чтобы он поместился в прежний размер ячейки. Если этот флажок не установлен, то текст будет располагаться на одной строке.</para>
+<para
+>Параметр <guilabel
+>Текст по вертикали</guilabel
+> располагает текст вертикально.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Поворот</guilabel
+></term>
+<listitem
+><para
+>Текст будет повёрнут на указанный угол. Положительные значения означают поворот против часовой стрелки, а отрицательные — по часовой стрелке.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Объединить ячейки</guilabel
+></term>
+<listitem
+><para
+>Установка этого флажка даёт такой же эффект, как и пункт меню <menuchoice
+><guimenu
+>Формат</guimenu
+><guimenuitem
+>Объединить ячейки</guimenuitem
+></menuchoice
+>. Для этого требуется выбрать хотя бы две смежные ячейки, которые будут объединены в одну большую.</para>
+<para
+>При выделении объединённой ячейки и удалении этого флажка все ячейки возвращаются к своему первоначальному размеру, как и до объединения. Это даёт такой же эффект, как и пункт меню <menuchoice
+><guimenu
+>Формат</guimenu
+><guimenuitem
+>Разбить ячейки</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Отступ</guilabel
+></term>
+<listitem
+><para
+>Установка шага отступа, который будет использоваться в ячейке при выборе на панели инструментов действий <guilabel
+>Увеличить шаг</guilabel
+> и <guilabel
+>Уменьшить шаг</guilabel
+>. По умолчанию эти действия не включены в панель инструментов.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Размер ячейки</guilabel
+></term>
+<listitem
+><para
+>Здесь возможно установить размер ячейки, или вручную установив ширину и высоту ячейки, или выбрав ширину и высоту ячейки по умолчанию.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>Границы ячейки</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Вкладка «Границы».</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>На вкладке <guilabel
+>Границы</guilabel
+> возможно настроить внешний вид границ ячейки. При выделении нескольких ячеек возможно применить разный тип границы к границам между ячейками и границам, окружающим выделенную область. </para>
+<para
+>Сначала выберите узор и цвет в блоке <guilabel
+>Узор</guilabel
+> на вкладке <guilabel
+>Границы</guilabel
+>, а затем примените их к разным частям границы, нажимая соответствующие кнопки в блоке <guilabel
+>Рамка</guilabel
+> или одну из кнопок в блоке <guilabel
+>Набор</guilabel
+>. Самая левая кнопка в блоке <guilabel
+>Набор</guilabel
+> удаляет все установленные границы. Также возможно добавить диагональные линии.</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>Фон ячейки</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Вкладка «Фон».</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Узор и цвет фона ячейки возможно выбрать на вкладке <guilabel
+>Фон</guilabel
+>.</para>
+<para
+>Выберите желаемый<guilabel
+>Узор</guilabel
+>, затем <guilabel
+>Цвет</guilabel
+> узора и <guilabel
+>Цвет фона</guilabel
+>.</para>
+<para
+>В нижней части страницы находится <guilabel
+>Предварительный просмотр</guilabel
+> настроенного фона ячейки.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>Защита ячеек</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Вкладка «Защита ячеек».</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Способ защиты содержимого ячейки возможно изменить на вкладке <guilabel
+>Защита ячеек</guilabel
+>.</para>
+<para
+>По умолчанию все ячейки являются защищёнными (это значит, что содержимое ячейки нельзя изменить), и для защиты ячейки следует также включить защиту листа с паролем с помощью пункта меню <menuchoice
+><guimenu
+>Сервис</guimenu
+><guimenuitem
+>Защитить лист...</guimenuitem
+></menuchoice
+>. Кроме того, возможно скрыть формулы защищённых ячеек, чтобы защитить способ их вычисления. Также возможно скрыть содержимое ячейки с помощью функции <guilabel
+>Скрыть всё</guilabel
+>, и опять же, для этого требуется защита листа. Более подробная информация об этих параметрах содержится в разделе <link linkend="protection"
+>расширенных функций &sheets; о защите листа</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Скрыть всё</guilabel
+></term>
+<listitem
+><para
+>Этот параметр скрывает содержимое ячейки и работает только когда включена защита листа, поэтому изменение параметра <guilabel
+>Скрыть всё</guilabel
+> не будет работать, если лист не защищён. При этом не имеет значения, защищена ли сама ячейка или нет.</para>
+<para
+>Когда флажок <guilabel
+>Скрыть всё</guilabel
+> установлен, а флажки <guilabel
+>Защищена от изменений</guilabel
+> и <guilabel
+>Скрыть формулу</guilabel
+> сняты, как и при защите листа <guilabel
+>Скрыть всё</guilabel
+> скрывает и содержимое ячейки, и формулу, таким образом, маскируя и защищая содержимое ячейки.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Защищена от изменений</guilabel
+></term>
+<listitem
+><para
+>При установке этого флажка содержимое ячейки будет защищено. Этот флажок установлен по умолчанию. Чтобы заработала защита отдельной ячейки, необходимо включить защиту листа с помощью пункта меню <menuchoice
+><guimenu
+>Сервис</guimenu
+><guimenuitem
+>Защитить лист...</guimenuitem
+></menuchoice
+>. Когда ячейка защищена, её содержимое не может быть изменено.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Скрыть формулы</guilabel
+></term>
+<listitem
+><para
+>Когда этот флажок установлен, ячейку всё ещё видно, однако её содержимое не отображается в строке <guilabel
+>Формула</guilabel
+>. Скрытие формулы работает только для ячеек, содержащих формулы. поэтому пользователь не может просмотреть формулу. Чтобы это работало, лист должен быть защищён.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Не печатать текст</guilabel
+></term>
+<listitem
+><para
+>При установке флажка <guilabel
+>Не печатать текст</guilabel
+> текст в ячейке не будет распечатан. По умолчанию этот флажок не установлен, а это значит, что по умолчанию весь текст печатается.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>Форматирование по условию</title>
+<para
+>Возможно сделать так, чтобы внешний вид ячейки менялся в зависимости от того, какое значение она содержит, и это может быть полезным в случае, когда &sheets; используется для учёта домашних расходов, где элементы, превышающие, например, тысячу долларов, должны быть выделены.</para>
+<para
+>Для этого выберите пункт <guimenuitem
+>Стиль по условию...</guimenuitem
+> из меню <guimenu
+>Формат</guimenu
+>. Появится диалог <guilabel
+>Стиль по условию</guilabel
+>, позволяющий задать параметры, при которых гарнитура шрифта и цвет ячейки должны меняться. Обратите внимание, что второе и третье условия проверяются только тогда, когда предыдущие не были удовлетворены.</para>
+<para
+>Чтобы удалить все условия форматирования из выделенных ячеек, выберите пункт <menuchoice
+><guisubmenu
+>Очистить</guisubmenu
+><guimenuitem
+>Стиль по условию...</guimenuitem
+></menuchoice
+> меню <guimenu
+>Правка</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>Изменение размера ячейки</title>
+<para
+>Вкладка <guilabel
+>Положение</guilabel
+> диалога <guilabel
+>Формат ячеек</guilabel
+> позволяет изменить размер выделенных ячеек. Обратите внимание, что изменение высоты одной ячейки изменит высоту всех ячеек в этой строке, и точно так же изменение ширины повлияет на ширину всего столбца.</para>
+<para
+>Также возможно выбрать строки или столбы, которые необходимо изменить, и выбрать <guimenuitem
+>Изменить ширину столбца...</guimenuitem
+> или <guimenuitem
+>Изменить высоту строки...</guimenuitem
+> в контекстном меню, вызываемом щелчком <mousebutton
+>правой</mousebutton
+> кнопкой мыши или с помощью пункта меню <menuchoice
+><guimenu
+>Формат</guimenu
+><guisubmenu
+>Строка</guisubmenu
+> </menuchoice
+> или <menuchoice
+><guimenu
+>Формат</guimenu
+><guisubmenu
+> Столбец</guisubmenu
+></menuchoice
+>.</para>
+<para
+>Если поместить указатель мыши между двумя номерами строк в левой части окна &sheets;, указатель изменит свой вид и превратится в две параллельные линии с маленькой стрелкой на каждой линии. Когда курсор принимает такой вид, возможно перемещать границу между двумя строками, удерживая <mousebutton
+>левую</mousebutton
+> кнопку мыши, изменяя высоту верхней строки. Аналогичным способом возможно изменять ширину столбца.</para>
+
+<para
+>Чтобы установить минимально необходимую для показа всего содержимого ширину столбца или высоту строки, выделите всю строку или столбцец и щёлкните по метке строки или столбца правой кнопкой мыши. В появившемся контекстном меню выберите пункт <guimenuitem
+>Выровнять строку</guimenuitem
+> или <guimenuitem
+>Выровнять столбец</guimenuitem
+>. Размер строки или столбца будет изменён до минимально необходимого значения. Также возможно выбрать одну ячейку или диапазон ячеек и выбрать пункт <guimenuitem
+>Подогнать размер ячеек</guimenuitem
+> из контекстного меню, вызываемого щелчком правой кнопкой мыши, или через меню <guimenu
+>Формат</guimenu
+>.</para>
+
+<para
+>Для нескольких расположенных рядом столбцов или строк возможно задать одинаковый размер, выделив их и выбрав <menuchoice
+><guimenu
+>Формат</guimenu
+><guisubmenu
+>Строка</guisubmenu
+><guimenuitem
+>Подогнать высоту строки</guimenuitem
+></menuchoice
+> или <menuchoice
+><guimenu
+>Формат</guimenu
+><guisubmenu
+>Столбец</guisubmenu
+><guimenuitem
+>Подогнать ширину столбца</guimenuitem
+></menuchoice
+>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>Объединение ячеек</title>
+<para
+>Часто бывает удобно иметь одну ячейку, которая будет занимать ширину несколько столбцов или занимать в высоту несколько строк. Это возможно сделать, объединив несколько ячеек в одну. Выберите ячейки, которые будут объединены, затем выберите пункт меню <menuchoice
+><guimenu
+> Формат</guimenu
+><guimenuitem
+>Объединить ячейки</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Чтобы разбить объединённые ячейки, выделите их и выберите пункт <guimenuitem
+>Разбить ячейки</guimenuitem
+> в меню <guimenu
+>Формат</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>Скрытие строк и столбцов</title>
+<para
+>Готовую электронную таблицу часто возможно сделать более привлекательной, скрыв ячейки, содержащие промежуточные вычисления, чтобы отображались только важные области ввода данных и результатов.</para>
+<para
+>Для скрытия выделенных строк или столбцов в &sheets; возможно воспользоваться функциями <guimenuitem
+>Скрыть строки</guimenuitem
+> и <guimenuitem
+>Скрыть столбцы</guimenuitem
+> из меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Строка</guisubmenu
+></menuchoice
+>, <menuchoice
+><guimenu
+>Формат </guimenu
+><guisubmenu
+>Столбец</guisubmenu
+></menuchoice
+> или с помощью контекстного меню, вызываемого щелчком <mousebutton
+>правой</mousebutton
+> правой кнопкой мыши. Скрытые строки и столбцы не отображаются на экране и не включаются в печать.</para>
+<para
+>Скрытие ячеек может сделать их немного более защищёнными от случайного изменения.</para>
+<para
+>Чтобы показать скрытый столбец или строку, выберите <menuchoice
+><guisubmenu
+>Строка</guisubmenu
+><guimenuitem
+>Показать строки...</guimenuitem
+></menuchoice
+> или <menuchoice
+><guisubmenu
+>Столбец</guisubmenu
+><guimenuitem
+>Показать столбцы...</guimenuitem
+> </menuchoice
+> в меню <guimenu
+>Формат</guimenu
+>. В появившемся диалоге возможно выбрать любое количество отображаемых строк.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>Свойства листа</title>
+<para
+>Чтобы установить параметры листа, щёлкните правой кнопкой мыши по вкладке листа и в открывшемся контекстном меню выберите пункт <guilabel
+>Свойства листа</guilabel
+>  или с помощью меню <menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Лист</guisubmenu
+><guimenuitem
+>Свойства листа</guimenuitem
+></menuchoice
+>. Обратие внимание, что получить доступ к <guilabel
+>Свойствам листа</guilabel
+> возможно только в том случае, если документ или лист не защищены.</para>
+<para
+>Возможно задать различные параметры, которые будут действительны на текущем листе. Нажатие на <guibutton
+>OK</guibutton
+> подтвердит изменения, а на кнопку <guibutton
+>По умолчанию</guibutton
+> вернёт параметры по умолчанию.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Диалог свойства листа.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Размещение:</guilabel
+></term>
+<listitem
+><para
+>Позволяет выбрать положение листа. По умолчанию первый столбец располагается слева. При выборе варианта <guilabel
+>Справа налево</guilabel
+> первый столбец будет находиться справа, а остальные будут добавляться слева.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Не показывать нулевые значения</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то нулевые значения не будут отображаться.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Автоматический пересчёт</guilabel
+></term>
+<listitem
+><para
+>Этот параметр определяет, должны ли автоматически пересчитываться формулы, если изменяется значение хотя бы одной ячейки, на которые они ссылаются.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показывать номера в заголовках столбцов</guilabel
+></term>
+<listitem
+><para
+>При установке этого флажка заголовки столбцов будут отображаться цифрами, а не буквами. По умолчанию используются буквы.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Адресация строка-столбец</guilabel
+></term>
+<listitem
+><para
+>При установке этого флажка адрес ячейки, показываемый в левой части панели «Формула» будет отображаться в формате строка-столбец (например, L2C3), а не в обычном виде B3. В настоящее время эта функция не имеет большого значения.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Преобразовать первую букву в верхний регистр</guilabel
+></term>
+<listitem
+><para
+>При установке этого флажка первая буква любого вводимого текста будет преобразована в верхний регистр.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показывать сетку</guilabel
+></term>
+<listitem
+><para
+>При установке этого флажка будет отображаться сетка (границы ячеек). По умолчанию он установлен. При удалении флажка сетка станет невидимой.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показывать границы страниц</guilabel
+></term>
+<listitem
+><para
+>При установке этого параметра на текущем листе будут отображаться границы страниц. По умолчанию границы страниц не отображаются. Видеть границы страниц полезно, если требуется распечатать таблицу.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показывать формулы</guilabel
+></term>
+<listitem
+><para
+>Если установлен этот флажок, то &sheets; будет отображать в ячейках сами формулы, а не результаты вычислений.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показывать индикатор формул</guilabel
+></term>
+<listitem
+><para
+>При установке этого флажка &sheets;будет отображать небольшой синий треугольник в левом нижнем углу ячеек, содержащих формулы. Это полезно, если требуется защитить ячейки с формулами.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Показывать индикатор комментария</guilabel
+></term>
+<listitem
+><para
+>При установке этого флажка ячейки, содержащие комментарии, будут отмечены маленьким красным треугольником в левом верхнем углу.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

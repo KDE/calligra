@@ -1,0 +1,3211 @@
+#
+# Tamas Szanto <tszanto@mol.hu>, 2005.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011.
+# Balázs Úr <urbalazs@gmail.com>, 2012, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: KOffice 1.6\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-08-12 07:47+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+#| msgid "PNG Export Options"
+msgid "%1 Export Options"
+msgstr "PNG-exportálási beállítások"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "%1. oldal"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "Oldal:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, kde-format
+msgid "Size in Pixels"
+msgstr "Méret képpontban"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr "Kép szélessége:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, kde-format
+msgid "Image height:"
+msgstr "Kép magassága:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr "Mértékegységek"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "Felbontás:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr "Egység:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr "Háttérszín"
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, kde-format
+msgid "Color"
+msgstr "Szín"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr "Átlátszatlanság"
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:297
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr "„%1” névtér nem található"
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, kde-format
+msgid "Could not open the requested file %1"
+msgstr "%1 fájl nem nyitható meg"
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr "%1 fájl ZIP-könyvtára nem olvasható"
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, kde-format
+msgid "Enter password"
+msgstr "Adja meg a jelszót"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr "A dokumentum titkosított, adja meg a jelszót a visszafejtéshez:"
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr "Hibás jelszó, adja meg a jelszót a dokumentum visszafejtéséhez:"
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, kde-format
+msgid "Could not find path for type %1"
+msgstr "%1 típus útvonala nem található"
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr "%1 (%2. sor, %3. oszlop)"
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr "%1 (%2, %3. sor, %4. oszlop)"
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr "„%1” elem nem található"
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, kde-format
+msgid "Attribute \"%1\" not found"
+msgstr "„%1” attribútum nem található"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr "„%2” attribútum váratlan értéke: „%1”"
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr "„%1” elem váratlan második előfordulása"
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr "„%1” elem várható leállítása"
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr "Nem található várható elem: %1"
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, kde-format
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "„%1” célja nem található a(z) „%2” fájlban"
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, kde-format
+msgid "Could not find relationships file \"%1\""
+msgstr "A(z) „%1” kapcsolatfájl nem található"
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, kde-format
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "„%1” kapcsolat célja nem található a(z) „%2” fájlban"
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+"feldolgozási hiba történt a fődokumentumban: %1. sor, %2. oszlop.\n"
+"Hibaüzenet: %3"
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr "„%1” bejegyzés nem található."
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr "„%1” bejegyzés nem egy fájl."
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr "„%1” bejegyzés nem nyitható meg íráshoz."
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, kde-format
+msgid "Could not write block"
+msgstr "A blokk nem írható"
+
+#: sheets/csv/csvexport.cc:269
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<MUNKALAPNÉV>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "Javasolt (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "Helyi (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "Egyéb (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:274 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "Nem található ez a kódolás: %1"
+
+#: sheets/csv/csvimport.cc:82
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr ""
+"A CSV-szűrő nem tudja megnyitni a bemeneti fájlt - kérjük jelentse be a "
+"hibát."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "Kódolás"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "Kód&olás:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "Sor vége"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "&UNIX (a javasolt mód; csak sorvége jel)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "&Windows (kocsivissza és sorvége)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "Ma&cOS (csak kocsivissza)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "Munkalapok"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "Válassza ki az exportálandó munkalapokat:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "Elválasztó vonal"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<MUNKALAPNÉV>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<MUNKALAPNÉV> helyére mindig az aktuális munkalap neve kerül."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "Elválasztó vonal kinyomtatása minden munkalap előtt"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "Cellák"
+
+#. i18n: ectx: property (title), widget (KButtonGroup, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "Elválasztó"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "Vessző"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "Pontosvessző"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "Tabulátor"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "Szóköz"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "Egyéb:"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "Idézőjelek:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "A kijelölt rész exportálása"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "Ez a fájlformátum nem támogatott."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "Nem sikerült olvasni a fájlból."
+
+#: sheets/html/exportdialog.cc:24
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "A munkalap exportálása HTML-be"
+
+#: sheets/html/exportdialog.cc:35
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "Javasolt: UTF-8"
+
+#: sheets/html/exportdialog.cc:36
+#, kde-format
+msgid "Locale (%1)"
+msgstr "Helyi kódolás (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "Kód&olás:"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+"Itt lehet beállítani a HTML-fájl kódolását. Alapértelmezés szerint a "
+"javasolt UTF-8 kódolás van kiválasztva."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "Munkalapválasztás"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr ""
+"Kattintson ide, ha a listában szereplő összes munkalapot ki szeretné jelölni."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "Mind&en kijelölése"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "A kijelölés meg&szüntetése"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+"Ha bejelöli ezt, a HTML-es exportszűrő minden munkalapot külön HTML-fájlba "
+"fog menteni. Ha nem jelöli be, egy fájlba kerül minden munkalap."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "Min&den munkalap külön fájlba kerüljön"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "Stílus"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr ""
+"Jelölje be ezt az opciót, ha az alapértelmezett betűtípusokat és színeket "
+"szeretné használni a HTML-oldalon."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "Az ala&pértelmezett stílus használata"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+"Jelölje be ezt az opciót, ha a HTML-oldalhoz saját stíluslapot szeretne "
+"használni. A fájl kiválasztható vagy írja be a fájlnevet az alábbi mezőbe."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "Külső stíl&uslap használata:"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+"Ebben a mezőben egy stíluslap URL-jét lehet megadni. A fájl lehet helyi "
+"fájl, de lehet az interneten is."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "Elrendezés"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr "Ezzel lehet a cellák körül levő szegélyt ki-be kapcsolni."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "Szegély &használata"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+"Itt lehet megadni, hány képpontnyi legyen a cellák közötti távolság. A hatás "
+"jobban észrevehető, ha bejelöli a <b>Szegélyek használata</b> opciót."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "A cellák kö&zötti képpontok száma:"
+
+#: sheets/html/htmlexport.cc:196 sheets/html/htmlexport.cc:371
+#, kde-format
+msgid "Top"
+msgstr "Fel"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "A LaTeX-exportszűrő beállításai"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "Dokumentum"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "Dokumentumstílus"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "Latex stílus"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, kde-format
+msgid "Words style"
+msgstr "Words stílus"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "Dokumentumtípus"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "A dokumentum önállóan lefordítható lesz"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, fuzzy, kde-format
+#| msgid ""
+#| "The document will be generated as a full latex document since all the "
+#| "include will be generated before the \\begin[document} and "
+#| "\\end{document} commands."
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+"A dokumentum teljes LaTeX-dokumentum lesz, mert az összes beemelés a "
+"\\begin[document} és \\end{document} parancsok közé fog kerülni."
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "Független dokumentum"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "Nem kell sem LaTeX-fejlécet, sem dokumentumkörnyezetet generálni."
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+"A dokumentum olyan LaTeX-dokumentum lesz, melyet be kell emelni egy fő LaTeX-"
+"dokumentumba. Így például a fejezetek mentén kisebb fájlokba bontható a "
+"dokumentum."
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "Beemelendő dokumentum"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "Dokumentumosztály:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "Minőség:"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "Végleges"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "Piszkozat"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "Alapértelmezett betűméret:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "Képek"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, kde-format
+msgid "Convert the pictures:"
+msgstr "A képek átalakítása:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "A képek könyvtára:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "Nyelv"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "Hozzáadás"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "Tartalom"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, kde-format
+msgid "Export information about author:"
+msgstr "A szerző adatainak exportálása:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, kde-format
+msgid "Add a table of content:"
+msgstr "Tartalomjegyzék hozzáadása:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "Megjegyzések"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "Nem kell exportálni"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "A feljegyzések exportálása széljegyzetként"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "A feljegyzések exportálása megjegyzésként"
+
+#: sheets/opencalc/opencalcexport.cc:905
+#, kde-format
+msgid "Page "
+msgstr "Oldal - "
+
+#: sheets/opencalc/opencalcimport.cc:1217
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "A fájl valószínűleg hibás, egy táblázat ki lesz hagyva."
+
+#: sheets/opencalc/opencalcimport.cc:1228
+#, kde-format
+msgid "Skipping a table."
+msgstr "Táblázat kihagyása."
+
+#: sheets/opencalc/opencalcimport.cc:1928
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+"Ezt a dokumentumot az OpenOffice.org %1 verziójával készítették. A szűrő az "
+"1.0-ás verzióhoz készült, ezért a fájl feldolgozása közben problémák "
+"léphetnek fel, például lefagyás vagy hibás megjelenítés. Biztosan át "
+"szeretné konvertálni a dokumentumot?"
+
+#: sheets/opencalc/opencalcimport.cc:1929
+#, kde-format
+msgid "Unsupported document version"
+msgstr "Nem támogatott dokumentumverzió"
+
+#: sheets/qpro/qproimport.cc:115
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "A QPRO-szűrő nem tudta megnyitni a fájlt - kérjük jelentse be a hibát."
+
+#: sheets/qpro/qproimport.cc:226
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+"Nem lehet jelszóval védett fájlokat megnyitni.\n"
+"A jelszókezelés módja nincs dokumentálva."
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, kde-format
+msgid "Unable to find part for type %1"
+msgstr "%1 típus részlete nem található"
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr "A megosztott sztringek száma túl kicsi (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr "A betűstílusok száma túl kicsi (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr "A cellaformátumok száma túl kicsit (%1)"
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr "A kitöltési stílusok száma túl kicsi (%1)"
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:346
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+"A maximális lapméret elérve, ezért az adatok teljes betöltése nem lehetséges."
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1423
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr "Váratlan egész vagy lebegőpontos szám"
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, kde-format
+msgid "Slide layout \"%1\" not found"
+msgstr "„%1” diaelrendezés nem található"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, kde-format
+msgid "Slide %1"
+msgstr "%1. dia"
+
+#: words/ascii/ImportDialog.cc:32
+#, kde-format
+msgid "Words's Plain Text Import Filter"
+msgstr "A Words egyszerű szöveges importszűrője"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "Egyszerű szöveges importálási párbeszédablak"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "Bekezdés vége"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "Aho&gy van: a sor végén"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "M&ondat: Ha a sor vége a mondat vége"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr "Ü&res sor: ha a sor üres"
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, kde-format
+msgid "End notes"
+msgstr "Végjegyzetek"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "A páros oldalak fejléce"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "A páratlan oldalak fejléce"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "A páros oldalak lábléce"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "A páratlan oldalak lábléce"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "Az első oldal fejléce"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "Az első oldal lábléce"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "Táblázat - %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "A fájlt nem sikerült betölteni, mert valószínűleg nem RTF-dokumentum."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, kde-format
+msgid "Words's RTF Import Filter"
+msgstr "A Words RTF-importszűrője"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, kde-format
+msgid "The file cannot be loaded."
+msgstr "A fájl nem tölthető be."
+
+#~ msgid "Failed to read data."
+#~ msgstr "Az adatok beolvasása nem sikerült."
+
+#~ msgid "Export Error"
+#~ msgstr "Exportálási hiba"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "Hibás formátumú XML-adatok."
+
+#~ msgid "Export to Image"
+#~ msgstr "Exportálás képként"
+
+#~ msgid "Complete Page"
+#~ msgstr "Teljes oldal"
+
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektumok területe az oldalon"
+
+#~ msgid "Area to export:"
+#~ msgstr "Exportálandó terület:"
+
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Egyéni méret (képpontban):"
+
+#~ msgid "Height:"
+#~ msgstr "Magasság:"
+
+#~ msgid "Width:"
+#~ msgstr "Szélesség:"
+
+#~ msgid "Margin:"
+#~ msgstr "Margó:"
+
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Size in Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "Méret képpontban"
+
+#, fuzzy
+#~| msgid "Image width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "Kép szélessége:"
+
+#, fuzzy
+#~| msgid "Image height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "Kép magassága:"
+
+#, fuzzy
+#~| msgid "Size in Units"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "Mértékegységek"
+
+#, fuzzy
+#~| msgid "Resolution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "Felbontás:"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "Egység:"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "Háttérszín"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "Szín"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "Átlátszatlanság"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "Kód&olás:"
+
+#, fuzzy
+#~| msgid ""
+#~| "With this option you can define the encoding of the HTML file. The "
+#~| "recommended encoding (UTF8) is selected as default."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "With this option you can define the encoding of the HTML file. The "
+#~ "recommended encoding (UTF8) is selected as default."
+#~ msgstr ""
+#~ "Itt lehet beállítani a HTML-fájl kódolását. Alapértelmezés szerint a "
+#~ "javasolt UTF-8 kódolás van kiválasztva."
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "Munkalapválasztás"
+
+#, fuzzy
+#~| msgid "Click here to select all sheets in the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr ""
+#~ "Kattintson ide, ha a listában szereplő összes munkalapot ki szeretné "
+#~ "jelölni."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "Mind&en kijelölése"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "A kijelölés meg&szüntetése"
+
+#, fuzzy
+#~| msgid ""
+#~| "This option will make the HTML export filter generate a new page for "
+#~| "each sheet. If you disable this option, all sheets are written on one "
+#~| "page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This option will make the HTML export filter generate a new page for each "
+#~ "sheet. If you disable this option, all sheets are written on one page."
+#~ msgstr ""
+#~ "Ha bejelöli ezt, a HTML-es exportszűrő minden munkalapot külön HTML-"
+#~ "fájlba fog menteni. Ha nem jelöli be, egy fájlba kerül minden munkalap."
+
+#, fuzzy
+#~| msgid "Use &separate files for each table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "Min&den munkalap külön fájlba kerüljön"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Stílus"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to use the default fonts and colors for the HTML page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr ""
+#~ "Jelölje be ezt az opciót, ha az alapértelmezett betűtípusokat és színeket "
+#~ "szeretné használni a HTML-oldalon."
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "Az ala&pértelmezett stílus használata"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to specify a separate stylesheet for the HTML page. "
+#~| "You can select or type on in the field below."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to specify a separate stylesheet for the HTML page. "
+#~ "You can select or type on in the field below."
+#~ msgstr ""
+#~ "Jelölje be ezt az opciót, ha a HTML-oldalhoz saját stíluslapot szeretne "
+#~ "használni. A fájl kiválasztható vagy írja be a fájlnevet az alábbi mezőbe."
+
+#, fuzzy
+#~| msgid "Use &external stylesheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "Külső stíl&uslap használata:"
+
+#, fuzzy
+#~| msgid ""
+#~| "In this field you can enter an URL for your stylesheet. It is possible "
+#~| "to point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "In this field you can enter an URL for your stylesheet. It is possible to "
+#~ "point to a stylesheet on disk, or to somewhere on the Internet."
+#~ msgstr ""
+#~ "Ebben a mezőben egy stíluslap URL-jét lehet megadni. A fájl lehet helyi "
+#~ "fájl, de lehet az interneten is."
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Elrendezés"
+
+#, fuzzy
+#~| msgid "Use this option to enable or disable borders around the cells."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr "Ezzel lehet a cellák körül levő szegélyt ki-be kapcsolni."
+
+#, fuzzy
+#~| msgid "Use &borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "Szegély &használata"
+
+#, fuzzy
+#~| msgid ""
+#~| "Use this option to define how many pixels there should be between the "
+#~| "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Use this option to define how many pixels there should be between the "
+#~ "cells. This effect is better visible if you check <b>Use borders</b> too."
+#~ msgstr ""
+#~ "Itt lehet megadni, hány képpontnyi legyen a cellák közötti távolság. A "
+#~ "hatás jobban észrevehető, ha bejelöli a <b>Szegélyek használata</b> "
+#~ "opciót."
+
+#, fuzzy
+#~| msgid "Pi&xels between cells:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "A cellák kö&zötti képpontok száma:"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "Dokumentum"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "Dokumentumstílus"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "Latex stílus"
+
+#, fuzzy
+#~| msgid "Words style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "Words stílus"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "Dokumentumtípus"
+
+#, fuzzy
+#~| msgid "The document will be able to be compiled alone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "A dokumentum önállóan lefordítható lesz"
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a full latex document since all the "
+#~| "include will be generated before the \\begin[document} and "
+#~| "\\end{document} commands."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a full latex document since all the "
+#~ "include will be generated before the \\begin[document} and "
+#~ "\\end{document} commands."
+#~ msgstr ""
+#~ "A dokumentum teljes LaTeX-dokumentum lesz, mert az összes beemelés a "
+#~ "\\begin[document} és \\end{document} parancsok közé fog kerülni."
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "Független dokumentum"
+
+#, fuzzy
+#~| msgid "Do not generate either the latex header or the document environment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "Nem kell sem LaTeX-fejlécet, sem dokumentumkörnyezetet generálni."
+
+#, fuzzy
+#~| msgid ""
+#~| "The document will be generated as a latex document which will have to be "
+#~| "included in a main latex document. It will allow you to generate several "
+#~| "little files for each chapter of your document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document will be generated as a latex document which will have to be "
+#~ "included in a main latex document. It will allow you to generate several "
+#~ "little files for each chapter of your document."
+#~ msgstr ""
+#~ "A dokumentum olyan LaTeX-dokumentum lesz, melyet be kell emelni egy fő "
+#~ "LaTeX-dokumentumba. Így például a fejezetek mentén kisebb fájlokba "
+#~ "bontható a dokumentum."
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "Beemelendő dokumentum"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "Dokumentumosztály:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "Minőség:"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "Végleges"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "Piszkozat"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "Alapértelmezett betűméret:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "Képek"
+
+#, fuzzy
+#~| msgid "Convert the pictures:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "A képek átalakítása:"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "A képek könyvtára:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Nyelv"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "Kódolás"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "Hozzáadás"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "Eltávolítás"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "Tartalom"
+
+#, fuzzy
+#~| msgid "Export information about author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "A szerző adatainak exportálása:"
+
+#, fuzzy
+#~| msgid "Add a table of content:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "Tartalomjegyzék hozzáadása:"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Megjegyzések"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "Nem kell exportálni"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "A feljegyzések exportálása széljegyzetként"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "A feljegyzések exportálása megjegyzésként"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "Kód&olás:"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "Sor vége"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "&UNIX (a javasolt mód; csak sorvége jel)"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "&Windows (kocsivissza és sorvége)"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "Ma&cOS (csak kocsivissza)"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "Munkalapok"
+
+#, fuzzy
+#~| msgid "Select sheets to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "Válassza ki az exportálandó munkalapokat:"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "Elválasztó vonal"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<MUNKALAPNÉV>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<MUNKALAPNÉV> helyére mindig az aktuális munkalap neve kerül."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "Elválasztó vonal kinyomtatása minden munkalap előtt"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "Cellák"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "Elválasztó"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "Vessző"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "Pontosvessző"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "Tabulátor"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "Szóköz"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "Egyéb:"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "Idézőjelek:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "A kijelölt rész exportálása"
+
+#, fuzzy
+#~| msgid "Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "Oldal:"
+
+#, fuzzy
+#~| msgid "Complete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "Teljes oldal"
+
+#, fuzzy
+#~| msgid "Area of Objects on Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "Objektumok területe az oldalon"
+
+#, fuzzy
+#~| msgid "Area to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "Exportálandó terület:"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "Egyéni méret (képpontban):"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "Magasság:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Szélesség:"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "Margó:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "Egyszerű szöveges importálási párbeszédablak"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "Bekezdés vége"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "Aho&gy van: a sor végén"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "M&ondat: Ha a sor vége a mondat vége"
+
+#, fuzzy
+#~| msgid "&Empty Line: If the line is empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Empty Line: If the line is empty"
+#~ msgstr "Ü&res sor: ha a sor üres"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "Exportálási hiba"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "Az adatok beolvasása nem sikerült."
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "Hibás formátumú XML-adatok."
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "Exportálás képként"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "PNG-exportálási beállítások"
+
+#, fuzzy
+#~| msgid "Namespace \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "„%1” névtér nem található"
+
+#, fuzzy
+#~| msgid "Could not open the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "%1 fájl nem nyitható meg"
+
+#, fuzzy
+#~| msgid "Could not read ZIP directory of the requested file %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "%1 fájl ZIP-könyvtára nem olvasható"
+
+#, fuzzy
+#~| msgid "Enter password"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "Adja meg a jelszót"
+
+#, fuzzy
+#~| msgid ""
+#~| "This document is encrypted, please enter the password to decrypt it:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This document is encrypted, please enter the password to decrypt it:"
+#~ msgstr "A dokumentum titkosított, adja meg a jelszót a visszafejtéshez:"
+
+#, fuzzy
+#~| msgid ""
+#~| "Incorrect password, please enter the password to decrypt this document:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Incorrect password, please enter the password to decrypt this document:"
+#~ msgstr "Hibás jelszó, adja meg a jelszót a dokumentum visszafejtéséhez:"
+
+#, fuzzy
+#~| msgid "Could not find path for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "%1 típus útvonala nem található"
+
+#, fuzzy
+#~| msgid "%1 (line %2, column %3)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (line %2, column %3)"
+#~ msgstr "%1 (%2. sor, %3. oszlop)"
+
+#, fuzzy
+#~| msgid "%1 (%2, line %3, column %4)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (%2, line %3, column %4)"
+#~ msgstr "%1 (%2, %3. sor, %4. oszlop)"
+
+#, fuzzy
+#~| msgid "Element \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "„%1” elem nem található"
+
+#, fuzzy
+#~| msgid "Attribute \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "„%1” attribútum nem található"
+
+#, fuzzy
+#~| msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected value \"%1\" of attribute \"%2\""
+#~ msgstr "„%2” attribútum váratlan értéke: „%1”"
+
+#, fuzzy
+#~| msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unexpected second occurrence of \"%1\" element"
+#~ msgstr "„%1” elem váratlan második előfordulása"
+
+#, fuzzy
+#~| msgid "Expected closing of element \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected closing of element \"%1\""
+#~ msgstr "„%1” elem várható leállítása"
+
+#, fuzzy
+#~| msgid "None of expected elements found: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None of expected elements found: %1"
+#~ msgstr "Nem található várható elem: %1"
+
+#, fuzzy
+#~| msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "„%1” célja nem található a(z) „%2” fájlban"
+
+#, fuzzy
+#~| msgid "Could not find relationships file \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "A(z) „%1” kapcsolatfájl nem található"
+
+#, fuzzy
+#~| msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "„%1” kapcsolat célja nem található a(z) „%2” fájlban"
+
+#, fuzzy
+#~| msgid ""
+#~| "Parsing error in the main document at line %1, column %2.\n"
+#~| "Error message: %3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Parsing error in the main document at line %1, column %2.\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "feldolgozási hiba történt a fődokumentumban: %1. sor, %2. oszlop.\n"
+#~ "Hibaüzenet: %3"
+
+#, fuzzy
+#~| msgid "QXml"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QXml"
+#~ msgstr "QXml"
+
+#, fuzzy
+#~| msgid "Entry '%1' not found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "„%1” bejegyzés nem található."
+
+#, fuzzy
+#~| msgid "Entry '%1' is not a file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' is not a file."
+#~ msgstr "„%1” bejegyzés nem egy fájl."
+
+#, fuzzy
+#~| msgid "Could not open entry \"%1\" for writing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open entry \"%1\" for writing."
+#~ msgstr "„%1” bejegyzés nem nyitható meg íráshoz."
+
+#, fuzzy
+#~| msgid "Could not write block"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "A blokk nem írható"
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<MUNKALAPNÉV>"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "Javasolt (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "Helyi (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "Egyéb (%1)"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "Nem található ez a kódolás: %1"
+
+#, fuzzy
+#~| msgid "CSV filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr ""
+#~ "A CSV-szűrő nem tudja megnyitni a bemeneti fájlt - kérjük jelentse be a "
+#~ "hibát."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "Ez a fájlformátum nem támogatott."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "Nem sikerült olvasni a fájlból."
+
+#, fuzzy
+#~| msgid "Export Sheet to HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "A munkalap exportálása HTML-be"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "Javasolt: UTF-8"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "Helyi kódolás (%1)"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Fel"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "A LaTeX-exportszűrő beállításai"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "Oldal - "
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "A fájl valószínűleg hibás, egy táblázat ki lesz hagyva."
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "Táblázat kihagyása."
+
+#, fuzzy
+#~| msgid ""
+#~| "This document was created with OpenOffice.org version '%1'. This filter "
+#~| "was written for version 1.0. Reading this file could cause strange "
+#~| "behavior, crashes or incorrect display of the data. Do you want to "
+#~| "continue converting the document?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This document was created with OpenOffice.org version '%1'. This filter "
+#~ "was written for version 1.0. Reading this file could cause strange "
+#~ "behavior, crashes or incorrect display of the data. Do you want to "
+#~ "continue converting the document?"
+#~ msgstr ""
+#~ "Ezt a dokumentumot az OpenOffice.org %1 verziójával készítették. A szűrő "
+#~ "az 1.0-ás verzióhoz készült, ezért a fájl feldolgozása közben problémák "
+#~ "léphetnek fel, például lefagyás vagy hibás megjelenítés. Biztosan át "
+#~ "szeretné konvertálni a dokumentumot?"
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "Nem támogatott dokumentumverzió"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr ""
+#~ "A QPRO-szűrő nem tudta megnyitni a fájlt - kérjük jelentse be a hibát."
+
+#, fuzzy
+#~| msgid ""
+#~| "Unable to open password protected files.\n"
+#~| "The password algorithm has not been published"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unable to open password protected files.\n"
+#~ "The password algorithm has not been published"
+#~ msgstr ""
+#~ "Nem lehet jelszóval védett fájlokat megnyitni.\n"
+#~ "A jelszókezelés módja nincs dokumentálva."
+
+#, fuzzy
+#~| msgid "Unable to find part for type %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "%1 típus részlete nem található"
+
+#, fuzzy
+#~| msgid "Declared number of shared strings too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of shared strings too small (%1)"
+#~ msgstr "A megosztott sztringek száma túl kicsi (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of font styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of font styles too small (%1)"
+#~ msgstr "A betűstílusok száma túl kicsi (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of cell formats too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of cell formats too small (%1)"
+#~ msgstr "A cellaformátumok száma túl kicsit (%1)"
+
+#, fuzzy
+#~| msgid "Declared number of fill styles too small (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Declared number of fill styles too small (%1)"
+#~ msgstr "A kitöltési stílusok száma túl kicsi (%1)"
+
+#, fuzzy
+#~| msgid ""
+#~| "The data could not be loaded completely because the maximum size of "
+#~| "sheet was exceeded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The data could not be loaded completely because the maximum size of sheet "
+#~ "was exceeded."
+#~ msgstr ""
+#~ "A maximális lapméret elérve, ezért az adatok teljes betöltése nem "
+#~ "lehetséges."
+
+#, fuzzy
+#~| msgid "Expected integer or floating point number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Expected integer or floating point number"
+#~ msgstr "Váratlan egész vagy lebegőpontos szám"
+
+#, fuzzy
+#~| msgid "Slide layout \"%1\" not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "„%1” diaelrendezés nem található"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "%1. dia"
+
+#, fuzzy
+#~| msgid "Words's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "A Words egyszerű szöveges importszűrője"
+
+#, fuzzy
+#~| msgid "End notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "Végjegyzetek"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "A páros oldalak fejléce"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "A páratlan oldalak fejléce"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "A páros oldalak lábléce"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "A páratlan oldalak lábléce"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "Az első oldal fejléce"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "Az első oldal lábléce"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "Táblázat - %1"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr ""
+#~ "A fájlt nem sikerült betölteni, mert valószínűleg nem RTF-dokumentum."
+
+#, fuzzy
+#~| msgid "Words's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "A Words RTF-importszűrője"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "A fájl nem tölthető be."
+
+#~ msgid "Failed to write file."
+#~ msgstr "Nem sikerült írni a fájlba."
+
+#~ msgid "%1 Export Error"
+#~ msgstr "%1 Exportálási hiba"
+
+#~ msgid "Export Filter Parameters"
+#~ msgstr "A szűrő paramétereinek exportálása"
+
+#~ msgid "Keep ratio"
+#~ msgstr "Az oldalarány megőrzése"
+
+#~ msgid "Width (%):"
+#~ msgstr "Szélesség (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "Magasság (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "PNG-exportálási hiba"
+
+#~ msgid "EPS Export"
+#~ msgstr "EPS-exportálás"
+
+#~ msgid "Options"
+#~ msgstr "Opciók"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "PostScript (Level 1)"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "PostScript (Level 2)"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "PostScript (Level 3)"
+
+#~ msgid "Import"
+#~ msgstr "Importálás"
+
+#~ msgid "Text"
+#~ msgstr "Szöveg"
+
+#~ msgid "Number"
+#~ msgstr "Szám"
+
+#~ msgid "Currency"
+#~ msgstr "Pénz"
+
+#~ msgid "Date"
+#~ msgstr "Dátum"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "Szám (tizedesvesszővel)"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "Szám (tizedesponttal)"
+
+#~ msgid "None"
+#~ msgstr "Egyik sem"
+
+#~ msgid ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+#~ msgstr ""
+#~ "Please check the ranges you specified. The start value must be lower than "
+#~ "the end value."
+
+#~ msgid "Common"
+#~ msgstr "Közös"
+
+#~ msgid "Other"
+#~ msgstr "Egyéb"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "A duplikált elválasztók figyelmen kívül hagyása"
+
+#~ msgid "Text&quote:"
+#~ msgstr "Idé&zőjel:"
+
+#~ msgid "&Format:"
+#~ msgstr "Formát&um:"
+
+#~ msgid "Ranges"
+#~ msgstr "Tartományok"
+
+#~ msgid "to"
+#~ msgstr "-"
+
+#~ msgid "Import lines:"
+#~ msgstr "Importálandó sorok:"
+
+#~ msgid "Import columns:"
+#~ msgstr "Importálandó oszlopok:"
+
+#~ msgid "Update"
+#~ msgstr "Frissítés"
+
+#~ msgid "&Help"
+#~ msgstr "&Súgó"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "&OK"
+#~ msgstr "&Rendben"
+
+#~ msgid "&Cancel"
+#~ msgstr "&Mégsem"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the Words file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Hiba történt a Words-fájl feldolgozása közben.\n"
+#~ "Sor: %1, oszlop: %2\n"
+#~ "Hibaüzenet: %3"
+
+#~ msgid "Words Export Filter Library"
+#~ msgstr "Words exportszűrő programkönyvtár"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "XSLT-beállítás exportálása"
+
+#~ msgid "Open Document"
+#~ msgstr "Dokumentum megnyitása"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "XSLT-beállítás importálása"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "Közös XSLT-fájlok"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "Személyes XSLT-fájlok"
+
+#~ msgid "Choose..."
+#~ msgstr "Választás..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "SVG-exportálási hiba"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "LaTeX-exportálási hiba"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "A PNG-exportszűrő paraméterei"
+
+#~ msgid "Height"
+#~ msgstr "Magasság"
+
+#~ msgid "Width"
+#~ msgstr "Szélesség"
+
+#~ msgid "Height (%)"
+#~ msgstr "Magasság (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "Szélesség (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "A dia címe"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "Kép - %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "Táblázat (%3), %1. sor, %2. oszlop"
+
+#~ msgid ""
+#~ "An error has occurred while parsing the AbiWord file.\n"
+#~ "At line: %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "Hiba történt az AbiWord-fájl feldolgozása közben.\n"
+#~ "Sor: %1, oszlop: %2\n"
+#~ "Hibaüzenet: %3"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "AbiWord importszűrő"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "Fő szövegkeret"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "Hiba történt a(z) %1 AbiWord-fájl betöltésekor"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "Nem sikerült elmenteni a dokumentumjellemzőket."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "Nem sikerült menteni a fődokuemntumot."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "Lábjegyzet - %1"
+
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "A Words egyszerű szöveges exportszűrője"
+
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "A Words HTML-exportszűrője"
+
+#~ msgid "Untitled Document"
+#~ msgstr "Névtelen dokumentum"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "A LaTeX-importszűrő beállításai"
+
+#~ msgid "Unicode"
+#~ msgstr "Unicode"
+
+#~ msgid "latin1"
+#~ msgstr "latin1"
+
+#~ msgid "New document"
+#~ msgstr "Új dokumentum"
+
+#~ msgid "Embedded document"
+#~ msgstr "Beágyazott dokumentum"
+
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "A Words MS Write importszűrője"
+
+#~ msgid "Header"
+#~ msgstr "Fejléc"
+
+#~ msgid "Footer"
+#~ msgstr "Lábléc"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Fő szöveges keretcsoport"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "Táblázat - %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "Táblázatkeret - %1"
+
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "KWord 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "Egyszerű szöveges exportálási párbeszédablak"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "HTML-exportálási párbeszédablak"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "&HTML 4.01"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "HTML 4.01 (régebbi HTML-es megjelenítőkhöz) "
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "&XHTML 1.0"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "XHTML 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "Mód"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "&Egyszerű: (X)HTML, strict mód"
+
+#~ msgid ""
+#~ "Convert mainly the document structure (Recommended for exporting to "
+#~ "browsers with limited capabilities)"
+#~ msgstr ""
+#~ "A dokumentum alapstruktúrájának átkonvertálása (egyszerű webböngészőkhöz "
+#~ "ajánlott)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "N&ormál: (X)HTML, transitional mód"
+
+#~ msgid ""
+#~ "Convert most of the document (Recommended for re-importing in Words or "
+#~ "for exporting to older browsers)"
+#~ msgstr ""
+#~ "A dokumentumok nagy részének átalakítása (ajánlott újraimportáláshoz a "
+#~ "Wordsben vagy exportáláshoz régebbi böngészőkbe)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "&Teljes: (X)HTML+CSS"
+
+#~ msgid ""
+#~ "Convert as much as possible of the Words document (Recommended for "
+#~ "exporting to other modern word processors or to modern browsers)"
+#~ msgstr ""
+#~ "A Words dokumentum lehető legtöbb részének átalakítása (ajánlott más "
+#~ "modern szövegszerkesztőkbe vagy modern böngészőkbe való exportáláshoz)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "Külső CSS-stíluslap használata:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "Adja meg a CSS-fájl helyét ebben a mezőben"
+
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "Ebbe a könyvtárba kerülnek a dokumentum EPS-képei."
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "MS Write importálási párbeszédablak"
+
+#~ msgid "&Encoding"
+#~ msgstr "Kódo&lás"
+
+#~ msgid ""
+#~ "Select the encoding of the Write document.<br><br>Try the Default  "
+#~ "Encoding (CP 1252), if unsure."
+#~ msgstr ""
+#~ "Válassza ki a Write-dokumentum kódolását.<br><br>Az alapértelmett "
+#~ "kódolást (CP 1252) válassza, ha nem tudja a választ."
+
+#~ msgid "&Other encoding:"
+#~ msgstr "Egyéb kó&dolás:"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "&Alapértelemzett kódolás (CP 1252)"
+
+#~ msgid ""
+#~ "Most Write documents are stored using this encoding (also known as "
+#~ "windows-1252).<br><br>Select this if unsure."
+#~ msgstr ""
+#~ "A legtöbb Write-dokumentum ezzel a kódolással van eltárolva (windows-1252 "
+#~ "néven is ismert).<br><br>Ezt válassza ki, ha nem tudja, mi a helyes érték."
+
+#~ msgid "&Advanced"
+#~ msgstr "Spe&ciális"
+
+#~ msgid ""
+#~ "These advanced options allow you to fine-tune the importing of formatting "
+#~ "information. They compensate for differences between Words and MS Write "
+#~ "by adding extra formatting information (not found in the original "
+#~ "document), to try to make the imported document look as close to the "
+#~ "original as possible.<br><br>It is safe to use the defaults, if unsure."
+#~ msgstr ""
+#~ "Ezekkel a speciális beállításokkal a formázási információk importálását "
+#~ "lehet testreszabni. A Words és az MS Write közötti különbségek kárpótlása "
+#~ "érdekében kiegészítő formázási információkat ad hozzá (nem található az "
+#~ "eredeti dokumentumban), hogy megpróbálja az impotált dokumentum kinézetét "
+#~ "a lehető legközelebb hozni az eredetihez.<br><br>Biztonságos az "
+#~ "alapértelmezettek használata, ha bizonytalan."
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "A sortávolság-eltérések k&ompenzálása"
+
+#~ msgid ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+#~ msgstr ""
+#~ "Try to simulate Write's linespacing by adding some spaces before each "
+#~ "paragraph."
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "A kép&pozícionálás engedélyezése"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "A képek pozícionálása bekezdésigazítással történjen."
+
+#~ msgid "DCM Import"
+#~ msgstr "DCM-importálás"
+
+#~ msgid "Import options"
+#~ msgstr "Importálási beállítások"
+
+#~ msgid "Read digital signatures from the dataset"
+#~ msgstr "Az adatkészlet digitális aláírásainak olvasása"
+
+#~ msgid "Ignore relationship constraints"
+#~ msgstr "Kapcsolati korlátozások figyelmen kívül hagyása"
+
+#~ msgid ""
+#~ "Do not abort on content item errors\n"
+#~ "(e.g. missing value type specific attributes)"
+#~ msgstr ""
+#~ "Ne kerüljön megszakításra tartalmi hiba esetén\n"
+#~ "(pl. specifikus attribútum hiányzó érték) "
+
+#~ msgid "Skip invalid content item subtree"
+#~ msgstr "Érvénytelen tartalmi tétel részfa átugrása"
+
+#~ msgid "Note \"%1\" already exists"
+#~ msgstr "A(z) \"%1\" jegyzet már létezik"
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr ""
+#~ "A dokumentumot nem sikerült betölteni, mert nem követi az RTF-szintaxist."
+
+#~ msgid ""
+#~ "The RTF (Rich Text Format) document has an unexpected version number: %1. "
+#~ "Continuing might result in an erroneous conversion. Do you want to "
+#~ "continue?"
+#~ msgstr ""
+#~ "Az RTF-dokumentum (Rich Text Format) verziószáma nem megfelelő: %1. Ha "
+#~ "továbblép, hibás lehet a konverzió. Biztosan tovább szeretne lépni?"
+
+#~ msgid ""
+#~ "The PWD (PocketWord's Rich Text Format) document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "A PWD-dokumentum (PocketWord's Rich Text Format) verziószáma nem a várt "
+#~ "érték: %1. ha továbblép, hibás lehet a konverzió. Biztosan tovább "
+#~ "szeretne lépni?"
+
+#~ msgid ""
+#~ "The URTF (\"Unicode Rich Text Format\") document has an unexpected "
+#~ "version number: %1. Continuing might result in an erroneous conversion. "
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Az URTF-dokumentum (\"Unicode Rich Text Format\") verziószáma nem a várt "
+#~ "érték: %1. Ha továbblép, hibás lehet a konverzió. Biztosan tovább "
+#~ "szeretne lépni?"
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "Az RTF-dokumentumot nem sikerült betölteni, mert az első kulcsszava nem "
+#~ "megfelelő: \\%1."
+
+#~ msgid "Declared number of border styles too small (%1)"
+#~ msgstr "A szegélystílusok száma túl kicsi (%1)"
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr "Ré&gi módszer: Ha a sor üres vagy 40 karakternél rövidebb"
+
+#~ msgid "KFormula Import Error"
+#~ msgstr "KFormula importálási hiba"
+
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "KFormula1.3 importszűrő"
+
+#~ msgid "Available Sheets"
+#~ msgstr "A rendelkezésre álló munkalapok"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgid "Endnote \"%1\" not found"
+#~ msgstr "Végjegyzet - %1"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "Lábjegyzet - %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "Kép - %1"
+
+#~ msgid "A password is required to read that pdf"
+#~ msgstr "A PDF-fájl beolvasásához jelszó megadása szükséges"
+
+#~ msgid "Cannot export images in %1.\n"
+#~ msgstr "Nem lehet képet exportálni %1 formátumban.\n"
+
+#~ msgid "JPEG Export Options"
+#~ msgstr "JPEG-exportálási beállítások"
+
+#~ msgid "TIFF Export Options"
+#~ msgstr "TIFF-exportálási beállítások"
+
+#~ msgid "All Images"
+#~ msgstr "Minden kép"
+
+#~ msgid ""
+#~ "The image is using an unsupported color space. Please convert to 16-bit "
+#~ "floating point RGB/Alpha before saving in the OpenEXR format."
+#~ msgstr ""
+#~ "A kép nem támogatott színteret használ. Konvertálja át 16-bites "
+#~ "lebegőpontos RGB/Alfa színtérre mielőtt elmentené OpenEXR formátumban."
+
+#~ msgid "PDFImportWidget"
+#~ msgstr "PDFImportWidget"
+
+#~ msgid "Pages"
+#~ msgstr "Oldalszám"
+
+#~ msgid "&All pages"
+#~ msgstr "M&inden oldal"
+
+#~ msgid "&First page"
+#~ msgstr "Az &első oldal"
+
+#~ msgid "&Selection of page"
+#~ msgstr "Oldal&kijelölés"
+
+#~ msgid "Dimensions"
+#~ msgstr "Méret"
+
+#, fuzzy
+#~| msgid "Vertical:"
+#~ msgctxt "vertical resolution"
+#~ msgid "Vertical:"
+#~ msgstr "Függőlegesen:"
+
+#, fuzzy
+#~| msgid "Horizontal:"
+#~ msgctxt "horizontal resolution"
+#~ msgid "Horizontal:"
+#~ msgstr "Vízszintesen:"
+
+#~ msgid "Size:"
+#~ msgstr "Méret:"
+
+#~ msgid "Options of Your PNG"
+#~ msgstr "PNG-beállítások"
+
+#~ msgid ""
+#~ "Note: the compression level does not change the quality of the result"
+#~ msgstr "Megjegyzés: a tömörítési mód nem befolyásolja az eredmény minőségét"
+
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level does not change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>A tömörítési idő beállítása. Erősebb tömörítés esetén több idő "
+#~ "szükséges.\n"
+#~ "<br>Megjegyzés: a tömörítési szint értéke nem befolyásolja az eredmény "
+#~ "minőségét.</p>"
+
+#~ msgid "Compress:"
+#~ msgstr "Tömörítés:"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "Gyors"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "Kicsi"
+
+#~ msgid "Use interlacing when publishing on the Internet"
+#~ msgstr "Váltottsorok használata internetes publikációnál"
+
+#~ msgid ""
+#~ "<p>Interlacing is useful if you intend to publish your image on the "
+#~ "Internet.<br>\n"
+#~ "Enabling interlacing will cause the image to be displayed by the browser "
+#~ "even while downloading.</p>"
+#~ msgstr ""
+#~ "<p>A váltottsoros opció hasznos lehet internetes publikálás esetén.<br>\n"
+#~ "Ha be van kapcsolva a váltottsoros opció, akkor a böngészők a kép "
+#~ "letöltése közben is meg tudják mutatni a képet.</p>"
+
+#~ msgid "Interlacing"
+#~ msgstr "Váltottsoros"
+
+#~ msgid "Disable to get smaller files if your image has no transparency"
+#~ msgstr ""
+#~ "Kapcsolja ki ezt, ha a képben nincs áttetszőség - így kisebb lesz a "
+#~ "fájlméret"
+
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparency in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparency and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>A PNG fájlformátumban eltárolhatók áttetszőségi adatok is az "
+#~ "úgynevezett alfa csatornában.\n"
+#~ "Nem kell bejelölni az opciót, ha nem használ áttetszőséget és kisebb "
+#~ "fájlméretet szeretne.<br>Általában érdemes elmenteni az alfa csatorna "
+#~ "adatait.</p>"
+
+#~ msgid "Store alpha channel (transparency)"
+#~ msgstr "Az alfa csatorna elmentése (áttetszőség)"
+
+#, fuzzy
+#~| msgid "Size:"
+#~ msgid "Size: 100KB"
+#~ msgstr "Méret:"
+
+#, fuzzy
+#~| msgid "Classic"
+#~ msgid "Basic"
+#~ msgstr "Hagyományos"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "Kicsi"
+
+#~ msgid ""
+#~ "These settings determine how much information is lost during compression"
+#~ msgstr ""
+#~ "Ezek a beállítások határozzák meg, mennyi képinformáció vész el "
+#~ "tömörítéskor"
+
+#, fuzzy
+#~| msgid "Pr&ogressive"
+#~ msgctxt "A progressive jpeg file can be displayed while loading."
+#~ msgid "Progressive"
+#~ msgstr "&Progresszív"
+
+#, fuzzy
+#~| msgid "&Advanced"
+#~ msgid "Advanced quality"
+#~ msgstr "Spe&ciális"
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Formats:"
+#~ msgstr "Formát&um:"
+
+#~ msgid "Options of Your TIFF"
+#~ msgstr "TIFF-beállítások"
+
+#~ msgid "TIFF Options"
+#~ msgstr "TIFF-beállítások"
+
+#~ msgid "Compression type:"
+#~ msgstr "Tömörítési mód:"
+
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "JPEG DCT tömörítés"
+
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "ZIP"
+
+#~ msgid "Lempel-Ziv & Welch (LZW)"
+#~ msgstr "LZW"
+
+#~ msgid "Leadtools JPEG2000"
+#~ msgstr "Leadtools JPEG2000"
+
+#~ msgid "CCITT Modified Huffman RLE"
+#~ msgstr "CCITT módosított Huffman RLE"
+
+#~ msgid "CCITT Group 3 Fax Encoding"
+#~ msgstr "CCITT Group 3 faxkódolás"
+
+#~ msgid "CCITT Group 4 Fax Encoding"
+#~ msgstr "CCITT Group 4 faxkódolás"
+
+#~ msgid "Pixar Log"
+#~ msgstr "Pixar Log"
+
+#~ msgid "Predictor:"
+#~ msgstr "Előrejelző:"
+
+#~ msgid ""
+#~ "Using a predictor can improve the compression (mostly for LZW and deflate)"
+#~ msgstr ""
+#~ "Előrejelző használata javíthatja a tömörítést (főleg LZW és ZIP esetén)"
+
+#, fuzzy
+#~ msgid "Horizontal Differencing"
+#~ msgstr "Vízszintes differenciálás"
+
+#, fuzzy
+#~ msgid "Floating Point Horizontal Differencing"
+#~ msgstr "Lebegőpontos vízszintes differenciálás"
+
+#~ msgid "Store alpha &channel (transparency)"
+#~ msgstr "Az &alfa csatorna eltárolása (áttetszőség)"
+
+#, fuzzy
+#~ msgid ""
+#~ "This option will merge all layers. It is advisable to check this option, "
+#~ "otherwise other applications might not be able to read your file correctly"
+#~ msgstr ""
+#~ "Ezzel az opcióval összevonható az összes réteg. Ezt általában célszerű "
+#~ "bejelölni, különben sok alkalmazás nem fogja tudni beolvasni a képet."
+
+#~ msgid "Flatten the &image"
+#~ msgstr "A kép &egyrétegessé tétele"
+
+#~ msgid "JPEG Compression Options"
+#~ msgstr "JPEG-tömörítési beállítások"
+
+#~ msgid "Smallest"
+#~ msgstr "Legkisebb"
+
+#~ msgid "Best"
+#~ msgstr "Legjobb"
+
+#~ msgid "Deflate Compression Options"
+#~ msgstr "ZIP-tömörítési beállítások"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "Gyors"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "Kicsi"
+
+#~ msgid "CCITT Group 3 fax encoding Options"
+#~ msgstr "CCITT Group 3 faxkódolási beállítások"
+
+#~ msgid "Fax mode:"
+#~ msgstr "Faxmód:"
+
+#, fuzzy
+#~| msgid "Classic"
+#~ msgid "Classic"
+#~ msgstr "Hagyományos"
+
+#, fuzzy
+#~| msgid "No RTC"
+#~ msgid "No RTC"
+#~ msgstr "RTC nélkül"
+
+#, fuzzy
+#~| msgid "No EOL"
+#~ msgid "No EOL"
+#~ msgstr "EOL nélkül"
+
+#~ msgid "Pixar Log Compression Options"
+#~ msgstr "Tömörítési beállítások (Pixar Log)"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "Gyors"
+
+#, fuzzy
+#~| msgid "Small"
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "Kicsi"
+
+#~ msgid "Initializing..."
+#~ msgstr "Inicializálás..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "Első fázis: %1. oldal..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "Második fázis: %1. oldal..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "%1. törzs-keretcsoport"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "%1. fejléc-keretcsoport"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "%1. lábléc-keretcsoport"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "%1 szöveges keretcsoport"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "KWord PDF-importszűrő"
+
+#~ msgid "Page Selection"
+#~ msgstr "Oldalkijelölés"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "Mind (%1 oldal)"
+
+#~ msgid "Range:"
+#~ msgstr "Tartomány:"
+
+#~ msgid "Import images"
+#~ msgstr "Képek importálása"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "Intelligens mód"
+
+#~ msgid ""
+#~ "Removes returns and hyphens at end of line. Also tries to compute the "
+#~ "paragraph alignment. Note that the layout of some pages can get messed up."
+#~ msgstr ""
+#~ "Eltávolítja a sorok végéről a redundáns sorvégjelzőket és kötőjeleket, "
+#~ "továbbá kiszámítja a bekezdésigazítást. Néhány oldal elrendezését ez "
+#~ "esetleg felboríthatja."
+
+#~ msgid "Owner:"
+#~ msgstr "Tulajdonos:"
+
+#~ msgid "User:"
+#~ msgstr "Felhasználó:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 cella %2, %3"
+
+#~ msgid ""
+#~ "Cannot convert RAW files because the dcraw executable could not be "
+#~ "started."
+#~ msgstr ""
+#~ "Nem lehet RAW-fájlokat konvertálni, mert a dcraw programot nem sikerült "
+#~ "elindítani."
+
+#~ msgid "Colorspace"
+#~ msgstr "Színtér"
+
+#~ msgid "&Document mode"
+#~ msgstr "&Dokumentummód"
+
+#~ msgid "&RGB"
+#~ msgstr "&RGB"
+
+#~ msgid "Channel Depth"
+#~ msgstr "Csatornamélység"
+
+#~ msgid "&16 bits per channel"
+#~ msgstr "&16 bit csatornánként"
+
+#~ msgid "Alt+1"
+#~ msgstr "Alt+1"
+
+#~ msgid "&8 bits per channel"
+#~ msgstr "&8 bit csatornánként"
+
+#~ msgid "Alt+8"
+#~ msgstr "Alt+8"
+
+#~ msgid "&Interpolate RGB as four colors"
+#~ msgstr "RGB-s &interpoláció négy színnel"
+
+#, fuzzy
+#~ msgid ""
+#~ "Interpolate RGB as four colors. This blurs the image a little, but it "
+#~ "eliminates false 2x2 mesh patterns"
+#~ msgstr ""
+#~ "RGB-s interpoláció 4 színnel. Ennek hatására kicsit elmosódottabb lesz a "
+#~ "kép, de így meg lehet szabadulni a nem valódi 2x2-es mintáktól."
+
+#~ msgid "&Update Preview"
+#~ msgstr "Az előnézet &frissítése"
+
+#~ msgid "Color Settings"
+#~ msgstr "Színbeállítások"
+
+#~ msgid "&White Balance"
+#~ msgstr "&Fehéregyensúly"
+
+#~ msgid "White card in sunlight"
+#~ msgstr "Fehér kártya napsütésben"
+
+#, fuzzy
+#~ msgid ""
+#~ "Automatic color balance. The default is to use a fixed color balance "
+#~ "based on a white card photographed in sunlight"
+#~ msgstr ""
+#~ "Automatikus színegyensúly. Alapértelmezésben rögzített színegyensúlyt "
+#~ "használ a program, mely napsütésben fényképezett fehér kártyán alapul."
+
+#, fuzzy
+#~ msgid "Camera white balance"
+#~ msgstr "&Fehéregyensúly"
+
+#, fuzzy
+#~ msgid ""
+#~ "Use the color balance specified by the camera. If this cannot be found, "
+#~ "dcraw prints a warning and reverts to the default"
+#~ msgstr ""
+#~ "\n"
+#~ "A fényképezőgép által megadott színegyensúly használata. Ha ez nem "
+#~ "található, a dcraw figyelmeztető üzenetet ad és visszavált az "
+#~ "alapértelmezésre. "
+
+#~ msgid "Brightness:"
+#~ msgstr "Fényesség:"
+
+#~ msgid "Blackpoint:"
+#~ msgstr "Fekete pont:"
+
+#~ msgid "Red multiplier:"
+#~ msgstr "Vörös szorzó:"
+
+#~ msgid "Blue multiplier:"
+#~ msgstr "Kék szorzó:"
+
+#~ msgid "Brightness. 1.0 is default"
+#~ msgstr "Fényesség. 1,0 az alapértelmezés."
+
+#~ msgid "Clip colors to prevent pink highlights"
+#~ msgstr "A színek levágása a rózsaszín kiemelések elkerüléséhez"
+
+#, fuzzy
+#~ msgid ""
+#~ "By default, dcraw clips all colors to prevent pink hues in the "
+#~ "highlights. Combine this option with -b 0.25 to leave the image data "
+#~ "completely unclipped"
+#~ msgstr ""
+#~ "Alapértelmezés szerint a dcraw levágja az összes színt, hogy "
+#~ "megakadályozza rózsaszín árnyalatok kialakulását a kiemelt részeken. Ha "
+#~ "ezt az opciót kombinálja a -b 0.25 opcióval, a képadatok egyáltalán nem "
+#~ "lesznek levágva."
+
+#~ msgid "Use camera raw colors, not sRGB"
+#~ msgstr "A kamera nyers színeinek használata sRGB helyett"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "Egyik sem"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "Egyik sem"
+
+#, fuzzy
+#~| msgid "Fast"
+#~ msgctxt "save the file quickly, but don't compress very well"
+#~ msgid "Fast"
+#~ msgstr "Gyors"
+
+#~ msgid "Note: the compression level doesn't change the quality of the result"
+#~ msgstr ""
+#~ "Megjegyzés: a tömörítési szint értéke nem változtatja meg az eredmény "
+#~ "minőségét"
+
+#~ msgid ""
+#~ "<p>Adjust the compression time. Better compression takes longer.\n"
+#~ "<br>Note: the compression level doesn't change the quality of the result."
+#~ "</p>"
+#~ msgstr ""
+#~ "<p>A tömörítési idő beállítása. Erősebb tömörítés esetén több idő "
+#~ "szükséges.\n"
+#~ "<br>Megjegyzés: a tömörítési szint értéke nem befolyásolja az eredmény "
+#~ "minőségét.</p>"
+
+#~ msgid "Pr&ogressive"
+#~ msgstr "&Progresszív"
+
+#, fuzzy
+#~ msgid "Alt+O"
+#~ msgstr "Alt+1"
+
+#~ msgid "Use progressive when publishing on the Internet"
+#~ msgstr "Progresszív mód használata internetes publikáláskor"
+
+#~ msgid ""
+#~ "<p>Progressive is useful if you intend to publish your image on the "
+#~ "Internet.<br>\n"
+#~ "Enabling progressive will cause the image to be displayed by the browser "
+#~ "even while downloading.</p>"
+#~ msgstr ""
+#~ "<p>Progresszív módot például akkor lehet használni, ha a képet az "
+#~ "interneten szeretné publikálni.<br>\n"
+#~ "Az opció használata esetén olyan kép keletkezik, amelyet a böngészők "
+#~ "letöltés közben is meg tudnak jeleníteni.</p>"
+
+#~ msgid "Importing..."
+#~ msgstr "Importálás..."
+
+#~ msgid "Saving..."
+#~ msgstr "Mentés..."
+
+#~ msgid "Loading..."
+#~ msgstr "Betöltés..."
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgid "Form"
+#~ msgstr "Formát&um:"
+
+#~ msgid "Error: Dcraw cannot load this image. Message: "
+#~ msgstr "Hiba: a Dcraw nem tudja betölteni ezt a képet. A hibaüzenet: "
+
+#~ msgid "No file specified"
+#~ msgstr "Nincs megadva fájl"
+
+#~ msgid "Error creating connection"
+#~ msgstr "Hiba történt a kapcsolat létrehozásakor"
+
+#~ msgid "Error connecting to database"
+#~ msgstr "Hiba történt az adatbázishoz való kapcsolódáskor"
+
+#~ msgid "Error using database"
+#~ msgstr "Hiba történt az adatbázis használata közben"
+
+#~ msgid "Cant find sheet"
+#~ msgstr "A lap nem található"
+
+#~ msgid "Your query was invalid or not a SELECT query"
+#~ msgstr "A lekérdezés érvénytelen vagy nem SELECT típusú"
+
+#~ msgid "Error executing query"
+#~ msgstr "Hiba történt a lekérdezés végrehajtásakor"
+
+#, fuzzy
+#~ msgid "Export hidden layers"
+#~ msgstr "A szűrő paramétereinek exportálása"
+
+#~ msgid "BMP Export Error"
+#~ msgstr "BMP-exportálási hiba"
+
+#~ msgid "MNG Export Error"
+#~ msgstr "MNG-exportálási hiba"
+
+#~ msgid "Xbm Export Error"
+#~ msgstr "Xbm-exportálási hiba"
+
+#~ msgid "Xpm Export Error"
+#~ msgstr "Xpm-exportálási hiba"
+
+#~ msgid "JPEG Export Error"
+#~ msgstr "JPEG-exportálási hiba"
+
+#~ msgid "Bitmap DPI:"
+#~ msgstr "Képpont/hüvelyk:"
+
+#~ msgid "Set the resolution of the resulting bitmap image"
+#~ msgstr "Az eredményként kapott kép felbontása"
+
+#~ msgid "72"
+#~ msgstr "72"
+
+#~ msgid "96"
+#~ msgstr "96"
+
+#~ msgid "150"
+#~ msgstr "150"
+
+#~ msgid "300"
+#~ msgstr "300"
+
+#~ msgid "600"
+#~ msgstr "600"
+
+#~ msgid "720"
+#~ msgstr "720"
+
+#~ msgid "1200"
+#~ msgstr "1200"
+
+#~ msgid "Dots/inch"
+#~ msgstr "Képpont / hüvelyk"
+
+#~ msgid "Automatic"
+#~ msgstr "Automatikus"
+
+#~ msgid "From camera"
+#~ msgstr "A fényképezőgépről"
+
+#~ msgid "Disable to get smaller files if your image has no transparancy"
+#~ msgstr ""
+#~ "Kapcsolja ki ezt, ha a képben nincs áttetszőség - így kisebb lesz a "
+#~ "fájlméret"
+
+#~ msgid ""
+#~ "<p>The Portable Network Graphics (PNG) file format allows transparancy in "
+#~ "your image to be stored by saving an alpha channel.\n"
+#~ "You can uncheck the box if you are not using transparancy and you want to "
+#~ "make the resulting file smaller .<br>Always saving the alpha channel is "
+#~ "recommended.</p>"
+#~ msgstr ""
+#~ "<p>A PNG fájlformátumban eltárolhatók áttetszőségi adatok is az "
+#~ "úgynevezett alfa csatornában.\n"
+#~ "Nem kell bejelölni az opciót, ha nem használ áttetszőséget és kisebb "
+#~ "fájlméretet szeretne.<br>Általában érdemes mindig elmenteni az alfa "
+#~ "csatorna adatait.</p>"
+
+#~ msgid "KSpread Kexi Import Filter"
+#~ msgstr "KSpread Kexi-importszűrő"
+
+#~ msgid ""
+#~ "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~ "want to insert. When you have choosen the desired dates, simply press the "
+#~ "Insert button to insert the calendar into the spreadsheet, starting at "
+#~ "the cell you have currently selected."
+#~ msgstr ""
+#~ "A Naptár beszúrása ablakban lehet kiválasztani a beszúrandó napokat. Ha "
+#~ "kiválasztotta a kívánt dátumokat, kattintson a Beszúrás gombra. Ekkor a "
+#~ "kívánt naptár rákerül a munkalapra, az éppen kijelölt cellától kezdve."
+
+#~ msgid "Table/Query"
+#~ msgstr "Tábla/lekérdezés"
+
+#~ msgid "Type"
+#~ msgstr "Típus"
+
+#~ msgid "Name"
+#~ msgstr "Név"
+
+#~ msgid "Custom quer&y"
+#~ msgstr "Egye&di lekérdezés"
+
+#~ msgid "Data Conversion"
+#~ msgstr "Adatkonverzió"
+
+#~ msgid "&Let KSpread choose"
+#~ msgstr "A&utomatikus"
+
+#~ msgid "Text (faster)"
+#~ msgstr "Szöveg (gyors)"
+
+#~ msgid "&Open"
+#~ msgstr "Me&gnyitás"
+
+#~ msgid "Insert the calendar at the currently selected cell."
+#~ msgstr "A naptár beszúrása a kijelölt cellánál."
+
+#~ msgid ""
+#~ "A new calendar will be inserted starting at the currently selected cell."
+#~ msgstr "Új naptár lesz beillesztve a kijelölt cellától kezdve."
+
+#~ msgid "Don't insert a calendar."
+#~ msgstr "Nem kell beilleszteni a naptárt."
+
+#~ msgid ""
+#~ "Quits the dialog and does not insert a calendar. Use this to cancel this "
+#~ "operation."
+#~ msgstr ""
+#~ "Bezárja a párbeszédablakot naptár beszúrása nélkül. Ezzel lehet "
+#~ "megszakítani a műveletet."
+
+#~ msgid "Unable to open output file."
+#~ msgstr "A kimeneti fájlt nem sikerült megnyitni."
+
+#~ msgid "Failed to open input file: %1"
+#~ msgstr "Nem sikerült megnyitni ezt a bemeneti fájlt: %1"
+
+#~ msgid "Failed to write formula."
+#~ msgstr "A képlet kiírása nem sikerült."
+
+#~ msgid "MathML Export Error"
+#~ msgstr "MathML-exportálási hiba"

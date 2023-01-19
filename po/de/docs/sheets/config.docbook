@@ -1,0 +1,166 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Hans-Frieder</firstname
+><surname
+>Hirsch</surname
+><affiliation
+><address
+><email
+>f.hirsch@t-online.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> <othercredit role="translator"
+><firstname
+>Johannes</firstname
+><surname
+>Schwall</surname
+><affiliation
+><address
+><email
+>johannes.schwall@gmail.com</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Kurzbefehle und Werkzeugleisten für &sheets; einrichten</title>
+
+<sect1 id="configshort">
+<title
+>Kurzbefehle</title>
+<para
+>Um die Kurzbefehle für &sheets; zu ändern, wählen Sie <menuchoice
+><guimenu
+>Einstellungen</guimenu
+> <guimenuitem
+>Kurzbefehle festlegen ...</guimenuitem
+></menuchoice
+>. Damit öffnen Sie den folgenden Dialog: </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Kurzbefehle festlegen</phrase>
+</textobject>
+</mediaobject>
+<para
+>Suchen Sie in der Liste nach Aktionen, für die Sie Kurzbefehle festlegen oder ändern möchten. Wählen Sie die gewünschte Aktion aus, indem Sie mit der <mousebutton
+>linken</mousebutton
+> Maustaste auf den Namen klicken. Durch die Eingabe des Namens der Aktion in der Suchleiste oben im Dialog können Sie die gewünschte Aktion leichter finden. Dann ändern Sie den Kurzbefehl, indem Sie auf einen der Auswahlknöpfe <guilabel
+>Keine</guilabel
+>, <guilabel
+>Standard</guilabel
+> oder <guilabel
+>Benutzerdefiniert</guilabel
+> klicken.</para>
+<para
+>Drücken Sie jetzt die gewünschte Tastenkombination für den Kurzbefehl, zum Beispiel <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Werkzeugleisten</title>
+<para
+>&sheets; hat sechs Werkzeugleisten: <guilabel
+>Datei</guilabel
+>, <guilabel
+>Bearbeiten</guilabel
+>, <guilabel
+>Navigation</guilabel
+>, <guilabel
+>Format</guilabel
+>, <guilabel
+>Schriftart</guilabel
+> und <guilabel
+>Farbe/Umrandung</guilabel
+>. Jede dieser Werkzeugleisten kann angezeigt oder ausgeblendet werden, je nachdem was Sie im Menü <guimenu
+>Einstellungen</guimenu
+> festgelegt haben.</para>
+<para
+>Wenn die Werkzeugleisten nicht gesperrt sind, können Sie wählen, ob eine Werkzeugleiste <guimenuitem
+>Oben</guimenuitem
+>, <guimenuitem
+>Links</guimenuitem
+>, <guimenuitem
+>Rechts</guimenuitem
+> oder <guimenuitem
+>Unten</guimenuitem
+> im &sheets;-Fenster angezeigt wird, indem Sie mit der <mousebutton
+>rechten</mousebutton
+> Maustaste auf die Werkzeugleiste klicken. Damit öffnen Sie die <guilabel
+>Werkzeugleisten-Einstellungen</guilabel
+> und können einen Eintrag aus dem Menü <guisubmenu
+>Ausrichtung</guisubmenu
+> wählen. In den <guilabel
+>Werkzeugleisten-Einstellungen</guilabel
+> können Sie auch einstellen, ob in der Werkzeugleiste nur Symbole, nur Text oder beides angezeigt werden sollen, sowie die Größe der Symbole festlegen.</para>
+
+<para
+>Sie können eine Werkzeugleiste auch bewegen, indem Sie den Mauszeiger auf der vertikalen Leiste am linken Ende einer Werkzeugleiste platzieren und mit gedrückter <mousebutton
+>linker</mousebutton
+> Maustaste die Werkzeugleiste in die gewünschte Position ziehen. Wenn Sie eine Werkzeugleiste auf diese Weise in eine Position außerhalb der Begrenzungen des &sheets;-Fensters ziehen, erhalten Sie eine unabhängige Werkzeugleiste, die an kein Element des &sheets;-Fensters mehr gebunden ist. Um eine unabhängige Leiste wieder in eine übliche Position zu bringen, klicken Sie mit der <mousebutton
+>rechten</mousebutton
+> Maustaste auf ihre Titelleiste um das <guilabel
+> Werkzeugleisten-Einstellungen</guilabel
+> aufzurufen. Dann wählen Sie eine der Optionen im Untermenü <guisubmenu
+>Ausrichtung</guisubmenu
+>.</para>
+
+<para
+>Wenn Sie <guimenuitem
+>Werkzeugleisten einrichten ...</guimenuitem
+> aus dem Menü <guimenu
+>Einstellungen</guimenu
+> wählen, öffnet sich ein Dialog, in dem Sie Knöpfe zu den Werkzeugleisten  &sheets;hinzufügen oder von diesen entfernen können.</para>
+<para
+>Im Dialog <guilabel
+>Werkzeugleisten einrichten</guilabel
+> wählen Sie zuerst eine Werkzeugleiste im Auswahlfeld <guilabel
+>Werkzeugleiste:</guilabel
+>. In der Liste <guilabel
+>Angezeigte Aktionen:</guilabel
+> rechts im Dialog, sehen Sie die Knöpfe, die derzeit in der Werkzeugleiste zu sehen sind. Sie können einen Knopf entfernen, indem Sie ihn im Fenster auswählen und dann auf den Pfeil-nach-links-Knopf klicken. Sie können ihn auch im Fenster bewegen, indem Sie auf die Pfeil-nach-oben- oder Pfeil-nach-unten-Knöpfe klicken. Einen neuen Knopf fügen Sie hinzu, indem Sie ihn in der Liste <guilabel
+>Verfügbare Aktionen:</guilabel
+> auswählen und dann auf den Pfeil-nach-rechts-Knopf klicken.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

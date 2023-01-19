@@ -1,0 +1,2645 @@
+# Malay translation
+# MIMOS Open Source <opensource@mimos.my>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mimos\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2005-09-29 17:00-0800\n"
+"Last-Translator: MIMOS Open Source <opensource@mimos.my>\n"
+"Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
+"Language: ms\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=1;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#, fuzzy
+#| msgid "Boolean Operation"
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Operasi Boolean"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Tertib"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Jajar"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "Isi"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr ""
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr ""
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Objek"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, fuzzy, kde-format
+msgid "&Distribute"
+msgstr "Hapuskan Objek"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, fuzzy, kde-format
+msgid "&Path"
+msgstr "laluan"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, fuzzy, kde-format
+msgid "Effe&cts"
+msgstr "Kesan"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Seting pensil"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr ""
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Objek"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, fuzzy, kde-format
+msgid "Align"
+msgstr "&Jajar"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Kesan"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, fuzzy, kde-format
+#| msgid "Edges:"
+msgid "View"
+msgstr "Tepi:"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "Laluan &Mendatar..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, fuzzy, kde-format
+#| msgid "Flatten Path"
+msgid "Flatten Path"
+msgstr "Laluan Mendatar"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, fuzzy, kde-format
+msgid "Properties"
+msgstr "Ciri Coret"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Kedataran:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#, fuzzy
+#| msgid "Flatten Path"
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Laluan Mendatar"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Tutup Laluan"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, fuzzy, kde-format
+#| msgid "&Flatten Path..."
+msgid "&Refine Path..."
+msgstr "Laluan &Mendatar..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, fuzzy, kde-format
+msgid "Refine Path"
+msgstr "Tutup Laluan"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr ""
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#, fuzzy
+#| msgid "Round Corners"
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Bucu Bundar"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&Bucu Bundar..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Bucu Bundar"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Jejari:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#, fuzzy
+#| msgid "Whirl Pinch"
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Sepit Pusar"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Pusar/Sepit..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Sepit Pusar"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Sudut:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Sepit:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#, fuzzy
+#| msgid "Raise Layer"
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Naikkan Lapisan"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#, fuzzy
+#| msgid "Lower Layer"
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Turunkan Lapisan"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "Konfigur Karbon..."
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Antara Muka"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Pelbagai"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Grid"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, fuzzy, kde-format
+#| msgid "Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Dokumen"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Seting Dokumen"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr ""
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr ""
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr ""
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr ""
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr ""
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr ""
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr ""
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr ""
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr ""
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr ""
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr ""
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "MIMOS"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "opensource@mimos.my"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#, fuzzy
+#| msgid "Insert Sinus"
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Selitkan Sinus"
+
+#: ui/KarbonView.cpp:346
+#, fuzzy, kde-format
+#| msgid "Choose Pattern to Add"
+msgid "Choose Graphic to Add"
+msgstr "Pilih Corak ke Tambah"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr ""
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, fuzzy, kde-format
+#| msgid "&Import Graphic..."
+msgid "Import graphic"
+msgstr "&Import Grafik..."
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr ""
+
+#: ui/KarbonView.cpp:612
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "&Mendatar:"
+
+#: ui/KarbonView.cpp:614
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "&Mendatar:"
+
+#: ui/KarbonView.cpp:616
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "&Mendatar:"
+
+#: ui/KarbonView.cpp:671
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Laluan Mendatar"
+
+#: ui/KarbonView.cpp:852
+#, fuzzy, kde-format
+#| msgid "View &Mode"
+msgid "Outline &Mode"
+msgstr "Paparkan &Mod"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Import Grafik..."
+
+#: ui/KarbonView.cpp:864
+#, fuzzy, kde-format
+#| msgid "Hide Grid"
+msgid "Edit Guides"
+msgstr "Sembunyikan Grid"
+
+#: ui/KarbonView.cpp:870
+#, fuzzy, kde-format
+#| msgid "&Duplicate"
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Salinan Pendua"
+
+#: ui/KarbonView.cpp:875
+#, fuzzy, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Jajarkan Ke tengah (Mendatar)"
+
+#: ui/KarbonView.cpp:879
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Jajarkan Ke tengah (Mendatar)"
+
+#: ui/KarbonView.cpp:883
+#, fuzzy, kde-format
+msgid "Distribute Left Borders"
+msgstr "Hapuskan Objek"
+
+#: ui/KarbonView.cpp:887
+#, fuzzy, kde-format
+msgid "Distribute Right Borders"
+msgstr "Hapuskan Objek"
+
+#: ui/KarbonView.cpp:891
+#, fuzzy, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Jajarkan keTengah (Menegak)"
+
+#: ui/KarbonView.cpp:895
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Jajarkan Ke tengah (Mendatar)"
+
+#: ui/KarbonView.cpp:899
+#, fuzzy, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Hapuskan Objek"
+
+#: ui/KarbonView.cpp:903
+#, fuzzy, kde-format
+msgid "Distribute Top Borders"
+msgstr "Hapuskan Objek"
+
+#: ui/KarbonView.cpp:907
+#, fuzzy, kde-format
+msgid "Show Color Palette"
+msgstr "Paparkan atau sembunyikan pembaris."
+
+#: ui/KarbonView.cpp:909
+#, fuzzy, kde-format
+msgid "Show or hide color palette"
+msgstr "Paparkan atau sembunyikan pembaris."
+
+#: ui/KarbonView.cpp:913
+#, fuzzy, kde-format
+#| msgid "&Object"
+msgid "&Clip Object"
+msgstr "&Objek"
+
+#: ui/KarbonView.cpp:917
+#, fuzzy, kde-format
+#| msgid "&Ungroup Objects"
+msgid "&Unclip Objects"
+msgstr "&Leraikan Objek"
+
+#: ui/KarbonView.cpp:921
+#, fuzzy, kde-format
+#| msgid "H&orizontal:"
+msgid "Mirror Vertically"
+msgstr "&Mendatar:"
+
+#: ui/KarbonView.cpp:925
+#, fuzzy, kde-format
+#| msgid "H&orizontal:"
+msgid "Mirror Horizontally"
+msgstr "&Mendatar:"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "&Tutup Laluan"
+
+#: ui/KarbonView.cpp:938
+#, fuzzy, kde-format
+msgid "Com&bine Path"
+msgstr "Tutup Laluan"
+
+#: ui/KarbonView.cpp:944
+#, fuzzy, kde-format
+msgid "Se&parate Path"
+msgstr "Laluan Mendatar"
+
+#: ui/KarbonView.cpp:950
+#, fuzzy, kde-format
+#| msgid "&Close Path"
+msgid "Re&verse Path"
+msgstr "&Tutup Laluan"
+
+#: ui/KarbonView.cpp:956
+#, fuzzy, kde-format
+#| msgid "Edit Base Path"
+msgid "Intersect Paths"
+msgstr "Edit Laluan Asas"
+
+#: ui/KarbonView.cpp:962
+#, fuzzy, kde-format
+msgid "Subtract Paths"
+msgstr "Laluan Mendatar"
+
+#: ui/KarbonView.cpp:968
+#, fuzzy, kde-format
+#| msgid "Edit Base Path"
+msgid "Unite Paths"
+msgstr "Edit Laluan Asas"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr ""
+
+#: ui/KarbonView.cpp:980
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Snap Path to Grid"
+msgstr "Petik ke Grid"
+
+#: ui/KarbonView.cpp:988
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Zoom to Selection"
+msgstr "Pemilihan "
+
+#: ui/KarbonView.cpp:992
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Zoom to Drawing"
+msgstr "Pemilihan "
+
+#: ui/KarbonZoomController.cpp:51
+#, fuzzy, kde-format
+msgid "Zoom"
+msgstr "Alat  Zum"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show status bar:"
+msgstr "Papar bar status"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Bilangan fail terbaru:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr ""
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, fuzzy, kde-format
+msgid "Select palette"
+msgstr "Pilih Alat Nod "
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Tiada"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Tiada"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, fuzzy, kde-format
+#| msgid "Stroke"
+msgid "Stroke:"
+msgstr "Coret"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, fuzzy, kde-format
+#| msgid "Fill"
+msgid "Fill:"
+msgstr "Isi"
+
+#~ msgid "D&elete"
+#~ msgstr "&Hapus"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer view"
+#~ msgstr "Lapisan"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Lapisan baru"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~| msgid "Edges:"
+#~ msgid "View mode"
+#~ msgstr "Tepi:"
+
+#~ msgid "New Layer"
+#~ msgstr "Lapisan Baru"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Masukkan nama lapisan baru:"
+
+#~ msgid "New layer"
+#~ msgstr "Lapisan baru"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Namakan Semula Lapisan"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Hapuskan Lapisan"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer"
+#~ msgstr "Lapisan"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "kumpulan"
+
+#, fuzzy
+#~| msgid "Spoke"
+#~ msgid "Shape"
+#~ msgstr "Jejari"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Kelegapan"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "yes"
+#~ msgstr "Gaya:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Kumpulkan Objek"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg office:isi ditemui."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg office:lukisan ditemui."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg lukis:halaman ditemui."
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgid "Master Page"
+#~ msgstr "Selitkan Imej"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Papar Pembaris"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Paparkan atau sembunyikan pembaris."
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Petik ke Grid"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "Petik ke grid."
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Konfigur Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "&Bentangan Halaman..."
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "&Tertib"
+
+#, fuzzy
+#~| msgid "&Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Jajar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "Isi"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Objek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "laluan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "Kesan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Seting pensil"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Objek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "&Jajar"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Kesan"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "Laluan &Mendatar..."
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Laluan Mendatar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Ciri Coret"
+
+#, fuzzy
+#~| msgid "Flatness:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Kedataran:"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "Laluan &Mendatar..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Tutup Laluan"
+
+#, fuzzy
+#~| msgid "&Round Corners..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "&Bucu Bundar..."
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Jejari:"
+
+#, fuzzy
+#~| msgid "&Whirl/Pinch..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Pusar/Sepit..."
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Sepit Pusar"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Sudut:"
+
+#, fuzzy
+#~| msgid "Pinch:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Sepit:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Konfigur Karbon..."
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Antara Muka"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Pelbagai"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Grid"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dokumen"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Seting Dokumen"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Lapisan"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Lapisan baru"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Lapisan Baru"
+
+#, fuzzy
+#~| msgid "Enter the name of the new layer:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Masukkan nama lapisan baru:"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Lapisan baru"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Lapisan"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "kumpulan"
+
+#, fuzzy
+#~| msgid "Spoke"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Jejari"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Kelegapan"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "Gaya:"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "MIMOS"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "opensource@mimos.my"
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg office:isi ditemui."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg office:lukisan ditemui."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Dokumen OASIS tak sah. Tiada teg lukis:halaman ditemui."
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Selitkan Imej"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Pilih Corak ke Tambah"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "&Import Grafik..."
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "Paparkan &Mod"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Import Grafik..."
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "&Hapus"
+
+#, fuzzy
+#~| msgid "Hide Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Sembunyikan Grid"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Salinan Pendua"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Jajarkan Ke tengah (Mendatar)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Jajarkan Ke tengah (Mendatar)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Jajarkan keTengah (Menegak)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Jajarkan Ke tengah (Mendatar)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Papar Pembaris"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Paparkan atau sembunyikan pembaris."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Paparkan atau sembunyikan pembaris."
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Petik ke Grid"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Petik ke grid."
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "&Objek"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "&Leraikan Objek"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "&Tutup Laluan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Tutup Laluan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Laluan Mendatar"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "&Tutup Laluan"
+
+#, fuzzy
+#~| msgid "Edit Base Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Edit Laluan Asas"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Laluan Mendatar"
+
+#, fuzzy
+#~| msgid "Edit Base Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Edit Laluan Asas"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Petik ke Grid"
+
+#, fuzzy
+#~| msgid "Configure Karbon..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Konfigur Karbon..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "&Bentangan Halaman..."
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Pemilihan "
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Pemilihan "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Alat  Zum"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Papar bar status"
+
+#, fuzzy
+#~| msgid "Number of recent files:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Bilangan fail terbaru:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Pilih Alat Nod "
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Tiada"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Tiada"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Coret"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Isi"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgid "Expand all"
+#~ msgstr "Sudut akhir:"
+
+#, fuzzy
+#~| msgid "Pencil Tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Alat Pensil"
+
+#~ msgid "File to open"
+#~ msgstr "Fail hendak dibuka"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgid "Blend"
+#~ msgstr "Tebal"
+
+#~ msgid "Normal"
+#~ msgstr "Biasa"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Lighten"
+#~ msgstr "Tinggi:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius"
+#~ msgstr "Jejari:"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgid "Saturate colors"
+#~ msgstr "Coret: Warna"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgid "Rotate hue"
+#~ msgstr "Putar"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgid "Angle"
+#~ msgstr "Sudut:"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgid "Function"
+#~ msgstr "Keratan "
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "Isi"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Linear"
+#~ msgstr "Linear"
+
+#, fuzzy
+#~| msgid "Spoke"
+#~ msgid "Slope"
+#~ msgstr "Jejari"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgid "Intercept"
+#~ msgstr "Antara Muka"
+
+#, fuzzy
+#~ msgid "Offset"
+#~ msgstr "Salin ofset:"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgid "Composite"
+#~ msgstr "Komponen "
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgid "Operation"
+#~ msgstr "Operasi Boolean"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgid "Duplicate"
+#~ msgstr "&Salinan Pendua"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgid "Target point:"
+#~ msgstr "Sasaran:"
+
+#, fuzzy
+#~| msgid "Cap:"
+#~ msgid "Bias:"
+#~ msgstr "Tukup:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Edit kernel"
+#~ msgstr "Corak"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Flood color"
+#~ msgstr "Warna Coret"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "imej"
+
+#, fuzzy
+#~ msgid "Select image"
+#~ msgstr "Pilih Alat Nod "
+
+#, fuzzy
+#~ msgid "Dilate"
+#~ msgstr "&Hapus"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgid "Operator:"
+#~ msgstr "Operasi Boolean"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius x:"
+#~ msgstr "Jejari:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius y:"
+#~ msgstr "Jejari:"
+
+#~ msgid "Target:"
+#~ msgstr "Sasaran:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Linear"
+
+#~ msgid "Fill"
+#~ msgstr "Isi"
+
+#~ msgid "Type:"
+#~ msgstr "Jenis:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Linear"
+
+#, fuzzy
+#~| msgid "Radial"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Jejarian"
+
+#, fuzzy
+#~| msgid "Conical"
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Kon"
+
+#~ msgid "Repeat:"
+#~ msgstr "Ulang:"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Tiada"
+
+#~ msgid "Reflect"
+#~ msgstr "Pantul"
+
+#~ msgid "Repeat"
+#~ msgstr "Ulang"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Kelegapan keseluruhan:"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color."
+#~ msgstr "Warna Coret"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Tambah ke Kecerunan Pratentu"
+
+#, fuzzy
+#~ msgid "Tiled"
+#~ msgstr "Isi"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgid "Top Right"
+#~ msgstr "Jajarkan Kanan"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Right"
+#~ msgstr "Tinggi:"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Bottom"
+#~ msgstr "Jajarkan Bawah"
+
+#~ msgid "Stroke"
+#~ msgstr "Coret"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Sembunyikan Pembaris"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color:"
+#~ msgstr "Warna Coret"
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Kotak Alat"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Salin ofset:"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Papar Grid"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Paparkan atau sembunyikan grid."
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Tiada"
+
+#, fuzzy
+#~| msgid "Solid"
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Padu"
+
+#~ msgid "Gradient"
+#~ msgstr "Kecerunan"
+
+#~ msgid "Pattern"
+#~ msgstr "Corak"
+
+#~ msgid "Units:"
+#~ msgstr "Unit:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Jejari dalam:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Leraikan Objek"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Kumpulkan Objek"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Papar &grid"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Petik ke grid."
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "&Warna grid:"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Mendatar:"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Menegak:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Auto simpan (minimum):"
+
+#~ msgid "No auto save"
+#~ msgstr "Tiada auto simpan"
+
+#~ msgid "min"
+#~ msgstr "minimum"
+
+#~ msgid "Create backup file"
+#~ msgstr "Buat fail sandaran"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Pilih Corak"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Pilih Corak ke Tambah"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Rujukan"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Corak"
+
+#~ msgid "W:"
+#~ msgstr "W:"
+
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Edit Kecerunan"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Kecerunan Pratentu"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient tool"
+#~ msgstr "Alat Kecerunan"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Alat Kecerunan"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern tool"
+#~ msgstr "Alat Corak"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Alat Corak"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Posisi:"
+
+#, fuzzy
+#~| msgid "Raw"
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Mentah"
+
+#~ msgid "Curve"
+#~ msgstr "Lengkung"
+
+#~ msgid "Straight"
+#~ msgstr "Lurus"
+
+#~ msgid "Optimize"
+#~ msgstr "Mengoptimumkan"
+
+#, fuzzy
+#~ msgid "Exactness:"
+#~ msgstr "Ketepatan"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Gabung Sudut"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Hapuskan Objek"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Lebar Coret"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Sudut mula:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Orientasi:"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "Lengkung"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Kecerunan"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Alat Elips"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Bawa ke &Depan "
+
+#~ msgid "&Raise"
+#~ msgstr "&Naik"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Turun"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Hantar ke &Belakang"
+
+#~ msgid "Show Grid"
+#~ msgstr "Papar Grid"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Sembunyikan Grid"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Paparkan atau sembunyikan grid."
+
+#~ msgid "Align Left"
+#~ msgstr "Jajarkan Kiri"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Jajarkan Ke tengah (Mendatar)"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Align Right"
+#~ msgstr "Jajarkan Kiri"
+
+#~ msgid "Align Top"
+#~ msgstr "Jajarkan Atas"
+
+#, fuzzy
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Jajarkan keTengah (Menegak)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Jajarkan Bawah"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Kelegapan:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Papar bar status"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Pilih Corak"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Pratentu"
+
+#~ msgid "Transform"
+#~ msgstr "Ubah"
+
+#, fuzzy
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Tiada pemilihan"
+
+#, fuzzy
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Tiada pemilihan"
+
+#, fuzzy
+#~ msgid "Set width of actual selection"
+#~ msgstr "Tiada pemilihan"
+
+#, fuzzy
+#~ msgid "Set height of actual selection"
+#~ msgstr "Tiada pemilihan"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#, fuzzy
+#~ msgid "Rotate actual selection"
+#~ msgstr "Tiada pemilihan"
+
+#, fuzzy
+#~ msgid "SX:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Tiada pemilihan"
+
+#, fuzzy
+#~ msgid "SY:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Tiada pemilihan"
+
+#~ msgid "Shear"
+#~ msgstr "Ricih"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Laluan Mendatar"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Laluan Mendatar"
+
+#, fuzzy
+#~| msgid "Convert to Shapes"
+#~ msgid "Convert to Path"
+#~ msgstr "Tukar ke Bentuk"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Alat Teks"
+
+#~ msgid "Save as path"
+#~ msgstr "Simpan sebagai laluan"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Warna Sekata"
+
+#~ msgid "Old:"
+#~ msgstr "Lama:"
+
+#~ msgid "New:"
+#~ msgstr "Baru:"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Jenis"
+
+#~ msgid "Cap"
+#~ msgstr "Tukup"
+
+#~ msgid "Join"
+#~ msgstr "Bersambung"
+
+#~ msgid "Layers:"
+#~ msgstr "Lapisan:"
+
+#~ msgid "Format:"
+#~ msgstr "Format:"
+
+#~ msgid "Patterns"
+#~ msgstr "Corak"
+
+#~ msgid "Clipart"
+#~ msgstr "Lukisan klip"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Import"
+
+#~ msgid "Stroke: None"
+#~ msgstr " Coret: Tiada"
+
+#~ msgid "Fill: None"
+#~ msgstr "Isi: Tiada"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Isi: RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Isi: CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Isi: HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Isi: Skala Kelabu"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Isi: Warna"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Isi: Kecerunan"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Isi: Corak"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Coret: RGB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Coret: CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Coret: HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Coret: Skala Kelabu"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Coret: Kecerunan"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Coret: Corak"
+
+#~ msgid "Polygonize"
+#~ msgstr "Poligon"
+
+#~ msgid "Round corners:"
+#~ msgstr "Bucu bundar:"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "Kesan &Bayang..."
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Cipta Kesan Bayang"
+
+#~ msgid "Distance:"
+#~ msgstr "Jarak:"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Cipta Bayang"
+
+#~ msgid "Object Properties"
+#~ msgstr "Ciri Objek"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Hapus"
+
+#~ msgid "&Import"
+#~ msgstr "&Import"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Alat Imej"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Batal:"
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "&Buat semula:"
+
+#~ msgid "&Undo: "
+#~ msgstr "&Batal:"
+
+#~ msgid "&Redo: "
+#~ msgstr "&Buat semula:"
+
+#~ msgid "Fill Objects"
+#~ msgstr "Objek Isian"
+
+#~ msgid "Fill Object"
+#~ msgstr "Objek Isian"
+
+#~ msgid "Insert Text"
+#~ msgstr "Selitkan Teks"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Ubah Objek"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Buat Salinan Pendua Objek"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Buat Salinan Pendua Objek"
+
+#~ msgid "Transform Object"
+#~ msgstr "Ubah Objek"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Terjemahkan Objek"
+
+#~ msgid "Translate Object"
+#~ msgstr "Terjemahkan Objek"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Skalakan Objek"
+
+#~ msgid "Scale Object"
+#~ msgstr "Skalakan Objek"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Ricih Objek "
+
+#~ msgid "Shear Object"
+#~ msgstr "Ricih Objek"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Putar Objek"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Putar Objek"
+
+#~ msgid "Translate Bezier"
+#~ msgstr "Terjemahkan Bezier"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "Terjemahkan Objek"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "Terjemah"
+
+#~ msgid "Ellipse"
+#~ msgstr "Elips"
+
+#~ msgid "Polygon"
+#~ msgstr "Poligon"
+
+#~ msgid "Polyline"
+#~ msgstr "Poligaris"
+
+#~ msgid "Sinus"
+#~ msgstr "Sinus"
+
+#~ msgid "Spiral"
+#~ msgstr "Pilin"
+
+#~ msgid "Star"
+#~ msgstr "Bintang"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Alat bentuk</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr "<i>Klik dan seret</i> untuk membuat bentuk yang dikehendaki.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Klik</i> untuk membuat bentuk dengan menggunakan nilai ciri alat.</qt>"
+
+#~ msgid "Periods:"
+#~ msgstr "Tempoh:"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Alat Sinus"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Selitkan Pilin"
+
+#~ msgid "Round"
+#~ msgstr "Bundar"
+
+#~ msgid "Rectangular"
+#~ msgstr "Segiempat tepat"
+
+#~ msgid "Segments:"
+#~ msgstr "Segmen:"
+
+#~ msgid "Fade:"
+#~ msgstr "Pudar:"
+
+#~ msgid "Clockwise"
+#~ msgstr "Ikut Arah Jam"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Lawan Arah Jam"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Alat Pilin"
+
+#~ msgid "Insert Star"
+#~ msgstr "Selitkan Bintang"
+
+#~ msgid "Star Outline"
+#~ msgstr "Garis Luar Bintang"
+
+#~ msgid "Wheel"
+#~ msgstr "Roda"
+
+#~ msgid "Framed Star"
+#~ msgstr "Bintang Berbingkai"
+
+#~ msgid "Gear"
+#~ msgstr "Gear"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Jejari luar:"
+
+#~ msgid "Inner angle:"
+#~ msgstr "Sudut dalam:"
+
+#~ msgid "Roundness:"
+#~ msgstr "Kebundaran:"
+
+#~ msgid "Star Tool"
+#~ msgstr "Alat Bintang"
+
+#~ msgid "Shadow"
+#~ msgstr "Bayang"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Lukis bayang lutcahaya"
+
+#~ msgid "Text"
+#~ msgstr "Teks"
+
+#~ msgid "Alignment:"
+#~ msgstr "Penjajaran:"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Posisi:"
+
+#~ msgid "Edit Base Path"
+#~ msgstr "Edit Laluan Asas"
+
+#, fuzzy
+#~ msgid "New text"
+#~ msgstr "teks"
+
+#, fuzzy
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Alat bentuk</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr "<i>Klik dan seret</i> untuk membuat bentuk yang dikehendaki.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr "<i>Klik dan seret</i> untuk zum ke kawasan segiempat tepat.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr "<i>Klik</i> pada corak yang anda mahu dalam pemilih.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr ""
+#~ "<i>Klik kanan<</i> pada titik warna untuk mengalihkannya keluar.</qt>"
+
+#~ msgid "Change Text"
+#~ msgstr "Ubah Teks"
+
+#~ msgid "Text Conversion"
+#~ msgstr "Penukaran Teks"
+
+#~ msgid "path"
+#~ msgstr "laluan"
+
+#~ msgid "text"
+#~ msgstr "teks"
+
+#~ msgid "image"
+#~ msgstr "imej"
+
+#, fuzzy
+#~ msgid "Paste Object"
+#~ msgstr "Putar Objek"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "Putar Objek"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "Lengkung Mendatar"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Ciri Coret"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "Bundar"
+
+#~ msgid "Join:"
+#~ msgstr "Sambung:"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "Bucu Bundar"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "Tetapkan Lebar Garis"
+
+#~ msgid "P&urge"
+#~ msgstr "&Singkir"
+
+#~ msgid "&History"
+#~ msgstr "&Sejarah"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "&Selitkan Knot..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Selitkan Knot"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Selitkan Lukisan Klip"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "Objek Coret"
+
+#~ msgid "Stroke Object"
+#~ msgstr "Objek Coret"
+
+#~ msgid "Stroke Width"
+#~ msgstr "Lebar Coret"
+
+#, fuzzy
+#~ msgid "Dash Pattern"
+#~ msgstr "Corak"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Alat zum:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr "<i>Klik dan seret</i> untuk zum ke kawasan segiempat tepat.<br>"
+
+#, fuzzy
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr ""
+#~ "<i>Klik kanan<</i> pada titik warna untuk mengalihkannya keluar.</qt>"
+
+#, fuzzy
+#~ msgid "<i>Pressing +/- keys</i><br>to zoom into/out of canvas."
+#~ msgstr ""
+#~ "<i>Zum dengan menggunakan kekunci anak panah</i><br>Zum ke dalam/ke luar "
+#~ "kanvas dengan menggunakan anak panah ke atas/ke bawah."
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Alat  Zum"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Batal/buat semula had:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Alat poligaris:</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Klik</i>untuk menambah satu nod dan <i>seret</i> untuk menetapkan "
+#~ "vektor beziernya.<br> "
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Tekan <i>Ctrl</i> sambil menyeret untuk mengedit vektor bezier "
+#~ "terdahulu.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Tekan <i>Shift</i> sambil menyeret untuk mengubah lengkung pada garis "
+#~ "lurus.<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr "- Tekan <i>Backspace</i> untuk membatalkan lengkung terakhir.<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr "- Tekan <i>Esc</i> untuk membatalkan semua poligaris.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Tekan <i>Enter</i> atau <i>klik dua kali</i> untuk menamatkan poligaris."
+#~ "</qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Alat Poligaris"
+
+#~ msgid "Translate"
+#~ msgstr "Terjemah"
+
+#~ msgid "Relative &position"
+#~ msgstr "&Posisi relatif"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Tindakan ini tidak boleh dibatalkan selepas ini. Anda benar-benar ingin "
+#~ "teruskannya?"
+
+#~ msgid "Purge History"
+#~ msgstr "Sejarah Penyingkiran"
+
+#, fuzzy
+#~ msgid "Zoom Width"
+#~ msgstr "Lebar"
+
+#~ msgid "Whole Page"
+#~ msgstr "Seluruh Halaman"
+
+#~ msgid "Wireframe"
+#~ msgstr "Kerangka dawai"
+
+#, fuzzy
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#, fuzzy
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#, fuzzy
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#, fuzzy
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#, fuzzy
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#, fuzzy
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#, fuzzy
+#~ msgid "800%"
+#~ msgstr "800%"
+
+#, fuzzy
+#~ msgid "Line Style"
+#~ msgstr "&Gaya"
+
+#~ msgid "History"
+#~ msgstr "Sejarah"
+
+#~ msgid "Align Objects"
+#~ msgstr "Jajarkan Objek"
+
+#~ msgid "Clean Up"
+#~ msgstr "Bersihkan"
+
+#~ msgid "Delete Object"
+#~ msgstr "Hapuskan Objek"
+
+#~ msgid "Delete Node"
+#~ msgstr "Hapuskan Nod"
+
+#~ msgid "Order Selection"
+#~ msgstr "Pemilihan Tertib"
+
+#~ msgid "Snap to g&rid"
+#~ msgstr "Petik ke &grid"
+
+#~ msgid "Snap Distance"
+#~ msgstr "Jarak Petik"
+
+#~ msgid "V&ertical:"
+#~ msgstr "&Menegak"
+
+#~ msgid "New"
+#~ msgstr "Baru"
+
+#~ msgid "Raise"
+#~ msgstr "Naik"
+
+#~ msgid "Lower"
+#~ msgstr "Turun"
+
+#~ msgid "Item"
+#~ msgstr "Butiran"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Objek Semasa"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Ubah nama objek:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Ubah nama lapisan semasa:"
+
+#~ msgid "Add Layer"
+#~ msgstr "Tambahkan Lapisan"
+
+#~ msgid "Commands"
+#~ msgstr "Perintah"
+
+#~ msgid "Group commands"
+#~ msgstr "Kumpulkan perintah"
+
+#~ msgid "Rectangle"
+#~ msgstr "Segiempat tepat"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Selitkan Elips"
+
+#~ msgid "Full"
+#~ msgstr "Penuh"
+
+#~ msgid "Pie"
+#~ msgstr "Pai"
+
+#~ msgid "Arc"
+#~ msgstr "Lengkok"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Alat kecerunan:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr "<i>Klik dan seret</i) untuk memilih vektor kecerunan.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr "<i>Klik dan seret</i) untuk memilih vektor kecerunan.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr "<i>Klik dan seret</i) untuk memilih vektor kecerunan.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Pengeditan kecerunan:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Klik dan seret</i> untuk menggerakkan titik.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Klik dua kali</i> pada titik warna untuk mengeditnya.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr ""
+#~ "<i>Klik kanan<</i> pada titik warna untuk mengalihkannya keluar.</qt>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Alat corak:</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Klik</i> pada corak yang anda mahu dalam pemilih.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "<i>Klik dan seret</i> untuk memilih vektor corak.</qt>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Sila pilih satu corak."
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Alat pensil:</b><br>"
+
+#~ msgid "- <i>Click</i> to begin drawing, release when you have finished."
+#~ msgstr "-<i>Klik</i> untuk mula melukis, lepaskan jika sudah selesai."
+
+#~ msgid "Pencil"
+#~ msgstr "Pensil"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Selitkan Poligon"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Alat Poligon"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Selitkan Segiempat Tepat"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Alat Segiempat Tepat"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Alat Putar"
+
+#~ msgid "Insert Round Rect"
+#~ msgstr "Selitkan Segiempat Tepat Bundar"
+
+#, fuzzy
+#~ msgid "Height (%1):"
+#~ msgstr "Tinggi:"
+
+#~ msgid "Edge radius X:"
+#~ msgstr "Jejari X tepi:"
+
+#~ msgid "Edge radius Y:"
+#~ msgstr "Jejari Y tepi:"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Alat Segi Empat Tepat Bundar"
+
+#, fuzzy
+#~ msgid "Round Rectangle"
+#~ msgstr "Alat Segi Empat Tepat Bundar"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "Mengedit Nod"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Pilih Alat Nod "
+
+#~ msgid "Selection Mode"
+#~ msgstr "Mod Pemilihan"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Pilih dalam lapisan semasa"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Pilih dalam lapisan nampak"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Pilih dalam lapisan yang dipilih"
+
+#~ msgid "Select"
+#~ msgstr "Pilih "
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Alat pemilihan:</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Pilih dalam lapisan semasa:</i><br>Pemilihan dibuat dalam lapisan yang "
+#~ "dipilih dalam doker.<br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i>Pilih dalam lapisan nampak:</i><br>Pemilihan dibuat dalam lapisan "
+#~ "nampak (mata dalam doker lapisan).<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Pilih dalam lapisan yang dipilih:</i><br> Pemilihan dibuat dalam "
+#~ "lapisan yang disemak dalam doker lapisan.<br><br>"
+
+#~ msgid ""
+#~ "<i>Position using arrow keys</i><br>The selection can be positioned up, "
+#~ "down, left and right using the corresponding arrow keys."
+#~ msgstr ""
+#~ "<i>Pilih posisi dengan menggunakan kekunci anak panah</i><br>Pemilihan "
+#~ "boleh diposisikan ke atas, ke bawah, ke kiri dan ke kanan dengan "
+#~ "menggunakan kekunci anak panah yang berkenaan."
+
+#~ msgid "No selection"
+#~ msgstr "Tiada pemilihan"
+
+#~ msgid "Select Tool"
+#~ msgstr "Pilih Alat"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Alat Ricih"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Alat imej:</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Pilih Imej ke Tambah"
+
+#~ msgid "Knots:"
+#~ msgstr "Knot:"

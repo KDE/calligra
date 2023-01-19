@@ -1,0 +1,347 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Алексей</firstname
+><surname
+>Опарин</surname
+><affiliation
+><address
+><email
+>opaleksej@yandex.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Мария</firstname
+><surname
+>Шикунова</surname
+><affiliation
+><address
+><email
+>translation-team@basealt.ru</email
+></address
+></affiliation
+><contrib
+>Обновление перевода на русский</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Настройка &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>Диалог «Настройка — Stage»</title>
+
+<sect2 id="configure-misc">
+<title
+>Разное</title>
+
+<screenshot>
+<screeninfo
+>Дополнительно</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Дополнительно</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Единицы</guilabel
+></term>
+<listitem
+><para
+>Выберите единицу измерения по умолчанию, которая будет использоваться на слайдах.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Радиус точки управления</guilabel
+></term>
+<listitem
+><para
+>При выборе фигуры с помощью инструмента по умолчанию (стрелка) отобразятся жёлтый и красный прямоугольники. Они называются «манипуляторами» (используются для изменения размера или поворота). Радиус манипулятора изменяет его размер. Чем он больше, чем проще на него нажать.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Чувствительность захвата</guilabel
+></term>
+<listitem
+><para
+>Этот параметр определяет, как именно нужно нажать на манипулятор, чтобы выбрать его.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Отступ вставки</guilabel
+></term>
+<listitem
+><para
+>Доступно только если отключена функция <guilabel
+>Вставить под курсором</guilabel
+>. При копировании объекта с помощью комбинации клавиш <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> и вставке его с помощью <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> в то же место, где уже есть объект, это смещение используется для вставки новой фигуры снизу или справа.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Вставить под курсором</guilabel
+></term>
+<listitem
+><para
+>Отключает вставку со смещением и вставляет фигуру в положение указателя мыши.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Сетка</title>
+
+<screenshot>
+<screeninfo
+>Сетка</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Сетка</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Сетка</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Показывать сетку</guilabel
+></term>
+<listitem
+><para
+>Если эта функция включена, &stage; будет отображать сетку, состоящую из маленьких точек, отображающую пересечение воображаемых горизонтальных и вертикальных линий. С помощью этих точек возможно точно расположить элементы на слайде.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Прилипание к сетке</guilabel
+></term>
+<listitem
+><para
+>Если эта функция включена, при перетаскивании или перемещении объектов на слайде верхний левый угол объекта будет <quote
+>привязываться</quote
+> или перемещаться к ближайшей точке сетки.</para>
+<para
+>Это уменьшает свободу размещения элементов на слайде, но вместе с тем помогает точно их выстраивать. Эта функция легко отключается или включается, позволяя получить лучший результат.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Цвет сетки:</guilabel
+></term>
+<listitem
+><para
+>Здесь можно настроить цвет сетки, по умолчанию он чёрный.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Интервал</guilabel
+></title>
+<para
+>Возможно связать два параметра, описанных ниже, с помощью значка <inlinemediaobject
+><imageobject
+><imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> или разделить оба параметра с помощью значка <inlinemediaobject
+><imageobject
+><imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+>.</para>
+<varlistentry>
+<term
+><guilabel
+>По горизонтали:</guilabel
+></term>
+<listitem
+><para
+>Установка расстояния в миллиметрах между двумя соседними точками сетки по горизонтали. По умолчанию 5 мм.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>По вертикали:</guilabel
+></term>
+<listitem
+><para
+>Установка расстояния между двумя соседними точками сетки по вертикали. По умолчанию 5 мм.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Документ</title>
+
+<screenshot>
+<screeninfo
+>Документ</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Документ</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Настройка документа</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Интервал автосохранения:</guilabel
+></term>
+<listitem
+><para
+>Здесь возможно установить частоту сохранения временного файла. Если установить параметр <guilabel
+>Без автосохранения</guilabel
+>, &stage; не будет этого делать совсем.  Период между автоматическими сохранениями возможно установить от 1 минуты до 60 минут.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Создавать резервную копию:</guilabel
+></term>
+<listitem
+><para
+>Если этот параметр включён, то в каталоге, где хранится редактируемый файл, будет создан файл <filename
+>.&lt;name&gt;.odp.autosave.odp</filename
+>. Это делается на случай возникновения проблем. Файл обновляется каждый раз при автоматическом сохранении документа и сохранении его вручную.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Автор</title>
+
+<screenshot>
+<screeninfo
+>Автор</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Документ</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Выберите профиль автора для документа. </para>
+<para
+>Возможно добавить новый профиль или удалить текущий с помощью кнопок в правой части раскрывающегося списка профилей. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

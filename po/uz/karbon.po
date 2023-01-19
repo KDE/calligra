@@ -1,0 +1,2678 @@
+# translation of karbon.po to Uzbek
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2004, 2006, 2007.
+# Nurali Abdurahmonov <mavnur@gamil.com>, 2006.#.
+# Nurali Abdurahmonov <mavnur@paradox-neo.uz>, 2006.
+# Nurali Abdurahmonov <mavnur@gmail.com>, 2006.
+# translation of karbon.po to
+# #-#-#-#-#  org_po_only_translated.po (karbon)  #-#-#-#-#
+# Copyright (C) 2004, 2006, 2007 Free Software Foundation, Inc.
+# #-#-#-#-#  karbon.diff.po (karbon.diff)  #-#-#-#-#
+# #-#-#-#-#  org_po_only_translated.po (karbon)  #-#-#-#-#
+# Copyright (C) 2004, 2006 Free Software Foundation, Inc.
+# #-#-#-#-#  cur_po_only_translated.po (karbon)  #-#-#-#-#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-02-11 00:26+0100\n"
+"Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
+"Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  org_po_only_translated.po (karbon)  #-#-#-#-#\n"
+"X-Generator: KBabel 1.11.4\n"
+"#-#-#-#-#  karbon.diff.po (karbon.diff)  #-#-#-#-#\n"
+"#-#-#-#-#  org_po_only_translated.po (karbon)  #-#-#-#-#\n"
+"X-Generator: KBabel 1.11.4\n"
+"#-#-#-#-#  cur_po_only_translated.po (karbon)  #-#-#-#-#\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#, fuzzy
+#| msgid "Boolean Operation"
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Mantiqiy operatsiya"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "&Tartiblash"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "&Tekislash"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "Toʻldirish"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr ""
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr ""
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Obʼekt"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, fuzzy, kde-format
+msgid "&Distribute"
+msgstr "&Tarqatish"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, fuzzy, kde-format
+msgid "&Path"
+msgstr "yoʻl"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "&Effektlar"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Qalam moslamasi"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr ""
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Obʼekt"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, fuzzy, kde-format
+msgid "Align"
+msgstr "&Tekislash"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Effektlar"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, fuzzy, kde-format
+#| msgid "Edges:"
+msgid "View"
+msgstr "Qirralar:"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, fuzzy, kde-format
+msgid "&Flatten Path..."
+msgstr "Burchakni silliqlash"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, fuzzy, kde-format
+msgid "Flatten Path"
+msgstr "Burchakni silliqlash"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, fuzzy, kde-format
+msgid "Properties"
+msgstr "Chiziq xossalari"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, fuzzy, kde-format
+msgid "Flatness:"
+msgstr "Aniqlik:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Burchakni silliqlash"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Yoʻlni yopish"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, fuzzy, kde-format
+msgid "&Refine Path..."
+msgstr "Burchakni silliqlash"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, fuzzy, kde-format
+msgid "Refine Path"
+msgstr "Yoʻlni yopish"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr ""
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#, fuzzy
+#| msgid "Round Corners"
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Burchaklarni qirrasizlantirish"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&Burchaklarni qirrasizlantirish"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Burchaklarni qirrasizlantirish"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Radius:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Aylantirish va siqish"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, fuzzy, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Aylantirish/Siqish..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, fuzzy, kde-format
+msgid "Whirl Pinch"
+msgstr "Aylantirish va siqish"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Burchak:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, fuzzy, kde-format
+msgid "Pinch:"
+msgstr "Siqish:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#, fuzzy
+#| msgid "Raise Layer"
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Qatlamni koʻtarish"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#, fuzzy
+#| msgid "Lower Layer"
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Qatlamni tushirish"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "Karbon moslamasi..."
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Interfeys"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Xar hil"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Toʻr"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, fuzzy, kde-format
+#| msgid "Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Hujjat"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Hujjat moslamalari"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr ""
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr ""
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr ""
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr ""
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr ""
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr ""
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr ""
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr ""
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr ""
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr ""
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr ""
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Mashrab Quvatov"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kmashrab@uni-bremen.de"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#, fuzzy
+#| msgid "Insert Sinus"
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Sinus qoʻyish"
+
+#: ui/KarbonView.cpp:346
+#, fuzzy, kde-format
+#| msgid "Choose Pattern to Add"
+msgid "Choose Graphic to Add"
+msgstr "Qoʻshish uchun namunani tanlang"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr ""
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, fuzzy, kde-format
+#| msgid "&Import Graphic..."
+msgid "Import graphic"
+msgstr "&Grafikani import qilish"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr ""
+
+#: ui/KarbonView.cpp:612
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "E&niga:"
+
+#: ui/KarbonView.cpp:614
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "E&niga:"
+
+#: ui/KarbonView.cpp:616
+#, fuzzy
+#| msgid "H&orizontal:"
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "E&niga:"
+
+#: ui/KarbonView.cpp:671
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Burchakni silliqlash"
+
+#: ui/KarbonView.cpp:852
+#, fuzzy, kde-format
+#| msgid "View &Mode"
+msgid "Outline &Mode"
+msgstr "Koʻrish &usuli"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "&Grafikani import qilish"
+
+#: ui/KarbonView.cpp:864
+#, fuzzy, kde-format
+#| msgid "Hide Grid"
+msgid "Edit Guides"
+msgstr "Toʻrni bekitish"
+
+#: ui/KarbonView.cpp:870
+#, fuzzy, kde-format
+#| msgid "&Duplicate"
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Nusxasini yaratish"
+
+#: ui/KarbonView.cpp:875
+#, fuzzy, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Tarqatish markazi (Gorizontal)"
+
+#: ui/KarbonView.cpp:879
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Markazda (eniga)"
+
+#: ui/KarbonView.cpp:883
+#, fuzzy, kde-format
+msgid "Distribute Left Borders"
+msgstr "Tarqatish markazi (Gorizontal)"
+
+#: ui/KarbonView.cpp:887
+#, fuzzy, kde-format
+msgid "Distribute Right Borders"
+msgstr "Tarqatish markazi (Gorizontal)"
+
+#: ui/KarbonView.cpp:891
+#, fuzzy, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Tarqatish markazi (Gorizontal)"
+
+#: ui/KarbonView.cpp:895
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Markazda (eniga)"
+
+#: ui/KarbonView.cpp:899
+#, fuzzy, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "&Tarqatish"
+
+#: ui/KarbonView.cpp:903
+#, fuzzy, kde-format
+msgid "Distribute Top Borders"
+msgstr "&Tarqatish"
+
+#: ui/KarbonView.cpp:907
+#, fuzzy, kde-format
+msgid "Show Color Palette"
+msgstr "Lineykalarni koʻrsatish/bekitish."
+
+#: ui/KarbonView.cpp:909
+#, fuzzy, kde-format
+msgid "Show or hide color palette"
+msgstr "Lineykalarni koʻrsatish/bekitish."
+
+#: ui/KarbonView.cpp:913
+#, fuzzy, kde-format
+#| msgid "&Object"
+msgid "&Clip Object"
+msgstr "&Obʼekt"
+
+#: ui/KarbonView.cpp:917
+#, fuzzy, kde-format
+#| msgid "&Ungroup Objects"
+msgid "&Unclip Objects"
+msgstr "Obʼektlarni guruhlashni &bekor qilish"
+
+#: ui/KarbonView.cpp:921
+#, fuzzy, kde-format
+#| msgid "H&orizontal:"
+msgid "Mirror Vertically"
+msgstr "E&niga:"
+
+#: ui/KarbonView.cpp:925
+#, fuzzy, kde-format
+#| msgid "H&orizontal:"
+msgid "Mirror Horizontally"
+msgstr "E&niga:"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "Yoʻlni yo&pish"
+
+#: ui/KarbonView.cpp:938
+#, fuzzy, kde-format
+msgid "Com&bine Path"
+msgstr "Yoʻlni yopish"
+
+#: ui/KarbonView.cpp:944
+#, fuzzy, kde-format
+msgid "Se&parate Path"
+msgstr "Burchakni silliqlash"
+
+#: ui/KarbonView.cpp:950
+#, fuzzy, kde-format
+#| msgid "&Close Path"
+msgid "Re&verse Path"
+msgstr "Yoʻlni yo&pish"
+
+#: ui/KarbonView.cpp:956
+#, fuzzy, kde-format
+msgid "Intersect Paths"
+msgstr "Asosiy yoʻlni oʻzgartirish"
+
+#: ui/KarbonView.cpp:962
+#, fuzzy, kde-format
+msgid "Subtract Paths"
+msgstr "Burchakni silliqlash"
+
+#: ui/KarbonView.cpp:968
+#, fuzzy, kde-format
+msgid "Unite Paths"
+msgstr "Asosiy yoʻlni oʻzgartirish"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr ""
+
+#: ui/KarbonView.cpp:980
+#, fuzzy, kde-format
+msgid "Snap Path to Grid"
+msgstr "Toʻrga tutashtirish"
+
+#: ui/KarbonView.cpp:988
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Zoom to Selection"
+msgstr "Tanlash"
+
+#: ui/KarbonView.cpp:992
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Zoom to Drawing"
+msgstr "Tanlash"
+
+#: ui/KarbonZoomController.cpp:51
+#, fuzzy, kde-format
+msgid "Zoom"
+msgstr "Kattalashtirish vositasi"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show status bar:"
+msgstr "Holat panelini koʻrsatish"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Yaqinda ochilgan fayllarning soni:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Asbob oynasidagi shriftning oʻlchami:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, fuzzy, kde-format
+#| msgid "Select Nodes"
+msgid "Select palette"
+msgstr "Tugunlarni tanlash"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Yoʻq"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Yoʻq"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, fuzzy, kde-format
+#| msgid "Stroke"
+msgid "Stroke:"
+msgstr "Chizish"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, fuzzy, kde-format
+#| msgid "Fill"
+msgid "Fill:"
+msgstr "Toʻldirish"
+
+#~ msgid "D&elete"
+#~ msgstr "Oʻ&chirish"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer view"
+#~ msgstr "Qatlamlar"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Yangi qatlam"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "Obʼektlarni oʻchirish"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "Obʼektlarni oʻchirish"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "Obʼektlarni oʻchirish"
+
+#, fuzzy
+#~| msgid "Edges:"
+#~ msgid "View mode"
+#~ msgstr "Qirralar:"
+
+#~ msgid "New Layer"
+#~ msgstr "Yangi qatlam"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Yangi qatlam nomini kiriting:"
+
+#~ msgid "New layer"
+#~ msgstr "Yangi qatlam"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Qatlam nomini oʻzgartirish"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Qatlamni oʻchirish"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer"
+#~ msgstr "Qatlamlar"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "guruh"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgid "Shape"
+#~ msgstr "Egish"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Xiralik"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "yes"
+#~ msgstr "Uslubi:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Obʼektlarni guruhlash"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Buzuq OASIS hujjati. office:body tegi topilmadi."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Buzuq OASIS hujjati. office:drawing tegi topilmadi."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Buzuq OASIS hujjati. office:page tegi topilmadi."
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgid "Master Page"
+#~ msgstr "Rasmni qoʻyish"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Bet boʻsh joylarini koʻrsatish"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Lineykalarni koʻrsatish"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Lineykalarni koʻrsatish/bekitish."
+
+#, fuzzy
+#~ msgid "Snap to Grid"
+#~ msgstr "Toʻrga tutashtirish"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "Toʻrga birlashtiradi."
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon moslamasi..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Bet &moslamalari"
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "&Tartiblash"
+
+#, fuzzy
+#~| msgid "&Align"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&Tekislash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "Toʻldirish"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Obʼekt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "&Tarqatish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "yoʻl"
+
+#, fuzzy
+#~| msgid "Effe&cts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "&Effektlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Qalam moslamasi"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Obʼekt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "&Tekislash"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Effektlar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "Burchakni silliqlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Burchakni silliqlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Chiziq xossalari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Aniqlik:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "Burchakni silliqlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Yoʻlni yopish"
+
+#, fuzzy
+#~| msgid "&Round Corners..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "&Burchaklarni qirrasizlantirish"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Aylantirish/Siqish..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Aylantirish va siqish"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Burchak:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Siqish:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Karbon moslamasi..."
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Interfeys"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Xar hil"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Toʻr"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Hujjat"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Hujjat moslamalari"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Qatlamlar"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Yangi qatlam"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Obʼektlarni oʻchirish"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Obʼektlarni oʻchirish"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Obʼektlarni oʻchirish"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Yangi qatlam"
+
+#, fuzzy
+#~| msgid "Enter the name of the new layer:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Yangi qatlam nomini kiriting:"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Yangi qatlam"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Qatlamlar"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "guruh"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Egish"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Xiralik"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "Uslubi:"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Mashrab Quvatov"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kmashrab@uni-bremen.de"
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Buzuq OASIS hujjati. office:body tegi topilmadi."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Buzuq OASIS hujjati. office:drawing tegi topilmadi."
+
+#, fuzzy
+#~| msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Buzuq OASIS hujjati. office:page tegi topilmadi."
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Qoʻshish uchun namunani tanlang"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "&Grafikani import qilish"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "Koʻrish &usuli"
+
+#, fuzzy
+#~| msgid "Show Page Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Bet boʻsh joylarini koʻrsatish"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Grafikani import qilish"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "Oʻ&chirish"
+
+#, fuzzy
+#~| msgid "Hide Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Toʻrni bekitish"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Nusxasini yaratish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Tarqatish markazi (Gorizontal)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Markazda (eniga)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Tarqatish markazi (Gorizontal)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Tarqatish markazi (Gorizontal)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Tarqatish markazi (Gorizontal)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Markazda (eniga)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "&Tarqatish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "&Tarqatish"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Lineykalarni koʻrsatish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Lineykalarni koʻrsatish/bekitish."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Lineykalarni koʻrsatish/bekitish."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Toʻrga tutashtirish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Toʻrga birlashtiradi."
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "&Obʼekt"
+
+#, fuzzy
+#~| msgid "&Ungroup Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "Obʼektlarni guruhlashni &bekor qilish"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "Yoʻlni yo&pish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Yoʻlni yopish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "Burchakni silliqlash"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "Yoʻlni yo&pish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Asosiy yoʻlni oʻzgartirish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Burchakni silliqlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Asosiy yoʻlni oʻzgartirish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Toʻrga tutashtirish"
+
+#, fuzzy
+#~| msgid "Configure Karbon..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon moslamasi..."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "Bet &moslamalari"
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Tanlash"
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Tanlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Kattalashtirish vositasi"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Number of recent files:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Yaqinda ochilgan fayllarning soni:"
+
+#, fuzzy
+#~| msgid "Palette font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Asbob oynasidagi shriftning oʻlchami:"
+
+#, fuzzy
+#~| msgid "Select Nodes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Tugunlarni tanlash"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Yoʻq"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Yoʻq"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Chizish"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Toʻldirish"
+
+#, fuzzy
+#~| msgid "End angle:"
+#~ msgid "Expand all"
+#~ msgstr "Tugatish burchagi:"
+
+#, fuzzy
+#~| msgid "Pencil Tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Qalam vositasi"
+
+#~ msgid "File to open"
+#~ msgstr "Ochish uchun fayl"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgid "Blend"
+#~ msgstr "Qalin"
+
+#~ msgid "Normal"
+#~ msgstr "Oddiy"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Right"
+#~ msgid "Lighten"
+#~ msgstr "Oʻng"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgid "Saturate colors"
+#~ msgstr "Chizish: Rang"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgid "Rotate hue"
+#~ msgstr "Burish"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgid "Angle"
+#~ msgstr "Burchak:"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgid "Function"
+#~ msgstr "Boʻlim"
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "Toʻldirish"
+
+#, fuzzy
+#~ msgid "Discrete"
+#~ msgstr "&Tarqatish"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Linear"
+#~ msgstr "Chiziqli"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgid "Slope"
+#~ msgstr "Egish"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgid "Intercept"
+#~ msgstr "Interfeys"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgid "Offset"
+#~ msgstr "Effektlar"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgid "Composite"
+#~ msgstr "Komponentlar"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgid "Operation"
+#~ msgstr "Mantiqiy operatsiya"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgid "Duplicate"
+#~ msgstr "&Nusxasini yaratish"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgid "Target point:"
+#~ msgstr "Moʻljal:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Edit kernel"
+#~ msgstr "Namuna"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgid "Flood color"
+#~ msgstr "Chizish: Rang"
+
+#~ msgid "Image"
+#~ msgstr "Rasm"
+
+#, fuzzy
+#~| msgid "Select Nodes"
+#~ msgid "Select image"
+#~ msgstr "Tugunlarni tanlash"
+
+#, fuzzy
+#~ msgid "Dilate"
+#~ msgstr "Oʻ&chirish"
+
+#, fuzzy
+#~| msgid "Boolean Operation"
+#~ msgid "Operator:"
+#~ msgstr "Mantiqiy operatsiya"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius x:"
+#~ msgstr "Radius:"
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgid "Radius y:"
+#~ msgstr "Radius:"
+
+#~ msgid "Target:"
+#~ msgstr "Moʻljal:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Chiziqli"
+
+#~ msgid "Fill"
+#~ msgstr "Toʻldirish"
+
+#~ msgid "Type:"
+#~ msgstr "Turi:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Chiziqli"
+
+#, fuzzy
+#~| msgid "Radial"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Radial"
+
+#, fuzzy
+#~| msgid "Conical"
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Konussimon"
+
+#~ msgid "Repeat:"
+#~ msgstr "Qaytarish:"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Yoʻq"
+
+#~ msgid "Reflect"
+#~ msgstr "Aks etishi"
+
+#~ msgid "Repeat"
+#~ msgstr "Qaytarish"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Umumiy xiralik:"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgid "Stop color."
+#~ msgstr "Chizish: Rang"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "Oldindan &aniqlangan gradientlarga qoʻshish"
+
+#, fuzzy
+#~ msgid "Tiled"
+#~ msgstr "Toʻldirish"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Left"
+#~ msgid "Top Left"
+#~ msgstr "Chap"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Right"
+#~ msgid "Top Right"
+#~ msgstr "Oʻng"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Left"
+#~ msgid "Left"
+#~ msgstr "Chap"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Center"
+#~ msgid "Center"
+#~ msgstr "Markaz"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Right"
+#~ msgid "Right"
+#~ msgstr "Oʻng"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Bottom"
+#~ msgstr "Pastga"
+
+#~ msgid "Stroke"
+#~ msgstr "Chizish"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Bet boʻsh joylarini bekitish"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Lineykalarni bekitish"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgid "Stop color:"
+#~ msgstr "Chizish: Rang"
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Asboblar"
+
+#, fuzzy
+#~ msgid "Copy offset:"
+#~ msgstr "Ofset:"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Toʻrni koʻrsatish"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Toʻrni koʻrsatish/bekitish."
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Yoʻq"
+
+#, fuzzy
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Yaxlit"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradient"
+
+#~ msgid "Pattern"
+#~ msgstr "Namuna"
+
+#~ msgid "Units:"
+#~ msgstr "Oʻlchovlar:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "Ichki radius:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Obʼektlarni guruhlashni bekor qilish"
+
+#~ msgid "&Group Objects"
+#~ msgstr "Obʼektlarni &guruhlash"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Toʻrni &koʻrsatish"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Toʻrga birlashtiradi."
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "Toʻr&ning rangi:"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Eniga:"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Boʻyiga:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Avto-saqlash (min):"
+
+#~ msgid "No auto save"
+#~ msgstr "Avtomatik saqlanilmasin"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Zahira fayli yaratish"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Namuna tanlash"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Qoʻshish uchun namunani tanlang"
+
+#, fuzzy
+#~ msgid "Reference Point:"
+#~ msgstr "Bogʻlash"
+
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Namuna"
+
+#, fuzzy
+#~ msgid "W:"
+#~ msgstr "W:"
+
+#, fuzzy
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Gradientni tahrirlash"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "Oldindan aniqlangan gradientlar"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient tool"
+#~ msgstr "Gradient vositasi"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Gradient vositasi"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern tool"
+#~ msgstr "Namuna moslamasi"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Namuna moslamasi"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Joylashishi:"
+
+#, fuzzy
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Qator"
+
+#~ msgid "Curve"
+#~ msgstr "Egri chiziq"
+
+#, fuzzy
+#~ msgid "Straight"
+#~ msgstr "Toʻgʻri chiziq"
+
+#, fuzzy
+#~ msgid "Optimize"
+#~ msgstr "Optimallashtirish"
+
+#~ msgid "Exactness:"
+#~ msgstr "Aniqlik:"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Ichki burchak:"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Obʼektlarni oʻchirish"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Eni:"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Boshlangʻich burchak:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Yoʻnalishi:"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "Egri chiziq"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Gradient"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Ellips vositasi"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Eng ol&dinga"
+
+#~ msgid "&Raise"
+#~ msgstr "&Oldinga"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "O&rqaga"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Eng o&xirga"
+
+#~ msgid "Show Grid"
+#~ msgstr "Toʻrni koʻrsatish"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Toʻrni bekitish"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Toʻrni koʻrsatish/bekitish."
+
+#~ msgid "Align Left"
+#~ msgstr "Chapga"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Markazda (eniga)"
+
+#~ msgid "Align Right"
+#~ msgstr "Oʻngga"
+
+#~ msgid "Align Top"
+#~ msgstr "Yuqoriga"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Markazda (uzinasiga)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Pastga"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Xiralik:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Namuna tanlash"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Oldindan aniqlangan"
+
+#, fuzzy
+#~ msgid "Transform"
+#~ msgstr "Boshqa shaklga almashtirish"
+
+#, fuzzy
+#~| msgid "Rotate actual selection"
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Tanlanganni burish"
+
+#, fuzzy
+#~| msgid "Rotate actual selection"
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Tanlanganni burish"
+
+#, fuzzy
+#~| msgid "Rotate actual selection"
+#~ msgid "Set width of actual selection"
+#~ msgstr "Tanlanganni burish"
+
+#, fuzzy
+#~| msgid "Rotate actual selection"
+#~ msgid "Set height of actual selection"
+#~ msgstr "Tanlanganni burish"
+
+#~ msgid "Rotate actual selection"
+#~ msgstr "Tanlanganni burish"
+
+#, fuzzy
+#~ msgid "SX:"
+#~ msgstr "SX:"
+
+#, fuzzy
+#~| msgid "Rotate actual selection"
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Tanlanganni burish"
+
+#, fuzzy
+#~ msgid "SY:"
+#~ msgstr "SY:"
+
+#, fuzzy
+#~| msgid "Rotate actual selection"
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Tanlanganni burish"
+
+#~ msgid "Shear"
+#~ msgstr "Egish"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Burchakni silliqlash"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Burchakni silliqlash"
+
+#, fuzzy
+#~| msgid "Convert to Shapes"
+#~ msgid "Convert to Path"
+#~ msgstr "Shakllarga aylantirish"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Matn vositasi"
+
+#, fuzzy
+#~ msgid "Save as path"
+#~ msgstr "Quyidagi manzil boʻyicha saqlash"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Bir xil rang"
+
+#~ msgid "Old:"
+#~ msgstr "Eski:"
+
+#~ msgid "New:"
+#~ msgstr "Yangi:"
+
+#, fuzzy
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#, fuzzy
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#, fuzzy
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Turi"
+
+#~ msgid "Join"
+#~ msgstr "Birlashtirish"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Rang tanlagich"
+
+#~ msgid "Height:"
+#~ msgstr "Uzunasi:"
+
+#~ msgid "Layers:"
+#~ msgstr "Qatlamlar:"
+
+#~ msgid "Format:"
+#~ msgstr "Formati:"
+
+#~ msgid "Resources"
+#~ msgstr "Manbalar"
+
+#~ msgid "Patterns"
+#~ msgstr "Namunalar"
+
+#~ msgid "Clipart"
+#~ msgstr "Klipart"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Import qilish"
+
+#~ msgid "Stroke: None"
+#~ msgstr "Chizish: Yoʻq"
+
+#~ msgid "Fill: None"
+#~ msgstr "Toʻldirish: Yoʻq"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Toʻldirish: RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Toʻldirish: CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Toʻldirish: HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Toʻldirish: Kul rang"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Toʻldirish: Rang"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Toʻldirish: Gradient"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Toʻldirish: Namuna"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Chizish: RGB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Chizish: CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Chizish: HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Chizish: Kul rang"
+
+#, fuzzy
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Gradientni tahrirlash"
+
+#, fuzzy
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Namuna tanlash"
+
+#, fuzzy
+#~ msgid "Polygonize"
+#~ msgstr "Koʻpburchak"
+
+#~ msgid "Round corners:"
+#~ msgstr "Burchaklarni qirrasizlantirish:"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "Soya &effektlari"
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Soya effektlarini yaratish"
+
+#~ msgid "Distance:"
+#~ msgstr "Masofa:"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Soyani yaratish"
+
+#~ msgid "Object Properties"
+#~ msgstr "Obʼektning xossalari"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "Oʻ&chirish"
+
+#~ msgid "&Import"
+#~ msgstr "&Import qilish"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Rasm vositasi"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Bekor qilish: "
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "Qay&tarish: "
+
+#~ msgid "&Undo: "
+#~ msgstr "&Bekor qilish: "
+
+#~ msgid "&Redo: "
+#~ msgstr "Qay&tarish: "
+
+#~ msgid "Fill Objects"
+#~ msgstr "Obʼektlarni toʻldirish"
+
+#~ msgid "Fill Object"
+#~ msgstr "Obʼektni toʻldirish"
+
+#~ msgid "Insert Text"
+#~ msgstr "Matnni qoʻyish"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Obʼektlarni oʻzgartirish"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Obʼektdan aynan nusxa olish"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Obʼektlardan aynan nusxa olish"
+
+#~ msgid "Transform Object"
+#~ msgstr "Obʼektni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Translate Objects"
+#~ msgstr "Obʼektlarni boshqa shaklga aylantirish"
+
+#, fuzzy
+#~ msgid "Translate Object"
+#~ msgstr "Obʼektni boshqa shaklga aylantirish"
+
+#, fuzzy
+#~ msgid "Scale Objects"
+#~ msgstr "Obʼektlarni yoyish"
+
+#, fuzzy
+#~ msgid "Scale Object"
+#~ msgstr "Obʼektni yoyish"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Obʼektlarni egish"
+
+#~ msgid "Shear Object"
+#~ msgstr "Obʼektni egish"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Obʼektlarni burish"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Obʼektni burish"
+
+#, fuzzy
+#~ msgid "Translate Bezier"
+#~ msgstr "Boshqa shalga aylantirish"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "Obʼektlarni boshqa shaklga aylantirish"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "Boshqa shalga aylantirish"
+
+#~ msgid "Ellipse"
+#~ msgstr "Ellips"
+
+#~ msgid "Polygon"
+#~ msgstr "Koʻpburchak"
+
+#~ msgid "Polyline"
+#~ msgstr "Siniq chiziq"
+
+#~ msgid "Sinus"
+#~ msgstr "Sinus"
+
+#~ msgid "Spiral"
+#~ msgstr "Spiral"
+
+#~ msgid "Star"
+#~ msgstr "Yulduz"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Shakl vositasi:</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr "Kattalashtirish uchun maydonni <i>bosing va torting</i>.<br>"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Sinus vositasi"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Spiral qoʻyish"
+
+#~ msgid "Round"
+#~ msgstr "Doira"
+
+#~ msgid "Rectangular"
+#~ msgstr "Toʻgʻri burchak"
+
+#~ msgid "Segments:"
+#~ msgstr "Segmentlar:"
+
+#~ msgid "Fade:"
+#~ msgstr "Soʻnish:"
+
+#~ msgid "Clockwise"
+#~ msgstr "Soat koʻrsatgichi boʻyicha"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Soat koʻrsatgichiga qarshi"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Spiral vositasi"
+
+#~ msgid "Insert Star"
+#~ msgstr "Yulduzni qoʻyish"
+
+#, fuzzy
+#~ msgid "Star Outline"
+#~ msgstr "Yulduz sirti"
+
+#~ msgid "Framed Star"
+#~ msgstr "Freymli yulduz"
+
+#, fuzzy
+#~ msgid "Gear"
+#~ msgstr "Chiziqli"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Tashqi radius:"
+
+#~ msgid "Inner angle:"
+#~ msgstr "Ichki burchak:"
+
+#, fuzzy
+#~ msgid "Roundness:"
+#~ msgstr "Burchaklarni qirrasizlantirish:"
+
+#~ msgid "Star Tool"
+#~ msgstr "Yulduz vositasi"
+
+#~ msgid "Draw a star"
+#~ msgstr "Yulduz chizish"
+
+#~ msgid "Shadow"
+#~ msgstr "Soya"
+
+#, fuzzy
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Yarim shaffof soya"
+
+#~ msgid "Text"
+#~ msgstr "Matn"
+
+#~ msgid "Alignment:"
+#~ msgstr "Tekislash:"
+
+#~ msgid "Position"
+#~ msgstr "Joylashishi"
+
+#, fuzzy
+#~ msgid "Edit Base Path"
+#~ msgstr "Asosiy yoʻlni oʻzgartirish"
+
+#~ msgid "New text"
+#~ msgstr "Yangi matn"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Above"
+#~ msgstr "Yuqori"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "On"
+#~ msgstr "Ustida"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Under"
+#~ msgstr "Ostida"
+
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Matn asbobi</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr "Gorizontal matn kiritish uchun hujjatni <i>bosing</i>.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr "Gorizontal matn kiritish uchun hujjatni <i>bosing</i>.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr ""
+#~ "Tanlangan matn obʼektini oʻzgartirish uchun uning ustiga <i>bosing</i>."
+#~ "<br></qt>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr ""
+#~ "Tanlangan matn obʼektini oʻzgartirish uchun uning ustiga <i>bosing</i>."
+#~ "<br></qt>"
+
+#~ msgid "Change Text"
+#~ msgstr "Matnni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Text Conversion"
+#~ msgstr "Matnni boshqa formatga aylantirish"
+
+#, fuzzy
+#~| msgid "One object"
+#~| msgid_plural "%n objects"
+#~ msgid "One object"
+#~ msgid_plural "%1 objects"
+#~ msgstr[0] "Bitta obʼekt"
+
+#~ msgid "path"
+#~ msgstr "yoʻl"
+
+#, fuzzy
+#~ msgid "One group, containing one object"
+#~ msgid_plural "One group, containing %1 objects"
+#~ msgstr[0] "Bitta guruhda bitta obʼekt bor"
+
+#~ msgid "text"
+#~ msgstr "matn"
+
+#~ msgid "image"
+#~ msgstr "rasm"
+
+#~ msgid "Paste Object"
+#~ msgstr "Obʼekt qoʻyish"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Obʼektlarni qoʻyish"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "Egri chiziqni tekislash"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Chiziq xossalari"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "Doira"
+
+#~ msgid "Join:"
+#~ msgstr "Birlashtirish:"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "Burchaklarni qirrasizlantirish"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "Chiziq qalinligini koʻrsatish"
+
+#~ msgid "P&urge"
+#~ msgstr "&Tozalash"
+
+#~ msgid "&History"
+#~ msgstr "&Tarix"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "Tugun&lar qoʻyish..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Tugunlar qoʻyish"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Klipart qoʻyish"
+
+#, fuzzy
+#~ msgid "Stroke Objects"
+#~ msgstr "Obʼektlarni yoyish"
+
+#, fuzzy
+#~ msgid "Stroke Object"
+#~ msgstr "Obʼektni yoyish"
+
+#, fuzzy
+#~ msgid "Stroke Width"
+#~ msgstr "Chiziq qalinligini koʻrsatish"
+
+#, fuzzy
+#~ msgid "Dash Pattern"
+#~ msgstr "Namuna"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Kattalashtirish vositasi:</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr "Kattalashtirish uchun maydonni <i>bosing va torting</i>.<br>"
+
+#, fuzzy
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr "<i>Oʻng tugma</i> kanvasni kichiklashtiradi.<br>"
+
+#, fuzzy
+#~ msgid "<i>Pressing +/- keys</i><br>to zoom into/out of canvas."
+#~ msgstr ""
+#~ "<i>+/- tugmalarini bosish</i><br>kanvasni kattalashtiradi/kichiklashtiradi"
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Kattalashtirish vositasi"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Bekor qilish/qaytarish chegarasi:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Siniq chiziq vositasi:</b><br>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Siniq chiziq vositasi"
+
+#, fuzzy
+#~ msgid "Translate"
+#~ msgstr "Boshqa shalga aylantirish"
+
+#~ msgid "Relative &position"
+#~ msgstr "Nisbiy &joyi"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Ushbu amalni keyin bekor qilib boʻlmaydi. Rostdan ham davom etishni "
+#~ "istaysizmi?"
+
+#~ msgid "Purge History"
+#~ msgstr "Tarixni tozalash"
+
+#~ msgid "Zoom Width"
+#~ msgstr "Eniga kattalashtirish"
+
+#~ msgid "Whole Page"
+#~ msgstr "Butun bet"
+
+#, fuzzy
+#~ msgid "Wireframe"
+#~ msgstr "Karkas usulida koʻrsatish"
+
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#~ msgid "800%"
+#~ msgstr "800%"
+
+#~ msgid "Line Style"
+#~ msgstr "Chiziq uslubi"
+
+#~ msgid "History"
+#~ msgstr "Tarix"
+
+#~ msgid "Align Objects"
+#~ msgstr "Obʼektlarni tekislash"
+
+#~ msgid "Clean Up"
+#~ msgstr "Tozalash"
+
+#~ msgid "Delete Object"
+#~ msgstr "Obʼektni oʻchirish"
+
+#~ msgid "Delete Node"
+#~ msgstr "Tugunni oʻchirish"
+
+#, fuzzy
+#~ msgid "Distribute Objects"
+#~ msgstr "Obʼektlarni qoʻyish"
+
+#, fuzzy
+#~ msgid "Order Selection"
+#~ msgstr "Tanlash"
+
+#, fuzzy
+#~ msgid "Snap to g&rid"
+#~ msgstr "T&oʻrga tutashtirish"
+
+#, fuzzy
+#~ msgid "Snap Distance"
+#~ msgstr "Tutatish masofasi"
+
+#~ msgid "V&ertical:"
+#~ msgstr "B&oʻyiga:"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Alpha (opacity)"
+#~ msgstr "Alfa (xiralik)"
+
+#~ msgctxt "document width"
+#~ msgid "Width:"
+#~ msgstr "Eni:"
+
+#~ msgid "New"
+#~ msgstr "Yangi"
+
+#~ msgid "Raise"
+#~ msgstr "Oldinga"
+
+#~ msgid "Lower"
+#~ msgstr "Orqaga"
+
+#~ msgid "Item"
+#~ msgstr "Band"
+
+#, fuzzy
+#~ msgid "L"
+#~ msgstr "L"
+
+#, fuzzy
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Joriy obʼekt"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Obʼekt nomini oʻzgartirish:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Joriy qatlamning nomini oʻzgartirish:"
+
+#~ msgid "Add Layer"
+#~ msgstr "Qatlamni qoʻshish"
+
+#~ msgid "Commands"
+#~ msgstr "Buyruqlar"
+
+#, fuzzy
+#~ msgid "Group commands"
+#~ msgstr "Guruhlash buyruqlari"
+
+#~ msgid "Rectangle"
+#~ msgstr "Toʻgʻri burchak"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Ellips qoʻyish"
+
+#~ msgid "Full"
+#~ msgstr "Toʻliq"
+
+#~ msgid "Arc"
+#~ msgstr "Yoy"
+
+#~ msgctxt "object width"
+#~ msgid "Width:"
+#~ msgstr "Eni:"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Gradient vositasi:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr ""
+#~ "Gradient vektorini tanlash uchun rasm maydonida <i>bosib tortish kerak</"
+#~ "i>.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Gradientni oʻzgartirish:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr ""
+#~ "Nuqtalarni joyidan koʻchirish uchun ularni <i>bosib tortish kerak</i>.<br>"
+
+#, fuzzy
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "Gorizontal matn kiritish uchun hujjatni <i>bosing</i>.<br>"
+
+#, fuzzy
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr "<i>Oʻng tugma</i> kanvasni kichiklashtiradi.<br>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Namuna vositasi:</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "Namunani tanlash uchun uni <i>bosing</i>.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "Namuna vektorini tanlash uchun <i>bosib tortish kerak</i>.<br>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Iltimos namunani tanlang."
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Qalam vositasi:</b><br>"
+
+#~ msgid "Pencil"
+#~ msgstr "Qalam"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Koʻpburchak qoʻyish"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Koʻpburchak vositasi"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Toʻtburchak qoʻyish"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Toʻgʻri burchak vositasi"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Burish vositasi"
+
+#~ msgid "Insert Round Rect"
+#~ msgstr "Doirasimon toʻgʻri burchak qoʻyish"
+
+#~ msgid "Height (%1):"
+#~ msgstr "Uzunasi (%1):"
+
+#, fuzzy
+#~ msgid "Edge radius X:"
+#~ msgstr "Ichki radius:"
+
+#, fuzzy
+#~ msgid "Edge radius Y:"
+#~ msgstr "Ichki radius:"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Doirasimon toʻgʻri burchak vositasi"
+
+#~ msgid "Round Rectangle"
+#~ msgstr "Doirasimon toʻgʻri burchak"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "Tugunlarni tahrirlash"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Tugunlarni tanlash vositasi"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Belgilash usuli"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Joriy qatlamda tanlash"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Koʻrinadigan qatlamlarda tanlash"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Tanlangan qatlamlarda tanlash"
+
+#~ msgid "Select"
+#~ msgstr "Tanlash"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Tanlash vositasi:</b><br>"
+
+#~ msgctxt "[(left,bottom), (right,top)] (actual unit)"
+#~ msgid "Selection [(%1, %2), (%3, %4)] (%5)"
+#~ msgstr "Tanlangan [(%1, %2), (%3, %4)] (%5)"
+
+#~ msgid "No selection"
+#~ msgstr "Tanlanmagan"
+
+#~ msgid "Select Tool"
+#~ msgstr "Belgilash vositasi"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Egish vositasi"
+
+#~ msgctxt "selection width"
+#~ msgid "Width:"
+#~ msgstr "Eni:"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Rasm vositasi:</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Qoʻshish uchun rasmni tanlang"
+
+#~ msgid "Knots:"
+#~ msgstr "Tugunlar:"

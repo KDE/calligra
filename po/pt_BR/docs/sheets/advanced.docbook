@@ -1,0 +1,1417 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Marcus</firstname
+><surname
+>Gama</surname
+><affiliation
+><address
+><email
+>marcus.gama@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>André Marcelo</firstname
+><surname
+>Alvarenga</surname
+><affiliation
+><address
+><email
+>alvarenga@kde.org</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets; avançado</title>
+<sect1 id="series">
+<title
+>Séries</title>
+<para
+>Durante a construção de uma planilha você frequentemente precisa incluir uma série de valores, como 10, 11, 12..., num linha ou coluna. Existem muitas maneiras para você fazer isso no &sheets;.</para>
+<para
+>Para um simples série curta como 5, 6, 7, 8... o método <quote
+>Arrastar e Colar</quote
+> é o mais simples. Insira o valor inicial na célula inicial e o próximo valor da série em uma célula adjacente. Então selecione ambas as células e mova o ponteiro do mouse para o pequeno quadrado no canto inferior direito da seleção, o cursor mudará para uma seta diagonal de duas pontas. Então mantenha pressionado o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse enquanto arrasta as células para baixo ou para frente o quanto for necessário.</para>
+<para
+>O tamanho do passo é calculado pela diferença dos dois valores iniciais que você inseriu. Por exemplo, se você inserir <userinput
+>4</userinput
+> na célula A1 e <userinput
+>3,5</userinput
+> na A2 e então selecionar ambas as células e Arrastar e Copiar as células para baixo, o tamanho do passo será o valor de A2 menos o valor de A1, -0,5 neste caso, então você obterá a série 4, 3,5, 3, 2,5, 2...</para>
+
+<para
+>O método <quote
+>Arrastar e Copiar</quote
+> trabalhará até mesmo com séries onde o valor do passo não é constante mas constitui uma série. Logo se você iniciar com 1, 3, 4, 6 Arrastar e Copiar estenderá isso para 1, 3, 4, 6, 7, 9, 10, 12..., o valor do passo no exemplo consiste na série 2, 1, 2, 1...</para>
+
+ <!--FIXME does not work here -->
+<para
+>O &sheets; também reconhece algumas <quote
+>séries</quote
+> especiais como os dias da semana. Tente inserir <userinput
+>Sexta</userinput
+> numa célula (observe a capitalização) e então Arraste e Copie para baixo. Para ver quais séries especiais estão disponíveis, e talvez criar suas próprias, selecione <menuchoice
+><guimenu
+>Ferramentas</guimenu
+><guimenuitem
+>Listas personalizadas...</guimenuitem
+></menuchoice
+></para>
+
+<para
+>Se você selecionar uma célula e escolher <guimenuitem
+>Séries...</guimenuitem
+> no menu <guimenu
+>Inserir</guimenu
+> você verá a caixa de diálogo <guilabel
+>Séries</guilabel
+>. Isto é útil para criar séries que são muito longas para serem convenientemente construídas usando o método Arrastar e Copiar, ou para criar séries geométricas como 1, 1.5, 2.25, 3.375... onde o valor do passo, 1.5 neste caso, é usado como multiplicador.</para>
+<para
+>Se o tipo de série que você deseja é muito complicado para qualquer um dos métodos anteriores, considere usar uma fórmula e Arrastar e Copiar ela. Por exemplo, para criar um série com valores 2, 4, 16, 256... insira <userinput
+>2</userinput
+> em A1, <userinput
+>=A1*A1</userinput
+> em A2, e Arraste e Copia a célula A2 para baixo.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title
+>Fórmula</title>
+<sect2 id="builtin">
+<title
+>Funções Internas</title>
+<para
+>O &sheets; possui uma grande variedade de funções matemáticas internas e outras <link linkend="functions"
+>funções</link
+> que podem ser usadas em uma célula com fórmulas. Elas podem ser vistas e acessadas selecionando um célula e escolhendo <guimenuitem
+>Função...</guimenuitem
+> no menu <guimenu
+>Inserir</guimenu
+>. Isto mostrará a janela <guilabel
+>Função</guilabel
+>.</para>
+<para
+>Selecione a função que deseja usar na lista à esquerda da janela. A página <guilabel
+>Ajuda</guilabel
+> irá então mostrar uma descrição, o tipo de dados devolvido, a Sintaxe, os Parâmetros e Exemplos desta função. Além disso, esta página oferece normalmente referências a Funções Relacionadas. Pressione então no botão com a seta para baixo para colar a expressão no campo de edição da fórmula no fundo da janela.</para>
+<para
+>A página de <guilabel
+>Parâmetros</guilabel
+> irá então ser mostrada para lhe permitir indicar os parâmetros para a expressão que você escolheu. Se você quiser inserir um valor atual para um determinado parâmetro, basta digitá-lo no campo de texto apropriado na página de <guilabel
+>Parâmetros</guilabel
+>. Para inserir uma referência de uma célula ao invés de um valor, clique com o botão <mousebutton
+>esquerdo</mousebutton
+> no campo de texto apropriado da página <guilabel
+>Parâmetros</guilabel
+> e clique com o botão <mousebutton
+>esquerdo</mousebutton
+> na célula de destino da planilha.</para>
+<para
+>Em vez de usar a página <guilabel
+>Parâmetros</guilabel
+>, as referências das células, como por exemplo <userinput
+>B6</userinput
+> podem ser inseridas digitando-as diretamente no campo de edição na parte inferior da janela <guilabel
+>Função</guilabel
+>. Se uma função tiver mais de um parâmetro, separe-os com um ponto e vírgula (<keysym
+>;</keysym
+>).</para>
+<para
+>Pressionar o botão <guibutton
+>OK</guibutton
+>, irá inserir a função na célula atual e fechar a janela da <guilabel
+>Função</guilabel
+>.</para>
+<para
+>Você pode, é claro, fazer isto sem o diálogo <guilabel
+>Função</guilabel
+> e simplesmente digitar a expressão completa no campo de texto principal do <guilabel
+>Editor de células</guilabel
+>. Os nomes das funções não fazem distinção entre maiúsculas e minúsculas. Não se esqueça de que todas as expressões devem iniciar com um símbolo de <keysym
+>=</keysym
+>.</para>
+</sect2>
+
+<sect2 id="logical">
+<title
+>Comparações Lógicas</title>
+<para
+>Funções lógicas como IF(), AND(), OR() tomam parâmetros que possuem valores lógicos (booleanos) como Verdadeiro ou Falso. Este tipo de valor pode ser produzido por outras funções lógicas como ISEVEN() ou através de comparação de valores nas células da planilha usando as expressões de comparação fornecidas na tabela a seguir.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>Expressão </entry>
+<entry
+>Descrição </entry>
+<entry
+>Exemplo </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+><keysym
+>=</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>É igual a</entry>
+<entry
+><userinput
+>A2==B3</userinput
+> é Verdadeiro se o valor em A2 é igual ao valor em B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>!</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>Não é igual a</entry>
+<entry
+><userinput
+>A2!=B3</userinput
+> é Verdadeiro se o valor em A2 não é igual ao valor em B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>Não é igual a</entry>
+<entry
+>O mesmo que <userinput
+>A2!=B3</userinput
+></entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+></entry>
+<entry
+>É menor que</entry>
+<entry
+><userinput
+>A2&lt;B3</userinput
+> é Verdadeiro se o valor em A2 é menor que o valor em B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>É menor que ou igual à</entry>
+<entry
+><userinput
+>A2&lt;=B3</userinput
+> é Verdadeiro se o valor em A2 é menor que ou igual ao valor em B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>É maior que</entry>
+<entry
+><userinput
+>A2&gt;B3</userinput
+> é Verdadeiro se o valor em A2 é maior que o valor em B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>É maior que ou igual à</entry>
+<entry
+><userinput
+>A2&gt;=B3</userinput
+> é verdadeiro se o valor em A2 é maior que ou igual ao valor em B3</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>Assim se você inserir <userinput
+>=IF(B3&gt;B1;"MAIOR";"")</userinput
+> numa célula ela exibirá MAIOR se o valor em B3 é maior que o de B1, caso contrário a célula não mostrará nada.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title
+>Referências Absolutas de Célula</title>
+<para
+>Se uma fórmula contém uma referência a uma célula, esta referência será normalmente alterada quando a célula é copiada para outra parte da pasta de trabalho. Para evitar este comportamento coloque um símbolo <keysym
+>$</keysym
+> antes da letra da coluna, número da linha ou ambos. </para>
+
+<itemizedlist>
+<listitem
+><para
+>Se A1 contém a fórmula <userinput
+>=D5</userinput
+> então ao copiar a célula para B2 ele se tornará <userinput
+>=E6</userinput
+> (o comportamento normal). </para
+></listitem>
+<listitem
+><para
+>Se A1 contém a fórmula <userinput
+>=$D5</userinput
+> então ao copiar a célula para B2 ela se tornará <userinput
+>=D6</userinput
+> (letra da coluna não mudou). </para
+></listitem>
+<listitem
+><para
+>Se A1 contém a fórmula <userinput
+>=D$5</userinput
+> então ao copiar a célula para B2 ela se tornará <userinput
+>=E5</userinput
+> (número da linha não mudou). </para
+></listitem>
+<listitem
+><para
+>Se A1 contém a fórmula <userinput
+>=$D$5</userinput
+> então ao copiar a célula para B2 ela permanecerá como <userinput
+>=D5</userinput
+> (nem a letra da coluna e nem o número da linha mudaram). </para
+></listitem>
+
+</itemizedlist>
+<para
+>Quando você inserir ou editar um referência de célula em uma fórmula a tecla de atalho <keysym
+>F4</keysym
+> pode ser usada para passar por estas quatro possibilidades.</para>
+<para
+><link linkend="namedareas"
+>Células nomeadas</link
+> podem ser usada de maneira similar para incluir referências fixas à células numa fórmula. </para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title
+>Aritmética usando Colagem Especial</title>
+<para
+>Algumas vezes você pode querer adicionar um valor simples para um número de células, ou subtrair um valor delas, ou multiplicar ou dividir todos eles por um valor simples. A opção <guimenuitem
+>Colar Especial...</guimenuitem
+> permite-lhe fazer isso rapidamente e facilmente.</para>
+<para
+>Primeiro, insira o valor modificado em qualquer célula disponível em sua planilha e <guimenuitem
+>Copie</guimenuitem
+> o. Então selecione a área de células que você deseja mudar, escolha <guimenuitem
+>Colar Especial...</guimenuitem
+> do menu <guimenu
+>Editar</guimenu
+> ou do menu de contexto e selecione <guilabel
+>Adição</guilabel
+>, <guilabel
+>Subtração</guilabel
+>, <guilabel
+>Multiplicação</guilabel
+> ou <guilabel
+>Divisão</guilabel
+> da seção <guilabel
+>Operação</guilabel
+> da caixa de diálogo.</para>
+<para
+>Você pode também aplicar valores diferentes de modificadores para diferentes linhas ou colunas das áreas alvo copiando uma área contendo os modificadores desejados antes de selecionar a área alvo e fazer o <guimenuitem
+>Colar especial...</guimenuitem
+> Por exemplo, se você inserir <userinput
+>5</userinput
+> na célula A1, <userinput
+>10</userinput
+> na B1, selecione ambas as células e faça um <guimenuitem
+>Copiar</guimenuitem
+> e então <guimenuitem
+>Colar especial...</guimenuitem
+> <guilabel
+>Adição</guilabel
+> nas células A10 à D15, 5 será adicionado à A10:A15 e C10:C15, e 10 à B10:B15 e D10:D15.</para>
+<para
+>Observe que um valor modificador pode ser uma fórmula bem como um simples valor numérico. Se for um fórmula então o &sheets; ajustará as referências à célula do mesmo modo que uma operação normal de <guimenuitem
+>Colar</guimenuitem
+>.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title
+>Formulas de listas</title>
+<para
+>O &sheets; permite-lhe usar fórmulas cujo resultado é uma matriz ou um intervalo de valores. Normalmente, apenas o primeiro valor é apresentado em uma célula. Se quiser mostrar a matriz inteira, basta usar <keycombo
+>&Ctrl;&Alt;&Enter;</keycombo
+> ao editar uma fórmula, para que esta seja convertida para uma fórmula de listas, ocupando as células vizinhas quando for necessário.</para>
+<para
+>As células que façam parte de uma fórmula de listas estão bloqueadas para edição.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title
+>Busca de Objetivo</title>
+<para
+>O &sheets; pode ser usado para resolver expressões algébricas como a <emphasis
+> x + x^2 = 4</emphasis
+> ou <emphasis
+>Para que valor de 'x', a soma de 'x' com 'x' ao quadrado é igual a 4?</emphasis
+></para>
+<para
+>Para este exemplo você pode inserir <userinput
+>=A2+A2*A2</userinput
+> em A1 e então tentar valores diferentes em A2 até o resultado em A1 estiver tão próximo quanto você deseja de <emphasis
+>4</emphasis
+> ou, preferencialmente, usar o recurso de <guimenuitem
+>Buscar Objetivo...</guimenuitem
+> do &sheets; que automaticamente ajusta o valor em uma célula para tentar tornar o valor em outra célula tão próximo quanto possível de um valor alvo.</para>
+<para
+>Ele é invocado selecionando a opção <guimenuitem
+>Buscar Objetivo...</guimenuitem
+> do menu <guimenu
+>Dados</guimenu
+>. Isto exibe uma janela na qual deverá inserir a referência da célula do valor-alvo (<userinput
+>A1</userinput
+> neste caso) na opção <guilabel
+>Definir célula:</guilabel
+>, o valor-alvo em si (<userinput
+>4</userinput
+>) no campo <guilabel
+>Para o valor:</guilabel
+> e a referência da célula que será alterada (<userinput
+>A2</userinput
+>) no campo <guilabel
+>Alterando a célula</guilabel
+>. Note que você precisa inserir antes algum valor inicial na célula que será alterada antes de iniciar a <guimenuitem
+>Busca do Objetivo</guimenuitem
+>.</para>
+<para
+>Pressionar o botão <guibutton
+>OK</guibutton
+> irá iniciar o cálculo. Quando terminar, e se tiver encontrado uma solução, pressione <guibutton
+>OK</guibutton
+> para aceitar o resultado ou em <guibutton
+>Cancelar</guibutton
+> para manter o valor original. </para>
+</sect1>
+
+ <sect1 id="pivottable">
+   <title
+>Tabelas dinâmicas</title>
+   <para
+>O &sheets; pode ser usado para construir <ulink url="http://en.wikipedia.org/wiki/Pivot_table"
+>tabelas dinâmicas</ulink
+> com os dados da tabela atual. </para>
+   <para
+>Esta funcionalidade poderá ser carregada ao selecionar o item <guimenuitem
+>Tabela dinâmica...</guimenuitem
+> do menu <guimenu
+>Dados</guimenu
+>. Abaixo, encontra-se um exemplo de geração de uma tabela dinâmica. </para>
+   <para
+>Suponha-se que se tem os seguintes dados. </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase
+>Tabela inicial</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para
+>Queremos criar uma tabela dinâmica de acordo com a nossa escolha e requisitos. Como tal, escolheremos a opção <menuchoice
+> <guimenu
+>Dados</guimenu
+> <guimenuitem
+>Tabela dinâmica...</guimenuitem
+> </menuchoice
+>. </para>
+     <para
+>A janela que irá aparecer permite ao usuário escolher a fonte dos dados. Esses dados podem ser retirados da planilha atual ou de uma fonte externa, como um banco de dados ou um arquivo <abbrev
+>ODS</abbrev
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Escolher a fonte de dados</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>Aqui está a janela que permite ao usuário personalizar a tabela dinâmica. Os textos das colunas nos dados de origem são convertidos para legendas que servem como campos de trabalho. As legendas podem ser arrastadas e soltas em uma dessas áreas (<guilabel
+>Linhas</guilabel
+>, <guilabel
+>Colunas</guilabel
+> ou <guilabel
+>Valores</guilabel
+>) para gerar a tabela dinâmica. Você pode restaurar as suas escolhas com o botão <guibutton
+>Restaurar DnD</guibutton
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Janela de personalização da tabela dinâmica</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>No nosso exemplo, o <replaceable
+>Nome</replaceable
+> é arrastado para as <guilabel
+>Linhas</guilabel
+>, a <replaceable
+>Categoria</replaceable
+> para as <guilabel
+>Colunas</guilabel
+> e a <replaceable
+>Pontuação</replaceable
+> para os <guilabel
+>Valores</guilabel
+>. As funções definidas pelo usuário, como a soma, média, máximo, mínimo, quantidade, &etc;, podem ser selecionadas na lista <guilabel
+>Selecionar a opção</guilabel
+>. </para>
+     <para
+>O botão <guibutton
+>Adicionar filtro</guibutton
+> pode ser usado para abrir a janela de filtragem e extrair os dados desejados. Ao usar esta opção, você poderá definir vários filtros com base no nome da coluna e da relação entre eles (<guimenuitem
+>E</guimenuitem
+> ou <guimenuitem
+>Ou</guimenuitem
+>). Isto irá permitir uma extrema liberdade para personalizar o resultado. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Janela de filtragem da tabela dinâmica</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+><guilabel
+>Linhas de Total</guilabel
+> e <guilabel
+>Colunas de Total</guilabel
+>: se assinalar estas opções, irá permitir o cálculo automático dos totais das linhas e colunas correspondentes na tabela dinâmica. </para>
+   </sect1>
+
+<sect1 id="worksheets">
+<title
+>Usar mais de uma Planilha</title>
+<para
+>Quando você iniciar um documento novo e em branco com o &sheets;, ele irá criar um conjunto de planilhas em branco. O número de planilhas que ele cria é determinado pelo modelo selecionado.</para>
+<para
+>A opção <menuchoice
+><guimenu
+>Inserir</guimenu
+> <guimenuitem
+>Planilha</guimenuitem
+> </menuchoice
+> insere outra planilha no documento.</para>
+<para
+>Você pode também alternar entre as planilhas usando <keycombo action="simul"
+>&Ctrl;<keysym
+>PgDown</keysym
+></keycombo
+> para mover para a próxima planilha, <keycombo action="simul"
+>&Ctrl;<keysym
+>PgUp</keysym
+></keycombo
+> para mover para a planilha anterior.</para>
+<para
+>Pastas de trabalho fornecem nomes padrão de <emphasis
+>Planilha1</emphasis
+>, <emphasis
+>Planilha2</emphasis
+>... Você pode fornecer um nome diferente de planilha com um clique <mousebutton
+>direito</mousebutton
+> na tabulação e selecionando <guimenuitem
+>Renomear Planilha...</guimenuitem
+></para>
+<para
+>Para remover uma planilha do documento, use a opção <guimenuitem
+>Remover planilha</guimenuitem
+> do menu de contexto que aparece quando você clica com o botão <mousebutton
+>direito</mousebutton
+> na aba da planilha que deseja remover.</para>
+<para
+>Outras entradas no submenu <menuchoice
+><guimenu
+>Formatar</guimenu
+><guisubmenu
+> Planilha</guisubmenu
+></menuchoice
+> permitem-lhe mostrar ou ocultar uma planilha da mesma maneira que linhas e colunas podem ser ocultas.</para>
+<para
+>Se você quiser que uma planilha faça referência a uma célula em outra planilha, a referência da célula deverá começar com o nome da planilha, seguido de um ponto de exclamação (<keysym
+>!</keysym
+>). Por exemplo, se você inserir <userinput
+>=Plan2!A2 </userinput
+> numa célula da Planilha 1, essa célula irá exibir o valor de A2 na Planilha 2. Note que os nomes das planilhas fazem distinção entre maiúsculas e minúsculas.</para>
+
+
+<sect2 id="consolidate">
+<title
+>Consolidar Dados</title>
+<para
+>Você pode ter construído um documento com várias planilhas com dados semelhantes para, por exemplo, vários meses do ano, e gostaria de ter uma planilha de resumo que contivesses os valores consolidados (&eg;, com uma soma ou média) dos itens de dados correspondentes das outras planilhas.</para>
+<para
+>Esta tarefa pode ser feita facilmente usando o item <guimenuitem
+> Consolidar...</guimenuitem
+> do menu <guimenu
+>Dados</guimenu
+>.</para>
+<para
+>Selecionar esta opções traz a caixa de diálogo <guilabel
+>Consolidar</guilabel
+>.</para>
+<para
+>Para cada uma das planilhas de origem, insira uma referência para a área de dados desejada na opção <guilabel
+>Referência:</guilabel
+>. Pressione em <guibutton
+>Adicionar</guibutton
+>, para transferi-las para a caixa <guilabel
+>Referências inseridas:</guilabel
+>. A referência deverá incluir o nome da planilha que contém os dados de origem, como por exemplo <userinput
+>Janeiro!A1:A10</userinput
+>, e poderá ser inserida automaticamente se selecionar a área na planilha apropriada.</para>
+<para
+>Quando você tiver inserido as referências para todas as planilhas de origem, selecione a célula na planilha de destino onde deseja que o canto superior esquerdo dos dados consolidados apareça, escolha a função apropriada na lista <guilabel
+>Função:</guilabel
+> e pressione o botão <guibutton
+>OK</guibutton
+>.</para>
+<para
+>Se você clicar em <guibutton
+>Detalhes 
+>
+></guibutton
+> na janela e assinalar a opção <guilabel
+>Copiar dados</guilabel
+>, os valores resultantes da consolidação serão colocados nas células alvo em vez da fórmula para calculá-los. </para>
+</sect2>
+</sect1>
+<sect1 id="insertchart">
+<title
+>Inserir um Gráfico</title>
+<para
+>Você pode inserir um gráfico na planilha para ter uma visão gráfica de seus dados.</para>
+<para
+>Primeiro ative a área <guilabel
+>Adicionar forma</guilabel
+> usando o item de menu <menuchoice
+> <guimenu
+>Configurações</guimenu
+><guimenuitem
+>Áreas acopláveis</guimenuitem
+> </menuchoice
+>.</para>
+<para
+>Então selecione a área de células que contém os dados e escolha <guilabel
+>Gráfico</guilabel
+> em <guilabel
+>Adicionar forma</guilabel
+>. Arraste o cursor ao longo da planilha enquanto mantém pressionado o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse para definir a área onde você deseja que o gráfico apareça. Não é necessário ser muito preciso neste estágio, uma vez que o tamanho do gráfico poderá ser facilmente alterado a qualquer momento. Quando você soltar o botão do mouse irá aparecer uma janela de <guilabel
+>Opções do gráfico</guilabel
+>.</para>
+<para
+>A área dos dados já está preenchida com o intervalo de células selecionado. Selecione a primeira linha e coluna como legendas, assinale a opção <guilabel
+>Conjunto de dados nas linhas</guilabel
+> e clique no botão <guibutton
+>OK</guibutton
+>. A janela irá desaparecer e o gráfico incorporado na planilha ficará visível.</para>
+<para
+>Agora selecione a <guibutton
+>Ferramenta de edição de gráficos</guibutton
+> da área <guilabel
+>Ferramentas</guilabel
+> e edite as propriedades do gráfico, tais como o tipo, legendas e eixos na <guilabel
+>Edição de gráficos</guilabel
+>.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Imagem do gráfico embutido</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Para mover, redimensionar ou excluir o gráfico embutido, mude para a ferramenta de <guibutton
+>Manipulação básica da forma</guibutton
+> e clique em qualquer parte da área do gráfico. Deverá aparecer agora uma borda verde e pequenos quadrados amarelos nos cantos e no meio de cada um dos lados. </para>
+<para
+>Se você mover o cursor para qualquer um dos quadrados, ele irá mudar para uma seta com duas pontas. Você poderá redimensionar o gráfico arrastando um destes quadrados com o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse pressionado. Para remover o gráfico, clique com o botão <mousebutton
+>direito</mousebutton
+> num dos quadrados e selecione a opção <guimenuitem
+>Excluir</guimenuitem
+>.</para>
+<para
+>Para mover o gráfico mova o cursor para dentro do gráfico. O cursor deverá mudar para uma cruz, pressione o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse e você poderá arrastar o gráfico para onde você desejar.</para>
+<para
+>Para restaurar o gráfico para sua aparência normal simplesmente clique em qualquer lugar fora da área do gráfico.</para>
+<para
+>Para alterar o formato do gráfico, clique com o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse duas vezes dentro da área do gráfico. Deverá então aparecer a <guilabel
+>Edição de gráficos</guilabel
+> na área acoplável. Você pode então usar estas ferramentas para modificar o gráfico.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title
+>Inserir Dados Externos</title>
+<para
+>Você pode inserir dados de um arquivo texto ou da área de transferência numa planilha primeiro selecionando a célula onde você deseja que o item do canto superior esquerdo dos dados inseridos apareça, então escolher <guimenuitem
+>Do arquivo texto...</guimenuitem
+> ou <guimenuitem
+>Da área de transferência...</guimenuitem
+> do submenu <menuchoice
+><guimenu
+>Inserir</guimenu
+><guisubmenu
+>Dados externos</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>Em ambos os casos, o &sheets; assumirá que os dados estão na forma <acronym
+>CSV</acronym
+> e abrirá uma caixa de diálogo permitindo-lhe controlar como os dados serão extraídos do arquivo ou área de transferência e colocados nas células da planilha.</para>
+<para
+>Se o suporte para isto estiver incluído em seu sistema, o &sheets; pode também inserir dados de um banco de dados <acronym
+>SQL</acronym
+> na planilha. Isto é feito usando a opção <menuchoice
+><guimenu
+>Inserir</guimenu
+> <guisubmenu
+>Dados externos</guisubmenu
+> <guimenuitem
+>Do banco de dados...</guimenuitem
+> </menuchoice
+>.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title
+>Ligar Células</title>
+<para
+>Uma célula de planilha pode se ligada a uma ação de modo que o clique <mousebutton
+>esquerdo </mousebutton
+> na célula irá, por exemplo, abrir seu navegador. Para fazer uma célula agir desta forma selecione-a e escolha <menuchoice
+><guimenu
+>Inserir</guimenu
+><guimenuitem
+>Ligação...</guimenuitem
+> </menuchoice
+>. Isto trará a caixa de diálogo <guilabel
+>Inserir Ligação</guilabel
+>, que lhe permitirá escolher entre quatro tipos de ligação:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Uma célula com ligação para <guilabel
+>Internet</guilabel
+> tentará abrir seu navegador padrão na &URL; inserida na caixa de texto <guilabel
+>Endereço Internet:</guilabel
+> do diálogo <guilabel
+>Inserir Ligação</guilabel
+> quando ela é clicada. Isto pode ser, por exemplo, <userinput
+>http://www.calligra.org</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Clicar em uma célula contendo uma ligação de <guilabel
+>E-mail</guilabel
+> abrirá seu editor de e-mail usando o endereço inserido na caixa de texto <guilabel
+>Email:</guilabel
+> como endereço Para:. Por exemplo <userinput
+>anonimo@exemplo.com</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Uma célula de ligação para <guilabel
+>Arquivo</guilabel
+> mantém o caminho para um arquivo ou pasta, como inserido na caixa de texto <guilabel
+>Localização do arquivo:</guilabel
+>, e tentará abrir o arquivo ou pasta com o aplicativo apropriado ao ser clicada. </para
+></listitem>
+
+<listitem
+><para
+>O tipo de ligação <guilabel
+>Célula</guilabel
+> mantém uma referência a uma célula do &sheets;, inserida no campo de texto <guilabel
+>Célula ou Área com nome</guilabel
+>. Clicar com o botão <mousebutton
+>esquerdo</mousebutton
+> neste tipo de ligação faz com que o foco do &sheets; seja movido para a célula alvo. </para
+></listitem>
+</itemizedlist>
+
+<para
+>Todos os quatro tipos de ligações de célula precisam de algum texto apropriado a ser inserido no campo <guilabel
+>Texto a exibir</guilabel
+> do diálogo <guilabel
+>Inserir Ligação</guilabel
+>. Este texto que aparecerá na célula.</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title
+>Checar Validade</title>
+<para
+>O &sheets; pode automaticamente checar a validade de dados inseridos baseado num determinado critério, e exibir uma caixa de mensagem se o dado é inválido.</para>
+<para
+>Para ativar esta funcionalidade, selecione as células a serem monitoradas e escolha <menuchoice
+><guimenu
+>Dados</guimenu
+><guimenuitem
+>Validação...</guimenuitem
+> </menuchoice
+>. Isto mostrará a janela <guilabel
+>Validação</guilabel
+> do &sheets;, que possui três páginas.</para>
+<para
+>Na página <guilabel
+>Critério</guilabel
+> selecione que tipo de dados serão considerados válidos a partir da lista de caixa combinada <guilabel
+>Permitir:</guilabel
+> e então define um intervalo de valores escolhendo uma das opções na caixa combinada <guilabel
+>Dados:</guilabel
+> e inserindo valor(es) apropriado(2) em uma ou ambas caixa(s) de edição.</para>
+<para
+>Quando você tiver feito esta mudança para a aba <guilabel
+>Alerta de erro</guilabel
+>. Aqui você pode escolher o tipo de caixa de mensagem (<guimenuitem
+>Pare</guimenuitem
+>, <guimenuitem
+>Alerta</guimenuitem
+> ou <guimenuitem
+>Informação</guimenuitem
+>) que aparecerá quando um valor inválido for inserido, e definir o título da caixa de mensagem e o texto de mensagem.</para>
+<!--FIXME missing Input Help tab-->
+<para
+>Note que esta característica somente verifica dados que você inserir na célula, para um modo de verificar os resultados de fórmulas de célula veja a seção <link linkend="formatdata"
+>Atributos Condicionais de Célula</link
+> deste Livro de Mão.</para>
+</sect1>
+
+<sect1 id="protection">
+<title
+>Proteção</title>
+
+<sect2 id="doc-protection">
+<title
+>Proteção do Documento</title>
+<para
+>A proteção do documento significa que, sem uma senha, um usuário não poderá adicionar ou remover planilhas. A proteção do documento não protege as células.</para>
+<para
+>Selecione a opção <menuchoice
+><guimenu
+>Ferramentas</guimenu
+><guimenuitem
+>Proteger documento...</guimenuitem
+></menuchoice
+> Irá aparecer uma janela solicitando-lhe uma senha. O indicador de potência da <guilabel
+>Senha</guilabel
+> indica se a sua senha é suficientemente segura. Quanto maior o indicador, mais segura é a sua senha.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>A janela para Proteger o Documento</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Essa senha será então necessária para desproteger o documento.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>A janela para Desproteger o Documento</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Quando um documento estiver protegido, o usuário não pode:</para>
+<itemizedlist>
+<listitem
+><para
+>Renomear uma planilha </para
+></listitem>
+<listitem
+><para
+>Inserir um Gráfico </para
+></listitem>
+<listitem
+><para
+>Remover uma planilha </para
+></listitem>
+<listitem
+><para
+>Ocultar uma planilha </para
+></listitem>
+<listitem
+><para
+>Mostrar uma planilha </para
+></listitem>
+<listitem
+><para
+>Ver as propriedades da planilha </para
+></listitem>
+<listitem
+><para
+>Mesclar ou separar células </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title
+>Proteção da planilha</title>
+<para
+>A proteção de uma planilha significa a proteção do conteúdo de todas as células e objetos protegidos de uma planilha. As células individuais ou uma seleção de células poderão ser desprotegidas dentro de uma planilha protegida; para isso, veja a <link linkend="cell-protection"
+>próxima seção</link
+>.</para>
+<para
+>Para proteger uma planilha, selecione a opção <menuchoice
+><guimenu
+>Ferramentas</guimenu
+><guimenuitem
+>Proteger Planilha...</guimenuitem
+></menuchoice
+>. Irá aparecer uma janela solicitando-lhe uma senha. O indicador de potência da <guilabel
+>Senha</guilabel
+> indica se a sua senha é suficientemente segura. Quanto maior o indicador, mais segura é a sua senha.</para>
+<para
+>Essa senha será então necessária para desproteger a planilha.</para>
+<para
+>Quando uma planilha estiver protegida, o usuário não poderá:</para>
+<itemizedlist>
+<listitem
+><para
+>Inserir qualquer objeto ou gráfico </para
+></listitem>
+<listitem
+><para
+>Formatar qualquer célula </para
+></listitem>
+<listitem
+><para
+>Inserir uma linha ou coluna </para
+></listitem>
+<listitem
+><para
+>Editar e modificar o conteúdo da célula </para
+></listitem>
+<listitem
+><para
+>Modificar qualquer conteúdo na planilha </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>A proteção de uma planilha é especialmente útil para evitar a remoção acidental das fórmulas.</para
+></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title
+>Proteção de uma célula ou das células selecionadas</title>
+<warning
+><para
+>A proteção das células está ativa para todas as células por padrão, e se torna efetiva quando você ativa a proteção da planilha. Assim, se você mantiver a configuração pré-definida e proteger a planilha, todas as células ficarão protegidas.</para
+></warning>
+<para
+>Se você quiser que apenas algumas células sejam protegidas, esta proteção padrão terá de ser desligada para todas as outras células. Por exemplo, você poderá desejar que a maioria das células aceitem dados de entrada; assim, deverá desligar a opção <guilabel
+>Protegido</guilabel
+> para elas e manter as células protegidas que deverão permanecer inalteradas (como os títulos). Para isso, são necessários 3 passos para proteger apenas algumas células: desproteger todas as células, selecionar as células a proteger e protegê-las, e finalmente proteger toda a planilha.</para>
+<para
+>Para desproteger todas as células:</para>
+<itemizedlist>
+<listitem
+><para
+>Selecione a planilha inteira com o mouse. </para
+></listitem>
+<listitem
+><para
+>No menu, selecione <menuchoice
+><guimenu
+>Formatar</guimenu
+><guimenuitem
+>Formato da célula...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Na janela que aparece, vá à página de <guilabel
+>Proteção das Células</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Assinale a opção <guilabel
+>Ocultar tudo</guilabel
+> e desligue a opção <guilabel
+>Protegido</guilabel
+> para remover a proteção de todas as células. As células ficarão agora todas desprotegidas. </para
+></listitem>
+</itemizedlist>
+<para
+>Para proteger um intervalo de células selecionadas ou uma seleção de células não-adjacentes:</para>
+<itemizedlist>
+<listitem
+><para
+>Selecione o intervalo de células a proteger ou use a tecla <keycombo action="simul"
+>&Ctrl;</keycombo
+> para selecionar as células não-adjacentes. </para
+></listitem>
+<listitem
+><para
+>Quando todas as células ficarem selecionadas, vá ao menu <menuchoice
+><guimenu
+>Formatar</guimenu
+><guimenuitem
+>Formato da célula...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Na janela que aparece, vá à página de <guilabel
+>Proteção das Células</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Clique na opção ao lado de <guilabel
+>Protegido</guilabel
+> e depois em <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+</itemizedlist>
+<para
+>Logo que as células fiquem marcadas para proteção, a opção de proteção deverá estar ativa ao nível da planilha, o que significa que você tem que proteger a planilha inteira para que a célula fique efetivamente protegida:</para>
+<itemizedlist>
+<listitem
+><para
+>Selecione a opção <menuchoice
+><guimenu
+>Ferramentas</guimenu
+><guimenuitem
+>Proteger Planilha...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Na janela que aparece, forneça uma senha segura e confirme-a, digitando-a novamente. Clique em <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+<listitem
+><para
+>As células protegidas de uma planilha protegida não poderão ser editadas sem desproteger a planilha inteira, ficando as outras alterações de planilha desativadas. Por exemplo, ninguém poderá inserir linhas ou colunas, mudar a largura das colunas ou criar gráficos embutidos. </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title
+>Ocultar as fórmulas das células</title>
+<para
+>Você poderá desejar ocultar as suas fórmulas, para que as outras pessoas não as possam ver. Por padrão, todas as células estão protegidas e não-ocultas. Mas é importante lembrar que estes atributos não fazem efeito, a menos que a própria planilha esteja protegida.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Uma célula padrão com uma fórmula</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Para ocultar as fórmulas da célula atual ou das células selecionadas, selecione a célula apropriada ou o intervalo respectivo com o <keycombo action="simul"
+>&Ctrl;</keycombo
+> e escolha a opção <menuchoice
+><guimenu
+>Formatar</guimenu
+><guimenuitem
+>Formato da Célula...</guimenuitem
+></menuchoice
+> do menu. Na janela de Formato da Célula, clique na página de <guilabel
+>Proteção da Célula</guilabel
+> e selecione a opção <guilabel
+>Ocultar fórmula</guilabel
+>. Após proteger a planilha, os resultados das fórmulas ficarão visíveis, mas as fórmulas em si não. </para>
+<para
+>Você terá agora que proteger a planilha: escolha a opção <menuchoice
+><guimenu
+>Ferramentas</guimenu
+><guimenuitem
+>Proteger Planilha...</guimenuitem
+></menuchoice
+> para mostrar a janela para <guilabel
+>Proteger Planilha</guilabel
+>. Insira uma senha segura duas vezes, para evitar que as outras pessoas desprotejam a planilha. </para>
+<para
+>Quando a opção <guilabel
+>Ocultar fórmula</guilabel
+> estiver ativa e o atributo <guilabel
+>Protegido</guilabel
+> estiver desativado, a fórmula ficará oculta, após proteger a planilha, apesar do conteúdo da célula poder ser alterado.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject
+>    
+<textobject>
+<phrase
+>A opção <guilabel
+>Ocultar fórmula</guilabel
+> fica ativa mas a célula não está protegida e a planilha está</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Quando a opção <guilabel
+>Ocultar fórmula</guilabel
+> estiver ativa e o atributo <guilabel
+>Protegido</guilabel
+> também estiver ativado, a fórmula ficará oculta, após proteger a planilha, e o conteúdo da célula não poderá ser alterado.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>O <guilabel
+>Ocultar fórmula</guilabel
+> e o <guilabel
+>Protegido</guilabel
+> estão ativos na <guilabel
+>Proteção da Célula</guilabel
+> e a planilha está protegida</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Tenha em mente que é muito simples quebrar a senha para uma planilha protegida, por isso, se estiver à procura de segurança real, esta não é a melhor solução.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title
+>Ocultar tudo na célula</title>
+<para
+>Você poderá esconder tanto a fórmula como o conteúdo da célula se escolher a opção <guilabel
+>Ocultar tudo</guilabel
+> na página de Proteção da Célula, na opção <menuchoice
+><guimenu
+>Formatar</guimenu
+><guimenuitem
+>Formato da Célula...</guimenuitem
+></menuchoice
+>. Na imagem abaixo, a própria célula não está protegida (o atributo <guilabel
+>Protegido</guilabel
+> está desligado), assim, o conteúdo da célula poderá ser alterado.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Apenas a opção <guilabel
+>Ocultar tudo</guilabel
+> está ativa (sem proteção de células) e a planilha está protegida</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Aqui a própria célula está protegida, não podendo ser modificada.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>O <guilabel
+>Ocultar tudo</guilabel
+> e o <guilabel
+>Protegido</guilabel
+> estão ativos na Proteção da Célula e a planilha está protegida</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title
+>Outras Características</title>
+<!-- no split view in 2.4
+<sect2 id="splitview">
+<title
+>Splitting the View</title>
+<para
+>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &sheets;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Split View</guimenuitem
+></menuchoice
+> which will split the current view into 
+two parts. <menuchoice
+><guimenu
+>View</guimenu
+><guisubmenu
+>Splitter Orientation
+</guisubmenu
+></menuchoice
+> lets you choose between 
+<guimenuitem
+>Horizontal</guimenuitem
+> and <guimenuitem
+>Vertical</guimenuitem
+> 
+splitting.</para>
+<para
+>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton
+>left</mousebutton
+> mouse button.</para>
+<para
+>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para
+>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para
+>To remove a view select <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Remove View</guimenuitem
+></menuchoice
+></para>
+</sect2>
+-->
+
+<sect2 id="namedareas">
+<title
+>Células e Áreas Nomeadas</title>
+<para
+>Você pode fornecer um nome como <userinput
+>foo</userinput
+> para uma célula ou para qualquer área de uma planilha selecionando a célula ou área e então selecionando <guimenuitem
+> Nome da Área...</guimenuitem
+> do menu acionado pelo botão <mousebutton
+>direito</mousebutton
+> do mouse. Isto trará a caixa de diálogo <guilabel
+>Nome de Área</guilabel
+> onde você poderá inserir qualquer nome que desejar.</para>
+<para
+>Você pode também nomear uma célula ou área selecionando-a e então digitando o nome na pequena caixa de texto à esquerda da barra de ferramentas Fórmula, sobrescrevendo a referência da célula que normalmente aparece.</para>
+<para
+>Se você inserir um nome que já estiver sendo usado na caixa de texto a seleção do &sheets; mudará para mostrar a célula nomeada.</para>
+<para
+>A opção <menuchoice
+><guimenu
+>Dados</guimenu
+><guimenuitem
+>Áreas com nome... </guimenuitem
+></menuchoice
+> irá mostrar-lhe uma lista com os nomes existentes e irá permitir a alteração do foco do &sheets; para qualquer um deles e ainda remover um nome. </para>
+<para
+>Células nomeadas são particularmente úteis em fórmulas como uma alternativa para <link linkend="absolute"
+>referência absoluta de célula</link
+> uma vez que nomes podem ser usados no lugar das referências normais à célula e não mudam quando a célula contendo a fórmula é copiada. Quando um nome é usado deste modo ele deverá ser envolvido em aspas simples.</para>
+<para
+>Por exemplo, se a célula A1 possui o nome <userinput
+>fred</userinput
+> então você pode inserir uma fórmula como <userinput
+>='fred' + 2 </userinput
+> em outra célula que sempre fornecerá o resultado da adição de 2 ao valor em A1 não importa onde a célula da fórmula seja copiada.</para>
+<para
+>Observe que os nomes de célula e área são tratados com sendo em minúsculas.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title
+>Comentários de Célula</title>
+<para
+>Uma célula pode conter um comentário de texto que pode ser visualizado durante o trabalho na planilha mas que não é impresso e não é visto normalmente.</para>
+<para
+>Para adicionar um comentário, selecione a célula e escolha a opção <guimenuitem
+>Comentário...</guimenuitem
+> do menu de contexto do botão <mousebutton
+>direito</mousebutton
+> ou a opção do menu <guimenu
+>Inserir</guimenu
+> e digite o seu comentário na janela <guilabel
+>Comentário da célula</guilabel
+>.</para>
+<para
+>Para ver o comentário, posicione o ponteiro do mouse sobre a célula. O comentário aparecerá como se fosse uma dica. </para>
+<para
+>Se você assinalar a opção <guilabel
+>Mostrar o indicador do comentário</guilabel
+> da página <guilabel
+>Propriedades da Planilha</guilabel
+> da janela, as células que contiverem comentários terão um pequeno triângulo vermelho no canto superior direito.</para>
+<para
+>Para abrir esta janela, clique com o botão <mousebutton
+>direito</mousebutton
+> nos separadores de planilhas, no fundo da janela principal, e selecione as <guimenuitem
+>Propriedades da Planilha</guimenuitem
+> do menu de contexto. Você pode também selecionar o menu <menuchoice
+><guimenu
+>Formatar</guimenu
+><guisubmenu
+>Planilha</guisubmenu
+></menuchoice
+>.</para>
+
+<para
+>Para remover um comentário de uma célula, selecione <guimenuitem
+>Remover comentário</guimenuitem
+> no menu acionado pelo botão <mousebutton
+>direito</mousebutton
+> do mouse ou escolha <menuchoice
+><guimenu
+>Editar</guimenu
+><guisubmenu
+>Limpar</guisubmenu
+> <guimenuitem
+>Comentário</guimenuitem
+></menuchoice
+>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -1,0 +1,7040 @@
+# Malay translation.
+# MIMOS <opensource@mimos.my>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mimos\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2006-10-05 19:46+0800\n"
+"Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
+"Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
+"Language: ms\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=1;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&Akhir"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "&Pai"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "Selitkan Fail"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "&Format"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "&Slide"
+msgstr "&Slaid"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "&Paparan Slid"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Seting Laluan"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+#| msgid "Custom slide show"
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Paparan slaid biasa"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Cipta Persembahan HTML"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Hapuskan Slaid"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Hapuskan Slaid"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Hapuskan Slaid"
+msgstr[1] "Hapuskan Slaid"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+#| msgid "Presentation duration: "
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Tempoh persembahan:"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+#| msgid "Custom slide show"
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Paparan slaid biasa"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgid "Change Image Effect"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Ubah Kesan Imej"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgid "Image &effect:"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "&Kesan imej:"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Hapuskan Slaid"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+#| msgid "Modify Slide Transition"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Ubah Suai Peralihan Slid"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Define Custom Slide Show"
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Tentukan Paparan Slid Biasa"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+#| msgid "Modify Slide Transition"
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Ubah Suai Peralihan Slid"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "&Konfigur Paparan Slaid..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "Persembahan"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(c) 1998-2005, KPresenter Team"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "penyenggara asal"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "pengarang asal"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr ""
+
+#: part/KPrAboutData.h:36
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Werner Trobin"
+msgstr "Di tengah"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr ""
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr ""
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr ""
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "Persembahan"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+#| msgid "&Closed Line"
+msgid "Carlos Licea "
+msgstr "Garis &Tertutup"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "MIMOS"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "opensource@mimos.my"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Slaid %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Persembahan tamat. Klik untuk keluar."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Layout"
+msgstr "&Bentangan Halaman..."
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Selitkan Gambar"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "Warna"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "Tambah Saiz Fon"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Black"
+msgstr "&Warna:"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "Lebar:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Hijau"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Merah"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Biru"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+#| msgid "Slow"
+msgid "Yellow"
+msgstr "Perlahan"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "&Next Slide"
+msgid "Next Slide"
+msgstr "Slaid &Berikutnya"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, kde-format
+msgid "Speaker Notes"
+msgstr ""
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Current Slide %1 of %2"
+msgstr "Cipta Paparan Slaid HTML"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "End of Slide Show"
+msgstr "Paparan Slaid"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start after previous animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start with previous animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Bentuk"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+#| msgid "Move Slide"
+msgid "&Move Here"
+msgstr "Alihkan Slaid"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+#| msgid "Copy Slide"
+msgid "&Copy Here"
+msgstr "Salin Slaid"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr ""
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Biasa"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Show Master Slides"
+msgstr "Tampal Slaid"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+#| msgid "Goto Slide..."
+msgid "Import Slideshow..."
+msgstr "Beralih ke Slid..."
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Selitkan Slid"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "Salin Slaid"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Copy the current slide"
+msgstr "Sebelum Slid Semasa"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Slide"
+msgstr "Hapuskan Slaid"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete the current slide"
+msgstr "Sebelum Slid Semasa"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+#| msgid "Insert &Slide..."
+msgid "Master Slide..."
+msgstr "Selitkan &Slaid..."
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Previous Slide"
+msgstr "Slaid &Sebelumnya"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+#| msgid "Previous slide"
+msgid "Go to previous slide"
+msgstr "Slaid sebelumnya"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to next slide"
+msgstr "Beralih ke slid:"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "First Slide"
+msgstr "Tampal Slaid"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to first slide"
+msgstr "Beralih ke slid:"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Last Slide"
+msgstr "Tampal Slaid"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to last slide"
+msgstr "Beralih ke slid:"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Stage..."
+msgstr "&Konfigur Paparan Slaid..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "Selitkan Gambar"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Create Appear Animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+#| msgid "Custom Slide Show..."
+msgid "Edit Custom Slide Shows..."
+msgstr "Paparan Slaid Biasa..."
+
+#: part/KPrView.cpp:268
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Start Presentation"
+msgstr "Persembahan"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "From Current Slide"
+msgstr "Selepas Slid Semasa"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+#| msgid "Start From &First Slide"
+msgid "From First Slide"
+msgstr "Mula Dari Slaid &Pertama"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+#| msgid "Loop presentation"
+msgid "Stop presentation"
+msgstr "Persembahan gelung"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show Status Bar"
+msgstr "Papar bar status"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Hide Status Bar"
+msgstr "Papar bar status"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Shows or hides the status bar"
+msgstr "Papar bar status"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Slide Show..."
+msgstr "&Konfigur Paparan Slaid..."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter..."
+msgid "Configure Presenter View..."
+msgstr "Konfigur KPresenter..."
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+#| msgid "Overwrite Presentation"
+msgid "Draw on the presentation..."
+msgstr "Tulis Ganti Persembahan"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+#| msgid "Overwrite Presentation"
+msgid "Highlight the presentation..."
+msgstr "Tulis Ganti Persembahan"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Overwrite Presentation"
+msgid "Blackscreen on the presentation..."
+msgstr "Tulis Ganti Persembahan"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+#| msgid "Note"
+msgid "Notes"
+msgstr "Nota"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "&Induk Slaid"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show: "
+msgstr "Paparan Slaid"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new custom slide show"
+msgstr "Paparan slaid"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current custom slide show"
+msgstr "Sebelum Slid Semasa"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+#| msgid "Custom slide show"
+msgid "Add slides to current custom slide show"
+msgstr "Paparan slaid biasa"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+#| msgid "Custom slide show"
+msgid "Remove slides from current custom slide show"
+msgstr "Paparan slaid biasa"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Duplicate Slide"
+msgstr "Hapuskan Slaid"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Start Slideshow"
+msgstr "Cipta Paparan Slaid HTML"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new slide"
+msgstr "Paparan slaid"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+#| msgid "Selected slides:"
+msgid "Delete selected slides"
+msgstr "Slid yang dipilih:"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "Alih Keluar Pautan"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+#| msgid "&Custom"
+msgid "Cut"
+msgstr "&Biasa"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Copy"
+msgstr "&Salin"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+#| msgid "Path"
+msgid "Paste"
+msgstr "Laluan"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show %1"
+msgstr "Paparan Slaid"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+#| msgid "All Files"
+msgid "All slides"
+msgstr "Semua Fail"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+#| msgid "Arrow"
+msgid "Error"
+msgstr "Anak Panah"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+#| msgid "Page &Layout..."
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "&Bentangan Halaman..."
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+#| msgid "Automatic hyphenation"
+msgid "Automatic animation preview"
+msgstr "Tanda sempang automatik"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Persembahan"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+#| msgid "Modify Slide Transition"
+msgid "Slide Transitions"
+msgstr "Ubah Suai Peralihan Slid"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Click Actions"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Animations"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Presentation duration: "
+msgid "Manage animation delay and duration: "
+msgstr "Tempoh persembahan:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "&Carta"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "after previous animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "with previous animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Duration: "
+msgstr "Arah"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Preview Shape Animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Tiada Kesan"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid " sec"
+msgstr "saat"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+#| msgid "Modify Slide Transition"
+msgid "Slide Transition:"
+msgstr "Ubah Suai Peralihan Slid"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "Guna Gaya"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+#| msgid "Apply Style to Frames"
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Guna Gaya pada Bingkai"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+#| msgid "Custom slide:"
+msgid "Custom"
+msgstr "Slaid biasa:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+#| msgid "Elevation:"
+msgid "Ole Action"
+msgstr "Dongakan:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Edit animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Add new animation"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Remove animation"
+msgstr "Alih Keluar Pautan"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation up"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation down"
+msgstr "Cipta Persembahan HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new animation"
+msgstr "Paparan slaid"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current animation"
+msgstr "Sebelum Slid Semasa"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Crop"
+msgstr "&Salin"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgid "W&idth:"
+msgstr "Lebar:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Cipta Gambar Slaid"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "&Tinggi:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Cipta Gambar Slaid"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+#| msgid "&Location:"
+msgid "R&atio:"
+msgstr "&Lokasi:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Cipta Gambar Slaid"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Image"
+msgstr "&Halaman"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+#| msgid "&Top:"
+msgid "&Crop"
+msgstr "&Atas:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Bentuk"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+#| msgid "Presentation Pen"
+msgid "Presentation monitor:"
+msgstr "Pena Persembahan"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Enable presenter view"
+msgstr "Konfigur KPresenter"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Configure Presenter View"
+msgstr "Konfigur KPresenter"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "Konfigur Paparan Slaid"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slides"
+msgstr "&Slaid"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "Persembahan"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+#| msgid "Custom Slide Show..."
+msgid "Edit Custom Slide Shows ..."
+msgstr "Paparan Slaid Biasa..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+#| msgid "Select &All"
+msgid "Select all"
+msgstr "Pilih &Semua"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+#| msgid "Selected pages:"
+msgid "Select template (.css) :"
+msgstr "Halaman yang dipilih:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+#| msgid "&Deselect All"
+msgid "Deselect all"
+msgstr "&Nyahpilih Semua"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgid "Title"
+msgstr "Tajuk:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+#| msgid "Automatic preview"
+msgid "Output preview"
+msgstr "Prapapar automatik"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Baru..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "Pengarang:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Favorite"
+msgstr "Hapuskan Slaid"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Template"
+msgstr "Hapuskan Slaid"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Add Template"
+msgstr "Hapuskan Slaid"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Do you want to remove the current slide?"
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Anda mahu alih keluar slaid semasa?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "Simpan Konfigurasi..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Rotation"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Ubah Putaran"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid "No sound"
+msgstr "saat"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Import..."
+msgstr "Import Gaya..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Left"
+msgstr "Datang Dari Kiri"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "From Top"
+msgstr "Datang Dari Atas"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Right"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Clock"
+msgstr "&Warna:"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Clockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Clockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Clockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Clockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Counterclockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Counterclockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Counterclockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Counterclockwise"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Fan"
+msgstr "Anak Panah Kembar"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Vertical"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Horizontal"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan In Vertical"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Horizontal"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Sweep"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Parallel Vertical"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Opposite Vertical"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Opposite Horizontal"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Flatten"
+msgid "Fan"
+msgstr "Meratakan"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Uncover Right"
+msgid "Center Right"
+msgstr "Nyahtutup Kanan"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Top"
+msgstr "Di tengah"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Left"
+msgstr "Di tengah"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Center Bottom"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Top"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Right"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan Out Bottom"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Left"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Top"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Fan In Right"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan In Bottom"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Fan In Left"
+msgstr "Datang Dari Kiri"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Pin Wheel"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Clockwise"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Saloon Door"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "To Top"
+msgstr "Datang Dari Atas"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "To Left"
+msgstr "Tutup Kiri"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "&Bawah:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "To Right"
+msgstr "Tutup Kanan"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Single Sweep"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top"
+msgstr "Datang Dari Kiri"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Cover Right-Up"
+msgid "Clockwise Right"
+msgstr "Tutup Kanan-Atas"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Clockwise Bottom"
+msgstr "Jajarkan Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Clockwise Left"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left"
+msgstr "Datang Dari Kiri"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Right"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Left"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Windshield"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Right"
+msgstr "&Kanan:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Barn Door"
+msgstr "Anak Panah Kembar"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left Reverse"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Barn Zig Zag"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Top Left"
+msgstr "Datang Dari Kiri"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Top Right"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Left"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Right"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "Kecerunan Pepenjuru 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In"
+msgstr "&Bucu:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In Reverse"
+msgstr "&Bucu:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out"
+msgstr "&Bucu:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out Reverse"
+msgstr "&Bucu:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "Kecerunan Pepenjuru 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Barn Door"
+msgstr "Anak Panah Kembar"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Diamond"
+msgstr "Anak Panah Kembar"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Zig Zag"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Pudar"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Set Text Color"
+msgid "Fade over Color"
+msgstr "Setkan Warna Teks"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "ArrowHead"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+#| msgid "Done"
+msgid "Down"
+msgstr "Selesai"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+#| msgid "&Length:"
+msgid "Left"
+msgstr "&Panjang:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Elips"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Bulatan"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "Persembahan"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "Segiempat Tepat"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "Segiempat Tepat"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Diamond"
+msgstr "Anak Panah Kembar"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Pelbagai"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Heart"
+msgstr "Pengepala"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "Garis Menegak"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "Persembahan"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Sound effect"
+msgid "RoundRect"
+msgstr "Kesan bunyi"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "&Carta"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "Garis Mendatar"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Triangle"
+msgstr "Berjubin"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Box Snakes"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Box In"
+msgid "Two Box Top In"
+msgstr "Kotak Masuk"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "&Bawah:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "Two Box Left In"
+msgstr "Tutup Kiri"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "Two Box Right In"
+msgstr "Tutup Kanan"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical In"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal In"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Box Out"
+msgid "Two Box Top Out"
+msgstr "Kotak Keluar"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "&Bawah:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Left Out"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Right Out"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical Out"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal Out"
+msgstr "Bidai Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Snakes"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "Kecerunan Menegak"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "Kecerunan Menegak"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "Kecerunan Menegak"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "Kecerunan Menegak"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Kecerunan Menegak"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Kecerunan Mendatar"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "Bentuk"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Swirl"
+msgid "Spiral"
+msgstr "Pusar"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left In"
+msgstr "Datang Dari Kiri"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left Out"
+msgstr "Datang Dari Kiri"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right In"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right Out"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left In"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left Out"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right In"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right Out"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left In"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left Out"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right In"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right Out"
+msgstr "Datang Dari Kanan"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left In"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right In"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Waterfall"
+msgstr "&Kesan imej:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Left Vertical"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Left Horizontal"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Right Vertical"
+msgstr "Buka Menegak"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Right Horizontal"
+msgstr "Buka Mendatar"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Close Vertical"
+msgid "Bottom Left Vertical"
+msgstr "Tutup Menegak"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Close Horizontal"
+msgid "Bottom Left Horizontal"
+msgstr "Tutup Mendatar"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Bottom Right Vertical"
+msgstr "Datang Dari Bawah"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Interlocking Horizontal 1"
+msgid "Bottom Right Horizontal"
+msgstr "Saling Kunci Mendatar 1"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slide"
+msgstr "&Slaid"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Space Rotation"
+msgstr "Putaran"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Swap effect"
+msgstr "&Kesan imej:"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Header"
+msgstr "Pengepala"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "Pengaki"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Akhir"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Pai"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "Selitkan Fail"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "&Format"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Slaid"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "&Paparan Slid"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Seting Laluan"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "&Salin"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Lebar:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Cipta Gambar Slaid"
+
+#, fuzzy
+#~| msgid "&Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "&Tinggi:"
+
+#, fuzzy
+#~| msgid "&Location:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "&Lokasi:"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "&Halaman"
+
+#, fuzzy
+#~| msgid "&Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "&Atas:"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "&Slaid"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Persembahan"
+
+#, fuzzy
+#~| msgid "Custom Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Paparan Slaid Biasa..."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Pilih &Semua"
+
+#, fuzzy
+#~| msgid "Selected pages:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Halaman yang dipilih:"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "&Nyahpilih Semua"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Tajuk:"
+
+#, fuzzy
+#~| msgid "Automatic preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Prapapar automatik"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Baru..."
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Pengarang:"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Hapuskan Slaid"
+
+#, fuzzy
+#~| msgid "Presentation Pen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Pena Persembahan"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "&Konfigur Paparan Slaid..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Persembahan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(c) 1998-2005, KPresenter Team"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "penyenggara asal"
+
+#, fuzzy
+#~| msgid "original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "pengarang asal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Persembahan"
+
+#, fuzzy
+#~| msgid "&Closed Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Garis &Tertutup"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "MIMOS"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "opensource@mimos.my"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Slaid %1"
+
+#, fuzzy
+#~| msgid "End of presentation. Click to exit."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Persembahan tamat. Klik untuk keluar."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "&Bentangan Halaman..."
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Warna"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Tambah Saiz Fon"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "&Warna:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Lebar:"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Hijau"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Merah"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Biru"
+
+#, fuzzy
+#~| msgid "Slow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Perlahan"
+
+#, fuzzy
+#~| msgid "&Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Slaid &Berikutnya"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Cipta Paparan Slaid HTML"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Paparan Slaid"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Bentuk"
+
+#, fuzzy
+#~| msgid "Move Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "Alihkan Slaid"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "Salin Slaid"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Biasa"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Tampal Slaid"
+
+#, fuzzy
+#~| msgid "Goto Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Beralih ke Slid..."
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Selitkan Slid"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Salin Slaid"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Sebelum Slid Semasa"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Hapuskan Slaid"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Sebelum Slid Semasa"
+
+#, fuzzy
+#~| msgid "Insert &Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Selitkan &Slaid..."
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Slaid &Sebelumnya"
+
+#, fuzzy
+#~| msgid "Previous slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Slaid sebelumnya"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Beralih ke slid:"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Tampal Slaid"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Beralih ke slid:"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Tampal Slaid"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Beralih ke slid:"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "&Konfigur Paparan Slaid..."
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Selitkan Gambar"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Custom Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Paparan Slaid Biasa..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Persembahan"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Selepas Slid Semasa"
+
+#, fuzzy
+#~| msgid "Start From &First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "Mula Dari Slaid &Pertama"
+
+#, fuzzy
+#~| msgid "Loop presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Persembahan gelung"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Papar bar status"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Papar bar status"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Papar bar status"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "&Konfigur Paparan Slaid..."
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Konfigur KPresenter..."
+
+#, fuzzy
+#~| msgid "Overwrite Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Tulis Ganti Persembahan"
+
+#, fuzzy
+#~| msgid "Note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Nota"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "&Induk Slaid"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Paparan Slaid"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Paparan slaid"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Sebelum Slid Semasa"
+
+#, fuzzy
+#~| msgid "Custom slide show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Paparan slaid biasa"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Hapuskan Slaid"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Cipta Paparan Slaid HTML"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Paparan slaid"
+
+#, fuzzy
+#~| msgid "Selected slides:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Slid yang dipilih:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Alih Keluar Pautan"
+
+#, fuzzy
+#~| msgid "&Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "&Biasa"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "&Salin"
+
+#, fuzzy
+#~| msgid "Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Laluan"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Paparan Slaid"
+
+#, fuzzy
+#~| msgid "All Files"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Semua Fail"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Anak Panah"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Tanda sempang automatik"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Persembahan"
+
+#, fuzzy
+#~| msgid "Modify Slide Transition"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Ubah Suai Peralihan Slid"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Presentation duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Tempoh persembahan:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "&Carta"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Arah"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Tiada Kesan"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr "saat"
+
+#, fuzzy
+#~| msgid "Apply Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Guna Gaya"
+
+#, fuzzy
+#~| msgid "Custom slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Slaid biasa:"
+
+#, fuzzy
+#~| msgid "Elevation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Dongakan:"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Remove Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Alih Keluar Pautan"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Cipta Persembahan HTML"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Paparan slaid"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Sebelum Slid Semasa"
+
+#, fuzzy
+#~| msgid "Configure KPresenter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Konfigur KPresenter"
+
+#, fuzzy
+#~| msgid "Configure Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Konfigur Paparan Slaid"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Hapuskan Slaid"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Anda mahu alih keluar slaid semasa?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Simpan Konfigurasi..."
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "saat"
+
+#, fuzzy
+#~| msgid "Import Styles..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Import Gaya..."
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Datang Dari Kiri"
+
+#, fuzzy
+#~| msgid "Come From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Datang Dari Atas"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "&Warna:"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Anak Panah Kembar"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Flatten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Meratakan"
+
+#, fuzzy
+#~| msgid "Uncover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Nyahtutup Kanan"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Di tengah"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Di tengah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Datang Dari Kiri"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Bidai Mendatar"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Bidai Mendatar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Tutup Kiri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "&Bawah:"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Tutup Kanan"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Cover Right-Up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Tutup Kanan-Atas"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Jajarkan Bawah"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Datang Dari Kiri"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "&Kanan:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Anak Panah Kembar"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Datang Dari Kiri"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Kecerunan Pepenjuru 1"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "&Bucu:"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "&Bucu:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Kecerunan Pepenjuru 1"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Anak Panah Kembar"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Anak Panah Kembar"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Pudar"
+
+#, fuzzy
+#~| msgid "Set Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Setkan Warna Teks"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Done"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Selesai"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "&Length:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "&Panjang:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Elips"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Bulatan"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Segiempat Tepat"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Segiempat Tepat"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Anak Panah Kembar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Pelbagai"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Pengepala"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Garis Menegak"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Persembahan"
+
+#, fuzzy
+#~| msgid "Sound effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Kesan bunyi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "&Carta"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Garis Mendatar"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Berjubin"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Box In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Kotak Masuk"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "&Bawah:"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Tutup Kiri"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Tutup Kanan"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Bidai Mendatar"
+
+#, fuzzy
+#~| msgid "Box Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Kotak Keluar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "&Bawah:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Bidai Mendatar"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Kecerunan Menegak"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Kecerunan Menegak"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Kecerunan Menegak"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Kecerunan Mendatar"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Kecerunan Mendatar"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Kecerunan Mendatar"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Kecerunan Mendatar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Kecerunan Mendatar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Kecerunan Mendatar"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Bentuk"
+
+#, fuzzy
+#~| msgid "Swirl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Pusar"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Datang Dari Kiri"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Datang Dari Kiri"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Datang Dari Kanan"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Buka Menegak"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Buka Mendatar"
+
+#, fuzzy
+#~| msgid "Close Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Tutup Menegak"
+
+#, fuzzy
+#~| msgid "Close Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Tutup Mendatar"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Datang Dari Bawah"
+
+#, fuzzy
+#~| msgid "Interlocking Horizontal 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Saling Kunci Mendatar 1"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "&Slaid"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Putaran"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Pengepala"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Pengaki"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgid "Maintainer"
+#~ msgstr "penyenggara asal"
+
+#, fuzzy
+#~| msgid "KOffice Presentation Tool"
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Alat Persembahan KOffice"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "&Halaman"
+
+#~ msgid "File to open"
+#~ msgstr "Fail hendak dibuka"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Set Layout"
+#~ msgstr "&Bentangan Halaman..."
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&Fail:"
+
+#~ msgid "Line"
+#~ msgstr "Garis"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "&Susun Objek"
+
+#~ msgid "&Align Objects"
+#~ msgstr "&Jajarkan Objek"
+
+#~ msgid "Te&xt"
+#~ msgstr "&Teks"
+
+#~ msgid "&Align"
+#~ msgstr "&Jajar"
+
+#~ msgid "T&ype"
+#~ msgstr "&Jenis"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Semak eja"
+
+#~ msgid "Autocorrection"
+#~ msgstr "Autopembetulan"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "&Fail:"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "&Akhir"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Selitkan Fail"
+
+#~ msgid "Tools"
+#~ msgstr "Alat"
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Text"
+#~ msgstr "Teks"
+
+#~ msgid "Slide Show"
+#~ msgstr "Paparan Slaid"
+
+#~ msgid "Navigation"
+#~ msgstr "Navigasi"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Penjajaran Menegak"
+
+#~ msgid "Flip Objects"
+#~ msgstr "Terbalikkan Objek"
+
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "&Skalakan untuk Memaparkan Gambar 1:1 Dalam"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Keputusan Semak Eja"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Slide Layouts"
+#~ msgstr "&Bentangan Halaman..."
+
+#, fuzzy
+#~| msgid "Slide Transition"
+#~ msgid "Transitions"
+#~ msgstr "Peralihan Slid"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Konfigur KPresenter..."
+
+#~ msgid "Slide Title"
+#~ msgstr "Tajuk Slaid"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "&Nyahpilih Semua"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Pilih"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "New Slide Show %1"
+#~ msgstr "Paparan Slaid"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "Anda mahu alih keluar slaid semasa?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgid "Confirm action"
+#~ msgstr "Simpan Konfigurasi..."
+
+#, fuzzy
+#~| msgid "Custom Slide Show"
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Paparan Slid Biasa"
+
+#, fuzzy
+#~| msgid "Custom Slide Show"
+#~ msgid "Customs Slideshows"
+#~ msgstr "Paparan Slid Biasa"
+
+#, fuzzy
+#~| msgid "Duplicate Slide"
+#~ msgid "Available Slides"
+#~ msgstr "Duplikasikan Slaid"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgid "Add Slide"
+#~ msgstr "Slaid"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgid "Close"
+#~ msgstr "&Warna:"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#, fuzzy
+#~| msgid "Set Page Layout"
+#~ msgid "Page Layouts"
+#~ msgstr "Setkan Bentangan Halaman"
+
+#~ msgid "&Page"
+#~ msgstr "&Halaman"
+
+#, fuzzy
+#~| msgid "Change Image Effect"
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Ubah Kesan Imej"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Star Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Box Wipe Effect"
+#~ msgstr "&Kesan imej:"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Format"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgid "Navigate to:"
+#~ msgstr "Navigasi"
+
+#, fuzzy
+#~| msgid "Cover Down"
+#~ msgid "Cover down effect"
+#~ msgstr "Tutup Bawah"
+
+#~ msgid "Insert &new slide:"
+#~ msgstr "Selitkan slid &baru:"
+
+#~ msgid "Use &default template"
+#~ msgstr "Guna templat &piawai"
+
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "Guna slid &semasa sebagai piawai"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "Guna templat &berbeza"
+
+#, fuzzy
+#~ msgid "A&ngle:"
+#~ msgstr "Sudut:"
+
+#, fuzzy
+#~ msgid " °"
+#~ msgstr "0°"
+
+#~ msgid "Pie"
+#~ msgstr "Pai"
+
+#~ msgid "&Type:"
+#~ msgstr "&Jenis:"
+
+#~ msgid "&Length:"
+#~ msgstr "&Panjang:"
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "Posisi Y (%1):"
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "Cipta Gambar Slaid"
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "Posisi Y (%1):"
+
+#~ msgid "Preview"
+#~ msgstr "Prapapar"
+
+#~ msgid "Channel Intensity"
+#~ msgstr "Keamatan Saluran"
+
+#~ msgid "Intensity"
+#~ msgstr "Keamatan"
+
+#~ msgid "Desaturate"
+#~ msgstr "Nyahtepu"
+
+#~ msgid "Contrast"
+#~ msgstr "Kontras"
+
+#~ msgid "Normalize"
+#~ msgstr "Menormalkan"
+
+#~ msgid "Equalize"
+#~ msgstr "Menyamakan"
+
+#~ msgid "Threshold"
+#~ msgstr "Ambang"
+
+#~ msgid "Solarize"
+#~ msgstr "Mensolarkan"
+
+#~ msgid "Emboss"
+#~ msgstr "Cetak timbul"
+
+#~ msgid "Despeckle"
+#~ msgstr "Nyahbintik"
+
+#~ msgid "Charcoal"
+#~ msgstr "Arang"
+
+#~ msgid "Noise"
+#~ msgstr "Bunyi"
+
+#~ msgid "Blur"
+#~ msgstr "Kabur"
+
+#~ msgid "Edge"
+#~ msgstr "Tepi"
+
+#~ msgid "Implode"
+#~ msgstr "Implod"
+
+#~ msgid "Oil Paint"
+#~ msgstr "Cat Minyak"
+
+#~ msgid "Sharpen"
+#~ msgstr "Menajamkan"
+
+#~ msgid "Spread"
+#~ msgstr "Sebar"
+
+#~ msgid "Shade"
+#~ msgstr "Bayang"
+
+#~ msgid "Wave"
+#~ msgstr "Ombak"
+
+#~ msgid "Value:"
+#~ msgstr "Nilai:"
+
+#~ msgid " %"
+#~ msgstr "%"
+
+#~ msgid "Color component:"
+#~ msgstr "Komponen warna:"
+
+#~ msgid "Gray"
+#~ msgstr "Kelabu"
+
+#~ msgid "All"
+#~ msgstr "Semua"
+
+#~ msgid "Color:"
+#~ msgstr "Warna:"
+
+#~ msgid "Color 1:"
+#~ msgstr "Warna 1:"
+
+#~ msgid "Color 2:"
+#~ msgstr "Warna 2:"
+
+#~ msgid "Intensity:"
+#~ msgstr "Keamatan:"
+
+#~ msgid "This effect has no options."
+#~ msgstr "Kesan ini tiada pilihan."
+
+#~ msgid "Factor:"
+#~ msgstr "Faktor:"
+
+#~ msgid "Type:"
+#~ msgstr "Jenis:"
+
+#~ msgid "Uniform"
+#~ msgstr "Sekata"
+
+#~ msgid "Gaussian"
+#~ msgstr "Gaussan"
+
+#~ msgid "Multiplicative Gaussian"
+#~ msgstr "Gaussan Berdaraban"
+
+#~ msgid "Impulse"
+#~ msgstr "Impuls"
+
+#~ msgid "LaPlace"
+#~ msgstr "LaPlace"
+
+#~ msgid "Poisson"
+#~ msgstr "Poisson"
+
+#~ msgid "Radius:"
+#~ msgstr "Jejari:"
+
+#~ msgid "Color Shading"
+#~ msgstr "Bayangan Warna"
+
+#~ msgid "Azimuth:"
+#~ msgstr "Azimut:"
+
+#, fuzzy
+#~ msgid "Determines the light source and direction"
+#~ msgstr "Tentukan sumber dan arah cahaya."
+
+#~ msgid "Angle:"
+#~ msgstr "Sudut:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "Amplitud:"
+
+#~ msgid "Wave length:"
+#~ msgstr "Jarak gelombang:"
+
+#~ msgid "Pen"
+#~ msgstr "Pena"
+
+#~ msgid "Arrow Style"
+#~ msgstr "Gaya Anak Panah"
+
+#~ msgid "&Begin:"
+#~ msgstr "&Mula:"
+
+#~ msgid "&End:"
+#~ msgstr "&Akhir:"
+
+#~ msgid "&Width:"
+#~ msgstr "&Lebar:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "&Gaya"
+
+#~ msgid "C&olor:"
+#~ msgstr "&Warna"
+
+#~ msgid " pt"
+#~ msgstr "pt"
+
+#~ msgid "Rect"
+#~ msgstr "Segiempat tepat"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Kemerosotan &menegak:"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "&Kemerosotan mengufuk:"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "&Kemerosotan mengufuk:"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "Kemerosotan &menegak:"
+
+#~ msgid "Polygon"
+#~ msgstr "Poligon"
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "&Ketajaman"
+
+#~ msgid "Brush"
+#~ msgstr "Berus"
+
+#~ msgid "&Style:"
+#~ msgstr "&Gaya:"
+
+#~ msgid "&Preview"
+#~ msgstr "&Prapapar"
+
+#~ msgid "&Effect:"
+#~ msgstr "&Kesan:"
+
+#~ msgid "&Speed:"
+#~ msgstr "&Laju:"
+
+#~ msgid "So&und effect"
+#~ msgstr "Kesan &bunyi"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "&Fail:"
+
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "&Peralihan automatik ke slid berikutnya selepas:"
+
+#~ msgid "Gradient"
+#~ msgstr "Kecerunan"
+
+#, fuzzy
+#~ msgid "Gradient:"
+#~ msgstr "Kecerunan"
+
+#~ msgid "X-fac&tor:"
+#~ msgstr "&Faktor X:"
+
+#~ msgid "Un&balanced:"
+#~ msgstr "&Tidak seimbang:"
+
+#~ msgid "&Y-factor:"
+#~ msgstr "&Faktor Y:"
+
+#~ msgid "Margin"
+#~ msgstr "Jidar"
+
+#~ msgid "Margins"
+#~ msgstr "Jidar"
+
+#, fuzzy
+#~ msgid "S&ynchronize changes"
+#~ msgstr "&Segerakkan perubahan"
+
+#~ msgid "General"
+#~ msgstr "Am"
+
+#~ msgid "Na&me:"
+#~ msgstr "&Nama:"
+
+#, fuzzy
+#~ msgid "Protect si&ze and position"
+#~ msgstr "&Lindungi saiz dan posisi"
+
+#, fuzzy
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "&Kekalkan nisbah"
+
+#~ msgid "Position"
+#~ msgstr "Posisi"
+
+#~ msgid "Shadow"
+#~ msgstr "Bayang"
+
+#~ msgid "Color && Distance"
+#~ msgstr "Warna && Jarak"
+
+#~ msgid "Distance:"
+#~ msgstr "Jarak:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Persembahan"
+
+#~ msgid "Picture"
+#~ msgstr "Gambar"
+
+#~ msgid "Depth"
+#~ msgstr "Kedalaman"
+
+#~ msgid "&1 bit color mode"
+#~ msgstr "mod warna bit &1"
+
+#~ msgid "&8 bit color mode"
+#~ msgstr "mod warna bit &8"
+
+#~ msgid "1&6 bit color mode"
+#~ msgstr "mod warna bit 1&6"
+
+#~ msgid "&32 bit color mode"
+#~ msgstr "mod warna bit &32"
+
+#~ msgid "&Default color mode"
+#~ msgstr "Mod warna &piawai"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Conv&ert from RGB image to BRG image"
+#~ msgstr "&Tukar daripada imej RGB kepada imej BRG"
+
+#~ msgid "Gra&yscale"
+#~ msgstr "Skala &kelabu"
+
+#~ msgid "&Brightness:"
+#~ msgstr "&Kecerahan:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "&Kiri:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Persembahan"
+
+#~ msgid "Use slide master background"
+#~ msgstr "Gunakan latar belakang induk slid"
+
+#~ msgid "Background type:"
+#~ msgstr "Jenis latar belakang:"
+
+#~ msgid "Color/Gradient"
+#~ msgstr "Warna/Kecerunan"
+
+#~ msgid "Plain"
+#~ msgstr "Kosong"
+
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "Kecerunan Pepenjuru 1"
+
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "Kecerunan Pepenjuru 2"
+
+#~ msgid "Circle Gradient"
+#~ msgstr "Kecerunan Bulatan"
+
+#~ msgid "Rectangle Gradient"
+#~ msgstr "Kecerunan Segiempat Tepat"
+
+#~ msgid "PipeCross Gradient"
+#~ msgstr "Kecerunan PipeCross"
+
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Kecerunan Piramid"
+
+#~ msgid "Unbalanced"
+#~ msgstr "Tak seimbang"
+
+#~ msgid "X-factor:"
+#~ msgstr "Faktor X:"
+
+#~ msgid "Y-factor:"
+#~ msgstr "Faktor Y:"
+
+#~ msgid "View mode:"
+#~ msgstr "Mod papar:"
+
+#~ msgid "Scaled"
+#~ msgstr "Berskala"
+
+#~ msgid "Apply &Global"
+#~ msgstr "Guna &Global"
+
+#~ msgid "&Reset"
+#~ msgstr "&Set semula"
+
+#, fuzzy
+#~ msgid "Single Color"
+#~ msgstr "&Setkan Warna"
+
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "%1% Corak Isian"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Garis Menyilang"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Garis Pepenjuru ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Garis Pepenjuru ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Garis Menyilang Pepenjuru"
+
+#, fuzzy
+#~ msgid "Diagonal 2"
+#~ msgstr "Kecerunan Pepenjuru 2"
+
+#, fuzzy
+#~ msgid "PipeCross"
+#~ msgstr "Kecerunan PipeCross"
+
+#, fuzzy
+#~ msgid "Pyramid"
+#~ msgstr "Kecerunan Piramid"
+
+#~ msgid ""
+#~ "The object you are trying to select belongs to the master slide. Editing "
+#~ "the object can only be done on the master slide.\n"
+#~ "Go there now?"
+#~ msgstr ""
+#~ "Objek yang cuba anda pilih kepunyaan slid induk. Mengedit objek hanya "
+#~ "boleh dilakukan pada slid induk.\n"
+#~ "Beralih ke sana sekarang?"
+
+#~ msgid "Resize Object Up"
+#~ msgstr "Saiz Semula Objek Ke atas"
+
+#~ msgid "Resize Object Down"
+#~ msgstr "Saiz Semula Objek Ke bawah"
+
+#~ msgid "Resize Object Left"
+#~ msgstr "Saiz Semula Objek Ke kiri"
+
+#~ msgid "Resize Object Right"
+#~ msgstr "Saiz Semula Objek Ke kanan"
+
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "Saiz Semula Objek Ke kiri && Atas"
+
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "Saiz Semula Objek Ke kiri && Bawah"
+
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "Saiz Semula Objek Ke kanan && Atas"
+
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "Saiz Semula Objek Ke kanan && Bawah"
+
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr ""
+#~ "Kandungan baca sahaja tidak boleh diubah. Pengubahsuaian tidak diterima."
+
+#~ msgid "&Continue"
+#~ msgstr "&Teruskan"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "Mod &Lukisan"
+
+#~ msgid "&Goto Slide..."
+#~ msgstr "&Beralih ke Slid..."
+
+#~ msgid "&End"
+#~ msgstr "&Akhir"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Tukar Fon Teks"
+
+#~ msgid "Set Text Background Color"
+#~ msgstr "Setkan Warna Latar Belakang Teks"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Jadikan Teks Tebal"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Jadikan Teks Italik"
+
+#~ msgid "Underline Text"
+#~ msgstr "Garis Bawah Teks"
+
+#~ msgid "Set Text Font"
+#~ msgstr "Setkan Fon Teks"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Ubah Saiz Teks"
+
+#~ msgid "Set Text Subscript"
+#~ msgstr "Setkan Teks Subskrip"
+
+#~ msgid "Set Text Superscript"
+#~ msgstr "Setkan Teks Superskrip"
+
+#~ msgid "Apply Default Format"
+#~ msgstr "Guna Format Piawai"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Tambah Saiz Fon"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Kurangkan Saiz Fon"
+
+#~ msgid "Set Text Align"
+#~ msgstr "Setkan Teks Sejajar"
+
+#~ msgid "Change Tabulators"
+#~ msgstr "Ubah Penjadual"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Tambah Kedalaman Perenggan"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Kurangkan Kedalaman Perenggan"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "Ubah Inden Baris Pertama"
+
+#~ msgid "Change Left Indent"
+#~ msgstr "Ubah Inden Kiri"
+
+#~ msgid "Change Right Indent"
+#~ msgstr "Ubah Inden Kanan"
+
+#~ msgid "Printing..."
+#~ msgstr "Mencetak..."
+
+#, fuzzy
+#~ msgid "Scale to Original Size"
+#~ msgstr "Skalakan ke Saiz Asal"
+
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr "Skalakan Gambar supaya Dipaparkan Sebagai 1:1 dalam Mod Persembahan"
+
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "Besarkan Kandungan Teks ikut Tinggi"
+
+#~ msgid "Extend Text to Contents"
+#~ msgstr "Besarkan Teks ikut Kandungan"
+
+#~ msgid "Align Objects Left"
+#~ msgstr "Jajarkan Objek Ke kiri"
+
+#~ msgid "Align Objects Top"
+#~ msgstr "Jajarkan Objek Ke atas"
+
+#~ msgid "Align Objects Right"
+#~ msgstr "Jajarkan Objek Ke kanan"
+
+#~ msgid "Align Objects Bottom"
+#~ msgstr "Jajarkan Objek Ke bawah"
+
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "Jajarkan Objek Ke tengah (mendatar)"
+
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "Jajarkan Objek Ke tengah/Menegak"
+
+#~ msgid "Close Object"
+#~ msgstr "Tutup Objek"
+
+#~ msgid "Closed Freehand"
+#~ msgstr "Dengan Tangan Tertutup"
+
+#~ msgid "Closed Polyline"
+#~ msgstr "Poligaris Tertutup"
+
+#~ msgid "Closed Cubic Bezier Curve"
+#~ msgstr "Keluk Bezier Kubus Tertutup"
+
+#~ msgid "Closed Quadric Bezier Curve"
+#~ msgstr "Keluk Bezier Kuadrik Tertutup"
+
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "Ubah Suai Peralihan Slid Untuk Semua Halaman"
+
+#~ msgid "Interface"
+#~ msgstr "Antara muka"
+
+#~ msgid "Spelling"
+#~ msgstr "Ejaan"
+
+#~ msgid "Document"
+#~ msgstr "Dokumen"
+
+#~ msgid "Document Settings"
+#~ msgstr "Seting Dokumen"
+
+#~ msgid "Default Tools Settings"
+#~ msgstr "Seting Alat Piawai"
+
+#~ msgid "Paths"
+#~ msgstr "Laluan"
+
+#~ msgid "Path Settings"
+#~ msgstr "Seting Laluan"
+
+#~ msgid "Change Config"
+#~ msgstr "Ubah Konfig"
+
+#~ msgid "Show rulers"
+#~ msgstr "Papar pembaris"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Bilangan fail terbaru:"
+
+#~ msgid "Background object color:"
+#~ msgstr "Warna objek latar belakang:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Warna grid:"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Batal/Buat semula had:"
+
+#~ msgid "Display links"
+#~ msgstr "Paparkan pautan"
+
+#~ msgid "&Underline all links"
+#~ msgstr "&Garis bawah semua pautan"
+
+#~ msgid "Display comments"
+#~ msgstr "Paparkan komen"
+
+#~ msgid "Display field code"
+#~ msgstr "Paparkan kod medan"
+
+#~ msgid "Print slide notes"
+#~ msgstr "Cetak nota slaid"
+
+#~ msgid "Grid"
+#~ msgstr "Grid"
+
+#, fuzzy
+#~ msgid "Vertical grid size:"
+#~ msgstr "Kecerunan Menegak"
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "Ubah Paparan Perintah Pautan"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Ubah Paparan Perintah Kod Medan"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Piawai Dokumen"
+
+#~ msgid "Default font:"
+#~ msgstr "Fon piawai:"
+
+#~ msgid "Choose..."
+#~ msgstr "Pilih..."
+
+#~ msgid "Global language:"
+#~ msgstr "Bahasa global:"
+
+#~ msgid "Create backup file"
+#~ msgstr "Cipta fail sandaran"
+
+#~ msgid "Autosave (min):"
+#~ msgstr "Autosimpan (min):"
+
+#~ msgid "No autosave"
+#~ msgstr "Tiada autosimpan"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Starting page number:"
+#~ msgstr "Nombor halaman mula:"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Tab henti (%1) "
+
+#~ msgid "Cursor"
+#~ msgstr "Kursor"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "Kursor dalam kawasan yang dilindungi"
+
+#~ msgid "Direct insert cursor"
+#~ msgstr "Terus selitkan kursor"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Ubah Nombor Halaman Mula"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Ubah Nilai Tab Henti"
+
+#~ msgid "Outl&ine"
+#~ msgstr "&Garis luar"
+
+#~ msgid "&Fill"
+#~ msgstr "&Isian"
+
+#~ msgid "&Rectangle"
+#~ msgstr "&Segiempat Tepat"
+
+#~ msgid "Polygo&n"
+#~ msgstr "&Poligon"
+
+#~ msgid "&Pie"
+#~ msgstr "&Pai"
+
+#~ msgid "Type"
+#~ msgstr "Jenis"
+
+#~ msgid "Picture Path"
+#~ msgstr "Laluan gambar"
+
+#~ msgid "Backup Path"
+#~ msgstr "Laluan Sandaran"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Ubah Suai Laluan..."
+
+#~ msgid "&Add..."
+#~ msgstr "&Tambah..."
+
+#~ msgid "&Modify..."
+#~ msgstr "&Ubah Suai..."
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "Alih Keluar Pautan"
+
+#~ msgid "Test"
+#~ msgstr "Uji"
+
+#~ msgid "(Copy %1)"
+#~ msgstr "(Salin %1)"
+
+#~ msgid "Name:"
+#~ msgstr "Nama:"
+
+#~ msgid "Existing slides:"
+#~ msgstr "Slid sedia ada:"
+
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "Nama Paparan Slid Biasa sudah digunakan."
+
+#~ msgid "You did not select any slides. Please select some slides."
+#~ msgstr "Anda tidak memilih mana-mana slid. Sila pilih beberapa slid."
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "Anda tidak memasang PERL.\n"
+#~ "Ia diperlukan untuk menukar dokumen ini.\n"
+#~ "Sila pasang PERL dan cuba lagi."
+
+#~ msgid ""
+#~ "parsing error in the main document (converted from an old KPresenter "
+#~ "format) at line %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "ralat pengkaji hurai dalam dokumen utama (ditukar dari format KPresenter "
+#~ "lama) pada baris %1, lajur %2\n"
+#~ "Mesej ralat:%3"
+
+#~ msgid "Insert Part Object"
+#~ msgstr "Selitkan Objek Bahagian"
+
+#~ msgid "Invalid document, DOC tag missing."
+#~ msgstr "Dokumen tak sah, teg DOC hilang."
+
+#~ msgid ""
+#~ "Invalid document, expected mimetype application/x-kpresenter or "
+#~ "application/vnd.kde.kpresenter, got %1"
+#~ msgstr ""
+#~ "Dokumen tak sah, terdapat %1 aplikasi/x-kpresenter atau aplikasi/vnd.kde."
+#~ "kpresenter jenis mime yang dijangka, "
+
+#~ msgid "Paste Objects"
+#~ msgstr "Tampal Objek"
+
+#~ msgid "Set New Options"
+#~ msgstr "Setkan Pilihan Baru"
+
+#~ msgid "Insert File"
+#~ msgstr "Selitkan Fail"
+
+#~ msgid "Insert New Slide"
+#~ msgstr "Selitkan Slid Baru"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Duplikasikan Objek"
+
+#~ msgid "Number of copies:"
+#~ msgstr "Bilangan salinan:"
+
+#~ msgid "Rotation angle:"
+#~ msgstr "Sudut putaran:"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "Tambahkan lebar (%):"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "Tambahkan tinggi (%):"
+
+#, fuzzy
+#~ msgid "Move X:"
+#~ msgstr "Alihkan X (%):"
+
+#, fuzzy
+#~ msgid "Move Y:"
+#~ msgstr "Alihkan Y (%):"
+
+#~ msgid "Appear"
+#~ msgstr "Muncul"
+
+#~ msgid "Order of appearance:"
+#~ msgstr "Tertib kemunculan:"
+
+#~ msgid "Effect (appearing):"
+#~ msgstr "Kesan (kemunculan):"
+
+#~ msgid "Come From Right/Top"
+#~ msgstr "Datang Dari Kanan/Atas"
+
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "Datang Dari Kanan/Bawah"
+
+#~ msgid "Come From Left/Top"
+#~ msgstr "Datang Dari Kiri/Atas"
+
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "Datang Dari Kiri/Bawah"
+
+#~ msgid "Wipe From Left"
+#~ msgstr "Padam Dari Kiri"
+
+#~ msgid "Wipe From Right"
+#~ msgstr "Padam Dari Kanan"
+
+#~ msgid "Wipe From Top"
+#~ msgstr "Padam Dari Atas"
+
+#~ msgid "Wipe From Bottom"
+#~ msgstr "Padam Dari Bawah"
+
+#~ msgid "Speed:"
+#~ msgstr "Laju:"
+
+#~ msgid "Medium"
+#~ msgstr "Sederhana"
+
+#~ msgid "Fast"
+#~ msgstr "Laju"
+
+#~ msgid "Effect (object specific):"
+#~ msgstr "Kesan (objek tetap):"
+
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "Perenggan Demi Perenggan"
+
+#~ msgid "Timer of the object:"
+#~ msgstr "Penentu masa objek:"
+
+#~ msgid "File name:"
+#~ msgstr "Nama fail:"
+
+#~ msgid "Play"
+#~ msgstr "Main"
+
+#~ msgid "Disappear"
+#~ msgstr "Hilang "
+
+#~ msgid "Order of disappearance:"
+#~ msgstr "Tertib kehilangan:"
+
+#~ msgid "Effect (disappearing):"
+#~ msgstr "Kesan (kehilangan):"
+
+#~ msgid "Disappear to Right"
+#~ msgstr "Hilang ke Kanan"
+
+#~ msgid "Disappear to Left"
+#~ msgstr "Hilang ke Kiri"
+
+#~ msgid "Disappear to Top"
+#~ msgstr "Hilang ke Atas"
+
+#~ msgid "Disappear to Bottom"
+#~ msgstr "Hilang ke Bawah"
+
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "Hilang ke Kanan/Atas"
+
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "Hilang ke Kanan/Bawah"
+
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "Hilang ke Kiri/Atas"
+
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "Hilang ke Kiri/Bawah"
+
+#~ msgid "Wipe to Left"
+#~ msgstr "Padam ke Kiri"
+
+#~ msgid "Wipe to Right"
+#~ msgstr "Padam ke Kanan"
+
+#~ msgid "Wipe to Top"
+#~ msgstr "Padam ke Atas"
+
+#~ msgid "Wipe to Bottom"
+#~ msgstr "Padam ke Bawah"
+
+#~ msgid "Assign Object Effects"
+#~ msgstr "Umpuk Kesan Objek"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "Fail* .%1l%2 "
+
+#~ msgid "All Supported Files"
+#~ msgstr "Semua Fail Sokongan"
+
+#~ msgid "Image Effect"
+#~ msgstr "Kesan Imej"
+
+#~ msgid "Import Style"
+#~ msgstr "Import Gaya"
+
+#~ msgid "File name is empty."
+#~ msgstr "Nama fail kosong."
+
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "Fail bukan fail KPresenter!"
+
+#~ msgid ""
+#~ "Please enter the directory where the memory stick presentation should be "
+#~ "saved. Please also enter a title for the slideshow presentation. "
+#~ msgstr ""
+#~ "Sila masukkan direktori di mana persembahan lekat memori perlu disimpan. "
+#~ "Sila masukkan juga tajuk untuk persembahan paparan slaid. "
+
+#~ msgid "Path:"
+#~ msgstr "Laluan:"
+
+#~ msgid "&Set Colors"
+#~ msgstr "&Setkan Warna"
+
+#~ msgid "Preliminary Slides"
+#~ msgstr "Slaid Permulaan"
+
+#~ msgid ""
+#~ "This section allows you to set the colors for the preliminary slides; it "
+#~ "does not affect the presentation in any way, and it is normal to leave "
+#~ "these set to the default."
+#~ msgstr ""
+#~ "Seksyen ini membenarkan anda mengeset warna slaid permulaan; walau "
+#~ "bagaimanapun, ia tidak menjejaskan persembahan dan menjadi kebiasaan "
+#~ "menetapkan set ini pada piawai."
+
+#~ msgid "Text color:"
+#~ msgstr "Warna teks:"
+
+#~ msgid "Background color:"
+#~ msgstr "Warna latar belakang:"
+
+#~ msgid ""
+#~ "Selecting this button will take you to the KPresenter documentation that "
+#~ "provides more information on how to use the Memory Stick export function. "
+#~ msgstr ""
+#~ "Memilih butang ini akan membawa anda ke dokumentasi KPresenter yang "
+#~ "menyediakan lebih banyak maklumat tentang cara menggunakan fungsi eksport "
+#~ "Lekat Memori."
+
+#~ msgid ""
+#~ "Selecting this button will proceed to generating the presentation in the "
+#~ "special Sony format."
+#~ msgstr ""
+#~ "Memilih butang ini akan terus menjanakan persembahan dalam format khas "
+#~ "Sony. "
+
+#~ msgid ""
+#~ "Selecting this button will cancel out of the generation of the "
+#~ "presentation, and return to the normal KPresenter view. No files will be "
+#~ "affected."
+#~ msgstr ""
+#~ "Memilih butang ini akan membatalkan penjanaan persembahan, dan kembali ke "
+#~ "papar KPresenter biasa. Tiada fail akan terjejas."
+
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "Cipta Paparan Slaid Lekat Memori "
+
+#~ msgid ""
+#~ "<qt>The directory <b>%1</b> does not exist.<br>Do you want create it?</qt>"
+#~ msgstr "<qt>Direktori <b>%1</b> tidak wujud <br>Anda mahu ciptanya?</qt>"
+
+#~ msgid "Directory Not Found"
+#~ msgstr "Direktori Tidak Ditemui"
+
+#~ msgid "Cannot create directory."
+#~ msgstr "Tidak boleh cipta direktori."
+
+#~ msgid ""
+#~ "You are about to overwrite an existing index file : %1.\n"
+#~ " Do you want to proceed?"
+#~ msgstr ""
+#~ "Anda hampir menulis ganti fail indeks sedia ada : %1.\n"
+#~ " Anda mahu teruskan?"
+
+#~ msgid "Create directory structure"
+#~ msgstr "Cipta struktur direktori"
+
+#~ msgid "Create pictures of the slides"
+#~ msgstr "Cipta gambar pada slaid"
+
+#~ msgid "Create index file"
+#~ msgstr "Cipta fail indeks"
+
+#~ msgid "Change Help Line Position"
+#~ msgstr "Ubah Posisi Garis Bantuan"
+
+#, fuzzy
+#~ msgid "Position:"
+#~ msgstr "Posisi"
+
+#~ msgid "Add New Help Line"
+#~ msgstr "Tambah Garis Bantuan Baru"
+
+#~ msgid "Add New Help Point"
+#~ msgstr "Tambah Titik Bantuan Baru"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "Posisi X (%1):"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "Posisi Y (%1):"
+
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "Nota Slaid %1:\n"
+
+#~ msgid "Master Page Note:\n"
+#~ msgstr "Nota Halaman Induk:\n"
+
+#~ msgid "Delete Objects"
+#~ msgstr "Hapuskan Objek"
+
+#~ msgid "Resize"
+#~ msgstr "Saiz Semula"
+
+#~ msgid "Group Objects"
+#~ msgstr "Kumpulkan Objek"
+
+#~ msgid "Ungroup Objects"
+#~ msgstr "Lerai Objek"
+
+#~ msgid "Lower Objects"
+#~ msgstr "Turunkan Objek "
+
+#~ msgid "Raise Objects"
+#~ msgstr "Naikkan Objek"
+
+#~ msgid "Insert Line"
+#~ msgstr "Selitkan Baris"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Selitkan Segiempat Tepat"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Selitkan Elips"
+
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Selitkan Pai/Lengkuk/Perentas"
+
+#~ msgid "Insert Textbox"
+#~ msgstr "Selitkan Kotak Teks"
+
+#~ msgid "Insert Autoform"
+#~ msgstr "Selitkan Autobentuk"
+
+#~ msgid "Insert Freehand"
+#~ msgstr "Selitkan Dengan Tangan"
+
+#~ msgid "Insert Polyline"
+#~ msgstr "Selitkan Poligaris"
+
+#~ msgid "Insert Quadric Bezier Curve"
+#~ msgstr "Selitkan Keluk Bezier Kuadrik"
+
+#~ msgid "Insert Cubic Bezier Curve"
+#~ msgstr "Selitkan Keluk Bezier Kubus"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Selitkan Poligon"
+
+#~ msgid "Insert Closed Freehand"
+#~ msgstr "Selitkan Dengan Tangan Tertutup"
+
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "Selitkan Poligaris Tertutup"
+
+#~ msgid "Insert Closed Quadric Bezier Curve"
+#~ msgstr "Selitkan Keluk Bezier Kuadrik Tertutup"
+
+#~ msgid "Insert Closed Cubic Bezier Curve"
+#~ msgstr "Selitkan Keluk Bezier Kubus Tertutup"
+
+#~ msgid "Embed Object"
+#~ msgstr "Benamkan Objek"
+
+#~ msgid "Change Pixmap"
+#~ msgstr "Ubah Pixmap"
+
+#~ msgid "Move Objects"
+#~ msgstr "Alihkan Objek"
+
+#~ msgid "Change Shadow"
+#~ msgstr "Ubah Bayang"
+
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Ubah Penjajaran Menegak"
+
+#~ msgid "No Outline"
+#~ msgstr "Tiada Garis Luar"
+
+#~ msgid "Square"
+#~ msgstr "Segiempat Sama"
+
+#~ msgid "Line Arrow"
+#~ msgstr "Anak Panah Garis"
+
+#~ msgid "Dimension Line"
+#~ msgstr "Garis Dimensi"
+
+#~ msgid "Double Line Arrow"
+#~ msgstr "Anak Panah Garis Kembar"
+
+#~ msgid "&General"
+#~ msgstr "&Am"
+
+#~ msgid ""
+#~ "<p>This dialog allows you to configure how the slideshow will be "
+#~ "displayed, including whether the slides are automatically sequenced or "
+#~ "manually controlled, and also allows you to configure a <em>drawing pen</"
+#~ "em> that can be used during the display of the presentation to add "
+#~ "additional information or to emphasise particular points.</p>"
+#~ msgstr ""
+#~ "<p> Dialog ini membenarkan anda mengkonfigur cara paparan slaid "
+#~ "dipaparkan, termasuk sama ada slaid disusun secara automatik atau dikawal "
+#~ "secara manual, dan juga membenarkan anda mengkonfigur <em>pena lukisan</"
+#~ "em> yang boleh digunakan semasa paparan persembahan untuk menambah "
+#~ "maklumat tambahan atau untuk memperjelas titik tertentu.</p>"
+
+#~ msgid "&Transition Type"
+#~ msgstr "Jenis &Peralihan"
+
+#~ msgid ""
+#~ "<li><p>If you select <b>Manual transition to next step or slide</b> then "
+#~ "each transition and effect on a slide, or transition from one slide to "
+#~ "the next, will require an action. Typically this action will be a mouse "
+#~ "click, or the space bar.</p></li><li><p>If you select <b>Automatic "
+#~ "transition to next step or slide</b> then the presentation will "
+#~ "automatically sequence each transition and effect on a slide, and will "
+#~ "automatically transition to the next slide when the current slide is "
+#~ "fully displayed. The speed of sequencing is controlled using the slider "
+#~ "below. This also enables the option to automatically loop back to the "
+#~ "first slide after the last slide has been shown.</p></li>"
+#~ msgstr ""
+#~ "<li>Jika anda pilih <b>Peralihan manual ke langkah atau slaid berikutnya</"
+#~ "b> maka setiap peralihan dan kesan ke atas slaid, atau peralihan dari "
+#~ "satu slaid ke slaid berikutnya, akan memerlukan tindakan. Biasanya "
+#~ "tindakan ini adalah mengklik tetikus, atau bar jarak.</p></li><li><p>Jika "
+#~ "anda pilih <b>Peralihan automatik ke langkah atau slaid berikutnya</b> "
+#~ "maka persembahan akan menyusun setiap peralihan dan kesan ke atas slaid "
+#~ "secara automatik, dan akan beralih ke slaid berikutnya secara automatik "
+#~ "apabila slaid semasa telah dipaparkan sepenuhnya. Laju penyusunan dikawal "
+#~ "dengan menggunakan peleret di bawah. Ini juga membolehkan pilihan "
+#~ "menggelung balik ke slaid pertama secara automatik selepas slaid terakhir "
+#~ "dipaparkan.</p></li>"
+
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "Peralihan &manual ke langkah atau slaid berikutnya"
+
+#~ msgid "&Automatic transition to next step or slide"
+#~ msgstr "Peralihan &automatik ke langkah atau slaid berikutnya"
+
+#~ msgid "&Infinite loop"
+#~ msgstr "Gelung &tak terhingga"
+
+#~ msgid ""
+#~ "<p>If this checkbox is selected, then the slideshow will restart at the "
+#~ "first slide after the last slide has been displayed. It is only available "
+#~ "if the <b>Automatic transition to next step or slide</b> button is "
+#~ "selected above.</p> <p>This option may be useful if you are running a "
+#~ "promotional display.</p>"
+#~ msgstr ""
+#~ "<p>Jika kotak semak ini dipilih, maka paparan slaid akan mula semula pada "
+#~ "slaid pertama selepas slaid terakhir dipaparkan. Ia hanya boleh "
+#~ "didapatkan jika <b>Butang peralihan automatik ke slaid atau langkah "
+#~ "berikutnya</b> di atas dipilih.</p><p>Pilihan ini mungkin berguna jika "
+#~ "anda mengadakan paparan promosi.</p>"
+
+#, fuzzy
+#~ msgid "&Show 'End of presentation' slide"
+#~ msgstr "Persembahan tamat. Klik untuk keluar."
+
+#~ msgid "Measure presentation &duration"
+#~ msgstr "Ukur &tempoh persembahan"
+
+#~ msgid ""
+#~ "<p>If this checkbox is selected, the time that each slide was displayed "
+#~ "for, and the total time for the presentation will be measured.</p> <p>The "
+#~ "times will be displayed at the end of the presentation.</p> <p>This can "
+#~ "be used during rehearsal to check coverage for each issue in the "
+#~ "presentation, and to verify that the presentation duration is correct.</p>"
+#~ msgstr ""
+#~ "<p>Jika kotak semak ini dipilih, masa setiap slaid dipaparkan dan jumlah "
+#~ "masa persembahan akan diukur.</p><p>Masa akan dipaparkan pada hujung "
+#~ "persembahan.</p><p>Ini boleh digunakan semasa latihan untuk memeriksa "
+#~ "liputan setiap isu dalam persembahan, dan mengesahkan tempoh persembahan "
+#~ "itu betul.</p>"
+
+#~ msgid ""
+#~ "<p>This part of the dialog allows you to configure the <em>drawing mode</"
+#~ "em>, which allows you to add additional information, emphasise particular "
+#~ "content, or to correct errors during the presentation by drawing on the "
+#~ "slides using the mouse.</p><p>You can configure the color of the drawing "
+#~ "pen and the width of the pen.</p>"
+#~ msgstr ""
+#~ "<p>Bahagian dialog ini membenarkan anda mengkonfigur <em>mod lukisan</"
+#~ "em>, yang membenarkan anda menambah maklumat tambahan,  memperjelas "
+#~ "kandungan tertentu, atau membetulkan ralat semasa persembahan dengan "
+#~ "melukis pada slaid menggunakan tetikus.</p><p>Anda boleh mengkonfigur "
+#~ "warna pena lukisan dan lebar pena.</p>"
+
+#~ msgid ""
+#~ "<p>This dialog allows you to configure which slides are used in the "
+#~ "presentation. Slides that are not selected will not be displayed during "
+#~ "the slide show.</p>"
+#~ msgstr ""
+#~ "<p>Dialog ini membenarkan anda mengkonfigur slaid yang akan digunakan "
+#~ "dalam persembahan. Slaid yang tidak dipilih tidak akan dipaparkan semasa "
+#~ "paparan slaid.</p>"
+
+#~ msgid "Arc"
+#~ msgstr "Lengkuk"
+
+#~ msgid "Chord"
+#~ msgstr "Perentas"
+
+#~ msgid "Convex/Concave"
+#~ msgstr "Cekung/Cembung"
+
+#~ msgid "No."
+#~ msgstr "Bilangan"
+
+#~ msgid "Display Duration"
+#~ msgstr "Tempoh Paparan"
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "Halaman yang dipilih:"
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "Tulis pengaki pada slaid"
+
+#~ msgid "Apply Properties"
+#~ msgstr "Guna Ciri"
+
+#~ msgid "Name Object"
+#~ msgstr "Nama Objek"
+
+#~ msgid "Protect Object"
+#~ msgstr "Lindungi Objek"
+
+#~ msgid "Keep Ratio"
+#~ msgstr "Kekalkan Nisbah"
+
+#~ msgid "Change Size"
+#~ msgstr "Ubah Saiz"
+
+#~ msgid "Pict&ure"
+#~ msgstr "&Gambar"
+
+#~ msgid "pt"
+#~ msgstr "pt"
+
+#~ msgid "(%1)"
+#~ msgstr "(%1)"
+
+#~ msgid "Rename Slide"
+#~ msgstr "Namakan Semula Slaid"
+
+#~ msgid "Slide title:"
+#~ msgstr "Tajuk slaid:"
+
+#~ msgid "Close From All Directions"
+#~ msgstr "Tutup Dari Semua Arah"
+
+#~ msgid "Open From All Directions"
+#~ msgstr "Buka Dari Semua Arah"
+
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "Saling Kunci Mendatar 2"
+
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "Saling Kunci Menegak 1"
+
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "Saling Kunci Menegak 2"
+
+#~ msgid "Surround 1"
+#~ msgstr "Keliling 1"
+
+#~ msgid "Fly Away 1"
+#~ msgstr "Fly Away 1"
+
+#~ msgid "Blinds Vertical"
+#~ msgstr "Bidai Menegak"
+
+#~ msgid "Checkerboard Across"
+#~ msgstr "Melintang Papan Dam"
+
+#~ msgid "Checkerboard Down"
+#~ msgstr "Ke bawah Papan Dam"
+
+#~ msgid "Uncover Down"
+#~ msgstr "Nyahtutup Bawah"
+
+#~ msgid "Cover Up"
+#~ msgstr "Tutup Atas"
+
+#~ msgid "Uncover Up"
+#~ msgstr "Nyahtutup Atas"
+
+#~ msgid "Uncover Left"
+#~ msgstr "Nyahtutup Kiri"
+
+#~ msgid "Cover Left-Up"
+#~ msgstr "Tutup Kiri-Atas"
+
+#~ msgid "Uncover Left-Up"
+#~ msgstr "Nyahtutup Kiri-Atas"
+
+#~ msgid "Cover Left-Down"
+#~ msgstr "Tutup Kiri-Bawah"
+
+#~ msgid "Uncover Left-Down"
+#~ msgstr "Nyahtutup Kiri-Bawah"
+
+#~ msgid "Uncover Right-Up"
+#~ msgstr "Nyahtutup Kanan-Atas"
+
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "Tutup Kanan-Bawah"
+
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "Nyahtutup Kanan-Bawah"
+
+#~ msgid "Dissolve"
+#~ msgstr "Larut "
+
+#~ msgid "Strips Left-Up"
+#~ msgstr "Jalur Kiri-Atas"
+
+#~ msgid "Strips Left-Down"
+#~ msgstr "Jalur Kiri-Bawah "
+
+#~ msgid "Strips Right-Up"
+#~ msgstr "Jalur Kanan-Atas"
+
+#~ msgid "Strips Right-Down"
+#~ msgstr "Jalur Kanan-Bawah"
+
+#~ msgid "Melting"
+#~ msgstr "Melebur"
+
+#~ msgid "Random Transition"
+#~ msgstr "Peralihan Rawak"
+
+#~ msgid "Paste Text"
+#~ msgstr "Tampal Teks"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Selitkan Variabel"
+
+#~ msgid "Protect content"
+#~ msgstr "Lindungi kandungan"
+
+#~ msgid "Effect:"
+#~ msgstr "Kesan:"
+
+#~ msgid "Automatically advance to the next slide after:"
+#~ msgstr "Secara automatik beralih ke slaid berikutnya selepas:"
+
+#~ msgid "Remove Slide"
+#~ msgstr "Alih Keluar Slaid"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Tarikh"
+
+#~ msgid "Insert new slide"
+#~ msgstr "Selitkan slaid baru"
+
+#~ msgid "Save Picture"
+#~ msgstr "Simpan Gambar"
+
+#~ msgid "Error during saving: could not open '%1' for writing."
+#~ msgstr "Ralat semasa menyimpan: tidak dapat buka '%1' untuk menulis."
+
+#~ msgid "Unable to save the file to '%1'. %2."
+#~ msgstr "Tidak dapat simpan fail ke '%1'.%2."
+
+#~ msgid "Save Failed"
+#~ msgstr "Simpan Gagal"
+
+#, fuzzy
+#~ msgid "Error during saving: could not create temporary file."
+#~ msgstr "Ralat semasa menyimpan: tidak dapat cipta fail sementara: %1"
+
+#~ msgid "No chart component registered"
+#~ msgstr "Tiada komponen carta didaftarkan"
+
+#~ msgid "No table component registered"
+#~ msgstr "Tiada komponen jadual didaftarkan"
+
+#~ msgid "No formula component registered"
+#~ msgstr "Tiada komponen formula didaftarkan"
+
+#~ msgid "Autoform-Choose"
+#~ msgstr "Autobentuk-Pilih"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "&Ciri"
+
+#~ msgid "Slide Background"
+#~ msgstr "Latar Belakang Slaid"
+
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "Anda mahu muatkan konfigurasi yang disimpan sebelum ini yang akan "
+#~ "digunakan untuk Persembahan HTML?"
+
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+
+#~ msgid "Only local files are currently supported."
+#~ msgstr "Hanya fail lokal disokong pada masa ini."
+
+#~ msgid "Object Effect"
+#~ msgstr "Kesan Objek"
+
+#, fuzzy
+#~ msgid "You did not select any slide."
+#~ msgstr "Anda tidak pilih mana-mana slaid."
+
+#~ msgid "No Slide"
+#~ msgstr "Tiada slaid"
+
+#~ msgid "Change List Type"
+#~ msgstr "Ubah Jenis Senarai"
+
+#~ msgid "Change Outline Color"
+#~ msgstr "Ubah Warna Garis Luar"
+
+#~ msgid "Change Fill Color"
+#~ msgstr "Ubah Warna Isian"
+
+#~ msgid "Change Line Begin"
+#~ msgstr "Ubah Awal Baris"
+
+#~ msgid "Change Line End"
+#~ msgstr "Ubah Hujung Baris"
+
+#~ msgid "Change Outline Style"
+#~ msgstr "Ubah Gaya Garis Luar"
+
+#~ msgid "Change Outline Width"
+#~ msgstr "Ubah Lebar Garis Luar"
+
+#~ msgid "Show Sidebar"
+#~ msgstr "Papar Bar Sisi"
+
+#~ msgid "Hide Sidebar"
+#~ msgstr "Sembunyikan Bar Sisi "
+
+#~ msgid "Show Notebar"
+#~ msgstr "Papar Bar Nota"
+
+#~ msgid "Hide Notebar"
+#~ msgstr "Sembunyikan Bar Nota"
+
+#~ msgid "&Formatting Characters"
+#~ msgstr "&Memformatkan Aksara"
+
+#, fuzzy
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Toggel paparan aksara tak cetak."
+
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br><br>When this is "
+#~ "enabled, KPresenter shows you tabs, spaces, carriage returns and other "
+#~ "non-printing characters."
+#~ msgstr ""
+#~ "Toggel paparan aksara tak cetak.<br><br>Apabila ini diaktifkan, "
+#~ "KPresenter memaparkan tab, jarak, kembalian penyorong dan aksara tak "
+#~ "cetak yang lain kepada anda."
+
+#~ msgid "Slide &Master"
+#~ msgstr "&Induk Slaid"
+
+#, fuzzy
+#~ msgid "Guide Lines"
+#~ msgstr "Garis Penuh"
+
+#, fuzzy
+#~ msgid "Show &Grid"
+#~ msgstr "Petik ke Grid"
+
+#, fuzzy
+#~ msgid "Hide &Grid"
+#~ msgstr "Sembunyikan &Pengepala"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Petik ke Grid"
+
+#~ msgid "&Slide..."
+#~ msgstr "&Slaid..."
+
+#~ msgid "P&icture..."
+#~ msgstr "&Gambar..."
+
+#~ msgid "&Rotate"
+#~ msgstr "&Putar"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "Zum:"
+
+#~ msgid "&Shape"
+#~ msgstr "&Bentuk"
+
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "&Bulatan/Elips"
+
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "&Pai/Lengkuk/Perentas"
+
+#~ msgid "&Text"
+#~ msgstr "&Teks"
+
+#~ msgid "&Chart"
+#~ msgstr "&Carta"
+
+#~ msgid "Ta&ble"
+#~ msgstr "&Jadual"
+
+#~ msgid "&Object"
+#~ msgstr "&Objek"
+
+#~ msgid "&Line"
+#~ msgstr "&Garisan"
+
+#~ msgid "&Freehand"
+#~ msgstr "&Dengan Tangan"
+
+#~ msgid "Po&lyline"
+#~ msgstr "&Poligaris"
+
+#~ msgid "&Quadric Bezier Curve"
+#~ msgstr "Keluk Bezier &Kuadrik"
+
+#~ msgid "C&ubic Bezier Curve"
+#~ msgstr "Keluk Bezier &Kubus"
+
+#~ msgid "Co&nvex/Concave Polygon"
+#~ msgstr "Poligon &Cembung/Cekung"
+
+#~ msgid "Closed &Freehand"
+#~ msgstr "&Dengan Tangan Tertutup"
+
+#~ msgid "Closed Po&lyline"
+#~ msgstr "&Poligaris Tertutup"
+
+#~ msgid "Closed &Quadric Bezier Curve"
+#~ msgstr "Keluk Bezier &Kuadrik Tertutup"
+
+#~ msgid "Closed C&ubic Bezier Curve"
+#~ msgstr "Keluk Bezier &Kubus Tertutup"
+
+#~ msgid "&Font..."
+#~ msgstr "&Fon..."
+
+#~ msgid "Font Family"
+#~ msgstr "Keluarga Fon"
+
+#~ msgid "&Bold"
+#~ msgstr "&Tebal"
+
+#~ msgid "&Italic"
+#~ msgstr "&Italik"
+
+#~ msgid "&Underline"
+#~ msgstr "&Garis bawah"
+
+#~ msgid "&Strike Out"
+#~ msgstr "&Garis Lorek"
+
+#~ msgid "&Color..."
+#~ msgstr "&Warna..."
+
+#~ msgid "Align &Left"
+#~ msgstr "Jajarkan &Kiri"
+
+#~ msgid "Align &Center"
+#~ msgstr "Jajarkan &Tengah"
+
+#~ msgid "Align &Right"
+#~ msgstr "Jajarkan &Kanan"
+
+#~ msgid "Align &Block"
+#~ msgstr "Jajarkan &Blok"
+
+#~ msgid "Number"
+#~ msgstr "Nombor"
+
+#~ msgid "Bullet"
+#~ msgstr "Bulet"
+
+#~ msgid "&Increase Depth"
+#~ msgstr "&Tambahkan Kedalaman"
+
+#~ msgid "&Decrease Depth"
+#~ msgstr "&Kurangkan Kedalaman"
+
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "Besarkan Kandungan ikut &Tinggi Objek"
+
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "&Besarkan Objek supaya Muat dengan Kandungan"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "&Selitkan Nombor Halaman"
+
+#~ msgid "&Properties"
+#~ msgstr "&Ciri"
+
+#~ msgid "Ra&ise Objects"
+#~ msgstr "&Naikkan Objek"
+
+#~ msgid "&Lower Objects"
+#~ msgstr "&Turunkan Objek"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Bawa ke Depan"
+
+#~ msgid "Send to Back"
+#~ msgstr "Hantar ke Belakang"
+
+#~ msgid "R&otate Objects..."
+#~ msgstr "&Putar Objek..."
+
+#~ msgid "&Shadow Objects..."
+#~ msgstr "&Buat Bayang Objek..."
+
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "Jajarkan Tengah (&mendatar)"
+
+#~ msgid "Align &Top"
+#~ msgstr "Jajarkan &Atas"
+
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "Jajarkan Tengah (&menegak)"
+
+#~ msgid "Align &Bottom"
+#~ msgstr "Jajarkan &Bawah"
+
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "&Latar Belakang Slaid..."
+
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "Cipta Paparan Slaid &HTML..."
+
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "Cipta Paparan Slaid Lekat &Memori..."
+
+#~ msgid "Template Manager"
+#~ msgstr "Pengurus Templat"
+
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "Gunakan Slaid Semasa sebagai Templat Piawai"
+
+#~ msgid "Align O&bjects"
+#~ msgstr "Jajarkan &Objek"
+
+#~ msgid "Line Begin"
+#~ msgstr "Garis Mula "
+
+#~ msgid "Line End"
+#~ msgstr "Garis Tamat"
+
+#~ msgid "Outline Style"
+#~ msgstr "Gaya Garis Luar"
+
+#~ msgid "Outline Width"
+#~ msgstr "Lebar Garis Luar"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Kumpulkan Objek"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "&Lerai Objek"
+
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "Edit Kesan &Objek..."
+
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "Edit & Peralihan Slaid..."
+
+#~ msgid "&Go to Start"
+#~ msgstr "&Beralih ke Mula"
+
+#~ msgid "Go to &End"
+#~ msgstr "Beralih ke &Akhir"
+
+#~ msgid "Goto &Slide..."
+#~ msgstr "Beralih ke &Slaid..."
+
+#~ msgid "Fill Color..."
+#~ msgstr "Warna Isian..."
+
+#~ msgid "Outline Color..."
+#~ msgstr "Warna Garis Luar..."
+
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "&Besarkan Kandungan ikut Tinggi Objek"
+
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "&Saiz Semula Objek supaya Muat dengan Kandungan"
+
+#~ msgid "&Rename Slide..."
+#~ msgstr "&Namakan Semula Slaid..."
+
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "Skalakan ke Saiz Asal"
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "&Change Picture..."
+#~ msgstr "&Ubah Gambar..."
+
+#~ msgid "Image &Effect..."
+#~ msgstr "&Kesan Imej..."
+
+#~ msgid "Superscript"
+#~ msgstr "Superskrip"
+
+#~ msgid "Subscript"
+#~ msgstr "Subskrip"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Aksara &Khas..."
+
+#~ msgid "Link..."
+#~ msgstr "Paut..."
+
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "Masukkan Faktor Biasa..."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Konfigur &Autopembetulan..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Perenggan..."
+
+#~ msgid "Default Format"
+#~ msgstr "Format Piawai"
+
+#~ msgid "Open Link"
+#~ msgstr "Buka Pautan"
+
+#~ msgid "Change Link..."
+#~ msgstr "Ubah Pautan..."
+
+#~ msgid "Copy Link"
+#~ msgstr "Salin Pautan"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Tambah ke Tanda Buku"
+
+#~ msgid "&Custom Variables..."
+#~ msgstr "Variabel &Biasa..."
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Edit Variabel..."
+
+#~ msgid "&Variable"
+#~ msgstr "&Variabel"
+
+#~ msgid "&Property"
+#~ msgstr "&Ciri"
+
+#~ msgid "&Date"
+#~ msgstr "&Tarikh"
+
+#~ msgid "&Time"
+#~ msgstr "&Masa"
+
+#~ msgid "&Statistic"
+#~ msgstr "&Statistik"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "&Muat Semula Semua Variabel"
+
+#~ msgid "Change Case..."
+#~ msgstr "Ubah Huruf..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Zum:"
+
+#~ msgid "&Style Manager"
+#~ msgstr "Pengurus &Gaya"
+
+#~ msgid "St&yle"
+#~ msgstr "&Gaya"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Aktifkan Autopembetulan"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Nyahaktifkan Autopembetulan"
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Selitkan Jarak Bukan Pemisah"
+
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Selitkan Tanda Sempang Bukan Pemisah"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Selitkan Tanda Sempang Lembut"
+
+#~ msgid "Line Break"
+#~ msgstr "Pemisah Baris"
+
+#~ msgid "Completion"
+#~ msgstr "Pelengkapan"
+
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Tambahkan Tahap Penomboran"
+
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Kurangkan Tahap Penomboran"
+
+#~ msgid "Comment..."
+#~ msgstr "Komen..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Edit Komen..."
+
+#, fuzzy
+#~ msgid "Add Guide Line..."
+#~ msgstr "Tambah Garis Bantuan Baru..."
+
+#~ msgid "Remove Comment"
+#~ msgstr "Alih Keluar Komen"
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Salin Teks Komen..."
+
+#~ msgid "&Configure Completion..."
+#~ msgstr "&Konfigur Pelengkapan..."
+
+#~ msgid "Zoom Out"
+#~ msgstr "Zum Ke luar"
+
+#~ msgid "Zoom In"
+#~ msgstr "Zum Ke dalam"
+
+#~ msgid "Zoom Entire Slide"
+#~ msgstr "Zum Seluruh Slaid"
+
+#~ msgid "Zoom Slide Width"
+#~ msgstr "Zum Lebar Slaid"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "Zum Objek yang Dipilih"
+
+#~ msgid "Zoom Slide Height"
+#~ msgstr "Zum Tinggi Slaid"
+
+#~ msgid "Zoom All Objects"
+#~ msgstr "Zum Semua Objek"
+
+#~ msgid "Horizontal Flip"
+#~ msgstr "Terbalikkan Mendatar"
+
+#~ msgid "Vertical Flip"
+#~ msgstr "Terbalikkan Menegak"
+
+#~ msgid "Duplicate Object..."
+#~ msgstr "Duplikasikan Objek..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Guna Autopembetulan"
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Cipta Gaya Dari Pemilihan..."
+
+#~ msgid "Align Top"
+#~ msgstr "Jajarkan Atas"
+
+#~ msgid "Align Middle"
+#~ msgstr "Jajarkan Tengah"
+
+#~ msgid "Save Picture..."
+#~ msgstr "Simpan Gambar..."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Autosemak eja"
+
+#~ msgid "File..."
+#~ msgstr "Fail..."
+
+#~ msgid "Save Background Picture..."
+#~ msgstr "Simpan Gambar Latar Belakang..."
+
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "Taip Kursor Di mana Sahaja"
+
+#~ msgid "Ignore All"
+#~ msgstr "Abaikan Semua"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Tambahkan Kata ke Kamus"
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "Latar Belakang Slaid"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "Latar Belakang Slaid"
+
+#~ msgid "Set Background"
+#~ msgstr "Setkan Latar Belakang"
+
+#~ msgid "Select New Picture"
+#~ msgstr "Pilih Gambar Baru"
+
+#~ msgid "Next slide"
+#~ msgstr "Slaid berikutnya"
+
+#~ msgid "Slide %1/%2"
+#~ msgstr "Slaid %1/%2"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr " Objek: %1 - (lebar: %2; tinggi: %3)(%4)"
+
+#, fuzzy
+#~ msgctxt "1 object selected"
+#~ msgid "%n objects selected"
+#~ msgstr "_n: 1 objek dipilih"
+
+#~ msgid "Change Link"
+#~ msgstr "Ubah Pautan"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Betulkan Kata Salah Eja"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "Seting Perenggan"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Ubah Variabel Biasa"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Ubah Huruf Teks"
+
+#~ msgid "Whole Slide"
+#~ msgstr "Seluruh Slaid"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Presentation Duration"
+#~ msgstr "Tempoh Persembahan"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "Jenis dokumen:"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Guna Gaya pada Bingkai"
+
+#~ msgid "Change Note Text"
+#~ msgstr "Ubah Teks Nota"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Guna Autoformat"
+
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "Anda mahu guna autoformat dalam slaid baru?"
+
+#~ msgid "Replace Word"
+#~ msgstr "Gantikan Kata"
+
+#~ msgid "First"
+#~ msgstr "Pertama"
+
+#~ msgid "Previous"
+#~ msgstr "Sebelumnya"
+
+#~ msgid "Next"
+#~ msgstr "Berikutnya"
+
+#~ msgid "Last"
+#~ msgstr "Terakhir"
+
+#~ msgid "Home"
+#~ msgstr "Rerumah"
+
+#~ msgid ""
+#~ "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/"
+#~ "kpresenter\">KPresenter</a>"
+#~ msgstr ""
+#~ "Dicipta pada %1 melalui <i>%2</i> dengan <a href=\"http://www.koffice.org/"
+#~ "kpresenter\">KPresenter</a>"
+
+#~ msgid "Table of Contents"
+#~ msgstr "Jadual Kandungan"
+
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "Klik di sini untuk memulakan Paparan Slaid"
+
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "Cipta Wizard Paparan Slaid HTML"
+
+#~ msgid ""
+#~ "This page allows you to specify some of the key values for how your "
+#~ "presentation will be shown in HTML. Select individual items for more help "
+#~ "on what they do."
+#~ msgstr ""
+#~ "Halaman ini membenarkan anda menetapkan beberapa nilai penting tentang "
+#~ "bagaimana persembahan anda akan dipaparkan dalam HTML. Pilih butiran "
+#~ "individu untuk bantuan lanjut tentang apa yang dapat dilakukannya. "
+
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "Masukkan nama, alamat e-mel dan tajuk persembahan web anda. Masukkan juga "
+#~ "direktori output di mana persembahan web sepatutnya disimpan. "
+
+#~ msgid ""
+#~ "This is where you enter the name of the person or organization that "
+#~ "should be named as the author of the presentation."
+#~ msgstr ""
+#~ "Di sini tempat anda memasukkan nama orang atau organisasi yang sepatutnya "
+#~ "dinamakan sebagai pengarang persembahan."
+
+#~ msgid "This is where you enter the title of the overall presentation."
+#~ msgstr "Di sini tempatnya anda memasukkan tajuk persembahan keseluruhan."
+
+#~ msgid "Email address:"
+#~ msgstr "Alamat e-mel:"
+
+#~ msgid ""
+#~ "This is where you enter the email address of the person or organization "
+#~ "that is responsible for the presentation."
+#~ msgstr ""
+#~ "Di sini tempatnya anda memasukkan alamat e-mel orang atau organisasi yang "
+#~ "bertanggungjawab ke atas persembahan."
+
+#~ msgid ""
+#~ "The value entered for the path is the directory where the presentation "
+#~ "will be saved. If it does not exist, you'll be asked if you want to "
+#~ "create the directory or abort the creation."
+#~ msgstr ""
+#~ "Nilai yang dimasukkan untuk laluan adalah direktori di mana persembahan "
+#~ "di simpan. Jika ia tidak wujud, anda akan ditanya sama ada anda mahu "
+#~ "cipta direktori atau gugurkan ciptaan."
+
+#~ msgid "Step 1: General Information"
+#~ msgstr "Langkah 1: Maklumat Am"
+
+#~ msgid ""
+#~ "This page allows you to specify how the HTML for your presentation will "
+#~ "be displayed. Select individual items for more help on what they do."
+#~ msgstr ""
+#~ "Halaman ini membenarkan anda menetapkan bagaimanan HTML persembahan anda "
+#~ "akan dipaparkan. Pilih butiran individu untuk bantuan lanjut tentang apa "
+#~ "yang dapat dilakukannya."
+
+#~ msgid "Here you can configure the style of the web pages."
+#~ msgstr "Di sini anda boleh menkonfigur gaya halaman web."
+
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr "Anda juga boleh menetapkan zum untuk slaid."
+
+#~ msgid "Zoom:"
+#~ msgstr "Zum:"
+
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr "Pemilihan ini membenarkan anda menetapkan saiz imej slaid."
+
+#~ msgid "Encoding:"
+#~ msgstr "Pengekodan:"
+
+#~ msgid "Document type:"
+#~ msgstr "Jenis dokumen:"
+
+#~ msgid "Step 2: Configure HTML"
+#~ msgstr "Langkah 2: Konfigur HTML"
+
+#~ msgid ""
+#~ "This page allows you to specify the colors for your presentation display. "
+#~ "Select individual items for more help on what they do."
+#~ msgstr ""
+#~ "Halaman ini membenarkan anda menetapkan warna untuk paparan persembahan. "
+#~ "Pilih butiran individu untuk bantuan lanjut tentang apa yang dapat "
+#~ "dilakukannya."
+
+#~ msgid "Now you can customize the colors of the web pages."
+#~ msgstr "Kini anda boleh suaikan warna halaman web. "
+
+#~ msgid "Title color:"
+#~ msgstr "Warna tajuk:"
+
+#~ msgid "Step 3: Customize Colors"
+#~ msgstr "Langkah 3: Suaikan Warna"
+
+#~ msgid ""
+#~ "This page allows you to modify the titles of each slide, if required. You "
+#~ "normally do not need to do this, but it is available if required."
+#~ msgstr ""
+#~ "Halaman ini membenarkan anda mengubah suai tajuk setiap slaid, jika "
+#~ "diperlukan. Biasanya, anda tidak perlu melakukannya, tetapi ia boleh "
+#~ "didapatkan jika dikehendaki. "
+
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "Di sini anda boleh menetapkan tajuk setiap slaid. Klik slaid dalam "
+#~ "senarai dan selepas itu masukkan tajuk dalam kotak teks di bawah. Jika "
+#~ "anda klik tajuk, papar utama KPresenter akan memaparkan slaid. "
+
+#~ msgid "Step 4: Customize Slide Titles"
+#~ msgstr "Langkah 4: Suaikan Tajuk Slaid"
+
+#~ msgid ""
+#~ "This page allows you to specify some options for presentations which run "
+#~ "unattended, such as time elapsed before advancing to the next slide, "
+#~ "looping and the presence of headers. If you do not want an unattended "
+#~ "presentation, just leave defaults unchanged."
+#~ msgstr ""
+#~ "Halaman ini membenarkan anda menetapkan beberapa pilihan untuk "
+#~ "persembahan yang berlangsung tanpa jagaan, seperti masa yang diambil "
+#~ "sebelum beralih ke slaid berikutnya, penggelungan dan kehadiran "
+#~ "pengepala. Jika anda tidak mahu persembahan tanpa jagaan, jangan ubah "
+#~ "piawai."
+
+#~ msgid ""
+#~ "Here you can configure some options for unattended presentations, such as "
+#~ "time elapsed before automatically advance to the next slide, looping and "
+#~ "the presence of headers."
+#~ msgstr ""
+#~ "Di sini anda boleh mengkonfigur beberapa pilihan untuk persembahan tanpa "
+#~ "jagaan, seperti masa yang diambil sebelum beralih secara automatik ke "
+#~ "slaid berikutnya, penggelungan dan kehadiran pengepala."
+
+#~ msgid "Advance after:"
+#~ msgstr "Beralih ke depan selepas:"
+
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr "Pemilihan ini membenarkan anda menetapkan masa antara slaid."
+
+#~ msgid "Disabled"
+#~ msgstr "Dinyahaktifkan"
+
+#~ msgid "Write header to the slides"
+#~ msgstr "Tulis pengepala pada slaid"
+
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr ""
+#~ "Kotak semak ini membenarkan anda membuat penetapan sekiranya anda ingin "
+#~ "menulis butang navigasi pada bahagian atas slaid."
+
+#~ msgid "Write footer to the slides"
+#~ msgstr "Tulis pengaki pada slaid"
+
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write an imprint "
+#~ "consisting on the author and the software used to create these slides."
+#~ msgstr ""
+#~ "Kotak semak ini membenarkan anda membuat penetapan sekiranya anda ingin "
+#~ "menulis imprin yang memasukkan nama pengarang dan perisian yang digunakan "
+#~ "untuk mencipta slaid ini. "
+
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr ""
+#~ "Kotak semak ini membenarkan anda membuat penetapan sekiranya anda ingin "
+#~ "persembahan dimulakan sekali lagi sebaik sahaja paparan slaid terakhir "
+#~ "tamat. "
+
+#~ msgid "Step 5: Options for Unattended Presentations"
+#~ msgstr "Langkah 5: Pilihan untuk Persembahan Tanpa Jagaan"
+
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "Memulakan (cipta struktur fail, dll.)"
+
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "Cipta Gambar Slaid"
+
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "Cipta Halaman HTML untuk Slaid"
+
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "Cipta Halaman Utama (Jadual Kandungan)"
+
+#~ msgid "Options for Unattended Presentations"
+#~ msgstr "Pilihan untuk Persembahan Tanpa Jagaan"
+
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Simpan Konfigurasi Persembahan Web"
+
+#~ msgid "Freehand"
+#~ msgstr "Dengan Tangan"
+
+#~ msgid "Autoform"
+#~ msgstr "Autobentuk"
+
+#~ msgid "Group"
+#~ msgstr "Kumpulan"
+
+#~ msgid "Polyline"
+#~ msgstr "Poligaris"
+
+#~ msgid "Embedded Object"
+#~ msgstr "Objek Terbenam"
+
+#~ msgid "Cubic Bezier Curve"
+#~ msgstr "Keluk Bezier Kubus"
+
+#~ msgid "Quadric Bezier Curve"
+#~ msgstr "Keluk Bezier Kuadrik"
+
+#, fuzzy
+#~| msgid "View mode:"
+#~ msgid "View Mode"
+#~ msgstr "Mod papar:"
+
+#~ msgid "Prot&ect content"
+#~ msgstr "&Lindungi kandungan"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "Tatalaku Penyemak Eja"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Seting Laluan"
+
+#~ msgid "Error during saving: could not open '%1' temporary file for writing."
+#~ msgstr ""
+#~ "Ralat semasa menyimpan: tidak dapat buka fail sementara '%1' untuk "
+#~ "menulis."

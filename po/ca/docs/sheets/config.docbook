@@ -1,0 +1,136 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+&traductor.Antoni.Bella; 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Configurar les dreceres de &sheets; i les barres d'eines</title>
+
+<sect1 id="configshort">
+<title
+>Dreceres</title>
+<para
+>Per a canviar les dreceres de teclat utilitzades per &sheets; seleccioneu <menuchoice
+><guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Configura les dreceres...</guimenuitem
+></menuchoice
+>. Es mostrarà un diàleg com el que es mostra a sota. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura de pantalla 1 de la configuració amb les dreceres</phrase>
+</textobject>
+</mediaobject>
+<para
+>Cerqueu a través del quadre de llista fins a trobar l'acció que voleu afegir o per a la que voleu canviar la drecera de teclat i seleccioneu-la fent clic <mousebutton
+>esquerre</mousebutton
+> sobre el nom. Si introduïu el nom de l'acció en la barra de cerca d'amunt, podreu trobar l'acció desitjada més ràpidament. Aleshores podreu canviar a drecera seleccionant el botó d'opció <guilabel
+>Cap</guilabel
+>, <guilabel
+>Omissió</guilabel
+> o <guilabel
+>A mida</guilabel
+>.</para>
+<para
+>Ara podeu simplement prémer la combinació de tecles que voleu com a drecera, per exemple <keycombo action="simul"
+>&Ctrl;&Maj;<keycap
+>S</keycap
+></keycombo
+>.</para>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Barres d'eines</title>
+<para
+>&sheets; disposa de sis barres d'eines: <guilabel
+>Fitxer</guilabel
+>, <guilabel
+>Edita</guilabel
+>, <guilabel
+>Navegació</guilabel
+>, <guilabel
+>Tipus de lletra</guilabel
+>, <guilabel
+>Format</guilabel
+> i <guilabel
+>Color/Vores</guilabel
+>. Cadascuna es pot o no mostrar depenent de l'elecció que feu en el menú <guimenu
+>Arranjament</guimenu
+>.</para>
+<para
+>Si les barres d'eines estan desbloquejades, podeu escollir si una barra d'eines apareix <guimenuitem
+>Dalt</guimenuitem
+>, a l'<guimenuitem
+>Esquerra</guimenuitem
+>, a la <guimenuitem
+>Dreta</guimenuitem
+> o a <guimenuitem
+>Baix</guimenuitem
+> de la finestra de &sheets; fent clic <mousebutton
+>dret</mousebutton
+> sobre aquesta barra d'eines, el qual farà aparèixer el <guilabel
+>Menú de la barra d'eines</guilabel
+>, i fent una selecció des del submenú <guisubmenu
+>Orientació</guisubmenu
+>. Aquest <guilabel
+>Menú de la barra d'eines</guilabel
+> també de submenús per escollir si la barra d'eines mostra icones, text o ambdues opcions, i la mida de les icones.</para>
+
+<para
+>Una altra manera de moure una barra d'eines és situant el punter del ratolí sobre les dues barres verticals a l'esquerra de cada barra d'eines i mantenint premut el &BER; mentre arrossegueu la barra d'eines a la posició desitjada. Quan arrossegueu la barra d'eines d'aquesta manera podeu deixar anar el botó del ratolí una vegada esteu a alguna distància de qualsevol dels costats de la finestra de &sheets;, i aleshores obtindreu una barra d'eines flotant, la qual no estarà ancorada a cap part de la finestra de &sheets; i de fet es pot moure fora de la finestra. Per a tornar-la a posar en una de les posicions tradicionals, feu clic <mousebutton
+>dret</mousebutton
+> sobre la seva barra de títol per a fer aparèixer el <guilabel
+>Menú de la barra d'eines</guilabel
+> i després seleccioneu una de les opcions en el submenú <guisubmenu
+>Orientació</guisubmenu
+>.</para>
+
+<para
+>Seleccionant <guimenuitem
+>Configura les barres d'eines...</guimenuitem
+> des del menú <guimenu
+>Arranjament</guimenu
+> se us mostrarà un diàleg que us permetrà afegir o eliminar botons de les barres d'eines de &sheets;.</para>
+<para
+>Per a utilitzar aquest diàleg <guilabel
+>Configura les barres d'eines</guilabel
+>, seleccioneu primer una barra d'eines des del quadre combinat <guilabel
+>Barra d'eines:</guilabel
+>. A la dreta de la finestra <guilabel
+>Accions actuals:</guilabel
+> se us mostraran els botons presents actualment sobre la barra d'eines. Podeu eliminar un botó seleccionant-lo en aquesta finestra i després prement el botó de la fletxa esquerra, o moveu-lo amunt o avall prement els botons de fletxa amunt i avall. Per afegir un botó nou a la barra d'eines, seleccioneu-lo en la llista <guilabel
+>Accions disponibles:</guilabel
+> i després premeu el botó de fletxa dreta.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -1,0 +1,62 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2012-03-04 02:52+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: PluginShape.cpp:36
+#, kde-format
+msgid "Unknown"
+msgstr "Беймәлім"
+
+#: PluginShape.cpp:40
+#, kde-format
+msgid "Plugin of mimetype: %1"
+msgstr "MIME түрінің плагині: %1"
+
+#: PluginShapeFactory.cpp:22
+#, kde-format
+msgid "Plugin Placeholder"
+msgstr "Плагин орынбасары"
+
+#: PluginShapeFactory.cpp:24
+#, kde-format
+msgid "Plugin Placeholder, embedded or fullscreen"
+msgstr "Плагин орынбасары, панеліндегі не толық экранды"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Беймәлім"
+
+#, fuzzy
+#~| msgid "Plugin of mimetype: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin of mimetype: %1"
+#~ msgstr "MIME түрінің плагині: %1"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder"
+#~ msgstr "Плагин орынбасары"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgstr "Плагин орынбасары, панеліндегі не толық экранды"

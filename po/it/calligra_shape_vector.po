@@ -1,0 +1,70 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Andrea Celli <andrea.celli@ilibero.it>, 2010.
+# Federico Zenith <federico.zenith@member.fsf.org>, 2010, 2011, 2012.
+# Vincenzo Reale <smart2128vr@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VectorShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-24 20:39+0100\n"
+"Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "Cambia dati vettoriali"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Immagine vettoriale"
+
+#: VectorShapeFactory.cpp:29
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "Una forma che mostra immagini vettoriali (EMF/WMF/SVM)"
+
+#: VectorTool.cpp:64
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "Apri immagine vettoriale (EMF/WMF/SVM)"
+
+#: VectorToolFactory.cpp:20
+#, kde-format
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "Strumento per immagini vettoriali (EMF/WMF/SVM/SVG)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Immagine vettoriale"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "Una forma che mostra immagini vettoriali (EMF/WMF/SVM)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgstr "Apri immagine vettoriale (EMF/WMF/SVM)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgstr "Strumento per immagini vettoriali (EMF/WMF/SVM/SVG)"
+
+#~ msgid "Open EMF/WMF Shape"
+#~ msgstr "Apri forma EMF/WMF"
+
+#~ msgid "EMF/WMF Vector Shape tool"
+#~ msgstr "Strumento per forme vettoriali EMF/WMF"
+
+#~ msgid "Vector image selection tool"
+#~ msgstr "Uno strumento per scegliere immagini vettoriali"

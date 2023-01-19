@@ -1,0 +1,31 @@
+# POT_PART_NORMAL only
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the calligra package.
+#
+# Alexander Yavorsky <kekcuha@gmail.com>, 2020.
+# Мария Шикунова <translation-team@basealt.ru>, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2021-06-16 15:37+0300\n"
+"Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 19.12.3\n"
+
+#: ThreedShapeFactory.cpp:35
+#, kde-format
+msgid "3D Scene"
+msgstr "Трёхмерная сцена"
+
+#: ThreedShapeFactory.cpp:37
+#, kde-format
+msgid "Shape that displays a simple 3D scene."
+msgstr "Форма, отображающая простую трёхмерную сцену."

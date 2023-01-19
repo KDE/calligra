@@ -1,0 +1,904 @@
+# translation of MusicShape.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Youssef Chahibi <chahibi@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: MusicShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-10-14 16:07+0000\n"
+"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
+"Language-Team: <en@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: actions/AccidentalAction.cpp:54
+#, fuzzy, kde-format
+msgid "Double flat"
+msgstr "مزدوج مسطح"
+
+#: actions/AccidentalAction.cpp:55
+#, fuzzy, kde-format
+msgctxt "lowered half a step"
+msgid "Flat"
+msgstr "مسطح"
+
+#: actions/AccidentalAction.cpp:56
+#, fuzzy, kde-format
+msgid "Natural"
+msgstr "طبيعي"
+
+#: actions/AccidentalAction.cpp:57
+#, fuzzy, kde-format
+msgctxt "raised half a step"
+msgid "Sharp"
+msgstr "حاد"
+
+#: actions/AccidentalAction.cpp:58
+#, fuzzy, kde-format
+msgid "Double sharp"
+msgstr "مزدوج حاد"
+
+#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#, kde-format
+msgid "%1 flats"
+msgstr ""
+
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#, kde-format
+msgid "%1 sharps"
+msgstr ""
+
+#: actions/DotsAction.cpp:34
+#, fuzzy, kde-format
+msgid "Dots"
+msgstr "نقاط"
+
+#: actions/EraserAction.cpp:36
+#, fuzzy, kde-format
+msgid "Eraser"
+msgstr "الماحية"
+
+#: actions/KeySignatureAction.cpp:28
+#, fuzzy, kde-format
+msgid "Ab Major"
+msgstr "فصيلة الدّم ا ب، مقاطعة ألبرتا الكنديّة عريف"
+
+#: actions/KeySignatureAction.cpp:29
+#, fuzzy, kde-format
+msgid "Eb Major"
+msgstr "عريف"
+
+#: actions/KeySignatureAction.cpp:30
+#, fuzzy, kde-format
+msgid "Bb Major"
+msgstr "عريف"
+
+#: actions/KeySignatureAction.cpp:31
+#, fuzzy, kde-format
+msgid "F Major"
+msgstr "F عريف"
+
+#: actions/KeySignatureAction.cpp:32
+#, fuzzy, kde-format
+msgid "C Major"
+msgstr "C عريف"
+
+#: actions/KeySignatureAction.cpp:33
+#, fuzzy, kde-format
+msgid "G Major"
+msgstr "G عريف"
+
+#: actions/KeySignatureAction.cpp:34
+#, fuzzy, kde-format
+msgid "D Major"
+msgstr "D عريف"
+
+#: actions/KeySignatureAction.cpp:35
+#, fuzzy, kde-format
+msgid "A Major"
+msgstr "A عريف"
+
+#: actions/KeySignatureAction.cpp:36
+#, fuzzy, kde-format
+msgid "E Major"
+msgstr "E عريف"
+
+#: actions/KeySignatureAction.cpp:49
+#, fuzzy, kde-format
+msgctxt "Other key signature"
+msgid "Other"
+msgstr "أخرى"
+
+#: actions/NoteEntryAction.cpp:55
+#, fuzzy, kde-format
+msgid "note"
+msgstr "ملاحظة"
+
+#: actions/NoteEntryAction.cpp:55
+#, fuzzy, kde-format
+msgid "rest"
+msgstr "أضف"
+
+#: actions/NoteEntryAction.cpp:57
+#, fuzzy, kde-format
+msgid "Double whole "
+msgstr "مزدوج "
+
+#: actions/NoteEntryAction.cpp:58
+#, fuzzy, kde-format
+msgid "Whole "
+msgstr "كلّ "
+
+#: actions/NoteEntryAction.cpp:59
+#, fuzzy, kde-format
+msgid "Half "
+msgstr "نصف "
+
+#: actions/NoteEntryAction.cpp:60
+#, fuzzy, kde-format
+msgid "Quarter "
+msgstr "الربع "
+
+#: actions/NoteEntryAction.cpp:61
+#, fuzzy, kde-format
+msgid "Eighth "
+msgstr "الثمن "
+
+#: actions/NoteEntryAction.cpp:62
+#, fuzzy, kde-format
+msgid "16th "
+msgstr "السّادس عشر "
+
+#: actions/NoteEntryAction.cpp:63
+#, kde-format
+msgid "32nd "
+msgstr ""
+
+#: actions/NoteEntryAction.cpp:64
+#, kde-format
+msgid "64th "
+msgstr ""
+
+#: actions/NoteEntryAction.cpp:65
+#, kde-format
+msgid "128th "
+msgstr ""
+
+#: actions/NoteEntryAction.cpp:67
+#, fuzzy, kde-format
+msgid "Unknown note"
+msgstr "مجهول ملاحظة"
+
+#: actions/NoteEntryAction.cpp:67
+#, fuzzy, kde-format
+msgid "Unknown rest"
+msgstr "مجهول"
+
+#: actions/RemoveBarAction.cpp:22
+#, fuzzy, kde-format
+msgid "Remove bar"
+msgstr "احذف شريط"
+
+#: actions/SelectionAction.cpp:32
+#, kde-format
+msgid "Select"
+msgstr ""
+
+#: actions/SetClefAction.cpp:39
+#, fuzzy, kde-format
+msgctxt "Treble clef"
+msgid "Treble"
+msgstr "السوبرانو"
+
+#: actions/SetClefAction.cpp:40
+#, fuzzy, kde-format
+msgctxt "Bass clef"
+msgid "Bass"
+msgstr "باس"
+
+#: actions/SetClefAction.cpp:43
+#, fuzzy, kde-format
+msgctxt "Soprano clef"
+msgid "Soprano"
+msgstr "السوبرانو"
+
+#: actions/SetClefAction.cpp:44
+#, fuzzy, kde-format
+msgctxt "Alto clef"
+msgid "Alto"
+msgstr "الألتو"
+
+#: actions/SetClefAction.cpp:45
+#, fuzzy, kde-format
+msgctxt "Tenor clef"
+msgid "Tenor"
+msgstr "الفحوى"
+
+#: actions/SetClefAction.cpp:46
+#, fuzzy, kde-format
+msgid "C clef on line %1"
+msgstr "C يعمل سطر 1"
+
+#: actions/SetClefAction.cpp:49
+#, fuzzy, kde-format
+msgid "Unknown clef"
+msgstr "مجهول"
+
+#: actions/TiedNoteAction.cpp:33
+#, fuzzy, kde-format
+msgid "Tied notes"
+msgstr "إضافة ملاحظة"
+
+#: commands/AddBarsCommand.cpp:17
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add measures"
+msgstr "إضافة"
+
+#: commands/AddDotCommand.cpp:17
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add dot"
+msgstr "إضافة نقطة"
+
+#: commands/AddNoteCommand.cpp:29
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set chord duration"
+msgstr "ضبط"
+
+#: commands/AddNoteCommand.cpp:31
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add note"
+msgstr "إضافة ملاحظة"
+
+#: commands/AddPartCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add part"
+msgstr "إضافة جزء"
+
+#: commands/AddPartCommand.cpp:26
+#, fuzzy, kde-format
+msgid "Part %1"
+msgstr "الأجزاء"
+
+#: commands/ChangePartDetailsCommand.cpp:30
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change part details"
+msgstr "جزءالجزء تفاصيل"
+
+#: commands/CreateChordCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add chord"
+msgstr "إضافة"
+
+#: commands/CreateChordCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add rest"
+msgstr "إضافة"
+
+#: commands/MakeRestCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Convert chord to rest"
+msgstr "حوّل إلى"
+
+#: commands/RemoveBarCommand.cpp:18
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove bar"
+msgstr "احذف شريط"
+
+#: commands/RemoveChordCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove rest"
+msgstr "احذف"
+
+#: commands/RemoveChordCommand.cpp:21
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove chord"
+msgstr "احذف"
+
+#: commands/RemoveNoteCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove note"
+msgstr "احذف ملاحظة"
+
+#: commands/RemovePartCommand.cpp:21
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove part"
+msgstr "احذف جزء"
+
+#: commands/RemoveStaffElementCommand.cpp:22
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove clef"
+msgstr "احذف"
+
+#: commands/RemoveStaffElementCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Remove staff element"
+msgstr ""
+
+#: commands/SetAccidentalsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set accidentals"
+msgstr "ضبط"
+
+#: commands/SetClefCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change clef"
+msgstr "غيّر"
+
+#: commands/SetKeySignatureCommand.cpp:25
+#: commands/SetKeySignatureCommand.cpp:72
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change key signature"
+msgstr "غيّر مفتاح إمضاء"
+
+#: commands/SetTimeSignatureCommand.cpp:21
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change time signature"
+msgstr "غيّر وقت إمضاء"
+
+#: commands/ToggleTiedNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Toggle Note Tie"
+msgstr ""
+
+#: dialogs/KeySignatureDialog.cpp:15
+#, fuzzy, kde-format
+msgid "Set key signature"
+msgstr "ضبط مفتاح إمضاء"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/KeySignatureDialog.ui:63
+#, fuzzy, kde-format
+msgid "Region"
+msgstr "منطقة"
+
+#. i18n: ectx: property (text), widget (QRadioButton, throughBar)
+#. i18n: ectx: property (text), widget (QRadioButton, throughEndOfPiece)
+#. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
+#: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
+#: dialogs/KeySignatureDialog.ui:163
+#, fuzzy, kde-format
+msgid "Measure"
+msgstr "قياس"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/KeySignatureDialog.ui:88
+#, kde-format
+msgid "through"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/KeySignatureDialog.ui:139
+#, fuzzy, kde-format
+msgid "through end of piece"
+msgstr "end من"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/KeySignatureDialog.ui:180
+#, fuzzy, kde-format
+msgid "to next key change"
+msgstr "إلى التالي مفتاح تغيير"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/KeySignatureDialog.ui:205
+#, fuzzy, kde-format
+msgid "Staves"
+msgstr "العصي"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allStaves)
+#: dialogs/KeySignatureDialog.ui:211
+#, fuzzy, kde-format
+msgid "Update all staves"
+msgstr "تحديث الكل"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
+#: dialogs/KeySignatureDialog.ui:221
+#, fuzzy, kde-format
+msgid "Only update selected staff"
+msgstr "فقط تحديث مُنتقى"
+
+#: dialogs/PartDetailsDialog.cpp:19
+#, fuzzy, kde-format
+msgid "Part details"
+msgstr "جزءالجزء تفاصيل"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/PartDetailsDialog.ui:18
+#, fuzzy, kde-format
+msgid "Name:"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/PartDetailsDialog.ui:34
+#, fuzzy, kde-format
+msgid "Short name:"
+msgstr "قصير الاسم:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/PartDetailsDialog.ui:50
+#, fuzzy, kde-format
+msgid "Staves:"
+msgstr "العصي:"
+
+#. i18n: ectx: property (text), widget (QToolButton, editPart)
+#. i18n: ectx: property (text), widget (QToolButton, addPart)
+#. i18n: ectx: property (text), widget (QToolButton, removePart)
+#: dialogs/PartsWidget.ui:37 dialogs/PartsWidget.ui:44
+#: dialogs/PartsWidget.ui:54
+#, fuzzy, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:187
+#, fuzzy, kde-format
+msgid "Voice 1"
+msgstr "صوت 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:192
+#, fuzzy, kde-format
+msgid "Voice 2"
+msgstr "صوت 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:197
+#, fuzzy, kde-format
+msgid "Voice 3"
+msgstr "صوت 3"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:202
+#, fuzzy, kde-format
+msgid "Voice 4"
+msgstr "صوت 4"
+
+#. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
+#: SimpleEntryTool.cpp:678
+#, fuzzy, kde-format
+msgid "Add measures"
+msgstr "إضافة"
+
+#. i18n: ectx: property (text), widget (QToolButton, importButton)
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#, fuzzy, kde-format
+msgid "Import"
+msgstr "استيراد"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportButton)
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#, fuzzy, kde-format
+msgid "Export"
+msgstr "صدِّر"
+
+#: MusicShape.cpp:71
+#, fuzzy, kde-format
+msgid "Part 1"
+msgstr "الأجزاء"
+
+#: MusicShapeFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Music Shape"
+msgstr "موسيقى شكل"
+
+#: MusicShapeFactory.cpp:38
+#, fuzzy, kde-format
+msgid "A shape which provides a music editor"
+msgstr "A شكل يزود بِـ a موسيقى محرِّر"
+
+#: MusicTool.cpp:85
+#, fuzzy, kde-format
+msgid "Parts"
+msgstr "الأجزاء"
+
+#: MusicToolFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Music editing, parts"
+msgstr "موسيقى أداة"
+
+#: SimpleEntryTool.cpp:226
+#, fuzzy, kde-format
+msgid "Clef"
+msgstr "المفتاح الموسيقي"
+
+#: SimpleEntryTool.cpp:255
+#, fuzzy, kde-format
+msgid "Time signature"
+msgstr "الوقت إمضاء"
+
+#: SimpleEntryTool.cpp:285
+#, fuzzy, kde-format
+msgid "Key signature"
+msgstr "مفتاح إمضاء"
+
+#: SimpleEntryTool.cpp:679
+#, fuzzy, kde-format
+msgid "Add how many measures?"
+msgstr "إضافة"
+
+#: SimpleEntryTool.cpp:743
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Import"
+msgstr "استيراد"
+
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#, kde-format
+msgid "MusicXML files (*.xml)"
+msgstr ""
+
+#: SimpleEntryTool.cpp:760
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Export"
+msgstr "صدِّر"
+
+#: SimpleEntryToolFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Music editing"
+msgstr "موسيقى أداة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "منطقة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Measure"
+#~ msgstr "قياس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "through end of piece"
+#~ msgstr "end من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to next key change"
+#~ msgstr "إلى التالي مفتاح تغيير"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves"
+#~ msgstr "العصي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Update all staves"
+#~ msgstr "تحديث الكل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Only update selected staff"
+#~ msgstr "فقط تحديث مُنتقى"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short name:"
+#~ msgstr "قصير الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves:"
+#~ msgstr "العصي:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 1"
+#~ msgstr "صوت 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 2"
+#~ msgstr "صوت 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 3"
+#~ msgstr "صوت 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 4"
+#~ msgstr "صوت 4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double flat"
+#~ msgstr "مزدوج مسطح"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) lowered half a step"
+#~ msgid "Flat"
+#~ msgstr "مسطح"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Natural"
+#~ msgstr "طبيعي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) raised half a step"
+#~ msgid "Sharp"
+#~ msgstr "حاد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double sharp"
+#~ msgstr "مزدوج حاد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dots"
+#~ msgstr "نقاط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eraser"
+#~ msgstr "الماحية"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ab Major"
+#~ msgstr "فصيلة الدّم ا ب، مقاطعة ألبرتا الكنديّة عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eb Major"
+#~ msgstr "عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bb Major"
+#~ msgstr "عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F Major"
+#~ msgstr "F عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C Major"
+#~ msgstr "C عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "G Major"
+#~ msgstr "G عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D Major"
+#~ msgstr "D عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Major"
+#~ msgstr "A عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E Major"
+#~ msgstr "E عريف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Other key signature"
+#~ msgid "Other"
+#~ msgstr "أخرى"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "note"
+#~ msgstr "ملاحظة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "rest"
+#~ msgstr "أضف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double whole "
+#~ msgstr "مزدوج "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whole "
+#~ msgstr "كلّ "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Half "
+#~ msgstr "نصف "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quarter "
+#~ msgstr "الربع "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eighth "
+#~ msgstr "الثمن "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "16th "
+#~ msgstr "السّادس عشر "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown note"
+#~ msgstr "مجهول ملاحظة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown rest"
+#~ msgstr "مجهول"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Treble clef"
+#~ msgid "Treble"
+#~ msgstr "السوبرانو"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Bass clef"
+#~ msgid "Bass"
+#~ msgstr "باس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Soprano clef"
+#~ msgid "Soprano"
+#~ msgstr "السوبرانو"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Alto clef"
+#~ msgid "Alto"
+#~ msgstr "الألتو"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Tenor clef"
+#~ msgid "Tenor"
+#~ msgstr "الفحوى"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C clef on line %1"
+#~ msgstr "C يعمل سطر 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown clef"
+#~ msgstr "مجهول"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tied notes"
+#~ msgstr "إضافة ملاحظة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part %1"
+#~ msgstr "الأجزاء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set key signature"
+#~ msgstr "ضبط مفتاح إمضاء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part details"
+#~ msgstr "جزءالجزء تفاصيل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part 1"
+#~ msgstr "الأجزاء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music Shape"
+#~ msgstr "موسيقى شكل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which provides a music editor"
+#~ msgstr "A شكل يزود بِـ a موسيقى محرِّر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parts"
+#~ msgstr "الأجزاء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing, parts"
+#~ msgstr "موسيقى أداة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "استيراد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "صدِّر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clef"
+#~ msgstr "المفتاح الموسيقي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time signature"
+#~ msgstr "الوقت إمضاء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key signature"
+#~ msgstr "مفتاح إمضاء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add how many measures?"
+#~ msgstr "إضافة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Import"
+#~ msgstr "استيراد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Export"
+#~ msgstr "صدِّر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing"
+#~ msgstr "موسيقى أداة"
+
+#, fuzzy
+#~ msgid "Music Tool"
+#~ msgstr "موسيقى الأداة"

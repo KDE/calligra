@@ -1,0 +1,93 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Juan Manuel</firstname
+><surname
+>García Molina</surname
+><affiliation
+><address
+><email
+>juanma@superiodico.net</email
+></address
+></affiliation
+><contrib
+>Traductor</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Consejos generales y trucos para grandes presentaciones</title>
+
+<para
+>De acuerdo, ha decidido usar &stage; para su presentación. Antes de que empiece a hacer transparencias o presentaciones de diapositivas animadas, busque un trozo de papel y siéntese en una mesa lejos del computador. No importa si va a preparar una clase o si va a intentar convencer al jefe de que su plan, política o idea debe ser adoptada, necesita saber qué es lo que intenta contar. Escriba todos los temas que necesita cubrir, intente ordenarlos de la forma que piense que tenga más sentido. No entre en detalles aún, simplemente decida los encabezados y la estructura de su charla.</para>
+
+<para
+>Debajo de cada encabezado, anote qué heche necesita cubrir: está intentando construir un argumento convincente. Considere agrupar sus hechos en cosas que se tienen que inclur, cosas que se deberían incluir y cosas que sería interesante cubrir si tiene mucho tiempo.</para>
+
+<para
+>Una vez que haya escrito todas las cosas que necesita decir, considere el tiempo disponible para hacerlo. Diez minutos parecen años cuando empieza, pero es muy difícil actualmente ir muy lejos en tan poco tiempo. Tome su hoja de papel y un reloj en la otra mano. Practique su presentación una y otra vez. Esto tiene muchos beneficios. En primer lugar, tendrá la temporización adecuada. Si alguien le dice que tiene diez minutos, nunca supere el tiempo permitido. En segundo lugar, cuando lo haga realmente, tendrá delante suyo una audiencia viva, no debe ser la primera vez que haya hecho la presentación. En tercer lugar, tenga las palabras adecuadas en su propia cabeza. Encontrará varias formas de decir las cosas sobre el tema. Si se ha escuchado a sí mismo hacer esta presentación varias veces, sabrá qué va a decir el próximo día y cómo lo va a decir. </para>
+
+<para
+>&stage; no produce «notas del ponente» mientras se escribe, pero soy feliz usando simplemente diapositivas normales. Produzca algunas diapositivas por sí mismo, impresas en papel normal, y algunas para usar con el retroproyector. Haga el texto de sus diapositivas agradable y grande, necesita poder leerlo desde cierta distancia. Yo uso un texto de 14 ó 16 puntos, experimento hasta encontrar un tamaño que pueda leer con facilidad. Nunca escribo un script.</para>
+
+<para
+>Si está usando un retroproyectos, aprenda a usarlo con tiempo. Asegúrese de que la bombilla funciona, de que la bombilla de repuesto esté en buen estado. Limpie las lentes y el plato de muestra. Si no está acostumbrado a trabajar con proyectores, practique. Asegúrese de que la propia pantalla de proyección está limpia. Probablemente sea mejor, cuando se controla el tiempo a sí mismo, permitir cinco segundos (cuente <quote
+>one ciento uno, ciento dos....</quote
+>) para cambiar cada diapositiva. De esta forma sabrá que no tiene que precipitarse. Si necesita apuntar a algo en algún sitio de una diapositiva, puede usar un puntero y señalarla en la pantalla. Busque un puntero láser o ponga un bolígrafo sobre la propia transparencia. Tenga cuidado, estos tienden a salirse del sitio cuando mueve sin querer la mesa.</para>
+
+<para
+>Tenga en cuenta el sitio en el que va a estar. No puede estar delante de su pantalla, así que ponerse en un lado es probablemente su mejor opción si quiere que su audiencia pueda ver. Normalmente proyecto una imagen sobre una pizarra limpia y dibujo por encima de las transparencias. Si usa un PC con un proyector digital, puede dibujar a mano alzada con la herramienta «pluma» de &stage;. Recuerde, dibujar a mano alzada con un razón es una habilidad que necesita práctica. Si está usando un retroproyector, puede usar transparencias vacías sobre las que generó su computador, y dibujar sobre ellas.</para>
+
+<para
+>Cuando esté haciendo una presentación no mire accidentalmente a la luz, es fácil hacerlo. Si no va a usar la máquina durante unos minutos, apáguela. Practique el colocarse donde había planeado. Compruebe que la habitación donde va a estar tiene enchufes y aprenda dónde estan los interruptores de la luz y cómo se activan. Una buena preparación no solo le hace tener menor predisposición a cometer fallos (las cosas inanimadas pueden ser una pesadilla delante de una audiencia), sino que también le da confianza. Tenga siempre un <quote
+>Plan B</quote
+> dispuesto por si algo se niega a funcionar. Tenga una copia en papel de las transparencias consigo. Puede fotocopiarlas y distribuirlas a su audiencia si el equipo falla.</para>
+
+<para
+>Aún no he dicho mucho acerca del contenido. Por ahora, todo lo que tiene es un trozo de papel con todo lo que quiere decir. Antes de hacer nada, pregúntese si la comprensión de lo que va a contar mejoraría mostrando una imagen. Las malas presentaciones constan de una serie de diapositivas plagadas de texto. El ponente se limita a leer la diapositiva a la audiencia (que ya la ha leído porque lee más rápido de lo que alguien puede hablar en voz alta). Intente evitar escribir sobre la transparencia, salvo un título y un número. Dibuje una imagen de lo que necesita decir, luego explique la imagen a la audiencia. De esta forma, no irán por delante de usted (pueden leer más rápido de lo que habla, ¿recuerda?) y además da la impresión de que lo sabe. No lo sabe, pero está usando una imagen como una especie de guía. Una transparencia debería dar soporte a lo que está diciendo, no duplicarlo. Una diapositiva debería ser el foco de atención de la audiencia, no una distracción.</para>
+
+<para
+>Un ejemplo. Enseñaba cosas sobre cómo responder a accidentes ferroviarios. Quería usar una transparencia para tratar lo peligroso que es mover cargas peligrosas de un vehículo que ha descarrilado tras un accidente. La transparencia que hice tenía solo el dibujo de un vagón de mercancías, del tipo de los que se usan para transportar gases o gasóleos. Al lado escribí <quote
+>Empresa química Letal</quote
+>, de tal forma que no tuve que explicarlo. Quería señalar varios puntos importantes. Primero, puede sufrir los efectos de una sobrecarga eléctrica debido a los cables caídos si están a una distancia lo suficientemente corta. Dibujé una de las estructuras que los soportan y dibujé una flecha mostrando la distancia de seguridad. Luego quería decir que no debe mover los contenidos del vagón en la oscuridad ni bajo tormentas. Dibujé una luna y un relámpago sobre el vehículo. Debe seguir el consejo de los especialista, así que dibujé una hoja de papel y escribí la palabra <quote
+>Plan</quote
+> cerca del vehículo. También tiene que asegurarse de que el vehículo no se mueva cuando se quite el peso del interior. Dibujé pequeñas cuñas rojas en las ruedas. Todo sobre lo que necesitaba hablar estaba en este dibujo. Todo lo que tenía que hacer era mirar al dibujo y me decía lo que necesitaba cubrir. Cuando hube cubierto todas las cosas del dibujo, había terminado con ese asunto. </para>
+
+<para
+>En general, use solo una diapositiva o imagen si muestra algo que añadir a lo que está diciendo. Finalmente, relájese e intente no precipitarse en ningún momento. Hable para ellos, no a ellos y recuerde que una presentación es, ni más ni menos, para transmitir el mensaje que está intentando comunicar. &stage; es una herramienta útil. Puede ayudarle a hacer comprender el mensaje, pero no puede hacer el trabajo por usted.</para>
+
+</chapter>

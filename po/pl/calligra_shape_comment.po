@@ -1,0 +1,87 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-07-15 21:25+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "The plugin needed for displaying comments is not present."
+msgstr "Wtyczka potrzebna do wyświetlania komentarzy jest nieobecna."
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Brakująca wtyczka"
+
+#: CommentShape.cpp:51
+#, kde-format
+msgid ""
+"The plugin needed for displaying the comment is not compatible with the "
+"current version of the comment shape."
+msgstr ""
+"Wtyczka potrzebna do wyświetlania komentarzy jest niekompatybilna z obecną "
+"wersją składnika kształtu."
+
+#: CommentShape.cpp:52
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Wtyczka niekompatybilna"
+
+#: CommentShapeFactory.cpp:17 CommentToolFactory.cpp:17
+#, kde-format
+msgid "Comment"
+msgstr "Komentarz"
+
+#, fuzzy
+#~| msgid "Plugin Missing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Missing"
+#~ msgstr "Brakująca wtyczka"
+
+#, fuzzy
+#~| msgid "The plugin needed for displaying comments is not present."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The plugin needed for displaying comments is not present."
+#~ msgstr "Wtyczka potrzebna do wyświetlania komentarzy jest nieobecna."
+
+#, fuzzy
+#~| msgid ""
+#~| "The plugin needed for displaying the comment is not compatible with the "
+#~| "current version of the comment shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying the comment is not compatible with the "
+#~ "current version of the comment shape."
+#~ msgstr ""
+#~ "Wtyczka potrzebna do wyświetlania komentarzy jest niekompatybilna z "
+#~ "obecną wersją składnika kształtu."
+
+#, fuzzy
+#~| msgid "Plugin Incompatible"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Incompatible"
+#~ msgstr "Wtyczka niekompatybilna"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comment"
+#~ msgstr "Komentarz"
+
+#~ msgid "Comment Tool"
+#~ msgstr "Narzędzie komentarza"

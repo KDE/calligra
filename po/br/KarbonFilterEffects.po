@@ -1,0 +1,1814 @@
+# KDE breton translation
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# Thierry Vignaud <tvignaud@mandriva.com>, 2004-2005
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2004-09-29 01:29+0200\n"
+"Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
+"Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
+"Language: br\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Bold"
+msgid "Blend"
+msgstr "Druz"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "Blend mode"
+msgstr "Gwel"
+
+#: BlendEffectConfigWidget.cpp:24
+#, kde-format
+msgid "Normal"
+msgstr "Boas"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:28
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Lighten"
+msgstr "Uhelder :"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "Raise"
+msgid "Radius"
+msgstr "Sevel"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Stroke: Color"
+msgid "Saturate colors"
+msgstr "StankaÃ±Â : Liv"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, fuzzy, kde-format
+#| msgid "Rotate"
+msgid "Rotate hue"
+msgstr "Treiñ"
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Stroke: Color"
+msgid "Saturate value"
+msgstr "StankaÃ±Â : Liv"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, fuzzy, kde-format
+#| msgid "Angle:"
+msgid "Angle"
+msgstr "Kogn :"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Table"
+msgstr "&Restr"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, fuzzy, kde-format
+#| msgid "&Distribute"
+msgid "Discrete"
+msgstr "&Skignañ"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Linear"
+msgid "Linear"
+msgstr "Lineel"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Shear"
+msgid "Slope"
+msgstr "Didroc'hañ"
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Intercept"
+msgstr "Etrefas"
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Components"
+msgid "Composite"
+msgstr "Parzhioù"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, fuzzy, kde-format
+#| msgid "Section"
+msgid "Operation"
+msgstr "Dachenn"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "&Duplicate"
+msgid "Duplicate"
+msgstr "&Eilañ"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, fuzzy, kde-format
+#| msgid "None"
+msgid "None"
+msgstr "Hini ebet"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "Edge mode:"
+msgstr "Gwel"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "Target:"
+msgid "Target point:"
+msgstr "Gwenn :"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, kde-format
+msgid "Bias:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, fuzzy, kde-format
+#| msgid "Pattern"
+msgid "Edit kernel"
+msgstr "Sil"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "Stroke: Color"
+msgid "Flood fill"
+msgstr "StankaÃ±Â : Liv"
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+#| msgid "Stroke: Color"
+msgid "Flood color"
+msgstr "StankaÃ±Â : Liv"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr "Skeudenn"
+
+#: ImageEffectConfigWidget.cpp:27
+#, fuzzy, kde-format
+#| msgid "Select Nodes"
+msgid "Select image..."
+msgstr "Dibab ar skoulmoù"
+
+#: ImageEffectConfigWidget.cpp:54
+#, fuzzy, kde-format
+#| msgid "Select Nodes"
+msgid "Select image"
+msgstr "Dibab ar skoulmoù"
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr ""
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Dilate"
+msgstr "Dilemel"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+#| msgid "Section"
+msgid "Operator:"
+msgstr "Dachenn"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+#| msgid "Raise"
+msgid "Radius x:"
+msgstr "Sevel"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+#| msgid "Raise"
+msgid "Radius y:"
+msgstr "Sevel"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr ""
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "Druz"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Gwel"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Boas"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Uhelder :"
+
+#, fuzzy
+#~| msgid "Raise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Sevel"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "StankaÃ±Â : Liv"
+
+#, fuzzy
+#~| msgid "Rotate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rotate hue"
+#~ msgstr "Treiñ"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "StankaÃ±Â : Liv"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Kogn :"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "&Restr"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "&Skignañ"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Lineel"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slope"
+#~ msgstr "Didroc'hañ"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intercept"
+#~ msgstr "Etrefas"
+
+#, fuzzy
+#~| msgid "Components"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Parzhioù"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Dachenn"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "&Eilañ"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Gwel"
+
+#, fuzzy
+#~| msgid "Target:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Gwenn :"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Sil"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "StankaÃ±Â : Liv"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "StankaÃ±Â : Liv"
+
+#, fuzzy
+#~| msgid "Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Skeudenn"
+
+#, fuzzy
+#~| msgid "Select Nodes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image..."
+#~ msgstr "Dibab ar skoulmoù"
+
+#, fuzzy
+#~| msgid "Select Nodes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select image"
+#~ msgstr "Dibab ar skoulmoù"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Dilemel"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Dachenn"
+
+#, fuzzy
+#~| msgid "Raise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Sevel"
+
+#, fuzzy
+#~| msgid "Raise"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Sevel"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Thierry Vignaud, Jañ-Mai Drapier"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "tvignaud@mandriva.com, jdrapier@club-internet.fr"
+
+#, fuzzy
+#~| msgid "Section"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boolean Operation"
+#~ msgstr "Dachenn"
+
+#~ msgid "&Order"
+#~ msgstr "&Urzhiañ"
+
+#~ msgid "&Align"
+#~ msgstr "&Steudañ"
+
+#~ msgid "&File"
+#~ msgstr "&Restr"
+
+#~ msgid "&Edit"
+#~ msgstr "&Aozañ"
+
+#~ msgid "&View"
+#~ msgstr "&Gwel"
+
+#~ msgid "&Object"
+#~ msgstr "&Tra"
+
+#~ msgid "&Distribute"
+#~ msgstr "&Skignañ"
+
+#~ msgid "&Path"
+#~ msgstr "&Hent"
+
+#~ msgid "&Settings"
+#~ msgstr "&Kefluniadur"
+
+#~ msgid "Edit"
+#~ msgstr "Aozañ"
+
+#~ msgid "Object"
+#~ msgstr "Tra"
+
+#~ msgid "Align"
+#~ msgstr "Steudañ"
+
+#~ msgid "View"
+#~ msgstr "Gwel"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Flatten Path"
+#~ msgstr "&Serriñ an hent"
+
+#~ msgid "Properties"
+#~ msgstr "Perzhioù"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "&Serriñ an hent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Serriñ an hent"
+
+#, fuzzy
+#~ msgid "&Refine Path..."
+#~ msgstr "Serriñ an hent"
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Serriñ an hent"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Gwel"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Gwel"
+
+#, fuzzy
+#~| msgid "Pencil Tool"
+#~ msgid "Stencil Box"
+#~ msgstr "Ostilh kreion"
+
+#~ msgid "Info"
+#~ msgstr "Titouroù"
+
+#~ msgid "Angle:"
+#~ msgstr "Kogn :"
+
+#, fuzzy
+#~| msgid "Raise Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Uhelaat ur gwisk"
+
+#, fuzzy
+#~| msgid "Lower Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Gwisk izel"
+
+#~ msgid "Configure"
+#~ msgstr "Kefluniañ"
+
+#~ msgid "Interface"
+#~ msgstr "Etrefas"
+
+#~ msgid "Misc"
+#~ msgstr "A bep seurt"
+
+#~ msgid "Grid"
+#~ msgstr "Kael"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Teul"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dibarzhoù an teul"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer view"
+#~ msgstr "Gwiskoù"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Gwisk nevez"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "Lemel an traoñ"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "Lemel an traoñ"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "Lemel an traoñ"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "View mode"
+#~ msgstr "Gwel"
+
+#~ msgid "New Layer"
+#~ msgstr "Gwisk nevez"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Roit anv ar gwisk nevez :"
+
+#~ msgid "New layer"
+#~ msgstr "Gwisk nevez"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Adenvel ar gwisk"
+
+#, fuzzy
+#~| msgid "Delete Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Lemel ar gwisk"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer"
+#~ msgstr "Gwiskoù"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "strollad"
+
+#, fuzzy
+#~| msgid "Shear"
+#~ msgid "Shape"
+#~ msgstr "Didroc'hañ"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Divoullded"
+
+#, fuzzy
+#~| msgid "Info"
+#~ msgid "no"
+#~ msgstr "Titouroù"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "yes"
+#~ msgstr "Giz :"
+
+#, fuzzy
+#~| msgid "Insert Image"
+#~ msgid "Master Page"
+#~ msgstr "Enlakaat ur skeudenn"
+
+#, fuzzy
+#~| msgid "Insert Sinus"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Enlakaat ur sinus"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Dibabit ur sil da ouzhpennañ"
+
+#, fuzzy
+#~| msgid "&Import Graphic..."
+#~ msgid "Import graphic"
+#~ msgstr "&Enporzh ur skeudenn ..."
+
+#, fuzzy
+#~| msgid "H&orizontal:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "A&-serzh :"
+
+#, fuzzy
+#~| msgid "H&orizontal:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Vertically"
+#~ msgstr "A&-serzh :"
+
+#, fuzzy
+#~| msgid "H&orizontal:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mirror Horizontally and Vertically"
+#~ msgstr "A&-serzh :"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "&Serriñ an hent"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgid "Outline &Mode"
+#~ msgstr "Mod g&well"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Diskouez bevennoù ar bajenn"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Enporzh ur skeudenn ..."
+
+#~ msgid "D&elete"
+#~ msgstr "&Dilemel"
+
+#, fuzzy
+#~| msgid "Hide Grid"
+#~ msgid "Edit Guides"
+#~ msgstr "Kuzhat ar gael"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Eilañ"
+
+#, fuzzy
+#~| msgid "Distribute Objects"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "skignañ an traoù"
+
+#, fuzzy
+#~| msgid "Distribute Objects"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "skignañ an traoù"
+
+#, fuzzy
+#~| msgid "Distribute Objects"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "skignañ an traoù"
+
+#, fuzzy
+#~| msgid "Distribute Objects"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "skignañ an traoù"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Diskouez ar reolennoù"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Diskouez pe kuzhat ar reolennoù"
+
+#, fuzzy
+#~| msgid "Shows or hides rulers"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Diskouez pe kuzhat ar reolennoù"
+
+#, fuzzy
+#~ msgid "Snap to Grid"
+#~ msgstr "Diskouez ar &gael"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "Diskouez ar &gael"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Clip Object"
+#~ msgstr "&Tra"
+
+#, fuzzy
+#~| msgid "Shear Objects"
+#~ msgid "&Unclip Objects"
+#~ msgstr "Didroc'hañ an traoù"
+
+#, fuzzy
+#~| msgid "H&orizontal:"
+#~ msgid "Mirror Horizontally"
+#~ msgstr "A&-serzh :"
+
+#~ msgid "&Close Path"
+#~ msgstr "&Serriñ an hent"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "Serriñ an hent"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Se&parate Path"
+#~ msgstr "&Serriñ an hent"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Re&verse Path"
+#~ msgstr "&Serriñ an hent"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Intersect Paths"
+#~ msgstr "&Serriñ an hent"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Subtract Paths"
+#~ msgstr "&Serriñ an hent"
+
+#, fuzzy
+#~ msgid "Unite Paths"
+#~ msgstr "Serriñ an hent"
+
+#, fuzzy
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Diskouez ar &gael"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "&Kefluniañ Karbon ..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Pajen&naozañ ..."
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Diuzadenn"
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Diuzadenn"
+
+#, fuzzy
+#~| msgid "Zoom Tool"
+#~ msgid "Zoom"
+#~ msgstr "Ostilh Zoom"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show status bar:"
+#~ msgstr "Diskouez ar barrenn a stad"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Niver a restr nevezig :"
+
+#~ msgid "Palette font size:"
+#~ msgstr "Ment nodrezh an daolenn-livioù :"
+
+#, fuzzy
+#~| msgid "Select Nodes"
+#~ msgid "Select palette"
+#~ msgstr "Dibab ar skoulmoù"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#, fuzzy
+#~| msgid "Stroke: RGB"
+#~ msgid "Stroke:"
+#~ msgstr "StankaÃ±Â : RGB"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgid "Fill:"
+#~ msgstr "Leuniañ"
+
+#~ msgid "File to open"
+#~ msgstr "Restr da zigeriñ"
+
+#~ msgid "Target:"
+#~ msgstr "Gwenn :"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Lineel"
+
+#~ msgid "Fill"
+#~ msgstr "Leuniañ"
+
+#~ msgid "Type:"
+#~ msgstr "Rizh :"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineel"
+
+#~ msgid "Repeat:"
+#~ msgstr "Adseniñ :"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgid "Reflect"
+#~ msgstr "Dibabit"
+
+#~ msgid "Repeat"
+#~ msgstr "Adseniñ"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Overall opacity:"
+#~ msgstr "Divoullded :"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgid "Stop color."
+#~ msgstr "StankaÃ±Â : Liv"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "Tiled"
+#~ msgstr "&Restr"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Left"
+#~ msgid "Top Left"
+#~ msgstr "Kleiz"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgid "Top Right"
+#~ msgstr "Steudañ d'a-zehou"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Left"
+#~ msgid "Left"
+#~ msgstr "Kleiz"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Center"
+#~ msgid "Center"
+#~ msgstr "Kreizennad"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgid "Right"
+#~ msgstr "Uhelder :"
+
+#, fuzzy
+#~ msgid "Bottom"
+#~ msgstr "Ostilh Zoom"
+
+#, fuzzy
+#~| msgid "Stroke: RGB"
+#~ msgid "Stroke"
+#~ msgstr "StankaÃ±Â : RGB"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Kuzhat bevennoù ar bajenn"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Kuzhat ar reolennoù"
+
+#, fuzzy
+#~| msgid "Stroke: Color"
+#~ msgid "Stop color:"
+#~ msgstr "StankaÃ±Â : Liv"
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Boest ostilhoù"
+
+#, fuzzy
+#~| msgid "Offset:"
+#~ msgid "Copy offset:"
+#~ msgstr "Lamm :"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Diskouez ar gael"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Diskouez pe kuzhat ar reolennoù."
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Hini ebet"
+
+#, fuzzy
+#~| msgid "Solid"
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Leun"
+
+#~ msgid "Gradient"
+#~ msgstr "Kemmesk"
+
+#~ msgid "Pattern"
+#~ msgstr "Sil"
+
+#~ msgid "Units:"
+#~ msgstr "Unanennoù :"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Group Objects"
+#~ msgstr "&Tra"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Diskouez ar &gael"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Diskouez ar &gael"
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "&Liv ar &gael :"
+
+#~ msgid "Spacing"
+#~ msgstr "Spas"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&A-serzh :"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&A-led :"
+
+#~ msgid "min"
+#~ msgstr "mun"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Adenvel ar gwisk"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Dibabit ur sil"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Dibabit ur sil da ouzhpennañ"
+
+#~ msgid "X:"
+#~ msgstr "X :"
+
+#~ msgid "Y:"
+#~ msgstr "Y :"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Sil"
+
+#~ msgid "W:"
+#~ msgstr "K :"
+
+#~ msgid "H:"
+#~ msgstr "H :"
+
+#~ msgid "Edit Gradient"
+#~ msgstr "Aozañ ar c'hemmesk"
+
+#, fuzzy
+#~| msgid "Edit Gradient"
+#~ msgid "Predefined Gradients"
+#~ msgstr "Aozañ ar c'hemmesk"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient tool"
+#~ msgstr "Ostilh kemmesk"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient Editing Tool"
+#~ msgstr "Ostilh kemmesk"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern tool"
+#~ msgstr "Ostilh sil"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern Editing Tool"
+#~ msgstr "Ostilh sil"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Lec'h :"
+
+#, fuzzy
+#~| msgid "Raw"
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Kriz"
+
+#~ msgid "Curve"
+#~ msgstr "Kromm"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Right"
+#~ msgid "Straight"
+#~ msgstr "Dehoù"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Serriñ an hent"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "Lemel an traoñ"
+
+#~ msgid "Width:"
+#~ msgstr "Ledander :"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Kogn loc'hañ :"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "Reteradur :"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgid "Current"
+#~ msgstr "Kromm"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "Kemmesk"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Ostilh elipsenn"
+
+#~ msgid "&Raise"
+#~ msgstr "&Sevel"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Izelaat"
+
+#~ msgid "Show Grid"
+#~ msgstr "Diskouez ar gael"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Kuzhat ar gael"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Diskouez pe kuzhat ar reolennoù."
+
+#~ msgid "Align Left"
+#~ msgstr "Steudañ d'a-gleiz"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Align Right"
+#~ msgstr "Steudañ d'a-gleiz"
+
+#, fuzzy
+#~| msgid "Align"
+#~ msgid "Align Top"
+#~ msgstr "Steudañ"
+
+#, fuzzy
+#~ msgid "Align Bottom"
+#~ msgstr "Ostilh Zoom"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Divoullded :"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Diskouez ar barrenn a stad"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Dibabit ur sil"
+
+#~ msgid "Transform"
+#~ msgstr "Treuzfurmiñ"
+
+#, fuzzy
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Diuzadenn ebet"
+
+#, fuzzy
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Diuzadenn ebet"
+
+#, fuzzy
+#~ msgid "Set width of actual selection"
+#~ msgstr "Diuzadenn ebet"
+
+#, fuzzy
+#~ msgid "Set height of actual selection"
+#~ msgstr "Diuzadenn ebet"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#, fuzzy
+#~ msgid "Rotate actual selection"
+#~ msgstr "Diuzadenn ebet"
+
+#~ msgid "SX:"
+#~ msgstr "SX :"
+
+#, fuzzy
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Diuzadenn ebet"
+
+#~ msgid "SY:"
+#~ msgstr "SY :"
+
+#, fuzzy
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Diuzadenn ebet"
+
+#~ msgid "Shear"
+#~ msgstr "Didroc'hañ"
+
+#, fuzzy
+#~ msgid "Convert to Path"
+#~ msgstr "Serriñ an hent"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Ostilh ar skrid"
+
+#~ msgid "Save as path"
+#~ msgstr "Enrollañ evel un hent"
+
+#~ msgid "Old:"
+#~ msgstr "Kozh :"
+
+#~ msgid "New:"
+#~ msgstr "Nevez :"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "G:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "H :"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S :"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "G :"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Seurt"
+
+#~ msgid "Join"
+#~ msgstr "Adunaniñ"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Dibaber livioù"
+
+#~ msgid "Layers:"
+#~ msgstr "Gwiskoù :"
+
+#~ msgid "Format:"
+#~ msgstr "Furmad :"
+
+#~ msgid "Resources"
+#~ msgstr "Danvezioù"
+
+#~ msgid "Patterns"
+#~ msgstr "Siloù :"
+
+#~ msgid "Add"
+#~ msgstr "Ouzhpennañ"
+
+#~ msgid "Import"
+#~ msgstr "Enporzh"
+
+#~ msgid "Stroke: None"
+#~ msgstr "Stankañ : hini ebet"
+
+#~ msgid "Fill: None"
+#~ msgstr "Leuniañ : hini ebet"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Leuniañ : RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Leuniañ : CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Leuniañ : HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Leuniañ : SkeulLouet"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Leuniañ : Liv"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Leuniañ : sil"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "StankaÃ±Â : CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "StankaÃ±Â : HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "StankaÃ±Â : SkeulLouet"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "StankaÃ±Â : Kemmesk"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "StankaÃ±Â : Sil"
+
+#~ msgid "Distance:"
+#~ msgstr "Hed :"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Krouiñ ur skeud"
+
+#~ msgid "Object Properties"
+#~ msgstr "Dibarzhoù an dra"
+
+#~ msgid "&Delete"
+#~ msgstr "&Distruj"
+
+#~ msgid "&Import"
+#~ msgstr "&Enporzh"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Ostilh skeudenn"
+
+#~ msgid "&Undo"
+#~ msgstr "&Dizober"
+
+#~ msgid "&Redo"
+#~ msgstr "&Adober"
+
+#~ msgid "&Undo: "
+#~ msgstr "&Dizober : "
+
+#~ msgid "&Redo: "
+#~ msgstr "&Adober : "
+
+#~ msgid "Insert Text"
+#~ msgstr "Enlakaat ur skrid"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Treuzfurmiñ an traoù"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Eilañ an dra"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Eilañ an traoù"
+
+#~ msgid "Transform Object"
+#~ msgstr "Treuzfurmiñ an dra"
+
+#~ msgid "Scale Object"
+#~ msgstr "Skeulañ an dra"
+
+#~ msgid "Shear Object"
+#~ msgstr "Didroc'hañ an dra"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Treiñ an traoù"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Treiñ an dra"
+
+#~ msgid "Translate Points"
+#~ msgstr "Fiñval ar pikoù"
+
+#~ msgid "Translate Point"
+#~ msgstr "Fiñval ar pik"
+
+#~ msgid "Ellipse"
+#~ msgstr "Elipsenn"
+
+#~ msgid "Polygon"
+#~ msgstr "Liestueg"
+
+#~ msgid "Polyline"
+#~ msgstr "Lieslinenn"
+
+#~ msgid "Spiral"
+#~ msgstr "Spiral"
+
+#~ msgid "Star"
+#~ msgstr "Steredenn"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Ostilh stumm</b><br>"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Ostilh sinus"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Enlakaat ur spiral"
+
+#~ msgid "Round"
+#~ msgstr "Ront"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Ostilh spiral"
+
+#~ msgid "Insert Star"
+#~ msgstr "Enlakaat ur steredenn"
+
+#~ msgid "Wheel"
+#~ msgstr "Rodell"
+
+#~ msgid "Edges:"
+#~ msgstr "Bordoù :"
+
+#~ msgid "Star Tool"
+#~ msgstr "Ostilh steredenn"
+
+#~ msgid "Shadow"
+#~ msgstr "Skeud"
+
+#~ msgid "Text"
+#~ msgstr "Skrid"
+
+#~ msgid "Italic"
+#~ msgstr "Italek"
+
+#~ msgid "Alignment:"
+#~ msgstr "Skweraj :"
+
+#~ msgid "Position"
+#~ msgstr "Lec'h"
+
+#~ msgid "New text"
+#~ msgstr "Skrid nevez"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Above"
+#~ msgstr "A-us"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "On"
+#~ msgstr "War enaou"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Under"
+#~ msgstr "Dindan"
+
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Ostilh skrid</b><br>"
+
+#~ msgid "Change Text"
+#~ msgstr "Kemmañ ar skrid"
+
+#~ msgid "path"
+#~ msgstr "hent"
+
+#~ msgid "text"
+#~ msgstr "skrid"
+
+#~ msgid "image"
+#~ msgstr "skeudenn"
+
+#~ msgid "Paste Object"
+#~ msgstr "Pegañ an dra"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Pegañ an traoù"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Danvezioù stankañ"
+
+#~ msgid "Join:"
+#~ msgstr "Adunaniñ :"
+
+#, fuzzy
+#~ msgid "Set miter limit"
+#~ msgstr "Lakaat ledander al linenn"
+
+#~ msgid "P&urge"
+#~ msgstr "Sk&arzhañ"
+
+#~ msgid "&History"
+#~ msgstr "&Istor"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Ostilh zoom :</b><br>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Ostilh lieslinenn"
+
+#~ msgid "Translate"
+#~ msgstr "Treiñ"
+
+#~ msgid "Purge History"
+#~ msgstr "Skarzhañ an istorig"
+
+#~ msgid "Zoom Width"
+#~ msgstr "Ledander ar zoom"
+
+#~ msgid "Whole Page"
+#~ msgstr "Pajenn a-bezh"
+
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#~ msgid "800%"
+#~ msgstr "800%"
+
+#~ msgid "Line Style"
+#~ msgstr "Giz al linenn"
+
+#~ msgid "History"
+#~ msgstr "Istor"
+
+#~ msgid "Align Objects"
+#~ msgstr "Steudañ an traoù"
+
+#~ msgid "Clean Up"
+#~ msgstr "Naetaat"
+
+#~ msgid "Delete Object"
+#~ msgstr "Lemel an dra"
+
+#~ msgid "Delete Node"
+#~ msgstr "Dilemel ar skoulm"
+
+#~ msgid "Order Selection"
+#~ msgstr "Urzhiañ an dibab"
+
+#~ msgid "V&ertical:"
+#~ msgstr "A&-led :"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgctxt "document width"
+#~ msgid "Width:"
+#~ msgstr "Ledander :"
+
+#~ msgid "New"
+#~ msgstr "Nevez"
+
+#~ msgid "Lower"
+#~ msgstr "Izelaat"
+
+#~ msgid "Item"
+#~ msgstr "Tra"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Tra red"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Kemmañ anv an dra :"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Kemmañ anv ar gwisk red :"
+
+#~ msgid "Add Layer"
+#~ msgstr "Ouzhpennañ ur gwisk"
+
+#~ msgid "Commands"
+#~ msgstr "Urzhiadoù"
+
+#~ msgid "Rectangle"
+#~ msgstr "Hirgarrezenn"
+
+#~ msgid "Full"
+#~ msgstr "Leun"
+
+#~ msgid "Arc"
+#~ msgstr "Gwareg"
+
+#~ msgctxt "object width"
+#~ msgid "Width:"
+#~ msgstr "Ledander :"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Ostilh kemmesk:</b><br>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Ostilh sil :</b><br>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Dibabit ur sil mar plij."
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Ostilh kreion :</b><br>"
+
+#~ msgid "Pencil"
+#~ msgstr "Kreion"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Enlakaat ul lieskognegoù"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Ostilh liestueg"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Enlakaat un hirgarrezenn"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Ostilh hirgarrezenn"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Ostilh treiñ"
+
+#~ msgid "Height (%1):"
+#~ msgstr "Uhelder (%1) :"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Ostilh hirgarrezen ront"
+
+#~ msgid "Round Rectangle"
+#~ msgstr "Hirgarrezen ront"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "Oc'h aozañ ar skoulmoù"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Dibab un ostilh skoulm"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Mod choazh"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Dibab er gwisk red"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Dibabit er gwiskoù red"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Ostilh dibab: </b><br>"
+
+#~ msgctxt "[(left,bottom), (right,top)] (actual unit)"
+#~ msgid "Selection [(%1, %2), (%3, %4)] (%5)"
+#~ msgstr "Choaz [(%1, %2), (%3, %4)] (%5)"
+
+#~ msgid "No selection"
+#~ msgstr "Diuzadenn ebet"
+
+#~ msgid "Select Tool"
+#~ msgstr "Dibab un ostilh"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Ostilh didroc'hañ"
+
+#~ msgctxt "selection width"
+#~ msgid "Width:"
+#~ msgstr "Ledander :"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Ostilh skeudenn :</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Dibabit ar skeudenn da ouzhpennañ"
+
+#~ msgid "Knots:"
+#~ msgstr "Knots :"

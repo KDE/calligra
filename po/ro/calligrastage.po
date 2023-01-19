@@ -1,0 +1,6719 @@
+# translation of kpresenter.po to Romanian
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# Claudiu Costin <claudiuc@kde.org>, 2005.
+# Sergiu Bivol <sergiu@cip.md>, 2009, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-01-12 05:09+0200\n"
+"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&Editare"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "&Vizualizare"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "&Inserare"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, fuzzy, kde-format
+msgid "F&ormat"
+msgstr "Format"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+msgid "&Slide"
+msgstr "&Diapozitiv"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, fuzzy, kde-format
+msgid "Sli&de Show"
+msgstr "Prezentare de diapozitive"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "&Configurări"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Adaugă Prezentare Diapozitive Personalizată"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Creează animație de apariție"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Animation tool"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Unealtă de animații"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Create shape animation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Creează animație de apariție"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Șterge prezentarea personalizată"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Șterge diapozitiv"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Șterge diapozitiv"
+msgstr[1] "Șterge diapozitive"
+msgstr[2] "Șterge diapozitive"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Prezentare"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Modifică prezentarea personalizată"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Create page effect"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Creează efect de pagină"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Modify page effect"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Modifică efectul de pagină"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Șterge diapozitiv"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Titlu slide"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Redenumește prezentare personalizată"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Titlu slide"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Configurează pagini..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+msgid "Presentation Tool"
+msgstr "Prezentare"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(c) 1998-2008, Echipa KPresenter"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+msgid "Former maintainer"
+msgstr "Fostul responsabil"
+
+#: part/KPrAboutData.h:33
+#, fuzzy, kde-format
+msgid "Thorsten Zachmann"
+msgstr "Thorsten Zachmann"
+
+#: part/KPrAboutData.h:34
+#, fuzzy, kde-format
+msgid "Laurent Montel"
+msgstr "Laurent Montel"
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+msgid "Original author"
+msgstr "Autor original"
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+msgid "Reginald Stadlbauer"
+msgstr "Reginald Stadlbauer"
+
+#: part/KPrAboutData.h:36
+#, fuzzy, kde-format
+msgid "Werner Trobin"
+msgstr "Werner Trobin"
+
+#: part/KPrAboutData.h:37
+#, fuzzy, kde-format
+msgid "David Faure"
+msgstr "David Faure"
+
+#: part/KPrAboutData.h:38
+#, fuzzy, kde-format
+msgid "Toshitaka Fujioka"
+msgstr "Toshitaka Fujioka"
+
+#: part/KPrAboutData.h:39
+#, fuzzy, kde-format
+msgid "Lukáš Tinkl"
+msgstr "Lukáš Tinkl"
+
+#: part/KPrAboutData.h:40
+#, fuzzy, kde-format
+msgid "Ariya Hidayat"
+msgstr "Ariya Hidayat"
+
+#: part/KPrAboutData.h:41
+#, fuzzy, kde-format
+msgid "Percy Leonhardt"
+msgstr "Percy Leonhardt"
+
+#: part/KPrAboutData.h:42
+#, fuzzy, kde-format
+msgid "Thomas Zander"
+msgstr "Thomas Zander"
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: part/KPrAboutData.h:44
+#, fuzzy, kde-format
+msgid "Boudewijn Rempt "
+msgstr "Boudewijn Rempt "
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+msgid "Carlos Licea "
+msgstr "Carlos Licea "
+
+#: part/KPrAboutData.h:46
+#, fuzzy, kde-format
+#| msgid "Casper Boemann "
+msgid "C. Boemann "
+msgstr "Casper Boemann "
+
+#: part/KPrAboutData.h:47
+#, fuzzy, kde-format
+msgid "Fredy Yanardi "
+msgstr "Fredy Yanardi "
+
+#: part/KPrAboutData.h:48
+#, fuzzy, kde-format
+msgid "Jan Hambrecht "
+msgstr "Jan Hambrecht "
+
+#: part/KPrAboutData.h:49
+#, fuzzy, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr "Marijn Kruisselbrink "
+
+#: part/KPrAboutData.h:50
+#, fuzzy, kde-format
+msgid "Martin Pfeiffer "
+msgstr "Martin Pfeiffer "
+
+#: part/KPrAboutData.h:51
+#, fuzzy, kde-format
+msgid "Sven Langkamp "
+msgstr "Sven Langkamp "
+
+#: part/KPrAboutData.h:52
+#, fuzzy, kde-format
+msgid "Timothée Lacroix "
+msgstr "Timothée Lacroix "
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, fuzzy, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Andrei Agache"
+
+#: part/KPrAboutData.h:55
+#, fuzzy, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "yoy_becool@yahoo.com"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, fuzzy, kde-format
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, fuzzy, kde-format
+msgid "Slide %1"
+msgstr "Diapozitiv %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, fuzzy, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Sfârșitul prezentării. Faceți clic pentru a ieși."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Layout"
+msgstr "Stabilește aranjamentul"
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, fuzzy, kde-format
+msgid "Installation Error"
+msgstr "Eroare de instalare"
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Inserează imagine"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Placeholder shape"
+msgstr "Forma substituentului"
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, fuzzy, kde-format
+msgid "Double click to add a title"
+msgstr "Dublu-clic pentru a adăuga un titlu"
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, fuzzy, kde-format
+msgid "Double click to add an outline"
+msgstr "Dublu-clic pentru a adăuga un contur"
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, fuzzy, kde-format
+msgid "Double click to add a text"
+msgstr "Dublu-clic pentru a adăuga un text"
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, fuzzy, kde-format
+msgid "Double click to add notes"
+msgstr "Dublu-clic pentru a adăuga observații"
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, fuzzy, kde-format
+msgid "Double click to add a picture"
+msgstr "Dublu-clic pentru a adăuga o imagine"
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, fuzzy, kde-format
+msgid "Double click to add a chart"
+msgstr "Dublu-clic pentru a adăuga un grafic"
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, fuzzy, kde-format
+msgid "Double click to add an object"
+msgstr "Dublu-clic pentru a adăuga un obiect"
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+msgid "Pen Color"
+msgstr "Culoare"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "Grosime peniță"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+msgid "Black"
+msgstr "Negru"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "Alb"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, fuzzy, kde-format
+msgid "Green"
+msgstr "Verde"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Red"
+msgstr "Roșu"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, fuzzy, kde-format
+msgid "Blue"
+msgstr "Albastru"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+msgid "Yellow"
+msgstr "Galben"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+msgid "Next Slide"
+msgstr "Diapozitivul următor"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, fuzzy, kde-format
+msgid "Speaker Notes"
+msgstr "Notele Vorbitorului"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+msgid "Current Slide %1 of %2"
+msgstr "Diapozitivul curent %1 din %2"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+msgid "End of Slide Show"
+msgstr "Sfârșitul Prezentării"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Create shape animation"
+msgid "start after previous animation"
+msgstr "Creează animație de apariție"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Create shape animation"
+msgid "start with previous animation"
+msgstr "Creează animație de apariție"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Animation tool"
+msgid "Animation"
+msgstr "Unealtă de animații"
+
+#: part/KPrShapeAnimations.cpp:201
+#, fuzzy, kde-format
+msgid "Shape"
+msgstr "Formă"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+msgid "&Move Here"
+msgstr "&Mută aici"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+msgid "&Copy Here"
+msgstr "&Copiază diapozitiv"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, fuzzy, kde-format
+msgid "C&ancel"
+msgstr "Anulează"
+
+#: part/KPrView.cpp:73
+#, fuzzy, kde-format
+msgid "Normal"
+msgstr "Normală"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+msgid "Show Master Slides"
+msgstr "Arată Diapozitivele Principale"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+msgid "Import Slideshow..."
+msgstr "Importă Prezentare Diapozitive..."
+
+#: part/KPrView.cpp:80
+#, fuzzy, kde-format
+msgid "Insert Slide"
+msgstr "Inserează diapozitiv"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, fuzzy, kde-format
+msgid "Insert a new slide after the current one"
+msgstr "Inserează un nou diapozitiv după cel curent"
+
+#: part/KPrView.cpp:83
+#, fuzzy, kde-format
+msgid "Copy Slide"
+msgstr "Copiază diapozitiv"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+msgid "Copy the current slide"
+msgstr "Copiază diapozitivul curent"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+msgid "Delete Slide"
+msgstr "Șterge diapozitiv"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+msgid "Delete the current slide"
+msgstr "Șterge diapozitivul curent"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+msgid "Master Slide..."
+msgstr "Diapozitiv Principal..."
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+msgid "Previous Slide"
+msgstr "Diapozitivul precedent"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+msgid "Go to previous slide"
+msgstr "Pasul &precedent"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+msgid "Go to next slide"
+msgstr "Du-te la pagina..."
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+msgid "First Slide"
+msgstr "Primul diapozitiv"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+msgid "Go to first slide"
+msgstr "Du-te la pagina..."
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+msgid "Last Slide"
+msgstr "Ultimul diapozitiv"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+msgid "Go to last slide"
+msgstr "Du-te la pagina..."
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+msgid "Configure Stage..."
+msgstr "Configurează pagini..."
+
+#: part/KPrView.cpp:225
+#, fuzzy, kde-format
+msgid "Export as HTML..."
+msgstr "Exportă ca HTML..."
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+msgid "Insert Pictures as Slides..."
+msgstr "Inserează imagini"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+msgid "Create Appear Animation"
+msgstr "Creează animație de apariție"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Editează Diapozitiv Specific"
+
+#: part/KPrView.cpp:268
+#, fuzzy, kde-format
+msgid "Start Presentation"
+msgstr "Începe prezentarea"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+msgid "From Current Slide"
+msgstr "De la diapozitivul curent"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+msgid "From First Slide"
+msgstr "De la primul diapozitiv"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "Prezentare"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+msgid "Show Status Bar"
+msgstr "Afișează bara de stare"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+msgid "Hide Status Bar"
+msgstr "Ascunde subsol"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Afișează sau ascunde bara de stare"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+msgid "Configure Slide Show..."
+msgstr "Configurează Diapozitiv"
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+msgid "Configure Presenter View..."
+msgstr "Configurează Vizualizarea Prezentatorului"
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "Desenează pe prezentare..."
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "Evidențiază prezentarea"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Ecran negru pe prezentare"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+msgid "Notes"
+msgstr "Observații"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "Sortare diapozitive"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+msgid "Slide Show: "
+msgstr "Prezentare diapozitive"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+msgid "Add a new custom slide show"
+msgstr "Adaugă prezentare diapozitive personalizată"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+msgid "Delete current custom slide show"
+msgstr "Șterge curenta prezentare personalizată de diapozitive "
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Adăugare diapozitive la prezentarea curentă"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Elimină diapozitive din prezentarea personalizată curentă"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Duplicate Slide"
+msgstr "Șterge diapozitiv"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Import Slideshow..."
+msgid "Start Slideshow"
+msgstr "Importă Prezentare Diapozitive..."
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+msgid "Add a new slide"
+msgstr "Adaugă diapozitiv"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+msgid "Delete selected slides"
+msgstr "Șterge diapozitive selectate"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "Redenumește"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+msgid "Cut"
+msgstr "Decupează"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+msgid "Copy"
+msgstr "Copiază"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+msgid "Paste"
+msgstr "Lipește"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+msgid "Slide Show %1"
+msgstr "Prezentare diapozitive %1"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+msgid "All slides"
+msgstr "Toate diapozitivele"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+msgid "Error"
+msgstr "Eroare"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, fuzzy, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr "Nu pot exista doua prezentări de diapozitive cu același nume."
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "Stabilește aranjamentul"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+msgid "Automatic animation preview"
+msgstr "Afișează &previzualizare"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Prezentare"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "Titlu slide"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Click Actions"
+msgid "Shape Click Actions"
+msgstr "Acțiuni la apăsarea butoanelor mouseului"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Shape Animation"
+msgid "Shape Animations"
+msgstr "Forma Animației"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Prezentare"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+#| msgid "Star"
+msgid "Start: "
+msgstr "Stea"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Create shape animation"
+msgid "after previous animation"
+msgstr "Creează animație de apariție"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Shape Animation"
+msgid "with previous animation"
+msgstr "Forma Animației"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+msgid "Duration: "
+msgstr "Direcția:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Shape Animation"
+msgid "Preview Shape Animation"
+msgstr "Forma Animației"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, fuzzy, kde-format
+msgid "No Effect"
+msgstr "Fără efect"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+msgid " sec"
+msgstr " sec"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "Titlu slide"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+msgid "Apply To All Slides"
+msgstr "Aplică stiluri"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Aplică stiluri"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "Succesiune imagini"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+msgid "Ole Action"
+msgstr "Du-te la pagina:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Animation tool"
+msgid "Edit animation"
+msgstr "Unealtă de animații"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Animation tool"
+msgid "Add new animation"
+msgstr "Unealtă de animații"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+msgid "Remove animation"
+msgstr "&Linie"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Shape Animation"
+msgid "Move animation up"
+msgstr "Forma Animației"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Animation Tool"
+msgid "Move animation down"
+msgstr "Unealtă de animații"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Add a new slide"
+msgid "Add a new animation"
+msgstr "Adaugă diapozitiv"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+#| msgid "Delete the current slide"
+msgid "Delete current animation"
+msgstr "Șterge diapozitivul curent"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+msgid "Crop"
+msgstr "Tăiere"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, fuzzy, kde-format
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+msgid "W&idth:"
+msgstr "Lățime:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Păstreaga lățimea decupării constantă"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, fuzzy, kde-format
+msgid "&Height:"
+msgstr "&Înălțime:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Păstrează înălțimea decupării constantă"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, fuzzy, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+msgid "R&atio:"
+msgstr "Raport:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Va păstra raportul constant"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, fuzzy, kde-format
+msgid "Layer"
+msgstr "Strat"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+msgid "Image"
+msgstr "Imagine"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+msgid "&Crop"
+msgstr "&Decupare"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Modifică forma"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, fuzzy, kde-format
+msgid "Multiple monitors"
+msgstr "Monitoare multiple"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+msgid "Presentation monitor:"
+msgstr "Monitor prezentare:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+msgid "Enable presenter view"
+msgstr "Activează vizualizarea de prezentator"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, fuzzy, kde-format
+msgid "Monitor %1 (primary)"
+msgstr "Monitor %1 (primar)"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, fuzzy, kde-format
+msgid "Monitor %1"
+msgstr "Monitor %1"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+msgid "Configure Presenter View"
+msgstr "Configurează Vizualizarea Prezentatorului"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure Slide Show"
+msgstr "Configurează Diapozitiv"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+msgid "Slides"
+msgstr "Diapozitive"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+msgid "Presentation Slides:"
+msgstr "Diapozitive prezentare:"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Modifică Prezentările Personalizate ..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, fuzzy, kde-format
+msgid "HTML Export"
+msgstr "Exportă ca HTML"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, fuzzy, kde-format
+msgid "Tick the slide should be exported :"
+msgstr "Bifați prezentarea pentru export :"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+msgid "Select all"
+msgstr "Selectează tot..."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "Selectează șablon(.css)..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+msgid "Deselect all"
+msgstr "Deselectează tot"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+msgid "Title"
+msgstr " Titlu"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+msgid "Output preview"
+msgstr "Afișează previzualizare"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, fuzzy, kde-format
+msgid "Browse"
+msgstr "Răsfoiește"
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+msgid "Author"
+msgstr "Autor"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+msgid "Delete Favorite"
+msgstr "Șterge diapozitiv favorit"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, fuzzy, kde-format
+msgid "Open in browser"
+msgstr "Deschide in browser"
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, fuzzy, kde-format
+msgid "Html Export"
+msgstr "Exportă ca HTML"
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, fuzzy, kde-format
+msgid "Export"
+msgstr "Exportă"
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, fuzzy, kde-format
+msgid "There is already a favorite file with this name"
+msgstr "Există deja un fișier favorit cu acest nume"
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, fuzzy, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr "Fișier incorrect, nu este .zip sau este corupt"
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, fuzzy, kde-format
+msgid "Zip file need to contain style.css"
+msgstr "Fișierul zip trebuie să conține fișierul style.css"
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+msgid "Delete Template"
+msgstr "Șterge șablon"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, fuzzy, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr "Nu puteți elimina șabloanele furnizate de această aplicație"
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+msgid "Add Template"
+msgstr "Adaugă Șablon"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Sunteți sigur că doriți să eliminați \"%1\"?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+msgid "Confirm remove"
+msgstr "Confirmă eliminarea"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Modifică sunetul acțiunii"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+msgid "No sound"
+msgstr "Fără sunet"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+msgid "Import..."
+msgstr "Importă..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, fuzzy, kde-format
+msgid "Bar"
+msgstr "Bară"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "From Left"
+msgstr "Apare de la stânga"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "From Top"
+msgstr "Apare de sus"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "From Right"
+msgstr "Apare de la dreapta"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "From Bottom"
+msgstr "Apare de jos"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Unknown subtype"
+msgstr "Subtip necunoscut"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Clock"
+msgstr "Ceas"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "From Twelve Clockwise"
+msgstr "De la ora 12 în sens orar"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "From Three Clockwise"
+msgstr "De la 3 în sens orar"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "From Six Clockwise"
+msgstr "De la 6 în sens orar"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "From Nine Clockwise"
+msgstr "De la 9 în sens orar"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "From Twelve Counterclockwise"
+msgstr "De la 12 în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "From Three Counterclockwise"
+msgstr "De la 3 în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "From Six Counterclockwise"
+msgstr "De la 6 în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "From Nine Counterclockwise"
+msgstr "De la 9 în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Double Fan"
+msgstr "Dublă împrăștiere"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Fan Out Vertical"
+msgstr "Împrăștie pe verticală spre exterior"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Împrăștie pe orizontală spre exterior"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Fan In Vertical"
+msgstr "Împrăștie pe verticală spre interior"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Fan In Horizontal"
+msgstr "Împrăștie pe orizontală spre interior"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Fan In Vertical Reverse"
+msgstr "Împărștie vertical invers spre interior"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Fan In Horizontal Reverse"
+msgstr "Împrăștie orizontal invers spre interior"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Double Sweep"
+msgstr "Extindere dublă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Parallel Vertical"
+msgstr "Deschidere verticală paralelă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Parallel Diagonal"
+msgstr "Diagonală Paralelă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Opposite Vertical"
+msgstr "Deschidere verticală inversă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Opposite Horizontal"
+msgstr "Deschidere orizontală inversă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Deschidere pe diagonală stânga"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Apare de jos"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Parallel Vertical Reverse"
+msgstr "Deschidere verticală paralelă inversă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Reverse"
+msgstr "Deschidere paralelă diagonală inversă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Opposite Vertical Reverse"
+msgstr "Deschidere verticală opusă inversă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Opposite Horizontal Reverse"
+msgstr "Deschidere orizontală opusă inversă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Deschidere diagonală spre stânga paralelă inversă"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Deschidere diagonală spre stânga paralelă inversă"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Fan"
+msgstr "Împrăștie"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Center Right"
+msgstr "Centru Dreapta"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Center Top"
+msgstr "Centru Vârf"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Center Left"
+msgstr "Centru Stânga"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Center Bottom"
+msgstr "Centru Bază"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Fan Out Top"
+msgstr "Împrăștie vârful spre exterior"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Fan Out Right"
+msgstr "Împrăștie dreapta spre exterior"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Fan Out Bottom"
+msgstr "Împrăștie baza spre exterior"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Fan Out Left"
+msgstr "Imprăștie stânga spre exterior"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Fan In Top"
+msgstr "Împrăștie în vârf"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Fan In Right"
+msgstr "Împrăștie spre interior dreapta"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Fan In Bottom"
+msgstr "Împrăștie spre interior baza"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Fan In Left"
+msgstr "Împrăștie spre interior stânga"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Pin Wheel"
+msgstr "Roată"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Două lame pe verticală în sens orar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Două lame pe orizontală în sens orar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Patru lame pe orizontală în sens orar"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Două lame pe verticală în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Două lame pe orizontală în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Patru lame pe orizontală în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Saloon Door"
+msgstr "Ușă de salon"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "To Top"
+msgstr "Spre vârf"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "To Left"
+msgstr "spre stânga"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "spre bază"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "To Right"
+msgstr "spre dreapta"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Single Sweep"
+msgstr "Extindere simplă"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+msgid "Clockwise Top"
+msgstr "Spre vârf în sens orar"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Clockwise Right"
+msgstr "În sens orar spre dreapta"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Clockwise Bottom"
+msgstr "În sens orar spre bază"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Clockwise Left"
+msgstr "În sens orar spre stânga"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Clockwise Top Left"
+msgstr "În sens orar spre stânga vârfului"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left"
+msgstr "În sens trigonometric spre stânga bazei"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right"
+msgstr "În sens orar spre dreapta bazei"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right"
+msgstr "În sens trigonometric spre dreapta vârfului"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Counterclockwise Top"
+msgstr "Spre vârf în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Counterclockwise Right"
+msgstr "Spre dreapta în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom"
+msgstr "Spre bază în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+msgid "Counterclockwise Left"
+msgstr "Spre stânga în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left"
+msgstr "Spre vârf în sens trigonometric"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left"
+msgstr "În sens orar spre stânga bazei"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right"
+msgstr "În sens trigonometric spre dreapta bazei"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+msgid "Clockwise Top Right"
+msgstr "În sens orar spre dreapta vârfului"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Windshield"
+msgstr "Scut"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+msgid "Right"
+msgstr "Dreapta"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+msgid "Up"
+msgstr "Sus"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Vertical"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Orizontal"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+msgid "Right Reverse"
+msgstr "Inversare spre dreapta"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+msgid "Up Reverse"
+msgstr "Inversare spre vârf"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Vertical Reverse"
+msgstr "Inversare verticală"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Horizontal Reverse"
+msgstr "Inversare orizontală"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Barn Door"
+msgstr "Săgeată"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left"
+msgstr "În diagonală spre stânga bazei"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Inversare pe diagonală spre stânga bazei"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Diagonal Top Left"
+msgstr "În diagonală spre stânga vârfului"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "Inversare pe diagonală spre stânga vârfului"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Barn Vee"
+msgstr "Săgeată în V"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Barn Zig Zag"
+msgstr "Săgeată în Zig Zag"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Vertical Reversed"
+msgstr "Vertical inversat"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Horizontal Reversed"
+msgstr "Orizontal inversat"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Box"
+msgstr "Casetă"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "From Top Left"
+msgstr "Din stânga vârfului"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "From Top Right"
+msgstr "Din dreapta vârfului"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "From Bottom Left"
+msgstr "Din stânga bazei"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "From Bottom Right"
+msgstr "Din dreapta bazei"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "Diagonală"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Four Box"
+msgstr "Casetă patru"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Corners In"
+msgstr "Colțuri spre interior"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Corners In Reverse"
+msgstr "Colțuri spre interior invers"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Corners Out"
+msgstr "Colțuri spre exterior"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Corners Out Reverse"
+msgstr "Colțuri spre exterior invers"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "Gradient diagonal 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+msgid "Double Barn Door"
+msgstr "Săgeată dublă"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+msgid "Double Diamond"
+msgstr "Diamant dublu"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Vee"
+msgstr "În V"
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Zig Zag"
+msgstr "Zig Zag"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Fade"
+msgstr "Atenuare"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, fuzzy, kde-format
+msgid "Crossfade"
+msgstr "Intercalare"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Fade over Color"
+msgstr "Atenuare prin Culoare"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "ArrowHead"
+msgstr "Cap de săgeată"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+msgid "Down"
+msgstr "Jos"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+msgid "Down Reverse"
+msgstr "Inversare în jos"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+msgid "Left"
+msgstr "Stânga"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+msgid "Left Reverse"
+msgstr "Inversare la stânga"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Ellipse"
+msgstr "Elipsă"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Circle"
+msgstr "Cerc"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Circle Reverse"
+msgstr "Inversare circulară"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Eye"
+msgstr "Ochi"
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Hexagon"
+msgstr "Hexagon"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Iris"
+msgstr "Iris"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Rectangular"
+msgstr "Dreptunghiular"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Rectangular Reverse"
+msgstr "Inversare dreptunghiulară"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Diamond"
+msgstr "Diamant"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Diamond Reverse"
+msgstr "Diamant invers"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, fuzzy, kde-format
+msgid "Misc"
+msgstr "Diverse"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Heart"
+msgstr "Inimă"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Heart Reverse"
+msgstr "Inversare în inimă"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Keyhole"
+msgstr "Gaura Cheii"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Keyhole Reverse"
+msgstr "Inversare în gaura cheii"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Pentagon"
+msgstr "Pentagon"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "RoundRect"
+msgstr "Oval"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "Stea"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+msgid "Four Point Star"
+msgstr "Stea cu patru colțuri"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+msgid "Four Point Star Reverse"
+msgstr "Stea cu patru colțuri invers"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+msgid "Five Point Star"
+msgstr "Stea cu cinci colțuri"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+msgid "Five Point Star Reverse"
+msgstr "Stea cu cinci colțuri invers"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+msgid "Six Point Star"
+msgstr "Stea cu șase colțuri"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+msgid "Six Point Star Reverse"
+msgstr "Stea cu șase colțuri invers"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Triangle"
+msgstr "Triunghi"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Box Snakes"
+msgstr "Casetă Șerpi"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Two Box Top In"
+msgstr "Aliniază în sus"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "Aliniază în jos"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Two Box Left In"
+msgstr "Taie către stânga"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Two Box Right In"
+msgstr "Taie către dreapta"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Four Box Vertical In"
+msgstr "Deschidere verticală"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Deschidere orizontală"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Two Box Top Out"
+msgstr "Aliniază în sus"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Aliniază în jos"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Two Box Left Out"
+msgstr "Apare de jos"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Two Box Right Out"
+msgstr "Apare de jos"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Închidere verticală"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Închidere orizontală"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Parallel Snakes"
+msgstr "Traiectorii șerpuite paralele"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Vertical Top Same In"
+msgstr "Gradient vertical deschidere"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Vertical Top Same Out"
+msgstr "Gradient vertical închidere"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Vertical Bottom Same In"
+msgstr "Gradient vertical deschidere"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Vertical Bottom Same Out"
+msgstr "Gradient vertical închidere"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Gradient vertical spre vârf deschidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Gradient vertical spre vârf închidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Gradient vertical spre bază deschidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Gradient vertical spre bază închidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+msgid "Horizontal Left Same In"
+msgstr "Gradient orizontal deschidere spre stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+msgid "Horizontal Left Same Out"
+msgstr "Gradient orizontal închidere spre stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+msgid "Horizontal Right Same In"
+msgstr "Gradient orizontal deschidere spre dreapta"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Horizontal Right Same Out"
+msgstr "Gradient orizontal închidere spre dreapta"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Gradient orizontal spre vârf deschidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Gradient orizontal spre vârf închidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Gradient orizontal deschidere spre dreapta"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Gradient orizontal deschidere spre dreapta"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Gradient diagonal spre bază deschidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Gradient diagonal spre bază închidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Gradient diagonal deschidere stânga"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Gradient diagonal închidere stânga"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Snake"
+msgstr "Șarpe"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Spiral"
+msgstr "Spirală"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Clockwise Top Left In"
+msgstr "În sens orar de la stânga vârfului în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Clockwise Top Left Out"
+msgstr "În sens orar de la stânga vârfului în exterior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Clockwise Top Right In"
+msgstr "În sens orar de la dreapta vârfului în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Clockwise Top Right Out"
+msgstr "În sens orar de la dreapta vârfului în exterior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left In"
+msgstr "În sens orar de la stânga bazei în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left Out"
+msgstr "În sens orar de la stânga bazei în exterior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right In"
+msgstr "În sens orar de la dreapta bazei în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right Out"
+msgstr "În sens orar de la dreapta bazei în exterior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left In"
+msgstr "În sens trigonometric de la stânga vârfului în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left Out"
+msgstr "În sens trigonometric de la stânga vârfului în exterior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right In"
+msgstr "În sens trigonometric de la dreapta vârfului în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right Out"
+msgstr "În sens trigonometric de la dreapta vârfului în exterior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left In"
+msgstr "În sens trigonometric de la stânga bazei în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left Out"
+msgstr "În sens trigonometric de la stânga bazei în exterior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right In"
+msgstr "În sens trigonometric de la dreapta bazei în interior"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right Out"
+msgstr "În sens trigonometric de la dreapta bazei în exterior"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Waterfall"
+msgstr "Cascadă"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Top Left Vertical"
+msgstr "de la Vârf spre Stânga Vertical"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Top Left Horizontal"
+msgstr "de la Vârf spre Dreapta Orizontal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Top Right Vertical"
+msgstr "de la Vârf spre Stânga Vertical"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Top Right Horizontal"
+msgstr "de la Vârf spre Dreapta Orizontal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Bottom Left Vertical"
+msgstr "de la Bază spre Stânga Vertical"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "de la Bază spre Stânga Orizontal"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Bottom Right Vertical"
+msgstr "de la Bază spre Dreapta Vertical"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "de la Bază spre Dreapta Orizontal"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Slide"
+msgstr "Alunecare"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Space Rotation"
+msgstr "Rotație spațială"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Swap effect"
+msgstr "Efect de interschimbare"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+msgid "Header"
+msgstr "Antet"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Footer"
+msgstr "Subsol"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Editare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Vizualizare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "&Inserare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "Prezentare de diapozitive"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Configurări"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Tăiere"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Lățime:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Păstreaga lățimea decupării constantă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "&Înălțime:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the height of the crop constant"
+#~ msgstr "Păstrează înălțimea decupării constantă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "Raport:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the ratio constant"
+#~ msgstr "Va păstra raportul constant"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Strat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Imagine"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "&Decupare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "Diapozitive"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Diapozitive prezentare:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Modifică Prezentările Personalizate ..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HTML Export"
+#~ msgstr "Exportă ca HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tick the slide should be exported :"
+#~ msgstr "Bifați prezentarea pentru export :"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Selectează tot..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Selectează șablon(.css)..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Deselectează tot"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr " Titlu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Afișează previzualizare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Browse"
+#~ msgstr "Răsfoiește"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Șterge diapozitiv favorit"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open in browser"
+#~ msgstr "Deschide in browser"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiple monitors"
+#~ msgstr "Monitoare multiple"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Monitor prezentare:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enable presenter view"
+#~ msgstr "Activează vizualizarea de prezentator"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Configurează pagini..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(c) 1998-2008, Echipa KPresenter"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "Fostul responsabil"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thorsten Zachmann"
+#~ msgstr "Thorsten Zachmann"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Laurent Montel"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "Autor original"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reginald Stadlbauer"
+#~ msgstr "Reginald Stadlbauer"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Werner Trobin"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "David Faure"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toshitaka Fujioka"
+#~ msgstr "Toshitaka Fujioka"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lukáš Tinkl"
+#~ msgstr "Lukáš Tinkl"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ariya Hidayat"
+#~ msgstr "Ariya Hidayat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percy Leonhardt"
+#~ msgstr "Percy Leonhardt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thomas Zander"
+#~ msgstr "Thomas Zander"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt "
+#~ msgstr "Boudewijn Rempt "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Carlos Licea "
+
+#, fuzzy
+#~| msgid "Casper Boemann "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C. Boemann "
+#~ msgstr "Casper Boemann "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fredy Yanardi "
+#~ msgstr "Fredy Yanardi "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht "
+#~ msgstr "Jan Hambrecht "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Marijn Kruisselbrink "
+#~ msgstr "Marijn Kruisselbrink "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Martin Pfeiffer "
+#~ msgstr "Martin Pfeiffer "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sven Langkamp "
+#~ msgstr "Sven Langkamp "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Timothée Lacroix "
+#~ msgstr "Timothée Lacroix "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Andrei Agache"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "yoy_becool@yahoo.com"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Necunoscut"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Diapozitiv %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Sfârșitul prezentării. Faceți clic pentru a ieși."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Stabilește aranjamentul"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Installation Error"
+#~ msgstr "Eroare de instalare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Placeholder shape"
+#~ msgstr "Forma substituentului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a title"
+#~ msgstr "Dublu-clic pentru a adăuga un titlu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an outline"
+#~ msgstr "Dublu-clic pentru a adăuga un contur"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a text"
+#~ msgstr "Dublu-clic pentru a adăuga un text"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add notes"
+#~ msgstr "Dublu-clic pentru a adăuga observații"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a picture"
+#~ msgstr "Dublu-clic pentru a adăuga o imagine"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add a chart"
+#~ msgstr "Dublu-clic pentru a adăuga un grafic"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double click to add an object"
+#~ msgstr "Dublu-clic pentru a adăuga un obiect"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Culoare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Grosime peniță"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Negru"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Alb"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Verde"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Roșu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Albastru"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Galben"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Diapozitivul următor"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Notele Vorbitorului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Diapozitivul curent %1 din %2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Sfârșitul Prezentării"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Create shape animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "Creează animație de apariție"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Create shape animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "Creează animație de apariție"
+
+#, fuzzy
+#~| msgid "Animation tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Unealtă de animații"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Formă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "&Mută aici"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "&Copiază diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "Anulează"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Normală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Arată Diapozitivele Principale"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Importă Prezentare Diapozitive..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Inserează diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a new slide after the current one"
+#~ msgstr "Inserează un nou diapozitiv după cel curent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Copiază diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Copiază diapozitivul curent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Șterge diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Șterge diapozitivul curent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Diapozitiv Principal..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Diapozitivul precedent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Pasul &precedent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Du-te la pagina..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Primul diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Du-te la pagina..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Ultimul diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Du-te la pagina..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Configurează pagini..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as HTML..."
+#~ msgstr "Exportă ca HTML..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Inserează imagini"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Creează animație de apariție"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Editează Diapozitiv Specific"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Începe prezentarea"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "De la diapozitivul curent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "De la primul diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Afișează bara de stare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Ascunde subsol"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Afișează sau ascunde bara de stare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Configurează Diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Configurează Vizualizarea Prezentatorului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Desenează pe prezentare..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Highlight the presentation..."
+#~ msgstr "Evidențiază prezentarea"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blackscreen on the presentation..."
+#~ msgstr "Ecran negru pe prezentare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Observații"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Sortare diapozitive"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Prezentare diapozitive"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Adaugă prezentare diapozitive personalizată"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Șterge curenta prezentare personalizată de diapozitive "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Adăugare diapozitive la prezentarea curentă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove slides from current custom slide show"
+#~ msgstr "Elimină diapozitive din prezentarea personalizată curentă"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Șterge diapozitiv"
+
+#, fuzzy
+#~| msgid "Import Slideshow..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Importă Prezentare Diapozitive..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Adaugă diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Șterge diapozitive selectate"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Redenumește"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Decupează"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Copiază"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Lipește"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Prezentare diapozitive %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Toate diapozitivele"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Eroare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There cannot be two slideshows with the same name."
+#~ msgstr "Nu pot exista doua prezentări de diapozitive cu același nume."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Afișează &previzualizare"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~| msgid "Click Actions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Acțiuni la apăsarea butoanelor mouseului"
+
+#, fuzzy
+#~| msgid "Shape Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Forma Animației"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~| msgid "Star"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Stea"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Create shape animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "Creează animație de apariție"
+
+#, fuzzy
+#~| msgid "Shape Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "Forma Animației"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Direcția:"
+
+#, fuzzy
+#~| msgid "Shape Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Forma Animației"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " sec"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Aplică stiluri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Succesiune imagini"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Du-te la pagina:"
+
+#, fuzzy
+#~| msgid "Animation tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Unealtă de animații"
+
+#, fuzzy
+#~| msgid "Animation tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Unealtă de animații"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "&Linie"
+
+#, fuzzy
+#~| msgid "Shape Animation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Forma Animației"
+
+#, fuzzy
+#~| msgid "Animation Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation down"
+#~ msgstr "Unealtă de animații"
+
+#, fuzzy
+#~| msgid "Add a new slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Adaugă diapozitiv"
+
+#, fuzzy
+#~| msgid "Delete the current slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Șterge diapozitivul curent"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1 (primary)"
+#~ msgstr "Monitor %1 (primar)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Monitor %1"
+#~ msgstr "Monitor %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Configurează Vizualizarea Prezentatorului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Configurează Diapozitiv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Html Export"
+#~ msgstr "Exportă ca HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Exportă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "There is already a favorite file with this name"
+#~ msgstr "Există deja un fișier favorit cu acest nume"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Incorrect file, .zip only or corrupted zip"
+#~ msgstr "Fișier incorrect, nu este .zip sau este corupt"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zip file need to contain style.css"
+#~ msgstr "Fișierul zip trebuie să conține fișierul style.css"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Șterge șablon"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "You may not remove the templates provided with the application"
+#~ msgstr "Nu puteți elimina șabloanele furnizate de această aplicație"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Template"
+#~ msgstr "Adaugă Șablon"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Sunteți sigur că doriți să eliminați \"%1\"?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Confirmă eliminarea"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr "Fără sunet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Importă..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bar"
+#~ msgstr "Bară"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Apare de la stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Apare de sus"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Apare de la dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Apare de jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown subtype"
+#~ msgstr "Subtip necunoscut"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Ceas"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Clockwise"
+#~ msgstr "De la ora 12 în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Clockwise"
+#~ msgstr "De la 3 în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Clockwise"
+#~ msgstr "De la 6 în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Clockwise"
+#~ msgstr "De la 9 în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Twelve Counterclockwise"
+#~ msgstr "De la 12 în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Three Counterclockwise"
+#~ msgstr "De la 3 în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Six Counterclockwise"
+#~ msgstr "De la 6 în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Nine Counterclockwise"
+#~ msgstr "De la 9 în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Dublă împrăștiere"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Împrăștie pe verticală spre exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Împrăștie pe orizontală spre exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Împrăștie pe verticală spre interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Împrăștie pe orizontală spre interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Împărștie vertical invers spre interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Împrăștie orizontal invers spre interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Extindere dublă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Deschidere verticală paralelă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal"
+#~ msgstr "Diagonală Paralelă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Deschidere verticală inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Deschidere orizontală inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Deschidere pe diagonală stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Apare de jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Deschidere verticală paralelă inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Deschidere paralelă diagonală inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Deschidere verticală opusă inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Deschidere orizontală opusă inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Deschidere diagonală spre stânga paralelă inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Deschidere diagonală spre stânga paralelă inversă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Împrăștie"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Centru Dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Centru Vârf"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Centru Stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Centru Bază"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Împrăștie vârful spre exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Împrăștie dreapta spre exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Împrăștie baza spre exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Imprăștie stânga spre exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Top"
+#~ msgstr "Împrăștie în vârf"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Împrăștie spre interior dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Împrăștie spre interior baza"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Împrăștie spre interior stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Roată"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Clockwise"
+#~ msgstr "Două lame pe verticală în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Două lame pe orizontală în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Patru lame pe orizontală în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Vertical Counterclockwise"
+#~ msgstr "Două lame pe verticală în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Counterclockwise"
+#~ msgstr "Două lame pe orizontală în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Counterclockwise"
+#~ msgstr "Patru lame pe orizontală în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Ușă de salon"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Top"
+#~ msgstr "Spre vârf"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "spre stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "spre bază"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "spre dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Extindere simplă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top"
+#~ msgstr "Spre vârf în sens orar"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "În sens orar spre dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "În sens orar spre bază"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "În sens orar spre stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "În sens orar spre stânga vârfului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "În sens trigonometric spre stânga bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "În sens orar spre dreapta bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "În sens trigonometric spre dreapta vârfului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top"
+#~ msgstr "Spre vârf în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Right"
+#~ msgstr "Spre dreapta în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom"
+#~ msgstr "Spre bază în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Left"
+#~ msgstr "Spre stânga în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left"
+#~ msgstr "Spre vârf în sens trigonometric"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "În sens orar spre stânga bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "În sens trigonometric spre dreapta bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "În sens orar spre dreapta vârfului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Scut"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up"
+#~ msgstr "Sus"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Vertical"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Orizontal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Inversare spre dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Inversare spre vârf"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Inversare verticală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Inversare orizontală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Săgeată"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "În diagonală spre stânga bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Reverse"
+#~ msgstr "Inversare pe diagonală spre stânga bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "În diagonală spre stânga vârfului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Reverse"
+#~ msgstr "Inversare pe diagonală spre stânga vârfului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Vee"
+#~ msgstr "Săgeată în V"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Săgeată în Zig Zag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Vertical inversat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Orizontal inversat"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box"
+#~ msgstr "Casetă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Din stânga vârfului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Din dreapta vârfului"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Din stânga bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Din dreapta bazei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Diagonală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box"
+#~ msgstr "Casetă patru"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Colțuri spre interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In Reverse"
+#~ msgstr "Colțuri spre interior invers"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Colțuri spre exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out Reverse"
+#~ msgstr "Colțuri spre exterior invers"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Gradient diagonal 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Săgeată dublă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Diamant dublu"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vee"
+#~ msgstr "În V"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zig Zag"
+#~ msgstr "Zig Zag"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Atenuare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crossfade"
+#~ msgstr "Intercalare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Atenuare prin Culoare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Cap de săgeată"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Inversare în jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Inversare la stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Elipsă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Cerc"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Inversare circulară"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eye"
+#~ msgstr "Ochi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hexagon"
+#~ msgstr "Hexagon"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Iris"
+#~ msgstr "Iris"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Dreptunghiular"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Inversare dreptunghiulară"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Diamant"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Diamant invers"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Diverse"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Inimă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Inversare în inimă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole"
+#~ msgstr "Gaura Cheii"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Inversare în gaura cheii"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Pentagon"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Oval"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Stea"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star"
+#~ msgstr "Stea cu patru colțuri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Stea cu patru colțuri invers"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star"
+#~ msgstr "Stea cu cinci colțuri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Stea cu cinci colțuri invers"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star"
+#~ msgstr "Stea cu șase colțuri"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Stea cu șase colțuri invers"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Triunghi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Casetă Șerpi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Aliniază în sus"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Aliniază în jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Taie către stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Taie către dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Deschidere verticală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Deschidere orizontală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Aliniază în sus"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Aliniază în jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Apare de jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Apare de jos"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical Out"
+#~ msgstr "Închidere verticală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Închidere orizontală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Traiectorii șerpuite paralele"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Gradient vertical deschidere"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Gradient vertical închidere"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Gradient vertical deschidere"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same Out"
+#~ msgstr "Gradient vertical închidere"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite In"
+#~ msgstr "Gradient vertical spre vârf deschidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Left Opposite Out"
+#~ msgstr "Gradient vertical spre vârf închidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite In"
+#~ msgstr "Gradient vertical spre bază deschidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Left Opposite Out"
+#~ msgstr "Gradient vertical spre bază închidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Gradient orizontal deschidere spre stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Gradient orizontal închidere spre stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Gradient orizontal deschidere spre dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Gradient orizontal închidere spre dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite In"
+#~ msgstr "Gradient orizontal spre vârf deschidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Left Opposite Out"
+#~ msgstr "Gradient orizontal spre vârf închidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Gradient orizontal deschidere spre dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite Out"
+#~ msgstr "Gradient orizontal deschidere spre dreapta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite In"
+#~ msgstr "Gradient diagonal spre bază deschidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left Opposite Out"
+#~ msgstr "Gradient diagonal spre bază închidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Gradient diagonal deschidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite Out"
+#~ msgstr "Gradient diagonal închidere stânga"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Șarpe"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Spirală"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "În sens orar de la stânga vârfului în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "În sens orar de la stânga vârfului în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "În sens orar de la dreapta vârfului în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "În sens orar de la dreapta vârfului în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "În sens orar de la stânga bazei în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "În sens orar de la stânga bazei în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "În sens orar de la dreapta bazei în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "În sens orar de la dreapta bazei în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "În sens trigonometric de la stânga vârfului în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "În sens trigonometric de la stânga vârfului în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "În sens trigonometric de la dreapta vârfului în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "În sens trigonometric de la dreapta vârfului în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "În sens trigonometric de la stânga bazei în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "În sens trigonometric de la stânga bazei în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "În sens trigonometric de la dreapta bazei în interior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "În sens trigonometric de la dreapta bazei în exterior"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Cascadă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "de la Vârf spre Stânga Vertical"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "de la Vârf spre Dreapta Orizontal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "de la Vârf spre Stânga Vertical"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "de la Vârf spre Dreapta Orizontal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "de la Bază spre Stânga Vertical"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "de la Bază spre Stânga Orizontal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "de la Bază spre Dreapta Vertical"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "de la Bază spre Dreapta Orizontal"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Alunecare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Rotație spațială"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Efect de interschimbare"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Antet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Subsol"
+
+#, fuzzy
+#~ msgid "Maintainer"
+#~ msgstr "Responsabil"
+
+#, fuzzy
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Utilitar de prezentare KOffice"
+
+#, fuzzy
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Pagină"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "Fișier de deschis"
+
+#, fuzzy
+#~ msgid "Set Layout"
+#~ msgstr "Stabilește aranjamentul"
+
+#, fuzzy
+#~ msgid "Layout Tool"
+#~ msgstr "Unealtă de aranjare"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&Fișier"
+
+#, fuzzy
+#~ msgid "Line"
+#~ msgstr "Linie"
+
+#, fuzzy
+#~ msgid "Arra&nge Objects"
+#~ msgstr "Aranjează obiectele"
+
+#, fuzzy
+#~ msgid "&Align Objects"
+#~ msgstr "&Aliniază obiecte"
+
+#, fuzzy
+#~ msgid "Te&xt"
+#~ msgstr "Text"
+
+#, fuzzy
+#~ msgid "&Align"
+#~ msgstr "&Aliniere"
+
+#, fuzzy
+#~ msgid "T&ype"
+#~ msgstr "Tip"
+
+#, fuzzy
+#~ msgid "Spellcheck"
+#~ msgstr "Verificare ortografică"
+
+#, fuzzy
+#~ msgid "Autocorrection"
+#~ msgstr "Corecție automată"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "Fișier"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "Modifică"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Inserează"
+
+#, fuzzy
+#~ msgid "Tools"
+#~ msgstr "Unelte"
+
+#, fuzzy
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#, fuzzy
+#~ msgid "Slide Show"
+#~ msgstr "Succesiune de imagini"
+
+#, fuzzy
+#~ msgid "Navigation"
+#~ msgstr "Navigare"
+
+#, fuzzy
+#~ msgid "Vertical Alignment"
+#~ msgstr "Aliniere verticală"
+
+#, fuzzy
+#~ msgid "Flip Objects"
+#~ msgstr "Inversează Obiectele"
+
+#, fuzzy
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "&Scalează pentru a arăta imaginea în raportul 1:1"
+
+#, fuzzy
+#~ msgid "Spell Check Result"
+#~ msgstr "Rezultatul verificării ortografice"
+
+#, fuzzy
+#~ msgid "Slide Layouts"
+#~ msgstr "Șabloane Diapozitiv"
+
+#, fuzzy
+#~ msgid "Transitions"
+#~ msgstr "Tranziții"
+
+#, fuzzy
+#~ msgid "Not implemented in 2.0"
+#~ msgstr "Neimplementat în versiunea 2.0"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "Șterge efectul de pagină"
+
+#, fuzzy
+#~ msgid "Slide Title"
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "&Opțiuni..."
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "&Opțiuni..."
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Modifică"
+
+#, fuzzy
+#~ msgid "Confirm action"
+#~ msgstr "Confirmă acțiunea"
+
+#, fuzzy
+#~ msgid "Available Slides"
+#~ msgstr "Diapozitive disponibile"
+
+#, fuzzy
+#~ msgid "Add Slide"
+#~ msgstr "Adaugă diapozitiv"
+
+#, fuzzy
+#~ msgid "Undo"
+#~ msgstr "Desfă"
+
+#, fuzzy
+#~ msgid "Ok"
+#~ msgstr "Ok"
+
+#, fuzzy
+#~ msgid "Close"
+#~ msgstr "Închide"
+
+#, fuzzy
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#, fuzzy
+#~ msgid "Page Layouts"
+#~ msgstr "Setează format pagină"
+
+#, fuzzy
+#~ msgid "&Page"
+#~ msgstr "&Pagină..."
+
+#, fuzzy
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Modifică valori dreptunghi"
+
+#, fuzzy
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Star Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Box Wipe Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Cover down effect"
+#~ msgstr "Apare de la stânga"
+
+#, fuzzy
+#~ msgid "Insert &new slide:"
+#~ msgstr "Inserează pagină &nouă:"
+
+#, fuzzy
+#~ msgid "Use &default template"
+#~ msgstr "Utilizează modelul &implicit"
+
+#, fuzzy
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "Utilizează slide-ul curent ca model implicit"
+
+#, fuzzy
+#~ msgid "Choose di&fferent template"
+#~ msgstr "Alege un model &diferit"
+
+#, fuzzy
+#~ msgid "A&ngle:"
+#~ msgstr "Unghi"
+
+#, fuzzy
+#~ msgid "Pie"
+#~ msgstr "Plăcintă"
+
+#, fuzzy
+#~ msgid "&Type:"
+#~ msgstr "Tip:"
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "Creez imaginile slide-urilor"
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Preview"
+#~ msgstr "Afișează &previzualizare"
+
+#, fuzzy
+#~ msgid "Channel Intensity"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "Intensity"
+#~ msgstr "Stil peniță:"
+
+#, fuzzy
+#~ msgid "Normalize"
+#~ msgstr "Normală"
+
+#, fuzzy
+#~ msgid "Solarize"
+#~ msgstr "Slide"
+
+#, fuzzy
+#~ msgid "Noise"
+#~ msgstr "Fără peniță"
+
+#, fuzzy
+#~ msgid "Blur"
+#~ msgstr "Liste n&enumerotate"
+
+#, fuzzy
+#~ msgid "Sharpen"
+#~ msgstr "Pătrat"
+
+#, fuzzy
+#~ msgid "Shade"
+#~ msgstr "Afișează antet"
+
+#, fuzzy
+#~ msgid "Value:"
+#~ msgstr "Liste n&enumerotate"
+
+#, fuzzy
+#~ msgid "Color:"
+#~ msgstr "Culoare:"
+
+#, fuzzy
+#~ msgid "Color 1:"
+#~ msgstr "Culoare:"
+
+#, fuzzy
+#~ msgid "Color 2:"
+#~ msgstr "Culoare:"
+
+#, fuzzy
+#~ msgid "Intensity:"
+#~ msgstr "Stil peniță:"
+
+#, fuzzy
+#~ msgid "Factor:"
+#~ msgstr "Factor X:"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "Tip:"
+
+#, fuzzy
+#~ msgid "Poisson"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Color Shading"
+#~ msgstr "Culoare/gradient"
+
+#, fuzzy
+#~ msgid "Azimuth:"
+#~ msgstr "Autor:"
+
+#, fuzzy
+#~ msgid "Angle:"
+#~ msgstr "Unghi"
+
+#, fuzzy
+#~ msgid "Pen"
+#~ msgstr "&Pagină..."
+
+#, fuzzy
+#~ msgid "Arrow Style"
+#~ msgstr "Aplică stiluri"
+
+#, fuzzy
+#~ msgid "&Begin:"
+#~ msgstr "Început linie"
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Grosime peniță:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Stil"
+
+#, fuzzy
+#~ msgid "C&olor:"
+#~ msgstr "Culoare:"
+
+#, fuzzy
+#~ msgid "Rect"
+#~ msgstr "&Dreptunghi"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Gradient vertical"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "Gradient orizontal"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "Gradient orizontal"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "Gradient vertical"
+
+#, fuzzy
+#~ msgid "Polygon"
+#~ msgstr "Simplu"
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "Pătrat"
+
+#, fuzzy
+#~ msgid "Brush"
+#~ msgstr "Pensula"
+
+#, fuzzy
+#~ msgid "&Style:"
+#~ msgstr "Stil"
+
+#, fuzzy
+#~ msgid "&Preview"
+#~ msgstr "Afișează &previzualizare"
+
+#, fuzzy
+#~ msgid "&Effect:"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "&Speed:"
+#~ msgstr "Tip:"
+
+#, fuzzy
+#~ msgid "So&und effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr " Titlu: "
+
+#, fuzzy
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "Comutare &manuală la următorul pas"
+
+#, fuzzy
+#~ msgid "Gradient"
+#~ msgstr "Gradient"
+
+#, fuzzy
+#~ msgid "Gradient:"
+#~ msgstr "Gradient"
+
+#, fuzzy
+#~ msgid "X-fac&tor:"
+#~ msgstr "Factor X:"
+
+#, fuzzy
+#~ msgid "Un&balanced:"
+#~ msgstr "Neechilibrat"
+
+#, fuzzy
+#~ msgid "&Y-factor:"
+#~ msgstr "Factor Y:"
+
+#, fuzzy
+#~ msgid "Margin"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "General"
+#~ msgstr "General"
+
+#, fuzzy
+#~ msgid "Na&me:"
+#~ msgstr "Număr"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Shadow"
+#~ msgstr "Afișează antet"
+
+#, fuzzy
+#~ msgid "Color && Distance"
+#~ msgstr "Distanță:"
+
+#, fuzzy
+#~ msgid "Distance:"
+#~ msgstr "Distanță:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~ msgid "Picture"
+#~ msgstr "Imagine"
+
+#, fuzzy
+#~ msgid "&1 bit color mode"
+#~ msgstr " Culoare titlu: "
+
+#, fuzzy
+#~ msgid "&8 bit color mode"
+#~ msgstr " Culoare titlu: "
+
+#, fuzzy
+#~ msgid "1&6 bit color mode"
+#~ msgstr " Culoare titlu: "
+
+#, fuzzy
+#~ msgid "&32 bit color mode"
+#~ msgstr " Culoare titlu: "
+
+#, fuzzy
+#~ msgid "&Default color mode"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "&Brightness:"
+#~ msgstr "Pătrat"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "Setează fundal"
+
+#, fuzzy
+#~ msgid "Background type:"
+#~ msgstr "Tip fundal:"
+
+#, fuzzy
+#~ msgid "Color/Gradient"
+#~ msgstr "Culoare/gradient"
+
+#, fuzzy
+#~ msgid "Plain"
+#~ msgstr "Simplu"
+
+#, fuzzy
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "Gradient diagonal 1"
+
+#, fuzzy
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "Gradient diagonal 2"
+
+#, fuzzy
+#~ msgid "Circle Gradient"
+#~ msgstr "Gradient circular"
+
+#, fuzzy
+#~ msgid "Rectangle Gradient"
+#~ msgstr "Gradient rectangular"
+
+#, fuzzy
+#~ msgid "PipeCross Gradient"
+#~ msgstr "Gradient conducte încrucișate"
+
+#, fuzzy
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Gradient piramidal"
+
+#, fuzzy
+#~ msgid "Unbalanced"
+#~ msgstr "Neechilibrat"
+
+#, fuzzy
+#~ msgid "X-factor:"
+#~ msgstr "Factor X:"
+
+#, fuzzy
+#~ msgid "Y-factor:"
+#~ msgstr "Factor Y:"
+
+#, fuzzy
+#~ msgid "View mode:"
+#~ msgstr "Mod vizualizare:"
+
+#, fuzzy
+#~ msgid "Apply &Global"
+#~ msgstr "Aplică gl&obal"
+
+#, fuzzy
+#~ msgid "Single Color"
+#~ msgstr "Culoare text"
+
+#, fuzzy
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "Model umplere 12%"
+
+#, fuzzy
+#~ msgid "Crossing Lines"
+#~ msgstr "Linii încrucișate"
+
+#, fuzzy
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Linii diagonale (/)"
+
+#, fuzzy
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Linii diagonale (\\)"
+
+#, fuzzy
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Linii diagonale încrucișate"
+
+#, fuzzy
+#~ msgid "Diagonal 2"
+#~ msgstr "Gradient diagonal 2"
+
+#, fuzzy
+#~ msgid "PipeCross"
+#~ msgstr "Gradient conducte încrucișate"
+
+#, fuzzy
+#~ msgid "Pyramid"
+#~ msgstr "Gradient piramidal"
+
+#, fuzzy
+#~ msgid "Resize Object Up"
+#~ msgstr "Redimensionează obiectul în sus"
+
+#, fuzzy
+#~ msgid "Resize Object Down"
+#~ msgstr "Redimensionează obiectul în jos"
+
+#, fuzzy
+#~ msgid "Resize Object Left"
+#~ msgstr "Redimensionează obiectul la stânga"
+
+#, fuzzy
+#~ msgid "Resize Object Right"
+#~ msgstr "Redimensionează obiectul la dreapta"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "Redimensionează obiectul stânga-sus"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "Redimensionează obiectul stânga-jos"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "Redimensionează obiectul dreapta-sus"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "Redimensionează obiectul dreapta-jos"
+
+#, fuzzy
+#~ msgid "&Drawing Mode"
+#~ msgstr "Mod &desenare"
+
+#, fuzzy
+#~ msgid "&Goto Slide..."
+#~ msgstr "Du-te la pagina..."
+
+#, fuzzy
+#~ msgid "Change Text Font"
+#~ msgstr "Modifică rotația"
+
+#, fuzzy
+#~ msgid "Set Text Background Color"
+#~ msgstr " Culoare fundal: "
+
+#, fuzzy
+#~ msgid "Underline Text"
+#~ msgstr "Subliniat"
+
+#, fuzzy
+#~ msgid "Change Text Size"
+#~ msgstr "Modifică valori dreptunghi"
+
+#, fuzzy
+#~ msgid "Apply Default Format"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Increase Font Size"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Decrease Font Size"
+#~ msgstr "&Descrește adâncimea"
+
+#, fuzzy
+#~ msgid "Change Tabulators"
+#~ msgstr "Modifică clipart"
+
+#, fuzzy
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Change First Line Indent"
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Change Left Indent"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "Change Right Indent"
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Printing..."
+#~ msgstr "Tipăresc..."
+
+#, fuzzy
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr "Scalează imaginea 1:1 în modul prezentare"
+
+#, fuzzy
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "&Extinde conținutul pe înălțimea obiectului"
+
+#, fuzzy
+#~ msgid "Extend Text to Contents"
+#~ msgstr "&Extinde obiectul să umple conținutul"
+
+#, fuzzy
+#~ msgid "Align Objects Left"
+#~ msgstr "Aliniază obiectul(ele) la stânga"
+
+#, fuzzy
+#~ msgid "Align Objects Top"
+#~ msgstr "Aliniază obiectul(ele) în sus"
+
+#, fuzzy
+#~ msgid "Align Objects Right"
+#~ msgstr "Aliniază obiectul(ele) la dreapta"
+
+#, fuzzy
+#~ msgid "Align Objects Bottom"
+#~ msgstr "Aliniază obiectul(ele) în jos"
+
+#, fuzzy
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "Aliniază central obiectul(ele) (orizontal)"
+
+#, fuzzy
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "Aliniază obiectul(ele) central / orizontal"
+
+#, fuzzy
+#~ msgid "Close Object"
+#~ msgstr "Aliniază &obiecte"
+
+#, fuzzy
+#~ msgid "Closed Freehand"
+#~ msgstr "Inserează dreptunghi"
+
+#, fuzzy
+#~ msgid "Closed Polyline"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Closed Cubic Bezier Curve"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Closed Quadric Bezier Curve"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~ msgid "Interface"
+#~ msgstr "Inserează pagină"
+
+#, fuzzy
+#~ msgid "Spelling"
+#~ msgstr "&Spațiere"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Opțiuni"
+
+#, fuzzy
+#~ msgid "Default Tools Settings"
+#~ msgstr "Opțiuni"
+
+#, fuzzy
+#~ msgid "Paths"
+#~ msgstr " Cale: "
+
+#, fuzzy
+#~ msgid "Path Settings"
+#~ msgstr "Spațiere &paragrafe:"
+
+#, fuzzy
+#~ msgid "Show rulers"
+#~ msgstr "Afișează subsol"
+
+#, fuzzy
+#~ msgid "Background object color:"
+#~ msgstr "Culoare fundal:"
+
+#, fuzzy
+#~ msgid "Grid color:"
+#~ msgstr "Culori gradient:"
+
+#, fuzzy
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Listă n&esortată"
+
+#, fuzzy
+#~ msgid "&Underline all links"
+#~ msgstr "&Subliniat"
+
+#, fuzzy
+#~ msgid "Display field code"
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Vertical grid size:"
+#~ msgstr "Gradient vertical"
+
+#, fuzzy
+#~ msgid "Change Display Link Command"
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Default font:"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Choose..."
+#~ msgstr "Alege..."
+
+#, fuzzy
+#~ msgid "Starting page number:"
+#~ msgstr "Inserează număr de pagină"
+
+#, fuzzy
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Inserează număr de pagină"
+
+#, fuzzy
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Modifică valori dreptunghi"
+
+#, fuzzy
+#~ msgid "Outl&ine"
+#~ msgstr "Contur cerc"
+
+#, fuzzy
+#~ msgid "&Rectangle"
+#~ msgstr "&Dreptunghi"
+
+#, fuzzy
+#~ msgid "Polygo&n"
+#~ msgstr "Simplu"
+
+#, fuzzy
+#~ msgid "&Pie"
+#~ msgstr "Plăcintă"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "Tip:"
+
+#, fuzzy
+#~ msgid "Picture Path"
+#~ msgstr " Format imagine: "
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr " Format imagine: "
+
+#, fuzzy
+#~ msgid "&Add..."
+#~ msgstr "Slide"
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "&Linie"
+
+#, fuzzy
+#~ msgid "Test"
+#~ msgstr "Text"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "Număr"
+
+#, fuzzy
+#~ msgid "Existing slides:"
+#~ msgstr "Pasul &următor"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "&Configurează pagini..."
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "Se pare că nu aveți instalat PERL.\n"
+#~ "Acesta este necesar la conversia acestui\n"
+#~ "document. Instalați PERL și încercați din\n"
+#~ "nou."
+
+#, fuzzy
+#~ msgid "Insert Part Object"
+#~ msgstr "Inserează grup de obiecte"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "Ridică obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Set New Options"
+#~ msgstr "Setează opțiuni noi"
+
+#, fuzzy
+#~ msgid "Insert File"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Insert New Slide"
+#~ msgstr "Inserează pagină &nouă:"
+
+#, fuzzy
+#~ msgid "Duplicate Object"
+#~ msgstr "Duplică pagina"
+
+#, fuzzy
+#~ msgid "Rotation angle:"
+#~ msgstr "Du-te la pagina:"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Move X:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Move Y:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Appear"
+#~ msgstr "Apare"
+
+#, fuzzy
+#~ msgid "Effect (appearing):"
+#~ msgstr "Efect (apariție): "
+
+#, fuzzy
+#~ msgid "Come From Right/Top"
+#~ msgstr "Apare din dreapta-sus"
+
+#, fuzzy
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "Apare din dreapta-jos"
+
+#, fuzzy
+#~ msgid "Come From Left/Top"
+#~ msgstr "Apare din stânga-sus"
+
+#, fuzzy
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "Apare din stânga-jos"
+
+#, fuzzy
+#~ msgid "Wipe From Left"
+#~ msgstr "Taie de la stânga"
+
+#, fuzzy
+#~ msgid "Wipe From Right"
+#~ msgstr "Taie de la dreapta"
+
+#, fuzzy
+#~ msgid "Wipe From Top"
+#~ msgstr "Taie din partea de sus"
+
+#, fuzzy
+#~ msgid "Wipe From Bottom"
+#~ msgstr "Taie din partea de jos"
+
+#, fuzzy
+#~ msgid "Fast"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Effect (object specific):"
+#~ msgstr "Efect (specific obiectului): "
+
+#, fuzzy
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "Paragraf după paragraf"
+
+#, fuzzy
+#~ msgid "Timer of the object:"
+#~ msgstr "Taie către stânga"
+
+#, fuzzy
+#~ msgid "Play"
+#~ msgstr "Simplu"
+
+#, fuzzy
+#~ msgid "Disappear"
+#~ msgstr "Dispare"
+
+#, fuzzy
+#~ msgid "Effect (disappearing):"
+#~ msgstr "Efect (dispariție): "
+
+#, fuzzy
+#~ msgid "Disappear to Right"
+#~ msgstr "Dispare către dreapta"
+
+#, fuzzy
+#~ msgid "Disappear to Left"
+#~ msgstr "Dispare către stânga"
+
+#, fuzzy
+#~ msgid "Disappear to Top"
+#~ msgstr "Dispare în sus"
+
+#, fuzzy
+#~ msgid "Disappear to Bottom"
+#~ msgstr "Dispare în jos"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "Disappear către dreapta-sus"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "Disappear către dreapta-jos"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "Disappear către stânga-sus"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "Disappear către stânga-jos"
+
+#, fuzzy
+#~ msgid "Wipe to Top"
+#~ msgstr "Taie către partea de sus"
+
+#, fuzzy
+#~ msgid "Wipe to Bottom"
+#~ msgstr "Taie către partea de jos"
+
+#, fuzzy
+#~ msgid "Assign Object Effects"
+#~ msgstr "Atribuie efecte obiectului"
+
+#, fuzzy
+#~ msgid "Image Effect"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Import Style"
+#~ msgstr "Aplică stiluri"
+
+#, fuzzy
+#~ msgid "Path:"
+#~ msgstr " Cale: "
+
+#, fuzzy
+#~ msgid "&Set Colors"
+#~ msgstr "Culoare text"
+
+#, fuzzy
+#~ msgid "Preliminary Slides"
+#~ msgstr "Pasul &precedent"
+
+#, fuzzy
+#~ msgid "Text color:"
+#~ msgstr " Culoare text: "
+
+#, fuzzy
+#~ msgid "Background color:"
+#~ msgstr "Culoare fundal:"
+
+#, fuzzy
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "Creează succesiune de imagini HTML"
+
+#, fuzzy
+#~ msgid "Create pictures of the slides"
+#~ msgstr "Creez imaginile slide-urilor"
+
+#, fuzzy
+#~ msgid "Change Help Line Position"
+#~ msgstr "Modifică începutul liniei"
+
+#, fuzzy
+#~ msgid "Position:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Add New Help Line"
+#~ msgstr "&Linie"
+
+#, fuzzy
+#~ msgid "Add New Help Point"
+#~ msgstr "&Linie"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "Slide %1"
+
+#, fuzzy
+#~ msgid "Master Page Note:\n"
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~ msgid "Delete Objects"
+#~ msgstr "Șterge obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Group Objects"
+#~ msgstr "Grupare obiecte"
+
+#, fuzzy
+#~ msgid "Ungroup Objects"
+#~ msgstr "Degrupează obiecte"
+
+#, fuzzy
+#~ msgid "Lower Objects"
+#~ msgstr "Coboară obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Raise Objects"
+#~ msgstr "Ridică obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Insert Line"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Insert Rectangle"
+#~ msgstr "Inserează dreptunghi"
+
+#, fuzzy
+#~ msgid "Insert Ellipse"
+#~ msgstr "Inserează elipsă"
+
+#, fuzzy
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Inserează plăcintă/arc/coardă"
+
+#, fuzzy
+#~ msgid "Insert Textbox"
+#~ msgstr "Inserează casetă text"
+
+#, fuzzy
+#~ msgid "Insert Autoform"
+#~ msgstr "Inserează autoformă"
+
+#, fuzzy
+#~ msgid "Insert Freehand"
+#~ msgstr "Inserează dreptunghi"
+
+#, fuzzy
+#~ msgid "Insert Polyline"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Insert Cubic Bezier Curve"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Insert Polygon"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Insert Closed Freehand"
+#~ msgstr "Inserează dreptunghi"
+
+#, fuzzy
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Insert Closed Quadric Bezier Curve"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Insert Closed Cubic Bezier Curve"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Embed Object"
+#~ msgstr "Obiect încapsulat"
+
+#, fuzzy
+#~ msgid "Change Pixmap"
+#~ msgstr "Modifică imagine"
+
+#, fuzzy
+#~ msgid "Move Objects"
+#~ msgstr "Mută obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Change Shadow"
+#~ msgstr "Modifică umbra"
+
+#, fuzzy
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Gradient vertical"
+
+#, fuzzy
+#~ msgid "No Outline"
+#~ msgstr "Contur cerc"
+
+#, fuzzy
+#~ msgid "Square"
+#~ msgstr "Pătrat"
+
+#, fuzzy
+#~ msgid "Line Arrow"
+#~ msgstr "Săgeată"
+
+#, fuzzy
+#~ msgid "Double Line Arrow"
+#~ msgstr "Săgeată"
+
+#, fuzzy
+#~ msgid "&General"
+#~ msgstr "&General"
+
+#, fuzzy
+#~ msgid "&Transition Type"
+#~ msgstr "&Atribuie efect..."
+
+#, fuzzy
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "Comutare &manuală la următorul pas"
+
+#, fuzzy
+#~ msgid "&Infinite loop"
+#~ msgstr "Buclă &infinită"
+
+#, fuzzy
+#~ msgid "Measure presentation &duration"
+#~ msgstr "&Ieșire prezentare"
+
+#, fuzzy
+#~ msgid "Arc"
+#~ msgstr "Arc"
+
+#, fuzzy
+#~ msgid "Chord"
+#~ msgstr "Coardă"
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "Ș&terge pagina..."
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "Creez imaginile slide-urilor"
+
+#, fuzzy
+#~ msgid "Apply Properties"
+#~ msgstr "Aplică stiluri"
+
+#, fuzzy
+#~ msgid "Name Object"
+#~ msgstr "Obiect încapsulat"
+
+#, fuzzy
+#~ msgid "Protect Object"
+#~ msgstr "Grupare obiecte"
+
+#, fuzzy
+#~ msgid "Change Size"
+#~ msgstr "Modifică valori dreptunghi"
+
+#, fuzzy
+#~ msgid "Pict&ure"
+#~ msgstr "Imagine"
+
+#, fuzzy
+#~ msgid "Rename Slide"
+#~ msgstr "Inserează pagină"
+
+#, fuzzy
+#~ msgid "Slide title:"
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~ msgid "Close From All Directions"
+#~ msgstr "Închidere din toate direcțiile"
+
+#, fuzzy
+#~ msgid "Open From All Directions"
+#~ msgstr "Deschidere din toate direcțiile"
+
+#, fuzzy
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "Interblocare orizontală 2"
+
+#, fuzzy
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "Interblocare verticală 1"
+
+#, fuzzy
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "Interblocare verticală 2"
+
+#, fuzzy
+#~ msgid "Surround 1"
+#~ msgstr "Înconjurare 1"
+
+#, fuzzy
+#~ msgid "Fly Away 1"
+#~ msgstr "Zbor 1"
+
+#, fuzzy
+#~ msgid "Blinds Vertical"
+#~ msgstr "Închidere verticală"
+
+#, fuzzy
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "Apare din dreapta-jos"
+
+#, fuzzy
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "Apare din dreapta-jos"
+
+#, fuzzy
+#~ msgid "Strips Right-Up"
+#~ msgstr "Apare de la dreapta"
+
+#, fuzzy
+#~ msgid "Melting"
+#~ msgstr "&Spațiere"
+
+#, fuzzy
+#~ msgid "Paste Text"
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~ msgid "Insert Variable"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Protect content"
+#~ msgstr "Grupare obiecte"
+
+#, fuzzy
+#~ msgid "Effect:"
+#~ msgstr "Fără efect"
+
+#, fuzzy
+#~ msgid "Remove Slide"
+#~ msgstr "Inserează pagină"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "Slide-urile s&electate"
+
+#, fuzzy
+#~ msgid "Insert new slide"
+#~ msgstr "Inserează pagină &nouă:"
+
+#, fuzzy
+#~ msgid "Save Picture"
+#~ msgstr "Imagine"
+
+#, fuzzy
+#~ msgid "Save Failed"
+#~ msgstr "Ș&terge pagina..."
+
+#, fuzzy
+#~ msgid "No chart component registered"
+#~ msgstr "Nu există nici o componentă hartă înregistrată."
+
+#, fuzzy
+#~ msgid "No table component registered"
+#~ msgstr "Nu există nici o componentă tabel înregistrată."
+
+#, fuzzy
+#~ msgid "No formula component registered"
+#~ msgstr "Nu există nici o componentă formulă înregistrată."
+
+#, fuzzy
+#~ msgid "Autoform-Choose"
+#~ msgstr "Alegere autoformă"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Aplică stiluri"
+
+#, fuzzy
+#~ msgid "Slide Background"
+#~ msgstr "Setează fundal"
+
+#, fuzzy
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "Doriți să încarc o configurație care va fi folosită \n"
+#~ "pentru această prezentare HTML și pe care ați salvat-o \n"
+#~ "mai înainte?"
+
+#, fuzzy
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Prezentare HTML KPresenter (*.kpweb)"
+
+#, fuzzy
+#~ msgid "Only local files are currently supported."
+#~ msgstr "Deocamdată sunt suportate numai fișierele locale."
+
+#, fuzzy
+#~ msgid "Object Effect"
+#~ msgstr "Atribuie efecte obiectului"
+
+#, fuzzy
+#~ msgid "No Slide"
+#~ msgstr "Slide"
+
+#, fuzzy
+#~ msgid "Change List Type"
+#~ msgstr "Modifică clipart"
+
+#, fuzzy
+#~ msgid "Change Outline Color"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "Change Fill Color"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "Change Line Begin"
+#~ msgstr "Modifică începutul liniei"
+
+#, fuzzy
+#~ msgid "Change Line End"
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Change Outline Style"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "Change Outline Width"
+#~ msgstr "Modifică penița"
+
+#, fuzzy
+#~ msgid "Show Sidebar"
+#~ msgstr "Afișează bară laterală"
+
+#, fuzzy
+#~ msgid "Hide Sidebar"
+#~ msgstr "Afișează bară laterală"
+
+#, fuzzy
+#~ msgid "Show Notebar"
+#~ msgstr "Afișează subsol"
+
+#, fuzzy
+#~ msgid "Hide Notebar"
+#~ msgstr "&Subsol"
+
+#, fuzzy
+#~ msgid "Slide &Master"
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~ msgid "Guide Lines"
+#~ msgstr "Linie plină"
+
+#, fuzzy
+#~ msgid "Show &Grid"
+#~ msgstr "Afișează subsol"
+
+#, fuzzy
+#~ msgid "Hide &Grid"
+#~ msgstr "&Antet"
+
+#, fuzzy
+#~ msgid "&Slide..."
+#~ msgstr "Slide"
+
+#, fuzzy
+#~ msgid "P&icture..."
+#~ msgstr "&Imagine..."
+
+#, fuzzy
+#~ msgid "&Rotate"
+#~ msgstr "&Rotește..."
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr " Scalare: "
+
+#, fuzzy
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "&Cerc/elipsă"
+
+#, fuzzy
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "&Plăcintă/arc/coardă"
+
+#, fuzzy
+#~ msgid "&Text"
+#~ msgstr "&Text"
+
+#, fuzzy
+#~ msgid "&Chart"
+#~ msgstr "Clipart"
+
+#, fuzzy
+#~ msgid "Ta&ble"
+#~ msgstr "T&abel"
+
+#, fuzzy
+#~ msgid "&Object"
+#~ msgstr "&Obiect..."
+
+#, fuzzy
+#~ msgid "&Line"
+#~ msgstr "&Linie"
+
+#, fuzzy
+#~ msgid "Closed &Freehand"
+#~ msgstr "Inserează dreptunghi"
+
+#, fuzzy
+#~ msgid "Closed Po&lyline"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Closed &Quadric Bezier Curve"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "Closed C&ubic Bezier Curve"
+#~ msgstr "Inserează imagine"
+
+#, fuzzy
+#~ msgid "&Font..."
+#~ msgstr "&Font..."
+
+#, fuzzy
+#~ msgid "Font Family"
+#~ msgstr "Familie font"
+
+#, fuzzy
+#~ msgid "&Bold"
+#~ msgstr "&Bold"
+
+#, fuzzy
+#~ msgid "&Italic"
+#~ msgstr "&Italic"
+
+#, fuzzy
+#~ msgid "&Underline"
+#~ msgstr "&Subliniat"
+
+#, fuzzy
+#~ msgid "&Strike Out"
+#~ msgstr "Obiect &blocat"
+
+#, fuzzy
+#~ msgid "&Color..."
+#~ msgstr "Culoare"
+
+#, fuzzy
+#~ msgid "Align &Left"
+#~ msgstr "Aliniază la &stânga"
+
+#, fuzzy
+#~ msgid "Align &Center"
+#~ msgstr "Aliniază &central"
+
+#, fuzzy
+#~ msgid "Align &Right"
+#~ msgstr "Aliniază la &dreapta"
+
+#, fuzzy
+#~ msgid "Align &Block"
+#~ msgstr "Aliniază în s&us"
+
+#, fuzzy
+#~ msgid "Number"
+#~ msgstr "Număr"
+
+#, fuzzy
+#~ msgid "Bullet"
+#~ msgstr "Liste n&enumerotate"
+
+#, fuzzy
+#~ msgid "&Increase Depth"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "&Decrease Depth"
+#~ msgstr "&Descrește adâncimea"
+
+#, fuzzy
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "Extinde conținutul pe î&nălțimea obiectului"
+
+#, fuzzy
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "&Extinde obiectul să umple conținutul"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "&Inserează număr de pagină"
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Aplică stiluri"
+
+#, fuzzy
+#~ msgid "Ra&ise Objects"
+#~ msgstr "Ridică obiectul(ele)"
+
+#, fuzzy
+#~ msgid "&Lower Objects"
+#~ msgstr "Coboară obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Bring to Front"
+#~ msgstr "&Linie"
+
+#, fuzzy
+#~ msgid "Send to Back"
+#~ msgstr "Setează fundal"
+
+#, fuzzy
+#~ msgid "R&otate Objects..."
+#~ msgstr "R&otește obiectul(ele)..."
+
+#, fuzzy
+#~ msgid "&Shadow Objects..."
+#~ msgstr "&Umbrește obiectul(ele)..."
+
+#, fuzzy
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "Aliniază central (&orizontal)"
+
+#, fuzzy
+#~ msgid "Align &Top"
+#~ msgstr "Aliniază în s&us"
+
+#, fuzzy
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "Aliniază central (&vertical)"
+
+#, fuzzy
+#~ msgid "Align &Bottom"
+#~ msgstr "Aliniază în j&os"
+
+#, fuzzy
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "&Fundal pagină..."
+
+#, fuzzy
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "Creează prezentare &HTML..."
+
+#, fuzzy
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "Creează prezentare &HTML..."
+
+#, fuzzy
+#~ msgid "Template Manager"
+#~ msgstr "&Du-te la pagina..."
+
+#, fuzzy
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "Utilizează slide-ul curent ca model implicit"
+
+#, fuzzy
+#~ msgid "Align O&bjects"
+#~ msgstr "Aliniază &obiecte"
+
+#, fuzzy
+#~ msgid "Line Begin"
+#~ msgstr "Început linie"
+
+#, fuzzy
+#~ msgid "Line End"
+#~ msgstr "Sfârșit linie"
+
+#, fuzzy
+#~ msgid "Outline Style"
+#~ msgstr "Contur cerc"
+
+#, fuzzy
+#~ msgid "Outline Width"
+#~ msgstr "Contur cerc"
+
+#, fuzzy
+#~ msgid "&Group Objects"
+#~ msgstr "&Grupează obiecte"
+
+#, fuzzy
+#~ msgid "&Ungroup Objects"
+#~ msgstr "&Degrupează obiecte"
+
+#, fuzzy
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "Atribuie efecte obiectului"
+
+#, fuzzy
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "Titlu slide"
+
+#, fuzzy
+#~ msgid "&Go to Start"
+#~ msgstr "&Du-te la început"
+
+#, fuzzy
+#~ msgid "Go to &End"
+#~ msgstr "Du-te la &sfârșit"
+
+#, fuzzy
+#~ msgid "Goto &Slide..."
+#~ msgstr "Du-te la p&agina..."
+
+#, fuzzy
+#~ msgid "Fill Color..."
+#~ msgstr "Culoare"
+
+#, fuzzy
+#~ msgid "Outline Color..."
+#~ msgstr "&Culoare peniță..."
+
+#, fuzzy
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "&Extinde conținutul pe înălțimea obiectului"
+
+#, fuzzy
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "&Redimensionează obiectul la conținut"
+
+#, fuzzy
+#~ msgid "&Rename Slide..."
+#~ msgstr "Inserează pagină"
+
+#, fuzzy
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#, fuzzy
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#, fuzzy
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#, fuzzy
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#, fuzzy
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#, fuzzy
+#~ msgid "&Change Picture..."
+#~ msgstr "&Modifică imaginea..."
+
+#, fuzzy
+#~ msgid "Image &Effect..."
+#~ msgstr "&Atribuie efect..."
+
+#, fuzzy
+#~ msgid "Link..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "Factor personalizat..."
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "&Configurează pagini..."
+
+#, fuzzy
+#~ msgid "&Paragraph..."
+#~ msgstr "&Pagină..."
+
+#, fuzzy
+#~ msgid "Default Format"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Change Link..."
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Edit Variable..."
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "&Time"
+#~ msgstr "&Text"
+
+#, fuzzy
+#~ msgid "Change Case..."
+#~ msgstr "&Modifică imaginea..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr " Scalare: "
+
+#, fuzzy
+#~ msgid "&Style Manager"
+#~ msgstr "&Du-te la pagina..."
+
+#, fuzzy
+#~ msgid "St&yle"
+#~ msgstr "Stil"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Inserează pagină &nouă:"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Inserează pagină &nouă:"
+
+#, fuzzy
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Inserează linie"
+
+#, fuzzy
+#~ msgid "Line Break"
+#~ msgstr "Început linie"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "&Crește adâncimea"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "&Descrește adâncimea"
+
+#, fuzzy
+#~ msgid "Comment..."
+#~ msgstr "&Font..."
+
+#, fuzzy
+#~ msgid "Add Guide Line..."
+#~ msgstr "Modifică începutul liniei"
+
+#, fuzzy
+#~ msgid "Remove Comment"
+#~ msgstr "&Linie"
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "&Font..."
+
+#, fuzzy
+#~ msgid "Zoom Out"
+#~ msgstr " Scalare: "
+
+#, fuzzy
+#~ msgid "Zoom In"
+#~ msgstr " Scalare: "
+
+#, fuzzy
+#~ msgid "Zoom Slide Width"
+#~ msgstr "&Grosime peniță"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "Șterge obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Zoom All Objects"
+#~ msgstr "Șterge obiectul(ele)"
+
+#, fuzzy
+#~ msgid "Horizontal Flip"
+#~ msgstr "Linii orizontale"
+
+#, fuzzy
+#~ msgid "Vertical Flip"
+#~ msgstr "Linii verticale"
+
+#, fuzzy
+#~ msgid "Duplicate Object..."
+#~ msgstr "Duplică pagina"
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Închidere din toate direcțiile"
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "Aliniază în s&us"
+
+#, fuzzy
+#~ msgid "Align Middle"
+#~ msgstr "Aliniază la &stânga"
+
+#, fuzzy
+#~ msgid "Save Picture..."
+#~ msgstr "&Modifică imaginea..."
+
+#, fuzzy
+#~ msgid "File..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgid "Save Background Picture..."
+#~ msgstr "&Fundal pagină..."
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "Setează fundal"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "Setează fundal"
+
+#, fuzzy
+#~ msgid "Set Background"
+#~ msgstr "Setează fundal"
+
+#, fuzzy
+#~ msgid "Select New Picture"
+#~ msgstr "Selectează imagine nouă"
+
+#, fuzzy
+#~ msgid "Next slide"
+#~ msgstr "Pasul &următor"
+
+#, fuzzy
+#~ msgid "Slide %1/%2"
+#~ msgstr "Slide %1"
+
+#, fuzzy
+#~ msgid "Change Link"
+#~ msgstr "Modifică sfârșitul liniei"
+
+#, fuzzy
+#~ msgid "Paragraph Settings"
+#~ msgstr "Spațiere &paragrafe:"
+
+#, fuzzy
+#~ msgid "Change Custom Variable"
+#~ msgstr "Modifică valori dreptunghi"
+
+#, fuzzy
+#~ msgid "Change Case of Text"
+#~ msgstr "Modifică valori dreptunghi"
+
+#, fuzzy
+#~ msgid "Whole Slide"
+#~ msgstr "Slide"
+
+#, fuzzy
+#~ msgid "Presentation Duration"
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "Opțiuni"
+
+#, fuzzy
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Aplică stiluri"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "Modifică valori dreptunghi"
+
+#, fuzzy
+#~ msgid "Apply Autoformat"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr ""
+#~ "Doriți să elimin pagina curentă?\n"
+#~ "Nu veți mai putea recupera pagina."
+
+#, fuzzy
+#~ msgid "First"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Previous"
+#~ msgstr "Pagina precedentă"
+
+#, fuzzy
+#~ msgid "Next"
+#~ msgstr "Text"
+
+#, fuzzy
+#~ msgid "Last"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Home"
+#~ msgstr "Scalat"
+
+#, fuzzy
+#~ msgid "Table of Contents"
+#~ msgstr "Cuprins"
+
+#, fuzzy
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "Dați clic aici pentru a porni succesiunea de imagini"
+
+#, fuzzy
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "Creează succesiune de imagini HTML"
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "Introduceți aici nume dumneavoastră\n"
+#~ "adresa de e-mail și titlul prezentării\n"
+#~ "Web. De asemenea, scrieți și calea în\n"
+#~ "care va fi creată prezentarea Web.\n"
+#~ "Aceasta trebuie să fie un director."
+
+#, fuzzy
+#~ msgid "Email address:"
+#~ msgstr " Adresă email: "
+
+#, fuzzy
+#~ msgid "Step 1: General Information"
+#~ msgstr "Informații generale"
+
+#, fuzzy
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr ""
+#~ "\n"
+#~ "În final, puteți specifica factorul de\n"
+#~ "scalare pentru slide-uri."
+
+#, fuzzy
+#~ msgid "Zoom:"
+#~ msgstr " Scalare: "
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr ""
+#~ "\n"
+#~ "În final, puteți specifica factorul de\n"
+#~ "scalare pentru slide-uri."
+
+#, fuzzy
+#~ msgid "Encoding:"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Document type:"
+#~ msgstr "Opțiuni"
+
+#, fuzzy
+#~ msgid "Title color:"
+#~ msgstr " Culoare titlu: "
+
+#, fuzzy
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "Aici puteți specifica titlul pentru\n"
+#~ "fiecare slide. Dați clic în listă pe\n"
+#~ "un slide și apoi scrieți-l în căsuța\n"
+#~ "de editare de sub titlu. Dacă dați\n"
+#~ "clic pe un titlu, atunci KPresenter\n"
+#~ "va defila ecranul până la acel slide,\n"
+#~ "astfel încât îi puteți vedea conținutul."
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr ""
+#~ "\n"
+#~ "În final, puteți specifica factorul de\n"
+#~ "scalare pentru slide-uri."
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "Mozaic"
+
+#, fuzzy
+#~ msgid "Write header to the slides"
+#~ msgstr "Creez imaginile slide-urilor"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr ""
+#~ "\n"
+#~ "În final, puteți specifica factorul de\n"
+#~ "scalare pentru slide-uri."
+
+#, fuzzy
+#~ msgid "Write footer to the slides"
+#~ msgstr "Creez imaginile slide-urilor"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr ""
+#~ "\n"
+#~ "În final, puteți specifica factorul de\n"
+#~ "scalare pentru slide-uri."
+
+#, fuzzy
+#~ msgid "Step 5: Options for Unattended Presentations"
+#~ msgstr "KPresenter - Configurare pagină și prezentare ecran"
+
+#, fuzzy
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "Inițializez (creez structura de fișiere etc.)"
+
+#, fuzzy
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "Creez imaginile slide-urilor"
+
+#, fuzzy
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "Creez paginile HTML pentru slide-uri"
+
+#, fuzzy
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "Creez pagina principală (cuprinsul)"
+
+#, fuzzy
+#~ msgid "Options for Unattended Presentations"
+#~ msgstr "KPresenter - Configurare pagină și prezentare ecran"
+
+#, fuzzy
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Prezentare Web KPresenter (*.kpweb)"
+
+#, fuzzy
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Prezentare"
+
+#, fuzzy
+#~ msgid "Autoform"
+#~ msgstr "&Autoformă"
+
+#, fuzzy
+#~ msgid "Polyline"
+#~ msgstr "Simplu"
+
+#, fuzzy
+#~ msgid "Embedded Object"
+#~ msgstr "Obiect încapsulat"
+
+#, fuzzy
+#~ msgid "View Mode"
+#~ msgstr "Mod vizualizare:"
+
+#, fuzzy
+#~ msgid "Prot&ect content"
+#~ msgstr "Grupare obiecte"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "&Spațiere"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Spațiere &paragrafe:"

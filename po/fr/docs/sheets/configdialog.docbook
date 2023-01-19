@@ -1,0 +1,568 @@
+<chapter id="configdialog">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+&traducteurGerardDelafond;&traducteurDanielDurand;&traducteurLudovicGrossard; 
+</authorgroup>
+</chapterinfo>
+<title
+>La boîte de dialogue de configuration de &sheets;</title>
+
+<para
+>La sélection de <menuchoice
+><guimenu
+>Configuration</guimenu
+><guimenuitem
+>Configurer &sheets;...</guimenuitem
+></menuchoice
+> ouvre une boîte de dialogue avec plusieurs pages, sélectionnables par les icônes à gauche, qui permettent de changer plusieurs aspects des opérations de &sheets;.</para>
+
+<sect1 id="configinterface">
+<title
+>Interface</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure2.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase
+>Configuration de l'interface.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Mouvement du curseur après la pression de Entrée : </guilabel
+></term>
+<listitem
+><para
+>Quand vous avez sélectionné une cellule puis actionné la touche &Entree;, la sélection se déplacera d'une place vers la <guilabel
+>gauche</guilabel
+>, la <guilabel
+>droite</guilabel
+>, le <guilabel
+>haut</guilabel
+>, le <guilabel
+>bas, première colonne</guilabel
+> ou <guilabel
+>Aucun</guilabel
+> comme déterminé par le réglage dans la boîte de sélection déroulante. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Fonction montrée dans la barre d'état :</guilabel
+></term>
+<listitem
+><para
+>Cette boîte à sélection peut être utilisée pour choisir le calcul fourni par la fonction <link linkend="statusbarsum"
+>Résumé de la barre d'état</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Unité :</guilabel
+></term>
+<listitem
+><para
+>Choisissez l'unité par défaut à utiliser sur votre feuille. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Pas d'indentation : </guilabel
+></term>
+<listitem
+><para
+>Règle la taille de l'indentation qui sera utilisée dans une cellule lorsque vous choisissez les actions <guilabel
+>Augmenter l'indentation</guilabel
+> et <guilabel
+>Diminuer l'indentation</guilabel
+> depuis la barre d'outils. Ces actions ne sont pas activées par défaut dans la barre d'outils.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Capte toutes les touches de navigation pendant l'édition.</guilabel
+></term>
+<listitem
+><para
+>Capte toutes les touches de navigation, &cad; les touches flèches, haut/bas de page, touche de tabulation avant et arrière, pendant l'édition d'une cellule avec l'éditeur inclus. L'éditeur inclus apparaît directement dans la cellule. Si elles sont captées, ces clés sont utilisées pour la navigation dans l'éditeur. Sinon, elles sont utilisées pour la navigation de la cellule.</para>
+</listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+<para
+>La section <guilabel
+>Couleurs</guilabel
+> vous permet de choisir la couleur du quadrillage de la feuille. Si vous ne voulez pas que le quadrillage apparaisse du tout, décochez la case <guilabel
+>Afficher le quadrillage</guilabel
+> dans la boîte le dialogue <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Feuille</guisubmenu
+><guimenuitem
+>Propriétés de la feuille</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Cette section vous permet aussi de choisir la couleur des lignes utilisées pour indiquer les bordures de pages affichées quand la case <guimenuitem
+>Afficher les limites de pages</guimenuitem
+> dans le menu <guimenu
+>Affichage</guimenu
+> est cochée.</para>
+<para
+>Choisissez <guilabel
+>Personnaliser...</guilabel
+> dans la couleur courante pour afficher la boîte de dialogue &kde; standard <guilabel
+>Choisir une couleur</guilabel
+>.</para>
+
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Grille</guilabel
+></term>
+<listitem
+><para
+>Cliquer ici pour modifier de la grille &cad; la couleur des bordures de chaque cellule </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Limites de page</guilabel
+></term>
+<listitem
+><para
+>quand l'élément du menu <menuchoice
+><guimenu
+>Vue</guimenu
+><guimenuitem
+>Afficher bordures de page</guimenuitem
+></menuchoice
+> est coché, les bordures de page sont affichées. Cliquer ici pour choisir une autre couleur de bordure au lieu du rouge par défaut. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="configopensave">
+<title
+>Ouvrir / Enregistrer</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure3.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Configuration de l'ouverture et de l'enregistrement.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Nombre de fichiers récents à afficher  : </guilabel
+></term>
+<listitem
+><para
+>Contrôle le nombre maximal de noms de fichiers qui sont affichés quand vous sélectionnez <menuchoice
+><guimenu
+>Fichier</guimenu
+><guimenuitem
+>Récemment ouverts</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Intervalle d'enregistrement automatique : </guilabel
+></term>
+<listitem
+><para
+>Vous pouvez ici sélectionner l'intervalle entre deux enregistrements automatiques, ou désactiver cette fonction en choisissant <guilabel
+>Pas d'enregistrement automatique</guilabel
+> (en choisissant la valeur minimale). </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Créer des fichiers de sauvegarde : </guilabel
+></term>
+<listitem
+><para
+>Cocher cette boîte si vous souhaitez créer des fichiers de sauvegarde. Elle est cochée par défaut. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+
+<!-- no longer in config dialog
+<sect1 id="configmisc">
+<title
+><guilabel
+>Misc</guilabel
+></title>
+
+<para
+>The <guilabel
+>Misc</guilabel
+> page of &sheets;'s configuration
+dialog box contains the following items;</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Completion mode:</guilabel
+></term>
+<listitem
+><para
+>Lets you choose the (auto) text completion mode from a
+range of options in the drop down selection box.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Show error message for invalid formulae</guilabel
+></term>
+<listitem
+><para
+>If this box is checked a message box will pop up when what
+you have entered into a cell cannot be understood by &sheets;.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Show comment indicator</guilabel
+></term>
+<listitem
+><para
+>If this box is checked cells containing comments will be
+marked by a small red triangle at the top right corner.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+-->
+<!-- Move this to page layout section
+<sect1 id="configpagelayout">
+<title
+><guilabel
+>Page Layout</guilabel
+></title>
+
+<para
+>This page of &sheets;'s configuration dialog box lets you set up the
+default page size, orientation and units used by the printer and by the
+<guilabel
+>Page Layout</guilabel
+> dialog box (obtained by selecting
+<guimenuitem
+>Page Layout...</guimenuitem
+> from the <guimenu
+>Format
+</guimenu
+> menu.)</para>
+
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Default page size:</guilabel
+></term>
+<listitem
+><para
+>Choose the default page size for your worksheet among all the most common page sizes. Note that you can overwrite the page size for the current sheet using the <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Default page orientation:</guilabel
+></term>
+<listitem
+><para
+>Choose the default sheet orientation: portrait or landscape.
+Note that you can overwrite the orientation for the current sheet using the
+<menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page
+Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Default page unit:</guilabel
+></term>
+<listitem
+><para
+>Choose the default unit that will be used in your all your sheets. Note that you can overwrite the unit for the current sheet using the <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+-->
+<!--FIXME empty plugins page
+error message in konsole
+tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTrader: serviceType  "KSpread/Plugin"  not found
+ -->
+<sect1 id="configplugins">
+<title
+>Modules externes</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure4.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Configuration des modules externes.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+>Vérifie un module externe dans la liste pour l'activer. Affiche la boîte de dialogue <guilabel
+>À propos</guilabel
+> en cliquant sur le bouton info à droite de la liste des éléments. </para>
+
+</sect1>
+<!--FIXME link to sonnet handbook -> building blocks-->
+<sect1 id="configspelling">
+<title
+>Vérification d'orthographe</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure5.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Configuration de la vérification d'orthographe.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+<para
+>Cette page vous permet de configurer le comportement du vérificateur d'orthographe de &sheets;.</para>
+<para
+>Pour plus d'informations, veuillez consulter la documentation du <ulink url="help:kcontrol/spellchecking"
+>correcteur orthographique</ulink
+>.</para>
+</sect1>
+<!--
+<varlistentry>
+<term
+><guilabel
+>Create root/affix combinations not in dictionary</guilabel>
+</term>
+<listitem
+><para
+>If this box is checked then when &sheets; finds a word in
+the document which it does not recognize but which consists of a recognized
+root word plus a recognized prefix or suffix it will accept it, whereas if
+the box is not checked the spell checker will reject it.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Consider run-together words as spelling errors</guilabel>
+</term>
+<listitem
+><para
+>If this box is checked then common words which are run
+together will be considered to be spelling errors, for example <emphasis>
+cannot</emphasis
+>.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Dictionary:</guilabel
+></term>
+<listitem
+><para
+>This drop down selection box can be used to select
+alternative dictionaries.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Encoding:</guilabel
+></term>
+<listitem
+><para
+>To select the character encoding that should be used.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Client:</guilabel
+></term>
+<listitem
+><para
+>This combo box lets you select between different spell
+checking programs that may be present on your computer.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Skip all uppercase words</guilabel
+></term>
+<listitem
+><para
+>Check this box if you want the spellchecker to ignore
+uppercase words, which are usually acronyms such as &kde;.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Do not check title case</guilabel
+></term>
+<listitem
+><para
+>Check this box if you want the spellchecker to ignore
+the title case, for example My Own Spreadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+-->
+<sect1 id="configauthor">
+<title
+>Auteur</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure6.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Configuration de l'auteur</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+<para
+>Choisissez un profil d'auteur pour votre document. </para>
+<para
+>Vous pouvez ajouter un nouveau profil ou supprimer le profil actuel en utilisant les boutons à droite de la liste déroulante des profils. </para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

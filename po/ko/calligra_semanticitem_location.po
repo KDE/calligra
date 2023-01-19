@@ -1,0 +1,151 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Shinjo Park <kde@peremen.name>, 2014, 2019.
+# Jung Hee Lee <daemul72@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-04-19 19:00+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 18.12.3\n"
+
+#: KoLocationSemanticItemFactory.cpp:34
+#, kde-format
+msgctxt "displayname of the semantic item type Location"
+msgid "Location"
+msgstr "위치"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidget.ui:17
+#, kde-format
+msgid "&Name"
+msgstr "이름(&N)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationEditWidgetMarble.ui:17 KoRdfLocationViewWidgetMarble.ui:24
+#, kde-format
+msgid "Name"
+msgstr "이름"
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:30 KoRdfLocationViewWidgetMarble.ui:31
+#, kde-format
+msgid "The Earth"
+msgstr "지구"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleWidget, map)
+#: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
+#, kde-format
+msgid "The Marble widget displays a virtual globe."
+msgstr "Marble 위젯은 가상 지구본을 표시합니다."
+
+#. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:40
+#, kde-format
+msgid "Navigation Control"
+msgstr "탐색 컨트롤"
+
+#. i18n: ectx: property (whatsThis), widget (Marble::MarbleNavigator, zoomer)
+#: KoRdfLocationEditWidgetMarble.ui:43
+#, kde-format
+msgid "Use this control to navigate."
+msgstr "이 컨트롤을 사용하여 탐색하십시오."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfLocationEditWidgetMarble.ui:50
+#, kde-format
+msgid "Latitude"
+msgstr "위도"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfLocationEditWidgetMarble.ui:60
+#, kde-format
+msgid "Longitude"
+msgstr "경도"
+
+#: KoRdfLocationTreeWidgetItem.cpp:42
+#, kde-format
+msgid "Location Information"
+msgstr "위치 정보"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfLocationViewWidget.ui:24
+#, kde-format
+msgid "&Name:"
+msgstr "이름(&N):"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name"
+#~ msgstr "이름"
+
+#, fuzzy
+#~| msgid "The Earth"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Earth"
+#~ msgstr "지구"
+
+#, fuzzy
+#~| msgid "The Marble widget displays a virtual globe."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The Marble widget displays a virtual globe."
+#~ msgstr "Marble 위젯은 가상 지구본을 표시합니다."
+
+#, fuzzy
+#~| msgid "Navigation Control"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation Control"
+#~ msgstr "탐색 제어"
+
+#, fuzzy
+#~| msgid "Use this control to navigate."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this control to navigate."
+#~ msgstr "이 컨트롤을 사용하여 탐색하십시오."
+
+#, fuzzy
+#~| msgid "Latitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latitude"
+#~ msgstr "위도"
+
+#, fuzzy
+#~| msgid "Longitude"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Longitude"
+#~ msgstr "경도"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "이름(&N):"
+
+#, fuzzy
+#~| msgid "&Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name"
+#~ msgstr "이름(&N)"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Location"
+#~| msgid "Location"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Location"
+#~ msgid "Location"
+#~ msgstr "위치"
+
+#, fuzzy
+#~| msgid "Location Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Location Information"
+#~ msgstr "위치 정보"

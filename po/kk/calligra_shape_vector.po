@@ -1,0 +1,74 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2012-12-25 05:12+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ChangeVectorDataCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Change Vector Data"
+msgstr "Векторлы дерегін өзгерту"
+
+#: VectorShapeFactory.cpp:27
+#, kde-format
+msgid "Vector image"
+msgstr "Векторлы кескін"
+
+#: VectorShapeFactory.cpp:29
+#, kde-format
+msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+msgstr "Векторлы (EMF/WMF/SVM) кескінді көрсететін қалып "
+
+#: VectorTool.cpp:64
+#, kde-format
+msgid "Open Vector Image (EMF/WMF/SVM)"
+msgstr "Ашық векторлы (EMF/WMF/SVM) кескін"
+
+#: VectorToolFactory.cpp:20
+#, fuzzy, kde-format
+#| msgid "Vector Image (EMF/WMF/SVM) tool"
+msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+msgstr "Векторлы (EMF/WMF/SVM) кескін құралы"
+
+#, fuzzy
+#~| msgid "Vector image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector image"
+#~ msgstr "Векторлы кескін"
+
+#, fuzzy
+#~| msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows a vector image (EMF/WMF/SVM)"
+#~ msgstr "Векторлы (EMF/WMF/SVM) кескінді көрсететін қалып "
+
+#, fuzzy
+#~| msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Vector Image (EMF/WMF/SVM)"
+#~ msgstr "Ашық векторлы (EMF/WMF/SVM) кескін"
+
+#, fuzzy
+#~| msgid "Vector Image (EMF/WMF/SVM) tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vector Image (EMF/WMF/SVM/SVG) tool"
+#~ msgstr "Векторлы (EMF/WMF/SVM) кескін құралы"
+
+#~ msgid "Open EMF/WMF Shape"
+#~ msgstr "EMF/WMF ашу қалыпы"
+
+#~ msgid "EMF/WMF Vector Shape tool"
+#~ msgstr "EMF/WMF векторлы қалып құралы"

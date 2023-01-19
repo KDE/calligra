@@ -1,0 +1,2140 @@
+# translation of krossmodulesheets.po to Greek
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Spiros Georgaras <sng@hellug.gr>, 2007.
+# Toussis Manolis <manolis@koppermind.homelinux.org>, 2007, 2008.
+# Spiros Georgaras <sngeorgaras@otenet.gr>, 2008.
+# Stelios <sstavra@gmail.com>, 2011, 2012, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: krossmodulesheets\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2017-04-28 23:31+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#. i18n: ectx: Menu (tools)
+#: scripting.rc:4
+#, kde-format
+msgid "&Tools"
+msgstr "Ερ&γαλεία"
+
+#: ScriptingFunction.cpp:43
+#, kde-format
+msgid "No such script."
+msgstr "Δεν υπάρχει τέτοιο σενάριο."
+
+#: ScriptingFunction.cpp:89
+#, kde-format
+msgid "No such script function."
+msgstr "Δεν υπάρχει τέτοια συνάρτηση σεναρίου."
+
+#: ScriptingFunction.cpp:103
+#, kde-format
+msgid "No return value."
+msgstr "Χωρίς τιμή επιστροφής."
+
+#: ScriptingFunction.cpp:141 ScriptingFunction.cpp:142
+#: ScriptingFunction.cpp:149
+#, kde-format
+msgid "Scripts"
+msgstr "Σενάρια"
+
+#: ScriptingPart.cpp:48
+#, kde-format
+msgid "Scriptfile \"%1\" does not exist."
+msgstr "Το αρχείο σεναρίου \"%1\" δεν υπάρχει."
+
+#: ScriptingPart.cpp:52
+#, kde-format
+msgid ""
+"Scriptfile \"%1\" is not executable. Please set the executable-attribute on "
+"that file."
+msgstr ""
+"Το αρχείο σεναρίου \"%1\" δεν είναι εκτελέσιμο. Παρακαλώ ορίστε το "
+"χαρακτηριστικό εκτελέσιμου στο αρχείο αυτό."
+
+#: ScriptingPart.cpp:68
+#, kde-format
+msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
+msgstr ""
+"Το αρχείο σεναρίου \"%1\" βρίσκεται σε προσωρινό κατάλογο. Άρνηση εκτέλεσης."
+
+#: ScriptingPart.cpp:73
+#, kde-format
+msgid "Failed to execute scriptfile \"%1\""
+msgstr "Αποτυχία εκτέλεσης του αρχείου σεναρίου \"%1\""
+
+#: ScriptingPart.cpp:76
+#, kde-format
+msgid "Errors on execution of scripts."
+msgstr "Σφάλματα κατά την εκτέλεση των σεναρίων."
+
+#: ScriptingWidgets.cpp:68
+#, kde-format
+msgid "Sheet"
+msgstr "Φύλλο"
+
+#: ScriptingWidgets.cpp:71
+#, kde-format
+msgid "Cell"
+msgstr "Κελί"
+
+#: ScriptingWidgets.cpp:72
+#, kde-format
+msgid "Range"
+msgstr "Εύρος"
+
+#: ScriptingWriter.h:231
+msgctxt "(qtundo-format)"
+msgid "Set Values"
+msgstr "Ορισμός τιμών"
+
+#: scripts/consoledocker.py:63
+msgctxt "Menu"
+msgid "File"
+msgstr "Αρχείο"
+
+#: scripts/consoledocker.py:65
+msgid "New"
+msgstr "Νέο"
+
+#: scripts/consoledocker.py:66
+msgid "Open..."
+msgstr "Άνοιγμα..."
+
+#: scripts/consoledocker.py:67
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: scripts/consoledocker.py:68
+msgid "Save As..."
+msgstr "Αποθήκευση ως..."
+
+#: scripts/consoledocker.py:70
+msgctxt "Menu"
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: scripts/consoledocker.py:72
+msgctxt "Menu"
+msgid "Build"
+msgstr "Κατασκευή"
+
+#: scripts/consoledocker.py:74
+msgid "Compile"
+msgstr "Μεταγλώττιση"
+
+#: scripts/consoledocker.py:75
+msgid "Execute"
+msgstr "Εκτέλεση"
+
+#: scripts/consoledocker.py:90
+msgid "Open File"
+msgstr "Άνοιγμα αρχείου"
+
+#: scripts/consoledocker.py:98
+msgid "<qt>Failed to open file \"%1\"<br><br>%2</qt>"
+msgstr "<qt>Αποτυχία ανοίγματος αρχείου \"%1\"<br><br>%2</qt>"
+
+#: scripts/consoledocker.py:98 scripts/consoledocker.py:108
+#: scripts/csvexport.py:46 scripts/csvimport.py:45 scripts/htmlexport.py:444
+#: scripts/xmlviewer.py:175 scripts/xmlviewer.py:283
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: scripts/consoledocker.py:108
+msgid "<qt>Failed to save file \"%1\"<br><br>%2</qt>"
+msgstr "<qt>Αποτυχία αποθήκευσης αρχείου \"%1\"<br><br>%2</qt>"
+
+#: scripts/consoledocker.py:114
+msgid "Save File"
+msgstr "Αποθήκευση αρχείου"
+
+#: scripts/consoledocker.py:123
+msgid "Compiled! %1"
+msgstr "Μεταγλωττίστηκε! %1"
+
+#: scripts/consoledocker.py:131
+msgid "Executed! %1"
+msgstr "Εκτελέστηκε! %1"
+
+#: scripts/consoledocker.py:229
+msgid "Name"
+msgstr "Όνομα"
+
+#: scripts/consoledocker.py:231
+msgid "Type"
+msgstr "Τύπος"
+
+#: scripts/consoledocker.py:249
+msgid "Console"
+msgstr "Κονσόλα"
+
+#: scripts/consoledocker.py:262
+msgid "Editor"
+msgstr "Κειμενογράφος"
+
+#: scripts/consoledocker.py:269
+msgid "Inspect"
+msgstr "Επιθεώρηση"
+
+#: scripts/csvexport.py:25
+msgid "CSV Export"
+msgstr "Εξαγωγή CSV"
+
+#: scripts/csvexport.py:29
+msgid "Export to CSV File"
+msgstr "Εξαγωγή σε αρχείο CSV"
+
+#: scripts/csvexport.py:29 scripts/htmlexport.py:377 scripts/logger.py:22
+#: scripts/odfpyexport.py:241
+msgctxt "Options page name"
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: scripts/csvexport.py:32 scripts/csvimport.py:32 scripts/htmlexport.py:374
+#: scripts/htmlexport.py:380 scripts/logger.py:25 scripts/odfpyexport.py:250
+#: scripts/vcardimport.py:45 scripts/xmlviewer.py:32
+msgid "All Files"
+msgstr "Όλα τα αρχεία"
+
+#: scripts/csvexport.py:32 scripts/csvimport.py:32
+msgid "Comma-Separated-Value Files"
+msgstr "Αρχεία με τιμές διαχωρισμένες με κόμματα"
+
+#: scripts/csvexport.py:34
+msgctxt "Options page name"
+msgid "Export"
+msgstr "Εξαγωγή"
+
+#: scripts/csvexport.py:34
+msgid "Export Sheets and ranges"
+msgstr "Εξαγωγή φύλλων εργασίας και εύρος περιοχών"
+
+#: scripts/csvexport.py:39 scripts/csvimport.py:38
+msgid "Comma Separated Value Options"
+msgstr "Επιλογές με τιμές διαχωρισμένες με κόμματα"
+
+#: scripts/csvexport.py:39 scripts/csvimport.py:38
+msgid "Options"
+msgstr "Επιλογές"
+
+#: scripts/csvexport.py:79
+msgid "No CSV file chosen"
+msgstr "Δεν επιλέχθηκε CSV αρχείο"
+
+#: scripts/csvimport.py:25
+msgid "CSV Import"
+msgstr "Εισαγωγή CSV"
+
+#: scripts/csvimport.py:29
+msgid "Import from CSV File"
+msgstr "Εισαγωγή από CSV αρχείο"
+
+#: scripts/csvimport.py:29 scripts/htmlexport.py:371 scripts/vcardimport.py:40
+#: scripts/xmlviewer.py:30
+msgid "Open"
+msgstr "Άνοιγμα"
+
+#: scripts/csvimport.py:34 scripts/vcardimport.py:47
+msgid "Import to sheet beginning at cell"
+msgstr "Η εισαγωγή στο φύλλο εργασίας ξεκινάει από το κελί"
+
+#: scripts/csvimport.py:72 scripts/vcardimport.py:60
+msgid "No current sheet."
+msgstr "Κανένα τρέχον φύλλο εργασίας."
+
+#: scripts/csvimport.py:76 scripts/vcardimport.py:70
+msgid "Invalid sheet \"%1\" defined."
+msgstr "Ορίστηκε μη έγκυρο φύλλο εργασίας \"%1\"."
+
+#: scripts/csvimport.py:80
+msgid "Invalid cell \"%1\" defined."
+msgstr "Ορίστηκε μη έγκυρο κελί \"%1\"."
+
+#: scripts/csvimport.py:84 scripts/vcardimport.py:56
+msgid "File '%1' not found."
+msgstr "Το αρχείο '%1' δεν βρέθηκε."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: scripts/csvoptions.ui:21
+#, kde-format
+msgid "Delimiter:"
+msgstr "Οριοθέτης:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: scripts/csvoptions.ui:58
+#, kde-format
+msgid "Line terminator"
+msgstr "Ένδειξη τέλους γραμμής"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scripts/csvoptions.ui:100
+#, kde-format
+msgid "Escape char:"
+msgstr "Χαρακτήρας διαφυγής:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, DoubleQuoteCheckBox)
+#: scripts/csvoptions.ui:127
+#, kde-format
+msgid "Double quote"
+msgstr "Διπλά εισαγωγικά"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scripts/csvoptions.ui:137
+#, kde-format
+msgid "Quote char:"
+msgstr "Εισαγωγικό:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, QuotingCheckBox)
+#: scripts/csvoptions.ui:170
+#, kde-format
+msgid "Quoting"
+msgstr "Σε εισαγωγικά"
+
+#. i18n: ectx: property (text), widget (QCheckBox, SkipInitialSpaceCheckBox)
+#: scripts/csvoptions.ui:177
+#, kde-format
+msgid "Skip initial space"
+msgstr "Παράλειψη αρχικού κενού"
+
+#. i18n: ectx: property (text), widget (QCheckBox, StrictCheckBox)
+#: scripts/csvoptions.ui:184
+#, kde-format
+msgid "Strict"
+msgstr "Σενάριο"
+
+#: scripts/htmlexport.py:221
+msgid "No such file \"%1\" to read from."
+msgstr "Δεν υπάρχει τέτοιο αρχείο \"%1\" για ανάγνωση."
+
+#: scripts/htmlexport.py:230
+msgid "Failed to open the file \"%1\"."
+msgstr "Αποτυχία ανοίγματος του αρχείου \"%1\"."
+
+#: scripts/htmlexport.py:236
+msgid "No sheets which could be exported to HTML."
+msgstr "Κανένα φύλλο εργασίας που να μπορεί να εξαχθεί σε HTML."
+
+#: scripts/htmlexport.py:309
+msgid ""
+"Failed to create HTML file \"%1\":\n"
+"%2"
+msgstr ""
+"Αποτυχία δημιουργίας του HTML αρχείου \"%1\":\n"
+"%2"
+
+#: scripts/htmlexport.py:366
+msgid "HTML Export"
+msgstr "Εξαγωγή HTML"
+
+#: scripts/htmlexport.py:371
+msgid "Read from OpenDocument Spreadsheet File"
+msgstr "Ανάγνωση από αρχείο OpenDocument Spreadsheet"
+
+#: scripts/htmlexport.py:374
+msgid "OpenDocument Spreadsheet Files"
+msgstr "Αρχεία OpenDocument Spreadsheet"
+
+#: scripts/htmlexport.py:377
+msgid "Save to HTML File"
+msgstr "Αποθήκευση σε αρχείο HTML"
+
+#: scripts/htmlexport.py:380
+msgid "HTML Documents"
+msgstr "Έγγραφα HTML"
+
+#: scripts/htmlexport.py:382
+msgid "HTML Document Information"
+msgstr "Πληροφορίες HTML εγγράφου"
+
+#: scripts/htmlexport.py:382
+msgid "Info"
+msgstr "Πληροφορίες"
+
+#: scripts/htmlexport.py:388
+msgid "Style of the HTML Document"
+msgstr "Στιλ του HTML εγγράφου"
+
+#: scripts/htmlexport.py:388
+msgid "Styles"
+msgstr "Στιλ"
+
+#: scripts/htmlexport.py:426 scripts/logger.py:30
+msgid "Overwrite file?"
+msgstr "Να αντικατασταθεί το αρχείο;"
+
+#: scripts/htmlexport.py:426 scripts/logger.py:30
+msgid "The file \"%1\" does already exist. Overwrite the file?"
+msgstr "Το αρχείο \"%1\" ήδη υπάρχει. Να αντικατασταθεί το αρχείο;"
+
+#: scripts/htmlexport.py:428
+msgid "Export aborted."
+msgstr "Εγκατάλειψη εξαγωγής."
+
+#: scripts/htmlexport.py:447
+msgid "Exporting..."
+msgstr "Εξαγωγή..."
+
+#: scripts/htmlexport.py:447
+msgid "Initialize..."
+msgstr "Αρχικοποίηση..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: scripts/htmlexportinfos.ui:26
+#, kde-format
+msgid "Title:"
+msgstr "Τίτλος:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: scripts/htmlexportinfos.ui:52
+#, kde-format
+msgid "Subject:"
+msgstr "Θέμα:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: scripts/htmlexportinfos.ui:78
+#, kde-format
+msgid "Author:"
+msgstr "Συγγραφέας:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: scripts/htmlexportinfos.ui:104
+#, kde-format
+msgid "E-Mail:"
+msgstr "Ηλ. ταχυδρομείο:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: scripts/htmlexportinfos.ui:130
+#, kde-format
+msgid "Keywords:"
+msgstr "Λέξεις-κλειδιά:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: scripts/htmlexportinfos.ui:156
+#, kde-format
+msgid "Filename:"
+msgstr "Όνομα αρχείου:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: scripts/htmlexportinfos.ui:182
+#, kde-format
+msgid "Date:"
+msgstr "Ημερομηνία:"
+
+#: scripts/logger.py:22
+msgid "Save to Log File"
+msgstr "Αποθήκευση στο αρχείο καταγραφής"
+
+#: scripts/logger.py:25
+msgid "Log File"
+msgstr "Αρχείο καταγραφής"
+
+#: scripts/logger.py:31 scripts/xmlviewer.py:34
+msgid "Aborted."
+msgstr "Εγκαταλείφθηκε."
+
+#: scripts/logger.py:38
+msgid ""
+"Failed to write Log File \"%1\":\n"
+"%2"
+msgstr ""
+"Αποτυχία εγγραφής αρχείου καταγραφής \"%1\":\n"
+"%2"
+
+#: scripts/logger.py:50
+msgid "Failed to create listener for sheetname '%1' and range '%2'"
+msgstr "Αποτυχία δημιουργίας ακρόασης για όνομα φύλλου '%1' και εύρος '%2'"
+
+#: scripts/myorca.py:86
+msgid "Failed to create listener"
+msgstr "Αποτυχία δημιουργίας ακρόασης"
+
+#: scripts/myorca.py:96
+msgid "Sheet name changed"
+msgstr "Το όνομα φύλλου άλλαξε"
+
+#: scripts/myorca.py:100
+msgid "Show sheet %1"
+msgstr "Εμφάνιση φύλλου εργασίας %1"
+
+#: scripts/myorca.py:104
+msgid "Hide sheet %1"
+msgstr "Απόκρυψη φύλλου εργασίας %1"
+
+#: scripts/myorca.py:136
+msgid "Action"
+msgstr "Ενέργεια"
+
+#: scripts/myorca.py:139
+msgid "Cell Name"
+msgstr "Όνομα κελιού"
+
+#: scripts/myorca.py:144
+msgid "Cell Value"
+msgstr "Τιμή κελιού"
+
+#: scripts/myorca.py:148
+msgid "Sheet Name"
+msgstr "Όνομα φύλλου εργασίας"
+
+#: scripts/myorca.py:154
+msgid "Cell Name if selection changed"
+msgstr "Όνομα κελιού αν η επιλογή άλλαξε"
+
+#: scripts/myorca.py:159
+msgid "Cell Value if selection changed"
+msgstr "Τιμή κελιού αν η επιλογή άλλαξε"
+
+#: scripts/myorca.py:164
+msgid "Sheet Name if sheet changed"
+msgstr "Όνομα φύλλου εργασίας αν το φύλλο άλλαξε"
+
+#: scripts/myorca.py:188
+msgid "Calligra Spreadsheet"
+msgstr "Calligra Spreadsheet"
+
+#: scripts/myorca.py:198
+msgid "Failed to connect with the Orca HTTP-Server."
+msgstr "Αποτυχία σύνδεσης στον Orca HTTP-Server."
+
+#: scripts/myorca.py:201
+msgid "Url:"
+msgstr "Url:"
+
+#: scripts/odfpyexport.py:43
+msgid ""
+"<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport."
+"py python script to export to OpenDocument you need to install the <a href="
+"\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module."
+"</qt>"
+msgstr ""
+"<qt>αποτυχία εισαγωγής του αρθρώματος ODFPY python.<br><br>Για να γίνει "
+"χρήση αυτού του σεναρίου python odfpyexport.py για εξαγωγή σε OpenDocument "
+"χρειάζεται να εγκαταστήσετε το άρθρωμα python <a href=\"http://"
+"opendocumentfellowship.org/projects/odfpy\">ODFPY</a>.</qt>"
+
+#: scripts/odfpyexport.py:74
+msgid ""
+"Invalid range for sheet \"%1\" cause left column value \"%2\" is bigger than "
+"right column value \"%3\"."
+msgstr ""
+"Το μη έγκυρο εύρος για το φύλλο \"%1\" έγινε αιτία η τιμή \"%2\" της "
+"αριστερής στήλης να είναι μεγαλύτερη από την τιμή \"%3\" της δεξιάς στήλης."
+
+#: scripts/odfpyexport.py:76
+msgid ""
+"Invalid range for sheet \"%1\" cause top row value \"%2\" is bigger than "
+"bottom row value \"%3\"."
+msgstr ""
+"Το μη έγκυρο εύρος για το φύλλο \"%1\" έγινε αιτία η τιμή \"%2\" στη γραμμή "
+"κορυφής να είναι μεγαλύτερη από την τιμή \"%3\" στη γραμμή βάσης."
+
+#: scripts/odfpyexport.py:83
+msgid "OpenDocument Text"
+msgstr "Κείμενο OpenDocument"
+
+#: scripts/odfpyexport.py:140
+msgid "OpenDocument Spreadsheet"
+msgstr "Φύλλο εργασίας OpenDocument"
+
+#: scripts/odfpyexport.py:222
+msgid "No OpenDocument Spreadsheet file to read from defined."
+msgstr "Κανένα αρχείο φύλλου εργασίας OpenDocument για ανάγνωση δεν ορίστηκε."
+
+#: scripts/odfpyexport.py:236
+msgid "OdfPy Export"
+msgstr "Εξαγωγή OdfPy"
+
+#: scripts/odfpyexport.py:241
+msgid "Save to OpenDocument File"
+msgstr "Αποθήκευση σε αρχείο OpenDocument"
+
+#: scripts/odfpyexport.py:249
+msgid "All Supported Files"
+msgstr "Όλα τα υποστηριζόμενα αρχεία"
+
+#: scripts/odfpyexport.py:254
+msgid "Export Sheets"
+msgstr "Εξαγωγή φύλλων"
+
+#: scripts/odfpyexport.py:254
+msgid "Sheets"
+msgstr "Φύλλα"
+
+#: scripts/odfpyexport.py:280
+msgid "No OpenDocument file to write defined."
+msgstr "Κανένα αρχείο φύλλου εργασίας OpenDocument για εγγραφή δεν ορίστηκε."
+
+#: scripts/pyregexp.py:10
+msgid ""
+"The PYREGEXP() function replaces substring in the input string with a given "
+"string using regular expression."
+msgstr ""
+"Η συνάρτηση PYREGEXP() αντικαθιστά την υποσυμβολοσειρά στη συμβολοσειρά "
+"εισόδου με μια δοσμένη συμβολοσειρά με χρήση κανονικής έκφρασης."
+
+#: scripts/pyregexp.py:11
+msgid "PYREGEXP(string)"
+msgstr "PYREGEXP(συμβολοσειρά)"
+
+#: scripts/pyregexp.py:12
+msgid "The input string."
+msgstr "Η συμβολοσειρά εισόδου."
+
+#: scripts/pyregexp.py:13
+msgid "The regular expression."
+msgstr "Η κανονική έκφραση."
+
+#: scripts/pyregexp.py:14
+msgid "Replace with."
+msgstr "Αντικατάσταση με."
+
+#: scripts/pyregexp.py:15
+msgid "PYREGEXP(\"Some String\",\"(S|m)\",\"A\")"
+msgstr "PYREGEXP(\"Κάποια συμβολοσειρά\",\"(S|m)\",\"A\")"
+
+#: scripts/pyregexp.py:25
+msgid "Invalid regexp"
+msgstr "Μη έγκυρη regexp"
+
+#: scripts/pytime.py:10
+msgid "The PYTIME() function displays the current datetime."
+msgstr "Η συνάρτηση PYTIME() εμφανίζει την τρέχουσα ημερομηνία και ώρα."
+
+#: scripts/pytime.py:11
+msgid "PYTIME(string)"
+msgstr "PYTIME(συμβολοσειρά)"
+
+#: scripts/pytime.py:12
+msgid "The datetime format string."
+msgstr "Η συμβολοσειρά τύπου datetime."
+
+#: scripts/pytime.py:13
+msgid "PYTIME()"
+msgstr "PYTIME()"
+
+#: scripts/pytime.py:14
+msgid "PYTIME(\"%H:%M.%S\")"
+msgstr "PYTIME(\"%H:%M.%S\")"
+
+#: scripts/pytime.py:15
+msgid "PYTIME(\"%Y-%M-%d\")"
+msgstr "PYTIME(\"%Y-%M-%d\")"
+
+#: scripts/pytime.py:21
+msgid "Invalid format"
+msgstr "Μη έγκυρος τύπος"
+
+#: scripts/rpyfunctions.py:116
+msgid ""
+"This function returns the probability density function of the normal "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κανονικής κατανομής."
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:124
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:138
+#: scripts/rpyfunctions.py:145 scripts/rpyfunctions.py:152
+#: scripts/rpyfunctions.py:159 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:180
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:208
+#: scripts/rpyfunctions.py:215
+msgid ""
+"If true, log of the result will be returned instead. This is useful if the "
+"result would otherwise underflow to 0. Defaults to false."
+msgstr ""
+"Αν είναι true, η καταγραφή του αποτελέσματος θα επιστραφεί. Αυτό είναι "
+"χρήσιμο αν το αποτέλεσμα θα υποχείλιζε στο 0. Η προκαθορισμένη τιμή είναι "
+"false."
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:121
+msgid "mean of the distribution"
+msgstr "μέση τιμή της κατανομής"
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128 scripts/rpyfunctions.py:131
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:138
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:145
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:152
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:159 scripts/rpyfunctions.py:161
+#: scripts/rpyfunctions.py:166 scripts/rpyfunctions.py:168
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:175
+#: scripts/rpyfunctions.py:180 scripts/rpyfunctions.py:182
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:201
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:208
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:215
+#: scripts/rpyfunctions.py:217
+msgid "observation"
+msgstr "παρατήρηση"
+
+#: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
+#: scripts/rpyfunctions.py:121
+msgid "standard deviation of the distribution"
+msgstr "τυπική απόκλιση της κατανομής"
+
+#: scripts/rpyfunctions.py:118
+msgid ""
+"This function returns the cumulative distribution function of the normal "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κανονικής κατανομής."
+
+#: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
+#: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:142
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:175 scripts/rpyfunctions.py:177
+#: scripts/rpyfunctions.py:182 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:189 scripts/rpyfunctions.py:191
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:212
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid ""
+"If true (the default), the lower tail of the distribution is considered."
+msgstr ""
+"Αν είναι true (το προκαθορισμένο), θα θεωρηθεί η χαμηλότερη άκρη της "
+"κατανομής."
+
+#: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
+#: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
+#: scripts/rpyfunctions.py:133 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:140 scripts/rpyfunctions.py:142
+#: scripts/rpyfunctions.py:147 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:154 scripts/rpyfunctions.py:156
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:175 scripts/rpyfunctions.py:177
+#: scripts/rpyfunctions.py:182 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:189 scripts/rpyfunctions.py:191
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:203 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:212
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid ""
+"If true, log of the probability is used. This is useful if the probability "
+"would otherwise underflow to 0. Defaults to false."
+msgstr ""
+"Αν είναι true, η καταγραφή της πιθανότητας θα επιστραφεί. Αυτό είναι χρήσιμο "
+"αν η πιθανότητα θα υποχείλιζε στο 0. Η προκαθορισμένη τιμή είναι false."
+
+#: scripts/rpyfunctions.py:120
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the normal distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κανονικής κατανομής."
+
+#: scripts/rpyfunctions.py:121 scripts/rpyfunctions.py:135
+#: scripts/rpyfunctions.py:142 scripts/rpyfunctions.py:149
+#: scripts/rpyfunctions.py:163 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:177 scripts/rpyfunctions.py:184
+#: scripts/rpyfunctions.py:198 scripts/rpyfunctions.py:205
+#: scripts/rpyfunctions.py:212 scripts/rpyfunctions.py:219
+msgid "probability"
+msgstr "πιθανότητα"
+
+#: scripts/rpyfunctions.py:123
+msgid ""
+"This function returns the probability density function of the log-normal "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"λογαριθμικής κανονικής κατανομής."
+
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128
+msgid "mean of the underlying normal distribution"
+msgstr "μέση τιμή της βασικής κανονικής κατανομής"
+
+#: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
+#: scripts/rpyfunctions.py:128
+msgid "standard deviation of the underlying normal distribution"
+msgstr "τυπική απόκλιση της βασικής κανονικής κατανομής"
+
+#: scripts/rpyfunctions.py:125
+msgid ""
+"This function returns the cumulative distribution function of the log-normal "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της λογαριθμικής-"
+"κανονικής κατανομής."
+
+#: scripts/rpyfunctions.py:127
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the log-normal distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της λογαριθμικής-κανονικής κατανομής."
+
+#: scripts/rpyfunctions.py:130
+msgid ""
+"This function returns the probability density function of the gamma "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής γάμμα."
+
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:133
+#: scripts/rpyfunctions.py:135 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+#: scripts/rpyfunctions.py:180 scripts/rpyfunctions.py:182
+#: scripts/rpyfunctions.py:184 scripts/rpyfunctions.py:215
+#: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
+msgid "the scale parameter of the distribution"
+msgstr "η παράμετρος κλίμακας της κατανομής"
+
+#: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:133
+#: scripts/rpyfunctions.py:135 scripts/rpyfunctions.py:166
+#: scripts/rpyfunctions.py:168 scripts/rpyfunctions.py:170
+msgid "the shape parameter of the distribution"
+msgstr "η παράμετρος σχήματος της κατανομής"
+
+#: scripts/rpyfunctions.py:132
+msgid ""
+"This function returns the cumulative distribution function of the gamma "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής γάμμα."
+
+#: scripts/rpyfunctions.py:134
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the gamma distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής γάμμα."
+
+#: scripts/rpyfunctions.py:137
+msgid ""
+"This function returns the probability density function of the beta "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής βήτα."
+
+#: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
+#: scripts/rpyfunctions.py:142
+msgid "the first shape parameter of the distribution"
+msgstr "η πρώτη παράμετρος σχήματος της κατανομής"
+
+#: scripts/rpyfunctions.py:138 scripts/rpyfunctions.py:140
+#: scripts/rpyfunctions.py:142
+msgid "the second scale parameter of the distribution"
+msgstr "η δεύτερη παράμετρος κλίμακας της κατανομής"
+
+#: scripts/rpyfunctions.py:139
+msgid ""
+"This function returns the cumulative distribution function of the beta "
+"distribution."
+msgstr "Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής βήτα."
+
+#: scripts/rpyfunctions.py:141
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the beta distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής βήτα."
+
+#: scripts/rpyfunctions.py:144
+msgid ""
+"This function returns the probability density function of the Student t "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής Student t."
+
+#: scripts/rpyfunctions.py:145 scripts/rpyfunctions.py:147
+#: scripts/rpyfunctions.py:149 scripts/rpyfunctions.py:159
+#: scripts/rpyfunctions.py:161 scripts/rpyfunctions.py:163
+msgid "the number of degrees of freedom of the distribution"
+msgstr "οι βαθμοί ελευθερίας της κατανομής"
+
+#: scripts/rpyfunctions.py:146
+msgid ""
+"This function returns the cumulative distribution function of the Student t "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής Student t."
+
+#: scripts/rpyfunctions.py:148
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Student t distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής Student t."
+
+#: scripts/rpyfunctions.py:151
+msgid ""
+"This function returns the probability density function of the F distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής F."
+
+#: scripts/rpyfunctions.py:152 scripts/rpyfunctions.py:154
+#: scripts/rpyfunctions.py:156
+msgid "the first number of degrees of freedom of the distribution"
+msgstr "ο πρώτος αριθμός των βαθμών ελευθερίας της κατανομής"
+
+#: scripts/rpyfunctions.py:152 scripts/rpyfunctions.py:154
+#: scripts/rpyfunctions.py:156
+msgid "the second number of degrees of freedom of the distribution"
+msgstr "ο δεύτερος αριθμός των βαθμών ελευθερίας της κατανομής"
+
+#: scripts/rpyfunctions.py:153
+msgid ""
+"This function returns the cumulative distribution function of the F "
+"distribution."
+msgstr "Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής F."
+
+#: scripts/rpyfunctions.py:155
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the F distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής F."
+
+#: scripts/rpyfunctions.py:158
+msgid ""
+"This function returns the probability density function of the chi-square "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής chi-square."
+
+#: scripts/rpyfunctions.py:160
+msgid ""
+"This function returns the cumulative distribution function of the chi-square "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής chi-square."
+
+#: scripts/rpyfunctions.py:162
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the chi-square distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής chi-square."
+
+#: scripts/rpyfunctions.py:165
+msgid ""
+"This function returns the probability density function of the Weibull "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής Weibull."
+
+#: scripts/rpyfunctions.py:167
+msgid ""
+"This function returns the cumulative distribution function of the Weibull "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής Weibull."
+
+#: scripts/rpyfunctions.py:169
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Weibull distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής Weibull."
+
+#: scripts/rpyfunctions.py:172
+msgid ""
+"This function returns the probability density function of the Poisson "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής Poisson."
+
+#: scripts/rpyfunctions.py:173 scripts/rpyfunctions.py:175
+#: scripts/rpyfunctions.py:177
+msgid "the mean of the distribution"
+msgstr "ο μέσος της κατανομής"
+
+#: scripts/rpyfunctions.py:174
+msgid ""
+"This function returns the cumulative distribution function of the Poisson "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής Poisson."
+
+#: scripts/rpyfunctions.py:176
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Poisson distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής Poisson."
+
+#: scripts/rpyfunctions.py:179
+msgid ""
+"This function returns the probability density function of the exponential "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"εκθετικής κατανομής."
+
+#: scripts/rpyfunctions.py:181
+msgid ""
+"This function returns the cumulative distribution function of the "
+"exponential distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της εκθετικής κατανομής."
+
+#: scripts/rpyfunctions.py:183
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the exponential distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της εκθετικής κατανομής."
+
+#: scripts/rpyfunctions.py:186
+msgid ""
+"This function returns the probability density function of the binomial "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"διωνυμικής κατανομής."
+
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+msgid "the number of trials"
+msgstr "ο αριθμός των δοκιμών"
+
+#: scripts/rpyfunctions.py:187 scripts/rpyfunctions.py:189
+#: scripts/rpyfunctions.py:191 scripts/rpyfunctions.py:194
+#: scripts/rpyfunctions.py:196 scripts/rpyfunctions.py:198
+#: scripts/rpyfunctions.py:208 scripts/rpyfunctions.py:210
+#: scripts/rpyfunctions.py:212
+msgid "the probability of success in each trial"
+msgstr "η πιθανότητα επιτυχίας για κάθε δοκιμή"
+
+#: scripts/rpyfunctions.py:188
+msgid ""
+"This function returns the cumulative distribution function of the binomial "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της διωνυμικής κατανομής."
+
+#: scripts/rpyfunctions.py:190
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the binomial distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της διωνυμικής κατανομής."
+
+#: scripts/rpyfunctions.py:193
+msgid ""
+"This function returns the probability density function of the negative "
+"binomial distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"αρνητικής διωνυμικής κατανομής."
+
+#: scripts/rpyfunctions.py:195
+msgid ""
+"This function returns the cumulative distribution function of the negative "
+"binomial distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της αρνητικής διωνυμικής "
+"κατανομής."
+
+#: scripts/rpyfunctions.py:197
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the negative binomial "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της αρνητικής διωνυμικής κατανομής."
+
+#: scripts/rpyfunctions.py:200
+msgid ""
+"This function returns the probability density function of the hypergeometric "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"υπεργεωμετρικής κατανομής."
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of balls drawn"
+msgstr "ο αριθμός των σφαιρών που τραβήχτηκαν"
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of black balls"
+msgstr "ο αριθμός των μαύρων σφαιρών"
+
+#: scripts/rpyfunctions.py:201 scripts/rpyfunctions.py:203
+#: scripts/rpyfunctions.py:205
+msgid "the number of red balls"
+msgstr "ο αριθμός των ερυθρών σφαιρών"
+
+#: scripts/rpyfunctions.py:202
+msgid ""
+"This function returns the cumulative distribution function of the "
+"hypergeometric distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της υπεργεωμετρικής "
+"κατανομής."
+
+#: scripts/rpyfunctions.py:204
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the hypergeometric distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της υπεργεωμετρικής κατανομής."
+
+#: scripts/rpyfunctions.py:207
+msgid ""
+"This function returns the probability density function of the geometric "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"γεωμετρικής κατανομής."
+
+#: scripts/rpyfunctions.py:209
+msgid ""
+"This function returns the cumulative distribution function of the geometric "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της γεωμετρικής κατανομής."
+
+#: scripts/rpyfunctions.py:211
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the geometric distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της γεωμετρικής κατανομής."
+
+#: scripts/rpyfunctions.py:214
+msgid ""
+"This function returns the probability density function of the Cauchy "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση πυκνότητας πιθανότητας της "
+"κατανομής Cauchy."
+
+#: scripts/rpyfunctions.py:215 scripts/rpyfunctions.py:217
+#: scripts/rpyfunctions.py:219
+msgid "the center of the distribution"
+msgstr "το κέντρο της κατανομής"
+
+#: scripts/rpyfunctions.py:216
+msgid ""
+"This function returns the cumulative distribution function of the Cauchy "
+"distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση κατανομής της κατανομής Cauchy."
+
+#: scripts/rpyfunctions.py:218
+msgid ""
+"This function returns the probability quantile function, i.e., the inverse "
+"of the cumulative distribution function, of the Cauchy distribution."
+msgstr ""
+"Η συνάρτηση αυτή επιστρέφει τη συνάρτηση εκατοστιαίων σημείων, δηλαδή την "
+"αντίστροφη της συνάρτησης κατανομής της κατανομής Cauchy."
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:4
+#, kde-format
+msgid "Import"
+msgstr "Εισαγωγή"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:4
+#, kde-format
+msgid "Import content"
+msgstr "Εισαγωγή περιεχομένου"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:5 scripts/scripts.rc:16
+#, kde-format
+msgid "CSV File"
+msgstr "Αρχείο CSV"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:5
+#, kde-format
+msgid "Import from a Comma-Separated-Value File"
+msgstr "Εισαγωγή από ένα αρχείο τιμών διαχωρισμένων με κόμματα"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:9
+#, kde-format
+msgid "vCard File"
+msgstr "Αρχείο vCard"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:9
+#, kde-format
+msgid "Import from a vCard File"
+msgstr "Εισαγωγή από ένα αρχείο vCard"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:15
+#, kde-format
+msgid "Export"
+msgstr "Εξαγωγή"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:15
+#, kde-format
+msgid "Export content"
+msgstr "Εξαγωγή περιεχομένου"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:16
+#, kde-format
+msgid "Export to a Comma-Separated-Value File"
+msgstr "Εξαγωγή σε ένα αρχείο τιμών διαχωρισμένων με κόμματα"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:20
+#, kde-format
+msgid "HTML File"
+msgstr "Αρχείο HTML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:20
+#, kde-format
+msgid "Export to a HTML File"
+msgstr "Εξαγωγή σε ένα αρχείο HTML"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:24
+#, kde-format
+msgid "OdfPy File"
+msgstr "Αρχείο OdfPy"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:24
+#, kde-format
+msgid "Export to an OpenDocument File"
+msgstr "Εξαγωγή σε ένα αρχείο OpenDocument"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Functions"
+msgstr "Συναρτήσεις"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:30
+#, kde-format
+msgid "Scripting formula functions"
+msgstr "Συναρτήσεις μαθηματικής σχέσης σεναρίου"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:31
+#, kde-format
+msgid "R-Project"
+msgstr "R-Project"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:31
+#, kde-format
+msgid ""
+"Functions for the R programming environment for data analysis and graphics"
+msgstr ""
+"Συναρτήσεις για το περιβάλλον προγραμματισμού R για την ανάλυση δεδομένων "
+"και γραφικών"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:35
+#, kde-format
+msgid "YFinance"
+msgstr "YFinance"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:35
+#, kde-format
+msgid "Yahoo! Finance formula function"
+msgstr "Συνάρτηση μαθηματικής σχέσης Yahoo! Finance"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:39
+#, kde-format
+msgid "YWeather"
+msgstr "YWeather"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:39
+#, kde-format
+msgid "Yahoo! Weather formula function"
+msgstr "Συνάρτηση μαθηματικής σχέσης Yahoo! Weather"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:43
+#, kde-format
+msgid "PyTime"
+msgstr "PyTime"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:43
+#, kde-format
+msgid "Time formula function"
+msgstr "Συνάρτηση μαθηματικής σχέσης ώρας"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:48
+#, kde-format
+msgid "PyRegExp"
+msgstr "PyRegExp"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:48
+#, kde-format
+msgid "Regular Expression formula function"
+msgstr "Συνάρτηση μαθηματικής σχέσης κανονικής έκφρασης"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:55
+#, kde-format
+msgid "Tools"
+msgstr "Εργαλεία"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:55
+#, kde-format
+msgid "Miscellaneous scripts"
+msgstr "Διάφορα σενάρια"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:56
+#, kde-format
+msgid "XML Viewer"
+msgstr "Προβολέας XML"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:56
+#, kde-format
+msgid ""
+"Python script to view the OpenDocument XML representation of the current "
+"document"
+msgstr ""
+"Σενάριο Python για την προβολή της αναπαράστασης XML OpenDocument του "
+"τρέχοντος εγγράφου"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Orca Speech"
+msgstr "Orca Speech"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:60
+#, kde-format
+msgid "Orca Screen Reader"
+msgstr "Αναγνώστης Orca Screen"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:64
+#, kde-format
+msgid "Logger"
+msgstr "Καταγραφέας"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:64
+#, kde-format
+msgid "Log changes in cells to a file"
+msgstr "Καταγραφή τροποποιήσεων κελιών σε ένα αρχείο"
+
+#. i18n: tag collection attribute text
+#: scripts/scripts.rc:70
+#, kde-format
+msgid "Docker"
+msgstr "Προσάρτηση"
+
+#. i18n: tag collection attribute comment
+#: scripts/scripts.rc:70
+#, kde-format
+msgid "Scripting Docker Widgets"
+msgstr "Γραφικά συστατικά προσάρτησης σεναρίων"
+
+#. i18n: tag script attribute text
+#: scripts/scripts.rc:71
+#, kde-format
+msgid "Python Console"
+msgstr "Κονσόλα Python"
+
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:71
+#, kde-format
+msgid "Interactive Python Console Docker"
+msgstr "Διαδραστική προσάρτηση κονσόλας Python"
+
+#. i18n: tag script attribute text
+#. i18n: tag script attribute comment
+#: scripts/scripts.rc:76
+#, kde-format
+msgid "Ruby Snippets"
+msgstr "Δείγματα κώδικα Ruby"
+
+#: scripts/vcardimport.py:34
+msgid "Import vCard"
+msgstr "Εισαγωγή vCard"
+
+#: scripts/vcardimport.py:45
+msgid "vCard Files"
+msgstr "Αρχεία vCard"
+
+#: scripts/xmlviewer.py:30
+msgid "Open OpenDocument File"
+msgstr "Άνοιγμα αρχείου OpenDocument"
+
+#: scripts/xmlviewer.py:32
+msgid "OpenDocument Files"
+msgstr "Αρχεία OpenDocument"
+
+#: scripts/xmlviewer.py:57
+msgid "Failed to read the manifest"
+msgstr "Αποτυχία ανάγνωσης δηλωτικού"
+
+#: scripts/xmlviewer.py:168 scripts/xmlviewer.py:265
+msgid "Failed to extract \"%1\" to \"%2\""
+msgstr "Αποτυχία εξαγωγής του \"%1\" στο \"%2\""
+
+#: scripts/xmlviewer.py:175
+msgid "<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>"
+msgstr "<qt>Αποτυχία εκτέλεσης προγράμματος:<br><br>%1 \"%2\"</qt>"
+
+#: scripts/xmlviewer.py:187
+msgid "Open with..."
+msgstr "Άνοιγμα με..."
+
+#: scripts/xmlviewer.py:192
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#: scripts/xmlviewer.py:199
+msgid "No program defined."
+msgstr "Δεν ορίστηκε πρόγραμμα."
+
+#: scripts/xmlviewer.py:214
+msgid "Compare..."
+msgstr "Σύγκριση..."
+
+#: scripts/xmlviewer.py:225
+msgid "Compare with OpenDocument file:"
+msgstr "Σύγκριση με αρχείο OpenDocument:"
+
+#: scripts/xmlviewer.py:238
+msgid "No OpenDocument file to compare with selected."
+msgstr "Δεν υπάρχει αρχείο OpenDocument για σύγκριση με το επιλεγμένο."
+
+#: scripts/xmlviewer.py:242
+msgid "No command selected."
+msgstr "Δεν επιλέχθηκε εντολή."
+
+#: scripts/xmlviewer.py:253
+msgid "The OpenDocument file does not contain any file named \"%1\""
+msgstr "Το αρχείο OpenDocument δεν περιέχει κανένα αρχείο με όνομα \"%1\""
+
+#: scripts/xmlviewer.py:283
+msgid "<qt>%1</qt>"
+msgstr "<qt>%1</qt>"
+
+#: scripts/yfinance.py:39
+msgid ""
+"The YFINANCE() function uses the Yahoo! Finance Web Service to display stock "
+"values of a defined ticker symbol."
+msgstr ""
+"Η συνάρτηση YFINANCE() χρησιμοποιεί την υπηρεσία ιστού Yahoo! Finance για να "
+"εμφανίζει τιμές μετοχών ενός καθορισμένου συμβόλου μετοχής."
+
+#: scripts/yfinance.py:41
+msgid "YFINANCE(string,string,string)"
+msgstr "YFINANCE(συμβολοσειρά,συμβολοσειρά,συμβολοσειρά)"
+
+#: scripts/yfinance.py:42
+msgid "The ticker symbol."
+msgstr "Το σύμβολο της μετοχής."
+
+#: scripts/yfinance.py:43
+msgid "The date."
+msgstr "Η ημερομηνία."
+
+#: scripts/yfinance.py:44
+msgid "The type: Date, Open, High, Low, Close, Volume or AdjClose."
+msgstr ""
+"Ο τύπος: Ημερομηνία, Άνοιγμα, Υψηλό, Χαμηλό, Κλείσιμο, Τόμος ή AdjClose."
+
+#: scripts/yfinance.py:45
+msgid "YFINANCE(\"YHOO\";\"20060119\";\"Open\")"
+msgstr "YFINANCE(\"YHOO\";\"20060119\";\"Open\")"
+
+#: scripts/yfinance.py:46
+msgid "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
+msgstr "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
+
+#: scripts/yfinance.py:65
+msgid "Invalid symbol"
+msgstr "Μη έγκυρο σύμβολο"
+
+#: scripts/yfinance.py:69
+msgid "Invalid date"
+msgstr "Μη έγκυρη ημερομηνία"
+
+#: scripts/yfinance.py:81
+msgid "Invalid type"
+msgstr "Μη έγκυρος τύπος"
+
+#: scripts/yfinance.py:99 scripts/yweather.py:68
+msgid "Web services request failed"
+msgstr "Η αίτηση υπηρεσιών ιστού απέτυχε"
+
+#: scripts/yfinance.py:110
+msgid "No stock"
+msgstr "Χωρίς μετοχές"
+
+#: scripts/yfinance.py:113
+msgid "Invalid stock"
+msgstr "Μη έγκυρες μετοχές"
+
+#: scripts/yweather.py:39
+msgid ""
+"The YWEATHER() function uses the Yahoo! Weather Web Service to display the "
+"weather of a location."
+msgstr ""
+"Η συνάρτηση YWEATHER() χρησιμοποιεί την υπηρεσία ιστού Yahoo! Weather για να "
+"εμφανίσει τον καιρό σε έναν τόπο."
+
+#: scripts/yweather.py:41
+msgid "YWEATHER(string;string)"
+msgstr "YWEATHER(συμβολοσειρά;συμβολοσειρά)"
+
+#: scripts/yweather.py:42
+msgid "The US zip code, Location ID or cell that contains them."
+msgstr ""
+"Ο ταχυδρομικός κώδικας για τις ΗΠΑ, το αναγνωριστικό θέσης ή το κελί που τα "
+"περιέχει."
+
+#: scripts/yweather.py:43
+msgid "Units for temperature. f=Fahrenheit and c=Celsius"
+msgstr "Μονάδες για θερμοκρασία, f=Φαρενάιτ και c=Κελσίου"
+
+#: scripts/yweather.py:44
+msgid "YWEATHER(\"=A1\")"
+msgstr "YWEATHER(\"=A1\")"
+
+#: scripts/yweather.py:45
+msgid "YWEATHER(\"GMXX0151\";\"c\")"
+msgstr "YWEATHER(\"GMXX0151\";\"c\")"
+
+#: scripts/yweather.py:55
+msgid "Invalid location"
+msgstr "Μη έγκυρη θέση"
+
+#: scripts/yweather.py:83
+msgid "Invalid condition"
+msgstr "Μη έγκυρη συνθήκη"
+
+#~ msgid ","
+#~ msgstr ","
+
+#~ msgid ";"
+#~ msgstr ";"
+
+#~ msgid "\\n"
+#~ msgstr "\\n"
+
+#~ msgid "\\t"
+#~ msgstr "\\t"
+
+#~ msgid "\\r"
+#~ msgstr "\\r"
+
+#~ msgid "\\n\\r"
+#~ msgstr "\\n\\r"
+
+#~ msgid "\\r\\n"
+#~ msgstr "\\r\\n"
+
+#~ msgid "\\"
+#~ msgstr "\\"
+
+#~ msgid "\""
+#~ msgstr "\""
+
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Delimiter:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter:"
+#~ msgstr "Οριοθέτης:"
+
+#, fuzzy
+#~| msgid ","
+#~ msgctxt "(qtundo-format)"
+#~ msgid ","
+#~ msgstr ","
+
+#, fuzzy
+#~| msgid ";"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ";"
+#~ msgstr ";"
+
+#, fuzzy
+#~| msgid "\\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\n"
+#~ msgstr "\\n"
+
+#, fuzzy
+#~| msgid "\\t"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\t"
+#~ msgstr "\\t"
+
+#, fuzzy
+#~| msgid "Line terminator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line terminator"
+#~ msgstr "Ένδειξη τέλους γραμμής"
+
+#, fuzzy
+#~| msgid "\\r"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\r"
+#~ msgstr "\\r"
+
+#, fuzzy
+#~| msgid "\\n\\r"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\n\\r"
+#~ msgstr "\\n\\r"
+
+#, fuzzy
+#~| msgid "\\r\\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\r\\n"
+#~ msgstr "\\r\\n"
+
+#, fuzzy
+#~| msgid "Escape char:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Escape char:"
+#~ msgstr "Χαρακτήρας διαφυγής:"
+
+#, fuzzy
+#~| msgid "\\"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\\"
+#~ msgstr "\\"
+
+#, fuzzy
+#~| msgid "Double quote"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double quote"
+#~ msgstr "Διπλά εισαγωγικά"
+
+#, fuzzy
+#~| msgid "Quote char:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quote char:"
+#~ msgstr "Εισαγωγικό:"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Quoting"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quoting"
+#~ msgstr "Σε εισαγωγικά"
+
+#, fuzzy
+#~| msgid "Skip initial space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip initial space"
+#~ msgstr "Παράλειψη αρχικού κενού"
+
+#, fuzzy
+#~| msgid "Strict"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strict"
+#~ msgstr "Σενάριο"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "Τίτλος:"
+
+#, fuzzy
+#~| msgid "Subject:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject:"
+#~ msgstr "Θέμα:"
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author:"
+#~ msgstr "Συγγραφέας:"
+
+#, fuzzy
+#~| msgid "E-Mail:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E-Mail:"
+#~ msgstr "Ηλ. ταχυδρομείο:"
+
+#, fuzzy
+#~| msgid "Keywords:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords:"
+#~ msgstr "Λέξεις-κλειδιά:"
+
+#, fuzzy
+#~| msgid "Filename:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filename:"
+#~ msgstr "Όνομα αρχείου:"
+
+#, fuzzy
+#~| msgid "Date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date:"
+#~ msgstr "Ημερομηνία:"
+
+#, fuzzy
+#~| msgid "&Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Tools"
+#~ msgstr "Ερ&γαλεία"
+
+#, fuzzy
+#~| msgid "Import"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Εισαγωγή"
+
+#, fuzzy
+#~| msgid "Import content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import content"
+#~ msgstr "Εισαγωγή περιεχομένου"
+
+#, fuzzy
+#~| msgid "CSV File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV File"
+#~ msgstr "Αρχείο CSV"
+
+#, fuzzy
+#~| msgid "Import from a Comma-Separated-Value File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import from a Comma-Separated-Value File"
+#~ msgstr "Εισαγωγή από ένα αρχείο τιμών διαχωρισμένων με κόμματα"
+
+#, fuzzy
+#~| msgid "vCard File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "vCard File"
+#~ msgstr "Αρχείο vCard"
+
+#, fuzzy
+#~| msgid "Import from a vCard File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import from a vCard File"
+#~ msgstr "Εισαγωγή από ένα αρχείο vCard"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Εξαγωγή"
+
+#, fuzzy
+#~| msgid "Export content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export content"
+#~ msgstr "Εξαγωγή περιεχομένου"
+
+#, fuzzy
+#~| msgid "Export to a Comma-Separated-Value File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to a Comma-Separated-Value File"
+#~ msgstr "Εξαγωγή σε ένα αρχείο τιμών διαχωρισμένων με κόμματα"
+
+#, fuzzy
+#~| msgid "HTML File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HTML File"
+#~ msgstr "Αρχείο HTML"
+
+#, fuzzy
+#~| msgid "Export to a HTML File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to a HTML File"
+#~ msgstr "Εξαγωγή σε ένα αρχείο HTML"
+
+#, fuzzy
+#~| msgid "OdfPy File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "OdfPy File"
+#~ msgstr "Αρχείο OdfPy"
+
+#, fuzzy
+#~| msgid "Export to an OpenDocument File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to an OpenDocument File"
+#~ msgstr "Εξαγωγή σε ένα αρχείο OpenDocument"
+
+#, fuzzy
+#~| msgid "Functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Functions"
+#~ msgstr "Συναρτήσεις"
+
+#, fuzzy
+#~| msgid "Scripting formula functions"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripting formula functions"
+#~ msgstr "Συναρτήσεις μαθηματικής σχέσης σεναρίου"
+
+#, fuzzy
+#~| msgid "R-Project"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R-Project"
+#~ msgstr "R-Project"
+
+#, fuzzy
+#~| msgid ""
+#~| "Functions for the R programming environment for data analysis and "
+#~| "graphics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Functions for the R programming environment for data analysis and graphics"
+#~ msgstr ""
+#~ "Συναρτήσεις για το περιβάλλον προγραμματισμού R για την ανάλυση δεδομένων "
+#~ "και γραφικών"
+
+#, fuzzy
+#~| msgid "YFinance"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YFinance"
+#~ msgstr "YFinance"
+
+#, fuzzy
+#~| msgid "Yahoo! Finance formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yahoo! Finance formula function"
+#~ msgstr "Συνάρτηση μαθηματικής σχέσης Yahoo! Finance"
+
+#, fuzzy
+#~| msgid "YWeather"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YWeather"
+#~ msgstr "YWeather"
+
+#, fuzzy
+#~| msgid "Yahoo! Weather formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yahoo! Weather formula function"
+#~ msgstr "Συνάρτηση μαθηματικής σχέσης Yahoo! Weather"
+
+#, fuzzy
+#~| msgid "PyTime"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PyTime"
+#~ msgstr "PyTime"
+
+#, fuzzy
+#~| msgid "Time formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time formula function"
+#~ msgstr "Συνάρτηση μαθηματικής σχέσης ώρας"
+
+#, fuzzy
+#~| msgid "PyRegExp"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PyRegExp"
+#~ msgstr "PyRegExp"
+
+#, fuzzy
+#~| msgid "Regular Expression formula function"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Regular Expression formula function"
+#~ msgstr "Συνάρτηση μαθηματικής σχέσης κανονικής έκφρασης"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "Εργαλεία"
+
+#, fuzzy
+#~| msgid "Miscellaneous scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Miscellaneous scripts"
+#~ msgstr "Διάφορα σενάρια"
+
+#, fuzzy
+#~| msgid "XML Viewer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XML Viewer"
+#~ msgstr "Προβολέας XML"
+
+#, fuzzy
+#~| msgid ""
+#~| "Python script to view the OpenDocument XML representation of the current "
+#~| "document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Python script to view the OpenDocument XML representation of the current "
+#~ "document"
+#~ msgstr ""
+#~ "Σενάριο Python για την προβολή της αναπαράστασης XML OpenDocument του "
+#~ "τρέχοντος εγγράφου"
+
+#, fuzzy
+#~| msgid "Orca Speech"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orca Speech"
+#~ msgstr "Orca Speech"
+
+#, fuzzy
+#~| msgid "Orca Screen Reader"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orca Screen Reader"
+#~ msgstr "Αναγνώστης Orca Screen"
+
+#, fuzzy
+#~| msgid "Logger"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Logger"
+#~ msgstr "Καταγραφέας"
+
+#, fuzzy
+#~| msgid "Log changes in cells to a file"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Log changes in cells to a file"
+#~ msgstr "Καταγραφή τροποποιήσεων κελιών σε ένα αρχείο"
+
+#, fuzzy
+#~| msgid "Docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Docker"
+#~ msgstr "Προσάρτηση"
+
+#, fuzzy
+#~| msgid "Scripting Docker Widgets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripting Docker Widgets"
+#~ msgstr "Γραφικά συστατικά προσάρτησης σεναρίων"
+
+#, fuzzy
+#~| msgid "Python Console"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Python Console"
+#~ msgstr "Κονσόλα Python"
+
+#, fuzzy
+#~| msgid "Interactive Python Console Docker"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interactive Python Console Docker"
+#~ msgstr "Διαδραστική προσάρτηση κονσόλας Python"
+
+#, fuzzy
+#~| msgid "Ruby Snippets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ruby Snippets"
+#~ msgstr "Δείγματα κώδικα Ruby"
+
+#, fuzzy
+#~| msgid "No such script."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No such script."
+#~ msgstr "Δεν υπάρχει τέτοιο σενάριο."
+
+#, fuzzy
+#~| msgid "No such script function."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No such script function."
+#~ msgstr "Δεν υπάρχει τέτοια συνάρτηση σεναρίου."
+
+#, fuzzy
+#~| msgid "No return value."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No return value."
+#~ msgstr "Χωρίς τιμή επιστροφής."
+
+#, fuzzy
+#~| msgid "Scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripts"
+#~ msgstr "Σενάρια"
+
+#, fuzzy
+#~| msgid "Scriptfile \"%1\" does not exist."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scriptfile \"%1\" does not exist."
+#~ msgstr "Το αρχείο σεναρίου \"%1\" δεν υπάρχει."
+
+#, fuzzy
+#~| msgid ""
+#~| "Scriptfile \"%1\" is not executable. Please set the executable-attribute "
+#~| "on that file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Scriptfile \"%1\" is not executable. Please set the executable-attribute "
+#~ "on that file."
+#~ msgstr ""
+#~ "Το αρχείο σεναρίου \"%1\" δεν είναι εκτελέσιμο. Παρακαλώ ορίστε το "
+#~ "χαρακτηριστικό εκτελέσιμου στο αρχείο αυτό."
+
+#, fuzzy
+#~| msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
+#~ msgstr ""
+#~ "Το αρχείο σεναρίου \"%1\" βρίσκεται σε προσωρινό κατάλογο. Άρνηση "
+#~ "εκτέλεσης."
+
+#, fuzzy
+#~| msgid "Failed to execute scriptfile \"%1\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to execute scriptfile \"%1\""
+#~ msgstr "Αποτυχία εκτέλεσης του αρχείου σεναρίου \"%1\""
+
+#, fuzzy
+#~| msgid "Errors on execution of scripts."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Errors on execution of scripts."
+#~ msgstr "Σφάλματα κατά την εκτέλεση των σεναρίων."
+
+#, fuzzy
+#~| msgid "Sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet"
+#~ msgstr "Φύλλο"
+
+#, fuzzy
+#~| msgid "Cell"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cell"
+#~ msgstr "Κελί"
+
+#, fuzzy
+#~| msgid "Range"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Range"
+#~ msgstr "Εύρος"
+
+#~ msgid ""
+#~ "Failed to load the KexiDB Scripting module. This script needs Kexi to run."
+#~ msgstr ""
+#~ "Αποτυχία φόρτωσης του αρθρώματος συγγραφής σεναρίων KexiDB. το σενάριο "
+#~ "αυτό χρειάζεται το Kexi για να εκτελεστεί."
+
+#~ msgid "Invalid Kexi Project File: %1"
+#~ msgstr "Μη έγκυρο αρχείο έργου Kexi: %1"
+
+#~ msgid "No KexiDB driver for: %1"
+#~ msgstr "Κανένας οδηγός KexiDB για: %1"
+
+#~ msgid "Failed to connect: %1"
+#~ msgstr "Αποτυχία σύνδεσης: %1"
+
+#~ msgid "Failed to open database: %1"
+#~ msgstr "Αποτυχία ανοίγματος βάσης δεδομένων: %1"
+
+#~ msgid "Kexi Export"
+#~ msgstr "Εξαγωγή Kexi"
+
+#~ msgid "Export to Kexi Project File"
+#~ msgstr "Εξαγωγή σε αρχείο έργου Kexi"
+
+#~ msgid "Kexi Project Files"
+#~ msgstr "Αρχεία έργου Kexi"
+
+#~ msgid "Export sheets and ranges"
+#~ msgstr "Εξαγωγή φύλλων εργασίας και εύρους περιοχών"
+
+#~ msgid "Table or Query"
+#~ msgstr "Πίνακας ή ερώτηση"
+
+#~ msgid "Data"
+#~ msgstr "Δεδομένα"
+
+#~ msgid "Datasource"
+#~ msgstr "Datasource"
+
+#~ msgid "Failed to create cursor."
+#~ msgstr "Αποτυχία δημιουργίας δρομέα."
+
+#~ msgid "The cursor has no records to read from."
+#~ msgstr "Ο δρομέας δεν έχει εγγραφές για να αναγνωστούν."
+
+#~ msgid "Kexi Import"
+#~ msgstr "Εισαγωγή Kexi"
+
+#~ msgid "Import from Kexi Project File"
+#~ msgstr "Εισαγωγή από αρχείο έργου Kexi"
+
+#~ msgid "No such tableschema \"%1\""
+#~ msgstr "Δεν υπάρχει τέτοιο σχήμα \"%1\""
+
+#~ msgid "No such queryschema \"%1\""
+#~ msgstr "Δεν υπάρχει τέτοιο σχήμα \"%1\""
+
+#~ msgid "Unknown item %1"
+#~ msgstr "Άγνωστο αντικείμενο %1"
+
+#~ msgid "Kexi Database"
+#~ msgstr "Βάση δεδομένων Kexi"
+
+#~ msgid "Import from a Kexi Project File"
+#~ msgstr "Εισαγωγή από ένα αρχείο έργου Kexi"
+
+#~ msgid "Export to a Kexi Project File"
+#~ msgstr "Εξαγωγή σε ένα αρχείο έργου Kexi"

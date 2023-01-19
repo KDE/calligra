@@ -1,0 +1,893 @@
+# Translation of calligra_shape_music.po to Ukrainian
+# Copyright (C) 2008-2015 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2011, 2012, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_shape_music\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-10-09 17:11+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: actions/AccidentalAction.cpp:54
+#, kde-format
+msgid "Double flat"
+msgstr "Дубль-бемоль"
+
+#: actions/AccidentalAction.cpp:55
+#, kde-format
+msgctxt "lowered half a step"
+msgid "Flat"
+msgstr "Бемоль"
+
+#: actions/AccidentalAction.cpp:56
+#, kde-format
+msgid "Natural"
+msgstr "Звичайний"
+
+#: actions/AccidentalAction.cpp:57
+#, kde-format
+msgctxt "raised half a step"
+msgid "Sharp"
+msgstr "Дієз"
+
+#: actions/AccidentalAction.cpp:58
+#, kde-format
+msgid "Double sharp"
+msgstr "Дубль-дієз"
+
+#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#, kde-format
+msgid "%1 flats"
+msgstr "%1 бемолів"
+
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#, kde-format
+msgid "%1 sharps"
+msgstr "%1 дієзів"
+
+#: actions/DotsAction.cpp:34
+#, kde-format
+msgid "Dots"
+msgstr "Знаки стаккато"
+
+#: actions/EraserAction.cpp:36
+#, kde-format
+msgid "Eraser"
+msgstr "Гумка"
+
+#: actions/KeySignatureAction.cpp:28
+#, kde-format
+msgid "Ab Major"
+msgstr "Ля-бемоль мажор"
+
+#: actions/KeySignatureAction.cpp:29
+#, kde-format
+msgid "Eb Major"
+msgstr "Мі-бемоль мажор"
+
+#: actions/KeySignatureAction.cpp:30
+#, kde-format
+msgid "Bb Major"
+msgstr "Сі-бемоль мажор"
+
+#: actions/KeySignatureAction.cpp:31
+#, kde-format
+msgid "F Major"
+msgstr "Фа мажор"
+
+#: actions/KeySignatureAction.cpp:32
+#, kde-format
+msgid "C Major"
+msgstr "До мажор"
+
+#: actions/KeySignatureAction.cpp:33
+#, kde-format
+msgid "G Major"
+msgstr "Соль мажор"
+
+#: actions/KeySignatureAction.cpp:34
+#, kde-format
+msgid "D Major"
+msgstr "Ре мажор"
+
+#: actions/KeySignatureAction.cpp:35
+#, kde-format
+msgid "A Major"
+msgstr "Ля мажор"
+
+#: actions/KeySignatureAction.cpp:36
+#, kde-format
+msgid "E Major"
+msgstr "Мі мажор"
+
+#: actions/KeySignatureAction.cpp:49
+#, kde-format
+msgctxt "Other key signature"
+msgid "Other"
+msgstr "Інший"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "note"
+msgstr "нота"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "rest"
+msgstr "пауза"
+
+#: actions/NoteEntryAction.cpp:57
+#, kde-format
+msgid "Double whole "
+msgstr "Подвійна ціла "
+
+#: actions/NoteEntryAction.cpp:58
+#, kde-format
+msgid "Whole "
+msgstr "Ціла "
+
+#: actions/NoteEntryAction.cpp:59
+#, kde-format
+msgid "Half "
+msgstr "Половинна "
+
+#: actions/NoteEntryAction.cpp:60
+#, kde-format
+msgid "Quarter "
+msgstr "Одна четвертна "
+
+#: actions/NoteEntryAction.cpp:61
+#, kde-format
+msgid "Eighth "
+msgstr "Одна восьма "
+
+#: actions/NoteEntryAction.cpp:62
+#, kde-format
+msgid "16th "
+msgstr "Одна 16-та "
+
+#: actions/NoteEntryAction.cpp:63
+#, kde-format
+msgid "32nd "
+msgstr "Одна 32-га "
+
+#: actions/NoteEntryAction.cpp:64
+#, kde-format
+msgid "64th "
+msgstr "Одна 64-та "
+
+#: actions/NoteEntryAction.cpp:65
+#, kde-format
+msgid "128th "
+msgstr "Одна 128-ма "
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown note"
+msgstr "Невідома нота"
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown rest"
+msgstr "Невідома пауза"
+
+#: actions/RemoveBarAction.cpp:22
+#, kde-format
+msgid "Remove bar"
+msgstr "Вилучити тактову риску"
+
+#: actions/SelectionAction.cpp:32
+#, kde-format
+msgid "Select"
+msgstr "Вибрати"
+
+#: actions/SetClefAction.cpp:39
+#, kde-format
+msgctxt "Treble clef"
+msgid "Treble"
+msgstr "Дискант"
+
+#: actions/SetClefAction.cpp:40
+#, kde-format
+msgctxt "Bass clef"
+msgid "Bass"
+msgstr "Бас"
+
+#: actions/SetClefAction.cpp:43
+#, kde-format
+msgctxt "Soprano clef"
+msgid "Soprano"
+msgstr "Сопрано"
+
+#: actions/SetClefAction.cpp:44
+#, kde-format
+msgctxt "Alto clef"
+msgid "Alto"
+msgstr "Контральто"
+
+#: actions/SetClefAction.cpp:45
+#, kde-format
+msgctxt "Tenor clef"
+msgid "Tenor"
+msgstr "Тенор"
+
+#: actions/SetClefAction.cpp:46
+#, kde-format
+msgid "C clef on line %1"
+msgstr "Ключ «до» у рядку %1"
+
+#: actions/SetClefAction.cpp:49
+#, kde-format
+msgid "Unknown clef"
+msgstr "Невідомий ключ"
+
+#: actions/TiedNoteAction.cpp:33
+#, kde-format
+msgid "Tied notes"
+msgstr "Ліга нот"
+
+#: commands/AddBarsCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add measures"
+msgstr ""
+"Додати такти\n"
+"додавання тактів"
+
+#: commands/AddDotCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add dot"
+msgstr ""
+"Додати знак стаккато\n"
+"додавання знаку стаккато"
+
+#: commands/AddNoteCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Set chord duration"
+msgstr ""
+"Встановити тривалість акорду\n"
+"встановлення тривалості акорду"
+
+#: commands/AddNoteCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Add note"
+msgstr ""
+"Додати ноту\n"
+"додавання ноти"
+
+#: commands/AddPartCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Add part"
+msgstr ""
+"Додати партію\n"
+"додавання партії"
+
+#: commands/AddPartCommand.cpp:26
+#, kde-format
+msgid "Part %1"
+msgstr "Партія %1"
+
+#: commands/ChangePartDetailsCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Change part details"
+msgstr ""
+"Змінити параметри партії\n"
+"зміну параметрів партії"
+
+#: commands/CreateChordCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Add chord"
+msgstr ""
+"Додати акорд\n"
+"додавання акорду"
+
+#: commands/CreateChordCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Add rest"
+msgstr ""
+"Додати паузу\n"
+"додавання паузи"
+
+#: commands/MakeRestCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Convert chord to rest"
+msgstr ""
+"Перетворити акорд на паузу\n"
+"перетворення акорду на паузу"
+
+#: commands/RemoveBarCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Remove bar"
+msgstr ""
+"Вилучити тактову риску\n"
+"вилучення тактової риски"
+
+#: commands/RemoveChordCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove rest"
+msgstr ""
+"Вилучити паузу\n"
+"вилучення паузи"
+
+#: commands/RemoveChordCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove chord"
+msgstr ""
+"Вилучити акорд\n"
+"вилучення акорду"
+
+#: commands/RemoveNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove note"
+msgstr ""
+"Вилучити ноту\n"
+"вилучення ноти"
+
+#: commands/RemovePartCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove part"
+msgstr ""
+"Вилучити партію\n"
+"вилучення партії"
+
+#: commands/RemoveStaffElementCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Remove clef"
+msgstr ""
+"Вилучити ключ\n"
+"вилучення ключа"
+
+#: commands/RemoveStaffElementCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Remove staff element"
+msgstr ""
+"Вилучити елемент частини\n"
+"вилучення елемента частини"
+
+#: commands/SetAccidentalsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Set accidentals"
+msgstr ""
+"Встановити випадковий знак альтерації\n"
+"встановлення випадкового знаку альтерації"
+
+#: commands/SetClefCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change clef"
+msgstr ""
+"Змінити ключ\n"
+"зміну ключа"
+
+#: commands/SetKeySignatureCommand.cpp:25
+#: commands/SetKeySignatureCommand.cpp:72
+msgctxt "(qtundo-format)"
+msgid "Change key signature"
+msgstr ""
+"Змінити ключовий знак\n"
+"зміну ключового знаку"
+
+#: commands/SetTimeSignatureCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change time signature"
+msgstr ""
+"Змінити знак розмірності\n"
+"зміну знаку розмірності"
+
+#: commands/ToggleTiedNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Toggle Note Tie"
+msgstr ""
+"Перемкнути лігу\n"
+"перемикання ліги"
+
+#: dialogs/KeySignatureDialog.cpp:15
+#, kde-format
+msgid "Set key signature"
+msgstr "Встановити ключовий знак"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/KeySignatureDialog.ui:63
+#, kde-format
+msgid "Region"
+msgstr "Область"
+
+#. i18n: ectx: property (text), widget (QRadioButton, throughBar)
+#. i18n: ectx: property (text), widget (QRadioButton, throughEndOfPiece)
+#. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
+#: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
+#: dialogs/KeySignatureDialog.ui:163
+#, kde-format
+msgid "Measure"
+msgstr "Такт"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/KeySignatureDialog.ui:88
+#, kde-format
+msgid "through"
+msgstr "до"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/KeySignatureDialog.ui:139
+#, kde-format
+msgid "through end of piece"
+msgstr "до кінця п'єси"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/KeySignatureDialog.ui:180
+#, kde-format
+msgid "to next key change"
+msgstr "до наступної зміни ключа"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/KeySignatureDialog.ui:205
+#, kde-format
+msgid "Staves"
+msgstr "Нотний стан"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allStaves)
+#: dialogs/KeySignatureDialog.ui:211
+#, kde-format
+msgid "Update all staves"
+msgstr "Оновити весь нотний стан"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
+#: dialogs/KeySignatureDialog.ui:221
+#, kde-format
+msgid "Only update selected staff"
+msgstr "Оновити тільки вибрану частину"
+
+#: dialogs/PartDetailsDialog.cpp:19
+#, kde-format
+msgid "Part details"
+msgstr "Деталі партії"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/PartDetailsDialog.ui:18
+#, kde-format
+msgid "Name:"
+msgstr "Назва:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/PartDetailsDialog.ui:34
+#, kde-format
+msgid "Short name:"
+msgstr "Скорочена назва:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/PartDetailsDialog.ui:50
+#, kde-format
+msgid "Staves:"
+msgstr "Нотний стан:"
+
+#. i18n: ectx: property (text), widget (QToolButton, editPart)
+#. i18n: ectx: property (text), widget (QToolButton, addPart)
+#. i18n: ectx: property (text), widget (QToolButton, removePart)
+#: dialogs/PartsWidget.ui:37 dialogs/PartsWidget.ui:44
+#: dialogs/PartsWidget.ui:54
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:187
+#, kde-format
+msgid "Voice 1"
+msgstr "Перша партія"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:192
+#, kde-format
+msgid "Voice 2"
+msgstr "Друга партія"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:197
+#, kde-format
+msgid "Voice 3"
+msgstr "Третя партія"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:202
+#, kde-format
+msgid "Voice 4"
+msgstr "Четверта партія"
+
+#. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
+#: SimpleEntryTool.cpp:678
+#, kde-format
+msgid "Add measures"
+msgstr "Додати такти"
+
+#. i18n: ectx: property (text), widget (QToolButton, importButton)
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#, kde-format
+msgid "Import"
+msgstr "Імпорт"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportButton)
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#, kde-format
+msgid "Export"
+msgstr "Експорт"
+
+#: MusicShape.cpp:71
+#, kde-format
+msgid "Part 1"
+msgstr "Партія 1"
+
+#: MusicShapeFactory.cpp:36
+#, kde-format
+msgid "Music Shape"
+msgstr "Музична форма"
+
+#: MusicShapeFactory.cpp:38
+#, kde-format
+msgid "A shape which provides a music editor"
+msgstr "Форма, що надає можливість зміни партитур"
+
+#: MusicTool.cpp:85
+#, kde-format
+msgid "Parts"
+msgstr "Партії"
+
+#: MusicToolFactory.cpp:19
+#, kde-format
+msgid "Music editing, parts"
+msgstr "Редагування партитур, партій"
+
+#: SimpleEntryTool.cpp:226
+#, kde-format
+msgid "Clef"
+msgstr "Ключ"
+
+#: SimpleEntryTool.cpp:255
+#, kde-format
+msgid "Time signature"
+msgstr "Знак розмірності"
+
+#: SimpleEntryTool.cpp:285
+#, kde-format
+msgid "Key signature"
+msgstr "Ключовий знак"
+
+#: SimpleEntryTool.cpp:679
+#, kde-format
+msgid "Add how many measures?"
+msgstr "Скільки тактів слід додати?"
+
+#: SimpleEntryTool.cpp:743
+#, kde-format
+msgctxt "@title:window"
+msgid "Import"
+msgstr "Імпортування"
+
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#, kde-format
+msgid "MusicXML files (*.xml)"
+msgstr "файли MusicXML (*.xml)"
+
+#: SimpleEntryTool.cpp:760
+#, kde-format
+msgctxt "@title:window"
+msgid "Export"
+msgstr "Експортування"
+
+#: SimpleEntryToolFactory.cpp:18
+#, kde-format
+msgid "Music editing"
+msgstr "Редагування партитур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Region"
+#~ msgstr "Область"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Measure"
+#~ msgstr "Такт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "through"
+#~ msgstr "до"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "through end of piece"
+#~ msgstr "до кінця п'єси"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to next key change"
+#~ msgstr "до наступної зміни ключа"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves"
+#~ msgstr "Нотний стан"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Update all staves"
+#~ msgstr "Оновити весь нотний стан"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Only update selected staff"
+#~ msgstr "Оновити тільки вибрану частину"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Назва:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short name:"
+#~ msgstr "Скорочена назва:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Staves:"
+#~ msgstr "Нотний стан:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 1"
+#~ msgstr "Перша партія"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 2"
+#~ msgstr "Друга партія"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 3"
+#~ msgstr "Третя партія"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Voice 4"
+#~ msgstr "Четверта партія"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double flat"
+#~ msgstr "Дубль-бемоль"
+
+#~ msgctxt "(qtundo-format) lowered half a step"
+#~ msgid "Flat"
+#~ msgstr "Бемоль"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Natural"
+#~ msgstr "Звичайний"
+
+#~ msgctxt "(qtundo-format) raised half a step"
+#~ msgid "Sharp"
+#~ msgstr "Дієз"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double sharp"
+#~ msgstr "Дубль-дієз"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 flats"
+#~ msgstr "%1 бемолів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 sharps"
+#~ msgstr "%1 дієзів"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dots"
+#~ msgstr "Знаки стаккато"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eraser"
+#~ msgstr "Гумка"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ab Major"
+#~ msgstr "Ля-бемоль мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eb Major"
+#~ msgstr "Мі-бемоль мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bb Major"
+#~ msgstr "Сі-бемоль мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F Major"
+#~ msgstr "Фа мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C Major"
+#~ msgstr "До мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "G Major"
+#~ msgstr "Соль мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D Major"
+#~ msgstr "Ре мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Major"
+#~ msgstr "Ля мажор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E Major"
+#~ msgstr "Мі мажор"
+
+#~ msgctxt "(qtundo-format) Other key signature"
+#~ msgid "Other"
+#~ msgstr "Інший"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "note"
+#~ msgstr "нота"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "rest"
+#~ msgstr "пауза"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double whole "
+#~ msgstr "Подвійна ціла "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whole "
+#~ msgstr "Ціла "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Half "
+#~ msgstr "Половинна "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quarter "
+#~ msgstr "Одна четвертна "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Eighth "
+#~ msgstr "Одна восьма "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "16th "
+#~ msgstr "Одна 16-та "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "32nd "
+#~ msgstr "Одна 32-га "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "64th "
+#~ msgstr "Одна 64-та "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "128th "
+#~ msgstr "Одна 128-ма "
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown note"
+#~ msgstr "Невідома нота"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown rest"
+#~ msgstr "Невідома пауза"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "Вибрати"
+
+#~ msgctxt "(qtundo-format) Treble clef"
+#~ msgid "Treble"
+#~ msgstr "Дискант"
+
+#~ msgctxt "(qtundo-format) Bass clef"
+#~ msgid "Bass"
+#~ msgstr "Бас"
+
+#~ msgctxt "(qtundo-format) Soprano clef"
+#~ msgid "Soprano"
+#~ msgstr "Сопрано"
+
+#~ msgctxt "(qtundo-format) Alto clef"
+#~ msgid "Alto"
+#~ msgstr "Контральто"
+
+#~ msgctxt "(qtundo-format) Tenor clef"
+#~ msgid "Tenor"
+#~ msgstr "Тенор"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C clef on line %1"
+#~ msgstr "Ключ «до» у рядку %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown clef"
+#~ msgstr "Невідомий ключ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tied notes"
+#~ msgstr "Ліга нот"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part %1"
+#~ msgstr "Партія %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set key signature"
+#~ msgstr "Встановити ключовий знак"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part details"
+#~ msgstr "Деталі партії"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Part 1"
+#~ msgstr "Партія 1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music Shape"
+#~ msgstr "Музична форма"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which provides a music editor"
+#~ msgstr "Форма, що надає можливість зміни партитур"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parts"
+#~ msgstr "Партії"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing, parts"
+#~ msgstr "Редагування партитур, партій"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import"
+#~ msgstr "Імпорт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "Експорт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clef"
+#~ msgstr "Ключ"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time signature"
+#~ msgstr "Знак розмірності"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key signature"
+#~ msgstr "Ключовий знак"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add how many measures?"
+#~ msgstr "Скільки тактів слід додати?"
+
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Import"
+#~ msgstr "Імпорт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "MusicXML files (*.xml)"
+#~ msgstr "файли MusicXML (*.xml)"
+
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Export"
+#~ msgstr "Експорт"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Music editing"
+#~ msgstr "Редагування партитур"
+
+#~ msgid "Music Tool"
+#~ msgstr "Інструмент «Партитура»"

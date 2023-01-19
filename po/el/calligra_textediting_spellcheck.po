@@ -1,0 +1,105 @@
+# translation of SpellCheckPlugin.po to Greek
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Spiros Georgaras <sng@hellug.gr>, 2007.
+# Stelios <sstavra@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-12-29 20:18+0300\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.2\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Διαμόρφωση ελέγχου ορ&θογραφίας..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Αυτόματος έλεγχος ορθογραφίας"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Έλεγχος ορθογραφίας"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Ορθογραφία"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Προσθήκη στο λεξικό"
+
+#, fuzzy
+#~| msgid "Configure &Spell Checking..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Διαμόρφωση ελέγχου ορ&θογραφίας..."
+
+#, fuzzy
+#~| msgid "Auto Spell Check"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Αυτόματος έλεγχος ορθογραφίας"
+
+#, fuzzy
+#~| msgid "Check Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Έλεγχος ορθογραφίας"
+
+#, fuzzy
+#~| msgid "Spelling"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Ορθογραφία"
+
+#, fuzzy
+#~| msgid "Add to Dictionary"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Προσθήκη στο λεξικό"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Παράβλεψη λέξης"
+
+#~ msgid "Spell Check"
+#~ msgstr "Έλεγχος ορθογραφίας"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Ρύθμιση ελέγχου ορθογραφίας"
+
+#~ msgid "Default Language:"
+#~ msgstr "Προκαθορισμένη γλώσσα:"
+
+#~ msgid "Options"
+#~ msgstr "Επιλογές"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Ενεργοποίηση του ελέγχου ορθογραφίας στο υπό&βαθρο"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Πα&ράλειψη όλων των λέξεων που είναι γραμμένες με κεφαλαία"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "Παρά&λειψη κολλημένων λέξεων"
+
+#~ msgid "&Add"
+#~ msgstr "&Προσθήκη"
+
+#~ msgid "&Remove"
+#~ msgstr "Α&φαίρεση"

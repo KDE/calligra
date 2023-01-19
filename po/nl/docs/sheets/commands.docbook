@@ -1,0 +1,2734 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>De commando's</title>
+
+<sect1 id="filemenu">
+<title
+>Het menu Bestand</title>
+<para>
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Nieuw</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Maakt een nieuw bestand aan.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Openen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een bestaand bestand.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+> <guisubmenu
+>Recent geopend</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een lijst van recentelijk gebruikte bestanden</action
+>, u kunt hier het bestand kiezen dat u wilt openen.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Opslaan</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Slaat het document op.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Opslaan als...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Het huidige document opslaan met een nieuwe naam of bestandstype. Indien u die wilt behouden kunt u het document <guimenuitem
+>Exporteren...</guimenuitem
+></action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Herladen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Laadt het document opnieuw.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Versions</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME define different versions of the document + open them in new windows</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+><guimenuitem
+>Importeren...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Importeert andere documenten.</action>
+</para>
+<para
+>Tabellen met gegevens worden vaak bewaard in tekstbestanden, met op de regels waarden, gescheiden door een komma, spatie, tabpositie of een ander karakter. Bijvoorbeeld <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. Zulke bestanden noemt men gewoonlijk called <quote
+><acronym
+>CSV</acronym
+></quote
+>-bestanden (Comma Separated Values, door komma's gescheiden waarden), ook al wordt een ander scheidingsteken gebruikt.</para>
+<para
+>Indien u in &sheets; een tekstbestand opent, wordt aangenomen dat dit een <acronym
+>CSV</acronym
+>-bestand is. Er wordt dan een dialoog geopend waarin u kunt opgeven welk scheidingsteken in dit bestand wordt gebruikt, en waarin wordt getoond  hoe de gegevens in de cellen van het rekenblad zullen worden geplaatst.</para>
+<para
+>Met andere opties in deze dialoog kunt u de <guilabel
+>Opmaak</guilabel
+> van de cellen in het rekenblad instellen, opgeven of de aanhalingstekens van teksten moeten worden weergegeven, en ook of de eerste regel(s) van het bestand moeten worden genegeerd.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+><guimenuitem
+>Exporteren...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Slaat een document op in één van de ondersteunde bestandstypen.</action
+> Het huidige document wordt niet vervangen door het geëxporteerde bestand. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+><guimenuitem
+>Bestand verzenden...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Verzendt het bestand als een e-mailbijlage.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+> Bestand</guimenu
+><guimenuitem
+>Sjabloon van document maken</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Maakt een &sheets;-<link linkend="templates"
+>sjabloon</link
+> dat gebaseerd is op dit document. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afdrukken...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Drukt het document af.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afdrukvoorbeeld...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Toont een voorbeeld van het document zoals het afgedrukt zal worden.</action
+></para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Export as PDF...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action
+></para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bestand</guimenu
+><guimenuitem
+>Documentinformatie</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin informatie over het document en de auteur ingevuld kan worden.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Sluiten</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sluit het huidige document, maar sluit &sheets; niet af. </action
+></para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bestand</guimenu
+> <guimenuitem
+>Afsluiten</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Sluit</action
+> &sheets; af.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title
+>Het menu Bewerken</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Ongedaan maken</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Maakt de laatste handeling ongedaan.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Opnieuw</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Voert de laatste handeling opnieuw uit.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Knippen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Plaatst de geselecteerde items op het klembord en verwijdert ze uit het document.</action
+> Als u hierna <guimenuitem
+>Plakken</guimenuitem
+> kiest, worden de items op de nieuwe plaats ingevoegd. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Kopiëren</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Kopieert de geselecteerde items naar het klembord.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Plakken</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Plakt de inhoud van het klembord in de geselecteerde cellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bewerken</guimenu
+><guimenuitem
+>Speciaal plakken...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Plakt items op een speciale manier.</action
+> Meer informatie kunt u vinden bij <link linkend="specialpaste"
+>Overige methoden om te plakken</link
+> en <link linkend="sumspecialpaste"
+>Berekeningen met speciaal plakken</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bewerken</guimenu
+><guimenuitem
+>Plakken met invoeging</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Verplaatst de inhoud van de geselecteerde cellen naar rechts of omlaag en plakt de items van het klembord in de geselecteerde cellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bewerken</guimenu
+><guisubmenu
+>Vullen</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Vult de geselecteerde cellen met de waarde uit de eerste itemgroep.</action
+> Alle vier de richtingen worden geaccepteerd. Onthoud dat "itemgroep" de eerste waarden in de vulrichting zijn. Als naar links gevuld wordt, is de eerste itemgroep de laatste kolom van de selectie. </para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Select All</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Zoeken...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Zoekt in cellen naar de opgegeven tekst.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keysym
+>F3</keysym
+></shortcut
+> <guimenu
+>Bewerken</guimenu
+><guimenuitem
+>Volgende zoeken</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Zoekt in volgende cellen naar de opgegeven tekst.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>F3</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Vorige zoeken</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Zoekt in voorgaande cellen naar de opgegeven tekst.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Vervangen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Zoekt en vervangt opgegeven tekst in cellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bewerken</guimenu
+><guisubmenu
+>Wissen</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Verwijder <guimenuitem
+>Alles</guimenuitem
+> of <guimenuitem
+>Inhoud</guimenuitem
+>, <guimenuitem
+>Commentaar</guimenuitem
+>, <guimenuitem
+>Stijlen</guimenuitem
+>, <guimenuitem
+>Link</guimenuitem
+> of <guimenuitem
+>Geldigheid</guimenuitem
+> uit geselecteerde cellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Bewerken</guimenu
+><guimenuitem
+>Verwijderen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Wis <guimenuitem
+>Cellen</guimenuitem
+>, <guimenuitem
+>Kolommen</guimenuitem
+>, <guimenuitem
+>Rijen</guimenuitem
+> of <guimenuitem
+>Rekenblad</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Conditional Cell Attributes...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add or modify conditional cell attributes.</action>
+</para
+></listitem>
+</varlistentry>
+
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycap
+>F2</keycap
+> </shortcut
+> <guimenu
+>Bewerken</guimenu
+> <guimenuitem
+>Cel wijzigenl</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Plaatst de tekstcursor in de geselecteerde cel zodat u deze kunt bewerken.</action>
+</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title
+>Het menu Beeld</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Beeld</guimenu
+><guimenuitem
+>Nieuwe weergave</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een nieuw exemplaar van &sheets; met hetzelfde document.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Close all open instances of &sheets;</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Split current view into two parts.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Remove current view.</action
+> (Where the window 
+contains two or more views)
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change view split to <guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Goto Cell...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change &sheets;'s focus to show defined cell.</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Beeld</guimenu
+><guimenuitem
+>Paginaranden</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Toont of verbergt de randen van afgedrukte pagina's op het werkblad. </action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show/Hide Comment Indicator</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing Zoom In Zoom Out-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Beeld</guimenu
+><guisubmenu
+>Zoomen</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Vergroot of verkleint de weergave van het werkblad. De vergrotingsfactor loopt van 33% tot 500%. </action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME Full Screen Mode-->
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="gomenu">
+<title
+>Het menu Ga</title>
+<para
+>In dit menu vindt u acties voor het navigeren tussen de werkbladen van het nu geopende rekenblad, en de actie <guimenuitem
+>Ga naar cel</guimenuitem
+>, waarmee u direct naar een cel, of een bereik van cellen, kunt gaan.</para>
+</sect1>
+
+<sect1 id="insertmenu">
+<title
+>Het menu Invoegen</title>
+<para>
+<variablelist>
+
+<!-- OBSOLETE <varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Sheet</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add another worksheet.</action>
+</para
+></listitem>
+</varlistentry
+>-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Invoegen</guimenu
+> <guisubmenu
+>Commentaar</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>Commentaar toevoegen of wijzigen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Invoegen</guimenu
+><guimenuitem
+>Functie...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u een functie kunt kiezen.</action
+> Meer informatie kunt u vinden in <link linkend="formulas"
+>Formules</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Invoegen</guimenu
+><guimenuitem
+>Reeksen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de parameters voor een reeks kunt instellen.</action
+> Meer informatie kunt u vinden in <link linkend="series"
+>Reeksen</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Invoegen</guimenu
+><guimenuitem
+>Koppeling...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u gegevens voor koppelingen kunt instellen.</action
+> Meer informatie kunt u vinden in <link linkend="hyper"
+>Cellen koppelen</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Invoegen</guimenu
+><guimenuitem
+>Speciaal teken...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u een speciaal teken kunt selecteren om in de cel in te voegen.</action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Embed another &koffice; document into the sheet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a chart.</action
+> See the section 
+<link linkend="insertchart"
+>Inserting a Chart</link
+> for more details.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Invoegen</guimenu
+><guisubmenu
+>Externe gegevens</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Voegt gegevens in <guilabel
+>Vanuit database...</guilabel
+>, <guilabel
+>Vanuit tekstbestand...</guilabel
+> of <guilabel
+>Vanaf het klembord...</guilabel
+>.</action
+> Meer informatie kunt u vinden in <link linkend="insertdata"
+>Externe gegevens invoegen</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title
+>Het menu Opmaak</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Alt;&Ctrl;<keycap
+>F</keycap
+></keycombo
+></shortcut
+> <guimenu
+>Opmaak</guimenu
+><guimenuitem
+> Celopmaak...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de opmaak van de geselecteerde cellen kunt wijzigen.</action
+> Meer informatie kunt u vinden in <link linkend="formatspread"
+>Werkbladen opmaken</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guimenuitem
+>Stijlenbeheerder</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialogvenster waarin u stijlen kunt creëren, wijzigen of verwijderen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guisubmenu
+>Stijl</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Past een stijl toe op de geselecteerde cellen.</action
+> Kies het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Stijlenbeheer</guimenuitem
+></menuchoice
+> om stijlen te creëren, te wijzigen of te verwijderen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guimenuitem
+>Stijl van cel maken...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Creëert een nieuwe stijl van de opmaak van de geselecteerde cel.</action
+> Kies het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Stijlenbeheer</guimenuitem
+></menuchoice
+> om stijlen te creëren, te wijzigen of te verwijderen. </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guimenuitem
+>Auto-opmaak...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Past een voorgedefinieerde opmaak toe op de geselecteerde cellen. Er verschijnt een dioaloogvenster waarin u kunt kiezen uit twee voorbeelden.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guimenuitem
+>Cellen samenvoegen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Voegt de geselecteerde cellen samen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guimenuitem
+>Cellen splitsen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Splitst eerder samengevoegde cellen. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guimenuitem
+>Rij &amp; kolom aanpassen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Past de rijhoogte en kolombreedte aan zodat de inhoud van de geselecteerde cellen correct weergegeven wordt.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guisubmenu
+>Rij</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Wijzigt de rijhoogte, maakt rijen even hoog, toont of verbergt rijen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guisubmenu
+>Kolom</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Wijzigt de kolombreedte, maakt kolommen even breed, toont of verbergt kolommen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guisubmenu
+>Werkblad</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Verbergen, tonen werkblad, of instellen van gevorderde werkbladeigenschappen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guimenuitem
+>Paginaindeling...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de indeling van de pagina kunt instellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Opmaak</guimenu
+><guisubmenu
+>Afdrukbereik</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Definieert of wist een afdrukbereik.</action>
+</para
+></listitem>
+</varlistentry>
+
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title
+>Het menu Gegevens</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Sorteren...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de sorteercriteria kunt instellen.</action
+> Meer informatie kunt u vinden in <link linkend="sort"
+>Gegevens sorteren</link
+>. </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Filter-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Tekst naar kolommen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Interpreteert tekst in de geselecteerde cellen als <acronym
+>CSV</acronym
+>-gegevens en plaatst elk item in een eigen cel in de rij. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Gegevens</guimenu
+> <guimenuitem
+>Benoemde gebieden...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent</action
+> de dialoog <guilabel
+>Benoemde gebieden</guilabel
+> voor het selecteren, toevoegen, bewerken en verwijderen van benoemde gebieden. Zie <link linkend="namedareas"
+>Benoemde cellen en gebieden</link
+> voor nadere details. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Consolideren...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Consolideert gegevens.</action
+> Meer informatie kunt u vinden in <link linkend="consolidate"
+>Gegevens consolideren</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Subtotalen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Open een dialoogvenster waarin u verscheidenen opties voor subtotalen kunt instellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Geldigheid...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>opent een dialoogvenster waarin u criteria voor geldigheid van invoer en foutmeldingen voor de geselecteerde cellen kunt instellen en wijzigen.</action
+> Meer informatie kunt u vinden in <link linkend="validcheck"
+>Geldigheid controleren</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Doel zoeken...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent het dialoogvenster "Doel zoeken"/</action
+> Meer informatie kunt u vinden in <link linkend="goalseek"
+>Doel zoeken</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Kruistabel...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent het dialoogvenster "Kruistabel instellen"/</action
+>. Zie <link linkend="pivottable"
+>Kruistabel</link
+> voor details. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title
+>Het menu Hulpmiddelen</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guimenuitem
+>Spelling...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Controleert de spelling van tekst op het werkblad.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Aangepaste lijsten...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Bekijken of aanpassen van de voor &sheets; bekende speciale woorden. Deze lijst kan worden gebruikt om speciale <link linkend="series"
+>reeksen</link
+> in het werkblad in te voegen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guimenuitem
+>Werkblad beschermen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Beschermt een werkblad met een wachtwoord. Er verschijnt een dialoogvenster waarin u een wachtwoord kunt intypen, dit wachtwoord hebt u nodig om de bescherming van het werkblad weer op te heffen. In een beschermd werkblad zijn alle cellen beschermd, dit betekent dat de opmaak en de inhoud van de cellen niet gewijzigd kunnen worden.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Document beschermen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Beschermt het gehele document met een wachtwoord. Er verschijnt een dialoogvenster waarin u een wachtwoord kunt intypen, dit wachtwoord hebt u nodig om de bescherming van het werkblad weer op te heffen. In een beschermd document kunt u geen werkbladen hernoemen, invoegen of verwijderen. De bescherming van een document geldt niet voor de individuele werkbladen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+></shortcut
+> <guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Werkblad opnieuw berekenen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Berekent de formules op het huidige werkblad opnieuw.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keysym
+>F9</keysym
+></shortcut
+> <guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Document opnieuw berekenen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Berekent de formules op alle werkbladen opnieuw.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Tools</guimenu>
+<guimenuitem
+>Insert Calendar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
+</action>
+</para
+></listitem>
+</varlistentry>
+-->
+  
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guisubmenu
+>Script uitvoeren...</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>U kunt hier een extern script kiezen dat in &sheets; wordt uitgevoerd. In &sheets; kunnen scripts in JavaScript, Python en Ruby worden uitgevoerd. Standaard voorbeelden van scripts kunt u vinden in het submenu <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guisubmenu
+>Scripts</guisubmenu
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guisubmenu
+>Scripts</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>U kunt hier het script uitvoeren voor het exporteren of importeren van gegevens in diverse formaten, uw &sheets;-log opslaan in een bestand, <ulink url="https://live.gnome.org/Orca"
+>Orca spraak</ulink
+> gebruiken voor de toegankelijkheid, Python- en Rubyscripts verbeteren, of functies toevoegen voor het tonen van beurskoersen of het weer. U kunt zelfs enkele <ulink url="http://www.r-project.org/"
+>R-functies</ulink
+> gebruiken (de <ulink url="http://rpy.sourceforge.net/rpy.html"
+>RPy module</ulink
+> moet hier voor worden geïnstalleerd).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guimenuitem
+>Scriptbeheer...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent</action
+> het dialoogvenster <guilabel
+>Scriptbeheer</guilabel
+>, hierin kunt u scripts uitvoeren, laden, vrijgeven, installeren en meer scripts ophalen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Optimaliseerder van functies...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent</action
+> de dialoog <guilabel
+>Optimaliseerder van functies</guilabel
+> waar u een functiecell voor een object kunt kiezen, optimalisatiedoel (<guilabel
+>Maximaliseren</guilabel
+>, <guilabel
+>Minimaliseren</guilabel
+> of de <guilabel
+>Waarde</guilabel
+>) kan invoeren en een set van cellen met beslissingsparameters. </para
+></listitem>
+</varlistentry>
+  </variablelist
+></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>Het menu Instellingen</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guisubmenu
+>Werkbalken</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Toon of verberg de werkbalken: <guilabel
+>Bestand</guilabel
+>, <guilabel
+>Bewerken</guilabel
+>, <guilabel
+>Navigatie</guilabel
+>, <guilabel
+>Lettertype</guilabel
+>,<guilabel
+>Opmaak</guilabel
+> en <guilabel
+>Kleur/Rand</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Settings</guimenu>
+<guimenuitem
+>Dockers</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+>FIXME
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Statusbalk</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Toont of verbergt de statusbalk.</action
+> Op de statusbalk vindt u extra informatie over geselecteerde items en directe berekeningen van de geselecteerde cellen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Tabbladenbalk</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Toont of verbergt de tabbladenbalk.</action
+> Alle werkbladen van het document zijn toegankelijk via de tabs op deze balk. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Sneltoetsen instellen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Configureren van de sneltoetsen voor &sheets;.</action
+> Zie <link linkend="configshort"
+>Sneltoetsen instellen </link
+> voor  verdere details. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Werkbalken instellen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de werkbalken kunt instellen.</action
+> Meer informatie kunt u vinden in <link linkend="configtoolbars"
+>Werkbalken instellen</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Thema's</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Kies het kleurthema voor het venster van &sheets;.</action
+> U kunt een van de voorgedefinieerde kleurschema's kiezen of <guimenuitem
+>Instellingen...</guimenuitem
+> selecteren om <ulink url="help:/kcontrol/colors"
+>&systemsettings; module voor kleurselectie</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Actief auteurprofiel</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Stel het auteurprofiel voor het huidige document in.</action
+> U kunt een van de profielen kiezen gedefinieerd met <link linkend="configauthor"
+>&sheets; instellingenvenster</link
+>, <guimenuitem
+>Standaard auteurprofiel</guimenuitem
+> zoals gedefinieerd door &systemsettings; gegevens- of blanco <guimenuitem
+>Anoniem</guimenuitem
+> profiel die uw privacy kan waarborgen. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Meldingen instellen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Meldingensysteem van &sheets; instellen.</action
+> Er zijn geen acties waarover u geïnformeerd kunt worden in de huidige versie van &sheets;. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Instellingen</guimenu
+><guimenuitem
+>&sheets; instellen...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Algemene instellingen voor &sheets;.</action
+> Zie <link linkend="configdialog"
+>&sheets; instellen</link
+> voor verdere details. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>Het menu Help</title
+>&help.menu.documentation; </sect1>
+
+<sect1 id="rmbmenu">
+<title
+>Het contextmenu</title>
+<para
+>In dit gedeelte worden de items van het contextmenu beschreven. Dit menu verschijnt wanneer u met de <mousebutton
+>rechter</mousebutton
+>muisknop op geselecteerde cellen, rijen of kolommen klikt. </para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Celindeling...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de opmaak van de geselecteerde cellen kunt wijzigen.</action
+> Meer informatie kunt u vinden in <link linkend="formatspread"
+>Werkbladen opmaken</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+></shortcut
+> <guimenuitem
+>Knippen</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Plaatst de geselecteerde items op het klembord.</action
+> Als u hierna <guilabel
+>Plakken</guilabel
+> selecteert worden de items verplaatst van de oorspronkelijke naar de nieuwe plaats. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+></shortcut
+> <guimenuitem
+>Kopiëren</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Kopieert de geselecteerde items naar het klembord.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+></shortcut
+> <guimenuitem
+>Plakken</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Plakt de inhoud van het klembord in de geselecteerde cellen. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Speciaal plakken...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Plakt items op een speciale manier.</action
+> Meer informatie kunt u vinden bij <link linkend="specialpaste"
+>Overige methoden om te plakken</link
+> en <link linkend="sumspecialpaste"
+>Berekeningen met speciaal plakken</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Plakken met invoeging</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Plakt de inhoud van het klembord in de geselecteerde cellen, de bestaande cellen worden opgeschoven on ruimte te maken.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Alle</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>De inhoud van geselecteerde cellen wissen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Rij en kolom aanpassen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Wijzigt de rijhoogte en de kolombreedte om de inhoud van de cellen in het geheel te kunnen tonen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Standaard</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Past de standaardopmaak toe op de geselecteerde cellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Bereiknaam...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u een naam voor het bereik kunt intypen.</action
+> Meer informatie kunt u vinden in <link linkend="namedareas"
+>Benoemde cellen en celbereiken</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Rijhoogte wijzigen...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de rijhoogte kunt instellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Rij aanpassen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Wijzigt de rijhoogte om de inhoud van de cellen in het geheel te kunnen tonen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Kolombreedte wijzigen...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u de kolombreedte kunt instellen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Kolom aanpassen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Wijzigt de kolombreedte om de inhoud van de cellen in het geheel te kunnen tonen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Cellen invoegen...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Voegt nieuwe cellen in, in een dialoogvenster kunt u kiezen naar welke kant de bestaande cellen opgeschoven moeten worden.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Cellen wissen...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Verwijderen van de geselecteerde cellen, in een dialoogvenster kunt u kiezen welke cellen de vrijgekomen ruimte moeten opvullen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Rijen invoegen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Voegt nieuwe rijen boven de geselecteerde rijen in. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Rijen verwijderen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Verwijdert de geselecteerde rijen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Rijen verbergen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Verbergt de geselecteerde rijen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Rijen tonen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toont verborgen rijen. Om verborgen rijen te kunnen tonen moet u de rijen selecteren waar de verborgen rijen zich binnen bevinden.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Kolommen invoegen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Voegt nieuwe kolommen links van de geselecteerde kolommen in. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Kolommen verwijderen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Verwijdert de geselecteerde kolommen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Kolommen verbergen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Verbergt de geselecteerde kolommen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Kolommen tonen</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toont verborgen kolommen. Om verborgen kolommen te kunnen tonen moet u de kolommen selecteren waar de verborgen kolommen zich binnen bevinden.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Commentaar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een dialoogvenster waarin u een commentaar aan de cel kunt toevoegen of een bestaand commentaar kunt wijzigen.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Selectielijst...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opent een lijst met bestaande tekst in de huidige kolom, deze tekst kan in de geselecteerde cel geplakt worden.</action>
+</para
+></listitem>
+</varlistentry>
+<!-- not in 2.4.0
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Show Related Words</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the <guilabel
+>Related Words</guilabel
+> dialog box.</action
+> 
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="othershort">
+<title
+>Overige sneltoetsen</title>
+<para
+>In dit gedeelte worden de sneltoetsen van &sheets; beschreven die niet in één van de menu's voorkomen.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo>
+</term>
+<listitem
+><para
+>Tonen van de "dockers" aan/uit</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Pijltoetsen</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Als de geselecteerde cel gegevens bevat, wordt de celcursor naar het begin of naar het eind van het gegevensblok in de huidige rij of kolom verplaatst. Als de geselecteerde cel leeg is, wordt de celcursor naar het begin of naar het eind van het volgende gegevensblok in de huidige rij of kolom verplaatst. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keysym
+>Pijltoetsen</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Als de geselecteerde cel gegevens bevat, worden alle cellen met gegevens tot het begin of tot het eind van het gegevensblok in de huidige rij of kolom geselecteerd. Als de geselecteerde cel leeg is, worden alle cellen tot het begin of tot het eind van het volgende gegevensblok in de huidige rij of kolom geselecteerd. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>PageDown</keysym>
+</term>
+<listitem
+><para
+><action
+>Verplaatst de celcursor 10 rijen omlaag.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>PageUp</keysym>
+</term>
+<listitem
+><para
+><action
+>Verplaatst de celsursor 10 rijen omhoog.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>PageDown</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Ga naar het volgende werkblad.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>PageUp</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Ga naar het vorige werkblad.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycap
+>F4</keycap>
+</term>
+<listitem
+><para
+><action
+>Schakel de celverwijzing </action
+> tussen normale en <link linkend="absolute"
+>absolute verwijzing</link
+>. </para
+></listitem>
+</varlistentry>
+<!-- does not work in 2.4.0
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>&amp;</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Add a border to the selected cell(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>$</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in Money
+format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>%</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>^</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>#</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Date format</action
+>. The value is taken as the number of days since 
+1 January 1900.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>@</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+Time format</action
+>. The value is taken as the number of seconds since
+midnight.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>!</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+normal Number format</action
+>.
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

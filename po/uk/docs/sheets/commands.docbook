@@ -1,0 +1,2732 @@
+<chapter id="commands">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Юрій</firstname
+><surname
+>Чорноіван</surname
+><affiliation
+><address
+><email
+>yurchor@ukr.net</email
+></address
+></affiliation
+><contrib
+>Переклад українською</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Довідка щодо команд</title>
+
+<sect1 id="filemenu">
+<title
+>Меню «Файл»</title>
+<para>
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Створити</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Створює новий документ.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Відкрити...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкриває існуючий документ.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guisubmenu
+>Відкрити недавні</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкрити існуючий документ</action
+> вибором його зі списку нещодавно відкритих файлів.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Зберегти</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Зберегти документ.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Зберегти як...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Зберегти поточний документ з використанням іншої назви або іншого формату. Якщо ви хочете зберегти назву і формат документа, скористайтеся пунктом <guimenuitem
+>Експортувати...</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Перезавантажити</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Перезавантажує документ.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Versions</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME define different versions of the document + open them in new windows</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Імпортувати...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Імпортувати інші документи.</action>
+</para>
+<para
+>Таблиці з даними часто зберігаються у текстових файлах, значення у рядках яких відокремлено комами, пробілами або іншими символами, наприклад, <emphasis
+>123, 456, 789, abcd, efgh</emphasis
+>. Такі файли називають файлами <quote
+><acronym
+>CSV</acronym
+></quote
+> (Comma Separated Values або значень, відокремлених комами), хоча символом відокремлення може бути зовсім і не кома.</para>
+<para
+>Якщо ви накажете &sheets; відкрити текстовий файл, програма припускатиме, що цей файл зберігається у форматі <acronym
+>CSV</acronym
+>, а отже відкриє діалогове вікно, за допомогою якого ви зможете вказати символ-роздільник (символ відокремлення), використаний у файлі, а також показано, яким чином дані з файла буде розподілено на комірками електронної таблиці.</para>
+<para
+>За допомогою інших пунктів цього діалогового вікна ви зможете визначити <guilabel
+>Формат</guilabel
+> комірок електронної таблиці, те, чи слід вилучати лапки, а також те, чи слід пропускати перший рядок (або перші рядки) у файлі.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Експортувати...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Зберегти документ у одному з форматів, які підтримує програма.</action
+> Документ не буде замінено експортованим файлом. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Надіслати лист...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Надіслати файл як долучення до повідомлення електронної пошти.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Створити шаблон з документа...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>Створити <link linkend="templates"
+>шаблон</link
+> &sheets; на основі поточного документа. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Друкувати...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Надіслати документ на друк.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Перегляд друку...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Переглянути результати друку документа.</action
+></para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>File</guimenu>
+<guimenuitem
+>Export as PDF...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action
+></para>
+</listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Інформація про документ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Переглянути або ввести відомості про документ і його автора.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Закрити</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Закрити поточний документ, але не завершувати роботу &sheets;. </action
+></para
+></listitem>
+</varlistentry>
+<varlistentry>
+
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Файл</guimenu
+> <guimenuitem
+>Вийти</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Завершити роботу</action
+> &sheets;.</para
+></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="editmenu">
+<title
+>Меню «Зміни»</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Вернути</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Скасувати останню дію.</action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>Z</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Повторити</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Повернути результат останньої скасованої дії.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Вирізати</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Скопіювати виділені елементи до буфера обміну інформацією і вилучити їх з початкового розташування.</action
+> Якщо ви згодом скористаєтеся пунктом <guimenuitem
+>Вставити</guimenuitem
+> елементи буде вставлено до нового місця. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Копіювати</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Копіює вибраний елемент або елементи до буфера.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Вставити</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити елементи з буфера обміну інформацією до поточних комірок.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Спеціальна вставка...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Особлива форма вставлення.</action
+> Докладніше про неї можна дізнатися з розділів <link linkend="specialpaste"
+>Інші режими вставки</link
+> і <link linkend="sumspecialpaste"
+>Арифметика з використанням спеціальної вставки</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Вставити з новими рядками</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Пересунути вміст області вставки праворуч або вниз і вставити елементи з буфера обміну інформацією до поточних комірок.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Зміни</guimenu
+> <guisubmenu
+>Заповнити</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Заповнює вибрану область значеннями з першого набору елементів.</action
+> Підтримується заповнення у всіх чотирьох напрямках. Зауважте, що термін «набір елементів» означає перший набір значень у напрямку заповнення. Якщо напрямком заповнення буде «Ліворуч», першим набором елементів буде останній стовпчик вибраної області. </para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>A</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Select All</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>FIXME</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Пошук...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Знайти комірку, яка містить вказаний текст.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F3</keysym
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Знайти далі</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Знайти наступну комірку, яка містить вказаний текст.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>F3</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Знайти позаду</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Знайти попередню комірку, що містить вказаний текст.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Замінити...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Знайти і замінити вказаний текст у комірках.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Зміни</guimenu
+> <guisubmenu
+>Очистити</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вилучити <guimenuitem
+>Всі</guimenuitem
+> дані з позначених комірок, <guimenuitem
+>Вміст</guimenuitem
+> цих комірок, <guimenuitem
+>Коментар</guimenuitem
+>, <guimenuitem
+>Посилання</guimenuitem
+> або дані <guimenuitem
+>Коректність</guimenuitem
+> з позначених комірок.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Вилучити</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вилучити <guimenuitem
+>Комірки</guimenuitem
+>, <guimenuitem
+>Колонки</guimenuitem
+>, <guimenuitem
+>Рядки</guimenuitem
+> або <guimenuitem
+>Аркуш</guimenuitem
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Edit</guimenu>
+<guimenuitem
+>Conditional Cell Attributes...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add or modify conditional cell attributes.</action>
+</para
+></listitem>
+</varlistentry>
+
+-->
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycap
+>F2</keycap
+> </shortcut
+> <guimenu
+>Зміни</guimenu
+> <guimenuitem
+>Змінити комірку</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Призначено для зміни вмісту вибраної комірки на місці.</action>
+</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="viewmenu">
+<title
+>Меню «Перегляд»</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Перегляд</guimenu
+> <guimenuitem
+>Створити перегляд</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкриває новий екземпляр &sheets; з тим самим відкритим документом.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<shortcut>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>W</keycap
+></keycombo>
+</shortcut>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Close All Views</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Close all open instances of &sheets;</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Split View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Split current view into two parts.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Remove View</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Remove current view.</action
+> (Where the window 
+contains two or more views)
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guisubmenu
+>Splitter Orientation</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change view split to <guilabel
+>Horizontal</guilabel
+> or <guilabel
+>Vertical</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Goto Cell...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Change &sheets;'s focus to show defined cell.</action>
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Перегляд</guimenu
+> <guimenuitem
+>Межі сторінки</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вмикає або вимикає позначення червоними лініями меж друкованих сторінок на аркуші. </action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>View</guimenu>
+<guimenuitem
+>Show/Hide Comment Indicator</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing Zoom In Zoom Out-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Перегляд</guimenu
+> <guisubmenu
+>Масштаб</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Збільшує або зменшує масштаб, використаний для показу електронної таблиці. Діапазон значень: від 33% до 500%. </action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME Full Screen Mode-->
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="gomenu">
+<title
+>Меню «Перехід»</title>
+<para
+>У цьому меню ви знайдете пункти, призначені для навігації між аркушами поточної електронної таблиці, та пункт <guimenuitem
+>Перейти до комірки</guimenuitem
+>, за допомогою якого можна перейти до певної комірки або позначити діапазон комірок.</para>
+</sect1>
+
+<sect1 id="insertmenu">
+<title
+>Меню «Вставка»</title>
+<para>
+<variablelist>
+
+<!-- OBSOLETE <varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Sheet</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Add another worksheet.</action>
+</para
+></listitem>
+</varlistentry
+>-->
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guisubmenu
+>Коментар</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>Додати або змінити коментар. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Функція...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити математичну функцію.</action
+> Докладніше про ці функції можна дізнатися з розділу <link linkend="formulas"
+>Формули</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Ряд...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити ряд.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="series"
+>Ряди</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Посилання...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити посилання у вибрану комірку.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="hyper"
+>Посилання у комірках</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guimenuitem
+>Спеціальний символ...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити спеціальний символ у вибрану комірку.</action>
+</para
+></listitem>
+</varlistentry>
+<!--FIXME missing Cells Columns Rows Sheet-->
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guisubmenu
+>Object</guisubmenu>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Embed another &koffice; document into the sheet.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Chart</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a chart.</action
+> See the section 
+<link linkend="insertchart"
+>Inserting a Chart</link
+> for more details.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Insert</guimenu>
+<guimenuitem
+>Picture</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the standard &kde; file dialog</action>
+to insert a picture.
+</para
+></listitem>
+</varlistentry>
+-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Вставка</guimenu
+> <guisubmenu
+>Зовнішні дані</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити дані <guilabel
+>З бази даних...</guilabel
+>, <guilabel
+>З текстового файла...</guilabel
+> або <guilabel
+>З буфера обміну...</guilabel
+>.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="insertdata"
+>Вставка зовнішніх даних</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="formatmenu">
+<title
+>Меню «Формат»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Alt;&Ctrl;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Формат</guimenu
+> <guimenuitem
+>Формат комірки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Форматувати вибрані комірки.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="formatspread"
+>Форматування електронної таблиці</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Керування стилями</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Створити, змінити або вилучити стилі форматування комірок.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Стиль</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Застосувати певний стиль до вибраних комірок.</action
+> Для керування стилями можна скористатися пунктом меню <menuchoice
+> <guimenu
+>Формат</guimenu
+> <guimenuitem
+>Керування стилями...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Створити новий стиль з комірки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Створити новий стиль за форматом вибраної комірки.</action
+> Для керування стилями можна скористатися пунктом меню <menuchoice
+> <guimenu
+>Формат</guimenu
+> <guimenuitem
+>Керування стилями...</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Conditional Styles-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Автоформат...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Автоформатування вибраних комірок. За допомогою діалогового вікна ви зможете обрати один з двох запропонованих форматів.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Об’єднати комірки</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Об’єднати вибрані комірки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Роз’єднати комірки</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Роз’єднати (розбити) раніше об’єднані комірки. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Скоригувати рядок і колонку</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Встановлює розміри рядка і колонки так, щоб вміст вибраної комірки було відображено належним чином.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Рядок</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити розмір, вирівняти, сховати або показати рядки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Колонка</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити розмір, вирівняти, сховати або показати колонки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Аркуш</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Сховати, показати робочий аркуш або налаштувати додаткові властивості аркуша.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guimenuitem
+>Формат сторінки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити компонування друкованої сторінки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Формат</guimenu
+> <guisubmenu
+>Діапазон друку</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Визначити або відновити початкові значення діапазону друку.</action>
+</para
+></listitem>
+</varlistentry>
+
+ <!--FIXME missing Manual Page Breaks, Anchors, Document Settings-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="datamenu">
+<title
+>Меню «Дані»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Дані</guimenu
+> <guimenuitem
+>Впорядкувати...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Впорядкувати дані у вибраних комірках.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="sort"
+>Впорядкування даних</link
+>. </para
+></listitem>
+</varlistentry>
+<!--FIXME missing Filter-->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Дані</guimenu
+> <guimenuitem
+>Текст у колонки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>За використання цього пункту меню програма спробує обробити текст у вибраних комірках як дані <acronym
+>CSV</acronym
+>, розподіливши їх за різними комірками у рядку. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>G</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>Дані</guimenu
+> <guimenuitem
+>Ділянки з назвами...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкрити</action
+> діалогове вікно <guilabel
+>Ділянки з назвами</guilabel
+> для вибору, додавання, редагування або вилучення ділянок з назвами. Докладніше про це можна дізнатися з розділу <link linkend="namedareas"
+>Іменовані комірки і області</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Дані</guimenu
+> <guimenuitem
+>Консолідувати...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Об’єднати дані.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="consolidate"
+>Об’єднання даних</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Дані</guimenu
+> <guimenuitem
+>Підсумки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Створити підсумки різного роду у базі даних.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Дані</guimenu
+> <guimenuitem
+>Коректність...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Встановити або змінити критерії перевірки на помилковість і повідомлення про помилку для вибраних комірок.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="validcheck"
+>Перевірка коректності</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Дані</guimenu
+> <guimenuitem
+>Пошук розв’язку...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкрити діалогове вікно пошуку розв’язку задачі програмування</action
+>. Докладніше про це можна дізнатися з розділу <link linkend="goalseek"
+>Пошук розв’язку</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Дані</guimenu
+> <guimenuitem
+>Зведена таблиця...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкрити діалогове вікно налаштовування зведеної таблиці</action
+>. Докладніше про це у <link linkend="pivottable"
+>розділі щодо зведених таблиць</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="toolsmenu">
+<title
+>Меню «Інструменти»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Перевірка правопису...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Перевірити правопис тексту робочого аркуша.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Нетипові списки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Переглянути або змінити особливі послідовності слів, які розпізнає &sheets;. Цим списком можна скористатися для додавання особливих <link linkend="series"
+>послідовностей</link
+> на робочий аркуш.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Захистити аркуш...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Захистити аркуш паролем. Програма відкриє діалогове вікно, у якому ви зможете ввести пароль. Якщо ви знімете позначку з цього пункту, програма знову ж таки відкриє діалогове вікно, у якому вам слід буде ввести пароль для зняття захисту з аркуша. Захист аркуша означає захист всіх його комірок. На захищеному аркуші формат комірок не можна змінювати, а їх вміст не можна перезаписувати.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Захистити документ...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para>
+<action
+>Захистити весь документ паролем. Програма відкриє діалогове вікно, у якому ви зможете ввести пароль. Якщо ви знімете позначку з цього пункту, програма знову ж таки відкриє діалогове вікно, у якому вам слід буде ввести пароль для зняття захисту з документа. Захист документа означає, що ви не зможете перейменовувати або вилучати його аркуші. Захист документа не означає, що захищено кожен з його аркушів.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+></keycombo
+> </shortcut
+> <guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Перерахувати аркуш</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Перерахувати значення формул поточного аркуша.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keysym
+>F9</keysym
+> </shortcut
+> <guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Перерахувати документ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Переобчислити значення формул всіх аркушів.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Tools</guimenu>
+<guimenuitem
+>Insert Calendar...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
+</action>
+</para
+></listitem>
+</varlistentry>
+-->
+  
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Виконати файл скрипту...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+>За допомогою цього пункту ви зможете вибрати файл зовнішнього скрипту, який слід виконати у &sheets;. У &sheets; передбачено підтримку роботи зі скриптами мовами JavaScript, Python і Ruby. З типовими прикладами скриптів можна ознайомитися за допомогою підменю <menuchoice
+><guimenu
+>Інструменти</guimenu
+><guisubmenu
+>Скрипти</guisubmenu
+></menuchoice
+>.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guisubmenu
+>Скрипти</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+>За допомогою цього підменю ви можете виконати скрипт для експортування або імпортування даних у різних форматах, збереження журналу роботи у &sheets; до файла, використання <ulink url="https://live.gnome.org/Orca"
+>системи синтезу мовлення Orca</ulink
+> для покращення доступності, налагоджування скриптів Python і Ruby або додавання функцій для показу курсу акцій або погодних умов у таблиці. Ви можете навіть скористатися деякими з <ulink url="http://www.r-project.org/"
+>функцій R</ulink
+> (для цього слід встановити <ulink url="http://rpy.sourceforge.net/rpy.html"
+>модуль RPy</ulink
+>).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Менеджер скриптів...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкрити діалогове вікно</action
+> <guilabel
+>Менеджера скриптів</guilabel
+>, за допомогою цього діалогового вікна ви зможете виконати, завантажити, вивантажити, встановити, вилучити і отримати додаткові скрипти. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Інструменти</guimenu
+> <guimenuitem
+>Оптимізація функцій...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Відкрити</action
+> діалогове вікно <guilabel
+>Оптимізація функцій</guilabel
+>, за допомогою якого ви можете вибрати комірку функції призначення, ціль оптимізації (<guilabel
+>Максимізувати</guilabel
+>, <guilabel
+>Мінімізувати</guilabel
+> або ввести <guilabel
+>Значення</guilabel
+>) і множину комірок параметрів функції. </para
+></listitem>
+</varlistentry>
+  </variablelist
+></para>
+</sect1>
+
+<sect1 id="settingsmenu">
+<title
+>Меню «Параметри»</title>
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guisubmenu
+>Показані панелі</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показати або сховати панелі інструментів: <guilabel
+>Файл</guilabel
+>, <guilabel
+>Зміни</guilabel
+>, <guilabel
+>Навігація</guilabel
+>, <guilabel
+>Шрифт</guilabel
+>, <guilabel
+>Формат</guilabel
+> і <guilabel
+>Колір/Рамка</guilabel
+>.</action>
+</para
+></listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term
+><menuchoice>
+<guimenu
+>Settings</guimenu>
+<guimenuitem
+>Dockers</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+>FIXME
+</para
+></listitem>
+</varlistentry>
+-->
+<!--FIXME missing:
+Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
+ -->
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Смужка стану</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показати або сховати смужку стану.</action
+> У смужці стану буде показано додаткові відомості щодо вибраних елементів та поточні обчислення для виділених комірок. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Панель вкладок</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Показати або сховати панель вкладок.</action
+> За допомогою панелі вкладок ви зможете отримати доступ до всіх аркушів поточного документа. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Налаштувати скорочення...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Налаштувати клавіатурні скорочення, що використовуватимуться у &sheets;.</action
+> Докладніше про це можна дізнатися з розділу щодо <link linkend="configshort"
+>налаштування скорочень</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Налаштувати пенали...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Налаштувати панелі інструментів.</action
+> Докладніші відомості щодо цього викладено у розділі, присвяченому <link linkend="configtoolbars"
+>налаштуванню панелей інструментів</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Теми</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вибрати тему кольорів для вікна &sheets;.</action
+> Ви можете вибрати одну з попередньо визначених схем кольорів або скористатися пунктом <guimenuitem
+>Налаштування...</guimenuitem
+> і відкрити <ulink url="help:/kcontrol/colors"
+>вікно модуля вибору кольорів «Системних параметрів»</ulink
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Активний профіль автора</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Налаштувати профіль автора поточного документа.</action
+> Ви можете вибрати один з профілів, визначених за допомогою <link linkend="configauthor"
+>вікна налаштувань &sheets;</link
+>, <guimenuitem
+>Типовий профіль автора</guimenuitem
+>, визначений за даними програми «Системні параметри» або скористатися порожнім профілем <guimenuitem
+>Анонімний</guimenuitem
+>, який може забезпечити вашу конфіденційність. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Налаштувати сповіщення...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Налаштувати систему сповіщень &sheets;.</action
+> У поточній версії &sheets; немає дій, про які програма може вас сповістити. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>Параметри</guimenu
+> <guimenuitem
+>Налаштувати &sheets;...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Виконати загальне налаштування &sheets;.</action
+> Докладніше про це налаштування можна дізнатися з розділу, присвяченого <link linkend="configdialog"
+>налаштуванню &sheets;</link
+>. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title
+>Меню «Довідка»</title
+>&help.menu.documentation; </sect1>
+
+<sect1 id="rmbmenu">
+<title
+>Контекстне меню, яке викликається правою кнопкою миші</title>
+<para
+>У цьому розділі ми поговоримо про пункти контекстного меню, яке можна відкрити клацанням <mousebutton
+>правою</mousebutton
+> кнопкою миші, коли вказівник перебуває у виділеній комірці або діапазоні комірок, рядків або стовпчиків. </para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;&Alt;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Формат комірки...</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Форматувати вибрані комірки.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="formatspread"
+>Форматування електронної таблиці</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Вирізати</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Надіслати вибрані елементи до буфера обміну даними.</action
+> Якщо після цього ви скористаєтеся пунктом <guilabel
+>Вставити</guilabel
+>, елементи буде пересунуто з їх початкового місця на нове. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Копіювати</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Скопіювати виділені елементи до буфера обміну інформацією.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> </shortcut
+> <guimenuitem
+>Вставити</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити елементи з буфера обміну інформацією до вибраних комірок. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Спеціальна вставка...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Особлива форма вставлення.</action
+> Докладніше про неї можна дізнатися з розділів <link linkend="specialpaste"
+>Інші режими вставки</link
+> і <link linkend="sumspecialpaste"
+>Арифметика з використанням спеціальної вставки</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставляє з новими рядками</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити дані з буфера обміну інформацією до вибраних комірок, пересунувши попередній їх вміст для звільнення місця.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Всі</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вилучити вміст вибраних комірок.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Скоригувати рядок і колонку</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити розміри рядка і колонки так, щоб вміст комірок було показано повністю.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Типовий</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Встановити типовий формат для вибраних комірок.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Назва ділянки...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Надати виділеній області назву.</action
+> Докладніше про це можна дізнатися з розділу <link linkend="namedareas"
+>Іменовані області</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Змінити висоту рядка...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити висоту вибраного рядка.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Скоригувати рядок</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити висоту вибраного рядка, щоб вміст комірок було відображено повністю.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Змінити розмір колонки...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити ширину вибраної колонки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Скоригувати колонку</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Змінити ширину вибраної колонки, щоб вміст комірок було показано повністю.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставити комірки...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити нові комірки у вибране місце, пересунувши існуючі комірки для створення вільного простору.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вилучити комірки...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вилучити вибрані комірки з пересуванням на їх місце інших комірок, розташованих ліворуч від вилучених.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставити рядки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити нові рядки над вибраними рядками. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вилучити рядки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вилучити вибрані рядки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Сховати рядки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Сховати вибрані рядки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Показати рядки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Показати вибрані рядки. Для того, щоб мати змогу зробити видимими приховані рядки, вам слід обрати діапазон рядків, який включатиме ці приховані рядки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вставити колонки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вставити нові колонки ліворуч від виділених колонок. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Вилучити колонки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Вилучити вибрані колонки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Сховати колонки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Ховає вибрані колонки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Показати колонки</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Показати вибрані колонки. Для того, щоб мати змогу зробити видимими приховані колонки, вам слід обрати діапазон колонок, який включатиме ці приховані колонки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Коментар...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Додати або змінити коментар до вибраної комірки.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Список вибору...</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Надає вам змогу вибрати і вставити текст з будь-якої з комірок поточної виділеної області комірок до вибраної комірки.</action>
+</para
+></listitem>
+</varlistentry>
+<!-- not in 2.4.0
+<varlistentry>
+<term
+><menuchoice>
+<guimenuitem
+>Show Related Words</guimenuitem>
+</menuchoice
+></term>
+<listitem
+><para
+><action
+>Opens the <guilabel
+>Related Words</guilabel
+> dialog box.</action
+> 
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="othershort">
+<title
+>Інші клавіатурні скорочення</title>
+<para
+>У цьому розділі описано ті з клавіатурних скорочень &sheets;, які використовуються для виконання дій, пунктів яких немає у жодному з меню програми.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keycap
+>H</keycap
+></keycombo>
+</term>
+<listitem
+><para
+>Вмикає або вимикає показ бічних панелей.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Клавіші зі стрілками</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Якщо вибрану комірку зайнято, пересуне курсор на початок або у кінець зайнятого блоку у поточному рядку або колонці. Якщо вибрану комірку не зайнято, пересуне курсор на початок або у кінець блоку незайнятих комірок у поточному рядку або колонці. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;&Shift;<keysym
+>Клавіші зі стрілками</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Якщо вибрану комірку зайнято, призведе до вибору всіх зайнятих комірок до початку або до кінця зайнятого блоку у поточному рядку або колонці. Якщо вибрану комірку не зайнято, призведе до вибору всіх назайнятих комірок до початку або до кінця блоку незайнятих комірок у поточному рядку або колонці. </action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Page Down</keysym>
+</term>
+<listitem
+><para
+><action
+>Пересунути курсор комірок на 10 комірок вниз.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keysym
+>Page Up</keysym>
+</term>
+<listitem
+><para
+><action
+>Пересунути курсор комірок на 10 комірок вгору.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Down</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Перейти до наступного аркуша.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>Page Up</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Перейти до попереднього аркуша.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycap
+>F4</keycap>
+</term>
+<listitem
+><para
+><action
+>Перемкнути режим посилання у комірках</action
+> між звичайними і <link linkend="absolute"
+>абсолютними посиланнями</link
+>. </para
+></listitem>
+</varlistentry>
+<!-- does not work in 2.4.0
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>&amp;</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Add a border to the selected cell(s).</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>$</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in Money
+format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>%</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Percentage format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>^</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Scientific format.</action>
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>#</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in 
+Date format</action
+>. The value is taken as the number of days since 
+1 January 1900.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>@</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+Time format</action
+>. The value is taken as the number of seconds since
+midnight.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<keycombo action="simul"
+>&Ctrl;<keysym
+>!</keysym
+></keycombo>
+</term>
+<listitem
+><para
+><action
+>Display the value of the selected cell(s) in
+normal Number format</action
+>.
+</para
+></listitem>
+</varlistentry>
+-->
+</variablelist>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

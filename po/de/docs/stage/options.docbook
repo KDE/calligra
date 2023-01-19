@@ -1,0 +1,333 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Hans-Frieder</firstname
+><surname
+>Hirsch</surname
+><affiliation
+><address
+><email
+>f.hirsch@t-online.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Einrichtung von &stage;</title>
+
+<sect1 id="configure-dialog">
+<title
+>Der Einrichtungsdialog</title>
+
+<sect2 id="configure-misc">
+<title
+>Verschiedenes</title>
+
+<screenshot>
+<screeninfo
+>Verschiedenes</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-misc.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Verschiedenes</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Einheiten</guilabel
+></term>
+<listitem
+><para
+>Wählen Sie die Standardeinheit, die in Ihren Folien verwendet wird.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Radius der Ziehpunkte</guilabel
+></term>
+<listitem
+><para
+>Wenn Sie ein Objekt mit dem Standardwerkzeug (Pfeil) auswählen, wird der Umriss mit gelben und roten Quadraten angezeigt. Der Radius dieser Ziehpunkte  (zur Größenänderung, Drehung &etc;) legt die Größe diese Elemente fest, je größer desto einfacher sind sie zu treffen.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Empfindlichkeit der Ziehpunkte</guilabel
+></term>
+<listitem
+><para
+>Mit dieser Einstellung geben Sie an, wie der Abstand zum Ziehpunkt für die Aktivierung ist.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Versatz beim Einfügen</guilabel
+></term>
+<listitem
+><para
+>Dieser Versatz kann nur geändert werden, wenn <guilabel
+>Am Cursor einfügen</guilabel
+> abgeschaltet ist. Wenn  Sie mit ein Objekt mit den Kurzbefehlen <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+></keycombo
+> kopieren und mit <keycombo action="simul"
+>&Ctrl;<keycap
+>V</keycap
+></keycombo
+> an einer Stelle einfügen, an der sich bereits ein Objekt befindet, wird das eingefügte Objekt um diesen Wert nach rechts unten versetzt eingefügt.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Am Cursor einfügen</guilabel
+></term>
+<listitem
+><para
+>Deaktiviert den Versatz beim Einfügen und fügt ein Objekt immer an der Position des Mauszeigers ein.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-grid">
+<title
+>Gitter</title>
+
+<screenshot>
+<screeninfo
+>Gitter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-grid.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Gitter</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Gitter</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Gitter anzeigen</guilabel
+></term>
+<listitem
+><para
+>Wenn diese Option aktiviert ist, zeigt &stage; ein Punktgitter an. Diese Punkte repräsentieren die Schnittpunkte eines Gitters aus wagerechten und senkrechten Linien. Sie dienen zur exakten Positionierung von Objekten auf der Folie.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>An Gitter ausrichten</guilabel
+></term>
+<listitem
+><para
+>Wenn diese Option markiert ist, werden verschobene oder neu erstellte Objekte mit ihrer linken oberen Ecke auf dem nächstliegenden Gitterpunkt <quote
+>einrasten</quote
+>.</para>
+<para
+>Trotzdem können Sie Objekten auf der Folie beliebig anordnen. Diese Option hilft aber bei der genauen Ausrichtung von Objekten. Bei Bedarf kann diese Funktion schnell ein- oder ausgeschaltet werden.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Gitterfarbe:</guilabel
+></term>
+<listitem
+><para
+>Stellen Sie hier die Gitterfarbe ein, als Standard ist Schwarz vorgegeben.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+<variablelist>
+<title
+><guilabel
+>Abstände</guilabel
+></title>
+<para
+>Mit dem Symbol <inlinemediaobject
+><imageobject
+> <imagedata fileref="link.png" format="PNG"/></imageobject
+></inlinemediaobject
+> bleibt das Verhältnis der unten genannten Abweichungen erhalten, mit dem Symbol <inlinemediaobject
+><imageobject
+> <imagedata fileref="break.png" format="PNG"/></imageobject
+></inlinemediaobject
+> können Sie die beiden unten genannten Werte unabhängig voneinander einstellen.</para>
+<varlistentry>
+<term
+><guilabel
+>Waagerecht:</guilabel
+></term>
+<listitem
+><para
+>Einstellung des waagerechten Abstandes zwischen Linien des Gitters. Standard ist 0,5 cm.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Senkrecht:</guilabel
+></term>
+<listitem
+><para
+>Einstellung des senkrechten Abstandes zwischen Linien des Gitters. Standard ist 0,5 cm.</para
+></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-document">
+<title
+>Dokument</title>
+
+<screenshot>
+<screeninfo
+>Dokument</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-document.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Dokument</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title
+><guilabel
+>Dokument-Einstellungen</guilabel
+></title>
+<varlistentry>
+<term
+><guilabel
+>Intervall für automatisches Speichern:</guilabel
+></term>
+<listitem
+><para
+>Stellen Sie hier die Zeit für die automatische Sicherung ein. Mit <guilabel
+>Keine automatische Sicherung</guilabel
+> schalten Sie die Sicherung aus. Sie können hier einen Zeitraum von 1 bis 60 Minuten eingeben.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Sicherungsdatei erstellen:</guilabel
+></term>
+<listitem
+><para
+>Ist diese Einstellung aktiviert, wird eine Sicherungsdatei <filename
+>.&lt;name&gt;.odp.autosave.odp</filename
+> im Ordner der geöffneten Datei angelegt. Diese Sicherungsdatei können Sie bei Problemen mit dem Original verwenden. Die Sicherungsdatei wird jedesmal neu geschrieben, wenn Sie Ihr Dokument speichern oder wenn eine automatische Sicherung ausgeführt wird.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-author">
+<title
+>Autor</title>
+
+<screenshot>
+<screeninfo
+>Autor</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure-author.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Dokument</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Wählen Sie aus dem Auswahlfeld eine Autorprofil für Ihr Dokument. </para>
+<para
+>Um neue Profile hinzuzufügen oder vorhandene zu löschen, benutzen Sie die Knöpfe rechts neben dem Auswahlfeld mit den Autorprofilen. </para>
+</sect2>
+
+</sect1>
+
+</chapter>

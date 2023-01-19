@@ -1,0 +1,171 @@
+# translation of kspreadinsertcalendar.po to Romanian
+#
+# Claudiu Costin <claudiuc@kde.org>, 2005.
+# Sergiu Bivol <sergiu@cip.md>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadinsertcalendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2009-01-02 15:32+0200\n"
+"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "Eroare"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "Avertisment"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+
+#: CalendarTool.cpp:102
+#, fuzzy
+#| msgid "Insert Calendar..."
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Inserare calendar..."
+
+#: CalendarTool.cpp:107
+#, fuzzy, kde-format
+#| msgid "Insert Calendar..."
+msgid "Calendar from %1 to %2"
+msgstr "Inserare calendar..."
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "săptămână"
+
+#: CalendarToolFactory.cpp:24
+#, fuzzy, kde-format
+#| msgid "Insert Calendar..."
+msgid "Calendar"
+msgstr "Inserare calendar..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, fuzzy, kde-format
+#| msgid "Insert Calendar..."
+msgid "Calendar Tool"
+msgstr "Inserare calendar..."
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, fuzzy, kde-format
+#| msgid "&Insert"
+msgid "Insert"
+msgstr "&Inserează"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, fuzzy, kde-format
+#| msgid "Start Date"
+msgid "Start date:"
+msgstr "Data de început"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, fuzzy, kde-format
+#| msgid "End Date"
+msgid "End date:"
+msgstr "Data de sfârșit"
+
+#, fuzzy
+#~| msgid "&Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "&Inserează"
+
+#, fuzzy
+#~| msgid "Start Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Data de început"
+
+#, fuzzy
+#~| msgid "End Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Data de sfârșit"
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Eroare"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Avertisment"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "săptămână"
+
+#, fuzzy
+#~| msgid "Insert Calendar..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Inserare calendar..."
+
+#~ msgid "&Cancel"
+#~ msgstr "&Renunță"
+
+#~ msgid "&Tools"
+#~ msgstr "&Unelte"
+
+#~ msgid "(c) 2005, The KSpread Team"
+#~ msgstr "(c) 2005, Echipa KSpread"
+
+#~ msgid "Raphael Langerhorst"
+#~ msgstr "Raphael Langerhorst"

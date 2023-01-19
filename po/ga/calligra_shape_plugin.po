@@ -1,0 +1,62 @@
+# Irish translation of PluginShape
+# Copyright (C) 2011 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PluginShape package.
+# Kevin Scannell <kscanne@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: PluginShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-12-28 12:28-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+
+#: PluginShape.cpp:36
+#, kde-format
+msgid "Unknown"
+msgstr "Anaithnid"
+
+#: PluginShape.cpp:40
+#, kde-format
+msgid "Plugin of mimetype: %1"
+msgstr "Breiseán de chineál MIME: %1"
+
+#: PluginShapeFactory.cpp:22
+#, kde-format
+msgid "Plugin Placeholder"
+msgstr "Ionadchoinneálaí Breiseáin"
+
+#: PluginShapeFactory.cpp:24
+#, kde-format
+msgid "Plugin Placeholder, embedded or fullscreen"
+msgstr "Ionadchoinneálaí Breiseáin, leabaithe nó lánscáileán"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "Anaithnid"
+
+#, fuzzy
+#~| msgid "Plugin of mimetype: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin of mimetype: %1"
+#~ msgstr "Breiseán de chineál MIME: %1"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder"
+#~ msgstr "Ionadchoinneálaí Breiseáin"
+
+#, fuzzy
+#~| msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Placeholder, embedded or fullscreen"
+#~ msgstr "Ionadchoinneálaí Breiseáin, leabaithe nó lánscáileán"

@@ -1,0 +1,356 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+ <!ENTITY sheets "<application
+>Calligra Sheets</application
+>">
+ <!ENTITY words "<application
+>Calligra Words</application
+>">
+ <!ENTITY stage "<application
+>Calligra Stage</application
+>">
+ <!ENTITY flow "<application
+>Calligra Flow</application
+>">
+ <!ENTITY plan "<application
+>Calligra Plan</application
+>">
+ <!ENTITY karbon "<application
+>Calligra Karbon</application
+>">
+ <!ENTITY calligra "Calligra">
+ <!ENTITY kappname "&calligra;">
+ <!ENTITY package "Calligra">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % Estonian  "INCLUDE"
+> <!-- change language only here -->
+]>
+
+<!-- maintained by raphael.langerhorst@kdemail.net -->
+
+<book id="calligra" lang="&language;">
+<bookinfo>
+<title
+>&calligra;</title>
+<subtitle
+>Üldine sissejuhatus</subtitle>
+<authorgroup>
+<author
+>&Raphael.Langerhorst; &Raphael.Langerhorst.mail; </author>
+<author
+>&Jost.Schenck; &Jost.Schenck.mail; </author>
+<othercredit role="translator"
+><firstname
+>Marek</firstname
+><surname
+>Laane</surname
+><affiliation
+><address
+><email
+>bald@starman.ee</email
+></address
+></affiliation
+><contrib
+>Tõlge eesti keelde</contrib
+></othercredit
+> 
+</authorgroup>
+
+<date
+>2012-01-03</date>
+<releaseinfo
+>2.4.0</releaseinfo>
+
+<abstract>
+<para
+>&calligra; on &kde; kunstiloome- ja kontoritööpakett. </para>
+</abstract>
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>Calligra</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Sissejuhatus</title>
+<sect1>
+<title
+>&calligra; komponendid</title>
+
+<important
+> <para
+>Käesoleva käsiraamatu kõige uuema versiooni võib leida internetist aadressil <ulink url="http://docs.kde.org/development/en/calligra/calligra/index.html"
+>http://docs.kde.org</ulink
+>.</para
+></important>
+
+<para
+>&calligra; kujutab endast &kde; kunstiloome- ja kontoritöö paketti. Praegu koosneb &calligra; järgmistest rakendustest: </para>
+
+<itemizedlist>
+<listitem
+><para
+>&words; (raamipõhine tekstitöötlusrakendus)</para
+></listitem>
+<listitem
+><para
+>&sheets; (tabelitöötluse rakendus)</para
+></listitem
+> 
+<listitem
+><para
+>&stage; (esitluste valmistaja)</para
+></listitem>
+<listitem
+><para
+>&flow; (vooskeemide koostamise rakendus)</para
+></listitem>
+<listitem
+><para
+>&karbon; (vektorgraafika rakendus)</para
+></listitem>
+<listitem
+><para
+>&krita; (rastergraafika rakendus)</para
+></listitem>
+<listitem
+><para
+>&kexi; (integreeritud andmehalduse keskkond)</para
+></listitem>
+<listitem
+><para
+>&plan; (projektihalduse rakendus)</para
+></listitem>
+</itemizedlist>
+
+<para
+>&calligra; rakendused, mille aluseks on Flake-tehnoloogia, suudavad väga hästi omavahelise koostööga hakkama saada. Iga &calligra; komponenti on võimalik põimida suvalisse &calligra; dokumenti. Näiteks on võimalik &sheets;iga loodud arvutustabel lisada otse &words;i dokumenti. Sel moel saab &calligra; rakendustega luua vägagi keerukaid ja kompleksseid dokumente. </para>
+
+<para
+>Pluginad laiendavad märgatavalt &calligra; niigi suurt funktsionaalsust. Mõnes rakenduses on neid päris palju kasutusel ning sa võid neid ka ise luua. </para>
+
+<para
+>Käsolev käsiraamat kõneleb &calligra; üldistest omadustest, mis on ühised kõigile või vähemalt enamikule rakendustest. Täpsemat infot konkreetse rakenduse kohta leiab nende käsiraamatutest. </para>
+
+</sect1>
+
+<sect1 id="features">
+<title
+>Ülevaade &calligra; omadustest</title>
+<sect2 id="featureintegration">
+<title
+>Integreeritus</title>
+<para
+>&calligra; pakub välja raamistiku, millele toetuvad kõik komponendid. See võimaldab neid väga suurel määral lõimida. Soovi korral võib iga kasutaja luua ka ise komponente, mis raamistikus ilusasti töötavad. </para>
+</sect2>
+<sect2 id="featureleightweight">
+<title
+>Kergus</title>
+<para
+>Paljudele komponentidele vaatamata on &calligra; väga kerge ja kiire ega koorma märkimisväärselt arvuti mälu. Selle taga seisab asjaolu, et &calligra; tugineb &kde;-le, mis juba ise kujutab endast väga võimsat rakenduste arendamise raamistikku. </para>
+<para
+>Samuti ei püüa &calligra; koormata kasutajaliidest üle omadustega, mille järele enamikul kasutajatest usutavasti erilist vajadust pole. Nii on tulemuseks kena ja selge kasutajaliides, mis võimaldab keskenduda just oma tööle. </para>
+<para
+>Kergus võib küll harvadel juhtudel tähendada ka seda, et mõni eriline funktsioon ei ole kättesaadav. Sel juhul on aga alati võimalik vajalik funktsionaalsus ise luua &calligra; laiendamise teel. Lisaomadusi ja -võimalusi saab alati pakkuda täiendavate pluginate või skriptidega, mis ei koorma &calligra;t ennast. </para>
+</sect2>
+<sect2 id="featurecompleteness">
+<title
+>Täielikkus</title>
+<para
+>&calligra; pakub laia valikut komponente, mis peaksid katma enamiku kodu- ja ärikasutajate vajadustest. Lisavõimalusi saab alati teostada skriptide, pluginate või isegi uute, &calligra; raamistikule loodud komponentidega. </para>
+</sect2>
+<sect2 id="featurefileformat">
+<title
+>OASIS-e OpenDocument-vorming</title>
+<para
+>Iga kontoritööpaketi suureks eeliseks on see, kui ta võib tugineda kindlatele standarditele. Eriti just failivormingu tasandil võimaldab see muretut dokumentide vahetamist teiste kontoritööpakettide kasutajatega. See tagab ka sõltumatuse tarkvarapakkuja hetketujudest, mis on eriti oluline ärimaailmas, aga tuleb kasuks ka kodukasutajatele. </para>
+<para
+>Sel põhjusel on &calligra; võtnud oma loomupärase failivorminguna kasutusele OASIS-e OpenDocument-vormingu. </para>
+</sect2>
+<sect2 id="featurekde">
+<title
+>&kde; omadused</title>
+<para
+>Kuna &calligra; tugineb &kde;-le, võimaldab &calligra; kasutada ka kõike seda, mida &kde; rakendustelt vähegi oodata võib, kaasa arvatud &DBus;, KParts, Flake, lõimimine töölauaga, seadistatavus ja nii edasi. Kõik see muudab &calligra; välimuse äärmiselt tuttavaks ja integreerib &calligra; tõeliselt töökeskkonda, mis tagab sujuva ja tõrgeteta töö. </para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter id="configuration">
+<title
+>&calligra; ja oma süsteemi seadistamine</title>
+
+<para
+>Kuigi &calligra; võib töötada väga edukalt ka ilma midagi muutmata, on siiski mõningaid asju, mille näppimine võib &calligra; veelgi paremaks muuta. Käesolevas peatükis näitamegi, mida võib ette võtta, et saavutada uue kontoritöö paketiga kõige paremaid tulemusi. &calligra; on äärmiselt seadistatav, isegi tööriistaribasid ja menüüsid saab mitmeti muuta. </para>
+
+<sect1 id="custom-gui">
+<title
+>&calligra; &GUI; kohandamine</title>
+
+<para
+>&calligra; puhtal kujul pakub &GUI;-d (graafilist kasutajaliidest), mis peaks vastama enamiku inimeste vajadustele. Kuid võib olla mis tahes põhjusi, mis panevad sind tahtma rakenduste väljanägemist muuta. </para>
+
+<para
+>Minu ema näiteks pelgab nuppe ja menüükirjeid, millest ta aru ei saa. &calligra; kohandamiseks just tema vajadustele taandasin &GUI; sõna otseses mõttes miinimumini, säilitades vaid hädavajalikud funktsioonid. Kuna ta kirjutab peaaegu ainult kirju ja kasutab vaid kindlaid malle, siis kõikvõimalikud võimalused salvestamiseks, avamiseks, trükkimiseks &etc; polnud talle vajalikud. </para>
+
+<para
+>Tänu &Qt; ja &kde; loodud kontseptsioonile <quote
+>action</quote
+> saab &calligra; menüü- ja tööriistaribasid igati muuta. Kahjuks puuduvad praegu veel selleks hõlpsasti kasutatavad dialoogid. &calligra; salvestab oma &GUI; seadistused &XML;-failides, mida tuleb siis vastavalt vajadustele redigeerida. Loodetavasti muutub tulevikus asi hõlpsamaks, kuid praegu läheb selleks vaja mõningaid algteadmisi &XML; (või &HTML;, mis kujutab endast &XML;-i alamliiki) dokumentide toimimise kohta. </para>
+
+<para
+>Tavaliselt on igal &calligra; rakendusel vähemalt kaks sellist &XML;-faili: üks kirjeldab shelli &GUI;-d (see on põhimõtteliselt see, mida näeb siis, kui ühtki dokumenti ei ole avatud) ning teine vastava komponendi &GUI;-d (see on see, mida tavaliselt nähakse). Näiteks &words;il kannavad need kaks &XML;-faili nime <filename
+>calligra_shell.rc</filename
+> ja <filename
+>words.rc</filename
+>. </para>
+
+<para
+>Lihtne rc-fail näeb välja selline. </para>
+
+<example>
+<title
+>Lihtsa rc-faili näide</title>
+<screen
+>&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+&lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;separator/&gt;
+&lt;action name="edit_find"/&gt;
+&lt;/menu&gt;
+&lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+&lt;action name="insert_picture"/&gt;
+&lt;action name="insert_clipart"/&gt;
+&lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+&lt;action name="insert_var_datefix"/&gt;
+&lt;action name="insert_var_datevar"/&gt;
+&lt;/menu&gt;
+&lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+&lt;toolbar name="edit_toolbar" position="right"&gt;
+&lt;action name="edit_cut"/&gt;
+&lt;action name="edit_copy"/&gt;
+&lt;action name="edit_paste"/&gt;
+&lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
+</screen>
+</example>
+
+</sect1>
+
+</chapter>
+
+<chapter id="more-info">
+<title
+>Kuidas saada rohkem infot</title>
+
+<sect1 id="other-manuals">
+<title
+>Muud &calligra; käsiraamatud</title>
+
+<para
+>Täpsemat teavet &calligra; erinevate rakenduste kohta leiab nende käsiraamatutest. </para>
+
+</sect1>
+
+<sect1 id="links">
+<title
+>Viidad</title>
+
+<para
+>Järgnevad viidad võivad tulla kasuks, kui soovid saada rohkem teada &kde; või &calligra; kohta. </para>
+
+<itemizedlist>
+<listitem>
+<para
+><ulink url="http://calligra.org"
+>&calligra; kodulehekülg</ulink
+>. Siit leiab infot, kuidas &calligra;t hankida ja paigaldada, uudiseid &calligra; arendamise kohta, pilte &etc; </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://www.kde.org"
+>&kde; kodulehekülg</ulink
+>. &kde; on UNIX-laadsete operatsioonisüsteemide kõige täiuslikum ja absoluutselt vaba töökeskkond. &calligra; kasutab &kde; teeke. </para
+></listitem>
+<listitem>
+<para
+><ulink url="http://qt-project.org/"
+>&Qt; lehekülg</ulink
+>. C++ tööriistakomplekti &Qt; looja. &kde; ja &calligra; kasutavad &Qt;-d. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="programmersinfo">
+<title
+>&calligra; programmeerimine</title>
+
+<sect1 id="programmingintro">
+<title
+>Sissejuhatus</title>
+<para
+>Kui soovid kaasa aidata &calligra; arendamisele, võivad kasuks tulla järgmised kohad: </para>
+
+<itemizedlist>
+<listitem
+><para
+>Veebileheküljel <ulink url="http://techbase.kde.org/Development"
+>http://techbase.kde.org/Development</ulink
+> leiab hulganisti dokumente programmeerimise kohta &Qt; ja &kde; abil. Täielikku &kde; teegi dokumentatsiooni pakub lehekülg <ulink url="http://api.kde.org/"
+>KDE API Reference</ulink
+>. </para
+></listitem
+> 
+<listitem
+><para
+>Esimene samm koodiga panustamisel on järgida <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
+>neid juhiseid</ulink
+> lähtekoodi hankimiseks ja ehitamiseks. </para
+></listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="legal">
+<title
+>Autoriõigus ja litsents</title>
+
+<para
+>&calligra; on sündinud paljude arendajate ühise pingutuse tulemusena. Iga &calligra; lähtefail kannab selle kirjutaja autoriõigust, kelle nime võib koos faili kohta käiva litsentsiga leida iga lähtefaili algusest. </para>
+
+<para
+>Selle käsiraamatu autoriõigus kuulub &Jost.Schenck;ile. Käsiraamatut võib levitada vabalt, kuni sellele on lisatud märge autoriõiguse kohta. Seda võib ükspuha millises ulatuses muuta tingimusel, et muudatused saadetakse mulle või &kde; <acronym
+>Git</acronym
+>-i. Ma ei kanna mingisugust vastutust millegi eest, mis võib juhtuda selle käsiraamatu kasutamise tagajärjel. </para>
+
+<para
+>Muude &calligra; käsiraamatute autoriõigus kuulub vastavalt nende autoritele. </para>
+
+<para
+>Tõlge eesti keelde: Marek Laane <email
+>bald@smail.ee</email
+></para
+> 
+&underFDL; &underGPL; </chapter>
+
+&documentation.index; 
+</book>
+

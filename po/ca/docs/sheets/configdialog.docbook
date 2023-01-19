@@ -1,0 +1,570 @@
+<chapter id="configdialog">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+&traductor.Antoni.Bella; 
+</authorgroup>
+</chapterinfo>
+<title
+>El diàleg de configuració de &sheets;</title>
+
+<para
+>Seleccionant <menuchoice
+><guimenu
+>Arranjament</guimenu
+><guimenuitem
+>Configura el &sheets;...</guimenuitem
+></menuchoice
+> s'obre un diàleg amb diverses pàgines, seleccionades amb les icones al diàleg de l'esquerra, les quals us permeten canviar molts aspectes del funcionament de &sheets;.</para>
+
+<sect1 id="configinterface">
+<title
+>Interfície</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure2.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase
+>Configuració de la interfície.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Moviment del cursor després de pressionar Retorn:</guilabel
+></term>
+<listitem
+><para
+>Seleccioneu si prement la tecla &Intro; es desplaçarà el cursor <guilabel
+>Avall</guilabel
+>, <guilabel
+>Amunt</guilabel
+>, a la <guilabel
+>Dreta</guilabel
+>, a l'<guilabel
+>Esquerra</guilabel
+>, <guilabel
+>Avall, primera columna</guilabel
+> o <guilabel
+>Cap</guilabel
+> segons determini l'opció de configuració a la casella de selecció d'aquesta llista desplegable. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Funció mostrada a la barra d'estat:</guilabel
+></term>
+<listitem
+><para
+>Aquesta llista desplegable s'utilitza per escollir el càlcul realitzat per la funció <link linkend="statusbarsum"
+>Resum a la Barra d'estat</link
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Unitat:</guilabel
+></term>
+<listitem
+><para
+>Seleccioneu la unitat per defecte que s'utilitzarà als vostres fulls. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Pas de sagnat:</guilabel
+></term>
+<listitem
+><para
+>Estableix la quantitat de sagnat que hi haurà a la cel·la quan escolliu les accions <guilabel
+>Augmenta el sagnat</guilabel
+> o <guilabel
+>Disminueix el sagnat</guilabel
+> des de la barra d'eines. Per omissió aquestes accions no estan habilitades a la barra d'eines.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Captura totes les tecles de navegació mentre s'edita</guilabel
+></term>
+<listitem
+><para
+>Captura totes les tecles de navegació, &ead;, les tecles de fletxa, Re pàg/Av Pàg, tabulador i tabulador enrere, mentre s'edita una cel·la amb l'editor incrustat. Aquest editor és el que apareix directament a la cel·la. Si es capturen, aquestes tecles s'utilitzen per a navegar en l'editor. Altrament, s'utilitzen per a la navegació de cel·les.</para>
+</listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+<para
+>La secció <guilabel
+>Colors</guilabel
+> permet escollir el color de la graella al full. Si no voleu que aparegui cap graella, desmarqueu la casella <guilabel
+>Mostra la graella</guilabel
+> en el diàleg <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Full</guimenuitem
+><guimenuitem
+>Propietats del full</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Aquesta secció també permet seleccionar el color de les línies utilitzades per indicar les vores de pàgina impresa quan es marca la casella <guimenuitem
+>Vores de la pàgina</guimenuitem
+> en el menú <guimenu
+>Visualitza</guimenu
+>.</para>
+<para
+>Seleccioneu <guilabel
+>A mida</guilabel
+> al color actual perquè aparegui el diàleg estàndard del &kde; <guilabel
+>Selecció de color</guilabel
+>.</para>
+
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Graella</guilabel
+></term>
+<listitem
+><para
+>Feu clic aquí per a canviar el color de la graella, &ead;, el color de les vores de cada cel·la. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Vora de la pàgina</guilabel
+></term>
+<listitem
+><para
+>Quan està marcat l'element del menú <menuchoice
+><guimenu
+>Visualitza</guimenu
+><guimenuitem
+>Mostra les vores de pàgina</guimenuitem
+></menuchoice
+>, se us mostraran les vores de pàgina. Feu clic aquí per escollir un altre color per a les vores en comptes del vermell per omissió. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="configopensave">
+<title
+>Obre/Desa</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure3.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Obre/Desa la configuració.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Nombre d'entrades a mostrar a la llista de fitxers recents:</guilabel
+></term>
+<listitem
+><para
+>Controla el màxim nombre de noms de fitxer a mostrar quan seleccioneu <menuchoice
+><guimenu
+>Fitxer</guimenu
+><guisubmenu
+>Obre recent</guisubmenu
+></menuchoice
+>. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Desa automàticament cada:</guilabel
+></term>
+<listitem
+><para
+>Aquí podeu seleccionar el temps entre desaments automàtics, o inhabilitar aquesta característica completament si escolliu <guilabel
+>No desar automàticament</guilabel
+> (arrossegueu el botó lliscant totalment al costat esquerre). </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Crea un fitxer de còpia de seguretat:</guilabel
+></term>
+<listitem
+><para
+>Marqueu aquest quadre si voleu crear fitxers de còpia de seguretat. Per omissió està marcada. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+
+<!-- no longer in config dialog
+<sect1 id="configmisc">
+<title
+><guilabel
+>Misc</guilabel
+></title>
+
+<para
+>The <guilabel
+>Misc</guilabel
+> page of &sheets;'s configuration
+dialog box contains the following items;</para>
+
+<para
+><variablelist>
+<varlistentry>
+<term
+><guilabel
+>Completion mode:</guilabel
+></term>
+<listitem
+><para
+>Lets you choose the (auto) text completion mode from a
+range of options in the drop down selection box.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Show error message for invalid formulae</guilabel
+></term>
+<listitem
+><para
+>If this box is checked a message box will pop up when what
+you have entered into a cell cannot be understood by &sheets;.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Show comment indicator</guilabel
+></term>
+<listitem
+><para
+>If this box is checked cells containing comments will be
+marked by a small red triangle at the top right corner.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+-->
+<!-- Move this to page layout section
+<sect1 id="configpagelayout">
+<title
+><guilabel
+>Page Layout</guilabel
+></title>
+
+<para
+>This page of &sheets;'s configuration dialog box lets you set up the
+default page size, orientation and units used by the printer and by the
+<guilabel
+>Page Layout</guilabel
+> dialog box (obtained by selecting
+<guimenuitem
+>Page Layout...</guimenuitem
+> from the <guimenu
+>Format
+</guimenu
+> menu.)</para>
+
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>Default page size:</guilabel
+></term>
+<listitem
+><para
+>Choose the default page size for your worksheet among all the most common page sizes. Note that you can overwrite the page size for the current sheet using the <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Default page orientation:</guilabel
+></term>
+<listitem
+><para
+>Choose the default sheet orientation: portrait or landscape.
+Note that you can overwrite the orientation for the current sheet using the
+<menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page
+Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Default page unit:</guilabel
+></term>
+<listitem
+><para
+>Choose the default unit that will be used in your all your sheets. Note that you can overwrite the unit for the current sheet using the <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Page Layout...</guimenuitem
+></menuchoice
+> dialog.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+
+</sect1>
+-->
+<!--FIXME empty plugins page
+error message in konsole
+tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTrader: serviceType  "KSpread/Plugin"  not found
+ -->
+<sect1 id="configplugins">
+<title
+>Connectors</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure4.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Configuració dels connectors.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+
+<para
+>Marqueu un connector a la llista per activar-lo. Per a mostrar el diàleg <guilabel
+>Quant a</guilabel
+>, feu clic al botó d'informació a la part dreta de l'element de la llista. </para>
+
+</sect1>
+<!--FIXME link to sonnet handbook -> building blocks-->
+<sect1 id="configspelling">
+<title
+>Ortografia</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure5.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Configuració de la verificació ortogràfica.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+<para
+>Aquesta pàgina permet configurar el comportament del revisor ortogràfic de &sheets;.</para>
+<para
+>Per obtenir més informació, consulteu la documentació del <ulink url="help:kcontrol/spellchecking"
+>corrector ortogràfic</ulink
+>.</para>
+</sect1>
+<!--
+<varlistentry>
+<term
+><guilabel
+>Create root/affix combinations not in dictionary</guilabel>
+</term>
+<listitem
+><para
+>If this box is checked then when &sheets; finds a word in
+the document which it does not recognize but which consists of a recognized
+root word plus a recognized prefix or suffix it will accept it, whereas if
+the box is not checked the spell checker will reject it.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Consider run-together words as spelling errors</guilabel>
+</term>
+<listitem
+><para
+>If this box is checked then common words which are run
+together will be considered to be spelling errors, for example <emphasis>
+cannot</emphasis
+>.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Dictionary:</guilabel
+></term>
+<listitem
+><para
+>This drop down selection box can be used to select
+alternative dictionaries.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Encoding:</guilabel
+></term>
+<listitem
+><para
+>To select the character encoding that should be used.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Client:</guilabel
+></term>
+<listitem
+><para
+>This combo box lets you select between different spell
+checking programs that may be present on your computer.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Skip all uppercase words</guilabel
+></term>
+<listitem
+><para
+>Check this box if you want the spellchecker to ignore
+uppercase words, which are usually acronyms such as &kde;.
+</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Do not check title case</guilabel
+></term>
+<listitem
+><para
+>Check this box if you want the spellchecker to ignore
+the title case, for example My Own Spreadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns.
+</para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+-->
+<sect1 id="configauthor">
+<title
+>Autor</title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure6.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+	    <phrase
+>Configuració de l'autor.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
+<para
+>Trieu un perfil d'autor per al vostre document. </para>
+<para
+>Podeu afegir un nou perfil o eliminar el perfil actual utilitzant els botons a la dreta de la llista desplegable perfils. </para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

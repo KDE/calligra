@@ -1,0 +1,315 @@
+# Translation of calligra-dockers.po to Ukrainian
+# Copyright (C) 2008-2013 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-06-21 14:52+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "У збірці не знайдено форм! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Це не файл Calligra: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "У файлі не знайдено теґу body: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "У файлі не знайдено теґу office:drawing: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "У файлі не знайдено форм: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Додати форму"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Більше"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Відкрити збірку форм"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Вилучити збірку форм"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Типовий"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Геометрія"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Стрілки"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Смішне"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Помилка у збірці"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Властивості форми"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Параметри прилипання"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "У збірці не знайдено форм! %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Це не файл Calligra: %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "У файлі не знайдено теґу body: %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "У файлі не знайдено теґу office:drawing: %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "У файлі не знайдено форм: %1"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Додати форму"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Більше"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Відкрити збірку форм"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Вилучити збірку форм"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Типовий"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Геометрія"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Стрілки"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Смішне"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Помилка у збірці"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Властивості форми"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Settings"
+#~ msgstr "Параметри прилипання"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Вибір кольорів"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Властивості тіні"
+
+#~ msgid "Creation error"
+#~ msgstr "Помилка створення"
+
+#~ msgid "File not found"
+#~ msgstr "Файл не знайдено"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Не створити сховище даних"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Неправильний тип MIME"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Помилка у вбудованому документі"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Формат не розпізнано"
+
+#~ msgid "Not implemented"
+#~ msgstr "Не реалізовано"
+
+#~ msgid "Parsing error"
+#~ msgstr "Помилка синтаксичного аналізу"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Документ захищений паролем"
+
+#~ msgid "Internal error"
+#~ msgstr "Внутрішня помилка"
+
+#~ msgid "Out of memory"
+#~ msgstr "Не вистачає пам'яті"
+
+#~ msgid "Unknown error"
+#~ msgstr "Невідома помилка"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Не вдалося відкрити\n"
+#~ "%2\n"
+#~ "Причина: %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "Не вдалося імпортувати файл: %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Непрозорість:"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Немає"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Суцільний"
+
+#~ msgid "Gradient"
+#~ msgstr "Градієнт"
+
+#~ msgid "Pattern"
+#~ msgstr "Візерунок"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Почергове заповнення"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Звивисте заповнення"
+
+#~ msgid "Stroke and Fill"
+#~ msgstr "Штрих і заповнення"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Властивості штриха"
+
+#~ msgid "Style:"
+#~ msgstr "Стиль:"
+
+#~ msgid "Width:"
+#~ msgstr "Товщина:"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Встановити товщину лінії для виділення"
+
+#~ msgid "Cap:"
+#~ msgstr "Кінець:"
+
+#~ msgid "Butt cap"
+#~ msgstr "Стик"
+
+#~ msgid "Round cap"
+#~ msgstr "Овал"
+
+#~ msgid "Square cap"
+#~ msgstr "Прямокутник"
+
+#~ msgid "Join:"
+#~ msgstr "З’єднання:"
+
+#~ msgid "Miter join"
+#~ msgstr "Фацетне"
+
+#~ msgid "Round join"
+#~ msgstr "Скруглене"
+
+#~ msgid "Bevel join"
+#~ msgstr "Скісне"
+
+#~ msgid "Miter limit:"
+#~ msgstr "Обмеження фацета:"
+
+#~ msgid "Set miter limit"
+#~ msgstr "Встановити обмеження фацета"
+
+#~ msgid "Styles"
+#~ msgstr "Стилі"
+
+#~ msgid "Shapes"
+#~ msgstr "Форми"
+
+#~ msgid "Open..."
+#~ msgstr "Відкрити..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Зберегти книгу..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Створити теку..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Збільшити масштаб"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Зменшити масштаб"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Вилучити теку"
+
+#~ msgid "Templates"
+#~ msgstr "Шаблони"

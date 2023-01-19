@@ -1,0 +1,6842 @@
+# translation of kpresenter.po to Cymraeg
+# Penbwrdd yn Gymraeg.
+# Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+# www.kyfieithu.co.uk<kyfieithu@dotmon.com>, www.gyfieithu.co.uk<kyfieithu@dotmon.com>, 2003.
+# Kyfieithu <kyfieithu@dotmon.com>, 2004.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2004-09-07 14:09+0100\n"
+"Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
+"Language-Team: Cymraeg <cy@li.org>\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&Diwedd"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "&Pei"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, fuzzy, kde-format
+msgid "&Insert"
+msgstr "Mewnosod Ffeil"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "Ff&ormat"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "&Slide"
+msgstr "&Tryloywderau"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, kde-format
+msgid "Sli&de Show"
+msgstr "Sioe T&ryloywder"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Gosodiadau Llwybr"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Sioe Tryloywderau"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+#| msgid "Create HTML Presentation"
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Dileu Tryloywder"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Dileu Tryloywder"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Dileu Tryloywder"
+msgstr[1] "Dileu Tryloywder"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+#| msgid "Presentation duration: "
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Hyd y cyflwyniad:"
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Sioe Tryloywderau"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgid "Change Image Effect"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Newid Effaith Ddelwedd"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+#| msgid "Image &effect:"
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "&Effaith ddelwedd:"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+#| msgid "Delete Slide"
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Dileu Tryloywder"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Golygu Tra&wsnewid Tryloywder"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Ffurfweddu Sioe Tryloywderau"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Golygu Tra&wsnewid Tryloywder"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "Cyflwyniad"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(h)(c) 1998-2003, Y Tîm KPresenter"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "cynhaliwr cyfredol"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "awdur gwreiddiol"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr ""
+
+#: part/KPrAboutData.h:36
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Werner Trobin"
+msgstr "Wedi'i ganoli"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr ""
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr ""
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr ""
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "Cyflwyniad"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+#| msgid "&Closed Line"
+msgid "Carlos Licea "
+msgstr "Llinell &Gaëedig"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Kyfieithu: KD,jr"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kyfieithu@dotmon.com,"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, kde-format
+msgid "Slide %1"
+msgstr "Tryloywder %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Diwedd y Cyflwyniad.  Cliciwch i adael."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Layout"
+msgstr "&Haenlun Tudalen..."
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+#| msgid "Insert Picture"
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Mewnosod Llun"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Pen Color"
+msgstr "Lliw"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "Cynyddu Maint Wynebfath"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Black"
+msgstr "L&liwiau:"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "Lled:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, kde-format
+msgid "Green"
+msgstr "Gwyrdd"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, kde-format
+msgid "Red"
+msgstr "Coch"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, kde-format
+msgid "Blue"
+msgstr "Glas"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+#| msgid "Slow"
+msgid "Yellow"
+msgstr "Araf"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+#| msgid "&Next Slide"
+msgid "Next Slide"
+msgstr "Tryloywder &Nesaf"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, fuzzy, kde-format
+#| msgid "Speak &tool tips"
+msgid "Speaker Notes"
+msgstr "Cyngorynnau erfyn &llais"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Current Slide %1 of %2"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "End of Slide Show"
+msgstr "Sioe Tryloywderau"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start after previous animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "start with previous animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Siâp"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+#| msgid "Move Slide"
+msgid "&Move Here"
+msgstr "Symud Tryloywder"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+#| msgid "Copy Slide"
+msgid "&Copy Here"
+msgstr "Copïo Tryloywder"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, kde-format
+msgid "C&ancel"
+msgstr ""
+
+#: part/KPrView.cpp:73
+#, kde-format
+msgid "Normal"
+msgstr "Arferol"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Show Master Slides"
+msgstr "Gludo Tryloywder"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+#| msgid "Goto Slide..."
+msgid "Import Slideshow..."
+msgstr "Ewch i Dryloywder..."
+
+#: part/KPrView.cpp:80
+#, kde-format
+msgid "Insert Slide"
+msgstr "Mewnosod Tryloywder"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, kde-format
+msgid "Copy Slide"
+msgstr "Copïo Tryloywder"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Copy the current slide"
+msgstr "Cyn y Tryloywder Cyfredol"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Slide"
+msgstr "Dileu Tryloywder"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete the current slide"
+msgstr "Cyn y Tryloywder Cyfredol"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+#| msgid "Insert &Slide..."
+msgid "Master Slide..."
+msgstr "Mewnosod T&ryloywder..."
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+#| msgid "&Previous Slide"
+msgid "Previous Slide"
+msgstr "Tryloywder &Blaenorol"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+#| msgid "Previous slide"
+msgid "Go to previous slide"
+msgstr "Tryloywder blaenorol"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to next slide"
+msgstr "Ewch i dryloywder:"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "First Slide"
+msgstr "Gludo Tryloywder"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to first slide"
+msgstr "Ewch i dryloywder:"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+#| msgid "Paste Slide"
+msgid "Last Slide"
+msgstr "Gludo Tryloywder"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+#| msgid "Go to slide:"
+msgid "Go to last slide"
+msgstr "Ewch i dryloywder:"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Stage..."
+msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+#| msgid "Insert Picture"
+msgid "Insert Pictures as Slides..."
+msgstr "Mewnosod Llun"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Create Appear Animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#: part/KPrView.cpp:268
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Start Presentation"
+msgstr "Cyflwyniad"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+#| msgid "After Current Slide"
+msgid "From Current Slide"
+msgstr "Ar ôl y Tryloywder Cyfredol"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+#| msgid "Start From &First Slide"
+msgid "From First Slide"
+msgstr "Dechrau o'r Tryloywder Cyn&taf"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "Cyflwyniad"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Show Status Bar"
+msgstr "Dangos y bar cyflwr"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Hide Status Bar"
+msgstr "Dangos y bar cyflwr"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+#| msgid "Show status bar"
+msgid "Shows or hides the status bar"
+msgstr "Dangos y bar cyflwr"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+#| msgid "&Configure Slide Show..."
+msgid "Configure Slide Show..."
+msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter..."
+msgid "Configure Presenter View..."
+msgstr "Ffurweddu KPresenter..."
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+#| msgid "Note"
+msgid "Notes"
+msgstr "Nodyn"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "Teitl Trylowder"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show: "
+msgstr "Sioe Tryloywderau"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new custom slide show"
+msgstr "Sioe Tryloywderau"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current custom slide show"
+msgstr "Cyn y Tryloywder Cyfredol"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Sioe Tryloywderau"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Sioe Tryloywderau"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Duplicate Slide"
+msgstr "Dileu Tryloywder"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+#| msgid "Create HTML Slideshow"
+msgid "Start Slideshow"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new slide"
+msgstr "Sioe Tryloywderau"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+msgid "Delete selected slides"
+msgstr "Dileu Trylowyder"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "Gwaredu Cyswllt"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+#| msgid "&Custom"
+msgid "Cut"
+msgstr "&Addasiedig"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Copy"
+msgstr "Co&pïo"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+#| msgid "Path"
+msgid "Paste"
+msgstr "Llwybr"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+#| msgid "Slide Show"
+msgid "Slide Show %1"
+msgstr "Sioe Tryloywderau"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+#| msgid "All Files"
+msgid "All slides"
+msgstr "Pob Ffeil"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+#| msgid "Arrow"
+msgid "Error"
+msgstr "Saeth"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+#| msgid "Page &Layout..."
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "&Haenlun Tudalen..."
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+#| msgid "Automatic hyphenation"
+msgid "Automatic animation preview"
+msgstr "Cysylltnodi ymysgogol"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Cyflwyniad"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "Golygu Tra&wsnewid Tryloywder"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Click Actions"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Shape Animations"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+#| msgid "Presentation duration: "
+msgid "Manage animation delay and duration: "
+msgstr "Hyd y cyflwyniad:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "S&iart"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "after previous animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "with previous animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Duration: "
+msgstr "Cyfeiriad:"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Preview Shape Animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Dim Effaith"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid " sec"
+msgstr " eiliad(au)"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "Golygu Tra&wsnewid Tryloywder"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+#| msgid "Apply Styles"
+msgid "Apply To All Slides"
+msgstr "Gweithredu Arddulliau"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+#| msgid "Apply Style to Frames"
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Gweithredu Arddull i Fframiau"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "Sioe Tryloywderau"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+#| msgid "Elevation:"
+msgid "Ole Action"
+msgstr "Uchder:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Edit animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Add new animation"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+#| msgid "Remove Link"
+msgid "Remove animation"
+msgstr "Gwaredu Cyswllt"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation up"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+#| msgid "Create HTML Presentation"
+msgid "Move animation down"
+msgstr "Creu Cyflwyniad HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+#| msgid "Slideshow"
+msgid "Add a new animation"
+msgstr "Sioe Tryloywderau"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+#| msgid "Before Current Slide"
+msgid "Delete current animation"
+msgstr "Cyn y Tryloywder Cyfredol"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+#| msgid "Co&py"
+msgid "Crop"
+msgstr "Co&pïo"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+#| msgid "Width:"
+msgid "W&idth:"
+msgstr "Lled:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Creu Lluniau o'r Tryloywderau"
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, kde-format
+msgid "&Height:"
+msgstr "&Uchder:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Creu Lluniau o'r Tryloywderau"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+#| msgid "&Location:"
+msgid "R&atio:"
+msgstr "&Lleoliad:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Creu Lluniau o'r Tryloywderau"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Image"
+msgstr "&Tudalen"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+#| msgid "&Top:"
+msgid "&Crop"
+msgstr "&Pen:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Siâp"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+#| msgid "Presentation Pen"
+msgid "Presentation monitor:"
+msgstr "Pensil ar gyfer y Cyflwyniad"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Enable presenter view"
+msgstr "Ffurweddu KPresenter"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+#| msgid "Configure KPresenter"
+msgid "Configure Presenter View"
+msgstr "Ffurweddu KPresenter"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, kde-format
+msgid "Configure Slide Show"
+msgstr "Ffurfweddu Sioe Tryloywderau"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slides"
+msgstr "&Tryloywderau"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "Cyflwyniad"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+#| msgid "Select &All"
+msgid "Select all"
+msgstr "Dewis Pope&th"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "Dileu Trylowyder"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+#| msgid "&Deselect All"
+msgid "Deselect all"
+msgstr "Da&tddewis Popeth"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+#| msgid "Title:"
+msgid "Title"
+msgstr "Teitl:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+#| msgid "Automatic preview"
+msgid "Output preview"
+msgstr "Rhagolwg Ymysgogol"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Newydd ..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+#| msgid "Author:"
+msgid "Author"
+msgstr "Awdur:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Favorite"
+msgstr "Dileu Tryloywder"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Delete Template"
+msgstr "Dileu Tryloywder"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+#| msgid "Delete Slide"
+msgid "Add Template"
+msgstr "Dileu Tryloywder"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Do you want to remove the current slide?"
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Hoffech waredu'r tryloywder cyfredol?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+#| msgid "Save Configuration..."
+msgid "Confirm remove"
+msgstr "Cadw Ffurfweddiad..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+#| msgid "Change Rotation"
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Newid Cylchdroi"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+#| msgid " seconds"
+msgid "No sound"
+msgstr " eiliad(au)"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+msgid "Import..."
+msgstr "Mewnforio Arddull..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Left"
+msgstr "Dod o'r Chwith"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "From Top"
+msgstr "Dod o'r Pen"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Right"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "C&olors:"
+msgid "Clock"
+msgstr "L&liwiau:"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Clockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Clockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Clockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Clockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Twelve Counterclockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Three Counterclockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Six Counterclockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Nine Counterclockwise"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Fan"
+msgstr "Saeth Ddwbl"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Vertical"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Horizontal"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan In Vertical"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Horizontal"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Fan In Vertical Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Fan In Horizontal Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Double Sweep"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Parallel Vertical"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Opposite Vertical"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Opposite Horizontal"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Parallel Vertical Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Parallel Diagonal Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Opposite Vertical Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Opposite Horizontal Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Flatten"
+msgid "Fan"
+msgstr "Gwastadu"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Uncover Right"
+msgid "Center Right"
+msgstr "Llusgo i'r Dde"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Top"
+msgstr "Wedi'i ganoli"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Centered"
+msgid "Center Left"
+msgstr "Wedi'i ganoli"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Center Bottom"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Top"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan Out Right"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan Out Bottom"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Fan Out Left"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Fan In Top"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Fan In Right"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Fan In Bottom"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Fan In Left"
+msgstr "Dod o'r Chwith"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Pin Wheel"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Clockwise"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Saloon Door"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Top"
+msgid "To Top"
+msgstr "Dod o'r Pen"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "To Left"
+msgstr "Gorchuddio i'r Chwith"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "&Gwaelod:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "To Right"
+msgstr "Gorchuddio i'r Dde"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Single Sweep"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top"
+msgstr "Dod o'r Chwith"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Cover Right-Up"
+msgid "Clockwise Right"
+msgstr "Gorchuddio o'r Dde i Fyny"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Clockwise Bottom"
+msgstr "Alinio Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Clockwise Left"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left"
+msgstr "Dod o'r Chwith"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Right"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Left"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Windshield"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+#| msgid "Rig&ht:"
+msgid "Right"
+msgstr "D&e:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Right Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Up Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Barn Door"
+msgstr "Saeth Ddwbl"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Diagonal Top Left Reverse"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Barn Zig Zag"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Reversed"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Reversed"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "From Top Left"
+msgstr "Dod o'r Chwith"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "From Top Right"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Left"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "From Bottom Right"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "Graddiant Croeslinol 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In"
+msgstr "Corn&eli:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners In Reverse"
+msgstr "Corn&eli:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out"
+msgstr "Corn&eli:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Corn&ers:"
+msgid "Corners Out Reverse"
+msgstr "Corn&eli:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "Graddiant Croeslinol 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Barn Door"
+msgstr "Saeth Ddwbl"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Double Diamond"
+msgstr "Saeth Ddwbl"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Zig Zag"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, kde-format
+msgid "Fade"
+msgstr "Pylu"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+#| msgid "Set Text Color"
+msgid "Fade over Color"
+msgstr "Gosod Lliw Testun"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "ArrowHead"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+#| msgid "Done"
+msgid "Down"
+msgstr "Wedi gorffen"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Down Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+#| msgid "&Length:"
+msgid "Left"
+msgstr "&Hyd:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Left Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Ellipse"
+msgstr "Hirgylch"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, kde-format
+msgid "Circle"
+msgstr "Cylch"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Circle Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "Cyflwyniad"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular"
+msgstr "Petryal"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgid "Rectangular Reverse"
+msgstr "Petryal"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Double Arrow"
+msgid "Diamond"
+msgstr "Saeth Ddwbl"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Diamond Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, kde-format
+msgid "Misc"
+msgstr "Amrywiol"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Heart"
+msgstr "Pennawd"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Heart Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Keyhole Reverse"
+msgstr "Llinellau Fertigol"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "Cyflwyniad"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Sound effect"
+msgid "RoundRect"
+msgstr "Effaith sŵn"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "S&iart"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Four Point Star Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Five Point Star Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Six Point Star Reverse"
+msgstr "Llinellau Llorweddol"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Tiled"
+msgid "Triangle"
+msgstr "Wedi'i deilio"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Box Snakes"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Box In"
+msgid "Two Box Top In"
+msgstr "Blwch i Mewn"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "&Gwaelod:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Cover Left"
+msgid "Two Box Left In"
+msgstr "Gorchuddio i'r Chwith"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Cover Right"
+msgid "Two Box Right In"
+msgstr "Gorchuddio i'r Dde"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical In"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal In"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Box Out"
+msgid "Two Box Top Out"
+msgstr "Blwch Allan"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "&Gwaelod:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Left Out"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Two Box Right Out"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Four Box Vertical Out"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Blinds Horizontal"
+msgid "Four Box Horizontal Out"
+msgstr "Cysgodlenni Llorweddol"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Parallel Snakes"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same In"
+msgstr "Graddiant Fertigol"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Top Same Out"
+msgstr "Graddiant Fertigol"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same In"
+msgstr "Graddiant Fertigol"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Same Out"
+msgstr "Graddiant Fertigol"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Vertical Top Left Opposite In"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Vertical Top Left Opposite Out"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Vertical Gradient"
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Graddiant Fertigol"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same In"
+msgstr "Graddiant Llorweddol "
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Left Same Out"
+msgstr "Graddiant Llorweddol "
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same In"
+msgstr "Graddiant Llorweddol "
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+#| msgid "Horizontal Gradient"
+msgid "Horizontal Right Same Out"
+msgstr "Graddiant Llorweddol "
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Left Opposite In"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Right Opposite In"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Top Left Opposite In"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+#| msgid "Horizontal grid size:"
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Maint llorweddol y grid:"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "Siâp"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Swirl"
+msgid "Spiral"
+msgstr "Chwyrlïad"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left In"
+msgstr "Dod o'r Chwith"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Left"
+msgid "Clockwise Top Left Out"
+msgstr "Dod o'r Chwith"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right In"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Clockwise Top Right Out"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left In"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Left Out"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right In"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Clockwise Bottom Right Out"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left In"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Top Left Out"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right In"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+#| msgid "Come From Right"
+msgid "Counterclockwise Top Right Out"
+msgstr "Dod o'r Dde"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left In"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right In"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Waterfall"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Left Vertical"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Left Horizontal"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+#| msgid "Open Vertical"
+msgid "Top Right Vertical"
+msgstr "Agor Fertigol"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Open Horizontal"
+msgid "Top Right Horizontal"
+msgstr "Agor Llorweddol"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+#| msgid "Close Vertical"
+msgid "Bottom Left Vertical"
+msgstr "Cau Fertigol"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Close Horizontal"
+msgid "Bottom Left Horizontal"
+msgstr "Cau Llorweddol"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+#| msgid "Come From Bottom"
+msgid "Bottom Right Vertical"
+msgstr "Dod o'r Gwaelod"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+#| msgid "Interlocking Horizontal 1"
+msgid "Bottom Right Horizontal"
+msgstr "Cydgloi Llorweddol 1"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "&Slides"
+msgid "Slide"
+msgstr "&Tryloywderau"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Space Rotation"
+msgstr "Cylchdroi"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Image &effect:"
+msgid "Swap effect"
+msgstr "&Effaith ddelwedd:"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+#| msgid "Header"
+msgid "Header"
+msgstr "Pennawd"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, kde-format
+msgid "Footer"
+msgstr "Troedyn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Diwedd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Pei"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "Mewnosod Ffeil"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "Ff&ormat"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "&Tryloywderau"
+
+#, fuzzy
+#~| msgid "Sli&de Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "Sioe T&ryloywder"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Gosodiadau Llwybr"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Co&pïo"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Lled:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Creu Lluniau o'r Tryloywderau"
+
+#, fuzzy
+#~| msgid "&Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "&Uchder:"
+
+#, fuzzy
+#~| msgid "&Location:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "&Lleoliad:"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "&Tudalen"
+
+#, fuzzy
+#~| msgid "&Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "&Pen:"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "&Tryloywderau"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Dewis Pope&th"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Dileu Trylowyder"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Da&tddewis Popeth"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Teitl:"
+
+#, fuzzy
+#~| msgid "Automatic preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Rhagolwg Ymysgogol"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Newydd ..."
+
+#, fuzzy
+#~| msgid "Author:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Awdur:"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Dileu Tryloywder"
+
+#, fuzzy
+#~| msgid "Presentation Pen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Pensil ar gyfer y Cyflwyniad"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(h)(c) 1998-2003, Y Tîm KPresenter"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "cynhaliwr cyfredol"
+
+#, fuzzy
+#~| msgid "original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "awdur gwreiddiol"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~| msgid "&Closed Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Llinell &Gaëedig"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kyfieithu: KD,jr"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kyfieithu@dotmon.com,"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Tryloywder %1"
+
+#, fuzzy
+#~| msgid "End of presentation. Click to exit."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Diwedd y Cyflwyniad.  Cliciwch i adael."
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "&Haenlun Tudalen..."
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Lliw"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Cynyddu Maint Wynebfath"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "L&liwiau:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Lled:"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Gwyrdd"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Coch"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Glas"
+
+#, fuzzy
+#~| msgid "Slow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Araf"
+
+#, fuzzy
+#~| msgid "&Next Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Tryloywder &Nesaf"
+
+#, fuzzy
+#~| msgid "Speak &tool tips"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Cyngorynnau erfyn &llais"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Siâp"
+
+#, fuzzy
+#~| msgid "Move Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "Symud Tryloywder"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "Copïo Tryloywder"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Arferol"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Gludo Tryloywder"
+
+#, fuzzy
+#~| msgid "Goto Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Ewch i Dryloywder..."
+
+#, fuzzy
+#~| msgid "Insert Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Mewnosod Tryloywder"
+
+#, fuzzy
+#~| msgid "Copy Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Copïo Tryloywder"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Cyn y Tryloywder Cyfredol"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Dileu Tryloywder"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Cyn y Tryloywder Cyfredol"
+
+#, fuzzy
+#~| msgid "Insert &Slide..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Mewnosod T&ryloywder..."
+
+#, fuzzy
+#~| msgid "&Previous Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Tryloywder &Blaenorol"
+
+#, fuzzy
+#~| msgid "Previous slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Tryloywder blaenorol"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Ewch i dryloywder:"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Gludo Tryloywder"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Ewch i dryloywder:"
+
+#, fuzzy
+#~| msgid "Paste Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Gludo Tryloywder"
+
+#, fuzzy
+#~| msgid "Go to slide:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Ewch i dryloywder:"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Mewnosod Llun"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~| msgid "After Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Ar ôl y Tryloywder Cyfredol"
+
+#, fuzzy
+#~| msgid "Start From &First Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "Dechrau o'r Tryloywder Cyn&taf"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Dangos y bar cyflwr"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Dangos y bar cyflwr"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Dangos y bar cyflwr"
+
+#, fuzzy
+#~| msgid "&Configure Slide Show..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Ffurweddu KPresenter..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Note"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Nodyn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Teitl Trylowder"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Cyn y Tryloywder Cyfredol"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Dileu Tryloywder"
+
+#, fuzzy
+#~| msgid "Create HTML Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Dileu Trylowyder"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Gwaredu Cyswllt"
+
+#, fuzzy
+#~| msgid "&Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "&Addasiedig"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Co&pïo"
+
+#, fuzzy
+#~| msgid "Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Llwybr"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "All Files"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Pob Ffeil"
+
+#, fuzzy
+#~| msgid "Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Saeth"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Cysylltnodi ymysgogol"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Golygu Tra&wsnewid Tryloywder"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Presentation duration: "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Hyd y cyflwyniad:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "S&iart"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Direction"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Cyfeiriad:"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Dim Effaith"
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " eiliad(au)"
+
+#, fuzzy
+#~| msgid "Apply Styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Gweithredu Arddulliau"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Elevation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Uchder:"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Remove Link"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Gwaredu Cyswllt"
+
+#, fuzzy
+#~| msgid "Create HTML Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#, fuzzy
+#~| msgid "Slideshow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Before Current Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Cyn y Tryloywder Cyfredol"
+
+#, fuzzy
+#~| msgid "Configure KPresenter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Ffurweddu KPresenter"
+
+#, fuzzy
+#~| msgid "Configure Slide Show"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Ffurfweddu Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Delete Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Dileu Tryloywder"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Hoffech waredu'r tryloywder cyfredol?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Cadw Ffurfweddiad..."
+
+#, fuzzy
+#~| msgid " seconds"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr " eiliad(au)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Mewnforio Arddull..."
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Dod o'r Chwith"
+
+#, fuzzy
+#~| msgid "Come From Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Dod o'r Pen"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "L&liwiau:"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "Saeth Ddwbl"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Flatten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Gwastadu"
+
+#, fuzzy
+#~| msgid "Uncover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Llusgo i'r Dde"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Wedi'i ganoli"
+
+#, fuzzy
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Wedi'i ganoli"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Dod o'r Chwith"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Cysgodlenni Llorweddol"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Cysgodlenni Llorweddol"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Gorchuddio i'r Chwith"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "&Gwaelod:"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Gorchuddio i'r Dde"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Cover Right-Up"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Gorchuddio o'r Dde i Fyny"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Alinio Gwaelod"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Dod o'r Chwith"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Rig&ht:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "D&e:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "Saeth Ddwbl"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Dod o'r Chwith"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Graddiant Croeslinol 1"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Corn&eli:"
+
+#, fuzzy
+#~| msgid "Corn&ers:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Corn&eli:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Graddiant Croeslinol 1"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "Saeth Ddwbl"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "Saeth Ddwbl"
+
+#, fuzzy
+#~| msgid "Fade"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Pylu"
+
+#, fuzzy
+#~| msgid "Set Text Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Gosod Lliw Testun"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Done"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Wedi gorffen"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "&Length:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "&Hyd:"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Ellipse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Hirgylch"
+
+#, fuzzy
+#~| msgid "Circle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Cylch"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Petryal"
+
+#, fuzzy
+#~| msgid "Rectangle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Petryal"
+
+#, fuzzy
+#~| msgid "Double Arrow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "Saeth Ddwbl"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Amrywiol"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Pennawd"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Llinellau Fertigol"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~| msgid "Sound effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Effaith sŵn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "S&iart"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Llinellau Llorweddol"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Wedi'i deilio"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Box In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Blwch i Mewn"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "&Gwaelod:"
+
+#, fuzzy
+#~| msgid "Cover Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Gorchuddio i'r Chwith"
+
+#, fuzzy
+#~| msgid "Cover Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Gorchuddio i'r Dde"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Cysgodlenni Llorweddol"
+
+#, fuzzy
+#~| msgid "Box Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Blwch Allan"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "&Gwaelod:"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Blinds Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Cysgodlenni Llorweddol"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Graddiant Fertigol"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Graddiant Fertigol"
+
+#, fuzzy
+#~| msgid "Vertical Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Graddiant Fertigol"
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Graddiant Llorweddol "
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Graddiant Llorweddol "
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Graddiant Llorweddol "
+
+#, fuzzy
+#~| msgid "Horizontal Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Graddiant Llorweddol "
+
+#, fuzzy
+#~| msgid "Horizontal grid size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Maint llorweddol y grid:"
+
+#, fuzzy
+#~| msgid "Horizontal grid size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Maint llorweddol y grid:"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Siâp"
+
+#, fuzzy
+#~| msgid "Swirl"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Chwyrlïad"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Dod o'r Chwith"
+
+#, fuzzy
+#~| msgid "Come From Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Dod o'r Chwith"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Dod o'r Dde"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Open Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Agor Fertigol"
+
+#, fuzzy
+#~| msgid "Open Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Agor Llorweddol"
+
+#, fuzzy
+#~| msgid "Close Vertical"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Cau Fertigol"
+
+#, fuzzy
+#~| msgid "Close Horizontal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Cau Llorweddol"
+
+#, fuzzy
+#~| msgid "Come From Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Dod o'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Interlocking Horizontal 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Cydgloi Llorweddol 1"
+
+#, fuzzy
+#~| msgid "&Slides"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "&Tryloywderau"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Cylchdroi"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Pennawd"
+
+#, fuzzy
+#~| msgid "Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Troedyn"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgid "Maintainer"
+#~ msgstr "cynhaliwr cyfredol"
+
+#, fuzzy
+#~| msgid "KOffice Presentation Tool"
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Erfyn Cyflwyniadau KOffice"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "&Tudalen"
+
+#~ msgid "File to open"
+#~ msgstr "Ffeil i agor"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Set Layout"
+#~ msgstr "&Haenlun Tudalen..."
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "&Ffeil:"
+
+#~ msgid "Line"
+#~ msgstr "Llinell"
+
+#~ msgid "Arra&nge Objects"
+#~ msgstr "&Trefnu Gwrthrychau"
+
+#~ msgid "&Align Objects"
+#~ msgstr "&Alinio Gwrthrychau"
+
+#~ msgid "Te&xt"
+#~ msgstr "Te&stun"
+
+#~ msgid "&Align"
+#~ msgstr "&Alinio"
+
+#~ msgid "T&ype"
+#~ msgstr "M&ath"
+
+#~ msgid "Spellcheck"
+#~ msgstr "Gwirio sillafu"
+
+#~ msgid "Autocorrection"
+#~ msgstr "Hunangywiro"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "&Ffeil:"
+
+#, fuzzy
+#~ msgid "Edit"
+#~ msgstr "&Diwedd"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Mewnosod Ffeil"
+
+#~ msgid "Tools"
+#~ msgstr "Offer"
+
+#~ msgid "Format"
+#~ msgstr "Fformat"
+
+#~ msgid "Text"
+#~ msgstr "Testun"
+
+#~ msgid "Slide Show"
+#~ msgstr "Sioe Tryloywderau"
+
+#~ msgid "Navigation"
+#~ msgstr "Llywio"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Aliniad Fertigol"
+
+#~ msgid "Flip Objects"
+#~ msgstr "Drosdroi Gwrthrychau"
+
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "&Graddio i Ddangos y Llun yn 1:1 ln"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Canlyniadau Gwirio Syllafu"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgid "Slide Layouts"
+#~ msgstr "&Haenlun Tudalen..."
+
+#, fuzzy
+#~| msgid "Slide Transition"
+#~ msgid "Transitions"
+#~ msgstr "Trawsnewid Tryloywder"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Configure KPresenter..."
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Ffurweddu KPresenter..."
+
+#~ msgid "Slide Title"
+#~ msgstr "Teitl Tryloywder"
+
+#, fuzzy
+#~| msgid "&Deselect All"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Da&tddewis Popeth"
+
+#, fuzzy
+#~| msgid "Select"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Dewis"
+
+#, fuzzy
+#~| msgid "Slide Show"
+#~ msgid "New Slide Show %1"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Do you want to remove the current slide?"
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "Hoffech waredu'r tryloywder cyfredol?"
+
+#, fuzzy
+#~| msgid "Save Configuration..."
+#~ msgid "Confirm action"
+#~ msgstr "Cadw Ffurfweddiad..."
+
+#, fuzzy
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~ msgid "Customs Slideshows"
+#~ msgstr "Sioe Tryloywderau"
+
+#, fuzzy
+#~| msgid "Duplicate Slide"
+#~ msgid "Available Slides"
+#~ msgstr "Dyblygu Tryloywder"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgid "Add Slide"
+#~ msgstr "Tryloywder"
+
+#, fuzzy
+#~| msgid "C&olors:"
+#~ msgid "Close"
+#~ msgstr "L&liwiau:"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#, fuzzy
+#~| msgid "Set Page Layout"
+#~ msgid "Page Layouts"
+#~ msgstr "Gosod Haenlun Tudalen"
+
+#~ msgid "&Page"
+#~ msgstr "&Tudalen"
+
+#, fuzzy
+#~| msgid "Change Image Effect"
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Newid Effaith Ddelwedd"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Star Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Image &effect:"
+#~ msgid "Box Wipe Effect"
+#~ msgstr "&Effaith ddelwedd:"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Fformat"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgid "Navigate to:"
+#~ msgstr "Llywio"
+
+#, fuzzy
+#~| msgid "Cover Down"
+#~ msgid "Cover down effect"
+#~ msgstr "Gorchuddio i Lawr"
+
+#~ msgid "Insert &new slide:"
+#~ msgstr "Mewnosod &tryloywder newydd:"
+
+#~ msgid "Use &default template"
+#~ msgstr "Defnyddio patrymlun &rhagosodol"
+
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "Defnyddio'r tryloywder &cyfredol fel rhagosodiad"
+
+#~ msgid "Choose di&fferent template"
+#~ msgstr "Dewis patrymlun &gwahanol"
+
+#~ msgid "A&ngle:"
+#~ msgstr "O&ngl:"
+
+#, fuzzy
+#~ msgid " °"
+#~ msgstr "0°"
+
+#~ msgid "Pie"
+#~ msgstr "Pei"
+
+#~ msgid "&Type:"
+#~ msgstr "&Math:"
+
+#~ msgid "&Length:"
+#~ msgstr "&Hyd:"
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "Lleoliad Y (%1):"
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "Creu Lluniau o'r Tryloywderau"
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "Lleoliad Y (%1):"
+
+#~ msgid "Preview"
+#~ msgstr "Rhagolwg"
+
+#~ msgid "Channel Intensity"
+#~ msgstr "Dwyster Sianel"
+
+#~ msgid "Intensity"
+#~ msgstr "Dwyster"
+
+#~ msgid "Desaturate"
+#~ msgstr "Dad-ddirlenwi"
+
+#~ msgid "Contrast"
+#~ msgstr "Cyferbyniant"
+
+#~ msgid "Normalize"
+#~ msgstr "Arferoli"
+
+#~ msgid "Equalize"
+#~ msgstr "Cyfartalu"
+
+#~ msgid "Threshold"
+#~ msgstr "Trothwy"
+
+#~ msgid "Solarize"
+#~ msgstr "Heuloli"
+
+#~ msgid "Emboss"
+#~ msgstr "Boglynnu"
+
+#~ msgid "Despeckle"
+#~ msgstr "Dad-frychu"
+
+#~ msgid "Charcoal"
+#~ msgstr "Siarcol"
+
+#~ msgid "Noise"
+#~ msgstr "Sŵn"
+
+#~ msgid "Blur"
+#~ msgstr "Pylu"
+
+#~ msgid "Edge"
+#~ msgstr "Ymyl"
+
+#~ msgid "Implode"
+#~ msgstr "Mewnffrwydro"
+
+#~ msgid "Oil Paint"
+#~ msgstr "Paent Olew"
+
+#~ msgid "Sharpen"
+#~ msgstr "Miniogi"
+
+#~ msgid "Spread"
+#~ msgstr "Taenu"
+
+#~ msgid "Shade"
+#~ msgstr "Arlliw"
+
+#~ msgid "Wave"
+#~ msgstr "Ton"
+
+#~ msgid "Value:"
+#~ msgstr "Gwerth:"
+
+#~ msgid " %"
+#~ msgstr "%"
+
+#~ msgid "Color component:"
+#~ msgstr "Cydran Lliw:"
+
+#~ msgid "Gray"
+#~ msgstr "Llwyd"
+
+#~ msgid "All"
+#~ msgstr "Popeth"
+
+#~ msgid "Color:"
+#~ msgstr "Lliw:"
+
+#~ msgid "Color 1:"
+#~ msgstr "Lliw 1:"
+
+#~ msgid "Color 2:"
+#~ msgstr "Lliw 2:"
+
+#~ msgid "Intensity:"
+#~ msgstr "Dwyster:"
+
+#~ msgid "This effect has no options."
+#~ msgstr "Nid oes dewisiadau gan yr effaith yma."
+
+#~ msgid "Factor:"
+#~ msgstr "Ffactor:"
+
+#~ msgid "Type:"
+#~ msgstr "Math:"
+
+#~ msgid "Uniform"
+#~ msgstr "Unffurf"
+
+#~ msgid "Gaussian"
+#~ msgstr "Gaussaidd"
+
+#~ msgid "Multiplicative Gaussian"
+#~ msgstr "Gaussaidd lluosiadol"
+
+#~ msgid "Impulse"
+#~ msgstr "Ysgogiad"
+
+#~ msgid "LaPlace"
+#~ msgstr "LaPlace"
+
+#~ msgid "Poisson"
+#~ msgstr "Poisson"
+
+#~ msgid "Radius:"
+#~ msgstr "Radiws:"
+
+#~ msgid "Color Shading"
+#~ msgstr "Arlliwio Lliw"
+
+#~ msgid "Azimuth:"
+#~ msgstr "Asimwth:"
+
+#, fuzzy
+#~ msgid "Determines the light source and direction"
+#~ msgstr "Penodi tarddiad y golau a'i gyfeiriad."
+
+#~ msgid "Angle:"
+#~ msgstr "Ongl:"
+
+#~ msgid "Amplitude:"
+#~ msgstr "Osgled:"
+
+#~ msgid "Wave length:"
+#~ msgstr "Tonfedd:"
+
+#~ msgid "Pen"
+#~ msgstr "Pen-ysgrifennu"
+
+#~ msgid "Arrow Style"
+#~ msgstr "Arddull Saeth"
+
+#~ msgid "&Begin:"
+#~ msgstr "&Dechrau:"
+
+#~ msgid "&End:"
+#~ msgstr "&Gorffen:"
+
+#~ msgid "&Width:"
+#~ msgstr "&Lled:"
+
+#~ msgid "St&yle:"
+#~ msgstr "&Arddull:"
+
+#~ msgid "C&olor:"
+#~ msgstr "L&liw:"
+
+#~ msgid " pt"
+#~ msgstr "pt"
+
+#, fuzzy
+#~ msgid "Rect"
+#~ msgstr "Petryal"
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Gogwyddiad fertigol y gornel:"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "Gogwyddiad llorweddol y gornel:"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "Gogwyddiad llorweddol y gornel:"
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "G&ogwyddiad fertigol y gornel:"
+
+#~ msgid "Polygon"
+#~ msgstr "Polygon amgrwm"
+
+#~ msgid "&Sharpness:"
+#~ msgstr "&Miniogrwydd:"
+
+#~ msgid "Brush"
+#~ msgstr "Brws"
+
+#~ msgid "&Style:"
+#~ msgstr "&Arddull:"
+
+#~ msgid "&Preview"
+#~ msgstr "&Rhagolwg"
+
+#~ msgid "&Effect:"
+#~ msgstr "&Effaith:"
+
+#~ msgid "&Speed:"
+#~ msgstr "&Cyflymder:"
+
+#~ msgid "So&und effect"
+#~ msgstr "Ef&faith sŵn"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "&Ffeil:"
+
+#, fuzzy
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "Symud ymlaen i'r tryloywder nesaf yn ymysgogol ar ôl:"
+
+#~ msgid "Gradient"
+#~ msgstr "Graddiant"
+
+#~ msgid "Gradient:"
+#~ msgstr "Graddfa:"
+
+#~ msgid "X-fac&tor:"
+#~ msgstr "Ffact&or-X:"
+
+#, fuzzy
+#~ msgid "Un&balanced:"
+#~ msgstr "Anghytbwys"
+
+#~ msgid "&Y-factor:"
+#~ msgstr "&Ffactor-Y:"
+
+#~ msgid "Margin"
+#~ msgstr "Ymyl"
+
+#~ msgid "Margins"
+#~ msgstr "Ymylon"
+
+#~ msgid "S&ynchronize changes"
+#~ msgstr "C&ydamseru newidiadau"
+
+#~ msgid "General"
+#~ msgstr "Cyffredinol"
+
+#~ msgid "Na&me:"
+#~ msgstr "&Enw:"
+
+#~ msgid "Protect si&ze and position"
+#~ msgstr "Diogelu mai&nt a lleoliad"
+
+#, fuzzy
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "Cadw'r gymhareb"
+
+#~ msgid "Position"
+#~ msgstr "Lleoliad"
+
+#~ msgid "Shadow"
+#~ msgstr "Cysgod"
+
+#~ msgid "Color && Distance"
+#~ msgstr "Lliw && Pellter"
+
+#~ msgid "Distance:"
+#~ msgstr "Pellter:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Cyflwyniad"
+
+#~ msgid "Picture"
+#~ msgstr "Llun"
+
+#~ msgid "Depth"
+#~ msgstr "Dyfnder"
+
+#~ msgid "&1 bit color mode"
+#~ msgstr "Modd lliw &1-did"
+
+#~ msgid "&8 bit color mode"
+#~ msgstr "Modd lliw &8-did"
+
+#~ msgid "1&6 bit color mode"
+#~ msgstr "Modd lliw &16-did"
+
+#~ msgid "&32 bit color mode"
+#~ msgstr "Modd lliw &32-did"
+
+#~ msgid "&Default color mode"
+#~ msgstr "&Modd lliw rhagosodol"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~ msgid "Conv&ert from RGB image to BRG image"
+#~ msgstr "Trosi o ddelwedd RGB i ddelwedd BGR"
+
+#~ msgid "Gra&yscale"
+#~ msgstr "Gra&ddlwyd"
+
+#~ msgid "&Brightness:"
+#~ msgstr "&Glowyder:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "&Chwith:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Cyflwyniad"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "Cefndir Tryloywder"
+
+#~ msgid "Background type:"
+#~ msgstr "Math cefndir:"
+
+#~ msgid "Color/Gradient"
+#~ msgstr "Lliw/Graddiant"
+
+#~ msgid "Plain"
+#~ msgstr "Plaen"
+
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "Graddiant Croeslinol 1"
+
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "Graddiant Croeslinol 2"
+
+#~ msgid "Circle Gradient"
+#~ msgstr "Graddiant Cylch"
+
+#~ msgid "Rectangle Gradient"
+#~ msgstr "Graddiant Petryal"
+
+#~ msgid "PipeCross Gradient"
+#~ msgstr "Graddiant Croesbibell"
+
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Graddiant Pyramid"
+
+#~ msgid "Unbalanced"
+#~ msgstr "Anghytbwys"
+
+#~ msgid "X-factor:"
+#~ msgstr "Ffactor-X:"
+
+#~ msgid "Y-factor:"
+#~ msgstr "Ffactor-Y:"
+
+#~ msgid "View mode:"
+#~ msgstr "Modd golwg:"
+
+#~ msgid "Scaled"
+#~ msgstr "Graddiedig"
+
+#~ msgid "Apply &Global"
+#~ msgstr "Gweithredu yn &Eang"
+
+#~ msgid "&Reset"
+#~ msgstr "&Ailosod"
+
+#~ msgid "Single Color"
+#~ msgstr "Un Lliw"
+
+#~ msgid "Transparent"
+#~ msgstr "Tryloyw"
+
+#, fuzzy
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "Patrwm Llenwad 12% "
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Llinellau Croesi"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Llinellau Lletraws ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Llinellau Lletraws ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Llinellau Croesi Lletraws"
+
+#, fuzzy
+#~ msgid "Diagonal 2"
+#~ msgstr "Graddiant Croeslinol 2"
+
+#~ msgid "PipeCross"
+#~ msgstr "Croesbibell"
+
+#~ msgid "Pyramid"
+#~ msgstr "Pyramid"
+
+#~ msgid "Resize Object Up"
+#~ msgstr "Newid Maint y Gwrthrych i Fyny"
+
+#~ msgid "Resize Object Down"
+#~ msgstr "Newid Maint y Gwrthrych i Lawr"
+
+#~ msgid "Resize Object Left"
+#~ msgstr "Newid Maint y Gwrthrych i'r Chwith"
+
+#~ msgid "Resize Object Right"
+#~ msgstr "Newid Maint y Gwrthrych i'r Dde"
+
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "Newid Maint y Gwrthrych i'r Chwith && i Fyny"
+
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "Newid Maint y Gwrthrych i'r Chwith && i Lawr"
+
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "Newid Maint y Gwrthrych i'r Dde && i Fyny"
+
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "Newid Maint y Gwrthrych i'r Dde && i Lawr"
+
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr "Ni ellir newid cynnwys darllen-yn-unig.  Ni dderbynnir addasiadau."
+
+#~ msgid "&Continue"
+#~ msgstr "&Parhau"
+
+#~ msgid "&Drawing Mode"
+#~ msgstr "Modd &Darlunio"
+
+#~ msgid "&Goto Slide..."
+#~ msgstr "&Ewch i'r Tryloywder..."
+
+#~ msgid "&End"
+#~ msgstr "&Diwedd"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Newid Wynebfath Testun"
+
+#~ msgid "Set Text Background Color"
+#~ msgstr "Gosod Lliw Cefndir y Testun"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Gwneud y Testun yn Drwm"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Gwneud y Testun yn Italig"
+
+#~ msgid "Underline Text"
+#~ msgstr "Tanlinellu Testun"
+
+#~ msgid "Set Text Font"
+#~ msgstr "Gosod Wynebfath Testun"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Newid Maint Testun"
+
+#~ msgid "Set Text Subscript"
+#~ msgstr "Gosod Isysgrif Testun"
+
+#~ msgid "Set Text Superscript"
+#~ msgstr "Gosod Uwchysgrif Testun"
+
+#~ msgid "Apply Default Format"
+#~ msgstr "Gweithredu Fformat Rhagosodol"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Cynyddu Maint Wynebfath"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Lleihau Maint Wynebfath"
+
+#~ msgid "Set Text Align"
+#~ msgstr "Gosod Alinio Testun"
+
+#~ msgid "Change Tabulators"
+#~ msgstr "Newid Tablyddion"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Cynyddu Dyfnder Paragraff"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Lleihau Dyfnder Paragraff"
+
+#~ msgid "Change First Line Indent"
+#~ msgstr "Newid Mewnoliad Llinell Gyntaf"
+
+#~ msgid "Change Left Indent"
+#~ msgstr "Newid Mewnoliad Chwith"
+
+#~ msgid "Change Right Indent"
+#~ msgstr "Newid Mewnoliad De"
+
+#~ msgid "Printing..."
+#~ msgstr "Argraffu..."
+
+#~ msgid "Scale to Original Size"
+#~ msgstr "Graddu i'r Maint Gwreiddiol"
+
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr "Graddu'r Llun i'w Ddangos 1:1 ym Modd Cyflwyniad"
+
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "Estyn Cynnwys Testun i Uchder"
+
+#~ msgid "Extend Text to Contents"
+#~ msgstr "Estyn Testun i Gynnwys"
+
+#~ msgid "Align Objects Left"
+#~ msgstr "Alinio Gwrthrychau i'r Chwith"
+
+#~ msgid "Align Objects Top"
+#~ msgstr "Alinio Gwrthrychau i'r Pen"
+
+#~ msgid "Align Objects Right"
+#~ msgstr "Alinio Gwrthrychau i'r Dde"
+
+#~ msgid "Align Objects Bottom"
+#~ msgstr "Alinio Gwrthrychau i'r Gwaelod"
+
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "Alinio Gwrthrychau yn y Canol (llorweddol)"
+
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "Alinio Gwrthrychau yn y Canol (fertigol)"
+
+#~ msgid "Close Object"
+#~ msgstr "Cau Gwrthrych"
+
+#~ msgid "Closed Freehand"
+#~ msgstr "Rhydd-law Caëedig"
+
+#~ msgid "Closed Polyline"
+#~ msgstr "Polylin Gaëedig"
+
+#~ msgid "Closed Cubic Bezier Curve"
+#~ msgstr "Cromlin Fezier Ciwbig Caëedig"
+
+#~ msgid "Closed Quadric Bezier Curve"
+#~ msgstr "Cromlin Fezier Cwadrig Caëedig"
+
+#, fuzzy
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "Golygu Tra&wsnewid Tryloywder"
+
+#~ msgid "Interface"
+#~ msgstr "Rhyngwyneb"
+
+#~ msgid "Spelling"
+#~ msgstr "Sillafu"
+
+#~ msgid "Document"
+#~ msgstr "Dogfen"
+
+#~ msgid "Document Settings"
+#~ msgstr "Gosodiadau Dogfen"
+
+#~ msgid "Default Tools Settings"
+#~ msgstr "Gosodiadau Offer Rhagosodol"
+
+#~ msgid "Paths"
+#~ msgstr "Llwybrau"
+
+#~ msgid "Path Settings"
+#~ msgstr "Gosodiadau Llwybr"
+
+#~ msgid "Change Config"
+#~ msgstr "Newid Ffurfweddiad"
+
+#~ msgid "Show rulers"
+#~ msgstr "Dangos mesuryddion"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Nifer y ffeiliau diweddar:"
+
+#~ msgid "Background object color:"
+#~ msgstr "Lliw gwrthrych cefndir:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Lliw grid:"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Datwneud/ailwneud y terfyn:"
+
+#~ msgid "Display links"
+#~ msgstr "Dangos cysylltau"
+
+#~ msgid "&Underline all links"
+#~ msgstr "&Tanlinellu pob cyswllt"
+
+#~ msgid "Display comments"
+#~ msgstr "Dangos sylwadau"
+
+#~ msgid "Display field code"
+#~ msgstr "Dangos côd maes"
+
+#~ msgid "Print slide notes"
+#~ msgstr "Argraffu nodiadau tryloywder"
+
+#~ msgid "Grid"
+#~ msgstr "Grid"
+
+#~ msgid "Vertical grid size:"
+#~ msgstr "Maint fertigol y grid:"
+
+#~ msgid "Change Display Link Command"
+#~ msgstr "Newid Gorchymyn am Ddangos Cyswllt"
+
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Newid Gorchymyn am Ddangos Côd Maes"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Rhagosodiadau Dogfen"
+
+#~ msgid "Default font:"
+#~ msgstr "Wynebfath rhagosodol:"
+
+#~ msgid "Choose..."
+#~ msgstr "Dewis..."
+
+#~ msgid "Global language:"
+#~ msgstr "Iaith eang:"
+
+#~ msgid "Create backup file"
+#~ msgstr "Creu ffeil wrth gefn"
+
+#~ msgid "Autosave (min):"
+#~ msgstr "Hunan-gadw (mun):"
+
+#~ msgid "No autosave"
+#~ msgstr "Dim hunan-gadw"
+
+#~ msgid "min"
+#~ msgstr "mun"
+
+#~ msgid "Starting page number:"
+#~ msgstr "Rhif y dudalen gychwyn:"
+
+#~ msgid "Tab stop:"
+#~ msgstr "Atalfa dab:"
+
+#~ msgid "Cursor"
+#~ msgstr "Cyrchydd"
+
+#~ msgid "Cursor in protected area"
+#~ msgstr "Cyrchydd mewn man gwarchodedig"
+
+#~ msgid "Direct insert cursor"
+#~ msgstr "Cyrchydd mewnosod uniongyrchol"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Newid Rhif y Dudalen Gychwyn"
+
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Newid Gwerth y Dablyddfa"
+
+#~ msgid "Outl&ine"
+#~ msgstr "Amli&nell"
+
+#~ msgid "&Fill"
+#~ msgstr "&Llenwi"
+
+#~ msgid "&Rectangle"
+#~ msgstr "Pet&ryal"
+
+#~ msgid "Polygo&n"
+#~ msgstr "Amloch&ryn"
+
+#~ msgid "&Pie"
+#~ msgstr "&Pei"
+
+#~ msgid "Type"
+#~ msgstr "Math"
+
+#~ msgid "Picture Path"
+#~ msgstr "Llwybr Llun"
+
+#~ msgid "Backup Path"
+#~ msgstr "Llwybr Copïo wrth Gefn"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Addasu Llwybr..."
+
+#~ msgid "&Add..."
+#~ msgstr "Ychw&anegu..."
+
+#~ msgid "&Modify..."
+#~ msgstr "&Addasu..."
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "Gwaredu Cyswllt"
+
+#~ msgid "Test"
+#~ msgstr "Profi"
+
+#~ msgid "(Copy %1)"
+#~ msgstr "(Copïo %1)"
+
+#~ msgid "Name:"
+#~ msgstr "Enw:"
+
+#, fuzzy
+#~ msgid "Existing slides:"
+#~ msgstr "Trylowder nesaf"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "Ffurfweddu Sioe Tryloy&wderau..."
+
+#, fuzzy
+#~ msgid "You did not select any slides. Please select some slides."
+#~ msgstr "Ni wnaethoch chi ddewis tryloywder."
+
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "Dogfen OASIS OpenDocument annilys.  Ni chanfuwyd y tag office:body."
+
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Dogfen OASIS OpenDocument annilys.  Ni chanfuwyd tag tu mewn i office:"
+#~ "body."
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "Ymddengys na arsefydlir PERL.\n"
+#~ "Mae angen PERL i drosi'r ddogfen hon.\n"
+#~ "Arsefydlwch PERL a cheisiwch eto."
+
+#~ msgid ""
+#~ "parsing error in the main document (converted from an old KPresenter "
+#~ "format) at line %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "gwall dosrannu yn y prif ddogfen (a throsiwyd o hen fformat KPresenter) "
+#~ "wrth linell %1, colofn %2\n"
+#~ "Neges Wall: %3"
+
+#~ msgid "Insert Part Object"
+#~ msgstr "Mewnosod Gwrthrych Part"
+
+#~ msgid "Invalid document, DOC tag missing."
+#~ msgstr "Dogfen annilys, tag DOC ar goll."
+
+#~ msgid ""
+#~ "Invalid document, expected mimetype application/x-kpresenter or "
+#~ "application/vnd.kde.kpresenter, got %1"
+#~ msgstr ""
+#~ "Dogfen annilys, disgwyliwyd math mime application/x-kpresenter "
+#~ "neuapplication/vnd.kde.kpresenter, cafwyd %1"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Gludo Gwrthrychau"
+
+#~ msgid "Set New Options"
+#~ msgstr "Gosod Dewisiadau Newydd"
+
+#~ msgid "Insert File"
+#~ msgstr "Mewnosod Ffeil"
+
+#~ msgid "Insert New Slide"
+#~ msgstr "Mewnosod Tryloywder Newydd"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Dyblygu Gwrthrych"
+
+#~ msgid "Number of copies:"
+#~ msgstr "Nifer o gopïau:"
+
+#~ msgid "Rotation angle:"
+#~ msgstr "Ongl gylchdroi:"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "Cynyddu lled (%1):"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "Cynyddu uchder (%1):"
+
+#, fuzzy
+#~ msgid "Move X:"
+#~ msgstr "Symud X (%1):"
+
+#, fuzzy
+#~ msgid "Move Y:"
+#~ msgstr "Symud Y (%1):"
+
+#~ msgid "Appear"
+#~ msgstr "Ymddangos"
+
+#~ msgid "Order of appearance:"
+#~ msgstr "Trefn ymddangos:"
+
+#~ msgid "Effect (appearing):"
+#~ msgstr "Effaith (ymddangos):"
+
+#~ msgid "Come From Right/Top"
+#~ msgstr "Dod o'r Dde/Pen"
+
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "Dod o'r Dde/Gwaelod"
+
+#~ msgid "Come From Left/Top"
+#~ msgstr "Dod o'r Chwith/Pen"
+
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "Dod o'r Chwith/Gwaelod"
+
+#~ msgid "Wipe From Left"
+#~ msgstr "Disodli o'r Chwith"
+
+#~ msgid "Wipe From Right"
+#~ msgstr "Disodli o'r Dde"
+
+#~ msgid "Wipe From Top"
+#~ msgstr "Disodli o'r Pen"
+
+#~ msgid "Wipe From Bottom"
+#~ msgstr "Disodli o'r Gwaelod"
+
+#~ msgid "Speed:"
+#~ msgstr "Cyflymder:"
+
+#~ msgid "Medium"
+#~ msgstr "Canolig"
+
+#~ msgid "Fast"
+#~ msgstr "Cyflym"
+
+#~ msgid "Effect (object specific):"
+#~ msgstr "Effaith (penodol i wrthrych):"
+
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "Paragraff ar ôl Paragraff"
+
+#~ msgid "Timer of the object:"
+#~ msgstr "Amserydd gwrthrych:"
+
+#~ msgid "File name:"
+#~ msgstr "Enw'r ffeil:"
+
+#~ msgid "Play"
+#~ msgstr "Chwarae"
+
+#~ msgid "Disappear"
+#~ msgstr "Diflannu"
+
+#~ msgid "Order of disappearance:"
+#~ msgstr "Trefn diflannu:"
+
+#~ msgid "Effect (disappearing):"
+#~ msgstr "Effaith (diflannu):"
+
+#~ msgid "Disappear to Right"
+#~ msgstr "Diflannu i'r Dde"
+
+#~ msgid "Disappear to Left"
+#~ msgstr "Diflannu i'r Chwith"
+
+#~ msgid "Disappear to Top"
+#~ msgstr "Diflannu i'r Pen"
+
+#~ msgid "Disappear to Bottom"
+#~ msgstr "Diflannu i'r Gwaelod"
+
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "Diflannu i'r Dde/Pen"
+
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "Diflannu i'r Dde/Gwaelod"
+
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "Diflannu i'r Chwith/Pen"
+
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "Diflannu i'r Chwith/Gwaelod"
+
+#~ msgid "Wipe to Left"
+#~ msgstr "Disodli i'r Chwith"
+
+#~ msgid "Wipe to Right"
+#~ msgstr "Disodli i'r Dde"
+
+#~ msgid "Wipe to Top"
+#~ msgstr "Disodli i'r Pen"
+
+#~ msgid "Wipe to Bottom"
+#~ msgstr "Disodli i'r Gwaelod"
+
+#~ msgid "Assign Object Effects"
+#~ msgstr "Neilltuo Effeithiau Gwrthrych"
+
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "Ffeiliau *.%1|%2"
+
+#~ msgid "All Supported Files"
+#~ msgstr "Pob Ffeil a Gynhelir"
+
+#~ msgid "Image Effect"
+#~ msgstr "Efffaith Ddelwedd"
+
+#~ msgid "Import Style"
+#~ msgstr "Mewnforio Arddull"
+
+#~ msgid "File name is empty."
+#~ msgstr "Mae'r enw ffeil yn wag."
+
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "Nid ffeil KPresenter yw'r ffeil yma!"
+
+#~ msgid "Path:"
+#~ msgstr "Llwybr:"
+
+#, fuzzy
+#~ msgid "&Set Colors"
+#~ msgstr "Gosod Lliw Testun"
+
+#, fuzzy
+#~ msgid "Preliminary Slides"
+#~ msgstr "Tryloywder &Blaenorol"
+
+#~ msgid "Text color:"
+#~ msgstr "Lliw testun:"
+
+#~ msgid "Background color:"
+#~ msgstr "Lliw cefndir:"
+
+#, fuzzy
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "Creu Cyflwyniad HTML"
+
+#~ msgid ""
+#~ "<qt>The directory <b>%1</b> does not exist.<br>Do you want create it?</qt>"
+#~ msgstr ""
+#~ "<qt>Nid yw'r cyfeiriadur <b>%1</b> yn bodoli.<br>ydych am ei greu?</qt>"
+
+#~ msgid "Directory Not Found"
+#~ msgstr "Ni Chanfuwyd y Cyfeiriadur"
+
+#, fuzzy
+#~ msgid "Cannot create directory."
+#~ msgstr "Methru creu'r cyfeiriadur!"
+
+#, fuzzy
+#~ msgid "Create directory structure"
+#~ msgstr "Methru creu'r cyfeiriadur!"
+
+#~ msgid "Create pictures of the slides"
+#~ msgstr "Creu Lluniau o'r Tryloywderau"
+
+#, fuzzy
+#~ msgid "Create index file"
+#~ msgstr "Creu ffeil wrth gefn"
+
+#~ msgid "Change Help Line Position"
+#~ msgstr "Newid Lleoliad y Llinell Gymorth"
+
+#~ msgid "Position:"
+#~ msgstr "Lleoliad:"
+
+#~ msgid "Add New Help Line"
+#~ msgstr "Ychwanegu Llinell Gymorth Newydd"
+
+#~ msgid "Add New Help Point"
+#~ msgstr "Ychwanegu Pwynt Cymorth Newydd"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "Lleoliad X (%1):"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "Lleoliad Y (%1):"
+
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "Nodyn Tryloywder %1:\n"
+
+#~ msgid "Delete Objects"
+#~ msgstr "Dileu Gwrthrychau"
+
+#~ msgid "Resize"
+#~ msgstr "Newid Maint"
+
+#~ msgid "Group Objects"
+#~ msgstr "Casglu Gwrthrychau"
+
+#~ msgid "Ungroup Objects"
+#~ msgstr "Datgasglu Gwrthrychau"
+
+#~ msgid "Lower Objects"
+#~ msgstr "Gostwng Gwrthrych(au)"
+
+#~ msgid "Raise Objects"
+#~ msgstr "Codi Gwrthrych(au)"
+
+#~ msgid "Insert Line"
+#~ msgstr "Mewnosod Llinell"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Mewnosod Hirsgwar"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Mewnosod Hirgylch"
+
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Mewnosod Pei/Cromlin/Cord"
+
+#~ msgid "Insert Textbox"
+#~ msgstr "Mewnosod Blwch Testun"
+
+#~ msgid "Insert Autoform"
+#~ msgstr "Mewnosod Siâp Ymysgogol"
+
+#~ msgid "Insert Freehand"
+#~ msgstr "Mewnosod Rhydd-law"
+
+#~ msgid "Insert Polyline"
+#~ msgstr "Mewnosod Polylin"
+
+#~ msgid "Insert Quadric Bezier Curve"
+#~ msgstr "Mewnosod Cromlin Fezier Cwadrig"
+
+#~ msgid "Insert Cubic Bezier Curve"
+#~ msgstr "Mewnosod Cromlin Fezier Ciwbig"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Mewnosod Polygon"
+
+#~ msgid "Insert Closed Freehand"
+#~ msgstr "Mewnosod Rhydd-law Caëedig"
+
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "Mewnosod Polylin Gaëedig"
+
+#~ msgid "Insert Closed Quadric Bezier Curve"
+#~ msgstr "Mewnosod Cromlin Fezier Cwadrig Caëedig"
+
+#~ msgid "Insert Closed Cubic Bezier Curve"
+#~ msgstr "Mewnosod Cromlin Fezier Ciwbig Caëedig"
+
+#~ msgid "Embed Object"
+#~ msgstr "Caethu Gwrthrych"
+
+#~ msgid "Change Pixmap"
+#~ msgstr "Newid Picsfap"
+
+#~ msgid "Move Objects"
+#~ msgstr "Symud Gwrthrychau"
+
+#~ msgid "Change Shadow"
+#~ msgstr "Newid Cysgod"
+
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Newid Aliniad Fertigol"
+
+#, fuzzy
+#~ msgid "No Outline"
+#~ msgstr "Amlinell"
+
+#~ msgid "Square"
+#~ msgstr "Sgwâr"
+
+#~ msgid "Line Arrow"
+#~ msgstr "Saeth Linell"
+
+#~ msgid "Dimension Line"
+#~ msgstr "Gosod Maint Llinell"
+
+#~ msgid "Double Line Arrow"
+#~ msgstr "Saeth Linell Ddwbl"
+
+#~ msgid "&General"
+#~ msgstr "&Cyffredinol"
+
+#, fuzzy
+#~ msgid "&Transition Type"
+#~ msgstr "Trawsnewid Tryloywder"
+
+#, fuzzy
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "Newid â llaw i'r &gam nesaf"
+
+#, fuzzy
+#~ msgid "&Automatic transition to next step or slide"
+#~ msgstr "Symud ymlaen i'r tryloywder nesaf yn ymysgogol ar ôl:"
+
+#~ msgid "&Infinite loop"
+#~ msgstr "&Dolen Ddiddiwedd"
+
+#, fuzzy
+#~ msgid "&Show 'End of presentation' slide"
+#~ msgstr "Diwedd y Cyflwyniad.  Cliciwch i adael."
+
+#, fuzzy
+#~ msgid "Measure presentation &duration"
+#~ msgstr "Dangos &hyd y cyflwyniad"
+
+#~ msgid "Arc"
+#~ msgstr "Cromlin"
+
+#~ msgid "Chord"
+#~ msgstr "Cord"
+
+#~ msgid "Convex/Concave"
+#~ msgstr "Amgrwm/Ceugrwm"
+
+#~ msgid "No."
+#~ msgstr "Rhif"
+
+#, fuzzy
+#~ msgid "Display Duration"
+#~ msgstr "Dangos cysylltau"
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "Dileu Trylowyder"
+
+#~ msgid "Rows: "
+#~ msgstr "Rhesi: "
+
+#~ msgid "Columns: "
+#~ msgstr "Colofnau: "
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "Creu Lluniau o'r Tryloywderau"
+
+#~ msgid "Apply Properties"
+#~ msgstr "Gweithredu Priodweddau"
+
+#~ msgid "Name Object"
+#~ msgstr "Enwi'r Gwrthrych"
+
+#~ msgid "Protect Object"
+#~ msgstr "Gwarchod Gwrthrych"
+
+#~ msgid "Keep Ratio"
+#~ msgstr "Cadw Cymhareb"
+
+#~ msgid "Change Size"
+#~ msgstr "Newid Maint"
+
+#~ msgid "Pict&ure"
+#~ msgstr "Ll&un"
+
+#~ msgid "pt"
+#~ msgstr "pt"
+
+#~ msgctxt "Structure of the presentation"
+#~ msgid "Outline"
+#~ msgstr "Amlinell"
+
+#~ msgid "(%1)"
+#~ msgstr "(%1)"
+
+#~ msgid "Rename Slide"
+#~ msgstr "Ail-enwi Tryloywder"
+
+#~ msgid "Slide title:"
+#~ msgstr "Teitl tryloywder:"
+
+#~ msgid "Close From All Directions"
+#~ msgstr "Cau Pob Cyfeiriad"
+
+#~ msgid "Open From All Directions"
+#~ msgstr "Agor Pob Cyfeiriad"
+
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "Cydgloi Llorweddol 2"
+
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "Cydgloi Fertigol 1"
+
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "Cydgloi Fertigol 2"
+
+#~ msgid "Surround 1"
+#~ msgstr "Amgylchu 1"
+
+#~ msgid "Fly Away 1"
+#~ msgstr "Hedfan i Ffwrdd 1"
+
+#~ msgid "Blinds Vertical"
+#~ msgstr "Cysgodlenni Fertigol"
+
+#~ msgid "Checkerboard Across"
+#~ msgstr "Siecfwrdd Drosodd"
+
+#~ msgid "Checkerboard Down"
+#~ msgstr "Siecfwrdd i Lawr"
+
+#~ msgid "Uncover Down"
+#~ msgstr "Llusgo i Lawr"
+
+#~ msgid "Cover Up"
+#~ msgstr "Gorchuddio i Fyny"
+
+#~ msgid "Uncover Up"
+#~ msgstr "Llusgo i Fyny"
+
+#~ msgid "Uncover Left"
+#~ msgstr "Llusgo i'r Chwith"
+
+#~ msgid "Cover Left-Up"
+#~ msgstr "Gorchuddio o'r Chwith i Fyny"
+
+#~ msgid "Uncover Left-Up"
+#~ msgstr "Llusgo o'r Chwith i Fyny"
+
+#~ msgid "Cover Left-Down"
+#~ msgstr "Gorchuddio o'r Chwith i Lawr"
+
+#~ msgid "Uncover Left-Down"
+#~ msgstr "Llusgo o'r Chwith i Lawr"
+
+#~ msgid "Uncover Right-Up"
+#~ msgstr "Llusgo o'r Dde i Fyny"
+
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "Gorchuddio o'r Dde i'r Gwaelod"
+
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "Llusgo o'r Dde i'r Gwaelod"
+
+#~ msgid "Dissolve"
+#~ msgstr "Hydoddi"
+
+#~ msgid "Strips Left-Up"
+#~ msgstr "Stribedi o'r Chwith i Fyny"
+
+#~ msgid "Strips Left-Down"
+#~ msgstr "Stribedi o'r Chwith i Lawr"
+
+#~ msgid "Strips Right-Up"
+#~ msgstr "Stribedi o'r Dde i Fyny"
+
+#~ msgid "Strips Right-Down"
+#~ msgstr "Stribedi o'r Dde i Lawr"
+
+#~ msgid "Melting"
+#~ msgstr "Ymdoddi"
+
+#~ msgid "Random Transition"
+#~ msgstr "Trawsnewid ar Hap"
+
+#~ msgid "Paste Text"
+#~ msgstr "Gludo Testun"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Mewnosod Newidyn"
+
+#~ msgid "Protect content"
+#~ msgstr "Gwarchod cynnwys"
+
+#~ msgid "Effect:"
+#~ msgstr "Effaith:"
+
+#~ msgid "Automatically advance to the next slide after:"
+#~ msgstr "Symud ymlaen i'r tryloywder nesaf yn ymysgogol ar ôl:"
+
+#, fuzzy
+#~ msgid "Remove Slide"
+#~ msgstr "Ail-enwi Tryloywder"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "&Dyddiad"
+
+#~ msgid "Insert new slide"
+#~ msgstr "Mewnosod tryloywder newydd"
+
+#~ msgid "Save Picture"
+#~ msgstr "Cadw Llun"
+
+#~ msgid "Save Failed"
+#~ msgstr "Methodd y cadw"
+
+#~ msgid "No chart component registered"
+#~ msgstr "Ni chofrestrir cydran siart"
+
+#~ msgid "No table component registered"
+#~ msgstr "Ni chofrestrir cydran dabl"
+
+#~ msgid "No formula component registered"
+#~ msgstr "Ni chofrestrir cydran fformiwla"
+
+#~ msgid "Autoform-Choose"
+#~ msgstr "Dewis Siâp Ymysgogol"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "&Priodweddau"
+
+#~ msgid "Slide Background"
+#~ msgstr "Cefndir Tryloywder"
+
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "Hoffech lwytho ffurfweddiad a gedwir yn gynt a fydd yn cael ei ddefnyddio "
+#~ "ar gyfer y Cyflwyniad HTML yma?"
+
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Cyflwyniad HTML KPresenter (*.kpweb)"
+
+#~ msgid "Only local files are currently supported."
+#~ msgstr "Cynhelir ffeiliau lleol yn unig ar hyn o bryd."
+
+#~ msgid "Object Effect"
+#~ msgstr "Effaith Wrthrych"
+
+#, fuzzy
+#~ msgid "You did not select any slide."
+#~ msgstr "Ni wnaethoch chi ddewis tryloywder."
+
+#~ msgid "No Slide"
+#~ msgstr "Dim Tryloywder"
+
+#~ msgid "Change List Type"
+#~ msgstr "Newid Math Rhestr"
+
+#, fuzzy
+#~ msgid "Change Outline Color"
+#~ msgstr "Newid Lliw Pen-ysgrifennu"
+
+#, fuzzy
+#~ msgid "Change Fill Color"
+#~ msgstr "Newid Lliw Pen-ysgrifennu"
+
+#~ msgid "Change Line Begin"
+#~ msgstr "Newid Dechrau Llinell"
+
+#~ msgid "Change Line End"
+#~ msgstr "Newid Gorffen Llinell"
+
+#, fuzzy
+#~ msgid "Change Outline Style"
+#~ msgstr "Newid Arddull Pen-ysgrifennu"
+
+#, fuzzy
+#~ msgid "Change Outline Width"
+#~ msgstr "Newid Lled Pen-ysgrifennu"
+
+#~ msgid "Show Sidebar"
+#~ msgstr "Dangos Bar Ochr"
+
+#~ msgid "Hide Sidebar"
+#~ msgstr "Cuddio Bar Ochr"
+
+#~ msgid "Show Notebar"
+#~ msgstr "Dangos Bar Nodiadau"
+
+#, fuzzy
+#~ msgid "Hide Notebar"
+#~ msgstr "Cuddio Troedyn"
+
+#~ msgid "&Formatting Characters"
+#~ msgstr "&Nodau Fformatio"
+
+#, fuzzy
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Dangos/cuddio nodau di-argraffu."
+
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br><br>When this is "
+#~ "enabled, KPresenter shows you tabs, spaces, carriage returns and other "
+#~ "non-printing characters."
+#~ msgstr ""
+#~ "Dangos/cuddio nodau di-argraffu. <br> <br> Os yn alluog, mae KPresenter "
+#~ "yn dangos i chi tabnodau, gofodnodau, dychwelnodau, a nodau eraill di-"
+#~ "argraffu."
+
+#, fuzzy
+#~ msgid "Slide &Master"
+#~ msgstr "Teitl Trylowder"
+
+#~ msgid "Guide Lines"
+#~ msgstr "Cyfeiryddion"
+
+#~ msgid "Show &Grid"
+#~ msgstr "Dango&s Grid"
+
+#~ msgid "Hide &Grid"
+#~ msgstr "Cuddi&o Grid"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Neidio at y Grid"
+
+#~ msgid "&Slide..."
+#~ msgstr "&Tryloywder..."
+
+#~ msgid "P&icture..."
+#~ msgstr "Ll&un..."
+
+#~ msgid "&Rotate"
+#~ msgstr "C&ylchdroi"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "Chwyddo:"
+
+#~ msgid "&Shape"
+#~ msgstr "&Siâp"
+
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "Cylch/&Hirgylch"
+
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "&Pei/Cromlin/Cord"
+
+#~ msgid "&Text"
+#~ msgstr "&Testun"
+
+#~ msgid "&Chart"
+#~ msgstr "S&iart"
+
+#~ msgid "Ta&ble"
+#~ msgstr "&Tabl"
+
+#~ msgid "&Object"
+#~ msgstr "&Gwrthrych"
+
+#~ msgid "&Line"
+#~ msgstr "&Llinell"
+
+#~ msgid "&Freehand"
+#~ msgstr "&Rhydd-law"
+
+#~ msgid "Po&lyline"
+#~ msgstr "P&olylin"
+
+#~ msgid "&Quadric Bezier Curve"
+#~ msgstr "Cromlin Fezier C&wadrig"
+
+#~ msgid "C&ubic Bezier Curve"
+#~ msgstr "Cromlin Fe&zier Ciwbig"
+
+#~ msgid "Co&nvex/Concave Polygon"
+#~ msgstr "Polygon &Amgrwm/Ceugrwm"
+
+#~ msgid "Closed &Freehand"
+#~ msgstr "Rhydd-law Caëe&dig"
+
+#~ msgid "Closed Po&lyline"
+#~ msgstr "&Polylin Gaëedig"
+
+#~ msgid "Closed &Quadric Bezier Curve"
+#~ msgstr "Cro&mlin Fezier Cwadrig Caëedig"
+
+#~ msgid "Closed C&ubic Bezier Curve"
+#~ msgstr "Cromli&n Fezier Cwadrig Gaëedig"
+
+#~ msgid "&Font..."
+#~ msgstr "W&ynebfath..."
+
+#~ msgid "Font Family"
+#~ msgstr "Teulu Wynebfathau"
+
+#~ msgid "&Bold"
+#~ msgstr "&Trwm"
+
+#~ msgid "&Italic"
+#~ msgstr "&Italig"
+
+#~ msgid "&Underline"
+#~ msgstr "&Tanlinellu"
+
+#~ msgid "&Strike Out"
+#~ msgstr "T&rwylinellu"
+
+#~ msgid "&Color..."
+#~ msgstr "&Lliw..."
+
+#~ msgid "Align &Left"
+#~ msgstr "Alinio i'r Ch&with"
+
+#~ msgid "Align &Center"
+#~ msgstr "Alinio i'r &Canol"
+
+#~ msgid "Align &Right"
+#~ msgstr "Alinio i'r &Dde"
+
+#~ msgid "Align &Block"
+#~ msgstr "Alinio'r &Bloc"
+
+#~ msgid "Number"
+#~ msgstr "Rhif"
+
+#~ msgid "Bullet"
+#~ msgstr "Bwled"
+
+#~ msgid "&Increase Depth"
+#~ msgstr "&Cynyddu Dyfnder Paragraff"
+
+#~ msgid "&Decrease Depth"
+#~ msgstr "&Lleihau Dyfnder Paragraff"
+
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "Estyn Cynnwys i &Uchder y Gwrthrych"
+
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "Estyn Gwrthrych i &Ffitio'r Cynnwys"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "&Mewnosod Rhif Tudalen"
+
+#~ msgid "&Properties"
+#~ msgstr "&Priodweddau"
+
+#~ msgid "Ra&ise Objects"
+#~ msgstr "Co&di Gwrthrych(au)"
+
+#~ msgid "&Lower Objects"
+#~ msgstr "&Gostwng Gwrthrych(au)"
+
+#~ msgid "Bring to Front"
+#~ msgstr "Anfon i'r Blaen"
+
+#~ msgid "Send to Back"
+#~ msgstr "Anfon i'r Cefn"
+
+#~ msgid "R&otate Objects..."
+#~ msgstr "Cylch&droi Gwrthrychau..."
+
+#~ msgid "&Shadow Objects..."
+#~ msgstr "Cy&sgodi Gwrthrychau..."
+
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "Alinio i'r Canol (&llorweddol)"
+
+#~ msgid "Align &Top"
+#~ msgstr "Alinio i'r &Pen"
+
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "Alinio i'r Canol (&fertigol)"
+
+#~ msgid "Align &Bottom"
+#~ msgstr "Alinio i'r &Gwaelod"
+
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "&Cefndir Tryloywder..."
+
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "Creu Cyflwyniad &HTML..."
+
+#, fuzzy
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "Creu Cyflwyniad &HTML..."
+
+#~ msgid "Template Manager"
+#~ msgstr "Rheolydd Patrymluniau"
+
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "Defnyddio'r Tryloywder Cyfredol fel Patrymlun Rhagosodol"
+
+#~ msgid "Align O&bjects"
+#~ msgstr "Alinio &Gwrthrychau"
+
+#~ msgid "Line Begin"
+#~ msgstr "Dechrau Llinell"
+
+#~ msgid "Line End"
+#~ msgstr "Diwedd y Llinell"
+
+#, fuzzy
+#~ msgid "Outline Style"
+#~ msgstr "Amlinell"
+
+#, fuzzy
+#~ msgid "Outline Width"
+#~ msgstr "Amlinell"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Casglu Gwrthrychau"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "&Dadgasglu Gwrthrychau"
+
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "Golygu &Effaith Gwrthrych ..."
+
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "Golygu Tra&wsnewid Tryloywder ..."
+
+#~ msgid "&Go to Start"
+#~ msgstr "Ewch i'r &Dechrau"
+
+#~ msgid "Go to &End"
+#~ msgstr "Ewch i'r Di&wedd"
+
+#~ msgid "Goto &Slide..."
+#~ msgstr "Ewch i &Dryloywder..."
+
+#~ msgid "Fill Color..."
+#~ msgstr "Lliw Llenwad ..."
+
+#, fuzzy
+#~ msgid "Outline Color..."
+#~ msgstr "Lliw Pen-ysgrifennu"
+
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "Es&tyn Cynnwys i Uchder y Gwrthrych"
+
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "Newid &Maint y Gwrthrych i Ffitio'r Cynnwys"
+
+#~ msgid "&Rename Slide..."
+#~ msgstr "Ail-enwi Tr&yloywder..."
+
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "G&raddu i'r Maint Gwreiddiol"
+
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#~ msgid "&Change Picture..."
+#~ msgstr "&Newid Llun..."
+
+#~ msgid "Image &Effect..."
+#~ msgstr "&Effaith Ddelwedd:"
+
+#~ msgid "Superscript"
+#~ msgstr "Uwchysgrif"
+
+#~ msgid "Subscript"
+#~ msgstr "Isysgrif"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Nod A&rbennig..."
+
+#~ msgid "Link..."
+#~ msgstr "Cyswllt..."
+
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "Dewis Ffactor Addasiedig..."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Ffurfweddu &Hunangywiro..."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Paragraff..."
+
+#~ msgid "Default Format"
+#~ msgstr "Fformat Rhagosodol"
+
+#~ msgid "Open Link"
+#~ msgstr "Agor Cyswllt"
+
+#~ msgid "Change Link..."
+#~ msgstr "Newid Cyswllt..."
+
+#~ msgid "Copy Link"
+#~ msgstr "Copïo Cyswllt"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Ychwanegu i'r Tudnodau"
+
+#~ msgid "&Custom Variables..."
+#~ msgstr "Newidynnau &Addasiedig..."
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Golygu Newidyn..."
+
+#~ msgid "&Variable"
+#~ msgstr "&Newidyn"
+
+#~ msgid "&Property"
+#~ msgstr "&Priodwedd"
+
+#~ msgid "&Date"
+#~ msgstr "&Dyddiad"
+
+#~ msgid "&Time"
+#~ msgstr "&Amser"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "C&yfredoli Pob Newidyn"
+
+#~ msgid "Change Case..."
+#~ msgstr "Newid i Lythrennau Mawr/Bach..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Chwyddo:"
+
+#~ msgid "&Style Manager"
+#~ msgstr "Rheolydd Ardd&ull"
+
+#~ msgid "St&yle"
+#~ msgstr "Ardd&ull"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Galluogi Hunangywiro"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Galluogi Hunan-gywiro"
+
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Mewnosod Bwlch Di-doriad"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Mewnosod Bwlch Di-doriad"
+
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Mewnosod Cysylltnod Meddal"
+
+#~ msgid "Line Break"
+#~ msgstr "Toriad Llinell"
+
+#~ msgid "Completion"
+#~ msgstr "Cwblhad"
+
+#~ msgid "Comment..."
+#~ msgstr "Sylwad..."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Golygu Sylwad..."
+
+#, fuzzy
+#~ msgid "Add Guide Line..."
+#~ msgstr "Ychwanegu Llinell Gymorth Newydd..."
+
+#~ msgid "Remove Comment"
+#~ msgstr "Gwaredu Sylwad"
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Copïo Testun Sylwad..."
+
+#~ msgid "&Configure Completion..."
+#~ msgstr "Ffurfweddu &Cwblhau..."
+
+#~ msgid "Zoom Out"
+#~ msgstr "Pellhàu"
+
+#~ msgid "Zoom In"
+#~ msgstr "Nesàu"
+
+#~ msgid "Zoom Entire Slide"
+#~ msgstr "Chwyddo'r Tryloywder Cyfan"
+
+#~ msgid "Zoom Slide Width"
+#~ msgstr "Chwyddo Lled Tryloywder"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "Chwyddo Gwrthrych Detholedig"
+
+#~ msgid "Zoom Slide Height"
+#~ msgstr "Chwyddo Uchder Tryloywder"
+
+#~ msgid "Zoom All Objects"
+#~ msgstr "Chwyddo Pob Gwrthrych"
+
+#~ msgid "Horizontal Flip"
+#~ msgstr "Drosdroi Llorweddol"
+
+#~ msgid "Vertical Flip"
+#~ msgstr "Drosdroi Fertigol"
+
+#~ msgid "Duplicate Object..."
+#~ msgstr "Dyblygu Gwrthrych..."
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Gweithredu Hunan-gwblhau"
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Creu Ardull o Ddetholiad ..."
+
+#~ msgid "Align Top"
+#~ msgstr "Alinio Brig"
+
+#~ msgid "Align Middle"
+#~ msgstr "Alinio i'r Canol:"
+
+#~ msgid "Save Picture..."
+#~ msgstr "Cadw Llun..."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Hunangywiro Sillafu"
+
+#~ msgid "File..."
+#~ msgstr "Ffeil..."
+
+#~ msgid "Save Background Picture..."
+#~ msgstr "Cadw Llun Cefndir..."
+
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "Cyrchydd Teipio Ymhobman"
+
+#~ msgid "Ignore All"
+#~ msgstr "Anwybyddu Popeth"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Ychwanegu Gair i'r Geiriadur"
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "Cefndir Tryloywder"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "Cefndir Tryloywder"
+
+#~ msgid "Set Background"
+#~ msgstr "Gosod Cefndir"
+
+#~ msgid "Select New Picture"
+#~ msgstr "Dewis Llun Newydd"
+
+#~ msgid "Next slide"
+#~ msgstr "Tryloywder nesaf"
+
+#~ msgid "Slide %1/%2"
+#~ msgstr "Tryloywder %1/%2"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "Gwrthrych: %1 - (lled: %2, uchder: %3) (%4)"
+
+#, fuzzy
+#~ msgctxt "1 object selected"
+#~ msgid "%n objects selected"
+#~ msgstr "Detholir un gwrthrych"
+
+#~ msgid "Change Link"
+#~ msgstr "Newid Cyswllt"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Cywiro Gair a Gamsillafwyd"
+
+#~ msgid "Paragraph Settings"
+#~ msgstr "Gosodiadau Paragraff"
+
+#~ msgid "Change Custom Variable"
+#~ msgstr "Newid Newidyn Addasiedig"
+
+#~ msgid "Change Case of Text"
+#~ msgstr "Newid Llythrennau Mawr/Bach y Testun"
+
+#~ msgid "Whole Slide"
+#~ msgstr "Tryloywder Cyfan"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#~ msgid "Presentation Duration"
+#~ msgstr "Hyd y Cyflwyniad"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "Math dogfen:"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Gweithredu Arddull i Ffrâm"
+
+#~ msgid "Change Note Text"
+#~ msgstr "Newid Testun Nodyn"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Gweithredu Hunan-fformatio"
+
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "Hoffech weithredu hunan-fformatio yn y tryloywder newydd?"
+
+#~ msgid "Replace Word"
+#~ msgstr "Amnewid Gair"
+
+#~ msgid "First"
+#~ msgstr "Yn Gyntaf"
+
+#~ msgid "Previous"
+#~ msgstr "Blaenorol"
+
+#~ msgid "Next"
+#~ msgstr "Nesaf"
+
+#~ msgid "Last"
+#~ msgstr "Olaf"
+
+#~ msgid "Home"
+#~ msgstr "Cartref"
+
+#~ msgid ""
+#~ "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/"
+#~ "kpresenter\">KPresenter</a>"
+#~ msgstr ""
+#~ "Creuwyd ar %1 gan <i>%2</i> efo <a href=\"http://www.koffice.org/"
+#~ "kpresenter\">KPresenter</a>"
+
+#~ msgid "Table of Contents"
+#~ msgstr "Tabl Cynnwys"
+
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "Cliciwch yma i gychwyn y Sioe Tryloywderau"
+
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "Dewin Creu Cyflwyniad HTML"
+
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "Rhowch eich enw, cyfeiriad, ebost a theitl y cyflwyniad gwe.  Hefyd, "
+#~ "rhowch y cyfeiriadur allbwn lle ddylai gadw'r cyflwyniad gwe."
+
+#~ msgid "Email address:"
+#~ msgstr "Cyfeiriad Ebost:"
+
+#~ msgid "Step 1: General Information"
+#~ msgstr "Cam 1: Gwybodaeth Gyffredinol"
+
+#~ msgid "Here you can configure the style of the web pages."
+#~ msgstr "Yma, gallwch ffurfweddu arddull y tudalennau gwe."
+
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr " Gallwch hefyd benodi'r chwyddo ar gyfer y tryloywderau."
+
+#~ msgid "Zoom:"
+#~ msgstr "Chwyddo:"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr "Gallwch hefyd benodi'r chwyddo ar gyfer y tryloywderau."
+
+#~ msgid "Encoding:"
+#~ msgstr "Amgodiad:"
+
+#~ msgid "Document type:"
+#~ msgstr "Math dogfen:"
+
+#~ msgid "Step 2: Configure HTML"
+#~ msgstr "Cam 2: Ffurfweddu HTML"
+
+#~ msgid "Now you can customize the colors of the web pages."
+#~ msgstr "Rwan gallwch addasu lliwiau'r tudalennau gwe."
+
+#~ msgid "Title color:"
+#~ msgstr "Lliw'r teitl:"
+
+#~ msgid "Step 3: Customize Colors"
+#~ msgstr "Cam 3: Addasu Lliwiau"
+
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "Yma, gallwch benodi teitlau ar gyfer pob tryloywder.  Cliciwch ar "
+#~ "dryloywder yn y rhestr a rhowch y teitl yn y blwch testun isod.  Os "
+#~ "cliciwch ar deitl, bydd prif ffenestr KPresenter yn dangos y tryloywder."
+
+#~ msgid "Step 4: Customize Slide Titles"
+#~ msgstr "Cam 4: Addasu Teitlau Tryloywderau"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr "Gallwch hefyd benodi'r chwyddo ar gyfer y tryloywderau."
+
+#~ msgid "Disabled"
+#~ msgstr "Analluogir"
+
+#, fuzzy
+#~ msgid "Write header to the slides"
+#~ msgstr "Creu Lluniau o'r Tryloywderau"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr "Gallwch hefyd benodi'r chwyddo ar gyfer y tryloywderau."
+
+#, fuzzy
+#~ msgid "Write footer to the slides"
+#~ msgstr "Creu Lluniau o'r Tryloywderau"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr "Gallwch hefyd benodi'r chwyddo ar gyfer y tryloywderau."
+
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "Ymgychwyn (creu adeiledd ffeiliau, ayyb)"
+
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "Creu Lluniau o'r Tryloywderau"
+
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "Creu Tudalennau HTML ar gyfer y Tryloywderau"
+
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "Creu Prif Dudalen (Tabl Cynnwys)"
+
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Cyflwyniad Gwe KPresenter (*.kpweb)"
+
+#, fuzzy
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Hyd y Cyflwyniad"
+
+#~ msgid "Freehand"
+#~ msgstr "Rhydd-law"
+
+#~ msgid "Autoform"
+#~ msgstr "Siâp Ymysgogol"
+
+#~ msgid "Group"
+#~ msgstr "Grŵp"
+
+#~ msgid "Polyline"
+#~ msgstr "Polylin"
+
+#~ msgid "Embedded Object"
+#~ msgstr "Gwrthrych Caeth"
+
+#~ msgid "Cubic Bezier Curve"
+#~ msgstr "Cromlin Fezier Ciwbig"
+
+#~ msgid "Quadric Bezier Curve"
+#~ msgstr "Cromlin Fezier Cwadrig"
+
+#, fuzzy
+#~| msgid "View mode:"
+#~ msgid "View Mode"
+#~ msgstr "Modd golwg:"
+
+#~ msgid "Prot&ect content"
+#~ msgstr "Gwar&chod cynnwys"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "Ymddygiad y Gwirydd Sillafu"
+
+#~ msgctxt "Abbreviation for Text-to-Speech"
+#~ msgid "TTS"
+#~ msgstr "TiL (TTS)"
+
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Gosodiadau Testun-i-Leferydd"
+
+#~ msgid "Speak widget under &mouse pointer"
+#~ msgstr "Celfigyn llais dan &bwyntydd llygoden"
+
+#~ msgid "Speak widget with &focus"
+#~ msgstr "Celfigyn llais efo &canolbywnt"
+
+#~ msgid "Speak &What's This?"
+#~ msgstr "Be' dy &Hwn (Llais)?"
+
+#~ msgctxt "Verbal indication if widget is disabled (grayed)"
+#~ msgid "&Say whether disabled"
+#~ msgstr "Dweud os yn &analluog"
+
+#~ msgid "Spea&k accelerators"
+#~ msgstr "Cyflym&yddion llais"
+
+#~ msgctxt "A word spoken before another word"
+#~ msgid "Pr&efaced by the word:"
+#~ msgstr "Wedi ei ragddodi &gan y gair:"
+
+#~ msgctxt "Keyboard accelerator, such as Alt+F"
+#~ msgid "Accelerator"
+#~ msgstr "Cyflymydd"
+
+#~ msgid "&Polling interval:"
+#~ msgstr "Cyfnod g&wirio:"

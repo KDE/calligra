@@ -1,0 +1,544 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# Wantoyo <wantoyek@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2019-07-23 19:07+0700\n"
+"Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
+"Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: actions/AccidentalAction.cpp:54
+#, kde-format
+msgid "Double flat"
+msgstr "Datar ganda"
+
+#: actions/AccidentalAction.cpp:55
+#, kde-format
+msgctxt "lowered half a step"
+msgid "Flat"
+msgstr "Datar"
+
+#: actions/AccidentalAction.cpp:56
+#, kde-format
+msgid "Natural"
+msgstr "Natural"
+
+#: actions/AccidentalAction.cpp:57
+#, kde-format
+msgctxt "raised half a step"
+msgid "Sharp"
+msgstr "Tajam"
+
+#: actions/AccidentalAction.cpp:58
+#, kde-format
+msgid "Double sharp"
+msgstr "Tajam ganda"
+
+#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#, kde-format
+msgid "%1 flats"
+msgstr "%1 datar"
+
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#, kde-format
+msgid "%1 sharps"
+msgstr "%1 tajam"
+
+#: actions/DotsAction.cpp:34
+#, kde-format
+msgid "Dots"
+msgstr "Titik"
+
+#: actions/EraserAction.cpp:36
+#, kde-format
+msgid "Eraser"
+msgstr "Penghapus"
+
+#: actions/KeySignatureAction.cpp:28
+#, kde-format
+msgid "Ab Major"
+msgstr "Mayor Ab"
+
+#: actions/KeySignatureAction.cpp:29
+#, kde-format
+msgid "Eb Major"
+msgstr "Mayor Eb"
+
+#: actions/KeySignatureAction.cpp:30
+#, kde-format
+msgid "Bb Major"
+msgstr "Mayor Bb"
+
+#: actions/KeySignatureAction.cpp:31
+#, kde-format
+msgid "F Major"
+msgstr "Mayor F"
+
+#: actions/KeySignatureAction.cpp:32
+#, kde-format
+msgid "C Major"
+msgstr "Mayor C"
+
+#: actions/KeySignatureAction.cpp:33
+#, kde-format
+msgid "G Major"
+msgstr "Mayor G"
+
+#: actions/KeySignatureAction.cpp:34
+#, kde-format
+msgid "D Major"
+msgstr "Mayor D"
+
+#: actions/KeySignatureAction.cpp:35
+#, kde-format
+msgid "A Major"
+msgstr "Mayor A"
+
+#: actions/KeySignatureAction.cpp:36
+#, kde-format
+msgid "E Major"
+msgstr "Mayor E"
+
+#: actions/KeySignatureAction.cpp:49
+#, kde-format
+msgctxt "Other key signature"
+msgid "Other"
+msgstr "Lainnya"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "note"
+msgstr "catatan"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "rest"
+msgstr "tanda-diam"
+
+#: actions/NoteEntryAction.cpp:57
+#, kde-format
+msgid "Double whole "
+msgstr "Seluruh ganda"
+
+#: actions/NoteEntryAction.cpp:58
+#, kde-format
+msgid "Whole "
+msgstr "Seluruh"
+
+#: actions/NoteEntryAction.cpp:59
+#, kde-format
+msgid "Half "
+msgstr "Setengah "
+
+#: actions/NoteEntryAction.cpp:60
+#, kde-format
+msgid "Quarter "
+msgstr "Perempat"
+
+#: actions/NoteEntryAction.cpp:61
+#, kde-format
+msgid "Eighth "
+msgstr "Kedelapan "
+
+#: actions/NoteEntryAction.cpp:62
+#, kde-format
+msgid "16th "
+msgstr "Ke-16 "
+
+#: actions/NoteEntryAction.cpp:63
+#, kde-format
+msgid "32nd "
+msgstr "Ke-32 "
+
+#: actions/NoteEntryAction.cpp:64
+#, kde-format
+msgid "64th "
+msgstr "Ke-64 "
+
+#: actions/NoteEntryAction.cpp:65
+#, kde-format
+msgid "128th "
+msgstr "Ke-128 "
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown note"
+msgstr "Catatan tak diketahui"
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown rest"
+msgstr "Tanda-diam tak diketahui"
+
+#: actions/RemoveBarAction.cpp:22
+#, kde-format
+msgid "Remove bar"
+msgstr "Hapus bilah"
+
+#: actions/SelectionAction.cpp:32
+#, kde-format
+msgid "Select"
+msgstr "Pilih"
+
+#: actions/SetClefAction.cpp:39
+#, kde-format
+msgctxt "Treble clef"
+msgid "Treble"
+msgstr "Trebel"
+
+#: actions/SetClefAction.cpp:40
+#, kde-format
+msgctxt "Bass clef"
+msgid "Bass"
+msgstr "Bas"
+
+#: actions/SetClefAction.cpp:43
+#, kde-format
+msgctxt "Soprano clef"
+msgid "Soprano"
+msgstr "Sopran"
+
+#: actions/SetClefAction.cpp:44
+#, kde-format
+msgctxt "Alto clef"
+msgid "Alto"
+msgstr "Alto"
+
+#: actions/SetClefAction.cpp:45
+#, kde-format
+msgctxt "Tenor clef"
+msgid "Tenor"
+msgstr "Tenor"
+
+#: actions/SetClefAction.cpp:46
+#, kde-format
+msgid "C clef on line %1"
+msgstr "Kunci C pada garis %1"
+
+#: actions/SetClefAction.cpp:49
+#, kde-format
+msgid "Unknown clef"
+msgstr "Kunci tak diketahui"
+
+#: actions/TiedNoteAction.cpp:33
+#, kde-format
+msgid "Tied notes"
+msgstr "Catatan terikat"
+
+#: commands/AddBarsCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add measures"
+msgstr "Tambahkan tindakan"
+
+#: commands/AddDotCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add dot"
+msgstr "Tambahkan titik"
+
+#: commands/AddNoteCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Set chord duration"
+msgstr "Atur durasi akord"
+
+#: commands/AddNoteCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Add note"
+msgstr "Tambahkan catatan"
+
+#: commands/AddPartCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Add part"
+msgstr "Tambahkan bagian"
+
+#: commands/AddPartCommand.cpp:26
+#, kde-format
+msgid "Part %1"
+msgstr "Bagian %1"
+
+#: commands/ChangePartDetailsCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Change part details"
+msgstr "Ubah bagian terperinci"
+
+#: commands/CreateChordCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Add chord"
+msgstr "Tambahkan akord"
+
+#: commands/CreateChordCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Add rest"
+msgstr "Tambahkan tanda-diam"
+
+#: commands/MakeRestCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Convert chord to rest"
+msgstr "Konversikan akord ke tanda-diam"
+
+#: commands/RemoveBarCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Remove bar"
+msgstr "Hapus bilah"
+
+#: commands/RemoveChordCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove rest"
+msgstr "Hapus tanda-diam"
+
+#: commands/RemoveChordCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove chord"
+msgstr "Hapus akord"
+
+#: commands/RemoveNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove note"
+msgstr "Hapus catatan"
+
+#: commands/RemovePartCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove part"
+msgstr "Hapus bagian"
+
+#: commands/RemoveStaffElementCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Remove clef"
+msgstr "Hapus kunci"
+
+#: commands/RemoveStaffElementCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Remove staff element"
+msgstr "Hapus elemen staf"
+
+#: commands/SetAccidentalsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Set accidentals"
+msgstr "Atur asidental"
+
+#: commands/SetClefCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change clef"
+msgstr "Ubah kunci"
+
+#: commands/SetKeySignatureCommand.cpp:25
+#: commands/SetKeySignatureCommand.cpp:72
+msgctxt "(qtundo-format)"
+msgid "Change key signature"
+msgstr "Ubah tandatangan kunci"
+
+#: commands/SetTimeSignatureCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change time signature"
+msgstr "Ubah tandatangan waktu"
+
+#: commands/ToggleTiedNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Toggle Note Tie"
+msgstr "Jungkit Ikatan Catatan"
+
+#: dialogs/KeySignatureDialog.cpp:15
+#, kde-format
+msgid "Set key signature"
+msgstr "Atur tandatangan kunci"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/KeySignatureDialog.ui:63
+#, kde-format
+msgid "Region"
+msgstr "Region"
+
+#. i18n: ectx: property (text), widget (QRadioButton, throughBar)
+#. i18n: ectx: property (text), widget (QRadioButton, throughEndOfPiece)
+#. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
+#: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
+#: dialogs/KeySignatureDialog.ui:163
+#, kde-format
+msgid "Measure"
+msgstr "Tindakan"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/KeySignatureDialog.ui:88
+#, kde-format
+msgid "through"
+msgstr "melalui"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/KeySignatureDialog.ui:139
+#, kde-format
+msgid "through end of piece"
+msgstr "melalui akhir potongan"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/KeySignatureDialog.ui:180
+#, kde-format
+msgid "to next key change"
+msgstr "untuk pengubahan kunci selanjutnya"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/KeySignatureDialog.ui:205
+#, kde-format
+msgid "Staves"
+msgstr "Pranada"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allStaves)
+#: dialogs/KeySignatureDialog.ui:211
+#, kde-format
+msgid "Update all staves"
+msgstr "Perbarui semua pranada"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
+#: dialogs/KeySignatureDialog.ui:221
+#, kde-format
+msgid "Only update selected staff"
+msgstr "Hanya perbarui staf yang dipilih"
+
+#: dialogs/PartDetailsDialog.cpp:19
+#, kde-format
+msgid "Part details"
+msgstr "Bagian terperinci"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/PartDetailsDialog.ui:18
+#, kde-format
+msgid "Name:"
+msgstr "Nama:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/PartDetailsDialog.ui:34
+#, kde-format
+msgid "Short name:"
+msgstr "Nama pendek:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/PartDetailsDialog.ui:50
+#, kde-format
+msgid "Staves:"
+msgstr "Pranada:"
+
+#. i18n: ectx: property (text), widget (QToolButton, editPart)
+#. i18n: ectx: property (text), widget (QToolButton, addPart)
+#. i18n: ectx: property (text), widget (QToolButton, removePart)
+#: dialogs/PartsWidget.ui:37 dialogs/PartsWidget.ui:44
+#: dialogs/PartsWidget.ui:54
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:187
+#, kde-format
+msgid "Voice 1"
+msgstr "Suara 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:192
+#, kde-format
+msgid "Voice 2"
+msgstr "Suara 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:197
+#, kde-format
+msgid "Voice 3"
+msgstr "Suara 3"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:202
+#, kde-format
+msgid "Voice 4"
+msgstr "Suara 4"
+
+#. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
+#: SimpleEntryTool.cpp:678
+#, kde-format
+msgid "Add measures"
+msgstr "Tambahkan tindakan"
+
+#. i18n: ectx: property (text), widget (QToolButton, importButton)
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#, kde-format
+msgid "Import"
+msgstr "Impor"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportButton)
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#, kde-format
+msgid "Export"
+msgstr "Ekspor"
+
+#: MusicShape.cpp:71
+#, kde-format
+msgid "Part 1"
+msgstr "Bagian 1"
+
+#: MusicShapeFactory.cpp:36
+#, kde-format
+msgid "Music Shape"
+msgstr "Bentuk Musik"
+
+#: MusicShapeFactory.cpp:38
+#, kde-format
+msgid "A shape which provides a music editor"
+msgstr "Sebuah bentuk yang menyediakan sebuah pengedit musik"
+
+#: MusicTool.cpp:85
+#, kde-format
+msgid "Parts"
+msgstr "Bagian-bagian"
+
+#: MusicToolFactory.cpp:19
+#, kde-format
+msgid "Music editing, parts"
+msgstr "Pengeditan musik, bagian-bagian"
+
+#: SimpleEntryTool.cpp:226
+#, kde-format
+msgid "Clef"
+msgstr "Kunci"
+
+#: SimpleEntryTool.cpp:255
+#, kde-format
+msgid "Time signature"
+msgstr "Tandatangan waktu"
+
+#: SimpleEntryTool.cpp:285
+#, kde-format
+msgid "Key signature"
+msgstr "Tandatangan kunci"
+
+#: SimpleEntryTool.cpp:679
+#, kde-format
+msgid "Add how many measures?"
+msgstr "Tambahkan berapa banyak tindakan?"
+
+#: SimpleEntryTool.cpp:743
+#, kde-format
+msgctxt "@title:window"
+msgid "Import"
+msgstr "Impor"
+
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#, kde-format
+msgid "MusicXML files (*.xml)"
+msgstr "File-file MusicXML (*.xml)"
+
+#: SimpleEntryTool.cpp:760
+#, kde-format
+msgctxt "@title:window"
+msgid "Export"
+msgstr "Ekspor"
+
+#: SimpleEntryToolFactory.cpp:18
+#, kde-format
+msgid "Music editing"
+msgstr "Pengeditan musik"

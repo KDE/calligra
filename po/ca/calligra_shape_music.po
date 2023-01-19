@@ -1,0 +1,550 @@
+# Translation of calligra_shape_music.po to Catalan
+# Copyright (C) 2008-2016 This_file_is_part_of_KDE
+# This file is distributed under the same license as the MusicShape package.
+#
+# Rafael Carreras <rcarreras@caliu.cat>, 2008.
+# Josep M. Ferrer <txemaq@gmail.com>, 2012, 2014, 2015, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-20 22:37+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Poedit-Language: Catalan\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: actions/AccidentalAction.cpp:54
+#, kde-format
+msgid "Double flat"
+msgstr "Doble bemoll"
+
+#: actions/AccidentalAction.cpp:55
+#, kde-format
+msgctxt "lowered half a step"
+msgid "Flat"
+msgstr "Bemoll"
+
+#: actions/AccidentalAction.cpp:56
+#, kde-format
+msgid "Natural"
+msgstr "Natural"
+
+#: actions/AccidentalAction.cpp:57
+#, kde-format
+msgctxt "raised half a step"
+msgid "Sharp"
+msgstr "Sostingut"
+
+#: actions/AccidentalAction.cpp:58
+#, kde-format
+msgid "Double sharp"
+msgstr "Doble sostingut"
+
+#: actions/AccidentalAction.cpp:61 actions/KeySignatureAction.cpp:38
+#, kde-format
+msgid "%1 flats"
+msgstr "%1 bemolls"
+
+#: actions/AccidentalAction.cpp:63 actions/KeySignatureAction.cpp:39
+#, kde-format
+msgid "%1 sharps"
+msgstr "%1 sostinguts"
+
+#: actions/DotsAction.cpp:34
+#, kde-format
+msgid "Dots"
+msgstr "Punts"
+
+#: actions/EraserAction.cpp:36
+#, kde-format
+msgid "Eraser"
+msgstr "Esborrador"
+
+#: actions/KeySignatureAction.cpp:28
+#, kde-format
+msgid "Ab Major"
+msgstr "La bemoll major"
+
+#: actions/KeySignatureAction.cpp:29
+#, kde-format
+msgid "Eb Major"
+msgstr "Mi bemoll major"
+
+#: actions/KeySignatureAction.cpp:30
+#, kde-format
+msgid "Bb Major"
+msgstr "Si bemoll major"
+
+#: actions/KeySignatureAction.cpp:31
+#, kde-format
+msgid "F Major"
+msgstr "Fa major"
+
+#: actions/KeySignatureAction.cpp:32
+#, kde-format
+msgid "C Major"
+msgstr "Do major"
+
+#: actions/KeySignatureAction.cpp:33
+#, kde-format
+msgid "G Major"
+msgstr "Sol major"
+
+#: actions/KeySignatureAction.cpp:34
+#, kde-format
+msgid "D Major"
+msgstr "Re major"
+
+#: actions/KeySignatureAction.cpp:35
+#, kde-format
+msgid "A Major"
+msgstr "La major"
+
+#: actions/KeySignatureAction.cpp:36
+#, kde-format
+msgid "E Major"
+msgstr "Mi major"
+
+#: actions/KeySignatureAction.cpp:49
+#, kde-format
+msgctxt "Other key signature"
+msgid "Other"
+msgstr "Altres"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "note"
+msgstr "nota"
+
+#: actions/NoteEntryAction.cpp:55
+#, kde-format
+msgid "rest"
+msgstr "pausa"
+
+#: actions/NoteEntryAction.cpp:57
+#, kde-format
+msgid "Double whole "
+msgstr "Doble rodona "
+
+#: actions/NoteEntryAction.cpp:58
+#, kde-format
+msgid "Whole "
+msgstr "Rodona "
+
+#: actions/NoteEntryAction.cpp:59
+#, kde-format
+msgid "Half "
+msgstr "Blanca "
+
+#: actions/NoteEntryAction.cpp:60
+#, kde-format
+msgid "Quarter "
+msgstr "Negra "
+
+#: actions/NoteEntryAction.cpp:61
+#, kde-format
+msgid "Eighth "
+msgstr "Corxera "
+
+#: actions/NoteEntryAction.cpp:62
+#, kde-format
+msgid "16th "
+msgstr "Semicorxera "
+
+#: actions/NoteEntryAction.cpp:63
+#, kde-format
+msgid "32nd "
+msgstr "Fusa "
+
+#: actions/NoteEntryAction.cpp:64
+#, kde-format
+msgid "64th "
+msgstr "Semifusa "
+
+#: actions/NoteEntryAction.cpp:65
+#, kde-format
+msgid "128th "
+msgstr "128a part "
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown note"
+msgstr "Nota desconeguda"
+
+#: actions/NoteEntryAction.cpp:67
+#, kde-format
+msgid "Unknown rest"
+msgstr "Pausa desconeguda"
+
+#: actions/RemoveBarAction.cpp:22
+#, kde-format
+msgid "Remove bar"
+msgstr "Elimina la barra"
+
+#: actions/SelectionAction.cpp:32
+#, kde-format
+msgid "Select"
+msgstr "Selecciona"
+
+#: actions/SetClefAction.cpp:39
+#, kde-format
+msgctxt "Treble clef"
+msgid "Treble"
+msgstr "Tiple"
+
+#: actions/SetClefAction.cpp:40
+#, kde-format
+msgctxt "Bass clef"
+msgid "Bass"
+msgstr "Baix"
+
+#: actions/SetClefAction.cpp:43
+#, kde-format
+msgctxt "Soprano clef"
+msgid "Soprano"
+msgstr "Soprano"
+
+#: actions/SetClefAction.cpp:44
+#, kde-format
+msgctxt "Alto clef"
+msgid "Alto"
+msgstr "Alto"
+
+#: actions/SetClefAction.cpp:45
+#, kde-format
+msgctxt "Tenor clef"
+msgid "Tenor"
+msgstr "Tenor"
+
+#: actions/SetClefAction.cpp:46
+#, kde-format
+msgid "C clef on line %1"
+msgstr "Clau de Do en línia %1"
+
+#: actions/SetClefAction.cpp:49
+#, kde-format
+msgid "Unknown clef"
+msgstr "Clau desconeguda"
+
+#: actions/TiedNoteAction.cpp:33
+#, kde-format
+msgid "Tied notes"
+msgstr "Notes lligades"
+
+#: commands/AddBarsCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add measures"
+msgstr "Afegeix mesures"
+
+#: commands/AddDotCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Add dot"
+msgstr "Afegeix punt"
+
+#: commands/AddNoteCommand.cpp:29
+msgctxt "(qtundo-format)"
+msgid "Set chord duration"
+msgstr "Arranja la durada de l'acord"
+
+#: commands/AddNoteCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Add note"
+msgstr "Afegeix una nota"
+
+#: commands/AddPartCommand.cpp:25
+msgctxt "(qtundo-format)"
+msgid "Add part"
+msgstr "Afegeix part"
+
+#: commands/AddPartCommand.cpp:26
+#, kde-format
+msgid "Part %1"
+msgstr "Part %1"
+
+#: commands/ChangePartDetailsCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Change part details"
+msgstr "Canvia els detalls de la part"
+
+#: commands/CreateChordCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Add chord"
+msgstr "Afegeix un acord"
+
+#: commands/CreateChordCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Add rest"
+msgstr "Afegeix una pausa"
+
+#: commands/MakeRestCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Convert chord to rest"
+msgstr "Converteix l'acord en pausa"
+
+#: commands/RemoveBarCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Remove bar"
+msgstr "Elimina la barra"
+
+#: commands/RemoveChordCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove rest"
+msgstr "Elimina la pausa"
+
+#: commands/RemoveChordCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove chord"
+msgstr "Elimina l'acord"
+
+#: commands/RemoveNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove note"
+msgstr "Elimina la nota"
+
+#: commands/RemovePartCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Remove part"
+msgstr "Elimina la part"
+
+#: commands/RemoveStaffElementCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Remove clef"
+msgstr "Elimina la clau"
+
+#: commands/RemoveStaffElementCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Remove staff element"
+msgstr "Elimina l'element del pentagrama"
+
+#: commands/SetAccidentalsCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Set accidentals"
+msgstr "Arranja els accidentals"
+
+#: commands/SetClefCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Change clef"
+msgstr "Canvia la clau"
+
+#: commands/SetKeySignatureCommand.cpp:25
+#: commands/SetKeySignatureCommand.cpp:72
+msgctxt "(qtundo-format)"
+msgid "Change key signature"
+msgstr "Canvia la signatura de la clau"
+
+#: commands/SetTimeSignatureCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Change time signature"
+msgstr "Canvia el temps de la signatura"
+
+#: commands/ToggleTiedNoteCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Toggle Note Tie"
+msgstr "Commuta la nota lligada"
+
+#: dialogs/KeySignatureDialog.cpp:15
+#, kde-format
+msgid "Set key signature"
+msgstr "Arranja la signatura de clau"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/KeySignatureDialog.ui:63
+#, kde-format
+msgid "Region"
+msgstr "Regió"
+
+#. i18n: ectx: property (text), widget (QRadioButton, throughBar)
+#. i18n: ectx: property (text), widget (QRadioButton, throughEndOfPiece)
+#. i18n: ectx: property (text), widget (QRadioButton, toNextChange)
+#: dialogs/KeySignatureDialog.ui:71 dialogs/KeySignatureDialog.ui:122
+#: dialogs/KeySignatureDialog.ui:163
+#, kde-format
+msgid "Measure"
+msgstr "Mesura"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/KeySignatureDialog.ui:88
+#, kde-format
+msgid "through"
+msgstr "fins"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/KeySignatureDialog.ui:139
+#, kde-format
+msgid "through end of piece"
+msgstr "fins al final de la peça"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/KeySignatureDialog.ui:180
+#, kde-format
+msgid "to next key change"
+msgstr "el següent canvi de clau"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/KeySignatureDialog.ui:205
+#, kde-format
+msgid "Staves"
+msgstr "Pentagrames"
+
+#. i18n: ectx: property (text), widget (QRadioButton, allStaves)
+#: dialogs/KeySignatureDialog.ui:211
+#, kde-format
+msgid "Update all staves"
+msgstr "Actualitza tots els pentagrames"
+
+#. i18n: ectx: property (text), widget (QRadioButton, selectedStaff)
+#: dialogs/KeySignatureDialog.ui:221
+#, kde-format
+msgid "Only update selected staff"
+msgstr "Actualitza només el pentagrama seleccionat"
+
+#: dialogs/PartDetailsDialog.cpp:19
+#, kde-format
+msgid "Part details"
+msgstr "Detalls de part"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/PartDetailsDialog.ui:18
+#, kde-format
+msgid "Name:"
+msgstr "Nom:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/PartDetailsDialog.ui:34
+#, kde-format
+msgid "Short name:"
+msgstr "Nom curt:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/PartDetailsDialog.ui:50
+#, kde-format
+msgid "Staves:"
+msgstr "Pentagrames:"
+
+#. i18n: ectx: property (text), widget (QToolButton, editPart)
+#. i18n: ectx: property (text), widget (QToolButton, addPart)
+#. i18n: ectx: property (text), widget (QToolButton, removePart)
+#: dialogs/PartsWidget.ui:37 dialogs/PartsWidget.ui:44
+#: dialogs/PartsWidget.ui:54
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:187
+#, kde-format
+msgid "Voice 1"
+msgstr "Veu 1"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:192
+#, kde-format
+msgid "Voice 2"
+msgstr "Veu 2"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:197
+#, kde-format
+msgid "Voice 3"
+msgstr "Veu 3"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, voiceList)
+#: dialogs/SimpleEntryWidget.ui:202
+#, kde-format
+msgid "Voice 4"
+msgstr "Veu 4"
+
+#. i18n: ectx: property (text), widget (QToolButton, addBarsButton)
+#: dialogs/SimpleEntryWidget.ui:360 SimpleEntryTool.cpp:86
+#: SimpleEntryTool.cpp:678
+#, kde-format
+msgid "Add measures"
+msgstr "Afegeix mesures"
+
+#. i18n: ectx: property (text), widget (QToolButton, importButton)
+#: dialogs/SimpleEntryWidget.ui:387 SimpleEntryTool.cpp:78
+#, kde-format
+msgid "Import"
+msgstr "Importa"
+
+#. i18n: ectx: property (text), widget (QToolButton, exportButton)
+#: dialogs/SimpleEntryWidget.ui:397 SimpleEntryTool.cpp:82
+#, kde-format
+msgid "Export"
+msgstr "Exporta"
+
+#: MusicShape.cpp:71
+#, kde-format
+msgid "Part 1"
+msgstr "Part 1"
+
+#: MusicShapeFactory.cpp:36
+#, kde-format
+msgid "Music Shape"
+msgstr "Forma de música"
+
+#: MusicShapeFactory.cpp:38
+#, kde-format
+msgid "A shape which provides a music editor"
+msgstr "Una forma que proporciona un editor de música"
+
+#: MusicTool.cpp:85
+#, kde-format
+msgid "Parts"
+msgstr "Parts"
+
+#: MusicToolFactory.cpp:19
+#, kde-format
+msgid "Music editing, parts"
+msgstr "Edició de música, parts"
+
+#: SimpleEntryTool.cpp:226
+#, kde-format
+msgid "Clef"
+msgstr "Clau"
+
+#: SimpleEntryTool.cpp:255
+#, kde-format
+msgid "Time signature"
+msgstr "Signatura de temps"
+
+#: SimpleEntryTool.cpp:285
+#, kde-format
+msgid "Key signature"
+msgstr "Signatura de clau"
+
+#: SimpleEntryTool.cpp:679
+#, kde-format
+msgid "Add how many measures?"
+msgstr "Quantes mesures s'han d'afegir?"
+
+#: SimpleEntryTool.cpp:743
+#, kde-format
+msgctxt "@title:window"
+msgid "Import"
+msgstr "Importa"
+
+#: SimpleEntryTool.cpp:743 SimpleEntryTool.cpp:760
+#, kde-format
+msgid "MusicXML files (*.xml)"
+msgstr "Fitxers MusicXML (*.xml)"
+
+#: SimpleEntryTool.cpp:760
+#, kde-format
+msgctxt "@title:window"
+msgid "Export"
+msgstr "Exporta"
+
+#: SimpleEntryToolFactory.cpp:18
+#, kde-format
+msgid "Music editing"
+msgstr "Edició de música"

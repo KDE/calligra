@@ -1,0 +1,86 @@
+# CommentShape.po translation [el]
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: CommentShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-05-30 08:28+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "The plugin needed for displaying comments is not present."
+msgstr "Το πρόσθετο που απαιτείται για την εμφάνιση σημειώσεων δεν υπάρχει."
+
+#: CommentShape.cpp:48
+#, kde-format
+msgid "Plugin Missing"
+msgstr "Λείπει το πρόσθετο"
+
+#: CommentShape.cpp:51
+#, kde-format
+msgid ""
+"The plugin needed for displaying the comment is not compatible with the "
+"current version of the comment shape."
+msgstr ""
+"Το πρόσθετο που απαιτείται για την εμφάνιση της σημείωσης δεν είναι συμβατό "
+"με την τρέχουσα έκδοση του comment shape."
+
+#: CommentShape.cpp:52
+#, kde-format
+msgid "Plugin Incompatible"
+msgstr "Ασυμβατότητα πρόσθετου"
+
+#: CommentShapeFactory.cpp:17 CommentToolFactory.cpp:17
+#, kde-format
+msgid "Comment"
+msgstr "Σημείωση"
+
+#, fuzzy
+#~| msgid "Plugin Missing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Missing"
+#~ msgstr "Λείπει το πρόσθετο"
+
+#, fuzzy
+#~| msgid "The plugin needed for displaying comments is not present."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The plugin needed for displaying comments is not present."
+#~ msgstr "Το πρόσθετο που απαιτείται για την εμφάνιση σημειώσεων δεν υπάρχει."
+
+#, fuzzy
+#~| msgid ""
+#~| "The plugin needed for displaying the comment is not compatible with the "
+#~| "current version of the comment shape."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The plugin needed for displaying the comment is not compatible with the "
+#~ "current version of the comment shape."
+#~ msgstr ""
+#~ "Το πρόσθετο που απαιτείται για την εμφάνιση της σημείωσης δεν είναι "
+#~ "συμβατό με την τρέχουσα έκδοση του comment shape."
+
+#, fuzzy
+#~| msgid "Plugin Incompatible"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plugin Incompatible"
+#~ msgstr "Ασυμβατότητα πρόσθετου"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comment"
+#~ msgstr "Σημείωση"
+
+#~ msgid "Comment Tool"
+#~ msgstr "Εργαλείο σημειώσεων"

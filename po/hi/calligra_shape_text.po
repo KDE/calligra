@@ -1,0 +1,5249 @@
+# translation of TextShape.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+# Raghavendra Kamath <raghu@raghukamath.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: TextShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2022-02-26 11:44+0530\n"
+"Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
+"Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.2\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
+#, fuzzy, kde-format
+#| msgctxt "Line spacing type"
+#| msgid "Additional"
+msgid "Annotation"
+msgstr "अतिरिक्त"
+
+#: AnnotationTextShapeFactory.cpp:33
+#, kde-format
+msgid "Annotation shape to show annotation content"
+msgstr ""
+
+#: AnnotationTextShapeFactory.cpp:41
+#, fuzzy, kde-format
+#| msgctxt "Line spacing type"
+#| msgid "Additional"
+msgid "Annotation Shape"
+msgstr "अतिरिक्त"
+
+#: commands/AcceptChangeCommand.cpp:30
+#, fuzzy
+#| msgid "Change List"
+msgctxt "(qtundo-format)"
+msgid "Accept change"
+msgstr "सूची बदलें"
+
+#: commands/AutoResizeCommand.cpp:19
+#, fuzzy, kde-format
+#| msgid "Distance:"
+msgctxt "Disable Shrink To Fit"
+msgid "Disable"
+msgstr "दूरीः"
+
+#: commands/AutoResizeCommand.cpp:19
+#, fuzzy, kde-format
+#| msgid "Tamil"
+msgctxt "Enable Shrink To Fit"
+msgid "Enable"
+msgstr "तमिल"
+
+#: commands/AutoResizeCommand.cpp:22
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Grow To Fit Width"
+msgid "%1 Grow To Fit Width"
+msgstr ""
+
+#: commands/AutoResizeCommand.cpp:25
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Grow To Fit Height"
+msgid "%1 Grow To Fit Height"
+msgstr ""
+
+#: commands/AutoResizeCommand.cpp:28
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
+msgid "%1 Shrink To Fit"
+msgstr ""
+
+#: commands/ChangeListLevelCommand.cpp:29
+#, fuzzy
+#| msgid "Change List"
+msgctxt "(qtundo-format)"
+msgid "Change List Level"
+msgstr "सूची बदलें"
+
+#: commands/RejectChangeCommand.cpp:34
+#, fuzzy
+#| msgid "Change List"
+msgctxt "(qtundo-format)"
+msgid "Reject change"
+msgstr "सूची बदलें"
+
+#: commands/ShowChangesCommand.cpp:40
+#, fuzzy
+#| msgid "Change List"
+msgctxt "(qtundo-format)"
+msgid "Show Changes"
+msgstr "सूची बदलें"
+
+#: commands/ShowChangesCommand.cpp:42
+#, fuzzy
+#| msgid "Change List"
+msgctxt "(qtundo-format)"
+msgid "Hide Changes"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, TableOfContentsStyleConfigure)
+#. i18n: ectx: property (windowTitle), widget (QDialog, AcceptRejectChangeDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, TableOfContentsConfigure)
+#: dialogs/AcceptRejectChangeDialog.ui:26
+#: dialogs/TableOfContentsConfigure.ui:14
+#: dialogs/TableOfContentsStyleConfigure.ui:14
+#, fuzzy, kde-format
+#| msgid "Distance:"
+msgid "Dialog"
+msgstr "दूरीः"
+
+#. i18n: ectx: property (text), widget (QPushButton, acceptButton)
+#: dialogs/AcceptRejectChangeDialog.ui:44
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Accept"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (text), widget (QPushButton, rejectButton)
+#: dialogs/AcceptRejectChangeDialog.ui:57
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Reject"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: dialogs/AcceptRejectChangeDialog.ui:70
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Cancel"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/AcceptRejectChangeDialog.ui:96
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Change Log"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/AcceptRejectChangeDialog.ui:109
+#, fuzzy, kde-format
+#| msgctxt "Automatic horizontal alignment"
+#| msgid "Auto"
+msgid "Author"
+msgstr "स्वतः"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/AcceptRejectChangeDialog.ui:122
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Date"
+msgstr "मिटाएँ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/AcceptRejectChangeDialog.ui:135
+#, fuzzy, kde-format
+#| msgid "Type:"
+msgid "Type"
+msgstr "क़िस्मः"
+
+#: dialogs/BibliographyConfigureDialog.cpp:96
+#, kde-format
+msgid "Ascending"
+msgstr ""
+
+#: dialogs/BibliographyConfigureDialog.cpp:97
+#, kde-format
+msgid "Descending"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
+#. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)
+#: dialogs/BibliographyConfigureDialog.ui:14
+#: dialogs/SimpleCitationBibliographyWidget.ui:52
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Configure bibliography"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/BibliographyConfigureDialog.ui:20
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Formatting of bibliography entries"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QLabel, prefixLabel)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/BibliographyConfigureDialog.ui:28 dialogs/ListLevelWidget.ui:396
+#: dialogs/ParagraphBulletsNumbers.ui:70
+#, kde-format
+msgid "Prefix:"
+msgstr "प्रीफ़िक्स:"
+
+#. i18n: ectx: property (text), widget (QLabel, suffixLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/BibliographyConfigureDialog.ui:48 dialogs/ListLevelWidget.ui:373
+#: dialogs/ParagraphBulletsNumbers.ui:86
+#, kde-format
+msgid "Suffix:"
+msgstr "सफिक्स:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, numberedEntries)
+#: dialogs/BibliographyConfigureDialog.ui:70
+#, fuzzy, kde-format
+#| msgid "Custom character:"
+msgid "Number entries"
+msgstr "मनपसंद अक्षर:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/BibliographyConfigureDialog.ui:80
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid "Sort"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, sortByPosition)
+#: dialogs/BibliographyConfigureDialog.ui:86
+#, kde-format
+msgid "Sort by position"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, sortKeyGroupBox)
+#: dialogs/BibliographyConfigureDialog.ui:93
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid "Sort keys"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addSortKeyButton)
+#: dialogs/BibliographyConfigureDialog.ui:103
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid "Add sort key"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), widget (QLabel, sortAlgorithmLabel)
+#: dialogs/BibliographyConfigureDialog.ui:131
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid "Sort algorithm:"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sortAlgorithm)
+#: dialogs/BibliographyConfigureDialog.ui:139
+#, kde-format
+msgid "Alphanumeric"
+msgstr ""
+
+#: dialogs/BibliographyTemplate.cpp:30
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Bibliography"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: dialogs/BibliographyTemplate.cpp:42 ReferencesToolFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "References"
+msgstr "अनुच्छेद विन्यास\n"
+
+#: dialogs/ChangeConfigureDialog.cpp:136
+#, kde-format
+msgid "This is a line of inserted text."
+msgstr ""
+
+#: dialogs/ChangeConfigureDialog.cpp:142
+#, kde-format
+msgid "This is a line of deleted text."
+msgstr ""
+
+#: dialogs/ChangeConfigureDialog.cpp:148
+#, kde-format
+msgid "This is a line of text whose format has been changed."
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ChangeConfigureDialog)
+#: dialogs/ChangeConfigureDialog.ui:17
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Configure Change Tracking"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ChangeConfigureDialog.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "General Settings"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ChangeConfigureDialog.ui:37
+#, fuzzy, kde-format
+#| msgid "Paragraph style"
+msgid "Saving Format"
+msgstr "अनुच्छेद शैली"
+
+#. i18n: ectx: property (text), widget (QRadioButton, odf12RadioButton)
+#: dialogs/ChangeConfigureDialog.ui:44
+#, kde-format
+msgid "ODF 1.2"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, deltaXmlRadioButton)
+#: dialogs/ChangeConfigureDialog.ui:51
+#, kde-format
+msgid "DeltaXML (Experimental)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ChangeConfigureDialog.ui:58
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid "Author Name"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ChangeConfigureDialog.ui:75
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Change Visualization Settings"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (title), widget (QGroupBox, insertionGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:89
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Insertions"
+msgstr "प्रविष्ट"
+
+#. i18n: ectx: property (text), widget (QLabel, insertionColorLabel)
+#. i18n: ectx: property (text), widget (QLabel, deletionColorLabel)
+#. i18n: ectx: property (text), widget (QLabel, formatColorLabel)
+#: dialogs/ChangeConfigureDialog.ui:105 dialogs/ChangeConfigureDialog.ui:188
+#: dialogs/ChangeConfigureDialog.ui:247
+#, fuzzy, kde-format
+#| msgid "Background color:"
+msgid "Background Color"
+msgstr "पृष्ठभूमि का रंगः"
+
+#. i18n: ectx: property (text), widget (QToolButton, moreOptions)
+#. i18n: ectx: property (text), widget (QToolButton, toolAutoSpellCheck)
+#. i18n: ectx: property (text), widget (QToolButton, configureSection)
+#. i18n: ectx: property (text), widget (QToolButton, splitSections)
+#. i18n: ectx: property (text), widget (QToolButton, insertSection)
+#. i18n: ectx: property (text), widget (QuickTableButton, quickTable)
+#. i18n: ectx: property (text), widget (QToolButton, insertVariable)
+#. i18n: ectx: property (text), widget (QToolButton, insertSpecialChar)
+#. i18n: ectx: property (text), widget (QToolButton, insertPageBreak)
+#. i18n: ectx: property (text), widget (FormattingButton, bulletListButton)
+#. i18n: ectx: property (text), widget (QToolButton, resetBackground)
+#. i18n: ectx: property (text), widget (QToolButton, resetTextColor)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_5)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_7)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_4)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_8)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_3)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_6)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_2)
+#. i18n: ectx: property (text), widget (QToolButton, splitCells)
+#. i18n: ectx: property (text), widget (QToolButton, mergeCells)
+#. i18n: ectx: property (text), widget (FormattingButton, border)
+#. i18n: ectx: property (text), widget (QToolButton, resetBackgroundColor)
+#. i18n: ectx: property (text), widget (QPushButton, insertionColorButton)
+#. i18n: ectx: property (text), widget (QPushButton, deletionColorButton)
+#. i18n: ectx: property (text), widget (QPushButton, formatColorButton)
+#. i18n: ectx: property (text), widget (QToolButton, customCharacter)
+#: dialogs/ChangeConfigureDialog.ui:127 dialogs/ChangeConfigureDialog.ui:207
+#: dialogs/ChangeConfigureDialog.ui:266 dialogs/CharacterHighlighting.ui:40
+#: dialogs/CharacterHighlighting.ui:84 dialogs/FontDecorations.ui:36
+#: dialogs/FontDecorations.ui:62 dialogs/FontDecorations.ui:109
+#: dialogs/FontDecorations.ui:122 dialogs/FontDecorations.ui:135
+#: dialogs/FontDecorations.ui:148 dialogs/FontDecorations.ui:161
+#: dialogs/FontDecorations.ui:174 dialogs/FontDecorations.ui:187
+#: dialogs/FontDecorations.ui:200 dialogs/ParagraphBulletsNumbers.ui:221
+#: dialogs/ParagraphDecorations.ui:55 dialogs/SimpleCharacterWidget.ui:128
+#: dialogs/SimpleInsertWidget.ui:49 dialogs/SimpleInsertWidget.ui:62
+#: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
+#: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
+#: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:80
+#: dialogs/SimpleParagraphWidget.ui:204 dialogs/SimpleSpellCheckingWidget.ui:23
+#: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
+#: dialogs/SimpleTableWidget.ui:137
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (html), widget (QTextEdit, previewTextEdit)
+#: dialogs/ChangeConfigureDialog.ui:158
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; text-"
+"decoration: underline;\">Preview</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;"
+"\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Inserted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"inserted text. This is a line of inserted text. This is a line after the "
+"inserted text.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Deleted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"deleted text. This is a line of deleted text. This is a line after the "
+"deleted text.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Formatted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"format-change text. This is a line of text whose format has been changed. "
+"This is a line of text after the format-change text.</span></p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, deletionGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:172
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Deletions"
+msgstr "मिटाएँ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, formatGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:231
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Format Changes"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ChangeTrackingOptions)
+#: dialogs/ChangeTrackingOptionsWidget.ui:14
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Change Tracking Options"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (text), widget (QPushButton, configureChangeTrackingButton)
+#: dialogs/ChangeTrackingOptionsWidget.ui:142
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Configure Settings"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, recordChangesCheckBox)
+#: dialogs/ChangeTrackingOptionsWidget.ui:175
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Record Changes"
+msgstr "सूची बदलें"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showChangesCheckBox)
+#: dialogs/ChangeTrackingOptionsWidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Show Changes"
+msgstr "सूची बदलें"
+
+#: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
+#, kde-format
+msgid "Font"
+msgstr "फ़ॉन्ट"
+
+#. i18n: ectx: attribute (title), widget (QWidget, generalTab)
+#: dialogs/CharacterGeneral.ui:27
+#, kde-format
+msgid "General"
+msgstr "सामान्य"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/CharacterGeneral.ui:33
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgctxt "Name of the style"
+msgid "Name:"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/CharacterGeneral.ui:46
+#, kde-format
+msgid "Next style:"
+msgstr "अगली शैली:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CharacterGeneral.ui:62
+#, fuzzy, kde-format
+#| msgid "Next style:"
+msgid "Parent style:"
+msgstr "अगली शैली:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, inToc)
+#: dialogs/CharacterGeneral.ui:78
+#, kde-format
+msgid "Include in table of contents"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#, kde-format
+msgid "Normal"
+msgstr "सामान्य"
+
+#: dialogs/CharacterHighlighting.cpp:261
+#, kde-format
+msgid "Small Caps"
+msgstr "छोटा कैप्स"
+
+#: dialogs/CharacterHighlighting.cpp:262
+#, kde-format
+msgid "Uppercase"
+msgstr "अपरकेस"
+
+#: dialogs/CharacterHighlighting.cpp:263
+#, kde-format
+msgid "Lowercase"
+msgstr "लोअरकेस"
+
+#: dialogs/CharacterHighlighting.cpp:264
+#, kde-format
+msgid "Capitalize"
+msgstr "केपिटलाइज़"
+
+#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#, kde-format
+msgid "Superscript"
+msgstr "सुपरस्क्रिप्ट"
+
+#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#, kde-format
+msgid "Subscript"
+msgstr "सब्स्क्रिप्ट"
+
+#. i18n: ectx: property (text), widget (QLabel, textColorLabel)
+#: dialogs/CharacterHighlighting.ui:27 dialogs/FontDecorations.ui:49
+#, kde-format
+msgid "Text color:"
+msgstr "पाठ रंगः"
+
+#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
+#: dialogs/CharacterHighlighting.ui:71 dialogs/FontDecorations.ui:69
+#, kde-format
+msgid "Background color:"
+msgstr "पृष्ठभूमि का रंगः"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:110
+#, kde-format
+msgid "Underlining:"
+msgstr "रेखांकित:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:141
+#, fuzzy, kde-format
+#| msgid "Strikethrough"
+msgid "Strikethrough:"
+msgstr "लिखकर काट दें"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:172
+#, fuzzy, kde-format
+#| msgid "Capitalization"
+msgid "Capitalization:"
+msgstr "केपिटलाइजेशन"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:185
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "Character position"
+msgid "Position:"
+msgstr "स्थिति"
+
+#: dialogs/CitationInsertionDialog.cpp:25
+#, fuzzy, kde-format
+#| msgid "Select Font"
+msgid "Select"
+msgstr "फ़ॉन्ट चुनें"
+
+#: dialogs/CitationInsertionDialog.cpp:40
+#, kde-format
+msgid ""
+"The document already contains the bibliography entry with different data.\n"
+"Do you want to adjust existing entries?"
+msgstr ""
+
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
+#, kde-format
+msgid "Warning"
+msgstr ""
+
+#: dialogs/CitationInsertionDialog.cpp:55
+#: dialogs/CitationInsertionDialog.cpp:73
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid "Short name%1"
+msgstr "नाम:"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, CitationInsertionDialog)
+#: dialogs/CitationInsertionDialog.ui:20
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Bibliography entry"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/CitationInsertionDialog.ui:32
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Bibliography Entry Details"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QLabel, shortnameLabel)
+#: dialogs/CitationInsertionDialog.ui:38
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid "Short Name:"
+msgstr "नाम:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourcetypeLabel)
+#: dialogs/CitationInsertionDialog.ui:52
+#, kde-format
+msgid "Source:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:60 dialogs/InsertBibliographyDialog.ui:61
+#, kde-format
+msgid "Article"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:65 dialogs/InsertBibliographyDialog.ui:66
+#, fuzzy, kde-format
+#| msgid "Bookmarks"
+msgid "Book"
+msgstr " पसंदीदा "
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:70 dialogs/InsertBibliographyDialog.ui:71
+#, fuzzy, kde-format
+#| msgid "Bookmarks"
+msgid "Booklet"
+msgstr " पसंदीदा "
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:75 dialogs/InsertBibliographyDialog.ui:76
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Conference"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:80 dialogs/InsertBibliographyDialog.ui:81
+#, kde-format
+msgid "Email"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:85
+#, kde-format
+msgid "Inbook"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:90
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Incollection"
+msgstr "प्रविष्ट"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:95
+#, kde-format
+msgid "Inproceedings"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:100
+#: dialogs/InsertBibliographyDialog.ui:101
+#, kde-format
+msgid "Journal"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:105
+#: dialogs/InsertBibliographyDialog.ui:106
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:110
+#: dialogs/InsertBibliographyDialog.ui:111
+#, kde-format
+msgid "Masters thesis"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:115
+#: dialogs/InsertBibliographyDialog.ui:116
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:120
+#: dialogs/InsertBibliographyDialog.ui:121
+#, kde-format
+msgid "PhD thesis"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:125
+#: dialogs/InsertBibliographyDialog.ui:126
+#, kde-format
+msgid "Proceedings"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:130
+#, kde-format
+msgid "Tech Report"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:135
+#: dialogs/InsertBibliographyDialog.ui:136
+#, kde-format
+msgid "Unpublished"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:140
+#: dialogs/InsertBibliographyDialog.ui:141
+#, kde-format
+msgid "WWW"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:145
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom 1"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:150
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom 2"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:155
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom 3"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:160
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom 4"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:165
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom 5"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), widget (QLabel, authorLabel)
+#: dialogs/CitationInsertionDialog.ui:173
+#, fuzzy, kde-format
+#| msgctxt "Automatic horizontal alignment"
+#| msgid "Auto"
+msgid "Author:"
+msgstr "स्वतः"
+
+#. i18n: ectx: property (text), widget (QLabel, titleLabel)
+#: dialogs/CitationInsertionDialog.ui:183
+#: dialogs/InsertBibliographyDialog.ui:32
+#, fuzzy, kde-format
+#| msgid "Tamil"
+msgid "Title:"
+msgstr "तमिल"
+
+#. i18n: ectx: property (text), widget (QLabel, yearLabel)
+#: dialogs/CitationInsertionDialog.ui:193
+#, kde-format
+msgid "Year:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, publisherLabel)
+#: dialogs/CitationInsertionDialog.ui:203
+#, kde-format
+msgid "Publisher:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, addressLabel)
+#: dialogs/CitationInsertionDialog.ui:213
+#, kde-format
+msgid "Address:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, isbnLabel)
+#: dialogs/CitationInsertionDialog.ui:223
+#, kde-format
+msgid "ISBN:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, chapterLabel)
+#: dialogs/CitationInsertionDialog.ui:233
+#, kde-format
+msgid "Chapter:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, issnLabel)
+#: dialogs/CitationInsertionDialog.ui:243
+#, kde-format
+msgid "ISSN:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, editorLabel)
+#: dialogs/CitationInsertionDialog.ui:253
+#, fuzzy, kde-format
+#| msgctxt "Line spacing type"
+#| msgid "Additional"
+msgid "Editor:"
+msgstr "अतिरिक्त"
+
+#. i18n: ectx: property (text), widget (QLabel, pagesLabel)
+#: dialogs/CitationInsertionDialog.ui:263
+#, kde-format
+msgid "Page(s):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, booktitleLabel)
+#: dialogs/CitationInsertionDialog.ui:273
+#, fuzzy, kde-format
+#| msgid "Bookmarks"
+msgid "Book title:"
+msgstr " पसंदीदा "
+
+#. i18n: ectx: property (text), widget (QLabel, editionLabel)
+#: dialogs/CitationInsertionDialog.ui:283
+#, fuzzy, kde-format
+#| msgctxt "Line spacing type"
+#| msgid "Additional"
+msgid "Edition:"
+msgstr "अतिरिक्त"
+
+#. i18n: ectx: property (text), widget (QLabel, publicationLabel)
+#: dialogs/CitationInsertionDialog.ui:293
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Publication:"
+msgstr "स्थिति"
+
+#. i18n: ectx: property (text), widget (QLabel, volumeLabel)
+#: dialogs/CitationInsertionDialog.ui:303
+#, fuzzy, kde-format
+#| msgid "Align Left"
+msgid "Volume:"
+msgstr "बायाँ पंक्तिबद्ध करें "
+
+#. i18n: ectx: property (text), widget (QLabel, institutionLabel)
+#: dialogs/CitationInsertionDialog.ui:313
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Institution:"
+msgstr "प्रविष्ट"
+
+#. i18n: ectx: property (text), widget (QLabel, organisationLabel)
+#: dialogs/CitationInsertionDialog.ui:323
+#, fuzzy, kde-format
+#| msgid "Decorations"
+msgid "Organisation:"
+msgstr "सजावट"
+
+#. i18n: ectx: property (text), widget (QLabel, reporttypeLabel)
+#: dialogs/CitationInsertionDialog.ui:333
+#, kde-format
+msgid "Type of Report:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, schoolLabel)
+#: dialogs/CitationInsertionDialog.ui:343
+#, kde-format
+msgid "University:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, journalLabel)
+#: dialogs/CitationInsertionDialog.ui:353
+#, kde-format
+msgid "Journal:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, monthLabel)
+#: dialogs/CitationInsertionDialog.ui:363
+#, kde-format
+msgid "Month:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, seriesLabel)
+#: dialogs/CitationInsertionDialog.ui:373
+#, kde-format
+msgid "Series:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, numberLabel)
+#: dialogs/CitationInsertionDialog.ui:383
+#, fuzzy, kde-format
+#| msgid "Custom character:"
+msgid "Number:"
+msgstr "मनपसंद अक्षर:"
+
+#. i18n: ectx: property (text), widget (QLabel, noteLabel)
+#: dialogs/CitationInsertionDialog.ui:393
+#, kde-format
+msgid "Note:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, annotationLabel)
+#: dialogs/CitationInsertionDialog.ui:403
+#, fuzzy, kde-format
+#| msgctxt "Line spacing type"
+#| msgid "Additional"
+msgid "Annotation:"
+msgstr "अतिरिक्त"
+
+#. i18n: ectx: property (text), widget (QLabel, urlLabel)
+#: dialogs/CitationInsertionDialog.ui:413
+#, kde-format
+msgid "URL:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud1Label)
+#: dialogs/CitationInsertionDialog.ui:423
+#, kde-format
+msgid "User-defined 1:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud3Label)
+#: dialogs/CitationInsertionDialog.ui:433
+#, kde-format
+msgid "User-defined 3:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud2Label)
+#: dialogs/CitationInsertionDialog.ui:440
+#, kde-format
+msgid "User-defined 2:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud4Label)
+#: dialogs/CitationInsertionDialog.ui:453
+#, kde-format
+msgid "User-defined 4:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud5Label)
+#: dialogs/CitationInsertionDialog.ui:463
+#, kde-format
+msgid "User-defined 5:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CitationInsertionDialog.ui:485
+#, kde-format
+msgid "OR"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/CitationInsertionDialog.ui:509
+#, kde-format
+msgid "From the document:"
+msgstr ""
+
+#: dialogs/DockerStylesComboModel.cpp:61
+#, fuzzy, kde-format
+#| msgid "New Style"
+msgid "Used Styles"
+msgstr "नई शैली"
+
+#: dialogs/DockerStylesComboModel.cpp:64
+#, fuzzy, kde-format
+#| msgid "New Style"
+msgid "Unused Styles"
+msgstr "नई शैली"
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/FontDecorations.ui:17
+#, kde-format
+msgid "Colors"
+msgstr "रंग"
+
+#. i18n: ectx: property (title), widget (QGroupBox, shadowGroupBox)
+#: dialogs/FontDecorations.ui:95
+#, kde-format
+msgid "Text Shadow"
+msgstr "पाठ छाया"
+
+#. i18n: ectx: property (text), widget (QLabel, shadowColorLabel)
+#: dialogs/FontDecorations.ui:244
+#, kde-format
+msgid "Color:"
+msgstr "रंगः"
+
+#. i18n: ectx: property (text), widget (QLabel, shadowDistanceLabel)
+#: dialogs/FontDecorations.ui:257
+#, kde-format
+msgid "Distance:"
+msgstr "दूरीः"
+
+#. i18n: ectx: property (title), widget (QGroupBox, positionGroupBox)
+#: dialogs/FontDecorations.ui:289
+#, kde-format
+msgid "Position"
+msgstr "स्थिति"
+
+#. i18n: ectx: property (text), widget (QCheckBox, hyphenate)
+#: dialogs/FontDecorations.ui:295
+#, kde-format
+msgid "Automatic hyphenation"
+msgstr "स्वचालित हायफनेशन"
+
+#: dialogs/FontDia.cpp:34
+#, kde-format
+msgid "Select Font"
+msgstr "फ़ॉन्ट चुनें"
+
+#: dialogs/FontDia.cpp:68
+#, fuzzy
+#| msgid "Font"
+msgctxt "(qtundo-format)"
+msgid "Font"
+msgstr "फ़ॉन्ट"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
+#. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
+#: dialogs/InsertBibliographyDialog.ui:17
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Bibliography"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (title), widget (QGroupBox, titlegroupBox)
+#: dialogs/InsertBibliographyDialog.ui:26
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Bibliography title"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/InsertBibliographyDialog.ui:45
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Bibliography entries"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QLabel, bibTypesLabel)
+#: dialogs/InsertBibliographyDialog.ui:53
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Bibliography type:"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:86
+#, kde-format
+msgid "In book"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:91
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "In collection"
+msgstr "प्रविष्ट"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:96
+#, kde-format
+msgid "In proceedings"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:131
+#, kde-format
+msgid "Tech report"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:146
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom1"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:151
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom2"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:156
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom3"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:161
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom4"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:166
+#, fuzzy, kde-format
+#| msgid "Custom"
+msgid "custom5"
+msgstr "मनपसंद"
+
+#. i18n: ectx: property (text), widget (QLabel, availableFieldsLabel)
+#: dialogs/InsertBibliographyDialog.ui:178
+#, kde-format
+msgid "Available fields "
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: dialogs/InsertBibliographyDialog.ui:192
+#, kde-format
+msgid "Add >>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, span)
+#: dialogs/InsertBibliographyDialog.ui:199
+#, kde-format
+msgid "Span"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: dialogs/InsertBibliographyDialog.ui:206
+#, kde-format
+msgid "<<Remove"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, addedFieldsLabel)
+#: dialogs/InsertBibliographyDialog.ui:217
+#, kde-format
+msgid "Fields added"
+msgstr ""
+
+#: dialogs/InsertCharacter.cpp:16
+#, kde-format
+msgid "Special Characters"
+msgstr "विशिष्ट अक्षर"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
+#: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
+#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#, kde-format
+msgid "Insert"
+msgstr "प्रविष्ट"
+
+#: dialogs/InsertCharacter.cpp:28
+#, kde-format
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "बंद करें"
+
+#. i18n: ectx: property (text), widget (QLabel, filterLabel)
+#: dialogs/LanguageTab.ui:19
+#, kde-format
+msgid "Quick search:"
+msgstr "त्वरित खोज:"
+
+#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
+#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#, kde-format
+msgid "The URL is invalid"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:88
+#, kde-format
+msgid "Bookmark does not exist"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:190
+#, no-c-format, kde-format
+msgid "Fetching the title: 0% complete"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:213
+#, kde-format
+msgid "Fetch timed out"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:268
+#, no-c-format, kde-format
+msgid "Fetching the title: %1% complete"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
+#: dialogs/LinkInsertionDialog.ui:14
+#, fuzzy, kde-format
+#| msgid "Open Link?"
+msgid "Link"
+msgstr "लिंक खोलें?"
+
+#. i18n: ectx: attribute (title), widget (QWidget, weblinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:30
+#, fuzzy, kde-format
+#| msgid "Open Link?"
+msgid "Web Link"
+msgstr "लिंक खोलें?"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, weblinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:34
+#, kde-format
+msgid ""
+"Insert links to web documents. You can provide both URL and a label for the "
+"link,\n"
+" or just enter the URL and hit \"Fetch the title from URL\""
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#: dialogs/LinkInsertionDialog.ui:42
+#, kde-format
+msgid "The address of your document (Uniform Resource Locator)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/LinkInsertionDialog.ui:45
+#, kde-format
+msgid " URL:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, fetchTitleButton)
+#: dialogs/LinkInsertionDialog.ui:58
+#, kde-format
+msgid ""
+"Hit this button to get the title from the URL. Redirections are also "
+"handled. "
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
+#: dialogs/LinkInsertionDialog.ui:61
+#, kde-format
+msgid "Fetch Title From URL"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QLabel, label_6)
+#: dialogs/LinkInsertionDialog.ui:81 dialogs/LinkInsertionDialog.ui:165
+#, kde-format
+msgid "The text that will be displayed for your link"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/LinkInsertionDialog.ui:84 dialogs/LinkInsertionDialog.ui:168
+#, fuzzy, kde-format
+#| msgid "Text"
+msgid " Text:"
+msgstr "पाठ"
+
+#. i18n: ectx: attribute (title), widget (QWidget, bookmarkLinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:113
+#, fuzzy, kde-format
+#| msgid "Rename Bookmark"
+msgid "Link To Bookmark"
+msgstr "पसंदीदा को नया नाम दें"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:117
+#, kde-format
+msgid ""
+"Insert links to Bookmarks. To create bookmarks,\n"
+"click \"Bookmarks\" in the Links and Bookmarks section"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#: dialogs/LinkInsertionDialog.ui:132
+#, kde-format
+msgid "The name of the bookmark to where the link has to point to"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/LinkInsertionDialog.ui:135
+#, fuzzy, kde-format
+#| msgid "Name:"
+msgid " Name:"
+msgstr "नाम:"
+
+#. i18n: ectx: property (whatsThis), widget (QWidget, ParagraphIndentSpacing)
+#. i18n: ectx: property (whatsThis), widget (QGroupBox)
+#. i18n: ectx: property (whatsThis), widget (QWidget, ListLevelWidget)
+#: dialogs/ListLevelWidget.ui:14 dialogs/ParagraphIndentSpacing.ui:14
+#: dialogs/ParagraphIndentSpacing.ui:97
+#, kde-format
+msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+msgstr "<p><ul><li><b>एकल</b>: सामान्य पंक्तिदूरी</li></ul></p> "
+
+#. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
+#: dialogs/ListLevelWidget.ui:47
+#, fuzzy, kde-format
+#| msgctxt "Line spacing type"
+#| msgid "Additional"
+msgid "Add tab stop"
+msgstr "अतिरिक्त"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:71
+#, fuzzy, kde-format
+#| msgid "Character style"
+msgid "Tab character"
+msgstr "अक्षर शैली"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:76
+#, fuzzy, kde-format
+#| msgid "Special Characters"
+msgid "Space character"
+msgstr "विशिष्ट अक्षर"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:81
+#, kde-format
+msgid "Nothing"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, loremIpsum)
+#: dialogs/ListLevelWidget.ui:95
+#, kde-format
+msgid ""
+"              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed "
+"do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+"minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+"ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+"cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
+"est laborum."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelLabel)
+#: dialogs/ListLevelWidget.ui:117
+#, kde-format
+msgid "LABEL"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
+#: dialogs/ListLevelWidget.ui:149
+#, kde-format
+msgid "First line separated from label by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:23
+#, kde-format
+msgid "Left"
+msgstr "बायाँ"
+
+#. i18n: ectx: property (text), widget (QRadioButton, center)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:30
+#, kde-format
+msgid "Center"
+msgstr "बीच में"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:37
+#, kde-format
+msgid "Right"
+msgstr "दायाँ"
+
+#. i18n: ectx: property (text), widget (QLabel, increaseLabel)
+#: dialogs/ListLevelWidget.ui:300
+#, kde-format
+msgid "Per level increase:"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, numberTab)
+#: dialogs/ListLevelWidget.ui:334
+#, kde-format
+msgid "Number"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ListLevelWidget.ui:366
+#, fuzzy, kde-format
+#| msgid "Normal"
+msgid "Format:"
+msgstr "सामान्य"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ListLevelWidget.ui:429
+#, fuzzy, kde-format
+#| msgid "Display Levels:"
+msgid "Display levels above:"
+msgstr "स्तर प्रदर्शित करें:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, synchro)
+#: dialogs/ListLevelWidget.ui:436
+#, fuzzy, kde-format
+#| msgid "Letter Synchronization"
+msgid "Letter synchronization"
+msgstr "अक्षर सिंक्रोनाइजेशन"
+
+#. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
+#: dialogs/ListLevelWidget.ui:454
+#, fuzzy, kde-format
+#| msgid "Box Bullet"
+msgid "Bullet"
+msgstr "बक्सा गोली"
+
+#. i18n: ectx: attribute (title), widget (QWidget, imageTab)
+#: dialogs/ListLevelWidget.ui:459
+#, kde-format
+msgid "Picture"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: dialogs/ListLevelWidget.ui:481
+#, kde-format
+msgid "Load Image..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: dialogs/ManageBookmark.ui:20
+#, kde-format
+msgid "&Rename"
+msgstr "नाम बदलें (&R)"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: dialogs/ManageBookmark.ui:27
+#, kde-format
+msgid "&Delete"
+msgstr "मिटाएँ (&D)"
+
+#: dialogs/ManageBookmarkDialog.cpp:69
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "पसंदीदा को नया नाम दें"
+
+#: dialogs/ManageBookmarkDialog.cpp:70
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "कृपया पुस्तचिह्न के लिए एक नाम प्रविष्ट करें"
+
+#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#, fuzzy, kde-format
+#| msgid "There exist already a bookmark with the name \"%1\"."
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "इस नाम \"%1\" का पुस्तचिह्न पहले से ही मौजूद है."
+
+#: dialogs/ManageBookmarkDialog.cpp:110
+#, fuzzy, kde-format
+#| msgid "Select Bookmark"
+msgid "Insert Bookmark"
+msgstr "पसंदीदा चुनें"
+
+#: dialogs/ManageBookmarkDialog.cpp:111
+#, fuzzy, kde-format
+#| msgid "Please provide a new name for the bookmark"
+msgid "Please provide a name for the bookmark"
+msgstr "कृपया पुस्तचिह्न के लिए एक नाम प्रविष्ट करें"
+
+#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#, fuzzy, kde-format
+#| msgid "Rename Bookmark"
+msgid "Manage Bookmarks"
+msgstr "पसंदीदा को नया नाम दें"
+
+#: dialogs/NotesConfigurationDialog.cpp:24
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Footnote Settings"
+msgstr "अनुच्छेद विन्यास\n"
+
+#: dialogs/NotesConfigurationDialog.cpp:27
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Endnote Settings"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/NotesConfigurationDialog.ui:54
+#, fuzzy, kde-format
+#| msgid "Automatic hyphenation"
+msgid "Automatic Numbering:"
+msgstr "स्वचालित हायफनेशन"
+
+#. i18n: ectx: property (text), widget (QLabel, prefix)
+#: dialogs/NotesConfigurationDialog.ui:75
+#, fuzzy, kde-format
+#| msgid "Prefix:"
+msgid " Prefix:"
+msgstr "प्रीफ़िक्स:"
+
+#. i18n: ectx: property (text), widget (QLabel, startAt)
+#: dialogs/NotesConfigurationDialog.ui:85
+#, fuzzy, kde-format
+#| msgid "Start at:"
+msgid " Start at:"
+msgstr "यहाँ से प्रारंभ करें:"
+
+#. i18n: ectx: property (text), widget (QLabel, numStyle)
+#: dialogs/NotesConfigurationDialog.ui:95
+#, fuzzy, kde-format
+#| msgid "Normal"
+msgid " Format:"
+msgstr "सामान्य"
+
+#. i18n: ectx: property (text), widget (QLabel, suffix)
+#: dialogs/NotesConfigurationDialog.ui:111
+#, fuzzy, kde-format
+#| msgid "Suffix:"
+msgid " Suffix:"
+msgstr "सफिक्स:"
+
+#. i18n: ectx: property (text), widget (QLabel, beginAt)
+#: dialogs/NotesConfigurationDialog.ui:127
+#, fuzzy, kde-format
+#| msgid "Start at:"
+msgid "Starts over at:"
+msgstr "यहाँ से प्रारंभ करें:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:144
+#, kde-format
+msgid "Page"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:149
+#, kde-format
+msgid "Chapter"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:154
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Document"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:233
+#, kde-format
+msgid "1, 2, 3, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:238
+#, kde-format
+msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:243
+#, kde-format
+msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:248
+#, kde-format
+msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:253
+#, kde-format
+msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:258
+#, kde-format
+msgid "i, ii, iii, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:263
+#, kde-format
+msgid "I,II,III, ..."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
+#: dialogs/NotesConfigurationDialog.ui:290
+#, kde-format
+msgid "Continuation Notice:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, cont2)
+#: dialogs/NotesConfigurationDialog.ui:305
+#, kde-format
+msgid "Text saying it is a continuation:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, cont1)
+#: dialogs/NotesConfigurationDialog.ui:315
+#, kde-format
+msgid " Text saying it will continue:"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:34
+#, kde-format
+msgctxt "Automatic horizontal alignment"
+msgid "Auto"
+msgstr "स्वतः"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:35
+#, kde-format
+msgctxt "Text alignment"
+msgid "Left"
+msgstr "बायाँ"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:36
+#, kde-format
+msgctxt "Text alignment"
+msgid "Right"
+msgstr "दायाँ"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:37
+#, kde-format
+msgctxt "Text alignment"
+msgid "Centered"
+msgstr "केंद्रित"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:39
+#, kde-format
+msgctxt "Tab follows the bullet or number"
+msgid "Tab Stop"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:40
+#, kde-format
+msgctxt "Space"
+msgid "Space"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:41
+#, kde-format
+msgctxt "None"
+msgid "Nothing"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:335
+#, kde-format
+msgid "Select a list image"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ParagraphBulletsNumbers.ui:31
+#, kde-format
+msgid "Start at:"
+msgstr "यहाँ से प्रारंभ करें:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/ParagraphBulletsNumbers.ui:57
+#, kde-format
+msgid "Alignment:"
+msgstr "पंक्तिबद्धता:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ParagraphBulletsNumbers.ui:105
+#, kde-format
+msgid "Depth:"
+msgstr "गहराईः"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: dialogs/ParagraphBulletsNumbers.ui:128
+#, kde-format
+msgid "Display Levels:"
+msgstr "स्तर प्रदर्शित करें:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: dialogs/ParagraphBulletsNumbers.ui:148
+#, fuzzy, kde-format
+#| msgid "Bullets/Numbers"
+msgid "Bullet/Number followed by"
+msgstr "बुलेट/क्रमांकन"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_2)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_3)
+#: dialogs/ParagraphBulletsNumbers.ui:158
+#: dialogs/ParagraphBulletsNumbers.ui:175
+#: dialogs/ParagraphBulletsNumbers.ui:192
+#, kde-format
+msgid " cm"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: dialogs/ParagraphBulletsNumbers.ui:165
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "at"
+msgstr "मिटाएँ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: dialogs/ParagraphBulletsNumbers.ui:182
+#, fuzzy, kde-format
+#| msgid "Alignment"
+msgid "Aligned at"
+msgstr "पंक्तिबद्धता"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: dialogs/ParagraphBulletsNumbers.ui:199
+#, fuzzy, kde-format
+#| msgid "Indent"
+msgid "Indented at"
+msgstr "हाशिया"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ParagraphBulletsNumbers.ui:211
+#, kde-format
+msgid "Custom character:"
+msgstr "मनपसंद अक्षर:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, restartNumbering)
+#: dialogs/ParagraphBulletsNumbers.ui:241
+#, kde-format
+msgid "Restart numbering at this paragraph"
+msgstr "इस अनुच्छेद से क्रमांक देना पुनः प्रारंभ करें"
+
+#. i18n: ectx: property (text), widget (QCheckBox, letterSynchronization)
+#: dialogs/ParagraphBulletsNumbers.ui:248
+#, kde-format
+msgid "Letter Synchronization"
+msgstr "अक्षर सिंक्रोनाइजेशन"
+
+#. i18n: ectx: property (text), widget (QLabel, widthLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:257
+#, kde-format
+msgid "Width"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, insertImageLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:264
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Image"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QLabel, heightLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:274
+#, fuzzy, kde-format
+#| msgid "Right"
+msgid "Height"
+msgstr "दायाँ"
+
+#. i18n: ectx: property (text), widget (QPushButton, insertImage)
+#: dialogs/ParagraphBulletsNumbers.ui:284
+#, kde-format
+msgid "Browse..."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#, kde-format
+msgid "Background"
+msgstr "पृष्ठभूमि"
+
+#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
+#: dialogs/ParagraphDecorations.ui:65
+#, fuzzy, kde-format
+#| msgid "Background color:"
+msgid "Background color"
+msgstr "पृष्ठभूमि का रंगः"
+
+#: dialogs/ParagraphDropCaps.cpp:20
+#, kde-format
+msgid "Whole Word"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ParagraphDropCaps.ui:32
+#, kde-format
+msgid "Drop caps:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ParagraphDropCaps.ui:84
+#, fuzzy, kde-format
+#| msgid "Paragraph..."
+msgid "Distance to paragraph:"
+msgstr "अनुच्छेद..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ParagraphDropCaps.ui:94
+#, fuzzy, kde-format
+#| msgid "Custom character:"
+msgid "Number of characters:"
+msgstr "मनपसंद अक्षर:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ParagraphDropCaps.ui:104
+#, fuzzy, kde-format
+#| msgid "Custom character:"
+msgid "Number of lines it covers:"
+msgstr "मनपसंद अक्षर:"
+
+#: dialogs/ParagraphGeneral.cpp:40
+#, kde-format
+msgid "Indent/Spacing"
+msgstr "हाशिया/पंक्तियों के बीच दूरी"
+
+#: dialogs/ParagraphGeneral.cpp:45
+#, kde-format
+msgid "General Layout"
+msgstr "सामान्य खाका"
+
+#: dialogs/ParagraphGeneral.cpp:50
+#, kde-format
+msgid "Bullets/Numbers"
+msgstr "बुलेट/क्रमांकन"
+
+#: dialogs/ParagraphGeneral.cpp:55
+#, kde-format
+msgid "Decorations"
+msgstr "सजावट"
+
+#: dialogs/ParagraphGeneral.cpp:60
+#, kde-format
+msgid "Drop Caps"
+msgstr ""
+
+#: dialogs/ParagraphIndentSpacing.cpp:25
+#, kde-format
+msgctxt "Line spacing value"
+msgid "Single"
+msgstr "एकल"
+
+#: dialogs/ParagraphIndentSpacing.cpp:26
+#, kde-format
+msgctxt "Line spacing value"
+msgid "1.5 Lines"
+msgstr "१.५ पंक्तियां"
+
+#: dialogs/ParagraphIndentSpacing.cpp:27
+#, kde-format
+msgctxt "Line spacing value"
+msgid "Double"
+msgstr "दोगुना"
+
+#: dialogs/ParagraphIndentSpacing.cpp:28
+#, kde-format
+msgctxt "Line spacing type"
+msgid "Proportional"
+msgstr "समानुपातिक"
+
+#: dialogs/ParagraphIndentSpacing.cpp:29
+#, kde-format
+msgctxt "Line spacing type"
+msgid "Additional"
+msgstr "अतिरिक्त"
+
+#: dialogs/ParagraphIndentSpacing.cpp:30
+#, kde-format
+msgctxt "Line spacing type"
+msgid "Fixed"
+msgstr "स्थिर"
+
+#: dialogs/ParagraphIndentSpacing.cpp:31
+#, kde-format
+msgctxt "Line spacing type"
+msgid "At least"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphIndentSpacing.ui:20
+#, kde-format
+msgid "Indent"
+msgstr "हाशिया"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:26
+#, kde-format
+msgid "Left:"
+msgstr "बायाँ:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:55
+#, kde-format
+msgid "Right:"
+msgstr "दायाँ:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:71
+#, kde-format
+msgid "First Line:"
+msgstr "पहली पंक्ति:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
+#: dialogs/ParagraphIndentSpacing.ui:87
+#, kde-format
+msgid "Auto-infer from text size"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/ParagraphIndentSpacing.ui:100
+#, kde-format
+msgid "Line Spacing"
+msgstr "पंक्तियों के बीच दूरी"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, proportional)
+#: dialogs/ParagraphIndentSpacing.ui:134
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:180
+#, kde-format
+msgid "Use Font Metrics:"
+msgstr "फ़ॉन्ट मेट्रिक्स इस्तेमाल करें:"
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/ParagraphIndentSpacing.ui:202
+#, kde-format
+msgid "Paragraph Space"
+msgstr "अनुच्छेद जगह"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:208
+#, kde-format
+msgid "Before:"
+msgstr "पहले:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:221
+#, kde-format
+msgid "After:"
+msgstr "पश्चातः"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphLayout.ui:17
+#, kde-format
+msgid "Alignment"
+msgstr "पंक्तिबद्धता"
+
+#. i18n: ectx: property (text), widget (QRadioButton, justify)
+#: dialogs/ParagraphLayout.ui:44
+#, kde-format
+msgid "Justify"
+msgstr "समान रुप से दाएँ-बाएँ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/ParagraphLayout.ui:54
+#, kde-format
+msgid "Behavior at End of Frame/Page"
+msgstr "फ्रेम/पृष्ठ के अंत में व्यवहार"
+
+#. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
+#: dialogs/ParagraphLayout.ui:60
+#, kde-format
+msgid "Keep lines together"
+msgstr "पंक्तियाँ एक साथ रखें"
+
+#. i18n: ectx: property (text), widget (QCheckBox, breakBefore)
+#: dialogs/ParagraphLayout.ui:67
+#, kde-format
+msgid "Insert break before paragraph"
+msgstr "पैराग्राफ से पहले ब्रेक प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
+#: dialogs/ParagraphLayout.ui:74
+#, kde-format
+msgid "Insert break after paragraph"
+msgstr "पैराग्राफ के बाद ब्रेक प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ParagraphLayout.ui:83
+#, kde-format
+msgid "Leave at least this many lines (orphans):"
+msgstr ""
+
+#: dialogs/ParagraphSettingsDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "Paragraph style"
+msgid "Paragraph Format"
+msgstr "अनुच्छेद शैली"
+
+#: dialogs/QuickTableButton.cpp:146
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a table"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: dialogs/SectionFormatDialog.cpp:41
+#, fuzzy, kde-format
+#| msgid "Enter style name:"
+msgid "Section name"
+msgstr "शैली नाम भरें:"
+
+#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Configure sections"
+msgstr "अनुच्छेद विन्यास\n"
+
+#: dialogs/SectionFormatDialog.cpp:154
+#, kde-format
+msgid "Invalid characters or section with such name exists."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/SectionFormatDialog.ui:29
+#, fuzzy, kde-format
+#| msgid "Enter style name:"
+msgid "Section name:"
+msgstr "शैली नाम भरें:"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
+#: dialogs/SectionsSplitDialog.ui:6
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Split sections"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/SectionsSplitDialog.ui:12
+#, fuzzy, kde-format
+#| msgid "Paragraph..."
+msgid "Insert paragraph..."
+msgstr "अनुच्छेद..."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/SectionsSplitDialog.ui:23
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "before start of section:"
+msgstr "प्रविष्ट"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/SectionsSplitDialog.ui:37
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "after end of section:"
+msgstr "प्रविष्ट"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
+#: dialogs/SimpleAnnotationWidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Note"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
+#: dialogs/SimpleAnnotationWidget.ui:39
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Remove Note"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QToolButton, addCitation)
+#: dialogs/SimpleCaptionsWidget.ui:34
+#, fuzzy, kde-format
+#| msgctxt "Line spacing type"
+#| msgid "Additional"
+msgid "Add caption"
+msgstr "अतिरिक्त"
+
+#: dialogs/SimpleCharacterWidget.cpp:53
+#, fuzzy, kde-format
+#| msgid "Paragraph style"
+msgid "Change font format"
+msgstr "अनुच्छेद शैली"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
+#: dialogs/SimpleCitationBibliographyWidget.ui:23
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert citation at current position"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QToolButton, addCitation)
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Insert Citation"
+msgstr "प्रविष्ट"
+
+#. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
+#: dialogs/SimpleCitationBibliographyWidget.ui:55
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Configure Bibliography"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#, kde-format
+msgid "Inserts a footnote at the current cursor position"
+msgstr ""
+
+#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#, kde-format
+msgid "Inserts an endnote at the current cursor position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (FormattingButton, addEndnote)
+#: dialogs/SimpleFootEndNotesWidget.ui:29
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Endnote"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addFootnote)
+#: dialogs/SimpleFootEndNotesWidget.ui:48
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Footnote"
+msgstr "अनुच्छेद विन्यास\n"
+
+#. i18n: ectx: property (toolTip), widget (QWidget, SimpleInsertWidget)
+#: dialogs/SimpleInsertWidget.ui:20
+#, kde-format
+msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, insertLink)
+#: dialogs/SimpleLinksWidget.ui:34
+#, kde-format
+msgid "Hyperlinks"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#, fuzzy, kde-format
+#| msgid "Bookmark..."
+msgid "Bookmarks"
+msgstr "पसंदीदा..."
+
+#: dialogs/SimpleParagraphWidget.cpp:84
+#, fuzzy, kde-format
+#| msgid "Paragraph style"
+msgid "Change paragraph format"
+msgstr "अनुच्छेद शैली"
+
+#: dialogs/SimpleParagraphWidget.cpp:292
+#, kde-format
+msgid "Recently Used Level Formats"
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:297
+#, kde-format
+msgid "Library of Level Formats"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bDelete)
+#: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#, kde-format
+msgid "Delete"
+msgstr "मिटाएँ"
+
+#: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
+#, kde-format
+msgid "Edit..."
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:312
+#, kde-format
+msgid "Define New Level Format..."
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:313
+#, kde-format
+msgid "Define new bullet or numbering format"
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:333
+#, kde-format
+msgid "Define New List Level Format"
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:532
+#, kde-format
+msgid "Edit List Level Format"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (FormattingButton, addToC)
+#: dialogs/SimpleTableOfContentsWidget.ui:34
+#: dialogs/TableOfContentsTemplate.cpp:38
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Contents"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#: dialogs/SimpleTableWidget.cpp:45
+#, fuzzy, kde-format
+#| msgid "Text color:"
+msgid "Set Border Color..."
+msgstr "पाठ रंगः"
+
+#: dialogs/SimpleTableWidget.cpp:170
+#, fuzzy, kde-format
+#| msgctxt "Inherit style"
+#| msgid "None"
+msgctxt "No border - has to fit in 48pixels"
+msgid "None"
+msgstr "कुछ नहीं"
+
+#: dialogs/SimpleTableWidget.cpp:171
+#, kde-format
+msgid "No Border"
+msgstr ""
+
+#: dialogs/StyleManager.cpp:38
+#, kde-format
+msgid "Create a new style inheriting the current style"
+msgstr ""
+
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#, fuzzy, kde-format
+#| msgid "Next style:"
+msgid "New Style"
+msgstr "अगली शैली:"
+
+#: dialogs/StyleManager.cpp:426
+#, kde-format
+msgid "Another style named '%1' already exist. Please choose another name."
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#, fuzzy, kde-format
+#| msgid "Paragraph..."
+msgid "Paragraph"
+msgstr "अनुच्छेद..."
+
+#. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#, fuzzy, kde-format
+#| msgid "Character style"
+msgid "Character"
+msgstr "अक्षर शैली"
+
+#. i18n: ectx: property (text), widget (QPushButton, bNew)
+#: dialogs/StyleManager.ui:68
+#, kde-format
+msgid "&New"
+msgstr "नया (&N)"
+
+#: dialogs/StyleManagerDialog.cpp:20
+#, kde-format
+msgid "Style Manager"
+msgstr "शैली प्रबंधक"
+
+#: dialogs/StyleManagerDialog.cpp:49
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Save Changes"
+msgstr "सूची बदलें"
+
+#: dialogs/StyleManagerDialog.cpp:49
+#, kde-format
+msgid ""
+"You have changes that are not applied. What do you want to do with those "
+"changes?"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/StyleManagerWelcome.ui:42
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">It is possible to assign a "
+"named style to text and alter the style properties to change all text with "
+"that style.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Applying a style change "
+"will reformat all text that previously got the named style assigned to it. "
+"Use the Styles docker to apply styles to text.</p></body></html>"
+msgstr ""
+
+#: dialogs/StylesComboPreview.cpp:68
+#, kde-format
+msgid "Create a new style with the current properties"
+msgstr ""
+
+#: dialogs/StylesComboPreview.cpp:179
+#, fuzzy, kde-format
+#| msgid "Next style:"
+msgid "New style"
+msgstr "अगली शैली:"
+
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
+#: dialogs/StylesModel.cpp:197
+#, fuzzy, kde-format
+#| msgctxt "Inherit style"
+#| msgid "None"
+msgid "None"
+msgstr "कुछ नहीं"
+
+#: dialogs/TableDialog.cpp:14
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Table"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupLogical)
+#: dialogs/TableDialog.ui:23
+#, kde-format
+msgid "Columns and rows"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColumns)
+#: dialogs/TableDialog.ui:32
+#, fuzzy, kde-format
+#| msgid "Custom character:"
+msgid "Number of columns:"
+msgstr "मनपसंद अक्षर:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelRows)
+#: dialogs/TableDialog.ui:55
+#, fuzzy, kde-format
+#| msgid "Custom character:"
+msgid "Number of rows:"
+msgstr "मनपसंद अक्षर:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupPhysical)
+#: dialogs/TableDialog.ui:97
+#, kde-format
+msgid "Width strategy"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFixed)
+#: dialogs/TableDialog.ui:112
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Fixed column width:"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFitContents)
+#: dialogs/TableDialog.ui:125
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Fit to contents"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFitAvail)
+#: dialogs/TableDialog.ui:138
+#, kde-format
+msgid "Fit to available surrounding"
+msgstr ""
+
+#: dialogs/TableOfContentsConfigure.cpp:62
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Table of Contents - Configure"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#: dialogs/TableOfContentsConfigure.cpp:64
+#, fuzzy, kde-format
+#| msgid "Tamil"
+msgid "Table Title"
+msgstr "तमिल"
+
+#: dialogs/TableOfContentsConfigure.cpp:65
+#, fuzzy, kde-format
+#| msgid "New Style"
+msgid "Use outline"
+msgstr "नई शैली"
+
+#: dialogs/TableOfContentsConfigure.cpp:66
+#, fuzzy, kde-format
+#| msgid "New Style"
+msgid "Use styles"
+msgstr "नई शैली"
+
+#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Configure"
+msgstr "अनुच्छेद विन्यास\n"
+
+#: dialogs/TableOfContentsConfigure.cpp:68
+#, fuzzy, kde-format
+#| msgid "Indent"
+msgid "Index"
+msgstr "हाशिया"
+
+#: dialogs/TableOfContentsConfigure.cpp:69
+#: dialogs/TableOfContentsStyleModel.cpp:232
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "Styles"
+msgstr "शैली:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: dialogs/TableOfContentsConfigure.ui:49
+#, kde-format
+msgid "Tab 1"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelTitle)
+#: dialogs/TableOfContentsConfigure.ui:57
+#: dialogs/TableOfContentsEntryModel.cpp:27
+#, fuzzy, kde-format
+#| msgid "Tamil"
+msgid "Title"
+msgstr "तमिल"
+
+#. i18n: ectx: property (text), widget (QCheckBox, useOutline)
+#. i18n: ectx: property (text), widget (QCheckBox, useStyles)
+#: dialogs/TableOfContentsConfigure.ui:69
+#: dialogs/TableOfContentsConfigure.ui:78
+#, kde-format
+msgid "CheckBox"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, configureStyles)
+#: dialogs/TableOfContentsConfigure.ui:85
+#, kde-format
+msgid "PushButton"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: dialogs/TableOfContentsConfigure.ui:108
+#, kde-format
+msgid "Tab 2"
+msgstr ""
+
+#: dialogs/TableOfContentsEntryModel.cpp:30
+#, kde-format
+msgid "Level %1"
+msgstr ""
+
+#: dialogs/TableOfContentsEntryModel.cpp:137
+#: dialogs/TableOfContentsStyleModel.cpp:234
+#, kde-format
+msgid "Level"
+msgstr ""
+
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "Style"
+msgstr "शैली:"
+
+#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Table of Contents - Configure Styles"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#, fuzzy, kde-format
+#| msgid "Style Manager"
+msgid "Styles available"
+msgstr "शैली प्रबंधक"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesAvailableLabel)
+#: dialogs/TableOfContentsStyleConfigure.ui:20
+#, fuzzy, kde-format
+#| msgid "Text Shape"
+msgid "TextLabel"
+msgstr "पाठ आकार"
+
+#: dialogs/TableOfContentsStyleDelegate.cpp:43
+#: dialogs/TableOfContentsStyleModel.cpp:97
+#, fuzzy, kde-format
+#| msgid "Distance:"
+msgid "Disabled"
+msgstr "दूरीः"
+
+#: dialogs/TableOfContentsTemplate.cpp:27
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Table Of Contents"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#: ReferencesTool.cpp:116
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a Table of Contents into the document."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:118 TextTool.cpp:410
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Custom..."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:120
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a custom Table of Contents into the document."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:122
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Configure..."
+msgstr "अनुच्छेद विन्यास\n"
+
+#: ReferencesTool.cpp:124
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Configure the Table of Contents"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#: ReferencesTool.cpp:127
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert footnote with auto number"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:132
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Labeled Footnote"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert with label:"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:138
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert endnote with auto number"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:143
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Labeled Endnote"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Settings..."
+msgstr "अनुच्छेद विन्यास\n"
+
+#: ReferencesTool.cpp:159
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a citation into the document."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:164
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a bibliography into the document."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:166
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Custom Bibliography"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:168
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a custom Bibliography into the document."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:172
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Configure the bibliography"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:175
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Insert Link"
+msgstr "प्रविष्ट"
+
+#: ReferencesTool.cpp:177
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a weblink or link to a bookmark."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:181
+#, fuzzy, kde-format
+#| msgid "Bookmark..."
+msgid "Add Bookmark"
+msgstr "पसंदीदा..."
+
+#: ReferencesTool.cpp:182
+#, fuzzy, kde-format
+#| msgid "Bookmark..."
+msgid "Add Bookmark :"
+msgstr "पसंदीदा..."
+
+#: ReferencesTool.cpp:187
+#, kde-format
+msgid ""
+"Insert a Bookmark. This is useful to create links that point to areas within "
+"the document"
+msgstr ""
+
+#: ReferencesTool.cpp:191
+#, kde-format
+msgid ""
+"Display a pop up that hosts the options to add new Bookmark or handle "
+"existing Bookmarks"
+msgstr ""
+
+#: ReferencesTool.cpp:195
+#, kde-format
+msgid ""
+"Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
+msgstr ""
+
+#: ReferencesTool.cpp:231
+#, kde-format
+msgctxt "as in table of contents, list of pictures, index"
+msgid "Tables, Lists & Indexes"
+msgstr ""
+
+#: ReferencesTool.cpp:234
+#, kde-format
+msgid "Footnotes and Endnotes"
+msgstr ""
+
+#: ReferencesTool.cpp:237
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Citations and Bibliography"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReferencesTool.cpp:240
+#, fuzzy, kde-format
+#| msgid "Rename Bookmark"
+msgid "Links and Bookmarks"
+msgstr "पसंदीदा को नया नाम दें"
+
+#: ReferencesTool.cpp:366
+#, kde-format
+msgid "Bookmark cannot be empty"
+msgstr ""
+
+#: ReferencesTool.cpp:373
+#, kde-format
+msgid "Duplicate Name. Click \"Manage Bookmarks\""
+msgstr ""
+
+#: ReferencesTool.cpp:374
+#, fuzzy, kde-format
+#| msgid "Rename Bookmark"
+msgid "to Rename or Delete Bookmarks"
+msgstr "पसंदीदा को नया नाम दें"
+
+#: ReviewTool.cpp:53 ReviewTool.cpp:54
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Remove Comment"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: ReviewTool.cpp:98
+#, kde-format
+msgid "Spell check"
+msgstr ""
+
+#: ReviewTool.cpp:101
+#, fuzzy, kde-format
+#| msgid "Include in table of contents"
+msgid "Comments"
+msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#: ReviewToolFactory.cpp:24
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgid "Review"
+msgstr "पूर्वावलोकन"
+
+#: TextShapeFactory.cpp:31 TextShapeFactory.cpp:41
+#, kde-format
+msgid "Text"
+msgstr "पाठ"
+
+#: TextShapeFactory.cpp:33
+#, kde-format
+msgid "A shape that shows text"
+msgstr "आकार जो पाठ दिखाता है"
+
+#: TextShapeFactory.cpp:43
+#, kde-format
+msgid "Text Shape"
+msgstr "पाठ आकार"
+
+#: TextTool.cpp:201
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Configure current section"
+msgstr "अनुच्छेद विन्यास\n"
+
+#: TextTool.cpp:205
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Insert new section"
+msgstr "प्रविष्ट"
+
+#: TextTool.cpp:209
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Insert paragraph between sections"
+msgstr "प्रविष्ट"
+
+#: TextTool.cpp:213
+#, kde-format
+msgid "Paste As Text"
+msgstr ""
+
+#: TextTool.cpp:218
+#, kde-format
+msgid "Bold"
+msgstr "गाढ़ा"
+
+#: TextTool.cpp:224
+#, kde-format
+msgid "Italic"
+msgstr "ईटैलिक"
+
+#: TextTool.cpp:230
+#, kde-format
+msgctxt "Text formatting"
+msgid "Underline"
+msgstr "रेखांकित"
+
+#: TextTool.cpp:236
+#, fuzzy, kde-format
+#| msgid "Strikethrough"
+msgid "Strikethrough"
+msgstr "लिखकर काट दें"
+
+#: TextTool.cpp:242
+#, kde-format
+msgid "Align Left"
+msgstr "बायाँ पंक्तिबद्ध करें "
+
+#: TextTool.cpp:249
+#, kde-format
+msgid "Align Right"
+msgstr "दायाँ पंक्तिबद्ध करें"
+
+#: TextTool.cpp:256
+#, kde-format
+msgid "Align Center"
+msgstr "क्रमबद्ध बीच में"
+
+#: TextTool.cpp:264
+#, kde-format
+msgid "Align Block"
+msgstr "ब्लॉक क्रमबद्ध करें"
+
+#: TextTool.cpp:271
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Change text direction"
+msgstr "सूची बदलें"
+
+#: TextTool.cpp:273
+#, fuzzy, kde-format
+#| msgid "Change List"
+msgid "Change writing direction"
+msgstr "सूची बदलें"
+
+#: TextTool.cpp:295
+#, kde-format
+msgid "Increase Indent"
+msgstr "हाशिया बढ़ाएँ"
+
+#: TextTool.cpp:302
+#, kde-format
+msgid "Decrease Indent"
+msgstr "हाशिया घटाएँ"
+
+#: TextTool.cpp:306
+#, kde-format
+msgid "Toggle List or List Level Formatting"
+msgstr ""
+
+#: TextTool.cpp:307
+#, kde-format
+msgid "Toggle list on/off, or change format of current level"
+msgstr ""
+
+#: TextTool.cpp:310
+#, kde-format
+msgid "Increase Font Size"
+msgstr "फ़ॉन्ट आकार बढ़ाएं"
+
+#: TextTool.cpp:315
+#, kde-format
+msgid "Decrease Font Size"
+msgstr "फ़ॉन्ट आकार घटाएं"
+
+#: TextTool.cpp:321
+#, fuzzy, kde-format
+#| msgid "Layout"
+msgid "Font Family"
+msgstr "ले-आउट"
+
+#: TextTool.cpp:326
+#, fuzzy, kde-format
+#| msgid "Distance:"
+msgid "Variable"
+msgstr "दूरीः"
+
+#: TextTool.cpp:330
+#, kde-format
+msgid "Insert Non-Breaking Space"
+msgstr "नॉन-ब्रेकिंग स्पेस प्रविष्ट करें"
+
+#: TextTool.cpp:335
+#, kde-format
+msgid "Insert Non-Breaking Hyphen"
+msgstr "नॉन-ब्रेकिंग हायफन प्रविष्ट करें"
+
+#: TextTool.cpp:340
+#, kde-format
+msgid "Insert Index"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:345
+#, kde-format
+msgid "Insert Soft Hyphen"
+msgstr "सॉफ़्ट हॉयफन प्रविष्ट करें"
+
+#: TextTool.cpp:351
+#, kde-format
+msgid "Line Break"
+msgstr "लाइन ब्रेक"
+
+#: TextTool.cpp:356
+#, fuzzy, kde-format
+#| msgid "Line Break"
+msgid "Page Break"
+msgstr "लाइन ब्रेक"
+
+#: TextTool.cpp:360
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a page break"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:361
+#, kde-format
+msgid "All text after this point will be moved into the next page."
+msgstr ""
+
+#: TextTool.cpp:364
+#, kde-format
+msgid "Font..."
+msgstr "फ़ॉन्ट..."
+
+#: TextTool.cpp:367
+#, kde-format
+msgid "Change character size, font, boldface, italics etc."
+msgstr "अक्षर आकार, फ़ॉन्ट, बोल्डफ़ेस, इटेलिक्स इत्यादि बदलें."
+
+#: TextTool.cpp:368
+#, kde-format
+msgid "Change the attributes of the currently selected characters."
+msgstr "वर्तमान में चयनित अक्षरों के गुण बदलें."
+
+#: TextTool.cpp:371
+#, kde-format
+msgid "Font Size"
+msgstr "फ़ॉन्ट आकार"
+
+#: TextTool.cpp:377
+#, fuzzy, kde-format
+#| msgid "Text color:"
+msgid "Text Color..."
+msgstr "पाठ रंगः"
+
+#: TextTool.cpp:378
+#, fuzzy, kde-format
+#| msgid "Text color:"
+msgid "Text Color"
+msgstr "पाठ रंगः"
+
+#: TextTool.cpp:384
+#, fuzzy, kde-format
+#| msgid "Background color:"
+msgid "Background Color..."
+msgstr "पृष्ठभूमि का रंगः"
+
+#: TextTool.cpp:389
+#, kde-format
+msgid "Auto Resize To Content"
+msgstr ""
+
+#: TextTool.cpp:394
+#, kde-format
+msgid "Grow To Fit Width"
+msgstr ""
+
+#: TextTool.cpp:399
+#, kde-format
+msgid "Grow To Fit Height"
+msgstr ""
+
+#: TextTool.cpp:404
+#, kde-format
+msgid "Shrink To Fit"
+msgstr ""
+
+#: TextTool.cpp:412
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert a table into the document."
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:415
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Row Above"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:416
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Row Above"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:420
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Row Below"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:421
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Row Below"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:425
+#, fuzzy, kde-format
+#| msgid "Align Left"
+msgid "Column Left"
+msgstr "बायाँ पंक्तिबद्ध करें "
+
+#: TextTool.cpp:426
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Column Left"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:430
+#, fuzzy, kde-format
+#| msgid "Align Right"
+msgid "Column Right"
+msgstr "दायाँ पंक्तिबद्ध करें"
+
+#: TextTool.cpp:431
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Column Right"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:435
+#, fuzzy, kde-format
+#| msgid "Align Left"
+msgid "Column"
+msgstr "बायाँ पंक्तिबद्ध करें "
+
+#: TextTool.cpp:436
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Delete Column"
+msgstr "मिटाएँ"
+
+#: TextTool.cpp:440
+#, kde-format
+msgid "Row"
+msgstr ""
+
+#: TextTool.cpp:441
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Delete Row"
+msgstr "मिटाएँ"
+
+#: TextTool.cpp:445
+#, kde-format
+msgid "Merge Cells"
+msgstr ""
+
+#: TextTool.cpp:449
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings\n"
+msgid "Split Cells"
+msgstr "अनुच्छेद विन्यास\n"
+
+#: TextTool.cpp:454
+#, kde-format
+msgid "Select a border style and paint that style onto a table"
+msgstr ""
+
+#: TextTool.cpp:458
+#, kde-format
+msgid "Paragraph..."
+msgstr "अनुच्छेद..."
+
+#: TextTool.cpp:461
+#, kde-format
+msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
+msgstr "अनुच्छेद हाशिया, पाठ प्रवाह, किनारा, बुलेट, क्रमांकन इत्यादि बदलें."
+
+#: TextTool.cpp:462
+#, kde-format
+msgid ""
+"<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
+"p><p>Select text in multiple paragraphs to change the formatting of all "
+"selected paragraphs.</p><p>If no text is selected, the paragraph where the "
+"cursor is located will be changed.</p>"
+msgstr ""
+
+#: TextTool.cpp:465
+#, fuzzy, kde-format
+#| msgid "Style Manager"
+msgid "Style Manager..."
+msgstr "शैली प्रबंधक"
+
+#: TextTool.cpp:467
+#, kde-format
+msgid "Change attributes of styles"
+msgstr "शैली का गुण बदलें"
+
+#: TextTool.cpp:468
+#, kde-format
+msgid ""
+"<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
+"be changed using the dialog box.</p>"
+msgstr ""
+
+#: TextTool.cpp:475
+#, kde-format
+msgid "Special Character..."
+msgstr "विशिष्ट अक्षर..."
+
+#: TextTool.cpp:479
+#, kde-format
+msgid "Insert one or more symbols or characters not found on the keyboard"
+msgstr "कुंजीपट में अनुपलब्ध एकाधिक प्रतीक या अक्षर प्रविष्ट करें"
+
+#: TextTool.cpp:480
+#, kde-format
+msgid "Insert one or more symbols or characters not found on the keyboard."
+msgstr "कुंजीपट में अनुपलब्ध एकाधिक प्रतीक या अक्षर प्रविष्ट करें."
+
+#: TextTool.cpp:483
+#, kde-format
+msgid "Repaint"
+msgstr ""
+
+#: TextTool.cpp:488
+#, fuzzy, kde-format
+#| msgid "Insert Index"
+msgid "Insert Comment"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:574
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Insertion"
+msgstr "प्रविष्ट"
+
+#: TextTool.cpp:576
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Deletion"
+msgstr "मिटाएँ"
+
+#: TextTool.cpp:578
+#, fuzzy, kde-format
+#| msgid "Decoration"
+msgid "Formatting"
+msgstr "सजावट"
+
+#: TextTool.cpp:593
+#, kde-format
+msgid "Ctrl+click to go to link "
+msgstr ""
+
+#: TextTool.cpp:600
+#, kde-format
+msgid "Ctrl+click to go to the note "
+msgstr ""
+
+#: TextTool.cpp:606
+#, kde-format
+msgid "Ctrl+click to go to the note reference"
+msgstr ""
+
+#: TextTool.cpp:707
+#, kde-format
+msgid "follows along"
+msgstr ""
+
+#: TextTool.cpp:737
+#, kde-format
+msgid "Press shift to not resize this"
+msgstr ""
+
+#: TextTool.cpp:939
+#, fuzzy
+#| msgid "Paragraph style"
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr "अनुच्छेद शैली"
+
+#: TextTool.cpp:1158
+#, fuzzy
+#| msgid "Custom"
+msgctxt "(qtundo-format)"
+msgid "Cut"
+msgstr "मनपसंद"
+
+#: TextTool.cpp:1418
+#, fuzzy
+#| msgid "Insert Index"
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr "निर्देशिका प्रविष्ट करें"
+
+#: TextTool.cpp:1461
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr ""
+
+#: TextTool.cpp:2257
+#, fuzzy, kde-format
+#| msgid "Tamil"
+msgid "Table"
+msgstr "तमिल"
+
+#: TextTool.cpp:2616 TextTool.cpp:2621
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Autocorrection"
+msgstr "प्रविष्ट"
+
+#: TextTool.cpp:2616
+#, fuzzy, kde-format
+#| msgid "Key press"
+msgid "Key Press"
+msgstr "कुंजी दबाएं"
+
+#: TextTool.cpp:2912
+#, kde-format
+msgid ""
+"This link points to the program or script '%1'.\n"
+"Malicious programs can harm your computer. Are you sure that you want to run "
+"this program?"
+msgstr ""
+
+#: TextTool.cpp:2917
+#, kde-format
+msgid "Open Link?"
+msgstr "लिंक खोलें?"
+
+#: TextToolFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Text editing tool"
+msgid "Text editing"
+msgstr "पाठ संपादन औज़ार"
+
+#, fuzzy
+#~| msgid "Quick search:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quick search:"
+#~ msgstr "त्वरित खोज:"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Note"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Distance:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dialog"
+#~ msgstr "दूरीः"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cancel"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Log"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgctxt "Automatic horizontal alignment"
+#~| msgid "Auto"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "स्वतः"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type"
+#~ msgstr "क़िस्मः"
+
+#, fuzzy
+#~| msgid "Start at:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start at:"
+#~ msgstr "यहाँ से प्रारंभ करें:"
+
+#, fuzzy
+#~| msgid "Alignment:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment:"
+#~ msgstr "पंक्तिबद्धता:"
+
+#, fuzzy
+#~| msgid "Prefix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Prefix:"
+#~ msgstr "प्रीफ़िक्स:"
+
+#, fuzzy
+#~| msgid "Suffix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Suffix:"
+#~ msgstr "सफिक्स:"
+
+#, fuzzy
+#~| msgid "Depth:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Depth:"
+#~ msgstr "गहराईः"
+
+#, fuzzy
+#~| msgid "Display Levels:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display Levels:"
+#~ msgstr "स्तर प्रदर्शित करें:"
+
+#, fuzzy
+#~| msgid "Bullets/Numbers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet/Number followed by"
+#~ msgstr "बुलेट/क्रमांकन"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "at"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Aligned at"
+#~ msgstr "पंक्तिबद्धता"
+
+#, fuzzy
+#~| msgid "Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indented at"
+#~ msgstr "हाशिया"
+
+#, fuzzy
+#~| msgid "Custom character:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom character:"
+#~ msgstr "मनपसंद अक्षर:"
+
+#, fuzzy
+#~| msgid "Restart numbering at this paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Restart numbering at this paragraph"
+#~ msgstr "इस अनुच्छेद से क्रमांक देना फिर से प्रारंभ करें"
+
+#, fuzzy
+#~| msgid "Letter Synchronization"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Letter Synchronization"
+#~ msgstr "अक्षर सिंक्रोनाइजेशन"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Image"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height"
+#~ msgstr "दायाँ"
+
+#, fuzzy
+#~| msgid "Alignment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment"
+#~ msgstr "पंक्तिबद्धता"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "बायाँ"
+
+#, fuzzy
+#~| msgid "Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "बीच में"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "दायाँ"
+
+#, fuzzy
+#~| msgid "Justify"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Justify"
+#~ msgstr "समान रुप से दाएँ-बाएँ"
+
+#, fuzzy
+#~| msgid "Behavior at End of Frame/Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Behavior at End of Frame/Page"
+#~ msgstr "फ्रेम/पृष्ठ के अंत में व्यवहार"
+
+#, fuzzy
+#~| msgid "Keep lines together"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep lines together"
+#~ msgstr "पंक्तियाँ एक साथ रखें"
+
+#, fuzzy
+#~| msgid "Insert break before paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert break before paragraph"
+#~ msgstr "पैराग्राफ से पहले ब्रेक प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert break after paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert break after paragraph"
+#~ msgstr "पैराग्राफ के बाद ब्रेक प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "&Rename"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "नाम बदलें (&R)"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "मिटाएँ (&D)"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add caption"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General"
+#~ msgstr "सामान्य"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format) Name of the style"
+#~ msgid "Name:"
+#~ msgstr "नाम:"
+
+#, fuzzy
+#~| msgid "Next style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next style:"
+#~ msgstr "अगली शैली:"
+
+#, fuzzy
+#~| msgid "Next style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parent style:"
+#~ msgstr "अगली शैली:"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Include in table of contents"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Text color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text color:"
+#~ msgstr "पाठ रंगः"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background color:"
+#~ msgstr "पृष्ठभूमि का रंगः"
+
+#, fuzzy
+#~| msgid "Underlining:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Underlining:"
+#~ msgstr "रेखांकित:"
+
+#, fuzzy
+#~| msgid "Strikethrough"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strikethrough:"
+#~ msgstr "लिखकर काट दें"
+
+#, fuzzy
+#~| msgid "Capitalization"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Capitalization:"
+#~ msgstr "केपिटलाइजेशन"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format) Character position"
+#~ msgid "Position:"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short Name:"
+#~ msgstr "नाम:"
+
+#, fuzzy
+#~| msgid "Bookmarks"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Book"
+#~ msgstr " पसंदीदा "
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Incollection"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 1"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 2"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 3"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 4"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 5"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgctxt "Automatic horizontal alignment"
+#~| msgid "Auto"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author:"
+#~ msgstr "स्वतः"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edition:"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Publication:"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Institution:"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation:"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background color"
+#~ msgstr "पृष्ठभूमि का रंगः"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure bibliography"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Bibliography"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+#~ msgstr "<p><ul><li><b>एकल</b>: सामान्य पंक्तिदूरी</li></ul></p> "
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add tab stop"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgid "Character style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tab character"
+#~ msgstr "अक्षर शैली"
+
+#, fuzzy
+#~| msgid "Special Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space character"
+#~ msgstr "विशिष्ट अक्षर"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format:"
+#~ msgstr "सामान्य"
+
+#, fuzzy
+#~| msgid "Display Levels:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display levels above:"
+#~ msgstr "स्तर प्रदर्शित करें:"
+
+#, fuzzy
+#~| msgid "Letter Synchronization"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Letter synchronization"
+#~ msgstr "अक्षर सिंक्रोनाइजेशन"
+
+#, fuzzy
+#~| msgid "Box Bullet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet"
+#~ msgstr "बक्सा गोली"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General Settings"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Paragraph style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saving Format"
+#~ msgstr "अनुच्छेद शैली"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Visualization Settings"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insertions"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "पृष्ठभूमि का रंगः"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deletions"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Changes"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Open Link?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Web Link"
+#~ msgstr "लिंक खोलें?"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Text:"
+#~ msgstr "पाठ"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Link To Bookmark"
+#~ msgstr "पसंदीदा को नया नाम दें"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Name:"
+#~ msgstr "नाम:"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "In collection"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom1"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom2"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom3"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom4"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom5"
+#~ msgstr "मनपसंद"
+
+#, fuzzy
+#~| msgid "&New"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&New"
+#~ msgstr "नया (&N)"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Settings"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Record Changes"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Colors"
+#~ msgstr "रंग"
+
+#, fuzzy
+#~| msgid "Text Shadow"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Shadow"
+#~ msgstr "पाठ छाया"
+
+#, fuzzy
+#~| msgid "Color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color:"
+#~ msgstr "रंगः"
+
+#, fuzzy
+#~| msgid "Distance:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance:"
+#~ msgstr "दूरीः"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic hyphenation"
+#~ msgstr "स्वचालित हायफनेशन"
+
+#, fuzzy
+#~| msgid "Text Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "TextLabel"
+#~ msgstr "पाठ आकार"
+
+#, fuzzy
+#~| msgid "Paragraph..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance to paragraph:"
+#~ msgstr "अनुच्छेद..."
+
+#, fuzzy
+#~| msgid "Custom character:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of characters:"
+#~ msgstr "मनपसंद अक्षर:"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit to contents"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort keys"
+#~ msgstr "नाम:"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort algorithm:"
+#~ msgstr "नाम:"
+
+#, fuzzy
+#~| msgid "Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indent"
+#~ msgstr "हाशिया"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "बायाँ:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "दायाँ:"
+
+#, fuzzy
+#~| msgid "First Line:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Line:"
+#~ msgstr "पहली पंक्ति:"
+
+#, fuzzy
+#~| msgid "Line Spacing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Spacing"
+#~ msgstr "पंक्तियों के बीच दूरी"
+
+#, fuzzy
+#~| msgid " %"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~| msgid "Use Font Metrics:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use Font Metrics:"
+#~ msgstr "फ़ॉन्ट मेट्रिक्स इस्तेमाल करें:"
+
+#, fuzzy
+#~| msgid "Paragraph Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph Space"
+#~ msgstr "अनुच्छेद जगह"
+
+#, fuzzy
+#~| msgid "Before:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Before:"
+#~ msgstr "पहले:"
+
+#, fuzzy
+#~| msgid "After:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "After:"
+#~ msgstr "पश्चातः"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Split sections"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Paragraph..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert paragraph..."
+#~ msgstr "अनुच्छेद..."
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after end of section:"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Automatic hyphenation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic Numbering:"
+#~ msgstr "स्वचालित हायफनेशन"
+
+#, fuzzy
+#~| msgid "Prefix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Prefix:"
+#~ msgstr "प्रीफ़िक्स:"
+
+#, fuzzy
+#~| msgid "Start at:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Start at:"
+#~ msgstr "यहाँ से प्रारंभ करें:"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Format:"
+#~ msgstr "सामान्य"
+
+#, fuzzy
+#~| msgid "Suffix:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Suffix:"
+#~ msgstr "सफिक्स:"
+
+#, fuzzy
+#~| msgid "Start at:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Starts over at:"
+#~ msgstr "यहाँ से प्रारंभ करें:"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation Shape"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgid "Distance:"
+#~ msgctxt "(qtundo-format) Disable Shrink To Fit"
+#~ msgid "Disable"
+#~ msgstr "दूरीः"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "सामान्य"
+
+#, fuzzy
+#~| msgid "Small Caps"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Small Caps"
+#~ msgstr "छोटा कैप्स"
+
+#, fuzzy
+#~| msgid "Uppercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Uppercase"
+#~ msgstr "अपरकेस"
+
+#, fuzzy
+#~| msgid "Lowercase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lowercase"
+#~ msgstr "लोअरकेस"
+
+#, fuzzy
+#~| msgid "Capitalize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Capitalize"
+#~ msgstr "केपिटलाइज़"
+
+#, fuzzy
+#~| msgid "Superscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Superscript"
+#~ msgstr "सुपरस्क्रिप्ट"
+
+#, fuzzy
+#~| msgid "Subscript"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subscript"
+#~ msgstr "सब्स्क्रिप्ट"
+
+#, fuzzy
+#~| msgid "Select Font"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "फ़ॉन्ट चुनें"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short name%1"
+#~ msgstr "नाम:"
+
+#, fuzzy
+#~| msgid "New Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Used Styles"
+#~ msgstr "नई शैली"
+
+#, fuzzy
+#~| msgid "New Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unused Styles"
+#~ msgstr "नई शैली"
+
+#, fuzzy
+#~| msgid "Select Font"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Font"
+#~ msgstr "फ़ॉन्ट चुनें"
+
+#, fuzzy
+#~| msgid "Special Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Special Characters"
+#~ msgstr "विशिष्ट अक्षर"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgctxt "Close dialog"
+#~| msgid "Close"
+#~ msgctxt "(qtundo-format) Close dialog"
+#~ msgid "Close"
+#~ msgstr "बंद करें"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "पसंदीदा को नया नाम दें"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "कृपया पुस्तचिह्न के लिए एक नाम प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "There exist already a bookmark with the name \"%1\"."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "इस नाम \"%1\" का पुस्तचिह्न पहले से ही मौजूद है."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bookmark"
+#~ msgstr "पसंदीदा चुनें"
+
+#, fuzzy
+#~| msgid "Please provide a new name for the bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a name for the bookmark"
+#~ msgstr "कृपया पुस्तचिह्न के लिए एक नाम प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage Bookmarks"
+#~ msgstr "पसंदीदा को नया नाम दें"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footnote Settings"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Endnote Settings"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgctxt "Automatic horizontal alignment"
+#~| msgid "Auto"
+#~ msgctxt "(qtundo-format) Automatic horizontal alignment"
+#~ msgid "Auto"
+#~ msgstr "स्वतः"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Left"
+#~ msgstr "बायाँ"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Right"
+#~ msgstr "दायाँ"
+
+#, fuzzy
+#~| msgctxt "Text alignment"
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Centered"
+#~ msgstr "केंद्रित"
+
+#, fuzzy
+#~| msgid "Indent/Spacing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indent/Spacing"
+#~ msgstr "हाशिया/पंक्तियों के बीच दूरी"
+
+#, fuzzy
+#~| msgid "General Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General Layout"
+#~ msgstr "सामान्य खाका"
+
+#, fuzzy
+#~| msgid "Bullets/Numbers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullets/Numbers"
+#~ msgstr "बुलेट/क्रमांकन"
+
+#, fuzzy
+#~| msgid "Decorations"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decorations"
+#~ msgstr "सजावट"
+
+#, fuzzy
+#~| msgctxt "Line spacing value"
+#~| msgid "Single"
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "Single"
+#~ msgstr "एकल"
+
+#, fuzzy
+#~| msgctxt "Line spacing value"
+#~| msgid "1.5 Lines"
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "1.5 Lines"
+#~ msgstr "१.५ पंक्तियां"
+
+#, fuzzy
+#~| msgctxt "Line spacing value"
+#~| msgid "Double"
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "Double"
+#~ msgstr "दोगुना"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Proportional"
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Proportional"
+#~ msgstr "समानुपातिक"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Additional"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Fixed"
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Fixed"
+#~ msgstr "स्थिर"
+
+#, fuzzy
+#~| msgid "Paragraph style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph Format"
+#~ msgstr "अनुच्छेद शैली"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a table"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Enter style name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section name"
+#~ msgstr "शैली नाम भरें:"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure sections"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Paragraph style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change paragraph format"
+#~ msgstr "अनुच्छेद शैली"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Text color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Border Color..."
+#~ msgstr "पाठ रंगः"
+
+#, fuzzy
+#~| msgctxt "Inherit style"
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) No border - has to fit in 48pixels"
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#, fuzzy
+#~| msgid "Next style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Style"
+#~ msgstr "अगली शैली:"
+
+#, fuzzy
+#~| msgid "Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "शैली प्रबंधक"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save Changes"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Next style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New style"
+#~ msgstr "अगली शैली:"
+
+#, fuzzy
+#~| msgctxt "Inherit style"
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Table"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table of Contents - Configure"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Tamil"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Title"
+#~ msgstr "तमिल"
+
+#, fuzzy
+#~| msgid "New Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use styles"
+#~ msgstr "नई शैली"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Index"
+#~ msgstr "हाशिया"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Styles"
+#~ msgstr "शैली:"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "शैली:"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table of Contents - Configure Styles"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Styles available"
+#~ msgstr "शैली प्रबंधक"
+
+#, fuzzy
+#~| msgid "Distance:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Disabled"
+#~ msgstr "दूरीः"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Of Contents"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Custom..."
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure the Table of Contents"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert footnote with auto number"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Labeled Footnote"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert with label:"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert endnote with auto number"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Labeled Endnote"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Settings..."
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Citation"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bibliography"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Custom Bibliography"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a custom Bibliography into the document."
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure the bibliography"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Link"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Bookmark..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Bookmark"
+#~ msgstr "पसंदीदा..."
+
+#, fuzzy
+#~| msgid "Bookmark..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Bookmark :"
+#~ msgstr "पसंदीदा..."
+
+#, fuzzy
+#~| msgid "Bookmark..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bookmarks"
+#~ msgstr "पसंदीदा..."
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Links and Bookmarks"
+#~ msgstr "पसंदीदा को नया नाम दें"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to Rename or Delete Bookmarks"
+#~ msgstr "पसंदीदा को नया नाम दें"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Review"
+#~ msgstr "पूर्वावलोकन"
+
+#, fuzzy
+#~| msgid "Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text"
+#~ msgstr "पाठ"
+
+#, fuzzy
+#~| msgid "A shape that shows text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows text"
+#~ msgstr "आकार जो पाठ दिखाता है"
+
+#, fuzzy
+#~| msgid "Text Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Shape"
+#~ msgstr "पाठ आकार"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure current section"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert new section"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert paragraph between sections"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bold"
+#~ msgstr "गाढ़ा"
+
+#, fuzzy
+#~| msgid "Italic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Italic"
+#~ msgstr "ईटैलिक"
+
+#, fuzzy
+#~| msgctxt "Text formatting"
+#~| msgid "Underline"
+#~ msgctxt "(qtundo-format) Text formatting"
+#~ msgid "Underline"
+#~ msgstr "रेखांकित"
+
+#, fuzzy
+#~| msgid "Strikethrough"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strikethrough"
+#~ msgstr "लिखकर काट दें"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Left"
+#~ msgstr "बायाँ पंक्तिबद्ध करें "
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Right"
+#~ msgstr "दायाँ पंक्तिबद्ध करें"
+
+#, fuzzy
+#~| msgid "Align Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Center"
+#~ msgstr "क्रमबद्ध बीच में"
+
+#, fuzzy
+#~| msgid "Align Block"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Block"
+#~ msgstr "ब्लॉक क्रमबद्ध करें"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change writing direction"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Increase Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Indent"
+#~ msgstr "हाशिया बढ़ाएँ"
+
+#, fuzzy
+#~| msgid "Decrease Indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Indent"
+#~ msgstr "हाशिया घटाएँ"
+
+#, fuzzy
+#~| msgid "Increase Font Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Font Size"
+#~ msgstr "फ़ॉन्ट आकार बढ़ाएं"
+
+#, fuzzy
+#~| msgid "Decrease Font Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Font Size"
+#~ msgstr "फ़ॉन्ट आकार घटाएं"
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font Family"
+#~ msgstr "ले-आउट"
+
+#, fuzzy
+#~| msgid "Distance:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variable"
+#~ msgstr "दूरीः"
+
+#, fuzzy
+#~| msgid "Insert Non-Breaking Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "नॉन-ब्रेकिंग स्पेस प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Non-Breaking Hyphen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "नॉन-ब्रेकिंग हायफन प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Index"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert Soft Hyphen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "सॉफ़्ट हॉयफन प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Line Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Break"
+#~ msgstr "लाइन ब्रेक"
+
+#, fuzzy
+#~| msgid "Line Break"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Break"
+#~ msgstr "लाइन ब्रेक"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a page break"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Font..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font..."
+#~ msgstr "फ़ॉन्ट..."
+
+#, fuzzy
+#~| msgid "Change character size, font, boldface, italics etc."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change character size, font, boldface, italics etc."
+#~ msgstr "अक्षर आकार, फ़ॉन्ट, बोल्डफ़ेस, इटेलिक्स इत्यादि बदलें."
+
+#, fuzzy
+#~| msgid "Change the attributes of the currently selected characters."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "वर्तमान में चयनित अक्षरों के गुण बदलें."
+
+#, fuzzy
+#~| msgid "Font Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font Size"
+#~ msgstr "फ़ॉन्ट आकार"
+
+#, fuzzy
+#~| msgid "Text color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Color..."
+#~ msgstr "पाठ रंगः"
+
+#, fuzzy
+#~| msgid "Text color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Color"
+#~ msgstr "पाठ रंगः"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color..."
+#~ msgstr "पृष्ठभूमि का रंगः"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background"
+#~ msgstr "पृष्ठभूमि"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Row Above"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column Left"
+#~ msgstr "बायाँ पंक्तिबद्ध करें "
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Column Left"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column Right"
+#~ msgstr "दायाँ पंक्तिबद्ध करें"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Column"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Row"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Paragraph..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph..."
+#~ msgstr "अनुच्छेद..."
+
+#, fuzzy
+#~| msgid ""
+#~| "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgstr "अनुच्छेद हाशिया, पाठ प्रवाह, किनारा, बुलेट, क्रमांकन इत्यादि बदलें."
+
+#, fuzzy
+#~| msgid "Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager..."
+#~ msgstr "शैली प्रबंधक"
+
+#, fuzzy
+#~| msgid "Change attributes of styles"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change attributes of styles"
+#~ msgstr "शैली का गुण बदलें"
+
+#, fuzzy
+#~| msgid "Special Character..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Special Character..."
+#~ msgstr "विशिष्ट अक्षर..."
+
+#, fuzzy
+#~| msgid "Insert one or more symbols or characters not found on the keyboard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert one or more symbols or characters not found on the keyboard"
+#~ msgstr "कुंजीपट में अनुपलब्ध एकाधिक प्रतीक या अक्षर प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert one or more symbols or characters not found on the keyboard."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert one or more symbols or characters not found on the keyboard."
+#~ msgstr "कुंजीपट में अनुपलब्ध एकाधिक प्रतीक या अक्षर प्रविष्ट करें."
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Comment"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insertion"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deletion"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Decoration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting"
+#~ msgstr "सजावट"
+
+#, fuzzy
+#~| msgid "Character style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "अक्षर शैली"
+
+#, fuzzy
+#~| msgid "Paragraph..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph"
+#~ msgstr "अनुच्छेद..."
+
+#, fuzzy
+#~| msgid "Tamil"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "तमिल"
+
+#, fuzzy
+#~| msgid "Key press"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key Press"
+#~ msgstr "कुंजी दबाएं"
+
+#, fuzzy
+#~| msgid "Open Link?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Link?"
+#~ msgstr "लिंक खोलें?"
+
+#, fuzzy
+#~| msgid "Text editing tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text editing"
+#~ msgstr "पाठ संपादन औज़ार"
+
+#~ msgid "Custom Bullet"
+#~ msgstr "मनपसंद गोली"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgid "Change List Level"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Box Bullet"
+#~ msgid "Bullet list"
+#~ msgstr "बक्सा गोली"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgid "Form"
+#~ msgstr "सामान्य"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgid "Table of Contents"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgid "Changes"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Paragraph Settings\n"
+#~ msgid "Paragraph Settings"
+#~ msgstr "अनुच्छेद विन्यास\n"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgid "Insert Custom ..."
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgid "Format Notes"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgid "Configure the notes"
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Decorations"
+#~ msgid "Location"
+#~ msgstr "सजावट"
+
+#, fuzzy
+#~| msgid "Start at:"
+#~ msgid " Start at "
+#~ msgstr "यहाँ से प्रारंभ करें:"
+
+#, fuzzy
+#~| msgid "Prefix:"
+#~ msgid " Prefix"
+#~ msgstr "प्रीफ़िक्स:"
+
+#, fuzzy
+#~| msgid "Suffix:"
+#~ msgid " Suffix"
+#~ msgstr "सफिक्स:"
+
+#~ msgid "Inherit style:"
+#~ msgstr "उत्तराधिकार शैली:"
+
+#~ msgid "<b>Paragraph style properties</b>"
+#~ msgstr "<b>अनुच्छेद शैली गुण</b>"
+
+#~ msgid "Strike Out"
+#~ msgstr "लिखकर काटा"
+
+#~ msgid "Type:"
+#~ msgstr "क़िस्मः"
+
+#~ msgid "Paragraph style"
+#~ msgstr "अनुच्छेद शैली"
+
+#~ msgid "Character style"
+#~ msgstr "अक्षर शैली"
+
+#~ msgid "Create"
+#~ msgstr "बनाएँ"
+
+#~ msgid "Minimum:"
+#~ msgstr "न्यूनतमः"
+
+#~ msgid "Highlighting"
+#~ msgstr "उभार रहे"
+
+#, fuzzy
+#~| msgctxt "Automatic horizontal alignment"
+#~| msgid "Auto"
+#~ msgid "author"
+#~ msgstr "स्वतः"
+
+#, fuzzy
+#~| msgctxt "Line spacing type"
+#~| msgid "Additional"
+#~ msgid "edition"
+#~ msgstr "अतिरिक्त"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgid "institution"
+#~ msgstr "प्रविष्ट"
+
+#, fuzzy
+#~| msgid "Insert Index"
+#~ msgid "Configure bibiliography"
+#~ msgstr "निर्देशिका प्रविष्ट करें"
+
+#~ msgid "Offset:"
+#~ msgstr "ऑफसेटः"
+
+#~ msgid "Custom"
+#~ msgstr "मनपसंद"
+
+#~ msgid "Default Format"
+#~ msgstr "डिफ़ॉल्ट फ़ॉर्मेट"
+
+#, fuzzy
+#~| msgid "Change font and paragraph attributes to their default values"
+#~ msgid "Change text attributes to their default values"
+#~ msgstr "फ़ॉन्ट तथा अनुच्छेद गुणों को उनके डिफ़ॉल्ट मान में बदलें"
+
+#~ msgctxt "Short for LeftToRight"
+#~ msgid "LTR"
+#~ msgstr "LTR"
+
+#~ msgctxt "Short for RightToLeft"
+#~ msgid "RTL"
+#~ msgstr "RTL"
+
+#~ msgctxt "Automatic direction detection"
+#~ msgid "Auto"
+#~ msgstr "स्वतः"
+
+#~ msgid "<b>Character style properties</b>"
+#~ msgstr "<b>अक्षर शैली गुण</b>"
+
+#~ msgid "Use named character style"
+#~ msgstr "नाम अक्षर शैली इस्तेमाल करें"
+
+#~ msgid "Style:"
+#~ msgstr "शैली:"
+
+#, fuzzy
+#~| msgid "Text tool"
+#~ msgid "Review tool"
+#~ msgstr "पाठ औज़ार"
+
+#, fuzzy
+#~| msgid "Text Shape"
+#~ msgid "Label"
+#~ msgstr "पाठ आकार"
+
+#, fuzzy
+#~| msgid "Capitalization"
+#~ msgid "Citation"
+#~ msgstr "केपिटलाइजेशन"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change List Numbering"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Change List"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change List"
+#~ msgstr "सूची बदलें"
+
+#, fuzzy
+#~| msgid "Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "मिटाएँ"
+
+#, fuzzy
+#~| msgid "Include in table of contents"
+#~ msgid "Table of Contents..."
+#~ msgstr "विषय-वस्तु तालिका में शामिल करें"
+
+#, fuzzy
+#~| msgid "Options..."
+#~ msgid "Captions"
+#~ msgstr "विकल्प..."
+
+#~ msgctxt "Text list-style"
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#~ msgid "Arabic"
+#~ msgstr "अरबी"
+
+#~ msgid "Lower Alphabetical"
+#~ msgstr "निचला अल्फाबेटिकल"
+
+#~ msgid "Upper Alphabetical"
+#~ msgstr "ऊपरी अल्फाबेटिकल"
+
+#~ msgid "Lower Roman"
+#~ msgstr "निचला रोमन"
+
+#~ msgid "Upper Roman"
+#~ msgstr "ऊपरी रोमन"
+
+#, fuzzy
+#~| msgid "Ballot X Bullet"
+#~ msgid "Small Bullet"
+#~ msgstr "बैलट X बुलेट"
+
+#, fuzzy
+#~| msgid "Square Bullet"
+#~ msgid "Large Bullet"
+#~ msgstr "वर्ग गोली"
+
+#~ msgid "Circle Bullet"
+#~ msgstr "वृत्त गोली"
+
+#~ msgid "Square Bullet"
+#~ msgstr "वर्ग गोली"
+
+#~ msgid "Rhombus Bullet"
+#~ msgstr "वर्गाकार गोली"
+
+#~ msgid "Check Mark Bullet"
+#~ msgstr "चयन चिह्न बुलेट"
+
+#~ msgid "Ballot X Bullet"
+#~ msgstr "बैलट X बुलेट"
+
+#~ msgid "Rightwards Arrow Bullet"
+#~ msgstr "दाईं ओर का तीर बुलेट"
+
+#~ msgid "Rightwards Arrow Head Bullet"
+#~ msgstr "दाईं ओर का तीर सिरा बुलेट"
+
+#~ msgid "Bengali"
+#~ msgstr "बंगाली"
+
+#~ msgid "Gujarati"
+#~ msgstr "गुजराती"
+
+#~ msgid "Gurumukhi"
+#~ msgstr "गुरुमुखी"
+
+#~ msgid "Kannada"
+#~ msgstr "कन्नड"
+
+#~ msgid "Malayalam"
+#~ msgstr "मलयालम"
+
+#~ msgid "Oriya"
+#~ msgstr "उड़िया"
+
+#~ msgid "Tamil"
+#~ msgstr "तमिल"
+
+#~ msgid "Telugu"
+#~ msgstr "तेलुगु"
+
+#~ msgid "Tibetan"
+#~ msgstr "तिब्बती"
+
+#~ msgid "Thai"
+#~ msgstr "थाई"
+
+#~ msgid "Abjad"
+#~ msgstr "अब्जाद"
+
+#~ msgid "AbjadMinor"
+#~ msgstr "अब्जादमाइनर"
+
+#~ msgid "ArabicAlphabet"
+#~ msgstr "अरबीवर्णमाला"
+
+#~ msgid "Disc Bullet"
+#~ msgstr "डिस्क गोली"
+
+#~ msgid "Box Bullet"
+#~ msgstr "बक्सा गोली"
+
+#, fuzzy
+#~| msgid "New Style"
+#~ msgid "Create New Style"
+#~ msgstr "नई शैली"
+
+#, fuzzy
+#~| msgid "Paragraph style"
+#~ msgid "Edit Paragraph Style"
+#~ msgstr "अनुच्छेद शैली"
+
+#, fuzzy
+#~| msgid "Character style"
+#~ msgid "Edit Character Style"
+#~ msgstr "अक्षर शैली"
+
+#~ msgid "Abc"
+#~ msgstr "एबीसी"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "List Style:"
+#~ msgstr "शैली:"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgid "BackGround Color"
+#~ msgstr "पृष्ठभूमि का रंगः"
+
+#~ msgid "Record"
+#~ msgstr "रेकॉर्ड"
+
+#~ msgid "Language"
+#~ msgstr "भाषा"
+
+#~ msgctxt "Inherit style"
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#~ msgid "horizontalSpacer"
+#~ msgstr "आड़ास्पेसर"
+
+#~ msgid "Indent:"
+#~ msgstr "हाशिया:"
+
+#~ msgid "Align:"
+#~ msgstr "पंक्तिबद्ध करें:"
+
+#, fuzzy
+#~| msgid "Paragraph style"
+#~ msgid "Paragraph Style:"
+#~ msgstr "अनुच्छेद शैली"
+
+#~ msgid "Font:"
+#~ msgstr "फ़ॉन्टः"
+
+#~ msgid "Size:"
+#~ msgstr "आकारः"
+
+#~ msgid "Colors:"
+#~ msgstr "रंग:"
+
+#~ msgid "List Options"
+#~ msgstr "सूची विकल्प"
+
+#~ msgid "¶"
+#~ msgstr "¶"
+
+#~ msgid "T"
+#~ msgstr "टी"
+
+#~ msgid "Create New Bookmark"
+#~ msgstr "नया पसंदीदा बनाएँ"
+
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "आपके दस्तावेज़ों के विभिन्न भागों के बीच आने जाने के लिए पुस्तचिह्न आपको अनुमति देता है.\n"
+#~ " कृपया अपने पुस्तचिह्न का नाम भरें."
+
+#~ msgid "Select Bookmark..."
+#~ msgstr "पसंदीदा चुनें..."

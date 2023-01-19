@@ -1,0 +1,534 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+&Natalie.Koning;&Freek.de.Kruijf; 
+</authorgroup>
+</chapterinfo>
+<title
+>Een stap voor stap-snelcursus</title>
+
+<para
+>In dit hoofdstuk kunt u kennismaken met &stage; door middel van een eenvoudige snelcursus. We behandelen de basisstappen die nodig zijn om een presentatie te creëren en er enkele eenvoudige effecten aan toe te voegen. </para>
+
+<sect1 id="start-new">
+<title
+>Met een nieuw document beginnen</title>
+
+<para
+>Wanneer u &stage; start, verschijnt het opstart-dialoogvenster van &calligra;. </para>
+
+<screenshot>
+<screeninfo
+>Het opstart-dialoogvenster van <guilabel
+>&calligra;</guilabel
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Het opstart-dialoogvenster van &calligra;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Klik op <guilabel
+>Scherm</guilabel
+> aan de linkerkant en kies dan het sjabloon <guilabel
+>Leeg</guilabel
+> (met blauw geaccentueerd in de schermafbeelding) door erop te klikken. U kunt dit het standaardsjabloon maken door het keuzevakje <guilabel
+>Altijd dit sjabloon gebruiken</guilabel
+> te activeren. </para>
+
+<para
+>Klik op <guibutton
+>Dit sjabloon gebruiken</guibutton
+>. In het venster dat geopend wordt kunt u de dia's (en de objecten erin) zien en bewerken. </para>
+
+<para
+>Op dat moment is er slechts één lege dia, selecteer daarom de dia linksboven met het enkele tekstvak uit de vastzetter <guilabel
+>Dia-indelingen</guilabel
+>.</para>
+
+<para
+>Dubbelklik op het tekstvak. De cursor verandert in een tekstcursor (een verticale lijn), om aan te geven dat u nu tekst in het vak kunt typen. </para>
+
+<screenshot>
+<screeninfo
+>De tekstcursor</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>De tekstcursor</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Typ maar een willekeurige tekst in. </para>
+
+<screenshot>
+<screeninfo
+>Tekst toevoegen</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Tekst toevoegen</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Klik ergens buiten het tekstvak wanneer u klaar bent met typen. </para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title
+>Een nieuwe dia toevoegen</title>
+
+<para
+>We voegen een nieuwe dia toe aan het document. Klik op het menu <guimenu
+>Dia</guimenu
+> en daarna op <guimenuitem
+>Dia invoegen</guimenuitem
+>. </para>
+
+<para
+>We kunnen hier kiezen hoe de nieuwe dia er uit zal zien. Kies deze keer de opmaak één kolom (met blauw geaccentueerd). </para>
+
+<screenshot>
+<screeninfo
+>Een opmaak voor de nieuwe dia kiezen</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Een opmaak voor de nieuwe dia kiezen</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>De opmaak van de nieuwe dia verschijnt nu in het bewerkingsvenster. Om naar een andere dia in de presentatie te gaan, kunt u de gewenste dia in het paneel links (in de schermafdruk met blauw geaccentueerd) selecteren. </para>
+
+<para
+>De nieuwe dia heeft twee tekstvakken: een tekstvak voor een titel en een tekstvak voor een opgesomde lijst. </para>
+
+<screenshot>
+<screeninfo
+>De nieuwe dia</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>De nieuwe dia</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Dubbelklik in het bovenste tekstvak en typ een titel. Dubbelklik daarna in het tweede tekstvak. Het eerste opsommingsteken is al ingevoegd. Typ wat tekst en druk dan op <keycap
+>Enter</keycap
+> of op <keycap
+>Return</keycap
+> om een nieuwe alinea te beginnen. Bij elke nieuwe alinea wordt automatisch een opsommingsteken aan het begin van de regel geplaatst. </para>
+
+<screenshot>
+<screeninfo
+>Tekst aan de tweede dia toevoegen</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Tekst aan de tweede dia toevoegen</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Klik ergens buiten het tekstvak wanneer u klaar bent met typen. </para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title
+>Een afbeelding invoegen</title>
+
+<para
+>We gaan terug naar de eerste dia. Klik op de dia in de lijst aan de linkerkant in het venster. </para>
+
+<para
+>We gaan nu de presentatie een beetje opfleuren door een logo aan de titelpagina toe te voegen. Om dit te doen klikt u eerst op de vastzetter <guilabel
+>Vorm toevoegen</guilabel
+> met gebruik van het menu <menuchoice
+><guimenu
+>Instellingen</guimenu
+> <guimenuitem
+>Vastzetters</guimenuitem
+></menuchoice
+>. </para>
+
+<para
+>Selecteer nu Afbeelding in de vastzetter <guilabel
+>Vorm toevoegen</guilabel
+> en klik met &LMB; op de gewenste plaats van het logo in zijn oorspronkelijke grootte of of teken met de linker muis (klik met &LMB; en houdt de knop ingedrukt) een rechthoek om de positie en grootte van het logo te bepalen. </para>
+
+<para
+>Het dialoogvenster "Bestandsselectie" verschijnt. Meer informatie over dit of andere standaard &kde;-dialoogvensters kunt u vinden in de documentatie van &kde;. U kunt door het bestandssysteem bladeren door op de <guiicon
+>map</guiicon
+>-pictogrammen of door de knoppen <guiicon
+>browser</guiicon
+>-stijl te gebruiken. Klikken op de <guiicon
+>pijl omhoog</guiicon
+> brengt u een map één niveau hoger. </para>
+
+<para
+>Selecteer een bestand en klik op <guibutton
+>OK</guibutton
+>. </para>
+
+<para
+>De afbeelding wordt nu in de dia ingevoegd en er zijn selectiehandels (kleine vierkantjes) zichtbaar rond de rand van het plaatje. </para>
+
+<screenshot>
+<screeninfo
+>De afbeelding is ingevoegd</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>De afbeelding is ingevoegd</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Plaats de muiswijzer ergens op de afbeelding en sleep de afbeelding naar het midden van de dia. Gebruik de handvatten om de grootte van de afbeelding aan te passen. </para>
+
+<para
+>Dat is het. De titelpagina heeft nu een afbeelding! </para>
+<!--FIXME Double click opens the file dialog to replace the image-->
+</sect1>
+
+<sect1 id="insert-object">
+<title
+>Een &calligra;-object invoegen</title>
+<para
+>Laten we ook nog maar een &calligra;-object onder de afbeelding invoegen, bijvoorbeeld een grafiek.</para>
+
+<para
+>Elk door &calligra; ondersteund object kan ingebed worden in een dia van &stage;. Laten we een grafiek uit de vastzetter <guilabel
+>Vorm toevoegen</guilabel
+> kiezen. </para>
+
+<para
+>Kies <guilabel
+>Grafiek</guilabel
+> en teken daarna met de muis een rechthoek op de plaats waar u de grafiek in de &stage;-dia wilt invoegen. </para>
+
+<screenshot>
+<screeninfo
+>Teken een rechthoek op de plaats waar de grafiek ingevoegd moet worden</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Teken een rechthoek op de plaats waar de grafiek ingevoegd moet worden</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Zodra u de muisknop loslaat, wordt een grafieksjabloon in de dia ingevoegd. Wanneer u de grafiek gaat bewerken, verschijnen zijn <guilabel
+>Hulpmiddelopties</guilabel
+> in de vastzetter. </para>
+
+<screenshot>
+<screeninfo
+>Hulpmiddelopties van &kchart;</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Hulpmiddelopties van &kchart;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Om een ingebedde grafiek te verplaatsen, van grootte te veranderen of te verwijderen, schakelt u om naar het hulpmiddel <guibutton
+>Basis vormmanipulatie</guibutton
+> klikt u ergens binnen het gebied van de grafiek. Het zou nu met een groene rand moeten verschijnen en met een geel vierkantje op elke hoek en in het midden van elke zijde. </para>
+<para
+>Als u de cursor op één van de vierkantjes plaatst, verandert deze in een dubbele pijl. U kunt nu de grootte van de grafiek wijzigen door een vierkantje te verslepen terwijl u de <mousebutton
+>linker</mousebutton
+> muisknop ingedrukt houdt. Om de grafiek te verwijderen klikt u met de <mousebutton
+>rechter</mousebutton
+> muisknop op één van de vierkantjes en kiest dan <guimenuitem
+>Verwijderen</guimenuitem
+> in het menu.</para>
+<para
+>Om de grafiek te verplaatsen plaatst u de cursor in de grafiek. De cursor verandert in een kruis, klik op de <mousebutton
+>linker</mousebutton
+> muisknop, houd de knop ingedrukt en sleep de grafiek naar de gewenste plaats.</para>
+<para
+>Klik ergens buiten de grafiek wanneer u klaar bent met wijzigen.</para>
+<para
+>Om het formaat van de grafiek zelf te wijzigen klikt u twee keer <mousebutton
+>links</mousebutton
+> in het gebied van de grafiek. De vastzetter <guilabel
+>Hulpmiddelopties</guilabel
+> moet verschijnen. U kunt daarna deze hulpmiddelen gebruiken om de grafiekeigenschappen, zoals grafiektype, labels, assen en gegevens te wijzigen.</para>
+
+<para
+>Klik met de &LMB; ergens buiten de grafiek om verder aan de &stage;-dia te werken.</para>
+
+<para
+>Klik één keer op de grafiek om deze te verplaatsen of om de grootte te wijzigen (op dezelfde manier als alle andere &stage;-objecten). Dubbelklik op de grafiek om &kchart; te openen en de eigenschappen van de grafiek te wijzigen.</para>
+
+</sect1>
+<!-- does not work in BETA6 here
+<sect1 id="addshadow">
+<title
+>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton
+>Right</mousebutton
+> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem
+>Shadow Objects...</guimenuitem
+> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo
+>The context menu</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The context menu</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel
+>Shadow</guilabel
+> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Shadow</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The <guilabel
+>Shadow</guilabel>
+dialog</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton
+>OK</guibutton
+>.
+</para>
+
+<screenshot>
+<screeninfo
+>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adding a shadow to the title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo
+>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The new shadowed title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+-->
+<sect1 id="textcolor">
+<title
+>De kleur van de titeltekst wijzigen</title>
+
+<para
+>Als laatste gaan we te kleur van de titeltekst van zwart in blauw veranderen. Dubbelklik op het tekstvak en selecteer de tekst. </para>
+<!-- Font from menu Format or contextmenu with a lot of options-->
+<para
+>Open de kleurenkiezer door op het <inlinemediaobject
+><imageobject
+> <imagedata fileref="22x22-actions-format-text-color.png" format="PNG"/></imageobject
+> </inlinemediaobject
+> pictogram in de Hulpmiddelopties Tekstbewerking te klikken (dit pictogram heeft een tekstballon Tekstkleur...).</para>
+
+<screenshot>
+<screeninfo
+>De kleurenkiezer</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>De kleurenkiezer</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>De kleurenkiezer</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>De kleurenkiezer</phrase
+></textobject>
+<caption
+><para
+>De kleur naar blauw wijzigen.</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<para
+>Het wijzigen van de kleur van de geselecteerde tekst naar blauw wijzigt zijn uiterlijk. De precieze kleur die geaccentueerde tekst krijgt is afhankelijk van uw systeemkleuren. </para>
+
+<note>
+<para
+>Selectie van tekstkleur is ook beschikbaar in het tabblad <guilabel
+>Decoraties</guilabel
+> van het dialoogvenster <guilabel
+>Lettertype selecteren</guilabel
+>. Open dit venster met <guimenuitem
+>Lettertype</guimenuitem
+> in het menu <guimenu
+>Opmaak</guimenu
+> of in het contextmenu. </para>
+</note>
+
+<para
+>Klik ergens buiten het tekstvak. </para>
+
+
+<screenshot>
+<screeninfo
+>De titel is af</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>De titel is af</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Er zijn nu twee dia's, we kunnen de presentatie testen. Klik op de knop <guiicon
+>Presentatie starten</guiicon
+> op de werkbalk. De eerste dia komt op het scherm. </para>
+
+<para
+>Klik ergens op het scherm, of druk op de <keycap
+>PageDown</keycap
+>-toets om naar de volgende dia te gaan. </para>
+
+<para
+>Om de diapresentatie te verlaten drukt u op de toets &Esc;. </para>
+
+</sect1>
+
+</chapter>

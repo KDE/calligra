@@ -1,0 +1,69 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2014, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2016-11-21 13:30+0100\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: OkularOdpGenerator.cpp:82
+#, kde-format
+msgid "Language"
+msgstr "Taal"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "Taal"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Freek de Kruijf"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "freekdekruijf@kde.nl"
+
+#~ msgid "ODP Backend"
+#~ msgstr "ODP-backend"
+
+#~ msgid "ODP file renderer"
+#~ msgstr "ODP-bestandsweergave"
+
+#~ msgid "© 2010 Sven Langkamp"
+#~ msgstr "© 2010 Sven Langkamp"
+
+#~ msgctxt "Document title"
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "Subject"
+#~ msgstr "Onderwerp"
+
+#~ msgid "Keywords"
+#~ msgstr "Trefwoorden"
+
+#~ msgid "Comments"
+#~ msgstr "Commentaar"
+
+#~ msgid "Creation date"
+#~ msgstr "Aanmaakdatum"
+
+#~ msgid "Initial creator"
+#~ msgstr "Initiële maker"
+
+#~ msgid "Last modification date"
+#~ msgstr "Datum laatste wijziging"
+
+#~ msgid "Last modifier"
+#~ msgstr "Laatste bewerker"

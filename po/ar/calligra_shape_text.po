@@ -1,0 +1,4747 @@
+# translation of TextShape.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Youssef Chahibi <chahibi@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: TextShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-10-14 16:07+0000\n"
+"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
+"Language-Team: <en@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Annotation"
+msgstr "إضافي"
+
+#: AnnotationTextShapeFactory.cpp:33
+#, kde-format
+msgid "Annotation shape to show annotation content"
+msgstr ""
+
+#: AnnotationTextShapeFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Annotation Shape"
+msgstr "إضافي"
+
+#: commands/AcceptChangeCommand.cpp:30
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Accept change"
+msgstr "غيّر قائمة"
+
+#: commands/AutoResizeCommand.cpp:19
+#, fuzzy, kde-format
+msgctxt "Disable Shrink To Fit"
+msgid "Disable"
+msgstr "المسافة:"
+
+#: commands/AutoResizeCommand.cpp:19
+#, fuzzy, kde-format
+msgctxt "Enable Shrink To Fit"
+msgid "Enable"
+msgstr "تاميلي"
+
+#: commands/AutoResizeCommand.cpp:22
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Grow To Fit Width"
+msgid "%1 Grow To Fit Width"
+msgstr ""
+
+#: commands/AutoResizeCommand.cpp:25
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Grow To Fit Height"
+msgid "%1 Grow To Fit Height"
+msgstr ""
+
+#: commands/AutoResizeCommand.cpp:28
+#, kde-format
+msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
+msgid "%1 Shrink To Fit"
+msgstr ""
+
+#: commands/ChangeListLevelCommand.cpp:29
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change List Level"
+msgstr "غيّر قائمة"
+
+#: commands/RejectChangeCommand.cpp:34
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reject change"
+msgstr "غيّر قائمة"
+
+#: commands/ShowChangesCommand.cpp:40
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Show Changes"
+msgstr "غيّر قائمة"
+
+#: commands/ShowChangesCommand.cpp:42
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Hide Changes"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, TableOfContentsStyleConfigure)
+#. i18n: ectx: property (windowTitle), widget (QDialog, AcceptRejectChangeDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, TableOfContentsConfigure)
+#: dialogs/AcceptRejectChangeDialog.ui:26
+#: dialogs/TableOfContentsConfigure.ui:14
+#: dialogs/TableOfContentsStyleConfigure.ui:14
+#, fuzzy, kde-format
+msgid "Dialog"
+msgstr "المسافة:"
+
+#. i18n: ectx: property (text), widget (QPushButton, acceptButton)
+#: dialogs/AcceptRejectChangeDialog.ui:44
+#, fuzzy, kde-format
+msgid "Accept"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (text), widget (QPushButton, rejectButton)
+#: dialogs/AcceptRejectChangeDialog.ui:57
+#, fuzzy, kde-format
+msgid "Reject"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (text), widget (QPushButton, cancelButton)
+#: dialogs/AcceptRejectChangeDialog.ui:70
+#, fuzzy, kde-format
+msgid "Cancel"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/AcceptRejectChangeDialog.ui:96
+#, fuzzy, kde-format
+msgid "Change Log"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/AcceptRejectChangeDialog.ui:109
+#, fuzzy, kde-format
+msgid "Author"
+msgstr "تلقائي"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/AcceptRejectChangeDialog.ui:122
+#, fuzzy, kde-format
+msgid "Date"
+msgstr "احذف"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/AcceptRejectChangeDialog.ui:135
+#, fuzzy, kde-format
+msgid "Type"
+msgstr "النوع:"
+
+#: dialogs/BibliographyConfigureDialog.cpp:96
+#, kde-format
+msgid "Ascending"
+msgstr ""
+
+#: dialogs/BibliographyConfigureDialog.cpp:97
+#, kde-format
+msgid "Descending"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
+#. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)
+#: dialogs/BibliographyConfigureDialog.ui:14
+#: dialogs/SimpleCitationBibliographyWidget.ui:52
+#, fuzzy, kde-format
+msgid "Configure bibliography"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/BibliographyConfigureDialog.ui:20
+#, fuzzy, kde-format
+msgid "Formatting of bibliography entries"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QLabel, prefixLabel)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/BibliographyConfigureDialog.ui:28 dialogs/ListLevelWidget.ui:396
+#: dialogs/ParagraphBulletsNumbers.ui:70
+#, fuzzy, kde-format
+msgid "Prefix:"
+msgstr "البادئة:"
+
+#. i18n: ectx: property (text), widget (QLabel, suffixLabel)
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/BibliographyConfigureDialog.ui:48 dialogs/ListLevelWidget.ui:373
+#: dialogs/ParagraphBulletsNumbers.ui:86
+#, fuzzy, kde-format
+msgid "Suffix:"
+msgstr "اللاحقة:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, numberedEntries)
+#: dialogs/BibliographyConfigureDialog.ui:70
+#, fuzzy, kde-format
+msgid "Number entries"
+msgstr ""
+"مخصص رمز\n"
+"حرف\n"
+"مِحرف:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/BibliographyConfigureDialog.ui:80
+#, fuzzy, kde-format
+msgid "Sort"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, sortByPosition)
+#: dialogs/BibliographyConfigureDialog.ui:86
+#, kde-format
+msgid "Sort by position"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, sortKeyGroupBox)
+#: dialogs/BibliographyConfigureDialog.ui:93
+#, fuzzy, kde-format
+msgid "Sort keys"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), widget (QPushButton, addSortKeyButton)
+#: dialogs/BibliographyConfigureDialog.ui:103
+#, fuzzy, kde-format
+msgid "Add sort key"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), widget (QLabel, sortAlgorithmLabel)
+#: dialogs/BibliographyConfigureDialog.ui:131
+#, fuzzy, kde-format
+msgid "Sort algorithm:"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sortAlgorithm)
+#: dialogs/BibliographyConfigureDialog.ui:139
+#, kde-format
+msgid "Alphanumeric"
+msgstr ""
+
+#: dialogs/BibliographyTemplate.cpp:30
+#, fuzzy, kde-format
+msgid "Bibliography"
+msgstr "إدراج فهرس"
+
+#: dialogs/BibliographyTemplate.cpp:42 ReferencesToolFactory.cpp:19
+#, fuzzy, kde-format
+msgid "References"
+msgstr "فقرة إعدادات n"
+
+#: dialogs/ChangeConfigureDialog.cpp:136
+#, kde-format
+msgid "This is a line of inserted text."
+msgstr ""
+
+#: dialogs/ChangeConfigureDialog.cpp:142
+#, kde-format
+msgid "This is a line of deleted text."
+msgstr ""
+
+#: dialogs/ChangeConfigureDialog.cpp:148
+#, kde-format
+msgid "This is a line of text whose format has been changed."
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ChangeConfigureDialog)
+#: dialogs/ChangeConfigureDialog.ui:17
+#, fuzzy, kde-format
+msgid "Configure Change Tracking"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ChangeConfigureDialog.ui:30
+#, fuzzy, kde-format
+msgid "General Settings"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ChangeConfigureDialog.ui:37
+#, fuzzy, kde-format
+msgid "Saving Format"
+msgstr "أسلوب الفقرة"
+
+#. i18n: ectx: property (text), widget (QRadioButton, odf12RadioButton)
+#: dialogs/ChangeConfigureDialog.ui:44
+#, kde-format
+msgid "ODF 1.2"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, deltaXmlRadioButton)
+#: dialogs/ChangeConfigureDialog.ui:51
+#, kde-format
+msgid "DeltaXML (Experimental)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ChangeConfigureDialog.ui:58
+#, fuzzy, kde-format
+msgid "Author Name"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ChangeConfigureDialog.ui:75
+#, fuzzy, kde-format
+msgid "Change Visualization Settings"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (title), widget (QGroupBox, insertionGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:89
+#, fuzzy, kde-format
+msgid "Insertions"
+msgstr "إدراج"
+
+#. i18n: ectx: property (text), widget (QLabel, insertionColorLabel)
+#. i18n: ectx: property (text), widget (QLabel, deletionColorLabel)
+#. i18n: ectx: property (text), widget (QLabel, formatColorLabel)
+#: dialogs/ChangeConfigureDialog.ui:105 dialogs/ChangeConfigureDialog.ui:188
+#: dialogs/ChangeConfigureDialog.ui:247
+#, fuzzy, kde-format
+msgid "Background Color"
+msgstr "لون الخلفية:"
+
+#. i18n: ectx: property (text), widget (QToolButton, moreOptions)
+#. i18n: ectx: property (text), widget (QToolButton, toolAutoSpellCheck)
+#. i18n: ectx: property (text), widget (QToolButton, configureSection)
+#. i18n: ectx: property (text), widget (QToolButton, splitSections)
+#. i18n: ectx: property (text), widget (QToolButton, insertSection)
+#. i18n: ectx: property (text), widget (QuickTableButton, quickTable)
+#. i18n: ectx: property (text), widget (QToolButton, insertVariable)
+#. i18n: ectx: property (text), widget (QToolButton, insertSpecialChar)
+#. i18n: ectx: property (text), widget (QToolButton, insertPageBreak)
+#. i18n: ectx: property (text), widget (FormattingButton, bulletListButton)
+#. i18n: ectx: property (text), widget (QToolButton, resetBackground)
+#. i18n: ectx: property (text), widget (QToolButton, resetTextColor)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_5)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_7)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_4)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_8)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_3)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_6)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_2)
+#. i18n: ectx: property (text), widget (QToolButton, splitCells)
+#. i18n: ectx: property (text), widget (QToolButton, mergeCells)
+#. i18n: ectx: property (text), widget (FormattingButton, border)
+#. i18n: ectx: property (text), widget (QToolButton, resetBackgroundColor)
+#. i18n: ectx: property (text), widget (QPushButton, insertionColorButton)
+#. i18n: ectx: property (text), widget (QPushButton, deletionColorButton)
+#. i18n: ectx: property (text), widget (QPushButton, formatColorButton)
+#. i18n: ectx: property (text), widget (QToolButton, customCharacter)
+#: dialogs/ChangeConfigureDialog.ui:127 dialogs/ChangeConfigureDialog.ui:207
+#: dialogs/ChangeConfigureDialog.ui:266 dialogs/CharacterHighlighting.ui:40
+#: dialogs/CharacterHighlighting.ui:84 dialogs/FontDecorations.ui:36
+#: dialogs/FontDecorations.ui:62 dialogs/FontDecorations.ui:109
+#: dialogs/FontDecorations.ui:122 dialogs/FontDecorations.ui:135
+#: dialogs/FontDecorations.ui:148 dialogs/FontDecorations.ui:161
+#: dialogs/FontDecorations.ui:174 dialogs/FontDecorations.ui:187
+#: dialogs/FontDecorations.ui:200 dialogs/ParagraphBulletsNumbers.ui:221
+#: dialogs/ParagraphDecorations.ui:55 dialogs/SimpleCharacterWidget.ui:128
+#: dialogs/SimpleInsertWidget.ui:49 dialogs/SimpleInsertWidget.ui:62
+#: dialogs/SimpleInsertWidget.ui:75 dialogs/SimpleInsertWidget.ui:88
+#: dialogs/SimpleInsertWidget.ui:101 dialogs/SimpleInsertWidget.ui:114
+#: dialogs/SimpleInsertWidget.ui:124 dialogs/SimpleParagraphWidget.ui:80
+#: dialogs/SimpleParagraphWidget.ui:204 dialogs/SimpleSpellCheckingWidget.ui:23
+#: dialogs/SimpleTableWidget.ui:101 dialogs/SimpleTableWidget.ui:111
+#: dialogs/SimpleTableWidget.ui:137
+#, fuzzy, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (html), widget (QTextEdit, previewTextEdit)
+#: dialogs/ChangeConfigureDialog.ui:158
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; text-"
+"decoration: underline;\">Preview</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;"
+"\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Inserted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"inserted text. This is a line of inserted text. This is a line after the "
+"inserted text.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Deleted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"deleted text. This is a line of deleted text. This is a line after the "
+"deleted text.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Formatted Text</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">This is a line of text before the "
+"format-change text. This is a line of text whose format has been changed. "
+"This is a line of text after the format-change text.</span></p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, deletionGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:172
+#, fuzzy, kde-format
+msgid "Deletions"
+msgstr "احذف"
+
+#. i18n: ectx: property (title), widget (QGroupBox, formatGroupBox)
+#: dialogs/ChangeConfigureDialog.ui:231
+#, fuzzy, kde-format
+msgid "Format Changes"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ChangeTrackingOptions)
+#: dialogs/ChangeTrackingOptionsWidget.ui:14
+#, fuzzy, kde-format
+msgid "Change Tracking Options"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (text), widget (QPushButton, configureChangeTrackingButton)
+#: dialogs/ChangeTrackingOptionsWidget.ui:142
+#, fuzzy, kde-format
+msgid "Configure Settings"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (text), widget (QCheckBox, recordChangesCheckBox)
+#: dialogs/ChangeTrackingOptionsWidget.ui:175
+#, fuzzy, kde-format
+msgid "Record Changes"
+msgstr "غيّر قائمة"
+
+#. i18n: ectx: property (text), widget (QCheckBox, showChangesCheckBox)
+#: dialogs/ChangeTrackingOptionsWidget.ui:182
+#, fuzzy, kde-format
+msgid "Show Changes"
+msgstr "غيّر قائمة"
+
+#: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
+#, fuzzy, kde-format
+msgid "Font"
+msgstr "الخط"
+
+#. i18n: ectx: attribute (title), widget (QWidget, generalTab)
+#: dialogs/CharacterGeneral.ui:27
+#, fuzzy, kde-format
+msgid "General"
+msgstr "عام"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/CharacterGeneral.ui:33
+#, fuzzy, kde-format
+msgctxt "Name of the style"
+msgid "Name:"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/CharacterGeneral.ui:46
+#, fuzzy, kde-format
+msgid "Next style:"
+msgstr "الطراز التالي:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CharacterGeneral.ui:62
+#, fuzzy, kde-format
+msgid "Parent style:"
+msgstr "الطراز التالي:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, inToc)
+#: dialogs/CharacterGeneral.ui:78
+#, fuzzy, kde-format
+msgid "Include in table of contents"
+msgstr "تضمين بوصة جدول من"
+
+#: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
+#, fuzzy, kde-format
+msgid "Normal"
+msgstr "عادي"
+
+#: dialogs/CharacterHighlighting.cpp:261
+#, kde-format
+msgid "Small Caps"
+msgstr ""
+
+#: dialogs/CharacterHighlighting.cpp:262
+#, fuzzy, kde-format
+msgid "Uppercase"
+msgstr "الأعلى روماني"
+
+#: dialogs/CharacterHighlighting.cpp:263
+#, fuzzy, kde-format
+msgid "Lowercase"
+msgstr "أدنى روماني"
+
+#: dialogs/CharacterHighlighting.cpp:264
+#, fuzzy, kde-format
+msgid "Capitalize"
+msgstr "الزينة"
+
+#: dialogs/CharacterHighlighting.cpp:272 TextTool.cpp:279
+#, fuzzy, kde-format
+msgid "Superscript"
+msgstr "مرتفع"
+
+#: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
+#, fuzzy, kde-format
+msgid "Subscript"
+msgstr "منخفض"
+
+#. i18n: ectx: property (text), widget (QLabel, textColorLabel)
+#: dialogs/CharacterHighlighting.ui:27 dialogs/FontDecorations.ui:49
+#, fuzzy, kde-format
+msgid "Text color:"
+msgstr "لون النص:"
+
+#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
+#: dialogs/CharacterHighlighting.ui:71 dialogs/FontDecorations.ui:69
+#, fuzzy, kde-format
+msgid "Background color:"
+msgstr "لون الخلفية:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:110
+#, fuzzy, kde-format
+msgid "Underlining:"
+msgstr "تسطير:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:141
+#, fuzzy, kde-format
+msgid "Strikethrough:"
+msgstr "شطب"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:172
+#, fuzzy, kde-format
+msgid "Capitalization:"
+msgstr "الزينة"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/CharacterHighlighting.ui:185
+#, fuzzy, kde-format
+msgctxt "Character position"
+msgid "Position:"
+msgstr "الموضع"
+
+#: dialogs/CitationInsertionDialog.cpp:25
+#, fuzzy, kde-format
+msgid "Select"
+msgstr "انتقِ علامة موقع"
+
+#: dialogs/CitationInsertionDialog.cpp:40
+#, kde-format
+msgid ""
+"The document already contains the bibliography entry with different data.\n"
+"Do you want to adjust existing entries?"
+msgstr ""
+
+#: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
+#, kde-format
+msgid "Warning"
+msgstr ""
+
+#: dialogs/CitationInsertionDialog.cpp:55
+#: dialogs/CitationInsertionDialog.cpp:73
+#, fuzzy, kde-format
+msgid "Short name%1"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, CitationInsertionDialog)
+#: dialogs/CitationInsertionDialog.ui:20
+#, fuzzy, kde-format
+msgid "Insert Bibliography entry"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/CitationInsertionDialog.ui:32
+#, fuzzy, kde-format
+msgid "Insert Bibliography Entry Details"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QLabel, shortnameLabel)
+#: dialogs/CitationInsertionDialog.ui:38
+#, fuzzy, kde-format
+msgid "Short Name:"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (text), widget (QLabel, sourcetypeLabel)
+#: dialogs/CitationInsertionDialog.ui:52
+#, kde-format
+msgid "Source:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:60 dialogs/InsertBibliographyDialog.ui:61
+#, kde-format
+msgid "Article"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:65 dialogs/InsertBibliographyDialog.ui:66
+#, fuzzy, kde-format
+msgid "Book"
+msgstr "علامات المواقع"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:70 dialogs/InsertBibliographyDialog.ui:71
+#, fuzzy, kde-format
+msgid "Booklet"
+msgstr "علامات المواقع"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:75 dialogs/InsertBibliographyDialog.ui:76
+#, fuzzy, kde-format
+msgid "Conference"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:80 dialogs/InsertBibliographyDialog.ui:81
+#, kde-format
+msgid "Email"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:85
+#, kde-format
+msgid "Inbook"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:90
+#, fuzzy, kde-format
+msgid "Incollection"
+msgstr "إدراج"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:95
+#, kde-format
+msgid "Inproceedings"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:100
+#: dialogs/InsertBibliographyDialog.ui:101
+#, kde-format
+msgid "Journal"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:105
+#: dialogs/InsertBibliographyDialog.ui:106
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:110
+#: dialogs/InsertBibliographyDialog.ui:111
+#, kde-format
+msgid "Masters thesis"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:115
+#: dialogs/InsertBibliographyDialog.ui:116
+#, kde-format
+msgid "Misc"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:120
+#: dialogs/InsertBibliographyDialog.ui:121
+#, kde-format
+msgid "PhD thesis"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:125
+#: dialogs/InsertBibliographyDialog.ui:126
+#, kde-format
+msgid "Proceedings"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:130
+#, kde-format
+msgid "Tech Report"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:135
+#: dialogs/InsertBibliographyDialog.ui:136
+#, kde-format
+msgid "Unpublished"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/CitationInsertionDialog.ui:140
+#: dialogs/InsertBibliographyDialog.ui:141
+#, kde-format
+msgid "WWW"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:145
+#, fuzzy, kde-format
+msgid "custom 1"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:150
+#, fuzzy, kde-format
+msgid "custom 2"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:155
+#, fuzzy, kde-format
+msgid "custom 3"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:160
+#, fuzzy, kde-format
+msgid "custom 4"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
+#: dialogs/CitationInsertionDialog.ui:165
+#, fuzzy, kde-format
+msgid "custom 5"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), widget (QLabel, authorLabel)
+#: dialogs/CitationInsertionDialog.ui:173
+#, fuzzy, kde-format
+msgid "Author:"
+msgstr "تلقائي"
+
+#. i18n: ectx: property (text), widget (QLabel, titleLabel)
+#: dialogs/CitationInsertionDialog.ui:183
+#: dialogs/InsertBibliographyDialog.ui:32
+#, fuzzy, kde-format
+msgid "Title:"
+msgstr "تاميلي"
+
+#. i18n: ectx: property (text), widget (QLabel, yearLabel)
+#: dialogs/CitationInsertionDialog.ui:193
+#, kde-format
+msgid "Year:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, publisherLabel)
+#: dialogs/CitationInsertionDialog.ui:203
+#, kde-format
+msgid "Publisher:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, addressLabel)
+#: dialogs/CitationInsertionDialog.ui:213
+#, kde-format
+msgid "Address:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, isbnLabel)
+#: dialogs/CitationInsertionDialog.ui:223
+#, kde-format
+msgid "ISBN:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, chapterLabel)
+#: dialogs/CitationInsertionDialog.ui:233
+#, kde-format
+msgid "Chapter:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, issnLabel)
+#: dialogs/CitationInsertionDialog.ui:243
+#, kde-format
+msgid "ISSN:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, editorLabel)
+#: dialogs/CitationInsertionDialog.ui:253
+#, fuzzy, kde-format
+msgid "Editor:"
+msgstr "إضافي"
+
+#. i18n: ectx: property (text), widget (QLabel, pagesLabel)
+#: dialogs/CitationInsertionDialog.ui:263
+#, kde-format
+msgid "Page(s):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, booktitleLabel)
+#: dialogs/CitationInsertionDialog.ui:273
+#, fuzzy, kde-format
+msgid "Book title:"
+msgstr "علامات المواقع"
+
+#. i18n: ectx: property (text), widget (QLabel, editionLabel)
+#: dialogs/CitationInsertionDialog.ui:283
+#, fuzzy, kde-format
+msgid "Edition:"
+msgstr "إضافي"
+
+#. i18n: ectx: property (text), widget (QLabel, publicationLabel)
+#: dialogs/CitationInsertionDialog.ui:293
+#, fuzzy, kde-format
+msgid "Publication:"
+msgstr "الموضع"
+
+#. i18n: ectx: property (text), widget (QLabel, volumeLabel)
+#: dialogs/CitationInsertionDialog.ui:303
+#, fuzzy, kde-format
+msgid "Volume:"
+msgstr "محاذاة إلى اليسار"
+
+#. i18n: ectx: property (text), widget (QLabel, institutionLabel)
+#: dialogs/CitationInsertionDialog.ui:313
+#, fuzzy, kde-format
+msgid "Institution:"
+msgstr "إدراج"
+
+#. i18n: ectx: property (text), widget (QLabel, organisationLabel)
+#: dialogs/CitationInsertionDialog.ui:323
+#, fuzzy, kde-format
+msgid "Organisation:"
+msgstr "الزينة"
+
+#. i18n: ectx: property (text), widget (QLabel, reporttypeLabel)
+#: dialogs/CitationInsertionDialog.ui:333
+#, kde-format
+msgid "Type of Report:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, schoolLabel)
+#: dialogs/CitationInsertionDialog.ui:343
+#, kde-format
+msgid "University:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, journalLabel)
+#: dialogs/CitationInsertionDialog.ui:353
+#, kde-format
+msgid "Journal:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, monthLabel)
+#: dialogs/CitationInsertionDialog.ui:363
+#, kde-format
+msgid "Month:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, seriesLabel)
+#: dialogs/CitationInsertionDialog.ui:373
+#, kde-format
+msgid "Series:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, numberLabel)
+#: dialogs/CitationInsertionDialog.ui:383
+#, fuzzy, kde-format
+msgid "Number:"
+msgstr ""
+"مخصص رمز\n"
+"حرف\n"
+"مِحرف:"
+
+#. i18n: ectx: property (text), widget (QLabel, noteLabel)
+#: dialogs/CitationInsertionDialog.ui:393
+#, kde-format
+msgid "Note:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, annotationLabel)
+#: dialogs/CitationInsertionDialog.ui:403
+#, fuzzy, kde-format
+msgid "Annotation:"
+msgstr "إضافي"
+
+#. i18n: ectx: property (text), widget (QLabel, urlLabel)
+#: dialogs/CitationInsertionDialog.ui:413
+#, kde-format
+msgid "URL:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud1Label)
+#: dialogs/CitationInsertionDialog.ui:423
+#, kde-format
+msgid "User-defined 1:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud3Label)
+#: dialogs/CitationInsertionDialog.ui:433
+#, kde-format
+msgid "User-defined 3:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud2Label)
+#: dialogs/CitationInsertionDialog.ui:440
+#, kde-format
+msgid "User-defined 2:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud4Label)
+#: dialogs/CitationInsertionDialog.ui:453
+#, kde-format
+msgid "User-defined 4:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, ud5Label)
+#: dialogs/CitationInsertionDialog.ui:463
+#, kde-format
+msgid "User-defined 5:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/CitationInsertionDialog.ui:485
+#, kde-format
+msgid "OR"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/CitationInsertionDialog.ui:509
+#, kde-format
+msgid "From the document:"
+msgstr ""
+
+#: dialogs/DockerStylesComboModel.cpp:61
+#, fuzzy, kde-format
+msgid "Used Styles"
+msgstr "أسلوب جديد"
+
+#: dialogs/DockerStylesComboModel.cpp:64
+#, fuzzy, kde-format
+msgid "Unused Styles"
+msgstr "أسلوب جديد"
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/FontDecorations.ui:17
+#, fuzzy, kde-format
+msgid "Colors"
+msgstr "الألوان"
+
+#. i18n: ectx: property (title), widget (QGroupBox, shadowGroupBox)
+#: dialogs/FontDecorations.ui:95
+#, fuzzy, kde-format
+msgid "Text Shadow"
+msgstr "نص ظل"
+
+#. i18n: ectx: property (text), widget (QLabel, shadowColorLabel)
+#: dialogs/FontDecorations.ui:244
+#, fuzzy, kde-format
+msgid "Color:"
+msgstr "اللون:"
+
+#. i18n: ectx: property (text), widget (QLabel, shadowDistanceLabel)
+#: dialogs/FontDecorations.ui:257
+#, fuzzy, kde-format
+msgid "Distance:"
+msgstr "المسافة:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, positionGroupBox)
+#: dialogs/FontDecorations.ui:289
+#, fuzzy, kde-format
+msgid "Position"
+msgstr "الموضع"
+
+#. i18n: ectx: property (text), widget (QCheckBox, hyphenate)
+#: dialogs/FontDecorations.ui:295
+#, fuzzy, kde-format
+msgid "Automatic hyphenation"
+msgstr "تلقائي"
+
+#: dialogs/FontDia.cpp:34
+#, fuzzy, kde-format
+msgid "Select Font"
+msgstr "انتقِ علامة موقع"
+
+#: dialogs/FontDia.cpp:68
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Font"
+msgstr "الخط"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addBibliography)
+#. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
+#: dialogs/InsertBibliographyDialog.ui:17
+#: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
+#, fuzzy, kde-format
+msgid "Insert Bibliography"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (title), widget (QGroupBox, titlegroupBox)
+#: dialogs/InsertBibliographyDialog.ui:26
+#, fuzzy, kde-format
+msgid "Bibliography title"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/InsertBibliographyDialog.ui:45
+#, fuzzy, kde-format
+msgid "Bibliography entries"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QLabel, bibTypesLabel)
+#: dialogs/InsertBibliographyDialog.ui:53
+#, fuzzy, kde-format
+msgid "Bibliography type:"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:86
+#, kde-format
+msgid "In book"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:91
+#, fuzzy, kde-format
+msgid "In collection"
+msgstr "إدراج"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:96
+#, kde-format
+msgid "In proceedings"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:131
+#, kde-format
+msgid "Tech report"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:146
+#, fuzzy, kde-format
+msgid "custom1"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:151
+#, fuzzy, kde-format
+msgid "custom2"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:156
+#, fuzzy, kde-format
+msgid "custom3"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:161
+#, fuzzy, kde-format
+msgid "custom4"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
+#: dialogs/InsertBibliographyDialog.ui:166
+#, fuzzy, kde-format
+msgid "custom5"
+msgstr "مخصص"
+
+#. i18n: ectx: property (text), widget (QLabel, availableFieldsLabel)
+#: dialogs/InsertBibliographyDialog.ui:178
+#, kde-format
+msgid "Available fields "
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, add)
+#: dialogs/InsertBibliographyDialog.ui:192
+#, kde-format
+msgid "Add >>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, span)
+#: dialogs/InsertBibliographyDialog.ui:199
+#, kde-format
+msgid "Span"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, remove)
+#: dialogs/InsertBibliographyDialog.ui:206
+#, kde-format
+msgid "<<Remove"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, addedFieldsLabel)
+#: dialogs/InsertBibliographyDialog.ui:217
+#, kde-format
+msgid "Fields added"
+msgstr ""
+
+#: dialogs/InsertCharacter.cpp:16
+#, fuzzy, kde-format
+msgid "Special Characters"
+msgstr "أحرف خاصة"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
+#: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
+#: ReferencesTool.cpp:114 TextTool.cpp:2259
+#, fuzzy, kde-format
+msgid "Insert"
+msgstr "إدراج"
+
+#: dialogs/InsertCharacter.cpp:28
+#, fuzzy, kde-format
+msgctxt "Close dialog"
+msgid "Close"
+msgstr "إغلاق"
+
+#. i18n: ectx: property (text), widget (QLabel, filterLabel)
+#: dialogs/LanguageTab.ui:19
+#, kde-format
+msgid "Quick search:"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
+#: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
+#, kde-format
+msgid "The URL is invalid"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:88
+#, kde-format
+msgid "Bookmark does not exist"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:190
+#, no-c-format, kde-format
+msgid "Fetching the title: 0% complete"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:213
+#, kde-format
+msgid "Fetch timed out"
+msgstr ""
+
+#: dialogs/LinkInsertionDialog.cpp:268
+#, no-c-format, kde-format
+msgid "Fetching the title: %1% complete"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
+#: dialogs/LinkInsertionDialog.ui:14
+#, fuzzy, kde-format
+msgid "Link"
+msgstr "فتح وصلة؟"
+
+#. i18n: ectx: attribute (title), widget (QWidget, weblinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:30
+#, fuzzy, kde-format
+msgid "Web Link"
+msgstr "فتح وصلة؟"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, weblinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:34
+#, kde-format
+msgid ""
+"Insert links to web documents. You can provide both URL and a label for the "
+"link,\n"
+" or just enter the URL and hit \"Fetch the title from URL\""
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_2)
+#: dialogs/LinkInsertionDialog.ui:42
+#, kde-format
+msgid "The address of your document (Uniform Resource Locator)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/LinkInsertionDialog.ui:45
+#, kde-format
+msgid " URL:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, fetchTitleButton)
+#: dialogs/LinkInsertionDialog.ui:58
+#, kde-format
+msgid ""
+"Hit this button to get the title from the URL. Redirections are also "
+"handled. "
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
+#: dialogs/LinkInsertionDialog.ui:61
+#, kde-format
+msgid "Fetch Title From URL"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label)
+#. i18n: ectx: property (toolTip), widget (QLabel, label_6)
+#: dialogs/LinkInsertionDialog.ui:81 dialogs/LinkInsertionDialog.ui:165
+#, kde-format
+msgid "The text that will be displayed for your link"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/LinkInsertionDialog.ui:84 dialogs/LinkInsertionDialog.ui:168
+#, fuzzy, kde-format
+msgid " Text:"
+msgstr "نص"
+
+#. i18n: ectx: attribute (title), widget (QWidget, bookmarkLinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:113
+#, fuzzy, kde-format
+msgid "Link To Bookmark"
+msgstr "أعِد تسمية علامة الموقع"
+
+#. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
+#: dialogs/LinkInsertionDialog.ui:117
+#, kde-format
+msgid ""
+"Insert links to Bookmarks. To create bookmarks,\n"
+"click \"Bookmarks\" in the Links and Bookmarks section"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QLabel, label_5)
+#: dialogs/LinkInsertionDialog.ui:132
+#, kde-format
+msgid "The name of the bookmark to where the link has to point to"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: dialogs/LinkInsertionDialog.ui:135
+#, fuzzy, kde-format
+msgid " Name:"
+msgstr "الاسم:"
+
+#. i18n: ectx: property (whatsThis), widget (QWidget, ParagraphIndentSpacing)
+#. i18n: ectx: property (whatsThis), widget (QGroupBox)
+#. i18n: ectx: property (whatsThis), widget (QWidget, ListLevelWidget)
+#: dialogs/ListLevelWidget.ui:14 dialogs/ParagraphIndentSpacing.ui:14
+#: dialogs/ParagraphIndentSpacing.ui:97
+#, fuzzy, kde-format
+msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+msgstr "<p><ul><li><b> مفرد</b> الـ عادي</li></ul></p> "
+
+#. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
+#: dialogs/ListLevelWidget.ui:47
+#, fuzzy, kde-format
+msgid "Add tab stop"
+msgstr "إضافي"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:71
+#, fuzzy, kde-format
+msgid "Tab character"
+msgstr "حرف"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:76
+#, fuzzy, kde-format
+msgid "Space character"
+msgstr "أحرف خاصة"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
+#: dialogs/ListLevelWidget.ui:81
+#, kde-format
+msgid "Nothing"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, loremIpsum)
+#: dialogs/ListLevelWidget.ui:95
+#, kde-format
+msgid ""
+"              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed "
+"do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+"minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+"ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+"cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
+"est laborum."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelLabel)
+#: dialogs/ListLevelWidget.ui:117
+#, kde-format
+msgid "LABEL"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
+#: dialogs/ListLevelWidget.ui:149
+#, kde-format
+msgid "First line separated from label by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:204 dialogs/ParagraphLayout.ui:23
+#, fuzzy, kde-format
+msgid "Left"
+msgstr "يسار"
+
+#. i18n: ectx: property (text), widget (QRadioButton, center)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:209 dialogs/ParagraphLayout.ui:30
+#, fuzzy, kde-format
+msgid "Center"
+msgstr "وسط"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#. i18n: ectx: property (text), item, widget (QComboBox, alignment)
+#: dialogs/ListLevelWidget.ui:214 dialogs/ParagraphLayout.ui:37
+#, fuzzy, kde-format
+msgid "Right"
+msgstr "يمين"
+
+#. i18n: ectx: property (text), widget (QLabel, increaseLabel)
+#: dialogs/ListLevelWidget.ui:300
+#, kde-format
+msgid "Per level increase:"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, numberTab)
+#: dialogs/ListLevelWidget.ui:334
+#, kde-format
+msgid "Number"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ListLevelWidget.ui:366
+#, fuzzy, kde-format
+msgid "Format:"
+msgstr "عادي"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ListLevelWidget.ui:429
+#, fuzzy, kde-format
+msgid "Display levels above:"
+msgstr "العرض المستويات:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, synchro)
+#: dialogs/ListLevelWidget.ui:436
+#, fuzzy, kde-format
+msgid "Letter synchronization"
+msgstr "خطاب مزامنة"
+
+#. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
+#: dialogs/ListLevelWidget.ui:454
+#, fuzzy, kde-format
+msgid "Bullet"
+msgstr "صندوق"
+
+#. i18n: ectx: attribute (title), widget (QWidget, imageTab)
+#: dialogs/ListLevelWidget.ui:459
+#, kde-format
+msgid "Picture"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton)
+#: dialogs/ListLevelWidget.ui:481
+#, kde-format
+msgid "Load Image..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: dialogs/ManageBookmark.ui:20
+#, fuzzy, kde-format
+msgid "&Rename"
+msgstr "ا&عادة تسمية"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: dialogs/ManageBookmark.ui:27
+#, fuzzy, kde-format
+msgid "&Delete"
+msgstr "ا&حذف"
+
+#: dialogs/ManageBookmarkDialog.cpp:69
+#, fuzzy, kde-format
+msgid "Rename Bookmark"
+msgstr "أعِد تسمية علامة الموقع"
+
+#: dialogs/ManageBookmarkDialog.cpp:70
+#, fuzzy, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr "رجاء توفير a جديد الاسم لـ علامة"
+
+#: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
+#, fuzzy, kde-format
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr "هناك a علامة مع الاسم."
+
+#: dialogs/ManageBookmarkDialog.cpp:110
+#, fuzzy, kde-format
+msgid "Insert Bookmark"
+msgstr "انتقِ علامة موقع"
+
+#: dialogs/ManageBookmarkDialog.cpp:111
+#, fuzzy, kde-format
+msgid "Please provide a name for the bookmark"
+msgstr "رجاء توفير a جديد الاسم لـ علامة"
+
+#: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
+#, fuzzy, kde-format
+msgid "Manage Bookmarks"
+msgstr "أعِد تسمية علامة الموقع"
+
+#: dialogs/NotesConfigurationDialog.cpp:24
+#, fuzzy, kde-format
+msgid "Footnote Settings"
+msgstr "فقرة إعدادات n"
+
+#: dialogs/NotesConfigurationDialog.cpp:27
+#, fuzzy, kde-format
+msgid "Endnote Settings"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/NotesConfigurationDialog.ui:54
+#, fuzzy, kde-format
+msgid "Automatic Numbering:"
+msgstr "تلقائي"
+
+#. i18n: ectx: property (text), widget (QLabel, prefix)
+#: dialogs/NotesConfigurationDialog.ui:75
+#, fuzzy, kde-format
+msgid " Prefix:"
+msgstr "البادئة:"
+
+#. i18n: ectx: property (text), widget (QLabel, startAt)
+#: dialogs/NotesConfigurationDialog.ui:85
+#, fuzzy, kde-format
+msgid " Start at:"
+msgstr "ابدأ عند:"
+
+#. i18n: ectx: property (text), widget (QLabel, numStyle)
+#: dialogs/NotesConfigurationDialog.ui:95
+#, fuzzy, kde-format
+msgid " Format:"
+msgstr "عادي"
+
+#. i18n: ectx: property (text), widget (QLabel, suffix)
+#: dialogs/NotesConfigurationDialog.ui:111
+#, fuzzy, kde-format
+msgid " Suffix:"
+msgstr "اللاحقة:"
+
+#. i18n: ectx: property (text), widget (QLabel, beginAt)
+#: dialogs/NotesConfigurationDialog.ui:127
+#, fuzzy, kde-format
+msgid "Starts over at:"
+msgstr "ابدأ عند:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:144
+#, kde-format
+msgid "Page"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:149
+#, kde-format
+msgid "Chapter"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
+#: dialogs/NotesConfigurationDialog.ui:154
+#, fuzzy, kde-format
+msgid "Document"
+msgstr "تضمين بوصة جدول من"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:233
+#, kde-format
+msgid "1, 2, 3, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:238
+#, kde-format
+msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:243
+#, kde-format
+msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:248
+#, kde-format
+msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:253
+#, kde-format
+msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:258
+#, kde-format
+msgid "i, ii, iii, ..."
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
+#: dialogs/NotesConfigurationDialog.ui:263
+#, kde-format
+msgid "I,II,III, ..."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
+#: dialogs/NotesConfigurationDialog.ui:290
+#, kde-format
+msgid "Continuation Notice:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, cont2)
+#: dialogs/NotesConfigurationDialog.ui:305
+#, kde-format
+msgid "Text saying it is a continuation:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, cont1)
+#: dialogs/NotesConfigurationDialog.ui:315
+#, kde-format
+msgid " Text saying it will continue:"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:34
+#, fuzzy, kde-format
+msgctxt "Automatic horizontal alignment"
+msgid "Auto"
+msgstr "تلقائي"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:35
+#, fuzzy, kde-format
+msgctxt "Text alignment"
+msgid "Left"
+msgstr "يسار"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:36
+#, fuzzy, kde-format
+msgctxt "Text alignment"
+msgid "Right"
+msgstr "يمين"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:37
+#, fuzzy, kde-format
+msgctxt "Text alignment"
+msgid "Centered"
+msgstr "توسيط"
+
+#: dialogs/ParagraphBulletsNumbers.cpp:39
+#, kde-format
+msgctxt "Tab follows the bullet or number"
+msgid "Tab Stop"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:40
+#, kde-format
+msgctxt "Space"
+msgid "Space"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:41
+#, kde-format
+msgctxt "None"
+msgid "Nothing"
+msgstr ""
+
+#: dialogs/ParagraphBulletsNumbers.cpp:335
+#, kde-format
+msgid "Select a list image"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ParagraphBulletsNumbers.ui:31
+#, fuzzy, kde-format
+msgid "Start at:"
+msgstr "ابدأ عند:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: dialogs/ParagraphBulletsNumbers.ui:57
+#, fuzzy, kde-format
+msgid "Alignment:"
+msgstr "المحاذاة:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ParagraphBulletsNumbers.ui:105
+#, fuzzy, kde-format
+msgid "Depth:"
+msgstr "عمق:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: dialogs/ParagraphBulletsNumbers.ui:128
+#, fuzzy, kde-format
+msgid "Display Levels:"
+msgstr "العرض المستويات:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: dialogs/ParagraphBulletsNumbers.ui:148
+#, fuzzy, kde-format
+msgid "Bullet/Number followed by"
+msgstr "نقاط أرقام"
+
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_2)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_3)
+#: dialogs/ParagraphBulletsNumbers.ui:158
+#: dialogs/ParagraphBulletsNumbers.ui:175
+#: dialogs/ParagraphBulletsNumbers.ui:192
+#, kde-format
+msgid " cm"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: dialogs/ParagraphBulletsNumbers.ui:165
+#, fuzzy, kde-format
+msgid "at"
+msgstr "احذف"
+
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: dialogs/ParagraphBulletsNumbers.ui:182
+#, fuzzy, kde-format
+msgid "Aligned at"
+msgstr "المحاذاة"
+
+#. i18n: ectx: property (text), widget (QLabel, label_11)
+#: dialogs/ParagraphBulletsNumbers.ui:199
+#, fuzzy, kde-format
+msgid "Indented at"
+msgstr "إزاحة"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ParagraphBulletsNumbers.ui:211
+#, fuzzy, kde-format
+msgid "Custom character:"
+msgstr ""
+"مخصص رمز\n"
+"حرف\n"
+"مِحرف:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, restartNumbering)
+#: dialogs/ParagraphBulletsNumbers.ui:241
+#, fuzzy, kde-format
+msgid "Restart numbering at this paragraph"
+msgstr "إعادة تشغيل ترقيم عند فقرة"
+
+#. i18n: ectx: property (text), widget (QCheckBox, letterSynchronization)
+#: dialogs/ParagraphBulletsNumbers.ui:248
+#, fuzzy, kde-format
+msgid "Letter Synchronization"
+msgstr "خطاب مزامنة"
+
+#. i18n: ectx: property (text), widget (QLabel, widthLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:257
+#, kde-format
+msgid "Width"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, insertImageLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:264
+#, fuzzy, kde-format
+msgid "Insert Image"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QLabel, heightLabel)
+#: dialogs/ParagraphBulletsNumbers.ui:274
+#, fuzzy, kde-format
+msgid "Height"
+msgstr "يمين"
+
+#. i18n: ectx: property (text), widget (QPushButton, insertImage)
+#: dialogs/ParagraphBulletsNumbers.ui:284
+#, kde-format
+msgid "Browse..."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
+#, fuzzy, kde-format
+msgid "Background"
+msgstr "لون الخلفية:"
+
+#. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
+#: dialogs/ParagraphDecorations.ui:65
+#, fuzzy, kde-format
+msgid "Background color"
+msgstr "لون الخلفية:"
+
+#: dialogs/ParagraphDropCaps.cpp:20
+#, kde-format
+msgid "Whole Word"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ParagraphDropCaps.ui:32
+#, kde-format
+msgid "Drop caps:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/ParagraphDropCaps.ui:84
+#, fuzzy, kde-format
+msgid "Distance to paragraph:"
+msgstr "فقرة"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/ParagraphDropCaps.ui:94
+#, fuzzy, kde-format
+msgid "Number of characters:"
+msgstr ""
+"مخصص رمز\n"
+"حرف\n"
+"مِحرف:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: dialogs/ParagraphDropCaps.ui:104
+#, fuzzy, kde-format
+msgid "Number of lines it covers:"
+msgstr ""
+"مخصص رمز\n"
+"حرف\n"
+"مِحرف:"
+
+#: dialogs/ParagraphGeneral.cpp:40
+#, fuzzy, kde-format
+msgid "Indent/Spacing"
+msgstr "إزاحة التباعد"
+
+#: dialogs/ParagraphGeneral.cpp:45
+#, fuzzy, kde-format
+msgid "General Layout"
+msgstr "عام التصميم"
+
+#: dialogs/ParagraphGeneral.cpp:50
+#, fuzzy, kde-format
+msgid "Bullets/Numbers"
+msgstr "نقاط أرقام"
+
+#: dialogs/ParagraphGeneral.cpp:55
+#, fuzzy, kde-format
+msgid "Decorations"
+msgstr "الزينة"
+
+#: dialogs/ParagraphGeneral.cpp:60
+#, kde-format
+msgid "Drop Caps"
+msgstr ""
+
+#: dialogs/ParagraphIndentSpacing.cpp:25
+#, fuzzy, kde-format
+msgctxt "Line spacing value"
+msgid "Single"
+msgstr "مفرد"
+
+#: dialogs/ParagraphIndentSpacing.cpp:26
+#, fuzzy, kde-format
+msgctxt "Line spacing value"
+msgid "1.5 Lines"
+msgstr "سطر ونصف"
+
+#: dialogs/ParagraphIndentSpacing.cpp:27
+#, fuzzy, kde-format
+msgctxt "Line spacing value"
+msgid "Double"
+msgstr "مزدوج"
+
+#: dialogs/ParagraphIndentSpacing.cpp:28
+#, fuzzy, kde-format
+msgctxt "Line spacing type"
+msgid "Proportional"
+msgstr "متناسب"
+
+#: dialogs/ParagraphIndentSpacing.cpp:29
+#, fuzzy, kde-format
+msgctxt "Line spacing type"
+msgid "Additional"
+msgstr "إضافي"
+
+#: dialogs/ParagraphIndentSpacing.cpp:30
+#, fuzzy, kde-format
+msgctxt "Line spacing type"
+msgid "Fixed"
+msgstr "ثابت"
+
+#: dialogs/ParagraphIndentSpacing.cpp:31
+#, kde-format
+msgctxt "Line spacing type"
+msgid "At least"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphIndentSpacing.ui:20
+#, fuzzy, kde-format
+msgid "Indent"
+msgstr "إزاحة"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:26
+#, fuzzy, kde-format
+msgid "Left:"
+msgstr "اليسار:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:55
+#, fuzzy, kde-format
+msgid "Right:"
+msgstr "يمين:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:71
+#, fuzzy, kde-format
+msgid "First Line:"
+msgstr "الأول خط:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
+#: dialogs/ParagraphIndentSpacing.ui:87
+#, kde-format
+msgid "Auto-infer from text size"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/ParagraphIndentSpacing.ui:100
+#, fuzzy, kde-format
+msgid "Line Spacing"
+msgstr "تباعد الأسطر"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, proportional)
+#: dialogs/ParagraphIndentSpacing.ui:134
+#, fuzzy, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:180
+#, fuzzy, kde-format
+msgid "Use Font Metrics:"
+msgstr "إستعمل الخط القياسات:"
+
+#. i18n: ectx: property (title), widget (QGroupBox)
+#: dialogs/ParagraphIndentSpacing.ui:202
+#, fuzzy, kde-format
+msgid "Paragraph Space"
+msgstr "فقرة فضائي"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:208
+#, fuzzy, kde-format
+msgid "Before:"
+msgstr "قبل:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: dialogs/ParagraphIndentSpacing.ui:221
+#, fuzzy, kde-format
+msgid "After:"
+msgstr "بعد:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: dialogs/ParagraphLayout.ui:17
+#, fuzzy, kde-format
+msgid "Alignment"
+msgstr "المحاذاة"
+
+#. i18n: ectx: property (text), widget (QRadioButton, justify)
+#: dialogs/ParagraphLayout.ui:44
+#, fuzzy, kde-format
+msgid "Justify"
+msgstr "ساوِ"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: dialogs/ParagraphLayout.ui:54
+#, fuzzy, kde-format
+msgid "Behavior at End of Frame/Page"
+msgstr "السلوك عند نهاية من إطار صفحة"
+
+#. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
+#: dialogs/ParagraphLayout.ui:60
+#, fuzzy, kde-format
+msgid "Keep lines together"
+msgstr "حافظ عليه سطور"
+
+#. i18n: ectx: property (text), widget (QCheckBox, breakBefore)
+#: dialogs/ParagraphLayout.ui:67
+#, fuzzy, kde-format
+msgid "Insert break before paragraph"
+msgstr "إدراج فاصل قبل الفقرة"
+
+#. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
+#: dialogs/ParagraphLayout.ui:74
+#, fuzzy, kde-format
+msgid "Insert break after paragraph"
+msgstr "إدراج فاصل بعد الفقرة"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/ParagraphLayout.ui:83
+#, kde-format
+msgid "Leave at least this many lines (orphans):"
+msgstr ""
+
+#: dialogs/ParagraphSettingsDialog.cpp:28
+#, fuzzy, kde-format
+msgid "Paragraph Format"
+msgstr "أسلوب الفقرة"
+
+#: dialogs/QuickTableButton.cpp:146
+#, fuzzy, kde-format
+msgid "Insert a table"
+msgstr "إدراج فهرس"
+
+#: dialogs/SectionFormatDialog.cpp:41
+#, fuzzy, kde-format
+msgid "Section name"
+msgstr "إدخال أسلوب الاسم:"
+
+#: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
+#, fuzzy, kde-format
+msgid "Configure sections"
+msgstr "فقرة إعدادات n"
+
+#: dialogs/SectionFormatDialog.cpp:154
+#, kde-format
+msgid "Invalid characters or section with such name exists."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/SectionFormatDialog.ui:29
+#, fuzzy, kde-format
+msgid "Section name:"
+msgstr "إدخال أسلوب الاسم:"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
+#: dialogs/SectionsSplitDialog.ui:6
+#, fuzzy, kde-format
+msgid "Split sections"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/SectionsSplitDialog.ui:12
+#, fuzzy, kde-format
+msgid "Insert paragraph..."
+msgstr "فقرة."
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: dialogs/SectionsSplitDialog.ui:23
+#, fuzzy, kde-format
+msgid "before start of section:"
+msgstr "إدراج"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: dialogs/SectionsSplitDialog.ui:37
+#, fuzzy, kde-format
+msgid "after end of section:"
+msgstr "إدراج"
+
+#. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
+#: dialogs/SimpleAnnotationWidget.ui:29
+#, fuzzy, kde-format
+msgid "Insert Note"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
+#: dialogs/SimpleAnnotationWidget.ui:39
+#, fuzzy, kde-format
+msgid "Remove Note"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QToolButton, addCitation)
+#: dialogs/SimpleCaptionsWidget.ui:34
+#, fuzzy, kde-format
+msgid "Add caption"
+msgstr "إضافي"
+
+#: dialogs/SimpleCharacterWidget.cpp:53
+#, fuzzy, kde-format
+msgid "Change font format"
+msgstr "أسلوب الفقرة"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
+#: dialogs/SimpleCitationBibliographyWidget.ui:23
+#, fuzzy, kde-format
+msgid "Insert citation at current position"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QToolButton, addCitation)
+#: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
+#, fuzzy, kde-format
+msgid "Insert Citation"
+msgstr "إدراج"
+
+#. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
+#: dialogs/SimpleCitationBibliographyWidget.ui:55
+#, fuzzy, kde-format
+msgid "Configure Bibliography"
+msgstr "إدراج فهرس"
+
+#: dialogs/SimpleFootEndNotesWidget.cpp:27
+#, kde-format
+msgid "Inserts a footnote at the current cursor position"
+msgstr ""
+
+#: dialogs/SimpleFootEndNotesWidget.cpp:32
+#, kde-format
+msgid "Inserts an endnote at the current cursor position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (FormattingButton, addEndnote)
+#: dialogs/SimpleFootEndNotesWidget.ui:29
+#, fuzzy, kde-format
+msgid "Endnote"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (text), widget (FormattingButton, addFootnote)
+#: dialogs/SimpleFootEndNotesWidget.ui:48
+#, fuzzy, kde-format
+msgid "Footnote"
+msgstr "فقرة إعدادات n"
+
+#. i18n: ectx: property (toolTip), widget (QWidget, SimpleInsertWidget)
+#: dialogs/SimpleInsertWidget.ui:20
+#, kde-format
+msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QToolButton, insertLink)
+#: dialogs/SimpleLinksWidget.ui:34
+#, kde-format
+msgid "Hyperlinks"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
+#: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
+#, fuzzy, kde-format
+msgid "Bookmarks"
+msgstr "علامة موقع."
+
+#: dialogs/SimpleParagraphWidget.cpp:84
+#, fuzzy, kde-format
+msgid "Change paragraph format"
+msgstr "أسلوب الفقرة"
+
+#: dialogs/SimpleParagraphWidget.cpp:292
+#, kde-format
+msgid "Recently Used Level Formats"
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:297
+#, kde-format
+msgid "Library of Level Formats"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bDelete)
+#: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
+#: dialogs/StyleManager.ui:75 TextTool.cpp:2621
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "احذف"
+
+#: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
+#, kde-format
+msgid "Edit..."
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:312
+#, kde-format
+msgid "Define New Level Format..."
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:313
+#, kde-format
+msgid "Define new bullet or numbering format"
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:333
+#, kde-format
+msgid "Define New List Level Format"
+msgstr ""
+
+#: dialogs/SimpleParagraphWidget.cpp:532
+#, kde-format
+msgid "Edit List Level Format"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (FormattingButton, addToC)
+#: dialogs/SimpleTableOfContentsWidget.ui:34
+#: dialogs/TableOfContentsTemplate.cpp:38
+#, fuzzy, kde-format
+msgid "Contents"
+msgstr "تضمين بوصة جدول من"
+
+#: dialogs/SimpleTableWidget.cpp:45
+#, fuzzy, kde-format
+msgid "Set Border Color..."
+msgstr "لون النص:"
+
+#: dialogs/SimpleTableWidget.cpp:170
+#, fuzzy, kde-format
+msgctxt "No border - has to fit in 48pixels"
+msgid "None"
+msgstr "لا شيء"
+
+#: dialogs/SimpleTableWidget.cpp:171
+#, kde-format
+msgid "No Border"
+msgstr ""
+
+#: dialogs/StyleManager.cpp:38
+#, kde-format
+msgid "Create a new style inheriting the current style"
+msgstr ""
+
+#: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
+#, fuzzy, kde-format
+msgid "New Style"
+msgstr "الطراز التالي:"
+
+#: dialogs/StyleManager.cpp:426
+#, kde-format
+msgid "Another style named '%1' already exist. Please choose another name."
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
+#: dialogs/StyleManager.ui:46 TextTool.cpp:2251
+#, fuzzy, kde-format
+msgid "Paragraph"
+msgstr "فقرة."
+
+#. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
+#: dialogs/StyleManager.ui:60 TextTool.cpp:2249
+#, fuzzy, kde-format
+msgid "Character"
+msgstr "حرف"
+
+#. i18n: ectx: property (text), widget (QPushButton, bNew)
+#: dialogs/StyleManager.ui:68
+#, fuzzy, kde-format
+msgid "&New"
+msgstr "&جديد"
+
+#: dialogs/StyleManagerDialog.cpp:20
+#, fuzzy, kde-format
+msgid "Style Manager"
+msgstr "الأسلوب المدير"
+
+#: dialogs/StyleManagerDialog.cpp:49
+#, fuzzy, kde-format
+msgid "Save Changes"
+msgstr "غيّر قائمة"
+
+#: dialogs/StyleManagerDialog.cpp:49
+#, kde-format
+msgid ""
+"You have changes that are not applied. What do you want to do with those "
+"changes?"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: dialogs/StyleManagerWelcome.ui:42
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">It is possible to assign a "
+"named style to text and alter the style properties to change all text with "
+"that style.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Applying a style change "
+"will reformat all text that previously got the named style assigned to it. "
+"Use the Styles docker to apply styles to text.</p></body></html>"
+msgstr ""
+
+#: dialogs/StylesComboPreview.cpp:68
+#, kde-format
+msgid "Create a new style with the current properties"
+msgstr ""
+
+#: dialogs/StylesComboPreview.cpp:179
+#, fuzzy, kde-format
+msgid "New style"
+msgstr "الطراز التالي:"
+
+#: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
+#: dialogs/StylesModel.cpp:197
+#, fuzzy, kde-format
+msgid "None"
+msgstr "لا شيء"
+
+#: dialogs/TableDialog.cpp:14
+#, fuzzy, kde-format
+msgid "Insert Table"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupLogical)
+#: dialogs/TableDialog.ui:23
+#, kde-format
+msgid "Columns and rows"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColumns)
+#: dialogs/TableDialog.ui:32
+#, fuzzy, kde-format
+msgid "Number of columns:"
+msgstr ""
+"مخصص رمز\n"
+"حرف\n"
+"مِحرف:"
+
+#. i18n: ectx: property (text), widget (QLabel, labelRows)
+#: dialogs/TableDialog.ui:55
+#, fuzzy, kde-format
+msgid "Number of rows:"
+msgstr ""
+"مخصص رمز\n"
+"حرف\n"
+"مِحرف:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupPhysical)
+#: dialogs/TableDialog.ui:97
+#, kde-format
+msgid "Width strategy"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFixed)
+#: dialogs/TableDialog.ui:112
+#, fuzzy, kde-format
+msgid "Fixed column width:"
+msgstr "إدراج فهرس"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFitContents)
+#: dialogs/TableDialog.ui:125
+#, fuzzy, kde-format
+msgid "Fit to contents"
+msgstr "تضمين بوصة جدول من"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioFitAvail)
+#: dialogs/TableDialog.ui:138
+#, kde-format
+msgid "Fit to available surrounding"
+msgstr ""
+
+#: dialogs/TableOfContentsConfigure.cpp:62
+#, fuzzy, kde-format
+msgid "Table of Contents - Configure"
+msgstr "تضمين بوصة جدول من"
+
+#: dialogs/TableOfContentsConfigure.cpp:64
+#, fuzzy, kde-format
+msgid "Table Title"
+msgstr "تاميلي"
+
+#: dialogs/TableOfContentsConfigure.cpp:65
+#, fuzzy, kde-format
+msgid "Use outline"
+msgstr "أسلوب جديد"
+
+#: dialogs/TableOfContentsConfigure.cpp:66
+#, fuzzy, kde-format
+msgid "Use styles"
+msgstr "أسلوب جديد"
+
+#: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "فقرة إعدادات n"
+
+#: dialogs/TableOfContentsConfigure.cpp:68
+#, fuzzy, kde-format
+msgid "Index"
+msgstr "إزاحة"
+
+#: dialogs/TableOfContentsConfigure.cpp:69
+#: dialogs/TableOfContentsStyleModel.cpp:232
+#, fuzzy, kde-format
+msgid "Styles"
+msgstr "الأسلوب"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: dialogs/TableOfContentsConfigure.ui:49
+#, kde-format
+msgid "Tab 1"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelTitle)
+#: dialogs/TableOfContentsConfigure.ui:57
+#: dialogs/TableOfContentsEntryModel.cpp:27
+#, fuzzy, kde-format
+msgid "Title"
+msgstr "تاميلي"
+
+#. i18n: ectx: property (text), widget (QCheckBox, useOutline)
+#. i18n: ectx: property (text), widget (QCheckBox, useStyles)
+#: dialogs/TableOfContentsConfigure.ui:69
+#: dialogs/TableOfContentsConfigure.ui:78
+#, kde-format
+msgid "CheckBox"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, configureStyles)
+#: dialogs/TableOfContentsConfigure.ui:85
+#, kde-format
+msgid "PushButton"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: dialogs/TableOfContentsConfigure.ui:108
+#, kde-format
+msgid "Tab 2"
+msgstr ""
+
+#: dialogs/TableOfContentsEntryModel.cpp:30
+#, kde-format
+msgid "Level %1"
+msgstr ""
+
+#: dialogs/TableOfContentsEntryModel.cpp:137
+#: dialogs/TableOfContentsStyleModel.cpp:234
+#, kde-format
+msgid "Level"
+msgstr ""
+
+#: dialogs/TableOfContentsEntryModel.cpp:139
+#, fuzzy, kde-format
+msgid "Style"
+msgstr "الأسلوب"
+
+#: dialogs/TableOfContentsStyleConfigure.cpp:26
+#, fuzzy, kde-format
+msgid "Table of Contents - Configure Styles"
+msgstr "تضمين بوصة جدول من"
+
+#: dialogs/TableOfContentsStyleConfigure.cpp:30
+#, fuzzy, kde-format
+msgid "Styles available"
+msgstr "الأسلوب المدير"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesAvailableLabel)
+#: dialogs/TableOfContentsStyleConfigure.ui:20
+#, fuzzy, kde-format
+msgid "TextLabel"
+msgstr "نص شكل"
+
+#: dialogs/TableOfContentsStyleDelegate.cpp:43
+#: dialogs/TableOfContentsStyleModel.cpp:97
+#, fuzzy, kde-format
+msgid "Disabled"
+msgstr "المسافة:"
+
+#: dialogs/TableOfContentsTemplate.cpp:27
+#, fuzzy, kde-format
+msgid "Table Of Contents"
+msgstr "تضمين بوصة جدول من"
+
+#: ReferencesTool.cpp:116
+#, fuzzy, kde-format
+msgid "Insert a Table of Contents into the document."
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:118 TextTool.cpp:410
+#, fuzzy, kde-format
+msgid "Insert Custom..."
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:120
+#, fuzzy, kde-format
+msgid "Insert a custom Table of Contents into the document."
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:122
+#, fuzzy, kde-format
+msgid "Configure..."
+msgstr "فقرة إعدادات n"
+
+#: ReferencesTool.cpp:124
+#, fuzzy, kde-format
+msgid "Configure the Table of Contents"
+msgstr "تضمين بوصة جدول من"
+
+#: ReferencesTool.cpp:127
+#, fuzzy, kde-format
+msgid "Insert footnote with auto number"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:132
+#, fuzzy, kde-format
+msgid "Insert Labeled Footnote"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:133 ReferencesTool.cpp:144
+#, fuzzy, kde-format
+msgid "Insert with label:"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:138
+#, fuzzy, kde-format
+msgid "Insert endnote with auto number"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:143
+#, fuzzy, kde-format
+msgid "Insert Labeled Endnote"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:149 ReferencesTool.cpp:153
+#, fuzzy, kde-format
+msgid "Settings..."
+msgstr "فقرة إعدادات n"
+
+#: ReferencesTool.cpp:159
+#, fuzzy, kde-format
+msgid "Insert a citation into the document."
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:164
+#, fuzzy, kde-format
+msgid "Insert a bibliography into the document."
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:166
+#, fuzzy, kde-format
+msgid "Insert Custom Bibliography"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:168
+#, fuzzy, kde-format
+msgid "Insert a custom Bibliography into the document."
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:172
+#, fuzzy, kde-format
+msgid "Configure the bibliography"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:175
+#, fuzzy, kde-format
+msgid "Insert Link"
+msgstr "إدراج"
+
+#: ReferencesTool.cpp:177
+#, fuzzy, kde-format
+msgid "Insert a weblink or link to a bookmark."
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:181
+#, fuzzy, kde-format
+msgid "Add Bookmark"
+msgstr "علامة موقع."
+
+#: ReferencesTool.cpp:182
+#, fuzzy, kde-format
+msgid "Add Bookmark :"
+msgstr "علامة موقع."
+
+#: ReferencesTool.cpp:187
+#, kde-format
+msgid ""
+"Insert a Bookmark. This is useful to create links that point to areas within "
+"the document"
+msgstr ""
+
+#: ReferencesTool.cpp:191
+#, kde-format
+msgid ""
+"Display a pop up that hosts the options to add new Bookmark or handle "
+"existing Bookmarks"
+msgstr ""
+
+#: ReferencesTool.cpp:195
+#, kde-format
+msgid ""
+"Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
+msgstr ""
+
+#: ReferencesTool.cpp:231
+#, kde-format
+msgctxt "as in table of contents, list of pictures, index"
+msgid "Tables, Lists & Indexes"
+msgstr ""
+
+#: ReferencesTool.cpp:234
+#, kde-format
+msgid "Footnotes and Endnotes"
+msgstr ""
+
+#: ReferencesTool.cpp:237
+#, fuzzy, kde-format
+msgid "Citations and Bibliography"
+msgstr "إدراج فهرس"
+
+#: ReferencesTool.cpp:240
+#, fuzzy, kde-format
+msgid "Links and Bookmarks"
+msgstr "أعِد تسمية علامة الموقع"
+
+#: ReferencesTool.cpp:366
+#, kde-format
+msgid "Bookmark cannot be empty"
+msgstr ""
+
+#: ReferencesTool.cpp:373
+#, kde-format
+msgid "Duplicate Name. Click \"Manage Bookmarks\""
+msgstr ""
+
+#: ReferencesTool.cpp:374
+#, fuzzy, kde-format
+msgid "to Rename or Delete Bookmarks"
+msgstr "أعِد تسمية علامة الموقع"
+
+#: ReviewTool.cpp:53 ReviewTool.cpp:54
+#, fuzzy, kde-format
+msgid "Remove Comment"
+msgstr "إدراج فهرس"
+
+#: ReviewTool.cpp:98
+#, kde-format
+msgid "Spell check"
+msgstr ""
+
+#: ReviewTool.cpp:101
+#, fuzzy, kde-format
+msgid "Comments"
+msgstr "تضمين بوصة جدول من"
+
+#: ReviewToolFactory.cpp:24
+#, fuzzy, kde-format
+msgid "Review"
+msgstr "معاينة"
+
+#: TextShapeFactory.cpp:31 TextShapeFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Text"
+msgstr "نص"
+
+#: TextShapeFactory.cpp:33
+#, fuzzy, kde-format
+msgid "A shape that shows text"
+msgstr "A شكل ذلك المعارض نص"
+
+#: TextShapeFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Text Shape"
+msgstr "نص شكل"
+
+#: TextTool.cpp:201
+#, fuzzy, kde-format
+msgid "Configure current section"
+msgstr "فقرة إعدادات n"
+
+#: TextTool.cpp:205
+#, fuzzy, kde-format
+msgid "Insert new section"
+msgstr "إدراج"
+
+#: TextTool.cpp:209
+#, fuzzy, kde-format
+msgid "Insert paragraph between sections"
+msgstr "إدراج"
+
+#: TextTool.cpp:213
+#, kde-format
+msgid "Paste As Text"
+msgstr ""
+
+#: TextTool.cpp:218
+#, fuzzy, kde-format
+msgid "Bold"
+msgstr "عريض"
+
+#: TextTool.cpp:224
+#, fuzzy, kde-format
+msgid "Italic"
+msgstr "مائل"
+
+#: TextTool.cpp:230
+#, fuzzy, kde-format
+msgctxt "Text formatting"
+msgid "Underline"
+msgstr "تسطير"
+
+#: TextTool.cpp:236
+#, fuzzy, kde-format
+msgid "Strikethrough"
+msgstr "شطب"
+
+#: TextTool.cpp:242
+#, fuzzy, kde-format
+msgid "Align Left"
+msgstr "محاذاة إلى اليسار"
+
+#: TextTool.cpp:249
+#, fuzzy, kde-format
+msgid "Align Right"
+msgstr "محاذاة إلى اليمين"
+
+#: TextTool.cpp:256
+#, fuzzy, kde-format
+msgid "Align Center"
+msgstr "صف مركز"
+
+#: TextTool.cpp:264
+#, fuzzy, kde-format
+msgid "Align Block"
+msgstr "حاذي منع"
+
+#: TextTool.cpp:271
+#, fuzzy, kde-format
+msgid "Change text direction"
+msgstr "غيّر قائمة"
+
+#: TextTool.cpp:273
+#, fuzzy, kde-format
+msgid "Change writing direction"
+msgstr "غيّر قائمة"
+
+#: TextTool.cpp:295
+#, fuzzy, kde-format
+msgid "Increase Indent"
+msgstr "زيادة الإزاحة"
+
+#: TextTool.cpp:302
+#, fuzzy, kde-format
+msgid "Decrease Indent"
+msgstr "اخفض المحاذاة"
+
+#: TextTool.cpp:306
+#, kde-format
+msgid "Toggle List or List Level Formatting"
+msgstr ""
+
+#: TextTool.cpp:307
+#, kde-format
+msgid "Toggle list on/off, or change format of current level"
+msgstr ""
+
+#: TextTool.cpp:310
+#, fuzzy, kde-format
+msgid "Increase Font Size"
+msgstr "زود مقاس الخط"
+
+#: TextTool.cpp:315
+#, fuzzy, kde-format
+msgid "Decrease Font Size"
+msgstr "قلل مقاس الخط"
+
+#: TextTool.cpp:321
+#, fuzzy, kde-format
+msgid "Font Family"
+msgstr "التصميم"
+
+#: TextTool.cpp:326
+#, fuzzy, kde-format
+msgid "Variable"
+msgstr "المسافة:"
+
+#: TextTool.cpp:330
+#, fuzzy, kde-format
+msgid "Insert Non-Breaking Space"
+msgstr "إدراج غير الانكسار فضائي"
+
+#: TextTool.cpp:335
+#, fuzzy, kde-format
+msgid "Insert Non-Breaking Hyphen"
+msgstr "إدراج غير الانكسار الشرطة"
+
+#: TextTool.cpp:340
+#, fuzzy, kde-format
+msgid "Insert Index"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:345
+#, fuzzy, kde-format
+msgid "Insert Soft Hyphen"
+msgstr "إدراج شارطة"
+
+#: TextTool.cpp:351
+#, fuzzy, kde-format
+msgid "Line Break"
+msgstr "قطع الخط"
+
+#: TextTool.cpp:356
+#, fuzzy, kde-format
+msgid "Page Break"
+msgstr "قطع الخط"
+
+#: TextTool.cpp:360
+#, fuzzy, kde-format
+msgid "Insert a page break"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:361
+#, kde-format
+msgid "All text after this point will be moved into the next page."
+msgstr ""
+
+#: TextTool.cpp:364
+#, fuzzy, kde-format
+msgid "Font..."
+msgstr "الخط..."
+
+#: TextTool.cpp:367
+#, fuzzy, kde-format
+msgid "Change character size, font, boldface, italics etc."
+msgstr ""
+"غيّر رمز\n"
+"حرف\n"
+"مِحرف حجم الخط."
+
+#: TextTool.cpp:368
+#, fuzzy, kde-format
+msgid "Change the attributes of the currently selected characters."
+msgstr "تغير صفات الرموز المنتقاة حاليا."
+
+#: TextTool.cpp:371
+#, fuzzy, kde-format
+msgid "Font Size"
+msgstr "حجم الخط"
+
+#: TextTool.cpp:377
+#, fuzzy, kde-format
+msgid "Text Color..."
+msgstr "لون النص:"
+
+#: TextTool.cpp:378
+#, fuzzy, kde-format
+msgid "Text Color"
+msgstr "لون النص:"
+
+#: TextTool.cpp:384
+#, fuzzy, kde-format
+msgid "Background Color..."
+msgstr "لون الخلفية:"
+
+#: TextTool.cpp:389
+#, kde-format
+msgid "Auto Resize To Content"
+msgstr ""
+
+#: TextTool.cpp:394
+#, kde-format
+msgid "Grow To Fit Width"
+msgstr ""
+
+#: TextTool.cpp:399
+#, kde-format
+msgid "Grow To Fit Height"
+msgstr ""
+
+#: TextTool.cpp:404
+#, kde-format
+msgid "Shrink To Fit"
+msgstr ""
+
+#: TextTool.cpp:412
+#, fuzzy, kde-format
+msgid "Insert a table into the document."
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:415
+#, fuzzy, kde-format
+msgid "Row Above"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:416
+#, fuzzy, kde-format
+msgid "Insert Row Above"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:420
+#, fuzzy, kde-format
+msgid "Row Below"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:421
+#, fuzzy, kde-format
+msgid "Insert Row Below"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:425
+#, fuzzy, kde-format
+msgid "Column Left"
+msgstr "محاذاة إلى اليسار"
+
+#: TextTool.cpp:426
+#, fuzzy, kde-format
+msgid "Insert Column Left"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:430
+#, fuzzy, kde-format
+msgid "Column Right"
+msgstr "محاذاة إلى اليمين"
+
+#: TextTool.cpp:431
+#, fuzzy, kde-format
+msgid "Insert Column Right"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:435
+#, fuzzy, kde-format
+msgid "Column"
+msgstr "محاذاة إلى اليسار"
+
+#: TextTool.cpp:436
+#, fuzzy, kde-format
+msgid "Delete Column"
+msgstr "احذف"
+
+#: TextTool.cpp:440
+#, kde-format
+msgid "Row"
+msgstr ""
+
+#: TextTool.cpp:441
+#, fuzzy, kde-format
+msgid "Delete Row"
+msgstr "احذف"
+
+#: TextTool.cpp:445
+#, kde-format
+msgid "Merge Cells"
+msgstr ""
+
+#: TextTool.cpp:449
+#, fuzzy, kde-format
+msgid "Split Cells"
+msgstr "فقرة إعدادات n"
+
+#: TextTool.cpp:454
+#, kde-format
+msgid "Select a border style and paint that style onto a table"
+msgstr ""
+
+#: TextTool.cpp:458
+#, fuzzy, kde-format
+msgid "Paragraph..."
+msgstr "فقرة."
+
+#: TextTool.cpp:461
+#, fuzzy, kde-format
+msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
+msgstr "غيّر فقرة نص ترقيم."
+
+#: TextTool.cpp:462
+#, fuzzy, kde-format
+msgid ""
+"<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
+"p><p>Select text in multiple paragraphs to change the formatting of all "
+"selected paragraphs.</p><p>If no text is selected, the paragraph where the "
+"cursor is located will be changed.</p>"
+msgstr ""
+"غيّر فقرة نص ترقيم<p> انتقِ نص بوصة متعدد إلى تغيير من الكل مُنتقى<p> إذا لا نص "
+"هو مُنتقى فقرة مؤشر هو تغير</p>"
+
+#: TextTool.cpp:465
+#, fuzzy, kde-format
+msgid "Style Manager..."
+msgstr "الأسلوب المدير"
+
+#: TextTool.cpp:467
+#, fuzzy, kde-format
+msgid "Change attributes of styles"
+msgstr "غيّر من"
+
+#: TextTool.cpp:468
+#, fuzzy, kde-format
+msgid ""
+"<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
+"be changed using the dialog box.</p>"
+msgstr ""
+"تغيير صفات الخط أو الفقرة للأنماط.<p>من الممكن تغيير عدة أنماط باستخدام مربع "
+"الحوار."
+
+#: TextTool.cpp:475
+#, fuzzy, kde-format
+msgid "Special Character..."
+msgstr "خاص حرف."
+
+#: TextTool.cpp:479
+#, fuzzy, kde-format
+msgid "Insert one or more symbols or characters not found on the keyboard"
+msgstr "إدراج أو المزيد أو محارف ليس موجود يعمل لوحة مفاتيح"
+
+#: TextTool.cpp:480
+#, fuzzy, kde-format
+msgid "Insert one or more symbols or characters not found on the keyboard."
+msgstr "إدراج أو المزيد أو محارف ليس موجود يعمل لوحة مفاتيح."
+
+#: TextTool.cpp:483
+#, kde-format
+msgid "Repaint"
+msgstr ""
+
+#: TextTool.cpp:488
+#, fuzzy, kde-format
+msgid "Insert Comment"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:574
+#, fuzzy, kde-format
+msgid "Insertion"
+msgstr "إدراج"
+
+#: TextTool.cpp:576
+#, fuzzy, kde-format
+msgid "Deletion"
+msgstr "احذف"
+
+#: TextTool.cpp:578
+#, fuzzy, kde-format
+msgid "Formatting"
+msgstr "الزينة"
+
+#: TextTool.cpp:593
+#, kde-format
+msgid "Ctrl+click to go to link "
+msgstr ""
+
+#: TextTool.cpp:600
+#, kde-format
+msgid "Ctrl+click to go to the note "
+msgstr ""
+
+#: TextTool.cpp:606
+#, kde-format
+msgid "Ctrl+click to go to the note reference"
+msgstr ""
+
+#: TextTool.cpp:707
+#, kde-format
+msgid "follows along"
+msgstr ""
+
+#: TextTool.cpp:737
+#, kde-format
+msgid "Press shift to not resize this"
+msgstr ""
+
+#: TextTool.cpp:939
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr "أسلوب الفقرة"
+
+#: TextTool.cpp:1158
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Cut"
+msgstr "مخصص"
+
+#: TextTool.cpp:1418
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr "إدراج فهرس"
+
+#: TextTool.cpp:1461
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr ""
+
+#: TextTool.cpp:2257
+#, fuzzy, kde-format
+msgid "Table"
+msgstr "تاميلي"
+
+#: TextTool.cpp:2616 TextTool.cpp:2621
+#, fuzzy, kde-format
+msgid "Autocorrection"
+msgstr "إدراج"
+
+#: TextTool.cpp:2616
+#, fuzzy, kde-format
+msgid "Key Press"
+msgstr "مفتاح ضغط"
+
+#: TextTool.cpp:2912
+#, fuzzy, kde-format
+msgid ""
+"This link points to the program or script '%1'.\n"
+"Malicious programs can harm your computer. Are you sure that you want to run "
+"this program?"
+msgstr "هذا وصلة نقطة إلى برنامج أو برنامج نصي حاسوب هل إلى تنفيذ برنامج?"
+
+#: TextTool.cpp:2917
+#, fuzzy, kde-format
+msgid "Open Link?"
+msgstr "فتح وصلة؟"
+
+#: TextToolFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Text editing"
+msgstr "نص أداة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Note"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dialog"
+#~ msgstr "المسافة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cancel"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Log"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "تلقائي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type"
+#~ msgstr "النوع:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start at:"
+#~ msgstr "ابدأ عند:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment:"
+#~ msgstr "المحاذاة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Prefix:"
+#~ msgstr "البادئة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Suffix:"
+#~ msgstr "اللاحقة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Depth:"
+#~ msgstr "عمق:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display Levels:"
+#~ msgstr "العرض المستويات:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet/Number followed by"
+#~ msgstr "نقاط أرقام"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "at"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Aligned at"
+#~ msgstr "المحاذاة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indented at"
+#~ msgstr "إزاحة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom character:"
+#~ msgstr ""
+#~ "مخصص رمز\n"
+#~ "حرف\n"
+#~ "مِحرف:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Restart numbering at this paragraph"
+#~ msgstr "إعادة تشغيل ترقيم عند فقرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Letter Synchronization"
+#~ msgstr "خطاب مزامنة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Image"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height"
+#~ msgstr "يمين"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alignment"
+#~ msgstr "المحاذاة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "يسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "وسط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "يمين"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Justify"
+#~ msgstr "ساوِ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Behavior at End of Frame/Page"
+#~ msgstr "السلوك عند نهاية من إطار صفحة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keep lines together"
+#~ msgstr "حافظ عليه سطور"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert break before paragraph"
+#~ msgstr "إدراج فاصل قبل الفقرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert break after paragraph"
+#~ msgstr "إدراج فاصل بعد الفقرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "ا&عادة تسمية"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "ا&حذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add caption"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General"
+#~ msgstr "عام"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Name of the style"
+#~ msgid "Name:"
+#~ msgstr "الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next style:"
+#~ msgstr "الطراز التالي:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parent style:"
+#~ msgstr "الطراز التالي:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Include in table of contents"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text color:"
+#~ msgstr "لون النص:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background color:"
+#~ msgstr "لون الخلفية:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Underlining:"
+#~ msgstr "تسطير:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strikethrough:"
+#~ msgstr "شطب"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Capitalization:"
+#~ msgstr "الزينة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Character position"
+#~ msgid "Position:"
+#~ msgstr "الموضع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short Name:"
+#~ msgstr "الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Book"
+#~ msgstr "علامات المواقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Incollection"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 1"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 2"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 3"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 4"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom 5"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author:"
+#~ msgstr "تلقائي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edition:"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Publication:"
+#~ msgstr "الموضع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Institution:"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation:"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background color"
+#~ msgstr "لون الخلفية:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure bibliography"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Bibliography"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
+#~ msgstr "<p><ul><li><b> مفرد</b> الـ عادي</li></ul></p> "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add tab stop"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tab character"
+#~ msgstr "حرف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space character"
+#~ msgstr "أحرف خاصة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format:"
+#~ msgstr "عادي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Display levels above:"
+#~ msgstr "العرض المستويات:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Letter synchronization"
+#~ msgstr "خطاب مزامنة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet"
+#~ msgstr "صندوق"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General Settings"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saving Format"
+#~ msgstr "أسلوب الفقرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Visualization Settings"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insertions"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color"
+#~ msgstr "لون الخلفية:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deletions"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format Changes"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Web Link"
+#~ msgstr "فتح وصلة؟"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Text:"
+#~ msgstr "نص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Link To Bookmark"
+#~ msgstr "أعِد تسمية علامة الموقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Name:"
+#~ msgstr "الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "In collection"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom1"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom2"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom3"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom4"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "custom5"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&New"
+#~ msgstr "&جديد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Settings"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Record Changes"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Colors"
+#~ msgstr "الألوان"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Shadow"
+#~ msgstr "نص ظل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color:"
+#~ msgstr "اللون:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance:"
+#~ msgstr "المسافة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position"
+#~ msgstr "الموضع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic hyphenation"
+#~ msgstr "تلقائي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "TextLabel"
+#~ msgstr "نص شكل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance to paragraph:"
+#~ msgstr "فقرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of characters:"
+#~ msgstr ""
+#~ "مخصص رمز\n"
+#~ "حرف\n"
+#~ "مِحرف:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit to contents"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort keys"
+#~ msgstr "الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sort algorithm:"
+#~ msgstr "الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indent"
+#~ msgstr "إزاحة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left:"
+#~ msgstr "اليسار:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right:"
+#~ msgstr "يمين:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Line:"
+#~ msgstr "الأول خط:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Spacing"
+#~ msgstr "تباعد الأسطر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use Font Metrics:"
+#~ msgstr "إستعمل الخط القياسات:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph Space"
+#~ msgstr "فقرة فضائي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Before:"
+#~ msgstr "قبل:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "After:"
+#~ msgstr "بعد:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Split sections"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert paragraph..."
+#~ msgstr "فقرة."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after end of section:"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic Numbering:"
+#~ msgstr "تلقائي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Prefix:"
+#~ msgstr "البادئة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Start at:"
+#~ msgstr "ابدأ عند:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Format:"
+#~ msgstr "عادي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " Suffix:"
+#~ msgstr "اللاحقة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Starts over at:"
+#~ msgstr "ابدأ عند:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Annotation Shape"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Disable Shrink To Fit"
+#~ msgid "Disable"
+#~ msgstr "المسافة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bibliography"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "عادي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Uppercase"
+#~ msgstr "الأعلى روماني"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lowercase"
+#~ msgstr "أدنى روماني"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Superscript"
+#~ msgstr "مرتفع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subscript"
+#~ msgstr "منخفض"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select"
+#~ msgstr "انتقِ علامة موقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Short name%1"
+#~ msgstr "الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Used Styles"
+#~ msgstr "أسلوب جديد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unused Styles"
+#~ msgstr "أسلوب جديد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Font"
+#~ msgstr "انتقِ علامة موقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Special Characters"
+#~ msgstr "أحرف خاصة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Close dialog"
+#~ msgid "Close"
+#~ msgstr "إغلاق"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "أعِد تسمية علامة الموقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a new name for the bookmark"
+#~ msgstr "رجاء توفير a جديد الاسم لـ علامة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr "هناك a علامة مع الاسم."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bookmark"
+#~ msgstr "انتقِ علامة موقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please provide a name for the bookmark"
+#~ msgstr "رجاء توفير a جديد الاسم لـ علامة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage Bookmarks"
+#~ msgstr "أعِد تسمية علامة الموقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footnote Settings"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Endnote Settings"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Automatic horizontal alignment"
+#~ msgid "Auto"
+#~ msgstr "تلقائي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Left"
+#~ msgstr "يسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Right"
+#~ msgstr "يمين"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Text alignment"
+#~ msgid "Centered"
+#~ msgstr "توسيط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Indent/Spacing"
+#~ msgstr "إزاحة التباعد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General Layout"
+#~ msgstr "عام التصميم"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullets/Numbers"
+#~ msgstr "نقاط أرقام"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decorations"
+#~ msgstr "الزينة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "Single"
+#~ msgstr "مفرد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "1.5 Lines"
+#~ msgstr "سطر ونصف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Line spacing value"
+#~ msgid "Double"
+#~ msgstr "مزدوج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Proportional"
+#~ msgstr "متناسب"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Additional"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Line spacing type"
+#~ msgid "Fixed"
+#~ msgstr "ثابت"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph Format"
+#~ msgstr "أسلوب الفقرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a table"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section name"
+#~ msgstr "إدخال أسلوب الاسم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure sections"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change paragraph format"
+#~ msgstr "أسلوب الفقرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Set Border Color..."
+#~ msgstr "لون النص:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) No border - has to fit in 48pixels"
+#~ msgid "None"
+#~ msgstr "لا شيء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Style"
+#~ msgstr "الطراز التالي:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "الأسلوب المدير"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save Changes"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New style"
+#~ msgstr "الطراز التالي:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "لا شيء"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Table"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table of Contents - Configure"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Title"
+#~ msgstr "تاميلي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use styles"
+#~ msgstr "أسلوب جديد"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Index"
+#~ msgstr "إزاحة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Styles"
+#~ msgstr "الأسلوب"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "الأسلوب"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table of Contents - Configure Styles"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Styles available"
+#~ msgstr "الأسلوب المدير"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Disabled"
+#~ msgstr "المسافة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table Of Contents"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Custom..."
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure the Table of Contents"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert footnote with auto number"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Labeled Footnote"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert with label:"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert endnote with auto number"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Labeled Endnote"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Settings..."
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Citation"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Bibliography"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Custom Bibliography"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a custom Bibliography into the document."
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure the bibliography"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Link"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Bookmark"
+#~ msgstr "علامة موقع."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Bookmark :"
+#~ msgstr "علامة موقع."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bookmarks"
+#~ msgstr "علامة موقع."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Links and Bookmarks"
+#~ msgstr "أعِد تسمية علامة الموقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to Rename or Delete Bookmarks"
+#~ msgstr "أعِد تسمية علامة الموقع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Review"
+#~ msgstr "معاينة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text"
+#~ msgstr "نص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape that shows text"
+#~ msgstr "A شكل ذلك المعارض نص"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Shape"
+#~ msgstr "نص شكل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure current section"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert new section"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert paragraph between sections"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bold"
+#~ msgstr "عريض"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Italic"
+#~ msgstr "مائل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Text formatting"
+#~ msgid "Underline"
+#~ msgstr "تسطير"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Strikethrough"
+#~ msgstr "شطب"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Left"
+#~ msgstr "محاذاة إلى اليسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Right"
+#~ msgstr "محاذاة إلى اليمين"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Center"
+#~ msgstr "صف مركز"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align Block"
+#~ msgstr "حاذي منع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change writing direction"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Indent"
+#~ msgstr "زيادة الإزاحة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Indent"
+#~ msgstr "اخفض المحاذاة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Increase Font Size"
+#~ msgstr "زود مقاس الخط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrease Font Size"
+#~ msgstr "قلل مقاس الخط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font Family"
+#~ msgstr "التصميم"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variable"
+#~ msgstr "المسافة:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "إدراج غير الانكسار فضائي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "إدراج غير الانكسار الشرطة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Index"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "إدراج شارطة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Break"
+#~ msgstr "قطع الخط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Break"
+#~ msgstr "قطع الخط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert a page break"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font..."
+#~ msgstr "الخط..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change character size, font, boldface, italics etc."
+#~ msgstr ""
+#~ "غيّر رمز\n"
+#~ "حرف\n"
+#~ "مِحرف حجم الخط."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "تغير صفات الرموز المنتقاة حاليا."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Font Size"
+#~ msgstr "حجم الخط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Color..."
+#~ msgstr "لون النص:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Color"
+#~ msgstr "لون النص:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background Color..."
+#~ msgstr "لون الخلفية:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background"
+#~ msgstr "لون الخلفية:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Row Above"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column Left"
+#~ msgstr "محاذاة إلى اليسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Column Left"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column Right"
+#~ msgstr "محاذاة إلى اليمين"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Column"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Row"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph..."
+#~ msgstr "فقرة."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Change paragraph margins, text flow, borders, bullets, numbering etc."
+#~ msgstr "غيّر فقرة نص ترقيم."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
+#~ "p><p>Select text in multiple paragraphs to change the formatting of all "
+#~ "selected paragraphs.</p><p>If no text is selected, the paragraph where "
+#~ "the cursor is located will be changed.</p>"
+#~ msgstr ""
+#~ "غيّر فقرة نص ترقيم<p> انتقِ نص بوصة متعدد إلى تغيير من الكل مُنتقى<p> إذا لا "
+#~ "نص هو مُنتقى فقرة مؤشر هو تغير</p>"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager..."
+#~ msgstr "الأسلوب المدير"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change attributes of styles"
+#~ msgstr "غيّر من"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles "
+#~ "can be changed using the dialog box.</p>"
+#~ msgstr ""
+#~ "تغيير صفات الخط أو الفقرة للأنماط.<p>من الممكن تغيير عدة أنماط باستخدام "
+#~ "مربع الحوار."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Special Character..."
+#~ msgstr "خاص حرف."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert one or more symbols or characters not found on the keyboard"
+#~ msgstr "إدراج أو المزيد أو محارف ليس موجود يعمل لوحة مفاتيح"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert one or more symbols or characters not found on the keyboard."
+#~ msgstr "إدراج أو المزيد أو محارف ليس موجود يعمل لوحة مفاتيح."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Comment"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insertion"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deletion"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting"
+#~ msgstr "الزينة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "حرف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph"
+#~ msgstr "فقرة."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "تاميلي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key Press"
+#~ msgstr "مفتاح ضغط"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This link points to the program or script '%1'.\n"
+#~ "Malicious programs can harm your computer. Are you sure that you want to "
+#~ "run this program?"
+#~ msgstr "هذا وصلة نقطة إلى برنامج أو برنامج نصي حاسوب هل إلى تنفيذ برنامج?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Link?"
+#~ msgstr "فتح وصلة؟"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text editing"
+#~ msgstr "نص أداة"
+
+#, fuzzy
+#~ msgid "Custom Bullet"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgid "Change List Level"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgid "Bullet list"
+#~ msgstr "صندوق"
+
+#, fuzzy
+#~ msgid "Form"
+#~ msgstr "عادي"
+
+#, fuzzy
+#~ msgid "Table of Contents"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgid "Changes"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgid "Paragraph Settings"
+#~ msgstr "فقرة إعدادات n"
+
+#, fuzzy
+#~ msgid "Insert Custom ..."
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgid "Format Notes"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgid "Configure the notes"
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgid "Location"
+#~ msgstr "الزينة"
+
+#, fuzzy
+#~ msgid " Start at "
+#~ msgstr "ابدأ عند:"
+
+#, fuzzy
+#~ msgid " Prefix"
+#~ msgstr "البادئة:"
+
+#, fuzzy
+#~ msgid " Suffix"
+#~ msgstr "اللاحقة:"
+
+#, fuzzy
+#~ msgid "Inherit style:"
+#~ msgstr "رث أسلوب:"
+
+#, fuzzy
+#~ msgid "<b>Paragraph style properties</b>"
+#~ msgstr "<b> فقرة أسلوب خصائِص</b>"
+
+#, fuzzy
+#~ msgid "Strike Out"
+#~ msgstr "ارسم خط عمودي"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "النوع:"
+
+#, fuzzy
+#~ msgid "Paragraph style"
+#~ msgstr "أسلوب الفقرة"
+
+#, fuzzy
+#~ msgid "Character style"
+#~ msgstr "نمط الأحرف"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "إنشاء"
+
+#, fuzzy
+#~ msgid "Minimum:"
+#~ msgstr "الحد الأدنى:"
+
+#, fuzzy
+#~ msgid "Highlighting"
+#~ msgstr "التظليلالإبراز"
+
+#, fuzzy
+#~ msgid "author"
+#~ msgstr "تلقائي"
+
+#, fuzzy
+#~ msgid "edition"
+#~ msgstr "إضافي"
+
+#, fuzzy
+#~ msgid "institution"
+#~ msgstr "إدراج"
+
+#, fuzzy
+#~ msgid "Configure bibiliography"
+#~ msgstr "إدراج فهرس"
+
+#, fuzzy
+#~ msgid "Offset:"
+#~ msgstr "اوفسيت"
+
+#, fuzzy
+#~ msgid "Custom"
+#~ msgstr "مخصص"
+
+#, fuzzy
+#~ msgid "Default Format"
+#~ msgstr "التهيئة الافتراضية"
+
+#, fuzzy
+#~ msgid "Change text attributes to their default values"
+#~ msgstr "غيّر الخط و فقرة إلى افتراضي"
+
+#, fuzzy
+#~ msgctxt "Short for LeftToRight"
+#~ msgid "LTR"
+#~ msgstr "RTL"
+
+#, fuzzy
+#~ msgctxt "Automatic direction detection"
+#~ msgid "Auto"
+#~ msgstr "تلقائي"
+
+#, fuzzy
+#~ msgid "<b>Character style properties</b>"
+#~ msgstr "<b> حرف أسلوب خصائِص</b>"
+
+#, fuzzy
+#~ msgid "Use named character style"
+#~ msgstr ""
+#~ "إستعمل مسمى رمز\n"
+#~ "حرف\n"
+#~ "مِحرف أسلوب"
+
+#, fuzzy
+#~ msgid "Style:"
+#~ msgstr "الأسلوب:"
+
+#, fuzzy
+#~ msgid "Review tool"
+#~ msgstr "نص أداة"
+
+#, fuzzy
+#~ msgid "Label"
+#~ msgstr "نص شكل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change List Numbering"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change List"
+#~ msgstr "غيّر قائمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgid "Table of Contents..."
+#~ msgstr "تضمين بوصة جدول من"
+
+#, fuzzy
+#~ msgid "Captions"
+#~ msgstr "الزينة"
+
+#, fuzzy
+#~ msgctxt "Text list-style"
+#~ msgid "None"
+#~ msgstr "لا شيء"
+
+#, fuzzy
+#~ msgid "Arabic"
+#~ msgstr "عربي"
+
+#, fuzzy
+#~ msgid "Lower Alphabetical"
+#~ msgstr "أحرف صغيرة"
+
+#, fuzzy
+#~ msgid "Upper Alphabetical"
+#~ msgstr "أحرف كبيرة"
+
+#, fuzzy
+#~ msgid "Lower Roman"
+#~ msgstr "أدنى روماني"
+
+#, fuzzy
+#~ msgid "Upper Roman"
+#~ msgstr "الأعلى روماني"
+
+#, fuzzy
+#~ msgid "Small Bullet"
+#~ msgstr "الاقتراع س نقطة"
+
+#, fuzzy
+#~ msgid "Large Bullet"
+#~ msgstr "مربع"
+
+#, fuzzy
+#~ msgid "Circle Bullet"
+#~ msgstr "دائرة"
+
+#, fuzzy
+#~ msgid "Square Bullet"
+#~ msgstr "مربع"
+
+#, fuzzy
+#~ msgid "Rhombus Bullet"
+#~ msgstr "مُعَيَّن نقطة"
+
+#, fuzzy
+#~ msgid "Check Mark Bullet"
+#~ msgstr "كِش علامة نقطة"
+
+#, fuzzy
+#~ msgid "Ballot X Bullet"
+#~ msgstr "الاقتراع س نقطة"
+
+#, fuzzy
+#~ msgid "Rightwards Arrow Bullet"
+#~ msgstr "يمينا سهم نقطة"
+
+#, fuzzy
+#~ msgid "Rightwards Arrow Head Bullet"
+#~ msgstr "يمينا سهم الرئيس نقطة"
+
+#, fuzzy
+#~ msgid "Bengali"
+#~ msgstr "بنغالي"
+
+#, fuzzy
+#~ msgid "Gujarati"
+#~ msgstr "كوجراتي"
+
+#, fuzzy
+#~ msgid "Kannada"
+#~ msgstr "كنادا"
+
+#, fuzzy
+#~ msgid "Malayalam"
+#~ msgstr "ملايلام"
+
+#, fuzzy
+#~ msgid "Oriya"
+#~ msgstr "أوريا"
+
+#, fuzzy
+#~ msgid "Tamil"
+#~ msgstr "تاميلي"
+
+#, fuzzy
+#~ msgid "Telugu"
+#~ msgstr "تلوغو"
+
+#, fuzzy
+#~ msgid "Tibetan"
+#~ msgstr "تبيتي"
+
+#, fuzzy
+#~ msgid "Thai"
+#~ msgstr "تايلندي"
+
+#, fuzzy
+#~ msgid "Disc Bullet"
+#~ msgstr "قرص"
+
+#, fuzzy
+#~ msgid "Box Bullet"
+#~ msgstr "صندوق"
+
+#, fuzzy
+#~ msgid "Create New Style"
+#~ msgstr "أسلوب جديد"
+
+#, fuzzy
+#~ msgid "Edit Paragraph Style"
+#~ msgstr "أسلوب الفقرة"
+
+#, fuzzy
+#~ msgid "Edit Character Style"
+#~ msgstr "نمط الأحرف"
+
+#, fuzzy
+#~ msgid "Abc"
+#~ msgstr "عربي"
+
+#, fuzzy
+#~ msgid "List Style:"
+#~ msgstr "الأسلوب:"
+
+#, fuzzy
+#~ msgid "BackGround Color"
+#~ msgstr "لون الخلفية:"
+
+#, fuzzy
+#~ msgid "Record"
+#~ msgstr "سجل"
+
+#, fuzzy
+#~ msgctxt "Inherit style"
+#~ msgid "None"
+#~ msgstr "لا شيء"
+
+#, fuzzy
+#~ msgid "Indent:"
+#~ msgstr "إزاحة"
+
+#, fuzzy
+#~ msgid "Align:"
+#~ msgstr "المحاذاة:"
+
+#, fuzzy
+#~ msgid "Paragraph Style:"
+#~ msgstr "أسلوب الفقرة"
+
+#, fuzzy
+#~ msgid "Font:"
+#~ msgstr "الخط"
+
+#, fuzzy
+#~ msgid "Colors:"
+#~ msgstr "الألوان"
+
+#, fuzzy
+#~ msgid "Create New Bookmark"
+#~ msgstr "أنشئ علامة موقع جديدة"
+
+#, fuzzy
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "علامات المواقع اسمح إلى قفز :: تجاوز بين من مستند توفير الاسم من علامة."
+
+#, fuzzy
+#~ msgid "Select Bookmark..."
+#~ msgstr "انتقِ علامة موقع."

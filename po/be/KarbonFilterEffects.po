@@ -1,0 +1,1252 @@
+# translation of karbon.po to Belarusian (Official spelling)
+#
+# Siarhei Liantsevich <serzh.by@gmail.com>, 2006, 2007.
+# Darafei Praliaskouski <komzpa@licei2.com>, 2007.
+# Darafei Praliaskouski <komzpa@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-01-01 23:14+0200\n"
+"Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
+"Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+
+#: BlendEffect.cpp:18 BlendEffectFactory.cpp:14
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Blend"
+msgstr "&Файл"
+
+#: BlendEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "Blend mode"
+msgstr "Выгляд"
+
+#: BlendEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+msgid "Normal"
+msgstr "Фармат:"
+
+#: BlendEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Multiply"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:26
+#, kde-format
+msgid "Screen"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Darken"
+msgstr ""
+
+#: BlendEffectConfigWidget.cpp:28
+#, fuzzy, kde-format
+msgid "Lighten"
+msgstr "Вышыня:"
+
+#: BlurEffect.cpp:263 BlurEffectFactory.cpp:14
+#, kde-format
+msgid "Gaussian blur"
+msgstr ""
+
+#: BlurEffectConfigWidget.cpp:22
+#, fuzzy, kde-format
+msgid "Radius"
+msgstr "Радыўс:"
+
+#: ColorMatrixEffect.cpp:22
+#, kde-format
+msgid "Color Matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:28
+#, kde-format
+msgid "Apply color matrix"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+msgid "Saturate colors"
+msgstr "Контур: суцэльны колер"
+
+#: ColorMatrixEffectConfigWidget.cpp:30
+#, kde-format
+msgid "Rotate hue"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:31
+#, kde-format
+msgid "Luminance to alpha"
+msgstr ""
+
+#: ColorMatrixEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Saturate value"
+msgstr "Контур: суцэльны колер"
+
+#: ColorMatrixEffectConfigWidget.cpp:61
+#, fuzzy, kde-format
+msgid "Angle"
+msgstr "Кут:"
+
+#: ColorMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Color matrix"
+msgstr ""
+
+#: ComponentTransferEffect.cpp:18 ComponentTransferEffectFactory.cpp:14
+#, kde-format
+msgid "Component transfer"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:45
+#, kde-format
+msgid "Function"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:47
+#, kde-format
+msgid "Identity"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:48
+#, fuzzy, kde-format
+#| msgid "&File"
+msgid "Table"
+msgstr "&Файл"
+
+#: ComponentTransferEffectConfigWidget.cpp:49
+#, fuzzy, kde-format
+#| msgid "&Distribute"
+msgid "Discrete"
+msgstr "Расставіць"
+
+#: ComponentTransferEffectConfigWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Linear"
+msgstr "Лінейны"
+
+#: ComponentTransferEffectConfigWidget.cpp:51
+#, kde-format
+msgid "Gamma"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:64
+#: ComponentTransferEffectConfigWidget.cpp:74
+#, kde-format
+msgid "Values"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:84
+#, kde-format
+msgid "Slope"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:89
+#, kde-format
+msgid "Intercept"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:101
+#, kde-format
+msgid "Amplitude"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:106
+#, kde-format
+msgid "Exponent"
+msgstr ""
+
+#: ComponentTransferEffectConfigWidget.cpp:111 OffsetEffect.cpp:17
+#: OffsetEffectFactory.cpp:13
+#, fuzzy, kde-format
+#| msgid "Effects"
+msgid "Offset"
+msgstr "Эфекты"
+
+#: CompositeEffect.cpp:19 CompositeEffectFactory.cpp:14
+#, fuzzy, kde-format
+msgid "Composite"
+msgstr "Кампаненты"
+
+#: CompositeEffectConfigWidget.cpp:23
+#, fuzzy, kde-format
+msgid "Operation"
+msgstr "Паўтор:"
+
+#: ConvolveMatrixEffect.cpp:22 ConvolveMatrixEffectFactory.cpp:14
+#, kde-format
+msgid "Convolve Matrix"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:32
+#, fuzzy, kde-format
+#| msgctxt "Duplicate selection"
+#| msgid "&Duplicate"
+msgid "Duplicate"
+msgstr "Прадубляваць"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:33
+#, kde-format
+msgid "Wrap"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:34
+#, fuzzy, kde-format
+msgid "None"
+msgstr "Няма"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:35
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "Edge mode:"
+msgstr "Выгляд"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:42
+#, kde-format
+msgid "Kernel size:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Target point:"
+msgstr "Выкарыстанне:"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:58
+#, kde-format
+msgid "Divisor:"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:60
+#, fuzzy, kde-format
+msgid "Bias:"
+msgstr "Адлучыць"
+
+#: ConvolveMatrixEffectConfigWidget.cpp:63
+#, kde-format
+msgid "Preserve alpha"
+msgstr ""
+
+#: ConvolveMatrixEffectConfigWidget.cpp:66
+#, fuzzy, kde-format
+msgid "Edit kernel"
+msgstr "Шаблон"
+
+#: FloodEffect.cpp:16 FloodEffectFactory.cpp:14
+#, fuzzy, kde-format
+msgid "Flood fill"
+msgstr "Контур: суцэльны колер"
+
+#: FloodEffectConfigWidget.cpp:24
+#, fuzzy, kde-format
+msgid "Flood color"
+msgstr "Контур: суцэльны колер"
+
+#: ImageEffect.cpp:25 ImageEffectFactory.cpp:13
+#, kde-format
+msgid "Image"
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:27
+#, kde-format
+msgid "Select image..."
+msgstr ""
+
+#: ImageEffectConfigWidget.cpp:54
+#, kde-format
+msgid "Select image"
+msgstr ""
+
+#: MergeEffect.cpp:16 MergeEffectFactory.cpp:14
+#, kde-format
+msgid "Merge"
+msgstr ""
+
+#: MorphologyEffect.cpp:19 MorphologyEffectFactory.cpp:14
+#, kde-format
+msgid "Morphology"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:25
+#, kde-format
+msgid "Erode"
+msgstr ""
+
+#: MorphologyEffectConfigWidget.cpp:26
+#, fuzzy, kde-format
+#| msgctxt "Duplicate selection"
+#| msgid "&Duplicate"
+msgid "Dilate"
+msgstr "Прадубляваць"
+
+#: MorphologyEffectConfigWidget.cpp:29
+#, fuzzy, kde-format
+msgid "Operator:"
+msgstr "Паўтор:"
+
+#: MorphologyEffectConfigWidget.cpp:33
+#, fuzzy, kde-format
+msgid "Radius x:"
+msgstr "Радыўс:"
+
+#: MorphologyEffectConfigWidget.cpp:39
+#, fuzzy, kde-format
+msgid "Radius y:"
+msgstr "Радыўс:"
+
+#: OffsetEffectConfigWidget.cpp:22
+#, kde-format
+msgid "dx"
+msgstr ""
+
+#: OffsetEffectConfigWidget.cpp:28
+#, kde-format
+msgid "dy"
+msgstr ""
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend"
+#~ msgstr "&Файл"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blend mode"
+#~ msgstr "Выгляд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "Фармат:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius"
+#~ msgstr "Радыўс:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate colors"
+#~ msgstr "Контур: суцэльны колер"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturate value"
+#~ msgstr "Контур: суцэльны колер"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle"
+#~ msgstr "Кут:"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table"
+#~ msgstr "&Файл"
+
+#, fuzzy
+#~| msgid "&Distribute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Discrete"
+#~ msgstr "Расставіць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Linear"
+#~ msgstr "Лінейны"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Offset"
+#~ msgstr "Эфекты"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Composite"
+#~ msgstr "Кампаненты"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operation"
+#~ msgstr "Паўтор:"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate"
+#~ msgstr "Прадубляваць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edge mode:"
+#~ msgstr "Выгляд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Target point:"
+#~ msgstr "Выкарыстанне:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bias:"
+#~ msgstr "Адлучыць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit kernel"
+#~ msgstr "Шаблон"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood fill"
+#~ msgstr "Контур: суцэльны колер"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flood color"
+#~ msgstr "Контур: суцэльны колер"
+
+#, fuzzy
+#~| msgctxt "Duplicate selection"
+#~| msgid "&Duplicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dilate"
+#~ msgstr "Прадубляваць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Operator:"
+#~ msgstr "Паўтор:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius x:"
+#~ msgstr "Радыўс:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius y:"
+#~ msgstr "Радыўс:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сяржук Лянцэвіч"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "serzh.by@gmail.com"
+
+#~ msgid "&Order"
+#~ msgstr "Парадак"
+
+#~ msgid "&Align"
+#~ msgstr "Вы&раўнаць"
+
+#~ msgid "&File"
+#~ msgstr "&Файл"
+
+#~ msgid "&Edit"
+#~ msgstr "&Змяніць"
+
+#~ msgid "&View"
+#~ msgstr "&Выгляд"
+
+#~ msgid "&Object"
+#~ msgstr "Аб'ект"
+
+#~ msgid "&Distribute"
+#~ msgstr "Расставіць"
+
+#~ msgid "&Path"
+#~ msgstr "Шлях"
+
+#~ msgid "Effe&cts"
+#~ msgstr "Эфекты"
+
+#~ msgid "&Settings"
+#~ msgstr "&Настаўленні"
+
+#~ msgid "Edit"
+#~ msgstr "Змяніць"
+
+#~ msgid "Object"
+#~ msgstr "Аб'ект"
+
+#~ msgid "Align"
+#~ msgstr "Выраўнаваць"
+
+#~ msgid "Effects"
+#~ msgstr "Эфекты"
+
+#~ msgid "View"
+#~ msgstr "Выгляд"
+
+#, fuzzy
+#~ msgid "&Flatten Path..."
+#~ msgstr "Згладзіць крывую..."
+
+#, fuzzy
+#~ msgid "Flatten Path"
+#~ msgstr "Згладзіць крывую"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Уласцівасці"
+
+#, fuzzy
+#~ msgid "Flatness:"
+#~ msgstr "Згладжванне:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten path"
+#~ msgstr "Згладзіць крывую"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine path"
+#~ msgstr "Замкнуць контур"
+
+#, fuzzy
+#~ msgid "&Refine Path..."
+#~ msgstr "Згладзіць крывую..."
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Замкнуць контур"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round Corners"
+#~ msgstr "Закругленне кутоў"
+
+#, fuzzy
+#~ msgid "&Round Corners..."
+#~ msgstr "Закругленне кутоў..."
+
+#, fuzzy
+#~ msgid "Round Corners"
+#~ msgstr "Закругленне кутоў"
+
+#, fuzzy
+#~ msgid "Radius:"
+#~ msgstr "Радыўс:"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "List View"
+#~ msgstr "Выгляд"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "Icon View"
+#~ msgstr "Выгляд"
+
+#, fuzzy
+#~| msgid "Group shapes"
+#~ msgid "More shapes"
+#~ msgstr "Групоўка аб'ектаў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Скрут і сціск"
+
+#, fuzzy
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "Скрут і сціск..."
+
+#, fuzzy
+#~ msgid "Whirl Pinch"
+#~ msgstr "Скрут і сціск"
+
+#, fuzzy
+#~ msgid "Info"
+#~ msgstr "Інфармацыя"
+
+#, fuzzy
+#~ msgid "Angle:"
+#~ msgstr "Кут:"
+
+#, fuzzy
+#~ msgid "Pinch:"
+#~ msgstr "Сціск:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise Layer"
+#~ msgstr "Пластоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower Layer"
+#~ msgstr "Пластоў:"
+
+#, fuzzy
+#~ msgid "Configure"
+#~ msgstr "Наладзіць Karbon..."
+
+#, fuzzy
+#~ msgid "Grid"
+#~ msgstr "Паказаць сетку"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgid "Document Settings"
+#~ msgstr "&Настаўленні"
+
+#, fuzzy
+#~| msgid "View"
+#~ msgid "View mode"
+#~ msgstr "Выгляд"
+
+#, fuzzy
+#~ msgid "New Layer"
+#~ msgstr "Пластоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Стварыць цень"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~ msgid "Layer"
+#~ msgstr "Пластоў:"
+
+#, fuzzy
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Празрыстасць"
+
+#, fuzzy
+#~ msgid "no"
+#~ msgstr "Інфармацыя"
+
+#, fuzzy
+#~ msgid "yes"
+#~ msgstr "Стыль:"
+
+#~ msgid "Bug fixes"
+#~ msgstr "выпраўленне памылак"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Недапушчальны фармат дакумента OASIS. Не знойдзены тэг office:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr ""
+#~ "Недапушчальны фармат дакумента OASIS. Не знойдзены тэг office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Недапушчальны фармат дакумента OASIS. Не знойдзены тэг office:page."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert graphics"
+#~ msgstr "Уставіць малюнак..."
+
+#, fuzzy
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Вылучыце дадаваную тэкстуру"
+
+#, fuzzy
+#~ msgid "Import graphic"
+#~ msgstr "Уставіць малюнак..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Separate paths"
+#~ msgstr "Згладзіць крывую"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Паказаць палі старонкі"
+
+#, fuzzy
+#~ msgid "&Import Graphic..."
+#~ msgstr "Уставіць малюнак..."
+
+#~ msgid "D&elete"
+#~ msgstr "&Выдаліць"
+
+#, fuzzy
+#~ msgid "Edit Guides"
+#~ msgstr "Схаваць сетку"
+
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "Прадубляваць"
+
+#, fuzzy
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Равноудаленно расставіць цэнтры па гарызанталі"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Выраўнаваць інтэрвалы паміж аб'ектамі па гарызанталі"
+
+#, fuzzy
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Равноудаленно расставіць левыя боку"
+
+#, fuzzy
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Равноудаленно расставіць правыя боку"
+
+#, fuzzy
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Равноудаленно расставіць цэнтры па вертыкалі"
+
+#, fuzzy
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Выраўнаваць інтэрвалы паміж аб'ектамі па вертыкалі"
+
+#, fuzzy
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Равноудаленно расставіць ніжнія боку"
+
+#, fuzzy
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Равноудаленно расставіць верхнія боку"
+
+#, fuzzy
+#~ msgid "Show Rulers"
+#~ msgstr "Паказаць лінейкі"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Паказаць або схаваць лінейкі."
+
+#, fuzzy
+#~ msgid "Show or hide color palette"
+#~ msgstr "Паказаць або схаваць лінейкі."
+
+#, fuzzy
+#~ msgid "Snap to Grid"
+#~ msgstr "Прыліпанне да сеткі"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "Прыліпаць да сеткі."
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgid "&Clip Object"
+#~ msgstr "Аб'ект"
+
+#, fuzzy
+#~ msgid "&Unclip Objects"
+#~ msgstr "Разгрупавать аб'екты"
+
+#, fuzzy
+#~ msgid "&Close Path"
+#~ msgstr "Замкнуць контур"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "Замкнуць контур"
+
+#, fuzzy
+#~ msgid "Se&parate Path"
+#~ msgstr "Згладзіць крывую"
+
+#, fuzzy
+#~ msgid "Re&verse Path"
+#~ msgstr "Замкнуць контур"
+
+#, fuzzy
+#~ msgid "Intersect Paths"
+#~ msgstr "Змяніць базавы контур"
+
+#, fuzzy
+#~ msgid "Subtract Paths"
+#~ msgstr "Згладзіць крывую"
+
+#, fuzzy
+#~ msgid "Unite Paths"
+#~ msgstr "Змяніць базавы контур"
+
+#, fuzzy
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Прыліпанне да сеткі"
+
+#, fuzzy
+#~ msgid "Configure Karbon..."
+#~ msgstr "Наладзіць Karbon..."
+
+#, fuzzy
+#~ msgid "Page &Layout..."
+#~ msgstr "Уласцівасці старонкі..."
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Zoom"
+#~ msgstr "Па ніжнім боку"
+
+#, fuzzy
+#~ msgctxt "The style has no fill"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgctxt "The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgid "Stroke:"
+#~ msgstr "Контур"
+
+#, fuzzy
+#~ msgid "Fill:"
+#~ msgstr "Заліванне"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "Адкрыць файл"
+
+#, fuzzy
+#~ msgid "Target:"
+#~ msgstr "Выкарыстанне:"
+
+#, fuzzy
+#~ msgid "Line"
+#~ msgstr "Лінейны"
+
+#, fuzzy
+#~ msgid "Fill"
+#~ msgstr "Заліванне"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "Тып:"
+
+#, fuzzy
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Лінейны"
+
+#, fuzzy
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Радыяльны"
+
+#, fuzzy
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Канічны"
+
+#, fuzzy
+#~ msgid "Repeat:"
+#~ msgstr "Паўтор:"
+
+#, fuzzy
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgid "Reflect"
+#~ msgstr "Адлюстраванне"
+
+#, fuzzy
+#~ msgid "Repeat"
+#~ msgstr "Паўтор"
+
+#, fuzzy
+#~ msgid "Overall opacity:"
+#~ msgstr "Агульная непразрыстасць:"
+
+#, fuzzy
+#~ msgid "Stop color."
+#~ msgstr "Контур: суцэльны колер"
+
+#, fuzzy
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "Дадаць да стандартнага набору градыентаў"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgid "Tiled"
+#~ msgstr "&Файл"
+
+#, fuzzy
+#~| msgid "Align Right"
+#~ msgid "Top Right"
+#~ msgstr "Па правым боку"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Bottom"
+#~ msgstr "Па ніжнім боку"
+
+#, fuzzy
+#~ msgid "Stroke"
+#~ msgstr "Контур"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Схаваць палі старонкі"
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "Схаваць лінейкі"
+
+#, fuzzy
+#~ msgid "Stop color:"
+#~ msgstr "Контур: суцэльны колер"
+
+#~ msgid "Tools"
+#~ msgstr "Начынне"
+
+#, fuzzy
+#~ msgid "Show Guides"
+#~ msgstr "Паказаць лінейкі"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Паказаць або схаваць сетку."
+
+#, fuzzy
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Няма"
+
+#, fuzzy
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Працяглы"
+
+#, fuzzy
+#~ msgid "Gradient"
+#~ msgstr "Градыент"
+
+#, fuzzy
+#~ msgid "Pattern"
+#~ msgstr "Шаблон"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Разгрупаваць аб'екты"
+
+#, fuzzy
+#~ msgid "&Group Objects"
+#~ msgstr "Згрупаваць аб'екты"
+
+#, fuzzy
+#~ msgid "Show grid:"
+#~ msgstr "Паказаць сетку"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Прыліпаць да сеткі."
+
+#, fuzzy
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Вылучыце дадаваную тэкстуру"
+
+#, fuzzy
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Вылучыце дадаваную тэкстуру"
+
+#, fuzzy
+#~ msgid "Reference Point:"
+#~ msgstr "Спасылка"
+
+#, fuzzy
+#~ msgid "X:"
+#~ msgstr "S:"
+
+#, fuzzy
+#~ msgid "Y:"
+#~ msgstr "S:"
+
+#, fuzzy
+#~ msgid "Pattern Size"
+#~ msgstr "Шаблон"
+
+#, fuzzy
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#, fuzzy
+#~ msgid "Edit Gradient"
+#~ msgstr "Праўка градыенту"
+
+#, fuzzy
+#~ msgid "Predefined Gradients"
+#~ msgstr "Набор градыентаў"
+
+#, fuzzy
+#~ msgid "Gradient tool"
+#~ msgstr "Градыент"
+
+#, fuzzy
+#~ msgid "Pattern tool"
+#~ msgstr "Шаблон"
+
+#, fuzzy
+#~ msgid "Exactness:"
+#~ msgstr "Згладжванне:"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Замкнуць контур"
+
+#, fuzzy
+#~ msgid "Width:"
+#~ msgstr "Шырыня:"
+
+#, fuzzy
+#~ msgid "Graphics Pen"
+#~ msgstr "Градыент"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "На самы верх"
+
+#~ msgid "&Raise"
+#~ msgstr "Падняць"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "Апусціць"
+
+#~ msgid "Send to &Back"
+#~ msgstr "У самы ніз"
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "Паказаць сетку"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "Схаваць сетку"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Паказаць або схаваць сетку."
+
+#~ msgid "Align Left"
+#~ msgstr "Па левым боку"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Па цэнтры (гарызантальна)"
+
+#, fuzzy
+#~| msgid "Align Left"
+#~ msgid "Align Right"
+#~ msgstr "Па левым боку"
+
+#~ msgid "Align Top"
+#~ msgstr "Па верхнім боку"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Па цэнтры (вертыкальна)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Па ніжнім боку"
+
+#, fuzzy
+#~ msgid "Stop opacity:"
+#~ msgstr "Непразрыстасць:"
+
+#, fuzzy
+#~ msgid "Choose Pattern"
+#~ msgstr "Вылучыце дадаваную тэкстуру"
+
+#, fuzzy
+#~ msgid "R:"
+#~ msgstr "R(Да):"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Згладзіць крывую"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Згладзіць крывую"
+
+#, fuzzy
+#~ msgid "Convert to Path"
+#~ msgstr "Замкнуць контур"
+
+#, fuzzy
+#~ msgid "Uniform Color"
+#~ msgstr "Агульны колер"
+
+#, fuzzy
+#~ msgid "Old:"
+#~ msgstr "Стары:"
+
+#, fuzzy
+#~ msgid "New:"
+#~ msgstr "Новы:"
+
+#, fuzzy
+#~ msgid "G:"
+#~ msgstr "G(З):"
+
+#, fuzzy
+#~ msgid "B:"
+#~ msgstr "B(Г):"
+
+#, fuzzy
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V:"
+
+#, fuzzy
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "Тып"
+
+#, fuzzy
+#~ msgid "Join"
+#~ msgstr "Увайсці"
+
+#, fuzzy
+#~ msgid "Color Chooser"
+#~ msgstr "Выбар колеру"
+
+#, fuzzy
+#~ msgid "Resources"
+#~ msgstr "Рэсурсы"
+
+#, fuzzy
+#~ msgid "Patterns"
+#~ msgstr "Шаблоны"
+
+#, fuzzy
+#~ msgid "Clipart"
+#~ msgstr "Ілюстрацыя"
+
+#, fuzzy
+#~ msgid "Add"
+#~ msgstr "Дадаць"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "Імпартаваць"
+
+#, fuzzy
+#~ msgid "Stroke: None"
+#~ msgstr "Контур: не"
+
+#, fuzzy
+#~ msgid "Fill: None"
+#~ msgstr "Заліванне: не"
+
+#, fuzzy
+#~ msgid "Fill: RGB"
+#~ msgstr "Заліванне: RGB"
+
+#, fuzzy
+#~ msgid "Fill: CMYK"
+#~ msgstr "Заліванне: CMYK"
+
+#, fuzzy
+#~ msgid "Fill: HSB"
+#~ msgstr "Заліванне: HSB"
+
+#, fuzzy
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Заліванне: адценні шэрага"
+
+#, fuzzy
+#~ msgid "Fill: Color"
+#~ msgstr "Заліванне: суцэльны колер"
+
+#, fuzzy
+#~ msgid "Fill: Gradient"
+#~ msgstr "Заліванне: градыент"
+
+#, fuzzy
+#~ msgid "Fill: Pattern"
+#~ msgstr "Заліванне: тэкстура"
+
+#, fuzzy
+#~ msgid "Stroke: RGB"
+#~ msgstr "Контур: RGB"
+
+#, fuzzy
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Контур: CMYK"
+
+#, fuzzy
+#~ msgid "Stroke: HSB"
+#~ msgstr "Контур: HSB"
+
+#, fuzzy
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Контур: адценні шэрага"
+
+#, fuzzy
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Контур: градыент"
+
+#, fuzzy
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Контур: тэкстура"
+
+#, fuzzy
+#~ msgid "Polygonize"
+#~ msgstr "Выпрастаць лініі"
+
+#, fuzzy
+#~ msgid "Round corners:"
+#~ msgstr "Закругленне кутоў:"
+
+#, fuzzy
+#~ msgid "&Shadow Effect..."
+#~ msgstr "Цень..."
+
+#, fuzzy
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Стварыць цень"
+
+#, fuzzy
+#~ msgid "Distance:"
+#~ msgstr "Адлегласць:"
+
+#, fuzzy
+#~ msgid "%"
+#~ msgstr "%"

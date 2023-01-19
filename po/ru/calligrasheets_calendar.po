@@ -1,0 +1,337 @@
+# KDE3 - koffice/kspreadinsertcalendar.po Russian translation.
+# Copyright (C) 2004 KDE Russian translation team.
+#
+# Andrey Cherepanov <sibskull@mail.ru>, 2005.
+# Nick Shaforostoff <shafff@ukr.net>, 2005.
+# Artem Sereda <overmind88@gmail.com>, 2009.
+# Yuri Efremov <yur.arh@gmail.com>, 2013.
+# Georgiy Syptchenko <superzhook@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: kspreadinsertcalendar\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-07-06 07:35+0400\n"
+"Last-Translator: Georgiy Syptchenko <superzhook@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr "Дата окончания находится раньше даты начала!"
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "Ошибка"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Период календаря не должен превышать 10 лет. Если вы хотите указать более "
+"длительный период, вставьте несколько календарей."
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Даты начала и окончания совпадают! Будет вставлена эта указанная дата. Вы "
+"хотите продолжить?"
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Календарь с периодом больше года может занять очень много места на листе. Вы "
+"хотите продолжить?"
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Область под вставляемым календарём содержит данные. После вставки календаря "
+"они будут потеряны. Вы хотите перезаписать данные? Если вы нажмёте на кнопку "
+"«Нет», то будет выделена область ячеек, необходимая для вставки календаря."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Вставить календарь"
+
+#: CalendarTool.cpp:107
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Календарь с %1 по %2"
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "неделя"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "Календарь"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Календарь"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, kde-format
+msgid "Insert"
+msgstr "Вставка"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, kde-format
+msgid "Start date:"
+msgstr "Дата начала:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, kde-format
+msgid "End date:"
+msgstr "Окончание:"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Календарь"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Вставка"
+
+#, fuzzy
+#~| msgid "Start date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Дата начала:"
+
+#, fuzzy
+#~| msgid "End date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Окончание:"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr "Дата окончания находится раньше даты начала!"
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Ошибка"
+
+#, fuzzy
+#~| msgid ""
+#~| "Calendars should not be longer than 10 years. If you really need such "
+#~| "long periods you need to split them up."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Период календаря не должен превышать 10 лет. Если вы хотите указать более "
+#~ "длительный период, вставьте несколько календарей."
+
+#, fuzzy
+#~| msgid ""
+#~| "Start and end dates are equal! Only one day will be inserted, do you "
+#~| "want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Даты начала и окончания совпадают! Будет вставлена эта указанная дата. Вы "
+#~ "хотите продолжить?"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Предупреждение"
+
+#, fuzzy
+#~| msgid ""
+#~| "Creating a calendar for a longer period than a year can take up a lot of "
+#~| "space, do you want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Календарь с периодом больше года может занять очень много места на листе. "
+#~ "Вы хотите продолжить?"
+
+#, fuzzy
+#~| msgid ""
+#~| "The area where the calendar is inserted is NOT empty, are you sure you "
+#~| "want to continue, overwriting existing data? If you choose No the area "
+#~| "that would be required for the desired calendar will be selected so you "
+#~| "can see what data would be overwritten."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Область под вставляемым календарём содержит данные. После вставки "
+#~ "календаря они будут потеряны. Вы хотите перезаписать данные? Если вы "
+#~ "нажмёте на кнопку «Нет», то будет выделена область ячеек, необходимая для "
+#~ "вставки календаря."
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Календарь с %1 по %2"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "неделя"
+
+#, fuzzy
+#~| msgid "Calendar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Календарь"
+
+#, fuzzy
+#~| msgid ""
+#~| "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~| "want to insert. When you have choosen the desired dates, simply press "
+#~| "the Insert button to insert the calendar into the spreadsheet, starting "
+#~| "at the cell you have currently selected."
+#~ msgctxt "This what's this help applies for the entire dialog."
+#~ msgid ""
+#~ "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~ "want to insert. When you have chosen the desired dates, simply press the "
+#~ "Insert button to insert the calendar into the spreadsheet, starting at "
+#~ "the cell you have currently selected."
+#~ msgstr ""
+#~ "Для того, чтобы вставить календарь, укажите даты календаря. После того, "
+#~ "как вы выберите даты, нажмите кнопку \"Вставить\" для вставки календаря "
+#~ "начиная с текущей ячейки."
+
+#, fuzzy
+#~ msgid "Set the start date of the calendar you want to insert"
+#~ msgstr "Дата начала календаря."
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should start. The "
+#~ "selected date will be the first day of the inserted calendar. You can "
+#~ "also choose a date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "Здесь вы должны указать дату, с которой будет начинаться календарь. "
+#~ "Указанная дата будет первым днём во вставляемом календаре. Вы можете "
+#~ "выбрать дату из диалога календаря при нажатии на кнопку \"Выбрать\"."
+
+#~ msgid "Date Picker"
+#~ msgstr "Выбор даты"
+
+#, fuzzy
+#~ msgid "Use a graphical date picker to select a date"
+#~ msgstr "Выбор даты из календаря."
+
+#, fuzzy
+#~ msgid "Set the end date of the calendar you want to insert"
+#~ msgstr "Дата окончания календаря."
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should end. The selected "
+#~ "date will be the last day of the inserted calendar. You can also choose a "
+#~ "date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "Здесь вы должны указать дату, на которой будет заканчиваться календарь. "
+#~ "Указанная дата будет последним днём во вставляемом календаре. Вы можете "
+#~ "выбрать дату из диалога календаря при нажатии на кнопку \"Выбрать\"."
+
+#, fuzzy
+#~ msgctxt "Tooltip for the insert button of the insert calendar plugin"
+#~ msgid "Insert the calendar at the currently selected cell"
+#~ msgstr "Вставить календарь в текущую ячейку."
+
+#, fuzzy
+#~| msgid ""
+#~| "A new calendar will be inserted starting at the currently selected cell."
+#~ msgctxt "What's this for the insert button of the insert calendar plugin"
+#~ msgid ""
+#~ "A new calendar will be inserted starting at the currently selected cell."
+#~ msgstr "Новый календарь будет вставлен начиная с текущей ячейки."
+
+#, fuzzy
+#~ msgid "Do not insert a calendar"
+#~ msgstr "Не вставлять календарь."
+
+#~ msgid ""
+#~ "Quits the dialog and does not insert a calendar. Use this to cancel this "
+#~ "operation."
+#~ msgstr "Выход из диалога без вставки календаря."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Андрей Черепанов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sibskull@mail.ru"
+
+#~ msgid "Insert Calendar..."
+#~ msgstr "Вставить календарь..."
+
+#~ msgid "KSpread Insert Calendar Plugin"
+#~ msgstr "Модуль календаря KSpread"
+
+#~ msgid "(c) 2005, The KSpread Team"
+#~ msgstr "(c) 2005, Команда разработчиков KSpread"
+
+#, fuzzy
+#~ msgid "Cannot insert calendar because no document is set!"
+#~ msgstr "Невозможно вставить календарь, так как нет открытого документа!"

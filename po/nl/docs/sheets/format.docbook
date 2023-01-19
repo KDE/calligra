@@ -1,0 +1,1134 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+><surname
+>Koning</surname
+><affiliation
+><address
+><email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+><contrib
+>Vertaler</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Werkbladen opmaken</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>Celopmaak</title>
+<para
+>Om de opmaak en het uiterlijk van geselecteerde cel(len), rij(en) en kolom(men) te wijzigen gebruikt u <guimenuitem
+>Celopmaak...</guimenuitem
+> in het menu <guimenu
+>Opmaak</guimenu
+> of in het contextmenu dat verschijnt als u met de <mousebutton
+>rechter</mousebutton
+>muisknop klikt.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Rechtermuisknop en contextmenu.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Het dialoogvenster <guilabel
+>Celopmaak</guilabel
+> verschijnt. Dit dialoogvenster heeft verscheidene tabbladen:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>Gegevensopmaak en uiterlijk</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het tabblad <guilabel
+>Gegevensopmaak</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Op het tabblad <guilabel
+>Gegevensopmaak</guilabel
+> van het dialoogvenster <guilabel
+>Celopmaak</guilabel
+> kunt u bepalen hoe de waarden in de cellen worden weergegeven.</para>
+<para
+>In het bovenste gedeelte van het tabblad kunt u de opmaak van getallen, datum en tijd instellen, in het vak <guilabel
+>Voorbeeld</guilabel
+> kunt u het effect van de opmaak zien. </para>
+<para
+>U kunt de opmaak voor een gehele rij of kolom instellen door de rij of kolom te selecteren en daarna het dialoogvenster <guilabel
+>Celopmaak</guilabel
+> te openen door met de &RMB; te klikken.</para>
+<note
+><para
+>U kunt de precisie (het aantal decimalen) voor elk getal verhogen in  <guilabel
+>Algemeen</guilabel
+>, <guilabel
+>Getal</guilabel
+>, <guilabel
+>Procent</guilabel
+>, <guilabel
+>Geldbedrag</guilabel
+> en <guilabel
+>Wetenschappelijk</guilabel
+> door op de knop <guiicon
+>Precisie verhogen</guiicon
+> in de werkbalk <guilabel
+>Opmaak</guilabel
+> te klikken: <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>U kunt de precisie (het aantal decimalen) voor elk getal verlagen in  <guilabel
+>Algemeen</guilabel
+>, <guilabel
+>Getal</guilabel
+>, <guilabel
+>Procent</guilabel
+>, <guilabel
+>Geldbedrag</guilabel
+> en <guilabel
+>Wetenschappelijk</guilabel
+> door op de knop <guiicon
+>Precisie verlagen</guiicon
+> in de werkbalk <guilabel
+>Opmaak</guilabel
+> te klikken: <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Algemeen</guilabel
+></term>
+<listitem
+><para
+>Dit is de standaardopmaak en &sheets; detecteert automatisch het feitelijke gegevenstype van de inhoud van de huidige cel. Standaard lijnt &sheets; getallen, data en tijden rechts uit, en al het overige links.</para>
+<para
+>Als de opmaak <guilabel
+>Algemeen</guilabel
+> niet aan uw eisen voldoet, kunt u één van de volgende specifieke opmaaktypen kiezen.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Getal</guilabel
+></term>
+<listitem
+><para
+>De notatie die gebruikt wordt, is de notatie die ingesteld is in &systemsettings; in <menuchoice
+><guimenu
+>Regio en toegankelijkheid</guimenu
+> <guimenuitem
+>Getallen</guimenuitem
+></menuchoice
+>. Getallen worden standaard rechts uitgelijnd.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Procent</guilabel
+></term>
+<listitem
+><para
+>Als er een getal in de geselecteerde cel staat, en u wijzigt de celopmaak van <guilabel
+>Algemeen</guilabel
+> in <guilabel
+>Procent</guilabel
+>, wordt het getal met 100% vermenigvuldigd.</para>
+<para
+>Als u bijvoorbeeld 2 intypt en voor de celopmaak <guilabel
+>Procent</guilabel
+> kiest, wordt het 200%. Als u de opmaak weer naar <guilabel
+>Algemeen</guilabel
+> terugzet, wordt de inhoud van de cel weer 2.</para>
+<para
+>U kunt ook op de knop <guiicon
+>Procentenopmaak</guiicon
+> op de werkbalk <guilabel
+>Opmaak</guilabel
+> klikken: <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Geldbedrag</guilabel
+></term>
+<listitem
+><para
+>De opmaak <guilabel
+>Geld</guilabel
+> converteert het getal naar de valutanotatie die ingesteld is in &systemsettings; in <menuchoice
+><guimenu
+>Regio &amp; toegankelijkheid</guimenu
+> <guisubmenu
+>Land/Regio &amp; Taal</guisubmenu
+><guimenuitem
+>Valuta</guimenuitem
+></menuchoice
+>. Het valutasymbool en de precisie zoals die in  &systemsettings; zijn ingesteld, worden gebruikt.</para>
+<para
+>U kunt ook op de knop <guiicon
+>Valuta-opmaak</guiicon
+> op de werkbalk <guilabel
+>Opmaak</guilabel
+> klikken om de celopmaak aan te passen aan de huidige muntsoort: <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Wetenschappelijk</guilabel
+></term>
+<listitem
+><para
+>De opmaak <guilabel
+>Wetenschappelijk</guilabel
+> geeft het getal in de wetenschappelijke notatie weer. Het getal 0.0012 bijvoorbeeld, wordt 1.2E-03. Als u de opmaak terugzet naar <guilabel
+>Algemeen</guilabel
+> wordt het getal weer 0.0012.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Breuk</guilabel
+></term>
+<listitem
+><para
+>Met de opmaak <guilabel
+>Breuk</guilabel
+> kunt u getallen als breuken laten weergeven. U kunt het type in de lijst aan de rechterkant kiezen, bijvoorbeeld 1/8, 2/16, 1/10, &etc; Als de exacte waarde niet in het gekozen type weergegeven kan worden, wordt de dichtstbijliggende waarde genomen. Als u het getal 1,5 bijvoorbeeld in de opmaak <guilabel
+>Breuk</guilabel
+> en het type <guilabel
+>Zestienden 1/16</guilabel
+> wilt omzetten, wordt "1 8/16" weergegeven. Dit komt exact overeen met het 1,5. Als u 1,4 als <guilabel
+>Breuk</guilabel
+> in het type <guilabel
+>Zestienden 1/16</guilabel
+> wilt omzetten, wordt "1 6/16" weergegeven. Dit is de dichtstbijzijnde waarde die mogelijk is voor zestiende-breuken.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Datum</guilabel
+></term>
+<listitem
+><para
+>Wanneer u een datum invoert, kunt u het beste één van de opmaaktypen gebruiken die in &systemsettings; in <menuchoice
+><guimenu
+>Regio en toegankelijkheid</guimenu
+> <guisubmenu
+>Land/Regio &amp; Taal</guisubmenu
+><guimenuitem
+>Tijd &amp; datum</guimenuitem
+></menuchoice
+> ingesteld is. Hier zijn twee opmaaktypen ingesteld: de datum en de afgekorte datum.</para>
+<para
+>Een willekeurig natuurlijk getal NN wordt omgezet in de datum vanaf 30 december 1899 (die 0 is) waarbij het aantal dagen NN wordt opgeteld. Als er bijvoorbeeld 100 in een cel staat, en u kiest <guilabel
+>Datumopmaak</guilabel
+>, wordt de datum "1900-04-09", 100 dagen na 30 december 1899. De begindatum is eigenlijk twee dagen te vroeg, dit was een fout in Lotus 123 en daarna werd dit in Excel overgenomen voor compatibiliteit. Voor datumberekeningen maakt dit niets uit, als u 9 dagen bij 1 november 2000 optelt, is het resultaat 10 november 2000.</para>
+<note
+><para
+>Wanneer de inhoud van een cel een <guilabel
+>Datum</guilabel
+> is, kunt u deze cel omlaag slepen, net als bij cellen met getallen. De inhoud van de volgende cellen is dan ook een datum, in elke volgende cel een dag erbij.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tijd</guilabel
+></term>
+<listitem
+><para
+>Hiermee krijgt de cel de opmaak van een tijd. Wanneer u een tijd invoert kunt het beste één van de opmaaktypen gebruiken die bij <guilabel
+>Tijdindeling</guilabel
+> in &systemsettings; in <menuchoice
+><guimenu
+>Regio en toegankelijkheid</guimenu
+> <guimenuitem
+>Tijd &amp; Datum</guimenuitem
+></menuchoice
+> is ingesteld. In het dialoogvenster <guilabel
+>Celopmaak</guilabel
+> kunt u instellen hoe de tijd weergegeven wordt door één van de beschikbare opties te kiezen. De standaardopmaak is die, die in &systemsettings; ingesteld is. Wanneer het getal in de cel niet herkenbaar is als tijd, geeft &sheets; het getal 00:00 weer in de globale opmaak, die is ingesteld in &systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Datum en tijd</guilabel
+></term>
+<listitem
+><para
+>Hiermee krijgt de cel de opmaak van een datum en tijd.Wanneer u een tijd invoert kunt het beste één van de opmaaktypen gebruiken die bij <guilabel
+>Tijdindeling</guilabel
+> in &systemsettings; in <menuchoice
+><guimenu
+>Regio en toegankelijkheid</guimenu
+> <guimenuitem
+>Tijd &amp; Datum</guimenuitem
+></menuchoice
+> is ingesteld. In het dialoogvenster <guilabel
+>Celopmaak</guilabel
+> kunt u instellen hoe de tijd weergegeven wordt door één van de beschikbare opties te kiezen. De standaardopmaak is die, die in &systemsettings; ingesteld is. Wanneer het getal in de cel niet herkenbaar is als tijd, geeft &sheets; het getal 00:00 weer in de globale opmaak, die is ingesteld in &systemsettings;.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tekst</guilabel
+></term>
+<listitem
+><para
+>Hierdoor wordt de inhoud van de cel opgemaakt als tekst. Dit kan nuttig zijn als u wilt dat een getal als tekst wordt beschouwd en niet als een getal, bijvoorbeeld in een postcode. Een getal dat als tekst is opgemaakt, wordt links in de cel geplaatst. Als tekst opgemaakte getallen kunnen niet worden gebruikt in berekeningen. Ook wordt de plaats in de cel veranderd.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Aangepast</guilabel
+></term>
+<listitem
+><para
+>In deze versie werkt dit nog niet. Het wordt in de volgende versie ingebouwd.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>In het onderste gedeelte van het tabblad <guilabel
+>Gegevensopmaak</guilabel
+> kunt u een <guilabel
+>Voorvoegsel:</guilabel
+> zoals een &#8364;-symbool aan het begin van elk bedrag toevoegen of een <guilabel
+>Achtervoegsel:</guilabel
+> zoals $HK aan het eind. U kunt ook instellen hoeveel cijfers er na de komma weergegeven worden, of positieve getallen een plusteken (+) krijgen, en of negatieve getallen in rood weergegeven worden. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>Lettertypen en tekstopmaak</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het tabblad "Lettertype".</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Op het tabblad <guilabel
+>Lettertype</guilabel
+> kunt u onder andere de <guilabel
+>Stijl:</guilabel
+>, de <guilabel
+>Grootte:</guilabel
+> en de <guilabel
+>Kleur:</guilabel
+> instellen, evenals enkele andere opties zoals onderstreepte of doorgehaalde tekst. In het onderste gedeelte ziet u een <guilabel
+>Voorbeeld</guilabel
+>van de geselecteerde tekstopmaak.</para>
+<para
+>Het standaardlettertype wordt voor alle cellen ingesteld in het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Stijlenbeheer</guimenuitem
+></menuchoice
+> met de huidige stijl.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>Stijl:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de stijl voor het lettertype in de geselecteerde cellen kiezen. Wanneer er cellen met verschillende stijlen geselecteerd zijn, wordt als stijl <guilabel
+>Variërend (Geen wijziging)</guilabel
+> vermeld. Als u deze optie kiest, blijven de verschillende stijlen in de geselecteerde cellen zoals ze zijn. Als u bijvoorbeeld <guilabel
+>Recht</guilabel
+> kiest, wordt de lettertypestijl voor alle geselecteerde cellen <guilabel
+>Recht</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Grootte:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de grootte voor het lettertype in de geselecteerde cellen kiezen. Wanneer er cellen met verschillende tekengrootten geselecteerd zijn, wordt als grootte <guilabel
+> </guilabel
+> (geen getal) vermeld. Als u deze optie kiest, blijven de verschillende grootten in de geselecteerde cellen zoals ze zijn. Als u bijvoorbeeld <guilabel
+>14</guilabel
+> kiest, wordt de tekengrootte voor alle geselecteerde cellen <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Gewicht:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u het gewicht voor het lettertype in de geselecteerde cellen kiezen. Wanneer er cellen met verschillend gewicht geselecteerd zijn, wordt als gewicht <guilabel
+>Variërend (Geen wijziging)</guilabel
+> vermeld. Als u deze optie kiest, blijven de verschillende gewichtinstellingen in de geselecteerde cellen zoals ze zijn. Als u bijvoorbeeld <guilabel
+>Vet</guilabel
+> kiest, wordt het gewicht voor alle geselecteerde cellen <guilabel
+>Vet</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tekstkleur:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de tekstkleur voor de geselecteerde cellen kiezen. Klik op de gekleurde balk om het KDE-dialoogvenster <guilabel
+>Kleur selecteren</guilabel
+> te openen, hierin kunt u een andere kleur kiezen. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Onderstrepen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, wordt de tekst in de geselecteerde cellen onderstreept. Standaard is deze optie uitgeschakeld.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Doorgehaald</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, wordt de tekst in de geselecteerde cellen doorgehaald. Standaard is deze optie uitgeschakeld.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>Tekstpositie en tekstrotatie</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het tabblad "Positie".</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Op het tabblad <guilabel
+>Positie</guilabel
+> kunt u de uitlijning van de tekst in de cel bepalen bij <guilabel
+>Horizontaal</guilabel
+> en <guilabel
+>Verticaal</guilabel
+>. U kunt de waarde van het <guilabel
+>Inspringen</guilabel
+> wijzigen en de tekst verticaal of onder een hoek in plaats van horizontaal zetten.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Horizontaal</guilabel
+></term>
+<listitem
+><para
+>Hier stelt u de horizontale uitlijning van de celinhoud in. Bij de optie <guilabel
+>Standaard</guilabel
+> is de uitlijning afhankelijk van de gegevensopmaak. <guilabel
+>Links</guilabel
+>, <guilabel
+>Midden</guilabel
+> en <guilabel
+>Rechts</guilabel
+> lijnen de celinhoud respectievelijk aan de linkerkant, in het midden en aan de rechterkant van de cel uit.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Verticaal</guilabel
+></term>
+<listitem
+><para
+>Hier stelt u de verticale uitlijning van de celinhoud in. <guilabel
+>Boven</guilabel
+>, <guilabel
+>Midden</guilabel
+> en <guilabel
+>Onder</guilabel
+> lijnen de celinhoud aan de bovenkant, in het midden en aan de onderkant van de cel uit.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tekstoptie</guilabel
+></term>
+<listitem
+><para
+>Deze optie is alleen beschikbaar als de rotatie 0° is. Als u <guilabel
+>Tekst afbreken</guilabel
+> inschakelt, wordt de tekst afgebroken zodat deze binnen de oorspronkelijke celgrootte past. Als deze optie uitgeschakeld is, blijft de tekst op één regel.</para>
+<para
+>Als u de optie <guilabel
+>Verticale tekst</guilabel
+> inschakelt, wordt tekst verticaal in de cel geplaatst.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Rotatie</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u het aantal graden instellen om de tekst te laten roteren. Positieve waarden laten de tekst tegen de klok in roteren, negatieve waarden met de klok mee.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Cellen samenvoegen</guilabel
+></term>
+<listitem
+><para
+>Het inschakelen van deze optie heeft hetzelfde effect als het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Cellen samenvoegen</guimenuitem
+></menuchoice
+>. U moet ten minste twee aan elkaar grenzende cellen geselecteerd hebben. Deze cellen worden met elkaar samengevoegd tot één cel.</para>
+<para
+>Wanneer u een samengevoegde cel selecteert en deze optie uitschakelt, worden alle cellen teruggezet naar hun oorspronkelijke grootte. Dit heeft hetzelfde effect als het menu <menuchoice
+><guimenu
+>Gegevens</guimenu
+> <guimenuitem
+>Cellen splitsen</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Inspringen</guilabel
+></term>
+<listitem
+><para
+>Instellen van de inspringdiepte die in de cel wordt gebruikt wanneer de acties <guilabel
+>Meer inspringen</guilabel
+>/<guilabel
+>Minder inspringen</guilabel
+> worden gekozen in de werkbalk. Deze acties zijn niet standaard actief in de werkbalk.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Celgrootte</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de grootte van de geselecteerde cellen instellen. U kunt de breedte en de hoogte aanpassen of de standaardbreedte en -hoogte gebruiken.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>Celrand</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het tabblad "Rand".</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Op het tabblad <guilabel
+>Rand</guilabel
+> kunt u de celranden instellen. Als u meer dan één cel geselecteerd hebt, kunt u verschillende stijlen kiezen voor de randen tussen de cellen en de randen om de cellen heen. </para>
+<para
+>Selecteer eerst het patroon en de kleur in het gedeelte <guilabel
+>Patroon</guilabel
+> op het tabblad <guilabel
+>Rand</guilabel
+> en pas deze toe op verschillende delen van de rand door op de gewenste knop te klikken in het gedeelte <guilabel
+>Rand</guilabel
+> of op een van de knoppen in het gedeelte <guilabel
+>Voorselecteren</guilabel
+>. Door op de linkerknop in het gedeelte <guilabel
+>Voorselecteren</guilabel
+> te klikken kunt u alle randen weer wissen. U kunt ook diagonale lijnen in de cellen aanbrengen.</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>Celachtergrond</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het tabblad "Achtergrond".</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Op het tabblad <guilabel
+>Achtergrond</guilabel
+> kunt u het patroon en de kleur voor de celachtergrond instellen.</para>
+<para
+>Kies eerst het gewenste <guilabel
+>Patroon</guilabel
+> en kies daarna de <guilabel
+>Kleur</guilabel
+> voor het patroon en de <guilabel
+>Achtergrondkleur</guilabel
+>.</para>
+<para
+>Onderop het tabblad kunt u een <guilabel
+>Voorbeeld</guilabel
+> zien van de geselecteerde celachtergrond.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>Celbescherming</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het tabblad "Celbescherming".</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>p het tabblad <guilabel
+>Celbeschrming</guilabel
+> kunt u instellen hoe de inhoud van een cel beschermd wordt.</para>
+<para
+>Alle cellen zijn standaard beschermd (dit betekent dat de celinhoud niet gewijzigd kan worden). Om de celbescherming actief te maken moet u ook het werkblad beschermen door het menu <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guimenuitem
+>Werkblad beschermen...</guimenuitem
+></menuchoice
+> te kiezen en een wachtwoord op te geven. U kunt ook de formules in cellen verbergen om te voorkomen dat anderen de formule zien. Ook hiervoor moet de bescherming van het werkblad ingeschakeld worden. U kunt de inhoud van cellen verbergen met <guilabel
+>Alles verbergen</guilabel
+> en ook hiervoor moet de bescherming van het werkblad ingeschakeld zijn. Meer informatie over deze instellingen kunt u vinden in het hoofdstuk <link linkend="protection"
+>Gevorderd hoofdstuk &sheets;, Beveiliging</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Alles verbergen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld, is wordt de inhoud van de cel verborgen. Dit heeft alleen effect als het werkblad beschermd is, dit betekent dat het in- of uitschakelen van <guilabel
+>Alles verbergen</guilabel
+> alleen effect heeft als een werkblad beschermd is. Het maakt niet uit of de cel zelf al dan niet beschermd is.</para>
+<para
+>Als <guilabel
+>Alles verbergen</guilabel
+> ingeschakeld is, zijn de opties <guilabel
+>Beschermd</guilabel
+> en <guilabel
+>Formule verbergen</guilabel
+> niet beschikbaar, omdat, wanneer het werkblad beschermd is, de celinhoud en de formules beschermd en verborgen worden door de optie <guilabel
+>Alles verbergen</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Beschermd</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, word de celinhoud beschermd. Dit is de standaard. Om de celbescherming actief te maken moet u het gehele werkblad beschermen door het menu <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guimenuitem
+>Werkblad beschermen...</guimenuitem
+></menuchoice
+> te kiezen. Als cellen beschermd zijn, kan de inhoud ervan niet gewijzigd worden.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Formule verbergen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, blijft de cel en de celinhoud zichtbaar, maar de formule wordt niet op de <guilabel
+>Formulebalk</guilabel
+> getoond. Het verbergen van formules wordt pas actief als de bescherming voor het werkblad ingeschakeld is.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Geen tekst afdrukken</guilabel
+></term>
+<listitem
+><para
+>Als u <guilabel
+>Geen tekst afdrukken</guilabel
+> inschakelt, wordt de tekst in de cel niet afgedrukt. Standaard is deze optie uitgeschakeld, tekst wordt standaard altijd afgedrukt.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>Voorwaardelijke celattributen</title>
+<para
+>U kunt het uiterlijk van een cel laten veranderen afhankelijk van de waarde van de inhoud. Dit kan nuttig zijn als u &sheets; gebruikt om uw huishoudelijke uitgaven  bij te houden, en bijvoorbeeld elke uitgave van meer dan duizend euro wilt markeren.</para>
+<para
+>Selecteer hiervoor eerst de cel(len) en kies dan <guimenuitem
+>Voorwaardelijke celattributen...</guimenuitem
+> in het menu <guimenu
+>Opmaak</guimenu
+>. Het dialoogvenster <guilabel
+>Voorwaardelijke celattributen</guilabel
+> verschijnt. Hierin kunt u het lettertype en de kleur van de cel wijzigen zodra het bedrag aan één of meer voorwaarden voldoet. De tweede en derde voorwaarden worden alleen toegepast als de waarde niet aan de voorgaande voorwaarden voldoet.</para>
+<para
+>Om voorwaardelijke celattributen van geselecteerde cellen te verwijderen kiest u <menuchoice
+><guisubmenu
+>Wissen</guisubmenu
+><guimenuitem
+>Voorwaardelijke celattributen</guimenuitem
+></menuchoice
+> in het menu <guimenu
+>Bewerken</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>Celgrootte wijzigen</title>
+<para
+>Op het tabblad <guilabel
+>Positie</guilabel
+> van het dialoogvenster <guilabel
+>Celopmaak</guilabel
+> kunt u de grootte van de geselecteerde cel(len) wijzigen. Wanneer u de hoogte van een cel wijzigt, wordt de hoogte van de gehele rij gewijzigd, de breedte van de gehele kolom wordt gewijzigd wanneer u de breedte van een cel wijzigt.</para>
+<para
+>U kunt ook de te wijzigen rij(en) of kolom(men) selecteren, en daarna kiezen: <guimenuitem
+>Rijhoogte wijzigen</guimenuitem
+> of <guimenuitem
+>Kolombreedte wijzigen</guimenuitem
+> in het contextmenu dat verschijnt wanneer u met de <mousebutton
+>rechter</mousebutton
+>muisknop klikt, of in het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Rij</guisubmenu
+></menuchoice
+> of <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Kolom</guisubmenu
+></menuchoice
+>.</para>
+<para
+>Wanneer u de muiswijzer op de grenslijn tussen twee rijnummers plaatst in het venster van &sheets;, verandert deze in een dubbele pijl. Houd de <mousebutton
+>linker</mousebutton
+>muisknop ingedrukt en versleep de grenslijn tussen de twee rijen om de hoogte van de bovenste rij te wijzigen. Op dezelfde manier kunt u de breedte van kolommen wijzigen.</para>
+
+<para
+>Om de rijhoogte en de kolombreedte op het minimum in te stellen, zodat alle gegevens nog weergegeven worden, selecteert u de gehele rij of kolom. Klik met de &RMB; op de rij- of kolomkop en kies <guimenuitem
+>Rij aanpassen</guimenuitem
+> of <guimenuitem
+>Kolom aanpassen</guimenuitem
+> in het contextmenu. De afmetingen van de rij of de kolom worden zo klein mogelijk gemaakt. U kunt ook een cel of een celbereik selecteren en <guimenuitem
+>Rij en kolom aanpassen </guimenuitem
+> in het contextmenu of in het menu <guimenu
+>Opmaak</guimenu
+> kiezen.</para>
+
+<para
+>U kunt een aantal aangrenzende rijen of kolommen even hoog of breed maken door <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Rij</guisubmenu
+><guimenuitem
+>Rij gelijk maken</guimenuitem
+></menuchoice
+> of <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Kolom</guisubmenu
+> <guimenuitem
+>Kolom gelijk maken</guimenuitem
+></menuchoice
+> te kiezen.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>Cellen samenvoegen</title>
+<para
+>Het kan soms handig zijn een cel de breedte van twee of meer kolommen of de hoogte van twee of meer rijen te geven. Om dit te doen moet u cellen samenvoegen. Selecteer de cellen die samengevoegd moeten worden en kies daarna het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Cellen samenvoegen</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Om de cellen weer te splitsen selecteert u eerst de samengevoegde cel en kiest u daarna <guimenuitem
+>Cellen splitsen</guimenuitem
+> in het menu <guimenu
+>Opmaak</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>Rijen en kolommen verbergen</title>
+<para
+>Een werkblad kan gemakkelijker te lezen worden door de cellen met tussenberekeningen te verbergen, zodat alleen de belangrijke gegevens zichtbaar blijven.</para>
+<para
+>In &sheets; kunt u geselecteerde rijen of kolommen verbergen door de opties <guimenuitem
+>Rijen verbergen</guimenuitem
+> en <guimenuitem
+>Kolommen verbergen</guimenuitem
+> in het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Rij</guisubmenu
+></menuchoice
+> of <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Kolom</guisubmenu
+></menuchoice
+> te kiezen. Verborgen rijen en kolommen worden niet op het scherm weergegeven en worden niet afgedrukt.</para>
+<para
+>Verborgen cellen kunnen ook minder gemakkelijk per ongeluk gewijzigd werden.</para>
+<para
+>Om een verborgen rij of kolom weer te tonen kiest u <menuchoice
+><guisubmenu
+>Rij</guisubmenu
+> <guimenuitem
+>Rijen tonen...</guimenuitem
+></menuchoice
+> of <menuchoice
+><guisubmenu
+>Kolom</guisubmenu
+> <guimenuitem
+>Kolommen tonen...</guimenuitem
+></menuchoice
+> in het menu <guimenu
+>Opmaak</guimenu
+>. In het dialoogvenster dat verschijnt kunt u de rijen of kolommen kiezen die getoond moeten worden.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>Werkbladeigenschappen</title>
+<para
+>U kunt de eigenschappen van het huidige werkblad zien door te rechtsklikken op de tab en <guilabel
+>Werkbladeigenschappen</guilabel
+> in het context menu te kiezen of door het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Werkblad</guisubmenu
+> <guimenuitem
+>Werkbladeigenschappen</guimenuitem
+></menuchoice
+> te kiezen. Houd er rekening mee dat u de eigenschappen alleen kunt zien als het werkblad of het document niet beschermd is.</para>
+<para
+>U kunt hier verscheidene eigenschappen voor het huidige werkblad instellen. Klik op <guibutton
+>OK</guibutton
+> om wijzigingen op te slaan, klik op <guibutton
+>Standaard</guibutton
+> om de standaardinstellingen terug te zetten.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het dialoogvenster "Werkbladeigenschappen".</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Opmaakrichting:</guilabel
+></term>
+<listitem
+><para
+>Hier kunt u de oriëntatie van het werkblad instellen. Standaard bevindt de eerste kolom zich links. Als u <guilabel
+>Rechts naar links</guilabel
+> kiest, komt de eerste kolom aan de rechterkant van het werkblad.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Nul verbergen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, worden cellen die de waarde nul bevatten leeg gelaten.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Automatische herberekening</guilabel
+></term>
+<listitem
+><para
+>Deze instelling bepaalt of formules automatisch opnieuw worden berekend wanneer de waarde in een cel waar zij naar verwijzen verandert.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Kolom als nummers tonen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie geselecteerd is, worden de kolomkoppen genummerd in plaats van met letters aangeduid. Letters zijn de standaard.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>LC-modus gebruiken</guilabel
+></term>
+<listitem
+><para
+>Als deze optie geselecteerd is, wordt de celaanduiding aan de linkerkant van de Formulebalk getoond in de LC-modus (bijv. L2C3) in plaats van op de normale manier B3. Dit lijkt op dit moment niet erg nuttig.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Eerste letter omzetten in hoofdletter</guilabel
+></term>
+<listitem
+><para
+>Selecteren van deze optie maakt dat de eerste letter van elke tekst die u intypt automatisch naar een hoofdletter wordt omgezet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Raster tonen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, wordt het raster (de grijze celranden) getoond. Dit is de standaard. Als u deze optie uitschakelt, wordt het raster verborgen.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Paginaranden tonen</guilabel
+></term>
+<listitem
+><para
+>Indien u deze optie kiest worden de paginaranden van uw huidige werkblad getekend. Standaard is dit niet het geval. Het is nuttig de paginaranden te kunnen zien als u het werkblad wilt afdrukken.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Formule tonen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, toont &sheets; de gebruikte formules in de cellen in plaats van de resultaten.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Formule-indicator tonen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie ingeschakeld is, plaatst &sheets; een blauw driehoekje in de linker benedenhoek van cellen die een formule bevatten. Dit kan nuttig zijn als u deze cellen wilt beschermen.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Commentaarindicator tonen</guilabel
+></term>
+<listitem
+><para
+>Als deze optie geselecteerd is, worden cellen met commentaar gemerkt met een rood driehoekje in de rechter bovenhoek.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

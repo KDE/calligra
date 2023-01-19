@@ -1,0 +1,96 @@
+# Translation of calligra_textediting_spellcheck.po to Ukrainian
+# Copyright (C) 2008-2011 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2010, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra_textediting_spellcheck\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-10-12 07:58+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Налаштувати &перевірку правопису..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Автоматична перевірка правопису"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Перевірити правопис"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Правопис"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Додати до словника"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Налаштувати &перевірку правопису..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Автоматична перевірка правопису"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Перевірити правопис"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Правопис"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Додати до словника"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Ігнорувати слово"
+
+#~ msgid "Spell Check"
+#~ msgstr "Перевірка правопису"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Налаштування перевірки правопису"
+
+#~ msgid "Default Language:"
+#~ msgstr "Типова мова:"
+
+#~ msgid "Options"
+#~ msgstr "Параметри"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Дозволити перевірку правопису у &тлі"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Пропускати всі слова з &прописними"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "П&ропускати складені слова"
+
+#~ msgid "&Add"
+#~ msgstr "&Додати"
+
+#~ msgid "&Remove"
+#~ msgstr "&Вилучити"

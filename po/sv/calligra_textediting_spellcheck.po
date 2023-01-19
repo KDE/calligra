@@ -1,0 +1,94 @@
+# translation of SpellCheckPlugin.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2007, 2010, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: SpellCheckPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2011-10-12 18:05+0200\n"
+"Last-Translator: Stefan Asserhall <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: SpellCheck.cpp:45
+#, kde-format
+msgid "Configure &Spell Checking..."
+msgstr "Anpassa &stavningskontroll..."
+
+#: SpellCheck.cpp:49
+#, kde-format
+msgid "Auto Spell Check"
+msgstr "Automatisk stavningskontroll"
+
+#: SpellCheckFactory.cpp:16
+#, kde-format
+msgid "Check Spelling"
+msgstr "Kontrollera stavning"
+
+#: SpellCheckMenu.cpp:28
+#, kde-format
+msgid "Spelling"
+msgstr "Stavning"
+
+#: SpellCheckMenu.cpp:32
+#, kde-format
+msgid "Add to Dictionary"
+msgstr "Lägg till i ordlista"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure &Spell Checking..."
+#~ msgstr "Anpassa &stavningskontroll..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto Spell Check"
+#~ msgstr "Automatisk stavningskontroll"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Check Spelling"
+#~ msgstr "Kontrollera stavning"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spelling"
+#~ msgstr "Stavning"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to Dictionary"
+#~ msgstr "Lägg till i ordlista"
+
+#~ msgid "Ignore Word"
+#~ msgstr "Ignorera ord"
+
+#~ msgid "Spell Check"
+#~ msgstr "Stavningskontroll"
+
+#~ msgid "Spell Check Configuration"
+#~ msgstr "Inställning av stavningskontroll"
+
+#~ msgid "Default Language:"
+#~ msgstr "Förvalt språk:"
+
+#~ msgid "Options"
+#~ msgstr "Alternativ"
+
+#~ msgid "Enable &background spellchecking"
+#~ msgstr "Aktivera stavningskontroll i &bakgrunden"
+
+#~ msgid "Skip all &uppercase words"
+#~ msgstr "Hoppa över alla ord med &stora bokstäver"
+
+#~ msgid "S&kip run-together words"
+#~ msgstr "&Hoppa över sammansatta ord"
+
+#~ msgid "&Add"
+#~ msgstr "&Lägg till"
+
+#~ msgid "&Remove"
+#~ msgstr "&Ta bort"

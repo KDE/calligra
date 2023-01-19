@@ -1,0 +1,8765 @@
+# Uyghur translation for calligra.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sahran <sahran.ug@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-09-08 07:04+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+
+#: basicflakes/plugin/KoCreatePathToolFactory.cpp:17
+#, kde-format
+msgid "Draw path"
+msgstr ""
+
+#: basicflakes/plugin/KoPencilToolFactory.cpp:16
+#, kde-format
+msgid "Freehand path"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:448
+#, kde-format
+msgid "Angle snapping delta:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:455
+#, kde-format
+msgid "Activate angle snap:"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:463
+#, kde-format
+msgid "Angle Constraints"
+msgstr ""
+
+#: basicflakes/tools/KoCreatePathTool.cpp:467
+#: basicflakes/tools/KoPencilTool.cpp:336 widgets/KoGradientEditWidget.cpp:147
+#, kde-format
+msgid "Line"
+msgstr "قۇر"
+
+#: basicflakes/tools/KoPencilTool.cpp:273
+#, kde-format
+msgid "Precision:"
+msgstr "ئېنىقلىقى:"
+
+#: basicflakes/tools/KoPencilTool.cpp:275
+#, kde-format
+msgctxt "The raw line data"
+msgid "Raw"
+msgstr "خام"
+
+#: basicflakes/tools/KoPencilTool.cpp:276
+#: flake/KoConnectionShapeConfigWidget.cpp:20
+#, kde-format
+msgid "Curve"
+msgstr "ئەگرى سىزىق"
+
+#: basicflakes/tools/KoPencilTool.cpp:277
+#: flake/KoConnectionShapeConfigWidget.cpp:19
+#, kde-format
+msgid "Straight"
+msgstr "تۈز سىزىق"
+
+#: basicflakes/tools/KoPencilTool.cpp:286
+#: basicflakes/tools/KoPencilTool.cpp:292
+#, kde-format
+msgid "Optimize"
+msgstr "ئەلالاشتۇر"
+
+#: basicflakes/tools/KoPencilTool.cpp:298
+#, fuzzy, kde-format
+#| msgid "Thickness:"
+msgid "Exactness:"
+msgstr "قېلىنلىقى:"
+
+#: basicflakes/tools/KoPencilTool.cpp:331
+#: basicflakes/tools/KoPencilTool.cpp:332
+#, kde-format
+msgid "Pencil"
+msgstr "قەلەم"
+
+#: flake/commands/KoConnectionShapeTypeCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Change Connection"
+msgstr ""
+
+#: flake/commands/KoParameterHandleMoveCommand.cpp:21
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change page layout"
+msgctxt "(qtundo-format)"
+msgid "Change parameter"
+msgstr "بەت جايلاشتۇرۇشنى ئۆزگەرت"
+
+#: flake/commands/KoParameterToPathCommand.cpp:31
+#: flake/commands/KoParameterToPathCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "يولغا ئۆزگەرت"
+
+#: flake/commands/KoPathBreakAtPointCommand.cpp:29
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Break subpath at points"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/commands/KoPathCombineCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Combine paths"
+msgstr ""
+
+#: flake/commands/KoPathControlPointMoveCommand.cpp:28
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Move control point"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/commands/KoPathFillRuleCommand.cpp:31
+msgctxt "(qtundo-format)"
+msgid "Set fill rule"
+msgstr ""
+
+#: flake/commands/KoPathPointInsertCommand.cpp:66
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert points"
+msgstr "بەت قىستۇر"
+
+#: flake/commands/KoPathPointMergeCommand.cpp:139
+msgctxt "(qtundo-format)"
+msgid "Merge points"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/commands/KoPathPointMoveCommand.cpp:29
+#: flake/commands/KoPathPointMoveCommand.cpp:45
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Move points"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/commands/KoPathPointRemoveCommand.cpp:91
+#: flake/commands/KoPathPointRemoveCommand.cpp:120
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgctxt "(qtundo-format)"
+msgid "Remove points"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/commands/KoPathPointTypeCommand.cpp:35
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Set point type"
+msgstr "بەت قىستۇر"
+
+#: flake/commands/KoPathReverseCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Reverse paths"
+msgstr ""
+
+#: flake/commands/KoPathSegmentBreakCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Break subpath"
+msgstr ""
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:121
+msgctxt "(qtundo-format)"
+msgid "Change segments to curves"
+msgstr ""
+
+#: flake/commands/KoPathSegmentTypeCommand.cpp:123
+msgctxt "(qtundo-format)"
+msgid "Change segments to lines"
+msgstr ""
+
+#: flake/commands/KoPathShapeMarkerCommand.cpp:20
+msgctxt "(qtundo-format)"
+msgid "Set marker"
+msgstr ""
+
+#: flake/commands/KoShapeAlignCommand.cpp:74
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Ungroup shapes"
+msgctxt "(qtundo-format)"
+msgid "Align shapes"
+msgstr "شەكىللەرنى گۇرۇپپىلىما"
+
+#: flake/commands/KoShapeBackgroundCommand.cpp:50
+#: flake/commands/KoShapeBackgroundCommand.cpp:61
+#: flake/commands/KoShapeBackgroundCommand.cpp:76
+#, fuzzy
+#| msgid "Background"
+msgctxt "(qtundo-format)"
+msgid "Set background"
+msgstr "تەگلىك"
+
+#: flake/commands/KoShapeClipCommand.cpp:57
+#: flake/commands/KoShapeClipCommand.cpp:73
+#, fuzzy
+#| msgid "Ellipse Shape"
+msgctxt "(qtundo-format)"
+msgid "Clip Shape"
+msgstr "ئېللىپس شەكلى"
+
+#: flake/commands/KoShapeCreateCommand.cpp:39
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Create Layer"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "قاتلام قۇرۇش"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:43
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format) Delete one shape"
+msgid "Delete shape"
+msgstr "بەت ئۆچۈر"
+
+#: flake/commands/KoShapeDeleteCommand.cpp:56
+#, fuzzy
+#| msgid "Delete Page"
+msgctxt "(qtundo-format)"
+msgid "Delete shape"
+msgid_plural "Delete shapes"
+msgstr[0] "بەت ئۆچۈر"
+
+#: flake/commands/KoShapeDistributeCommand.cpp:117
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Group shapes"
+msgctxt "(qtundo-format)"
+msgid "Distribute shapes"
+msgstr "شەكىللەرنى گۇرۇپپىلا"
+
+#: flake/commands/KoShapeGroupCommand.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Group shapes"
+msgstr "شەكىللەرنى گۇرۇپپىلا"
+
+#: flake/commands/KoShapeGroupCommand.cpp:84
+msgctxt "(qtundo-format)"
+msgid "Add shapes to group"
+msgstr ""
+
+#: flake/commands/KoShapeKeepAspectRatioCommand.cpp:17
+msgctxt "(qtundo-format)"
+msgid "Keep Aspect Ratio"
+msgstr "ئېگىزلىك-كەڭلىك نىسبىتى ئۆزگەرمىسۇن"
+
+#: flake/commands/KoShapeLockCommand.cpp:23
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Group shapes"
+msgctxt "(qtundo-format)"
+msgid "Lock shapes"
+msgstr "شەكىللەرنى گۇرۇپپىلا"
+
+#: flake/commands/KoShapeMoveCommand.cpp:36
+#: flake/commands/KoShapeMoveCommand.cpp:54
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Move page"
+#| msgid_plural "Move pages"
+msgctxt "(qtundo-format)"
+msgid "Move shapes"
+msgstr "بەت يۆتكە"
+
+#: flake/commands/KoShapeRenameCommand.cpp:28
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste Page"
+#| msgid_plural "Paste Pages"
+msgctxt "(qtundo-format)"
+msgid "Rename Shape"
+msgstr "بەتلەرنى چاپلا"
+
+#: flake/commands/KoShapeReorderCommand.cpp:40
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Group shapes"
+msgctxt "(qtundo-format)"
+msgid "Reorder shapes"
+msgstr "شەكىللەرنى گۇرۇپپىلا"
+
+#: flake/commands/KoShapeRunAroundCommand.cpp:59
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change page layout"
+msgctxt "(qtundo-format)"
+msgid "Change Shape RunAround"
+msgstr "بەت جايلاشتۇرۇشنى ئۆزگەرت"
+
+#: flake/commands/KoShapeShadowCommand.cpp:54
+#: flake/commands/KoShapeShadowCommand.cpp:71
+#: flake/commands/KoShapeShadowCommand.cpp:82
+#, fuzzy
+#| msgid "Show Shadow"
+msgctxt "(qtundo-format)"
+msgid "Set Shadow"
+msgstr "سايە كۆرسىتىش"
+
+#: flake/commands/KoShapeShearCommand.cpp:38
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Group shapes"
+msgctxt "(qtundo-format)"
+msgid "Shear shapes"
+msgstr "شەكىللەرنى گۇرۇپپىلا"
+
+#: flake/commands/KoShapeSizeCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Resize shapes"
+msgstr ""
+
+#: flake/commands/KoShapeStrokeCommand.cpp:59
+#: flake/commands/KoShapeStrokeCommand.cpp:78
+#: flake/commands/KoShapeStrokeCommand.cpp:89
+msgctxt "(qtundo-format)"
+msgid "Set stroke"
+msgstr ""
+
+#: flake/commands/KoShapeTransparencyCommand.cpp:35
+#: flake/commands/KoShapeTransparencyCommand.cpp:46
+#: flake/commands/KoShapeTransparencyCommand.cpp:59
+#, fuzzy
+#| msgid "Opacity:"
+msgctxt "(qtundo-format)"
+msgid "Set opacity"
+msgstr "غۇۋالىقى:"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:107
+#, fuzzy
+#| msgid "Ellipse Shape"
+msgctxt "(qtundo-format)"
+msgid "Unclip Shape"
+msgstr "ئېللىپس شەكلى"
+
+#: flake/commands/KoShapeUnclipCommand.cpp:116
+#, fuzzy
+#| msgid "Ellipse Shape"
+msgctxt "(qtundo-format)"
+msgid "Unclip Shapes"
+msgstr "ئېللىپس شەكلى"
+
+#: flake/commands/KoShapeUngroupCommand.cpp:46
+msgctxt "(qtundo-format)"
+msgid "Ungroup shapes"
+msgstr "شەكىللەرنى گۇرۇپپىلىما"
+
+#: flake/commands/KoSubpathJoinCommand.cpp:38
+msgctxt "(qtundo-format)"
+msgid "Close subpath"
+msgstr ""
+
+#: flake/commands/KoSubpathJoinCommand.cpp:40
+msgctxt "(qtundo-format)"
+msgid "Join subpaths"
+msgstr ""
+
+#: flake/commands/KoSubpathRemoveCommand.cpp:19
+#, fuzzy
+#| msgid "Remove Group"
+msgctxt "(qtundo-format)"
+msgid "Remove subpath"
+msgstr "گۇرۇپپىنى چىقىرىۋەت"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:17
+#, kde-format
+msgid "Standard"
+msgstr "ئۆلچەملىك"
+
+#: flake/KoConnectionShapeConfigWidget.cpp:18
+#, kde-format
+msgid "Lines"
+msgstr "سىزىقلار"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#. i18n: ectx: property (text), widget (QLabel, lblTypeDesc)
+#: flake/KoConnectionShapeConfigWidget.ui:17
+#: widgets/koDocumentInfoAboutWidget.ui:141
+#: widgets/KoGradientEditWidget.cpp:152
+#, kde-format
+msgid "Type:"
+msgstr "تىپى:"
+
+#: flake/KoConnectionShapeFactory.cpp:22
+#, fuzzy, kde-format
+#| msgid "Time"
+msgid "Tie"
+msgstr "ۋاقىت"
+
+#: flake/KoConnectionShapeFactory.cpp:24
+#, kde-format
+msgid "A connection between two other shapes"
+msgstr ""
+
+#: flake/KoGridData.cpp:210
+#, kde-format
+msgid "Show Grid"
+msgstr "سېتكا كۆرسەت"
+
+#: flake/KoGridData.cpp:211
+#, fuzzy, kde-format
+#| msgid "Show Grid"
+msgid "Shows or hides grid"
+msgstr "سېتكا كۆرسەت"
+
+#: flake/KoPathShapeFactory.cpp:22
+#, fuzzy, kde-format
+#| msgid "Delete Page"
+msgid "Simple path shape"
+msgstr "بەت ئۆچۈر"
+
+#: flake/KoPathShapeFactory.cpp:24
+#, kde-format
+msgid "A simple path shape"
+msgstr ""
+
+#: flake/KoShapeController.cpp:60 rdf/InsertSemanticObjectCreateAction.cpp:46
+#: rdf/InsertSemanticObjectReferenceAction.cpp:51
+#: text/InsertTextReferenceAction.cpp:50 text/InsertVariableAction.cpp:45
+#, kde-format
+msgid "%1 Options"
+msgstr "%1 تاللانما"
+
+#: flake/KoShapePaste.cpp:155
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste Page"
+#| msgid_plural "Paste Pages"
+msgctxt "(qtundo-format)"
+msgid "Paste Shapes"
+msgstr "بەتلەرنى چاپلا"
+
+#: flake/KoToolManager.cpp:451
+#, kde-format
+msgid "Active tool: %1"
+msgstr "ئاكتىپ قورال: %1"
+
+#: flake/KoToolProxy.cpp:587
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste Page"
+#| msgid_plural "Paste Pages"
+msgctxt "(qtundo-format)"
+msgid "Paste Image"
+msgstr "بەتلەرنى چاپلا"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, nodeSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:30
+#, kde-format
+msgid "Nodes"
+msgstr "تۈگۈنلەر"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, extensionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:43
+#, kde-format
+msgid "Extension of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:56
+#, kde-format
+msgid "Bounding box of shape"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:72
+#, kde-format
+msgid "Proximity distance where snapping happens"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
+#: flake/SnapGuideConfigWidget.ui:75
+#, kde-format
+msgid " px"
+msgstr " px"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:85
+#, kde-format
+msgid "Orthogonal"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:98
+#, kde-format
+msgid "Intersection of lines"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
+#: flake/SnapGuideConfigWidget.ui:111
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Underline"
+msgid "Guide lines"
+msgstr "ئاستى سىزىق"
+
+#: flake/svg/SvgShapeFactory.cpp:23
+#, kde-format
+msgid "Embedded svg shape"
+msgstr ""
+
+#: flake/tools/KoCreateShapesToolFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Create Path"
+msgid "Create object"
+msgstr "يول قۇر"
+
+#: flake/tools/KoPanToolFactory.cpp:17
+#, kde-format
+msgid "Pan"
+msgstr "تاختا"
+
+#: flake/tools/KoPathSegmentChangeStrategy.cpp:133
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change page layout"
+msgctxt "(qtundo-format)"
+msgid "Change Segment"
+msgstr "بەت جايلاشتۇرۇشنى ئۆزگەرت"
+
+#: flake/tools/KoPathTool.cpp:97
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Corner point"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:102
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Smooth point"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:107
+#, kde-format
+msgid "Symmetric Point"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:112
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Make curve point"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:116
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Make line point"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:120
+#, kde-format
+msgid "Segment to Line"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:125
+#, kde-format
+msgid "Segment to Curve"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:130
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert page"
+msgid "Insert point"
+msgstr "بەت قىستۇر"
+
+#: flake/tools/KoPathTool.cpp:135
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Remove point"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:140
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Break at point"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:144
+#, kde-format
+msgid "Break at segment"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:148
+#, kde-format
+msgid "Join with segment"
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:153
+#, kde-format
+msgid "Merge points"
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:157
+#, fuzzy, kde-format
+#| msgid "Path:"
+msgid "To Path"
+msgstr "يول:"
+
+#: flake/tools/KoPathTool.cpp:190
+#, fuzzy, kde-format
+#| msgid "Curve"
+msgid "Line/Curve"
+msgstr "ئەگرى سىزىق"
+
+#: flake/tools/KoPathTool.cpp:528
+#, kde-format
+msgid "Drag to move handle."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:592
+#, kde-format
+msgid "Drag to move point. Shift click to change point type."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:594
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Drag to move control point."
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:619
+#, kde-format
+msgid "Drag to change curve directly. Double click to insert new path point."
+msgstr ""
+
+#: flake/tools/KoPathTool.cpp:626
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge points"
+msgid "Press B to break path at selected point."
+msgstr "نۇقتىلارنى بىرىكتۈر"
+
+#: flake/tools/KoPathTool.cpp:628
+#, kde-format
+msgid "Press B to break path at selected segments."
+msgstr ""
+
+#: flake/tools/KoPathToolFactory.cpp:17
+#, kde-format
+msgid "Path editing"
+msgstr ""
+
+#: flake/tools/KoZoomToolFactory.cpp:17 widgets/KoZoomController_p.h:28
+#: widgets/KoZoomWidget.cpp:52
+#, kde-format
+msgid "Zoom"
+msgstr "كېڭەيت-تارايت"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
+#: flake/tools/KoZoomToolWidget.ui:20
+#, kde-format
+msgid "Zoom In"
+msgstr "چوڭايت"
+
+#. i18n: ectx: property (text), widget (QRadioButton, zoomOutButton)
+#: flake/tools/KoZoomToolWidget.ui:30
+#, kde-format
+msgid "Zoom Out"
+msgstr "كىچىكلىتىش"
+
+#. i18n: ectx: property (text), widget (QToolButton, corner)
+#. i18n: ectx: property (text), widget (QToolButton, smooth)
+#. i18n: ectx: property (text), widget (QToolButton, symmetric)
+#. i18n: ectx: property (text), widget (QToolButton, lineSegment)
+#. i18n: ectx: property (text), widget (QToolButton, curveSegment)
+#. i18n: ectx: property (text), widget (QToolButton, linePoint)
+#. i18n: ectx: property (text), widget (QToolButton, curvePoint)
+#. i18n: ectx: property (text), widget (QToolButton, addPoint)
+#. i18n: ectx: property (text), widget (QToolButton, removePoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakPoint)
+#. i18n: ectx: property (text), widget (QToolButton, breakSegment)
+#. i18n: ectx: property (text), widget (QToolButton, joinSegment)
+#. i18n: ectx: property (text), widget (QToolButton, mergePoints)
+#. i18n: ectx: property (text), widget (QToolButton, add)
+#. i18n: ectx: property (text), widget (QToolButton, remove)
+#. i18n: ectx: property (text), widget (QToolButton, open)
+#. i18n: ectx: property (text), widget (QToolButton, save)
+#: flake/tools/PathToolOptionWidgetBase.ui:39
+#: flake/tools/PathToolOptionWidgetBase.ui:46
+#: flake/tools/PathToolOptionWidgetBase.ui:53
+#: flake/tools/PathToolOptionWidgetBase.ui:73
+#: flake/tools/PathToolOptionWidgetBase.ui:80
+#: flake/tools/PathToolOptionWidgetBase.ui:87
+#: flake/tools/PathToolOptionWidgetBase.ui:94
+#: flake/tools/PathToolOptionWidgetBase.ui:101
+#: flake/tools/PathToolOptionWidgetBase.ui:108
+#: flake/tools/PathToolOptionWidgetBase.ui:115
+#: flake/tools/PathToolOptionWidgetBase.ui:122
+#: flake/tools/PathToolOptionWidgetBase.ui:129
+#: flake/tools/PathToolOptionWidgetBase.ui:136 widgets/KoEditColorSet.ui:48
+#: widgets/KoEditColorSet.ui:58 widgets/KoEditColorSet.ui:68
+#: widgets/KoEditColorSet.ui:78
+#, kde-format
+msgid "..."
+msgstr "…"
+
+#. i18n: ectx: property (text), widget (QPushButton, convertToPath)
+#: flake/tools/PathToolOptionWidgetBase.ui:186
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert to Path"
+msgid "Convert To Path"
+msgstr "يولغا ئۆزگەرت"
+
+#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
+#, kde-format
+msgid "Scripts"
+msgstr "قوليازما"
+
+#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
+#, kde-format
+msgid "Script Manager"
+msgstr "قوليازما باشقۇرغۇ"
+
+#: kross/KoScriptingPart.cpp:78
+#, fuzzy, kde-format
+#| msgid "Script File"
+msgid "Execute Script File..."
+msgstr "قوليازما ھۆججىتى"
+
+#: kross/KoScriptingPart.cpp:86
+#, fuzzy, kde-format
+#| msgid "Script Manager"
+msgid "Script Manager..."
+msgstr "قوليازما باشقۇرغۇ"
+
+#: kross/KoScriptingPart.cpp:160
+#, fuzzy, kde-format
+#| msgid "Script File"
+msgid "Execute Script File"
+msgstr "قوليازما ھۆججىتى"
+
+#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:661
+#, kde-format
+msgid "Save"
+msgstr "ساقلا"
+
+#: kross/KoScriptManagerAdd.cpp:54
+#, kde-format
+msgid ""
+"<qt>This wizard will guide you through the process of adding a new resource "
+"to your scripts.</qt>"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:59
+#, fuzzy, kde-format
+#| msgid "Script File"
+msgid "Add script file"
+msgstr "قوليازما ھۆججىتى"
+
+#: kross/KoScriptManagerAdd.cpp:64
+#, kde-format
+msgid "Add collection folder"
+msgstr ""
+
+#: kross/KoScriptManagerAdd.cpp:67
+#, fuzzy, kde-format
+#| msgid "Script Manager"
+msgid "Install script package file"
+msgstr "قوليازما باشقۇرغۇ"
+
+#: kross/KoScriptManagerAdd.cpp:71
+#, fuzzy, kde-format
+#| msgid "Script Manager"
+msgid "Install online script package"
+msgstr "قوليازما باشقۇرغۇ"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "قوش"
+
+#: kross/KoScriptManagerAdd.cpp:281
+#, kde-format
+msgid "Script File"
+msgstr "قوليازما ھۆججىتى"
+
+#: kross/KoScriptManagerAdd.cpp:284
+#, kde-format
+msgid "Script"
+msgstr "قوليازما"
+
+#: kross/KoScriptManagerAdd.cpp:287
+#, kde-format
+msgid "Collection"
+msgstr "توپلام"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#, kde-format
+msgctxt "Default text for undo action"
+msgid "Undo"
+msgstr "يېنىۋال"
+
+#: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
+#: main/KoUndoStackAction.cpp:41
+#, kde-format
+msgid "Undo %1"
+msgstr "%1 يېنىۋال"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#, kde-format
+msgctxt "Default text for redo action"
+msgid "Redo"
+msgstr "قايتىلا"
+
+#: kundo2/kundo2group.cpp:386 kundo2/kundo2stack.cpp:1100
+#: main/KoUndoStackAction.cpp:41
+#, kde-format
+msgid "Redo %1"
+msgstr "قايتىلا %1"
+
+#: kundo2/kundo2model.cpp:54
+#, fuzzy, kde-format
+#| msgid "Empty"
+msgid "<empty>"
+msgstr "بوش"
+
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1511
+#: main/KoUndoStackAction.cpp:33
+#, kde-format
+msgid "Redo"
+msgstr "قايتىلا"
+
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1510
+#: main/KoUndoStackAction.cpp:25
+#, kde-format
+msgid "Undo"
+msgstr "يېنىۋال"
+
+#. i18n: ectx: Menu (file)
+#: main/calligra_shell.rc:4
+#, kde-format
+msgid "&File"
+msgstr "ھۆججەت(&F)"
+
+#. i18n: ectx: Menu (settings)
+#: main/calligra_shell.rc:32
+#, kde-format
+msgid "&Settings"
+msgstr "تەڭشەك(&S)"
+
+#. i18n: ectx: ToolBar (mainToolBar)
+#: main/calligra_shell.rc:46
+#, kde-format
+msgid "File"
+msgstr "ھۆججەت"
+
+#: main/config/KoConfigDocumentPage.cpp:46
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:46
+#, kde-format
+msgid "Document Settings"
+msgstr "پۈتۈك تەڭشىكى"
+
+#: main/config/KoConfigDocumentPage.cpp:62
+#, kde-format
+msgid "No autosave"
+msgstr "ئاپتوماتىك ساقلىمىسۇن"
+
+#: main/config/KoConfigDocumentPage.cpp:63
+#, kde-format
+msgctxt "unit symbol for minutes, leading space as separator"
+msgid " min"
+msgstr " مىنۇت"
+
+#: main/config/KoConfigDocumentPage.cpp:65
+#, kde-format
+msgid "Autosave interval:"
+msgstr "ئاپتوماتىك ساقلاش ئىنتېرۋالى:"
+
+#: main/config/KoConfigDocumentPage.cpp:69
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Create Layer"
+msgid "Create backup file:"
+msgstr "قاتلام قۇرۇش"
+
+#: main/config/KoConfigGridPage.cpp:55
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:38
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:39
+#, kde-format
+msgid "Grid"
+msgstr "سېتكا"
+
+#: main/config/KoConfigGridPage.cpp:63
+#, fuzzy, kde-format
+#| msgid "Show Grid"
+msgid "Show grid:"
+msgstr "سېتكا كۆرسەت"
+
+#: main/config/KoConfigGridPage.cpp:64
+#, fuzzy, kde-format
+#| msgid "Snap to Grid"
+msgid "Snap to grid:"
+msgstr "سېتكىغا توغرىلا"
+
+#: main/config/KoConfigGridPage.cpp:65
+#, kde-format
+msgid "Grid color:"
+msgstr "سېتكا رەڭگى:"
+
+#: main/config/KoConfigGridPage.cpp:67
+#, kde-format
+msgid "Spacing"
+msgstr "ئارىلىق"
+
+#: main/config/KoConfigGridPage.cpp:78
+#, kde-format
+msgctxt "Horizontal grid spacing"
+msgid "&Horizontal:"
+msgstr "توغرىسىغا(&H):"
+
+#: main/config/KoConfigGridPage.cpp:79
+#, kde-format
+msgctxt "Vertical grid spacing"
+msgid "&Vertical:"
+msgstr "بويىغا(&V):"
+
+#: main/config/KoConfigMiscPage.cpp:66
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:33
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:34 pigment/KoCompositeOp.cpp:30
+#: pigment/KoCompositeOpRegistry.cpp:31
+#, kde-format
+msgid "Misc"
+msgstr "ئارىلاش"
+
+#: main/config/KoConfigMiscPage.cpp:76
+#, kde-format
+msgid "Units:"
+msgstr "بىرلىك:"
+
+#: main/config/KoConfigMiscPage.cpp:85
+#, kde-format
+msgid "Handle radius:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:92
+#, kde-format
+msgid "Grab sensitivity:"
+msgstr ""
+
+#: main/config/KoConfigMiscPage.cpp:99
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste As Text"
+msgid "Paste offset:"
+msgstr "تېكىست بويىچە چاپلا"
+
+#: main/config/KoConfigMiscPage.cpp:103
+#, kde-format
+msgid "Paste at Cursor:"
+msgstr ""
+
+#: main/KoApplication.cpp:198
+#, fuzzy, kde-format
+#| msgid "Export to PDF"
+msgid "Only print and exit"
+msgstr "PDF كە چىقار"
+
+#: main/KoApplication.cpp:199
+#, kde-format
+msgid "Open a new document based on the given template (desktopfile name)"
+msgstr ""
+
+#: main/KoApplication.cpp:200
+#, kde-format
+msgid "Open a new document based on the given template file"
+msgstr ""
+
+#: main/KoApplication.cpp:201
+#, kde-format
+msgid "Override display DPI"
+msgstr ""
+
+#: main/KoApplication.cpp:202
+#, fuzzy, kde-format
+#| msgid "Export to PDF"
+msgid "Only export to PDF and exit"
+msgstr "PDF كە چىقار"
+
+#: main/KoApplication.cpp:203
+#, kde-format
+msgid "Filename for export-pdf"
+msgstr ""
+
+#: main/KoApplication.cpp:204
+#, kde-format
+msgid "just load the file and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:205
+#, kde-format
+msgid "load the file, show the window and progressbar and then exit"
+msgstr ""
+
+#: main/KoApplication.cpp:206
+#, kde-format
+msgid "Filename to write profiling information into."
+msgstr ""
+
+#: main/KoApplication.cpp:207
+#, kde-format
+msgid "Load a file and save it as an ODF file. Meant for debugging."
+msgstr ""
+
+#: main/KoApplication.cpp:208
+#, kde-format
+msgid "File(s) or URL(s) to open"
+msgstr ""
+
+#: main/KoApplication.cpp:218
+#, kde-format
+msgid ""
+"You are running a 32 bits build on a 64 bits Windows.\n"
+"This is not recommended.\n"
+"Please download and install the x64 build instead."
+msgstr ""
+
+#: main/KoApplication.cpp:262
+#, fuzzy, kde-format
+#| msgid "Creation error"
+msgid "%1: Critical Error"
+msgstr "قۇرۇش خاتالىقى"
+
+#: main/KoApplication.cpp:262
+#, kde-format
+msgid ""
+"Essential application components could not be found.\n"
+"This might be an installation issue.\n"
+"Try restarting or reinstalling."
+msgstr ""
+
+#: main/KoApplication.cpp:511
+#, fuzzy, kde-format
+#| msgid "No matches found"
+msgid "No template found for: %1"
+msgstr "ماس كەلگەن تۈر تېپىلمىدى"
+
+#: main/KoApplication.cpp:514
+#, fuzzy, kde-format
+#| msgid "No matches found"
+msgid "Too many templates found for: %1"
+msgstr "ماس كەلگەن تۈر تېپىلمىدى"
+
+#: main/KoApplication.cpp:536 main/KoApplication.cpp:554
+#, kde-format
+msgid "Template %1 failed to load."
+msgstr ""
+
+#: main/KoApplication.cpp:544
+#, fuzzy, kde-format
+#| msgid "No matches found"
+msgid "No template found at: %1"
+msgstr "ماس كەلگەن تۈر تېپىلمىدى"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:166
+#, fuzzy, kde-format
+#| msgid "Save as %1"
+msgctxt "@title:window"
+msgid "Recover Files"
+msgstr "%1 سۈپىتىدە ساقلا"
+
+#: main/KoAutoSaveRecoveryDialog.cpp:171
+#, kde-format
+msgid "The following autosave file can be recovered:"
+msgstr ""
+
+#: main/KoAutoSaveRecoveryDialog.cpp:174
+#, kde-format
+msgid "The following autosave files can be recovered:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:94
+#, fuzzy, kde-format
+#| msgid "Always use this template"
+msgid "Always use this template at application start up"
+msgstr "ھەمىشە  بۇ قېلىپنى ئىشلەت"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
+#: main/KoDetailsPaneBase.ui:97
+#, kde-format
+msgid "Always use this template"
+msgstr "ھەمىشە  بۇ قېلىپنى ئىشلەت"
+
+#: main/KoDocument.cpp:546
+#, kde-format
+msgid "Making backup..."
+msgstr ""
+
+#: main/KoDocument.cpp:561
+#, kde-format
+msgid "Saving..."
+msgstr "ساقلاۋاتىدۇ…"
+
+#: main/KoDocument.cpp:589
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
+msgid ""
+"Could not save\n"
+"%1"
+msgstr "%1 نى تاپقىلى بولمىدى"
+
+#: main/KoDocument.cpp:591
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%2.\n"
+#| "Reason: %1"
+msgid ""
+"Could not save %1\n"
+"Reason: %2"
+msgstr ""
+"ئاچالمىدى\n"
+"%2.\n"
+"سەۋەبى: %1"
+
+#: main/KoDocument.cpp:620
+#, kde-format
+msgid "Document <i>%1</i> saved"
+msgstr ""
+
+#: main/KoDocument.cpp:708
+#, kde-format
+msgid ""
+"The password of this encrypted document is not known. Autosave aborted! "
+"Please save your work manually."
+msgstr ""
+
+#: main/KoDocument.cpp:711
+#, fuzzy, kde-format
+#| msgid "Saving..."
+msgid "Autosaving..."
+msgstr "ساقلاۋاتىدۇ…"
+
+#: main/KoDocument.cpp:723
+#, fuzzy, kde-format
+#| msgid "Not able to write '%1'. Partition full?"
+msgid "Error during autosave! Partition full?"
+msgstr "‹%1› غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+
+#: main/KoDocument.cpp:816
+#, kde-format
+msgid "Could not create the file for saving"
+msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
+
+#: main/KoDocument.cpp:860 main/KoDocument.cpp:882 main/KoDocument.cpp:913
+#: main/KoDocument.cpp:947
+#, kde-format
+msgid "Not able to write '%1'. Partition full?"
+msgstr "‹%1› غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+
+#: main/KoDocument.cpp:867
+#, fuzzy, kde-format
+#| msgid "Not able to write '%1'. Partition full?"
+msgid "Not able to write RDF metadata. Partition full?"
+msgstr "‹%1› غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+
+#: main/KoDocument.cpp:875 main/KoDocument.cpp:922 main/KoDocument.cpp:1986
+#, fuzzy, kde-format
+#| msgid "Not able to write '%1'. Partition full?"
+msgid "Error while trying to write '%1'. Partition full?"
+msgstr "‹%1› غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+
+#: main/KoDocument.cpp:1201
+#, kde-format
+msgid ""
+"Malformed URL\n"
+"%1"
+msgstr ""
+"بۇزۇق URL\n"
+"%1"
+
+#: main/KoDocument.cpp:1217
+#, kde-format
+msgid ""
+"An autosaved file exists for this document.\n"
+"Do you want to open it instead?"
+msgstr ""
+
+#: main/KoDocument.cpp:1334 main/KoDocument.cpp:1679 main/KoMainWindow.cpp:699
+#, kde-format
+msgid "The file %1 does not exist."
+msgstr "ھۆججەت %1 مەۋجۇت ئەمەس."
+
+#: main/KoDocument.cpp:1459
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Opening Document"
+msgstr "پۈتۈك ئېچىش"
+
+#: main/KoDocument.cpp:1474
+#, fuzzy, kde-format
+#| msgid "Could not create the file for saving"
+msgid "Could not create the filter plugin"
+msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
+
+#: main/KoDocument.cpp:1477
+#, fuzzy, kde-format
+#| msgid "Could not create the file for saving"
+msgid "Could not create the output document"
+msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
+
+#: main/KoDocument.cpp:1480
+#, kde-format
+msgid "File not found"
+msgstr "ھۆججەت تېپىلمىدى"
+
+#: main/KoDocument.cpp:1483
+#, kde-format
+msgid "Cannot create storage"
+msgstr "ساقلىغۇچ قۇرغىلى بولمىدى"
+
+#: main/KoDocument.cpp:1486
+#, kde-format
+msgid "Bad MIME type"
+msgstr "بولمىغۇر MIME تىپى"
+
+#: main/KoDocument.cpp:1489
+#, kde-format
+msgid "Error in embedded document"
+msgstr "سىڭدۈرمە پۈتۈكتە خاتالىق بار"
+
+#: main/KoDocument.cpp:1492
+#, kde-format
+msgid "Format not recognized"
+msgstr "ناتونۇش پىچىم"
+
+#: main/KoDocument.cpp:1495
+#, kde-format
+msgid "Not implemented"
+msgstr "ئەمەلىيلەشتۈرۈلمىگەن"
+
+#: main/KoDocument.cpp:1498
+#, kde-format
+msgid "Parsing error"
+msgstr "تەھلىل قىلىش خاتالىقى"
+
+#: main/KoDocument.cpp:1501
+#, kde-format
+msgid "Document is password protected"
+msgstr "پۈتۈك ئىم بىلەن قوغدالغان"
+
+#: main/KoDocument.cpp:1504
+#, kde-format
+msgid "Invalid file format"
+msgstr ""
+
+#: main/KoDocument.cpp:1511
+#, kde-format
+msgid "Internal error"
+msgstr "ئىچكى خاتالىق"
+
+#: main/KoDocument.cpp:1514
+#, kde-format
+msgid "Out of memory"
+msgstr "ئەسلەك يېتىشمىدى"
+
+#: main/KoDocument.cpp:1517
+#, kde-format
+msgid "Empty Filter Plugin"
+msgstr ""
+
+#: main/KoDocument.cpp:1520
+#, kde-format
+msgid "Trying to load into the wrong kind of document"
+msgstr ""
+
+#: main/KoDocument.cpp:1523
+#, kde-format
+msgid "Failed to download remote file"
+msgstr ""
+
+#: main/KoDocument.cpp:1530
+#, kde-format
+msgid "Unknown error"
+msgstr "نامەلۇم خاتالىق"
+
+#: main/KoDocument.cpp:1534
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%2.\n"
+#| "Reason: %1"
+msgid ""
+"Could not open %2.\n"
+"Reason: %1.\n"
+"%3"
+msgstr ""
+"ئاچالمىدى\n"
+"%2.\n"
+"سەۋەبى: %1"
+
+#: main/KoDocument.cpp:1591
+#, kde-format
+msgid "Document <i>%1</i> loaded"
+msgstr ""
+
+#: main/KoDocument.cpp:1653 odf/KoOdfReadStore.cpp:98
+#, kde-format
+msgid "Could not find %1"
+msgstr "%1 نى تاپقىلى بولمىدى"
+
+#: main/KoDocument.cpp:1665
+#, kde-format
+msgid ""
+"Parsing error in %1 at line %2, column %3\n"
+"Error message: %4"
+msgstr ""
+
+#: main/KoDocument.cpp:1686
+#, kde-format
+msgid "%1 is not a file."
+msgstr "%1 ھۆججەت ئەمەس."
+
+#: main/KoDocument.cpp:1701
+#, kde-format
+msgid "Could not open the file for reading (check read permissions)."
+msgstr ""
+
+#: main/KoDocument.cpp:1712
+#, fuzzy, kde-format
+#| msgid "Could not create the file for saving"
+msgid "Could not read the beginning of the file."
+msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
+
+#: main/KoDocument.cpp:1742
+#, kde-format
+msgid ""
+"parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+
+#: main/KoDocument.cpp:1763
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "ئىناۋەتلىك كاللىگىرا ھۆججىتى ئەمەس: %1"
+
+#: main/KoDocument.cpp:1848
+#, kde-format
+msgid "Invalid document: no file 'maindoc.xml'."
+msgstr ""
+
+#: main/KoDocument.cpp:1872
+#, kde-format
+msgid ""
+"Document <i>%1</i> contains several versions. Go to File->Versions to open "
+"an old version."
+msgstr ""
+
+#: main/KoDocument.cpp:2073 main/KoDocument.cpp:2548 main/KoMainWindow.cpp:1216
+#: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
+#, kde-format
+msgid "Untitled"
+msgstr "ماۋزۇسىز"
+
+#: main/KoDocument.cpp:2076 main/KoMainWindow.cpp:1219
+#, kde-format
+msgid ""
+"<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
+"</p>"
+msgstr "<p>پۈتۈك <b>'%1'</b> ئۆزگەرتىلدى.</p><p>ساقلامسىز؟</p>"
+
+#: main/KoDocument.cpp:2159
+#, kde-format
+msgid "Internal error: saveXML not implemented"
+msgstr ""
+
+#: main/KoDocument.cpp:2196
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
+msgid ""
+"Could not open\n"
+"%1"
+msgstr "%1 نى تاپقىلى بولمىدى"
+
+#: main/KoDocument.cpp:2199
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not open\n"
+#| "%2.\n"
+#| "Reason: %1"
+msgid ""
+"Could not open %1\n"
+"Reason: %2"
+msgstr ""
+"ئاچالمىدى\n"
+"%2.\n"
+"سەۋەبى: %1"
+
+#: main/KoDocument.cpp:2256
+#, kde-format
+msgid "a word processing"
+msgstr ""
+
+#: main/KoDocument.cpp:2257
+#, fuzzy, kde-format
+#| msgid "Page Header"
+msgid "a spreadsheet"
+msgstr "بەت قېشى"
+
+#: main/KoDocument.cpp:2258
+#, fuzzy, kde-format
+#| msgid "Orientation:"
+msgid "a presentation"
+msgstr "يۆنىلىش:"
+
+#: main/KoDocument.cpp:2259
+#, kde-format
+msgid "a chart"
+msgstr ""
+
+#: main/KoDocument.cpp:2260
+#, kde-format
+msgid "a drawing"
+msgstr ""
+
+#: main/KoDocument.cpp:2552
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
+#| "it?</p>"
+msgid ""
+"The document \"%1\" has been modified.\n"
+"Do you want to save your changes or discard them?"
+msgstr "<p>پۈتۈك <b>'%1'</b> ئۆزگەرتىلدى.</p><p>ساقلامسىز؟</p>"
+
+#: main/KoDocument.cpp:2554
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgid "Close Document"
+msgstr "پۈتۈك ساقلا"
+
+#: main/KoDocumentSectionDelegate.cpp:508
+#, kde-format
+msgid "%1 %"
+msgstr "%1 %"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "No"
+msgstr "ياق"
+
+#: main/KoDocumentSectionToolTip.cpp:37
+#, kde-format
+msgid "Yes"
+msgstr "ھەئە"
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
+msgid "Could not export file."
+msgstr "%1 نى تاپقىلى بولمىدى"
+
+#: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgid "Missing Export Filter"
+msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#: main/KoFilterManager.cpp:518
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
+msgid ""
+"Could not import file of type\n"
+"%1"
+msgstr "%1 نى تاپقىلى بولمىدى"
+
+#: main/KoFilterManager.cpp:520
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgid "Missing Import Filter"
+msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#: main/KoFilterManager_p.cpp:30
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Choose File to Add"
+msgid "Choose Filter"
+msgstr "قوشىدىغان ھۆججەتنى تاللا"
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Case Sensitive"
+msgstr "چوڭ-كىچىك يېزىلىشى پەرقلەندۈر"
+
+#: main/KoFindText.cpp:46
+#, kde-format
+msgid "Match cases when searching"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Match only whole words"
+msgstr ""
+
+#: main/KoFindText.cpp:47
+#, kde-format
+msgid "Whole Words Only"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Find from Cursor"
+msgstr ""
+
+#: main/KoFindText.cpp:48
+#, kde-format
+msgid "Start searching from the current cursor"
+msgstr ""
+
+#: main/KoMainWindow.cpp:157
+#, fuzzy, kde-format
+#| msgid "Save Document As"
+msgid "%1 unsaved document (%2)"
+msgstr "پۈتۈكنى باشقا ئاتتا ساقلا"
+
+#: main/KoMainWindow.cpp:266
+#, kde-format
+msgid "Export as PDF..."
+msgstr "PDF چىقار…"
+
+#: main/KoMainWindow.cpp:276
+#, kde-format
+msgid "Reload"
+msgstr "قايتا يۈكلە"
+
+#: main/KoMainWindow.cpp:280
+#, kde-format
+msgid "Versions..."
+msgstr "نەشرى…"
+
+#: main/KoMainWindow.cpp:284
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Open ex&isting Document as Untitled Document..."
+msgstr "پۈتۈك ئېچىش"
+
+#: main/KoMainWindow.cpp:288
+#, kde-format
+msgid "E&xport..."
+msgstr "چىقار(&X)…"
+
+#: main/KoMainWindow.cpp:292
+#, fuzzy, kde-format
+#| msgid "Recent Documents"
+msgid "En&crypt Document"
+msgstr "يېقىنقى پۈتۈكلەر"
+
+#: main/KoMainWindow.cpp:297
+#, fuzzy, kde-format
+#| msgid "Import Data"
+msgid "&Uncompress to Directory"
+msgstr "سانلىق-مەلۇمات ئەكىر"
+
+#: main/KoMainWindow.cpp:302
+#, kde-format
+msgid "&New View"
+msgstr "يېڭى كۆرۈنۈش(&N)"
+
+#: main/KoMainWindow.cpp:308 widgets/KoDocumentInfoDlg.cpp:86
+#, kde-format
+msgid "Document Information"
+msgstr "پۈتۈك ئۇچۇرى"
+
+#: main/KoMainWindow.cpp:332
+#, kde-format
+msgid "Full Screen Mode"
+msgstr "پۈتۈن ئېكران ھالىتى"
+
+#: main/KoMainWindow.cpp:337
+#, fuzzy, kde-format
+#| msgid "Show Rulers"
+msgid "Show Dockers"
+msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+
+#: main/KoMainWindow.cpp:342
+#, fuzzy, kde-format
+#| msgid "Show Rulers"
+msgctxt "@action:inmenu"
+msgid "Show Docker Titlebars"
+msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+
+#: main/KoMainWindow.cpp:349
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgid "Dockers"
+msgstr "پۈتۈك ساقلا"
+
+#: main/KoMainWindow.cpp:654
+#, kde-format
+msgid "(write protected)"
+msgstr "(يېزىش چەكلەنگەن)"
+
+#: main/KoMainWindow.cpp:659
+#, kde-format
+msgid "Save as %1"
+msgstr "%1 سۈپىتىدە ساقلا"
+
+#: main/KoMainWindow.cpp:841 widgets/KoDocumentInfoDlg.cpp:388
+#, kde-format
+msgid "%1 (unknown file type)"
+msgstr "%1 (نامەلۇم ھۆججەت تىپى)"
+
+#: main/KoMainWindow.cpp:849
+#, kde-format
+msgid ""
+"<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
+"want to save in this format?</qt>"
+msgstr ""
+
+#: main/KoMainWindow.cpp:852
+#, kde-format
+msgid "Confirm Save"
+msgstr "ساقلاشنى جەزملەش"
+
+#: main/KoMainWindow.cpp:861
+#, kde-format
+msgid ""
+"<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
+"want to export to this format?</qt>"
+msgstr ""
+
+#: main/KoMainWindow.cpp:864
+#, fuzzy, kde-format
+#| msgid "Confirm Save"
+msgid "Confirm Export"
+msgstr "ساقلاشنى جەزملەش"
+
+#: main/KoMainWindow.cpp:865
+#, kde-format
+msgid "Export"
+msgstr "ئېكسپورت قىل"
+
+#: main/KoMainWindow.cpp:957
+#, fuzzy, kde-format
+#| msgid "Untitled"
+msgid "untitled"
+msgstr "ماۋزۇسىز"
+
+#: main/KoMainWindow.cpp:1281
+#, kde-format
+msgid "Open Document"
+msgstr "پۈتۈك ئېچىش"
+
+#: main/KoMainWindow.cpp:1290 pageapp/KoPAView.cpp:524
+#, fuzzy, kde-format
+#| msgid "Save Document As"
+msgid "Import Document"
+msgstr "پۈتۈكنى باشقا ئاتتا ساقلا"
+
+#: main/KoMainWindow.cpp:1454
+#, fuzzy, kde-format
+#| msgid "Export as PDF..."
+msgid "Export as PDF"
+msgstr "PDF چىقار…"
+
+#: main/KoMainWindow.cpp:1491
+#, kde-format
+msgid "Cannot export to the specified file"
+msgstr ""
+
+#: main/KoMainWindow.cpp:1690 pageapp/KoPADocumentStructureDocker.cpp:80
+#, kde-format
+msgid "Document"
+msgstr "پۈتۈك"
+
+#: main/KoMainWindow.cpp:1698
+#, fuzzy, kde-format
+#| msgid "Document"
+msgid "Document - %1"
+msgstr "پۈتۈك"
+
+#: main/KoMainWindow.cpp:1728
+#, kde-format
+msgid ""
+"You will lose all changes made since your last save\n"
+"Do you want to continue?"
+msgstr ""
+
+#: main/KoMainWindow.cpp:1730
+#, kde-format
+msgid "Warning"
+msgstr "ئاگاھلاندۇرۇش"
+
+#: main/KoMainWindow.cpp:2095
+#, kde-format
+msgid "Show %1 Toolbar"
+msgstr ""
+
+#: main/KoMainWindow.cpp:2097
+#, kde-format
+msgid "Hide %1 Toolbar"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
+#: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Open Existing Document"
+msgstr "پۈتۈك ئېچىش"
+
+#: main/KoOpenPane.cpp:199
+#, kde-format
+msgid "Recent Documents"
+msgstr "يېقىنقى پۈتۈكلەر"
+
+#: main/KoOpenPane.cpp:299
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgid "Custom Document"
+msgstr "پۈتۈك ساقلا"
+
+#: main/KoPrintingDialog.cpp:43
+#, kde-format
+msgid "Stop"
+msgstr "توختا"
+
+#: main/KoPrintingDialog.cpp:132
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Printing"
+msgstr "تىكىش گىرۋىكى:"
+
+#: main/KoPrintingDialog_p.h:136
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Printing done"
+msgstr "تىكىش گىرۋىكى:"
+
+#: main/KoPrintingDialog_p.h:137
+#, kde-format
+msgid "Close"
+msgstr "ياپ"
+
+#: main/KoPrintingDialog_p.h:157
+#, kde-format
+msgid "Stopped"
+msgstr "توختىدى"
+
+#: main/KoRecentDocumentsPane.cpp:71
+#, fuzzy, kde-format
+#| msgid "Open Document"
+msgid "Open This Document"
+msgstr "پۈتۈك ئېچىش"
+
+#: main/KoRecentDocumentsPane.cpp:174
+#, kde-format
+msgctxt "File modification date and time. %1 is date time"
+msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>ئۆزگەرتىلگەن ۋاقىت:</b></td><td>%1</td></tr>"
+
+#: main/KoRecentDocumentsPane.cpp:177
+#, kde-format
+msgctxt "File access date and time. %1 is date time"
+msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+msgstr "<tr><td><b>زىيارەت قىلىنغان ۋاقىت:</b></td><td>%1</td></tr>"
+
+#: main/KoStandardAction.cpp:19
+#, fuzzy, kde-format
+#| msgid "Show Grid"
+msgid "Show Guides"
+msgstr "سېتكا كۆرسەت"
+
+#: main/KoStandardAction.cpp:20
+#, fuzzy, kde-format
+#| msgid "Show Grid"
+msgid "Shows or hides guides"
+msgstr "سېتكا كۆرسەت"
+
+#: main/KoTemplateCreateDia.cpp:104
+#, kde-format
+msgid "Create Template"
+msgstr "قېلىپ قۇر"
+
+#: main/KoTemplateCreateDia.cpp:113
+#, kde-format
+msgctxt "Template name"
+msgid "Name:"
+msgstr "ئاتى:"
+
+#: main/KoTemplateCreateDia.cpp:123
+#, kde-format
+msgid "Group:"
+msgstr "گۇرۇپپا:"
+
+#: main/KoTemplateCreateDia.cpp:138
+#, kde-format
+msgid "&Add Group..."
+msgstr "گۇرۇپپا قوش(&A)…"
+
+#: main/KoTemplateCreateDia.cpp:141 main/KoVersionDialog.cpp:61
+#, kde-format
+msgid "&Remove"
+msgstr "چىقىرىۋەت(&R)"
+
+#: main/KoTemplateCreateDia.cpp:147
+#, kde-format
+msgid "Picture"
+msgstr "سۈرەت"
+
+#: main/KoTemplateCreateDia.cpp:150
+#, kde-format
+msgid "&Preview"
+msgstr "ئالدىن كۆزەت(&P)"
+
+#: main/KoTemplateCreateDia.cpp:155
+#, kde-format
+msgid "Custom:"
+msgstr "ئىختىيارى:"
+
+#: main/KoTemplateCreateDia.cpp:159
+#, kde-format
+msgid "&Select..."
+msgstr "تاللا(&S)…"
+
+#: main/KoTemplateCreateDia.cpp:168
+#, kde-format
+msgid "Use the new template as default"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:308
+#, kde-format
+msgid "Do you really want to overwrite the existing '%1' template?"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "Add Group"
+msgstr "گۇرۇپپا قوش"
+
+#: main/KoTemplateCreateDia.cpp:421
+#, kde-format
+msgid "Enter group name:"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:428
+#, kde-format
+msgid "This name is already used."
+msgstr "بۇ ئات ئىشلىتىلگەن."
+
+#: main/KoTemplateCreateDia.cpp:452
+#, kde-format
+msgid "Do you really want to remove that group?"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:453
+#, kde-format
+msgid "Remove Group"
+msgstr "گۇرۇپپىنى چىقىرىۋەت"
+
+#: main/KoTemplateCreateDia.cpp:455
+#, kde-format
+msgid "Do you really want to remove that template?"
+msgstr ""
+
+#: main/KoTemplateCreateDia.cpp:456
+#, kde-format
+msgid "Remove Template"
+msgstr "قېلىپنى چىقىرىۋېتىش"
+
+#: main/KoTemplateCreateDia.cpp:507
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
+msgid "Could not load picture."
+msgstr "%1 نى تاپقىلى بولمىدى"
+
+#: main/KoTemplateCreateDia.cpp:510
+#, kde-format
+msgid "No picture available."
+msgstr ""
+
+#: main/KoTemplatesPane.cpp:37
+#, fuzzy, kde-format
+#| msgid "Always use this template"
+msgid "Use This Template"
+msgstr "ھەمىشە  بۇ قېلىپنى ئىشلەت"
+
+#: main/KoVersionDialog.cpp:35
+#, kde-format
+msgid "Version"
+msgstr "نەشرى"
+
+#: main/KoVersionDialog.cpp:49
+#, kde-format
+msgid "Date & Time"
+msgstr "چېسلا & ۋاقىت"
+
+#: main/KoVersionDialog.cpp:50
+#, fuzzy, kde-format
+#| msgid "Save"
+msgid "Saved By"
+msgstr "ساقلا"
+
+#: main/KoVersionDialog.cpp:51 main/KoVersionDialog.cpp:215
+#, kde-format
+msgid "Comment"
+msgstr "ئىزاھات"
+
+#: main/KoVersionDialog.cpp:58
+#, kde-format
+msgid "&Add"
+msgstr "قوش(&A)"
+
+#: main/KoVersionDialog.cpp:64
+#, kde-format
+msgid "&Modify"
+msgstr "ئۆزگەرت(&M)"
+
+#: main/KoVersionDialog.cpp:67
+#, kde-format
+msgid "&Open"
+msgstr "ئاچ(&O)"
+
+#: main/KoVersionDialog.cpp:120
+#, kde-format
+msgid "A new version could not be added"
+msgstr "يېڭى نەشرىنى قوشۇشقا بولمىدى"
+
+#: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
+#, kde-format
+msgid "Date: %1"
+msgstr "چېسلا: %1"
+
+#: main/KoView.cpp:330
+#, fuzzy, kde-format
+#| msgid "Active tool: %1"
+msgid "Active Author Profile"
+msgstr "ئاكتىپ قورال: %1"
+
+#: main/KoView.cpp:342 main/KoView.cpp:396
+#, kde-format
+msgctxt "choice for author profile"
+msgid "Anonymous"
+msgstr "ئاتسىز"
+
+#: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
+#, fuzzy, kde-format
+#| msgid "Active tool: %1"
+msgid "Default Author Profile"
+msgstr "ئاكتىپ قورال: %1"
+
+#: odf/KoDocumentInfo.cpp:40
+#, kde-format
+msgid "Unknown"
+msgstr "نامەلۇم"
+
+#: odf/KoOdfReadStore.cpp:91
+#, kde-format
+msgid "No store backend"
+msgstr ""
+
+#: odf/KoOdfReadStore.cpp:126
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2\n"
+"Error message: %3"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:53
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A3"
+msgstr "ISO A3"
+
+#: odf/KoPageFormat.cpp:54
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A4"
+msgstr "ISO A4"
+
+#: odf/KoPageFormat.cpp:55
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A5"
+msgstr "ISO A5"
+
+#: odf/KoPageFormat.cpp:56
+#, kde-format
+msgctxt "Page size"
+msgid "US Letter"
+msgstr "ئا ق ش لېپاپى"
+
+#: odf/KoPageFormat.cpp:57
+#, kde-format
+msgctxt "Page size"
+msgid "US Legal"
+msgstr "ئا ق ش قانۇن"
+
+#: odf/KoPageFormat.cpp:58
+#, kde-format
+msgctxt "Page size"
+msgid "Screen"
+msgstr "ئېكران"
+
+#: odf/KoPageFormat.cpp:59
+#, kde-format
+msgctxt "Page size"
+msgid "Custom"
+msgstr "ئىختىيارى"
+
+#: odf/KoPageFormat.cpp:60
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B5"
+msgstr "ISO B5"
+
+#: odf/KoPageFormat.cpp:61
+#, fuzzy, kde-format
+#| msgid "Execute"
+msgctxt "Page size"
+msgid "US Executive"
+msgstr "ئىجرا قىل"
+
+#: odf/KoPageFormat.cpp:62
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A0"
+msgstr "ISO A0"
+
+#: odf/KoPageFormat.cpp:63
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A1"
+msgstr "ISO A1"
+
+#: odf/KoPageFormat.cpp:64
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A2"
+msgstr "ISO A2"
+
+#: odf/KoPageFormat.cpp:65
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A6"
+msgstr "ISO A6"
+
+#: odf/KoPageFormat.cpp:66
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A7"
+msgstr "ISO A7"
+
+#: odf/KoPageFormat.cpp:67
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A8"
+msgstr "ISO A8"
+
+#: odf/KoPageFormat.cpp:68
+#, kde-format
+msgctxt "Page size"
+msgid "ISO A9"
+msgstr "ISO A9"
+
+#: odf/KoPageFormat.cpp:69
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B0"
+msgstr "ISO B0"
+
+#: odf/KoPageFormat.cpp:70
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B1"
+msgstr "ISO B1"
+
+#: odf/KoPageFormat.cpp:71
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B10"
+msgstr "ISO B10"
+
+#: odf/KoPageFormat.cpp:72
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B2"
+msgstr "ISO B2"
+
+#: odf/KoPageFormat.cpp:73
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B3"
+msgstr "ISO B3"
+
+#: odf/KoPageFormat.cpp:74
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B4"
+msgstr "ISO B4"
+
+#: odf/KoPageFormat.cpp:75
+#, kde-format
+msgctxt "Page size"
+msgid "ISO B6"
+msgstr "ISO B6"
+
+#: odf/KoPageFormat.cpp:76
+#, kde-format
+msgctxt "Page size"
+msgid "ISO C5"
+msgstr "ISO C5"
+
+#: odf/KoPageFormat.cpp:77
+#, kde-format
+msgctxt "Page size"
+msgid "US Common 10"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:78
+#, kde-format
+msgctxt "Page size"
+msgid "ISO DL"
+msgstr "ISO DL"
+
+#: odf/KoPageFormat.cpp:79
+#, kde-format
+msgctxt "Page size"
+msgid "US Folio"
+msgstr ""
+
+#: odf/KoPageFormat.cpp:80
+#, fuzzy, kde-format
+#| msgctxt "Page size"
+#| msgid "US Letter"
+msgctxt "Page size"
+msgid "US Ledger"
+msgstr "ئا ق ش لېپاپى"
+
+#: odf/KoPageFormat.cpp:81
+#, kde-format
+msgctxt "Page size"
+msgid "US Tabloid"
+msgstr ""
+
+#: odf/KoUnit.cpp:37
+#, kde-format
+msgid "Millimeters (mm)"
+msgstr "مىللىمېتىر(mm)"
+
+#: odf/KoUnit.cpp:39
+#, kde-format
+msgid "Centimeters (cm)"
+msgstr "سانتىمېتىر(cm)"
+
+#: odf/KoUnit.cpp:41
+#, kde-format
+msgid "Decimeters (dm)"
+msgstr "دېتسىمېتىر (د م)"
+
+#: odf/KoUnit.cpp:43
+#, kde-format
+msgid "Inches (in)"
+msgstr "دىيۇيم(in)"
+
+#: odf/KoUnit.cpp:45
+#, kde-format
+msgid "Pica (pi)"
+msgstr ""
+
+#: odf/KoUnit.cpp:47
+#, kde-format
+msgid "Cicero (cc)"
+msgstr ""
+
+#: odf/KoUnit.cpp:49
+#, kde-format
+msgid "Points (pt)"
+msgstr "قاداق (pt)"
+
+#: odf/KoUnit.cpp:51
+#, fuzzy, kde-format
+#| msgid "Points (pt)"
+msgid "Pixels (px)"
+msgstr "قاداق (pt)"
+
+#: odf/KoUnit.cpp:53
+#, kde-format
+msgid "Unsupported unit"
+msgstr ""
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
+#, fuzzy
+#| msgid "Master Page"
+msgctxt "(qtundo-format)"
+msgid "Change master slide"
+msgstr "ئانا بەت"
+
+#: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
+#, fuzzy
+#| msgid "Master Page"
+msgctxt "(qtundo-format)"
+msgid "Change master page"
+msgstr "ئانا بەت"
+
+#: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Set Page Layout"
+msgstr "بەت جايلاشتۇرۇشنى بەلگىلەش"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
+#, fuzzy
+#| msgid "Background"
+msgctxt "(qtundo-format)"
+msgid "Display master background"
+msgstr "تەگلىك"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
+#, fuzzy
+#| msgid "Background"
+msgctxt "(qtundo-format)"
+msgid "Display slide background"
+msgstr "تەگلىك"
+
+#: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
+#, fuzzy
+#| msgid "Background"
+msgctxt "(qtundo-format)"
+msgid "Display page background"
+msgstr "تەگلىك"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
+#, fuzzy
+#| msgid "Master Page"
+msgctxt "(qtundo-format)"
+msgid "Show master shapes"
+msgstr "ئانا بەت"
+
+#: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
+msgctxt "(qtundo-format)"
+msgid "Hide master shapes"
+msgstr ""
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:26
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Delete slide"
+#| msgid_plural "Delete slides"
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "تام تەسۋىر ئۆچۈر"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:29
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Delete page"
+#| msgid_plural "Delete pages"
+msgctxt "(qtundo-format) Delete one page"
+msgid "Delete page"
+msgstr "بەت ئۆچۈر"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:50
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "تام تەسۋىر ئۆچۈر"
+
+#: pageapp/commands/KoPAPageDeleteCommand.cpp:53
+msgctxt "(qtundo-format)"
+msgid "Delete page"
+msgid_plural "Delete pages"
+msgstr[0] "بەت ئۆچۈر"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Insert slide"
+msgstr "تام تەسۋىر قىستۇر"
+
+#: pageapp/commands/KoPAPageInsertCommand.cpp:27
+msgctxt "(qtundo-format)"
+msgid "Insert page"
+msgstr "بەت قىستۇر"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:45
+msgctxt "(qtundo-format)"
+msgid "Move slide"
+msgid_plural "Move slides"
+msgstr[0] "تام تەسۋىر يۆتكە"
+
+#: pageapp/commands/KoPAPageMoveCommand.cpp:48
+msgctxt "(qtundo-format)"
+msgid "Move page"
+msgid_plural "Move pages"
+msgstr[0] "بەت يۆتكە"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:28
+#, kde-format
+msgid "Configure"
+msgstr "سەپلە"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:45
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "پۈتۈك"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:50
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "ئاپتور"
+
+#: pageapp/dialogs/KoPAConfigureDialog.cpp:51 widgets/KoDocumentInfoDlg.cpp:131
+#, kde-format
+msgid "Author"
+msgstr "ئاپتور"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:27
+#, kde-format
+msgid "Select a master slide design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Master Slide"
+msgstr "ئانا بەت"
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
+#, kde-format
+msgid "Select a master page design:"
+msgstr ""
+
+#: pageapp/dialogs/KoPAMasterPageDialog.cpp:31
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:97
+#, kde-format
+msgid "Master Page"
+msgstr "ئانا بەت"
+
+#: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
+#, kde-format
+msgid "Slide %1"
+msgstr "تام تەسۋىر %1"
+
+#: pageapp/KoPADocumentModel.cpp:174
+#, kde-format
+msgid "Page  %1"
+msgstr "بەت %1"
+
+#: pageapp/KoPADocumentModel.cpp:177
+#: pageapp/KoPADocumentStructureDocker.cpp:102
+#, kde-format
+msgid "Layer"
+msgstr "قەۋەت"
+
+#: pageapp/KoPADocumentModel.cpp:179
+#, kde-format
+msgid "Group"
+msgstr "گۇرۇپپا"
+
+#: pageapp/KoPADocumentModel.cpp:181
+#, kde-format
+msgid "Shape"
+msgstr "شەكىل"
+
+#: pageapp/KoPADocumentModel.cpp:272
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste Page"
+#| msgid_plural "Paste Pages"
+msgctxt "(qtundo-format)"
+msgid "Rename Slide"
+msgstr "بەتلەرنى چاپلا"
+
+#: pageapp/KoPADocumentModel.cpp:274
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste Page"
+#| msgid_plural "Paste Pages"
+msgctxt "(qtundo-format)"
+msgid "Rename Page"
+msgstr "بەتلەرنى چاپلا"
+
+#: pageapp/KoPADocumentModel.cpp:278
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Create Layer"
+msgctxt "(qtundo-format)"
+msgid "Rename Layer"
+msgstr "قاتلام قۇرۇش"
+
+#: pageapp/KoPADocumentModel.cpp:314
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#, kde-format
+msgid "Slide"
+msgstr "تام تەسۋىر"
+
+#: pageapp/KoPADocumentModel.cpp:317
+#, kde-format
+msgid "Visible"
+msgstr "كۆرۈنۈشچان"
+
+#: pageapp/KoPADocumentModel.cpp:318
+#, kde-format
+msgid "Locked"
+msgstr "قۇلۇپلانغان"
+
+#: pageapp/KoPADocumentModel.cpp:533 pageapp/KoPADocumentModel.cpp:552
+msgctxt "(qtundo-format)"
+msgid "Reparent shapes"
+msgstr ""
+
+#: pageapp/KoPADocumentModel.cpp:686
+#, kde-format
+msgid "&Move Here"
+msgstr "بۇ جايغا يۆتكە(&M)"
+
+#: pageapp/KoPADocumentModel.cpp:690
+#, kde-format
+msgid "&Copy Here"
+msgstr "بۇ جايغا كۆچۈر(&C)"
+
+#: pageapp/KoPADocumentModel.cpp:694
+#, kde-format
+msgid "C&ancel"
+msgstr "ۋاز كەچ(&A)"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:89
+#, fuzzy, kde-format
+#| msgid "Add a new page or layer"
+msgid "Add a new slide or layer"
+msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:92
+#, kde-format
+msgid "Add a new page or layer"
+msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:100
+#: widgets/KoPageLayoutDialog.cpp:37
+#, kde-format
+msgid "Page"
+msgstr "بەت"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:109
+#: pageapp/KoPADocumentStructureDocker.cpp:616
+#, kde-format
+msgid "Delete selected objects"
+msgstr "تاللانغان نەڭنى ئۆچۈر"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:115
+#, kde-format
+msgid "Raise selected objects"
+msgstr "تاللانغان نەڭنى ئالدىغا يۆتكە"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:121
+#, kde-format
+msgid "Lower selected objects"
+msgstr "تاللانغان نەڭنى ئارقىغا يۆتكە"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:130
+#, kde-format
+msgid "Minimal View"
+msgstr "ئەڭ كىچىك كۆرۈنۈش"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:132
+#, kde-format
+msgid "Detailed View"
+msgstr "تەپسىلات كۆرۈنۈش"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:134
+#, kde-format
+msgid "Thumbnail View"
+msgstr "كىچىكلىتىلگەن سۈرەت كۆرۈنۈشى"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:144
+#, kde-format
+msgid "View mode"
+msgstr "كۆرۈنۈش ھالىتى"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "Enter the name of the new layer:"
+msgstr "يېڭى قاتلامنىڭ ئاتىنى كىرگۈزۈڭ:"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:301
+#, kde-format
+msgid "New Layer"
+msgstr "يېڭى سۈرەت قەۋىتى"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:302
+#, kde-format
+msgid "New layer"
+msgstr "يېڭى سۈرەت قەۋىتى"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:315
+msgctxt "(qtundo-format)"
+msgid "Create Layer"
+msgstr "قاتلام قۇرۇش"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:341
+msgctxt "(qtundo-format)"
+msgid "Delete Layer"
+msgstr "سۈرەت قەۋىتى ئۆچۈر"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Could not delete all layers. At least one layer is required."
+msgstr "ھەممە قاتلاملارنى ئۆچۈرگىلى بولمىدى. ئاز دېگەندە قاتلامدىن بىرى زۆرۈر."
+
+#: pageapp/KoPADocumentStructureDocker.cpp:344
+#, kde-format
+msgid "Error deleting layers"
+msgstr "قاتلاملارنى ئۆچۈرۈۋاتقاندا خاتالىق كۆرۈلدى"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:611
+#, fuzzy, kde-format
+#| msgid "Add a new page or layer"
+msgid "Add a new slide"
+msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:614
+#, fuzzy, kde-format
+#| msgid "Add a new page or layer"
+msgid "Add a new page"
+msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:618
+#, kde-format
+msgid "Cut"
+msgstr "كەس"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:619
+#: pigment/compositeops/KoCompositeOpCopy.h:24
+#: pigment/compositeops/KoCompositeOpCopy2.h:32
+#: pigment/KoCompositeOpRegistry.cpp:87
+#, kde-format
+msgid "Copy"
+msgstr "كۆچۈر"
+
+#: pageapp/KoPADocumentStructureDocker.cpp:620
+#, kde-format
+msgid "Paste"
+msgstr "چاپلا"
+
+#: pageapp/KoPAPageThumbnailModel.cpp:56
+#, kde-format
+msgid "Page %1"
+msgstr "%1 -بەت"
+
+#: pageapp/KoPAPastePage.cpp:118
+#, fuzzy
+#| msgid "Master Page"
+msgctxt "(qtundo-format)"
+msgid "Paste Slide"
+msgid_plural "Paste Slides"
+msgstr[0] "ئانا بەت"
+
+#: pageapp/KoPAPastePage.cpp:121
+msgctxt "(qtundo-format)"
+msgid "Paste Page"
+msgid_plural "Paste Pages"
+msgstr[0] "بەتلەرنى چاپلا"
+
+#: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
+#, kde-format
+msgid "Tools"
+msgstr "قوراللار"
+
+#: pageapp/KoPAView.cpp:350
+#, kde-format
+msgid "D&elete"
+msgstr "ئۆچۈر(&E)"
+
+#: pageapp/KoPAView.cpp:361
+#, kde-format
+msgid "Snap to Grid"
+msgstr "سېتكىغا توغرىلا"
+
+#: pageapp/KoPAView.cpp:371
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Show Master Pages"
+msgstr "ئانا بەت"
+
+#: pageapp/KoPAView.cpp:375
+#, kde-format
+msgid "Show Rulers"
+msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+
+#: pageapp/KoPAView.cpp:377
+#, kde-format
+msgid "Show/hide the view's rulers"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:381
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Show Page Margins"
+msgstr "ئانا بەت"
+
+#: pageapp/KoPAView.cpp:383
+#, kde-format
+msgid "Show/hide the page margins"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:387
+#, kde-format
+msgid "Insert Page"
+msgstr "بەت قىستۇر"
+
+#: pageapp/KoPAView.cpp:389 pageapp/KoPAView.cpp:390
+#, kde-format
+msgid "Insert a new page after the current one"
+msgstr ""
+
+#: pageapp/KoPAView.cpp:393
+#, kde-format
+msgid "Copy Page"
+msgstr "بەت كۆچۈر"
+
+#: pageapp/KoPAView.cpp:395 pageapp/KoPAView.cpp:396
+#, kde-format
+msgid "Copy the current page"
+msgstr "نۆۋەتتىكى  بەتنى كۆچۈرىدۇ"
+
+#: pageapp/KoPAView.cpp:399
+#, kde-format
+msgid "Delete Page"
+msgstr "بەت ئۆچۈر"
+
+#: pageapp/KoPAView.cpp:402 pageapp/KoPAView.cpp:403
+#, kde-format
+msgid "Delete the current page"
+msgstr "نۆۋەتتىكى  بەتنى ئۆچۈرىدۇ"
+
+#: pageapp/KoPAView.cpp:406
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Master Page..."
+msgstr "ئانا بەت"
+
+#: pageapp/KoPAView.cpp:410
+#, kde-format
+msgid "Page Layout..."
+msgstr "بەت ئۇسلۇبى …"
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: pageapp/KoPAView.cpp:420 rdf/KoSemanticStylesheetsEditor.ui:57
+#, kde-format
+msgid "Variable"
+msgstr "ئۆزگىرىشچان"
+
+#: pageapp/KoPAView.cpp:425
+#, fuzzy, kde-format
+#| msgid "Save Document As"
+msgid "Import Document..."
+msgstr "پۈتۈكنى باشقا ئاتتا ساقلا"
+
+#: pageapp/KoPAView.cpp:429
+#, kde-format
+msgid "Configure..."
+msgstr "سەپلە…"
+
+#: pageapp/KoPAView.cpp:521
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgid "Import Slideshow"
+msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
+#, fuzzy, kde-format
+#| msgid "Could not find %1"
+msgid ""
+"Could not import\n"
+"%1"
+msgstr "%1 نى تاپقىلى بولمىدى"
+
+#: pageapp/KoPAView.cpp:666
+msgctxt "(qtundo-format)"
+msgid "Change page layout"
+msgstr "بەت جايلاشتۇرۇشنى ئۆزگەرت"
+
+#. i18n: ectx: property (text), widget (QPushButton, backgroundImage)
+#: pageapp/tools/backgroundTool/BackgroundToolWidget.ui:43
+#, kde-format
+msgid "Set image ..."
+msgstr ""
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
+#, kde-format
+msgid "Background"
+msgstr "تەگلىك"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
+#, fuzzy, kde-format
+#| msgid "Background"
+msgid "Page Background"
+msgstr "تەگلىك"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Page Size"
+msgid "Page Design"
+msgstr "بەت چوڭلۇقى"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
+#, fuzzy, kde-format
+#| msgid "Slide %1"
+msgid "Slide Design"
+msgstr "تام تەسۋىر %1"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, kde-format
+msgid "Use background of master page"
+msgstr ""
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Use background of master slide"
+msgstr "ئانا بەت"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Display shapes of master page"
+msgstr "ئانا بەت"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Display shapes of master slide"
+msgstr "ئانا بەت"
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Change slide background image"
+msgstr ""
+
+#: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change page layout"
+msgctxt "(qtundo-format)"
+msgid "Change page background image"
+msgstr "بەت جايلاشتۇرۇشنى ئۆزگەرت"
+
+#: pageapp/widgets/KoPageNavigator.cpp:55
+#, fuzzy, kde-format
+#| msgid "Slide %1"
+msgid "Master Slide %1/%2"
+msgstr "تام تەسۋىر %1"
+
+#: pageapp/widgets/KoPageNavigator.cpp:56
+#, fuzzy, kde-format
+#| msgid "Slide %1"
+msgid "Slide %1/%2"
+msgstr "تام تەسۋىر %1"
+
+#: pageapp/widgets/KoPageNavigator.cpp:57
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Master Page %1/%2"
+msgstr "ئانا بەت"
+
+#: pageapp/widgets/KoPageNavigator.cpp:58
+#, fuzzy, kde-format
+#| msgid "Page %1"
+msgid "Page %1/%2"
+msgstr "%1 -بەت"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:37
+#, kde-format
+msgid "Clear"
+msgstr "تازىلا"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:110
+#: pigment/compositeops/KoCompositeOps.h:127
+#: pigment/KoCompositeOpRegistry.cpp:38
+#, kde-format
+msgid "Subtract"
+msgstr "ئېلىش"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:182
+#: pigment/compositeops/KoCompositeOps.h:129
+#: pigment/KoCompositeOpRegistry.cpp:39
+#, kde-format
+msgid "Multiply"
+msgstr "ھەسسىلەپ ئېشىش"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:248
+#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/KoColorModelStandardIds.cpp:12
+#, fuzzy, kde-format
+#| msgid "Alpha darken"
+msgid "Alpha mask"
+msgstr "ئالفا قارايتىلغان"
+
+#: pigment/colorspaces/KoAlphaColorSpace.cpp:250
+#: pigment/colorspaces/KoLabColorSpace.cpp:34
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:36
+#, kde-format
+msgid "Alpha"
+msgstr "ئالفا"
+
+#: pigment/colorspaces/KoAlphaColorSpace.h:128
+#: pigment/colorspaces/KoAlphaColorSpace.h:133
+#: pigment/colorspaces/KoAlphaColorSpace.h:137
+#: pigment/colorspaces/KoAlphaColorSpace.h:141
+#: pigment/colorspaces/KoAlphaColorSpace.h:144
+#: pigment/colorspaces/KoAlphaColorSpace.h:147
+#: pigment/colorspaces/KoAlphaColorSpace.h:150
+#: pigment/colorspaces/KoAlphaColorSpace.h:153
+#: pigment/colorspaces/KoAlphaColorSpace.h:159
+#: pigment/colorspaces/KoAlphaColorSpace.h:162
+#, kde-format
+msgid "Undefined operation in the alpha color space"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:27
+#: pigment/colorspaces/KoLabColorSpace.h:63
+#, kde-format
+msgid "L*a*b* (16-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:31
+#: pigment/compositeops/KoCompositeOps.h:196
+#: pigment/KoCompositeOpRegistry.cpp:111
+#, kde-format
+msgid "Lightness"
+msgstr "يورۇقلۇق دەرىجىسى"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:32
+#: pigment/KoBasicHistogramProducers.cpp:430
+#, kde-format
+msgid "a*"
+msgstr "a*"
+
+#: pigment/colorspaces/KoLabColorSpace.cpp:33
+#: pigment/KoBasicHistogramProducers.cpp:431
+#, kde-format
+msgid "b*"
+msgstr "b*"
+
+#: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
+#: pigment/colorspaces/KoRgbU16ColorSpace.h:51
+#, kde-format
+msgid "RGB (16-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
+#: pigment/colorspaces/KoRgbU8ColorSpace.h:52
+#, kde-format
+msgid "RGB (8-bit integer/channel, unmanaged)"
+msgstr ""
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
+#, kde-format
+msgid "Blue"
+msgstr "كۆك"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:34
+#, kde-format
+msgid "Green"
+msgstr "يېشىل"
+
+#: pigment/colorspaces/KoRgbU8ColorSpace.cpp:35
+#, kde-format
+msgid "Red"
+msgstr "قىزىل"
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:60
+#: pigment/colorspaces/KoSimpleColorSpace.h:67
+#, kde-format
+msgid "Undefined operation in the %1 space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpace.h:84
+#: pigment/colorspaces/KoSimpleColorSpace.h:89
+#: pigment/colorspaces/KoSimpleColorSpace.h:94
+#: pigment/colorspaces/KoSimpleColorSpace.h:99
+#: pigment/colorspaces/KoSimpleColorSpace.h:104
+#: pigment/colorspaces/KoSimpleColorSpace.h:108
+#: pigment/colorspaces/KoSimpleColorSpace.h:112
+#: pigment/colorspaces/KoSimpleColorSpace.h:115
+#: pigment/colorspaces/KoSimpleColorSpace.h:118
+#: pigment/colorspaces/KoSimpleColorSpace.h:124
+#: pigment/colorspaces/KoSimpleColorSpace.h:127
+#, kde-format
+msgid "Undefined operation in the %1 color space"
+msgstr ""
+
+#: pigment/colorspaces/KoSimpleColorSpaceEngine.cpp:58
+#, kde-format
+msgid "Simple Color Conversion Engine"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpAlphaDarken.h:28
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken128.h:194
+#: pigment/compositeops/KoOptimizedCompositeOpAlphaDarken32.h:235
+#, kde-format
+msgid "Alpha darken"
+msgstr "ئالفا قارايتىلغان"
+
+#: pigment/compositeops/KoCompositeOpBehind.h:26
+#: pigment/KoCompositeOpRegistry.cpp:69
+#, kde-format
+msgid "Behind"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/KoCompositeOpRegistry.cpp:83
+#, kde-format
+msgid "Dissolve"
+msgstr "ئېرىت"
+
+#: pigment/compositeops/KoCompositeOpErase.h:27
+#: pigment/KoCompositeOpRegistry.cpp:72
+#, kde-format
+msgid "Erase"
+msgstr "ئۆچۈر"
+
+#: pigment/compositeops/KoCompositeOpGreater.h:40
+#: pigment/KoCompositeOpRegistry.cpp:70
+#, fuzzy, kde-format
+#| msgid "Created:"
+msgid "Greater"
+msgstr "قۇرۇلغان:"
+
+#: pigment/compositeops/KoCompositeOpOver.h:49
+#: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
+#: pigment/compositeops/KoOptimizedCompositeOpOver32.h:196
+#: pigment/KoCompositeOpRegistry.cpp:68 pigment/KoCompositeOpRegistry.cpp:134
+#, kde-format
+msgid "Normal"
+msgstr "نورمال"
+
+#: pigment/compositeops/KoCompositeOps.h:101
+#: pigment/KoCompositeOpRegistry.cpp:71
+#, kde-format
+msgid "Overlay"
+msgstr "دەستىلە"
+
+#: pigment/compositeops/KoCompositeOps.h:102
+#: pigment/KoCompositeOpRegistry.cpp:75
+#, kde-format
+msgid "Grain Merge"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:103
+#: pigment/KoCompositeOpRegistry.cpp:76
+#, kde-format
+msgid "Grain Extract"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:104
+#: pigment/KoCompositeOpRegistry.cpp:74
+#, fuzzy, kde-format
+#| msgid "Height"
+msgid "Hard Mix"
+msgstr "ئېگىزلىك"
+
+#: pigment/compositeops/KoCompositeOps.h:105
+#: pigment/KoCompositeOpRegistry.cpp:79
+#, kde-format
+msgid "Geometric Mean"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:106
+#: pigment/KoCompositeOpRegistry.cpp:77
+#, kde-format
+msgid "Parallel"
+msgstr "پاراللېل"
+
+#: pigment/compositeops/KoCompositeOps.h:107
+#: pigment/KoCompositeOpRegistry.cpp:78
+#, kde-format
+msgid "Allanon"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:109
+#: pigment/KoCompositeOpRegistry.cpp:53
+#, kde-format
+msgid "Screen"
+msgstr "ئېكران"
+
+#: pigment/compositeops/KoCompositeOps.h:110
+#: pigment/KoCompositeOpRegistry.cpp:49
+#, fuzzy, kde-format
+#| msgid "Color name:"
+msgid "Color Dodge"
+msgstr "رەڭ ئاتى:"
+
+#: pigment/compositeops/KoCompositeOps.h:111
+#: pigment/KoCompositeOpRegistry.cpp:50
+#, fuzzy, kde-format
+#| msgid "Line"
+msgid "Linear Dodge"
+msgstr "قۇر"
+
+#: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
+#: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
+#, kde-format
+msgid "Lighten"
+msgstr "يورۇت"
+
+#: pigment/compositeops/KoCompositeOps.h:113
+#: pigment/KoCompositeOpRegistry.cpp:56
+#, fuzzy, kde-format
+#| msgid "Height"
+msgid "Hard Light"
+msgstr "ئېگىزلىك"
+
+#: pigment/compositeops/KoCompositeOps.h:114
+#: pigment/KoCompositeOpRegistry.cpp:58
+#, kde-format
+msgid "Soft Light (SVG)"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:115
+#: pigment/KoCompositeOpRegistry.cpp:57
+#, kde-format
+msgid "Soft Light (Photoshop)"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:116
+#: pigment/KoCompositeOpRegistry.cpp:59
+#, fuzzy, kde-format
+#| msgid "Height"
+msgid "Gamma Light"
+msgstr "ئېگىزلىك"
+
+#: pigment/compositeops/KoCompositeOps.h:117
+#: pigment/KoCompositeOpRegistry.cpp:55
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Vivid Light"
+msgstr "يورۇت"
+
+#: pigment/compositeops/KoCompositeOps.h:118
+#: pigment/KoCompositeOpRegistry.cpp:54
+#, fuzzy, kde-format
+#| msgid "Lighten"
+msgid "Pin Light"
+msgstr "يورۇت"
+
+#: pigment/compositeops/KoCompositeOps.h:119
+#: pigment/KoCompositeOpRegistry.cpp:52
+#, fuzzy, kde-format
+#| msgid "Line"
+msgid "Linear Light"
+msgstr "قۇر"
+
+#: pigment/compositeops/KoCompositeOps.h:121
+#, fuzzy, kde-format
+#| msgid "Color name:"
+msgid "Color Burn"
+msgstr "رەڭ ئاتى:"
+
+#: pigment/compositeops/KoCompositeOps.h:122
+#: pigment/KoCompositeOpRegistry.cpp:44
+#, fuzzy, kde-format
+#| msgid "Line"
+msgid "Linear Burn"
+msgstr "قۇر"
+
+#: pigment/compositeops/KoCompositeOps.h:123 pigment/KoCompositeOp.cpp:24
+#: pigment/KoCompositeOpRegistry.cpp:27 pigment/KoCompositeOpRegistry.cpp:45
+#, kde-format
+msgid "Darken"
+msgstr "قارايت"
+
+#: pigment/compositeops/KoCompositeOps.h:124
+#: pigment/KoCompositeOpRegistry.cpp:46
+#, kde-format
+msgid "Gamma Dark"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:126
+#: pigment/KoCompositeOpRegistry.cpp:37
+#, kde-format
+msgid "Addition"
+msgstr "قوشۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:128
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Inversed-Subtract"
+msgstr "ئېلىش"
+
+#: pigment/compositeops/KoCompositeOps.h:130
+#: pigment/KoCompositeOpRegistry.cpp:40
+#, kde-format
+msgid "Divide"
+msgstr "بۆل"
+
+#: pigment/compositeops/KoCompositeOps.h:132
+#: pigment/KoCompositeOpRegistry.cpp:66
+#, kde-format
+msgid "Arcus Tangent"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:133
+#: pigment/KoCompositeOpRegistry.cpp:62
+#, kde-format
+msgid "Difference"
+msgstr "پەرق"
+
+#: pigment/compositeops/KoCompositeOps.h:134
+#: pigment/KoCompositeOpRegistry.cpp:65
+#, kde-format
+msgid "Exclusion"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:135
+#: pigment/KoCompositeOpRegistry.cpp:63
+#, kde-format
+msgid "Equivalence"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:136
+#, kde-format
+msgid "Additive-Subtractive"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:165
+#: pigment/KoCompositeOpRegistry.cpp:84
+#, fuzzy, kde-format
+#| msgid "Copy Page"
+msgid "Copy Red"
+msgstr "بەت كۆچۈر"
+
+#: pigment/compositeops/KoCompositeOps.h:166
+#: pigment/KoCompositeOpRegistry.cpp:85
+#, fuzzy, kde-format
+#| msgid "&Copy Here"
+msgid "Copy Green"
+msgstr "بۇ جايغا كۆچۈر(&C)"
+
+#: pigment/compositeops/KoCompositeOps.h:167
+#: pigment/KoCompositeOpRegistry.cpp:86
+#, fuzzy, kde-format
+#| msgid "Copy Page"
+msgid "Copy Blue"
+msgstr "بەت كۆچۈر"
+
+#: pigment/compositeops/KoCompositeOps.h:168
+#: pigment/KoCompositeOpRegistry.cpp:88
+#, kde-format
+msgid "Tangent Normalmap"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:169
+#, kde-format
+msgid "Combine Normal Maps"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:171 pigment/KoCompositeOp.cpp:18
+#: pigment/KoCompositeOpRegistry.cpp:90
+#, kde-format
+msgid "Color"
+msgstr "رەڭ"
+
+#: pigment/compositeops/KoCompositeOps.h:172
+#: pigment/KoCompositeOpRegistry.cpp:91
+#, kde-format
+msgid "Hue"
+msgstr "رەڭگى"
+
+#: pigment/compositeops/KoCompositeOps.h:173
+#: pigment/KoCompositeOpRegistry.cpp:92
+#, kde-format
+msgid "Saturation"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:174
+#: pigment/KoCompositeOpRegistry.cpp:95
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:175
+#: pigment/KoCompositeOpRegistry.cpp:94
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:176
+#: pigment/KoCompositeOpRegistry.cpp:93
+#, kde-format
+msgid "Luminosity"
+msgstr "يورۇقلۇق دەرىجىسى"
+
+#: pigment/compositeops/KoCompositeOps.h:177
+#: pigment/KoCompositeOpRegistry.cpp:97
+#, fuzzy, kde-format
+#| msgid "Luminosity"
+msgid "Increase Luminosity"
+msgstr "يورۇقلۇق دەرىجىسى"
+
+#: pigment/compositeops/KoCompositeOps.h:178
+#: pigment/KoCompositeOpRegistry.cpp:96
+#, fuzzy, kde-format
+#| msgid "Luminosity"
+msgid "Decrease Luminosity"
+msgstr "يورۇقلۇق دەرىجىسى"
+
+#: pigment/compositeops/KoCompositeOps.h:179
+#: pigment/KoCompositeOpRegistry.cpp:47
+#, fuzzy, kde-format
+#| msgid "Background Color"
+msgid "Darker Color"
+msgstr "تەگلىك رەڭگى"
+
+#: pigment/compositeops/KoCompositeOps.h:180
+#: pigment/KoCompositeOpRegistry.cpp:60
+#, fuzzy, kde-format
+#| msgid "Line Color"
+msgid "Lighter Color"
+msgstr "سىزىق رەڭگى"
+
+#: pigment/compositeops/KoCompositeOps.h:182
+#: pigment/KoCompositeOpRegistry.cpp:99
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSI"
+msgstr "رەڭ"
+
+#: pigment/compositeops/KoCompositeOps.h:183
+#: pigment/KoCompositeOpRegistry.cpp:100
+#, kde-format
+msgid "Hue HSI"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:184
+#: pigment/KoCompositeOpRegistry.cpp:101
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Saturation HSI"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:185
+#: pigment/KoCompositeOpRegistry.cpp:104
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation HSI"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:186
+#: pigment/KoCompositeOpRegistry.cpp:103
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation HSI"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:187
+#: pigment/KoCompositeOpRegistry.cpp:102
+#, kde-format
+msgid "Intensity"
+msgstr "كۈچلۈكلۈك"
+
+#: pigment/compositeops/KoCompositeOps.h:188
+#: pigment/KoCompositeOpRegistry.cpp:106
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Increase Indent"
+msgid "Increase Intensity"
+msgstr "كېڭەيت"
+
+#: pigment/compositeops/KoCompositeOps.h:189
+#: pigment/KoCompositeOpRegistry.cpp:105
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Decrease Indent"
+msgid "Decrease Intensity"
+msgstr "تارايت"
+
+#: pigment/compositeops/KoCompositeOps.h:191
+#: pigment/KoCompositeOpRegistry.cpp:108
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSL"
+msgstr "رەڭ"
+
+#: pigment/compositeops/KoCompositeOps.h:192
+#: pigment/KoCompositeOpRegistry.cpp:109
+#, kde-format
+msgid "Hue HSL"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:193
+#: pigment/KoCompositeOpRegistry.cpp:110
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Saturation HSL"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:194
+#: pigment/KoCompositeOpRegistry.cpp:113
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation HSL"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:195
+#: pigment/KoCompositeOpRegistry.cpp:112
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation HSL"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:197
+#: pigment/KoCompositeOpRegistry.cpp:115
+#, fuzzy, kde-format
+#| msgid "Lightness"
+msgid "Increase Lightness"
+msgstr "يورۇقلۇق دەرىجىسى"
+
+#: pigment/compositeops/KoCompositeOps.h:198
+#: pigment/KoCompositeOpRegistry.cpp:114
+#, fuzzy, kde-format
+#| msgid "Lightness"
+msgid "Decrease Lightness"
+msgstr "يورۇقلۇق دەرىجىسى"
+
+#: pigment/compositeops/KoCompositeOps.h:200
+#: pigment/KoCompositeOpRegistry.cpp:117
+#, fuzzy, kde-format
+#| msgid "Color"
+msgid "Color HSV"
+msgstr "رەڭ"
+
+#: pigment/compositeops/KoCompositeOps.h:201
+#: pigment/KoCompositeOpRegistry.cpp:118
+#, kde-format
+msgid "Hue HSV"
+msgstr ""
+
+#: pigment/compositeops/KoCompositeOps.h:202
+#: pigment/KoCompositeOpRegistry.cpp:119
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Saturation HSV"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:203
+#: pigment/KoCompositeOpRegistry.cpp:122
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Increase Saturation HSV"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:204
+#: pigment/KoCompositeOpRegistry.cpp:121
+#, fuzzy, kde-format
+#| msgid "Saturation"
+msgid "Decrease Saturation HSV"
+msgstr "تويۇنۇش"
+
+#: pigment/compositeops/KoCompositeOps.h:205
+#: pigment/KoCompositeOpRegistry.cpp:120
+#, kde-format
+msgid "Value"
+msgstr "قىممەت"
+
+#: pigment/compositeops/KoCompositeOps.h:206
+#: pigment/KoCompositeOpRegistry.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Increase Indent"
+msgid "Increase Value"
+msgstr "كېڭەيت"
+
+#: pigment/compositeops/KoCompositeOps.h:207
+#: pigment/KoCompositeOpRegistry.cpp:123
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Decrease Indent"
+msgid "Decrease Value"
+msgstr "تارايت"
+
+#: pigment/KoBasicHistogramProducers.cpp:352
+#: pigment/KoBasicHistogramProducers.cpp:419
+#, kde-format
+msgid "Generic RGB Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:356
+#, kde-format
+msgid "R"
+msgstr "R"
+
+#: pigment/KoBasicHistogramProducers.cpp:357
+#, kde-format
+msgid "G"
+msgstr "G"
+
+#: pigment/KoBasicHistogramProducers.cpp:358
+#, kde-format
+msgid "B"
+msgstr "B"
+
+#: pigment/KoBasicHistogramProducers.cpp:425
+#, kde-format
+msgid "L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:429
+#, kde-format
+msgid "L*"
+msgstr ""
+
+#: pigment/KoBasicHistogramProducers.cpp:503
+#, kde-format
+msgid "Generic L*a*b* Histogram"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:13
+#, kde-format
+msgid "RGB"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:14
+#, kde-format
+msgid "XYZ"
+msgstr "XYZ"
+
+#: pigment/KoColorModelStandardIds.cpp:15
+#, kde-format
+msgid "L*a*b*"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:16
+#, kde-format
+msgid "CMYK"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:17
+#, kde-format
+msgid "Grayscale"
+msgstr "كۈلرەڭ"
+
+#: pigment/KoColorModelStandardIds.cpp:18
+#, kde-format
+msgid "Grayscale (without transparency)"
+msgstr ""
+
+#: pigment/KoColorModelStandardIds.cpp:19
+#, kde-format
+msgid "YCbCr"
+msgstr "YCbCr"
+
+#: pigment/KoColorModelStandardIds.cpp:21
+#, kde-format
+msgid "8 Bits"
+msgstr "8 بىت"
+
+#: pigment/KoColorModelStandardIds.cpp:22
+#, kde-format
+msgid "16 Bits"
+msgstr "16 بىت"
+
+#: pigment/KoColorModelStandardIds.cpp:23
+#, kde-format
+msgid "16 Bits Float"
+msgstr "16 بىتلىق كەسىر سان"
+
+#: pigment/KoColorModelStandardIds.cpp:24
+#, kde-format
+msgid "32 Bits Float"
+msgstr "32 بىتلىق كەسىر سان"
+
+#: pigment/KoColorModelStandardIds.cpp:25
+#, fuzzy, kde-format
+#| msgid "16 Bits Float"
+msgid "64 Bits Float"
+msgstr "16 بىتلىق كەسىر سان"
+
+#: pigment/KoCompositeOp.cpp:21 pigment/KoCompositeOpRegistry.cpp:26
+#, kde-format
+msgid "Arithmetic"
+msgstr "ھېساب(ئارىفمېتىكا)"
+
+#: pigment/KoCompositeOp.cpp:22 pigment/KoCompositeOpRegistry.cpp:29
+#, kde-format
+msgid "Negative"
+msgstr "مەنپىي"
+
+#: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
+#, fuzzy, kde-format
+#| msgid "HSV"
+msgid "HSY"
+msgstr "HSV"
+
+#: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
+#, fuzzy, kde-format
+#| msgid "HSV"
+msgid "HSI"
+msgstr "HSV"
+
+#: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
+#, fuzzy, kde-format
+#| msgid "HSV"
+msgid "HSL"
+msgstr "HSV"
+
+#: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
+#, kde-format
+msgid "HSV"
+msgstr "HSV"
+
+#: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
+#, kde-format
+msgid "Mix"
+msgstr "كىرىشتۈرۈش"
+
+#: pigment/KoCompositeOpRegistry.cpp:41
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Inverse Subtract"
+msgstr "ئېلىش"
+
+#: pigment/KoCompositeOpRegistry.cpp:43
+#, kde-format
+msgid "Burn"
+msgstr "ئوي"
+
+#: pigment/KoCompositeOpRegistry.cpp:64
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Additive Subtractive"
+msgstr "ئېلىش"
+
+#: pigment/KoCompositeOpRegistry.cpp:73
+#, fuzzy, kde-format
+#| msgid "Alpha darken"
+msgid "Alpha Darken"
+msgstr "ئالفا قارايتىلغان"
+
+#: pigment/KoCompositeOpRegistry.cpp:81
+#, kde-format
+msgid "Bumpmap"
+msgstr "Bumpmap"
+
+#: pigment/KoCompositeOpRegistry.cpp:82
+#, kde-format
+msgid "Combine Normal Map"
+msgstr ""
+
+#: pigment/resources/KoStopGradient.cpp:421
+#, fuzzy, kde-format
+#| msgid "Gradient"
+msgid "SVG Gradient"
+msgstr "گۈل نۇسخىسى"
+
+#: rdf/InsertSemanticObjectReferenceAction.cpp:43
+#, kde-format
+msgid "Select the object you want to reference"
+msgstr ""
+
+#: rdf/KoDocumentRdf.cpp:618
+#, kde-format
+msgid "Reference"
+msgstr "نەقىل"
+
+#: rdf/KoDocumentRdfEditWidget.cpp:229
+#, kde-format
+msgid "Set For All Existing"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:297
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
+msgid_plural ""
+"<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
+msgstr[0] ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:300
+#, kde-format
+msgctxt "statement is an Rdf related term"
+msgid "Discard invalid statements?"
+msgstr ""
+
+#: rdf/KoDocumentRdfEditWidget.cpp:341
+#, fuzzy, kde-format
+#| msgid "Red"
+msgid "Rdf"
+msgstr "قىزىل"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rdf/KoDocumentRdfEditWidget.ui:21
+#, kde-format
+msgid "Triples"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, newStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, newTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, newNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:39 rdf/KoDocumentRdfEditWidget.ui:84
+#: rdf/KoSemanticStylesheetsEditor.ui:77
+#, kde-format
+msgid "new"
+msgstr "يېڭى"
+
+#. i18n: ectx: property (text), widget (QPushButton, copyTripleButton)
+#: rdf/KoDocumentRdfEditWidget.ui:46
+#, kde-format
+msgid "copy"
+msgstr "كۆچۈر"
+
+#. i18n: ectx: property (text), widget (QPushButton, deleteStylesheet)
+#. i18n: ectx: property (text), widget (QPushButton, deleteTripleButton)
+#. i18n: ectx: property (text), widget (QPushButton, deleteNamespaceButton)
+#: rdf/KoDocumentRdfEditWidget.ui:53 rdf/KoDocumentRdfEditWidget.ui:91
+#: rdf/KoSemanticStylesheetsEditor.ui:84
+#, kde-format
+msgid "delete"
+msgstr "ئۆچۈر"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: rdf/KoDocumentRdfEditWidget.ui:76
+#, kde-format
+msgid "Namespaces"
+msgstr "ئات بوشلۇقى"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:123
+#, kde-format
+msgid "Prefix"
+msgstr "ئالدى قوشۇلغۇچى"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, m_namespaceView)
+#: rdf/KoDocumentRdfEditWidget.ui:128
+#, kde-format
+msgid "Namespace"
+msgstr "ئات بوشلۇقى"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: rdf/KoDocumentRdfEditWidget.ui:137
+#, kde-format
+msgid "Semantic"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: rdf/KoDocumentRdfEditWidget.ui:156
+#, kde-format
+msgid "SPARQL"
+msgstr "SPARQL"
+
+#. i18n: ectx: property (html), widget (QTextEdit, m_sparqlQuery)
+#: rdf/KoDocumentRdfEditWidget.ui:182
+#, kde-format
+msgid ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /># "
+"Results are shown below.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
+#: rdf/KoDocumentRdfEditWidget.ui:191
+#, kde-format
+msgid "Execute"
+msgstr "ئىجرا قىل"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_5)
+#: rdf/KoDocumentRdfEditWidget.ui:221
+#, kde-format
+msgid "Stylesheets"
+msgstr "ئۇسلۇب جەدۋىلى"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: rdf/KoDocumentRdfEditWidget.ui:227
+#, kde-format
+msgid ""
+"Set the default stylesheet for Semantic objects in this document. New RDF "
+"objects will use this stylesheet automatically. The buttons allow you to set "
+"the stylesheet for all existing semantic objects to the new default "
+"stylesheet as well."
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
+#, fuzzy, kde-format
+#| msgid "Stylesheets"
+msgid "Apply Stylesheet"
+msgstr "ئۇسلۇب جەدۋىلى"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
+#: rdf/KoSemanticStylesheetsEditor.cpp:107
+#, kde-format
+msgid "System"
+msgstr "سىستېما"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:112
+#: rdf/KoSemanticStylesheetsEditor.cpp:123
+#, kde-format
+msgid "User"
+msgstr "ئىشلەتكۈچى"
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:126
+#, kde-format
+msgid "Reapply Current"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:131
+#, kde-format
+msgid "Disassociate"
+msgstr ""
+
+#: rdf/KoRdfSemanticTreeWidgetItem.cpp:151
+#, kde-format
+msgid "Edit %1"
+msgstr "%1 نى تەھرىرلەش"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rdf/KoSemanticStylesheetsEditor.ui:17
+#, fuzzy, kde-format
+#| msgid "Stylesheets"
+msgid "Stylesheet Definition"
+msgstr "ئۇسلۇب جەدۋىلى"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: rdf/KoSemanticStylesheetsEditor.ui:29
+#, kde-format
+msgid "Variables Available"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTableWidget, variables)
+#: rdf/KoSemanticStylesheetsEditor.ui:62
+#, kde-format
+msgid "Description"
+msgstr "چۈشەندۈرۈش"
+
+#. i18n: ectx: property (text), widget (QTreeWidget, stylesheets)
+#: rdf/KoSemanticStylesheetsEditor.ui:107
+#, fuzzy, kde-format
+#| msgid "Stylesheets"
+msgid "Stylesheet Name"
+msgstr "ئۇسلۇب جەدۋىلى"
+
+#: rdf/KoSopranoTableModel.cpp:71
+#, kde-format
+msgid "Empty"
+msgstr "بوش"
+
+#: rdf/KoSopranoTableModel.cpp:73 rdf/KoSopranoTableModelDelegate.cpp:30
+#, kde-format
+msgid "URI"
+msgstr "URI"
+
+#: rdf/KoSopranoTableModel.cpp:75 rdf/KoSopranoTableModelDelegate.cpp:31
+#, kde-format
+msgid "Literal"
+msgstr "يېزىق"
+
+#: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
+#, kde-format
+msgid "Blank"
+msgstr "بوش"
+
+#: rdf/KoSopranoTableModel.cpp:119
+#, kde-format
+msgid "Valid"
+msgstr "ئىناۋەتلىك"
+
+#: rdf/KoSopranoTableModel.cpp:121
+#, kde-format
+msgid "Subject"
+msgstr "تېما"
+
+#: rdf/KoSopranoTableModel.cpp:123
+#, kde-format
+msgid "Predicate"
+msgstr "مۆلچەرلەش"
+
+#: rdf/KoSopranoTableModel.cpp:125
+#, kde-format
+msgid "Object"
+msgstr "نەڭ"
+
+#: rdf/KoSopranoTableModel.cpp:127
+#, fuzzy, kde-format
+#| msgid "Type:"
+msgid "Obj Type"
+msgstr "تىپى:"
+
+#: rdf/KoSopranoTableModel.cpp:129
+#, fuzzy, kde-format
+#| msgid "Data"
+msgid "DataType"
+msgstr "سانلىق-مەلۇمات"
+
+#: rdf/KoSopranoTableModel.cpp:131
+#, kde-format
+msgid "Stored In"
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:228
+#, kde-format
+msgid ""
+"This document contains an unknown checksum. When you give a password it "
+"might not be verified."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#, kde-format
+msgid ""
+"This document contains an unknown encryption method. Some parts may be "
+"unreadable."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:286
+#, kde-format
+msgid ""
+"This document contains incomplete encryption data. Some parts may be "
+"unreadable."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:300
+#, kde-format
+msgid ""
+"QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
+"not be opened."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:330
+#, kde-format
+msgid ""
+"The manifest file seems to be corrupted. It cannot be modified and the "
+"document will remain unreadable. Please try and save the document again to "
+"prevent losing your work."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:428
+#, kde-format
+msgid ""
+"The manifest file cannot be written. The document will remain unreadable. "
+"Please try and save the document again to prevent losing your work."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:549
+#, kde-format
+msgid "Please enter the password to open this file."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:724
+#, kde-format
+msgid "Please enter the password to encrypt the document with."
+msgstr ""
+
+#: store/KoEncryptedStore.cpp:738
+#, kde-format
+msgid "Do you want to save the password?"
+msgstr ""
+
+#: store/KoNetAccess.cpp:90
+#, fuzzy, kde-format
+#| msgid "%1 is not a file."
+msgid "File '%1' is not readable"
+msgstr "%1 ھۆججەت ئەمەس."
+
+#: store/KoNetAccess.cpp:409
+#, kde-format
+msgid "ERROR: Unknown protocol '%1'"
+msgstr ""
+
+#: store/KoStore.cpp:168
+#, kde-format
+msgid "The directory mode is not supported for remote locations."
+msgstr "يىراقتىكى ئورۇنلاردا بۇ مۇندەرىجە ھالىتىنى ئىشلەتكىلى بولمايدۇ."
+
+#: store/KoStore.cpp:169
+#, fuzzy, kde-format
+#| msgid "Calligra"
+msgid "Calligra Storage"
+msgstr "Calligra"
+
+#: text/commands/ChangeListCommand.cpp:28
+#: text/commands/ChangeListCommand.cpp:76
+#: text/commands/ChangeListCommand.cpp:89
+#, fuzzy
+#| msgid "Change"
+msgctxt "(qtundo-format)"
+msgid "Change List"
+msgstr "ئۆزگەرت"
+
+#: text/commands/ChangeStylesMacroCommand.cpp:24
+#, fuzzy
+#| msgid "Line Style"
+msgctxt "(qtundo-format)"
+msgid "Change Styles"
+msgstr "سىزىق ئۇسلۇبى"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:263
+#, kde-format
+msgid "Delete"
+msgstr "ئۆچۈر"
+
+#: text/commands/ChangeTrackedDeleteCommand.cpp:318
+#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
+#: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
+msgctxt "(qtundo-format)"
+msgid "Text"
+msgstr "تېكىست"
+
+#: text/commands/DeleteCommand.cpp:57
+msgctxt "(qtundo-format)"
+msgid "Delete"
+msgstr "ئۆچۈر"
+
+#: text/commands/DeleteTableColumnCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Delete Column"
+msgstr "ئىستون ئۆچۈر"
+
+#: text/commands/DeleteTableRowCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Delete Row"
+msgstr "قۇر ئۆچۈر"
+
+#: text/commands/InsertNoteCommand.cpp:21
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert Footnote"
+msgstr "بەت قىستۇر"
+
+#: text/commands/InsertNoteCommand.cpp:23
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Index"
+msgctxt "(qtundo-format)"
+msgid "Insert Endnote"
+msgstr "مۇندەرىجە قىستۇر"
+
+#: text/commands/InsertTableColumnCommand.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert Column Right"
+msgstr "بەت قىستۇر"
+
+#: text/commands/InsertTableColumnCommand.cpp:27
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert page"
+msgctxt "(qtundo-format)"
+msgid "Insert Column Left"
+msgstr "بەت قىستۇر"
+
+#: text/commands/InsertTableRowCommand.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Row Below"
+msgstr "قۇر ئالماشتۇرۇش بەلگىسى قىستۇر"
+
+#: text/commands/InsertTableRowCommand.cpp:27
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Table"
+msgctxt "(qtundo-format)"
+msgid "Insert Row Above"
+msgstr "جەدۋەل قىستۇر"
+
+#: text/commands/ListItemNumberingCommand.cpp:22
+msgctxt "(qtundo-format)"
+msgid "Change List Numbering"
+msgstr ""
+
+#: text/commands/NewSectionCommand.cpp:22
+#, fuzzy
+#| msgid "Test Connection"
+msgctxt "(qtundo-format)"
+msgid "New Section"
+msgstr "ئۇلىنىشنى سىنا"
+
+#: text/commands/ParagraphFormattingCommand.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Direct Paragraph Formatting"
+msgstr ""
+
+#: text/commands/RenameSectionCommand.cpp:20
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste Page"
+#| msgid_plural "Paste Pages"
+msgctxt "(qtundo-format)"
+msgid "Rename Section"
+msgstr "بەتلەرنى چاپلا"
+
+#: text/commands/ResizeTableCommand.cpp:30
+msgctxt "(qtundo-format)"
+msgid "Adjust Column Width"
+msgstr ""
+
+#: text/commands/ResizeTableCommand.cpp:32
+msgctxt "(qtundo-format)"
+msgid "Adjust Row Height"
+msgstr ""
+
+#: text/commands/SplitSectionsCommand.cpp:24
+msgctxt "(qtundo-format)"
+msgid "Split sections startings"
+msgstr ""
+
+#: text/commands/SplitSectionsCommand.cpp:26
+msgctxt "(qtundo-format)"
+msgid "Split sections endings"
+msgstr ""
+
+#: text/commands/TextPasteCommand.cpp:51
+msgctxt "(qtundo-format)"
+msgid "Paste As Text"
+msgstr "تېكىست بويىچە چاپلا"
+
+#: text/commands/TextPasteCommand.cpp:53
+msgctxt "(qtundo-format)"
+msgid "Paste"
+msgstr "چاپلا"
+
+#: text/InsertTextLocator.cpp:14
+#, fuzzy, kde-format
+#| msgid "Reference"
+msgid "Index Reference"
+msgstr "نەقىل"
+
+#: text/InsertTextReferenceAction.cpp:22 text/InsertTextReferenceAction.cpp:50
+#, fuzzy, kde-format
+#| msgid "Reference"
+msgid "Text Reference"
+msgstr "نەقىل"
+
+#: text/InsertTextReferenceAction.cpp:31
+#, kde-format
+msgid "Please create an index to reference first."
+msgstr ""
+
+#: text/InsertTextReferenceAction.cpp:40
+#, kde-format
+msgid "Select the index you want to reference"
+msgstr ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found 1 match"
+msgid_plural "Found %1 matches"
+msgstr[0] ""
+
+#: text/KoFindStrategy.cpp:51
+#, kde-format
+msgid "Found no match"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:43
+#, kde-format
+msgid ""
+"Found no match\n"
+"\n"
+"No text was replaced"
+msgstr ""
+
+#: text/KoReplaceStrategy.cpp:46
+#, kde-format
+msgid "1 replacement made"
+msgid_plural "%1 replacements made"
+msgstr[0] "%1 ئى ئالماشتۇرۇلدى"
+
+#: text/KoReplaceStrategy.cpp:59
+#, kde-format
+msgid "Replace %1 with %2?"
+msgstr ""
+
+#: text/KoSectionModel.cpp:87
+#, fuzzy, kde-format
+#| msgid "Test Connection"
+msgctxt "new numbered section name"
+msgid "New section %1"
+msgstr "ئۇلىنىشنى سىنا"
+
+#: text/KoText.cpp:19
+#, kde-format
+msgctxt "Underline Style"
+msgid "None"
+msgstr "يوق"
+
+#: text/KoText.cpp:20
+#, kde-format
+msgctxt "Underline Style"
+msgid "Single"
+msgstr "يەككە"
+
+#: text/KoText.cpp:21
+#, kde-format
+msgctxt "Underline Style"
+msgid "Double"
+msgstr "قوش"
+
+#: text/KoTextEditor.cpp:180 text/KoTextEditor.cpp:1501
+#: text/KoTextEditor.cpp:1503
+msgctxt "(qtundo-format)"
+msgid "New Paragraph"
+msgstr "يېڭى ئابزاس"
+
+#: text/KoTextEditor.cpp:470
+msgctxt "(qtundo-format)"
+msgid "Add Bookmark"
+msgstr "خەتكۈش قوش"
+
+#: text/KoTextEditor.cpp:485
+#, fuzzy
+#| msgid "Addition"
+msgctxt "(qtundo-format)"
+msgid "Add Annotation"
+msgstr "قوشۇش"
+
+#: text/KoTextEditor.cpp:509
+msgctxt "(qtundo-format)"
+msgid "Insert Index"
+msgstr "مۇندەرىجە قىستۇر"
+
+#: text/KoTextEditor.cpp:535
+msgctxt "(qtundo-format)"
+msgid "Insert Variable"
+msgstr "ئۆزگەرگۈچى قىستۇرۇش"
+
+#: text/KoTextEditor.cpp:602
+msgctxt "(qtundo-format)"
+msgid "Insert Break"
+msgstr "قۇر ئالماشتۇرۇش بەلگىسى قىستۇر"
+
+#: text/KoTextEditor.cpp:923 text/KoTextEditor.cpp:925
+#: text/KoTextEditor.cpp:940
+msgctxt "(qtundo-format)"
+msgid "Insert Table"
+msgstr "جەدۋەل قىستۇر"
+
+#: text/KoTextEditor.cpp:1080
+msgctxt "(qtundo-format)"
+msgid "Merge Cells"
+msgstr "كاتەكچە بىرلەشتۈر"
+
+#: text/KoTextEditor.cpp:1097
+msgctxt "(qtundo-format)"
+msgid "Split Cells"
+msgstr "كاتەكچە پارچىلا"
+
+#: text/KoTextEditor.cpp:1126
+#, fuzzy
+#| msgid "Fit Page Width"
+msgctxt "(qtundo-format)"
+msgid "Adjust Table Width"
+msgstr "بەت كەڭلىككە ماسلاش"
+
+#: text/KoTextEditor.cpp:1143
+msgctxt "(qtundo-format)"
+msgid "Change Border Formatting"
+msgstr ""
+
+#: text/KoTextEditor.cpp:1190 text/KoTextEditor.cpp:1192
+#: text/KoTextEditor.cpp:1210
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Table"
+msgctxt "(qtundo-format)"
+msgid "Insert Table Of Contents"
+msgstr "جەدۋەل قىستۇر"
+
+#: text/KoTextEditor.cpp:1249
+msgctxt "(qtundo-format)"
+msgid "Modify Table Of Contents"
+msgstr ""
+
+#: text/KoTextEditor.cpp:1266 text/KoTextEditor.cpp:1268
+#: text/KoTextEditor.cpp:1287
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Break"
+msgctxt "(qtundo-format)"
+msgid "Insert Bibliography"
+msgstr "قۇر ئالماشتۇرۇش بەلگىسى قىستۇر"
+
+#: text/KoTextEditor.cpp:1324 text/KoTextEditor.cpp:1326
+#, fuzzy
+#| msgid "Addition"
+msgctxt "(qtundo-format)"
+msgid "Add Citation"
+msgstr "قوشۇش"
+
+#: text/KoTextEditor.cpp:1353 text/KoTextEditor.cpp:1355
+#: text/KoTextEditor.cpp:1393
+msgctxt "(qtundo-format)"
+msgid "Typing"
+msgstr "كىرگۈزۈۋاتىدۇ"
+
+#: text/KoTextEditor_format.cpp:54
+msgctxt "(qtundo-format)"
+msgid "Bold"
+msgstr "توم"
+
+#: text/KoTextEditor_format.cpp:67
+msgctxt "(qtundo-format)"
+msgid "Italic"
+msgstr "يانتۇ"
+
+#: text/KoTextEditor_format.cpp:80
+msgctxt "(qtundo-format)"
+msgid "Underline"
+msgstr "ئاستى سىزىق"
+
+#: text/KoTextEditor_format.cpp:99
+msgctxt "(qtundo-format)"
+msgid "Strike Out"
+msgstr "ئۆچۈرۈش سىزىقى"
+
+#: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
+#, fuzzy
+#| msgid "Vertical Alignment"
+msgctxt "(qtundo-format)"
+msgid "Change Alignment"
+msgstr "بويىغا توغرىلاش"
+
+#: text/KoTextEditor_format.cpp:150
+#, fuzzy
+#| msgid "Vertical Alignment"
+msgctxt "(qtundo-format)"
+msgid "Set Vertical Alignment"
+msgstr "بويىغا توغرىلاش"
+
+#: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
+msgctxt "(qtundo-format)"
+msgid "Decrease Indent"
+msgstr "تارايت"
+
+#: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
+msgctxt "(qtundo-format)"
+msgid "Increase Indent"
+msgstr "كېڭەيت"
+
+#: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
+msgctxt "(qtundo-format)"
+msgid "Decrease font size"
+msgstr "خەت چوڭلۇقىنى كىچىكلىتىش"
+
+#: text/KoTextEditor_format.cpp:269 text/KoTextEditor_format.cpp:271
+msgctxt "(qtundo-format)"
+msgid "Increase font size"
+msgstr "خەت چوڭلۇقىنى چوڭايتىش"
+
+#: text/KoTextEditor_format.cpp:282
+#, fuzzy
+#| msgid "Font"
+msgctxt "(qtundo-format)"
+msgid "Set Font"
+msgstr "خەت نۇسخا"
+
+#: text/KoTextEditor_format.cpp:295
+#, fuzzy
+#| msgid "Size"
+msgctxt "(qtundo-format)"
+msgid "Set Font Size"
+msgstr "چوڭلۇقى"
+
+#: text/KoTextEditor_format.cpp:308
+#, fuzzy
+#| msgid "Background Color"
+msgctxt "(qtundo-format)"
+msgid "Set Background Color"
+msgstr "تەگلىك رەڭگى"
+
+#: text/KoTextEditor_format.cpp:321
+msgctxt "(qtundo-format)"
+msgid "Set Text Color"
+msgstr ""
+
+#: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
+msgctxt "(qtundo-format)"
+msgid "Set Character Style"
+msgstr ""
+
+#: text/KoTextEditor_format.cpp:455
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "New Paragraph"
+msgctxt "(qtundo-format)"
+msgid "Set Paragraph Style"
+msgstr "يېڭى ئابزاس"
+
+#: text/KoTextEditor_format.cpp:517
+msgctxt "(qtundo-format)"
+msgid "Formatting"
+msgstr "فورمات"
+
+#: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
+#, fuzzy
+#| msgid "Format"
+msgctxt "(qtundo-format)"
+msgid "Format"
+msgstr "پىچىمى"
+
+#: text/styles/KoStyleManager.cpp:93 text/styles/KoStyleManager.cpp:98
+#, kde-format
+msgid "Default"
+msgstr "كۆڭۈلدىكى"
+
+#: widgets/KoColorPopupAction.cpp:76
+#, kde-format
+msgid "Opacity"
+msgstr "غۇۋالىقى"
+
+#: widgets/KoColorSetWidget.cpp:148
+#, kde-format
+msgid "Recent:"
+msgstr "يېقىنقى:"
+
+#: widgets/KoColorSetWidget.cpp:161
+#, kde-format
+msgid "Add / Remove Colors..."
+msgstr "رەڭلەرنى قوش/چىقىرىۋەت…"
+
+#: widgets/KoConfigAuthorPage.cpp:51
+#, kde-format
+msgid "Add new author profile (starts out as a copy of current)"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:55
+#, fuzzy, kde-format
+#| msgid "Delete the current page"
+msgid "Delete the author profile"
+msgstr "نۆۋەتتىكى  بەتنى ئۆچۈرىدۇ"
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, kde-format
+msgid "Name (not duplicate or blank name):"
+msgstr ""
+
+#: widgets/KoConfigAuthorPage.cpp:129
+#, fuzzy, kde-format
+#| msgid "Active tool: %1"
+msgid "Name of Profile"
+msgstr "ئاكتىپ قورال: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
+#: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
+#, kde-format
+msgid "Name:"
+msgstr "ئاتى:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblInitialsDesc)
+#: widgets/KoConfigAuthorPage.ui:40 widgets/koDocumentInfoAuthorWidget.ui:37
+#, kde-format
+msgid "Initials:"
+msgstr "باش ھەرپلەر:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/KoConfigAuthorPage.ui:63 widgets/koDocumentInfoAuthorWidget.ui:60
+#, kde-format
+msgid "Title:"
+msgstr "ماۋزۇ:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPositionDesc)
+#: widgets/KoConfigAuthorPage.ui:79 widgets/koDocumentInfoAuthorWidget.ui:77
+#, kde-format
+msgid "Position:"
+msgstr "ئورنى:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCompanyDesc)
+#: widgets/KoConfigAuthorPage.ui:95 widgets/koDocumentInfoAuthorWidget.ui:94
+#, kde-format
+msgid "Company:"
+msgstr "شىركەت"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEmailDesc)
+#: widgets/KoConfigAuthorPage.ui:111 widgets/koDocumentInfoAuthorWidget.ui:104
+#, kde-format
+msgid "Email:"
+msgstr "ئېلخەت:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneHome)
+#: widgets/KoConfigAuthorPage.ui:127 widgets/koDocumentInfoAuthorWidget.ui:114
+#, kde-format
+msgid "Telephone (home):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblPhoneWork)
+#: widgets/KoConfigAuthorPage.ui:143 widgets/koDocumentInfoAuthorWidget.ui:124
+#, kde-format
+msgid "Telephone (work):"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lblFaxDesc)
+#: widgets/KoConfigAuthorPage.ui:159 widgets/koDocumentInfoAuthorWidget.ui:134
+#, kde-format
+msgid "Fax:"
+msgstr "فاكىس:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblStreetDesc)
+#: widgets/KoConfigAuthorPage.ui:175 widgets/koDocumentInfoAuthorWidget.ui:144
+#, kde-format
+msgid "Street:"
+msgstr "كوچا:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblPostalDesc)
+#: widgets/KoConfigAuthorPage.ui:191 widgets/koDocumentInfoAuthorWidget.ui:154
+#, kde-format
+msgid "Postal code:"
+msgstr "پوچتا نومۇرى"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCityDesc)
+#: widgets/KoConfigAuthorPage.ui:207 widgets/koDocumentInfoAuthorWidget.ui:164
+#, kde-format
+msgid "City:"
+msgstr "شەھەر :"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCountryDesc)
+#: widgets/KoConfigAuthorPage.ui:223 widgets/koDocumentInfoAuthorWidget.ui:174
+#, kde-format
+msgid "Country:"
+msgstr "دۆلەت:"
+
+#: widgets/KoCsvImportDialog.cpp:85
+#, kde-format
+msgid "Import Data"
+msgstr "سانلىق-مەلۇمات ئەكىر"
+
+#: widgets/KoCsvImportDialog.cpp:88
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "تەۋسىيە( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:89
+#, fuzzy, kde-format
+#| msgctxt "Descriptive encoding name"
+#| msgid "Other ( %1 )"
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "باشقا( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:92
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "باشقا( %1 )"
+
+#: widgets/KoCsvImportDialog.cpp:207 widgets/KoCsvImportDialog.cpp:547
+#: widgets/KoCsvImportDialog.cpp:570
+#, kde-format
+msgid "Generic"
+msgstr "ئادەتتىكى"
+
+#: widgets/KoCsvImportDialog.cpp:209 widgets/KoCsvImportDialog.cpp:572
+#: widgets/KoModeBox.cpp:572
+#, kde-format
+msgid "Text"
+msgstr "تېكىست"
+
+#: widgets/KoCsvImportDialog.cpp:211 widgets/KoCsvImportDialog.cpp:574
+#, kde-format
+msgid "Date"
+msgstr "چېسلا"
+
+#: widgets/KoCsvImportDialog.cpp:213 widgets/KoCsvImportDialog.cpp:576
+#, kde-format
+msgid "Currency"
+msgstr "پۇل"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.cpp:215 widgets/KoCsvImportDialog.cpp:578
+#: widgets/KoCsvImportDialog.cpp:685 widgets/KoCsvImportDialog.ui:265
+#, kde-format
+msgid "None"
+msgstr "يوق"
+
+#: widgets/KoCsvImportDialog.cpp:712
+#, kde-format
+msgid ""
+"Please check the ranges you specified. The start value must be lower than "
+"the end value."
+msgstr ""
+
+#: widgets/KoCsvImportDialog.cpp:758
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "كودلاشنى تاپقىلى بولمىدى: %1"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
+#: widgets/KoCsvImportDialog.ui:52
+#, kde-format
+msgid "Data"
+msgstr "سانلىق-مەلۇمات"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: widgets/KoCsvImportDialog.ui:63
+#, kde-format
+msgid "E&ncoding:"
+msgstr "كودلاش(&N):"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstRowHeader)
+#: widgets/KoCsvImportDialog.ui:107
+#, kde-format
+msgid "First row contains headers"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_firstColHeader)
+#: widgets/KoCsvImportDialog.ui:120
+#, kde-format
+msgid "First column contains headers"
+msgstr ""
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_formatTab)
+#: widgets/KoCsvImportDialog.ui:144
+#, kde-format
+msgid "Format"
+msgstr "پىچىمى"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterBox)
+#: widgets/KoCsvImportDialog.ui:156
+#, kde-format
+msgid "Delimiter"
+msgstr "ئايرىش بەلگىسى"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: widgets/KoCsvImportDialog.ui:162
+#, kde-format
+msgid "Comma"
+msgstr "پەش"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: widgets/KoCsvImportDialog.ui:172
+#, kde-format
+msgid "Semicolon"
+msgstr "چېكىتلىك پەش"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: widgets/KoCsvImportDialog.ui:179
+#, kde-format
+msgid "Other"
+msgstr "باشقا"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: widgets/KoCsvImportDialog.ui:186
+#, kde-format
+msgid "Tabulator"
+msgstr "جەدۋەل بەلگىسى"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: widgets/KoCsvImportDialog.ui:193
+#, kde-format
+msgid "Space"
+msgstr "بوشلۇق"
+
+#. i18n: ectx: property (text), widget (QLabel, label2)
+#: widgets/KoCsvImportDialog.ui:238
+#, kde-format
+msgid "Text&quote:"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:255
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: widgets/KoCsvImportDialog.ui:260
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QLabel, label3)
+#: widgets/KoCsvImportDialog.ui:289
+#, kde-format
+msgid "Decimal symbol:"
+msgstr "ئونلۇق كەسىر چېكىتى(D):"
+
+#. i18n: ectx: property (text), widget (QLabel, label4)
+#: widgets/KoCsvImportDialog.ui:318
+#, kde-format
+msgid "Thousands separator:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_ignoreDuplicates)
+#: widgets/KoCsvImportDialog.ui:363
+#, kde-format
+msgid "Ignore duplicate delimiters"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: widgets/KoCsvImportDialog.ui:370
+#, kde-format
+msgid "&Format:"
+msgstr "فورمات(&F):"
+
+#. i18n: ectx: attribute (title), widget (QWidget, m_rangesTab)
+#: widgets/KoCsvImportDialog.ui:384
+#, kde-format
+msgid "Ranges"
+msgstr "دائىرە"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_updateButton)
+#: widgets/KoCsvImportDialog.ui:390
+#, kde-format
+msgid "Update"
+msgstr "يېڭىلا"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3_2)
+#: widgets/KoCsvImportDialog.ui:457
+#, kde-format
+msgid "Import columns:"
+msgstr "ئىستون ئىمپورت قىلىش:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel3)
+#: widgets/KoCsvImportDialog.ui:476
+#, kde-format
+msgid "Import lines:"
+msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
+#, kde-format
+msgid "to"
+msgstr "غا"
+
+#: widgets/KoDialog.cpp:247
+#, kde-format
+msgid "&Try"
+msgstr ""
+
+#: widgets/KoDialog.cpp:460
+#, fuzzy, kde-format
+#| msgid "Modified:"
+msgid "modified"
+msgstr "ئۆزگەرتكەن:"
+
+#: widgets/KoDialog.cpp:471
+#, kde-format
+msgctxt "Document/application separator in titlebar"
+msgid " – "
+msgstr ""
+
+#: widgets/KoDialog.cpp:846
+#, fuzzy, kde-format
+#| msgid "Detail"
+msgid "&Details"
+msgstr "تەپسىلاتى"
+
+#: widgets/KoDialog.cpp:1004
+#, kde-format
+msgid "Get help..."
+msgstr ""
+
+#: widgets/KoDockWidgetTitleBar.cpp:52
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Float Docker"
+msgstr "پۈتۈك ساقلا"
+
+#: widgets/KoDockWidgetTitleBar.cpp:59
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Close Docker"
+msgstr "پۈتۈك ساقلا"
+
+#: widgets/KoDockWidgetTitleBar.cpp:67
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Collapse Docker"
+msgstr "پۈتۈك ساقلا"
+
+#: widgets/KoDockWidgetTitleBar.cpp:76
+#, fuzzy, kde-format
+#| msgid "Save Document"
+msgctxt "@info:tooltip"
+msgid "Lock Docker"
+msgstr "پۈتۈك ساقلا"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
+#: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
+#: widgets/KoDocumentInfoDlg.cpp:331
+#, kde-format
+msgid "&Encrypt"
+msgstr "شىفىرلا(&E)"
+
+#. i18n: ectx: property (text), widget (QLabel, lblKeywordsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:64
+#, kde-format
+msgid "Keywords:"
+msgstr "ھالقىلىق سۆز:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblSubjectDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:111
+#, kde-format
+msgid "Subject:"
+msgstr "تېما:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:124
+#, kde-format
+msgid "Last printed:"
+msgstr "ئاخىرقى باسقان ۋاقتى:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEditingDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:158
+#, kde-format
+msgid "Total editing time:"
+msgstr "تەھرىرلىگەن ئومۇمىي ۋاقىت:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblEncryptedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:178
+#, kde-format
+msgid "Encryption:"
+msgstr "شىفىرلاش:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:188
+#, kde-format
+msgctxt "Document title"
+msgid "Title:"
+msgstr "ماۋزۇ:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRevisionDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:201
+#, kde-format
+msgid "Revision number:"
+msgstr "تۈزىتىش قېتىم سانى:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblModifiedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:211
+#, kde-format
+msgid "Modified:"
+msgstr "ئۆزگەرتكەن:"
+
+#. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:231
+#, kde-format
+msgid "Comments:"
+msgstr "ئىزاھات:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblCreatedDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:251
+#, kde-format
+msgid "Created:"
+msgstr "قۇرۇلغان:"
+
+#. i18n: ectx: property (text), widget (QLabel, filePathInfoLabel)
+#: widgets/koDocumentInfoAboutWidget.ui:261
+#, kde-format
+msgid "Path:"
+msgstr "يول:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbReset)
+#: widgets/koDocumentInfoAboutWidget.ui:280
+#, kde-format
+msgid "&Reset"
+msgstr "ئەسلىگە قايتۇر(&R)"
+
+#. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
+#: widgets/koDocumentInfoAboutWidget.ui:297
+#, kde-format
+msgid "Language:"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
+#, kde-format
+msgid "General"
+msgstr "ئادەتتىكى"
+
+#: widgets/KoDocumentInfoDlg.cpp:132
+#, kde-format
+msgid "Last saved by"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:189
+#, kde-format
+msgid "Use ';' (Example: Office;KDE;Calligra)"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
+#, fuzzy, kde-format
+#| msgid "Document is password protected"
+msgid "This document will be decrypted"
+msgstr "پۈتۈك ئىم بىلەن قوغدالغان"
+
+#: widgets/KoDocumentInfoDlg.cpp:221 widgets/KoDocumentInfoDlg.cpp:317
+#, fuzzy, kde-format
+#| msgid "Decrypt"
+msgid "Do not decrypt"
+msgstr "شىفىر يەش"
+
+#: widgets/KoDocumentInfoDlg.cpp:223 widgets/KoDocumentInfoDlg.cpp:319
+#, fuzzy, kde-format
+#| msgid "Document is password protected"
+msgid "This document is encrypted"
+msgstr "پۈتۈك ئىم بىلەن قوغدالغان"
+
+#: widgets/KoDocumentInfoDlg.cpp:225 widgets/KoDocumentInfoDlg.cpp:321
+#, fuzzy, kde-format
+#| msgid "Decrypt"
+msgid "D&ecrypt"
+msgstr "شىفىر يەش"
+
+#: widgets/KoDocumentInfoDlg.cpp:229 widgets/KoDocumentInfoDlg.cpp:325
+#, fuzzy, kde-format
+#| msgid "Document is password protected"
+msgid "This document will be encrypted."
+msgstr "پۈتۈك ئىم بىلەن قوغدالغان"
+
+#: widgets/KoDocumentInfoDlg.cpp:231 widgets/KoDocumentInfoDlg.cpp:327
+#, fuzzy, kde-format
+#| msgid "Decrypt"
+msgid "Do not encrypt"
+msgstr "شىفىر يەش"
+
+#: widgets/KoDocumentInfoDlg.cpp:233 widgets/KoDocumentInfoDlg.cpp:329
+#, fuzzy, kde-format
+#| msgid "Document is password protected"
+msgid "This document is not encrypted"
+msgstr "پۈتۈك ئىم بىلەن قوغدالغان"
+
+#: widgets/KoDocumentInfoDlg.cpp:239
+#, fuzzy, kde-format
+#| msgid "Document is password protected"
+msgid "This document does not support encryption"
+msgstr "پۈتۈك ئىم بىلەن قوغدالغان"
+
+#: widgets/KoDocumentInfoDlg.cpp:351
+#, kde-format
+msgid ""
+"<qt>Decrypting the document will remove the password protection from it."
+"<p>Do you still want to decrypt the file?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:353
+#, fuzzy, kde-format
+#| msgid "Confirm Save"
+msgid "Confirm Decrypt"
+msgstr "ساقلاشنى جەزملەش"
+
+#: widgets/KoDocumentInfoDlg.cpp:354
+#, kde-format
+msgid "Decrypt"
+msgstr "شىفىر يەش"
+
+#: widgets/KoDocumentInfoDlg.cpp:365
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"decryption, please save the document.</qt>"
+msgstr ""
+"<qt>پۈتۈكىڭىز ئاپتوماتىك ساقلانمىدى.<p>شىفىرسىزلاشنى تاماملاش ئۈچۈن پۈتۈكنى "
+"ساقلاڭ.</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:367 widgets/KoDocumentInfoDlg.cpp:375
+#: widgets/KoDocumentInfoDlg.cpp:409 widgets/KoDocumentInfoDlg.cpp:417
+#, kde-format
+msgid "Save Document"
+msgstr "پۈتۈك ساقلا"
+
+#: widgets/KoDocumentInfoDlg.cpp:373
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"decryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:391
+#, kde-format
+msgid ""
+"<qt>The document is currently saved as %1. The document needs to be changed "
+"to <b>OASIS OpenDocument</b> to be encrypted.<p>Do you want to change the "
+"file to OASIS OpenDocument?</qt>"
+msgstr ""
+
+#: widgets/KoDocumentInfoDlg.cpp:393
+#, fuzzy, kde-format
+#| msgid "Line Style"
+msgid "Change Filetype"
+msgstr "سىزىق ئۇسلۇبى"
+
+#: widgets/KoDocumentInfoDlg.cpp:394
+#, kde-format
+msgid "Change"
+msgstr "ئۆزگەرت"
+
+#: widgets/KoDocumentInfoDlg.cpp:407
+#, kde-format
+msgid ""
+"<qt>Your document could not be saved automatically.<p>To complete the "
+"encryption, please save the document.</qt>"
+msgstr ""
+"<qt>پۈتۈكىڭىز ئاپتوماتىك ساقلانمىدى.<p>شىفىرسىزلاشنى تاماملاش ئۈچۈن پۈتۈكنى "
+"ساقلاڭ.</qt>"
+
+#: widgets/KoDocumentInfoDlg.cpp:415
+#, kde-format
+msgid ""
+"<qt>The document has been changed since it was opened. To complete the "
+"encryption the document needs to be saved.<p>Do you want to save the "
+"document now?</qt>"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, remove)
+#: widgets/KoEditColorSet.ui:55
+#, kde-format
+msgid "Remove"
+msgstr "چىقىرىۋەت"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, open)
+#: widgets/KoEditColorSet.ui:65
+#, fuzzy, kde-format
+#| msgid "File"
+msgid "Open palette"
+msgstr "ھۆججەت"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, save)
+#: widgets/KoEditColorSet.ui:75
+#, fuzzy, kde-format
+#| msgid "Save"
+msgid "Save palette"
+msgstr "ساقلا"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Add Color To Palette"
+msgstr "رەڭنى رەڭ تەڭشەش تاختىسىغا قوش"
+
+#: widgets/KoEditColorSetDialog.cpp:146
+#, kde-format
+msgid "Color name:"
+msgstr "رەڭ ئاتى:"
+
+#: widgets/KoEditColorSetDialog.cpp:174
+#, fuzzy, kde-format
+#| msgid "Add Color To Palette"
+msgid "Gimp Color Palette (*.gpl)"
+msgstr "رەڭنى رەڭ تەڭشەش تاختىسىغا قوش"
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Cannot write to palette file %1. Maybe it is read-only. "
+msgstr ""
+
+#: widgets/KoEditColorSetDialog.cpp:187
+#, kde-format
+msgid "Palette"
+msgstr "رەڭ تاختىسى"
+
+#: widgets/KoEditColorSetDialog.cpp:201
+#, kde-format
+msgid "Add/Remove Colors"
+msgstr "رەڭلەرنى قوش/چىقىرىۋەت"
+
+#: widgets/KoFillConfigWidget.cpp:211
+#, kde-format
+msgctxt "No stroke or fill"
+msgid "None"
+msgstr "يوق"
+
+#: widgets/KoFillConfigWidget.cpp:219
+#, kde-format
+msgctxt "Solid color stroke or fill"
+msgid "Solid"
+msgstr "لىق تولغان"
+
+#: widgets/KoFillConfigWidget.cpp:227
+#, kde-format
+msgid "Gradient"
+msgstr "گۈل نۇسخىسى"
+
+#: widgets/KoFillConfigWidget.cpp:235
+#, kde-format
+msgid "Pattern"
+msgstr "Pattern"
+
+#: widgets/KoFillConfigWidget.cpp:249
+#, kde-format
+msgid "Change the filling color"
+msgstr ""
+
+#: widgets/KoFillConfigWidget.cpp:260
+#, fuzzy, kde-format
+#| msgid "Master Page"
+msgid "Change the filling gradient"
+msgstr "ئانا بەت"
+
+#: widgets/KoFillConfigWidget.cpp:267
+#, kde-format
+msgid "Change the filling pattern"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:145
+#, kde-format
+msgid "Target:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:148
+#, kde-format
+msgid "Fill"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:154
+#, fuzzy, kde-format
+#| msgid "Line"
+msgctxt "Linear gradient type"
+msgid "Linear"
+msgstr "قۇر"
+
+#: widgets/KoGradientEditWidget.cpp:155
+#, kde-format
+msgctxt "Radial gradient type"
+msgid "Radial"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:156
+#, kde-format
+msgctxt "Conical gradient type"
+msgid "Conical"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:159
+#, kde-format
+msgid "Repeat:"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:161
+#, fuzzy, kde-format
+#| msgid "None"
+msgctxt "No gradient spread"
+msgid "None"
+msgstr "يوق"
+
+#: widgets/KoGradientEditWidget.cpp:162
+#, kde-format
+msgid "Reflect"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:163
+#, kde-format
+msgid "Repeat"
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:166
+#, fuzzy, kde-format
+#| msgid "Opacity:"
+msgid "Overall opacity:"
+msgstr "غۇۋالىقى:"
+
+#: widgets/KoGradientEditWidget.cpp:171
+#, fuzzy, kde-format
+#| msgid "Color:"
+msgid "Color stop:"
+msgstr "رەڭ"
+
+#: widgets/KoGradientEditWidget.cpp:179
+#, kde-format
+msgid "Stop color."
+msgstr ""
+
+#: widgets/KoGradientEditWidget.cpp:182
+#, kde-format
+msgid "&Add to Predefined Gradients"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:575
+#, kde-format
+msgid "Icon and Text"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:576
+#, kde-format
+msgid "Icon only"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:579
+#, kde-format
+msgid "Tabs side"
+msgstr ""
+
+#: widgets/KoModeBox.cpp:583
+#, fuzzy, kde-format
+#| msgid "Bottom"
+msgid "Top side"
+msgstr "ئاستى"
+
+#: widgets/KoModeBox.cpp:584
+#, fuzzy, kde-format
+#| msgid "Bottom"
+msgid "Bottom side"
+msgstr "ئاستى"
+
+#: widgets/KoModeBox.cpp:587
+#, kde-format
+msgid "Left side"
+msgstr "سول تەرەپ"
+
+#: widgets/KoModeBox.cpp:588
+#, fuzzy, kde-format
+#| msgid "Right Edge:"
+msgid "Right side"
+msgstr "ئوڭ گىرۋەك:"
+
+#: widgets/KoPageLayoutDialog.cpp:33
+#, kde-format
+msgid "Page Layout"
+msgstr "بەت جايلاشتۇرۇلۇشى"
+
+#: widgets/KoPageLayoutDialog.cpp:95
+#, kde-format
+msgid "Apply to document"
+msgstr "پۈتۈككە قوللان"
+
+#: widgets/KoPageLayoutWidget.cpp:175
+#, kde-format
+msgid "Left Edge:"
+msgstr "سول گىرۋەك:"
+
+#: widgets/KoPageLayoutWidget.cpp:176
+#, kde-format
+msgid "Right Edge:"
+msgstr "ئوڭ گىرۋەك:"
+
+#: widgets/KoPageLayoutWidget.cpp:179
+#, kde-format
+msgid "Binding Edge:"
+msgstr "تىكىش گىرۋىكى:"
+
+#: widgets/KoPageLayoutWidget.cpp:180
+#, kde-format
+msgid "Page Edge:"
+msgstr "بەت گىرۋىكى:"
+
+#: widgets/KoPageLayoutWidget.cpp:276
+#, fuzzy, kde-format
+#| msgid "Fit Page"
+msgid "Facing Pages:"
+msgstr "بەتكە خوپ كەلسۇن"
+
+#. i18n: ectx: property (text), widget (QRadioButton, facingPages)
+#: widgets/KoPageLayoutWidget.cpp:277 widgets/KoPageLayoutWidget.ui:160
+#, fuzzy, kde-format
+#| msgid "Fit Page"
+msgid "Facing pages"
+msgstr "بەتكە خوپ كەلسۇن"
+
+#: widgets/KoPageLayoutWidget.cpp:280
+#, kde-format
+msgid "Page Layout:"
+msgstr "بەت جايلاشتۇرۇلۇشى:"
+
+#: widgets/KoPageLayoutWidget.cpp:281
+#, fuzzy, kde-format
+#| msgid "Page Header"
+msgid "Page spread"
+msgstr "بەت قېشى"
+
+#. i18n: ectx: property (text), widget (QLabel, unitsLabel)
+#: widgets/KoPageLayoutWidget.ui:25
+#, kde-format
+msgid "Unit:"
+msgstr "بىرلىكى:"
+
+#. i18n: ectx: property (text), widget (QLabel, stylesLabel)
+#: widgets/KoPageLayoutWidget.ui:45
+#, kde-format
+msgid "Follow style:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoPageLayoutWidget.ui:61
+#, kde-format
+msgid "Size:"
+msgstr "چوڭلۇقى:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: widgets/KoPageLayoutWidget.ui:77
+#, kde-format
+msgid "Width:"
+msgstr "كەڭلىك:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:104
+#, kde-format
+msgid "Height:"
+msgstr "ئېگىزلىك:"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:119
+#, kde-format
+msgid "Orientation:"
+msgstr "يۆنىلىش:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, portrait)
+#: widgets/KoPageLayoutWidget.ui:129
+#, kde-format
+msgid "Portrait"
+msgstr "بوي يۆنىلىش"
+
+#. i18n: ectx: property (text), widget (QRadioButton, landscape)
+#: widgets/KoPageLayoutWidget.ui:136
+#, kde-format
+msgid "Landscape"
+msgstr "توغرا يۆنىلىش"
+
+#. i18n: ectx: property (text), widget (QLabel, facingPageLabel)
+#: widgets/KoPageLayoutWidget.ui:143
+#, fuzzy, kde-format
+#| msgid "Fit Page"
+msgid "Facing pages:"
+msgstr "بەتكە خوپ كەلسۇن"
+
+#. i18n: ectx: property (text), widget (QRadioButton, singleSided)
+#: widgets/KoPageLayoutWidget.ui:153
+#, fuzzy, kde-format
+#| msgctxt "Underline Style"
+#| msgid "Single"
+msgid "Single sided"
+msgstr "يەككە"
+
+#. i18n: ectx: property (text), widget (QLabel, directionLabel)
+#: widgets/KoPageLayoutWidget.ui:167
+#, fuzzy, kde-format
+#| msgid "Test Connection"
+msgid "Text direction:"
+msgstr "ئۇلىنىشنى سىنا"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:184
+#, kde-format
+msgid "Automatic"
+msgstr "ئاپتوماتىك"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:189
+#, kde-format
+msgid "Left to right"
+msgstr "سولدىن ئوڭغا"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, textDirection)
+#: widgets/KoPageLayoutWidget.ui:194
+#, kde-format
+msgid "Right to left"
+msgstr "ئوڭدىن سولغا"
+
+#. i18n: ectx: property (title), widget (QGroupBox, margins)
+#: widgets/KoPageLayoutWidget.ui:204
+#, kde-format
+msgid "Margins"
+msgstr "بەت ئارىلىقى"
+
+#. i18n: ectx: property (text), widget (QLabel)
+#: widgets/KoPageLayoutWidget.ui:210
+#, kde-format
+msgid "Top:"
+msgstr "چوققا:"
+
+#. i18n: ectx: property (text), widget (QLabel, leftLabel)
+#: widgets/KoPageLayoutWidget.ui:230
+#, fuzzy, kde-format
+#| msgid "Binding Edge:"
+msgid "Binding edge:"
+msgstr "تىكىش گىرۋىكى:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightLabel)
+#: widgets/KoPageLayoutWidget.ui:250
+#, fuzzy, kde-format
+#| msgid "Page Edge:"
+msgid "Page edge:"
+msgstr "بەت گىرۋىكى:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: widgets/KoPageLayoutWidget.ui:270
+#, kde-format
+msgid "Bottom:"
+msgstr "ئاستى:"
+
+#: widgets/KoResourceItemChooser.cpp:137
+#, fuzzy, kde-format
+#| msgid "Import lines:"
+msgctxt "@info:tooltip"
+msgid "Import resource"
+msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#: widgets/KoResourceItemChooser.cpp:144
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Delete resource"
+msgstr "مەنبەنى ئۆچۈر"
+
+#: widgets/KoResourceItemChooser.cpp:192
+#, kde-format
+msgctxt "@title:window"
+msgid "Choose File to Add"
+msgstr "قوشىدىغان ھۆججەتنى تاللا"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:107
+#: widgets/KoTagToolButton.cpp:51
+#, fuzzy, kde-format
+#| msgid "New Layer"
+msgid "New tag"
+msgstr "يېڭى سۈرەت قەۋىتى"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:140
+#, kde-format
+msgid "Assign to tag"
+msgstr ""
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:149
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Delete page"
+#| msgid_plural "Delete pages"
+msgid "Remove from this tag"
+msgstr "بەت ئۆچۈر"
+
+#: widgets/KoResourceItemChooserContextMenu.cpp:157
+#, kde-format
+msgid "Remove from other tag"
+msgstr ""
+
+#: widgets/KoResourceModel.cpp:78
+#, kde-format
+msgid "Tags"
+msgstr "خەتكۈشلەر"
+
+#: widgets/KoResourceTaggingManager.cpp:143
+#, kde-format
+msgid "Unable to undelete tag"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:144
+#, kde-format
+msgid ""
+"<qt>The tag you are trying to undelete already exists in tag list.<br>Please "
+"enter a new, unique name for it.</qt>"
+msgstr ""
+
+#: widgets/KoResourceTaggingManager.cpp:151
+#, kde-format
+msgid "Tag was not undeleted."
+msgstr ""
+
+#: widgets/KoRuler.cpp:1266
+#, kde-format
+msgid "First line indent"
+msgstr "باش قۇر تارايت"
+
+#: widgets/KoRuler.cpp:1267
+#, fuzzy, kde-format
+#| msgid "Left side"
+msgid "Left indent"
+msgstr "سول تەرەپ"
+
+#: widgets/KoRuler.cpp:1268
+#, fuzzy, kde-format
+#| msgid "Right Edge:"
+msgid "Right indent"
+msgstr "ئوڭ گىرۋەك:"
+
+#: widgets/KoShadowConfigWidget.cpp:55
+#, kde-format
+msgid "Change the color of the shadow"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: widgets/KoShadowConfigWidget.ui:67
+#, kde-format
+msgid "Blur:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: widgets/KoShadowConfigWidget.ui:84
+#, kde-format
+msgid "Distance:"
+msgstr "ئارىلىق:"
+
+#: widgets/KoStrokeConfigWidget.cpp:83
+#, kde-format
+msgid "Butt cap"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:90
+#, kde-format
+msgid "Round cap"
+msgstr "يۇمىلاق چوقا"
+
+#: widgets/KoStrokeConfigWidget.cpp:97
+#, kde-format
+msgid "Square cap"
+msgstr "تۆت چاسا چوقا"
+
+#: widgets/KoStrokeConfigWidget.cpp:108
+#, fuzzy, kde-format
+#| msgid "Delimiter"
+msgid "Miter join"
+msgstr "ئايرىش بەلگىسى"
+
+#: widgets/KoStrokeConfigWidget.cpp:115
+#, fuzzy, kde-format
+#| msgid "Round cap"
+msgid "Round join"
+msgstr "يۇمىلاق چوقا"
+
+#: widgets/KoStrokeConfigWidget.cpp:122
+#, kde-format
+msgid "Bevel join"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:132
+#, fuzzy, kde-format
+#| msgid "Delimiter"
+msgid "Miter limit"
+msgstr "ئايرىش بەلگىسى"
+
+#: widgets/KoStrokeConfigWidget.cpp:203
+#, kde-format
+msgid "Thickness:"
+msgstr "قېلىنلىقى:"
+
+#: widgets/KoStrokeConfigWidget.cpp:213
+#, kde-format
+msgid "Set line width of actual selection"
+msgstr ""
+
+#: widgets/KoStrokeConfigWidget.cpp:229
+#, kde-format
+msgid "Change the color of the line/border"
+msgstr ""
+
+#: widgets/KoTagChooserWidget.cpp:41
+#, fuzzy, kde-format
+#| msgid "Tags"
+msgid "Tag"
+msgstr "خەتكۈشلەر"
+
+#: widgets/KoTagFilterWidget.cpp:39
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Filter results cannot be saved for the <interface>All Presets</"
+"interface> view.<br>In this view, pressing <interface>Enter</interface> or "
+"clearing the filter box will restore all items.<br>Create and/or switch to a "
+"different tag if you want to save filtered resources into named sets.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:53
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Entering search terms here will add to, or remove resources from the "
+"current tag view.<para>To filter based on the partial, case insensitive name "
+"of a resource:<br><icode>partialname</icode> or <icode>!partialname</icode>."
+"</para><para>In-/exclusion of other tag sets:<br><icode>[Tagname]</icode> or "
+"<icode>![Tagname]</icode>.</para><para>Case sensitive and full name matching "
+"in-/exclusion:<br><icode>\"ExactMatch\"</icode> or <icode>!\"ExactMatch\"</"
+"icode>.</para>Pressing <interface>Enter</interface> or clicking the "
+"<interface>Save</interface> button will save the changes.</qt>"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:68
+#, kde-format
+msgid "Enter resource filters here"
+msgstr ""
+
+#: widgets/KoTagFilterWidget.cpp:79
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"<qt>Save the currently filtered set as the new members of the current tag.</"
+"qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:44
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "<qt>Show the tag box options.</qt>"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:60
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Paste Page"
+#| msgid_plural "Paste Pages"
+msgid "Rename tag"
+msgstr "بەتلەرنى چاپلا"
+
+#: widgets/KoTagToolButton.cpp:71
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Delete page"
+#| msgid_plural "Delete pages"
+msgid "Delete this tag"
+msgstr "بەت ئۆچۈر"
+
+#: widgets/KoTagToolButton.cpp:89
+#, kde-format
+msgid "Clear undelete list"
+msgstr ""
+
+#: widgets/KoTagToolButton.cpp:119
+#, fuzzy, kde-format
+#| msgid "delete"
+msgid "Undelete"
+msgstr "ئۆچۈر"
+
+#: widgets/KoToolBox.cpp:294
+#, fuzzy, kde-format
+#| msgid "Size"
+msgid "Icon Size"
+msgstr "چوڭلۇقى"
+
+#: widgets/KoToolBox.cpp:295
+#, fuzzy, kde-format
+#| msgid "Default"
+msgctxt "@item:inmenu Icon size"
+msgid "Default"
+msgstr "كۆڭۈلدىكى"
+
+#: widgets/KoToolBox.cpp:302
+#, kde-format
+msgid "%1x%2"
+msgstr ""
+
+#: widgets/KoToolBoxButton.cpp:55
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip of custom triple button"
+#| msgid "%1"
+msgctxt "@info:tooltip"
+msgid "%1"
+msgstr "%1"
+
+#: widgets/KoToolBoxButton.cpp:56
+#, kde-format
+msgctxt "@info:tooltip %2 is shortcut"
+msgid "%1 (%2)"
+msgstr ""
+
+#: widgets/KoToolBoxDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Tools"
+msgid "Toolbox"
+msgstr "قوراللار"
+
+#: widgets/KoToolDocker.cpp:184
+#, kde-format
+msgid "Tool Options"
+msgstr "قورال تاللانمىلىرى"
+
+#: widgets/KoToolDocker.cpp:216
+#, kde-format
+msgid "Toggles organizing the options in tabs or not"
+msgstr ""
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Select Item"
+msgid "deselect item"
+msgstr "تۈر تاللا"
+
+#: widgets/KoViewItemContextBar.cpp:183
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Select Item"
+msgid "select item"
+msgstr "تۈر تاللا"
+
+#: widgets/KoZoomAction.cpp:196 widgets/KoZoomAction.cpp:209
+#: widgets/KoZoomMode.cpp:13
+#, kde-format
+msgid "%1%"
+msgstr "%1%"
+
+#: widgets/KoZoomMode.cpp:14
+#, kde-format
+msgid "Fit Page Width"
+msgstr "بەت كەڭلىككە ماسلاش"
+
+#: widgets/KoZoomMode.cpp:15
+#, kde-format
+msgid "Fit Page"
+msgstr "بەتكە خوپ كەلسۇن"
+
+#: widgets/KoZoomMode.cpp:17
+#, kde-format
+msgid "Actual Pixels"
+msgstr "ئەمەلىي پىكسېل"
+
+#: widgets/KoZoomMode.cpp:21
+#, fuzzy, kde-format
+#| msgid "Fit Page Width"
+msgid "Fit Text Width"
+msgstr "بەت كەڭلىككە ماسلاش"
+
+#: widgets/KoZoomWidget.cpp:69
+#, kde-format
+msgid "Use same aspect as pixels"
+msgstr ""
+
+#: widgets/KoZoomWidget.cpp:78
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
+
+#: widgets/KoZoomWidget.cpp:87
+#, fuzzy, kde-format
+#| msgid "Zoom to Selection"
+msgid "Zoom to All"
+msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
+
+#: widgetutils/KoFileDialog.cpp:463
+#, kde-format
+msgid "All supported formats"
+msgstr ""
+
+#: widgetutils/KoGroupButton.cpp:131
+#, kde-format
+msgctxt "@info:tooltip of custom triple button"
+msgid "%1"
+msgstr "%1"
+
+#, fuzzy
+#~| msgid "Script Manager"
+#~ msgid "Install Script Package"
+#~ msgstr "قوليازما باشقۇرغۇ"
+
+#, fuzzy
+#~| msgid "Could not create the file for saving"
+#~ msgid "Could not read the package \"%1\"."
+#~ msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
+
+#~ msgid "Replace"
+#~ msgstr "ئالماشتۇر"
+
+#~ msgid "Key Press"
+#~ msgstr "كۇنۇپكىنىڭ بېسىلىشى"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip"
+#~| msgid "Delete resource"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Download resource"
+#~ msgstr "مەنبەنى ئۆچۈر"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip"
+#~| msgid "Delete resource"
+#~ msgctxt "@info:tooltip"
+#~ msgid "Share Resource"
+#~ msgstr "مەنبەنى ئۆچۈر"
+
+#~ msgid "&Delete"
+#~ msgstr "ئۆچۈر(&D)"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+
+#, fuzzy
+#~| msgid "&File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "ھۆججەت(&F)"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "تەڭشەك(&S)"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File"
+#~ msgstr "ھۆججەت"
+
+#, fuzzy
+#~| msgid "Always use this template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Always use this template"
+#~ msgstr "ھەمىشە  بۇ قېلىپنى ئىشلەت"
+
+#, fuzzy
+#~| msgid "Nodes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Nodes"
+#~ msgstr "تۈگۈنلەر"
+
+#, fuzzy
+#~| msgid " px"
+#~ msgctxt "(qtundo-format)"
+#~ msgid " px"
+#~ msgstr " px"
+
+#, fuzzy
+#~| msgid "Zoom In"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom In"
+#~ msgstr "چوڭايت"
+
+#, fuzzy
+#~| msgid "Zoom Out"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom Out"
+#~ msgstr "كىچىكلىتىش"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "…"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "ئاتى:"
+
+#, fuzzy
+#~| msgid "Initials:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Initials:"
+#~ msgstr "باش ھەرپلەر:"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title:"
+#~ msgstr "ماۋزۇ:"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Position:"
+#~ msgstr "ئورنى:"
+
+#, fuzzy
+#~| msgid "Company:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Company:"
+#~ msgstr "شىركەت"
+
+#, fuzzy
+#~| msgid "Email:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Email:"
+#~ msgstr "ئېلخەت:"
+
+#, fuzzy
+#~| msgid "Fax:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fax:"
+#~ msgstr "فاكىس:"
+
+#, fuzzy
+#~| msgid "Street:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Street:"
+#~ msgstr "كوچا:"
+
+#, fuzzy
+#~| msgid "Postal code:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Postal code:"
+#~ msgstr "پوچتا نومۇرى"
+
+#, fuzzy
+#~| msgid "City:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "City:"
+#~ msgstr "شەھەر :"
+
+#, fuzzy
+#~| msgid "Country:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Country:"
+#~ msgstr "دۆلەت:"
+
+#, fuzzy
+#~| msgid "Data"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Data"
+#~ msgstr "سانلىق-مەلۇمات"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "كودلاش(&N):"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "ئايرىش بەلگىسى"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "پەش"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "چېكىتلىك پەش"
+
+#, fuzzy
+#~| msgid "Other"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other"
+#~ msgstr "باشقا"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "جەدۋەل بەلگىسى"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "بوشلۇق"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Decimal symbol:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decimal symbol:"
+#~ msgstr "ئونلۇق كەسىر چېكىتى(D):"
+
+#, fuzzy
+#~| msgid "&Format:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Format:"
+#~ msgstr "فورمات(&F):"
+
+#, fuzzy
+#~| msgid "Ranges"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ranges"
+#~ msgstr "دائىرە"
+
+#, fuzzy
+#~| msgid "Update"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Update"
+#~ msgstr "يېڭىلا"
+
+#, fuzzy
+#~| msgid "Import columns:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import columns:"
+#~ msgstr "ئىستون ئىمپورت قىلىش:"
+
+#, fuzzy
+#~| msgid "Import lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import lines:"
+#~ msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#, fuzzy
+#~| msgid "to"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "to"
+#~ msgstr "غا"
+
+#, fuzzy
+#~| msgid "Unit:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unit:"
+#~ msgstr "بىرلىكى:"
+
+#, fuzzy
+#~| msgid "Size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size:"
+#~ msgstr "چوڭلۇقى:"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "كەڭلىك:"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "ئېگىزلىك:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Orientation:"
+#~ msgstr "يۆنىلىش:"
+
+#, fuzzy
+#~| msgid "Portrait"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Portrait"
+#~ msgstr "بوي يۆنىلىش"
+
+#, fuzzy
+#~| msgid "Landscape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Landscape"
+#~ msgstr "توغرا يۆنىلىش"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic"
+#~ msgstr "ئاپتوماتىك"
+
+#, fuzzy
+#~| msgid "Left to right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left to right"
+#~ msgstr "سولدىن ئوڭغا"
+
+#, fuzzy
+#~| msgid "Right to left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right to left"
+#~ msgstr "ئوڭدىن سولغا"
+
+#, fuzzy
+#~| msgid "Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margins"
+#~ msgstr "بەت ئارىلىقى"
+
+#, fuzzy
+#~| msgid "Top:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top:"
+#~ msgstr "چوققا:"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom:"
+#~ msgstr "ئاستى:"
+
+#, fuzzy
+#~| msgid "Distance:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance:"
+#~ msgstr "ئارىلىق:"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "چىقىرىۋەت"
+
+#, fuzzy
+#~| msgid "Keywords:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keywords:"
+#~ msgstr "ھالقىلىق سۆز:"
+
+#, fuzzy
+#~| msgid "Subject:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject:"
+#~ msgstr "تېما:"
+
+#, fuzzy
+#~| msgid "Last printed:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last printed:"
+#~ msgstr "ئاخىرقى باسقان ۋاقتى:"
+
+#, fuzzy
+#~| msgid "Total editing time:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Total editing time:"
+#~ msgstr "تەھرىرلىگەن ئومۇمىي ۋاقىت:"
+
+#, fuzzy
+#~| msgid "Encryption:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encryption:"
+#~ msgstr "شىفىرلاش:"
+
+#, fuzzy
+#~| msgid "Title:"
+#~ msgctxt "(qtundo-format) Document title"
+#~ msgid "Title:"
+#~ msgstr "ماۋزۇ:"
+
+#, fuzzy
+#~| msgid "Revision number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Revision number:"
+#~ msgstr "تۈزىتىش قېتىم سانى:"
+
+#, fuzzy
+#~| msgid "Modified:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Modified:"
+#~ msgstr "ئۆزگەرتكەن:"
+
+#, fuzzy
+#~| msgid "Comments:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comments:"
+#~ msgstr "ئىزاھات:"
+
+#, fuzzy
+#~| msgid "Created:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Created:"
+#~ msgstr "قۇرۇلغان:"
+
+#, fuzzy
+#~| msgid "Path:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Path:"
+#~ msgstr "يول:"
+
+#, fuzzy
+#~| msgid "&Reset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Reset"
+#~ msgstr "ئەسلىگە قايتۇر(&R)"
+
+#, fuzzy
+#~| msgid "Description"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Description"
+#~ msgstr "چۈشەندۈرۈش"
+
+#, fuzzy
+#~| msgid "new"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "new"
+#~ msgstr "يېڭى"
+
+#, fuzzy
+#~| msgid "delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "delete"
+#~ msgstr "ئۆچۈر"
+
+#, fuzzy
+#~| msgid "copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "copy"
+#~ msgstr "كۆچۈر"
+
+#, fuzzy
+#~| msgid "Namespaces"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespaces"
+#~ msgstr "ئات بوشلۇقى"
+
+#, fuzzy
+#~| msgid "Prefix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Prefix"
+#~ msgstr "ئالدى قوشۇلغۇچى"
+
+#, fuzzy
+#~| msgid "Namespace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace"
+#~ msgstr "ئات بوشلۇقى"
+
+#, fuzzy
+#~| msgid "SPARQL"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "SPARQL"
+#~ msgstr "SPARQL"
+
+#, fuzzy
+#~| msgid "Execute"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Execute"
+#~ msgstr "ئىجرا قىل"
+
+#, fuzzy
+#~| msgid "Stylesheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stylesheets"
+#~ msgstr "ئۇسلۇب جەدۋىلى"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line"
+#~ msgstr "قۇر"
+
+#, fuzzy
+#~| msgid "Precision:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Precision:"
+#~ msgstr "ئېنىقلىقى:"
+
+#, fuzzy
+#~| msgctxt "The raw line data"
+#~| msgid "Raw"
+#~ msgctxt "(qtundo-format) The raw line data"
+#~ msgid "Raw"
+#~ msgstr "خام"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Curve"
+#~ msgstr "ئەگرى سىزىق"
+
+#, fuzzy
+#~| msgid "Straight"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Straight"
+#~ msgstr "تۈز سىزىق"
+
+#, fuzzy
+#~| msgid "Optimize"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Optimize"
+#~ msgstr "ئەلالاشتۇر"
+
+#, fuzzy
+#~| msgid "Pencil"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pencil"
+#~ msgstr "قەلەم"
+
+#, fuzzy
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "ئۆلچەملىك"
+
+#, fuzzy
+#~| msgid "Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "سىزىقلار"
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Grid"
+#~ msgstr "سېتكا كۆرسەت"
+
+#, fuzzy
+#~| msgid "%1 Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 Options"
+#~ msgstr "%1 تاللانما"
+
+#, fuzzy
+#~| msgid "Active tool: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Active tool: %1"
+#~ msgstr "ئاكتىپ قورال: %1"
+
+#, fuzzy
+#~| msgid "Pan"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pan"
+#~ msgstr "تاختا"
+
+#, fuzzy
+#~| msgid "Zoom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "كېڭەيت-تارايت"
+
+#, fuzzy
+#~| msgid "Scripts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scripts"
+#~ msgstr "قوليازما"
+
+#, fuzzy
+#~| msgid "Script Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script Manager"
+#~ msgstr "قوليازما باشقۇرغۇ"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "ئالماشتۇر"
+
+#, fuzzy
+#~| msgid "Save"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save"
+#~ msgstr "ساقلا"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "قوش"
+
+#, fuzzy
+#~| msgid "Script File"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script File"
+#~ msgstr "قوليازما ھۆججىتى"
+
+#, fuzzy
+#~| msgid "Script"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Script"
+#~ msgstr "قوليازما"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection"
+#~ msgstr "توپلام"
+
+#, fuzzy
+#~| msgid "Undo"
+#~ msgctxt "(qtundo-format) Default text for undo action"
+#~ msgid "Undo"
+#~ msgstr "يېنىۋال"
+
+#, fuzzy
+#~| msgid "Undo %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Undo %1"
+#~ msgstr "%1 يېنىۋال"
+
+#, fuzzy
+#~| msgid "Redo"
+#~ msgctxt "(qtundo-format) Default text for redo action"
+#~ msgid "Redo"
+#~ msgstr "قايتىلا"
+
+#, fuzzy
+#~| msgid "Redo %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Redo %1"
+#~ msgstr "قايتىلا %1"
+
+#, fuzzy
+#~| msgid "Empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<empty>"
+#~ msgstr "بوش"
+
+#, fuzzy
+#~| msgid "Redo"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Redo"
+#~ msgstr "قايتىلا"
+
+#, fuzzy
+#~| msgid "Undo"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Undo"
+#~ msgstr "يېنىۋال"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "پۈتۈك تەڭشىكى"
+
+#, fuzzy
+#~| msgid "No autosave"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No autosave"
+#~ msgstr "ئاپتوماتىك ساقلىمىسۇن"
+
+#, fuzzy
+#~| msgctxt "unit symbol for minutes, leading space as separator"
+#~| msgid " min"
+#~ msgctxt ""
+#~ "(qtundo-format) unit symbol for minutes, leading space as separator"
+#~ msgid " min"
+#~ msgstr " مىنۇت"
+
+#, fuzzy
+#~| msgid "Autosave interval:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Autosave interval:"
+#~ msgstr "ئاپتوماتىك ساقلاش ئىنتېرۋالى:"
+
+#, fuzzy
+#~| msgid "Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "سېتكا"
+
+#, fuzzy
+#~| msgid "Grid color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid color:"
+#~ msgstr "سېتكا رەڭگى:"
+
+#, fuzzy
+#~| msgid "Spacing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spacing"
+#~ msgstr "ئارىلىق"
+
+#, fuzzy
+#~| msgctxt "Horizontal grid spacing"
+#~| msgid "&Horizontal:"
+#~ msgctxt "(qtundo-format) Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "توغرىسىغا(&H):"
+
+#, fuzzy
+#~| msgctxt "Vertical grid spacing"
+#~| msgid "&Vertical:"
+#~ msgctxt "(qtundo-format) Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "بويىغا(&V):"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "ئارىلاش"
+
+#, fuzzy
+#~| msgid "Units:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Units:"
+#~ msgstr "بىرلىك:"
+
+#, fuzzy
+#~| msgid "Creation error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1: Critical Error"
+#~ msgstr "قۇرۇش خاتالىقى"
+
+#, fuzzy
+#~| msgid "No matches found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No template found at: %1"
+#~ msgstr "ماس كەلگەن تۈر تېپىلمىدى"
+
+#, fuzzy
+#~| msgid "Saving..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saving..."
+#~ msgstr "ساقلاۋاتىدۇ…"
+
+#, fuzzy
+#~| msgid "Could not create the file for saving"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create the file for saving"
+#~ msgstr "ساقلايدىغان ھۆججەتنى قۇرالمىدى"
+
+#, fuzzy
+#~| msgid "Not able to write '%1'. Partition full?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not able to write '%1'. Partition full?"
+#~ msgstr "‹%1› غا يازغىلى بولمىدى. دىسكا رايونى توشۇپ كەتتىمۇ؟"
+
+#, fuzzy
+#~| msgid ""
+#~| "Malformed URL\n"
+#~| "%1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Malformed URL\n"
+#~ "%1"
+#~ msgstr ""
+#~ "بۇزۇق URL\n"
+#~ "%1"
+
+#, fuzzy
+#~| msgid "The file %1 does not exist."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file %1 does not exist."
+#~ msgstr "ھۆججەت %1 مەۋجۇت ئەمەس."
+
+#, fuzzy
+#~| msgid "Open Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opening Document"
+#~ msgstr "پۈتۈك ئېچىش"
+
+#, fuzzy
+#~| msgid "File not found"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File not found"
+#~ msgstr "ھۆججەت تېپىلمىدى"
+
+#, fuzzy
+#~| msgid "Cannot create storage"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot create storage"
+#~ msgstr "ساقلىغۇچ قۇرغىلى بولمىدى"
+
+#, fuzzy
+#~| msgid "Bad MIME type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bad MIME type"
+#~ msgstr "بولمىغۇر MIME تىپى"
+
+#, fuzzy
+#~| msgid "Error in embedded document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error in embedded document"
+#~ msgstr "سىڭدۈرمە پۈتۈكتە خاتالىق بار"
+
+#, fuzzy
+#~| msgid "Format not recognized"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Format not recognized"
+#~ msgstr "ناتونۇش پىچىم"
+
+#, fuzzy
+#~| msgid "Not implemented"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not implemented"
+#~ msgstr "ئەمەلىيلەشتۈرۈلمىگەن"
+
+#, fuzzy
+#~| msgid "Parsing error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parsing error"
+#~ msgstr "تەھلىل قىلىش خاتالىقى"
+
+#, fuzzy
+#~| msgid "Document is password protected"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document is password protected"
+#~ msgstr "پۈتۈك ئىم بىلەن قوغدالغان"
+
+#, fuzzy
+#~| msgid "Internal error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Internal error"
+#~ msgstr "ئىچكى خاتالىق"
+
+#, fuzzy
+#~| msgid "Out of memory"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Out of memory"
+#~ msgstr "ئەسلەك يېتىشمىدى"
+
+#, fuzzy
+#~| msgid "Unknown error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown error"
+#~ msgstr "نامەلۇم خاتالىق"
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not open\n"
+#~| "%2.\n"
+#~| "Reason: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Could not open %2.\n"
+#~ "Reason: %1.\n"
+#~ "%3"
+#~ msgstr ""
+#~ "ئاچالمىدى\n"
+#~ "%2.\n"
+#~ "سەۋەبى: %1"
+
+#, fuzzy
+#~| msgid "Could not find %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find %1"
+#~ msgstr "%1 نى تاپقىلى بولمىدى"
+
+#, fuzzy
+#~| msgid "%1 is not a file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 is not a file."
+#~ msgstr "%1 ھۆججەت ئەمەس."
+
+#, fuzzy
+#~| msgid "Not a valid Calligra file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "ئىناۋەتلىك كاللىگىرا ھۆججىتى ئەمەس: %1"
+
+#, fuzzy
+#~| msgid "Untitled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Untitled"
+#~ msgstr "ماۋزۇسىز"
+
+#, fuzzy
+#~| msgid ""
+#~| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
+#~| "it?</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
+#~ "it?</p>"
+#~ msgstr "<p>پۈتۈك <b>'%1'</b> ئۆزگەرتىلدى.</p><p>ساقلامسىز؟</p>"
+
+#, fuzzy
+#~| msgid ""
+#~| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
+#~| "it?</p>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The document \"%1\" has been modified.\n"
+#~ "Do you want to save your changes or discard them?"
+#~ msgstr "<p>پۈتۈك <b>'%1'</b> ئۆزگەرتىلدى.</p><p>ساقلامسىز؟</p>"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close Document"
+#~ msgstr "پۈتۈك ساقلا"
+
+#, fuzzy
+#~| msgid "%1 %"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 %"
+#~ msgstr "%1 %"
+
+#, fuzzy
+#~| msgid "No"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No"
+#~ msgstr "ياق"
+
+#, fuzzy
+#~| msgid "Yes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yes"
+#~ msgstr "ھەئە"
+
+#, fuzzy
+#~| msgid "Case Sensitive"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Case Sensitive"
+#~ msgstr "چوڭ-كىچىك يېزىلىشى پەرقلەندۈر"
+
+#, fuzzy
+#~| msgid "Export as PDF..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as PDF..."
+#~ msgstr "PDF چىقار…"
+
+#, fuzzy
+#~| msgid "Reload"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reload"
+#~ msgstr "قايتا يۈكلە"
+
+#, fuzzy
+#~| msgid "Versions..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Versions..."
+#~ msgstr "نەشرى…"
+
+#, fuzzy
+#~| msgid "E&xport..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&xport..."
+#~ msgstr "چىقار(&X)…"
+
+#, fuzzy
+#~| msgid "Recent Documents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&crypt Document"
+#~ msgstr "يېقىنقى پۈتۈكلەر"
+
+#, fuzzy
+#~| msgid "&New View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&New View"
+#~ msgstr "يېڭى كۆرۈنۈش(&N)"
+
+#, fuzzy
+#~| msgid "Document Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Information"
+#~ msgstr "پۈتۈك ئۇچۇرى"
+
+#, fuzzy
+#~| msgid "Full Screen Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Full Screen Mode"
+#~ msgstr "پۈتۈن ئېكران ھالىتى"
+
+#, fuzzy
+#~| msgid "(write protected)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(write protected)"
+#~ msgstr "(يېزىش چەكلەنگەن)"
+
+#, fuzzy
+#~| msgid "Save as %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save as %1"
+#~ msgstr "%1 سۈپىتىدە ساقلا"
+
+#, fuzzy
+#~| msgid "%1 (unknown file type)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1 (unknown file type)"
+#~ msgstr "%1 (نامەلۇم ھۆججەت تىپى)"
+
+#, fuzzy
+#~| msgid "Confirm Save"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm Save"
+#~ msgstr "ساقلاشنى جەزملەش"
+
+#, fuzzy
+#~| msgid "Export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export"
+#~ msgstr "ئېكسپورت قىل"
+
+#, fuzzy
+#~| msgid "Untitled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "untitled"
+#~ msgstr "ماۋزۇسىز"
+
+#, fuzzy
+#~| msgid "Open Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Document"
+#~ msgstr "پۈتۈك ئېچىش"
+
+#, fuzzy
+#~| msgid "Export as PDF..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as PDF"
+#~ msgstr "PDF چىقار…"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "پۈتۈك"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "ئاگاھلاندۇرۇش"
+
+#, fuzzy
+#~| msgid "Open Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Existing Document"
+#~ msgstr "پۈتۈك ئېچىش"
+
+#, fuzzy
+#~| msgid "Recent Documents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recent Documents"
+#~ msgstr "يېقىنقى پۈتۈكلەر"
+
+#, fuzzy
+#~| msgid "Stop"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop"
+#~ msgstr "توختا"
+
+#, fuzzy
+#~| msgid "Close"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Close"
+#~ msgstr "ياپ"
+
+#, fuzzy
+#~| msgid "Stopped"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stopped"
+#~ msgstr "توختىدى"
+
+#, fuzzy
+#~| msgctxt "File modification date and time. %1 is date time"
+#~| msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+#~ msgctxt "(qtundo-format) File modification date and time. %1 is date time"
+#~ msgid "<tr><td><b>Modified:</b></td><td>%1</td></tr>"
+#~ msgstr "<tr><td><b>ئۆزگەرتىلگەن ۋاقىت:</b></td><td>%1</td></tr>"
+
+#, fuzzy
+#~| msgctxt "File access date and time. %1 is date time"
+#~| msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+#~ msgctxt "(qtundo-format) File access date and time. %1 is date time"
+#~ msgid "<tr><td><b>Accessed:</b></td><td>%1</td></tr>"
+#~ msgstr "<tr><td><b>زىيارەت قىلىنغان ۋاقىت:</b></td><td>%1</td></tr>"
+
+#, fuzzy
+#~| msgid "Create Template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template"
+#~ msgstr "قېلىپ قۇر"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format) Template name"
+#~ msgid "Name:"
+#~ msgstr "ئاتى:"
+
+#, fuzzy
+#~| msgid "Group:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group:"
+#~ msgstr "گۇرۇپپا:"
+
+#, fuzzy
+#~| msgid "&Add Group..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Add Group..."
+#~ msgstr "گۇرۇپپا قوش(&A)…"
+
+#, fuzzy
+#~| msgid "&Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Remove"
+#~ msgstr "چىقىرىۋەت(&R)"
+
+#, fuzzy
+#~| msgid "Picture"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Picture"
+#~ msgstr "سۈرەت"
+
+#, fuzzy
+#~| msgid "&Preview"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Preview"
+#~ msgstr "ئالدىن كۆزەت(&P)"
+
+#, fuzzy
+#~| msgid "Custom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom:"
+#~ msgstr "ئىختىيارى:"
+
+#, fuzzy
+#~| msgid "&Select..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Select..."
+#~ msgstr "تاللا(&S)…"
+
+#, fuzzy
+#~| msgid "Add Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Group"
+#~ msgstr "گۇرۇپپا قوش"
+
+#, fuzzy
+#~| msgid "This name is already used."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "This name is already used."
+#~ msgstr "بۇ ئات ئىشلىتىلگەن."
+
+#, fuzzy
+#~| msgid "Remove Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Group"
+#~ msgstr "گۇرۇپپىنى چىقىرىۋەت"
+
+#, fuzzy
+#~| msgid "Remove Template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Template"
+#~ msgstr "قېلىپنى چىقىرىۋېتىش"
+
+#, fuzzy
+#~| msgid "&Delete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "ئۆچۈر(&D)"
+
+#, fuzzy
+#~| msgid "Version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Version"
+#~ msgstr "نەشرى"
+
+#, fuzzy
+#~| msgid "Date & Time"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date & Time"
+#~ msgstr "چېسلا & ۋاقىت"
+
+#, fuzzy
+#~| msgid "Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comment"
+#~ msgstr "ئىزاھات"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Add"
+#~ msgstr "قوش(&A)"
+
+#, fuzzy
+#~| msgid "&Modify"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Modify"
+#~ msgstr "ئۆزگەرت(&M)"
+
+#, fuzzy
+#~| msgid "&Open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Open"
+#~ msgstr "ئاچ(&O)"
+
+#, fuzzy
+#~| msgid "A new version could not be added"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A new version could not be added"
+#~ msgstr "يېڭى نەشرىنى قوشۇشقا بولمىدى"
+
+#, fuzzy
+#~| msgid "Date: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date: %1"
+#~ msgstr "چېسلا: %1"
+
+#, fuzzy
+#~| msgctxt "choice for author profile"
+#~| msgid "Anonymous"
+#~ msgctxt "(qtundo-format) choice for author profile"
+#~ msgid "Anonymous"
+#~ msgstr "ئاتسىز"
+
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unknown"
+#~ msgstr "نامەلۇم"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A3"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A3"
+#~ msgstr "ISO A3"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A4"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A4"
+#~ msgstr "ISO A4"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A5"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A5"
+#~ msgstr "ISO A5"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "US Letter"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Letter"
+#~ msgstr "ئا ق ش لېپاپى"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "US Legal"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "US Legal"
+#~ msgstr "ئا ق ش قانۇن"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "Screen"
+#~ msgstr "ئېكران"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "Custom"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "Custom"
+#~ msgstr "ئىختىيارى"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B5"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B5"
+#~ msgstr "ISO B5"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A0"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A0"
+#~ msgstr "ISO A0"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A1"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A1"
+#~ msgstr "ISO A1"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A2"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A2"
+#~ msgstr "ISO A2"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A6"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A6"
+#~ msgstr "ISO A6"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A7"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A7"
+#~ msgstr "ISO A7"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A8"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A8"
+#~ msgstr "ISO A8"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO A9"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO A9"
+#~ msgstr "ISO A9"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B0"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B0"
+#~ msgstr "ISO B0"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B1"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B1"
+#~ msgstr "ISO B1"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B10"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B10"
+#~ msgstr "ISO B10"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B2"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B2"
+#~ msgstr "ISO B2"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B3"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B3"
+#~ msgstr "ISO B3"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B4"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B4"
+#~ msgstr "ISO B4"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO B6"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO B6"
+#~ msgstr "ISO B6"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO C5"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO C5"
+#~ msgstr "ISO C5"
+
+#, fuzzy
+#~| msgctxt "Page size"
+#~| msgid "ISO DL"
+#~ msgctxt "(qtundo-format) Page size"
+#~ msgid "ISO DL"
+#~ msgstr "ISO DL"
+
+#, fuzzy
+#~| msgid "Millimeters (mm)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Millimeters (mm)"
+#~ msgstr "مىللىمېتىر(mm)"
+
+#, fuzzy
+#~| msgid "Centimeters (cm)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Centimeters (cm)"
+#~ msgstr "سانتىمېتىر(cm)"
+
+#, fuzzy
+#~| msgid "Decimeters (dm)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decimeters (dm)"
+#~ msgstr "دېتسىمېتىر (د م)"
+
+#, fuzzy
+#~| msgid "Inches (in)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inches (in)"
+#~ msgstr "دىيۇيم(in)"
+
+#, fuzzy
+#~| msgid "Points (pt)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Points (pt)"
+#~ msgstr "قاداق (pt)"
+
+#, fuzzy
+#~| msgid "Configure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "سەپلە"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "پۈتۈك"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "ئاپتور"
+
+#, fuzzy
+#~| msgid "Author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "ئاپتور"
+
+#, fuzzy
+#~| msgid "Master Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "ئانا بەت"
+
+#, fuzzy
+#~| msgid "Slide %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "تام تەسۋىر %1"
+
+#, fuzzy
+#~| msgid "Page  %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page  %1"
+#~ msgstr "بەت %1"
+
+#, fuzzy
+#~| msgid "Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "قەۋەت"
+
+#, fuzzy
+#~| msgid "Group"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Group"
+#~ msgstr "گۇرۇپپا"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "شەكىل"
+
+#, fuzzy
+#~| msgid "Slide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "تام تەسۋىر"
+
+#, fuzzy
+#~| msgid "Visible"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Visible"
+#~ msgstr "كۆرۈنۈشچان"
+
+#, fuzzy
+#~| msgid "Locked"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locked"
+#~ msgstr "قۇلۇپلانغان"
+
+#, fuzzy
+#~| msgid "&Move Here"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "بۇ جايغا يۆتكە(&M)"
+
+#, fuzzy
+#~| msgid "&Copy Here"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "بۇ جايغا كۆچۈر(&C)"
+
+#, fuzzy
+#~| msgid "C&ancel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "ۋاز كەچ(&A)"
+
+#, fuzzy
+#~| msgid "Add a new page or layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new page or layer"
+#~ msgstr "يېڭى بەت ياكى قەۋەت قوشىدۇ"
+
+#, fuzzy
+#~| msgid "Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page"
+#~ msgstr "بەت"
+
+#, fuzzy
+#~| msgid "Delete selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "تاللانغان نەڭنى ئۆچۈر"
+
+#, fuzzy
+#~| msgid "Raise selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "تاللانغان نەڭنى ئالدىغا يۆتكە"
+
+#, fuzzy
+#~| msgid "Lower selected objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "تاللانغان نەڭنى ئارقىغا يۆتكە"
+
+#, fuzzy
+#~| msgid "Minimal View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "ئەڭ كىچىك كۆرۈنۈش"
+
+#, fuzzy
+#~| msgid "Detailed View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "تەپسىلات كۆرۈنۈش"
+
+#, fuzzy
+#~| msgid "Thumbnail View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "كىچىكلىتىلگەن سۈرەت كۆرۈنۈشى"
+
+#, fuzzy
+#~| msgid "View mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "كۆرۈنۈش ھالىتى"
+
+#, fuzzy
+#~| msgid "Enter the name of the new layer:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "يېڭى قاتلامنىڭ ئاتىنى كىرگۈزۈڭ:"
+
+#, fuzzy
+#~| msgid "New Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "يېڭى سۈرەت قەۋىتى"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "يېڭى سۈرەت قەۋىتى"
+
+#, fuzzy
+#~| msgid "Could not delete all layers. At least one layer is required."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr ""
+#~ "ھەممە قاتلاملارنى ئۆچۈرگىلى بولمىدى. ئاز دېگەندە قاتلامدىن بىرى زۆرۈر."
+
+#, fuzzy
+#~| msgid "Error deleting layers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "قاتلاملارنى ئۆچۈرۈۋاتقاندا خاتالىق كۆرۈلدى"
+
+#, fuzzy
+#~| msgid "Cut"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "كەس"
+
+#, fuzzy
+#~| msgid "Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "كۆچۈر"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1"
+#~ msgstr "%1 -بەت"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tools"
+#~ msgstr "قوراللار"
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "ئۆچۈر(&E)"
+
+#, fuzzy
+#~| msgid "Snap to Grid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "سېتكىغا توغرىلا"
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "بەت قىستۇر"
+
+#, fuzzy
+#~| msgid "Copy Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Page"
+#~ msgstr "بەت كۆچۈر"
+
+#, fuzzy
+#~| msgid "Copy the current page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current page"
+#~ msgstr "نۆۋەتتىكى  بەتنى كۆچۈرىدۇ"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Page"
+#~ msgstr "بەت ئۆچۈر"
+
+#, fuzzy
+#~| msgid "Delete the current page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current page"
+#~ msgstr "نۆۋەتتىكى  بەتنى ئۆچۈرىدۇ"
+
+#, fuzzy
+#~| msgid "Page Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "بەت ئۇسلۇبى …"
+
+#, fuzzy
+#~| msgid "Variable"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Variable"
+#~ msgstr "ئۆزگىرىشچان"
+
+#, fuzzy
+#~| msgid "Configure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "سەپلە…"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Background"
+#~ msgstr "تەگلىك"
+
+#, fuzzy
+#~| msgid "Clear"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear"
+#~ msgstr "تازىلا"
+
+#, fuzzy
+#~| msgid "Subtract"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract"
+#~ msgstr "ئېلىش"
+
+#, fuzzy
+#~| msgid "Multiply"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Multiply"
+#~ msgstr "ھەسسىلەپ ئېشىش"
+
+#, fuzzy
+#~| msgid "Alpha"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alpha"
+#~ msgstr "ئالفا"
+
+#, fuzzy
+#~| msgid "Lightness"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lightness"
+#~ msgstr "يورۇقلۇق دەرىجىسى"
+
+#, fuzzy
+#~| msgid "a*"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "a*"
+#~ msgstr "a*"
+
+#, fuzzy
+#~| msgid "b*"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "b*"
+#~ msgstr "b*"
+
+#, fuzzy
+#~| msgid "Blue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "كۆك"
+
+#, fuzzy
+#~| msgid "Green"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "يېشىل"
+
+#, fuzzy
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "قىزىل"
+
+#, fuzzy
+#~| msgid "Alpha darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alpha darken"
+#~ msgstr "ئالفا قارايتىلغان"
+
+#, fuzzy
+#~| msgid "Dissolve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Dissolve"
+#~ msgstr "ئېرىت"
+
+#, fuzzy
+#~| msgid "Erase"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Erase"
+#~ msgstr "ئۆچۈر"
+
+#, fuzzy
+#~| msgid "Created:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Greater"
+#~ msgstr "قۇرۇلغان:"
+
+#, fuzzy
+#~| msgid "Normal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "نورمال"
+
+#, fuzzy
+#~| msgid "Overlay"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overlay"
+#~ msgstr "دەستىلە"
+
+#, fuzzy
+#~| msgid "Parallel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel"
+#~ msgstr "پاراللېل"
+
+#, fuzzy
+#~| msgid "Screen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Screen"
+#~ msgstr "ئېكران"
+
+#, fuzzy
+#~| msgid "Lighten"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighten"
+#~ msgstr "يورۇت"
+
+#, fuzzy
+#~| msgid "Darken"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darken"
+#~ msgstr "قارايت"
+
+#, fuzzy
+#~| msgid "Addition"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Addition"
+#~ msgstr "قوشۇش"
+
+#, fuzzy
+#~| msgid "Divide"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Divide"
+#~ msgstr "بۆل"
+
+#, fuzzy
+#~| msgid "Difference"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Difference"
+#~ msgstr "پەرق"
+
+#, fuzzy
+#~| msgid "Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "رەڭ"
+
+#, fuzzy
+#~| msgid "Hue"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hue"
+#~ msgstr "رەڭگى"
+
+#, fuzzy
+#~| msgid "Saturation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saturation"
+#~ msgstr "تويۇنۇش"
+
+#, fuzzy
+#~| msgid "Luminosity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Luminosity"
+#~ msgstr "يورۇقلۇق دەرىجىسى"
+
+#, fuzzy
+#~| msgid "Background Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Darker Color"
+#~ msgstr "تەگلىك رەڭگى"
+
+#, fuzzy
+#~| msgid "Line Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lighter Color"
+#~ msgstr "سىزىق رەڭگى"
+
+#, fuzzy
+#~| msgid "Intensity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intensity"
+#~ msgstr "كۈچلۈكلۈك"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Value"
+#~ msgstr "قىممەت"
+
+#, fuzzy
+#~| msgid "R"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R"
+#~ msgstr "R"
+
+#, fuzzy
+#~| msgid "G"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "G"
+#~ msgstr "G"
+
+#, fuzzy
+#~| msgid "B"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "B"
+#~ msgstr "B"
+
+#, fuzzy
+#~| msgid "XYZ"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "XYZ"
+#~ msgstr "XYZ"
+
+#, fuzzy
+#~| msgid "Grayscale"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grayscale"
+#~ msgstr "كۈلرەڭ"
+
+#, fuzzy
+#~| msgid "YCbCr"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "YCbCr"
+#~ msgstr "YCbCr"
+
+#, fuzzy
+#~| msgid "8 Bits"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "8 Bits"
+#~ msgstr "8 بىت"
+
+#, fuzzy
+#~| msgid "16 Bits"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "16 Bits"
+#~ msgstr "16 بىت"
+
+#, fuzzy
+#~| msgid "16 Bits Float"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "16 Bits Float"
+#~ msgstr "16 بىتلىق كەسىر سان"
+
+#, fuzzy
+#~| msgid "32 Bits Float"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "32 Bits Float"
+#~ msgstr "32 بىتلىق كەسىر سان"
+
+#, fuzzy
+#~| msgid "Arithmetic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arithmetic"
+#~ msgstr "ھېساب(ئارىفمېتىكا)"
+
+#, fuzzy
+#~| msgid "Negative"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Negative"
+#~ msgstr "مەنپىي"
+
+#, fuzzy
+#~| msgid "HSV"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#, fuzzy
+#~| msgid "Mix"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mix"
+#~ msgstr "كىرىشتۈرۈش"
+
+#, fuzzy
+#~| msgid "Burn"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Burn"
+#~ msgstr "ئوي"
+
+#, fuzzy
+#~| msgid "Bumpmap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bumpmap"
+#~ msgstr "Bumpmap"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reference"
+#~ msgstr "نەقىل"
+
+#, fuzzy
+#~| msgid "System"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "System"
+#~ msgstr "سىستېما"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "User"
+#~ msgstr "ئىشلەتكۈچى"
+
+#, fuzzy
+#~| msgid "Edit %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit %1"
+#~ msgstr "%1 نى تەھرىرلەش"
+
+#, fuzzy
+#~| msgid "Empty"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Empty"
+#~ msgstr "بوش"
+
+#, fuzzy
+#~| msgid "URI"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#, fuzzy
+#~| msgid "Literal"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Literal"
+#~ msgstr "يېزىق"
+
+#, fuzzy
+#~| msgid "Blank"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blank"
+#~ msgstr "بوش"
+
+#, fuzzy
+#~| msgid "Valid"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Valid"
+#~ msgstr "ئىناۋەتلىك"
+
+#, fuzzy
+#~| msgid "Subject"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subject"
+#~ msgstr "تېما"
+
+#, fuzzy
+#~| msgid "Predicate"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Predicate"
+#~ msgstr "مۆلچەرلەش"
+
+#, fuzzy
+#~| msgid "Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "نەڭ"
+
+#, fuzzy
+#~| msgid "%1 is not a file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File '%1' is not readable"
+#~ msgstr "%1 ھۆججەت ئەمەس."
+
+#, fuzzy
+#~| msgid "The directory mode is not supported for remote locations."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The directory mode is not supported for remote locations."
+#~ msgstr "يىراقتىكى ئورۇنلاردا بۇ مۇندەرىجە ھالىتىنى ئىشلەتكىلى بولمايدۇ."
+
+#, fuzzy
+#~| msgid "Key Press"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Key Press"
+#~ msgstr "كۇنۇپكىنىڭ بېسىلىشى"
+
+#, fuzzy
+#~| msgid "1 replacement made"
+#~| msgid_plural "%1 replacements made"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "1 replacement made"
+#~ msgid_plural "%1 replacements made"
+#~ msgstr[0] "%1 ئى ئالماشتۇرۇلدى"
+
+#, fuzzy
+#~| msgid "Test Connection"
+#~ msgctxt "(qtundo-format) new numbered section name"
+#~ msgid "New section %1"
+#~ msgstr "ئۇلىنىشنى سىنا"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#, fuzzy
+#~| msgctxt "Underline Style"
+#~| msgid "Single"
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "Single"
+#~ msgstr "يەككە"
+
+#, fuzzy
+#~| msgctxt "Underline Style"
+#~| msgid "Double"
+#~ msgctxt "(qtundo-format) Underline Style"
+#~ msgid "Double"
+#~ msgstr "قوش"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "كۆڭۈلدىكى"
+
+#, fuzzy
+#~| msgid "Opacity"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opacity"
+#~ msgstr "غۇۋالىقى"
+
+#, fuzzy
+#~| msgid "Recent:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recent:"
+#~ msgstr "يېقىنقى:"
+
+#, fuzzy
+#~| msgid "Add / Remove Colors..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add / Remove Colors..."
+#~ msgstr "رەڭلەرنى قوش/چىقىرىۋەت…"
+
+#, fuzzy
+#~| msgid "Import Data"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Data"
+#~ msgstr "سانلىق-مەلۇمات ئەكىر"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "تەۋسىيە( %1 )"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "باشقا( %1 )"
+
+#, fuzzy
+#~| msgid "Generic"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Generic"
+#~ msgstr "ئادەتتىكى"
+
+#, fuzzy
+#~| msgid "Date"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date"
+#~ msgstr "چېسلا"
+
+#, fuzzy
+#~| msgid "Currency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency"
+#~ msgstr "پۇل"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "كودلاشنى تاپقىلى بولمىدى: %1"
+
+#, fuzzy
+#~| msgid "Modified:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "modified"
+#~ msgstr "ئۆزگەرتكەن:"
+
+#, fuzzy
+#~| msgid "Detail"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Details"
+#~ msgstr "تەپسىلاتى"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Close Docker"
+#~ msgstr "پۈتۈك ساقلا"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Collapse Docker"
+#~ msgstr "پۈتۈك ساقلا"
+
+#, fuzzy
+#~| msgid "General"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "General"
+#~ msgstr "ئادەتتىكى"
+
+#, fuzzy
+#~| msgid "&Encrypt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Encrypt"
+#~ msgstr "شىفىرلا(&E)"
+
+#, fuzzy
+#~| msgid "Decrypt"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Decrypt"
+#~ msgstr "شىفىر يەش"
+
+#, fuzzy
+#~| msgid ""
+#~| "<qt>Your document could not be saved automatically.<p>To complete the "
+#~| "decryption, please save the document.</qt>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<qt>Your document could not be saved automatically.<p>To complete the "
+#~ "decryption, please save the document.</qt>"
+#~ msgstr ""
+#~ "<qt>پۈتۈكىڭىز ئاپتوماتىك ساقلانمىدى.<p>شىفىرسىزلاشنى تاماملاش ئۈچۈن "
+#~ "پۈتۈكنى ساقلاڭ.</qt>"
+
+#, fuzzy
+#~| msgid "Save Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save Document"
+#~ msgstr "پۈتۈك ساقلا"
+
+#, fuzzy
+#~| msgid "Change"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change"
+#~ msgstr "ئۆزگەرت"
+
+#, fuzzy
+#~| msgid ""
+#~| "<qt>Your document could not be saved automatically.<p>To complete the "
+#~| "encryption, please save the document.</qt>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<qt>Your document could not be saved automatically.<p>To complete the "
+#~ "encryption, please save the document.</qt>"
+#~ msgstr ""
+#~ "<qt>پۈتۈكىڭىز ئاپتوماتىك ساقلانمىدى.<p>شىفىرسىزلاشنى تاماملاش ئۈچۈن "
+#~ "پۈتۈكنى ساقلاڭ.</qt>"
+
+#, fuzzy
+#~| msgid "Add Color To Palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Color To Palette"
+#~ msgstr "رەڭنى رەڭ تەڭشەش تاختىسىغا قوش"
+
+#, fuzzy
+#~| msgid "Color name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color name:"
+#~ msgstr "رەڭ ئاتى:"
+
+#, fuzzy
+#~| msgid "Add Color To Palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gimp Color Palette (*.gpl)"
+#~ msgstr "رەڭنى رەڭ تەڭشەش تاختىسىغا قوش"
+
+#, fuzzy
+#~| msgid "Palette"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette"
+#~ msgstr "رەڭ تاختىسى"
+
+#, fuzzy
+#~| msgid "Add/Remove Colors"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add/Remove Colors"
+#~ msgstr "رەڭلەرنى قوش/چىقىرىۋەت"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) No stroke or fill"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#, fuzzy
+#~| msgctxt "Solid color stroke or fill"
+#~| msgid "Solid"
+#~ msgctxt "(qtundo-format) Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "لىق تولغان"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gradient"
+#~ msgstr "گۈل نۇسخىسى"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern"
+#~ msgstr "Pattern"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Type:"
+#~ msgstr "تىپى:"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgctxt "(qtundo-format) Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "قۇر"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "(qtundo-format) No gradient spread"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overall opacity:"
+#~ msgstr "غۇۋالىقى:"
+
+#, fuzzy
+#~| msgid "Color:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color stop:"
+#~ msgstr "رەڭ"
+
+#, fuzzy
+#~| msgid "Left side"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left side"
+#~ msgstr "سول تەرەپ"
+
+#, fuzzy
+#~| msgid "Page Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout"
+#~ msgstr "بەت جايلاشتۇرۇلۇشى"
+
+#, fuzzy
+#~| msgid "Apply to document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply to document"
+#~ msgstr "پۈتۈككە قوللان"
+
+#, fuzzy
+#~| msgid "Left Edge:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Edge:"
+#~ msgstr "سول گىرۋەك:"
+
+#, fuzzy
+#~| msgid "Right Edge:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Edge:"
+#~ msgstr "ئوڭ گىرۋەك:"
+
+#, fuzzy
+#~| msgid "Binding Edge:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Binding Edge:"
+#~ msgstr "تىكىش گىرۋىكى:"
+
+#, fuzzy
+#~| msgid "Page Edge:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Edge:"
+#~ msgstr "بەت گىرۋىكى:"
+
+#, fuzzy
+#~| msgid "Page Layout:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout:"
+#~ msgstr "بەت جايلاشتۇرۇلۇشى:"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip"
+#~| msgid "Delete resource"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "Delete resource"
+#~ msgstr "مەنبەنى ئۆچۈر"
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "Choose File to Add"
+#~ msgctxt "(qtundo-format) @title:window"
+#~ msgid "Choose File to Add"
+#~ msgstr "قوشىدىغان ھۆججەتنى تاللا"
+
+#, fuzzy
+#~| msgid "Tags"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tags"
+#~ msgstr "خەتكۈشلەر"
+
+#, fuzzy
+#~| msgid "First line indent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First line indent"
+#~ msgstr "باش قۇر تارايت"
+
+#, fuzzy
+#~| msgid "Round cap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Round cap"
+#~ msgstr "يۇمىلاق چوقا"
+
+#, fuzzy
+#~| msgid "Square cap"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Square cap"
+#~ msgstr "تۆت چاسا چوقا"
+
+#, fuzzy
+#~| msgid "Thickness:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thickness:"
+#~ msgstr "قېلىنلىقى:"
+
+#, fuzzy
+#~| msgid "Tags"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tag"
+#~ msgstr "خەتكۈشلەر"
+
+#, fuzzy
+#~| msgid "Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Icon Size"
+#~ msgstr "چوڭلۇقى"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format) @item:inmenu Icon size"
+#~ msgid "Default"
+#~ msgstr "كۆڭۈلدىكى"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip of custom triple button"
+#~| msgid "%1"
+#~ msgctxt "(qtundo-format) @info:tooltip"
+#~ msgid "%1"
+#~ msgstr "%1"
+
+#, fuzzy
+#~| msgid "Tools"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toolbox"
+#~ msgstr "قوراللار"
+
+#, fuzzy
+#~| msgid "Tool Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tool Options"
+#~ msgstr "قورال تاللانمىلىرى"
+
+#, fuzzy
+#~| msgid "%1%"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~| msgid "Fit Page Width"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit Page Width"
+#~ msgstr "بەت كەڭلىككە ماسلاش"
+
+#, fuzzy
+#~| msgid "Fit Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fit Page"
+#~ msgstr "بەتكە خوپ كەلسۇن"
+
+#, fuzzy
+#~| msgid "Actual Pixels"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Actual Pixels"
+#~ msgstr "ئەمەلىي پىكسېل"
+
+#, fuzzy
+#~| msgid "Zoom to Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
+
+#, fuzzy
+#~| msgctxt "@info:tooltip of custom triple button"
+#~| msgid "%1"
+#~ msgctxt "(qtundo-format) @info:tooltip of custom triple button"
+#~ msgid "%1"
+#~ msgstr "%1"
+
+#~ msgctxt "Label for the Find text input box"
+#~ msgid "Find:"
+#~ msgstr "ئىزدە:"
+
+#~ msgctxt "Next search result"
+#~ msgid "Next"
+#~ msgstr "كېيىنكى"
+
+#~ msgctxt "Previous search result"
+#~ msgid "Previous"
+#~ msgstr "ئالدىنقى"
+
+#~ msgctxt "Search options"
+#~ msgid "Options"
+#~ msgstr "تاللانما"
+
+#~ msgctxt "Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "ئالماشتۇر:"
+
+#~ msgctxt "Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "ئالماشتۇر"
+
+#~ msgctxt "Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "ھەممىنى ئالماشتۇر"
+
+#~ msgctxt "Total number of matches"
+#~ msgid "1 match found"
+#~ msgid_plural "%1 matches found"
+#~ msgstr[0] "%1 ئى تېپىلدى"
+
+#~ msgctxt "Text list-style"
+#~ msgid "None"
+#~ msgstr "يوق"
+
+#~ msgid "Arabic"
+#~ msgstr "ئەرەبچە"
+
+#~ msgid "Bengali"
+#~ msgstr "بېنگالچە"
+
+#~ msgid "Gujarati"
+#~ msgstr "گۇجاراتچە"
+
+#~ msgid "Kannada"
+#~ msgstr "كانناداچە"
+
+#~ msgid "Malayalam"
+#~ msgstr "مالايامچە"
+
+#~ msgid "Oriya"
+#~ msgstr "ئورىياچە"
+
+#~ msgid "Tamil"
+#~ msgstr "تامىلچە"
+
+#~ msgid "Telugu"
+#~ msgstr "تېلۇگۇچە"
+
+#~ msgid "Tibetan"
+#~ msgstr "تىبەتچە"
+
+#~ msgid "Thai"
+#~ msgstr "تايلاندچە"
+
+#~ msgid "AbjadMinor"
+#~ msgstr "AbjadMinor"
+
+#~ msgid "Image"
+#~ msgstr "سۈرەت"
+
+#, fuzzy
+#~| msgid "Label"
+#~ msgid "TextLabel"
+#~ msgstr "ئەن"
+
+#, fuzzy
+#~| msgid "Name"
+#~ msgid "Named"
+#~ msgstr "ئاتى"
+
+#, fuzzy
+#~| msgid "Import lines:"
+#~ msgid "Import Files"
+#~ msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#, fuzzy
+#~| msgid "Import lines:"
+#~ msgid "Import File"
+#~ msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#, fuzzy
+#~| msgid "File"
+#~ msgid "Testing: OpenFile"
+#~ msgstr "ھۆججەت"
+
+#, fuzzy
+#~| msgid "Import lines:"
+#~ msgid "Testing: ImportFiles"
+#~ msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#, fuzzy
+#~| msgid "Import Data"
+#~ msgid "Testing: Import Directory"
+#~ msgstr "سانلىق-مەلۇمات ئەكىر"
+
+#, fuzzy
+#~| msgid "Save"
+#~ msgid "Testing: SaveFile"
+#~ msgstr "ساقلا"
+
+#, fuzzy
+#~| msgid "The file %1 does not exist."
+#~ msgid "The database file \"%1\" does not exist."
+#~ msgstr "ھۆججەت %1 مەۋجۇت ئەمەس."
+
+#, fuzzy
+#~| msgid "Unknown error"
+#~ msgid "Unknown error."
+#~ msgstr "نامەلۇم خاتالىق"
+
+#, fuzzy
+#~| msgid "file"
+#~ msgctxt "@info"
+#~ msgid "file: %1"
+#~ msgstr "ھۆججەت"
+
+#, fuzzy
+#~| msgid "Could not find %1"
+#~ msgid "Could not find service <resource>%1</resource>."
+#~ msgstr "%1 نى تاپقىلى بولمىدى"
+
+#~ msgid "Byte"
+#~ msgstr "بايت"
+
+#~ msgid "Integer Number"
+#~ msgstr "پۈتۈن سان"
+
+#~ msgid "Date and Time"
+#~ msgstr "چېسلا ۋە ۋاقىت"
+
+#~ msgid "Date/Time"
+#~ msgstr "چېسلا/ۋاقىت"
+
+#~ msgid "Syntax Error"
+#~ msgstr "گرامماتىكىلىق خاتالىق"
+
+#, fuzzy
+#~| msgid "Syntax Error"
+#~ msgid "Syntax error."
+#~ msgstr "گرامماتىكىلىق خاتالىق"
+
+#~ msgid "Error"
+#~ msgstr "خاتالىق"
+
+#, fuzzy
+#~| msgid "Syntax Error"
+#~ msgid "Error near \"%1\"."
+#~ msgstr "گرامماتىكىلىق خاتالىق"
+
+#, fuzzy
+#~| msgctxt ""
+#~| "short for 'expression' word, e.g. 'expr' (only latin letters, please)"
+#~| msgid "expr"
+#~ msgctxt ""
+#~ "short for 'expression' word, e.g. 'expr' (only latin letters, please, no "
+#~ "'.')"
+#~ msgid "expr"
+#~ msgstr "expr"
+
+#~ msgid "Number"
+#~ msgstr "نومۇرى"
+
+#~ msgid "Name"
+#~ msgstr "ئاتى"
+
+#~ msgid "Object Name"
+#~ msgstr "ئوبيېكت ئاتى"
+
+#~ msgid "Line Color"
+#~ msgstr "سىزىق رەڭگى"
+
+#~ msgid "Position"
+#~ msgstr "ئورنى"
+
+#~ msgid "Size"
+#~ msgstr "چوڭلۇقى"
+
+#, fuzzy
+#~| msgid "Check"
+#~ msgid "Check Box"
+#~ msgstr "تەكشۈر"
+
+#~ msgid "Cross"
+#~ msgstr "كېسىشىش"
+
+#~ msgid "Dot"
+#~ msgstr "چېكىت"
+
+#~ msgid "Style"
+#~ msgstr "ئۇسلۇب"
+
+#~ msgid "Data Source"
+#~ msgstr "سانلىق-مەلۇمات مەنبەسى"
+
+#~ msgid "Foreground Color"
+#~ msgstr "ئالدى رەڭ"
+
+#~ msgid "Field"
+#~ msgstr "سۆز بۆلىكى"
+
+#~ msgid "Center"
+#~ msgstr "مەركەز"
+
+#~ msgid "Left"
+#~ msgstr "سول"
+
+#~ msgid "Right"
+#~ msgstr "ئوڭ"
+
+#~ msgid "Horizontal Alignment"
+#~ msgstr "توغرىسىغا توغرىلاش"
+
+#~ msgid "Top"
+#~ msgstr "ئۈستى"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Background Opacity"
+#~ msgstr "تەگلىك"
+
+#~ msgid "Word Wrap"
+#~ msgstr "سۆز قاتلاش"
+
+#~ msgid "Can Grow"
+#~ msgstr "چوڭايت"
+
+#~ msgid "Clip"
+#~ msgstr "ئىلغۇچ"
+
+#~ msgid "Stretch"
+#~ msgstr "سوز"
+
+#~ msgid "Caption"
+#~ msgstr "ماۋزۇ"
+
+#~ msgid "Label"
+#~ msgstr "ئەن"
+
+#~ msgid "Column:"
+#~ msgstr "ئىستون:"
+
+#~ msgid "Sort:"
+#~ msgstr "تەرتىپلەش:"
+
+#~ msgid "Report Header"
+#~ msgstr "دوكلات بەت قېشى"
+
+#~ msgid "Report Footer"
+#~ msgstr "دوكلات بەت ئاستى"
+
+#~ msgid "Title"
+#~ msgstr "ماۋزۇ"
+
+#~ msgid "Left Margin"
+#~ msgstr "سول گىرۋەك بوشلۇقى"
+
+#~ msgid "Right Margin"
+#~ msgstr "ئوڭ گىرۋەك بوشلۇقى"
+
+#~ msgctxt "<data-source>: <object>"
+#~ msgid "%1: %2"
+#~ msgstr "%1: %2"
+
+#~ msgid "Section Editor"
+#~ msgstr "بۆلەك تەھرىرلىگۈچ"
+
+#~ msgid "Add..."
+#~ msgstr "قوش…"
+
+#~ msgid "Edit..."
+#~ msgstr "تەھرىر…"
+
+#~ msgid "Move Up"
+#~ msgstr "ئۈستىگە"
+
+#~ msgid "Move Down"
+#~ msgstr "پەسكە"
+
+#~ msgid "Ascending"
+#~ msgstr "ئۆسكۈچى"
+
+#~ msgid "Descending"
+#~ msgstr "كېمەيگۈچى"
+
+#~ msgid "Page Footer"
+#~ msgstr "بەت ئاستى"
+
+#, fuzzy
+#~| msgid "Collection"
+#~ msgid "Section"
+#~ msgstr "توپلام"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgctxt "Static Image"
+#~ msgid "Static"
+#~ msgstr "ئاپتوماتىك"
+
+#~ msgid "Value (brightness)"
+#~ msgstr "قىممەت(يورۇقلۇقى)"
+
+#~ msgid "Cyan"
+#~ msgstr "توق يېشىل"
+
+#~ msgid "Magenta"
+#~ msgstr "ھال رەڭ"
+
+#~ msgid "Yellow"
+#~ msgstr "سېرىق"
+
+#~ msgid "Black"
+#~ msgstr "قارا"
+
+#~ msgid "Blue to yellow"
+#~ msgstr "كۆكتىن سېرىققا"
+
+#~ msgid "&Themes"
+#~ msgstr "ئۆرنەكلەر(&T)"
+
+#~ msgctxt "default theme name"
+#~ msgid "Default"
+#~ msgstr "كۆڭۈلدىكى"
+
+#~ msgid "&Tools"
+#~ msgstr "قوراللار(&T)"
+
+#~ msgid "Color Selector"
+#~ msgstr "رەڭ تاللىغۇ"
+
+#~ msgid "Ignored"
+#~ msgstr "پەرۋا قىلمىدى"
+
+#~ msgid "                Language:"
+#~ msgstr "                تىل:"
+
+#~ msgid "Formatting"
+#~ msgstr "فورمات"
+
+#, fuzzy
+#~| msgid "Import lines:"
+#~ msgid "Testing: OpenDirectories"
+#~ msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#, fuzzy
+#~| msgid "Import lines:"
+#~ msgid "Testing: ImportDirectories"
+#~ msgstr "قۇرلارنى ئىمپورت قىلىش:"
+
+#, fuzzy
+#~| msgid "Save as %1"
+#~ msgid "Testing: SaveFiles"
+#~ msgstr "%1 سۈپىتىدە ساقلا"
+
+#~ msgid "Error!"
+#~ msgstr "خاتالىق!"
+
+#~ msgid "Contacts"
+#~ msgstr "ئالاقەداشلار"
+
+#~ msgid "Events"
+#~ msgstr "ھادىسە"
+
+#~ msgid "Locations"
+#~ msgstr "ئورنى"
+
+#~ msgid "Area"
+#~ msgstr "دائىرە"
+
+#~ msgid "Region"
+#~ msgstr "رايون"
+
+#~ msgid "&Location:"
+#~ msgstr "ئورنى(&L):"
+
+#~ msgid "&Start:"
+#~ msgstr "باشلا(&S):"
+
+#~ msgid "Time and Date"
+#~ msgstr "ۋاقىت ۋە چېسلا"
+
+#~ msgid "Timezone"
+#~ msgstr "ۋاقىت رايونى"
+
+#~ msgid "&Name:"
+#~ msgstr "ئاتى(&N):"
+
+#~ msgid "Contact Information"
+#~ msgstr "ئالاقەداش ئۇچۇرى"
+
+#~ msgid "&Name"
+#~ msgstr "ئاتى(&N)"
+
+#~ msgid "Latitude"
+#~ msgstr "كەڭلىك"
+
+#~ msgid "Longitude"
+#~ msgstr "ئۇزۇنلۇق"
+
+#~ msgid "Location Information"
+#~ msgstr "ئورۇن ئۇچۇرى"
+
+#~ msgid "People"
+#~ msgstr "كىشىلەر"
+
+#~ msgid ""
+#~ "A document with this name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "بۇنداق ئاتلىق پۈتۈك مەۋجۇت.\n"
+#~ "قاپلامسىز؟"
+
+#~ msgid "%1 (Uncompressed XML Files)"
+#~ msgstr "%1 (پرېسلانمىغان XML ھۆججەتلىرى)"
+
+#~ msgid "%1 (Flat XML File)"
+#~ msgstr "%1 (تۈز XML ھۆججىتى)"
+
+#~ msgid "%1 (Encrypted)"
+#~ msgstr "%1 (شىفىرلانغان)"
+
+#~ msgid "&OK"
+#~ msgstr "جەزملە(&O)"
+
+#~ msgid "&Cancel"
+#~ msgstr "ۋاز كەچ(&C)"
+
+#~ msgid "&Edit"
+#~ msgstr "تەھرىر(&E)"
+
+#~ msgid "&Close"
+#~ msgstr "ياپ(&C)"
+
+#~ msgid "Dodge"
+#~ msgstr "دوجې"
+
+#~| msgctxt "Underline Style"
+#~| msgid "Single"
+#~ msgid "Angle:"
+#~ msgstr "يەككە"
+
+#~ msgid "Style:"
+#~ msgstr "ئۇسلۇب:"
+
+#~ msgid "Cap:"
+#~ msgstr "چوقىسى:"
+
+#~ msgid "Insert Table"
+#~ msgstr "جەدۋەل قىستۇر"
+
+#~ msgid "Delete Column"
+#~ msgstr "ئىستون ئۆچۈر"
+
+#~ msgid "Delete Row"
+#~ msgstr "قۇر ئۆچۈر"
+
+#~ msgid "Typing"
+#~ msgstr "كىرگۈزۈۋاتىدۇ"
+
+#~ msgid "min"
+#~ msgstr "مىنۇت"
+
+#~ msgid "I&mport..."
+#~ msgstr "ئەكىر(&M)…"
+
+#~ msgid "&Default"
+#~ msgstr "كۆڭۈلدىكى(&D)"
+
+#~ msgid "Background editing tool"
+#~ msgstr "تەگلىك تەھرىرلەش قورالى"
+
+#~ msgid "&Delete Personal Data"
+#~ msgstr "خۇسۇسىي سانلىق-مەلۇماتلارنى ئۆچۈر(&D)"
+
+#~ msgid "&Load From Address Book"
+#~ msgstr "ئادرېس دەپتىرىدىن يۈكلە(&L)"
+
+#~ msgid "Line Break"
+#~ msgstr "قۇر ئالماشتۇرۇش بەلگىسى"
+
+#~ msgid "&Close All Views"
+#~ msgstr "بارلىق كۆرۈنمىلەرنى ياپ(&C)"
+
+#~ msgid "&Remove View"
+#~ msgstr "كۆرۈنۈشنى چىقىرىۋەت(&R)"
+
+#~ msgid "&Horizontal"
+#~ msgstr "توغرىسىغا(&H)"
+
+#~ msgid "&Vertical"
+#~ msgstr "بويىغا(&V)"
+
+#~ msgid "End"
+#~ msgstr "تامام"
+
+#~ msgid "Form"
+#~ msgstr "كۆزنەك"
+
+#~ msgid "Import"
+#~ msgstr "ئىمپورت قىل"
+
+#~ msgid "Share"
+#~ msgstr "ھەمبەھىر"

@@ -1,0 +1,2536 @@
+# translation of kofficefilters.po to Hindi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kofficefilters\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2008-03-26 18:24+0530\n"
+"Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: karbon/image/ImageExport.cpp:90
+#, fuzzy, kde-format
+#| msgid "PNG Export Options"
+msgid "%1 Export Options"
+msgstr "पीएनजी निर्यात विकल्प"
+
+#: karbon/image/ImageExportOptionsWidget.cpp:47
+#, kde-format
+msgid "Page %1"
+msgstr "पृष्ठ %1"
+
+#. i18n: ectx: property (text), widget (QLabel, m_pageLabel)
+#: karbon/image/ImageExportOptionsWidget.ui:19
+#, kde-format
+msgid "Page:"
+msgstr "पृष्ठः"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: karbon/image/ImageExportOptionsWidget.ui:34
+#, fuzzy, kde-format
+#| msgid "Custom size (in pixels):"
+msgid "Size in Pixels"
+msgstr "मनपसंद आकार (पिक्सेल्स में):"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: karbon/image/ImageExportOptionsWidget.ui:43
+#: karbon/image/ImageExportOptionsWidget.ui:78
+#, kde-format
+msgid "Image width:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: karbon/image/ImageExportOptionsWidget.ui:53
+#: karbon/image/ImageExportOptionsWidget.ui:88
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgid "Image height:"
+msgstr "ऊँचाईः"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: karbon/image/ImageExportOptionsWidget.ui:69
+#, kde-format
+msgid "Size in Units"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: karbon/image/ImageExportOptionsWidget.ui:98
+#, kde-format
+msgid "Resolution:"
+msgstr "रिज़ोल्यूशन:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: karbon/image/ImageExportOptionsWidget.ui:108
+#, kde-format
+msgid "Unit:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: karbon/image/ImageExportOptionsWidget.ui:124
+#, kde-format
+msgid "Background Color"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelColor)
+#: karbon/image/ImageExportOptionsWidget.ui:133
+#, fuzzy, kde-format
+#| msgid "Colorspace"
+msgid "Color"
+msgstr "कलरस्पेस"
+
+#. i18n: ectx: property (text), widget (QLabel, labelOpacity)
+#: karbon/image/ImageExportOptionsWidget.ui:143
+#, kde-format
+msgid "Opacity"
+msgstr ""
+
+#: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
+#: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
+#: sheets/xlsx/XlsxXmlCommentsReader.cpp:98
+#: sheets/xlsx/XlsxXmlDocumentReader.cpp:127
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:101
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:448
+#: sheets/xlsx/XlsxXmlTableReader.cpp:67
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:297
+#: stage/pptx/PptxXmlDocumentReader.cpp:146
+#: stage/pptx/PptxXmlSlideReader.cpp:321
+#: words/docx/import/DocxXmlCommentsReader.cpp:82
+#: words/docx/import/DocxXmlDocumentReader.cpp:185
+#: words/docx/import/DocxXmlEndnoteReader.cpp:83
+#: words/docx/import/DocxXmlFontTableReader.cpp:81
+#: words/docx/import/DocxXmlFooterReader.cpp:88
+#: words/docx/import/DocxXmlFootnoteReader.cpp:83
+#: words/docx/import/DocxXmlHeaderReader.cpp:88
+#: words/docx/import/DocxXmlNumberingReader.cpp:78
+#: words/docx/import/DocxXmlSettingsReader.cpp:78
+#, kde-format
+msgid "Namespace \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:102
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not open the requested file %1"
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: libmsooxml/MsooXmlImport.cpp:125
+#, kde-format
+msgid "Could not read ZIP directory of the requested file %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
+#, fuzzy, kde-format
+#| msgid "Passwords"
+msgid "Enter password"
+msgstr "पासवर्ड"
+
+#: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
+#, kde-format
+msgid "This document is encrypted, please enter the password to decrypt it:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
+#, kde-format
+msgid "Incorrect password, please enter the password to decrypt this document:"
+msgstr ""
+
+#: libmsooxml/MsooXmlImport.cpp:633
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find path for type %1"
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: libmsooxml/MsooXmlReader.cpp:135
+#, kde-format
+msgid "%1 (line %2, column %3)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:137
+#, kde-format
+msgid "%1 (%2, line %3, column %4)"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:161
+#, kde-format
+msgid "Element \"%1\" not found"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:166
+#, fuzzy, kde-format
+#| msgid "Footnote %1"
+msgid "Attribute \"%1\" not found"
+msgstr "पाद-सूचना %1"
+
+#: libmsooxml/MsooXmlReader.cpp:176
+#, kde-format
+msgid "Unexpected value \"%1\" of attribute \"%2\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:181
+#, kde-format
+msgid "Unexpected second occurrence of \"%1\" element"
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
+#, kde-format
+msgid "Expected closing of element \"%1\""
+msgstr ""
+
+#: libmsooxml/MsooXmlReader.cpp:240
+#, kde-format
+msgid "None of expected elements found: %1"
+msgstr ""
+
+#: libmsooxml/MsooXmlRelationships.cpp:90
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for id \"%1\" in file \"%2\""
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: libmsooxml/MsooXmlRelationships.cpp:94
+#: libmsooxml/MsooXmlRelationships.cpp:114
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find relationships file \"%1\""
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: libmsooxml/MsooXmlRelationships.cpp:109
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not find target for relationship \"%1\" in file \"%2\""
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: libmsooxml/MsooXmlUtils.cpp:168
+#, kde-format
+msgid ""
+"Parsing error in the main document at line %1, column %2.\n"
+"Error message: %3"
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:217
+#, kde-format
+msgid "Entry '%1' not found."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:223
+#, kde-format
+msgid "Entry '%1' is not a file."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:301 libmsooxml/MsooXmlUtils.cpp:345
+#: libmsooxml/MsooXmlUtils.cpp:388
+#, kde-format
+msgid "Could not open entry \"%1\" for writing."
+msgstr ""
+
+#: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
+#: libmsooxml/MsooXmlUtils.cpp:399
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Could not write block"
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: sheets/csv/csvexport.cc:269
+#, kde-format
+msgid "<SHEETNAME>"
+msgstr "<शीटनाम>"
+
+#: sheets/csv/csvexportdialog.cpp:36 words/ascii/ImportDialog.cc:36
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Recommended ( %1 )"
+msgstr "अनुशंसित (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:37 words/ascii/ImportDialog.cc:37
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Locale ( %1 )"
+msgstr "लोकेल (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:40 words/ascii/ImportDialog.cc:40
+#, kde-format
+msgctxt "Descriptive encoding name"
+msgid "Other ( %1 )"
+msgstr "अन्य (%1)"
+
+#: sheets/csv/csvexportdialog.cpp:274 words/ascii/ImportDialog.cc:94
+#, kde-format
+msgid "Cannot find encoding: %1"
+msgstr "एनकोडिंग नहीं पा सका: %1"
+
+#: sheets/csv/csvimport.cc:82
+#, kde-format
+msgid "CSV filter cannot open input file - please report."
+msgstr "सीएसवी फ़िल्टर इनपुट फ़ाइल को खोल नहीं सकता - कृपया रपट दें."
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
+#: sheets/csv/exportdialogui.ui:27 sheets/latex/export/latexexportwidget.ui:219
+#, kde-format
+msgid "Encoding"
+msgstr "एनकोडिंग"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/csv/exportdialogui.ui:35 words/ascii/ImportDialogUI.ui:24
+#, kde-format
+msgid "E&ncoding:"
+msgstr "एनकोडिंग: (&n)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupEndOfLine)
+#: sheets/csv/exportdialogui.ui:76
+#, kde-format
+msgid "End of Line"
+msgstr "पंक्ति का अंत"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineLF)
+#: sheets/csv/exportdialogui.ui:82
+#, kde-format
+msgid "&UNIX style (recommended; line feed only)"
+msgstr "यूनिक्स शैली (अनुशंसित; सिर्फ लाइन फ़ीड) (&U)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCRLF)
+#: sheets/csv/exportdialogui.ui:92
+#, kde-format
+msgid "&Windows style (carriage return and line feed)"
+msgstr "विंडोज़ शैली (कैरिज रिटर्न और लाइन फ़ीड)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioEndOfLineCR)
+#: sheets/csv/exportdialogui.ui:102
+#, kde-format
+msgid "&MacOS style (carriage return only)"
+msgstr "मॅकऔएस शैली (सिर्फ कैरिज रिटर्न) (&M)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: sheets/csv/exportdialogui.ui:132
+#, kde-format
+msgid "Sheets"
+msgstr "शीट्स"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel4)
+#: sheets/csv/exportdialogui.ui:145
+#, kde-format
+msgid "Select sheets to export:"
+msgstr "निर्यात करने के लिए शीट चुनें:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, m_delimiterLineBox)
+#: sheets/csv/exportdialogui.ui:161
+#, kde-format
+msgid "Delimiter Line"
+msgstr "डेलिमिटर पंक्ति"
+
+#. i18n: ectx: property (text), widget (QLineEdit, m_sheetDelimiter)
+#: sheets/csv/exportdialogui.ui:167
+#, kde-format
+msgid "********<SHEETNAME>********"
+msgstr "********<शीटनाम>********"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel6)
+#: sheets/csv/exportdialogui.ui:180
+#, kde-format
+msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+msgstr "<शीटनाम> अगले शीट के नाम से बदल जाता है."
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_delimiterAboveAll)
+#: sheets/csv/exportdialogui.ui:199
+#, kde-format
+msgid "Print delimiter line above every sheet"
+msgstr "प्रत्येक शीट पर ऊपर डेलिमीटर लाइन छापें"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab2)
+#. i18n: ectx: property (title), widget (QGroupBox, GroupBox1)
+#: sheets/csv/exportdialogui.ui:210 sheets/csv/exportdialogui.ui:294
+#, kde-format
+msgid "Cells"
+msgstr "कक्ष"
+
+#. i18n: ectx: property (title), widget (KButtonGroup, m_delimiterBox)
+#: sheets/csv/exportdialogui.ui:222
+#, kde-format
+msgid "Delimiter"
+msgstr "डेलिमिटर"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioComma)
+#: sheets/csv/exportdialogui.ui:228
+#, kde-format
+msgid "Comma"
+msgstr "विराम चिह्न"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSemicolon)
+#: sheets/csv/exportdialogui.ui:238
+#, kde-format
+msgid "Semicolon"
+msgstr "सेमी-कॉलन"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioTab)
+#: sheets/csv/exportdialogui.ui:245
+#, kde-format
+msgid "Tabulator"
+msgstr "टेबुलेटर"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioSpace)
+#: sheets/csv/exportdialogui.ui:252
+#, kde-format
+msgid "Space"
+msgstr "खाली जगह"
+
+#. i18n: ectx: property (text), widget (QRadioButton, m_radioOther)
+#: sheets/csv/exportdialogui.ui:259
+#, kde-format
+msgid "Other:"
+msgstr "अन्यः"
+
+#. i18n: ectx: property (text), widget (QLabel, m_quotesLabel)
+#: sheets/csv/exportdialogui.ui:309
+#, kde-format
+msgid "Quotes:"
+msgstr "उद्धरणः"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:329
+#, kde-format
+msgid "\""
+msgstr "\""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
+#: sheets/csv/exportdialogui.ui:334
+#, kde-format
+msgid "'"
+msgstr "'"
+
+#. i18n: ectx: property (text), widget (QCheckBox, m_selectionOnly)
+#: sheets/csv/exportdialogui.ui:365
+#, kde-format
+msgid "Export selection only"
+msgstr "सिर्फ चयनित को निर्यात करें"
+
+#: sheets/dbase/dbaseimport.cc:44
+#, kde-format
+msgid "File format is not supported."
+msgstr "फ़ाइल फॉर्मेट समर्थित नहीं है."
+
+#: sheets/dbase/dbaseimport.cc:49
+#, kde-format
+msgid "Could not read from file."
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: sheets/html/exportdialog.cc:24
+#, kde-format
+msgid "Export Sheet to HTML"
+msgstr "शीट को एचटीएमएल में निर्यात करें"
+
+#: sheets/html/exportdialog.cc:35
+#, kde-format
+msgid "Recommended: UTF-8"
+msgstr "अनुशंसित: यूटीएफ-8"
+
+#: sheets/html/exportdialog.cc:36
+#, kde-format
+msgid "Locale (%1)"
+msgstr "लोकेल (%1)"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: sheets/html/exportwidget.ui:19
+#, kde-format
+msgid "En&coding:"
+msgstr "एनकोडिंगः (&c)"
+
+#. i18n: ectx: property (whatsThis), widget (QComboBox, mEncodingBox)
+#: sheets/html/exportwidget.ui:32
+#, kde-format
+msgid ""
+"With this option you can define the encoding of the HTML file. The "
+"recommended encoding (UTF8) is selected as default."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: sheets/html/exportwidget.ui:57
+#, kde-format
+msgid "Sheet Selection"
+msgstr "शीट चयन"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
+#. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:72 sheets/html/exportwidget.ui:82
+#, kde-format
+msgid "Click here to select all sheets in the list."
+msgstr "सूची में से सभी शीटों को चुनने के लिए यहाँ क्लिक करें."
+
+#. i18n: ectx: property (text), widget (QPushButton, mSelectAllButton)
+#: sheets/html/exportwidget.ui:75
+#, kde-format
+msgid "Select &All"
+msgstr "सभी चुनें (&A)"
+
+#. i18n: ectx: property (text), widget (QPushButton, mDeselectAllButton)
+#: sheets/html/exportwidget.ui:85
+#, kde-format
+msgid "Desele&ct All"
+msgstr "सभी अचयनित करें (&c)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:110
+#, kde-format
+msgid ""
+"This option will make the HTML export filter generate a new page for each "
+"sheet. If you disable this option, all sheets are written on one page."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, mSeparateFiles)
+#: sheets/html/exportwidget.ui:113
+#, kde-format
+msgid "Use &separate files for each table"
+msgstr "प्रत्येक तालिका के लिए अलग फ़ाइलें प्रयोग करें (&s)"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroup4)
+#: sheets/html/exportwidget.ui:123
+#, kde-format
+msgid "Style"
+msgstr "शैली"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:129
+#, kde-format
+msgid ""
+"Select this option to use the default fonts and colors for the HTML page."
+msgstr "इस विकल्प का प्रयोग एचटीएमएल पृष्ठ में डिफ़ॉल्ट फ़ॉन्ट व रंगों के प्रयोग के लिए करें."
+
+#. i18n: ectx: property (text), widget (QRadioButton, mDefaultButton)
+#: sheets/html/exportwidget.ui:132
+#, kde-format
+msgid "Use &default style"
+msgstr "डिफ़ॉल्ट शैली इस्तेमाल करें (&d)"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:142
+#, kde-format
+msgid ""
+"Select this option to specify a separate stylesheet for the HTML page. You "
+"can select or type on in the field below."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, mCustomButton)
+#: sheets/html/exportwidget.ui:145
+#, kde-format
+msgid "Use &external stylesheet:"
+msgstr "बाहरी स्टाइलशीट प्रयोग करें: (&e)"
+
+#. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
+#: sheets/html/exportwidget.ui:155
+#, kde-format
+msgid ""
+"In this field you can enter an URL for your stylesheet. It is possible to "
+"point to a stylesheet on disk, or to somewhere on the Internet."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: sheets/html/exportwidget.ui:165
+#, kde-format
+msgid "Layout"
+msgstr "ले-आउट"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:171
+#, kde-format
+msgid "Use this option to enable or disable borders around the cells."
+msgstr "इस विकल्प का प्रयोग कक्षों के चारों ओर किनारा को सक्षम या अक्षम बनाने के लिए करें."
+
+#. i18n: ectx: property (text), widget (QCheckBox, mUseBorders)
+#: sheets/html/exportwidget.ui:174
+#, kde-format
+msgid "Use &borders"
+msgstr "किनारा प्रयोग करें (&b)"
+
+#. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1_2)
+#. i18n: ectx: property (whatsThis), widget (QSpinBox, mPixelsBetweenCells)
+#: sheets/html/exportwidget.ui:186 sheets/html/exportwidget.ui:208
+#, kde-format
+msgid ""
+"Use this option to define how many pixels there should be between the cells. "
+"This effect is better visible if you check <b>Use borders</b> too."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: sheets/html/exportwidget.ui:189
+#, kde-format
+msgid "Pi&xels between cells:"
+msgstr "कक्षों के बीच पिक्सेल: (&x)"
+
+#: sheets/html/htmlexport.cc:196 sheets/html/htmlexport.cc:371
+#, kde-format
+msgid "Top"
+msgstr "ऊपर"
+
+#: sheets/latex/export/latexexportdialog.cc:139
+#, kde-format
+msgid "Latex Export Filter Configuration"
+msgstr "लेटेक्स निर्यात फ़िल्टर कॉन्फ़िगरेशन"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget2)
+#: sheets/latex/export/latexexportwidget.ui:24
+#, kde-format
+msgid "Document"
+msgstr "दस्तावेज़"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: sheets/latex/export/latexexportwidget.ui:32
+#, kde-format
+msgid "Document Style"
+msgstr "दस्तावेज़ शैली"
+
+#. i18n: ectx: property (text), widget (QRadioButton, latexStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:38
+#, kde-format
+msgid "Latex style"
+msgstr "लेटेक्स शैली"
+
+#. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
+#: sheets/latex/export/latexexportwidget.ui:45
+#, fuzzy, kde-format
+#| msgid "KWord style"
+msgid "Words style"
+msgstr "केवर्ड शैली"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: sheets/latex/export/latexexportwidget.ui:58
+#, kde-format
+msgid "Document Type"
+msgstr "दस्तावेज़ प्रकार"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:64
+#, kde-format
+msgid "The document will be able to be compiled alone"
+msgstr "दस्तावेज़ को अलग से कम्पाइल किया जा सकेगा"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:67
+#, kde-format
+msgid ""
+"The document will be generated as a full latex document since all the "
+"include will be generated before the \\begin{document} and \\end{document} "
+"commands."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, fullDocButton)
+#: sheets/latex/export/latexexportwidget.ui:70
+#, kde-format
+msgid "Independent document"
+msgstr "स्वतंत्र दस्तावेज़"
+
+#. i18n: ectx: property (toolTip), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:80
+#, kde-format
+msgid "Do not generate either the latex header or the document environment"
+msgstr "लेटेक्स शीर्षक या दस्तावेज़ वातावरण जेनरेट नहीं करें"
+
+#. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:83
+#, kde-format
+msgid ""
+"The document will be generated as a latex document which will have to be "
+"included in a main latex document. It will allow you to generate several "
+"little files for each chapter of your document."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, embededButton)
+#: sheets/latex/export/latexexportwidget.ui:86
+#, kde-format
+msgid "Document to include"
+msgstr "दस्तावेज़ जिसे शामिल करना है"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1_2)
+#: sheets/latex/export/latexexportwidget.ui:98
+#, kde-format
+msgid "Document class:"
+msgstr "दस्तावेज़ क्लास:"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel2)
+#: sheets/latex/export/latexexportwidget.ui:111
+#, kde-format
+msgid "Quality:"
+msgstr "विशेषताः"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:122
+#, kde-format
+msgid "Final"
+msgstr "अंतिम"
+
+#. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
+#: sheets/latex/export/latexexportwidget.ui:127
+#, kde-format
+msgid "Draft"
+msgstr "ड्राफ्ट"
+
+#. i18n: ectx: property (text), widget (QLabel, defaultFontSizeTextZone)
+#: sheets/latex/export/latexexportwidget.ui:135
+#, kde-format
+msgid "Default font size:"
+msgstr "डिफ़ॉल्ट फ़ॉन्ट आकार:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, Widget3)
+#: sheets/latex/export/latexexportwidget.ui:176
+#, kde-format
+msgid "Pictures"
+msgstr "छवियाँ"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: sheets/latex/export/latexexportwidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Convert the pictures"
+msgid "Convert the pictures:"
+msgstr "छवियाँ परिवर्तित करें"
+
+#. i18n: ectx: property (text), widget (QLabel, TextLabel1)
+#: sheets/latex/export/latexexportwidget.ui:199
+#, kde-format
+msgid "Pictures directory:"
+msgstr "छवि डिरेक्ट्री:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: sheets/latex/export/latexexportwidget.ui:213
+#: sheets/latex/export/latexexportwidget.ui:244
+#, kde-format
+msgid "Language"
+msgstr "भाषा"
+
+#. i18n: ectx: property (text), widget (QPushButton, addLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:261
+#, kde-format
+msgid "Add"
+msgstr "जोड़ें"
+
+#. i18n: ectx: property (text), widget (QPushButton, rmLanguageBtn)
+#: sheets/latex/export/latexexportwidget.ui:268
+#, kde-format
+msgid "Remove"
+msgstr "हटाएँ"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: sheets/latex/export/latexexportwidget.ui:293
+#, kde-format
+msgid "Contents"
+msgstr "विषय सूची"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: sheets/latex/export/latexexportwidget.ui:301
+#, fuzzy, kde-format
+#| msgid "Export informations about author"
+msgid "Export information about author:"
+msgstr "लेखक के बारे में निर्यात जानकारियाँ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: sheets/latex/export/latexexportwidget.ui:321
+#, fuzzy, kde-format
+#| msgid "Add a table of content"
+msgid "Add a table of content:"
+msgstr "विषय सूची तालिका जोड़ें"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
+#: sheets/latex/export/latexexportwidget.ui:340
+#, kde-format
+msgid "Notes"
+msgstr "टीप"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton7)
+#: sheets/latex/export/latexexportwidget.ui:346
+#, kde-format
+msgid "Don't export"
+msgstr "निर्यात नहीं करें"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton5)
+#: sheets/latex/export/latexexportwidget.ui:353
+#, kde-format
+msgid "Export notes in margin notes"
+msgstr "हाशिया नोट्स में नोट्स निर्यात करें"
+
+#. i18n: ectx: property (text), widget (QRadioButton, RadioButton6)
+#: sheets/latex/export/latexexportwidget.ui:360
+#, kde-format
+msgid "Export notes in comments"
+msgstr "टिप्पणियों में नोट्स निर्यात करें"
+
+#: sheets/opencalc/opencalcexport.cc:905
+#, kde-format
+msgid "Page "
+msgstr "पृष्ठ"
+
+#: sheets/opencalc/opencalcimport.cc:1217
+#, kde-format
+msgid "The file seems to be corrupt. Skipping a table."
+msgstr "फ़ाइल प्रतीत होता है कि खराब है. तालिका छोड़ा जा रहा है."
+
+#: sheets/opencalc/opencalcimport.cc:1228
+#, kde-format
+msgid "Skipping a table."
+msgstr "तालिका छोड़ा जा रहा है."
+
+#: sheets/opencalc/opencalcimport.cc:1928
+#, kde-format
+msgid ""
+"This document was created with OpenOffice.org version '%1'. This filter was "
+"written for version 1.0. Reading this file could cause strange behavior, "
+"crashes or incorrect display of the data. Do you want to continue converting "
+"the document?"
+msgstr ""
+
+#: sheets/opencalc/opencalcimport.cc:1929
+#, kde-format
+msgid "Unsupported document version"
+msgstr "असमर्थित दस्तावेज़ संस्करण"
+
+#: sheets/qpro/qproimport.cc:115
+#, kde-format
+msgid "QPRO filter cannot open input file - please report."
+msgstr "क्यूप्रो फ़िल्टर इनपुट फ़ाइल को खोल नहीं सकता - कृपया रपट दें."
+
+#: sheets/qpro/qproimport.cc:226
+#, kde-format
+msgid ""
+"Unable to open password protected files.\n"
+"The password algorithm has not been published"
+msgstr ""
+
+#: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
+#: words/docx/import/DocxImport.cpp:151
+#, fuzzy, kde-format
+#| msgid "Could not read from file."
+msgid "Unable to find part for type %1"
+msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
+#, kde-format
+msgid "Declared number of shared strings too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:562
+#, kde-format
+msgid "Declared number of font styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:917
+#, kde-format
+msgid "Declared number of cell formats too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1041
+#: sheets/xlsx/XlsxXmlStylesReader.cpp:1387
+#, kde-format
+msgid "Declared number of fill styles too small (%1)"
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:346
+#, kde-format
+msgid ""
+"The data could not be loaded completely because the maximum size of sheet "
+"was exceeded."
+msgstr ""
+
+#: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1423
+#, kde-format
+msgid "Expected integer or floating point number"
+msgstr ""
+
+#: stage/pptx/PptxXmlDocumentReader.cpp:282
+#, fuzzy, kde-format
+#| msgid "Endnote %1"
+msgid "Slide layout \"%1\" not found"
+msgstr "अंत-टिप्पणी %1"
+
+#: stage/pptx/PptxXmlSlideReader.cpp:617
+#, fuzzy, kde-format
+#| msgid "Slide Title"
+msgid "Slide %1"
+msgstr "स्लाइड शीर्षक"
+
+#: words/ascii/ImportDialog.cc:32
+#, fuzzy, kde-format
+#| msgid "KWord's Plain Text Import Filter"
+msgid "Words's Plain Text Import Filter"
+msgstr "केवर्ड सादा पाठ आयात फ़िल्टर"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
+#: words/ascii/ImportDialogUI.ui:16
+#, kde-format
+msgid "Plain Text Import Dialog"
+msgstr "सादा पाठ आयात संवाद"
+
+#. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
+#: words/ascii/ImportDialogUI.ui:65
+#, kde-format
+msgid "End of Paragraph"
+msgstr "अनुच्छेद का अंत"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphAsIs)
+#: words/ascii/ImportDialogUI.ui:71
+#, kde-format
+msgid "&As is: At the end of line"
+msgstr "जैसा है: पंक्ति के अंत में (&A)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphSentence)
+#: words/ascii/ImportDialogUI.ui:81
+#, kde-format
+msgid "&Sentence: If the end of line is the end of a sentence"
+msgstr "वाक्य: यदि पंक्ति का अंत वाक्य का अंत है (&S)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioParagraphEmptyLine)
+#: words/ascii/ImportDialogUI.ui:88
+#, kde-format
+msgid "&Empty Line: If the line is empty"
+msgstr ""
+
+#: words/epub/OdtHtmlConverter.cpp:288 words/mobi/OdtMobiHtmlConverter.cpp:310
+#, fuzzy, kde-format
+#| msgid "End of Line"
+msgid "End notes"
+msgstr "पंक्ति का अंत"
+
+#: words/msword-odf/conversion.cpp:828
+#, kde-format
+msgid "Even Pages Header"
+msgstr "सम पृष्ठ शीर्ष-सूचना"
+
+#: words/msword-odf/conversion.cpp:830
+#, kde-format
+msgid "Odd Pages Header"
+msgstr "विषम पृष्ठ शीर्ष-सूचना"
+
+#: words/msword-odf/conversion.cpp:832
+#, kde-format
+msgid "Even Pages Footer"
+msgstr "सम पृष्ठ पाद-सूचना"
+
+#: words/msword-odf/conversion.cpp:834
+#, kde-format
+msgid "Odd Pages Footer"
+msgstr "विषम पृष्ठ पाद-सूचना"
+
+#: words/msword-odf/conversion.cpp:836
+#, kde-format
+msgid "First Page Header"
+msgstr "प्रथम पृष्ठ शीर्ष-सूचना"
+
+#: words/msword-odf/conversion.cpp:838
+#, kde-format
+msgid "First Page Footer"
+msgstr "प्रथम पृष्ठ पाद-सूचना"
+
+#: words/msword-odf/texthandler.cpp:632
+#, kde-format
+msgid "Table %1"
+msgstr "तालिका %1"
+
+#: words/rtf/import/rtfimport.cpp:55
+#, kde-format
+msgid "The file cannot be loaded, as it seems not to be an RTF document."
+msgstr "फ़ाइल को लोड नहीं किया जा सका, चूंकि यह आरटीएफ़ दस्तावेज़ नहीं है."
+
+#: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
+#: words/rtf/import/rtfimport.cpp:80
+#, fuzzy, kde-format
+#| msgid "KWord's RTF Import Filter"
+msgid "Words's RTF Import Filter"
+msgstr "केवर्ड का आरटीएफ़ आयात फ़िल्टर"
+
+#: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
+#, fuzzy, kde-format
+#| msgid "The file cannot be loaded, as it cannot be opened."
+msgid "The file cannot be loaded."
+msgstr "फ़ाइल को लोड नहीं किया जा सकता क्योंकि इसे खोला नहीं जा सकता."
+
+#~ msgid "Failed to read data."
+#~ msgstr "डाटा पढ़ने में असफल"
+
+#~ msgid "Export Error"
+#~ msgstr "निर्यात त्रुटि"
+
+#~ msgid "Malformed XML data."
+#~ msgstr "एक्सएमएल डाटा गलत फ़ॉर्म्ड है."
+
+#~ msgid "Export to Image"
+#~ msgstr "छवि रूप में निर्यात करें"
+
+#~ msgid "Complete Page"
+#~ msgstr "पूरा पृष्ठ"
+
+#~ msgid "Area of Objects on Page"
+#~ msgstr "पृष्ठ पर वस्तु का क्षेत्र"
+
+#~ msgid "Area to export:"
+#~ msgstr "निर्यात हेतु क्षेत्र:"
+
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "मनपसंद आकार (पिक्सेल्स में):"
+
+#~ msgid "Height:"
+#~ msgstr "ऊँचाईः"
+
+#~ msgid "Width:"
+#~ msgstr "चौडाईः"
+
+#~ msgid "Margin:"
+#~ msgstr "हाशिया:"
+
+#~ msgid "QXml"
+#~ msgstr "क्यूएक्सएमएल"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Pixels"
+#~ msgstr "मनपसंद आकार (पिक्सेल्स में):"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image width:"
+#~ msgstr "ऊँचाईः"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image height:"
+#~ msgstr "ऊँचाईः"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Size in Units"
+#~ msgstr "मनपसंद आकार (पिक्सेल्स में):"
+
+#, fuzzy
+#~| msgid "Resolution:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Resolution:"
+#~ msgstr "रिज़ोल्यूशन:"
+
+#, fuzzy
+#~| msgid "Colorspace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Color"
+#~ msgstr "कलरस्पेस"
+
+#, fuzzy
+#~| msgid "En&coding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "En&coding:"
+#~ msgstr "एनकोडिंगः (&c)"
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheet Selection"
+#~ msgstr "शीट चयन"
+
+#, fuzzy
+#~| msgid "Click here to select all sheets in the list."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Click here to select all sheets in the list."
+#~ msgstr "सूची में से सभी शीटों को चुनने के लिए यहाँ क्लिक करें."
+
+#, fuzzy
+#~| msgid "Select &All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select &All"
+#~ msgstr "सभी चुनें (&A)"
+
+#, fuzzy
+#~| msgid "Desele&ct All"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Desele&ct All"
+#~ msgstr "सभी अचयनित करें (&c)"
+
+#, fuzzy
+#~| msgid "Use &separate files for each table"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &separate files for each table"
+#~ msgstr "प्रत्येक तालिका के लिए अलग फ़ाइलें प्रयोग करें (&s)"
+
+#, fuzzy
+#~| msgid "Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "शैली"
+
+#, fuzzy
+#~| msgid ""
+#~| "Select this option to use the default fonts and colors for the HTML page."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Select this option to use the default fonts and colors for the HTML page."
+#~ msgstr ""
+#~ "इस विकल्प का प्रयोग एचटीएमएल पृष्ठ में डिफ़ॉल्ट फ़ॉन्ट व रंगों के प्रयोग के लिए करें."
+
+#, fuzzy
+#~| msgid "Use &default style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &default style"
+#~ msgstr "डिफ़ॉल्ट शैली इस्तेमाल करें (&d)"
+
+#, fuzzy
+#~| msgid "Use &external stylesheet:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &external stylesheet:"
+#~ msgstr "बाहरी स्टाइलशीट प्रयोग करें: (&e)"
+
+#, fuzzy
+#~| msgid "Layout"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "ले-आउट"
+
+#, fuzzy
+#~| msgid "Use this option to enable or disable borders around the cells."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use this option to enable or disable borders around the cells."
+#~ msgstr ""
+#~ "इस विकल्प का प्रयोग कक्षों के चारों ओर किनारा को सक्षम या अक्षम बनाने के लिए करें."
+
+#, fuzzy
+#~| msgid "Use &borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use &borders"
+#~ msgstr "किनारा प्रयोग करें (&b)"
+
+#, fuzzy
+#~| msgid "Pi&xels between cells:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pi&xels between cells:"
+#~ msgstr "कक्षों के बीच पिक्सेल: (&x)"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document"
+#~ msgstr "दस्तावेज़"
+
+#, fuzzy
+#~| msgid "Document Style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Style"
+#~ msgstr "दस्तावेज़ शैली"
+
+#, fuzzy
+#~| msgid "Latex style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex style"
+#~ msgstr "लेटेक्स शैली"
+
+#, fuzzy
+#~| msgid "KWord style"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words style"
+#~ msgstr "केवर्ड शैली"
+
+#, fuzzy
+#~| msgid "Document Type"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Type"
+#~ msgstr "दस्तावेज़ प्रकार"
+
+#, fuzzy
+#~| msgid "The document will be able to be compiled alone"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The document will be able to be compiled alone"
+#~ msgstr "दस्तावेज़ को अलग से कम्पाइल किया जा सकेगा"
+
+#, fuzzy
+#~| msgid "Independent document"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Independent document"
+#~ msgstr "स्वतंत्र दस्तावेज़"
+
+#, fuzzy
+#~| msgid "Do not generate either the latex header or the document environment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Do not generate either the latex header or the document environment"
+#~ msgstr "लेटेक्स शीर्षक या दस्तावेज़ वातावरण जेनरेट नहीं करें"
+
+#, fuzzy
+#~| msgid "Document to include"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document to include"
+#~ msgstr "दस्तावेज़ जिसे शामिल करना है"
+
+#, fuzzy
+#~| msgid "Document class:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document class:"
+#~ msgstr "दस्तावेज़ क्लास:"
+
+#, fuzzy
+#~| msgid "Quality:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quality:"
+#~ msgstr "विशेषताः"
+
+#, fuzzy
+#~| msgid "Final"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Final"
+#~ msgstr "अंतिम"
+
+#, fuzzy
+#~| msgid "Draft"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draft"
+#~ msgstr "ड्राफ्ट"
+
+#, fuzzy
+#~| msgid "Default font size:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default font size:"
+#~ msgstr "डिफ़ॉल्ट फ़ॉन्ट आकार:"
+
+#, fuzzy
+#~| msgid "Pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures"
+#~ msgstr "छवियाँ"
+
+#, fuzzy
+#~| msgid "Convert the pictures"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Convert the pictures:"
+#~ msgstr "छवियाँ परिवर्तित करें"
+
+#, fuzzy
+#~| msgid "Pictures directory:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pictures directory:"
+#~ msgstr "छवि डिरेक्ट्री:"
+
+#, fuzzy
+#~| msgid "Language"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Language"
+#~ msgstr "भाषा"
+
+#, fuzzy
+#~| msgid "Encoding"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Encoding"
+#~ msgstr "एनकोडिंग"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add"
+#~ msgstr "जोड़ें"
+
+#, fuzzy
+#~| msgid "Remove"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove"
+#~ msgstr "हटाएँ"
+
+#, fuzzy
+#~| msgid "Contents"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contents"
+#~ msgstr "विषय सूची"
+
+#, fuzzy
+#~| msgid "Export informations about author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export information about author:"
+#~ msgstr "लेखक के बारे में निर्यात जानकारियाँ"
+
+#, fuzzy
+#~| msgid "Add a table of content"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a table of content:"
+#~ msgstr "विषय सूची तालिका जोड़ें"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "टीप"
+
+#, fuzzy
+#~| msgid "Don't export"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Don't export"
+#~ msgstr "निर्यात नहीं करें"
+
+#, fuzzy
+#~| msgid "Export notes in margin notes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in margin notes"
+#~ msgstr "हाशिया नोट्स में नोट्स निर्यात करें"
+
+#, fuzzy
+#~| msgid "Export notes in comments"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export notes in comments"
+#~ msgstr "टिप्पणियों में नोट्स निर्यात करें"
+
+#, fuzzy
+#~| msgid "E&ncoding:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "E&ncoding:"
+#~ msgstr "एनकोडिंग: (&n)"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Line"
+#~ msgstr "पंक्ति का अंत"
+
+#, fuzzy
+#~| msgid "&UNIX style (recommended; line feed only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&UNIX style (recommended; line feed only)"
+#~ msgstr "यूनिक्स शैली (अनुशंसित; सिर्फ लाइन फ़ीड) (&U)"
+
+#, fuzzy
+#~| msgid "&Windows style (carriage return and line feed)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Windows style (carriage return and line feed)"
+#~ msgstr "विंडोज़ शैली (कैरिज रिटर्न और लाइन फ़ीड)"
+
+#, fuzzy
+#~| msgid "&MacOS style (carriage return only)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&MacOS style (carriage return only)"
+#~ msgstr "मॅकऔएस शैली (सिर्फ कैरिज रिटर्न) (&M)"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sheets"
+#~ msgstr "शीट्स"
+
+#, fuzzy
+#~| msgid "Select sheets to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select sheets to export:"
+#~ msgstr "निर्यात करने के लिए शीट चुनें:"
+
+#, fuzzy
+#~| msgid "Delimiter Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter Line"
+#~ msgstr "डेलिमिटर पंक्ति"
+
+#, fuzzy
+#~| msgid "********<SHEETNAME>********"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "********<SHEETNAME>********"
+#~ msgstr "********<शीटनाम>********"
+
+#, fuzzy
+#~| msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME> gets replaced by the name of the next sheet."
+#~ msgstr "<शीटनाम> अगले शीट के नाम से बदल जाता है."
+
+#, fuzzy
+#~| msgid "Print delimiter line above every sheet"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Print delimiter line above every sheet"
+#~ msgstr "प्रत्येक शीट पर ऊपर डेलिमीटर लाइन छापें"
+
+#, fuzzy
+#~| msgid "Cells"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cells"
+#~ msgstr "कक्ष"
+
+#, fuzzy
+#~| msgid "Delimiter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delimiter"
+#~ msgstr "डेलिमिटर"
+
+#, fuzzy
+#~| msgid "Comma"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Comma"
+#~ msgstr "विराम चिह्न"
+
+#, fuzzy
+#~| msgid "Semicolon"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semicolon"
+#~ msgstr "सेमी-कॉलन"
+
+#, fuzzy
+#~| msgid "Tabulator"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tabulator"
+#~ msgstr "टेबुलेटर"
+
+#, fuzzy
+#~| msgid "Space"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space"
+#~ msgstr "खाली जगह"
+
+#, fuzzy
+#~| msgid "Other:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other:"
+#~ msgstr "अन्यः"
+
+#, fuzzy
+#~| msgid "Quotes:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Quotes:"
+#~ msgstr "उद्धरणः"
+
+#, fuzzy
+#~| msgid "\""
+#~ msgctxt "(qtundo-format)"
+#~ msgid "\""
+#~ msgstr "\""
+
+#, fuzzy
+#~| msgid "'"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "'"
+#~ msgstr "'"
+
+#, fuzzy
+#~| msgid "Export selection only"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export selection only"
+#~ msgstr "सिर्फ चयनित को निर्यात करें"
+
+#, fuzzy
+#~| msgid "Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page:"
+#~ msgstr "पृष्ठः"
+
+#, fuzzy
+#~| msgid "Complete Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Complete Page"
+#~ msgstr "पूरा पृष्ठ"
+
+#, fuzzy
+#~| msgid "Area of Objects on Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area of Objects on Page"
+#~ msgstr "पृष्ठ पर वस्तु का क्षेत्र"
+
+#, fuzzy
+#~| msgid "Area to export:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Area to export:"
+#~ msgstr "निर्यात हेतु क्षेत्र:"
+
+#, fuzzy
+#~| msgid "Custom size (in pixels):"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom size (in pixels):"
+#~ msgstr "मनपसंद आकार (पिक्सेल्स में):"
+
+#, fuzzy
+#~| msgid "Height:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Height:"
+#~ msgstr "ऊँचाईः"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "चौडाईः"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Margin:"
+#~ msgstr "हाशिया:"
+
+#, fuzzy
+#~| msgid "Plain Text Import Dialog"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Plain Text Import Dialog"
+#~ msgstr "सादा पाठ आयात संवाद"
+
+#, fuzzy
+#~| msgid "End of Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Paragraph"
+#~ msgstr "अनुच्छेद का अंत"
+
+#, fuzzy
+#~| msgid "&As is: At the end of line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As is: At the end of line"
+#~ msgstr "जैसा है: पंक्ति के अंत में (&A)"
+
+#, fuzzy
+#~| msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Sentence: If the end of line is the end of a sentence"
+#~ msgstr "वाक्य: यदि पंक्ति का अंत वाक्य का अंत है (&S)"
+
+#, fuzzy
+#~| msgid "Export Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Error"
+#~ msgstr "निर्यात त्रुटि"
+
+#, fuzzy
+#~| msgid "Failed to read data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Failed to read data."
+#~ msgstr "डाटा पढ़ने में असफल"
+
+#, fuzzy
+#~| msgid "Malformed XML data."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Malformed XML data."
+#~ msgstr "एक्सएमएल डाटा गलत फ़ॉर्म्ड है."
+
+#, fuzzy
+#~| msgid "Export to Image"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export to Image"
+#~ msgstr "छवि रूप में निर्यात करें"
+
+#, fuzzy
+#~| msgid "PNG Export Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "PNG Export Options"
+#~ msgstr "पीएनजी निर्यात विकल्प"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Namespace \"%1\" not found"
+#~ msgstr "अंत-टिप्पणी %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not open the requested file %1"
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read ZIP directory of the requested file %1"
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "Passwords"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter password"
+#~ msgstr "पासवर्ड"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find path for type %1"
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Element \"%1\" not found"
+#~ msgstr "अंत-टिप्पणी %1"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attribute \"%1\" not found"
+#~ msgstr "पाद-सूचना %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for id \"%1\" in file \"%2\""
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find relationships file \"%1\""
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not find target for relationship \"%1\" in file \"%2\""
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "QXml"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QXml"
+#~ msgstr "क्यूएक्सएमएल"
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Entry '%1' not found."
+#~ msgstr "अंत-टिप्पणी %1"
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not write block"
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "<SHEETNAME>"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<SHEETNAME>"
+#~ msgstr "<शीटनाम>"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Recommended ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Recommended ( %1 )"
+#~ msgstr "अनुशंसित (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Locale ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Locale ( %1 )"
+#~ msgstr "लोकेल (%1)"
+
+#, fuzzy
+#~| msgctxt "Descriptive encoding name"
+#~| msgid "Other ( %1 )"
+#~ msgctxt "(qtundo-format) Descriptive encoding name"
+#~ msgid "Other ( %1 )"
+#~ msgstr "अन्य (%1)"
+
+#, fuzzy
+#~| msgid "Cannot find encoding: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cannot find encoding: %1"
+#~ msgstr "एनकोडिंग नहीं पा सका: %1"
+
+#, fuzzy
+#~| msgid "CSV filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "CSV filter cannot open input file - please report."
+#~ msgstr "सीएसवी फ़िल्टर इनपुट फ़ाइल को खोल नहीं सकता - कृपया रपट दें."
+
+#, fuzzy
+#~| msgid "File format is not supported."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "File format is not supported."
+#~ msgstr "फ़ाइल फॉर्मेट समर्थित नहीं है."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not read from file."
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "Export Sheet to HTML"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export Sheet to HTML"
+#~ msgstr "शीट को एचटीएमएल में निर्यात करें"
+
+#, fuzzy
+#~| msgid "Recommended: UTF-8"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Recommended: UTF-8"
+#~ msgstr "अनुशंसित: यूटीएफ-8"
+
+#, fuzzy
+#~| msgid "Locale (%1)"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Locale (%1)"
+#~ msgstr "लोकेल (%1)"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "ऊपर"
+
+#, fuzzy
+#~| msgid "Latex Export Filter Configuration"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Latex Export Filter Configuration"
+#~ msgstr "लेटेक्स निर्यात फ़िल्टर कॉन्फ़िगरेशन"
+
+#, fuzzy
+#~| msgid "Page "
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page "
+#~ msgstr "पृष्ठ"
+
+#, fuzzy
+#~| msgid "The file seems to be corrupt. Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file seems to be corrupt. Skipping a table."
+#~ msgstr "फ़ाइल प्रतीत होता है कि खराब है. तालिका छोड़ा जा रहा है."
+
+#, fuzzy
+#~| msgid "Skipping a table."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skipping a table."
+#~ msgstr "तालिका छोड़ा जा रहा है."
+
+#, fuzzy
+#~| msgid "Unsupported document version"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unsupported document version"
+#~ msgstr "असमर्थित दस्तावेज़ संस्करण"
+
+#, fuzzy
+#~| msgid "QPRO filter cannot open input file - please report."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "QPRO filter cannot open input file - please report."
+#~ msgstr "क्यूप्रो फ़िल्टर इनपुट फ़ाइल को खोल नहीं सकता - कृपया रपट दें."
+
+#, fuzzy
+#~| msgid "Could not read from file."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unable to find part for type %1"
+#~ msgstr "फ़ाइल से पढ़ नहीं सका."
+
+#, fuzzy
+#~| msgid "Endnote %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide layout \"%1\" not found"
+#~ msgstr "अंत-टिप्पणी %1"
+
+#, fuzzy
+#~| msgid "Slide Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "स्लाइड शीर्षक"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's Plain Text Import Filter"
+#~ msgstr "केवर्ड सादा पाठ आयात फ़िल्टर"
+
+#, fuzzy
+#~| msgid "End of Line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End notes"
+#~ msgstr "पंक्ति का अंत"
+
+#, fuzzy
+#~| msgid "Even Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Header"
+#~ msgstr "सम पृष्ठ शीर्ष-सूचना"
+
+#, fuzzy
+#~| msgid "Odd Pages Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Header"
+#~ msgstr "विषम पृष्ठ शीर्ष-सूचना"
+
+#, fuzzy
+#~| msgid "Even Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Even Pages Footer"
+#~ msgstr "सम पृष्ठ पाद-सूचना"
+
+#, fuzzy
+#~| msgid "Odd Pages Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Odd Pages Footer"
+#~ msgstr "विषम पृष्ठ पाद-सूचना"
+
+#, fuzzy
+#~| msgid "First Page Header"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Header"
+#~ msgstr "प्रथम पृष्ठ शीर्ष-सूचना"
+
+#, fuzzy
+#~| msgid "First Page Footer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Page Footer"
+#~ msgstr "प्रथम पृष्ठ पाद-सूचना"
+
+#, fuzzy
+#~| msgid "Table %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Table %1"
+#~ msgstr "तालिका %1"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded, as it seems not to be an RTF document."
+#~ msgstr "फ़ाइल को लोड नहीं किया जा सका, चूंकि यह आरटीएफ़ दस्तावेज़ नहीं है."
+
+#, fuzzy
+#~| msgid "KWord's RTF Import Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words's RTF Import Filter"
+#~ msgstr "केवर्ड का आरटीएफ़ आयात फ़िल्टर"
+
+#, fuzzy
+#~| msgid "The file cannot be loaded, as it cannot be opened."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "The file cannot be loaded."
+#~ msgstr "फ़ाइल को लोड नहीं किया जा सकता क्योंकि इसे खोला नहीं जा सकता."
+
+#~ msgid "Failed to write file."
+#~ msgstr "फ़ाइल लिखने में असफल."
+
+#~ msgid "%1 Export Error"
+#~ msgstr "%1 निर्यात त्रुटि"
+
+#~ msgid "Export Filter Parameters"
+#~ msgstr "निर्यात फ़िल्टर गुण"
+
+#~ msgid "Keep ratio"
+#~ msgstr "अनुपात बनाए रखें"
+
+#~ msgid "Width (%):"
+#~ msgstr "चौड़ाई (%):"
+
+#~ msgid "Height (%):"
+#~ msgstr "ऊँचाई (%):"
+
+#~ msgid "PNG Export Error"
+#~ msgstr "पीएनजी निर्यात त्रुटि"
+
+#~ msgid "EPS Export"
+#~ msgstr "ईपीएस निर्यात"
+
+#~ msgid "Options"
+#~ msgstr "विकल्प"
+
+#~ msgid "PostScript level 1"
+#~ msgstr "पोस्टस्क्रिप्ट स्तर १"
+
+#~ msgid "PostScript level 2"
+#~ msgstr "पोस्टस्क्रिप्ट स्तर २"
+
+#~ msgid "PostScript level 3"
+#~ msgstr "पोस्टस्क्रिप्ट स्तर ३"
+
+#~ msgid "Import"
+#~ msgstr "आयात"
+
+#~ msgid "Text"
+#~ msgstr "पाठ"
+
+#~ msgid "Number"
+#~ msgstr "क्रमांक"
+
+#~ msgid "Currency"
+#~ msgstr "मुद्रा"
+
+#~ msgid "Date"
+#~ msgstr "तारीख़"
+
+#~ msgid "Decimal Comma Number"
+#~ msgstr "दशमलव कामा अंक"
+
+#~ msgid "Decimal Point Number"
+#~ msgstr "दशमलव पाइंट संख्या"
+
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#~ msgid "Common"
+#~ msgstr "सामान्य"
+
+#~ msgid "Other"
+#~ msgstr "अन्य"
+
+#~ msgid "Ignore duplicate delimiters"
+#~ msgstr "अनुकृति डेलिमीटर्स को नज़र अंदाज़ करें"
+
+#~ msgid "Text&quote:"
+#~ msgstr "पाठ उद्धरण: (&q)"
+
+#~ msgid "&Format:"
+#~ msgstr "फॉर्मेट: (&F)"
+
+#~ msgid "Ranges"
+#~ msgstr "सीमाएँ"
+
+#~ msgid "to"
+#~ msgstr "को"
+
+#~ msgid "Import lines:"
+#~ msgstr "लकीरें आयात करें:"
+
+#~ msgid "Import columns:"
+#~ msgstr "स्तम्भ आयात करें:"
+
+#~ msgid "Update"
+#~ msgstr "अद्यतन"
+
+#~ msgid "&Help"
+#~ msgstr "मदद (&H)"
+
+#~ msgid "F1"
+#~ msgstr "F1"
+
+#~ msgid "&OK"
+#~ msgstr "ठीक (&O)"
+
+#~ msgid "&Cancel"
+#~ msgstr "रद्द करें (&C)"
+
+#, fuzzy
+#~| msgid "KWord Export Filter Library"
+#~ msgid "Words Export Filter Library"
+#~ msgstr "केवर्ड निर्यात फ़िल्टर लाइब्रेरी"
+
+#~ msgid "Export XSLT Configuration"
+#~ msgstr "एक्सएसएलटी कॉन्फ़िगरेशन निर्यात करें"
+
+#~ msgid "Open Document"
+#~ msgstr "दस्तावेज़ खोलें"
+
+#~ msgid "Import XSLT Configuration"
+#~ msgstr "एक्सएसएलटी कॉन्फ़िगरेशन आयात करें"
+
+#~ msgid "Common xslt Files"
+#~ msgstr "आम एक्सएसएलटी फ़ाइलें"
+
+#~ msgid "Personal xslt Files"
+#~ msgstr "निजी एक्सएसएलटी फ़ाइलें"
+
+#~ msgid "Choose..."
+#~ msgstr "चुनें..."
+
+#~ msgid "SVG Export Error"
+#~ msgstr "एसवीजी निर्यात त्रुटि"
+
+#~ msgid "LaTeX Export Error"
+#~ msgstr "लेटेक्स निर्यात त्रुटि"
+
+#~ msgid "PNG Export Filter Parameters"
+#~ msgstr "पीएनजी निर्यात फ़िल्टर गुण"
+
+#~ msgid "Height"
+#~ msgstr "ऊंचाई"
+
+#~ msgid "Width"
+#~ msgstr "चौड़ाई"
+
+#~ msgid "Height (%)"
+#~ msgstr "ऊँचाई (%)"
+
+#~ msgid "Width (%)"
+#~ msgstr "चौडाई (%)"
+
+#~ msgid "Slide Title"
+#~ msgstr "स्लाइड शीर्षक"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Picture %1"
+#~ msgstr "छवि %1"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Table %3, row %1, column %2"
+#~ msgstr "तालिका %3, पंक्ति %1, स्तम्भ %2"
+
+#~ msgid "AbiWord Import Filter"
+#~ msgstr "एबीवर्ड आयात फ़िल्टर"
+
+#~ msgctxt "Frameset name"
+#~ msgid "Main Text Frameset"
+#~ msgstr "मुख्य पाठ फ्रेमसेट"
+
+#~ msgid "An error occurred during the load of the AbiWord file: %1"
+#~ msgstr "एबीवर्ड फ़ाइल को लोड करने के दौरान एक त्रुटि हुई: %1"
+
+#~ msgid "Unable to save document information."
+#~ msgstr "दस्तावेज़ जानकारी सहेजने में असफल."
+
+#~ msgid "Unable to save main document."
+#~ msgstr "मुख्य दस्तावेज़ सहेजने में अक्षम."
+
+#~ msgctxt "Frameset name"
+#~ msgid "Footnote %1"
+#~ msgstr "पाद-सूचना %1"
+
+#, fuzzy
+#~| msgid "KWord's Plain Text Export Filter"
+#~ msgid "Words's Plain Text Export Filter"
+#~ msgstr "केवर्ड सादा पाठ निर्यात फ़िल्टर"
+
+#, fuzzy
+#~| msgid "KWord's HTML Export Filter"
+#~ msgid "Words's HTML Export Filter"
+#~ msgstr "केवर्ड का एचटीएमएल निर्यात फ़िल्टर"
+
+#~ msgid "Untitled Document"
+#~ msgstr "अनाम दस्तावेज़"
+
+#~ msgid "Latex Import Filter Parameters"
+#~ msgstr "लेटेक्स आयात फ़िल्टर पैरामीटर"
+
+#~ msgid "Unicode"
+#~ msgstr "युनिकोड"
+
+#~ msgid "latin1"
+#~ msgstr "लेटिन1"
+
+#~ msgid "New document"
+#~ msgstr "नया दस्तावेज़"
+
+#~ msgid "Embedded document"
+#~ msgstr "अंतर्निहित दस्तावेज़"
+
+#, fuzzy
+#~| msgid "KWord's MS Write Import Filter"
+#~ msgid "Words's MS Write Import Filter"
+#~ msgstr "केवर्ड का एमएस राइट आयात फ़िल्टर"
+
+#~ msgid "Header"
+#~ msgstr "शीर्षक"
+
+#~ msgid "Footer"
+#~ msgstr "फ़ूटर"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "मुख्य पाठ फ्रेमसेट"
+
+#~ msgctxt "Object name"
+#~ msgid "Table %1"
+#~ msgstr "तालिका %1"
+
+#~ msgctxt "Object name"
+#~ msgid "Table Frame %1"
+#~ msgstr "तालिका फ्रेम %1"
+
+#, fuzzy
+#~| msgctxt "Pseudo-author for annotations"
+#~| msgid "KWord 1.3"
+#~ msgctxt "Pseudo-author for annotations"
+#~ msgid "KWord 1.3"
+#~ msgstr "के-वर्ड 1.3"
+
+#~ msgid "Plain Text Export Dialog"
+#~ msgstr "सादा पाठ निर्यात संवाद"
+
+#~ msgid "HTML Export Dialog"
+#~ msgstr "एचटीएमएल निर्यात संवाद"
+
+#~ msgid "&HTML 4.01"
+#~ msgstr "एचटीएमएल 4.01 (&H)"
+
+#~ msgid "HTML 4.01 (For older HTML user agents) "
+#~ msgstr "एचटीएमएल 4.01 (पुराने एचटीएमएल उपयोक्ता एजेंटों के लिए)"
+
+#~ msgid "&XHTML 1.0"
+#~ msgstr "एक्सएचटीएमएल 1.0 (&X)"
+
+#~ msgid "XHTML 1.0"
+#~ msgstr "एक्सएचटीएमएल 1.0"
+
+#~ msgid "Mode"
+#~ msgstr "मोड"
+
+#~ msgid "L&ight: Convert to strict (X)HTML"
+#~ msgstr "लाइट: स्ट्रिक्ट (एक्स)एचटीएमएल में बदलें (&i)"
+
+#~ msgid "&Basic: Convert to transitional (X)HTML"
+#~ msgstr "बेसिक: ट्रांजीशनल (एक्स)एचटीएमएल में बदलें (&B)"
+
+#~ msgid "&Enhanced: Convert to (X)HTML with CSS"
+#~ msgstr "एनहैंस्ड: सीएसएस युक्त (एक्स)एचटीएमएल में बदलें (&E)"
+
+#~ msgid "Use external CSS sheet:"
+#~ msgstr "बाहरी सीएसएस शीट इस्तेमाल करें:"
+
+#~ msgid "Enter the location of the CSS file in this field"
+#~ msgstr "इस क्षेत्र में सीएसएस फ़ाइल का स्थान भरें"
+
+#~ msgid "This directory will contains the eps pictures of your document"
+#~ msgstr "इस डिरेक्ट्री में आपके दस्तावेज़ का ईपीएएस छवि है"
+
+#~ msgid "MS Write Import Dialog"
+#~ msgstr "एमएस राइट आयात संवाद"
+
+#~ msgid "&Encoding"
+#~ msgstr "एनकोडिंग (&E)"
+
+#~ msgid "&Other encoding:"
+#~ msgstr "अन्य एनकोडिंग: (&O)"
+
+#~ msgid "&Default encoding (CP 1252)"
+#~ msgstr "डिफ़ॉल्ट एनकोडिंग (सीपी 1252) (&D)"
+
+#~ msgid "&Advanced"
+#~ msgstr "विस्तृत (&A)"
+
+#~ msgid "Compensate for &linespacing differences"
+#~ msgstr "लाइनस्पेसिंग भिन्नताओं के लिए कंपनसेट करें"
+
+#~ msgid "Enable &image positioning"
+#~ msgstr "छवि स्थान सक्षम करें (&i)"
+
+#~ msgid "Use paragraph indentation to position images."
+#~ msgstr "छवियों को रखने के लिए अनुच्छेद हाशिया प्रयोग करें."
+
+#, fuzzy
+#~| msgid "PDF Import"
+#~ msgid "DCM Import"
+#~ msgstr "पीडीएफ़ आयात"
+
+#, fuzzy
+#~| msgid "PDF Import Options"
+#~ msgid "Import options"
+#~ msgstr "पीडीएफ आयात विकल्प"
+
+#~ msgid ""
+#~ "The document cannot be loaded, as it seems not to follow the RTF syntax."
+#~ msgstr "दस्तावेज़ लोड नहीं किया जा सका, चूंकि यह आरटीएफ़ सिंटेक्स को फ़ॉलो नहीं करता."
+
+#~ msgid ""
+#~ "The RTF document cannot be loaded, as it has an unexpected first keyword: "
+#~ "\\%1."
+#~ msgstr ""
+#~ "आरटीएफ दस्तावेज़ लोड नहीं किया जा सका चूंकि इसमें अप्रत्याशित पहला कुंजीशब्द है: \\%1."
+
+#~ msgid "Old &method: If the line is empty or has less than 40 characters"
+#~ msgstr "पुरानी विधि: यदि पंक्ति रिक्त है या इसमें ४० अक्षर से कम हैं (&m)"
+
+#~ msgid "KFormula Import Error"
+#~ msgstr "केफ़ॉर्मूला निर्यात फ़िल्टर"
+
+#~ msgid "KFormula1.3 Import Filter"
+#~ msgstr "केफ़ॉर्मूला१.३ आयात फ़िल्टर"
+
+#~ msgid "Available Sheets"
+#~ msgstr "उपलब्ध शीट्स"
+
+#, fuzzy
+#~| msgid "Footnote %1"
+#~ msgid "Footnote \"%1\" not found"
+#~ msgstr "पाद-सूचना %1"
+
+#~ msgid "Picture %1"
+#~ msgstr "छवि %1"
+
+#~ msgid "A password is required to read that pdf"
+#~ msgstr "पीडीएफ़ फ़ाइल पढ़ने के लिए पासवर्ड आवश्यक है"
+
+#~ msgid "Cannot export images in %1.\n"
+#~ msgstr "छवियों को %1 में निर्यात नहीं किया जा सका.\n"
+
+#~ msgid "JPEG Export Options"
+#~ msgstr "जेपीईजी निर्यात विकल्प"
+
+#~ msgid "TIFF Export Options"
+#~ msgstr "टिफ़ निर्यात विकल्प"
+
+#~ msgid "All Images"
+#~ msgstr "सभी छवियाँ"
+
+#~ msgid "PDFImportWidget"
+#~ msgstr "पीडीएफइम्पोर्टविजेट"
+
+#~ msgid "Pages"
+#~ msgstr "पृष्ठ"
+
+#~ msgid "&All pages"
+#~ msgstr "सभी पृष्ठ (&A)"
+
+#~ msgid "&First page"
+#~ msgstr "प्रथम पृष्ठ (&F)"
+
+#~ msgid "&Selection of page"
+#~ msgstr "पृष्ठ का चयन (&S)"
+
+#~ msgid "Dimensions"
+#~ msgstr "आयाम"
+
+#~ msgctxt "vertical resolution"
+#~ msgid "Vertical:"
+#~ msgstr "खड़ा:"
+
+#~ msgctxt "horizontal resolution"
+#~ msgid "Horizontal:"
+#~ msgstr "आड़ा:"
+
+#~ msgid "Size:"
+#~ msgstr "आकारः"
+
+#~ msgid "Options of Your PNG"
+#~ msgstr "आपके पीएनजी का विकल्प"
+
+#~ msgid ""
+#~ "Note: the compression level does not change the quality of the result"
+#~ msgstr "टीप: संपीडन स्तर परिणाम के गुणवत्ता को परिवर्तित नहीं करता"
+
+#~ msgid "Compress:"
+#~ msgstr "संपीडित करें:"
+
+#~ msgctxt ""
+#~ "The compression will take a long time; saving the file will be slow."
+#~ msgid "Slow"
+#~ msgstr "धीमा"
+
+#~ msgctxt "The file will save fast but will not be compressed a lot"
+#~ msgid "Fast"
+#~ msgstr "तेज"
+
+#~ msgctxt "the file will be small"
+#~ msgid "Small"
+#~ msgstr "छोटा"
+
+#~ msgctxt "the file will be big"
+#~ msgid "Big"
+#~ msgstr "बड़ा"
+
+#~ msgid "Use interlacing when publishing on the Internet"
+#~ msgstr "इंटरनेट पर जब प्रकाशित कर रहे हों तो इंटरलेसिंग इस्तेमाल करें"
+
+#~ msgid "Interlacing"
+#~ msgstr "इंटरलेसिंग"
+
+#~ msgid "Disable to get smaller files if your image has no transparency"
+#~ msgstr ""
+#~ "यदि आपके चित्र में कोई ट्रांसपेरेंसी नहीं है तो कम आकार की फ़ाइलें प्राप्त करने के लिए इसे "
+#~ "अक्षम करें"
+
+#~ msgid "Store alpha channel (transparency)"
+#~ msgstr "अल्फ़ा चैनल भंडारित करें (ट्रांसपेरेंसी)"
+
+#~ msgctxt ""
+#~ "Show a preview of the image after saving to assess the quality difference"
+#~ msgid "Preview image"
+#~ msgstr "छवि पूर्वावलोकन"
+
+#~ msgid "Size: 100KB"
+#~ msgstr "आकार: 100किबा"
+
+#, fuzzy
+#~| msgctxt "simple options for average users"
+#~| msgid "Basic"
+#~ msgid "Basic"
+#~ msgstr "मूल"
+
+#~ msgid "File size:"
+#~ msgstr "फ़ाइल आकारः"
+
+#~ msgctxt ""
+#~ "the file will be much compressed, thus small, but quality will be bad"
+#~ msgid "Small"
+#~ msgstr "छोटा"
+
+#~ msgctxt "the file will be good quality, but big"
+#~ msgid "Big"
+#~ msgstr "बड़ा"
+
+#~ msgid ""
+#~ "These settings determine how much information is lost during compression"
+#~ msgstr "ये सेटिंग निर्धारित करते हैं कि संपीडन के दौरान कितनी जानकारी गुम होती है"
+
+#~ msgctxt "the file will be much compressed, so the quality will be bad"
+#~ msgid "Bad"
+#~ msgstr "खराब"
+
+#~ msgctxt "the quality will be good but the file will not be much compressed"
+#~ msgid "Good"
+#~ msgstr "अच्छा"
+
+#~ msgctxt "A progressive jpeg file can be displayed while loading."
+#~ msgid "Progressive"
+#~ msgstr "प्रोग्रेसिव"
+
+#~ msgid "Advanced quality"
+#~ msgstr "उन्नत गुणवत्ता"
+
+#~ msgid "Optimize"
+#~ msgstr "ऑप्टीमाइज़"
+
+#~ msgctxt "the result will be artificially smoothed to hide jpeg artefacts"
+#~ msgid "Smooth:"
+#~ msgstr "मृदुलता:"
+
+#~ msgid "Force baseline JPEG"
+#~ msgstr "फोर्स बेसलाइन जेपीईजी"
+
+#~ msgid "Subsampling:"
+#~ msgstr "सबसेंपलिंग:"
+
+#~ msgid "2x2, 1x1, 1x1 (smallest file)"
+#~ msgstr "2x2, 1x1, 1x1 (न्यूनतम फ़ाइल)"
+
+#~ msgid "2x1, 1x1, 1x1"
+#~ msgstr "2x1, 1x1, 1x1"
+
+#~ msgid "1x2, 1x1, 1x1"
+#~ msgstr "1x2, 1x1, 1x1"
+
+#~ msgid "1x1, 1x1, 1x1 (best quality)"
+#~ msgstr "1x1, 1x1, 1x1 (सर्वोत्तम गुणवत्ता)"
+
+#~ msgid "Metadata"
+#~ msgstr "मेटाडाटा"
+
+#~ msgid "Formats:"
+#~ msgstr "फॉर्मेट्स:"
+
+#~ msgid "Exif"
+#~ msgstr "एक्सइफ"
+
+#~ msgid "IPTC"
+#~ msgstr "आईपीटीसी"
+
+#~ msgid "XMP"
+#~ msgstr "एक्सएमपी"
+
+#~ msgid "Filters:"
+#~ msgstr "फ़िल्टर्स:"
+
+#~ msgid "Options of Your TIFF"
+#~ msgstr "आपके टिफ का विकल्प"
+
+#~ msgid "TIFF Options"
+#~ msgstr "टिफ विकल्प"
+
+#~ msgid "Compression type:"
+#~ msgstr "संपीडन क़िस्म:"
+
+#~ msgid "JPEG DCT Compression"
+#~ msgstr "जेपीईजी डीसीटी संपीडन"
+
+#~ msgid "Deflate (ZIP)"
+#~ msgstr "डीफ़्लेट (जिप)"
+
+#~ msgid "Lempel-Ziv & Welch (LZW)"
+#~ msgstr "लेम्पेल-ज़िव & वेल्च (एलज़ेडडबल्यू)"
+
+#~ msgid "Leadtools JPEG2000"
+#~ msgstr "लीडटूल्ज़ JPEG2000"
+
+#~ msgid "CCITT Modified Huffman RLE"
+#~ msgstr "सीसीआईटीटी परिवर्धित हफ़मेन आरएलई"
+
+#~ msgid "CCITT Group 3 Fax Encoding"
+#~ msgstr "CCITT समूह ३ फ़ैक्स एनकोडिंग"
+
+#~ msgid "CCITT Group 4 Fax Encoding"
+#~ msgstr "CCITT समूह ४ फ़ैक्स एनकोडिंग"
+
+#~ msgid "Pixar Log"
+#~ msgstr "पिक्सार लॉग"
+
+#~ msgid "Predictor:"
+#~ msgstr "प्रेडिक्टर:"
+
+#~ msgid "Horizontal Differencing"
+#~ msgstr "आड़ा डिफ़रेंसिंग"
+
+#~ msgid "Floating Point Horizontal Differencing"
+#~ msgstr "फ्लोटिंग पाइंट आड़ा डिफ़रेंसिंग"
+
+#~ msgid "Store alpha &channel (transparency)"
+#~ msgstr "भंडार अल्फ़ा चैनल (पारदर्शी) (&c)"
+
+#~ msgid "Flatten the &image"
+#~ msgstr "छवि को फैलाएँ (&i)"
+
+#~ msgid "JPEG Compression Options"
+#~ msgstr "जेपीईजी संपीडन विकल्प"
+
+#~ msgid "Smallest"
+#~ msgstr "सबसे छोटा"
+
+#~ msgid "Best"
+#~ msgstr "उत्तम"
+
+#~ msgid "Deflate Compression Options"
+#~ msgstr "डीफ़्लेट संपीडन विकल्प"
+
+#~ msgctxt "save the file quickly, but do not compress very well"
+#~ msgid "Fast"
+#~ msgstr "तेज"
+
+#~ msgctxt "make the file small, at the price of a longer saving time"
+#~ msgid "Small"
+#~ msgstr "छोटा"
+
+#~ msgid "CCITT Group 3 fax encoding Options"
+#~ msgstr "CCITT समूह ३ फ़ैक्स एनकोडिंग विकल्प"
+
+#~ msgid "Fax mode:"
+#~ msgstr "फ़ैक्स मोड:"
+
+#, fuzzy
+#~| msgctxt "classic fax mode file format"
+#~| msgid "Classic"
+#~ msgid "Classic"
+#~ msgstr "क्लासिक"
+
+#, fuzzy
+#~| msgctxt "fax mode file format without rtc"
+#~| msgid "No RTC"
+#~ msgid "No RTC"
+#~ msgstr "आरटीसी नहीं"
+
+#, fuzzy
+#~| msgctxt "fax mode file format without end-of-line (EOL)"
+#~| msgid "No EOL"
+#~ msgid "No EOL"
+#~ msgstr "ईओएल नहीं"
+
+#~ msgid "Pixar Log Compression Options"
+#~ msgstr "पिक्सार लॉग संपीडन विकल्प"
+
+#~ msgctxt "save quickly, but do not compress a lot"
+#~ msgid "Fast"
+#~ msgstr "तेज"
+
+#~ msgctxt "make a very small file, but take a long time saving"
+#~ msgid "Small"
+#~ msgstr "छोटा"
+
+#~ msgid "Initializing..."
+#~ msgstr "प्रारंभ किया जा रहा है..."
+
+#~ msgid "First pass: page #%1..."
+#~ msgstr "प्रथम पास: पृष्ठ #%1..."
+
+#~ msgid "Second pass: page #%1..."
+#~ msgstr "द्वितीय पास: पृष्ठ #%1..."
+
+#~ msgid "Body Frameset #%1"
+#~ msgstr "बॉडी फ्रेमसेट #%1"
+
+#~ msgid "Header Frameset #%1"
+#~ msgstr "शीर्ष-सूचना फ्रेमसेट #%1"
+
+#~ msgid "Footer Frameset #%1"
+#~ msgstr "शीर्ष-सूचना फ्रेमसेट #%1"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "पाठ फ्रेमसेट %1"
+
+#~ msgid "KWord's PDF Import Filter"
+#~ msgstr "केवर्ड का पीडीएफ़ आयात फ़िल्टर"
+
+#~ msgid "Page Selection"
+#~ msgstr "पृष्ठ चयन"
+
+#~ msgid "All (%1 pages)"
+#~ msgstr "सभी (%1 पृष्ठ)"
+
+#~ msgid "Range:"
+#~ msgstr "सीमा:"
+
+#~ msgid "Import images"
+#~ msgstr "छवियाँ आयात करें"
+
+#~ msgid "\"Smart\" mode"
+#~ msgstr "\"स्मार्ट\" मोड"
+
+#~ msgid "Owner:"
+#~ msgstr "मालिक:"
+
+#~ msgid "User:"
+#~ msgstr "उपयोक्ता:"
+
+#~ msgctxt "Table_Name Cell row,column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 सेल %2,%3"
+
+#~ msgid ""
+#~ "Cannot convert RAW files because the dcraw executable could not be "
+#~ "started."
+#~ msgstr ""
+#~ "रा फ़ाइलों को परिवर्तित नहीं किया जा सकता चूंकि डीक्रा एक्जीक्यूटेबल प्रारंभ नहीं किया "
+#~ "जा सकता."
+
+#~ msgid "Colorspace"
+#~ msgstr "कलरस्पेस"
+
+#~ msgid "&Document mode"
+#~ msgstr "दस्तावेज़ मोड (&D)"
+
+#~ msgid "&RGB"
+#~ msgstr "आरजीबी (&R)"
+
+#~ msgid "Channel Depth"
+#~ msgstr "चैनल गहराई"
+
+#~ msgid "&16 bits per channel"
+#~ msgstr "&16 बिट प्रति चैनल"
+
+#~ msgid "Alt+1"
+#~ msgstr "ऑल्ट+1"
+
+#~ msgid "&8 bits per channel"
+#~ msgstr "&8 बिट प्रति चैनल"
+
+#~ msgid "Alt+8"
+#~ msgstr "ऑल्ट+8"
+
+#~ msgid "&Interpolate RGB as four colors"
+#~ msgstr "आरजीबी को चार रंगों के रूप में इंटरपोलेट करें (&I)"
+
+#~ msgid "&Update Preview"
+#~ msgstr "पूर्वावलोकन अद्यतन करें (&U)"
+
+#~ msgid "Color Settings"
+#~ msgstr "रंग विन्यास"
+
+#~ msgid "&White Balance"
+#~ msgstr "श्वेत संतुलन (&W)"
+
+#~ msgid "White card in sunlight"
+#~ msgstr "सूर्य प्रकाश में श्वेत कार्ड"
+
+#~ msgid "Automatic white balance"
+#~ msgstr "स्वचालित श्वेत संतुलन"
+
+#~ msgid "Camera white balance"
+#~ msgstr "कैमरा श्वेत संतुलन"
+
+#~ msgid "Brightness:"
+#~ msgstr "चमकीलापनः"
+
+#~ msgid "Blackpoint:"
+#~ msgstr "ब्लैकपाइंट:"
+
+#~ msgid "Red multiplier:"
+#~ msgstr "लाल मल्टीप्लायर:"
+
+#~ msgid "Blue multiplier:"
+#~ msgstr "नीला मल्टीप्लायर:"
+
+#~ msgid "Brightness. 1.0 is default"
+#~ msgstr "चमकीलापन. १.० डिफ़ॉल्ट है"
+
+#~ msgid "Clip colors to prevent pink highlights"
+#~ msgstr "गुलाबी रंग उभारने से रोकने हेतु रंगों को क्लिप करें"
+
+#~ msgid "Use camera raw colors, not sRGB"
+#~ msgstr "कैमरा रा रंग प्रयोग करें, एसआरजीबी नहीं"
+
+#~ msgctxt "do not compress the file at all"
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"
+
+#~ msgctxt "do not use any predictor"
+#~ msgid "None"
+#~ msgstr "कुछ नहीं"

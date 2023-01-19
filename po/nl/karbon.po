@@ -1,0 +1,1837 @@
+# translation of karbon.po to Dutch
+# Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009 Free Software Foundation, Inc.
+#
+# Rinse de Vries <rinse@kde.nl>, 2003, 2004.
+# Rinse de Vries <rinsedevries@kde.nl>, 2004, 2005, 2009.
+# Maarten Rütten <mrutten@dds.nl>, 2005.
+# Sander Koning <sanderkoning@kde.nl>, 2006.
+# Bram Schoenmakers <bramschoenmakers@kde.nl>, 2006.
+# Kristof Bal <kristof.bal@gmail.com>, 2008, 2009.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2008, 2009, 2010, 2011, 2012.
+# Freek de Kruijf <f.de.kruijf@gmail.com>, 2011, 2013, 2015, 2016, 2018, 2019, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2021-09-27 14:34+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.08.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr "Boleaanse operatie"
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "V&olgorde"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, kde-format
+msgid "&Align"
+msgstr "U&itlijnen"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, kde-format
+msgid "&File"
+msgstr "&Bestand"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, kde-format
+msgid "&Edit"
+msgstr "B&ewerken"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, kde-format
+msgid "&View"
+msgstr "&Beeld"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&Object"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, kde-format
+msgid "&Distribute"
+msgstr "Ve&rspreiden"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "&Pad"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, kde-format
+msgid "Effe&cts"
+msgstr "&Effecten"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, kde-format
+msgid "&Settings"
+msgstr "&Instellingen"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr "&Pagina"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, kde-format
+msgid "Edit"
+msgstr "Bewerken"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, kde-format
+msgid "Object"
+msgstr "Object"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, kde-format
+msgid "Align"
+msgstr "Uitlijnen"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "Effecten"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, kde-format
+msgid "View"
+msgstr "Beeld"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, kde-format
+msgid "&Flatten Path..."
+msgstr "Pad &vlak maken..."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, kde-format
+msgid "Flatten Path"
+msgstr "Pad vlak maken"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, kde-format
+msgid "Properties"
+msgstr "Eigenschappen"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "Vlakte:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "Pad vlak maken"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "Pad verfijnen"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, kde-format
+msgid "&Refine Path..."
+msgstr "Pad &verfijnen..."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, kde-format
+msgid "Refine Path"
+msgstr "Pad verfijnen"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, kde-format
+msgid "Subdivisions:"
+msgstr "Subsecties:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "Hoeken afronden"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, kde-format
+msgid "&Round Corners..."
+msgstr "&Hoeken afronden..."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "Hoeken afronden"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "Straal:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "Draaien & indrukken"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "&Draaien/indrukken..."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "Draaien/indrukken"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, kde-format
+msgid "Info"
+msgstr "Info"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr ""
+"Het resultaat van het draaien/indrukkeneffect kan worden verbeterd door het "
+"vooraf verfijnen van de vorm van het pad."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "Hoek:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "Indrukken:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "Laag naar voorgrond"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "Laag naar achtergrond"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, kde-format
+msgid "Configure"
+msgstr "Instellen"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "Interface"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "Diversen"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, kde-format
+msgid "Grid"
+msgstr "Raster"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Document"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "Documentinstellingen"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr "Auteur"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr "Auteur"
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr "Karbon"
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr "Een grafisch vectortekenprogramma."
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr "(c) 2001-%1, De ontwikkelaars van Karbon"
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr "Anthony Fieroni"
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr "Onderhouder"
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr "Rob Buis"
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr "Tomislav Lukman"
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr "Benoît Vautrin"
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr "Jan Hambrecht"
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr "Bugreparaties en verbeteringen"
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr "Peter Simonsson"
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr "Tim Beaulen"
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr "Boudewijn Rempt"
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr "Pierre Stirnweiss"
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr "Inge Wallin"
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr "Reparaties van bugs"
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr "Alan Horkan"
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr "Nuttige verbeteringen en advies"
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr ""
+"Rinse de Vries - 2003 t/m 2005 2009,Maarten Rütten - 2005,Sander Koning - "
+"2006,Antoon Tolboom,Freek de Kruijf - 2008 t/m 2016"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "rinsedevries@kde.nl,,sanderkoning@kde.nl,,freekdekruijf@kde.nl"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "Grafiek importeren"
+
+#: ui/KarbonView.cpp:346
+#, kde-format
+msgid "Choose Graphic to Add"
+msgstr "Kies de toe te voegen illustratie"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr "Kon afbeelding niet laden"
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Import graphic"
+msgstr "Grafisch importeren"
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr "Aanmaken van afbeeldingsvorm lukte niet."
+
+#: ui/KarbonView.cpp:612
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "Horizontaal spiegelen"
+
+#: ui/KarbonView.cpp:614
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "Verticaal spiegelen"
+
+#: ui/KarbonView.cpp:616
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "Horizontaal en verticaal spiegelen"
+
+#: ui/KarbonView.cpp:671
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "Paden scheiden"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr "Omlijning &modus"
+
+#: ui/KarbonView.cpp:860
+#, kde-format
+msgid "&Import Graphic..."
+msgstr "Grafiek &importeren..."
+
+#: ui/KarbonView.cpp:864
+#, kde-format
+msgid "Edit Guides"
+msgstr "Hulplijnen bewerken"
+
+#: ui/KarbonView.cpp:870
+#, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "&Dupliceren"
+
+#: ui/KarbonView.cpp:875
+#, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "Verdeel centrering (horizontaal)"
+
+#: ui/KarbonView.cpp:879
+#, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "Verdeel gaten (horizontaal)"
+
+#: ui/KarbonView.cpp:883
+#, kde-format
+msgid "Distribute Left Borders"
+msgstr "Verdeel linker grenzen"
+
+#: ui/KarbonView.cpp:887
+#, kde-format
+msgid "Distribute Right Borders"
+msgstr "Verdeel rechter grenzen"
+
+#: ui/KarbonView.cpp:891
+#, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "Verdeel centrering (vertikaal)"
+
+#: ui/KarbonView.cpp:895
+#, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "Verdeel gaten (vertikaal)"
+
+#: ui/KarbonView.cpp:899
+#, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "Verdeel ondergrenzen"
+
+#: ui/KarbonView.cpp:903
+#, kde-format
+msgid "Distribute Top Borders"
+msgstr "Verdeel bovengrenzen"
+
+#: ui/KarbonView.cpp:907
+#, kde-format
+msgid "Show Color Palette"
+msgstr "Kleurpalet tonen"
+
+#: ui/KarbonView.cpp:909
+#, kde-format
+msgid "Show or hide color palette"
+msgstr "Toon of verberg kleurpalet"
+
+#: ui/KarbonView.cpp:913
+#, kde-format
+msgid "&Clip Object"
+msgstr "Object &klemmen"
+
+#: ui/KarbonView.cpp:917
+#, kde-format
+msgid "&Unclip Objects"
+msgstr "Klemmen van objecten &opheffen"
+
+#: ui/KarbonView.cpp:921
+#, kde-format
+msgid "Mirror Vertically"
+msgstr "Verticaal spiegelen"
+
+#: ui/KarbonView.cpp:925
+#, kde-format
+msgid "Mirror Horizontally"
+msgstr "Horizontaal spiegelen"
+
+#: ui/KarbonView.cpp:932
+#, kde-format
+msgid "&Close Path"
+msgstr "Pad &sluiten"
+
+#: ui/KarbonView.cpp:938
+#, kde-format
+msgid "Com&bine Path"
+msgstr "Paden com&bineren"
+
+#: ui/KarbonView.cpp:944
+#, kde-format
+msgid "Se&parate Path"
+msgstr "&Pad scheiden"
+
+#: ui/KarbonView.cpp:950
+#, kde-format
+msgid "Re&verse Path"
+msgstr "Pad onge&daan maken"
+
+#: ui/KarbonView.cpp:956
+#, kde-format
+msgid "Intersect Paths"
+msgstr "Paden laten snijden"
+
+#: ui/KarbonView.cpp:962
+#, kde-format
+msgid "Subtract Paths"
+msgstr "Paden aftrekken"
+
+#: ui/KarbonView.cpp:968
+#, kde-format
+msgid "Unite Paths"
+msgstr "Paden verenigen"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr "Paden uitsluiten"
+
+#: ui/KarbonView.cpp:980
+#, kde-format
+msgid "Snap Path to Grid"
+msgstr "Pad vastzetten op raster"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr "Tot selectie inzoomen"
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr "Tekening inzoomen"
+
+#: ui/KarbonZoomController.cpp:51
+#, kde-format
+msgid "Zoom"
+msgstr "Zoomen"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, kde-format
+msgid "Show status bar:"
+msgstr "Statusbalk tonen:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, kde-format
+msgid "Number of recent files:"
+msgstr "Aantal recente bestanden:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, kde-format
+msgid "Palette font size:"
+msgstr "Lettertypegrootte palet:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr "Palet selecteren"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr "Druk om de selectie te vullen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "Geen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr "Druk om in de selectie strepen te zetten"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr "Aangepast"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "Geen"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, kde-format
+msgid "Stroke:"
+msgstr "Reep:"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, kde-format
+msgid "Fill:"
+msgstr "Opvullen:"
+
+#~ msgid "D&elete"
+#~ msgstr "Ver&wijderen"
+
+#~ msgid "Layer view"
+#~ msgstr "Lagenweergave"
+
+#~ msgid "Add a new layer"
+#~ msgstr "Nieuwe laag toevoegen"
+
+#~ msgid "Delete selected objects"
+#~ msgstr "Geselecteerde objecten verwijderen"
+
+#~ msgid "Raise selected objects"
+#~ msgstr "Geselecteerd object naar voorgrond"
+
+#~ msgid "Lower selected objects"
+#~ msgstr "Geselecteerd object naar achtergrond"
+
+#~ msgid "Minimal View"
+#~ msgstr "Minimale weergave"
+
+#~ msgid "Detailed View"
+#~ msgstr "Gedetailleerde weergave"
+
+#~ msgid "Thumbnail View"
+#~ msgstr "Miniaturenweergave"
+
+#~ msgid "View mode"
+#~ msgstr "Weergavemodus"
+
+#~ msgid "New Layer"
+#~ msgstr "Nieuwe laag"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Voer de naam in van de nieuwe laag:"
+
+#~ msgid "New layer"
+#~ msgstr "Nieuwe laag"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "Laag aanmaken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "Laag verwijderen"
+
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Kon niet alle lagen verwijderen. Minstens een laag is vereist."
+
+#~ msgid "Error deleting layers"
+#~ msgstr "Fout bij verwijderen van lagen"
+
+#~ msgid "Layer"
+#~ msgstr "Lagen"
+
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Groep"
+
+#~ msgid "Shape"
+#~ msgstr "Vorm"
+
+#~ msgctxt "Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Zichtbaar"
+
+#~ msgctxt "Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Vergrendeld"
+
+#~ msgctxt "The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "z-Index"
+
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Dekking"
+
+#~ msgctxt "Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Geklemd"
+
+#~ msgid "no"
+#~ msgstr "nee"
+
+#~ msgid "yes"
+#~ msgstr "ja"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "Vormen opnieuw ordenen"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Ongeldig OASIS document. Geen office:body tag gevonden."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Ongeldig OASIS document. Geen office:drawing tag gevonden."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Ongeldig OASIS document. Geen draw:page tag gevonden."
+
+#~ msgid "Master Page"
+#~ msgstr "Hoofdpagina"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Paginamarges tonen"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Linialen tonen"
+
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Toont of verbergt de linialen"
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Vastzetten op raster"
+
+#~ msgid "Snaps to grid"
+#~ msgstr "Vastzetten op raster"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon instellen..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "Pagina&opmaak..."
+
+#~ msgid "Canvas color:"
+#~ msgstr "Kleur werkvlak:"
+
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Niet onderhouden op het moment van uitgave van deze versie. De Calligra-"
+#~ "gemeenschap verwelkomt geïnteresseerde personen om het onderhoud op zich "
+#~ "te nemen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "V&olgorde"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "U&itlijnen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Bestand"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "B&ewerken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Beeld"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&Object"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "Ve&rspreiden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "&Pad"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "&Effecten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "In&stellingen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Bewerken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "Object"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "Uitlijnen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Effecten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "Beeld"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "Pad &vlak maken..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "Pad vlak maken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "Eigenschappen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "Vlakte:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "Pad &verfijnen..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "Pad verfijnen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "Subsecties:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "&Hoeken afronden..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "Straal:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Draaien/indrukken..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "Draaien/indrukken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "Info"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr ""
+#~ "Het resultaat van het draaien/indrukkeneffect kan worden verbeterd door "
+#~ "het vooraf verfijnen van de vorm van het pad."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Hoek:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "Indrukken:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "Configureren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "Interface"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Diversen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Raster"
+
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Document"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Documentinstellingen"
+
+#~ msgctxt "(qtundo-format) @title:tab Author page"
+#~ msgid "Author"
+#~ msgstr "Auteur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Auteur"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer view"
+#~ msgstr "Lagenweergave"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new layer"
+#~ msgstr "Nieuwe laag toevoegen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "Geselecteerde objecten verwijderen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "Geselecteerd object naar voorgrond"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "Geselecteerd object naar achtergrond"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Minimal View"
+#~ msgstr "Minimale weergave"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Detailed View"
+#~ msgstr "Gedetailleerde weergave"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thumbnail View"
+#~ msgstr "Miniaturenweergave"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "Weergavemodus"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "Nieuwe laag"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Voer de naam in van de nieuwe laag:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New layer"
+#~ msgstr "Nieuwe laag"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not delete all layers. At least one layer is required."
+#~ msgstr "Kon niet alle lagen verwijderen. Minstens een laag is vereist."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error deleting layers"
+#~ msgstr "Fout bij verwijderen van lagen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "Laag"
+
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Groep"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Vorm"
+
+#~ msgctxt "(qtundo-format) Visibility state of the shape"
+#~ msgid "Visible"
+#~ msgstr "Zichtbaar"
+
+#~ msgctxt "(qtundo-format) Lock state of the shape"
+#~ msgid "Locked"
+#~ msgstr "Vergrendeld"
+
+#~ msgctxt "(qtundo-format) The z-index of the shape"
+#~ msgid "zIndex"
+#~ msgstr "z-Index"
+
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "Dekking"
+
+#~ msgctxt "(qtundo-format) Clipped state of the shape"
+#~ msgid "Clipped"
+#~ msgstr "Geklemd"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "nee"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "ja"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Karbon"
+#~ msgstr "Karbon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A Vector Graphics Drawing Application."
+#~ msgstr "Een grafisch vectortekenprogramma."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(c) 2001-2013, The Karbon Developers"
+#~ msgstr "(c) 2001-2013, De ontwikkelaars van Karbon"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Unmaintained at the time of release of this version. The Calligra "
+#~ "community welcomes interested persons to take over maintainership."
+#~ msgstr ""
+#~ "Niet onderhouden op het moment van uitgave van deze versie. De Calligra-"
+#~ "gemeenschap verwelkomt geïnteresseerde personen om het onderhoud op zich "
+#~ "te nemen."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rob Buis"
+#~ msgstr "Rob Buis"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tomislav Lukman"
+#~ msgstr "Tomislav Lukman"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Benoît Vautrin"
+#~ msgstr "Benoît Vautrin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Jan Hambrecht"
+#~ msgstr "Jan Hambrecht"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes and improvements"
+#~ msgstr "Bugreparaties en verbeteringen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Peter Simonsson"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tim Beaulen"
+#~ msgstr "Tim Beaulen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Boudewijn Rempt"
+#~ msgstr "Boudewijn Rempt"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pierre Stirnweiss"
+#~ msgstr "Pierre Stirnweiss"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Inge Wallin"
+#~ msgstr "Inge Wallin"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bug fixes"
+#~ msgstr "Bugreparaties"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Alan Horkan"
+#~ msgstr "Alan Horkan"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Helpful patches and advice"
+#~ msgstr "Nuttige verbeteringen en advies"
+
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr ""
+#~ "Niels Reedijk,Rinse de Vries,Karel van der Zande,Maarten Rütten,Sander "
+#~ "Koning, Bram Schoenmakers,Natalie Koning,Freek de Kruijf"
+
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "n.reedijk@planet.nl,rinsedevries@kde.nl,,,sanderkoning@kde.nl,"
+#~ "bramschoenmakers@kde.nl,nat@switch.demon.nl,freekdekruijf@kde.nl"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Ongeldig OASIS document. Geen office:body tag gevonden."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Ongeldig OASIS document. Geen office:drawing tag gevonden."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Ongeldig OASIS document. Geen draw:page tag gevonden."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Page"
+#~ msgstr "Hoofdpagina"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Kies de toe te voegen illustratie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not load image."
+#~ msgstr "Kon afbeelding niet laden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "Grafisch importeren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Could not create image shape."
+#~ msgstr "Aanmaken van afbeeldingsvorm lukte niet."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Outline &Mode"
+#~ msgstr "Omlijning &modus"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "Paginamarges tonen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "Grafiek &importeren..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "V&erwijderen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "Hulplijnen bewerken"
+
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Dupliceren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Verdeel centrering (horizontaal)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Verdeel gaten (horizontaal)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Verdeel linker grenzen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Verdeel rechter grenzen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Verdeel centrering (vertikaal)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Verdeel gaten (vertikaal)"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Verdeel ondergrenzen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Verdeel bovengrenzen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Linialen tonen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Toont of verbergt de linialen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Color Palette"
+#~ msgstr "Kleurpalet tonen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "Toon of verberg kleurpalet"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Vastzetten op raster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "Vastzetten op raster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "Object &klemmen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "Klemmen van objecten &opheffen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "Pad &sluiten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "Paden com&bineren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "&Pad scheiden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "Pad onge&daan maken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "Paden laten snijden"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "Paden aftrekken"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "Paden verenigen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Exclude Paths"
+#~ msgstr "Paden uitsluiten"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "Pad vastzetten op raster"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "Karbon instellen..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "Pagina&opmaak..."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Tot selectie inzoomen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Tekening inzoomen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "Zoomen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "Statusbalk tonen:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "Aantal recente bestanden:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "Lettertypegrootte palet:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Canvas color:"
+#~ msgstr "Kleur werkvlak:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select palette"
+#~ msgstr "Palet selecteren"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply fill to selection"
+#~ msgstr "Druk om de selectie te vullen"
+
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press to apply stroke to selection"
+#~ msgstr "Druk om in de selectie strepen te zetten"
+
+#~ msgctxt "(qtundo-format) The style has a custom stroking"
+#~ msgid "Custom"
+#~ msgstr "Aangepast"
+
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "Reep:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "Opvulling:"
+
+#~ msgid "You are invited to participate in any way."
+#~ msgstr "U bent uitgenodigd om op eender welke manier mee te helpen"
+
+#~ msgid "Expand all"
+#~ msgstr "Alles uitvouwen"
+
+#~ msgid "Collapse all"
+#~ msgstr "Alles invouwen"
+
+#~ msgid "List View"
+#~ msgstr "Lijstweergave"
+
+#~ msgid "Icon View"
+#~ msgstr "Pictogramweergave"
+
+#~ msgid "Stencil Box"
+#~ msgstr "Stencilvak"
+
+#~ msgid "Stencils Online"
+#~ msgstr "Stencils online"
+
+#~ msgid "Add/Remove Stencil"
+#~ msgstr "Stencils toevoegen/verwijderen"
+
+#~ msgid "More shapes"
+#~ msgstr "Meer vormen"
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Stencils successfully installed."
+#~ msgstr "Stencils met succes geïnstalleerd."
+
+#~ msgid "Stencils successfully uninstalled."
+#~ msgstr "Stencils met succes verwijderd."
+
+#~ msgid ""
+#~ "This is the user stencils directory.\n"
+#~ "From here you can add / remove stencils for use in the Stencil Box "
+#~ "docker.\n"
+#~ "\n"
+#~ "Stencils are organized in collections, a collection is a folder "
+#~ "containing a text file 'collection.desktop':\n"
+#~ "\n"
+#~ "collection.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Your Stencil Collection Name\n"
+#~ "\n"
+#~ "A stencil is an ODG/SVG file, a desktop file, an optional PNG icon file, "
+#~ "all with the same name under its collection folder:\n"
+#~ "\n"
+#~ "foo.odg or foo.svgz or foo.svg\n"
+#~ "\n"
+#~ "ODF elements for stencil should be a <draw:g> element or <draw:custom-"
+#~ "shape> element\n"
+#~ "No special requirements to SVG file\n"
+#~ "\n"
+#~ "foo.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Foo\n"
+#~ "CS-KeepAspectRatio=1\n"
+#~ "\n"
+#~ "If CS-KeepAspectRatio=1, the stencil added to canvas will have geometry "
+#~ "aspect ratio locked, by default it's 0.\n"
+#~ "\n"
+#~ "foo.png\n"
+#~ "\n"
+#~ "Should have size 32x32 pixel, if the png file is not included, Karbon "
+#~ "will render the ODG/SVG file as the icon,\n"
+#~ "but it won't look good under small pixels when the stencil stroke is "
+#~ "complicated.\n"
+#~ msgstr ""
+#~ "Dit is de map voor stencils van gebruikers.\n"
+#~ "Vanaf hier kunt u stencils toevoegen / verwijderen voor gebruik in de "
+#~ "Stencil Box docker.\n"
+#~ "\n"
+#~ "Stencils zijn georganiseerd in verzamelingen, een verzameling is een map "
+#~ "met een tekstbestand 'collection.desktop':\n"
+#~ "\n"
+#~ "collection.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=De naam van uw stencil verzameling\n"
+#~ "\n"
+#~ "Een stencil is een ODG/SVG bestand, een desktop-bestand, een optioneel "
+#~ "PNG pictogram bestand, alles samen met dezelfde naam onder zijn "
+#~ "verzamelingmap:\n"
+#~ "\n"
+#~ "foo.odg of foo.svgz of foo.svg\n"
+#~ "\n"
+#~ "ODF elementen voor stencil zouden een <draw:g> element van <draw:custom-"
+#~ "shape> element moeten zijn\n"
+#~ "Geen speciale eisen aan het SVG bestand\n"
+#~ "\n"
+#~ "foo.desktop\n"
+#~ "\n"
+#~ "[Desktop Entry]\n"
+#~ "Name=Foo\n"
+#~ "CS-KeepAspectRatio=1\n"
+#~ "\n"
+#~ "Als CS-KeepAspectRatio=1 is zullen de stencils toegevoegd aan het "
+#~ "ẃerkveld een vergrendelde beeldverhouding hebben, standaard is het 0.\n"
+#~ "\n"
+#~ "foo.png\n"
+#~ "\n"
+#~ "Zou de grootte 32x32 pixels moeten hebben, als het png-bestand niet is "
+#~ "ingevoegd, zal Karbon het ODG/SVG bestand als pictogram weergeven,\n"
+#~ "maar het zal er niet goed uitzien bij kleine pixels wanneer de "
+#~ "stencilstreek gecompliceerd is.\n"
+
+#~ msgid "File to open"
+#~ msgstr "Bestand om te openen"
+
+#~ msgid "Blend"
+#~ msgstr "Vermengen"
+
+#~ msgid "Blend mode"
+#~ msgstr "Vermengmodus"
+
+#~ msgid "Normal"
+#~ msgstr "Normaal"
+
+#~ msgid "Multiply"
+#~ msgstr "Vermenigvuldigen"
+
+#~ msgid "Screen"
+#~ msgstr "Scherm"
+
+#~ msgid "Darken"
+#~ msgstr "Donkerder maken"
+
+#~ msgid "Lighten"
+#~ msgstr "Lichter maken"
+
+#~ msgid "Gaussian blur"
+#~ msgstr "Gaussiaans vervagen"
+
+#~ msgid "Radius"
+#~ msgstr "Straal"
+
+#~ msgid "Color Matrix"
+#~ msgstr "Kleurmatrix"
+
+#~ msgid "Apply color matrix"
+#~ msgstr "Kleurmatrix toepassen"
+
+#~ msgid "Saturate colors"
+#~ msgstr "Kleuren verzadigen"
+
+#~ msgid "Rotate hue"
+#~ msgstr "Tint roteren"
+
+#~ msgid "Luminance to alpha"
+#~ msgstr "Lichtsterkte naar alfa"
+
+#~ msgid "Saturate value"
+#~ msgstr "Verzadigingswaarde"
+
+#~ msgid "Angle"
+#~ msgstr "Hoek"
+
+#~ msgid "Color matrix"
+#~ msgstr "Kleurmatrix"
+
+#~ msgid "Component transfer"
+#~ msgstr "Component overdracht"
+
+#~ msgid "Function"
+#~ msgstr "Functie"
+
+#~ msgid "Identity"
+#~ msgstr "Identiteit"
+
+#~ msgid "Table"
+#~ msgstr "Tabel"
+
+#~ msgid "Discrete"
+#~ msgstr "Discreet"
+
+#~ msgid "Linear"
+#~ msgstr "Lineair"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "Values"
+#~ msgstr "Waarden"
+
+#~ msgid "Slope"
+#~ msgstr "Hellingshoek"
+
+#~ msgid "Intercept"
+#~ msgstr "Onderscheppen"
+
+#~ msgid "Amplitude"
+#~ msgstr "Amplitude"
+
+#~ msgid "Exponent"
+#~ msgstr "Exponent"
+
+#~ msgid "Offset"
+#~ msgstr "Offset"
+
+#~ msgid "Composite"
+#~ msgstr "Samenstelling"
+
+#~ msgid "Operation"
+#~ msgstr "Bewerking"
+
+#~ msgid "Convolve Matrix"
+#~ msgstr "Matrix convolueren"
+
+#~ msgid "Duplicate"
+#~ msgstr "Dupliceren"
+
+#~ msgid "Wrap"
+#~ msgstr "Regelafbreking"
+
+#~ msgid "Edge mode:"
+#~ msgstr "Randmodus:"
+
+#~ msgid "Kernel size:"
+#~ msgstr "Kernelgrootte:"
+
+#~ msgid "Target point:"
+#~ msgstr "Doelpunt:"
+
+#~ msgid "Divisor:"
+#~ msgstr "Deler:"
+
+#~ msgid "Bias:"
+#~ msgstr "Bias:"
+
+#~ msgid "Preserve alpha"
+#~ msgstr "Alfa behouden"
+
+#~ msgid "Edit kernel"
+#~ msgstr "Kernel bewerken"
+
+#~ msgid "Flood fill"
+#~ msgstr "Vloedvulling"
+
+#~ msgid "Flood color"
+#~ msgstr "Vloedkleur"
+
+#~ msgid "Image"
+#~ msgstr "Afbeelding"
+
+#~ msgid "Select image..."
+#~ msgstr "Afbeelding selecteren..."
+
+#~ msgid "Select image"
+#~ msgstr "Afbeelding selecteren"
+
+#~ msgid "Merge"
+#~ msgstr "Samenvoegen"
+
+#~ msgid "Morphology"
+#~ msgstr "Morfologie"
+
+#~ msgid "Erode"
+#~ msgstr "Eroderen"
+
+#~ msgid "Dilate"
+#~ msgstr "Wijder maken"
+
+#~ msgid "Operator:"
+#~ msgstr "Operator:"
+
+#~ msgid "Radius x:"
+#~ msgstr "Straal x:"
+
+#~ msgid "Radius y:"
+#~ msgstr "Straal y:"
+
+#~ msgid "dx"
+#~ msgstr "dx"
+
+#~ msgid "dy"
+#~ msgstr "dy"
+
+#~ msgid "Target:"
+#~ msgstr "Doel:"
+
+#~ msgid "Line"
+#~ msgstr "Lijn"
+
+#~ msgid "Fill"
+#~ msgstr "Opvullen"
+
+#~ msgid "Type:"
+#~ msgstr "Type:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Lineair"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Straalsgewijs"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Kegelvormig"
+
+#~ msgid "Repeat:"
+#~ msgstr "Herhalen:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgid "Reflect"
+#~ msgstr "Spiegelen"
+
+#~ msgid "Repeat"
+#~ msgstr "Herhalen"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Totale dekking:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Kleurstop:"
+
+#~ msgid "Stop color."
+#~ msgstr "Eindkleur."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Aan voorgedefinieerde kleurverlopen toevoegen"
+
+#~ msgid "Original"
+#~ msgstr "Origineel"
+
+#~ msgid "Tiled"
+#~ msgstr "Getegeld"
+
+#~ msgid "Stretched"
+#~ msgstr "Uitgerekt"
+
+#~ msgid "Top Left"
+#~ msgstr "Linksboven"
+
+#~ msgid "Top"
+#~ msgstr "Bovenaan"
+
+#~ msgid "Top Right"
+#~ msgstr "Rechtsboven"
+
+#~ msgid "Left"
+#~ msgstr "Links"
+
+#~ msgid "Center"
+#~ msgstr "Midden"
+
+#~ msgid "Right"
+#~ msgstr "Rechts"
+
+#~ msgid "Bottom Left"
+#~ msgstr "Linksonder"
+
+#~ msgid "Bottom"
+#~ msgstr "Onder"
+
+#~ msgid "Bottom Right"
+#~ msgstr "Rechtsonder"
+
+#~ msgid "Stroke"
+#~ msgstr "Reep"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Paginamarges verbergen"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Linialen verbergen"
+
+#~ msgid "Hide Color Palette"
+#~ msgstr "Kleurpalet verbergen"
+
+#~ msgid "Stop color:"
+#~ msgstr "Eindkleur:"
+
+#~ msgid "Tools"
+#~ msgstr "Gereedschappen"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Offset kopiëren:"
+
+#~ msgid "Units:"
+#~ msgstr "Eenheden:"
+
+#~ msgid "Handle radius:"
+#~ msgstr "Straal van de hendel:"
+
+#~ msgid "Grab sensitivity:"
+#~ msgstr "Gevoeligheid oppakken:"
+
+#~ msgid "Show Guides"
+#~ msgstr "Raster tonen"
+
+#~ msgid "Shows or hides guides"
+#~ msgstr "Toont of verbergt raster"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Vlak"
+
+#~ msgid "Gradient"
+#~ msgstr "Kleurverloop"
+
+#~ msgid "Pattern"
+#~ msgstr "Patroon"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Even/oneven vullen"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Winding vullen"
+
+#~ msgid "Ungroup shapes"
+#~ msgstr "Vormengroepering opheffen"
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Groepeer objecten"
+
+#~ msgid "Show grid:"
+#~ msgstr "Raster tonen:"
+
+#~ msgid "Snap to grid:"
+#~ msgstr "Vastzetten op raster:"
+
+#~ msgid "Grid color:"
+#~ msgstr "Rasterkleur:"
+
+#~ msgid "Spacing"
+#~ msgstr "Afstand"
+
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Verticaal:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Auto-opslag (min):"
+
+#~ msgid "No auto save"
+#~ msgstr "Geen automatische opslag"
+
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Reservekopie aanmaken"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Naar &voorgrond brengen"
+
+#~ msgid "&Raise"
+#~ msgstr "Naar vo&ren brengen"
+
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "Naar &achteren brengen"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Naar achtergrond &brengen"
+
+#~ msgid "Show Grid"
+#~ msgstr "Raster tonen"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Raster verbergen"
+
+#~ msgid "Shows or hides grid"
+#~ msgstr "Toont of verbergt het raster"
+
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Patroon kiezen om toe te voegen"
+
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Kleurverloop kiezen om toe te voegen"

@@ -1,0 +1,378 @@
+# translation of thesaurus_tool.po to Belarusian
+#
+# Siarhei Liantsevich <serzh.by@gmail.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: thesaurus_tool\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2006-12-30 09:38+0100\n"
+"Last-Translator: Siarhei Liantsevich <serzh.by@gmail.com>\n"
+"Language-Team: Belarusian\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+
+#: Thesaurus.cpp:81
+#, fuzzy, kde-format
+msgid "(No match)"
+msgstr "(няма супадзенняў)"
+
+#: Thesaurus.cpp:91
+#, fuzzy, kde-format
+msgid "&Search for:"
+msgstr "Пошук:"
+
+#: Thesaurus.cpp:94
+#, fuzzy, kde-format
+msgid "S&earch"
+msgstr "Пошук"
+
+#: Thesaurus.cpp:101
+#, kde-format
+msgctxt "@action:button Go back to the previous word in history"
+msgid "Back"
+msgstr ""
+
+#: Thesaurus.cpp:105
+#, fuzzy, kde-format
+msgctxt "@action:button Go forward to the next word in history"
+msgid "Forward"
+msgstr "Наперадзе"
+
+#: Thesaurus.cpp:108
+#, fuzzy, kde-format
+msgid "Change Language..."
+msgstr "Змяніць мову..."
+
+#: Thesaurus.cpp:122
+#, fuzzy, kde-format
+msgid "&Thesaurus"
+msgstr "Слоўнік значэнняў слоў"
+
+#: Thesaurus.cpp:126
+#, fuzzy, kde-format
+msgid "Synonyms"
+msgstr "Сінонімы"
+
+#: Thesaurus.cpp:133
+#, fuzzy, kde-format
+msgid "More General Words"
+msgstr "Больш агульных слоў"
+
+#: Thesaurus.cpp:140
+#, fuzzy, kde-format
+msgid "More Specific Words"
+msgstr "Больш спецыфічных слоў"
+
+#: Thesaurus.cpp:170
+#, fuzzy, kde-format
+msgid "&Wordnet"
+msgstr "WordNet"
+
+#: Thesaurus.cpp:192
+#, fuzzy, kde-format
+msgid "&Replace with:"
+msgstr "Замяніць на:"
+
+#: Thesaurus.cpp:255
+#, fuzzy, kde-format
+msgid "&Replace"
+msgstr "Замяніць"
+
+#: Thesaurus.cpp:267
+#, fuzzy, kde-format
+msgid "Replace Word"
+msgstr "Замяніць"
+
+#: Thesaurus.cpp:295
+#, fuzzy, kde-format
+msgid "Related Words - %1"
+msgstr "Звязаныя словы - %1"
+
+#: Thesaurus.cpp:409
+#, fuzzy, kde-format
+msgid ""
+"The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+"select a thesaurus file."
+msgstr ""
+"Файл слоўніка '%1' не знойдзены. Выкарыстайце опцыю 'Змяніць мову...' для "
+"выбару файла слоўніка."
+
+#: Thesaurus.cpp:429
+#, fuzzy, kde-format
+msgid "<b>Error:</b> Failed to execute grep."
+msgstr "<b>Памылка:</b> Немагчыма запусціць праграму grep. Паведамленне:<br>%1"
+
+#: Thesaurus.cpp:581
+#, fuzzy, kde-format
+msgid "Synonyms/Hypernyms - Ordered by Frequency"
+msgstr "Сінонімы / гіпербалы - размясціць па частаце паўтору."
+
+#: Thesaurus.cpp:582
+#, fuzzy, kde-format
+msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+msgstr "Сінонімы - размясціць па сэнсе (толькі для дзеясловаў)"
+
+#: Thesaurus.cpp:583
+#, fuzzy, kde-format
+msgid "Antonyms - Words with Opposite Meanings"
+msgstr "Антонімы - словы з процілеглым сэнсам"
+
+#: Thesaurus.cpp:584
+#, fuzzy, kde-format
+msgid "Hyponyms - ... is a (kind of) %1"
+msgstr "Гіпербалы - ...гэта (адбываецца ад) %1"
+
+#: Thesaurus.cpp:585
+#, fuzzy, kde-format
+msgid "Meronyms - %1 has a ..."
+msgstr "Метафары - %1 мае..."
+
+#: Thesaurus.cpp:587
+#, fuzzy, kde-format
+msgid "Holonyms - ... has a %1"
+msgstr "Галонімы - ... мае %1"
+
+#: Thesaurus.cpp:588
+#, fuzzy, kde-format
+msgid "Attributes"
+msgstr "Атрыбуты"
+
+#: Thesaurus.cpp:589
+#, fuzzy, kde-format
+msgid "Cause To (for some verbs only)"
+msgstr "Вылучыць з (толькі для некаторых дзеясловаў)"
+
+#: Thesaurus.cpp:590
+#, fuzzy, kde-format
+msgid "Verb Entailment (for some verbs only)"
+msgstr "Формы дзеясловаў (толькі для некаторых дзеясловаў)."
+
+#: Thesaurus.cpp:591
+#, fuzzy, kde-format
+msgid "Familiarity & Polysemy Count"
+msgstr "Колькасць падобных  аднакарэнных"
+
+#: Thesaurus.cpp:593
+#, fuzzy, kde-format
+msgid "Verb Frames (examples of use)"
+msgstr "Групы дзеясловаў (прыклады выкарыстання)."
+
+#: Thesaurus.cpp:594
+#, fuzzy, kde-format
+msgid "List of Compound Words"
+msgstr "Спіс cложных cлов."
+
+#: Thesaurus.cpp:595
+#, fuzzy, kde-format
+msgid "Overview of Senses"
+msgstr "Агляд пачуццяў."
+
+#: Thesaurus.cpp:623
+#, fuzzy, kde-format
+msgid ""
+"<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+"installed on your computer if you want to use it, and 'wn' has to be in your "
+"PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+"\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+"English language."
+msgstr ""
+"<b>Памылка:</b> Немагчыма выканаць праграму WordNet 'wn'. WordNet ПАВІНЕН "
+"быць усталяваны на вашым кампутары.Для правільнага запуску праграмы "
+"неабходна паказаць шлях да файла 'wn' у пераменнай асяроддзі PATH. Вы можаце "
+"атрымаць праграму WordNet па адрасе<a href=\"http://www.cogsci.princeton.edu/"
+"~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Варта адзначыць, што "
+"WordNet падтрымлівае толькі Ангельская мова."
+
+#: Thesaurus.cpp:635
+#, fuzzy, kde-format
+msgid "No match for '%1'."
+msgstr "Няма супадзенняў для '%1'."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "(No match)"
+#~ msgstr "(няма супадзенняў)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Search for:"
+#~ msgstr "Пошук:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&earch"
+#~ msgstr "Пошук"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "(qtundo-format) @action:button Go forward to the next word in history"
+#~ msgid "Forward"
+#~ msgstr "Наперадзе"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Language..."
+#~ msgstr "Змяніць мову..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Thesaurus"
+#~ msgstr "Слоўнік значэнняў слоў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms"
+#~ msgstr "Сінонімы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More General Words"
+#~ msgstr "Больш агульных слоў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More Specific Words"
+#~ msgstr "Больш спецыфічных слоў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Wordnet"
+#~ msgstr "WordNet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace with:"
+#~ msgstr "Замяніць на:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Replace"
+#~ msgstr "Замяніць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace Word"
+#~ msgstr "Замяніць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Related Words - %1"
+#~ msgstr "Звязаныя словы - %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The thesaurus file '%1' was not found. Please use 'Change Language...' to "
+#~ "select a thesaurus file."
+#~ msgstr ""
+#~ "Файл слоўніка '%1' не знойдзены. Выкарыстайце опцыю 'Змяніць мову...' для "
+#~ "выбару файла слоўніка."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "<b>Error:</b> Failed to execute grep."
+#~ msgstr ""
+#~ "<b>Памылка:</b> Немагчыма запусціць праграму grep. Паведамленне:<br>%1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms/Hypernyms - Ordered by Frequency"
+#~ msgstr "Сінонімы / гіпербалы - размясціць па частаце паўтору."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Synonyms - Ordered by Similarity of Meaning (verbs only)"
+#~ msgstr "Сінонімы - размясціць па сэнсе (толькі для дзеясловаў)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Antonyms - Words with Opposite Meanings"
+#~ msgstr "Антонімы - словы з процілеглым сэнсам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hyponyms - ... is a (kind of) %1"
+#~ msgstr "Гіпербалы - ...гэта (адбываецца ад) %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Meronyms - %1 has a ..."
+#~ msgstr "Метафары - %1 мае..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Holonyms - ... has a %1"
+#~ msgstr "Галонімы - ... мае %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Attributes"
+#~ msgstr "Атрыбуты"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cause To (for some verbs only)"
+#~ msgstr "Вылучыць з (толькі для некаторых дзеясловаў)"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Entailment (for some verbs only)"
+#~ msgstr "Формы дзеясловаў (толькі для некаторых дзеясловаў)."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Familiarity & Polysemy Count"
+#~ msgstr "Колькасць падобных  аднакарэнных"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Verb Frames (examples of use)"
+#~ msgstr "Групы дзеясловаў (прыклады выкарыстання)."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "List of Compound Words"
+#~ msgstr "Спіс cложных cлов."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Overview of Senses"
+#~ msgstr "Агляд пачуццяў."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "<b>Error:</b> Failed to execute WordNet program 'wn'. WordNet has to be "
+#~ "installed on your computer if you want to use it, and 'wn' has to be in "
+#~ "your PATH. You can get WordNet at <a href=\"http://wordnet.princeton.edu/"
+#~ "\">http://wordnet.princeton.edu/</a>. Note that WordNet only supports the "
+#~ "English language."
+#~ msgstr ""
+#~ "<b>Памылка:</b> Немагчыма выканаць праграму WordNet 'wn'. WordNet ПАВІНЕН "
+#~ "быць усталяваны на вашым кампутары.Для правільнага запуску праграмы "
+#~ "неабходна паказаць шлях да файла 'wn' у пераменнай асяроддзі PATH. Вы "
+#~ "можаце атрымаць праграму WordNet па адрасе<a href=\"http://www.cogsci."
+#~ "princeton.edu/~wn/\">http://www.cogsci.princeton.edu/~wn/</a>. Варта "
+#~ "адзначыць, што WordNet падтрымлівае толькі Ангельская мова."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No match for '%1'."
+#~ msgstr "Няма супадзенняў для '%1'."
+
+#, fuzzy
+#~ msgid "Failed to execute grep."
+#~ msgstr "Памылка выканання праграмы grep."
+
+#, fuzzy
+#~ msgid "<b>Error:</b> Failed to execute WordNet program 'wn'. Output:<br>%1"
+#~ msgstr ""
+#~ "<b>Памылка:</b> Немагчыма выканаць праграму WordNet 'wn'. Паведамленне:"
+#~ "<br>%1"

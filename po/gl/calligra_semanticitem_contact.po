@@ -1,0 +1,133 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marce Villarino <mvillarino@kde-espana.org>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2013-12-01 19:22+0100\n"
+"Last-Translator: Marce Villarino <mvillarino@kde-espana.org>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: KoContactSemanticItemFactory.cpp:46
+#, kde-format
+msgctxt "displayname of the semantic item type Contact"
+msgid "Contact"
+msgstr "Contacto"
+
+#: KoRdfFoaF.cpp:179
+#, kde-format
+msgid "Select an address book for saving:"
+msgstr "Escolla un caderno de enderezos para gardar:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: KoRdfFoaFEditWidget.ui:26
+#, kde-format
+msgid "&Name:"
+msgstr "&Nome:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: KoRdfFoaFEditWidget.ui:36
+#, kde-format
+msgid "&Nick:"
+msgstr "&Alcume:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: KoRdfFoaFEditWidget.ui:46
+#, kde-format
+msgid "&Phone Number:"
+msgstr "Número de telé&fono:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: KoRdfFoaFEditWidget.ui:59
+#, kde-format
+msgid "&Home Page:"
+msgstr "Páxina web:"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:30
+#, kde-format
+msgid "Contact Information"
+msgstr "Información de contacto"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:48
+#, kde-format
+msgid "Edit..."
+msgstr "Editar…"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:51
+#, kde-format
+msgid "Import contact"
+msgstr "Importar o contacto"
+
+#: KoRdfFoaFTreeWidgetItem.cpp:54
+#, kde-format
+msgid "Export as vcard..."
+msgstr "Exportar como vcard…"
+
+#, fuzzy
+#~| msgid "&Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Name:"
+#~ msgstr "&Nome:"
+
+#, fuzzy
+#~| msgid "&Nick:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Nick:"
+#~ msgstr "&Alcume:"
+
+#, fuzzy
+#~| msgid "&Phone Number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Phone Number:"
+#~ msgstr "Número de telé&fono:"
+
+#, fuzzy
+#~| msgid "&Home Page:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Home Page:"
+#~ msgstr "Páxina web:"
+
+#, fuzzy
+#~| msgctxt "displayname of the semantic item type Contact"
+#~| msgid "Contact"
+#~ msgctxt "(qtundo-format) displayname of the semantic item type Contact"
+#~ msgid "Contact"
+#~ msgstr "Contacto"
+
+#, fuzzy
+#~| msgid "Select an address book for saving:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select an address book for saving:"
+#~ msgstr "Escolla un caderno de enderezos para gardar:"
+
+#, fuzzy
+#~| msgid "Contact Information"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Contact Information"
+#~ msgstr "Información de contacto"
+
+#, fuzzy
+#~| msgid "Edit..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit..."
+#~ msgstr "Editar..."
+
+#, fuzzy
+#~| msgid "Import contact"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import contact"
+#~ msgstr "Importar o contacto"
+
+#, fuzzy
+#~| msgid "Export as vcard..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Export as vcard..."
+#~ msgstr "Exportar como vcard..."

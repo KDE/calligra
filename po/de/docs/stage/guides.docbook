@@ -1,0 +1,252 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Brad</firstname
+> <surname
+>Hards</surname
+> <affiliation
+> <address
+><email
+>bradh@frogmouth.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Danny</firstname
+> <surname
+>Allen</surname
+> <affiliation
+> <address
+><email
+>danny@dannyallen.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+
+<othercredit role="translator"
+><firstname
+>Burkhard</firstname
+><surname
+>Lück</surname
+><affiliation
+><address
+><email
+>lueck@hube-lueck.de</email
+></address
+></affiliation
+><contrib
+>Übersetzung</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Ausführliche Anleitungen</title>
+
+<para
+>Dieses Kapitel soll zeigen, wie die häufigsten Aufgaben in &stage; durchgeführt werden.</para>
+
+<sect1 id="html-wizard">
+<title
+>Erstellung einer &HTML;-Präsentation</title>
+
+<para
+>Erstellt &HTML;-Seiten mit zugehörigen Navigationselementen aus einer vorhandenen Präsentation.</para>
+
+<para
+>Zuerst erstellen Sie eine neue oder öffnen eine vorhandene Präsentation. Dann klicken Sie auf <guimenu
+>Datei</guimenu
+> <guimenuitem
+>Als HTML exportieren ...</guimenuitem
+></para>
+<para
+>In einem Dialog geben Sie dann einige Einstellungen ein:</para>
+
+<screenshot>
+<screeninfo
+>Eingabe der Informationen für die &HTML;-Präsentation</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Eingabe der Informationen für die &HTML;-Präsentation</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Geben Sie einen <guilabel
+>Titel</guilabel
+> und den <guilabel
+>Autor</guilabel
+> ein. Wählen Sie dann die Folien, die exportiert werden sollen. Möchten Sie Namen von Folien ändern, der auf der &HTML;-Seite angezeigt wird, doppelklicken Sie auf den Namen und bearbeiten ihn.</para>
+
+<para
+>In der <guilabel
+>Ausgabevorschau</guilabel
+> werden die Folien verkleinert angezeigt. Sie können hier die richtige Reihenfolge der Folien überprüfen und mit den Knöpfen <guiicon
+>&lt;</guiicon
+> and <guiicon
+>&gt;</guiicon
+> durch die Präsentation blättern. </para>
+
+<para
+>Wählen Sie dann eine Stilvorlage mit den Einstellungen für die &HTML;-Seiten aus.</para>
+
+<para
+>Nun können Sie den Ihre &HTML;-Präsentation erstellen, drücken Sie dazu auf den Knopf <guibutton
+>Exportieren</guibutton
+> und wählen einen Ordner zum speichern aus.</para>
+
+<para
+>Damit werden am angegebenen Pfad neue <filename
+>html/</filename
+>- und <filename
+>pics/</filename
+>-Ordner angelegt:</para>
+
+<screenshot>
+<screeninfo
+>Die neu angelegten Ordner der &HTML;-Präsentation</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Die neu angelegten Ordner der &HTML;-Präsentation</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Die neu erstellte Datei <filename
+>index.html</filename
+> dient als Einstiegspunkt zum Start der Präsentation.</para>
+
+<para
+>Für einen Test öffnen Sie mit dem Dateiverwaltungsprogramm oder Browser die Datei <filename
+>index.html</filename
+>. Klicken Sie auf den Start, so wird die erste Seite der Präsentation angezeigt. Der weitere Ablauf entspricht einer &stage;-Präsentation.</para>
+
+<para
+>Mit den blauen Pfeilen können Sie in den Folien blättern, ein Klick auf das Foliensymbol bringt Sie zum Inhaltsverzeichnis der Präsentation.</para>
+
+<tip
+><para
+>Um Ihre Präsentation zu veröffentlichen, laden Sie die neu erstellten Seiten ins Internet, ohne dabei die Ordnerstruktur zu verändern.</para
+></tip>
+</sect1>
+
+<sect1 id="creating-templates">
+<title
+>Vorlagen für &stage; erstellen</title>
+
+<para
+>Die &stage;-Bibliothek kann auf einfache Weise um eigene Vorlagen erweitert werden.</para>
+
+<para
+>Wenn Sie eine von Ihnen erstellte Vorlage wiederverwenden wollen, können Sie sie als Vorlage speichern.</para>
+
+<para
+>Dieses Anleitung erläutert die Erstellung und Abspeicherung einer eigenen Vorlage.</para>
+
+<para
+>Als erstes starten Sie &stage; und erstellen ein neues Dokument.</para>
+
+<para
+>Um die Folie ein bisschen ansprechender zu gestalten, ändern Sie den Folienhintergrund. Wählen Sie <guilabel
+>Dokumenthintergrund</guilabel
+> im andockbaren Dialog Werkzeuge.</para>
+
+<para
+>Der Hintergrund soll attraktiv aussehen, daher wählen Sie mit <guilabel
+>Bild festlegen</guilabel
+> eine Grafik als Hintergrund auswählen. Probieren Sie einfach verschiedene Einstellungen aus, bis das Ergebnis zufriedenstellend ist.</para>
+
+<screenshot>
+<screeninfo
+>Auswahl eines Folienhintergrundes</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject
+><phrase
+>Auswahl eines Folienhintergrundes</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Damit ist gewünschten Hintergrund für die Seite eingestellt. Erstellen Sie ein Textfeld und geben Sie eine Überschrift für die Folie ein:</para>
+
+<screenshot>
+<screeninfo
+>Eine Überschrift zur neuen Vorlage hinzufügen</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Eine Überschrift zur neuen Vorlage hinzufügen</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Wenn Sie mit Ihrer Vorlagen zufrieden sind, klicken Sie auf <menuchoice
+><guimenu
+>Datei</guimenu
+> <guimenuitem
+>Speichern unter</guimenuitem
+></menuchoice
+> und wählen den Dateityp <guilabel
+>ODP-Vorlage</guilabel
+>.</para>
+
+</sect1>
+
+</chapter>

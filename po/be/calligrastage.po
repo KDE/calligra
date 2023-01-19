@@ -1,0 +1,7586 @@
+# translation of kpresenter.po to Belarusian
+#
+# Siarhei Liantsevich <serzh.by@gmail.com>, 2006, 2007.
+# Darafei Praliaskouski <komzpa@licei2.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: kpresenter\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-12-09 17:58+0200\n"
+"Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
+"Language-Team: Belarusian <i18n@mova.org>\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrastage.rc:10
+#, kde-format
+msgid "&Edit"
+msgstr "&Змяніць"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrastage.rc:29
+#, kde-format
+msgid "&View"
+msgstr "&Выгляд"
+
+#. i18n: ectx: Menu (insert)
+#: part/calligrastage.rc:49
+#, kde-format
+msgid "&Insert"
+msgstr "У&ставіць"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrastage.rc:54
+#, kde-format
+msgid "F&ormat"
+msgstr "Ф&армат"
+
+#. i18n: ectx: Menu (page)
+#: part/calligrastage.rc:63
+#, fuzzy, kde-format
+msgid "&Slide"
+msgstr "Слайды"
+
+#. i18n: ectx: Menu (slideshow)
+#: part/calligrastage.rc:74
+#, fuzzy, kde-format
+msgid "Sli&de Show"
+msgstr "Дэманстрацыя"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrastage.rc:81
+#, kde-format
+msgid "&Settings"
+msgstr "&Настаўленні"
+
+#: part/commands/KPrAddCustomSlideShowCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add custom slide show"
+msgstr "Нестандартная дэманстрацыя"
+
+#: part/commands/KPrAnimationCreateCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Create shape animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation trigger event"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/commands/KPrAnimationRemoveCommand.cpp:30
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Remove shape animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/commands/KPrDelCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete custom slide show"
+msgstr "Выдаліць слайд"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format) Delete one slide"
+msgid "Delete slide"
+msgstr "Выдаліць слайд"
+
+#: part/commands/KPrDeleteSlidesCommand.cpp:44
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete slide"
+msgid_plural "Delete slides"
+msgstr[0] "Выдаліць слайд"
+msgstr[1] "Выдаліць слайд"
+msgstr[2] "Выдаліць слайд"
+
+#: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit animation delay/duration"
+msgstr "Працягласць прэзентацыі: "
+
+#: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Edit custom slide show"
+msgstr "Нестандартная дэманстрацыя"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:38
+#, fuzzy
+#| msgid "Create page effect"
+msgctxt "(qtundo-format)"
+msgid "Create Slide Effect"
+msgstr "Стварыць эфект малюнка"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:41
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Effect"
+msgstr "Эфект высновы малюнка:"
+
+#: part/commands/KPrPageEffectSetCommand.cpp:45
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Delete Slide Effect"
+msgstr "Выдаліць слайд"
+
+#: part/commands/KPrPageTransitionSetCommand.cpp:32
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Modify Slide Transition"
+msgstr "Змяніць змену слайдаў"
+
+#: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Rename custom slide show"
+msgstr "Наладзіць нестандартную дэманстрацыю"
+
+#: part/commands/KPrReorderAnimationCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Reorder animations"
+msgstr "Змяніць змену слайдаў"
+
+#: part/KPrAboutData.h:21
+#, fuzzy, kde-format
+msgctxt "application name"
+msgid "Calligra Stage"
+msgstr "Наладзіць дэманстрацыю..."
+
+#: part/KPrAboutData.h:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Tool"
+msgstr "Прэзентацыя"
+
+#: part/KPrAboutData.h:25
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2007, The KPresenter Team"
+msgid "Copyright 1998-%1, The Stage Team"
+msgstr "(c) 1998-2007, Каманда KPresenter"
+
+#: part/KPrAboutData.h:33 part/KPrAboutData.h:34
+#, fuzzy, kde-format
+#| msgid "current maintainer"
+msgid "Former maintainer"
+msgstr "бягучае суправаджэнне"
+
+#: part/KPrAboutData.h:33
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KPrAboutData.h:34
+#, kde-format
+msgid "Laurent Montel"
+msgstr "Лаўрэн Монтэль"
+
+#: part/KPrAboutData.h:35
+#, fuzzy, kde-format
+#| msgid "original author"
+msgid "Original author"
+msgstr "аўтар ідэі"
+
+#: part/KPrAboutData.h:35
+#, kde-format
+msgid "Reginald Stadlbauer"
+msgstr ""
+
+#: part/KPrAboutData.h:36
+#, kde-format
+msgid "Werner Trobin"
+msgstr "Вернер Тробін"
+
+#: part/KPrAboutData.h:37
+#, kde-format
+msgid "David Faure"
+msgstr "Дэвід Фор"
+
+#: part/KPrAboutData.h:38
+#, kde-format
+msgid "Toshitaka Fujioka"
+msgstr ""
+
+#: part/KPrAboutData.h:39
+#, kde-format
+msgid "Lukáš Tinkl"
+msgstr ""
+
+#: part/KPrAboutData.h:40
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KPrAboutData.h:41
+#, kde-format
+msgid "Percy Leonhardt"
+msgstr ""
+
+#: part/KPrAboutData.h:42
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KPrAboutData.h:43
+#, fuzzy, kde-format
+msgid "Peter Simonsson"
+msgstr "Параметры"
+
+#: part/KPrAboutData.h:44
+#, kde-format
+msgid "Boudewijn Rempt "
+msgstr ""
+
+#: part/KPrAboutData.h:45
+#, fuzzy, kde-format
+msgid "Carlos Licea "
+msgstr "Замкнёная лінія"
+
+#: part/KPrAboutData.h:46
+#, kde-format
+msgid "C. Boemann "
+msgstr ""
+
+#: part/KPrAboutData.h:47
+#, kde-format
+msgid "Fredy Yanardi "
+msgstr ""
+
+#: part/KPrAboutData.h:48
+#, kde-format
+msgid "Jan Hambrecht "
+msgstr ""
+
+#: part/KPrAboutData.h:49
+#, kde-format
+msgid "Marijn Kruisselbrink "
+msgstr ""
+
+#: part/KPrAboutData.h:50
+#, kde-format
+msgid "Martin Pfeiffer "
+msgstr ""
+
+#: part/KPrAboutData.h:51
+#, kde-format
+msgid "Sven Langkamp "
+msgstr ""
+
+#: part/KPrAboutData.h:52
+#, kde-format
+msgid "Timothée Lacroix "
+msgstr ""
+
+#. i18n translator strings
+#: part/KPrAboutData.h:54
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Сяржук Лянцэвіч"
+
+#: part/KPrAboutData.h:55
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "serzh.by@gmail.com"
+
+#: part/KPrCustomSlideShowsModel.cpp:54
+#: part/KPrSlidesSorterDocumentModel.cpp:86
+#, kde-format
+msgid "Unknown"
+msgstr ""
+
+#: part/KPrCustomSlideShowsModel.cpp:59
+#: part/KPrSlidesSorterDocumentModel.cpp:91 part/ui/KPrHtmlExportDialog.cpp:109
+#, fuzzy, kde-format
+msgid "Slide %1"
+msgstr "Слайд %1"
+
+#: part/KPrEndOfSlideShowPage.cpp:69
+#, fuzzy, kde-format
+msgid "End of presentation. Click to exit."
+msgstr "Канец прэзентацыі. Пстрыкніце для выхаду."
+
+#: part/KPrPageLayoutWidget.cpp:46 part/tools/KPrPlaceholderToolFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Layout"
+msgstr "Фармат слайда..."
+
+#: part/KPrPart.cpp:69
+#, kde-format
+msgid "Can not find needed text component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:74
+#, kde-format
+msgid "Can not find needed picture component, Calligra Stage will quit now."
+msgstr ""
+
+#: part/KPrPart.cpp:87
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KPrPicturesImport.cpp:62
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert Pictures"
+msgstr "Уставіць малюнак"
+
+#: part/KPrPlaceholderShapeFactory.cpp:32
+#, kde-format
+msgid "Placeholder shape"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:34
+#, kde-format
+msgid "Double click to add a title"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:35
+#, kde-format
+msgid "Double click to add an outline"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:36 part/KPrPlaceholderStrategy.cpp:37
+#, kde-format
+msgid "Double click to add a text"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:38
+#, kde-format
+msgid "Double click to add notes"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:46
+#, kde-format
+msgid "Double click to add a picture"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:48
+#, kde-format
+msgid "Double click to add a chart"
+msgstr ""
+
+#: part/KPrPlaceholderStrategy.cpp:50
+#, kde-format
+msgid "Double click to add an object"
+msgstr ""
+
+#: part/KPrPresentationDrawWidget.cpp:89
+#, fuzzy, kde-format
+msgid "Pen Color"
+msgstr "Колеры"
+
+#: part/KPrPresentationDrawWidget.cpp:90
+#, fuzzy, kde-format
+msgid "Pen Size"
+msgstr "Павялічыць памер шрыфта"
+
+#: part/KPrPresentationDrawWidget.cpp:92
+#, fuzzy, kde-format
+msgid "Black"
+msgstr "Колеры:"
+
+#: part/KPrPresentationDrawWidget.cpp:93
+#, fuzzy, kde-format
+msgid "White"
+msgstr "Таўшчыня:"
+
+#: part/KPrPresentationDrawWidget.cpp:94
+#, fuzzy, kde-format
+msgid "Green"
+msgstr "Зялёны"
+
+#: part/KPrPresentationDrawWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Red"
+msgstr "Чырвоны"
+
+#: part/KPrPresentationDrawWidget.cpp:96
+#, fuzzy, kde-format
+msgid "Blue"
+msgstr "Сіні"
+
+#: part/KPrPresentationDrawWidget.cpp:97
+#, fuzzy, kde-format
+msgid "Yellow"
+msgstr "Павольна"
+
+#: part/KPrPresenterViewInterface.cpp:49 part/KPrView.cpp:93
+#, fuzzy, kde-format
+msgid "Next Slide"
+msgstr "Наступны"
+
+#: part/KPrPresenterViewInterface.cpp:59
+#, fuzzy, kde-format
+msgid "Speaker Notes"
+msgstr "Зачытаць усплывальныя падказкі"
+
+#: part/KPrPresenterViewInterface.cpp:90
+#, fuzzy, kde-format
+msgid "Current Slide %1 of %2"
+msgstr "Стварыць вэб-прэзентацыю"
+
+#: part/KPrPresenterViewInterface.cpp:91
+#, fuzzy, kde-format
+msgid "End of Slide Show"
+msgstr "Дэманстрацыя"
+
+#: part/KPrShapeAnimations.cpp:168
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:519
+#, kde-format
+msgid "start on mouse click"
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:170
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:220
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:522
+#, fuzzy, kde-format
+msgid "start after previous animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/KPrShapeAnimations.cpp:172
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:223
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:525
+#, fuzzy, kde-format
+msgid "start with previous animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/KPrShapeAnimations.cpp:180
+#, kde-format
+msgid "Start after %1 seconds. Duration of %2 seconds."
+msgstr ""
+
+#: part/KPrShapeAnimations.cpp:195
+#: part/tools/animationtool/KPrAnimationToolFactory.cpp:21
+#, fuzzy, kde-format
+msgid "Animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/KPrShapeAnimations.cpp:201
+#, kde-format
+msgid "Shape"
+msgstr "Фігура"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:291
+#, fuzzy, kde-format
+msgid "&Move Here"
+msgstr "Перамясціць слайд"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:295
+#, fuzzy, kde-format
+msgid "&Copy Here"
+msgstr "Капіяваць слайд"
+
+#: part/KPrSlidesSorterDocumentModel.cpp:299
+#, fuzzy, kde-format
+#| msgid "&Cancel"
+msgid "C&ancel"
+msgstr "&Скасаваць"
+
+#: part/KPrView.cpp:73
+#, fuzzy, kde-format
+msgid "Normal"
+msgstr "не"
+
+#: part/KPrView.cpp:78
+#, fuzzy, kde-format
+msgid "Show Master Slides"
+msgstr "Уставіць слайд"
+
+#: part/KPrView.cpp:79
+#, fuzzy, kde-format
+msgid "Import Slideshow..."
+msgstr "Перайсці на слайд..."
+
+#: part/KPrView.cpp:80
+#, fuzzy, kde-format
+msgid "Insert Slide"
+msgstr "Уставіць слайд"
+
+#: part/KPrView.cpp:81 part/KPrView.cpp:82
+#, kde-format
+msgid "Insert a new slide after the current one"
+msgstr ""
+
+#: part/KPrView.cpp:83
+#, fuzzy, kde-format
+msgid "Copy Slide"
+msgstr "Капіяваць слайд"
+
+#: part/KPrView.cpp:84 part/KPrView.cpp:85
+#, fuzzy, kde-format
+msgid "Copy the current slide"
+msgstr "Перад бягучым слайдам"
+
+#: part/KPrView.cpp:86 part/KPrViewModeSlidesSorter.cpp:174
+#, fuzzy, kde-format
+msgid "Delete Slide"
+msgstr "Выдаліць слайд"
+
+#: part/KPrView.cpp:87 part/KPrView.cpp:88
+#, fuzzy, kde-format
+msgid "Delete the current slide"
+msgstr "Перад бягучым слайдам"
+
+#: part/KPrView.cpp:89
+#, fuzzy, kde-format
+msgid "Master Slide..."
+msgstr "Уставіць слайд..."
+
+#: part/KPrView.cpp:90
+#, fuzzy, kde-format
+msgid "Previous Slide"
+msgstr "Папярэдні"
+
+#: part/KPrView.cpp:91 part/KPrView.cpp:92
+#, fuzzy, kde-format
+msgid "Go to previous slide"
+msgstr "Папярэдні"
+
+#: part/KPrView.cpp:94 part/KPrView.cpp:95
+#, fuzzy, kde-format
+msgid "Go to next slide"
+msgstr "Перайсці на слайд:"
+
+#: part/KPrView.cpp:96
+#, fuzzy, kde-format
+msgid "First Slide"
+msgstr "Уставіць слайд"
+
+#: part/KPrView.cpp:97 part/KPrView.cpp:98
+#, fuzzy, kde-format
+msgid "Go to first slide"
+msgstr "Перайсці на слайд:"
+
+#: part/KPrView.cpp:99
+#, fuzzy, kde-format
+msgid "Last Slide"
+msgstr "Уставіць слайд"
+
+#: part/KPrView.cpp:100 part/KPrView.cpp:101
+#, fuzzy, kde-format
+msgid "Go to last slide"
+msgstr "Перайсці на слайд:"
+
+#: part/KPrView.cpp:102
+#, fuzzy, kde-format
+msgid "Configure Stage..."
+msgstr "Наладзіць дэманстрацыю..."
+
+#: part/KPrView.cpp:225
+#, kde-format
+msgid "Export as HTML..."
+msgstr ""
+
+#: part/KPrView.cpp:251
+#, fuzzy, kde-format
+msgid "Insert Pictures as Slides..."
+msgstr "Уставіць малюнак"
+
+#: part/KPrView.cpp:260
+#, fuzzy, kde-format
+msgid "Create Appear Animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/KPrView.cpp:264
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows..."
+msgstr "Нестандартная дэманстрацыя..."
+
+#: part/KPrView.cpp:268
+#, kde-format
+msgid "Start Presentation"
+msgstr "Пачаць прэзентацыю"
+
+#: part/KPrView.cpp:271
+#, fuzzy, kde-format
+msgid "From Current Slide"
+msgstr "Пасля бягучага слайда"
+
+#: part/KPrView.cpp:275
+#, fuzzy, kde-format
+msgid "From First Slide"
+msgstr "Запуск з першага слайда"
+
+#: part/KPrView.cpp:280
+#, fuzzy, kde-format
+msgid "Stop presentation"
+msgstr "У цыкле"
+
+#: part/KPrView.cpp:286
+#, fuzzy, kde-format
+msgid "Show Status Bar"
+msgstr "Паказаць радок стану"
+
+#: part/KPrView.cpp:287
+#, fuzzy, kde-format
+msgid "Hide Status Bar"
+msgstr "Паказаць радок стану"
+
+#: part/KPrView.cpp:288
+#, fuzzy, kde-format
+msgid "Shows or hides the status bar"
+msgstr "Паказаць радок стану"
+
+#: part/KPrView.cpp:297
+#, fuzzy, kde-format
+msgid "Configure Slide Show..."
+msgstr "Наладзіць дэманстрацыю..."
+
+#: part/KPrView.cpp:301
+#, fuzzy, kde-format
+msgid "Configure Presenter View..."
+msgstr "Наладзіць KPresenter..."
+
+#: part/KPrView.cpp:305
+#, fuzzy, kde-format
+msgid "Draw on the presentation..."
+msgstr "Замяніць файл"
+
+#: part/KPrView.cpp:312
+#, fuzzy, kde-format
+msgid "Highlight the presentation..."
+msgstr "Замяніць файл"
+
+#: part/KPrView.cpp:319
+#, fuzzy, kde-format
+msgid "Blackscreen on the presentation..."
+msgstr "Замяніць файл"
+
+#: part/KPrViewModeNotes.cpp:36
+#, fuzzy, kde-format
+msgid "Notes"
+msgstr "Нататка"
+
+#: part/KPrViewModeSlidesSorter.cpp:64
+#, fuzzy, kde-format
+msgid "Slides Sorter"
+msgstr "Шаблон слайда"
+
+#: part/KPrViewModeSlidesSorter.cpp:74
+#, fuzzy, kde-format
+msgid "Slide Show: "
+msgstr "Дэманстрацыя"
+
+#: part/KPrViewModeSlidesSorter.cpp:83
+#, fuzzy, kde-format
+msgid "Add a new custom slide show"
+msgstr "Дэманстрацыя"
+
+#: part/KPrViewModeSlidesSorter.cpp:88
+#, fuzzy, kde-format
+msgid "Delete current custom slide show"
+msgstr "Перад бягучым слайдам"
+
+#: part/KPrViewModeSlidesSorter.cpp:92
+#, fuzzy, kde-format
+msgid "Add slides to current custom slide show"
+msgstr "Нестандартная дэманстрацыя"
+
+#: part/KPrViewModeSlidesSorter.cpp:97
+#, fuzzy, kde-format
+msgid "Remove slides from current custom slide show"
+msgstr "Нестандартная дэманстрацыя"
+
+#: part/KPrViewModeSlidesSorter.cpp:173
+#, fuzzy, kde-format
+msgid "Duplicate Slide"
+msgstr "Выдаліць слайд"
+
+#: part/KPrViewModeSlidesSorter.cpp:175
+#, fuzzy, kde-format
+msgid "Start Slideshow"
+msgstr "Стварыць вэб-прэзентацыю"
+
+#: part/KPrViewModeSlidesSorter.cpp:532
+#, fuzzy, kde-format
+msgid "Add a new slide"
+msgstr "Дэманстрацыя"
+
+#: part/KPrViewModeSlidesSorter.cpp:533 part/KPrViewModeSlidesSorter.cpp:551
+#, fuzzy, kde-format
+msgid "Delete selected slides"
+msgstr "Вылучаныя слайды:"
+
+#: part/KPrViewModeSlidesSorter.cpp:537
+#, fuzzy, kde-format
+msgid "Rename"
+msgstr "Выдаліць спасылку"
+
+#: part/KPrViewModeSlidesSorter.cpp:541
+#, fuzzy, kde-format
+msgid "Cut"
+msgstr "Іншы фармат"
+
+#: part/KPrViewModeSlidesSorter.cpp:542
+#, fuzzy, kde-format
+msgid "Copy"
+msgstr "Капіяваць"
+
+#: part/KPrViewModeSlidesSorter.cpp:543
+#, fuzzy, kde-format
+msgid "Paste"
+msgstr "Тэчка"
+
+#: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
+#, fuzzy, kde-format
+msgid "Slide Show %1"
+msgstr "Дэманстрацыя"
+
+#: part/KPrViewModeSlidesSorter.cpp:658
+#: part/ui/KPrConfigureSlideShowDialog.cpp:26
+#, fuzzy, kde-format
+msgid "All slides"
+msgstr "Усе файлы"
+
+#: part/KPrViewModeSlidesSorter.cpp:686 part/ui/KPrHtmlExportDialog.cpp:149
+#: part/ui/KPrHtmlExportDialog.cpp:203
+#, fuzzy, kde-format
+msgid "Error"
+msgstr "стрэлка"
+
+#: part/KPrViewModeSlidesSorter.cpp:686
+#, kde-format
+msgid "There cannot be two slideshows with the same name."
+msgstr ""
+
+#: part/pagelayout/KPrPlaceholders.cpp:46
+#: part/pagelayout/KPrPlaceholders.cpp:47
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set Layout"
+msgstr "Фармат слайда..."
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
+#, fuzzy, kde-format
+msgid "Automatic animation preview"
+msgstr "Аўтаматычны перанос слоў"
+
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
+#: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Preview animation"
+msgstr "Прэзентацыя"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:205
+#, fuzzy, kde-format
+msgid "Slide Transitions"
+msgstr "Змяніць змену слайдаў"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:207
+#, fuzzy, kde-format
+msgid "Shape Click Actions"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrAnimationTool.cpp:209
+#, fuzzy, kde-format
+msgid "Shape Animations"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:50
+#, fuzzy, kde-format
+msgid "Manage animation delay and duration: "
+msgstr "Працягласць прэзентацыі: "
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:51
+#, fuzzy, kde-format
+msgid "Start: "
+msgstr "Дыяграма"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:55
+#, kde-format
+msgid "on mouse click"
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:56
+#, fuzzy, kde-format
+msgid "after previous animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:57
+#, fuzzy, kde-format
+msgid "with previous animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:59
+#, kde-format
+msgid "Delay: "
+msgstr ""
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:64
+#, fuzzy, kde-format
+msgid "Duration: "
+msgstr "Кірунак"
+
+#: part/tools/animationtool/KPrEditAnimationsWidget.cpp:71
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:125
+#, fuzzy, kde-format
+msgid "Preview Shape Animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:50
+#, kde-format
+msgid "No Effect"
+msgstr "Няма эфекту"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:73
+#, fuzzy, kde-format
+msgid " sec"
+msgstr " секунд"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:84
+#, kde-format
+msgid "Manual"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:85
+#, kde-format
+msgid "Automatic"
+msgstr ""
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:93
+#, fuzzy, kde-format
+msgid "Slide Transition:"
+msgstr "Змяніць змену слайдаў"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:104
+#, fuzzy, kde-format
+msgid "Apply To All Slides"
+msgstr "Ужыць стылі"
+
+#: part/tools/animationtool/KPrPageEffectDocker.cpp:265
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Apply Slide Effect to all Slides"
+msgstr "Ужыць стыль да ўрэзак"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
+#, kde-format
+msgid "Entrance"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:171
+#, kde-format
+msgid "Exit"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:176
+#, kde-format
+msgid "Emphasis"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:181
+#, fuzzy, kde-format
+msgid "Custom"
+msgstr "Нестандартны слайд:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:186
+#, kde-format
+msgid "Motion path"
+msgstr ""
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:191
+#, fuzzy, kde-format
+msgid "Ole Action"
+msgstr "Вышыня:"
+
+#: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:196
+#, kde-format
+msgid "Media Call"
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:77
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:81
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:513
+#, fuzzy, kde-format
+msgid "Edit animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:95
+#, fuzzy, kde-format
+msgid "Add new animation"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:108
+#, fuzzy, kde-format
+msgid "Remove animation"
+msgstr "Выдаліць спасылку"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:112
+#, kde-format
+msgid "Order: "
+msgstr ""
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
+#, fuzzy, kde-format
+msgid "Move animation up"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
+#, fuzzy, kde-format
+msgid "Move animation down"
+msgstr "Стварыць прэзентацыю HTML"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
+#, fuzzy, kde-format
+msgid "Add a new animation"
+msgstr "Дэманстрацыя"
+
+#: part/tools/animationtool/KPrShapeAnimationDocker.cpp:512
+#, fuzzy, kde-format
+msgid "Delete current animation"
+msgstr "Перад бягучым слайдам"
+
+#: part/tools/animationtool/KPrTimeLineHeader.cpp:71
+#, kde-format
+msgid "seconds"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgToolCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:16
+#, fuzzy, kde-format
+msgid "Crop"
+msgstr "Капіяваць"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: part/tools/animationtool/wdg_tool_crop.ui:36
+#, kde-format
+msgid "X:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:60
+#, fuzzy, kde-format
+msgid "W&idth:"
+msgstr "Таўшчыня:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolWidth)
+#: part/tools/animationtool/wdg_tool_crop.ui:63
+#, fuzzy, kde-format
+msgid "Will keep the width of the crop constant"
+msgstr "Таўшчыня лініі."
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:84
+#, fuzzy, kde-format
+msgid "&Height:"
+msgstr "Вышыня:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolHeight)
+#: part/tools/animationtool/wdg_tool_crop.ui:87
+#, fuzzy, kde-format
+msgid "Will keep the height of the crop constant"
+msgstr "Таўшчыня лініі."
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel3)
+#: part/tools/animationtool/wdg_tool_crop.ui:94
+#, kde-format
+msgid "Y:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:111
+#, fuzzy, kde-format
+msgid "R&atio:"
+msgstr "Размяшчэнне:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, boolRatio)
+#: part/tools/animationtool/wdg_tool_crop.ui:114
+#, fuzzy, kde-format
+msgid "Will keep the ratio constant"
+msgstr "Таўшчыня лініі."
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:132
+#, kde-format
+msgid "Layer"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: part/tools/animationtool/wdg_tool_crop.ui:137
+#, fuzzy, kde-format
+msgid "Image"
+msgstr "Слайд"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnCrop)
+#: part/tools/animationtool/wdg_tool_crop.ui:145
+#, fuzzy, kde-format
+msgid "&Crop"
+msgstr "Зверху:"
+
+#: part/tools/KPrPlaceholderTool.cpp:92
+#, fuzzy
+#| msgid "Shape"
+msgctxt "(qtundo-format)"
+msgid "Edit Shape"
+msgstr "Фігура"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/ui/KPrConfigurePresenterView.ui:16
+#, kde-format
+msgid "Multiple monitors"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigurePresenterView.ui:24
+#, fuzzy, kde-format
+msgid "Presentation monitor:"
+msgstr "Пяро для малявання на слайдах"
+
+#. i18n: ectx: property (text), widget (QCheckBox, presenterViewCheckBox)
+#: part/ui/KPrConfigurePresenterView.ui:39
+#, fuzzy, kde-format
+msgid "Enable presenter view"
+msgstr "Параметры KPresenter"
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:27
+#, kde-format
+msgid "Monitor %1 (primary)"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:29
+#, kde-format
+msgid "Monitor %1"
+msgstr ""
+
+#: part/ui/KPrConfigurePresenterViewDialog.cpp:38
+#, fuzzy, kde-format
+msgid "Configure Presenter View"
+msgstr "Параметры KPresenter"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
+#: part/ui/KPrConfigureSlideShow.ui:13
+#: part/ui/KPrConfigureSlideShowDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure Slide Show"
+msgstr "Наладзіць дэманстрацыю"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/ui/KPrConfigureSlideShow.ui:19
+#, fuzzy, kde-format
+msgid "Slides"
+msgstr "Слайды"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/ui/KPrConfigureSlideShow.ui:27
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Presentation Slides:"
+msgstr "Прэзентацыя"
+
+#. i18n: ectx: property (text), widget (QPushButton, editSlidesButton)
+#: part/ui/KPrConfigureSlideShow.ui:54
+#, fuzzy, kde-format
+msgid "Edit Custom Slide Shows ..."
+msgstr "Нестандартная дэманстрацыя..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
+#: part/ui/KPrHtmlExport.ui:20
+#, kde-format
+msgid "HTML Export"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_slideslist)
+#: part/ui/KPrHtmlExport.ui:29
+#, kde-format
+msgid "Tick the slide should be exported :"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_selectAll)
+#: part/ui/KPrHtmlExport.ui:55
+#, fuzzy, kde-format
+msgid "Select all"
+msgstr "Вылучыць усё"
+
+#. i18n: ectx: property (text), widget (QLabel, textLabel_css)
+#: part/ui/KPrHtmlExport.ui:65
+#, fuzzy, kde-format
+msgid "Select template (.css) :"
+msgstr "Вылучаныя слайды:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_deselectAll)
+#: part/ui/KPrHtmlExport.ui:78
+#, fuzzy, kde-format
+msgid "Deselect all"
+msgstr "Адмяніць выбар"
+
+#. i18n: ectx: property (text), widget (QLabel, textlable_top)
+#: part/ui/KPrHtmlExport.ui:101
+#, fuzzy, kde-format
+msgid "Title"
+msgstr "Загаловак:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_preview)
+#: part/ui/KPrHtmlExport.ui:117
+#, fuzzy, kde-format
+msgid "Output preview"
+msgstr "Папярэдні прагляд"
+
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
+#. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
+#: part/ui/KPrHtmlExport.ui:148 part/ui/KPrHtmlExport.ui:164
+#, fuzzy, kde-format
+msgid "..."
+msgstr "Стварыць..."
+
+#. i18n: ectx: property (text), widget (QPushButton, pushbuttonBrowseTemplate)
+#: part/ui/KPrHtmlExport.ui:227
+#, kde-format
+msgid "Browse"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_author)
+#: part/ui/KPrHtmlExport.ui:243
+#, fuzzy, kde-format
+msgid "Author"
+msgstr "Аўтар:"
+
+#. i18n: ectx: property (text), widget (QPushButton, pushButton_Favorite)
+#: part/ui/KPrHtmlExport.ui:258
+#, fuzzy, kde-format
+msgid "Delete Favorite"
+msgstr "Выдаліць слайд"
+
+#. i18n: ectx: property (text), widget (QCheckBox, checkBox_browser)
+#: part/ui/KPrHtmlExport.ui:286
+#, kde-format
+msgid "Open in browser"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:34
+#, kde-format
+msgid "Html Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:35
+#, kde-format
+msgid "Export"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:149
+#, kde-format
+msgid "There is already a favorite file with this name"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:194
+#, kde-format
+msgid "Incorrect file, .zip only or corrupted zip"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:199
+#, kde-format
+msgid "Zip file need to contain style.css"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:297
+#, fuzzy, kde-format
+msgid "Delete Template"
+msgstr "Выдаліць слайд"
+
+#: part/ui/KPrHtmlExportDialog.cpp:300
+#, kde-format
+msgid "You may not remove the templates provided with the application"
+msgstr ""
+
+#: part/ui/KPrHtmlExportDialog.cpp:308
+#, fuzzy, kde-format
+msgid "Add Template"
+msgstr "Выдаліць слайд"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+msgid "Are you sure you want to remove \"%1\"?"
+msgstr "Вы сапраўды жадаеце выдаліць бягучы слайд?"
+
+#: part/ui/KPrHtmlExportDialog.cpp:317
+#, fuzzy, kde-format
+msgid "Confirm remove"
+msgstr "Захаваць налады..."
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:80
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change sound action"
+msgstr "Паварот"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:103
+#, fuzzy, kde-format
+msgid "No sound"
+msgstr " секунд"
+
+#: plugins/eventactions/sound/KPrSoundEventActionWidget.cpp:104
+#, fuzzy, kde-format
+msgid "Import..."
+msgstr "Імпарт стыляў..."
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:20
+#, kde-format
+msgid "Bar"
+msgstr ""
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:33
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:32
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:40
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "From Left"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:34
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:29
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:42
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:42
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "From Top"
+msgstr "Выплываць зверху"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:35
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:30
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:41
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "From Right"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:36
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:31
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:43
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:43
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "From Bottom"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/barwipe/KPrBarWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:48
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:45
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:56
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:58
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:44
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:49
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:80
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:49
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:48
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:39
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:90
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:62
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:59
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:74
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:58
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:57
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:100
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:87
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:56
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:74
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:55
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:64
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:51
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:55
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:43
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:35
+#, kde-format
+msgid "Unknown subtype"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Clock"
+msgstr "Колеры:"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "From Twelve Clockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "From Three Clockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "From Six Clockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "From Nine Clockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "From Twelve Counterclockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "From Three Counterclockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "From Six Counterclockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/clockwipe/KPrClockWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "From Nine Counterclockwise"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Double Fan"
+msgstr "падвойная замаляваная"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Fan Out Vertical"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Fan Out Horizontal"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Fan In Vertical"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Fan In Horizontal"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Fan In Vertical Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/clockwipe/doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Fan In Horizontal Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Double Sweep"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Parallel Vertical"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Parallel Diagonal"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Opposite Vertical"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Opposite Horizontal"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Bottom Left"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Parallel Vertical Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Opposite Vertical Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Opposite Horizontal Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Top Left Reverse"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Parallel Diagonal Bottom Left Reverse"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Fan"
+msgstr "Матавае адценне"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:39
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Center Right"
+msgstr "Адкрыццё злева"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Center Top"
+msgstr "Па цэнтры"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Center Left"
+msgstr "Па цэнтры"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:42
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Center Bottom"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Fan Out Top"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Fan Out Right"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Fan Out Bottom"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Fan Out Left"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Fan In Top"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Fan In Right"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Fan In Bottom"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/fanwipe/KPrFanWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Fan In Left"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Pin Wheel"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Clockwise"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Clockwise"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Clockwise"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:34
+#, fuzzy, kde-format
+msgid "Two Blades Vertical Counterclockwise"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:35
+#, fuzzy, kde-format
+msgid "Two Blades Horizontal Counterclockwise"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/clockwipe/pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Four Blades Horizontal Counterclockwise"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Saloon Door"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:38
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "To Top"
+msgstr "Выплываць зверху"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:39
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "To Left"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:40
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "To Bottom"
+msgstr "Знізу:"
+
+#: plugins/pageeffects/clockwipe/saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp:41
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "To Right"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Single Sweep"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+msgid "Clockwise Top"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Clockwise Right"
+msgstr "Выплываць справа-зверху"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Clockwise Bottom"
+msgstr "Па ніжнім боку"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Clockwise Left"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Clockwise Top Left"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Counterclockwise Top"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Counterclockwise Right"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:67
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:68
+#, fuzzy, kde-format
+msgid "Counterclockwise Left"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:69
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:70
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:71
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:72
+#, fuzzy, kde-format
+msgid "Clockwise Top Right"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Windshield"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:77
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:74
+#, fuzzy, kde-format
+msgid "Right"
+msgstr "Справа:"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:35
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:75
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:72
+#, kde-format
+msgid "Up"
+msgstr ""
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:28
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:53
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:48
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:65
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Vertical"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:37
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:29
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:50
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:63
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:41
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:26
+#, fuzzy, kde-format
+msgid "Horizontal"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:38
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:78
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:75
+#, fuzzy, kde-format
+msgid "Right Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:39
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:76
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:73
+#, fuzzy, kde-format
+msgid "Up Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:40
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:34
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:54
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:49
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:66
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Vertical Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/clockwipe/windshieldwipe/KPrWindShieldWipeEffectFactory.cpp:41
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:36
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:52
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:51
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:64
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Horizontal Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Barn Door"
+msgstr "падвойная замаляваная"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Reverse"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Diagonal Top Left"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/edgewipe/barndoorwipe/BarnDoorWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Reverse"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/edgewipe/barnveewipe/BarnVeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Barn Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Barn Zig Zag"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Vertical Reversed"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/edgewipe/barnzigzagwipe/BarnZigZagWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Horizontal Reversed"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:33
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:29
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "From Top Left"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:34
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:31
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "From Top Right"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:35
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:32
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "From Bottom Left"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/edgewipe/boxwipe/BoxWipeEffectFactory.cpp:36
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:30
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "From Bottom Right"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/edgewipe/diagonalwipe/DiagonalWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Diagonal"
+msgstr "Дыяганальны градыент 1"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Four Box"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Corners In"
+msgstr "Кутоў:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:31
+#, fuzzy, kde-format
+msgid "Corners In Reverse"
+msgstr "Кутоў:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:32
+#, fuzzy, kde-format
+msgid "Corners Out"
+msgstr "Кутоў:"
+
+#: plugins/pageeffects/edgewipe/fourboxwipe/FourBoxWipeEffectFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Corners Out Reverse"
+msgstr "Кутоў:"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:17
+#, fuzzy, kde-format
+msgid "Misc Diagonal"
+msgstr "Дыяганальны градыент 1"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:28
+#, fuzzy, kde-format
+msgid "Double Barn Door"
+msgstr "падвойная замаляваная"
+
+#: plugins/pageeffects/edgewipe/miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp:29
+#, fuzzy, kde-format
+msgid "Double Diamond"
+msgstr "падвойная замаляваная"
+
+#: plugins/pageeffects/edgewipe/veewipe/VeeWipeEffectFactory.cpp:16
+#, kde-format
+msgid "Vee"
+msgstr ""
+
+#: plugins/pageeffects/edgewipe/zigzagwipe/ZigZagWipeEffectFactory.cpp:15
+#, fuzzy, kde-format
+msgid "Zig Zag"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Fade"
+msgstr "Паступовае знікненне"
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:29
+#, kde-format
+msgid "Crossfade"
+msgstr ""
+
+#: plugins/pageeffects/fade/KPrFadeEffectFactory.cpp:30
+#, fuzzy, kde-format
+msgid "Fade over Color"
+msgstr "Колер тэксту"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "ArrowHead"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:79
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:55
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:76
+#, fuzzy, kde-format
+msgid "Down"
+msgstr "Гатова"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:80
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:56
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:77
+#, fuzzy, kde-format
+msgid "Down Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:81
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:78
+#, fuzzy, kde-format
+msgid "Left"
+msgstr "Кут:"
+
+#: plugins/pageeffects/iriswipe/arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp:82
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:79
+#, fuzzy, kde-format
+msgid "Left Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Ellipse"
+msgstr "Эліпс"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Circle"
+msgstr "Канічны градыент"
+
+#: plugins/pageeffects/iriswipe/ellipseWipe/KPrEllipseWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Circle Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/iriswipe/eyeWipe/KPrEyeWipeEffectFactory.cpp:19
+#, kde-format
+msgid "Eye"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/hexagonWipe/KPrHexagonWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Hexagon"
+msgstr "Прэзентацыя"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:17
+#, kde-format
+msgid "Iris"
+msgstr ""
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Rectangular"
+msgstr "Прастакутны градыент"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Rectangular Reverse"
+msgstr "Прастакутны градыент"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Diamond"
+msgstr "падвойная замаляваная"
+
+#: plugins/pageeffects/iriswipe/irisWipe/KPrIrisWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Diamond Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:14
+#, fuzzy, kde-format
+msgid "Misc"
+msgstr "Дадаткова"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Heart"
+msgstr "Верхні калантытул"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Heart Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Keyhole"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/iriswipe/miscShapeWipe/KPrMiscShapeWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Keyhole Reverse"
+msgstr "Вертыкальныя лініі"
+
+#: plugins/pageeffects/iriswipe/pentagonWipe/KPrPentagonWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Presentation"
+msgid "Pentagon"
+msgstr "Прэзентацыя"
+
+#: plugins/pageeffects/iriswipe/roundRectWipe/KPrRoundRectWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "RoundRect"
+msgstr "Прайграваць гук"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Star"
+msgstr "Дыяграма"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:87
+#, fuzzy, kde-format
+msgid "Four Point Star"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:88
+#, fuzzy, kde-format
+msgid "Four Point Star Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:89
+#, fuzzy, kde-format
+msgid "Five Point Star"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:90
+#, fuzzy, kde-format
+msgid "Five Point Star Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:91
+#, fuzzy, kde-format
+msgid "Six Point Star"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/iriswipe/starWipe/KPrStarWipeEffectFactory.cpp:92
+#, fuzzy, kde-format
+msgid "Six Point Star Reverse"
+msgstr "Гарызантальныя лініі"
+
+#: plugins/pageeffects/iriswipe/triangleWipe/KPrTriangleWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Triangle"
+msgstr "Чарапіцай"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Box Snakes"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Two Box Top In"
+msgstr "Прастакутнік унутр"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Two Box Bottom In"
+msgstr "Знізу:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Two Box Left In"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Two Box Right In"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Four Box Vertical In"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Four Box Horizontal In"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Two Box Top Out"
+msgstr "Прастакутнік вонкі"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Two Box Bottom Out"
+msgstr "Знізу:"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Two Box Left Out"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Two Box Right Out"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Four Box Vertical Out"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/matrixwipe/boxsnakes/KPrBoxSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Four Box Horizontal Out"
+msgstr "Гарызантальныя жалюзі"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:18
+#, fuzzy, kde-format
+msgid "Parallel Snakes"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Vertical Top Same In"
+msgstr "Вертыкальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Vertical Top Same Out"
+msgstr "Вертыкальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Vertical Bottom Same In"
+msgstr "Вертыкальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Vertical Bottom Same Out"
+msgstr "Вертыкальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite In"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Vertical Top Left Opposite Out"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite In"
+msgstr "Вертыкальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Vertical Bottom Left Opposite Out"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+msgid "Horizontal Left Same In"
+msgstr "Гарызантальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+msgid "Horizontal Left Same Out"
+msgstr "Гарызантальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:57
+#, fuzzy, kde-format
+msgid "Horizontal Right Same In"
+msgstr "Гарызантальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:58
+#, fuzzy, kde-format
+msgid "Horizontal Right Same Out"
+msgstr "Гарызантальны градыент"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:59
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite In"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:60
+#, fuzzy, kde-format
+msgid "Horizontal Top Left Opposite Out"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:61
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite In"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:62
+#, fuzzy, kde-format
+msgid "Horizontal Top Right Opposite Out"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:63
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite In"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:64
+#, fuzzy, kde-format
+msgid "Diagonal Bottom Left Opposite Out"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:65
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite In"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp:66
+#, fuzzy, kde-format
+msgid "Diagonal Top Left Opposite Out"
+msgstr "Гарызантальны крок сеткі:"
+
+#: plugins/pageeffects/matrixwipe/snakewipe/KPrSnakeWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+#| msgid "Shape"
+msgid "Snake"
+msgstr "Фігура"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Spiral"
+msgstr "Віхура"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Clockwise Top Left In"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Clockwise Top Left Out"
+msgstr "Выплываць злева"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Clockwise Top Right In"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:44
+#, fuzzy, kde-format
+msgid "Clockwise Top Right Out"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:45
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left In"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:46
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Left Out"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:47
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right In"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:48
+#, fuzzy, kde-format
+msgid "Clockwise Bottom Right Out"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:49
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left In"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:50
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Left Out"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:51
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right In"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:52
+#, fuzzy, kde-format
+msgid "Counterclockwise Top Right Out"
+msgstr "Выплываць справа"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:53
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left In"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:54
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Left Out"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:55
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right In"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/spiralwipe/KPrSpiralWipeEffectFactory.cpp:56
+#, fuzzy, kde-format
+msgid "Counterclockwise Bottom Right Out"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Waterfall"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:36
+#, fuzzy, kde-format
+msgid "Top Left Vertical"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:37
+#, fuzzy, kde-format
+msgid "Top Left Horizontal"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:38
+#, fuzzy, kde-format
+msgid "Top Right Vertical"
+msgstr "Разгарнуць па вертыкалі"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:39
+#, fuzzy, kde-format
+msgid "Top Right Horizontal"
+msgstr "Разгарнуць па гарызанталі"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:40
+#, fuzzy, kde-format
+msgid "Bottom Left Vertical"
+msgstr "Згортваць па вертыкалі"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:41
+#, fuzzy, kde-format
+msgid "Bottom Left Horizontal"
+msgstr "Згортваць па гарызанталі"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:42
+#, fuzzy, kde-format
+msgid "Bottom Right Vertical"
+msgstr "Выплываць знізу"
+
+#: plugins/pageeffects/matrixwipe/waterfallwipe/KPrWaterfallWipeEffectFactory.cpp:43
+#, fuzzy, kde-format
+msgid "Bottom Right Horizontal"
+msgstr "Гарызантальныя жалюзі 1"
+
+#: plugins/pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp:23
+#, fuzzy, kde-format
+msgid "Slide"
+msgstr "Слайды"
+
+#: plugins/pageeffects/spacerotation/KPrSpaceRotationEffectFactory.cpp:19
+#, fuzzy, kde-format
+msgid "Space Rotation"
+msgstr "Кручэнне"
+
+#: plugins/pageeffects/swapeffect/KPrSwapEffectFactory.cpp:16
+#, fuzzy, kde-format
+msgid "Swap effect"
+msgstr "Эфект высновы малюнка:"
+
+#: plugins/variable/PresentationVariableFactory.cpp:25
+#, fuzzy, kde-format
+msgid "Header"
+msgstr "Верхні калантытул"
+
+#: plugins/variable/PresentationVariableFactory.cpp:33
+#, fuzzy, kde-format
+msgid "Footer"
+msgstr "Ніжні калантытул"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&Змяніць"
+
+#, fuzzy
+#~| msgid "&View"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Выгляд"
+
+#, fuzzy
+#~| msgid "&Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Insert"
+#~ msgstr "У&ставіць"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "F&ormat"
+#~ msgstr "Ф&армат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Slide"
+#~ msgstr "Слайды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sli&de Show"
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~| msgid "&Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "&Настаўленні"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Crop"
+#~ msgstr "Капіяваць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W&idth:"
+#~ msgstr "Таўшчыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Will keep the width of the crop constant"
+#~ msgstr "Таўшчыня лініі."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Height:"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "R&atio:"
+#~ msgstr "Размяшчэнне:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Image"
+#~ msgstr "Слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Crop"
+#~ msgstr "Зверху:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides"
+#~ msgstr "Слайды"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Slides:"
+#~ msgstr "Прэзентацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows ..."
+#~ msgstr "Нестандартная дэманстрацыя..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select all"
+#~ msgstr "Вылучыць усё"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select template (.css) :"
+#~ msgstr "Вылучаныя слайды:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Deselect all"
+#~ msgstr "Адмяніць выбар"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Title"
+#~ msgstr "Загаловак:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Output preview"
+#~ msgstr "Папярэдні прагляд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Стварыць..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Author"
+#~ msgstr "Аўтар:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Favorite"
+#~ msgstr "Выдаліць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation monitor:"
+#~ msgstr "Пяро для малявання на слайдах"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Stage"
+#~ msgstr "Наладзіць дэманстрацыю..."
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Presentation Tool"
+#~ msgstr "Прэзентацыя"
+
+#, fuzzy
+#~| msgid "(c) 1998-2007, The KPresenter Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Stage Team"
+#~ msgstr "(c) 1998-2007, Каманда KPresenter"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Former maintainer"
+#~ msgstr "бягучае суправаджэнне"
+
+#, fuzzy
+#~| msgid "Laurent Montel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Laurent Montel"
+#~ msgstr "Лаўрэн Монтэль"
+
+#, fuzzy
+#~| msgid "original author"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original author"
+#~ msgstr "аўтар ідэі"
+
+#, fuzzy
+#~| msgid "Werner Trobin"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Werner Trobin"
+#~ msgstr "Вернер Тробін"
+
+#, fuzzy
+#~| msgid "David Faure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "David Faure"
+#~ msgstr "Дэвід Фор"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Peter Simonsson"
+#~ msgstr "Параметры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Carlos Licea "
+#~ msgstr "Замкнёная лінія"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сяржук Лянцэвіч"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "serzh.by@gmail.com"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide %1"
+#~ msgstr "Слайд %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of presentation. Click to exit."
+#~ msgstr "Канец прэзентацыі. Пстрыкніце для выхаду."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layout"
+#~ msgstr "Фармат слайда..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Color"
+#~ msgstr "Колеры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pen Size"
+#~ msgstr "Павялічыць памер шрыфта"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Black"
+#~ msgstr "Колеры:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "White"
+#~ msgstr "Таўшчыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Green"
+#~ msgstr "Зялёны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Red"
+#~ msgstr "Чырвоны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Blue"
+#~ msgstr "Сіні"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Yellow"
+#~ msgstr "Павольна"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Next Slide"
+#~ msgstr "Наступны"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Speaker Notes"
+#~ msgstr "Зачытаць усплывальныя падказкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current Slide %1 of %2"
+#~ msgstr "Стварыць вэб-прэзентацыю"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End of Slide Show"
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start after previous animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "start with previous animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "Фігура"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Move Here"
+#~ msgstr "Перамясціць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Copy Here"
+#~ msgstr "Капіяваць слайд"
+
+#, fuzzy
+#~| msgid "&Cancel"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "C&ancel"
+#~ msgstr "&Скасаваць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Normal"
+#~ msgstr "не"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Master Slides"
+#~ msgstr "Уставіць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import Slideshow..."
+#~ msgstr "Перайсці на слайд..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Slide"
+#~ msgstr "Уставіць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy Slide"
+#~ msgstr "Капіяваць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy the current slide"
+#~ msgstr "Перад бягучым слайдам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Slide"
+#~ msgstr "Выдаліць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete the current slide"
+#~ msgstr "Перад бягучым слайдам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Master Slide..."
+#~ msgstr "Уставіць слайд..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Previous Slide"
+#~ msgstr "Папярэдні"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to previous slide"
+#~ msgstr "Папярэдні"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to next slide"
+#~ msgstr "Перайсці на слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "First Slide"
+#~ msgstr "Уставіць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to first slide"
+#~ msgstr "Перайсці на слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Last Slide"
+#~ msgstr "Уставіць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Go to last slide"
+#~ msgstr "Перайсці на слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Stage..."
+#~ msgstr "Наладзіць дэманстрацыю..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Pictures as Slides..."
+#~ msgstr "Уставіць малюнак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Appear Animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Custom Slide Shows..."
+#~ msgstr "Нестандартная дэманстрацыя..."
+
+#, fuzzy
+#~| msgid "Start Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Presentation"
+#~ msgstr "Пачаць прэзентацыю"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Current Slide"
+#~ msgstr "Пасля бягучага слайда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From First Slide"
+#~ msgstr "Запуск з першага слайда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stop presentation"
+#~ msgstr "У цыкле"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "Паказаць радок стану"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Hide Status Bar"
+#~ msgstr "Паказаць радок стану"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "Паказаць радок стану"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show..."
+#~ msgstr "Наладзіць дэманстрацыю..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View..."
+#~ msgstr "Наладзіць KPresenter..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Draw on the presentation..."
+#~ msgstr "Замяніць файл"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Notes"
+#~ msgstr "Нататка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slides Sorter"
+#~ msgstr "Шаблон слайда"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show: "
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new custom slide show"
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current custom slide show"
+#~ msgstr "Перад бягучым слайдам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add slides to current custom slide show"
+#~ msgstr "Нестандартная дэманстрацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duplicate Slide"
+#~ msgstr "Выдаліць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start Slideshow"
+#~ msgstr "Стварыць вэб-прэзентацыю"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new slide"
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected slides"
+#~ msgstr "Вылучаныя слайды:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename"
+#~ msgstr "Выдаліць спасылку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Cut"
+#~ msgstr "Іншы фармат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Капіяваць"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paste"
+#~ msgstr "Тэчка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Show %1"
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "All slides"
+#~ msgstr "Усе файлы"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "стрэлка"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Automatic animation preview"
+#~ msgstr "Аўтаматычны перанос слоў"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview animation"
+#~ msgstr "Прэзентацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide Transitions"
+#~ msgstr "Змяніць змену слайдаў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Click Actions"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Animations"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Manage animation delay and duration: "
+#~ msgstr "Працягласць прэзентацыі: "
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start: "
+#~ msgstr "Дыяграма"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "after previous animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "with previous animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Duration: "
+#~ msgstr "Кірунак"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Preview Shape Animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~| msgid "No Effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No Effect"
+#~ msgstr "Няма эфекту"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid " sec"
+#~ msgstr " секунд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Apply To All Slides"
+#~ msgstr "Ужыць стылі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Custom"
+#~ msgstr "Нестандартны слайд:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ole Action"
+#~ msgstr "Вышыня:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add new animation"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove animation"
+#~ msgstr "Выдаліць спасылку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Move animation up"
+#~ msgstr "Стварыць прэзентацыю HTML"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add a new animation"
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete current animation"
+#~ msgstr "Перад бягучым слайдам"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Presenter View"
+#~ msgstr "Параметры KPresenter"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Slide Show"
+#~ msgstr "Наладзіць дэманстрацыю"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Template"
+#~ msgstr "Выдаліць слайд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Are you sure you want to remove \"%1\"?"
+#~ msgstr "Вы сапраўды жадаеце выдаліць бягучы слайд?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Confirm remove"
+#~ msgstr "Захаваць налады..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No sound"
+#~ msgstr " секунд"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import..."
+#~ msgstr "Імпарт стыляў..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Left"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top"
+#~ msgstr "Выплываць зверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Right"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clock"
+#~ msgstr "Колеры:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Fan"
+#~ msgstr "падвойная замаляваная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Vertical"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Horizontal"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Vertical Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Horizontal Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Sweep"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Vertical Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Vertical Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Opposite Horizontal Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Top Left Reverse"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Diagonal Bottom Left Reverse"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan"
+#~ msgstr "Матавае адценне"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Right"
+#~ msgstr "Адкрыццё злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Top"
+#~ msgstr "Па цэнтры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Left"
+#~ msgstr "Па цэнтры"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center Bottom"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Top"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Right"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Bottom"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan Out Left"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Right"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Bottom"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fan In Left"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pin Wheel"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Blades Horizontal Clockwise"
+#~ msgstr "Гарызантальныя жалюзі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Blades Horizontal Clockwise"
+#~ msgstr "Гарызантальныя жалюзі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saloon Door"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Left"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Bottom"
+#~ msgstr "Знізу:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "To Right"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Single Sweep"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Right"
+#~ msgstr "Выплываць справа-зверху"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom"
+#~ msgstr "Па ніжнім боку"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Left"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Windshield"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Справа:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Up Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Door"
+#~ msgstr "падвойная замаляваная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Bottom Left"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Barn Zig Zag"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Reversed"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Reversed"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Left"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Top Right"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Left"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "From Bottom Right"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal"
+#~ msgstr "Дыяганальны градыент 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners In"
+#~ msgstr "Кутоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Corners Out"
+#~ msgstr "Кутоў:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc Diagonal"
+#~ msgstr "Дыяганальны градыент 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Barn Door"
+#~ msgstr "падвойная замаляваная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Double Diamond"
+#~ msgstr "падвойная замаляваная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade"
+#~ msgstr "Паступовае знікненне"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fade over Color"
+#~ msgstr "Колер тэксту"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArrowHead"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down"
+#~ msgstr "Гатова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Down Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Кут:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Ellipse"
+#~ msgstr "Эліпс"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle"
+#~ msgstr "Канічны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Circle Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular"
+#~ msgstr "Прастакутны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rectangular Reverse"
+#~ msgstr "Прастакутны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond"
+#~ msgstr "падвойная замаляваная"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diamond Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Дадаткова"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart"
+#~ msgstr "Верхні калантытул"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Heart Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Keyhole Reverse"
+#~ msgstr "Вертыкальныя лініі"
+
+#, fuzzy
+#~| msgid "Presentation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pentagon"
+#~ msgstr "Прэзентацыя"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "RoundRect"
+#~ msgstr "Прайграваць гук"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Star"
+#~ msgstr "Дыяграма"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Point Star Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Five Point Star Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Six Point Star Reverse"
+#~ msgstr "Гарызантальныя лініі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Triangle"
+#~ msgstr "Чарапіцай"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Box Snakes"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top In"
+#~ msgstr "Прастакутнік унутр"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom In"
+#~ msgstr "Знізу:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left In"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right In"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Vertical In"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal In"
+#~ msgstr "Гарызантальныя жалюзі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Top Out"
+#~ msgstr "Прастакутнік вонкі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Bottom Out"
+#~ msgstr "Знізу:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Left Out"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Two Box Right Out"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Four Box Horizontal Out"
+#~ msgstr "Гарызантальныя жалюзі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Parallel Snakes"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same In"
+#~ msgstr "Вертыкальны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Top Same Out"
+#~ msgstr "Вертыкальны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Bottom Same In"
+#~ msgstr "Вертыкальны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same In"
+#~ msgstr "Гарызантальны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Left Same Out"
+#~ msgstr "Гарызантальны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same In"
+#~ msgstr "Гарызантальны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Right Same Out"
+#~ msgstr "Гарызантальны градыент"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Top Right Opposite In"
+#~ msgstr "Гарызантальны крок сеткі:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Diagonal Top Left Opposite In"
+#~ msgstr "Гарызантальны крок сеткі:"
+
+#, fuzzy
+#~| msgid "Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snake"
+#~ msgstr "Фігура"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spiral"
+#~ msgstr "Віхура"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left In"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Left Out"
+#~ msgstr "Выплываць злева"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right In"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Top Right Out"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left In"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Left Out"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right In"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clockwise Bottom Right Out"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left In"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Left Out"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right In"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Top Right Out"
+#~ msgstr "Выплываць справа"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left In"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Left Out"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right In"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Counterclockwise Bottom Right Out"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Waterfall"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Vertical"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left Horizontal"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Vertical"
+#~ msgstr "Разгарнуць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right Horizontal"
+#~ msgstr "Разгарнуць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Vertical"
+#~ msgstr "Згортваць па вертыкалі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left Horizontal"
+#~ msgstr "Згортваць па гарызанталі"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Vertical"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right Horizontal"
+#~ msgstr "Гарызантальныя жалюзі 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Slide"
+#~ msgstr "Слайды"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Space Rotation"
+#~ msgstr "Кручэнне"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Swap effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header"
+#~ msgstr "Верхні калантытул"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Footer"
+#~ msgstr "Ніжні калантытул"
+
+#, fuzzy
+#~| msgid "current maintainer"
+#~ msgid "Maintainer"
+#~ msgstr "бягучае суправаджэнне"
+
+#, fuzzy
+#~ msgid "Calligra Presentation Tool"
+#~ msgstr "Падрыхтоўка прэзентацый KOffice"
+
+#, fuzzy
+#~ msgctxt "application name"
+#~ msgid "Stage"
+#~ msgstr "Слайд"
+
+#~ msgid "File to open"
+#~ msgstr "Адкрыць файл"
+
+#, fuzzy
+#~ msgid "Set Layout"
+#~ msgstr "Фармат слайда..."
+
+#~ msgid "&File"
+#~ msgstr "&Файл"
+
+#, fuzzy
+#~ msgid "Line"
+#~ msgstr "Лінейны"
+
+#, fuzzy
+#~ msgid "Arra&nge Objects"
+#~ msgstr "Парадак аб'ектаў"
+
+#, fuzzy
+#~ msgid "&Align Objects"
+#~ msgstr "Выраўнаваць аб'екты"
+
+#~ msgid "Te&xt"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~ msgid "&Align"
+#~ msgstr "Вы&раўнаць"
+
+#~ msgid "T&ype"
+#~ msgstr "Тып"
+
+#, fuzzy
+#~ msgid "Spellcheck"
+#~ msgstr "Спраўдзіць правапіс"
+
+#~ msgid "Autocorrection"
+#~ msgstr "Аўтакарэкцыя"
+
+#~ msgid "File"
+#~ msgstr "Файл"
+
+#~ msgid "Edit"
+#~ msgstr "Змяніць"
+
+#~ msgid "Insert"
+#~ msgstr "Уставіць"
+
+#~ msgid "Tools"
+#~ msgstr "Начынне"
+
+#~ msgid "Format"
+#~ msgstr "Фармат"
+
+#~ msgid "Text"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~ msgid "Slide Show"
+#~ msgstr "Дэманстрацыя"
+
+#~ msgid "Navigation"
+#~ msgstr "Навігацыя"
+
+#~ msgid "Vertical Alignment"
+#~ msgstr "Вертыкальнае выраўнаванне"
+
+#, fuzzy
+#~ msgid "Flip Objects"
+#~ msgstr "Выраўнаваць аб'екты"
+
+#, fuzzy
+#~ msgid "&Scale to Show the Picture 1:1 In"
+#~ msgstr "Арыгінальны маштаб малюнка (1:1) у"
+
+#~ msgid "Spell Check Result"
+#~ msgstr "Вынікі праверкі арфаграфіі"
+
+#, fuzzy
+#~ msgid "Slide Layouts"
+#~ msgstr "Фармат слайда..."
+
+#, fuzzy
+#~ msgid "Transitions"
+#~ msgstr "Змена слайдаў"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete page effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Configure KPresenter..."
+#~ msgstr "Наладзіць KPresenter..."
+
+#, fuzzy
+#~ msgid "Slide Title"
+#~ msgstr "Загаловак слайда"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Deselect Item"
+#~ msgstr "Адмяніць выбар"
+
+#, fuzzy
+#~ msgctxt "@info:tooltip"
+#~ msgid "Select Item"
+#~ msgstr "Выбар"
+
+#, fuzzy
+#~| msgid "Edit"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Змяніць"
+
+#, fuzzy
+#~ msgid "New Slide Show %1"
+#~ msgstr "Дэманстрацыя"
+
+#, fuzzy
+#~ msgid "Are you sure you want to delete the selected slide show?"
+#~ msgstr "Вы сапраўды жадаеце выдаліць бягучы слайд?"
+
+#, fuzzy
+#~ msgid "Confirm action"
+#~ msgstr "Захаваць налады..."
+
+#, fuzzy
+#~ msgid "Custom Slideshows editor"
+#~ msgstr "Нестандартная дэманстрацыя"
+
+#, fuzzy
+#~ msgid "Customs Slideshows"
+#~ msgstr "Нестандартная дэманстрацыя"
+
+#, fuzzy
+#~ msgid "Available Slides"
+#~ msgstr "Дубліраваць слайд"
+
+#, fuzzy
+#~ msgid "Add Slide"
+#~ msgstr "Слайд"
+
+#, fuzzy
+#~ msgid "Close"
+#~ msgstr "Колеры:"
+
+#~ msgid "KPresenter"
+#~ msgstr "KPresenter"
+
+#~ msgid "&OK"
+#~ msgstr "&Добра"
+
+#, fuzzy
+#~ msgid ""
+#~ "Choose a predefined shape by clicking on it then clicking the OK button "
+#~ "(or just double-click on the shape). You can then insert the shape onto "
+#~ "your slide by drawing the area with the mouse pointer."
+#~ msgstr ""
+#~ "Устаўце фігуру, вылучыўшы яе ў спісе і націснуўшы OK або проста двойчы "
+#~ "пстрыкнуўшы па ёй. Акрамя таго, вы можаце ўставіць фігуру, вылучыўшы яе ў "
+#~ "меню, а затым пстрыкнуць і расцягнуць вобласць фігуры мышшу."
+
+#, fuzzy
+#~ msgid "Page Layouts"
+#~ msgstr "Фармат слайда"
+
+#, fuzzy
+#~ msgid "&Page"
+#~ msgstr "Слайд"
+
+#, fuzzy
+#~| msgid "Create page effect"
+#~ msgid "Click to preview the page effect."
+#~ msgstr "Стварыць эфект малюнка"
+
+#, fuzzy
+#~ msgid "Spiral Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Snake Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Pentagon Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "RoundRect Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Misc Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Ellipse Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Iris Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Eye Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Hexagon Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Triangle Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Star Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Fan Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Clock Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Double Fan Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Bar Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Slide Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Four Box Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Misc Diagonal Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Barn Vee Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Zig Zag Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Barn Door Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Diagonal Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Vee Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~ msgid "Box Wipe Effect"
+#~ msgstr "Эфект высновы малюнка:"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Фармат"
+
+#, fuzzy
+#~| msgid "Navigation"
+#~ msgid "Navigate to:"
+#~ msgstr "Навігацыя"
+
+#~ msgid "Cover down effect"
+#~ msgstr "Выплываць знізу"
+
+#, fuzzy
+#~ msgid "Insert &new slide:"
+#~ msgstr "Уставіць новы слайд:"
+
+#, fuzzy
+#~ msgid "Use &default template"
+#~ msgstr "Выкарыстаць шаблон па змаўчанні"
+
+#, fuzzy
+#~ msgid "Use cu&rrent slide as default"
+#~ msgstr "Выкарыстаць бягучы слайд як шаблон па змаўчанні"
+
+#, fuzzy
+#~ msgid "Choose di&fferent template"
+#~ msgstr "Вылучыць іншы шаблон"
+
+#, fuzzy
+#~ msgid "A&ngle:"
+#~ msgstr "Кут:"
+
+#, fuzzy
+#~ msgid " °"
+#~ msgstr " °"
+
+#, fuzzy
+#~ msgid "Pie"
+#~ msgstr "Сектар"
+
+#, fuzzy
+#~ msgid "These settings are used in the Insert->Shape->Pie/Arc/Chord menu."
+#~ msgstr "Гэтыя параметры выкарыстоўваюцца для сектара, дугі або хорды."
+
+#, fuzzy
+#~ msgid ""
+#~ "You can choose among three options in the dropdown box: Pie, Arc or Chord."
+#~ msgstr "Выбар тыпу фігуры: сектар, дуга або хорда."
+
+#, fuzzy
+#~ msgid "&Type:"
+#~ msgstr "Тып:"
+
+#, fuzzy
+#~ msgid "&Length:"
+#~ msgstr "Кут:"
+
+#, fuzzy
+#~ msgid "This displays a preview of your choices."
+#~ msgstr "Паказ прыкладу афармлення."
+
+#, fuzzy
+#~ msgid "Set here the start position."
+#~ msgstr "Пачатковы кут."
+
+#, fuzzy
+#~ msgid "Set the arc length of your pie."
+#~ msgstr "Кут сегмента акружнасці."
+
+#, fuzzy
+#~ msgid "Start position:"
+#~ msgstr "Пачатковы кут:"
+
+#, fuzzy
+#~ msgid "Preview"
+#~ msgstr "Прагляд"
+
+#, fuzzy
+#~ msgid "Channel Intensity"
+#~ msgstr "Інтэнсіўнасць канала"
+
+#, fuzzy
+#~ msgid "Intensity"
+#~ msgstr "Інтэнсіўнасць"
+
+#, fuzzy
+#~ msgid "Desaturate"
+#~ msgstr "Абясколерыць"
+
+#, fuzzy
+#~ msgid "Contrast"
+#~ msgstr "Кантраснасць"
+
+#, fuzzy
+#~ msgid "Normalize"
+#~ msgstr "Нармалізацыя"
+
+#, fuzzy
+#~ msgid "Equalize"
+#~ msgstr "Выраўнаваць"
+
+#, fuzzy
+#~ msgid "Threshold"
+#~ msgstr "Парог"
+
+#, fuzzy
+#~ msgid "Solarize"
+#~ msgstr "Выцвітанне"
+
+#, fuzzy
+#~ msgid "Emboss"
+#~ msgstr "Барэльеф"
+
+#, fuzzy
+#~ msgid "Despeckle"
+#~ msgstr "Прыбраць плямы"
+
+#, fuzzy
+#~ msgid "Charcoal"
+#~ msgstr "Аловак"
+
+#, fuzzy
+#~ msgid "Noise"
+#~ msgstr "Шум"
+
+#, fuzzy
+#~ msgid "Blur"
+#~ msgstr "Размыццё"
+
+#, fuzzy
+#~ msgid "Edge"
+#~ msgstr "Бок"
+
+#, fuzzy
+#~ msgid "Implode"
+#~ msgstr "Выбух"
+
+#, fuzzy
+#~ msgid "Oil Paint"
+#~ msgstr "Алейны малюнак"
+
+#, fuzzy
+#~ msgid "Sharpen"
+#~ msgstr "Падвышэнне рэзкасці"
+
+#, fuzzy
+#~ msgid "Spread"
+#~ msgstr "Рассейванне"
+
+#, fuzzy
+#~ msgid "Shade"
+#~ msgstr "Цень"
+
+#, fuzzy
+#~ msgid "Wave"
+#~ msgstr "Хваля"
+
+#, fuzzy
+#~ msgid "Value:"
+#~ msgstr "Яркасць:"
+
+#, fuzzy
+#~ msgid " %"
+#~ msgstr " %"
+
+#, fuzzy
+#~ msgid "Color component:"
+#~ msgstr "Кампанент колеру:"
+
+#, fuzzy
+#~ msgid "Gray"
+#~ msgstr "Шэры"
+
+#, fuzzy
+#~ msgid "All"
+#~ msgstr "Усё"
+
+#, fuzzy
+#~ msgid "Color:"
+#~ msgstr "Колер:"
+
+#, fuzzy
+#~ msgid "Color 1:"
+#~ msgstr "Колер 1:"
+
+#, fuzzy
+#~ msgid "Color 2:"
+#~ msgstr "Колер 2:"
+
+#, fuzzy
+#~ msgid "Intensity:"
+#~ msgstr "Інтэнсіўнасць:"
+
+#, fuzzy
+#~ msgid "This effect has no options."
+#~ msgstr "У гэтага эфекту няма налад."
+
+#, fuzzy
+#~ msgid "Factor:"
+#~ msgstr "Фактар:"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "Тып:"
+
+#, fuzzy
+#~ msgid "Uniform"
+#~ msgstr "Раўнамерны"
+
+#, fuzzy
+#~ msgid "Gaussian"
+#~ msgstr "Гаўсава"
+
+#, fuzzy
+#~ msgid "Multiplicative Gaussian"
+#~ msgstr "Выбарковае Гаўсава"
+
+#, fuzzy
+#~ msgid "Impulse"
+#~ msgstr "Імпульс"
+
+#, fuzzy
+#~ msgid "LaPlace"
+#~ msgstr "ЛаПлас"
+
+#, fuzzy
+#~ msgid "Poisson"
+#~ msgstr "Пуасон"
+
+#, fuzzy
+#~ msgid "Radius:"
+#~ msgstr "Радыўс:"
+
+#, fuzzy
+#~ msgid "Color Shading"
+#~ msgstr "Зацяненне колеру"
+
+#, fuzzy
+#~ msgid "Azimuth:"
+#~ msgstr "Азімут:"
+
+#, fuzzy
+#~ msgid "Determines the light source and direction"
+#~ msgstr "Азначэнне крыніцы і кірункі святла"
+
+#, fuzzy
+#~ msgid "Angle:"
+#~ msgstr "Кут:"
+
+#, fuzzy
+#~ msgid "Amplitude:"
+#~ msgstr "Амплітуда:"
+
+#, fuzzy
+#~ msgid "Wave length:"
+#~ msgstr "Даўжыня хвалі:"
+
+#, fuzzy
+#~ msgid "Pen"
+#~ msgstr "Пяро"
+
+#, fuzzy
+#~ msgid "The settings in this tab are used in the Insert->Line menu."
+#~ msgstr ""
+#~ "Параметры на гэтай укладцы выкарыстоўваюцца для ліній, устаўляемых з меню "
+#~ "Ўстаўка->Лінія."
+
+#, fuzzy
+#~ msgid "Arrow Style"
+#~ msgstr "Стрэлкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the styles of the beginning and end of your line. For example, you "
+#~ "can choose a square dot at the beginning and an arrow at the end."
+#~ msgstr ""
+#~ "Налада афармлення пачатку і завяршэнні лініі. Напрыклад, вы можаце "
+#~ "паказаць квадрат на пачатку лініі і стралку на канцы лініі."
+
+#, fuzzy
+#~ msgid "&Begin:"
+#~ msgstr "Пачатак лініі:"
+
+#, fuzzy
+#~ msgid "&End:"
+#~ msgstr "Канец лініі:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Choose the line style. This can range from No Outline, which will not "
+#~ "draw any lines, to dotted and plain lines."
+#~ msgstr ""
+#~ "Стыль лініі. Вы можаце не паказваць лінію, паказаць простую або штрыхавую "
+#~ "лінію."
+
+#, fuzzy
+#~ msgid "&Width:"
+#~ msgstr "Таўшчыня:"
+
+#, fuzzy
+#~ msgid "St&yle:"
+#~ msgstr "Стыль лініі:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the color of the line. Clicking on the color will bring the standard "
+#~ "KDE Select Color dialog."
+#~ msgstr "Выбар колеру лініі."
+
+#, fuzzy
+#~ msgid "C&olor:"
+#~ msgstr "Колер:"
+
+#, fuzzy
+#~ msgid " pt"
+#~ msgstr " пт"
+
+#, fuzzy
+#~ msgid "Rect"
+#~ msgstr "Прастакутнік"
+
+#, fuzzy
+#~ msgid "All these settings are used in the Insert->Shape->Rectangle menu."
+#~ msgstr "Гэтыя параметры выкарыстоўваюцца для прастакутніка."
+
+#, fuzzy
+#~ msgid "Vertical declination:"
+#~ msgstr "Зкругленне па вертыкалі:"
+
+#, fuzzy
+#~ msgid "Horizontal declination:"
+#~ msgstr "Зкругленне па гарызанталі:"
+
+#, fuzzy
+#~ msgid "Set the horizontal declination."
+#~ msgstr "Зкругленне вяршыняў па гарызанталі."
+
+#, fuzzy
+#~ msgid "Set the vertical declination."
+#~ msgstr "Зкругленне вяршыняў па вертыкалі."
+
+#, fuzzy
+#~ msgid ""
+#~ "You can choose whether or not to keep the same declination for both "
+#~ "vertical and horizontal using this button."
+#~ msgstr ""
+#~ "Тут вы можаце наладзіць зкругленне вяршыняў прастакутніка асобна па "
+#~ "вертыкалі і гарызанталі."
+
+#, fuzzy
+#~ msgid "Polygon"
+#~ msgstr "Звычайны"
+
+#, fuzzy
+#~ msgid ""
+#~ "These settings are used in the Insert->Shape->Convex/Concave Polygon menu."
+#~ msgstr "Гэтыя параметры выкарыстоўваюцца для шматкутніка."
+
+#, fuzzy
+#~ msgid "You can choose Polygon or Convex/Concave as a type."
+#~ msgstr "Выбар тыпу шматкутніка."
+
+#, fuzzy
+#~ msgid "Set here the number of corners of the polygon."
+#~ msgstr "Колькасць вяршыняў шматкутніка."
+
+#, fuzzy
+#~ msgid "&Sharpness:"
+#~ msgstr "Завостранасць вяршыняў:"
+
+#, fuzzy
+#~ msgid "Increase or decrease the sharpness of the polygon."
+#~ msgstr "Завостранасць вяршыняў."
+
+#, fuzzy
+#~ msgid "Brush"
+#~ msgstr "Фон"
+
+#, fuzzy
+#~ msgid "&Style:"
+#~ msgstr "Стыль:"
+
+#, fuzzy
+#~ msgid "Choose the style or the pattern."
+#~ msgstr "Стыль залівання."
+
+#, fuzzy
+#~ msgid ""
+#~ "Choose the color (white is the default). Clicking on the color will "
+#~ "display the standard KDE color chooser dialog."
+#~ msgstr "Выбар колеру (па змаўчанні выкарыстоўваецца белы колер)."
+
+#, fuzzy
+#~ msgid "&Preview"
+#~ msgstr "Прагляд"
+
+#, fuzzy
+#~ msgid "&Effect:"
+#~ msgstr "Эфект:"
+
+#, fuzzy
+#~ msgid "&Speed:"
+#~ msgstr "Хуткасць змены слайдаў:"
+
+#, fuzzy
+#~ msgid "So&und effect"
+#~ msgstr "Прайграваць гук"
+
+#, fuzzy
+#~ msgid "&File:"
+#~ msgstr "Файл:"
+
+#, fuzzy
+#~ msgid "Automatic &transition to the next slide after:"
+#~ msgstr "Пераходзіць на наступны слайд пасля:"
+
+#, fuzzy
+#~ msgid "Gradient"
+#~ msgstr "Градыент"
+
+#, fuzzy
+#~ msgid "Gradient:"
+#~ msgstr "Градыент:"
+
+#, fuzzy
+#~ msgid "X-fac&tor:"
+#~ msgstr "Гарызантальнае зрушэнне:"
+
+#, fuzzy
+#~ msgid "Un&balanced:"
+#~ msgstr "Наладзіць градыент:"
+
+#, fuzzy
+#~ msgid "&Y-factor:"
+#~ msgstr "Вертыкальнае зрушэнне:"
+
+#, fuzzy
+#~ msgid "Margin"
+#~ msgstr "Мяжа"
+
+#, fuzzy
+#~ msgid "Margins"
+#~ msgstr "Межы"
+
+#, fuzzy
+#~ msgid "S&ynchronize changes"
+#~ msgstr "Сінхранізаваць змены"
+
+#, fuzzy
+#~ msgid "General"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~ msgid "Na&me:"
+#~ msgstr "Імя:"
+
+#, fuzzy
+#~ msgid "Protect si&ze and position"
+#~ msgstr "Заблакаваць змену памераў і перамяшчэнне"
+
+#, fuzzy
+#~ msgid "Keep &aspect ratio"
+#~ msgstr "Захоўваць прапорцыі"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "Становішча"
+
+#, fuzzy
+#~ msgid "Shadow"
+#~ msgstr "Цень"
+
+#, fuzzy
+#~ msgid "Color && Distance"
+#~ msgstr "Колер і зрушэнне"
+
+#, fuzzy
+#~ msgid "Distance:"
+#~ msgstr "Зрушэнне:"
+
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "Прэзентацыя"
+
+#, fuzzy
+#~ msgid "Picture"
+#~ msgstr "Малюнак"
+
+#, fuzzy
+#~ msgid "Depth"
+#~ msgstr "Глыбіня"
+
+#, fuzzy
+#~ msgid "&1 bit color mode"
+#~ msgstr "Чорна-белы (1 біт)"
+
+#, fuzzy
+#~ msgid "&8 bit color mode"
+#~ msgstr "256 колераў (8 біт)"
+
+#, fuzzy
+#~ msgid "1&6 bit color mode"
+#~ msgstr "65 тысяч колераў (16 біт)"
+
+#, fuzzy
+#~ msgid "&32 bit color mode"
+#~ msgstr "4 млн. колераў (32 біта)"
+
+#, fuzzy
+#~ msgid "&Default color mode"
+#~ msgstr "Рэжым колеру па змаўчанні"
+
+#, fuzzy
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~ msgid "Conv&ert from RGB image to BRG image"
+#~ msgstr "Пераўтварыць малюнак RGB у BRG"
+
+#, fuzzy
+#~ msgid "Gra&yscale"
+#~ msgstr "Адценні шэрага"
+
+#, fuzzy
+#~ msgid "&Brightness:"
+#~ msgstr "Яркасць:"
+
+#, fuzzy
+#~ msgid "&Qt::DockLeft:"
+#~ msgstr "Злева:"
+
+#, fuzzy
+#~ msgid "Qt::Orientation"
+#~ msgstr "Прэзентацыя"
+
+#, fuzzy
+#~ msgid "Use slide master background"
+#~ msgstr "Фон з шаблону слайда"
+
+#, fuzzy
+#~ msgid "Background type:"
+#~ msgstr "Тып фону:"
+
+#, fuzzy
+#~ msgid "Color/Gradient"
+#~ msgstr "Колер/Градыент"
+
+#, fuzzy
+#~ msgid "Plain"
+#~ msgstr "Суцэльнае заліванне"
+
+#, fuzzy
+#~ msgid "Diagonal Gradient 1"
+#~ msgstr "Дыяганальны градыент 1"
+
+#, fuzzy
+#~ msgid "Diagonal Gradient 2"
+#~ msgstr "Дыяганальны градыент 2"
+
+#, fuzzy
+#~ msgid "Circle Gradient"
+#~ msgstr "Эліптычны градыент"
+
+#, fuzzy
+#~ msgid "Rectangle Gradient"
+#~ msgstr "Прастакутны градыент"
+
+#, fuzzy
+#~ msgid "PipeCross Gradient"
+#~ msgstr "Крыжападобны градыент"
+
+#, fuzzy
+#~ msgid "Pyramid Gradient"
+#~ msgstr "Пірамідальны градыент"
+
+#, fuzzy
+#~ msgid "Unbalanced"
+#~ msgstr "Наладзіць градыент"
+
+#, fuzzy
+#~ msgid "X-factor:"
+#~ msgstr "Гарызантальнае зрушэнне:"
+
+#, fuzzy
+#~ msgid "Y-factor:"
+#~ msgstr "Вертыкальнае зрушэнне:"
+
+#, fuzzy
+#~ msgid "View mode:"
+#~ msgstr "Рэжым прагляду:"
+
+#, fuzzy
+#~ msgid "Scaled"
+#~ msgstr "Маштабавана"
+
+#, fuzzy
+#~ msgid "Apply &Global"
+#~ msgstr "Ужыць да ўсіх"
+
+#, fuzzy
+#~ msgid "&Reset"
+#~ msgstr "Скінуць"
+
+#, fuzzy
+#~ msgid "Single Color"
+#~ msgstr "Суцэльны колер"
+
+#, fuzzy
+#~ msgid "Transparent"
+#~ msgstr "Празрысты"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can choose between Single Color, Gradient or Transparent as the type."
+#~ msgstr ""
+#~ "Тут вы можаце вылучыць тып фону: празрысты, суцэльны колер або градыент."
+
+#, fuzzy
+#~ msgid "%1% Fill Pattern"
+#~ msgstr "%1% заліванні"
+
+#, fuzzy
+#~ msgid "Crossing Lines"
+#~ msgstr "Рашотка"
+
+#, fuzzy
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Дыяганальныя лініі ( / )"
+
+#, fuzzy
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Дыяганальныя лініі ( \\ )"
+
+#, fuzzy
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Дыяганальная рашотка"
+
+#, fuzzy
+#~ msgid "Diagonal 2"
+#~ msgstr "Дыяганальны градыент 2"
+
+#, fuzzy
+#~ msgid "PipeCross"
+#~ msgstr "Крыжападобны градыент"
+
+#, fuzzy
+#~ msgid "Pyramid"
+#~ msgstr "Пірамідальны градыент"
+
+#, fuzzy
+#~ msgid ""
+#~ "The object you are trying to select belongs to the master slide. Editing "
+#~ "the object can only be done on the master slide.\n"
+#~ "Go there now?"
+#~ msgstr ""
+#~ "Вылучаны аб'ект знаходзіцца ў шаблоне слайда і можа быць зменены толькі ў "
+#~ "рэжыме рэдагавання шаблону.\n"
+#~ "Змяніць шаблон?"
+
+#, fuzzy
+#~ msgid "Resize Object Up"
+#~ msgstr "Расцягнуць уверх"
+
+#, fuzzy
+#~ msgid "Resize Object Down"
+#~ msgstr "Расцягнуць уніз"
+
+#, fuzzy
+#~ msgid "Resize Object Left"
+#~ msgstr "Расцягнуць налева"
+
+#, fuzzy
+#~ msgid "Resize Object Right"
+#~ msgstr "Расцягнуць направа"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Up"
+#~ msgstr "Расцягнуць налева і ўверх"
+
+#, fuzzy
+#~ msgid "Resize Object Left && Down"
+#~ msgstr "Расцягнуць налева і ўніз"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Up"
+#~ msgstr "Расцягнуць направа і ўверх"
+
+#, fuzzy
+#~ msgid "Resize Object Right && Down"
+#~ msgstr "Расцягнуць направа і ўніз"
+
+#, fuzzy
+#~ msgid ""
+#~ "Read-only content cannot be changed. No modifications will be accepted."
+#~ msgstr "Абароненае ад змены змесціва не можа рэдагавацца."
+
+#, fuzzy
+#~ msgid "&Continue"
+#~ msgstr "Працягнуць"
+
+#, fuzzy
+#~ msgid "&Drawing Mode"
+#~ msgstr "Рэжым малявання"
+
+#, fuzzy
+#~ msgid "&Goto Slide..."
+#~ msgstr "Перайсці на слайд..."
+
+#, fuzzy
+#~ msgid "&End"
+#~ msgstr "Канец"
+
+#, fuzzy
+#~ msgid "Change Text Font"
+#~ msgstr "Шрыфт тэксту"
+
+#, fuzzy
+#~ msgid "Set Text Background Color"
+#~ msgstr " Колер фону"
+
+#, fuzzy
+#~ msgid "Make Text Bold"
+#~ msgstr "Вылучыць паўтлустым"
+
+#, fuzzy
+#~ msgid "Make Text Italic"
+#~ msgstr "Вылучыць курсівам"
+
+#, fuzzy
+#~ msgid "Underline Text"
+#~ msgstr "Вылучыць падкрэсленнем"
+
+#, fuzzy
+#~ msgid "Set Text Font"
+#~ msgstr "Вылучыць шрыфт"
+
+#, fuzzy
+#~ msgid "Change Text Size"
+#~ msgstr "Змяніць памер тэксту"
+
+#, fuzzy
+#~ msgid "Set Text Subscript"
+#~ msgstr "Падрадковы"
+
+#, fuzzy
+#~ msgid "Set Text Superscript"
+#~ msgstr "Надрадковы"
+
+#, fuzzy
+#~ msgid "Apply Default Format"
+#~ msgstr "Ужыць фармат па змаўчанні"
+
+#, fuzzy
+#~ msgid "Increase Font Size"
+#~ msgstr "Павялічыць памер шрыфта"
+
+#, fuzzy
+#~ msgid "Decrease Font Size"
+#~ msgstr "Паменшыць памер шрыфта"
+
+#, fuzzy
+#~ msgid "Set Text Align"
+#~ msgstr "Выраўнаванне"
+
+#, fuzzy
+#~ msgid "Change Tabulators"
+#~ msgstr "Змяніць пазіцыі табуляцыі"
+
+#, fuzzy
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Павялічыць водступ абзаца"
+
+#, fuzzy
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Паменшыць водступ абзаца"
+
+#, fuzzy
+#~ msgid "Change First Line Indent"
+#~ msgstr "Змяніць чырвоны радок"
+
+#, fuzzy
+#~ msgid "Change Left Indent"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgid "Change Right Indent"
+#~ msgstr "Па правым боку"
+
+#, fuzzy
+#~ msgid "Printing..."
+#~ msgstr "Друк..."
+
+#, fuzzy
+#~ msgid "Scale to Original Size"
+#~ msgstr "Вярнуць арыгінальны памер"
+
+#, fuzzy
+#~ msgid "Scale Picture to Be Shown 1:1 in Presentation Mode"
+#~ msgstr "Паказваць малюнак у арыгінальным маштабе (1:1) у рэжыме прэзентацыі"
+
+#, fuzzy
+#~ msgid "Extend Text Contents to Height"
+#~ msgstr "Выраўнаваць змесціва па вышыні аб'екта"
+
+#, fuzzy
+#~ msgid "Extend Text to Contents"
+#~ msgstr "Выраўнаваць межы аб'екта па змесціве"
+
+#, fuzzy
+#~ msgid "Align Objects Left"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgid "Align Objects Top"
+#~ msgstr "Па верхнім боку"
+
+#, fuzzy
+#~ msgid "Align Objects Right"
+#~ msgstr "Па правым боку"
+
+#, fuzzy
+#~ msgid "Align Objects Bottom"
+#~ msgstr "Па ніжнім боку"
+
+#, fuzzy
+#~ msgid "Align Objects Centered (horizontal)"
+#~ msgstr "Па цэнтры (гарызантальна)"
+
+#, fuzzy
+#~ msgid "Align Objects Center/Vertical"
+#~ msgstr "Па цэнтры (вертыкальна)"
+
+#, fuzzy
+#~ msgid "Close Object"
+#~ msgstr "Зачыніць аб'ект"
+
+#, fuzzy
+#~ msgid "Closed Freehand"
+#~ msgstr "Зачыненая крывая"
+
+#, fuzzy
+#~ msgid "Closed Polyline"
+#~ msgstr "Зачыненая ламаная"
+
+#, fuzzy
+#~ msgid "Closed Cubic Bezier Curve"
+#~ msgstr "Зачыненая кубічная крывая Без'е"
+
+#, fuzzy
+#~ msgid "Closed Quadric Bezier Curve"
+#~ msgstr "Зачыненая квадратычная крывая Без'е"
+
+#, fuzzy
+#~ msgid "Modify Slide Transition For All Pages"
+#~ msgstr "Змяніць змену слайдаў для ўсіх старонак"
+
+#, fuzzy
+#~ msgid "Interface"
+#~ msgstr "Знешні выгляд"
+
+#, fuzzy
+#~ msgid "Spelling"
+#~ msgstr "Арфаграфія"
+
+#, fuzzy
+#~ msgid "Document"
+#~ msgstr "Дакумент"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Налады дакумента"
+
+#, fuzzy
+#~ msgid "Default Tools Settings"
+#~ msgstr "Фармат па змаўчанні"
+
+#, fuzzy
+#~ msgid "Paths"
+#~ msgstr "Тэчкі"
+
+#, fuzzy
+#~ msgid "Path Settings"
+#~ msgstr "Тэчкі"
+
+#, fuzzy
+#~ msgid "Change Config"
+#~ msgstr "Змяніць параметры"
+
+#, fuzzy
+#~ msgid "Show rulers"
+#~ msgstr "Паказаць лінейкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "When checked, both vertical and horizontal rulers are shown on the "
+#~ "KPresenter slide (this is the default). When unchecked, the rulers are "
+#~ "not shown on any slide."
+#~ msgstr ""
+#~ "Па змаўчанні зверху і злева ад слайда паказваюцца лінейкі. Вы можаце "
+#~ "адключыць іх паказ гэтым сцяжком."
+
+#, fuzzy
+#~ msgid "Toggle the statusbar, which is shown by default."
+#~ msgstr "Уключыць або адключыць паказ радка стану."
+
+#, fuzzy
+#~ msgid "Number of recent files:"
+#~ msgstr "Колькасць нядаўніх дакументаў:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the number of recent files which will be opened using the File->Open "
+#~ "Recent menu. Default is to remember 10 filenames. The maximum you can set "
+#~ "is 20 and the minimum is 1."
+#~ msgstr ""
+#~ "Усталяваць колькасць нядаўніх дакументаў, паказваемых у меню Файл-"
+#~ ">Нядаўнія дакументы. Па змаўчанні будуць паказаныя 10 апошніх дакументаў. "
+#~ "Вы можаце наладзіць паказ ад 1 да 20 нядаўніх дакументаў."
+
+#, fuzzy
+#~ msgid "Text indentation depth:"
+#~ msgstr "Водступ:"
+
+#, fuzzy
+#~ msgid ""
+#~ "This setting is used by Increase Depth and Decrease Depth menu items (in "
+#~ "the Text menu) to change the indentation depth. The Default is 1 "
+#~ "centimeter."
+#~ msgstr ""
+#~ "Гэты параметр задае водступ тэксту, які вы можаце змяніць праз меню "
+#~ "Тэкст. Значэнне па змаўчанні - 1 гл."
+
+#, fuzzy
+#~ msgid "Background object color:"
+#~ msgstr "Колер фону аб'екта:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Change the background color of the text box. The background is white by "
+#~ "default. If you have a dark background color and you want to put some "
+#~ "white text on it, you can change the color of the text box so that you "
+#~ "can see what you are typing. When you have finished, the area around the "
+#~ "text will revert to the background color. The Defaults button restores "
+#~ "the original settings."
+#~ msgstr ""
+#~ "Выбар колеру фону аб'ектаў. Па змаўчанні колер фону - белы. Рэкамендуемы "
+#~ "прызначыць квітнею тэксту і фону кантрасныя колеры для таго, каб тэкст "
+#~ "быў добра бачны на фоне. Напрыклад, на цёмным фоне будзе лепш бачны "
+#~ "светлы колер тэксту і наадварот."
+
+#, fuzzy
+#~ msgid "Grid color:"
+#~ msgstr "Колер сеткі:"
+
+#, fuzzy
+#~ msgid "Here you can change the grid color, which is black by default."
+#~ msgstr "Выбар колеру сеткі. Па змаўчанні выкарыстоўваецца чорны колер."
+
+#, fuzzy
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Глыбіня адмен і паўтораў:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the number of actions you can undo and redo (how many actions "
+#~ "KPresenter keeps in its Undo buffer). This ranges from a minimum of 10 to "
+#~ "a maximum of 60 (the default is 30). Once the number of actions reaches "
+#~ "the number set here, earlier actions will be forgotten."
+#~ msgstr ""
+#~ "Тут вы можаце задаць колькасць крокаў адмены або паўтораў, якія "
+#~ "падтрымлівае прыкладанне. Вы можаце паказаць ад 10 да 60 крокаў (значэнне "
+#~ "па змаўчанні - 30). Калі вы здзейснілі больш змен, чым паказана ў гэтым "
+#~ "полі, самыя раннія змены будзе немагчыма адмяніць."
+
+#, fuzzy
+#~ msgid "Display links"
+#~ msgstr "Паказваць спасылкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "When you want to include a link in your slide, you can use the Insert-"
+#~ ">Link... menu, which allows you to insert URL, mail or file links. If the "
+#~ "option Display links is checked, all links will be active and displayed "
+#~ "in a different color (this is the default behavior). If the option is "
+#~ "unchecked, the links will be inactive and the same color as the text. "
+#~ "This affects both the edited slides and the slide show."
+#~ msgstr ""
+#~ "Для таго, каб уставіць спасылку на слайд, выкарыстайце пункт меню Ўстаўка-"
+#~ ">Спасылка. Спасылка можа паказваць на рэсурс Інтэрнэту, адрас электроннай "
+#~ "пошты або на шлях да лакальнага файла. Калі гэты параметр уключаны "
+#~ "(паводзіны па змаўчанні), усе спасылкі на слайдах будуць актыўныя і "
+#~ "паказаныя іншым колерам. Калі параметр адключаны, спасылкі не будуць ніяк "
+#~ "вылучаныя і вы не зможаце перайсці па іх. Гэты параметр выкарыстоўваецца "
+#~ "як у рэжыме праўкі, так і ў рэжыме прэзентацыі."
+
+#, fuzzy
+#~ msgid "&Underline all links"
+#~ msgstr "Падкрэсліваць спасылкі"
+
+#, fuzzy
+#~ msgid ""
+#~ "If this is checked, all links will be underlined (this is the default). "
+#~ "If it is not checked, the links will not be underlined."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтага параметру ўсе спасылкі на слайдах будуць "
+#~ "падкрэсленыя."
+
+#, fuzzy
+#~ msgid "Display comments"
+#~ msgstr "Паказваць каментары"
+
+#, fuzzy
+#~ msgid ""
+#~ "Comments are inserted in the text at the cursor using the Insert-"
+#~ ">Comment... menu. Comments can only be viewed in edit mode and not in the "
+#~ "slide show. If this option is checked (default) then each comment will be "
+#~ "shown as a small yellow rectangle. You can then right-click on them to "
+#~ "edit them, remove them or copy the text."
+#~ msgstr ""
+#~ "Вы можаце ўставіць каментары на слайд праз пункт меню Ўстаўка->Каментар. "
+#~ "Пры ўключэнні гэтага параметру (паводзіны па змаўчанні) яны будуць "
+#~ "паказаныя толькі ў рэжыме праўкі ў выглядзе невялікага жоўтага "
+#~ "прастакутніка. Пстрыкнуўшы правай кнопкай мышы па гэтым значку, вы можаце "
+#~ "праглядзець і змяніць тэкст каментара, а таксама выдаліць яго."
+
+#, fuzzy
+#~ msgid "Display field code"
+#~ msgstr "Паказваць код палёў"
+
+#, fuzzy
+#~ msgid ""
+#~ "In editor mode (not in slide show) this option will display all the "
+#~ "variable codes as well as Link at links location. This is very useful to "
+#~ "see what variable is displayed. Variables are inserted using the Insert -"
+#~ "> Variable menu."
+#~ msgstr ""
+#~ "У рэжыме праўкі (не ў дэманстрацыі) гэты параметр задае паказ кодаў палёў "
+#~ "(напрыклад, адрасоў спасылак). Пераменныя можна ўставіць у меню Ўстаўка-"
+#~ ">Пераменная."
+
+#, fuzzy
+#~ msgid "Print slide notes"
+#~ msgstr "Друкаваць нататкі да слайдаў"
+
+#, fuzzy
+#~ msgid ""
+#~ "If checked, all notes will be printed on paper. The notes will all be "
+#~ "printed separately on the last page, from the first slide to the last and "
+#~ "finally the Master Page Note. You can see the notes for each slide using "
+#~ "the View->Show notebar menu."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтага параметру будуць раздрукаваныя ўсё нататкі да "
+#~ "слайдаў у парадку прытрымлівання слайдаў і ў самім канцы - нататкі да "
+#~ "шаблону. Вы можаце задаць нататкі на панелі Выгляд->Паказаць панель "
+#~ "нататак."
+
+#, fuzzy
+#~ msgid "Grid"
+#~ msgstr "Сетка"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the space in millimeters between two horizontal points on the grid. "
+#~ "Default is 5 millimeters."
+#~ msgstr ""
+#~ "Памер гарызантальнага кроку сеткі ў міліметрах. Па змаўчанні - 5 мм."
+
+#, fuzzy
+#~ msgid "Vertical grid size:"
+#~ msgstr "Вертыкальны крок сеткі:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the space in millimeters between two vertical points on the grid. "
+#~ "Default is 5 millimeters."
+#~ msgstr "Памер вертыкальнага кроку сеткі ў міліметрах. Па змаўчанні - 5 мм."
+
+#, fuzzy
+#~ msgid "Change Display Link Command"
+#~ msgstr "Змяніць паказ спасылак"
+
+#, fuzzy
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Змяніць паказ кода палёў"
+
+#, fuzzy
+#~ msgid "Document Defaults"
+#~ msgstr "Налады дакумента па змаўчанні"
+
+#, fuzzy
+#~ msgid "Default font:"
+#~ msgstr "Шрыфт па змаўчанні:"
+
+#, fuzzy
+#~ msgid "Choose..."
+#~ msgstr "Выбар..."
+
+#, fuzzy
+#~ msgid ""
+#~ "Click here if you want to set a new font. The KDE default Select Font "
+#~ "dialog will then be displayed."
+#~ msgstr "Націсніце на гэтую кнопку каб вылучыць іншы шрыфт."
+
+#, fuzzy
+#~ msgid "Global language:"
+#~ msgstr "Мова па змаўчанні:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Use this drop down box to determine the default language for the "
+#~ "document. This setting is used by the hyphenation and spelling tools."
+#~ msgstr ""
+#~ "Вылучыце мову з выпадальнага спісу. Ён будзе скарыстаны для праверкі "
+#~ "арфаграфіі і расстаноўкі пераносаў у прэзентацыях."
+
+#, fuzzy
+#~ msgid ""
+#~ "Check this box if you want KPresenter to automatically hyphenate long "
+#~ "words when it determines the word wrap in text frames. This is not set by "
+#~ "default."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтага параметру занадта доўгія словы не ўмяшчаюцца ў "
+#~ "тэкставыя ўрэзкі будуць перанесеныя па словах. Прадвызначана гэты "
+#~ "параметр адключаны."
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "Ствараць рэзервовую копію"
+
+#, fuzzy
+#~ msgid ""
+#~ "If checked, this will create a .<name>.kpr.autosave.kpr in the folder "
+#~ "where your file is. This backup file can then be used in case of a "
+#~ "problem.\n"
+#~ "The backup file is updated every time you save your document or every "
+#~ "time there is an autosave."
+#~ msgstr ""
+#~ "Калі гэты параметр уключаны, пры адкрыцці дакумента ў тэчцы дакумента "
+#~ "будзе створаная рэзервовая копія .<name>.kpr.autosave.kpr. Рэзервовая "
+#~ "копія будзе абнаўляцца пры кожным захаванні ўручную або пры аўтазахаванні."
+
+#, fuzzy
+#~ msgid "Autosave (min):"
+#~ msgstr "Аўтазахаванне (мін.):"
+
+#, fuzzy
+#~ msgid "No autosave"
+#~ msgstr "Без аўтазахавання"
+
+#, fuzzy
+#~ msgid "min"
+#~ msgstr "мін"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can use this to adjust how often KPresenter saves a temporary file. "
+#~ "If you set this value to No autosave, KPresenter will not autosave. You "
+#~ "can adjust the autosave from 1 to 60 minutes."
+#~ msgstr ""
+#~ "Тут вы можаце задаць наколькі часта будзе захоўвацца прэзентацыя. Вы "
+#~ "можаце паменшыць інтэрвал да 0 - пры гэтым аўтазахаванне будзе адключана. "
+#~ "Даступны перыяд аўтазахавання - ад 1 да 60 хвілін."
+
+#, fuzzy
+#~ msgid "Starting page number:"
+#~ msgstr "Нумар першага слайда:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Here you can change the number for the first page. It is set to 1 by "
+#~ "default.\n"
+#~ "Tip: this is helpful if you have split a single document into multiple "
+#~ "files."
+#~ msgstr ""
+#~ "Тут вы можаце паказаць нумар першага слайда. Па змаўчанні нумарацыя "
+#~ "слайдаў пачынаецца з 1.\n"
+#~ "Нататка: гэты параметр зручна ўжываць. калі ваша прэзентацыя пабітая на "
+#~ "некалькі файлаў."
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Інтэрвал табуляцыі:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Each KPresenter document has a default set of tab stops. If you add tab "
+#~ "stops to your document, the newly added tab stops override the default "
+#~ "ones. You can use this text box to define the spacing between default tab "
+#~ "stops. As an example, if you enter 1.5 in this text box, and the unit of "
+#~ "measurement is in centimeters, the first default tab stop will be located "
+#~ "1.5 cm to the right of the frame's left-hand margin. The second default "
+#~ "tab stop will be located at 3 cm from the left-hand margin, and so on."
+#~ msgstr ""
+#~ "Кожны дакумент KPresenter утрымоўвае спіс пазіцый табуляцыі. Калі вы "
+#~ "памяняеце значэнне гэтага параметру, усе зададзеныя ўручную пазіцыі "
+#~ "табуляцыі будуць скінутыя да значэнняў паказанага інтэрвалу. Інтэрвал "
+#~ "задаецца ў сантыметрах. Так, паказаўшы інтэрвал табуляцыі ў 1,5 націск "
+#~ "клавішы Tab пераносіць курсор на 1,5 гл. ад левага боку, наступны націск "
+#~ "- на 3 гл. і гэтак далей."
+
+#, fuzzy
+#~ msgid "Cursor"
+#~ msgstr "Курсор"
+
+#, fuzzy
+#~ msgid "Cursor in protected area"
+#~ msgstr "У абароненай урэзцы"
+
+#, fuzzy
+#~ msgid ""
+#~ "When this box is checked and you click in a protected frame within your "
+#~ "document, a cursor will appear. When this box is unchecked, and you click "
+#~ "in a protected frame, no cursor will be visible."
+#~ msgstr ""
+#~ "Пры ўключэнні гэтага параметру курсор для ўводу тэксту можа быць змешчаны "
+#~ "ў абароненай урэзцы. Калі параметр выключаны, і вы націснулі мышшу на "
+#~ "абароненай урэзцы, курсор не будзе паказаны."
+
+#, fuzzy
+#~ msgid "Direct insert cursor"
+#~ msgstr "У абароненай урэзцы"
+
+#, fuzzy
+#~ msgid ""
+#~ "When this box is checked, you can select a section of text using your "
+#~ "mouse. Move the mouse to a new area in your document and click once with "
+#~ "the middle mouse button and a copy of the selected text will be copied "
+#~ "and pasted to the new location in the document.\n"
+#~ "When this box is unchecked, in order to copy text from one section to "
+#~ "another, you must select the text, manually copy the text to the "
+#~ "clipboard, then manually paste the text in the new location."
+#~ msgstr ""
+#~ "Калі гэты параметр уключаны, вы можаце змясціць курсор у любым месцы "
+#~ "слайда (нават па-за ўрэзкамі)."
+
+#, fuzzy
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Усталёўвае нумар першага слайда"
+
+#, fuzzy
+#~ msgid "Change Tab Stop Value"
+#~ msgstr "Інтэрвал табуляцыі"
+
+#, fuzzy
+#~ msgid "Outl&ine"
+#~ msgstr "Лінія"
+
+#, fuzzy
+#~ msgid "&Fill"
+#~ msgstr "Заліванне"
+
+#, fuzzy
+#~ msgid "&Rectangle"
+#~ msgstr "Прастакутнік"
+
+#, fuzzy
+#~ msgid "Polygo&n"
+#~ msgstr "Шматкутнік"
+
+#, fuzzy
+#~ msgid "&Pie"
+#~ msgstr "Сектар"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "Апісанне"
+
+#, fuzzy
+#~ msgid "Picture Path"
+#~ msgstr "Малюнкі"
+
+#, fuzzy
+#~ msgid "Backup Path"
+#~ msgstr "Рэзервовыя копіі"
+
+#, fuzzy
+#~ msgid ""
+#~ "There are two paths that are set here: the Backup Path and the Picture "
+#~ "Path. The Backup path is the folder where your backup files are saved and "
+#~ "the Picture Path is the folder where your pictures are saved."
+#~ msgstr ""
+#~ "Вы павінны паказаць два шляху: размяшчэнне рэзервовых дзід і размяшчэнне "
+#~ "малюнкаў. У гэтых тэчках будуць захоўвацца адпаведна рэзервовыя копіі "
+#~ "прэзентацый і малюнкі."
+
+#, fuzzy
+#~ msgid "Modify Path..."
+#~ msgstr "Вылучыць..."
+
+#, fuzzy
+#~ msgid ""
+#~ "When you click this button, a small dialog will appear and, if Default "
+#~ "path is unchecked, you can either enter a path yourself or choose one "
+#~ "using the standard KDE file dialog."
+#~ msgstr ""
+#~ "Пры націску на гэтую кнопку з'явіцца дыялог, у якім вы можаце паказаць "
+#~ "шлях да адпаведнай тэчкі."
+
+#, fuzzy
+#~ msgid "&Add..."
+#~ msgstr "Дадаць..."
+
+#, fuzzy
+#~ msgid "&Modify..."
+#~ msgstr "Змяніць..."
+
+#, fuzzy
+#~ msgid "&Remove"
+#~ msgstr "Выдаліць спасылку"
+
+#, fuzzy
+#~ msgid "Test"
+#~ msgstr "Праверка"
+
+#, fuzzy
+#~ msgid "(Copy %1)"
+#~ msgstr "(Капіяваць %1)"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "Імя:"
+
+#, fuzzy
+#~ msgid "Existing slides:"
+#~ msgstr "Даступныя слайды:"
+
+#, fuzzy
+#~ msgid "Custom Slide Show name is already used."
+#~ msgstr "Нестандартная дэманстрацыя ўжо запушчаная."
+
+#, fuzzy
+#~ msgid "You did not select any slides. Please select some slides."
+#~ msgstr "Не вылучаны ні адзін слайд. Пакажыце некалькі слайдаў."
+
+#, fuzzy
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr ""
+#~ "Памылка чытання дакумента OASIS OpenDocument. Не знойдзены тэг office:"
+#~ "body."
+
+#, fuzzy
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr ""
+#~ "Памылка чытання дакумента OASIS OpenDocument. Няма тэгаў усярэдзіне тэга "
+#~ "office:body."
+
+#, fuzzy
+#~ msgid ""
+#~ "This document is not a presentation, but a %1. Please try opening it with "
+#~ "the appropriate application."
+#~ msgstr ""
+#~ "Дакумент '%1' не ўтрымоўвае прэзентацыю. Адкрыйце яго ў адпаведным яму "
+#~ "прыкладанні."
+
+#, fuzzy
+#~ msgid ""
+#~ "Invalid OASIS OpenDocument file. No master-style found inside office:"
+#~ "master-styles."
+#~ msgstr ""
+#~ "Памылка чытання дакумента OASIS OpenDocument. Няма інфармацыі ў тэгу "
+#~ "office:master-styles."
+
+#, fuzzy
+#~ msgid ""
+#~ "You do not appear to have PERL installed.\n"
+#~ "It is needed to convert this document.\n"
+#~ "Please install PERL and try again."
+#~ msgstr ""
+#~ "Падобна, PERL не ўсталяваны.\n"
+#~ "Ён неабходны для канвертацыі гэтага дакумента.\n"
+#~ "Усталюеце PERL і паспрабуйце зноў."
+
+#, fuzzy
+#~ msgid ""
+#~ "parsing error in the main document (converted from an old KPresenter "
+#~ "format) at line %1, column %2\n"
+#~ "Error message: %3"
+#~ msgstr ""
+#~ "памылка апрацоўкі асноўнага дакумента (ператворанага з старога фармату "
+#~ "KPresenter) у радку %1, слупку %2\n"
+#~ "Паведамленне аб памылцы: %3"
+
+#, fuzzy
+#~ msgid "Insert Part Object"
+#~ msgstr "Уставіць аб'ект"
+
+#, fuzzy
+#~ msgid "Invalid document, DOC tag missing."
+#~ msgstr "Няслушны фармат дакумента: адсутнічае тэг DOC."
+
+#, fuzzy
+#~ msgid ""
+#~ "Invalid document, expected mimetype application/x-kpresenter or "
+#~ "application/vnd.kde.kpresenter, got %1"
+#~ msgstr ""
+#~ "Няслушны фармат дакумента. Чакаўся тып MIME application/x-kpresenter або "
+#~ "application/vnd.kde.kpresenter, быў атрыманы %1"
+
+#, fuzzy
+#~ msgid "Paste Objects"
+#~ msgstr "Уставіць аб'екты"
+
+#, fuzzy
+#~ msgid "Set New Options"
+#~ msgstr "Ужыць новыя налады"
+
+#, fuzzy
+#~ msgid "Insert File"
+#~ msgstr "Уставіць файл"
+
+#, fuzzy
+#~ msgid "Insert New Slide"
+#~ msgstr "Уставіць новы слайд"
+
+#, fuzzy
+#~ msgid "Duplicate Object"
+#~ msgstr "Дубліраваць слайд"
+
+#, fuzzy
+#~ msgid "Number of copies:"
+#~ msgstr "Колькасць дзід:"
+
+#, fuzzy
+#~ msgid "Rotation angle:"
+#~ msgstr "Кут кручэння:"
+
+#, fuzzy
+#~ msgid "Increase width:"
+#~ msgstr "Павялічыць шырыню:"
+
+#, fuzzy
+#~ msgid "Increase height:"
+#~ msgstr "Павялічыць вышыню:"
+
+#, fuzzy
+#~ msgid "Move X:"
+#~ msgstr "Перамясціць па гарызанталі:"
+
+#, fuzzy
+#~ msgid "Move Y:"
+#~ msgstr "Перамясціць па вертыкалі:"
+
+#, fuzzy
+#~ msgid "Appear"
+#~ msgstr "З'яўленне"
+
+#, fuzzy
+#~ msgid "Order of appearance:"
+#~ msgstr "Парадак з'яўлення: "
+
+#, fuzzy
+#~ msgid "Effect (appearing):"
+#~ msgstr "Эфект з'яўлення: "
+
+#, fuzzy
+#~ msgid "Come From Right/Top"
+#~ msgstr "Выплываць з верхняга левага кута"
+
+#, fuzzy
+#~ msgid "Come From Right/Bottom"
+#~ msgstr "Выплываць з ніжняга правага кута"
+
+#, fuzzy
+#~ msgid "Come From Left/Top"
+#~ msgstr "Выплываць з верхняга левага кута"
+
+#, fuzzy
+#~ msgid "Come From Left/Bottom"
+#~ msgstr "Выплываць з ніжняга левага кута"
+
+#, fuzzy
+#~ msgid "Wipe From Left"
+#~ msgstr "Расчыняцца злева"
+
+#, fuzzy
+#~ msgid "Wipe From Right"
+#~ msgstr "Расчыняцца справа"
+
+#, fuzzy
+#~ msgid "Wipe From Top"
+#~ msgstr "Расчыняцца зверху"
+
+#, fuzzy
+#~ msgid "Wipe From Bottom"
+#~ msgstr "Расчыняцца знізу"
+
+#, fuzzy
+#~ msgid "Speed:"
+#~ msgstr "Хуткасць:"
+
+#, fuzzy
+#~ msgid "Medium"
+#~ msgstr "Сярэдне"
+
+#, fuzzy
+#~ msgid "Fast"
+#~ msgstr "Хутка"
+
+#, fuzzy
+#~ msgid "Effect (object specific):"
+#~ msgstr "Эфекты паказу аб'екта: "
+
+#, fuzzy
+#~ msgid "Paragraph After Paragraph"
+#~ msgstr "Абзац за абзацам"
+
+#, fuzzy
+#~ msgid "Timer of the object:"
+#~ msgstr "Час паказу аб'екта:"
+
+#, fuzzy
+#~ msgid "File name:"
+#~ msgstr "Файл: "
+
+#, fuzzy
+#~ msgid "Play"
+#~ msgstr "Прайграць гук"
+
+#, fuzzy
+#~ msgid "Disappear"
+#~ msgstr "Знікненне"
+
+#, fuzzy
+#~ msgid "Order of disappearance:"
+#~ msgstr "Парадак знікнення: "
+
+#, fuzzy
+#~ msgid "Effect (disappearing):"
+#~ msgstr "Эфект знікнення: "
+
+#, fuzzy
+#~ msgid "Disappear to Right"
+#~ msgstr "Знікаць направа"
+
+#, fuzzy
+#~ msgid "Disappear to Left"
+#~ msgstr "Знікаць налева"
+
+#, fuzzy
+#~ msgid "Disappear to Top"
+#~ msgstr "Знікаць уверх"
+
+#, fuzzy
+#~ msgid "Disappear to Bottom"
+#~ msgstr "Знікаць уніз"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Top"
+#~ msgstr "Знікаць у верхні правы кут"
+
+#, fuzzy
+#~ msgid "Disappear to Right/Bottom"
+#~ msgstr "Знікаць у ніжні правы кут"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Top"
+#~ msgstr "Знікаць у верхні левы кут"
+
+#, fuzzy
+#~ msgid "Disappear to Left/Bottom"
+#~ msgstr "Знікаць у ніжні левы кут"
+
+#, fuzzy
+#~ msgid "Wipe to Left"
+#~ msgstr "Згортвацца налева"
+
+#, fuzzy
+#~ msgid "Wipe to Right"
+#~ msgstr "Згортвацца направа"
+
+#, fuzzy
+#~ msgid "Wipe to Top"
+#~ msgstr "Згортвацца ўверх"
+
+#, fuzzy
+#~ msgid "Wipe to Bottom"
+#~ msgstr "Згортвацца ўніз"
+
+#, fuzzy
+#~ msgid "Assign Object Effects"
+#~ msgstr "Ужыць эфекты да аб'екта"
+
+#, fuzzy
+#~ msgid "*.%1|%2 Files"
+#~ msgstr "*.%1|Файлы %2"
+
+#, fuzzy
+#~ msgid "All Supported Files"
+#~ msgstr "Усе падтрымоўваемыя тыпы"
+
+#, fuzzy
+#~ msgid "Image Effect"
+#~ msgstr "Эфекту малюнка"
+
+#, fuzzy
+#~ msgid "Import Style"
+#~ msgstr "Імпарт стылю"
+
+#, fuzzy
+#~ msgid "File name is empty."
+#~ msgstr "Імя файл не паказана."
+
+#, fuzzy
+#~ msgid "File is not a KPresenter file!"
+#~ msgstr "Файл не з'яўляецца дакументам KPresenter!"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter the directory where the memory stick presentation should be "
+#~ "saved. Please also enter a title for the slideshow presentation. "
+#~ msgstr ""
+#~ "Пакажыце тэчку для захавання прэзентацыі Memory Stick і назоў "
+#~ "прэзентацыі. "
+
+#, fuzzy
+#~ msgid "Path:"
+#~ msgstr "Тэчка:"
+
+#, fuzzy
+#~ msgid "&Set Colors"
+#~ msgstr "Колеры"
+
+#, fuzzy
+#~ msgid "Preliminary Slides"
+#~ msgstr "Папярэднія слайды"
+
+#, fuzzy
+#~ msgid ""
+#~ "This section allows you to set the colors for the preliminary slides; it "
+#~ "does not affect the presentation in any way, and it is normal to leave "
+#~ "these set to the default."
+#~ msgstr ""
+#~ "Тут вы можаце паказаць колеры для слайдаў. У большасці выпадкаў лепш "
+#~ "пакінуць колеры па змаўчанні."
+
+#, fuzzy
+#~ msgid "Text color:"
+#~ msgstr "Колер тэксту:"
+
+#, fuzzy
+#~ msgid "Background color:"
+#~ msgstr "Колер фону:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Selecting this button will take you to the KPresenter documentation that "
+#~ "provides more information on how to use the Memory Stick export function. "
+#~ msgstr "Выклік даведкі аб экспарце прэзентацыі ў фармат Memory Stick. "
+
+#, fuzzy
+#~ msgid ""
+#~ "Selecting this button will proceed to generating the presentation in the "
+#~ "special Sony format."
+#~ msgstr "Пачаць экспарт прэзентацыі ў адмысловы фармат ад кампаніі Sony."
+
+#, fuzzy
+#~ msgid ""
+#~ "Selecting this button will cancel out of the generation of the "
+#~ "presentation, and return to the normal KPresenter view. No files will be "
+#~ "affected."
+#~ msgstr ""
+#~ "Спыніць экспарт прэзентацыі і вярнуцца ў звычайны рэжым рэдагавання "
+#~ "прэзентацыі. Не будзе створаны ні адзін файл."
+
+#, fuzzy
+#~ msgid "Create Memory Stick Slideshow"
+#~ msgstr "Стварыць прэзентацыю Memory Stick"
+
+#, fuzzy
+#~ msgid ""
+#~ "<qt>The directory <b>%1</b> does not exist.<br>Do you want create it?</qt>"
+#~ msgstr "<qt>Тэчка <b>%1</b> не існуе.<br>Вы жадаеце стварыць яе?</qt>"
+
+#, fuzzy
+#~ msgid "Directory Not Found"
+#~ msgstr "Тэчка не знойдзеная"
+
+#, fuzzy
+#~ msgid "Cannot create directory."
+#~ msgstr "Немагчыма стварыць тэчку."
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to overwrite an existing index file : %1.\n"
+#~ " Do you want to proceed?"
+#~ msgstr "Замяніць файл зместа %1 ?"
+
+#, fuzzy
+#~ msgid "Create directory structure"
+#~ msgstr "Стварыць структуру тэчак"
+
+#, fuzzy
+#~ msgid "Create pictures of the slides"
+#~ msgstr "Стварыць малюнкі слайдаў"
+
+#, fuzzy
+#~ msgid "Create index file"
+#~ msgstr "Ствараць файл зместа"
+
+#, fuzzy
+#~ msgid "Change Help Line Position"
+#~ msgstr "Змяніць пазіцыю накіравальнай"
+
+#, fuzzy
+#~ msgid "Position:"
+#~ msgstr "Становішча:"
+
+#, fuzzy
+#~ msgid "Add New Help Line"
+#~ msgstr "Дадаць накіравальную"
+
+#, fuzzy
+#~ msgid "Add New Help Point"
+#~ msgstr "Дадаць апорную кропку"
+
+#, fuzzy
+#~ msgid "X position:"
+#~ msgstr "Пазіцыя па гарызанталі:"
+
+#, fuzzy
+#~ msgid "Y position:"
+#~ msgstr "Пазіцыя па вертыкалі:"
+
+#, fuzzy
+#~ msgid "Slide Note %1:\n"
+#~ msgstr "Нататка слайда %1:\n"
+
+#, fuzzy
+#~ msgid "Master Page Note:\n"
+#~ msgstr "Нататка да шаблону слайдаў:\n"
+
+#, fuzzy
+#~ msgid "Delete Objects"
+#~ msgstr "Выдаліць"
+
+#, fuzzy
+#~ msgid "Resize"
+#~ msgstr "Змяніць памер"
+
+#, fuzzy
+#~ msgid "Group Objects"
+#~ msgstr "Групаваць аб'екты"
+
+#, fuzzy
+#~ msgid "Ungroup Objects"
+#~ msgstr "Разгрупіравать аб'екты"
+
+#, fuzzy
+#~ msgid "Lower Objects"
+#~ msgstr "Перамясціць ніжэй"
+
+#, fuzzy
+#~ msgid "Raise Objects"
+#~ msgstr "Перамясціць вышэй"
+
+#, fuzzy
+#~ msgid "Insert Line"
+#~ msgstr "Уставіць радок"
+
+#, fuzzy
+#~ msgid "Insert Rectangle"
+#~ msgstr "Уставіць прастакутнік"
+
+#, fuzzy
+#~ msgid "Insert Ellipse"
+#~ msgstr "Уставіць эліпс"
+
+#, fuzzy
+#~ msgid "Insert Pie/Arc/Chord"
+#~ msgstr "Уставіць сектар (дугу,хорду)"
+
+#, fuzzy
+#~ msgid "Insert Textbox"
+#~ msgstr "Уставіць вобласць тэксту"
+
+#, fuzzy
+#~ msgid "Insert Autoform"
+#~ msgstr "Уставіць аўтафігуру"
+
+#, fuzzy
+#~ msgid "Insert Freehand"
+#~ msgstr "Уставіць крывую"
+
+#, fuzzy
+#~ msgid "Insert Polyline"
+#~ msgstr "Уставіць ламаную"
+
+#, fuzzy
+#~ msgid "Insert Quadric Bezier Curve"
+#~ msgstr "Уставіць квардратычную крывую Без'е"
+
+#, fuzzy
+#~ msgid "Insert Cubic Bezier Curve"
+#~ msgstr "Уставіць кубічную крывую Без'е"
+
+#, fuzzy
+#~ msgid "Insert Polygon"
+#~ msgstr "Уставіць шматкутнік"
+
+#, fuzzy
+#~ msgid "Insert Closed Freehand"
+#~ msgstr "Уставіць зачыненую крывую"
+
+#, fuzzy
+#~ msgid "Insert Closed Polyline"
+#~ msgstr "Уставіць зачыненую ламаную"
+
+#, fuzzy
+#~ msgid "Insert Closed Quadric Bezier Curve"
+#~ msgstr "Уставіць зачыненую квардратычную крывую Без'е"
+
+#, fuzzy
+#~ msgid "Insert Closed Cubic Bezier Curve"
+#~ msgstr "Уставіць зачыненую кубічную крывую Без'е"
+
+#, fuzzy
+#~ msgid "Embed Object"
+#~ msgstr "Укараніць аб'ект"
+
+#, fuzzy
+#~ msgid "Change Pixmap"
+#~ msgstr "Змяніць малюнак"
+
+#, fuzzy
+#~ msgid "Move Objects"
+#~ msgstr "Перамясціць"
+
+#, fuzzy
+#~ msgid "Change Shadow"
+#~ msgstr "Цень"
+
+#, fuzzy
+#~ msgid "Change Vertical Alignment"
+#~ msgstr "Вертыкальнае выраўнаванне"
+
+#, fuzzy
+#~ msgid "No Outline"
+#~ msgstr "не"
+
+#, fuzzy
+#~ msgid "Square"
+#~ msgstr "квадрат"
+
+#, fuzzy
+#~ msgid "Line Arrow"
+#~ msgstr "звычайная"
+
+#, fuzzy
+#~ msgid "Dimension Line"
+#~ msgstr "размерная лінія"
+
+#, fuzzy
+#~ msgid "Double Line Arrow"
+#~ msgstr "падвойная"
+
+#, fuzzy
+#~ msgid "&General"
+#~ msgstr "Агульныя"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>This dialog allows you to configure how the slideshow will be "
+#~ "displayed, including whether the slides are automatically sequenced or "
+#~ "manually controlled, and also allows you to configure a <em>drawing pen</"
+#~ "em> that can be used during the display of the presentation to add "
+#~ "additional information or to emphasise particular points.</p>"
+#~ msgstr ""
+#~ "<p>Тут вы можаце наладзіць паказ слайдаў, іх парадак, а таксама дадаць "
+#~ "пазнакі <em>пяром</em>.</p>"
+
+#, fuzzy
+#~ msgid "&Transition Type"
+#~ msgstr "Змена слайдаў"
+
+#, fuzzy
+#~ msgid ""
+#~ "<li><p>If you select <b>Manual transition to next step or slide</b> then "
+#~ "each transition and effect on a slide, or transition from one slide to "
+#~ "the next, will require an action. Typically this action will be a mouse "
+#~ "click, or the space bar.</p></li><li><p>If you select <b>Automatic "
+#~ "transition to next step or slide</b> then the presentation will "
+#~ "automatically sequence each transition and effect on a slide, and will "
+#~ "automatically transition to the next slide when the current slide is "
+#~ "fully displayed. The speed of sequencing is controlled using the slider "
+#~ "below. This also enables the option to automatically loop back to the "
+#~ "first slide after the last slide has been shown.</p></li>"
+#~ msgstr ""
+#~ "<li><p>Пры выбары параметру <b>Ручны пераход на наступны крок або слайд</"
+#~ "b> для пераходу запатрабуецца націснуць клавішу 'прабел' або левую кнопку "
+#~ "мышы.</p></li><li><p>Калі вы ўключылі <b>Аўтаматычны пераход на наступны "
+#~ "крок або слайд</b>, слайды будуць змяняць адзін аднаго праз вызначаны "
+#~ "інтэрвал. Акрамя таго, у гэтым рэжыме вы можаце наладзіць паўтор "
+#~ "прэзентацыі пасля паказу апошняга слайда.</p></li>"
+
+#, fuzzy
+#~ msgid "&Manual transition to next step or slide"
+#~ msgstr "Ручны пераход на наступны крок або слайд"
+
+#, fuzzy
+#~ msgid "&Automatic transition to next step or slide"
+#~ msgstr "Аўтаматычны пераход на наступны крок або слайд"
+
+#, fuzzy
+#~ msgid "&Infinite loop"
+#~ msgstr "Паўтараць"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>If this checkbox is selected, then the slideshow will restart at the "
+#~ "first slide after the last slide has been displayed. It is only available "
+#~ "if the <b>Automatic transition to next step or slide</b> button is "
+#~ "selected above.</p> <p>This option may be useful if you are running a "
+#~ "promotional display.</p>"
+#~ msgstr ""
+#~ "<p>Пры ўключэнні гэтага параметру пры ўключаным параметры <b>Аўтаматычны "
+#~ "пераход на наступны крок або слайд</b> пасля паказу апошняга слайда "
+#~ "прэзентацыя будзе паказаная з пачатку.</p> <p>Гэта бывае зручна пры "
+#~ "паказе рэкламных прэзентацый</p>"
+
+#, fuzzy
+#~ msgid "&Show 'End of presentation' slide"
+#~ msgstr "Паказваць экран 'Канец прэзентацыі'"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>If this checkbox is selected, when the slideshow has finished a black "
+#~ "slideshow containing the message 'End of presentation. Click to exit' "
+#~ "will be shown."
+#~ msgstr ""
+#~ "<p>Калі гэты параметр уключаны, у канцы прэзентацыі будзе паказаны чорны "
+#~ "экран з надпісам 'Канец прэзентацыі. Пстрыкніце для выхаду.'."
+
+#, fuzzy
+#~ msgid "Measure presentation &duration"
+#~ msgstr "Разлічыць працягласць прэзентацыі"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>If this checkbox is selected, the time that each slide was displayed "
+#~ "for, and the total time for the presentation will be measured.</p> <p>The "
+#~ "times will be displayed at the end of the presentation.</p> <p>This can "
+#~ "be used during rehearsal to check coverage for each issue in the "
+#~ "presentation, and to verify that the presentation duration is correct.</p>"
+#~ msgstr ""
+#~ "<p>Пры ўключэнні гэтага параметру пасля рэпетыцыі паказу прэзентацыі "
+#~ "будзе паказана час паказу кожнага слайда і агульная працягласць "
+#~ "прэзентацыі.</p>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>This part of the dialog allows you to configure the <em>drawing mode</"
+#~ "em>, which allows you to add additional information, emphasise particular "
+#~ "content, or to correct errors during the presentation by drawing on the "
+#~ "slides using the mouse.</p><p>You can configure the color of the drawing "
+#~ "pen and the width of the pen.</p>"
+#~ msgstr ""
+#~ "<p>Гэтая частка дыялогу дазваляе наладзіць пяро для малявання мышшу на "
+#~ "слайдах падчас паказу прэзентацыі. Гэтая магчымасць вельмі зручная для "
+#~ "дадання дадатковай інфармацыі, вылучэнні пунктаў і выпраўленні памылак на "
+#~ "слайдах.</p><p>Вы можаце паказаць колер пяра і таўшчыню ліній.</p>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<p>This dialog allows you to configure which slides are used in the "
+#~ "presentation. Slides that are not selected will not be displayed during "
+#~ "the slide show.</p>"
+#~ msgstr ""
+#~ "<p>Гэты дыялог дапаможа вам вылучыць слайды, выкарыстоўваныя ў "
+#~ "прэзентацыі. Не вылучаныя слайды не будуць паказвацца падчас дэманстрацыі "
+#~ "прэзентацыі.</p>"
+
+#, fuzzy
+#~ msgid "Arc"
+#~ msgstr "Дуга"
+
+#, fuzzy
+#~ msgid "Chord"
+#~ msgstr "Хорда"
+
+#, fuzzy
+#~ msgid "Convex/Concave"
+#~ msgstr "Шматкутнік"
+
+#, fuzzy
+#~ msgid "No."
+#~ msgstr "№"
+
+#, fuzzy
+#~ msgid "Display Duration"
+#~ msgstr "Паказваць працягласць"
+
+#, fuzzy
+#~ msgid "Slides in the pages:"
+#~ msgstr "Слайдаў на старонцы:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Choose how many rows and columns with slides you want to have on all pages"
+#~ msgstr "Колькасць радкоў і слупкоў слайдаў на старонцы"
+
+#, fuzzy
+#~ msgid "Rows: "
+#~ msgstr "Радкоў: "
+
+#, fuzzy
+#~ msgid "Columns: "
+#~ msgstr "Слупкоў: "
+
+#, fuzzy
+#~ msgid "Draw border around the slides"
+#~ msgstr "Паказваць рамку вакол слайда"
+
+#, fuzzy
+#~ msgid "Apply Properties"
+#~ msgstr "Ужыць"
+
+#, fuzzy
+#~ msgid "Name Object"
+#~ msgstr "Імя аб'екта"
+
+#, fuzzy
+#~ msgid "Protect Object"
+#~ msgstr "Абараніць аб'ект"
+
+#, fuzzy
+#~ msgid "Keep Ratio"
+#~ msgstr "Захаваць памеры"
+
+#, fuzzy
+#~ msgid "Change Size"
+#~ msgstr "Змяніць памер"
+
+#, fuzzy
+#~ msgid "Pict&ure"
+#~ msgstr "Малюнак"
+
+#, fuzzy
+#~ msgid "pt"
+#~ msgstr "пт"
+
+#, fuzzy
+#~ msgctxt "Structure of the presentation"
+#~ msgid "Outline"
+#~ msgstr "Структура"
+
+#, fuzzy
+#~ msgid "(%1)"
+#~ msgstr "(%1)"
+
+#, fuzzy
+#~ msgid "Rename Slide"
+#~ msgstr "Пераназваць"
+
+#, fuzzy
+#~ msgid "Slide title:"
+#~ msgstr "Загаловак:"
+
+#, fuzzy
+#~ msgid "Close From All Directions"
+#~ msgstr "Згортваць у цэнтр"
+
+#, fuzzy
+#~ msgid "Open From All Directions"
+#~ msgstr "Разгарнуць з цэнтра"
+
+#, fuzzy
+#~ msgid "Interlocking Horizontal 2"
+#~ msgstr "Гарызантальныя жалюзі 2"
+
+#, fuzzy
+#~ msgid "Interlocking Vertical 1"
+#~ msgstr "Вертыкальныя жалюзі 1"
+
+#, fuzzy
+#~ msgid "Interlocking Vertical 2"
+#~ msgstr "Вертыкальныя жалюзі 2"
+
+#, fuzzy
+#~ msgid "Surround 1"
+#~ msgstr "Спіраль 1"
+
+#, fuzzy
+#~ msgid "Fly Away 1"
+#~ msgstr "Мінімізацыя і вылет 1"
+
+#, fuzzy
+#~ msgid "Blinds Vertical"
+#~ msgstr "Вертыкальныя жалюзі"
+
+#, fuzzy
+#~ msgid "Checkerboard Across"
+#~ msgstr "Шашкі гарызантальныя"
+
+#, fuzzy
+#~ msgid "Checkerboard Down"
+#~ msgstr "Шашкі вертыкальныя"
+
+#, fuzzy
+#~ msgid "Uncover Down"
+#~ msgstr "Адкрыццё зверху"
+
+#, fuzzy
+#~ msgid "Cover Up"
+#~ msgstr "Выплываць зверху"
+
+#, fuzzy
+#~ msgid "Uncover Up"
+#~ msgstr "Адкрыццё знізу"
+
+#, fuzzy
+#~ msgid "Uncover Left"
+#~ msgstr "Адкрыццё справа"
+
+#, fuzzy
+#~ msgid "Cover Left-Up"
+#~ msgstr "Выплываць злева-зверху"
+
+#, fuzzy
+#~ msgid "Uncover Left-Up"
+#~ msgstr "Адкрыццё справа-знізу"
+
+#, fuzzy
+#~ msgid "Cover Left-Down"
+#~ msgstr "Выплываць злева-знізу"
+
+#, fuzzy
+#~ msgid "Uncover Left-Down"
+#~ msgstr "Адкрыццё справа-зверху"
+
+#, fuzzy
+#~ msgid "Uncover Right-Up"
+#~ msgstr "Адкрыццё злева-знізу"
+
+#, fuzzy
+#~ msgid "Cover Right-Bottom"
+#~ msgstr "Выплываць справа-знізу"
+
+#, fuzzy
+#~ msgid "Uncover Right-Bottom"
+#~ msgstr "Адкрыццё злева-зверху"
+
+#, fuzzy
+#~ msgid "Dissolve"
+#~ msgstr "Растварэнне"
+
+#, fuzzy
+#~ msgid "Strips Left-Up"
+#~ msgstr "Згортванне ў левы верхні кут"
+
+#, fuzzy
+#~ msgid "Strips Left-Down"
+#~ msgstr "Згортванне ў левы ніжні кут"
+
+#, fuzzy
+#~ msgid "Strips Right-Up"
+#~ msgstr "Згортванне ў правы верхні кут"
+
+#, fuzzy
+#~ msgid "Strips Right-Down"
+#~ msgstr "Згортванне ў правы ніжні кут"
+
+#, fuzzy
+#~ msgid "Melting"
+#~ msgstr "Растварэнне"
+
+#, fuzzy
+#~ msgid "Random Transition"
+#~ msgstr "Выпадкова"
+
+#, fuzzy
+#~ msgid "Paste Text"
+#~ msgstr "Уставіць тэкст"
+
+#, fuzzy
+#~ msgid "Insert Variable"
+#~ msgstr "Уставіць пераменную"
+
+#, fuzzy
+#~ msgid "Protect content"
+#~ msgstr "Абараніць змесціва"
+
+#, fuzzy
+#~ msgid "Effect:"
+#~ msgstr "Эфект:"
+
+#, fuzzy
+#~ msgid "Automatically advance to the next slide after:"
+#~ msgstr "Пераходзіць на наступны слайд пасля:"
+
+#, fuzzy
+#~ msgid "Remove Slide"
+#~ msgstr "Выдаліць слайд"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "Дата"
+
+#, fuzzy
+#~ msgid "Insert new slide"
+#~ msgstr "Уставіць новы слайд"
+
+#, fuzzy
+#~ msgid "Save Picture"
+#~ msgstr "Захаваць малюнак"
+
+#, fuzzy
+#~ msgid "Error during saving: could not open '%1' for writing."
+#~ msgstr "Памылка захавання: немагчыма адкрыць файл '%1' для запісу."
+
+#, fuzzy
+#~ msgid "Unable to save the file to '%1'. %2."
+#~ msgstr "Немагчыма захаваць файл у '%1'. %2."
+
+#, fuzzy
+#~ msgid "Save Failed"
+#~ msgstr "Памылка захавання"
+
+#, fuzzy
+#~ msgid "Error during saving: could not create temporary file."
+#~ msgstr "Памылка захавання: немагчыма стварыць часовы файл: %1."
+
+#, fuzzy
+#~ msgid "No chart component registered"
+#~ msgstr "Кампанент дыяграм недаступны"
+
+#, fuzzy
+#~ msgid "No table component registered"
+#~ msgstr "Кампанент электроннай табліцы недаступны"
+
+#, fuzzy
+#~ msgid "No formula component registered"
+#~ msgstr "Кампанент формулы недаступны"
+
+#, fuzzy
+#~ msgid "Autoform-Choose"
+#~ msgstr "Выбар аўтафігуры"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Уласцівасці"
+
+#, fuzzy
+#~ msgid "Slide Background"
+#~ msgstr "Фон слайда"
+
+#, fuzzy
+#~ msgid ""
+#~ "Do you want to load a previously saved configuration which will be used "
+#~ "for this HTML Presentation?"
+#~ msgstr ""
+#~ "Загрузіць канфігурацыю прэзентацыі HTML, захаваную раней для гэтай "
+#~ "прэзентацыі?"
+
+#, fuzzy
+#~ msgid "*.kpweb|KPresenter HTML Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Вэб-прэзентацыі KPresenter (*.kpweb)"
+
+#, fuzzy
+#~ msgid "Only local files are currently supported."
+#~ msgstr "У гэтай версіі падтрымліваюцца толькі лакальныя файлы."
+
+#, fuzzy
+#~ msgid "Object Effect"
+#~ msgstr "Эфекты з'яўлення аб'екта"
+
+#, fuzzy
+#~ msgid "You did not select any slide."
+#~ msgstr "Не вылучаны ні адзін слайд."
+
+#, fuzzy
+#~ msgid "No Slide"
+#~ msgstr "Няма слайдаў"
+
+#, fuzzy
+#~ msgid "Change List Type"
+#~ msgstr "Змяніць тып спісу"
+
+#, fuzzy
+#~ msgid "Change Outline Color"
+#~ msgstr "Змяніць колер рамкі"
+
+#, fuzzy
+#~ msgid "Change Fill Color"
+#~ msgstr "Змяніць колер залівання"
+
+#, fuzzy
+#~ msgid "Change Line Begin"
+#~ msgstr "Змяніць пачатак лініі"
+
+#, fuzzy
+#~ msgid "Change Line End"
+#~ msgstr "Змяніць канец лініі"
+
+#, fuzzy
+#~ msgid "Change Outline Style"
+#~ msgstr "Змяніць тып лініі"
+
+#, fuzzy
+#~ msgid "Change Outline Width"
+#~ msgstr "Змяніць таўшчыню лініі"
+
+#, fuzzy
+#~ msgid "Show Sidebar"
+#~ msgstr "Паказаць бакавую панель"
+
+#, fuzzy
+#~ msgid "Hide Sidebar"
+#~ msgstr "Схаваць бакавую панель"
+
+#, fuzzy
+#~ msgid "Show Notebar"
+#~ msgstr "Паказаць панель нататак"
+
+#, fuzzy
+#~ msgid "Hide Notebar"
+#~ msgstr "Схаваць панель нататак"
+
+#, fuzzy
+#~ msgid "&Formatting Characters"
+#~ msgstr "Недрукавальныя знакі"
+
+#, fuzzy
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Пераключэнне паказу недрукавальных знакаў"
+
+#, fuzzy
+#~ msgid ""
+#~ "Toggle the display of non-printing characters.<br><br>When this is "
+#~ "enabled, KPresenter shows you tabs, spaces, carriage returns and other "
+#~ "non-printing characters."
+#~ msgstr ""
+#~ "Перамыкае паказ недрукавальных знакаў. <br> <br>Пры ўключэнні паказу "
+#~ "недрукавальных знакаў у дакуменце будуць паказаныя знакі табуляцыі, "
+#~ "прабелу, перакладу радкі і іншыя недрукавальныя знакі."
+
+#, fuzzy
+#~ msgid "Slide &Master"
+#~ msgstr "Шаблон слайда"
+
+#, fuzzy
+#~ msgid "Guide Lines"
+#~ msgstr "Накіравальныя"
+
+#, fuzzy
+#~ msgid "Show &Grid"
+#~ msgstr "Паказаць сетку"
+
+#, fuzzy
+#~ msgid "Hide &Grid"
+#~ msgstr "Схаваць сетку"
+
+#, fuzzy
+#~ msgid "Snap to Grid"
+#~ msgstr "Прывязаць да сеткі"
+
+#, fuzzy
+#~ msgid "&Slide..."
+#~ msgstr "Слайд..."
+
+#, fuzzy
+#~ msgid "P&icture..."
+#~ msgstr "Малюнак..."
+
+#, fuzzy
+#~ msgid "&Rotate"
+#~ msgstr "Кручэнне"
+
+#, fuzzy
+#~ msgid "&Zoom"
+#~ msgstr "Маштаб:"
+
+#, fuzzy
+#~ msgid "&Shape"
+#~ msgstr "Фігура"
+
+#, fuzzy
+#~ msgid "&Circle/Ellipse"
+#~ msgstr "Эліпс"
+
+#, fuzzy
+#~ msgid "&Pie/Arc/Chord"
+#~ msgstr "Сектар"
+
+#, fuzzy
+#~ msgid "&Text"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~ msgid "&Arrows && Connections"
+#~ msgstr "Стрэлкі і злучэнні"
+
+#, fuzzy
+#~ msgid "&Chart"
+#~ msgstr "Дыяграма"
+
+#, fuzzy
+#~ msgid "Ta&ble"
+#~ msgstr "Табліца"
+
+#, fuzzy
+#~ msgid "&Object"
+#~ msgstr "Аб'ект"
+
+#, fuzzy
+#~ msgid "&Line"
+#~ msgstr "Лінія"
+
+#, fuzzy
+#~ msgid "&Freehand"
+#~ msgstr "Крывая"
+
+#, fuzzy
+#~ msgid "Po&lyline"
+#~ msgstr "Ламаная"
+
+#, fuzzy
+#~ msgid "&Quadric Bezier Curve"
+#~ msgstr "Квадратычная крывая Без'е"
+
+#, fuzzy
+#~ msgid "C&ubic Bezier Curve"
+#~ msgstr "Кубічная крывая Без'е"
+
+#, fuzzy
+#~ msgid "Co&nvex/Concave Polygon"
+#~ msgstr "Шматкутнік"
+
+#, fuzzy
+#~ msgid "Closed &Freehand"
+#~ msgstr "Замкнёная крывая"
+
+#, fuzzy
+#~ msgid "Closed Po&lyline"
+#~ msgstr "Замкнёная ламаная"
+
+#, fuzzy
+#~ msgid "Closed &Quadric Bezier Curve"
+#~ msgstr "Замкнёная квадратычная крывая Без'е"
+
+#, fuzzy
+#~ msgid "Closed C&ubic Bezier Curve"
+#~ msgstr "Замкнёная кубічная крывая Без'е"
+
+#, fuzzy
+#~ msgid "&Font..."
+#~ msgstr "Шрыфт..."
+
+#, fuzzy
+#~ msgid "Font Family"
+#~ msgstr "Шрыфт"
+
+#, fuzzy
+#~ msgid "&Bold"
+#~ msgstr "Паўтлусты"
+
+#, fuzzy
+#~ msgid "&Italic"
+#~ msgstr "Курсіў"
+
+#, fuzzy
+#~ msgid "&Underline"
+#~ msgstr "Падкрэслены"
+
+#, fuzzy
+#~ msgid "&Strike Out"
+#~ msgstr "Закрэслены"
+
+#, fuzzy
+#~ msgid "&Color..."
+#~ msgstr "Колер..."
+
+#, fuzzy
+#~ msgid "Align &Left"
+#~ msgstr "Па левым боку"
+
+#, fuzzy
+#~ msgid "Align &Center"
+#~ msgstr "Па цэнтры"
+
+#, fuzzy
+#~ msgid "Align &Right"
+#~ msgstr "Па правым боку"
+
+#, fuzzy
+#~ msgid "Align &Block"
+#~ msgstr "Па шырыні"
+
+#, fuzzy
+#~ msgid "Number"
+#~ msgstr "Нумараваны спіс"
+
+#, fuzzy
+#~ msgid "Bullet"
+#~ msgstr "Маркіраваны спіс"
+
+#, fuzzy
+#~ msgid "&Increase Depth"
+#~ msgstr "Павялічыць водступ"
+
+#, fuzzy
+#~ msgid "&Decrease Depth"
+#~ msgstr "Паменшыць водступ"
+
+#, fuzzy
+#~ msgid "Extend Contents to Object &Height"
+#~ msgstr "Выраўнаваць змесціва па вышыні аб'екта"
+
+#, fuzzy
+#~ msgid "&Extend Object to Fit Contents"
+#~ msgstr "Выраўнаваць межы аб'екта па змесціве"
+
+#, fuzzy
+#~ msgid "&Insert Slide Number"
+#~ msgstr "Уставіць нумар слайда"
+
+#, fuzzy
+#~ msgid "&Properties"
+#~ msgstr "Уласцівасці"
+
+#, fuzzy
+#~ msgid "Ra&ise Objects"
+#~ msgstr "Перамясціць вышэй"
+
+#, fuzzy
+#~ msgid "&Lower Objects"
+#~ msgstr "Перамясціць вышэй"
+
+#, fuzzy
+#~ msgid "Bring to Front"
+#~ msgstr "Перамясціць наверх"
+
+#, fuzzy
+#~ msgid "Send to Back"
+#~ msgstr "Перамясціць уніз"
+
+#, fuzzy
+#~ msgid "R&otate Objects..."
+#~ msgstr "Круціць..."
+
+#, fuzzy
+#~ msgid "&Shadow Objects..."
+#~ msgstr "Цень..."
+
+#, fuzzy
+#~ msgid "Align Center (&horizontally)"
+#~ msgstr "Па цэнтры (гарызантальна)"
+
+#, fuzzy
+#~ msgid "Align &Top"
+#~ msgstr "Па верхнім боку"
+
+#, fuzzy
+#~ msgid "Align Center (&vertically)"
+#~ msgstr "Па цэнтры (вертыкальна)"
+
+#, fuzzy
+#~ msgid "Align &Bottom"
+#~ msgstr "Па ніжнім боку"
+
+#, fuzzy
+#~ msgid "Slide Bac&kground..."
+#~ msgstr "Фон слайда..."
+
+#, fuzzy
+#~ msgid "Enable Document &Header"
+#~ msgstr "Паказаць верхні калантытул"
+
+#, fuzzy
+#~ msgid "Disable Document &Header"
+#~ msgstr "Схаваць верхні калантытул"
+
+#, fuzzy
+#~ msgid "Shows and hides header display for the current slide"
+#~ msgstr "Паказаць або схаваць верхні калантытул слайда"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ter"
+#~ msgstr "Паказаць ніжні калантытул"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ter"
+#~ msgstr "Схаваць ніжні калантытул"
+
+#, fuzzy
+#~ msgid "Shows and hides footer display for the current slide"
+#~ msgstr "Паказаць або схаваць ніжні калантытул слайда"
+
+#, fuzzy
+#~ msgid "Create &HTML Slideshow..."
+#~ msgstr "Стварыць вэб-прэзентацыю..."
+
+#, fuzzy
+#~ msgid "Create Memor&y Stick Slideshow..."
+#~ msgstr "Стварыць прэзентацыю Memory Stick..."
+
+#, fuzzy
+#~ msgid "Template Manager"
+#~ msgstr "Мэнэджэр шаблонаў"
+
+#, fuzzy
+#~ msgid "Use Current Slide as Default Template"
+#~ msgstr "Зрабіць слайд шаблонам па змаўчанні"
+
+#, fuzzy
+#~ msgid "Align O&bjects"
+#~ msgstr "Выраўнаваць аб'екты"
+
+#, fuzzy
+#~ msgid "Line Begin"
+#~ msgstr "Пачатак лініі"
+
+#, fuzzy
+#~ msgid "Line End"
+#~ msgstr "Канец лініі"
+
+#, fuzzy
+#~ msgid "Outline Style"
+#~ msgstr "Тып лініі"
+
+#, fuzzy
+#~ msgid "Outline Width"
+#~ msgstr "Таўшчыня лініі"
+
+#, fuzzy
+#~ msgid "&Group Objects"
+#~ msgstr "Групаваць аб'екты"
+
+#, fuzzy
+#~ msgid "&Ungroup Objects"
+#~ msgstr "Разгрупіраваць аб'екты"
+
+#, fuzzy
+#~ msgid "Edit &Object Effect..."
+#~ msgstr "Эфект з'яўлення аб'екта..."
+
+#, fuzzy
+#~ msgid "Edit Slide &Transition..."
+#~ msgstr "Змена слайдаў..."
+
+#, fuzzy
+#~ msgid "&Go to Start"
+#~ msgstr "Пачатак"
+
+#, fuzzy
+#~ msgid "Go to &End"
+#~ msgstr "Перайсці ў канец"
+
+#, fuzzy
+#~ msgid "Goto &Slide..."
+#~ msgstr "Перайсці на слайд..."
+
+#, fuzzy
+#~ msgid "Fill Color..."
+#~ msgstr "Колер залівання..."
+
+#, fuzzy
+#~ msgid "Outline Color..."
+#~ msgstr "Колер лініі..."
+
+#, fuzzy
+#~ msgid "&Extend Contents to Object Height"
+#~ msgstr "Выраўнаваць змесціва па вышыні аб'екта"
+
+#, fuzzy
+#~ msgid "&Resize Object to Fit Contents"
+#~ msgstr "Змяніць памеры аб'екта па змесціве"
+
+#, fuzzy
+#~ msgid "&Rename Slide..."
+#~ msgstr "Пераназваць слайд..."
+
+#, fuzzy
+#~ msgid "Sca&le to Original Size"
+#~ msgstr "Вярнуць арыгінальны памер"
+
+#, fuzzy
+#~ msgid "640x480"
+#~ msgstr "640x480"
+
+#, fuzzy
+#~ msgid "800x600"
+#~ msgstr "800x600"
+
+#, fuzzy
+#~ msgid "1024x768"
+#~ msgstr "1024x768"
+
+#, fuzzy
+#~ msgid "1280x1024"
+#~ msgstr "1280x1024"
+
+#, fuzzy
+#~ msgid "1600x1200"
+#~ msgstr "1600x1200"
+
+#, fuzzy
+#~ msgid "&Change Picture..."
+#~ msgstr "Змяніць малюнак..."
+
+#, fuzzy
+#~ msgid "Image &Effect..."
+#~ msgstr "Эфект малюнка..."
+
+#, fuzzy
+#~ msgid "Superscript"
+#~ msgstr "Надрадковы"
+
+#, fuzzy
+#~ msgid "Subscript"
+#~ msgstr "Падрадковы"
+
+#, fuzzy
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "Адмысловы знак..."
+
+#, fuzzy
+#~ msgid "Link..."
+#~ msgstr "Спасылка..."
+
+#, fuzzy
+#~ msgid "Enter Custom Factor..."
+#~ msgstr "Іншы дазвол..."
+
+#, fuzzy
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Аўтавыпраўленне..."
+
+#, fuzzy
+#~ msgid "&Paragraph..."
+#~ msgstr "Абзац..."
+
+#, fuzzy
+#~ msgid "Default Format"
+#~ msgstr "Фармат па змаўчанні"
+
+#, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "Адкрыць спасылку"
+
+#, fuzzy
+#~ msgid "Change Link..."
+#~ msgstr "Змяніць спасылку..."
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Капіяваць спасылку"
+
+#, fuzzy
+#~ msgid "Add to Bookmark"
+#~ msgstr "Дадаць у закладкі"
+
+#, fuzzy
+#~ msgid "&Custom Variables..."
+#~ msgstr "Карыстацкія пераменныя..."
+
+#, fuzzy
+#~ msgid "Edit Variable..."
+#~ msgstr "Змяніць значэнне пераменнай..."
+
+#, fuzzy
+#~ msgid "&Variable"
+#~ msgstr "Пераменная"
+
+#, fuzzy
+#~ msgid "&Property"
+#~ msgstr "Уласцівасці"
+
+#, fuzzy
+#~ msgid "&Date"
+#~ msgstr "Дата"
+
+#, fuzzy
+#~ msgid "&Time"
+#~ msgstr "Час"
+
+#, fuzzy
+#~ msgid "&Statistic"
+#~ msgstr "Статыстыка"
+
+#, fuzzy
+#~ msgid "&Refresh All Variables"
+#~ msgstr "Абнавіць усе пераменныя"
+
+#, fuzzy
+#~ msgid "Change Case..."
+#~ msgstr "Змяніць рэгістр..."
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Маштаб:"
+
+#, fuzzy
+#~ msgid "&Style Manager"
+#~ msgstr "Мэнэджэр стыляў"
+
+#, fuzzy
+#~ msgid "St&yle"
+#~ msgstr "Стыль"
+
+#, fuzzy
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Уключыць аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Выключыць аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Space"
+#~ msgstr "Уставіць непарыўны прабел"
+
+#, fuzzy
+#~ msgid "Insert Non-Breaking Hyphen"
+#~ msgstr "Уставіць непарыўны злучок"
+
+#, fuzzy
+#~ msgid "Insert Soft Hyphen"
+#~ msgstr "Уставіць мяккі перанос"
+
+#, fuzzy
+#~ msgid "Line Break"
+#~ msgstr "Перанос радка"
+
+#, fuzzy
+#~ msgid "Completion"
+#~ msgstr "Аўтазавяршэнне"
+
+#, fuzzy
+#~ msgid "Increase Numbering Level"
+#~ msgstr "Павялічыць узровень нумарацыі"
+
+#, fuzzy
+#~ msgid "Decrease Numbering Level"
+#~ msgstr "Паменшыць узровень нумарацыі"
+
+#, fuzzy
+#~ msgid "Comment..."
+#~ msgstr "Каментар..."
+
+#, fuzzy
+#~ msgid "Edit Comment..."
+#~ msgstr "Змяніць каментар..."
+
+#, fuzzy
+#~ msgid "Add Guide Line..."
+#~ msgstr "Дадаць накіравальную..."
+
+#, fuzzy
+#~ msgid "Remove Comment"
+#~ msgstr "Выдаліць каментар"
+
+#, fuzzy
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Капіяваць тэкст каментара..."
+
+#, fuzzy
+#~ msgid "&Configure Completion..."
+#~ msgstr "Налада аўтазавяршэння..."
+
+#, fuzzy
+#~ msgid "Zoom Out"
+#~ msgstr "Паменшыць"
+
+#, fuzzy
+#~ msgid "Zoom In"
+#~ msgstr "Павялічыць"
+
+#, fuzzy
+#~ msgid "Zoom Entire Slide"
+#~ msgstr "Слайд цалкам"
+
+#, fuzzy
+#~ msgid "Zoom Slide Width"
+#~ msgstr "Па шырыні слайда"
+
+#, fuzzy
+#~ msgid "Zoom Selected Objects"
+#~ msgstr "Па вылучаных аб'ектах"
+
+#, fuzzy
+#~ msgid "Zoom Slide Height"
+#~ msgstr "Па вышыні слайда"
+
+#, fuzzy
+#~ msgid "Zoom All Objects"
+#~ msgstr "Па ўсіх аб'ектах"
+
+#, fuzzy
+#~ msgid "Horizontal Flip"
+#~ msgstr "Выраўнаванне па гарызанталі"
+
+#, fuzzy
+#~ msgid "Vertical Flip"
+#~ msgstr "Выраўнаванне па вертыкалі"
+
+#, fuzzy
+#~ msgid "Duplicate Object..."
+#~ msgstr "Дубліраваць аб'ект..."
+
+#, fuzzy
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Ужыць аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Стварыць стыль з вылучэння..."
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "Па верхнім боку"
+
+#, fuzzy
+#~ msgid "Align Middle"
+#~ msgstr "Пасярэдзіне"
+
+#, fuzzy
+#~ msgid "Save Picture..."
+#~ msgstr "Захаваць малюнак..."
+
+#, fuzzy
+#~ msgid "Autospellcheck"
+#~ msgstr "Аўтаматычная праверка арфаграфіі"
+
+#, fuzzy
+#~ msgid "File..."
+#~ msgstr "Файл..."
+
+#, fuzzy
+#~ msgid "Save Background Picture..."
+#~ msgstr "Захаваць фонавы малюнак..."
+
+#, fuzzy
+#~ msgid "Type Anywhere Cursor"
+#~ msgstr "Вольны курсор"
+
+#, fuzzy
+#~ msgid "Ignore All"
+#~ msgstr "Ігнараваць усё"
+
+#, fuzzy
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Дадаць слова ў слоўнік"
+
+#, fuzzy
+#~ msgid "Hide Object From Slide Master"
+#~ msgstr "Не паказваць аб'ект з шаблону слайда"
+
+#, fuzzy
+#~ msgid "Display Object From Slide Master"
+#~ msgstr "Паказваць аб'ект з шаблону слайда"
+
+#, fuzzy
+#~ msgid "Hide Background"
+#~ msgstr "Схаваць фон слайда"
+
+#, fuzzy
+#~ msgid "Display Background"
+#~ msgstr "Паказаць фон слайда"
+
+#, fuzzy
+#~ msgid "Set Background"
+#~ msgstr "Фон"
+
+#, fuzzy
+#~ msgid "Select New Picture"
+#~ msgstr "Новы малюнак"
+
+#, fuzzy
+#~ msgid "Next slide"
+#~ msgstr "Наступны"
+
+#, fuzzy
+#~ msgid "Slide %1/%2"
+#~ msgstr "Слайд %1 з %2"
+
+#, fuzzy
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1: %2, %3 - %4, %5 (%6 x %7)"
+
+#, fuzzy
+#~ msgid "Change Link"
+#~ msgstr "Змяніць спасылку"
+
+#, fuzzy
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Выправіць словы з памылкамі"
+
+#, fuzzy
+#~ msgid "Paragraph Settings"
+#~ msgstr "Налады абзаца"
+
+#, fuzzy
+#~ msgid "Change Custom Variable"
+#~ msgstr "Змяніць карыстацкую пераменную"
+
+#, fuzzy
+#~ msgid "Change Case of Text"
+#~ msgstr "Змяніць рэгістр тэксту"
+
+#, fuzzy
+#~ msgid "Whole Slide"
+#~ msgstr "Слайд цалкам"
+
+#, fuzzy
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Presentation Duration"
+#~ msgstr "Працягласць прэзентацыі"
+
+#, fuzzy
+#~ msgid "Enable Document Header"
+#~ msgstr "Паказаць верхнія калантытулы"
+
+#, fuzzy
+#~ msgid "Disable Document Header"
+#~ msgstr "Схаваць верхнія калантытулы"
+
+#, fuzzy
+#~ msgid "Enable Document Footer"
+#~ msgstr "Паказаць ніжнія калантытулы"
+
+#, fuzzy
+#~ msgid "Disable Document Footer"
+#~ msgstr "Схаваць ніжнія калантытулы"
+
+#, fuzzy
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Ужыць стыль абзаца"
+
+#, fuzzy
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Ужыць стыль да ўрэзкі"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "Змяніць нататку"
+
+#, fuzzy
+#~ msgid "Apply Autoformat"
+#~ msgstr "Ужыць аўтавыпраўленне"
+
+#, fuzzy
+#~ msgid "Do you want to apply autoformat in new slide?"
+#~ msgstr "Ужыць аўтафармат да новага слайда?"
+
+#, fuzzy
+#~ msgid "Replace Word"
+#~ msgstr "Замяніць слова"
+
+#, fuzzy
+#~ msgid "First"
+#~ msgstr "Першы"
+
+#, fuzzy
+#~ msgid "Previous"
+#~ msgstr "Папярэдні"
+
+#, fuzzy
+#~ msgid "Next"
+#~ msgstr "Наступны"
+
+#, fuzzy
+#~ msgid "Last"
+#~ msgstr "Апошні"
+
+#, fuzzy
+#~ msgid "Home"
+#~ msgstr "Пачатак"
+
+#, fuzzy
+#~ msgid ""
+#~ "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/"
+#~ "kpresenter\">KPresenter</a>"
+#~ msgstr ""
+#~ "Створаная на %1 <i>%2</i> у <a href=\"http://www.koffice.org/kpresenter"
+#~ "\">KPresenter</a>"
+
+#, fuzzy
+#~ msgid "Table of Contents"
+#~ msgstr "Змест"
+
+#, fuzzy
+#~ msgid "Click here to start the Slideshow"
+#~ msgstr "Запуск дэманстрацыі"
+
+#, fuzzy
+#~ msgid "Create HTML Slideshow Wizard"
+#~ msgstr "Майстар стварэння вэб-прэзентацыі"
+
+#, fuzzy
+#~ msgid ""
+#~ "This page allows you to specify some of the key values for how your "
+#~ "presentation will be shown in HTML. Select individual items for more help "
+#~ "on what they do."
+#~ msgstr ""
+#~ "Гэтая ўкладка дапаможа вам паказаць асноўныя параметры вэб-прэзентацыі."
+
+#, fuzzy
+#~ msgid ""
+#~ "Enter your name, email address and the title of the web presentation. "
+#~ "Also enter the output directory where the web presentation should be "
+#~ "saved. "
+#~ msgstr ""
+#~ "Увядзіце ваша імя, адрас электроннай пошты і загаловак вэб-прэзентацыі. "
+#~ "Таксама неабходна паказаць тэчку, у якім будуць створаныя файлы "
+#~ "прэзентацыі."
+
+#, fuzzy
+#~ msgid ""
+#~ "This is where you enter the name of the person or organization that "
+#~ "should be named as the author of the presentation."
+#~ msgstr ""
+#~ "Пакажыце імя чалавека або назоў арганізацыі, якая з'яўляецца аўтарам "
+#~ "прэзентацыі."
+
+#, fuzzy
+#~ msgid "This is where you enter the title of the overall presentation."
+#~ msgstr "Тут вы можаце паказаць назоў прэзентацыі."
+
+#, fuzzy
+#~ msgid "Email address:"
+#~ msgstr "Адрас электроннай пошты:"
+
+#, fuzzy
+#~ msgid ""
+#~ "This is where you enter the email address of the person or organization "
+#~ "that is responsible for the presentation."
+#~ msgstr ""
+#~ "Пакажыце адрас электроннай пошты аўтара або арганізацыі, адказнай за "
+#~ "падрыхтоўку прэзентацыі."
+
+#, fuzzy
+#~ msgid ""
+#~ "The value entered for the path is the directory where the presentation "
+#~ "will be saved. If it does not exist, you'll be asked if you want to "
+#~ "create the directory or abort the creation."
+#~ msgstr ""
+#~ "Пакажыце тэчку, у якую будзе захаваная вэб-прэзентацыя. Калі тэчкі не "
+#~ "існуе, з'явіцца запыт на стварэнне тэчкі або спыненне захавання."
+
+#, fuzzy
+#~ msgid "Step 1: General Information"
+#~ msgstr "Крок 1: Агульная інфармацыя"
+
+#, fuzzy
+#~ msgid ""
+#~ "This page allows you to specify how the HTML for your presentation will "
+#~ "be displayed. Select individual items for more help on what they do."
+#~ msgstr "На гэтай укладцы вы можаце наладзіць знешні выгляд вэб-прэзентацыі."
+
+#, fuzzy
+#~ msgid "Here you can configure the style of the web pages."
+#~ msgstr "Тут вы можаце вызначыць стыль вэб-старонак."
+
+#, fuzzy
+#~ msgid "You can also specify the zoom for the slides."
+#~ msgstr "Таксама вы можаце паказаць маштаб слайдаў."
+
+#, fuzzy
+#~ msgid "Zoom:"
+#~ msgstr "Маштаб:"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the size of the slide image."
+#~ msgstr "Тут вы можаце паказаць маштаб слайдаў."
+
+#, fuzzy
+#~ msgid "Encoding:"
+#~ msgstr "Кадыроўка:"
+
+#, fuzzy
+#~ msgid "Document type:"
+#~ msgstr "Тып дакумента:"
+
+#, fuzzy
+#~ msgid "Step 2: Configure HTML"
+#~ msgstr "Крок 2: Налада HTML"
+
+#, fuzzy
+#~ msgid ""
+#~ "This page allows you to specify the colors for your presentation display. "
+#~ "Select individual items for more help on what they do."
+#~ msgstr ""
+#~ "На гэтай укладцы вы можаце паказаць колеры, выкарыстоўваныя ў вэб-"
+#~ "прэзентацыі."
+
+#, fuzzy
+#~ msgid "Now you can customize the colors of the web pages."
+#~ msgstr "Тут вы можаце вылучыць колеры вэб-старонак."
+
+#, fuzzy
+#~ msgid "Title color:"
+#~ msgstr "Колер загалоўка:"
+
+#, fuzzy
+#~ msgid "Step 3: Customize Colors"
+#~ msgstr "Крок 3: Налада колераў"
+
+#, fuzzy
+#~ msgid ""
+#~ "This page allows you to modify the titles of each slide, if required. You "
+#~ "normally do not need to do this, but it is available if required."
+#~ msgstr ""
+#~ "На гэтай укладцы вы можаце ўручную змяніць назовы слайдаў калі неабходна."
+
+#, fuzzy
+#~ msgid ""
+#~ "Here you can specify titles for each slide. Click on a slide in the list "
+#~ "and then enter the title in the textbox below. If you click on a title, "
+#~ "KPresenter mainview will display the slide."
+#~ msgstr ""
+#~ "Тут вы можаце паказаць загалоўкі для кожнага слайда. Пстрыкніце на "
+#~ "слайдзе і ўвядзіце тэкст загалоўка. Калі вы пстрыкніце на загалоўку, "
+#~ "KPresenter у асноўным акне пяройдзе на гэты слайд."
+
+#, fuzzy
+#~ msgid "Step 4: Customize Slide Titles"
+#~ msgstr "Крок 4: Загалоўкі слайдаў"
+
+#, fuzzy
+#~ msgid ""
+#~ "This page allows you to specify some options for presentations which run "
+#~ "unattended, such as time elapsed before advancing to the next slide, "
+#~ "looping and the presence of headers. If you do not want an unattended "
+#~ "presentation, just leave defaults unchanged."
+#~ msgstr ""
+#~ "Гэтая ўкладка дазваляе наладзіць аўтаматычны паказ прэзентацыі: час змены "
+#~ "слайдаў, аўтапаўтор прэзентацыі і паказ кнопак навігацыі."
+
+#, fuzzy
+#~ msgid ""
+#~ "Here you can configure some options for unattended presentations, such as "
+#~ "time elapsed before automatically advance to the next slide, looping and "
+#~ "the presence of headers."
+#~ msgstr ""
+#~ "Тут вы можаце наладзіць параметры, спецыфічныя для прэзентацый, не "
+#~ "суправаджаных дадатковымі тлумачэннямі, напрыклад інтэрвал, з якім варта "
+#~ "змяняць слайды ў аўтаматычным рэжыме, цыклічнасць, а таксама прысутнасць "
+#~ "кнопак навігацыі."
+
+#, fuzzy
+#~ msgid "Advance after:"
+#~ msgstr "Інтэрвал паміж слайдамі:"
+
+#, fuzzy
+#~ msgid "This selection allows you to specify the time between slides."
+#~ msgstr "Тут вы можаце паказаць інтэрвал паміж слайдамі."
+
+#, fuzzy
+#~ msgid "Disabled"
+#~ msgstr "Выключана"
+
+#, fuzzy
+#~ msgid "Write header to the slides"
+#~ msgstr "Паказваць кнопкі навігацыі"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write the navigation "
+#~ "buttons on top of the slide."
+#~ msgstr ""
+#~ "Гэты параметр дазваляе паказваць кнопкі навігацыі на старонках вэб-"
+#~ "прэзентацыі."
+
+#, fuzzy
+#~ msgid "Write footer to the slides"
+#~ msgstr "Паказваць інфармацыю аб аўтару"
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want to write an imprint "
+#~ "consisting on the author and the software used to create these slides."
+#~ msgstr ""
+#~ "Гэты параметр дазваляе выводзіць на слайдах інфармацыю аб аўтару і "
+#~ "выкарыстоўваным праграмным забеспячэнні."
+
+#, fuzzy
+#~ msgid ""
+#~ "This checkbox allows you to specify if you want the presentation to start "
+#~ "again once the latest slide is reached."
+#~ msgstr "Ці пачынаць слайд-шоў зноўку па завяршэнні гэтага."
+
+#, fuzzy
+#~ msgid "Step 5: Options for Unattended Presentations"
+#~ msgstr "Крок 5: Параметры для не суправаджаных прэзентацый"
+
+#, fuzzy
+#~ msgid "Initialize (create file structure, etc.)"
+#~ msgstr "Ініцыялізацыя ( стварэнне структуры файла і г.д. )"
+
+#, fuzzy
+#~ msgid "Create Pictures of the Slides"
+#~ msgstr "Стварыць малюнкі слайдаў"
+
+#, fuzzy
+#~ msgid "Create HTML Pages for the Slides"
+#~ msgstr "Стварыць HTML старонкі для слайдаў"
+
+#, fuzzy
+#~ msgid "Create Main Page (Table of Contents)"
+#~ msgstr "Стварыць асноўную старонку (Змест)"
+
+#, fuzzy
+#~ msgid "Options for Unattended Presentations"
+#~ msgstr "Параметры для не суправаджаных прэзентацый"
+
+#, fuzzy
+#~ msgid "*.kpweb|KPresenter Web-Presentation (*.kpweb)"
+#~ msgstr "*.kpweb|Вэб-прэзентацыі KPresenter (*.kpweb)"
+
+#, fuzzy
+#~ msgid "Save Web Presentation Configuration"
+#~ msgstr "Захаваць параметры вэб-прэзентацыі"
+
+#, fuzzy
+#~ msgid "Freehand"
+#~ msgstr "Крывая"
+
+#, fuzzy
+#~ msgid "Autoform"
+#~ msgstr "Аўтафігура"
+
+#, fuzzy
+#~ msgid "Group"
+#~ msgstr "Групаваць"
+
+#, fuzzy
+#~ msgid "Polyline"
+#~ msgstr "Ламаная"
+
+#, fuzzy
+#~ msgid "Embedded Object"
+#~ msgstr "Укаранёны аб'ект"
+
+#, fuzzy
+#~ msgid "Cubic Bezier Curve"
+#~ msgstr "Кубічная крывая Без'е"
+
+#, fuzzy
+#~ msgid "Quadric Bezier Curve"
+#~ msgstr "Квадратычная крывая Без'е"
+
+#, fuzzy
+#~ msgid "View Mode"
+#~ msgstr "Рэжым прагляду:"
+
+#, fuzzy
+#~ msgid "Prot&ect content"
+#~ msgstr "Абараніць змесціва"
+
+#, fuzzy
+#~ msgid "Spellchecker Behavior"
+#~ msgstr "Налада праверкі арфаграфіі"
+
+#, fuzzy
+#~ msgctxt "Abbreviation for Text-to-Speech"
+#~ msgid "TTS"
+#~ msgstr "Сінтэз прамовы"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Налада сінтэзу прамовы"
+
+#, fuzzy
+#~ msgid "Speak widget under &mouse pointer"
+#~ msgstr "Зачытаць віджет пад курсорам мышы"
+
+#, fuzzy
+#~ msgid "Speak widget with &focus"
+#~ msgstr "Зачытаць бягучы віджэт"
+
+#, fuzzy
+#~ msgid "Speak &What's This?"
+#~ msgstr "Зачытаць падказкі"
+
+#, fuzzy
+#~ msgctxt "Verbal indication if widget is disabled (grayed)"
+#~ msgid "&Say whether disabled"
+#~ msgstr "Акцэнтаваць на неактыўных віджэтах"
+
+#, fuzzy
+#~ msgid "Spea&k accelerators"
+#~ msgstr "Зачытаць камбінацыі клавіш"
+
+#, fuzzy
+#~ msgctxt "A word spoken before another word"
+#~ msgid "Pr&efaced by the word:"
+#~ msgstr "Папярэдне зачытаць слова:"
+
+#, fuzzy
+#~ msgctxt "Keyboard accelerator, such as Alt+F"
+#~ msgid "Accelerator"
+#~ msgstr "Камбінацыя клавіш"
+
+#, fuzzy
+#~ msgid "&Polling interval:"
+#~ msgstr "Інтэрвал апытання:"
+
+#, fuzzy
+#~ msgid "Error during saving: could not open '%1' temporary file for writing."
+#~ msgstr "Памылка захавання: немагчыма адкрыць часовы файл '%1' для запісу."

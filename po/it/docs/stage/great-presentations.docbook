@@ -1,0 +1,107 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Federico</firstname
+><surname
+>Zenith</surname
+><affiliation
+><address
+><email
+>federico.zenith@member.fsf.org</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Vincenzo</firstname
+><surname
+>Reale</surname
+><affiliation
+><address
+><email
+>smart2128vr@gmail.com</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Suggerimenti generali per delle ottime presentazioni</title>
+
+<para
+>Ok, hai deciso di usare &stage; per la tua presentazione. Prima di cominciare a fare lucidi o presentazioni animate, trova un foglio di carta e siediti a una scrivania lontano dal computer. Non importa se stai programmando una lezione o cercando di convincere il capo che il tuo piano o la tua idea dovrebbero essere adottati, devi capire cosa stai cercando di dire. Scrivi tutte le cose che devi trattare, e cerca di metterle in un ordine che credi abbia senso. Per ora non mettere dettagli, decidi solo le intestazioni e la struttura del tuo discorso.</para>
+
+<para
+>Sotto ogni intestazione scrivi una nota su quali fatti devi trattare. Stai cercando di presentare un argomento convincente. Considera l'idea di raggruppare i tuoi fatti in cose che devono essere incluse, cose che dovrebbero essere incluse, e cose che sarebbe bello trattare se avessi tempo.</para>
+
+<para
+>Una volta che hai scritto tutte le cose che devi dire, calcola il tempo disponibile per dirle. Dieci minuti sembrano un'eternità quando inizi, ma in realtà è molto difficile spiegare molto in così poco tempo. Prendi il tuo foglio di carta e un orologio con l'altra mano. Prova la tua presentazione più volte. Ciò comporta molti benefici. Primo, ti mantieni nei tempi. Se qualcuno ti dice che hai dieci minuti, non usare mai più del tempo disponibile. Secondo, quando lo fai di fronte a un uditorio, non sarà la prima volta che fai una presentazione. Terzo, ti imprimi le parole in testa. Troverai dei modi di dire le cose sul tema. Se ti sei sentito dare la presentazione più volte, saprai più o meno cosa dirai e come la dirai. </para>
+
+<para
+>&stage; non produce delle note per l'oratore durante la scrittura, ma a me va bene usare delle diapositive secondarie. Fai delle diapositive per te, stampate su carta semplice, e qualcuna da usare con la lavagna luminosa. Scrivi il testo sulle diapositive bene e in grande, devi poterlo leggere da lontano. Io uso del testo a 14 o 16 punti, tu sperimenta per trovare una dimensione che puoi leggere facilmente. Io non uso mai un manoscritto.</para>
+
+<para
+>Se usi una lavagna luminosa, impara prima a usarla. Assicurati che la lampadina funzioni, e che la lampadina di scorta sia a posto. Pulisci le lenti e la lastra. Se non sei abituato a lavorare con la lavagna luminosa, fai pratica. Assicurati che lo schermo di proiezione sia pulito. È meglio, quando misuri il tempo che ci metti, inserire cinque secondi (conta <quote
+>mille, duemila, ...</quote
+>) per cambiare ogni diapositiva. In questo modo non devi correre. Se devi indicare qualcosa sulla diapositiva, puoi usare un puntatore e puntare lo schermo, trovare un puntatore laser o mettere una matita sul lucido. Fai attenzione che le matite tendono a rotolare via.</para>
+
+<para
+>Considera il posto dove devi stare. Non puoi metterti davanti allo schermo, quindi un po' a lato è probabilmente la cosa migliore se vuoi che l'uditorio ci veda. Spesso io proietto un'immagine sullo schermo e ci traccio una riga sopra. Se stai usando un PC con un proiettore digitale puoi disegnare oltre il bordo delle tue diapositive con lo strumento penna di &stage;. Ricorda che disegnare a mano libera con un mouse è un'abilità che richiede pratica. Se stai usando una lavagna luminosa, puoi usare dei lucidi e una penna sopra il bordo superiore delle tue diapositive generate con il computer.</para>
+
+<para
+>Quando stai presentando non guardare per sbaglio nella luce, è un errore comune. Se non userai la macchina per qualche minuto, spegnila. Esercitati ad andare al posto dove devi stare. Controlla le prese elettriche della stanza che userai e impara come funzionano gli interruttori. Una buona preparazione non solo ti aiuta a non fare errori (gli oggetti inanimati possono essere un incubo davanti a un uditorio), ma ti dà sicurezza. Tieni sempre pronto un <quote
+>Piano B</quote
+> se qualcosa non funzionasse. Tieni con te una copia di carta delle diapositive. Puoi fotocopiarle e distribuirle all'uditorio se l'attrezzatura non funziona.</para>
+
+<para
+>Non ho ancora detto molto sul contenuto. Al momento hai solo un foglio di carta con su tutto quello che vuoi dire. Prima di fare qualsiasi cosa, chiediti se la comprensione di quello che stai dicendo può essere migliorata mostrando un'immagine. Molte cattive presentazioni sono fatte da una serie di diapositive di solo testo. Il presentatore le legge a un uditorio (che le ha già lette, perché si può leggere più veloce di quanto si possa pronunciare). Cerca di evitare di scrivere qualcosa sulla diapositiva, oltre a titolo e numero. Disegna un'immagine di ciò che vuoi dire, poi spiega l'immagine. In questo modo non ti fai sopravanzare da te stesso (loro leggono più veloce di quanto pronunci, ricordi?) e hai l'aria di saperlo. In realtà stai usando le diapositive come una serie di note. Una diapositiva dovrebbe supportare quello che dici, non duplicarlo. Una diapositiva dovrebbe essere il centro dell'attenzione dell'uditorio, non una distrazione.</para>
+
+<para
+>Un esempio. Io insegno a dei ferrovieri come reagire agli incidenti. Volevo usare una diapositiva per discutere come spostare carichi pericolosi da un veicolo deragliato o danneggiato su un veicolo stradale dopo un incidente. La diapositiva che ho fatto conteneva un semplice disegno di un vagone cisterna, del tipo di quelli usati per i gas o il petrolio. Sul lato ho scritto <quote
+>Composti Chimici Letali SpA</quote
+>, così non devo spiegarlo. Volevo chiarire alcuni punti importanti. Primo, devi staccare ogni linea elettrica aerea all'interno di un certo raggio prima di ogni altra cosa. Ho disegnato una delle strutture di supporto e una freccia con su la distanza di sicurezza. Poi volevo dire che non bisogna trasferire i contenuti dei vagoni al buio o sotto un temporale. Ho disegnato una luna e un fulmine sul veicolo. Devi avere la consulenza di uno specialista, così ho disegnato un foglio di carta e ho scritto la parola <quote
+>Piano</quote
+> vicino al veicolo. Devi anche assicurarti che il veicolo non si sposti quando il peso viene rimosso. Ho disegnato dei piccoli cunei rossi vicino alle ruote. Tutto ciò di cui devo parlare è sulla diapositiva. Tutto quello che devo fare è guardare il disegno ed esso mi dirà quello di cui devo parlare. Quando ho discusso tutte le cose nel disegno, ho finito. </para>
+
+<para
+>In generale, usa una diapositiva o un'immagine solo se mostra qualcosa che vuoi aggiungere a quello che stai dicendo. Infine, rilassati e non cercare di correre. Non parlare a un muro, e ricorda che una presentazione serve a passare un messaggio. &stage; è uno strumento utile: ti può aiutare a passare quel messaggio, ma non può fare il lavoro per te.</para>
+
+</chapter>

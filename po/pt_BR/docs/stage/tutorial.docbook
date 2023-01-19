@@ -1,0 +1,548 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd">
+          
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+   
+<chapter id="tutorial">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Marcus</firstname
+><surname
+>Gama</surname
+><affiliation
+><address
+><email
+>marcus.gama@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Tutorial Passo à Passo</title>
+
+<para
+>Neste capítulo, o &stage; será apresentado usando um tutorial bem simples. Nós iremos passear através dos passos mais básicos que estão envolvidos na criação de uma apresentação e adição de alguns efeitos básicos. </para>
+
+<sect1 id="start-new">
+<title
+>Iniciando um novo documento</title>
+
+<para
+>Quando você inicia o &stage;, a janela inicial do &calligra; é exibida. </para>
+
+<screenshot>
+<screeninfo
+>A janela inicial do <guilabel
+>&calligra;</guilabel
+></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut01.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>A janela inicial do &calligra;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Selecione <guilabel
+>Tela</guilabel
+>, no painel à esquerda e então selecione o modelo chamado <guilabel
+>Vazio</guilabel
+> (realçado em azul na imagem acima) clicando sobre ele. Você pode assinalar a opção <guilabel
+>Usar sempre este modelo</guilabel
+> para torná-lo o modelo padrão. </para>
+
+<para
+>Agora clique em <guibutton
+>Usar este modelo</guibutton
+>. Isto fará com que seja exibida a janela de edição de slides, onde você poderá ver e editar os slides (bem como os objetos neles contidos) do seu documento. </para>
+
+<para
+>No momento só existe um slide vazio, então selecione o slide acima e à esquerda com o único campo de texto da área <guilabel
+>Layouts do slide</guilabel
+>.</para>
+
+<para
+>Faça um duplo-clique na caixa de texto. O cursor irá mudar para uma barra vertical, mostrando que você pode agora digitar algum texto. </para>
+
+<screenshot>
+<screeninfo
+>O cursor de inserção de texto</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut03.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>O cursor de inserção de texto</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Vá em frente, digite algum texto! </para>
+
+<screenshot>
+<screeninfo
+>Adicionando texto</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tut04.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adicionando texto</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Clique fora do texto para desmarcar a caixa de texto quando você tiver terminado de digitar. </para>
+
+</sect1>
+
+<sect1 id="insert-page">
+<title
+>Adicionar uma nova página</title>
+
+<para
+>Vamos agora adicionar um novo slide ao seu documento. Para fazer isso, clique no menu <guimenu
+>Slide</guimenu
+> e então clique em <guimenuitem
+>Inserir slide...</guimenuitem
+>. </para>
+
+<para
+>Agora nós podemos decidir qual será a aparência do slide. Desta vez, selecione um layout em colunas (realçado em azul.) </para>
+
+<screenshot>
+<screeninfo
+>Escolhendo um layout para a nova página</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut07.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Escolhendo um layout para a nova página</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>O novo layout de slide irá aparecer agora na janela de edição. Para acessar as páginas na sua apresentação, você poderá selecionar o slide no painel à esquerda (realçado em azul nesta imagem). </para>
+
+<para
+>O novo slide inserido possui duas caixas de texto. Uma é para um título e outra para conter uma lista de itens com marcadores. </para>
+
+<screenshot>
+<screeninfo
+>O novo slide</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut09.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>O novo slide</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Dê um duplo-clique e digite um título. Então dê um duplo-clique na segunda caixa de texto com o marcador. Digite algum texto e termine o parágrafo teclando <keycap
+>Enter</keycap
+> ou <keycap
+>Return</keycap
+>. Quando você digitar novos parágrafos, marcadores aparecerão automaticamente neles. </para>
+
+<screenshot>
+<screeninfo
+>Adicionando texto ao segundo slide</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut10.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adicionando texto ao segundo slide</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Você pode desmarcar a caixa de texto clicando fora dela. </para>
+
+</sect1>
+
+<sect1 id="insert-pic">
+<title
+>Inserindo uma figura</title>
+
+<para
+>Vamos voltar ao primeiro slide agora. Use a lista de slides à esquerda da sua tela. </para>
+
+<para
+>Nesta seção, nós iremos realçar sua apresentação adicionando um belo logotipo à página de título. Para fazer isso, o primeiro passo é ativar a área <guilabel
+>Adicionar forma</guilabel
+> usando o menu <menuchoice
+><guimenu
+>Configurações</guimenu
+> <guimenuitem
+>Áreas acopláveis</guimenuitem
+></menuchoice
+>. </para>
+
+<para
+>Agora selecione a imagem na área <guilabel
+>Adicionar forma</guilabel
+> e clique com o &LMB; onde deseja colocar o logotipo no seu tamanho original ou desenhe um retângulo com o botão esquerdo do mouse (clique o &LMB; e mantenha-o pressionado) para especificar a posição e o tamanho do logotipo. </para>
+
+<para
+>Uma janela de seleção de arquivos será exibida. Para aprender como usá-la ou como usar outra janela padrão do &kde; por favor consulte a documentação do &kde;. Você pode navegar clicando nos ícones de <guiicon
+>pasta</guiicon
+> ou usando os botões estilo <guiicon
+>navegador</guiicon
+> da barra de ferramentas. Clicar na <guiicon
+>seta para cima</guiicon
+> sobe um nível na hierarquia de pastas. </para>
+
+<para
+>Selecione um arquivo e clique em <guibutton
+>OK</guibutton
+>. </para>
+
+<para
+>Agora a imagem será inserida no slide e existirão manipuladores de seleção (pequenos quadrados) visíveis em torno da borda do gráfico. </para>
+
+<screenshot>
+<screeninfo
+>A nova imagem adicionada</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut13.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>A nova imagem adicionada</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Coloque o cursor do mouse em qualquer ponto no meio do logotipo, arrastando-o para o meio da página de título. Depois, use as pegas de seleção para dimensioná-lo corretamente. </para>
+
+<para
+>É isto. Agora você tem uma figura na página título! </para>
+<!--FIXME Double click opens the file dialog to replace the image-->
+</sect1>
+
+<sect1 id="insert-object">
+<title
+>Inserindo um objeto do &calligra;</title>
+<para
+>Vamos inserir outro objeto do &calligra; abaixo da imagem, como por exemplo um gráfico.</para>
+
+<para
+>Todos os objetos suportados pelo &calligra; podem ser incorporados em um slide do &stage;. Vamos escolher então um gráfico na área <guilabel
+>Adicionar forma</guilabel
+>. </para>
+
+<para
+>Selecione <guilabel
+>Gráfico</guilabel
+> e depois selecione com o seu mouse a área onde deseja colocar o seu gráfico no slide do &stage;. </para>
+
+<screenshot>
+<screeninfo
+>Selecione a área onde deseja colocar o gráfico</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut25.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Selecione a área onde deseja colocar o gráfico</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Quando soltar o botão do mouse, será adicionado um gráfico modelo ao slide. Sempre que trabalhar no gráfico, as suas <guilabel
+>Opções da ferramenta</guilabel
+> aparecerão na área acoplável. </para>
+
+<screenshot>
+<screeninfo
+>Opções da ferramenta do &kchart;</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut26.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Opções da ferramenta do &kchart;</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Para mover, redimensionar ou excluir o gráfico embutido, mude para a ferramenta <guibutton
+>Manipulação básica da forma</guibutton
+> e clique em qualquer parte da área do gráfico. Deverá aparecer agora uma borda verde com um pequeno quadrado preto em cada canto e no meio de cada lado. </para>
+<para
+>Se você mover o cursor para qualquer um dos quadrados, ele irá mudar para uma seta com duas pontas. Você poderá redimensionar o gráfico arrastando um destes quadrados com o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse pressionado. Para excluir o gráfico, clique com o botão <mousebutton
+>direito</mousebutton
+> num dos quadrados e selecione a opção <guimenuitem
+>Excluir</guimenuitem
+>.</para>
+<para
+>Para mover o gráfico mova o cursor para dentro do gráfico. O cursor deverá mudar para uma cruz, pressione o botão <mousebutton
+>esquerdo</mousebutton
+> do mouse e você poderá arrastar o gráfico para onde desejar.</para>
+<para
+>Para restaurar o gráfico para sua aparência normal simplesmente clique em qualquer lugar fora da área do gráfico.</para>
+<para
+>Para alterar o formato do gráfico, clique duas vezes com o botão <mousebutton
+>esquerdo</mousebutton
+> dentro da área do gráfico. O gráfico <guilabel
+>Opções das ferramentas</guilabel
+> deverá aparecer na área acoplável. Você pode então usar estas ferramentas para editar as propriedades do gráfico, tais como o seu tipo, legendas, eixos e dados.</para>
+
+<para
+>Clique em qualquer lado com o &LMB;, fora do gráfico, para voltar ao slide do &stage;.</para>
+
+<para
+>Um clique simples no gráfico permitirá arrastá-lo para mudar a sua posição e também arrastar as bordas para torná-lo maior ou menor, como se fosse outro objeto qualquer do &stage;. Dê um duplo-clique no gráfico para colocá-lo no modo do &kchart; e modificar qualquer uma das propriedades do gráfico.</para>
+
+</sect1>
+<!-- does not work in BETA6 here
+<sect1 id="addshadow">
+<title
+>Add a shadow to the title text</title>
+
+<para>
+Let's continue enhancing our title page by adding a shadow
+behind the title. <mousebutton
+>Right</mousebutton
+> click anywhere on the
+title text. This achieves two things: the text box containing the title
+is selected, and a menu pops up.
+</para>
+
+<para>
+Select the <guimenuitem
+>Shadow Objects...</guimenuitem
+> option in the popup menu.
+</para>
+
+<screenshot>
+<screeninfo
+>The context menu</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut15.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The context menu</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel
+>Shadow</guilabel
+> dialog pops up. The distance between the
+shadow and the text is currently 0 so the shadow cannot be seen (this
+part of the dialog box is highlighted in red.)
+</para>
+
+<screenshot>
+<screeninfo
+>The <guilabel
+>Shadow</guilabel
+> dialog</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut16.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The <guilabel
+>Shadow</guilabel>
+dialog</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Increase the distance value to 3. The effect of changing the distance
+can be seen in the preview window. Now click <guibutton
+>OK</guibutton
+>.
+</para>
+
+<screenshot>
+<screeninfo
+>Adding a shadow to the title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut17.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>Adding a shadow to the title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Now the title has a shadow!
+</para>
+
+<screenshot>
+<screeninfo
+>The new shadowed title</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut18.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>The new shadowed title</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+</sect1>
+-->
+<sect1 id="textcolor">
+<title
+>Mudando a cor do texto do título</title>
+
+<para
+>Vamos terminar mudando a cor do texto do título de preto para azul. Para fazer isso, selecione o texto do título dando um duplo-clique na caixa de texto e selecione o texto. </para>
+<!-- Font from menu Format or contextmenu with a lot of options-->
+<para
+>Abra o seletor de cores com o ícone <inlinemediaobject
+><imageobject
+> <imagedata fileref="22x22-actions-format-text-color.png" format="PNG"/></imageobject
+> </inlinemediaobject
+> nas opções de edição do texto (este ícone tem uma dica 'Cor do texto...').</para>
+
+<screenshot>
+<screeninfo
+>O seletor de cores</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut19.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>O seletor de cores</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>O seletor de cores</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut20.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>O seletor de cores</phrase
+></textobject>
+<caption
+><para
+>Mudar a cor para azul.</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<para
+>A mudança de cor do texto selecionado para azul altera a sua aparência. A cor exata para a qual muda o texto realçado depende do esquema de cores do seu sistema. </para>
+
+<note>
+<para
+>A seleção da cor do texto também está disponível na aba <guilabel
+>Decorações</guilabel
+> da janela <guilabel
+>Selecionar fonte</guilabel
+>. Abra esta janela com a opção <guimenuitem
+>Fonte</guimenuitem
+> do menu <guimenu
+>Formatar</guimenu
+> ou do menu de contexto. </para>
+</note>
+
+<para
+>Agora clique fora do texto para desmarcá-lo. </para>
+
+
+<screenshot>
+<screeninfo
+>O título final</screeninfo>
+<mediaobject>
+<imageobject
+><imagedata fileref="tut21.png" format="PNG"/></imageobject>
+<textobject
+><phrase
+>O título final</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Agora que existem dois slides, por que não testamos a apresentação! Para iniciar uma apresentação, pressione o botão <guiicon
+>Iniciar apresentação</guiicon
+> na barra de ferramentas. O primeiro slide deverá aparecer em sua tela. </para>
+
+<para
+>Para avançar do primeiro para o próximo slide, basta clicar em qualquer lugar da tela, ou usar a tecla <keycap
+>Page Down</keycap
+>. </para>
+
+<para
+>Para sair da apresentação, pressione a tecla &Esc;. </para>
+
+</sect1>
+
+</chapter>

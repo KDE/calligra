@@ -1,0 +1,1112 @@
+<chapter id="formatspread">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Raphael</firstname
+> <surname
+>Langerhorst</surname
+> <affiliation
+> <address
+><email
+>raphael.langerhorst@kdemail.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Formatera kalkylblad</title>
+
+<sect1 id="formatcells">
+<!--<title
+>Fonts, Text, Borders and Colors</title
+>-->
+<title
+>Cellformat</title>
+<para
+>För att ändra format och utseende på markerade celler, rader eller kolumner använd alternativet <guimenuitem
+>Cellformat...</guimenuitem
+> i menyn <guimenu
+>Format</guimenu
+> eller från menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat0.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Sammanhangsberoende meny som visas med höger musknapp.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Det visar dialogrutan <guilabel
+>Cellformat</guilabel
+> som har flera flikar:</para>
+<sect2 id="formatdata">
+<!-- beginning of annma writing -->
+<title
+>Dataformat och representation</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Sidan <guilabel
+>Dataformat</guilabel
+>.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Sidan <guilabel
+>Dataformat</guilabel
+> i dialogrutan Cellformat, låter dig styra hur värden i cellen visas.</para>
+<para
+>Övre delen av den här sidan låter dig välja format som används vid visning av numeriska värden, datum eller tider. En <guilabel
+>Förhandsgranskning</guilabel
+> låter dig se det nya formatets effekt. </para>
+<para
+>Du kan ställa in samma dataformat för en rad eller kolumn genom att markera raden eller kolumnen och anropa dialogrutan <guilabel
+>Cellformat</guilabel
+> med höger musknapp.</para>
+<note
+><para
+>Du kan öka decimala precisionen för vilket nummer som helst med formaten <guilabel
+>Generellt</guilabel
+>, <guilabel
+>Nummer</guilabel
+>, <guilabel
+>Procent</guilabel
+>, <guilabel
+>Valuta</guilabel
+> eller <guilabel
+>Vetenskaplig</guilabel
+> med ikonen <guiicon
+>Öka precision</guiicon
+> i formatverktygsraden. <inlinemediaobject
+><imageobject>
+<imagedata fileref="increasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+<para
+>Du kan minska decimala precisionen för vilket nummer som helst med formaten <guilabel
+>Generellt</guilabel
+>, <guilabel
+>Nummer</guilabel
+>, <guilabel
+>Procent</guilabel
+>, <guilabel
+>Valuta</guilabel
+> eller <guilabel
+>Vetenskaplig</guilabel
+> med ikonen <guiicon
+>Minska precision</guiicon
+> i formatverktygsraden. <inlinemediaobject
+><imageobject>
+<imagedata fileref="decreasedecimal.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</note>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Generellt</guilabel
+></term>
+<listitem
+><para
+>Det här är förvalt format och &sheets; detekterar automatiskt den verkliga datatypen beroende på aktuell data i cellen. Normalt högerjusterar &sheets; nummer, datum och tider i en cell, och vänsterjusterar allt annat.</para>
+<para
+>Om det generella formatet inte passar dig kan du byta till ett specifikt format bland alternativen nedanför.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Nummer</guilabel
+></term>
+<listitem
+><para
+>Notationen för nummer använder den notation som du väljer globalt i systeminställningarna med <menuchoice
+><guimenu
+>Region</guimenu
+> <guimenuitem
+>Land/region och språk</guimenuitem
+> <guimenuitem
+>Siffror</guimenuitem
+></menuchoice
+>. Siffror högerjusteras normalt.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Procent</guilabel
+></term>
+<listitem
+><para
+>När du har ett nummer i aktuell cell och ändrar cellformat från <guilabel
+>Generellt</guilabel
+> till <guilabel
+>Procent</guilabel
+>, multipliceras den aktuella cellens nummer med 100.</para>
+<para
+>Om du till exempel skriver in 2 och ställer in cellformatet till <guilabel
+>Procent</guilabel
+>, blir numret 200 %. Genom att byta tillbaka till <guilabel
+>Generellt</guilabel
+> cellformat återställs det till 2.</para>
+<para
+>Du kan också använda procentikonen i formatverktygsraden. <inlinemediaobject
+><imageobject>
+<imagedata fileref="percent.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Valuta</guilabel
+></term>
+<listitem
+><para
+>Formatet <guilabel
+>Valuta</guilabel
+> konverterar numret till valutanotation med inställningarna som fastställts globalt i systeminställningarna med <menuchoice
+><guimenu
+>Region</guimenu
+> <guimenuitem
+>Land/region och språk</guimenuitem
+> <guimenuitem
+>Valuta</guimenuitem
+></menuchoice
+>. Valutasymbolen visas, och precisionen blir den som ställts in i systeminställningarna.</para>
+<para
+>Du kan också använda ikonen <guiicon
+>Valutaformat</guiicon
+> i verktygsraden <guilabel
+>Format</guilabel
+> för att ställa in cellformatet så att det ser ut som din aktuella valuta: <inlinemediaobject
+><imageobject>
+<imagedata fileref="hi22-action-money.png" format="PNG"/>
+</imageobject
+></inlinemediaobject
+></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Vetenskaplig</guilabel
+></term>
+<listitem
+><para
+>Det vetenskapliga formatet ändrar numret så att vetenskaplig notation används. Till exempel ändras 0,0012 till 1,2E-03. Genom att gå tillbaka till Generellt cellformat visas 0,0012 igen. Det generella celldataformatet behåller inte vetenskaplig notation, så om du vill ha denna notation måste du ange det med det här menyalternativet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Bråkdel</guilabel
+></term>
+<listitem
+><para
+>Bråkformatet ändrar numret till ett bråk. Exempelvis kan 0,1 ändras till 1/8, 2/16, 1/10, etc. Du definierar bråkets typ genom att välja den i fältet till höger. Om det exakta bråket inte är möjligt med bråkläget du väljer, väljes det närmaste möjliga värdet. Om vi exempelvis har 1,5 som nummer, och väljer <guilabel
+>Bråk</guilabel
+> och <guilabel
+>Sextondelar 1/16</guilabel
+>, är texten som visas i cellen "1 8/16", vilket är ett exakt bråk. Om du har 1,4 som nummer i cellen och väljer <guilabel
+>Bråk</guilabel
+> och <guilabel
+>Sextondelar 1/16</guilabel
+>, visar cellen "1 6/16", vilket är det närmaste sextondelsbråket.</para>
+</listitem
+><!--TODO formatting of numbers?-->
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Datum</guilabel
+></term>
+<listitem
+><para
+>När du skriver in ett datum ska du använda ett av formaten som ställs in i systeminställningarna under <menuchoice
+><guimenu
+>Region</guimenu
+> <guimenuitem
+>Land/region och språk</guimenuitem
+> <guimenuitem
+>Datum och tid</guimenuitem
+></menuchoice
+>. Det finns två format som ställs in där: datumformatet och det korta datumformatet.</para>
+<para
+>Ett slumpmässigt naturligt tal NN transformeras till datumet den 30:de december 1899 (som är 0) med antal dagar NN tillagda. Om du till exempel har en cell med 100 och du väljer formatet <guilabel
+>Datum</guilabel
+>, visas "1900-04-09" i cellen, vilket är 100 dagar efter 30:de december 1899. Startdatum är två dagar för tidigt eftersom det fanns ett fel i Lotus 123, som förblev på samma sätt i Excel för att behålla samma funktion. Det är ändå bara några få som behöver räkna från 1:a januari 1900, och att till exempel lägga till 9 dagar till 1:a november 2000 ger dig 10:e november 2000, så alla normala beräkningar med datum är riktiga.</para>
+<note
+><para
+>När en cell har formatet <guilabel
+>Datum</guilabel
+> kan du dra cellen neråt som du gör med nummer så får följande celler också datum, där varje datum ökas med en dag.</para
+></note
+><!--TODO explain that
+better-->
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Tid</guilabel
+></term>
+<listitem
+><para
+>Det här formaterar cellinnehållet som en tid. För att skriva in en tid ska du använda <guilabel
+>Tidsformat</guilabel
+> som ställs in i systeminställningarna under <menuchoice
+><guimenu
+>Region</guimenu
+> <guimenuitem
+>Land/region och språk</guimenuitem
+> <guimenuitem
+>Datum och tid</guimenuitem
+></menuchoice
+>. I dialogrutan <guilabel
+>Cellformat</guilabel
+> kan du ställa in hur tiden ska visas genom att välja ett av de tillgängliga tidsformaten. Förvalt format är systemformatet som ställs in i systeminställningarna. När numret i cellen inte är vettigt som en tid, visar &sheets; 00:00 med det globala formatet du har i systeminställningarna.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Datum och tid</guilabel
+></term>
+<listitem
+><para
+>Det här formaterar cellinnehållet som datum och tid. För att skriva in ett datum och en tid ska du använda <guilabel
+>Tidsformat</guilabel
+> som ställs in i systeminställningarna under <menuchoice
+><guimenu
+>Region</guimenu
+> <guimenuitem
+>Land/region och språk</guimenuitem
+> <guimenuitem
+>Datum och tid</guimenuitem
+></menuchoice
+>. I dialogrutan <guilabel
+>Cellformat</guilabel
+> kan du ställa in hur datum och tid ska visas genom att välja ett av de tillgängliga datum- och tidsformaten. Förvalt format är systemformatet som ställs in i systeminställningarna. När numret i cellen inte är vettigt som datum och tid, visar &sheets; 00:00 med det globala formatet du har i systeminställningarna.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Text</guilabel
+></term>
+<listitem
+><para
+>Det här formaterar cellinnehållet som en text. Det kan vara användbart om du vill att ett nummer ska behandlas som text istället för ett nummer, till exempel för ett postnummer. Att ställa in ett nummer med textformat vänsterjusterar det. När nummer formateras som text kan de inte användas i beräkningar eller formler. Det ändrar också hur cellen justeras.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Egen</guilabel
+></term>
+<listitem
+><para
+>Fungerar inte ännu. Kommer att aktiveras i nästa utgåva.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>Nedre delen av sidan <guilabel
+>Dataformat</guilabel
+> låter dig lägga till ett <guilabel
+>Prefix</guilabel
+> som en $ symbol i början av varje värde, eller ett <guilabel
+>Postfix</guilabel
+> som " kr" i slutet. Du kan också styra hur många siffror som visas efter decimalkommat för numeriska värden, om positiva värden visas med ett inledande plustecken och om negativa värden visas med röd färg. </para>
+</sect2
+> <!--end of annma writing -->
+
+<sect2 id="formattext">
+<title
+>Teckensnitt och textinställningar</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Teckensnittssida.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Sidan <guilabel
+>Teckensnitt</guilabel
+> låter dig välja teckensnittsfamilj, <guilabel
+>Stil:</guilabel
+>, <guilabel
+>Storlek:</guilabel
+>, <guilabel
+>Vikt:</guilabel
+> och <guilabel
+>Färg:</guilabel
+> för nuvarande cell, inklusive några ytterligare alternativ som understruken eller överstruken text. Den nedre delen av sidan visar en förhandsgranskning av det valda textformatet.</para>
+<para
+>Förvalt teckensnitt ställs in för alla celler i menyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Stilhantering</guimenuitem
+></menuchoice
+> med stilen som för närvarande används.</para>
+<!--annma-->
+<variablelist>
+<!--varlistentry>
+<term
+><guilabel
+>Family List box</guilabel
+></term>
+<listitem
+><para
+>Allows you to choose a new font family.</para>
+</listitem>
+</varlistentry-->
+<varlistentry>
+<term
+><guilabel
+>Stil:</guilabel
+></term>
+<listitem
+><para
+>Välj teckensnittets stil för cellerna som för närvarande är markerade. När du markerar flera celler med olika stilar, ställs den visade stilen in till <guilabel
+>Varierade (ingen ändring)</guilabel
+> och genom att lämna den sådan behålls alla de nuvarande stilinställningarna för varje cell. Att till exempel ändra till <guilabel
+>Romersk</guilabel
+> ändrar alla markerade cellers textstil till <guilabel
+>Romersk</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Storlek:</guilabel
+></term>
+<listitem
+><para
+>Välj teckenstorlek för cellerna som för närvarande är markerade. När du markerar flera celler med olika storlekar, ställs den visade storleken in till <guilabel
+> </guilabel
+> (inget värde visas) och genom att lämna den sådan behålls alla de nuvarande storleksinställningarna för varje cell. Att till exempel ändra till <guilabel
+>14</guilabel
+> ändrar alla markerade cellers teckenstorlek till <guilabel
+>14</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Vikt:</guilabel
+></term>
+<listitem
+><para
+>Välj teckensnittets vikt för cellerna som för närvarande är markerade. När du markerar flera celler med olika vikter, ställs den visade vikten in till <guilabel
+>Varierade (ingen ändring)</guilabel
+> och genom att lämna den sådan behålls alla de nuvarande viktinställningarna för varje cell. Att till exempel ändra till <guilabel
+>Fet</guilabel
+> ändrar alla markerade cellers textvikt till <guilabel
+>Fet</guilabel
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Färg:</guilabel
+></term>
+<listitem
+><para
+>Välj färg för den aktuella cellens text. Genom att klicka på färgraden får du fram KDE:s vanliga färgvalsdialogruta, där du kan välja den nya färgen. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Understruken</guilabel
+></term>
+<listitem
+><para
+>Stryker under texten i aktuell markerad cell om markerat. Det är inte normalt markerat.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Stryk över</guilabel
+></term>
+<listitem
+><para
+>Texten i aktuell cell blir överstruken om det här är markerat. Det är inte normalt markerat.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<!--end of annma-->
+</sect2>
+
+<sect2 id="formatposition">
+<title
+>Textposition och rotation</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Positionssida.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Under fliken <guilabel
+>Position</guilabel
+> kan du styra positionen för text inne i en cell genom att göra lämpliga val i sektionerna <guilabel
+>Horisontell</guilabel
+> och <guilabel
+>Vertikal</guilabel
+>, eller genom att välja värde på <guilabel
+>Indentering</guilabel
+>. Du kan också låta text visas vertikalt istället för horisontellt, eller till och med i en vinkel.</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Horisontell</guilabel
+></term>
+<listitem
+><para
+>Ställ in innehållets horisontella position i cellen. <guilabel
+>Standard</guilabel
+> är förval och ställs in från formatet du väljer. <guilabel
+>Vänster</guilabel
+> betyder att innehållet visas till vänster i cellen. <guilabel
+>Centrerat</guilabel
+> betyder att innehållet är i mitten horisontellt i cellen. <guilabel
+>Höger</guilabel
+> betyder att innehållet visas till höger i cellen.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Vertikal</guilabel
+></term>
+<listitem
+><para
+>Ställ in innehållets vertikala position i cellen. <guilabel
+>Överst</guilabel
+> betyder att innehållet visas till längst upp i cellen, <guilabel
+>Mitten</guilabel
+> betyder att innehållet är i mitten vertikalt i cellen. <guilabel
+>Underst</guilabel
+> betyder att innehållet visas längst ner i cellen.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Textalternativ</guilabel
+></term>
+<listitem
+><para
+>Det här är bara tillgängligt när rotationen är 0°. <guilabel
+>Radbryt text</guilabel
+> radbryter texten så att den passar i den tidigare cellstorleken. Om det inte är markerat, förblir texten på en rad.</para>
+<para
+><guilabel
+>Vertikal text</guilabel
+> visar texten vertikalt.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Rotation</guilabel
+></term>
+<listitem
+><para
+>Texten visas orienterad med vinkeln du ställer in här. Positiva värden flyttar den moturs och negativa värden flyttar den medurs.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Sammanfoga celler</guilabel
+></term>
+<listitem
+><para
+>Om markerat får det här samma effekt som <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Sammanfoga celler</guimenuitem
+></menuchoice
+>. Minst två sammanhängande celler måste vara markerade. De sammanhängande cellerna sammanfogas då till en större.</para>
+<para
+>När en sammanfogad cell markeras och det här avmarkeras, återställs cellerna till sina ursprungliga storlekar som innan de sammanfogades. Det får samma effekt som <menuchoice
+><guimenu
+>Format</guimenu
+> <guimenuitem
+>Dela upp cell</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Indentera</guilabel
+></term>
+<listitem
+><para
+>Ställ in hur mycket indentering som används i cellen när du väljer åtgärderna <guilabel
+>Öka indentering</guilabel
+> eller <guilabel
+>Minska indentering</guilabel
+> i verktygsraden. Åtgärderna är inte normalt aktiverade i verktygsraden.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Cellstorlek</guilabel
+></term>
+<listitem
+><para
+>Här ställer du in cellens storlek, antingen en egen bredd och höjd eller förvald bredd och höjd.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+
+<sect2 id="formatborder">
+<title
+>Cellkant</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Kantsida.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Fliken <guilabel
+>Kant</guilabel
+> låter dig ställa in utseende på cellkanter. Om du har valt mer än en cell kan du använda olika stilar på kanter mellan cellerna och de som omger det markerade området. </para>
+<para
+>Välj först mönster och färg i sektionen <guilabel
+>Mönster</guilabel
+> under fliken <guilabel
+>Kant</guilabel
+> och tilldela sedan olika delar av kanten genom att klicka på lämplig knapp i sektionen <guilabel
+>Kant</guilabel
+>, eller på en av knapparna i <guilabel
+>Förval</guilabel
+>. Den vänstra knappen i <guilabel
+>Förval</guilabel
+> rensar alla tidigare tilldelade kanter. Observera att du också kan lägga till en diagonal linje som överkorsar cellen.</para>
+</sect2>
+<sect2 id="formatbackground">
+<title
+>Cellbakgrund</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Bakgrundssida.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Cellens bakgrundsmönster och färg kan väljas på sidan <guilabel
+>Bakgrund</guilabel
+>.</para>
+<para
+>Välj helt enkelt det önskade mönstret, och välj därefter mönstrets färg och bakgrundsfärgen.</para>
+<para
+>Längst ner på sidan ser du en förhandsgranskning av den inställda cellbakgrunden.</para>
+</sect2>
+<sect2 id="formatprotection">
+<title
+>Cellskydd</title>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Cellskyddssida.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Du kan ändra sättet som innehållet i en cell är skyddat på sidan <guilabel
+>Cellskydd</guilabel
+>.</para>
+<para
+>Alla celler skyddas normalt (det betyder att cellinnehållet inte kan ändras), och för att cellskydd ska vara aktivt måste du också skydda bladet med menyn <menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda arbetsblad...</guimenuitem
+></menuchoice
+> och tillhandahålla ett lösenord. Du kan också dölja cellens formel för att skydda sättet du beräknar formeln. Det kräver också att bladet är skyddat för att fungera. Du kan dölja cellinnehållet med <guilabel
+>Dölj allt</guilabel
+>, och återigen krävs att bladet är skyddat. Du kan ta reda på mer om alla inställningarna i kapitlet <link linkend="protection"
+>Avancerad användning av &sheets; under avsnittet Skydd</link
+>.</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Dölj allt</guilabel
+></term>
+<listitem
+><para
+>Det här döljer cellinnehållet och fungerar bara när bladet är skyddat, viĺket betyder att ändring av cellegenskapen <guilabel
+>Dölj allt</guilabel
+> inte har någon effekt om inte bladet är skyddat. Om cellen själv är skyddad eller inte spelar ingen roll.</para>
+<para
+>När <guilabel
+>Dölj allt</guilabel
+> är markerat, är <guilabel
+>Skyddat</guilabel
+> och <guilabel
+>Dölj formel</guilabel
+> inaktiverade, eftersom när bladet är skyddat döljer <guilabel
+>Dölj allt</guilabel
+> cellinnehållet och formeln och maskerar och skyddar på så sätt cellens innehåll.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Skyddat</guilabel
+></term>
+<listitem
+><para
+>Om markerad, är cellinnehållet skyddat. Det är förvalt beteende. Du måste skydda hela bladet med menyn <menuchoice
+><guimenu
+>Verktyg</guimenu
+> <guimenuitem
+>Skydda arbetsblad...</guimenuitem
+></menuchoice
+> för att det individuella cellskyddet ska fungera. När en cell är skyddad kan dess innehåll inte ändras.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Dölj formel</guilabel
+></term>
+<listitem
+><para
+>Om det här är markerat är cellen fortfarande synlig, Dess innehåll visas dock inte i formelraden. Att dölja formeln fungerar bara för celler som innehåller formler, så att användaren inte kan visa formeln. Bladet måste också vara skyddad för att det ska fungera.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Skriv inte ut text</guilabel
+></term>
+<listitem
+><para
+>Om du markerar <guilabel
+>Skriv inte ut text</guilabel
+> skrivs inte cellens text ut. Den är normalt inte markerad, vilket betyder att cellinnehållet alltid normalt skrivs ut.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect2>
+</sect1>
+
+<sect1 id="conditional">
+<title
+>Villkorliga cellegenskaper</title>
+<para
+>Du kan också ändra utseende på en cell beroende på det värde den innehåller, som till exempel är användbart om du använder &sheets; för att hålla reda på hushållsutgifter och vill färglägga alla värden som är större än, låt oss säga, 10 000 kr.</para>
+<para
+>För att göra detta markera cellen eller cellerna och välj sedan <guimenuitem
+>Villkorliga stilar...</guimenuitem
+> i menyn <guimenu
+>Redigera</guimenu
+>. Då visas dialogrutan <guilabel
+>Villkorliga stilar</guilabel
+>, där du kan ändra teckensnitt och färg på en cell som när värdet uppfyller ett eller flera villkor. Observera att det andra och tredje villkoret gäller bara om de tidigare villkoren inte uppfylls.</para>
+<para
+>Använd <menuchoice
+><guisubmenu
+>Rensa</guisubmenu
+><guimenuitem
+>Villkorliga stilar</guimenuitem
+></menuchoice
+> i menyn <guimenu
+>Redigera</guimenu
+> för att ta bort alla villkorliga egenskaper från markerade celler.</para>
+</sect1>
+
+<sect1 id="cellsize">
+<title
+>Ändra cellstorlekar</title>
+<para
+>Fliken <guilabel
+>Position</guilabel
+> i dialogrutan <guilabel
+>Cellformat</guilabel
+> låter dig ändra storlek på de markerade cellerna. Observera att ändra höjd på en ensam cell ändrar höjden på alla celler i den raden, och på samma sätt påverkar en ändring av bredden hela kolumnen.</para>
+<para
+>Du kan också välja raderna eller kolumnerna som ska ändras och sedan välja <guimenuitem
+>Ändra storlek på rad...</guimenuitem
+> eller <guimenuitem
+>Ändra storlek på kolumn...</guimenuitem
+> från menyn som visas med <mousebutton
+>höger</mousebutton
+> musknapp, eller i menyerna <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Rad</guisubmenu
+></menuchoice
+> och <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Kolumn</guisubmenu
+></menuchoice
+>.</para>
+<para
+>Om du flyttar muspekaren så att dess spets pekar på linjen mellan två radnummer till vänster i &sheets; fönster, så ändras markören till två parallella linjer, med en kort pil från varje linje. När markören ser ut så här, kan du hålla nere <mousebutton
+>vänster</mousebutton
+> musknapp och dra kanten mellan de två raderna, för att ändra höjden på den övre raden. En liknande teknik kan användas för att ändra bredden på en kolumn.</para>
+
+<para
+>För att ställa in radhöjd eller kolumnbredd till minimum som behövs för att visa innehållet, markera hela raden eller kolumnen, och högerklicka på rad- eller kolumnrubriken. Välj <guimenuitem
+>Justera rad</guimenuitem
+> eller <guimenuitem
+>Justera kolumn</guimenuitem
+> i menyn som visas. Raden eller kolumnen ändras till minimum som behövs. Du kan också markera en ensam cell eller intervall av celler, och antingen välja <guimenuitem
+>Justera rad och kolumn</guimenuitem
+> från menyn som visas med högerklick eller menyn <guimenu
+>Format</guimenu
+>.</para>
+
+<para
+>Du kan göra ett antal intilliggande rader eller kolumner till samma storlek genom att välja <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Rad</guisubmenu
+><guimenuitem
+>Utjämna rad</guimenuitem
+></menuchoice
+> eller <menuchoice
+><guimenu
+>Format</guimenu
+><guisubmenu
+>Kolumn</guisubmenu
+><guimenuitem
+>Utjämna kolumn</guimenuitem
+></menuchoice
+>.</para>
+
+</sect1>
+
+<sect1 id="merging">
+<title
+>Slå ihop celler</title>
+<para
+>Det är ofta praktiskt att ha en cell som utbreder sig över två eller flera kolumner eller längs mer än en rad. Det här kan göras genom att slå ihop två eller flera celler till en. Markera cellerna som ska slås ihop, och välj sedan <menuchoice
+><guimenu
+>Format</guimenu
+><guimenuitem
+>Sammanfoga celler</guimenuitem
+></menuchoice
+>.</para>
+<para
+>För att vända på åtgärden, markera den sammanslagna cellen och välj <guimenuitem
+>Dela upp celler</guimenuitem
+> i menyn <guimenu
+>Format</guimenu
+>.</para>
+</sect1>
+
+<sect1 id="hiding">
+<title
+>Dölja rader och kolumner</title>
+<para
+>Ett färdigt kalkylblad kan ofta fås att se snyggare ut genom att dölja celler som innehåller mellansteg i beräkningen, så att bara viktiga indata- och resultatområden visas.</para>
+<para
+>Du kan dölja markerade rader och kolumner i &sheets; genom att använda alternativen <guimenuitem
+>Dölj rader</guimenuitem
+> och <guimenuitem
+>Dölj kolumner</guimenuitem
+> i menyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Rad</guisubmenu
+></menuchoice
+>, <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Kolumn</guisubmenu
+> </menuchoice
+> eller menyer som visas med <mousebutton
+>höger</mousebutton
+> musknapp. Dolda rader och kolumner visas inte på skärmen, och finns inte med på en utskrift.</para>
+<para
+>Att dölja celler på det här sättet gör dem också något svårare att ända av misstag.</para>
+<para
+>För att dölja en rad eller kolumn, välj <menuchoice
+><guisubmenu
+>Rad</guisubmenu
+><guimenuitem
+>Visa rader...</guimenuitem
+></menuchoice
+> eller <menuchoice
+><guisubmenu
+>Kolumn</guisubmenu
+><guimenuitem
+>Visa kolumner...</guimenuitem
+></menuchoice
+> i menyn <guimenu
+>Format</guimenu
+>. Du kan markera vilket antal rader som helst att visa i dialogrutan som öppnas.</para>
+</sect1>
+
+<sect1 id="sheet-properties">
+<title
+>Egenskaper för arbetsblad</title>
+<para
+>Du kan antingen komma åt det aktuella arbetsbladets egenskaper genom att högerklicka på arbetsbladets flik och välja <guilabel
+>Egenskaper för arbetsblad</guilabel
+> eller genom att använda menyn <menuchoice
+><guimenu
+>Format</guimenu
+> <guisubmenu
+>Arbetsblad</guisubmenu
+> <guimenuitem
+>Egenskaper för arbetsblad</guimenuitem
+></menuchoice
+>. Observera att du bara kan komma åt arbetsbladets egenskaper när dokumentet eller arbetsbladet inte är skyddade.</para>
+<para
+>Du kan ställa in olika egenskaper som är giltiga på aktuellt arbetsblad. Genom att klicka på <guibutton
+>Ok</guibutton
+> verkställs dina ändringar och <guibutton
+>Förval</guibutton
+> återställer förvalda inställningar.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Dialogrutan Egenskaper för arbetsblad.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Layoutriktning:</guilabel
+></term>
+<listitem
+><para
+>Låter dig välja bladets orientering. Förval är att bladets första kolumn är till vänster. Om du väljer <guilabel
+>Höger till vänster</guilabel
+>, är den första kolumnen till höger och de övriga läggs till från höger till vänster.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Dölj noll</guilabel
+></term>
+<listitem
+><para
+>Om den här rutan är markerad, så visas alla celler som innehåller värdet noll som tomma.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Automatisk omräkning</guilabel
+></term>
+<listitem
+><para
+>Den här inställningen styr om formler automatiskt beräknas om när värdet i någon cell de refererar till ändras.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Visa kolumn som nummer</guilabel
+></term>
+<listitem
+><para
+>Om den här rutan är markerad visas kolumnrubriker som nummer istället för bokstäver. Bokstäver är förval.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Använd LC-läge</guilabel
+></term>
+<listitem
+><para
+>Om den här rutan är markerad visas cellreferensen till vänster i formelraden med LC-läge (dvs. L2C3) istället för dess normala form B3. Det verkar inte vara särskilt användbart för närvarande.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Konvertera första bokstaven till stor bokstav</guilabel
+></term>
+<listitem
+><para
+>Markeras den här rutan, så konverteras automatiskt första bokstaven i all text som du skriver in till stor bokstav.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Visa rutnät</guilabel
+></term>
+<listitem
+><para
+>Om markerat visas rutnätet (cellernas gränser). Det är förval. Om du avmarkerar det, döljs rutnätet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Visa sidkanter</guilabel
+></term>
+<listitem
+><para
+>Om du markerar det här alternativet ritas sidkanterna på det nuvarande bladet. Normalt visas inte sidkanterna. Det är användbart att se sidkanterna om du vill skriva ut bladet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Visa formel</guilabel
+></term>
+<listitem
+><para
+>Om den här rutan är markerad, så visar &sheets; själva formeln i celler istället för resultatet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Visa formelindikering</guilabel
+></term>
+<listitem
+><para
+>Om den här rutan är markerad visar &sheets; en liten blå triangel i nedre vänstra hörnet av celler som innehåller formler. Det är användbart om du vill skydda celler med formler.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+><guilabel
+>Visa kommentarindikering</guilabel
+></term>
+<listitem
+><para
+>Om den här rutan är markerad så markeras celler som innehåller kommentarer med en liten röd triangel i övre högra hörnet.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

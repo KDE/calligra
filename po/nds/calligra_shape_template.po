@@ -1,0 +1,46 @@
+# Manfred Wiese <m.j.wiese@web.de>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: TemplateShape\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-03-18 20:47+0100\n"
+"Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
+"Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
+"Language: nds\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.4\n"
+
+#: ChangeSomethingCommand.cpp:34
+msgctxt "(qtundo-format)"
+msgid "Change something"
+msgstr "Jichtenswat ännern"
+
+#: TemplateShapeFactory.cpp:32
+#, kde-format
+msgid "Template shape"
+msgstr ""
+
+#: TemplateShapeFactory.cpp:34
+#, kde-format
+msgid "Simple shape that is used as a template for developing other shapes."
+msgstr ""
+
+#: TemplateTool.cpp:77
+#, kde-format
+msgid "Open"
+msgstr "Opmaken"
+
+#: TemplateToolFactory.cpp:26
+#, kde-format
+msgid "Template shape editing"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Open"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open"
+#~ msgstr "Opmaken"

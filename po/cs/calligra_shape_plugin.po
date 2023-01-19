@@ -1,0 +1,38 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2015, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2015-08-07 12:06+0100\n"
+"Last-Translator: Vít Pelčák <vit@pelcak.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: PluginShape.cpp:36
+#, kde-format
+msgid "Unknown"
+msgstr "Neznámý"
+
+#: PluginShape.cpp:40
+#, kde-format
+msgid "Plugin of mimetype: %1"
+msgstr "Modul typu MIME: %1"
+
+#: PluginShapeFactory.cpp:22
+#, kde-format
+msgid "Plugin Placeholder"
+msgstr "Zástupný modul"
+
+#: PluginShapeFactory.cpp:24
+#, kde-format
+msgid "Plugin Placeholder, embedded or fullscreen"
+msgstr "Zástupný modul, vložený, nebo na celou obrazovku"

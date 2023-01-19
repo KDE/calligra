@@ -1,0 +1,5776 @@
+# translation of kword.po to
+# Copyright (C) 2003, 2004, 2006 Free Software Foundation, Inc.
+#
+#
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004, 2006.
+# Nurali Abdurahmonov <mavnur@gmail.com>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: kword\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2006-12-17 13:48+0000\n"
+"Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
+"Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. i18n: ectx: Menu (file)
+#: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "&Filter:"
+
+#. i18n: ectx: Menu (edit)
+#: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "Matnni tahrirlash"
+
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "&Yangi"
+
+#. i18n: ectx: Menu (view_displaymodes)
+#. i18n: ectx: Menu (view)
+#: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
+#, kde-format
+msgid "&Display Mode"
+msgstr "Koʻrinish &usuli"
+
+#. i18n: ectx: Menu (semantic)
+#: part/calligrawords.rc:62
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Semantics"
+msgstr "Statistika"
+
+#. i18n: ectx: Menu (format)
+#: part/calligrawords.rc:74
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "S&tyles"
+msgstr "Uslubi:"
+
+#. i18n: ectx: Menu (settings)
+#: part/calligrawords.rc:78
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "Xar hil moslamalar"
+
+#. i18n: ectx: Menu (SpellCheck)
+#: part/calligrawords.rc:79
+#, kde-format
+msgid "Spellcheck"
+msgstr "Imloni tekshirish"
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: part/calligrawords.rc:92
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "Matnni tahrirlash"
+
+#. i18n: ectx: Menu (check_spell_list)
+#: part/calligrawords.rc:148
+#, kde-format
+msgid "Spell Check Result"
+msgstr "Imloni tekshirish natijasi"
+
+#. i18n: ectx: Menu (variable_list)
+#: part/calligrawords.rc:175
+#, kde-format
+msgid "Change Variable To"
+msgstr "Oʻzgaruvchini oʻzgartirish"
+
+#. i18n: ectx: Menu (tools)
+#: part/calligrawords_readonly.rc:30
+#, kde-format
+msgid "&Tools"
+msgstr ""
+
+#: part/commands/KWChangePageStyleCommand.cpp:11
+#, fuzzy
+#| msgid "Framestyle:"
+msgctxt "(qtundo-format)"
+msgid "Set Page Style"
+msgstr "Freymning uslubi:"
+
+#: part/commands/KWNewPageStyleCommand.cpp:12
+#, fuzzy
+#| msgid "Insert Page"
+msgctxt "(qtundo-format)"
+msgid "Insert Page Style"
+msgstr "Betni qoʻyish"
+
+#: part/commands/KWPageStylePropertiesCommand.cpp:16
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Page Properties"
+msgstr "Freymning xossalari"
+
+#: part/commands/KWShapeCreateCommand.cpp:42
+#, fuzzy
+#| msgid "Create Text Frame"
+msgctxt "(qtundo-format)"
+msgid "Create shape"
+msgstr "Matn freymini yaratish"
+
+#: part/dialogs/KWAnchoringProperties.cpp:422
+#, fuzzy, kde-format
+msgid "Baseline"
+msgstr "Freymning uslubi:"
+
+#: part/dialogs/KWAnchoringProperties.cpp:423
+#: part/dialogs/KWAnchoringProperties.cpp:434
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Character"
+msgstr "Yaratish"
+
+#: part/dialogs/KWAnchoringProperties.cpp:426
+#, kde-format
+msgid "Row"
+msgstr "Satr"
+
+#: part/dialogs/KWAnchoringProperties.cpp:427
+#: part/dialogs/KWAnchoringProperties.cpp:435
+#, fuzzy, kde-format
+msgid "Page (entire) area"
+msgstr "Chegarani oʻzgartirish"
+
+#: part/dialogs/KWAnchoringProperties.cpp:428
+#: part/dialogs/KWAnchoringProperties.cpp:436
+#, fuzzy, kde-format
+msgid "Page text area"
+msgstr "Chegarani oʻzgartirish"
+
+#: part/dialogs/KWAnchoringProperties.cpp:429
+#: part/dialogs/KWAnchoringProperties.cpp:443
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Paragraph area"
+msgstr "Bob"
+
+#: part/dialogs/KWAnchoringProperties.cpp:430
+#: part/dialogs/KWAnchoringProperties.cpp:444
+#, fuzzy, kde-format
+#| msgid "Paragraph Settings"
+msgid "Paragraph text area"
+msgstr "Paragrafning moslamalari"
+
+#: part/dialogs/KWAnchoringProperties.cpp:437
+#, fuzzy, kde-format
+#| msgid "Change Left Frame Border"
+msgid "Left page border"
+msgstr "Freymning chap chegarasini oʻzgartirish"
+
+#: part/dialogs/KWAnchoringProperties.cpp:438
+#, fuzzy, kde-format
+#| msgid "Change Right Frame Border"
+msgid "Right page border"
+msgstr "Freymning oʻng chegarasini oʻzgartirish"
+
+#: part/dialogs/KWAnchoringProperties.cpp:445
+#, fuzzy, kde-format
+#| msgid "Change Right Frame Border"
+msgid "Right paragraph border"
+msgstr "Freymning oʻng chegarasini oʻzgartirish"
+
+#: part/dialogs/KWAnchoringProperties.cpp:446
+#, fuzzy, kde-format
+#| msgid "Change Left Frame Border"
+msgid "Left paragraph border"
+msgstr "Freymning chap chegarasini oʻzgartirish"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWAnchoringProperties.ui:17
+#, kde-format
+msgid "Shape relation to text is:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:23
+#, kde-format
+msgid "Inline with text (behaves as a character)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWAnchoringProperties.ui:30
+#, kde-format
+msgid "Floating, but anchored to a character position"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWAnchoringProperties.ui:37
+#, kde-format
+msgid "Floating, but anchored to a paragraph"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWAnchoringProperties.ui:44
+#, kde-format
+msgid "Floating free (not anchored to text)"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVert)
+#: part/dialogs/KWAnchoringProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Positioning"
+msgstr "Vertikal chiziqlar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rTop)
+#: part/dialogs/KWAnchoringProperties.ui:60
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Top align with:"
+msgstr "Matnni chapdan tekislash"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
+#. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
+#: part/dialogs/KWAnchoringProperties.ui:77
+#: part/dialogs/KWAnchoringProperties.ui:186
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Center align with:"
+msgstr "Matnni chapdan tekislash"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rBottom)
+#: part/dialogs/KWAnchoringProperties.ui:87
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Bottom align with:"
+msgstr "Matnni chapdan tekislash"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
+#. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:97
+#: part/dialogs/KWAnchoringProperties.ui:206
+#, kde-format
+msgid "Offset"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVOffset)
+#. i18n: ectx: property (text), widget (QLabel, lHOffset)
+#: part/dialogs/KWAnchoringProperties.ui:119
+#: part/dialogs/KWAnchoringProperties.ui:228
+#, fuzzy, kde-format
+#| msgid "From:"
+msgid "from:"
+msgstr "Kimdan:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
+#: part/dialogs/KWAnchoringProperties.ui:163
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Positioning"
+msgstr "Gorizontal chiziqlar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rLeft)
+#: part/dialogs/KWAnchoringProperties.ui:169
+#, fuzzy, kde-format
+#| msgid "Left-Align Text"
+msgid "Left align with:"
+msgstr "Matnni chapdan tekislash"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rRight)
+#: part/dialogs/KWAnchoringProperties.ui:196
+#, fuzzy, kde-format
+msgid "Right align with:"
+msgstr "Matnni chapdan tekislash"
+
+#: part/dialogs/KWConfigureDialog.cpp:28
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure"
+msgstr "&Moslash"
+
+#: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
+#, kde-format
+msgid "Misc"
+msgstr "Xar hil"
+
+#: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Grid 1"
+msgid "Grid"
+msgstr "Toʻr 1"
+
+#: part/dialogs/KWConfigureDialog.cpp:44
+#, fuzzy, kde-format
+#| msgid "Go to Document"
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "Hujjatga oʻtish"
+
+#: part/dialogs/KWConfigureDialog.cpp:45
+#, kde-format
+msgid "Document Settings"
+msgstr "Hujjat moslamalari"
+
+#: part/dialogs/KWConfigureDialog.cpp:49
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: part/dialogs/KWConfigureDialog.cpp:50
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
+#: part/dialogs/KWCreateBookmark.ui:13
+#: part/dialogs/KWCreateBookmarkDialog.cpp:37
+#, kde-format
+msgid "Create New Bookmark"
+msgstr "Yangi xatchoʻpni yaratish"
+
+#. i18n: ectx: property (text), widget (QLabel, lExplain)
+#: part/dialogs/KWCreateBookmark.ui:20
+#, kde-format
+msgid ""
+"Bookmarks allow you to jump between parts of your document.\n"
+"Please provide the name of your bookmark."
+msgstr ""
+"Xatchoʻp yordamida hujjatning xohlagan qismiga oʻtishingiz\n"
+"mumkin. Xatchoʻp nomini koʻrsating."
+
+#. i18n: ectx: property (text), widget (QLabel, lName)
+#: part/dialogs/KWCreateBookmark.ui:38
+#, kde-format
+msgid "Name:"
+msgstr "Nomi:"
+
+#. i18n: ectx: property (text), widget (QLabel, columnsLabel)
+#: part/dialogs/KWDocumentColumns.ui:24
+#, fuzzy, kde-format
+#| msgid "Columns"
+msgid "Columns:"
+msgstr "Ustunlar"
+
+#. i18n: ectx: property (text), widget (QLabel, spacingLabel)
+#: part/dialogs/KWDocumentColumns.ui:44
+#, fuzzy, kde-format
+#| msgid "Default column spacing:"
+msgid "Column spacing:"
+msgstr "Ustunlar orasidagi andoza masofa:"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:101
+#, fuzzy, kde-format
+#| msgid "Fra&mes"
+msgid "frameset"
+msgstr "&Freymlar"
+
+#: part/dialogs/KWFrameConnectSelector.cpp:126
+#, fuzzy, kde-format
+msgid "No framesets in document"
+msgstr "Hujjatning faqat matnini koʻrsatish."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: part/dialogs/KWFrameConnectSelector.ui:67
+#, kde-format
+msgid "Name of frameset:"
+msgstr "Freymlar toʻplamining nomi:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, newRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:82
+#, fuzzy, kde-format
+#| msgid "Create a new frameset"
+msgid "Create a new frameset:"
+msgstr "Yangi freymlar toʻplamini yaratish"
+
+#. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
+#: part/dialogs/KWFrameConnectSelector.ui:89
+#, kde-format
+msgid "Select existing frameset to connect to:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QTreeWidget, framesList)
+#: part/dialogs/KWFrameConnectSelector.ui:122
+#, kde-format
+msgid "Frameset Name"
+msgstr "Freymlar toʻplamining nomi"
+
+#: part/dialogs/KWFrameDialog.cpp:29
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Smart Positioning"
+msgstr "Joylashishi"
+
+#: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
+#, kde-format
+msgid "Text Run Around"
+msgstr "Atrofidagi matn"
+
+#: part/dialogs/KWFrameDialog.cpp:41 part/dialogs/KWShapeConfigFactory.cpp:26
+#, kde-format
+msgid "Connect Text Frames"
+msgstr "Matn freymlarini bogʻlash"
+
+#: part/dialogs/KWFrameDialog.cpp:66
+#, fuzzy
+#| msgid "Frame Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Shape Properties"
+msgstr "Freymning xossalari"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
+#: part/dialogs/KWInsertImage.ui:17
+#, kde-format
+msgid "Anchor to..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
+#: part/dialogs/KWInsertImage.ui:23
+#, kde-format
+msgid "&Page"
+msgstr "&Bet"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
+#: part/dialogs/KWInsertImage.ui:30
+#, fuzzy, kde-format
+#| msgid "Paragraph"
+msgid "Para&graph"
+msgstr "Bob"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
+#: part/dialogs/KWInsertImage.ui:40
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&To Character"
+msgstr "Yaratish"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
+#: part/dialogs/KWInsertImage.ui:47
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "&As Character"
+msgstr "Yaratish"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
+#: part/dialogs/KWInsertImage.ui:59
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgid "Horizontal Alignment"
+msgstr "Gorizontal chiziqlar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
+#: part/dialogs/KWInsertImage.ui:65
+#, fuzzy, kde-format
+#| msgctxt "Run Around"
+#| msgid "&Left"
+msgid "&Left"
+msgstr "&Chap"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
+#: part/dialogs/KWInsertImage.ui:75
+#, fuzzy, kde-format
+#| msgctxt "Position"
+#| msgid "Centered"
+msgid "&Center"
+msgstr "Markazda"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
+#: part/dialogs/KWInsertImage.ui:82
+#, fuzzy, kde-format
+#| msgctxt "Run Around"
+#| msgid "&Right"
+msgid "&Right"
+msgstr "&Oʻng"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
+#: part/dialogs/KWInsertImage.ui:92
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgid "Vertical Alignment"
+msgstr "Vertikal chiziqlar"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
+#: part/dialogs/KWInsertImage.ui:98
+#, kde-format
+msgid "&Top"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
+#: part/dialogs/KWInsertImage.ui:105
+#, kde-format
+msgid "&Middle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
+#: part/dialogs/KWInsertImage.ui:115
+#, fuzzy, kde-format
+#| msgid "Bottom:"
+msgid "&Bottom"
+msgstr "Past:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
+#: part/dialogs/KWInsertImage.ui:127
+#, fuzzy, kde-format
+#| msgid "Text Run Around"
+msgid "Text Wrap-around"
+msgstr "Atrofidagi matn"
+
+#. i18n: ectx: property (text), widget (QRadioButton, runThrough)
+#: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run through this shape"
+msgstr "M&atn shu freymdan oʻtadi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
+#: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Skip below this shape"
+msgstr "M&atn shu freymdan oʻtadi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, left)
+#: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on left side of this shape"
+msgstr "M&atn shu freymdan oʻtadi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, right)
+#: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on right side of this shape"
+msgstr "M&atn shu freymdan oʻtadi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, longest)
+#: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on longest side of this shape"
+msgstr "M&atn shu freymdan oʻtadi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, both)
+#: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
+#, fuzzy, kde-format
+#| msgid "Text will run &through this frame"
+msgid "Run on both sides of this shape"
+msgstr "M&atn shu freymdan oʻtadi"
+
+#. i18n: ectx: property (text), widget (QRadioButton, enough)
+#: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
+#, kde-format
+msgid "Run on sides that are wider than:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWInsertImage.ui:194
+#, fuzzy, kde-format
+#| msgid "Distance Between Frame && Text"
+msgid "Distance Between Shape and Text:"
+msgstr "Freym va matn orasidagi masofa"
+
+#. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
+#: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
+#, kde-format
+msgid "Columns"
+msgstr "Ustunlar"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:42
+#, fuzzy, kde-format
+#| msgid "Style:"
+msgid "Style"
+msgstr "Uslubi:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:48
+#, fuzzy, kde-format
+#| msgid "Closing"
+msgid "Clone"
+msgstr "Xayrlashuv"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
+#, fuzzy, kde-format
+msgid "Delete"
+msgstr "Satrni oʻchirish"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:137
+#, fuzzy
+#| msgid "Framestyle:"
+msgctxt "(qtundo-format)"
+msgid "Change Page Style"
+msgstr "Freymning uslubi:"
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, kde-format
+msgid "Add a new page style with the name:"
+msgstr ""
+
+#: part/dialogs/KWPageSettingsDialog.cpp:211
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Clone Page Style"
+msgstr "Freymning uslubi:"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: part/dialogs/KWRunAroundProperties.ui:17
+#, kde-format
+msgid "Text elsewhere will:"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: part/dialogs/KWRunAroundProperties.ui:105
+#, kde-format
+msgid "The shape affects the text by its:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, box)
+#: part/dialogs/KWRunAroundProperties.ui:114
+#, kde-format
+msgid "Bounding box"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, outside)
+#: part/dialogs/KWRunAroundProperties.ui:121
+#, kde-format
+msgid "Contour"
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: part/dialogs/KWRunAroundProperties.ui:131
+#, kde-format
+msgid "Shape and text is separated:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: part/dialogs/KWRunAroundProperties.ui:140
+#, fuzzy, kde-format
+#| msgid "Left:"
+msgid "Left by:"
+msgstr "Chap:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: part/dialogs/KWRunAroundProperties.ui:169
+#, kde-format
+msgid "Above by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: part/dialogs/KWRunAroundProperties.ui:198
+#, kde-format
+msgid "Below by:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: part/dialogs/KWRunAroundProperties.ui:227
+#, fuzzy, kde-format
+#| msgid "Right:"
+msgid "Right by:"
+msgstr "Oʻng:"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonRename)
+#: part/dialogs/KWSelectBookmark.ui:20
+#, fuzzy, kde-format
+msgid "&Rename"
+msgstr "&Nomini oʻzgartirish"
+
+#. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
+#: part/dialogs/KWSelectBookmark.ui:27
+#, fuzzy, kde-format
+msgid "&Delete"
+msgstr "Satrni oʻchirish"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:68
+#, kde-format
+msgid "Rename Bookmark"
+msgstr "Xatchoʻpning nomini oʻzgartirish"
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:69
+#, kde-format
+msgid "Please provide a new name for the bookmark"
+msgstr ""
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:77
+#, fuzzy, kde-format
+#| msgid ""
+#| "A frameset with the name '%1' already exists. Please enter another name."
+msgid "A bookmark with the name \"%1\" already exists."
+msgstr ""
+"'%1' nomli freymlar toʻplami allaqachon mavjud. Iltimos boshqa nomni tanlang."
+
+#: part/dialogs/KWSelectBookmarkDialog.cpp:109
+#, kde-format
+msgid "Select Bookmark"
+msgstr "Xatchoʻpni tanlash"
+
+#: part/dialogs/KWShapeConfigFactory.cpp:44
+#, kde-format
+msgid "Geometry"
+msgstr "Geometriya"
+
+#. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
+#: part/dialogs/KWStartupWidget.ui:24
+#, kde-format
+msgid "Page Size && Margins"
+msgstr "Betning oʻlchami va boʻsh joylar"
+
+#. i18n: ectx: property (text), widget (QPushButton, createButton)
+#: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
+#, kde-format
+msgid "Create"
+msgstr "Yaratish"
+
+#: part/dockers/KWDebugDocker.cpp:18
+#, kde-format
+msgid "Debug"
+msgstr ""
+
+#: part/dockers/KWNavigationDocker.cpp:20
+#, fuzzy, kde-format
+#| msgid "Salutation"
+msgid "Navigation"
+msgstr "Salomlashish"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+#| msgid "&Page"
+msgid "Page #"
+msgstr "&Bet"
+
+#: part/dockers/KWNavigationWidget.cpp:95
+#, fuzzy, kde-format
+msgid "Section"
+msgstr "Interfeys moslamalari"
+
+#: part/dockers/KWRdfDocker.cpp:39
+#, kde-format
+msgid "RDF"
+msgstr ""
+
+#: part/dockers/KWStatisticsDocker.cpp:20
+#, kde-format
+msgid "Statistics"
+msgstr "Statistika"
+
+#: part/dockers/KWStatisticsWidget.cpp:128
+#, kde-format
+msgid "Words:"
+msgstr "Soʻzlar:"
+
+#: part/dockers/KWStatisticsWidget.cpp:131
+#, kde-format
+msgid "Sentences:"
+msgstr "Gaplar:"
+
+#: part/dockers/KWStatisticsWidget.cpp:134
+#, kde-format
+msgid "Syllables:"
+msgstr "Boʻgʻinlar:"
+
+#: part/dockers/KWStatisticsWidget.cpp:137
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Characters (spaces):"
+msgstr "Yaratish"
+
+#: part/dockers/KWStatisticsWidget.cpp:140
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Characters (no spaces):"
+msgstr "Yaratish"
+
+#: part/dockers/KWStatisticsWidget.cpp:143
+#, kde-format
+msgid "Lines:"
+msgstr "Chiziqlar:"
+
+#: part/dockers/KWStatisticsWidget.cpp:146
+#, kde-format
+msgid "Readability:"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:148
+#, kde-format
+msgid "Flesch reading ease"
+msgstr ""
+
+#: part/dockers/KWStatisticsWidget.cpp:150
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East asian characters:"
+msgstr "Formatlash &belgilari"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_words)
+#: part/dockers/StatisticsPreferencesPopup.ui:17
+#, fuzzy, kde-format
+#| msgid "Words:"
+msgid "Words"
+msgstr "Soʻzlar:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
+#: part/dockers/StatisticsPreferencesPopup.ui:24
+#, fuzzy, kde-format
+#| msgid "Sentences:"
+msgid "Sentences"
+msgstr "Gaplar:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
+#: part/dockers/StatisticsPreferencesPopup.ui:31
+#, fuzzy, kde-format
+#| msgid "Syllables:"
+msgid "Syllables"
+msgstr "Boʻgʻinlar:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_lines)
+#: part/dockers/StatisticsPreferencesPopup.ui:38
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Lines"
+msgstr "Chiziqlar:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
+#: part/dockers/StatisticsPreferencesPopup.ui:45
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Characters With Spaces"
+msgstr "Yaratish"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
+#: part/dockers/StatisticsPreferencesPopup.ui:52
+#, fuzzy, kde-format
+#| msgid "Create"
+msgid "Characters without spaces"
+msgstr "Yaratish"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_east)
+#: part/dockers/StatisticsPreferencesPopup.ui:59
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "East Asian characters"
+msgstr "Formatlash &belgilari"
+
+#. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
+#: part/dockers/StatisticsPreferencesPopup.ui:66
+#, kde-format
+msgid "Flesch Reading Ease"
+msgstr ""
+
+#: part/i18n/stylenames.cpp:8
+#, kde-format
+msgctxt "Style name"
+msgid "Standard"
+msgstr "Andoza"
+
+#: part/i18n/stylenames.cpp:9
+#, kde-format
+msgctxt "Style name"
+msgid "Head 1"
+msgstr "Sarlavha 1"
+
+#: part/i18n/stylenames.cpp:10
+#, kde-format
+msgctxt "Style name"
+msgid "Head 2"
+msgstr "Sarlavha 2"
+
+#: part/i18n/stylenames.cpp:11
+#, kde-format
+msgctxt "Style name"
+msgid "Head 3"
+msgstr "Sarlavha 3"
+
+#: part/i18n/stylenames.cpp:12
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Enumerated List"
+msgstr "Hujjat sarlavhasi"
+
+#: part/i18n/stylenames.cpp:13
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Alphabetical List"
+msgstr "Qora"
+
+#: part/i18n/stylenames.cpp:14
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Bullet List"
+msgstr "Koʻkish"
+
+#: part/i18n/stylenames.cpp:15
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Title"
+msgstr "Hujjat sarlavhasi"
+
+#: part/i18n/stylenames.cpp:16
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 1"
+msgstr "Sarlavha 1"
+
+#: part/i18n/stylenames.cpp:17
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 2"
+msgstr "Sarlavha 2"
+
+#: part/i18n/stylenames.cpp:18
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Contents Head 3"
+msgstr "Sarlavha 3"
+
+#: part/i18n/stylenames.cpp:19
+#, kde-format
+msgctxt "Style name"
+msgid "Document Title"
+msgstr "Hujjat sarlavhasi"
+
+#: part/i18n/stylenames.cpp:20
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Header"
+msgstr "Sarlavha 4"
+
+#: part/i18n/stylenames.cpp:21
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Footer"
+msgstr "Satr"
+
+#: part/i18n/stylenames.cpp:24
+#, fuzzy, kde-format
+msgctxt "Style name"
+msgid "Plain"
+msgstr "Qora"
+
+#: part/i18n/stylenames.cpp:25
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 1"
+msgstr "Chegaralar 1"
+
+#: part/i18n/stylenames.cpp:26
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 2"
+msgstr "Chegaralar 2"
+
+#: part/i18n/stylenames.cpp:27
+#, kde-format
+msgctxt "Style name"
+msgid "Borders 3"
+msgstr "Chegaralar 3"
+
+#: part/i18n/stylenames.cpp:28
+#, kde-format
+msgctxt "Style name"
+msgid "Row"
+msgstr "Satr"
+
+#: part/i18n/stylenames.cpp:29
+#, kde-format
+msgctxt "Style name"
+msgid "Column"
+msgstr "Ustun"
+
+#: part/i18n/stylenames.cpp:30
+#, kde-format
+msgctxt "Style name"
+msgid "Light Gray"
+msgstr "Och kul"
+
+#: part/i18n/stylenames.cpp:31
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Gray"
+msgstr "Toʻq kul"
+
+#: part/i18n/stylenames.cpp:32
+#, kde-format
+msgctxt "Style name"
+msgid "Black"
+msgstr "Qora"
+
+#: part/i18n/stylenames.cpp:33
+#, kde-format
+msgctxt "Style name"
+msgid "Light Blue"
+msgstr "Och koʻk"
+
+#: part/i18n/stylenames.cpp:34
+#, kde-format
+msgctxt "Style name"
+msgid "Dark Blue"
+msgstr "Toʻq koʻk"
+
+#: part/i18n/stylenames.cpp:35
+#, kde-format
+msgctxt "Style name"
+msgid "Red"
+msgstr "Qizil"
+
+#: part/i18n/stylenames.cpp:36
+#, kde-format
+msgctxt "Style name"
+msgid "Yellow"
+msgstr "Sariq"
+
+#: part/i18n/stylenames.cpp:37
+#, kde-format
+msgctxt "Style name"
+msgid "Colorful"
+msgstr "Rangli"
+
+#: part/i18n/stylenames.cpp:38
+#, kde-format
+msgctxt "Style name"
+msgid "Bluish"
+msgstr "Koʻkish"
+
+#: part/i18n/stylenames.cpp:41
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 1"
+msgstr "Oddiy 1"
+
+#: part/i18n/stylenames.cpp:42
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 2"
+msgstr "Oddiy 2"
+
+#: part/i18n/stylenames.cpp:43
+#, kde-format
+msgctxt "Style name"
+msgid "Simple 3"
+msgstr "Oddiy 3"
+
+#: part/i18n/stylenames.cpp:44
+#, kde-format
+msgctxt "Style name"
+msgid "Header 1"
+msgstr "Sarlavha 1"
+
+#: part/i18n/stylenames.cpp:45
+#, kde-format
+msgctxt "Style name"
+msgid "Header 2"
+msgstr "Sarlavha 2"
+
+#: part/i18n/stylenames.cpp:46
+#, kde-format
+msgctxt "Style name"
+msgid "Header 3"
+msgstr "Sarlavha 3"
+
+#: part/i18n/stylenames.cpp:47
+#, kde-format
+msgctxt "Style name"
+msgid "Header 4"
+msgstr "Sarlavha 4"
+
+#: part/i18n/stylenames.cpp:50
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 1"
+msgstr "Ustunlar 1"
+
+#: part/i18n/stylenames.cpp:51
+#, kde-format
+msgctxt "Style name"
+msgid "Columns 2"
+msgstr "Ustunlar 2"
+
+#: part/i18n/stylenames.cpp:52
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 1"
+msgstr "Toʻr 1"
+
+#: part/i18n/stylenames.cpp:53
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 2"
+msgstr "Toʻr 2"
+
+#: part/i18n/stylenames.cpp:54
+#, kde-format
+msgctxt "Style name"
+msgid "Grid 3"
+msgstr "Toʻr 3"
+
+#: part/i18n/stylenames.cpp:55
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Heading"
+msgstr "Kul sarlavha"
+
+#: part/i18n/stylenames.cpp:56
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Heading"
+msgstr "Koʻk sarlavha"
+
+#: part/i18n/stylenames.cpp:57
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Traditional"
+msgstr "Anʼanaviy koʻk"
+
+#: part/i18n/stylenames.cpp:58
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Traditional"
+msgstr "Anʼanaviy kul"
+
+#: part/i18n/stylenames.cpp:59
+#, kde-format
+msgctxt "Style name"
+msgid "Blue Top and Bottom"
+msgstr "Tepasi va pasti koʻk"
+
+#: part/i18n/stylenames.cpp:60
+#, kde-format
+msgctxt "Style name"
+msgid "Gray Top and Bottom"
+msgstr "Tepasi va pasti kul"
+
+#: part/KWAboutData.h:20
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgctxt "application name"
+msgid "Calligra Words"
+msgstr "KOffice matn protsessori"
+
+#: part/KWAboutData.h:22
+#, fuzzy, kde-format
+#| msgid "KOffice Word Processor"
+msgid "Word processor"
+msgstr "KOffice matn protsessori"
+
+#: part/KWAboutData.h:24
+#, fuzzy, kde-format
+#| msgid "(c) 1998-2006, The KWord Team"
+msgid "Copyright 1998-%1, The Words Team"
+msgstr "(C) 1998-2006, KWord jamoasi"
+
+#: part/KWAboutData.h:32 part/KWAboutData.h:33
+#, kde-format
+msgid "Co maintainer"
+msgstr ""
+
+#: part/KWAboutData.h:32
+#, kde-format
+msgid "Pierre Ducroquet"
+msgstr ""
+
+#: part/KWAboutData.h:33
+#, kde-format
+msgid "C. Boemann"
+msgstr ""
+
+#: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Everything"
+msgstr ""
+
+#: part/KWAboutData.h:34
+#, kde-format
+msgid "Sebastian Sauer"
+msgstr ""
+
+#: part/KWAboutData.h:35
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: part/KWAboutData.h:36
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: part/KWAboutData.h:37
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Formatting stuff"
+msgstr "Formatlash &belgilari"
+
+#: part/KWAboutData.h:37
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: part/KWAboutData.h:38
+#, kde-format
+msgid "Thorsten Zachmann"
+msgstr ""
+
+#: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
+#: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
+#: part/KWAboutData.h:61 part/KWAboutData.h:62 part/KWAboutData.h:63
+#: part/KWAboutData.h:64 part/KWAboutData.h:65 part/KWAboutData.h:66
+#: part/KWAboutData.h:67 part/KWAboutData.h:68
+#, fuzzy, kde-format
+msgid "Filter"
+msgstr "&Filter:"
+
+#: part/KWAboutData.h:39
+#, kde-format
+msgid "Matus Uzak"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Layout and Painting"
+msgstr ""
+
+#: part/KWAboutData.h:40
+#, kde-format
+msgid "Pavol Korinek"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, kde-format
+msgid "Shreya Pandit"
+msgstr ""
+
+#: part/KWAboutData.h:41
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistics docker"
+msgstr "Statistika"
+
+#: part/KWAboutData.h:42
+#, kde-format
+msgid "Brijesh Patel"
+msgstr ""
+
+#: part/KWAboutData.h:42
+#, fuzzy, kde-format
+msgid "Foot and endnotes"
+msgstr "&Shrift"
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Bibliography"
+msgstr ""
+
+#: part/KWAboutData.h:43
+#, kde-format
+msgid "Smit Patel"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, kde-format
+msgid "Mojtaba Shahi"
+msgstr ""
+
+#: part/KWAboutData.h:44
+#, fuzzy, kde-format
+#| msgid "&Style Manager"
+msgid "Style Manager"
+msgstr "Uslub &boshqaruvchisi"
+
+#: part/KWAboutData.h:45
+#, kde-format
+msgid "Lassi Nieminen"
+msgstr ""
+
+#: part/KWAboutData.h:46
+#, kde-format
+msgid "Hanzes Matus"
+msgstr ""
+
+#: part/KWAboutData.h:47
+#, kde-format
+msgid "Lukáš Tvrdý"
+msgstr ""
+
+#: part/KWAboutData.h:48
+#, kde-format
+msgid "Thomas Zander"
+msgstr ""
+
+#: part/KWAboutData.h:49
+#, kde-format
+msgid "Girish Ramakrishnan"
+msgstr ""
+
+#: part/KWAboutData.h:49 part/KWAboutData.h:50
+#, fuzzy, kde-format
+#| msgid "Sorting Order"
+msgid "ODF Support"
+msgstr "Saralash qoidasi"
+
+#: part/KWAboutData.h:50
+#, kde-format
+msgid "Robert Mathias Marmorstein"
+msgstr ""
+
+#: part/KWAboutData.h:51
+#, kde-format
+msgid "David Faure"
+msgstr ""
+
+#: part/KWAboutData.h:52
+#, kde-format
+msgid "Laurent Montel"
+msgstr ""
+
+#: part/KWAboutData.h:53
+#, kde-format
+msgid "Sven Lüppken"
+msgstr ""
+
+#: part/KWAboutData.h:54
+#, kde-format
+msgid "Frank Dekervel"
+msgstr ""
+
+#: part/KWAboutData.h:55
+#, kde-format
+msgid "Krister Wicksell Eriksson"
+msgstr ""
+
+#: part/KWAboutData.h:56
+#, kde-format
+msgid "Dag Andersen"
+msgstr ""
+
+#: part/KWAboutData.h:57
+#, kde-format
+msgid "Nash Hoogwater"
+msgstr ""
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "KFormula"
+msgstr "KFormula"
+
+#: part/KWAboutData.h:58
+#, kde-format
+msgid "Ulrich Kuettler"
+msgstr ""
+
+#: part/KWAboutData.h:59
+#, kde-format
+msgid "Shaheed Haque"
+msgstr ""
+
+#: part/KWAboutData.h:60
+#, kde-format
+msgid "Werner Trobin"
+msgstr ""
+
+#: part/KWAboutData.h:61
+#, kde-format
+msgid "Nicolas Goutte"
+msgstr ""
+
+#: part/KWAboutData.h:62
+#, kde-format
+msgid "Ariya Hidayat"
+msgstr ""
+
+#: part/KWAboutData.h:63
+#, kde-format
+msgid "Clarence Dang"
+msgstr ""
+
+#: part/KWAboutData.h:64
+#, kde-format
+msgid "Robert Jacolin"
+msgstr ""
+
+#: part/KWAboutData.h:65
+#, kde-format
+msgid "Enno Bartels"
+msgstr ""
+
+#: part/KWAboutData.h:66
+#, kde-format
+msgid "Ewald Snel"
+msgstr ""
+
+#: part/KWAboutData.h:67
+#, kde-format
+msgid "Tomasz Grobelny"
+msgstr ""
+
+#: part/KWAboutData.h:68
+#, kde-format
+msgid "Michael Johnson"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, kde-format
+msgid "Fatcow Web Hosting"
+msgstr ""
+
+#: part/KWAboutData.h:69
+#, fuzzy, kde-format
+msgid "Page break icon"
+msgstr "Chegarani oʻzgartirish"
+
+#. i18n translator strings
+#: part/KWAboutData.h:71
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Mashrab Quvatov,Nurali Abdurahmonov"
+
+#: part/KWAboutData.h:72
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "kmashrab@uni-bremen.de,mavnur@gmail.com"
+
+#: part/KWDocument.cpp:495
+#, fuzzy, kde-format
+#| msgid "Copy%1-%2"
+msgid "Copy"
+msgstr "Nusxa%1-%2"
+
+#: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgid "Standard"
+msgstr "Andoza"
+
+#: part/KWDocument.cpp:546
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Document Title"
+msgid "Document Title"
+msgstr "Hujjat sarlavhasi"
+
+#: part/KWDocument.cpp:553
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 1"
+msgid "Head 1"
+msgstr "Sarlavha 1"
+
+#: part/KWDocument.cpp:559
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 2"
+msgid "Head 2"
+msgstr "Sarlavha 2"
+
+#: part/KWDocument.cpp:565
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Head 3"
+msgid "Head 3"
+msgstr "Sarlavha 3"
+
+#: part/KWDocument.cpp:571
+#, fuzzy, kde-format
+msgid "Bullet List"
+msgstr "Koʻkish"
+
+#: part/KWGui.cpp:69
+#, kde-format
+msgid "Tools"
+msgstr ""
+
+#: part/KWOdfLoader.cpp:83
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+msgstr "OASIS OpenDocument fayli haqiqiy emas. office:body tegi topilmadi."
+
+#: part/KWOdfLoader.cpp:95
+#, kde-format
+msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+msgstr "OASIS OpenDocument fayli haqiqiy emas. office:body tegi topilmadi."
+
+#: part/KWOdfLoader.cpp:97
+#, kde-format
+msgid ""
+"This is not a word processing document, but %1. Please try opening it with "
+"the appropriate application."
+msgstr "Bu KWord hujjati emas, lekin %1. Uni mos dastur bilan ochib koʻring."
+
+#: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Standard"
+msgctxt "Default page style display name"
+msgid "Standard"
+msgstr "Andoza"
+
+#: part/KWPart.cpp:141
+#, kde-format
+msgid "Can not find needed text component, Words will quit now"
+msgstr ""
+
+#: part/KWPart.cpp:142
+#, kde-format
+msgid "Installation Error"
+msgstr ""
+
+#: part/KWStatusBar.cpp:35
+#, kde-format
+msgid "Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:36
+#, fuzzy, kde-format
+#| msgid "Save Failed"
+msgid "Saved"
+msgstr "Saqlash muvaffaqiyatsiz tugadi"
+
+#: part/KWStatusBar.cpp:37
+#, kde-format
+msgid "Page %1 of %2"
+msgstr "Bet %1/%2"
+
+#: part/KWStatusBar.cpp:38
+#, fuzzy, kde-format
+#| msgid "Page %1 of %2"
+msgid "Page %1-%2 of %3"
+msgstr "Bet %1/%2"
+
+#: part/KWStatusBar.cpp:39
+#, fuzzy, kde-format
+#| msgid "Lines:"
+msgid "Line %1"
+msgstr "Chiziqlar:"
+
+#: part/KWStatusBar.cpp:124
+#, fuzzy, kde-format
+#| msgid "Page number:"
+msgid "Page Number"
+msgstr "Betning soni:"
+
+#: part/KWStatusBar.cpp:137
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Line Number"
+msgstr "Son"
+
+#: part/KWStatusBar.cpp:149
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Change the page style"
+msgstr "Freymning uslubi:"
+
+#: part/KWStatusBar.cpp:155
+#, fuzzy, kde-format
+#| msgid "Framestyle:"
+msgid "Page Style"
+msgstr "Freymning uslubi:"
+
+#: part/KWStatusBar.cpp:169
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Size"
+msgstr "Oʻlchamini himoyalash"
+
+#: part/KWStatusBar.cpp:184
+#, kde-format
+msgid "Saved/Modified"
+msgstr ""
+
+#: part/KWStatusBar.cpp:197
+#, kde-format
+msgid "Mouse Cursor X:Y"
+msgstr ""
+
+#: part/KWStatusBar.cpp:211
+#, kde-format
+msgid "Zoom Controller"
+msgstr ""
+
+#: part/KWView.cpp:183
+#, kde-format
+msgid "Exit Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:260
+#, fuzzy, kde-format
+#| msgid "Frame Properties"
+msgid "Shape Properties..."
+msgstr "Freymning xossalari"
+
+#: part/KWView.cpp:262
+#, kde-format
+msgid "Change how the shape behave"
+msgstr ""
+
+#: part/KWView.cpp:271
+#, fuzzy, kde-format
+#| msgid "&Create Template From Document..."
+msgid "Create Template From Document..."
+msgstr "Hujjatdan &namuna yaratish"
+
+#: part/KWView.cpp:272
+#, kde-format
+msgid "Save this document and use it later as a template"
+msgstr "Ushbu hujjatni saqlash va keyinchalik uni namuna sifatida ishlatish"
+
+#: part/KWView.cpp:273
+#, kde-format
+msgid ""
+"You can save this document as a template.<br><br>You can use this new "
+"template as a starting point for another document."
+msgstr ""
+"Ushbu hujjatni namuna sifatida saqlash mumkin.<br><br>Soʻng uni yangi hujjat "
+"yaratishda qoʻllash mumkin."
+
+#: part/KWView.cpp:292
+#, fuzzy, kde-format
+#| msgid "&Formatting Characters"
+msgid "Show Formatting Characters"
+msgstr "Formatlash &belgilari"
+
+#: part/KWView.cpp:298
+#, fuzzy, kde-format
+msgid "Toggle the display of non-printing characters"
+msgstr "Bosib chiqarilmaydigan belgilarni koʻrsatish usuliga oʻtish."
+
+#: part/KWView.cpp:299
+#, kde-format
+msgid ""
+"Toggle the display of non-printing characters.<br/><br/>When this is "
+"enabled, Words shows you tabs, spaces, carriage returns and other non-"
+"printing characters."
+msgstr ""
+
+#: part/KWView.cpp:301
+#, kde-format
+msgid "Show Field Shadings"
+msgstr ""
+
+#: part/KWView.cpp:307
+#, kde-format
+msgid "Toggle the shaded background of fields"
+msgstr ""
+
+#: part/KWView.cpp:308
+#, kde-format
+msgid ""
+"Toggle the visualization of fields (variables etc.) by drawing their "
+"background in a contrasting color."
+msgstr ""
+
+#: part/KWView.cpp:310
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Text Shape Borders"
+msgstr "Jadvalning chegarasini moslash"
+
+#: part/KWView.cpp:311
+#, fuzzy, kde-format
+msgid "Turns the border display on and off"
+msgstr "Chegaralarni koʻrsatishni oʻchirish va yoqish."
+
+#: part/KWView.cpp:317
+#, kde-format
+msgid ""
+"Turns the border display on and off.<br/><br/>The borders are never printed. "
+"This option is useful to see how the document will appear on the printed "
+"page."
+msgstr ""
+
+#: part/KWView.cpp:319
+#, fuzzy, kde-format
+#| msgid "Configure Table Borders"
+msgid "Show Table Borders"
+msgstr "Jadvalning chegarasini moslash"
+
+#: part/KWView.cpp:325
+#, fuzzy, kde-format
+msgid "Toggle the display of table borders"
+msgstr "Bosib chiqarilmaydigan belgilarni koʻrsatish usuliga oʻtish."
+
+#: part/KWView.cpp:326
+#, kde-format
+msgid ""
+"Toggle the display of table borders.<br/><br/>When this is enabled, Words "
+"shows you any invisible table borders with a thin gray line."
+msgstr ""
+
+#: part/KWView.cpp:328
+#, fuzzy, kde-format
+msgid "Show Section Bounds"
+msgstr "Avto-toʻgʻrilash moslamalarini oʻzgartirish."
+
+#: part/KWView.cpp:334
+#, fuzzy, kde-format
+msgid "Toggle the display of section bounds"
+msgstr "Bosib chiqarilmaydigan belgilarni koʻrsatish usuliga oʻtish."
+
+#: part/KWView.cpp:335
+#, kde-format
+msgid ""
+"Toggle the display of section bounds.<br/><br/>When this is enabled, any "
+"section bounds will be indicated with a thin gray horizontal brackets."
+msgstr ""
+
+#: part/KWView.cpp:337
+#, kde-format
+msgid "Show Rulers"
+msgstr "Lineykalarni koʻrsatish"
+
+#: part/KWView.cpp:339
+#, fuzzy, kde-format
+msgid "Shows or hides rulers"
+msgstr "Lineykalarni koʻrsatish yoki bekitish."
+
+#: part/KWView.cpp:340
+#, kde-format
+msgid ""
+"The rulers are the white measuring spaces top and left of the document. The "
+"rulers show the position and width of pages and of frames and can be used to "
+"position tabulators among others.<p>Uncheck this to disable the rulers from "
+"being displayed.</p>"
+msgstr ""
+
+#: part/KWView.cpp:351
+#, fuzzy, kde-format
+msgid "Snap to Grid"
+msgstr "Toʻrni koʻrsatish"
+
+#: part/KWView.cpp:359
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Show Status Bar"
+msgstr "&Holat panelini koʻrsatish"
+
+#: part/KWView.cpp:360
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides the status bar"
+msgstr "&Holat panelini koʻrsatish"
+
+#: part/KWView.cpp:366
+#, kde-format
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: part/KWView.cpp:367
+#, kde-format
+msgid "Set view in fullscreen mode"
+msgstr ""
+
+#: part/KWView.cpp:374
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Semantic Stylesheets..."
+msgstr "Uslublarni import qilish"
+
+#: part/KWView.cpp:376
+#, fuzzy, kde-format
+#| msgid "Import Styles..."
+msgid "Modify and add semantic stylesheets"
+msgstr "Uslublarni import qilish"
+
+#: part/KWView.cpp:377
+#, kde-format
+msgid ""
+"Stylesheets are used to format the display of information which is stored in "
+"RDF."
+msgstr ""
+
+#: part/KWView.cpp:392
+#, fuzzy, kde-format
+#| msgid "C&onfigure..."
+msgid "Configure..."
+msgstr "&Moslash"
+
+#: part/KWView.cpp:401
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page Layout..."
+msgstr "Bet &moslamalari"
+
+#: part/KWView.cpp:403
+#, fuzzy, kde-format
+msgid "Change properties of entire page"
+msgstr "Betning xossalarini moslash."
+
+#: part/KWView.cpp:404
+#, kde-format
+msgid ""
+"Change properties of the entire page.<p>Currently you can change paper size, "
+"paper orientation, header and footer sizes, and column settings.</p>"
+msgstr ""
+
+#: part/KWView.cpp:407
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Header"
+msgstr "Matn freymini yaratish"
+
+#: part/KWView.cpp:413
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Create Footer"
+msgstr "Matn freymini yaratish"
+
+#: part/KWView.cpp:420
+#, fuzzy, kde-format
+#| msgid "Remove Comment"
+msgid "Show Comments"
+msgstr "Izohni olib tashlash"
+
+#: part/KWView.cpp:421
+#, fuzzy, kde-format
+msgid "Shows comments in the document"
+msgstr "Hujjatning faqat matnini koʻrsatish."
+
+#: part/KWView.cpp:427
+#, kde-format
+msgid "Word Count"
+msgstr ""
+
+#: part/KWView.cpp:428
+#, fuzzy, kde-format
+#| msgid "Show &status bar"
+msgid "Shows or hides word counting in status bar"
+msgstr "&Holat panelini koʻrsatish"
+
+#: part/pagetool/KWPageTool.cpp:85
+#, fuzzy, kde-format
+#| msgid "Protect Size"
+msgid "Page Setup"
+msgstr "Oʻlchamini himoyalash"
+
+#: part/pagetool/KWPageTool.cpp:89
+#, fuzzy, kde-format
+#| msgctxt "Style name"
+#| msgid "Header 1"
+msgid "Header & Footer"
+msgstr "Sarlavha 1"
+
+#: part/pagetool/KWPageToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Page &Layout..."
+msgid "Page layout"
+msgstr "Bet &moslamalari"
+
+#. i18n: ectx: property (text), widget (QToolButton, setup)
+#. i18n: ectx: property (text), widget (QToolButton, insertHeader)
+#. i18n: ectx: property (text), widget (QToolButton, insertFooter)
+#: part/pagetool/SimpleHeaderFooterWidget.ui:17
+#: part/pagetool/SimpleHeaderFooterWidget.ui:24
+#: part/pagetool/SimpleSetupWidget.ui:17
+#, fuzzy, kde-format
+#| msgid "New..."
+msgid "..."
+msgstr "Yangi..."
+
+#: part/widgets/KoFindToolbar.cpp:55
+#, kde-format
+msgctxt "Label for the Find text input box"
+msgid "Find:"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:68
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgctxt "Next search result"
+msgid "Next"
+msgstr "Betni qoʻyish"
+
+#: part/widgets/KoFindToolbar.cpp:78
+#, fuzzy, kde-format
+#| msgid "Preview"
+msgctxt "Previous search result"
+msgid "Previous"
+msgstr "Koʻrib chiqish"
+
+#: part/widgets/KoFindToolbar.cpp:87
+#, kde-format
+msgctxt "Search options"
+msgid "Options"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:115
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Label for the Replace text input box"
+msgid "Replace:"
+msgstr "Soʻzni almashtirish"
+
+#: part/widgets/KoFindToolbar.cpp:125
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace the current match"
+msgid "Replace"
+msgstr "Soʻzni almashtirish"
+
+#: part/widgets/KoFindToolbar.cpp:131
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgctxt "Replace all found matches"
+msgid "Replace All"
+msgstr "Soʻzni almashtirish"
+
+#: part/widgets/KoFindToolbar.cpp:139
+#, fuzzy, kde-format
+#| msgid "Replace Word"
+msgid "Replace"
+msgstr "Soʻzni almashtirish"
+
+#: part/widgets/KoFindToolbar.cpp:200
+#, kde-format
+msgctxt "Total number of matches"
+msgid "1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] ""
+
+#: part/widgets/KoFindToolbar.cpp:210
+#, kde-format
+msgid "No matches found"
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:216
+#, kde-format
+msgid "Search hit bottom, continuing from top."
+msgstr ""
+
+#: part/widgets/KoFindToolbar.cpp:218
+#, kde-format
+msgid "Search hit top, continuing from bottom."
+msgstr ""
+
+#: part/Words.cpp:45
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Odd Pages Header"
+msgstr "Matn freymini yaratish"
+
+#: part/Words.cpp:47
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Even Pages Header"
+msgstr "Matn freymini yaratish"
+
+#: part/Words.cpp:49
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Odd Pages Footer"
+msgstr "Matn freymini yaratish"
+
+#: part/Words.cpp:51
+#, fuzzy, kde-format
+#| msgid "Create Text Frame"
+msgid "Even Pages Footer"
+msgstr "Matn freymini yaratish"
+
+#: part/Words.cpp:53
+#, fuzzy, kde-format
+#| msgid "Plain text"
+msgid "Main text"
+msgstr "Matn"
+
+#: part/Words.cpp:55
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "Other text"
+msgstr "Betni qoʻyish"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Page"
+#~ msgstr "&Bet"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Para&graph"
+#~ msgstr "Bob"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&To Character"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&As Character"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Alignment"
+#~ msgstr "Gorizontal chiziqlar"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "&Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Left"
+#~ msgstr "&Chap"
+
+#, fuzzy
+#~| msgctxt "Position"
+#~| msgid "Centered"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Center"
+#~ msgstr "Markazda"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "&Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Right"
+#~ msgstr "&Oʻng"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Alignment"
+#~ msgstr "Vertikal chiziqlar"
+
+#, fuzzy
+#~| msgid "Bottom:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Bottom"
+#~ msgstr "Past:"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Wrap-around"
+#~ msgstr "Atrofidagi matn"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run through this shape"
+#~ msgstr "M&atn shu freymdan oʻtadi"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Skip below this shape"
+#~ msgstr "M&atn shu freymdan oʻtadi"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on left side of this shape"
+#~ msgstr "M&atn shu freymdan oʻtadi"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on right side of this shape"
+#~ msgstr "M&atn shu freymdan oʻtadi"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on longest side of this shape"
+#~ msgstr "M&atn shu freymdan oʻtadi"
+
+#, fuzzy
+#~| msgid "Text will run &through this frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Run on both sides of this shape"
+#~ msgstr "M&atn shu freymdan oʻtadi"
+
+#, fuzzy
+#~| msgid "Distance Between Frame && Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distance Between Shape and Text:"
+#~ msgstr "Freym va matn orasidagi masofa"
+
+#, fuzzy
+#~| msgid "Vertical Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Vertical Positioning"
+#~ msgstr "Vertikal chiziqlar"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top align with:"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center align with:"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom align with:"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~| msgid "From:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "from:"
+#~ msgstr "Kimdan:"
+
+#, fuzzy
+#~| msgid "Horizontal Lines"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Horizontal Positioning"
+#~ msgstr "Gorizontal chiziqlar"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left align with:"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right align with:"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~| msgid "Name of frameset:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name of frameset:"
+#~ msgstr "Freymlar toʻplamining nomi:"
+
+#, fuzzy
+#~| msgid "Create a new frameset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create a new frameset:"
+#~ msgstr "Yangi freymlar toʻplamini yaratish"
+
+#, fuzzy
+#~| msgid "Frameset Name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Frameset Name"
+#~ msgstr "Freymlar toʻplamining nomi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Rename"
+#~ msgstr "&Nomini oʻzgartirish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Delete"
+#~ msgstr "Satrni oʻchirish"
+
+#, fuzzy
+#~| msgid ""
+#~| "Bookmarks allow you to jump between parts of your document.\n"
+#~| "Please provide the name of your bookmark."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Bookmarks allow you to jump between parts of your document.\n"
+#~ "Please provide the name of your bookmark."
+#~ msgstr ""
+#~ "Xatchoʻp yordamida hujjatning xohlagan qismiga oʻtishingiz\n"
+#~ "mumkin. Xatchoʻp nomini koʻrsating."
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Name:"
+#~ msgstr "Nomi:"
+
+#, fuzzy
+#~| msgid "Page Size && Margins"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size && Margins"
+#~ msgstr "Betning oʻlchami va boʻsh joylar"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left by:"
+#~ msgstr "Chap:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right by:"
+#~ msgstr "Oʻng:"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns:"
+#~ msgstr "Ustunlar"
+
+#, fuzzy
+#~| msgid "Default column spacing:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Column spacing:"
+#~ msgstr "Ustunlar orasidagi andoza masofa:"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words"
+#~ msgstr "Soʻzlar:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences"
+#~ msgstr "Gaplar:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables"
+#~ msgstr "Boʻgʻinlar:"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines"
+#~ msgstr "Chiziqlar:"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters With Spaces"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters without spaces"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East Asian characters"
+#~ msgstr "Formatlash &belgilari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&Filter:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "Matnni tahrirlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "&Yangi"
+
+#, fuzzy
+#~| msgid "&Display Mode"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Display Mode"
+#~ msgstr "Koʻrinish &usuli"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantics"
+#~ msgstr "Statistika"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "S&tyles"
+#~ msgstr "Uslubi:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "Xar hil moslamalar"
+
+#, fuzzy
+#~| msgid "Spellcheck"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spellcheck"
+#~ msgstr "Imloni tekshirish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "Matnni tahrirlash"
+
+#, fuzzy
+#~| msgid "Spell Check Result"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Spell Check Result"
+#~ msgstr "Imloni tekshirish natijasi"
+
+#, fuzzy
+#~| msgid "Change Variable To"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Variable To"
+#~ msgstr "Oʻzgaruvchini oʻzgartirish"
+
+#, fuzzy
+#~| msgid "New..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "Yangi..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Baseline"
+#~ msgstr "Freymning uslubi:"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Character"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Row"
+#~ msgstr "Satr"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page text area"
+#~ msgstr "Chegarani oʻzgartirish"
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph area"
+#~ msgstr "Bob"
+
+#, fuzzy
+#~| msgid "Paragraph Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Paragraph text area"
+#~ msgstr "Paragrafning moslamalari"
+
+#, fuzzy
+#~| msgid "Change Left Frame Border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left page border"
+#~ msgstr "Freymning chap chegarasini oʻzgartirish"
+
+#, fuzzy
+#~| msgid "Change Right Frame Border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right page border"
+#~ msgstr "Freymning oʻng chegarasini oʻzgartirish"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "&Moslash"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "Xar hil"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "Toʻr 1"
+
+#, fuzzy
+#~| msgid "Go to Document"
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Hujjatga oʻtish"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "Hujjat moslamalari"
+
+#, fuzzy
+#~| msgid "Create New Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create New Bookmark"
+#~ msgstr "Yangi xatchoʻpni yaratish"
+
+#, fuzzy
+#~| msgid "Fra&mes"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "frameset"
+#~ msgstr "&Freymlar"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Smart Positioning"
+#~ msgstr "Joylashishi"
+
+#, fuzzy
+#~| msgid "Text Run Around"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text Run Around"
+#~ msgstr "Atrofidagi matn"
+
+#, fuzzy
+#~| msgid "Connect Text Frames"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Connect Text Frames"
+#~ msgstr "Matn freymlarini bogʻlash"
+
+#, fuzzy
+#~| msgid "Columns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Columns"
+#~ msgstr "Ustunlar"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style"
+#~ msgstr "Uslubi:"
+
+#, fuzzy
+#~| msgid "Closing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone"
+#~ msgstr "Xayrlashuv"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete"
+#~ msgstr "Satrni oʻchirish"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clone Page Style"
+#~ msgstr "Freymning uslubi:"
+
+#, fuzzy
+#~| msgid "Rename Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Rename Bookmark"
+#~ msgstr "Xatchoʻpning nomini oʻzgartirish"
+
+#, fuzzy
+#~| msgid ""
+#~| "A frameset with the name '%1' already exists. Please enter another name."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A bookmark with the name \"%1\" already exists."
+#~ msgstr ""
+#~ "'%1' nomli freymlar toʻplami allaqachon mavjud. Iltimos boshqa nomni "
+#~ "tanlang."
+
+#, fuzzy
+#~| msgid "Select Bookmark"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Select Bookmark"
+#~ msgstr "Xatchoʻpni tanlash"
+
+#, fuzzy
+#~| msgid "Geometry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometry"
+#~ msgstr "Geometriya"
+
+#, fuzzy
+#~| msgid "Salutation"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Navigation"
+#~ msgstr "Salomlashish"
+
+#, fuzzy
+#~| msgid "&Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page #"
+#~ msgstr "&Bet"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Section"
+#~ msgstr "Interfeys moslamalari"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics"
+#~ msgstr "Statistika"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Words:"
+#~ msgstr "Soʻzlar:"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sentences:"
+#~ msgstr "Gaplar:"
+
+#, fuzzy
+#~| msgid "Syllables:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Syllables:"
+#~ msgstr "Boʻgʻinlar:"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Characters (spaces):"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lines:"
+#~ msgstr "Chiziqlar:"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "East asian characters:"
+#~ msgstr "Formatlash &belgilari"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Standard"
+#~ msgstr "Andoza"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 1"
+#~ msgstr "Sarlavha 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 2"
+#~ msgstr "Sarlavha 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Head 3"
+#~ msgstr "Sarlavha 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Enumerated List"
+#~ msgstr "Hujjat sarlavhasi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Alphabetical List"
+#~ msgstr "Qora"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bullet List"
+#~ msgstr "Koʻkish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Title"
+#~ msgstr "Hujjat sarlavhasi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 1"
+#~ msgstr "Sarlavha 1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 2"
+#~ msgstr "Sarlavha 2"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Contents Head 3"
+#~ msgstr "Sarlavha 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Document Title"
+#~ msgstr "Hujjat sarlavhasi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header"
+#~ msgstr "Sarlavha 4"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Footer"
+#~ msgstr "Satr"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Plain"
+#~ msgstr "Qora"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 1"
+#~ msgstr "Chegaralar 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 2"
+#~ msgstr "Chegaralar 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Borders 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Borders 3"
+#~ msgstr "Chegaralar 3"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Row"
+#~ msgstr "Satr"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Column"
+#~ msgstr "Ustun"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Gray"
+#~ msgstr "Och kul"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Gray"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Gray"
+#~ msgstr "Toʻq kul"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Black"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Black"
+#~ msgstr "Qora"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Light Blue"
+#~ msgstr "Och koʻk"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Dark Blue"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Dark Blue"
+#~ msgstr "Toʻq koʻk"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Red"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Red"
+#~ msgstr "Qizil"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Yellow"
+#~ msgstr "Sariq"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Colorful"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Colorful"
+#~ msgstr "Rangli"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Bluish"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Bluish"
+#~ msgstr "Koʻkish"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 1"
+#~ msgstr "Oddiy 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 2"
+#~ msgstr "Oddiy 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Simple 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Simple 3"
+#~ msgstr "Oddiy 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 1"
+#~ msgstr "Sarlavha 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 2"
+#~ msgstr "Sarlavha 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 3"
+#~ msgstr "Sarlavha 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 4"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Header 4"
+#~ msgstr "Sarlavha 4"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 1"
+#~ msgstr "Ustunlar 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Columns 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Columns 2"
+#~ msgstr "Ustunlar 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 1"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 1"
+#~ msgstr "Toʻr 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 2"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 2"
+#~ msgstr "Toʻr 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Grid 3"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Grid 3"
+#~ msgstr "Toʻr 3"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Heading"
+#~ msgstr "Kul sarlavha"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Heading"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Heading"
+#~ msgstr "Koʻk sarlavha"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Traditional"
+#~ msgstr "Anʼanaviy koʻk"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Traditional"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Traditional"
+#~ msgstr "Anʼanaviy kul"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Blue Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Blue Top and Bottom"
+#~ msgstr "Tepasi va pasti koʻk"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Gray Top and Bottom"
+#~ msgctxt "(qtundo-format) Style name"
+#~ msgid "Gray Top and Bottom"
+#~ msgstr "Tepasi va pasti kul"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format) application name"
+#~ msgid "Calligra Words"
+#~ msgstr "KOffice matn protsessori"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Word processor"
+#~ msgstr "KOffice matn protsessori"
+
+#, fuzzy
+#~| msgid "(c) 1998-2006, The KWord Team"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copyright 1998-%1, The Words Team"
+#~ msgstr "(C) 1998-2006, KWord jamoasi"
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Formatting stuff"
+#~ msgstr "Formatlash &belgilari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter"
+#~ msgstr "&Filter:"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Statistics docker"
+#~ msgstr "Statistika"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Foot and endnotes"
+#~ msgstr "&Shrift"
+
+#, fuzzy
+#~| msgid "&Style Manager"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Style Manager"
+#~ msgstr "Uslub &boshqaruvchisi"
+
+#, fuzzy
+#~| msgid "KFormula"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "KFormula"
+#~ msgstr "KFormula"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page break icon"
+#~ msgstr "Chegarani oʻzgartirish"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Mashrab Quvatov,Nurali Abdurahmonov"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kmashrab@uni-bremen.de,mavnur@gmail.com"
+
+#, fuzzy
+#~| msgid "Copy%1-%2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Copy"
+#~ msgstr "Nusxa%1-%2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Standard"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Standard"
+#~ msgstr "Andoza"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Document Title"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Title"
+#~ msgstr "Hujjat sarlavhasi"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 1"
+#~ msgstr "Sarlavha 1"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 2"
+#~ msgstr "Sarlavha 2"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Head 3"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Head 3"
+#~ msgstr "Sarlavha 3"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bullet List"
+#~ msgstr "Koʻkish"
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
+#~ msgstr "OASIS OpenDocument fayli haqiqiy emas. office:body tegi topilmadi."
+
+#, fuzzy
+#~| msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
+#~ msgstr "OASIS OpenDocument fayli haqiqiy emas. office:body tegi topilmadi."
+
+#, fuzzy
+#~| msgid ""
+#~| "This is not a word processing document, but %1. Please try opening it "
+#~| "with the appropriate application."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "This is not a word processing document, but %1. Please try opening it "
+#~ "with the appropriate application."
+#~ msgstr ""
+#~ "Bu KWord hujjati emas, lekin %1. Uni mos dastur bilan ochib koʻring."
+
+#, fuzzy
+#~| msgid "Save Failed"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Saved"
+#~ msgstr "Saqlash muvaffaqiyatsiz tugadi"
+
+#, fuzzy
+#~| msgid "Page %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1 of %2"
+#~ msgstr "Bet %1/%2"
+
+#, fuzzy
+#~| msgid "Page %1 of %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page %1-%2 of %3"
+#~ msgstr "Bet %1/%2"
+
+#, fuzzy
+#~| msgid "Lines:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line %1"
+#~ msgstr "Chiziqlar:"
+
+#, fuzzy
+#~| msgid "Page number:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Number"
+#~ msgstr "Betning soni:"
+
+#, fuzzy
+#~| msgid "Number"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Line Number"
+#~ msgstr "Son"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Style"
+#~ msgstr "Freymning uslubi:"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Size"
+#~ msgstr "Oʻlchamini himoyalash"
+
+#, fuzzy
+#~| msgid "Frame Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties..."
+#~ msgstr "Freymning xossalari"
+
+#, fuzzy
+#~| msgid "&Create Template From Document..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Template From Document..."
+#~ msgstr "Hujjatdan &namuna yaratish"
+
+#, fuzzy
+#~| msgid "Save this document and use it later as a template"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save this document and use it later as a template"
+#~ msgstr "Ushbu hujjatni saqlash va keyinchalik uni namuna sifatida ishlatish"
+
+#, fuzzy
+#~| msgid ""
+#~| "You can save this document as a template.<br><br>You can use this new "
+#~| "template as a starting point for another document."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "You can save this document as a template.<br><br>You can use this new "
+#~ "template as a starting point for another document."
+#~ msgstr ""
+#~ "Ushbu hujjatni namuna sifatida saqlash mumkin.<br><br>Soʻng uni yangi "
+#~ "hujjat yaratishda qoʻllash mumkin."
+
+#, fuzzy
+#~| msgid "&Formatting Characters"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Formatting Characters"
+#~ msgstr "Formatlash &belgilari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of non-printing characters"
+#~ msgstr "Bosib chiqarilmaydigan belgilarni koʻrsatish usuliga oʻtish."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Turns the border display on and off"
+#~ msgstr "Chegaralarni koʻrsatishni oʻchirish va yoqish."
+
+#, fuzzy
+#~| msgid "Configure Table Borders"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Table Borders"
+#~ msgstr "Jadvalning chegarasini moslash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of table borders"
+#~ msgstr "Bosib chiqarilmaydigan belgilarni koʻrsatish usuliga oʻtish."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Toggle the display of section bounds"
+#~ msgstr "Bosib chiqarilmaydigan belgilarni koʻrsatish usuliga oʻtish."
+
+#, fuzzy
+#~| msgid "Show Rulers"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "Lineykalarni koʻrsatish"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Lineykalarni koʻrsatish yoki bekitish."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "Toʻrni koʻrsatish"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Status Bar"
+#~ msgstr "&Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides the status bar"
+#~ msgstr "&Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Import Styles..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Semantic Stylesheets..."
+#~ msgstr "Uslublarni import qilish"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~| msgid "C&onfigure..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure..."
+#~ msgstr "&Moslash"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Layout..."
+#~ msgstr "Bet &moslamalari"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change properties of entire page"
+#~ msgstr "Betning xossalarini moslash."
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Header"
+#~ msgstr "Matn freymini yaratish"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Footer"
+#~ msgstr "Matn freymini yaratish"
+
+#, fuzzy
+#~| msgid "Remove Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Comments"
+#~ msgstr "Izohni olib tashlash"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows comments in the document"
+#~ msgstr "Hujjatning faqat matnini koʻrsatish."
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides word counting in status bar"
+#~ msgstr "&Holat panelini koʻrsatish"
+
+#, fuzzy
+#~| msgid "Protect Size"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page Setup"
+#~ msgstr "Oʻlchamini himoyalash"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Header 1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Header & Footer"
+#~ msgstr "Sarlavha 1"
+
+#, fuzzy
+#~| msgid "Page &Layout..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page layout"
+#~ msgstr "Bet &moslamalari"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format) Next search result"
+#~ msgid "Next"
+#~ msgstr "Betni qoʻyish"
+
+#, fuzzy
+#~| msgid "Preview"
+#~ msgctxt "(qtundo-format) Previous search result"
+#~ msgid "Previous"
+#~ msgstr "Koʻrib chiqish"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Label for the Replace text input box"
+#~ msgid "Replace:"
+#~ msgstr "Soʻzni almashtirish"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace the current match"
+#~ msgid "Replace"
+#~ msgstr "Soʻzni almashtirish"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format) Replace all found matches"
+#~ msgid "Replace All"
+#~ msgstr "Soʻzni almashtirish"
+
+#, fuzzy
+#~| msgid "Replace Word"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Soʻzni almashtirish"
+
+#, fuzzy
+#~| msgid "Plain text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Main text"
+#~ msgstr "Matn"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Other text"
+#~ msgstr "Betni qoʻyish"
+
+#, fuzzy
+#~ msgid "Book"
+#~ msgstr "&Xatchoʻp"
+
+#, fuzzy
+#~| msgid "KOffice Word Processor"
+#~ msgctxt "application name"
+#~ msgid "Calligra Author"
+#~ msgstr "KOffice matn protsessori"
+
+#, fuzzy
+#~| msgid "(c) 1998-2006, The KWord Team"
+#~ msgid "Copyright 2012-%1, The Author Team"
+#~ msgstr "(C) 1998-2006, KWord jamoasi"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Select Cover Image..."
+#~ msgstr "Betni qoʻyish"
+
+#, fuzzy
+#~| msgid "Open Existing..."
+#~ msgid "Open..."
+#~ msgstr "Borini ochish"
+
+#, fuzzy
+#~| msgid "Open Link"
+#~ msgid "Open Cover"
+#~ msgstr "Bogʻni ochish"
+
+#, fuzzy
+#~| msgid "Import Style"
+#~ msgid "Import problem"
+#~ msgstr "Uslubni import qilish"
+
+#, fuzzy
+#~| msgid "Completion"
+#~ msgid "Cover selection"
+#~ msgstr "Toʻldirish"
+
+#, fuzzy
+#~ msgid "Outliner"
+#~ msgstr "Chegara uslubi"
+
+#, fuzzy
+#~| msgid "Edit Text"
+#~ msgid "Edit section"
+#~ msgstr "Matnni tahrirlash"
+
+#, fuzzy
+#~| msgid "Plain text"
+#~ msgid "Main"
+#~ msgstr "Matn"
+
+#, fuzzy
+#~| msgid "Enter entry name:"
+#~ msgid "Enter actor's name here"
+#~ msgstr "Yozuvning nomini kiriting:"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "Turi"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Actor description:"
+#~ msgstr "Avto-toʻgʻrilash"
+
+#, fuzzy
+#~| msgid "&Bold"
+#~ msgid "Bold"
+#~ msgstr "Qal&in"
+
+#, fuzzy
+#~| msgid "&Italic"
+#~ msgid "Italic"
+#~ msgstr "&Qiya"
+
+#, fuzzy
+#~| msgid "&Underline"
+#~ msgid "Underline"
+#~ msgstr "&Tagi chizilgan"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgid "LeftAlign"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~| msgid "Left-Align Text"
+#~ msgid "CenterAlign"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~ msgid "RightAlign"
+#~ msgstr "Matnni chapdan tekislash"
+
+#, fuzzy
+#~ msgid "1st Edit"
+#~ msgstr "Matnni tahrirlash"
+
+#, fuzzy
+#~ msgid "2nd Edit"
+#~ msgstr "Matnni tahrirlash"
+
+#, fuzzy
+#~ msgid "3rd Edit"
+#~ msgstr "Matnni tahrirlash"
+
+#, fuzzy
+#~| msgid "Autocorrection"
+#~ msgid "Author's section"
+#~ msgstr "Avto-toʻgʻrilash"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Badge:"
+#~ msgstr "&Bet usuli"
+
+#, fuzzy
+#~ msgctxt "displayname of the semantic item type AuthorSection"
+#~ msgid "Section"
+#~ msgstr "Interfeys moslamalari"
+
+#~ msgid "File to open"
+#~ msgstr "Ochish uchun fayl"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Frame"
+#~ msgstr "Matn freymini yaratish"
+
+#, fuzzy
+#~| msgid "Delete Frame"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Frame"
+#~ msgstr "Freymni oʻchirish"
+
+#~ msgid "General"
+#~ msgstr "Umumiy"
+
+#~ msgid "Protect size and position"
+#~ msgstr "Oʻlcham va joyini himoyalash"
+
+#~ msgid "Position"
+#~ msgstr "Joylashishi"
+
+#~ msgid "Width:"
+#~ msgstr "Eni:"
+
+#~ msgid "Height:"
+#~ msgstr "Uzunasi:"
+
+#~ msgid "Margins"
+#~ msgstr "Boʻsh joylar"
+
+#~ msgid "Bottom:"
+#~ msgstr "Past:"
+
+#~ msgid "Top:"
+#~ msgstr "Yuqori:"
+
+#~ msgid "Right:"
+#~ msgstr "Oʻng:"
+
+#~ msgid "Left:"
+#~ msgstr "Chap:"
+
+#~ msgid "Create a new page"
+#~ msgstr "Yangi betni yaratish"
+
+#~ msgid "Resize last frame"
+#~ msgstr "Oxirgi freymning oʻlchamini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Do not show the extra text"
+#~ msgstr "Qoʻshimcha matnni bekitish"
+
+#, fuzzy
+#~ msgid "Reconnect frame to current flow"
+#~ msgstr "Freymni qaytadan bogʻlash"
+
+#, fuzzy
+#~| msgid "Connect Frame"
+#~ msgid "Copy this Frame"
+#~ msgstr "Freymni bogʻlash"
+
+#~ msgid "Protect content"
+#~ msgstr "Tarkibidagini himoyalash"
+
+#~ msgid "Frame is a copy of the previous frame"
+#~ msgstr "Oldingi freymning nusxasi"
+
+#, fuzzy
+#~| msgid "Select All Frames"
+#~ msgid "Select All Shapes"
+#~ msgstr "Hamma freymlarni tanlash"
+
+#~ msgid "Create Linked Copy"
+#~ msgstr "Bogʻlangan nusxani yaratish"
+
+#, fuzzy
+#~| msgid "Create Linked Copy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Linked Copy"
+#~ msgstr "Bogʻlangan nusxani yaratish"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Page"
+#~ msgstr "Betni qoʻyish"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Page"
+#~ msgstr "Yozuvni olib tashlash"
+
+#, fuzzy
+#~| msgid "&Bookmark..."
+#~ msgid "Bookmark..."
+#~ msgstr "&Xatchoʻp"
+
+#, fuzzy
+#~| msgid "Select &Bookmark..."
+#~ msgid "Select Bookmark..."
+#~ msgstr "Xatchoʻpni &tanlash"
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "&Xatchoʻp"
+
+#, fuzzy
+#~| msgid "Page %1"
+#~ msgid "Page %1/%2"
+#~ msgstr "Bet %1"
+
+#, fuzzy
+#~| msgid "Sentences:"
+#~ msgid "Preferences"
+#~ msgstr "Gaplar:"
+
+#, fuzzy
+#~ msgid "Automatically update"
+#~ msgstr "Diqqat"
+
+#~ msgid "F&ormat"
+#~ msgstr "&Format"
+
+#~ msgid "Invalid document. No mimetype specified."
+#~ msgstr "Hujjat haqiqiy emas. Hech qanday MIME-turi koʻrsatilmagan."
+
+#, fuzzy
+#~| msgid ""
+#~| "Invalid document. Expected mimetype application/x-kword or application/"
+#~| "vnd.kde.kword, got %1"
+#~ msgid ""
+#~ "Invalid document. Expected mimetype application/x-words or application/"
+#~ "vnd.kde.words, got %1"
+#~ msgstr ""
+#~ "Notoʻgʻri hujjat turi. MIME-turi application/x-kword yoki application/vnd."
+#~ "kde.kword kutilgan edi, oʻrniga %1 olindi."
+
+#~ msgid "Invalid document. Paper size: %1x%2"
+#~ msgstr "Hujjat haqiqiy emas. Betning oʻlchami: %1x%2"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate footnote text"
+#~ msgstr "Maʼlumot baza obʼektini yaratib boʻlmadi"
+
+#, fuzzy
+#~| msgid "Unable to create database object"
+#~ msgid "Unable to locate note-text"
+#~ msgstr "Maʼlumot baza obʼektini yaratib boʻlmadi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clip Frame"
+#~ msgstr "Freymni bogʻlash"
+
+#, fuzzy
+#~| msgid "Create Text Frame"
+#~ msgid "Create Frame-clip"
+#~ msgstr "Matn freymini yaratish"
+
+#, fuzzy
+#~| msgid "Remove record"
+#~ msgid "Remove Frame-clip"
+#~ msgstr "Yozuvni olib tashlash"
+
+#, fuzzy
+#~| msgid "Format"
+#~ msgid "Form"
+#~ msgstr "Format"
+
+#, fuzzy
+#~ msgid "Enable Document Headers"
+#~ msgstr "Hujjatni tashqi hujjat qilish"
+
+#, fuzzy
+#~ msgid "Enable Document Footers"
+#~ msgstr "Hujjatni ichki hujjat qilish"
+
+#, fuzzy
+#~| msgid "Change Link"
+#~ msgid "Change Tracking"
+#~ msgstr "Bogʻni oʻzgartirish"
+
+#, fuzzy
+#~| msgid "Words:"
+#~ msgctxt "application name"
+#~ msgid "Words"
+#~ msgstr "Soʻzlar:"
+
+#~ msgid "Number of pages:"
+#~ msgstr "Betlar soni:"
+
+#~ msgid "Number of frames:"
+#~ msgstr "Freymlar soni:"
+
+#~ msgid "Number of pictures:"
+#~ msgstr "Rasmlar soni:"
+
+#~ msgid "Number of tables:"
+#~ msgstr "Jadvallar soni:"
+
+#~ msgid "Text"
+#~ msgstr "Matn"
+
+#~ msgid "approximately %1"
+#~ msgstr "taxminan %1"
+
+#~ msgid "Sentence, word and letter counts for this document"
+#~ msgstr "Ushbu hujjat uchun soʻz va harflarning soni"
+
+#, fuzzy
+#~ msgid "Shows and hides header display"
+#~ msgstr "Lineykalarni koʻrsatish yoki bekitish."
+
+#, fuzzy
+#~ msgid "Shows and hides footer display"
+#~ msgstr "Lineykalarni koʻrsatish yoki bekitish."
+
+#, fuzzy
+#~| msgid "Raise Frame"
+#~ msgid "Raise Shape"
+#~ msgstr "Freym oldinga"
+
+#, fuzzy
+#~ msgid ""
+#~ "Raise the currently selected shape so that it appears above all the other "
+#~ "shape"
+#~ msgstr "Tanlangan freymdagi rasmni alohida faylga saqlash."
+
+#, fuzzy
+#~| msgid "Lower Frame"
+#~ msgid "Lower Shape"
+#~ msgstr "Freym orqaga"
+
+#, fuzzy
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it"
+#~ msgstr "Tanlangan freymdagi rasmni alohida faylga saqlash."
+
+#, fuzzy
+#~ msgid ""
+#~ "Lower the currently selected shape so that it disappears under any shape "
+#~ "that overlaps it. If multiple shape are selected they are all lowered in "
+#~ "turn."
+#~ msgstr "Tanlangan freymdagi rasmni alohida faylga saqlash."
+
+#~ msgid "Bring to Front"
+#~ msgstr "Eng oldinga"
+
+#~ msgid "Send to Back"
+#~ msgstr "Eng oxirga"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "After last page"
+#~ msgstr "Betni qoʻyish"
+
+#, fuzzy
+#~| msgid "Framestyle:"
+#~ msgid "Page style:"
+#~ msgstr "Freymning uslubi:"
+
+#~ msgctxt "Insert menu"
+#~ msgid "&Insert"
+#~ msgstr "Qoʻyi&sh"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variable"
+#~ msgstr "Oʻ&zgaruvchi"
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "As Character"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~ msgid "Anchor the current shape as a character in the text"
+#~ msgstr "Kursordan boshlab mundarijani qoʻyish."
+
+#, fuzzy
+#~| msgid "Create"
+#~ msgid "To Character"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~ msgid "Anchor the current shape to the character at the current position"
+#~ msgstr "Kursordan boshlab mundarijani qoʻyish."
+
+#, fuzzy
+#~| msgid "Paragraph"
+#~ msgid "To Paragraph"
+#~ msgstr "Bob"
+
+#, fuzzy
+#~| msgid "Remove entry"
+#~ msgid "To Page"
+#~ msgstr "Yozuvni olib tashlash"
+
+#~ msgid "Page..."
+#~ msgstr "Bet"
+
+#~ msgid "Delete Page"
+#~ msgstr "Betni oʻchirish"
+
+#, fuzzy
+#~| msgid "Insert Page"
+#~ msgid "Insert Image Options"
+#~ msgstr "Betni qoʻyish"
+
+#, fuzzy
+#~ msgid "Disable Document Headers"
+#~ msgstr "Hujjatni tashqi hujjat qilish"
+
+#, fuzzy
+#~ msgid "Disable Document Footers"
+#~ msgstr "Hujjatni tashqi hujjat qilish"
+
+#, fuzzy
+#~| msgid "Frame &Borders"
+#~ msgid "Page Borders"
+#~ msgstr "Freymning che&garalari"
+
+#, fuzzy
+#~| msgid "Show &status bar"
+#~ msgid "Hide Status Bar"
+#~ msgstr "&Holat panelini koʻrsatish"
+
+#~ msgid "Numbering"
+#~ msgstr "Raqamlash"
+
+#~ msgid "Automatic"
+#~ msgstr "Avtomatik"
+
+#, fuzzy
+#~ msgid "Footnote"
+#~ msgstr "&Shrift"
+
+#, fuzzy
+#~ msgid "Insert Footnote/Endnote"
+#~ msgstr "Fayldan qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert a footnote referencing the selected text"
+#~ msgstr "Tanlangan matn uchun izohni qoʻyish."
+
+#, fuzzy
+#~| msgid "F&rame/Frameset Properties"
+#~ msgid "Frame/Frameset Properties"
+#~ msgstr "&Freym/Freymlar toʻplamining xossalari"
+
+#, fuzzy
+#~ msgid "Alter frameset properties"
+#~ msgstr "Freymning xossalarini oʻzgartirish."
+
+#, fuzzy
+#~| msgid "P&icture..."
+#~ msgid "Picture..."
+#~ msgstr "&Rasm"
+
+#, fuzzy
+#~ msgid "Insert a picture into document"
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~ msgid "Convert current frame to an inline frame"
+#~ msgstr "Formulani yangi freymga qoʻyish."
+
+#, fuzzy
+#~ msgid "Set Floating"
+#~ msgstr "Xar hil moslamalar"
+
+#, fuzzy
+#~| msgid "&Filter output"
+#~ msgid "Filter stuff"
+#~ msgstr "&Filtr natijasi"
+
+#, fuzzy
+#~| msgid "Fra&mestyle"
+#~ msgid "Fra&mes"
+#~ msgstr "&Freymning uslubi"
+
+#~ msgid "Tables"
+#~ msgstr "Jadvallar"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Qoʻyi&sh"
+
+#, fuzzy
+#~| msgid "Text will run &around the frame"
+#~ msgid "Text will run around this frame"
+#~ msgstr "Matn shu freymning atr&ofidan oʻtadi"
+
+#, fuzzy
+#~| msgid "Text will &not run around this frame"
+#~ msgid "Text will not run around this frame"
+#~ msgstr "Matn shu freymning atrofidan oʻt&maydi"
+
+#~ msgid "Run Around Side"
+#~ msgstr "Matn oʻtish tomoni"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "Chapda"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "Oʻngda"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "Lon&gest side"
+#~ msgid "Longest side"
+#~ msgstr "&Eng uzun tomoni"
+
+#, fuzzy
+#~ msgid "Create custom outline"
+#~ msgstr "Jadvalni yaratish."
+
+#, fuzzy
+#~ msgid "Create Custom Outline"
+#~ msgstr "Jadvalni yaratish."
+
+#, fuzzy
+#~ msgid "Create outlines"
+#~ msgstr "Jadvalni yaratish."
+
+#~ msgid "Borders"
+#~ msgstr "Chegaralar"
+
+#~ msgid "Table"
+#~ msgstr "Jadval"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "&Shrift"
+
+#, fuzzy
+#~| msgid "F&ormat"
+#~ msgid "Format"
+#~ msgstr "&Format"
+
+#~ msgid "Formula"
+#~ msgstr "Formula"
+
+#~ msgid "KWord"
+#~ msgstr "KWord"
+
+#, fuzzy
+#~| msgid "Insert Picture"
+#~ msgid "Insert Picture..."
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Page Background"
+#~ msgstr "Orqa fon"
+
+#~ msgid "If Text is Too Long for Frame"
+#~ msgstr "Agar matn freym uchun uzun boʻlsa"
+
+#~ msgid "On New Page Creation"
+#~ msgstr "Yangi bet yaratishda"
+
+#~ msgid "Place a copy of this frame"
+#~ msgstr "Ushbu freymdan nusxa olish"
+
+#~ msgid "Show Grid"
+#~ msgstr "Toʻrni koʻrsatish"
+
+#~ msgid "Main Text Frameset"
+#~ msgstr "Asosiy matn freym toʻplami"
+
+#~ msgid "Matrix"
+#~ msgstr "Matritsa"
+
+#~ msgid "Configure Frame Border"
+#~ msgstr "Freymning chegarasini moslash"
+
+#~ msgid "Ta&ble"
+#~ msgstr "&Jadval"
+
+#~ msgid "Cell"
+#~ msgstr "Katak"
+
+#~ msgid "Configure Frame Borders"
+#~ msgstr "Freymning chegarasini moslash"
+
+#, fuzzy
+#~| msgid "Create a new page"
+#~ msgid "Add a new page"
+#~ msgstr "Yangi betni yaratish"
+
+#, fuzzy
+#~| msgid "Delete all selected cells?"
+#~ msgid "Delete selected pages"
+#~ msgstr "Belgilangan kataklarni oʻchirishni istaysizmi?"
+
+#, fuzzy
+#~| msgid "Delete Page"
+#~ msgid "Delete Layer"
+#~ msgstr "Betni oʻchirish"
+
+#, fuzzy
+#~ msgid "Information"
+#~ msgstr "Hujjat &haqida maʼlumot"
+
+#~ msgid "&Available tables:"
+#~ msgstr "&Mavjud jadvallar:"
+
+#~ msgid "&Fields of the selected table:"
+#~ msgstr "Tanlangan jadvalning &maydonlari:"
+
+#~ msgid "Query Result"
+#~ msgstr "Soʻrov natijasi"
+
+#~ msgid "&Query:"
+#~ msgstr "&Soʻrov:"
+
+#~ msgid "&Execute"
+#~ msgstr "&Bajarish"
+
+#~ msgid "&Setup"
+#~ msgstr "&Moslash"
+
+#~ msgid "&Table:"
+#~ msgstr "&Jadval:"
+
+#~ msgid "View or Edit Filter &Rules"
+#~ msgstr "Filtrlash qoidalarini koʻrish yoki &tahrirlash"
+
+#~ msgid "&Keep Settings..."
+#~ msgstr "Moslamalarni &saqlash"
+
+#~ msgid "&Hostname:"
+#~ msgstr "&Kompyuterning nomi:"
+
+#~ msgid "&Driver:"
+#~ msgstr "&Drayver:"
+
+#~ msgid "Database &name:"
+#~ msgstr "Maʼlumot &bazasining nomi:"
+
+#~ msgid "&Username:"
+#~ msgstr "F&oydalanuvchi:"
+
+#~ msgid "&Port:"
+#~ msgstr "&Port:"
+
+#~ msgid "default"
+#~ msgstr "andoza"
+
+#~ msgid "Address Selection"
+#~ msgstr "Manzilni tanlash"
+
+#~ msgid "&Add >>"
+#~ msgstr "&Qoʻshish >>"
+
+#~ msgid "<< &Remove"
+#~ msgstr "<< &Olib tashlash"
+
+#~ msgid "Save as &Distribution List..."
+#~ msgstr "Tarqarish roʻyxati si&fatida saqlash"
+
+#~ msgid "&Filter on:"
+#~ msgstr "&Filter:"
+
+#~ msgid "Name"
+#~ msgstr "Nomi"
+
+#~ msgid "Distribution Lists"
+#~ msgstr "Tarqarish roʻyxatlari"
+
+#~ msgid "Address B&ook"
+#~ msgstr "Manzillar &daftari"
+
+#~ msgid "Launch KAddressbook"
+#~ msgstr "KAddressbook dasturini ishga tushirish"
+
+#~ msgid "&Address Book"
+#~ msgstr "Manzillar &daftari"
+
+#~ msgid "&Selected Addresses"
+#~ msgstr "&Tanlangan manzillar"
+
+#~ msgid "Personal"
+#~ msgstr "Shaxsiy"
+
+#~ msgid "Hi!"
+#~ msgstr "Salom!"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Yellow"
+#~ msgid "Hello!"
+#~ msgstr "Sariq"
+
+#~ msgid "Bye!"
+#~ msgstr "Xayr!"
+
+#~ msgid "Good bye"
+#~ msgstr "Yaxshi qoling"
+
+#~ msgid "Professional"
+#~ msgstr "Ishga taʼluqli"
+
+#~ msgid "Good Morning"
+#~ msgstr "Assalomu alaykum"
+
+#~ msgid "Good Afternoon"
+#~ msgstr "Xayrli kun"
+
+#, fuzzy
+#~ msgid "Good Evening"
+#~ msgstr "Assalomu alaykum"
+
+#~ msgid "Email"
+#~ msgstr "Elektron pochta"
+
+#~ msgid "To:"
+#~ msgstr "Kimga:"
+
+#~ msgid "Subject:"
+#~ msgstr "Mavzu:"
+
+#~ msgid "CC:"
+#~ msgstr "Nusxa:"
+
+#, fuzzy
+#~ msgid "BCC:"
+#~ msgstr "Nusxa:"
+
+#~ msgid "Best regards,"
+#~ msgstr "Hurmat bilan,"
+
+#~ msgid "Best wishes"
+#~ msgstr "Yaxshi tilaklar bilan,"
+
+#~ msgid "Cordially,"
+#~ msgstr "Samimiy,"
+
+#~ msgid "Regards,"
+#~ msgstr "Salom bilan,"
+
+#~ msgid "Thank you,"
+#~ msgstr "Katta rahmat,"
+
+#~ msgid "Thanks,"
+#~ msgstr "Rahmat,"
+
+#~ msgid "Subject"
+#~ msgstr "Mavzu"
+
+#~ msgid "Dear Sir or Madam:"
+#~ msgstr "Hurmatli janob yoki xonim:"
+
+#~ msgid "Ladies and Gentlemen:"
+#~ msgstr "Xonimlar va Janoblar:"
+
+#~ msgid "Attention"
+#~ msgstr "Diqqat"
+
+#~ msgid "Attention:"
+#~ msgstr "Diqqat:"
+
+#~ msgid "ATTN:"
+#~ msgstr "DIQ:"
+
+#, fuzzy
+#~ msgid "Instructions"
+#~ msgstr "Interfeys moslamalari"
+
+#~ msgid "CONFIDENTIAL"
+#~ msgstr "MAXFIY"
+
+#~ msgid "PERSONAL"
+#~ msgstr "SHAXSIY"
+
+#~ msgid "Please enter the password for the database connection"
+#~ msgstr "Maʼlumot bazasi bilan aloqa oʻrnatish uchun maxfiy soʻzni kiriting"
+
+#~ msgid "<not saved>"
+#~ msgstr "<saqlanmagan>"
+
+#~ msgid "Store Settings"
+#~ msgstr "Moslamalarni saqlash"
+
+#~ msgid "ascending"
+#~ msgstr "koʻpayish boʻyicha"
+
+#~ msgid "descending"
+#~ msgstr "kamayishi boʻyicha"
+
+#~ msgid "Field"
+#~ msgstr "Maydon"
+
+#~ msgid "Operator"
+#~ msgstr "Operator"
+
+#~ msgid "Condition"
+#~ msgstr "Shart"
+
+#~ msgid "Value"
+#~ msgstr "Qiymati"
+
+#~ msgid "NOT"
+#~ msgstr "Yoʻq"
+
+#~ msgid "KAddressbook entry '%1' not available."
+#~ msgstr "'%1' manzillar daftarida mavjud emas."
+
+#~ msgctxt "Geographic coordinates"
+#~ msgid "%1, %2"
+#~ msgstr "%1, %2"
+
+#~ msgid "no category"
+#~ msgstr "turkumsiz"
+
+#~ msgid "New Distribution List"
+#~ msgstr "Yangi tarqatish roʻyxati"
+
+#~ msgid "Please enter name:"
+#~ msgstr "Iltimos nomini kiriting:"
+
+#, fuzzy
+#~ msgid ""
+#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
+#~ "Please select a different name.</qt>"
+#~ msgstr ""
+#~ "'%1' nomli freymlar toʻplami allaqachon mavjud. Iltimos boshqa nomni "
+#~ "tanlang."
+
+#~ msgid "URL:"
+#~ msgstr "URL:"
+
+#~ msgid "No Value"
+#~ msgstr "Qiymati yoʻq"
+
+#~ msgid "Add record"
+#~ msgstr "Yozuvni qoʻshish"
+
+#~ msgid "Add entry"
+#~ msgstr "Yozuvni qoʻshish"
+
+#~ msgid "Remove entry"
+#~ msgstr "Yozuvni olib tashlash"
+
+#, fuzzy
+#~ msgid "Add Entry"
+#~ msgstr "Yozuvni qoʻshish"
+
+#, fuzzy
+#~| msgid "&Hostname:"
+#~ msgid "Host:"
+#~ msgstr "&Kompyuterning nomi:"
+
+#, fuzzy
+#~| msgid "&Port:"
+#~ msgid "Port:"
+#~ msgstr "&Port:"
+
+#, fuzzy
+#~| msgid "&Time"
+#~ msgid "Timeout:"
+#~ msgstr "&Vaqt"
+
+#, fuzzy
+#~| msgid "Table of Contents"
+#~ msgid "Table of Content"
+#~ msgstr "Mundarija"
+
+#, fuzzy
+#~ msgid "Pages"
+#~ msgstr "&Bet"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgid "Slots"
+#~ msgstr "Saralash"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Xossa&lari"
+
+#, fuzzy
+#~| msgid "&Variable"
+#~ msgid "Variables"
+#~ msgstr "Oʻ&zgaruvchi"
+
+#, fuzzy
+#~| msgid "Go to Document"
+#~ msgid "HTML Document"
+#~ msgstr "Hujjatga oʻtish"
+
+#, fuzzy
+#~| msgid "Move Text"
+#~ msgid "Encoded Text"
+#~ msgstr "Matnni koʻchirish"
+
+#, fuzzy
+#~ msgid "Delete the currently selected frame(s)"
+#~ msgstr "Belgilangan freym(lar)ni oʻchirish."
+
+#~ msgid "Delete the currently selected frame(s)."
+#~ msgstr "Belgilangan freym(lar)ni oʻchirish."
+
+#, fuzzy
+#~| msgid "&Units:"
+#~ msgid "Unit:"
+#~ msgstr "&Oʻlchov birligi:"
+
+#, fuzzy
+#~| msgid "Size (%1):"
+#~ msgid "Size:"
+#~ msgstr "Oʻlcham (%1):"
+
+#, fuzzy
+#~| msgid "Attention:"
+#~ msgid "Orientation:"
+#~ msgstr "Diqqat:"
+
+#, fuzzy
+#~| msgctxt "Run Around"
+#~| msgid "Lon&gest side"
+#~ msgid "Single sided"
+#~ msgstr "&Eng uzun tomoni"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgid "Whole document:"
+#~ msgstr "Hujjat"
+
+#, fuzzy
+#~| msgctxt "Style name"
+#~| msgid "Light Blue"
+#~ msgid "Right to left"
+#~ msgstr "Och koʻk"
+
+#, fuzzy
+#~| msgid "Left:"
+#~ msgid "Left Edge:"
+#~ msgstr "Chap:"
+
+#, fuzzy
+#~| msgid "Right:"
+#~ msgid "Right Edge:"
+#~ msgstr "Oʻng:"
+
+#, fuzzy
+#~| msgid "&Page Mode"
+#~ msgid "Page Edge:"
+#~ msgstr "&Bet usuli"
+
+#, fuzzy
+#~ msgid "Page spread"
+#~ msgstr "Chegarani oʻzgartirish"
+
+#~ msgid "Printing..."
+#~ msgstr "Bosib chiqarish"
+
+#, fuzzy
+#~ msgid "Cancel"
+#~ msgstr "Katak"
+
+#, fuzzy
+#~ msgid "Insert Inline Table"
+#~ msgstr "Jadvalni qoʻyish"
+
+#~ msgid "Text Frameset %1"
+#~ msgstr "Freymlar toʻplami %1"
+
+#~ msgid "Create Formula Frame"
+#~ msgstr "Formula freymini yaratish"
+
+#~ msgid "Create Table"
+#~ msgstr "Jadvalni yaratish"
+
+#~ msgid "Change Frame Background Color"
+#~ msgstr "Freymning orqa fon rangini oʻzgartirish"
+
+#~ msgid "Delete Page %1"
+#~ msgstr "Betni (%1) oʻchirish"
+
+#~ msgid "Resize Column"
+#~ msgstr "Ustunning oʻlchamini oʻzgartirish"
+
+#~ msgid "Resize Row"
+#~ msgstr "Satrning oʻlchamini oʻzgartirish"
+
+#~ msgid "Configure KWord"
+#~ msgstr "KWord moslamasi"
+
+#~ msgid "Interface"
+#~ msgstr "Interfeys"
+
+#~ msgid "Interface Settings"
+#~ msgstr "Interfeys moslamalari"
+
+#~ msgid "Spelling"
+#~ msgstr "Imlo"
+
+#~ msgid "Spell Checker Behavior"
+#~ msgstr "Imloni tekshiruvchining xususiyatlari"
+
+#~ msgid "Formula Defaults"
+#~ msgstr "Formulaning andozalari"
+
+#~ msgid "Misc Settings"
+#~ msgstr "Xar hil moslamalar"
+
+#~ msgid "Path"
+#~ msgstr "Yoʻl"
+
+#~ msgid "Path Settings"
+#~ msgstr "Yoʻl moslamalari"
+
+#~ msgid "Change Config"
+#~ msgstr "Moslamani oʻzgartirish"
+
+#~ msgid "Show s&crollbar"
+#~ msgstr "&Varaqlash panelini koʻrsatish"
+
+#~ msgid "Number of recent &files:"
+#~ msgstr "Yaqinda ochilgan &fayllarning soni:"
+
+#~ msgid "&Horizontal grid size:"
+#~ msgstr "&En boʻyicha toʻrning oʻlchami:"
+
+#~ msgid "&Vertical grid size:"
+#~ msgstr "&Uzuna boʻyicha toʻrning oʻlchami:"
+
+#~ msgid "Undo/&redo limit:"
+#~ msgstr "&Bekor qilish/qaytarish chegarasi:"
+
+#~ msgid "Display &links"
+#~ msgstr "&Bogʻlarni koʻrsatish"
+
+#~ msgid "&Underline all links"
+#~ msgstr "Hamma bogʻlarning &tagini chizish"
+
+#~ msgid "Display c&omments"
+#~ msgstr "Izohlarni &koʻrsatish"
+
+#~ msgid "Display field code"
+#~ msgstr "Maydonning kodini koʻrsatish"
+
+#~ msgid "View Formatting"
+#~ msgstr "Formatlashni koʻrish"
+
+#, fuzzy
+#~ msgid "View formatting end paragraph"
+#~ msgstr "Formatlashni koʻrish"
+
+#, fuzzy
+#~ msgid "View formatting space"
+#~ msgstr "Formatlashni koʻrish"
+
+#, fuzzy
+#~ msgid "View formatting tabs"
+#~ msgstr "Formatlashni koʻrish"
+
+#, fuzzy
+#~ msgid "View formatting break"
+#~ msgstr "Formatlashni koʻrish"
+
+#, fuzzy
+#~ msgid "Change Display Field Code Command"
+#~ msgstr "Maydonning kodini koʻrsatish"
+
+#~ msgid "Document Defaults"
+#~ msgstr "Hujjatning andozalari"
+
+#~ msgid "Default font:"
+#~ msgstr "Andoza shrift:"
+
+#~ msgid "Choose..."
+#~ msgstr "Tanlash"
+
+#~ msgid "Global language:"
+#~ msgstr "Umumiy til:"
+
+#~ msgid "Autosave every (min):"
+#~ msgstr "Avto-saqlash (min):"
+
+#~ msgid ""
+#~ "A backup copy of the current document is created when a change has been "
+#~ "made. The interval used to create backup documents is set here."
+#~ msgstr ""
+#~ "Hujjatning zahira nusxasi unga oʻzgartirish kiritilishi bilan yaratiladi. "
+#~ "Zahira yaratish oraligʻini bu yerdan oʻzgartirish mumkin."
+
+#~ msgid "No autosave"
+#~ msgstr "Avto-saqlashsiz"
+
+#~ msgid " min"
+#~ msgstr " min"
+
+#~ msgid "Create backup file"
+#~ msgstr "Zahira faylini yaratish"
+
+#~ msgid "Starting page number:"
+#~ msgstr "Betning boshlangʻich soni:"
+
+#, fuzzy
+#~ msgid "Tab stop (%1):"
+#~ msgstr "Boʻshliqning oʻlchami (%1):"
+
+#~ msgid "Cursor"
+#~ msgstr "Kursor"
+
+#~ msgid "Change Starting Page Number"
+#~ msgstr "Betning boshlangʻich sonini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Tab stop:"
+#~ msgstr "Yuqori:"
+
+#, fuzzy
+#~ msgid "Personal Expression"
+#~ msgstr "Shaxsiy ifodalarni tahrirlash"
+
+#~ msgid "Backup Path"
+#~ msgstr "Zahira fayli uchun yoʻl"
+
+#~ msgid "Modify Path..."
+#~ msgstr "Yoʻlni oʻzgartirish"
+
+#~ msgid "Separator Line"
+#~ msgstr "Ajratuvchi chiziq"
+
+#~ msgctxt "Position"
+#~ msgid "Left"
+#~ msgstr "Chapda"
+
+#~ msgctxt "Position"
+#~ msgid "Right"
+#~ msgstr "Oʻngda"
+
+#~ msgid " %"
+#~ msgstr " %"
+
+#~ msgid "&Width:"
+#~ msgstr "&Eni:"
+
+#~ msgid "&Size on page:"
+#~ msgstr "Varaqdagi &oʻlcham:"
+
+#~ msgid ""
+#~ "The size of the separator line can be defined as a percentage of the "
+#~ "width of the page."
+#~ msgstr ""
+#~ "Ajratish chizigʻining oʻlchamini betning eniga nisbatan foizlarda "
+#~ "koʻrsatish mumkin."
+
+#, fuzzy
+#~ msgid "Solid"
+#~ msgstr "Qal&in"
+
+#, fuzzy
+#~ msgid "Dash Line"
+#~ msgstr "Nuqtali chiziq"
+
+#~ msgid "Dot Line"
+#~ msgstr "Nuqtali chiziq"
+
+#, fuzzy
+#~ msgid "Dash Dot Line"
+#~ msgstr "Nuqtali chiziq"
+
+#, fuzzy
+#~ msgid "Dash Dot Dot Line"
+#~ msgstr "Nuqtali chiziq"
+
+#, fuzzy
+#~ msgid "Rename Bookmark..."
+#~ msgstr "Xatchoʻpning nomini oʻzgartirish"
+
+#~ msgid "That name already exists, please choose another name."
+#~ msgstr "Bu nomli xatchoʻp allaqachon mavjud. Iltimos boshqa nomni tanlang."
+
+#~ msgid "Delete Bookmark"
+#~ msgstr "Xatchoʻpni oʻchirish"
+
+#~ msgid "Delete Row"
+#~ msgstr "Satrni oʻchirish"
+
+#~ msgid "Delete Column"
+#~ msgstr "Ustunni oʻchirish"
+
+#~ msgid "Delete the row from the table."
+#~ msgstr "Jadvaldan satrni oʻchirish."
+
+#~ msgid "Delete the column from the table."
+#~ msgstr "Jadvaldan ustunni oʻchirish."
+
+#~ msgid "Delete the whole table?"
+#~ msgstr "Butun jadvalni oʻchirishni istaysizmi?"
+
+#~ msgid "Delete all selected rows?"
+#~ msgstr "Belgilangan satrlarni oʻchirishni istaysizmi?"
+
+#~ msgid "Delete row number %1?"
+#~ msgstr "%1chi satrni oʻchirishni istaysizmi?"
+
+#~ msgid "Delete column number %1?"
+#~ msgstr "%1chi ustunni oʻchirishni istaysizmi?"
+
+#~ msgid "Delete rows: %1 ?"
+#~ msgstr "%1 satrlarni oʻchirishni istaysizmi?"
+
+#~ msgid "Delete columns: %1 ?"
+#~ msgstr "%1 ustunlarni oʻchirishni istaysizmi?"
+
+#~ msgid "Column %1"
+#~ msgstr "Ustun: %1"
+
+#~ msgid "Text Frame %1"
+#~ msgstr "Matn freymi %1"
+
+#~ msgid "Empty"
+#~ msgstr "Boʻsh"
+
+#~ msgid "Formula Frame %1"
+#~ msgstr "Formular freymi %1"
+
+#~ msgid "Picture (%1) %2"
+#~ msgstr "Rasm (%1) %2"
+
+#~ msgid "Formula Frames"
+#~ msgstr "Formula freymlari"
+
+#~ msgid "Pictures"
+#~ msgstr "Rasmlar"
+
+#~ msgid "Text Frames/Frame Sets"
+#~ msgstr "Matn freymlari/Freym toʻplamlari"
+
+#~ msgid "Document Structure"
+#~ msgstr "Hujjatning tuzilishi"
+
+#~ msgid ""
+#~ "This document was created with a newer version of KWord (syntax version: "
+#~ "%1)\n"
+#~ "Opening it in this version of KWord will lose some information."
+#~ msgstr ""
+#~ "Ushbu hujjat KWord'ning yangiroq versiyasida (%1-chi versiya) yozilgan\n"
+#~ "Ushbu hujjatni KWord'ning joriy versiyasi bilan ochish baʼzi "
+#~ "maʼlumotlarni yoʻqolishiga olib keladi."
+
+#, fuzzy
+#~ msgid "Create Part Frame"
+#~ msgstr "Matn freymini yaratish"
+
+#~ msgid "Delete Table"
+#~ msgstr "Jadvalni oʻchirish"
+
+#~ msgid "Delete Text Frame"
+#~ msgstr "Matn freymini oʻchirish"
+
+#~ msgid "Delete Formula Frame"
+#~ msgstr "Formula freymini oʻchirish"
+
+#~ msgid "Delete Picture Frame"
+#~ msgstr "Rasm freymini oʻchirish"
+
+#~ msgid "Delete Object Frame"
+#~ msgstr "Obʼekt freymini oʻchirish"
+
+#~ msgid "Edit Personal Expression"
+#~ msgstr "Shaxsiy ifodalarni tahrirlash"
+
+#~ msgid "Group name:"
+#~ msgstr "Guruhning nomi:"
+
+#~ msgid "Expressions"
+#~ msgstr "Ifodalar"
+
+#~ msgid "&New"
+#~ msgstr "&Yangi"
+
+#~ msgid "New"
+#~ msgstr "Yangi"
+
+#~ msgid "empty"
+#~ msgstr "boʻsh"
+
+#~ msgid "new group"
+#~ msgstr "yangi guruh"
+
+#~ msgid "&Automatic"
+#~ msgstr "&Avtomatik"
+
+#~ msgid "&Manual"
+#~ msgstr "&Qoʻlbola"
+
+#~ msgid "Formula %1"
+#~ msgstr "Formula %1"
+
+#~ msgid "Frame Properties for %1"
+#~ msgstr "%1 uchun freym xossalari"
+
+#~ msgid "Frame Properties for New Frame"
+#~ msgstr "Yangi freym uchun freym xossalari"
+
+#~ msgid "Frames Properties"
+#~ msgstr "Freymning xossalari"
+
+#~ msgid "Frame Settings for %1"
+#~ msgstr "%1 uchun freym moslamalari"
+
+#~ msgid "Gap size (%1):"
+#~ msgstr "Boʻshliqning oʻlchami (%1):"
+
+#, fuzzy
+#~ msgid "Table is inline"
+#~ msgstr "Jadval &uslubi"
+
+#~ msgid "Set new color on all selected frames"
+#~ msgstr "Tanlangan barcha freymlar uchun rang belgilash"
+
+#~ msgid "Transparent background"
+#~ msgstr "Shaffof orqa fon"
+
+#~ msgid "Background color:"
+#~ msgstr "Orqa fon rangi:"
+
+#~ msgid "Background style:"
+#~ msgstr "Orqa fon uslubi:"
+
+#, fuzzy
+#~ msgid "No Background Fill"
+#~ msgstr "Orqa fon"
+
+#~ msgid "Crossing Lines"
+#~ msgstr "Kesishgan chiziqlar"
+
+#~ msgid "Diagonal Lines ( / )"
+#~ msgstr "Diagonal chiziqlar ( / )"
+
+#~ msgid "Diagonal Lines ( \\ )"
+#~ msgstr "Diagonal chiziqlar ( \\ )"
+
+#~ msgid "Diagonal Crossing Lines"
+#~ msgstr "Diagonal kesishgan chiziqlar"
+
+#~ msgid "&Borders"
+#~ msgstr "Che&garalar"
+
+#~ msgid "St&yle:"
+#~ msgstr "Us&lubi:"
+
+#~ msgid "Co&lor:"
+#~ msgstr "&Rangi:"
+
+#~ msgid "Rename Frameset"
+#~ msgstr "Freym toʻplamining nomini oʻzgartirish"
+
+#~ msgid "Protect Content"
+#~ msgstr "Tarkibidagini himoyalash"
+
+#~ msgid ""
+#~ "The frame will not be resized because the new size would be greater than "
+#~ "the size of the page."
+#~ msgstr ""
+#~ "Freym oʻlchamini oʻzgartirib boʻlmaydi, chunki uning oʻlchami betning "
+#~ "oʻlchamidan oshadi."
+
+#, fuzzy
+#~ msgid "Make Frameset Inline"
+#~ msgstr "Asosiy matn freym toʻplami"
+
+#~ msgid "Resize Frame"
+#~ msgstr "Freymning oʻlchamini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Margin Frame"
+#~ msgstr "Freymning yuqori chegarasini oʻzgartirish"
+
+#~ msgid "Change Border"
+#~ msgstr "Chegarani oʻzgartirish"
+
+#~ msgid "Change Left Border Frame"
+#~ msgstr "Freymning chap chegarasini oʻzgartirish"
+
+#~ msgid "Change Right Border Frame"
+#~ msgstr "Freymning oʻng chegarasini oʻzgartirish"
+
+#~ msgid "Change Top Border Frame"
+#~ msgstr "Freymning yuqori chegarasini oʻzgartirish"
+
+#~ msgid "Change Bottom Border Frame"
+#~ msgstr "Freymning past chegarasini oʻzgartirish"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to reconnect the last frame of the frameset '%1'. The "
+#~ "contents of this frameset will be deleted.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Siz jadvalni oʻchirish arafasidasiz.\n"
+#~ "Agar davom etsangiz, jadvaldagi matn oʻchiriladi.\n"
+#~ "Davom etishga ishonchingiz komilmi?"
+
+#~ msgid "Reconnect Frame"
+#~ msgstr "Freymni qaytadan bogʻlash"
+
+#~ msgid "&Reconnect"
+#~ msgstr "Qay&tadan bogʻlash"
+
+#~ msgid ""
+#~ "<b>Synchronize changes:</b><br/>When this is checked any change in "
+#~ "margins will be used for all directions."
+#~ msgstr ""
+#~ "<b>Oʻzgarishlarni tenglashtirish:</b><br/>Agar belgilansa, chegaralardagi "
+#~ "hamma oʻzgarishlar barcha yoʻnalish boʻyicha qoʻllaniladi."
+
+#~ msgid "Frame Style Manager"
+#~ msgstr "Freym uslubi boshqaruvchisi"
+
+#~ msgid "Import From File..."
+#~ msgstr "Fayldan import qilish"
+
+#~ msgid "Frame background color:"
+#~ msgstr "Freymning orqa fon rangi:"
+
+#, fuzzy
+#~ msgid "Go to Footnote"
+#~ msgstr "Hujjatga oʻtish"
+
+#~ msgid "File name is empty."
+#~ msgstr "Faylning nomi koʻrsatilmagan."
+
+#~ msgid "File does not contain any styles. It may be the wrong version."
+#~ msgstr ""
+#~ "Faylda hech qanday uslub koʻrsatilmagan. Xato versiya boʻlishi mumkin."
+
+#~ msgid "This file is not a KWord file!"
+#~ msgstr "Bu fayl KWord fayli emas!"
+
+#~ msgid "Select style to import:"
+#~ msgstr "Import qilish uchun uslubni tanlang:"
+
+#~ msgid "Insert Row"
+#~ msgstr "Satrni qoʻyish"
+
+#~ msgid "Insert Column"
+#~ msgstr "Ustunni qoʻyish"
+
+#~ msgid "Insert New Row"
+#~ msgstr "Yangi satrni qoʻyish"
+
+#~ msgid "Insert New Column"
+#~ msgstr "Yangi ustunni qoʻyish"
+
+#~ msgid "Before"
+#~ msgstr "Oldin"
+
+#~ msgid "After"
+#~ msgstr "Keyin"
+
+#~ msgid "Row:"
+#~ msgstr "Satr:"
+
+#~ msgid "Column:"
+#~ msgstr "Ustun:"
+
+#~ msgid "Choose &Picture..."
+#~ msgstr "Rasmni &tanlash"
+
+#~ msgid "Choose Picture"
+#~ msgstr "Rasmni tanlash"
+
+#~ msgid "No plugins supporting the requested action were found."
+#~ msgstr "Talab qilingan amalni bajarish plagini mavjud emas."
+
+#~ msgid "Do you really want to replace the current datasource?"
+#~ msgstr "Joriy maʼlumotlar manbasini almashtirishni istaysizmi?"
+
+#~ msgid "&Available sources:"
+#~ msgstr "&Mavjud manbalar:"
+
+#~ msgid "Datasource:"
+#~ msgstr "Maʼlumotlar manbasi:"
+
+#~ msgid "Edit Current..."
+#~ msgstr "Joriyni tahrirlash"
+
+#~ msgid "Create New..."
+#~ msgstr "Yangini yaratish"
+
+#, fuzzy
+#~ msgid "Merging:"
+#~ msgstr "Boʻsh joylar"
+
+#~ msgid "Print Preview..."
+#~ msgstr "Koʻrib chiqish"
+
+#~ msgid "Create New Document"
+#~ msgstr "Yangi hujjatni yaratish"
+
+#~ msgid "Unnamed Table"
+#~ msgstr "Nomsiz jadval"
+
+#~ msgid "Object %1"
+#~ msgstr "Obʼekt %1"
+
+#~ msgid "Move/Resize Frame"
+#~ msgstr "Freymni koʻchirish/oʻlchamini oʻzgartirish"
+
+#~ msgid "Make Document External"
+#~ msgstr "Hujjatni tashqi hujjat qilish"
+
+#~ msgid "Make Document Internal"
+#~ msgstr "Hujjatni ichki hujjat qilish"
+
+#~ msgid "Picture %1"
+#~ msgstr "Rasm %1"
+
+#~ msgid "Sort Text"
+#~ msgstr "Matnni saralash"
+
+#~ msgid "Increase"
+#~ msgstr "Koʻpaytirish"
+
+#~ msgid "Decrease"
+#~ msgstr "Kamaytirish"
+
+#~ msgid "Split Cell"
+#~ msgstr "Katakni boʻlish"
+
+#~ msgid "Number of rows:"
+#~ msgstr "Satrlar soni:"
+
+#~ msgid "Number of columns:"
+#~ msgstr "Ustunlar soni:"
+
+#~ msgid "Selected Text"
+#~ msgstr "Belgilangan soʻz"
+
+#~ msgid "Counting..."
+#~ msgstr "Hisoblanmoqda..."
+
+#, fuzzy
+#~ msgid "Number of embedded objects:"
+#~ msgstr "Jadvallar soni:"
+
+#, fuzzy
+#~ msgid "Number of formula frameset:"
+#~ msgstr "Freymlar soni:"
+
+#~ msgid "Table Settings"
+#~ msgstr "Jadvalning moslamalari"
+
+#~ msgid "Cell heights:"
+#~ msgstr "Katakning boʻyi:"
+
+#~ msgid "Manual"
+#~ msgstr "Qoʻlbola"
+
+#~ msgid "Cell widths:"
+#~ msgstr "Katakning eni:"
+
+#, fuzzy
+#~ msgid "Reapply template to table"
+#~ msgstr "Namunani jadvalga qoʻllash"
+
+#~ msgid "Templates"
+#~ msgstr "Namunalar"
+
+#~ msgid "Add New Rows to Table"
+#~ msgstr "Jadvalga yangi satrlarni koʻshish"
+
+#~ msgid "Remove Rows From Table"
+#~ msgstr "Jadvaldan satrlarni oʻchirish"
+
+#~ msgid "Remove Row"
+#~ msgstr "Satrni oʻchirish"
+
+#~ msgid "Add New Columns to Table"
+#~ msgstr "Jadvalga yangi ustunlarni koʻshish"
+
+#~ msgid "Remove Columns From Table"
+#~ msgstr "Jadvaldan ustunlarni oʻchirish"
+
+#~ msgid "Remove Column"
+#~ msgstr "Ustunni oʻchirish"
+
+#~ msgid "Apply Template to Table"
+#~ msgstr "Namunani jadvalga qoʻllash"
+
+#~ msgid "Table Style Manager"
+#~ msgstr "Jadval uslubi boshqaruvchisi"
+
+#, fuzzy
+#~ msgid "Tablestyles preview"
+#~ msgstr "Jadval &uslubi"
+
+#~ msgid "Adjust"
+#~ msgstr "Moslash"
+
+#~ msgid "Textstyle:"
+#~ msgstr "Matnning uslubi:"
+
+#~ msgid "Change..."
+#~ msgstr "Oʻzgartirish"
+
+#~ msgid "&Customize"
+#~ msgstr "&Moslash"
+
+#~ msgid "Apply To"
+#~ msgstr "Qoʻllash"
+
+#~ msgid "First row"
+#~ msgstr "Birinchi satr"
+
+#~ msgid "Last row"
+#~ msgstr "Oxirgi satr"
+
+#, fuzzy
+#~ msgid "Body"
+#~ msgstr "Qal&in"
+
+#~ msgid "First column"
+#~ msgstr "Birinchi ustun"
+
+#~ msgid "Last column"
+#~ msgstr "Oxirgi ustun"
+
+#~ msgid "--- Frame Break ---"
+#~ msgstr "--- Freym ajratuvchisi ---"
+
+#~ msgid "Change Paragraph Attribute"
+#~ msgstr "Paragrafning atributini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Paste"
+#~ msgstr "Yoʻl"
+
+#~ msgid "Insert Table of Contents"
+#~ msgstr "Mundarijani qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Break After Paragraph"
+#~ msgstr "Xat boshi masofasini oshirish"
+
+#~ msgid "Insert Expression"
+#~ msgstr "Ifodani qoʻyish"
+
+#~ msgid "Insert Variable"
+#~ msgstr "Oʻzgaruvchini qoʻyish"
+
+#~ msgid "ERROR"
+#~ msgstr "XATO"
+
+#~ msgid "INSRT"
+#~ msgstr "QOʻYISH"
+
+#~ msgid "Select Frame"
+#~ msgstr "Freymni tanlash"
+
+#, fuzzy
+#~ msgid "Configure Mai&l Merge..."
+#~ msgstr "&Toʻldirishni moslash"
+
+#~ msgid "&Delete Frame"
+#~ msgstr "&Freymni oʻchirish"
+
+#~ msgid "Ra&ise Frame"
+#~ msgstr "Freym &oldinga"
+
+#~ msgid "&Lower Frame"
+#~ msgstr "Frey&m orqaga"
+
+#~ msgid "Text Mode"
+#~ msgstr "Matn usuli"
+
+#, fuzzy
+#~ msgid "Switch to page editing mode"
+#~ msgstr "Tahrirlash usuliga oʻtish."
+
+#~ msgid "Pre&view Mode"
+#~ msgstr "&Koʻrib chiqish usuli"
+
+#, fuzzy
+#~ msgid "Enable Document &Headers"
+#~ msgstr "Hujjatni tashqi hujjat qilish"
+
+#, fuzzy
+#~ msgid "Enable Document Foo&ters"
+#~ msgstr "Hujjatni tashqi hujjat qilish"
+
+#, fuzzy
+#~ msgid "Disable Document Foo&ters"
+#~ msgstr "Hujjatni tashqi hujjat qilish"
+
+#~ msgid "Sp&ecial Character..."
+#~ msgstr "&Maxsus belgi"
+
+#, fuzzy
+#~ msgid "&Hard Frame Break"
+#~ msgstr "--- Freym ajratuvchisi ---"
+
+#~ msgid "Link..."
+#~ msgstr "Bogʻ"
+
+#~ msgid "Comment..."
+#~ msgstr "Izoh"
+
+#, fuzzy
+#~ msgid "Insert a comment about the selected text"
+#~ msgstr "Tanlangan matn uchun izohni qoʻyish."
+
+#~ msgid "Edit Comment..."
+#~ msgstr "Izohni tahrirlash"
+
+#, fuzzy
+#~ msgid "Change the content of a comment"
+#~ msgstr "Izohni oʻzgartirish."
+
+#~ msgid "Change the content of a comment."
+#~ msgstr "Izohni oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Remove the selected document comment"
+#~ msgstr "Tanlangan hujjat izohini olib tashlash."
+
+#~ msgid "Remove the selected document comment."
+#~ msgstr "Tanlangan hujjat izohini olib tashlash."
+
+#~ msgid "Copy Text of Comment..."
+#~ msgstr "Izohdan nusxa olish"
+
+#, fuzzy
+#~ msgid "Insert a footnote referencing the selected text."
+#~ msgstr "Tanlangan matn uchun izohni qoʻyish."
+
+#~ msgid "Table of &Contents"
+#~ msgstr "&Mundarija"
+
+#~ msgid "Insert table of contents at the current cursor position."
+#~ msgstr "Kursordan boshlab mundarijani qoʻyish."
+
+#~ msgid "Document &Information"
+#~ msgstr "Hujjat &haqida maʼlumot"
+
+#~ msgid "&Date"
+#~ msgstr "Sa&na"
+
+#~ msgid "&Statistic"
+#~ msgstr "&Statistika"
+
+#~ msgid "&Custom"
+#~ msgstr "B&oshqa"
+
+#~ msgid "&Refresh All Variables"
+#~ msgstr "Hamma oʻzga&ruvchilarni yangilash"
+
+#~ msgid "&Expression"
+#~ msgstr "&Ifoda"
+
+#~ msgid "Te&xt Frame"
+#~ msgstr "Ma&tn freymi"
+
+#, fuzzy
+#~ msgid "Create a new text frame"
+#~ msgstr "Yangi matn freymini yaratish."
+
+#~ msgid "Create a new text frame."
+#~ msgstr "Yangi matn freymini yaratish."
+
+#~ msgid "For&mula"
+#~ msgstr "&Formula"
+
+#, fuzzy
+#~ msgid "Insert a formula into a new frame"
+#~ msgstr "Formulani yangi freymga qoʻyish."
+
+#~ msgid "Insert a formula into a new frame."
+#~ msgstr "Formulani yangi freymga qoʻyish."
+
+#~ msgid "&Table..."
+#~ msgstr "&Jadval"
+
+#, fuzzy
+#~ msgid "Create a new frame for a picture"
+#~ msgstr "Rasm uchun yangi freymni yaratish."
+
+#~ msgid "Create a new frame for a picture or diagram."
+#~ msgstr "Diagramma yoki rasm uchun yangi freym yaratish."
+
+#~ msgid "&Object Frame"
+#~ msgstr "&Obʼekt freymi"
+
+#, fuzzy
+#~ msgid "Insert an object into a new frame"
+#~ msgstr "Obʼektni yangi freymga qoʻyish."
+
+#~ msgid "Insert an object into a new frame."
+#~ msgstr "Obʼektni yangi freymga qoʻyish."
+
+#~ msgid "Fi&le..."
+#~ msgstr "Fay&l"
+
+#~ msgid "&Font..."
+#~ msgstr "&Shrift"
+
+#, fuzzy
+#~ msgid "Change the attributes of the currently selected characters."
+#~ msgstr "Tanlangan freymdagi rasmni oʻzgartirish."
+
+#~ msgid "&Paragraph..."
+#~ msgstr "&Paragraf"
+
+#~ msgid "&Frame Style Manager"
+#~ msgstr "Freym uslub &boshqaruvchisi"
+
+#, fuzzy
+#~ msgid "Change attributes of framestyles"
+#~ msgstr "Freym uslubning moslamalarini oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Change attributes of styles"
+#~ msgstr "Uslubning moslamalarini oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Font Size"
+#~ msgstr "Oʻlchamini himoyalash"
+
+#~ msgid "Increase Font Size"
+#~ msgstr "Shriftni kattalashtirish"
+
+#~ msgid "Decrease Font Size"
+#~ msgstr "Shriftni kichiklashtirish"
+
+#~ msgid "St&yle"
+#~ msgstr "&Uslub"
+
+#~ msgid "Default Format"
+#~ msgstr "Andoza format"
+
+#~ msgid "&Strike Out"
+#~ msgstr "U&sti chizilgan"
+
+#~ msgid "Align &Left"
+#~ msgstr "&Chapga tekislash"
+
+#~ msgid "Align &Center"
+#~ msgstr "&Markazga tekislash"
+
+#~ msgid "Align &Right"
+#~ msgstr "&Oʻngga tekislash"
+
+#, fuzzy
+#~ msgid "Align &Block"
+#~ msgstr "&Chapga tekislash"
+
+#~ msgid "Line Spacing &1"
+#~ msgstr "Satrlar orasidagi oraliq &1"
+
+#~ msgid "Line Spacing 1.&5"
+#~ msgstr "Satrlar orasidagi oraliq 1.&5"
+
+#~ msgid "Line Spacing &2"
+#~ msgstr "Satrlar orasidagi oraliq &2"
+
+#, fuzzy
+#~ msgid "Subscript"
+#~ msgstr "Mavzu"
+
+#, fuzzy
+#~ msgid "Increase Indent"
+#~ msgstr "Koʻpaytirish"
+
+#, fuzzy
+#~ msgid "Decrease Indent"
+#~ msgstr "Kamaytirish"
+
+#~ msgid "Text Color..."
+#~ msgstr "Matnning rangi"
+
+#~ msgid "Framest&yle"
+#~ msgstr "Frey&mning uslubi"
+
+#~ msgid "Border Left"
+#~ msgstr "Chap chegara"
+
+#~ msgid "Border Right"
+#~ msgstr "Oʻng chegara"
+
+#~ msgid "Border Top"
+#~ msgstr "Yuqori chegara"
+
+#~ msgid "Border Bottom"
+#~ msgstr "Pastgi chegara"
+
+#~ msgid "Border Style"
+#~ msgstr "Chegara uslubi"
+
+#~ msgid "Border Width"
+#~ msgstr "Chegara eni"
+
+#~ msgid "Border Color"
+#~ msgstr "Chegara rangi"
+
+#~ msgid "Text Background Color..."
+#~ msgstr "Matnning orqa fon rangi"
+
+#, fuzzy
+#~ msgid "Change background color for currently selected text"
+#~ msgstr "Belgilangan matnning orqa fon rangini oʻzgartirish."
+
+#~ msgid "Change background color for currently selected text."
+#~ msgstr "Belgilangan matnning orqa fon rangini oʻzgartirish."
+
+#~ msgid "&Properties"
+#~ msgstr "Xossa&lari"
+
+#, fuzzy
+#~ msgid "Adjust properties of the current table"
+#~ msgstr "Joriy jadvalning xossalarini moslash."
+
+#~ msgid "Adjust properties of the current table."
+#~ msgstr "Joriy jadvalning xossalarini moslash."
+
+#~ msgid "&Insert Row..."
+#~ msgstr "&Satrni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert one or more rows at cursor location"
+#~ msgstr "Kursordan boshlab bitta yoki bir nechta satr qoʻyish."
+
+#~ msgid "Insert one or more rows at current cursor location."
+#~ msgstr "Kursordan boshlab bitta yoki bir nechta satr qoʻyish."
+
+#~ msgid "I&nsert Column..."
+#~ msgstr "&Ustunni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert one or more columns into the current table"
+#~ msgstr "Joriy jadvalga bitta yoki bir nechta ustun qoʻyish."
+
+#~ msgid "Insert one or more columns into the current table."
+#~ msgstr "Joriy jadvalga bitta yoki bir nechta ustun qoʻyish."
+
+#, fuzzy
+#~ msgid "Delete selected rows from the current table"
+#~ msgstr "Joriy jadvaldan tanlangan satrlarni oʻchirish"
+
+#~ msgid "Delete selected rows from the current table."
+#~ msgstr "Joriy jadvaldan tanlangan satrlarni oʻchirish"
+
+#, fuzzy
+#~ msgid "Delete selected columns from the current table"
+#~ msgstr "Joriy jadvaldan tanlangan ustunlarni oʻchirish"
+
+#~ msgid "Delete selected columns from the current table."
+#~ msgstr "Joriy jadvaldan tanlangan ustunlarni oʻchirish"
+
+#~ msgid "Resize Column..."
+#~ msgstr "Ustunning oʻlchamini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change the width of the currently selected column"
+#~ msgstr "Tanlangan ustunning enini oʻzgartirish"
+
+#~ msgid "Change the width of the currently selected column."
+#~ msgstr "Tanlangan ustunning enini oʻzgartirish"
+
+#~ msgid "&Join Cells"
+#~ msgstr "Kataklarni &birlashtirish"
+
+#, fuzzy
+#~ msgid "Join two or more cells into one large cell"
+#~ msgstr ""
+#~ "Ikkita yoki bir nechta kataklarni bitta katta katakka birlashtirish."
+
+#~ msgid "&Split Cell..."
+#~ msgstr "Katak&ni boʻlish"
+
+#, fuzzy
+#~ msgid "Split one cell into two or more cells"
+#~ msgstr "Bitta katakni bir nechta kataklarga boʻlish."
+
+#~ msgid "Protect Cells"
+#~ msgstr "Kataklarni himoyalash"
+
+#, fuzzy
+#~ msgid "Prevent changes to content of selected cells"
+#~ msgstr "Tanlangan ustunning enini oʻzgartirish"
+
+#~ msgid "&Ungroup Table"
+#~ msgstr "Jadva&lni ajratish"
+
+#, fuzzy
+#~ msgid "Break a table into individual frames"
+#~ msgstr "Jadvalni alohida freymlarga boʻlish."
+
+#~ msgid "Delete &Table"
+#~ msgstr "Jad&valni oʻchirish"
+
+#, fuzzy
+#~ msgid "Delete the entire table"
+#~ msgstr "Butun jadvalni oʻchirish."
+
+#, fuzzy
+#~ msgid ""
+#~ "Deletes all cells and the content within the cells of the currently "
+#~ "selected table."
+#~ msgstr "Tanlangan matn asosida yangi uslub yaratish."
+
+#~ msgid "T&able Style Manager"
+#~ msgstr "Jad&val uslub boshqaruvchisi"
+
+#, fuzzy
+#~ msgid "Change attributes of tablestyles"
+#~ msgstr "Jadval uslublarining moslamalarini oʻzgartirish."
+
+#~ msgid "Table&style"
+#~ msgstr "Jadval &uslubi"
+
+#~ msgid "Convert Table to Text"
+#~ msgstr "Jadvalni matnga aylantirish"
+
+#~ msgid "Sort Text..."
+#~ msgstr "Matnni saralash"
+
+#~ msgid "Add Expression"
+#~ msgstr "Ifodani qoʻshish"
+
+#~ msgid "Enable Autocorrection"
+#~ msgstr "Avto-toʻgʻrilashni yoqish"
+
+#~ msgid "Disable Autocorrection"
+#~ msgstr "Avto-toʻgʻrilashni oʻchirish"
+
+#, fuzzy
+#~ msgid "Toggle autocorrection on and off"
+#~ msgstr "Avtomatik toʻgʻrilashni oʻchirish/yoqish."
+
+#~ msgid "Toggle autocorrection on and off."
+#~ msgstr "Avtomatik toʻgʻrilashni oʻchirish/yoqish."
+
+#~ msgid "Configure &Autocorrection..."
+#~ msgstr "Avto-toʻgʻ&rilashni moslash"
+
+#~ msgid "Custom &Variables..."
+#~ msgstr "&Boshqa oʻzgaruvchilar"
+
+#~ msgid "Edit &Personal Expressions..."
+#~ msgstr "Shaxsiy ifodalarni &tahrirlash"
+
+#, fuzzy
+#~ msgid "Change Case..."
+#~ msgstr "Oʻzgartirish"
+
+#~ msgid "Change Picture..."
+#~ msgstr "Rasmni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change the picture in the currently selected frame"
+#~ msgstr "Tanlangan freymdagi rasmni oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Configure Header/Footer..."
+#~ msgstr "Freymning chegarasini moslash"
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer"
+#~ msgstr "Tanlangan freymdagi rasmni oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Configure the currently selected header or footer."
+#~ msgstr "Tanlangan freymdagi rasmni oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Open the link with the appropriate application"
+#~ msgstr "Bogʻni mos keladigan dastur bilan ochish."
+
+#~ msgid "Change Link..."
+#~ msgstr "Bogʻni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected link"
+#~ msgstr "Tanlangan ustunning enini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change the details of the currently selected link."
+#~ msgstr "Tanlangan ustunning enini oʻzgartirish"
+
+#~ msgid "Copy Link"
+#~ msgstr "Bogʻdan nusxa olish"
+
+#~ msgid "Add to Bookmark"
+#~ msgstr "Xatchoʻpga qoʻshish"
+
+#~ msgid "Remove Link"
+#~ msgstr "Bogʻni olib tashlash"
+
+#~ msgid "Show Doc Structure"
+#~ msgstr "Hujjat tuzilishini koʻrsatish"
+
+#~ msgid "Hide Doc Structure"
+#~ msgstr "Hujjat tuzilishini bekitish"
+
+#, fuzzy
+#~ msgid "Open document structure sidebar"
+#~ msgstr "Hujjatning tuzilishi koʻrsatuvchi yon panelini koʻrsatish."
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Lineykalarni bekitish"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Toʻrni bekitish"
+
+#~ msgid "Configure C&ompletion..."
+#~ msgstr "&Toʻldirishni moslash"
+
+#, fuzzy
+#~ msgid "Change the words and options for autocompletion"
+#~ msgstr "Izohni oʻzgartirish."
+
+#~ msgid "Edit Variable..."
+#~ msgstr "Oʻzgaruvchini tahrirlash"
+
+#~ msgid "Apply Autocorrection"
+#~ msgstr "Avto-toʻgʻrilashni qoʻllash"
+
+#~ msgid "Create Style From Selection..."
+#~ msgstr "Tanlangandan uslub yaratish"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected text"
+#~ msgstr "Tanlangan matn asosida yangi uslub yaratish."
+
+#~ msgid "Create a new style based on the currently selected text."
+#~ msgstr "Tanlangan matn asosida yangi uslub yaratish."
+
+#, fuzzy
+#~ msgid "Change the look of footnotes"
+#~ msgstr "Izohni oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Change the look of footnotes."
+#~ msgstr "Izohni oʻzgartirish."
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote"
+#~ msgstr "Tanlangan ustunning enini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change the content of the currently selected footnote."
+#~ msgstr "Tanlangan ustunning enini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Footnote/Endnote Parameter"
+#~ msgstr "Freymning past chegarasini oʻzgartirish"
+
+#~ msgid "Save Picture As..."
+#~ msgstr "Rasmni saqlash"
+
+#, fuzzy
+#~ msgid "Save the picture in a separate file"
+#~ msgstr "Rasmni alohida faylga saqlash."
+
+#~ msgid ""
+#~ "Save the picture in the currently selected frame in a separate file, "
+#~ "outside the KWord document."
+#~ msgstr "Tanlangan freymdagi rasmni alohida faylga saqlash."
+
+#~ msgid "Autospellcheck"
+#~ msgstr "Imloni avto-tekshirish"
+
+#~ msgid "Show"
+#~ msgstr "Koʻrsatish"
+
+#~ msgid "&Create Framestyle From Frame..."
+#~ msgstr "Freymdan freym uslubini &yaratish"
+
+#, fuzzy
+#~ msgid "Create a new style based on the currently selected frame"
+#~ msgstr "Tanlangan freym asosida yangi uslub yaratish."
+
+#~ msgid "Create a new framestyle based on the currently selected frame."
+#~ msgstr "Tanlangan freym asosida yangi freym uslubini yaratish."
+
+#, fuzzy
+#~ msgid "Convert to Text Box"
+#~ msgstr "Jadvalni matnga aylantirish"
+
+#~ msgid "Ignore All"
+#~ msgstr "Hammasiga eʼtibor berilmasin"
+
+#~ msgid "Add Word to Dictionary"
+#~ msgstr "Soʻzni lugʻatga qoʻshish"
+
+#, fuzzy
+#~ msgid "Store Document Internally"
+#~ msgstr "Hujjatni ichki hujjat qilish"
+
+#~ msgid "Go to Document Structure"
+#~ msgstr "Hujjatning tuzilishiga oʻtish"
+
+#~ msgctxt "Statusbar info"
+#~ msgid "%1: %2, %3 - %4, %5 (width: %6, height: %7)"
+#~ msgstr "%1: %2, %3 - %4, %5 (eni: %6, uzunasi: %7)"
+
+#~ msgid "%1 frames selected"
+#~ msgstr "%1 ta freym belgilangan"
+
+#~ msgid "Frame Background Color..."
+#~ msgstr "Freymning orqa fon rangi"
+
+#~ msgid "Apply a paragraph style"
+#~ msgstr "Paragraf uslubini qoʻllash"
+
+#~ msgid "Apply a frame style"
+#~ msgstr "Uslubni freymga qoʻllash"
+
+#~ msgid "Apply a table style"
+#~ msgstr "Uslubni jadvalga qoʻllash"
+
+#~ msgid "Image"
+#~ msgstr "Rasm"
+
+#, fuzzy
+#~ msgid "Select paste format:"
+#~ msgstr "Import qilish uchun uslubni tanlang:"
+
+#~ msgid ""
+#~ "You are about to delete a table.\n"
+#~ "Doing so will delete all the text in the table.\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Siz jadvalni oʻchirish arafasidasiz.\n"
+#~ "Agar davom etsangiz, jadvaldagi matn oʻchiriladi.\n"
+#~ "Davom etishga ishonchingiz komilmi?"
+
+#~ msgid "Do you want to delete this frame?"
+#~ msgstr "Shu freymni oʻchirishni istaysizmi?"
+
+#, fuzzy
+#~ msgid "Change Custom Variable"
+#~ msgstr "Oʻzgaruvchini oʻzgartirish"
+
+#~ msgid "%1%"
+#~ msgstr "%1%"
+
+#, fuzzy
+#~ msgid "Insert Picture Inline"
+#~ msgstr "Rasmni qoʻyish"
+
+#, fuzzy
+#~ msgid "Insert Inline Frame"
+#~ msgstr "Rasmni qoʻyish"
+
+#~ msgid "Update Table of &Contents"
+#~ msgstr "Mundarijani &yangilash"
+
+#~ msgid "Change Font"
+#~ msgstr "Shriftni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Layout"
+#~ msgstr "Shriftni oʻzgartirish"
+
+#~ msgid "You must select a frame first."
+#~ msgstr "Avvalo, freymni tanlashingiz kerak."
+
+#, fuzzy
+#~ msgid "Format Frameset"
+#~ msgstr "Formula freymlari"
+
+#~ msgid "Insert Table"
+#~ msgstr "Jadvalni qoʻyish"
+
+#~ msgid "Insert Formula"
+#~ msgstr "Formulani qoʻyish"
+
+#~ msgid "Remove Rows"
+#~ msgstr "Satrlarni oʻchirish"
+
+#~ msgid "Remove Columns"
+#~ msgstr "Ustunlarni oʻchirish"
+
+#~ msgid "Adjust Table"
+#~ msgstr "Jadvalni moslash"
+
+#~ msgid "Join Cells Failed"
+#~ msgstr "Kataklarni birlashtirish muvaffaqiyatsiz tugadi"
+
+#~ msgid "Join Cells"
+#~ msgstr "Kataklarni birlashtirish"
+
+#~ msgid "Split Cells"
+#~ msgstr "Kataklarni boʻlish"
+
+#~ msgid "Ungroup Table"
+#~ msgstr "Jadvalni ajratish"
+
+#~ msgid "Apply Style to Frame"
+#~ msgstr "Uslubni freymga qoʻllash"
+
+#~ msgid "Apply Style to Frames"
+#~ msgstr "Uslubni freymlarga qoʻllash"
+
+#~ msgid "Apply Framestyle to Frame"
+#~ msgstr "Uslubni freymga qoʻllash"
+
+#~ msgid "Apply Framestyle to Frames"
+#~ msgstr "Uslubni freymlarga qoʻllash"
+
+#~ msgid "Apply Framestyle"
+#~ msgstr "Freym uslubini qoʻllash"
+
+#~ msgid "Apply Tablestyle to Frame"
+#~ msgstr "Jadval uslubini freymga qoʻllash"
+
+#~ msgid "Apply Tablestyle to Frames"
+#~ msgstr "Jadval uslubini freymlarga qoʻllash"
+
+#~ msgid "Change Text Size"
+#~ msgstr "Matnning oʻlchamini oʻzgartirish"
+
+#~ msgid "Change Text Font"
+#~ msgstr "Matnning shriftini oʻzgartirish"
+
+#~ msgid "Make Text Bold"
+#~ msgstr "Matnni qalin qilish"
+
+#~ msgid "Make Text Italic"
+#~ msgstr "Matnni qiya qilish"
+
+#~ msgid "Underline Text"
+#~ msgstr "Matnni tagidan chizish"
+
+#~ msgid "Strike Out Text"
+#~ msgstr "Matnni ustidan chizish"
+
+#~ msgid "Set Text Color"
+#~ msgstr "Matnning rangini koʻrsatish"
+
+#~ msgid "Center Text"
+#~ msgstr "Matnni oʻrtadan tekislash"
+
+#, fuzzy
+#~ msgid "Set Single Line Spacing"
+#~ msgstr "Satrlar orasidagi oraliq &2"
+
+#, fuzzy
+#~ msgid "Set Double Line Spacing"
+#~ msgstr "Satrlar orasidagi oraliq &2"
+
+#, fuzzy
+#~ msgid "Change List Type"
+#~ msgstr "Bogʻni oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Make Text Subscript"
+#~ msgstr "Matnni qiya qilish"
+
+#, fuzzy
+#~ msgid "Change Case of Text"
+#~ msgstr "Jadvalni matnga aylantirish"
+
+#~ msgid "Increase Paragraph Depth"
+#~ msgstr "Xat boshi masofasini oshirish"
+
+#~ msgid "Decrease Paragraph Depth"
+#~ msgstr "Xat boshi masofasini kamaytirish"
+
+#~ msgid "Change Top Frame Border"
+#~ msgstr "Freymning yuqori chegarasini oʻzgartirish"
+
+#~ msgid "Change Bottom Frame Border"
+#~ msgstr "Freymning past chegarasini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Tabulator"
+#~ msgstr "Oʻzgaruvchini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Indent"
+#~ msgstr "Shriftni oʻzgartirish"
+
+#~ msgid "Correct Misspelled Word"
+#~ msgstr "Notoʻgʻri yozilgan soʻzni toʻgʻrilash"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameter"
+#~ msgstr "Freymning past chegarasini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Change Endnote Parameter"
+#~ msgstr "Freymning past chegarasini oʻzgartirish"
+
+#~ msgid "D&elete Current Column..."
+#~ msgstr "J&oriy ustunni oʻchirish"
+
+#~ msgid "D&elete Selected Columns..."
+#~ msgstr "Belgilangan &ustunlarni oʻchirish"
+
+#~ msgid "&Delete Current Row..."
+#~ msgstr "Joriy sa&trni oʻchirish"
+
+#~ msgid "&Delete Selected Rows..."
+#~ msgstr "Belgilangan &satrlarni oʻchirish"
+
+#~ msgid "OVER"
+#~ msgstr "ALMASH"
+
+#~ msgid "Change Picture"
+#~ msgstr "Rasmni oʻzgartirish"
+
+#~ msgid "Save Picture"
+#~ msgstr "Rasmni saqlash"
+
+#~ msgid "Error during saving. Could not open '%1' for writing"
+#~ msgstr "Saqlash vaqtida xato roʻy berdi. '%1' faylini ochib boʻlmadi."
+
+#, fuzzy
+#~ msgid "Error during saving. Could not create temporary file."
+#~ msgstr ""
+#~ "Saqlash vaqtida xato roʻy berdi. '%1' vaqtincha faylini yaratib boʻlmadi."
+
+#~ msgid "URL %1 is invalid."
+#~ msgstr "URL %1 notoʻgʻri."
+
+#~ msgid "Move Frame"
+#~ msgstr "Freymni koʻchirish"
+
+#, fuzzy
+#~ msgid "Change Note Text"
+#~ msgstr "Matnning oʻlchamini oʻzgartirish"
+
+#~ msgid "Apply Autoformat"
+#~ msgstr "Avto-formatni qoʻllash"
+
+#, fuzzy
+#~ msgid "Change Footnote Parameters"
+#~ msgstr "Freymning past chegarasini oʻzgartirish"
+
+#~ msgid "Insert File"
+#~ msgstr "Fayldan qoʻyish"
+
+#~ msgid "File name is not a KWord file!"
+#~ msgstr "Faylning nomi KWord fayli emas!"
+
+#~ msgid "Normal"
+#~ msgstr "Oddiy"
+
+#~ msgid "Delete Frames"
+#~ msgstr "Freymlarni oʻchirish"
+
+#, fuzzy
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Moslamalarni saqlash"
+
+#~ msgid "&Polling interval:"
+#~ msgstr "&Soʻrov oraligʻi:"
+
+#~ msgid "Table %1"
+#~ msgstr "Jadval %1"
+
+#~ msgctxt ""
+#~ "Hello dear translator :), 1 is the table name, 2 and 3 are row and column"
+#~ msgid "%1 Cell %2,%3"
+#~ msgstr "%1 Katak %2,%3"
+
+#~ msgid "Font Family"
+#~ msgstr "Shrift oilasi"
+
+#~ msgid "Speak Text"
+#~ msgstr "Matnni tovush chiqazib oʻqish"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are about to delete the last Frame of the Frameset '%1'. The contents "
+#~ "of this Frameset will not appear anymore!\n"
+#~ "Are you sure you want to do that?"
+#~ msgstr ""
+#~ "Siz jadvalni oʻchirish arafasidasiz.\n"
+#~ "Agar davom etsangiz, jadvaldagi matn oʻchiriladi.\n"
+#~ "Davom etishga ishonchingiz komilmi?"
+
+#~ msgid "Error during saving. Could not open '%1' temporary file for writing"
+#~ msgstr ""
+#~ "Saqlash vaqtida xato roʻy berdi. '%1' vaqtincha faylini ochib boʻlmadi."

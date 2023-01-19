@@ -1,0 +1,2140 @@
+# translation of karbon.po to
+# Copyright (C) 2003, 2007 Free Software Foundation, Inc.
+# Usama Ahmed Ali <usama01@maktoob.com>, 2002.
+# Nuriddin Aminagha <nuriddin@haydarlinux.org>, 2003.
+# Youssef Chahibi <chahibi@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2007-10-14 16:03+0000\n"
+"Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
+"Language-Team: <en@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+msgctxt "(qtundo-format)"
+msgid "Boolean Operation"
+msgstr ""
+
+#. i18n: ectx: Menu (object_order)
+#: data/karbon.rc:16 data/karbon.rc:77
+#, kde-format
+msgid "&Order"
+msgstr "ت&رتيب"
+
+#. i18n: ectx: Menu (object_align)
+#: data/karbon.rc:23 data/karbon.rc:84
+#, fuzzy, kde-format
+msgid "&Align"
+msgstr "&محاذاة"
+
+#. i18n: ectx: Menu (file)
+#: data/karbon.rc:34
+#, fuzzy, kde-format
+msgid "&File"
+msgstr "&ملف"
+
+#. i18n: ectx: Menu (edit)
+#: data/karbon.rc:38 data/karbon_readonly.rc:11
+#, fuzzy, kde-format
+msgid "&Edit"
+msgstr "&حرّر"
+
+#. i18n: ectx: Menu (view)
+#: data/karbon.rc:52 data/karbon_readonly.rc:17
+#, fuzzy, kde-format
+msgid "&View"
+msgstr "ا&عرض"
+
+#. i18n: ectx: Menu (object)
+#: data/karbon.rc:74
+#, kde-format
+msgid "&Object"
+msgstr "&عنصر"
+
+#. i18n: ectx: Menu (object_distribute)
+#: data/karbon.rc:94
+#, fuzzy, kde-format
+msgid "&Distribute"
+msgstr "توزي&ع"
+
+#. i18n: ectx: Menu (path)
+#: data/karbon.rc:113
+#, kde-format
+msgid "&Path"
+msgstr "الم&سار"
+
+#. i18n: ectx: Menu (effects)
+#: data/karbon.rc:127
+#, fuzzy, kde-format
+msgid "Effe&cts"
+msgstr "ال&تأثيرات"
+
+#. i18n: ectx: Menu (settings)
+#: data/karbon.rc:129
+#, fuzzy, kde-format
+msgid "&Settings"
+msgstr "إ&عدادات"
+
+#. i18n: ectx: Menu (page)
+#: data/karbon.rc:137
+#, kde-format
+msgid "&Page"
+msgstr ""
+
+#. i18n: ectx: ToolBar (edit_toolbar)
+#: data/karbon.rc:150
+#, fuzzy, kde-format
+msgid "Edit"
+msgstr "تحرير"
+
+#. i18n: ectx: ToolBar (object_toolbar)
+#: data/karbon.rc:160
+#, fuzzy, kde-format
+msgid "Object"
+msgstr "كائن"
+
+#. i18n: ectx: ToolBar (align_toolbar)
+#: data/karbon.rc:169
+#, fuzzy, kde-format
+msgid "Align"
+msgstr "حاذي"
+
+#. i18n: ectx: ToolBar (Effects)
+#: data/karbon.rc:178
+#, kde-format
+msgid "Effects"
+msgstr "تأثيرات"
+
+#. i18n: ectx: ToolBar (view_toolbar)
+#: data/karbon_readonly.rc:25
+#, fuzzy, kde-format
+msgid "View"
+msgstr "عرض"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:52
+#, fuzzy, kde-format
+msgid "&Flatten Path..."
+msgstr "سطّح المسار."
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:90
+#, fuzzy, kde-format
+msgid "Flatten Path"
+msgstr "سطّح المسار"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:102
+#: plugins/refinepath/RefinePathPlugin.cpp:95
+#: plugins/roundcorners/RoundCornersPlugin.cpp:111
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:117
+#, fuzzy, kde-format
+msgid "Properties"
+msgstr "خصائص"
+
+#: plugins/flattenpath/FlattenPathPlugin.cpp:106
+#, kde-format
+msgid "Flatness:"
+msgstr "السطحية:"
+
+#: plugins/flattenpath/KarbonPathFlattenCommand.cpp:150
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Flatten path"
+msgstr "سطّح المسار"
+
+#: plugins/refinepath/KarbonPathRefineCommand.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Refine path"
+msgstr "حَسِّن المسار"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:51
+#, fuzzy, kde-format
+msgid "&Refine Path..."
+msgstr "حَسِّن المسار."
+
+#: plugins/refinepath/RefinePathPlugin.cpp:87
+#, fuzzy, kde-format
+msgid "Refine Path"
+msgstr "حَسِّن المسار"
+
+#: plugins/refinepath/RefinePathPlugin.cpp:99
+#, fuzzy, kde-format
+msgid "Subdivisions:"
+msgstr "تجزئة الجزء:"
+
+#: plugins/roundcorners/RoundCornersCommand.cpp:28
+#: plugins/roundcorners/RoundCornersPlugin.cpp:82
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Round Corners"
+msgstr "تدوير الحواف"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:53
+#, fuzzy, kde-format
+msgid "&Round Corners..."
+msgstr "دائري الزوايا."
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:99
+#, kde-format
+msgid "Round Corners"
+msgstr "تدوير الحواف"
+
+#: plugins/roundcorners/RoundCornersPlugin.cpp:115
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:133
+#, kde-format
+msgid "Radius:"
+msgstr "نصف القطر:"
+
+#: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Whirl & pinch"
+msgstr "دوامة"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
+#, fuzzy, kde-format
+msgid "&Whirl/Pinch..."
+msgstr "الدوران القرصة."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
+#, kde-format
+msgid "Whirl Pinch"
+msgstr "دوامة"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
+#, fuzzy, kde-format
+msgid "Info"
+msgstr "معلومات"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:107
+#, fuzzy, kde-format
+msgid ""
+"The result of the Whirlpinch effect can be improved by refining the path "
+"shape beforehand."
+msgstr "الـ نتيجو من تأثير أداء المسار شكل."
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:121
+#, kde-format
+msgid "Angle:"
+msgstr "زاوية:"
+
+#: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
+#, kde-format
+msgid "Pinch:"
+msgstr "القرص:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:24
+#: ui/commands/KarbonLayerReorderCommand.cpp:33
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Raise Layer"
+msgstr "طبقات:"
+
+#: ui/commands/KarbonLayerReorderCommand.cpp:26
+#: ui/commands/KarbonLayerReorderCommand.cpp:35
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Lower Layer"
+msgstr "طبقات:"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:32
+#, fuzzy, kde-format
+msgid "Configure"
+msgstr "اضبط"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:43
+#: ui/dialogs/KarbonConfigureDialog.cpp:44
+#: ui/widgets/KarbonConfigInterfacePage.cpp:41
+#, kde-format
+msgid "Interface"
+msgstr "الواجهة"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:48
+#: ui/dialogs/KarbonConfigureDialog.cpp:49
+#, kde-format
+msgid "Misc"
+msgstr "متنوع"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:53
+#: ui/dialogs/KarbonConfigureDialog.cpp:54
+#, fuzzy, kde-format
+msgid "Grid"
+msgstr "الشبكة"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:60
+#, fuzzy, kde-format
+msgctxt "@title:tab Document settings page"
+msgid "Document"
+msgstr "مستند"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:61
+#, kde-format
+msgid "Document Settings"
+msgstr "خصائص المستند"
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:65
+#, kde-format
+msgctxt "@title:tab Author page"
+msgid "Author"
+msgstr ""
+
+#: ui/dialogs/KarbonConfigureDialog.cpp:66
+#, kde-format
+msgid "Author"
+msgstr ""
+
+#: ui/KarbonAboutData.h:22
+#, kde-format
+msgid "Karbon"
+msgstr ""
+
+#: ui/KarbonAboutData.h:24
+#, kde-format
+msgid "A Vector Graphics Drawing Application."
+msgstr ""
+
+#: ui/KarbonAboutData.h:26
+#, kde-format
+msgid "(c) 2001-%1, The Karbon Developers"
+msgstr ""
+
+#: ui/KarbonAboutData.h:34
+#, kde-format
+msgid "Anthony Fieroni"
+msgstr ""
+
+#: ui/KarbonAboutData.h:35
+#, kde-format
+msgid "Maintainer"
+msgstr ""
+
+#: ui/KarbonAboutData.h:38
+#, kde-format
+msgid "Rob Buis"
+msgstr ""
+
+#: ui/KarbonAboutData.h:42
+#, kde-format
+msgid "Tomislav Lukman"
+msgstr ""
+
+#: ui/KarbonAboutData.h:46
+#, kde-format
+msgid "Benoît Vautrin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:50
+#, kde-format
+msgid "Jan Hambrecht"
+msgstr ""
+
+#: ui/KarbonAboutData.h:51 ui/KarbonAboutData.h:55 ui/KarbonAboutData.h:59
+#: ui/KarbonAboutData.h:63 ui/KarbonAboutData.h:67
+#, kde-format
+msgid "Bug fixes and improvements"
+msgstr ""
+
+#: ui/KarbonAboutData.h:54
+#, kde-format
+msgid "Peter Simonsson"
+msgstr ""
+
+#: ui/KarbonAboutData.h:58
+#, kde-format
+msgid "Tim Beaulen"
+msgstr ""
+
+#: ui/KarbonAboutData.h:62
+#, kde-format
+msgid "Boudewijn Rempt"
+msgstr ""
+
+#: ui/KarbonAboutData.h:66
+#, kde-format
+msgid "Pierre Stirnweiss"
+msgstr ""
+
+#: ui/KarbonAboutData.h:70
+#, kde-format
+msgid "Inge Wallin"
+msgstr ""
+
+#: ui/KarbonAboutData.h:71
+#, kde-format
+msgid "Bug fixes"
+msgstr ""
+
+#: ui/KarbonAboutData.h:74
+#, kde-format
+msgid "Alan Horkan"
+msgstr ""
+
+#: ui/KarbonAboutData.h:75
+#, kde-format
+msgid "Helpful patches and advice"
+msgstr ""
+
+#. i18n translator strings
+#: ui/KarbonAboutData.h:78
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Mohamed Aser(محمد عَصَر)"
+
+#: ui/KarbonAboutData.h:79
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "aser@arabeyes.org"
+
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Insert graphics"
+msgstr "ادخل منحنى جيبي"
+
+#: ui/KarbonView.cpp:346
+#, fuzzy, kde-format
+msgid "Choose Graphic to Add"
+msgstr "تدرج"
+
+#: ui/KarbonView.cpp:381
+#, kde-format
+msgid "Could not load image."
+msgstr ""
+
+#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, fuzzy, kde-format
+msgid "Import graphic"
+msgstr "استيراد رسم."
+
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#, kde-format
+msgid "Could not create image shape."
+msgstr ""
+
+#: ui/KarbonView.cpp:612
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally"
+msgstr "أفقي:"
+
+#: ui/KarbonView.cpp:614
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Vertically"
+msgstr "أفقي:"
+
+#: ui/KarbonView.cpp:616
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Mirror Horizontally and Vertically"
+msgstr "أفقي:"
+
+#: ui/KarbonView.cpp:671
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Separate paths"
+msgstr "منفصل المسار"
+
+#: ui/KarbonView.cpp:852
+#, kde-format
+msgid "Outline &Mode"
+msgstr ""
+
+#: ui/KarbonView.cpp:860
+#, fuzzy, kde-format
+msgid "&Import Graphic..."
+msgstr "استيراد رسم."
+
+#: ui/KarbonView.cpp:864
+#, fuzzy, kde-format
+msgid "Edit Guides"
+msgstr "إخفاء الشبكة"
+
+#: ui/KarbonView.cpp:870
+#, fuzzy, kde-format
+msgctxt "Duplicate selection"
+msgid "&Duplicate"
+msgstr "م&ضاعفة"
+
+#: ui/KarbonView.cpp:875
+#, fuzzy, kde-format
+msgid "Distribute Center (Horizontal)"
+msgstr "توزيع وسط أفقي"
+
+#: ui/KarbonView.cpp:879
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Horizontal)"
+msgstr "توزيع فراغات أفقي"
+
+#: ui/KarbonView.cpp:883
+#, fuzzy, kde-format
+msgid "Distribute Left Borders"
+msgstr "توزيع يسار الحدود"
+
+#: ui/KarbonView.cpp:887
+#, fuzzy, kde-format
+msgid "Distribute Right Borders"
+msgstr "توزيع يمين الحدود"
+
+#: ui/KarbonView.cpp:891
+#, fuzzy, kde-format
+msgid "Distribute Center (Vertical)"
+msgstr "توزيع وسط رأسي"
+
+#: ui/KarbonView.cpp:895
+#, fuzzy, kde-format
+msgid "Distribute Gaps (Vertical)"
+msgstr "توزيع فراغات رأسي"
+
+#: ui/KarbonView.cpp:899
+#, fuzzy, kde-format
+msgid "Distribute Bottom Borders"
+msgstr "توزيع أسفل الحدود"
+
+#: ui/KarbonView.cpp:903
+#, fuzzy, kde-format
+msgid "Distribute Top Borders"
+msgstr "توزيع أعلى الحدود"
+
+#: ui/KarbonView.cpp:907
+#, fuzzy, kde-format
+msgid "Show Color Palette"
+msgstr "المعارض أو"
+
+#: ui/KarbonView.cpp:909
+#, fuzzy, kde-format
+msgid "Show or hide color palette"
+msgstr "المعارض أو"
+
+#: ui/KarbonView.cpp:913
+#, fuzzy, kde-format
+msgid "&Clip Object"
+msgstr "&عنصر"
+
+#: ui/KarbonView.cpp:917
+#, fuzzy, kde-format
+msgid "&Unclip Objects"
+msgstr "تفرقة ال&عناصر"
+
+#: ui/KarbonView.cpp:921
+#, fuzzy, kde-format
+msgid "Mirror Vertically"
+msgstr "أفقي:"
+
+#: ui/KarbonView.cpp:925
+#, fuzzy, kde-format
+msgid "Mirror Horizontally"
+msgstr "أفقي:"
+
+#: ui/KarbonView.cpp:932
+#, fuzzy, kde-format
+msgid "&Close Path"
+msgstr "إغلاق المسار"
+
+#: ui/KarbonView.cpp:938
+#, fuzzy, kde-format
+msgid "Com&bine Path"
+msgstr "دمج المسار"
+
+#: ui/KarbonView.cpp:944
+#, fuzzy, kde-format
+msgid "Se&parate Path"
+msgstr "منفصل المسار"
+
+#: ui/KarbonView.cpp:950
+#, fuzzy, kde-format
+msgid "Re&verse Path"
+msgstr "إغلاق المسار"
+
+#: ui/KarbonView.cpp:956
+#, fuzzy, kde-format
+msgid "Intersect Paths"
+msgstr "تقاطع مسارات"
+
+#: ui/KarbonView.cpp:962
+#, fuzzy, kde-format
+msgid "Subtract Paths"
+msgstr "تقاطع مسارات"
+
+#: ui/KarbonView.cpp:968
+#, fuzzy, kde-format
+msgid "Unite Paths"
+msgstr "إتّحد مسارات"
+
+#: ui/KarbonView.cpp:974
+#, kde-format
+msgid "Exclude Paths"
+msgstr ""
+
+#: ui/KarbonView.cpp:980
+#, fuzzy, kde-format
+msgid "Snap Path to Grid"
+msgstr "انطباق على الشبكة"
+
+#: ui/KarbonView.cpp:988
+#, kde-format
+msgid "Zoom to Selection"
+msgstr ""
+
+#: ui/KarbonView.cpp:992
+#, kde-format
+msgid "Zoom to Drawing"
+msgstr ""
+
+#: ui/KarbonZoomController.cpp:51
+#, fuzzy, kde-format
+msgid "Zoom"
+msgstr "محاذاة للأسفل"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:58
+#, fuzzy, kde-format
+msgid "Show status bar:"
+msgstr "اظهار شريط الحالة"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:64
+#, fuzzy, kde-format
+msgid "Number of recent files:"
+msgstr "الرقم من ملفات:"
+
+#: ui/widgets/KarbonConfigInterfacePage.cpp:70
+#, fuzzy, kde-format
+msgid "Palette font size:"
+msgstr "لوحة الخط حجم:"
+
+#: ui/widgets/KarbonPaletteBarWidget.cpp:48
+#, kde-format
+msgid "Select palette"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:42
+#, kde-format
+msgid "Press to apply fill to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:82
+#, fuzzy, kde-format
+msgctxt "The style has no fill"
+msgid "None"
+msgstr "لا شيئ"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:100
+#, kde-format
+msgid "Press to apply stroke to selection"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:145
+#, kde-format
+msgctxt "The style has a custom stroking"
+msgid "Custom"
+msgstr ""
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:151
+#, fuzzy, kde-format
+msgctxt "The style has no stroking"
+msgid "None"
+msgstr "لا شيئ"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:171
+#, fuzzy, kde-format
+msgid "Stroke:"
+msgstr "شطب"
+
+#: ui/widgets/KarbonSmallStylePreview.cpp:176
+#, fuzzy, kde-format
+msgid "Fill:"
+msgstr "تعبئة"
+
+#~ msgid "D&elete"
+#~ msgstr "م&سح"
+
+#, fuzzy
+#~ msgid "Layer view"
+#~ msgstr "طبقات:"
+
+#, fuzzy
+#~ msgid "Add a new layer"
+#~ msgstr "طبقات:"
+
+#, fuzzy
+#~ msgid "Delete selected objects"
+#~ msgstr "مضاعفة كائنات"
+
+#, fuzzy
+#~ msgid "Raise selected objects"
+#~ msgstr "إزاحة العناصر"
+
+#, fuzzy
+#~ msgid "Lower selected objects"
+#~ msgstr "إزاحة العناصر"
+
+#, fuzzy
+#~ msgid "View mode"
+#~ msgstr "عرض"
+
+#, fuzzy
+#~ msgid "New Layer"
+#~ msgstr "طبقات:"
+
+#, fuzzy
+#~ msgid "New layer"
+#~ msgstr "طبقات:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Create Layer"
+#~ msgstr "إنشاء ظل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete Layer"
+#~ msgstr "احذف"
+
+#, fuzzy
+#~ msgid "Layer"
+#~ msgstr "طبقات:"
+
+#, fuzzy
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "المجموعة"
+
+#, fuzzy
+#~ msgid "Shape"
+#~ msgstr "تكلّم"
+
+#, fuzzy
+#~ msgctxt "The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "عتمة"
+
+#, fuzzy
+#~ msgid "no"
+#~ msgstr "معلومات"
+
+#, fuzzy
+#~ msgid "yes"
+#~ msgstr "نمط:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Reparent shapes"
+#~ msgstr "المجموعة"
+
+#, fuzzy
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "غير صحيح مستند لا المتن بطاقة موجود."
+
+#, fuzzy
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "غير صحيح مستند لا بطاقة موجود."
+
+#, fuzzy
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "غير صحيح مستند لا رسم صفحة بطاقة موجود."
+
+#, fuzzy
+#~ msgid "Show Page Margins"
+#~ msgstr "إظهار هوامش الصفحة"
+
+#, fuzzy
+#~ msgid "Show Rulers"
+#~ msgstr "أظهر المسطرة"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "المعارض أو"
+
+#, fuzzy
+#~ msgid "Snap to Grid"
+#~ msgstr "انطباق على الشبكة"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "الطقّات إلى"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "إعداد كاربون..."
+
+#, fuzzy
+#~ msgid "Page &Layout..."
+#~ msgstr "صفحة التصميم."
+
+#, fuzzy
+#~| msgid "&Order"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Order"
+#~ msgstr "ت&رتيب"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Align"
+#~ msgstr "&محاذاة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&File"
+#~ msgstr "&ملف"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Edit"
+#~ msgstr "&حرّر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&View"
+#~ msgstr "ا&عرض"
+
+#, fuzzy
+#~| msgid "&Object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Object"
+#~ msgstr "&عنصر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Distribute"
+#~ msgstr "توزي&ع"
+
+#, fuzzy
+#~| msgid "&Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Path"
+#~ msgstr "الم&سار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effe&cts"
+#~ msgstr "ال&تأثيرات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Settings"
+#~ msgstr "إ&عدادات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit"
+#~ msgstr "تحرير"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Object"
+#~ msgstr "كائن"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Align"
+#~ msgstr "حاذي"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "تأثيرات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View"
+#~ msgstr "عرض"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Flatten Path..."
+#~ msgstr "سطّح المسار."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatten Path"
+#~ msgstr "سطّح المسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Properties"
+#~ msgstr "خصائص"
+
+#, fuzzy
+#~| msgid "Flatness:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Flatness:"
+#~ msgstr "السطحية:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Refine Path..."
+#~ msgstr "حَسِّن المسار."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Refine Path"
+#~ msgstr "حَسِّن المسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subdivisions:"
+#~ msgstr "تجزئة الجزء:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Round Corners..."
+#~ msgstr "دائري الزوايا."
+
+#, fuzzy
+#~| msgid "Radius:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Radius:"
+#~ msgstr "نصف القطر:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "الدوران القرصة."
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Whirl Pinch"
+#~ msgstr "دوامة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Info"
+#~ msgstr "معلومات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The result of the Whirlpinch effect can be improved by refining the path "
+#~ "shape beforehand."
+#~ msgstr "الـ نتيجو من تأثير أداء المسار شكل."
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "زاوية:"
+
+#, fuzzy
+#~| msgid "Pinch:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pinch:"
+#~ msgstr "القرص:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure"
+#~ msgstr "اضبط"
+
+#, fuzzy
+#~| msgid "Interface"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Interface"
+#~ msgstr "الواجهة"
+
+#, fuzzy
+#~| msgid "Misc"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Misc"
+#~ msgstr "متنوع"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Grid"
+#~ msgstr "الشبكة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) @title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "مستند"
+
+#, fuzzy
+#~| msgid "Document Settings"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Document Settings"
+#~ msgstr "خصائص المستند"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Delete selected objects"
+#~ msgstr "مضاعفة كائنات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Raise selected objects"
+#~ msgstr "إزاحة العناصر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Lower selected objects"
+#~ msgstr "إزاحة العناصر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View mode"
+#~ msgstr "عرض"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "New Layer"
+#~ msgstr "طبقات:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Layer"
+#~ msgstr "طبقات:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) A group of shapes"
+#~ msgid "Group"
+#~ msgstr "المجموعة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape"
+#~ msgstr "تكلّم"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) The opacity of the shape"
+#~ msgid "Opacity"
+#~ msgstr "عتمة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "no"
+#~ msgstr "معلومات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "yes"
+#~ msgstr "نمط:"
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Mohamed Aser(محمد عَصَر)"
+
+#, fuzzy
+#~| msgctxt "EMAIL OF TRANSLATORS"
+#~| msgid "Your emails"
+#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "aser@arabeyes.org"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "غير صحيح مستند لا المتن بطاقة موجود."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "غير صحيح مستند لا بطاقة موجود."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "غير صحيح مستند لا رسم صفحة بطاقة موجود."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "تدرج"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Import graphic"
+#~ msgstr "استيراد رسم."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Page Margins"
+#~ msgstr "إظهار هوامش الصفحة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Import Graphic..."
+#~ msgstr "استيراد رسم."
+
+#, fuzzy
+#~| msgid "D&elete"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "D&elete"
+#~ msgstr "م&سح"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Guides"
+#~ msgstr "إخفاء الشبكة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "م&ضاعفة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "توزيع وسط أفقي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "توزيع فراغات أفقي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Left Borders"
+#~ msgstr "توزيع يسار الحدود"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Right Borders"
+#~ msgstr "توزيع يمين الحدود"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "توزيع وسط رأسي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "توزيع فراغات رأسي"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "توزيع أسفل الحدود"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Distribute Top Borders"
+#~ msgstr "توزيع أعلى الحدود"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show Rulers"
+#~ msgstr "أظهر المسطرة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shows or hides rulers"
+#~ msgstr "المعارض أو"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show or hide color palette"
+#~ msgstr "المعارض أو"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap to Grid"
+#~ msgstr "انطباق على الشبكة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snaps to grid"
+#~ msgstr "الطقّات إلى"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Clip Object"
+#~ msgstr "&عنصر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Unclip Objects"
+#~ msgstr "تفرقة ال&عناصر"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Close Path"
+#~ msgstr "إغلاق المسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Com&bine Path"
+#~ msgstr "دمج المسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Se&parate Path"
+#~ msgstr "منفصل المسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Re&verse Path"
+#~ msgstr "إغلاق المسار"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Intersect Paths"
+#~ msgstr "تقاطع مسارات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Subtract Paths"
+#~ msgstr "تقاطع مسارات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Unite Paths"
+#~ msgstr "إتّحد مسارات"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Snap Path to Grid"
+#~ msgstr "انطباق على الشبكة"
+
+#, fuzzy
+#~| msgid "Configure Karbon..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Configure Karbon..."
+#~ msgstr "إعداد كاربون..."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Page &Layout..."
+#~ msgstr "صفحة التصميم."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Zoom"
+#~ msgstr "محاذاة للأسفل"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Show status bar:"
+#~ msgstr "اظهار شريط الحالة"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number of recent files:"
+#~ msgstr "الرقم من ملفات:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Palette font size:"
+#~ msgstr "لوحة الخط حجم:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) The style has no fill"
+#~ msgid "None"
+#~ msgstr "لا شيئ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format) The style has no stroking"
+#~ msgid "None"
+#~ msgstr "لا شيئ"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stroke:"
+#~ msgstr "شطب"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill:"
+#~ msgstr "تعبئة"
+
+#, fuzzy
+#~ msgid "List View"
+#~ msgstr "عرض"
+
+#, fuzzy
+#~ msgid "Icon View"
+#~ msgstr "عرض"
+
+#, fuzzy
+#~ msgid "File to open"
+#~ msgstr "الملف المراد فتحه"
+
+#, fuzzy
+#~ msgid "Blend"
+#~ msgstr "غليظ"
+
+#, fuzzy
+#~ msgid "Blend mode"
+#~ msgstr "عرض"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "الهيئة:"
+
+#, fuzzy
+#~ msgid "Lighten"
+#~ msgstr "الارتفاع:"
+
+#, fuzzy
+#~ msgid "Radius"
+#~ msgstr "نصف القطر:"
+
+#, fuzzy
+#~ msgid "Saturate colors"
+#~ msgstr "شطب اللون"
+
+#, fuzzy
+#~ msgid "Rotate hue"
+#~ msgstr "تدوير العنصر"
+
+#, fuzzy
+#~ msgid "Angle"
+#~ msgstr "زاوية:"
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "&ملف"
+
+#, fuzzy
+#~ msgid "Discrete"
+#~ msgstr "توزي&ع"
+
+#, fuzzy
+#~ msgid "Linear"
+#~ msgstr "طولي"
+
+#, fuzzy
+#~ msgid "Slope"
+#~ msgstr "تكلّم"
+
+#, fuzzy
+#~ msgid "Intercept"
+#~ msgstr "الواجهة"
+
+#, fuzzy
+#~ msgid "Offset"
+#~ msgstr "اوفسيت"
+
+#, fuzzy
+#~ msgid "Composite"
+#~ msgstr "المكونات"
+
+#, fuzzy
+#~ msgid "Duplicate"
+#~ msgstr "م&ضاعفة"
+
+#, fuzzy
+#~ msgid "Edge mode:"
+#~ msgstr "عرض"
+
+#, fuzzy
+#~ msgid "Target point:"
+#~ msgstr "الهدف:"
+
+#, fuzzy
+#~ msgid "Bias:"
+#~ msgstr "غطاء"
+
+#, fuzzy
+#~ msgid "Edit kernel"
+#~ msgstr "أنماط"
+
+#, fuzzy
+#~ msgid "Flood color"
+#~ msgstr "شطب اللون"
+
+#, fuzzy
+#~ msgid "Image"
+#~ msgstr "صورة"
+
+#, fuzzy
+#~ msgid "Dilate"
+#~ msgstr "م&ضاعفة"
+
+#, fuzzy
+#~ msgid "Operator:"
+#~ msgstr "تكرار:"
+
+#, fuzzy
+#~ msgid "Radius x:"
+#~ msgstr "نصف القطر:"
+
+#, fuzzy
+#~ msgid "Radius y:"
+#~ msgstr "نصف القطر:"
+
+#~ msgid "Target:"
+#~ msgstr "الهدف:"
+
+#, fuzzy
+#~ msgid "Line"
+#~ msgstr "طولي"
+
+#~ msgid "Fill"
+#~ msgstr "تعبئة"
+
+#~ msgid "Type:"
+#~ msgstr "النوع:"
+
+#, fuzzy
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "طولي"
+
+#, fuzzy
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "دائري"
+
+#, fuzzy
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "مخروطي"
+
+#~ msgid "Repeat:"
+#~ msgstr "تكرار:"
+
+#, fuzzy
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "لا شيئ"
+
+#~ msgid "Reflect"
+#~ msgstr "انعكاس"
+
+#~ msgid "Repeat"
+#~ msgstr "تكرار"
+
+#, fuzzy
+#~ msgid "Overall opacity:"
+#~ msgstr "عموما عتامة:"
+
+#, fuzzy
+#~ msgid "Stop color."
+#~ msgstr "شطب اللون"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "ا&ضف للتدرجات المحددة مسبقاً"
+
+#, fuzzy
+#~ msgid "Tiled"
+#~ msgstr "&ملف"
+
+#, fuzzy
+#~ msgid "Top Left"
+#~ msgstr "يسار"
+
+#, fuzzy
+#~ msgid "Top Right"
+#~ msgstr "محاذاة إلى اليمين"
+
+#, fuzzy
+#~ msgid "Left"
+#~ msgstr "يسار"
+
+#, fuzzy
+#~ msgid "Center"
+#~ msgstr "وسط"
+
+#, fuzzy
+#~ msgid "Right"
+#~ msgstr "الارتفاع:"
+
+#, fuzzy
+#~ msgid "Bottom"
+#~ msgstr "محاذاة للأسفل"
+
+#~ msgid "Stroke"
+#~ msgstr "شطب"
+
+#, fuzzy
+#~ msgid "Hide Page Margins"
+#~ msgstr "إخفاء صفحة الحواشي"
+
+#, fuzzy
+#~ msgid "Hide Rulers"
+#~ msgstr "إخفاء سطور"
+
+#, fuzzy
+#~ msgid "Stop color:"
+#~ msgstr "شطب اللون"
+
+#, fuzzy
+#~ msgid "Copy offset:"
+#~ msgstr "نسخ:"
+
+#, fuzzy
+#~ msgid "Show Guides"
+#~ msgstr "أظهر الشبيكة"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "المعارض أو"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "لا شيئ"
+
+#, fuzzy
+#~| msgid "Bold"
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "غليظ"
+
+#~ msgid "Gradient"
+#~ msgstr "تدرج"
+
+#, fuzzy
+#~| msgid "Patterns"
+#~ msgid "Pattern"
+#~ msgstr "أنماط"
+
+#~ msgid "Units:"
+#~ msgstr "وحدات:"
+
+#, fuzzy
+#~| msgid "Inner radius:"
+#~ msgid "Handle radius:"
+#~ msgstr "نصف القطر الداخلي:"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "تفكيك"
+
+#~ msgid "&Group Objects"
+#~ msgstr "تج&ميع العناصر"
+
+#, fuzzy
+#~ msgid "Show grid:"
+#~ msgstr "أظهر الش&بكة"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "الطقّات إلى"
+
+#, fuzzy
+#~ msgid "Grid color:"
+#~ msgstr "الشبكة اللّون:"
+
+#, fuzzy
+#~ msgid "Spacing"
+#~ msgstr "التباعد"
+
+#, fuzzy
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "عمودي"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "حفظ تلقائي (دقيقة):"
+
+#~ msgid "No auto save"
+#~ msgstr "لا حفظ تلقائي"
+
+#~ msgid "min"
+#~ msgstr "دقيقة"
+
+#, fuzzy
+#~ msgid "Create backup file"
+#~ msgstr "إنشاء احتياطي ملفّ"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "تدرج"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "مرجع"
+
+#~ msgid "X:"
+#~ msgstr "س:"
+
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "Patterns"
+#~ msgid "Pattern Size"
+#~ msgstr "أنماط"
+
+#, fuzzy
+#~ msgid "H:"
+#~ msgstr "أفقي:"
+
+#~ msgid "Edit Gradient"
+#~ msgstr "تحرير التدرج"
+
+#~ msgid "Predefined Gradients"
+#~ msgstr "تدرجات محددة مسبقا"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Gradient tool"
+#~ msgstr "تدرج"
+
+#, fuzzy
+#~| msgid "Patterns"
+#~ msgid "Pattern tool"
+#~ msgstr "أنماط"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "الموقع:"
+
+#, fuzzy
+#~ msgid "Straight"
+#~ msgstr "يمين"
+
+#, fuzzy
+#~| msgid "Flatness:"
+#~ msgid "Exactness:"
+#~ msgstr "السطحية:"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "داخلي زاوية:"
+
+#, fuzzy
+#~| msgid "Translate Objects"
+#~ msgid "&Follow selected path"
+#~ msgstr "إزاحة العناصر"
+
+#~ msgid "Width:"
+#~ msgstr "العرض:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgid "Fixation:"
+#~ msgstr "اتجاه:"
+
+#, fuzzy
+#~ msgid "Current"
+#~ msgstr "وسط"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgid "Graphics Pen"
+#~ msgstr "تدرج"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "ا&حضار للأمام"
+
+#~ msgid "&Raise"
+#~ msgstr "&رفع"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "إن&زال"
+
+#~ msgid "Send to &Back"
+#~ msgstr "ار&سال للخلف"
+
+#, fuzzy
+#~ msgid "Show Grid"
+#~ msgstr "أظهر الشبيكة"
+
+#, fuzzy
+#~ msgid "Hide Grid"
+#~ msgstr "إخفاء الشبكة"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "المعارض أو"
+
+#, fuzzy
+#~ msgid "Align Left"
+#~ msgstr "محاذاة إلى اليسار"
+
+#, fuzzy
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "حاذي وسط أفقي"
+
+#, fuzzy
+#~ msgid "Align Right"
+#~ msgstr "محاذاة إلى اليسار"
+
+#, fuzzy
+#~ msgid "Align Top"
+#~ msgstr "محاذاة إلى أعلى"
+
+#, fuzzy
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "حاذي وسط رأسي"
+
+#, fuzzy
+#~ msgid "Align Bottom"
+#~ msgstr "محاذاة للأسفل"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "عتمة:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "اظهار شريط الحالة"
+
+#, fuzzy
+#~ msgid "Choose Pattern"
+#~ msgstr "شطب نمط"
+
+#, fuzzy
+#~| msgid "Transform Object"
+#~ msgid "Transform"
+#~ msgstr "تحويل العنصر"
+
+#~ msgid "R:"
+#~ msgstr "أحمر:"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgid "SX:"
+#~ msgstr "س:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgid "SY:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~ msgid "Shear"
+#~ msgstr "نجم"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "طرح مسارات"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "طرح مسارات"
+
+#, fuzzy
+#~ msgid "Convert to Path"
+#~ msgstr "حوّل إلى أشكال"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "أداة النص"
+
+#, fuzzy
+#~ msgid "Save as path"
+#~ msgstr "احفظ المسار"
+
+#~ msgid "Uniform Color"
+#~ msgstr "لون موحّد"
+
+#~ msgid "Old:"
+#~ msgstr "قديم:"
+
+#~ msgid "New:"
+#~ msgstr "جديد:"
+
+#~ msgid "G:"
+#~ msgstr "أخضر:"
+
+#~ msgid "B:"
+#~ msgstr "أزرق:"
+
+#, fuzzy
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#, fuzzy
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "نوع"
+
+#~ msgid "Join"
+#~ msgstr "تجميع"
+
+#, fuzzy
+#~ msgid "Color Chooser"
+#~ msgstr "اللون المختار"
+
+#, fuzzy
+#~ msgid "Resources"
+#~ msgstr "الموارد"
+
+#~ msgid "Patterns"
+#~ msgstr "أنماط"
+
+#, fuzzy
+#~ msgid "Clipart"
+#~ msgstr "أداة الرسومات"
+
+#, fuzzy
+#~ msgid "Add"
+#~ msgstr "إضافة"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "استيراد"
+
+#, fuzzy
+#~ msgid "Stroke: None"
+#~ msgstr "شطب لا شيء"
+
+#, fuzzy
+#~ msgid "Fill: None"
+#~ msgstr "ملأ لا شيء"
+
+#, fuzzy
+#~ msgid "Fill: RGB"
+#~ msgstr "ملأ RGB"
+
+#, fuzzy
+#~ msgid "Fill: CMYK"
+#~ msgstr "ملأ CMYK"
+
+#, fuzzy
+#~ msgid "Fill: HSB"
+#~ msgstr "ملأ"
+
+#, fuzzy
+#~ msgid "Fill: Grayscale"
+#~ msgstr "ملأ تدرّج رمادي"
+
+#, fuzzy
+#~ msgid "Fill: Color"
+#~ msgstr "ملأ اللون"
+
+#, fuzzy
+#~ msgid "Fill: Gradient"
+#~ msgstr "ملأ التدرج"
+
+#, fuzzy
+#~ msgid "Fill: Pattern"
+#~ msgstr "ملأ نمط"
+
+#, fuzzy
+#~ msgid "Stroke: RGB"
+#~ msgstr "شطب RGB"
+
+#, fuzzy
+#~ msgid "Stroke: CMYK"
+#~ msgstr "شطب CMYK"
+
+#, fuzzy
+#~ msgid "Stroke: HSB"
+#~ msgstr "شطب"
+
+#, fuzzy
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "شطب تدرّج رمادي"
+
+#, fuzzy
+#~ msgid "Stroke: Gradient"
+#~ msgstr "شطب التدرج"
+
+#, fuzzy
+#~ msgid "Polygonize"
+#~ msgstr "مضلّع"
+
+#, fuzzy
+#~ msgid "Round corners:"
+#~ msgstr "دائري:"
+
+#, fuzzy
+#~ msgid "&Shadow Effect..."
+#~ msgstr "ظل التأثير."
+
+#, fuzzy
+#~ msgid "Create Shadow Effect"
+#~ msgstr "إنشاء ظل التأثير"
+
+#~ msgid "Distance:"
+#~ msgstr "المسافة:"
+
+#, fuzzy
+#~ msgid "%"
+#~ msgstr "%"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "ا&حذف"
+
+#~ msgid "&Import"
+#~ msgstr "إستي&راد"
+
+#~ msgid "Object Properties"
+#~ msgstr "خيارات العنصر"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "ت&راجع"
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "ت&كرار"
+
+#~ msgid "&Undo: "
+#~ msgstr "ترا&جع:"
+
+#~ msgid "&Redo: "
+#~ msgstr "إ&عادة:"
+
+#~ msgid "Fill Objects"
+#~ msgstr "تعبئة عناصر"
+
+#~ msgid "Fill Object"
+#~ msgstr "تعبئة عنصر"
+
+#~ msgid "Insert Text"
+#~ msgstr "ادخال نص"
+
+#~ msgid "Transform Objects"
+#~ msgstr "تحويل العناصر"
+
+#, fuzzy
+#~ msgid "Duplicate Object"
+#~ msgstr "مضاعفة كائن"
+
+#~ msgid "Translate Object"
+#~ msgstr "إزاحة العنصر"
+
+#~ msgid "Scale Objects"
+#~ msgstr "تحجيم العناصر"
+
+#~ msgid "Scale Object"
+#~ msgstr "تحجيم العنصر"
+
+#~ msgid "Shear Objects"
+#~ msgstr "تمييل العناصر"
+
+#~ msgid "Shear Object"
+#~ msgstr "تمييل العنصر"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "تدوير العتاصر"
+
+#, fuzzy
+#~ msgid "Translate Bezier"
+#~ msgstr "ترجم بيزيير"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "ترجم نقاط"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "ترجم نقطة"
+
+#, fuzzy
+#~ msgid "Ellipse"
+#~ msgstr "بيضوي"
+
+#, fuzzy
+#~ msgid "Polygon"
+#~ msgstr "مضلّع"
+
+#~ msgid "Polyline"
+#~ msgstr "متعدد خطوط"
+
+#, fuzzy
+#~ msgid "Sinus"
+#~ msgstr "الجيب"
+
+#, fuzzy
+#~ msgid "Spiral"
+#~ msgstr "لولب"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>أداة الأشكال</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr "<i>أنقر و جر</i> لإدخال أشكالك الخاصة.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>أنقر </i> لإدخال شكل مستخدما قيم الخصائص التي أعددتها بواسطة الأداة.</"
+#~ "qt>"
+
+#~ msgid "Periods:"
+#~ msgstr "الفترات:"
+
+#, fuzzy
+#~ msgid "Sinus Tool"
+#~ msgstr "الجيب الأداة"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "ادخل حلزون"
+
+#, fuzzy
+#~ msgid "Round"
+#~ msgstr "دائري"
+
+#, fuzzy
+#~ msgid "Rectangular"
+#~ msgstr "مستطيل الشكل"
+
+#~ msgid "Segments:"
+#~ msgstr "الحلقات الدائرية:"
+
+#~ msgid "Fade:"
+#~ msgstr "بهتان:"
+
+#~ msgid "Clockwise"
+#~ msgstr "اتجاه عقارب الساعة"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "عكس اتجاه عقارب الساعة"
+
+#, fuzzy
+#~ msgid "Spiral Tool"
+#~ msgstr "لولب الأداة"
+
+#~ msgid "Insert Star"
+#~ msgstr "ادخل نجمة"
+
+#, fuzzy
+#~ msgid "Star Outline"
+#~ msgstr "نجم تقسيم"
+
+#, fuzzy
+#~ msgid "Wheel"
+#~ msgstr "عجل"
+
+#, fuzzy
+#~ msgid "Framed Star"
+#~ msgstr "مؤطّر نجم"
+
+#, fuzzy
+#~ msgid "Gear"
+#~ msgstr "الترس"
+
+#~ msgid "Outer radius:"
+#~ msgstr "نصف القطر الخارجي:"
+
+#~ msgid "Edges:"
+#~ msgstr "الحواف:"
+
+#, fuzzy
+#~ msgid "Roundness:"
+#~ msgstr "الاستدارة:"
+
+#, fuzzy
+#~ msgid "Star Tool"
+#~ msgstr "نجم الأداة"
+
+#, fuzzy
+#~ msgid "Draw a star"
+#~ msgstr "رسم a نجمة"
+
+#~ msgid "Shadow"
+#~ msgstr "الظل"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "رسم ظل شفاف"
+
+#~ msgid "Text"
+#~ msgstr "نص"
+
+#, fuzzy
+#~ msgid "Italic"
+#~ msgstr "مائل"
+
+#~ msgid "Alignment:"
+#~ msgstr "المحاذاة:"
+
+#, fuzzy
+#~ msgid "Position"
+#~ msgstr "الموضع"
+
+#, fuzzy
+#~ msgid "Edit Base Path"
+#~ msgstr "تحرير الأساس المسار"
+
+#, fuzzy
+#~ msgid "New text"
+#~ msgstr "جديد نص"
+
+#, fuzzy
+#~ msgctxt "Vertical alignment"
+#~ msgid "Above"
+#~ msgstr "أعلى"
+
+#, fuzzy
+#~ msgctxt "Vertical alignment"
+#~ msgid "On"
+#~ msgstr "تشغيل"
+
+#, fuzzy
+#~ msgctxt "Vertical alignment"
+#~ msgid "Under"
+#~ msgstr "تحت"
+
+#, fuzzy
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b> نص الأداة</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr "<i> نقر</i> يعمل مستند إلى أفقي نص<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr "<i> نقر و سحب</i> بوصة مستند إلى نص<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr "<i> نقر</i> يعمل a مُنتقى المسار كائن إلى نص إطار<br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr "<i> نقر</i> يعمل a مُنتقى نص كائن إلى تغيير الإيطالية<br></qt>"
+
+#, fuzzy
+#~ msgid "Change Text"
+#~ msgstr "غيّر نص"
+
+#, fuzzy
+#~ msgid "Text Conversion"
+#~ msgstr "نص تحويل"
+
+#, fuzzy
+#~ msgid "One object"
+#~ msgid_plural "%1 objects"
+#~ msgstr[0] "واحد كائن"
+#~ msgstr[1] "واحد كائن"
+#~ msgstr[2] ""
+#~ msgstr[3] ""
+#~ msgstr[4] ""
+#~ msgstr[5] ""
+
+#, fuzzy
+#~ msgid "path"
+#~ msgstr "المسار"
+
+#, fuzzy
+#~ msgid "One group, containing one object"
+#~ msgid_plural "One group, containing %1 objects"
+#~ msgstr[0] "واحد المجموعة كائن"
+#~ msgstr[1] "واحد المجموعة كائن"
+#~ msgstr[2] ""
+#~ msgstr[3] ""
+#~ msgstr[4] ""
+#~ msgstr[5] ""
+
+#, fuzzy
+#~ msgid "text"
+#~ msgstr "نص"

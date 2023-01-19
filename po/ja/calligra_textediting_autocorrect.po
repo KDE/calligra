@@ -1,0 +1,371 @@
+# Translation of AutocorrectPlugin into Japanese.
+# This file is distributed under the same license as the koffice package.
+# Taiki Komoda <kom@kde.gr.jp>, 2002.
+# Yukiko Bando <ybando@k6.dion.ne.jp>, 2005, 2006, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: AutocorrectPlugin\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2010-09-25 20:16-0700\n"
+"Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: Autocorrect.cpp:25
+#, kde-format
+msgid "Configure &Autocorrection..."
+msgstr "自動修正を設定(&A)..."
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
+#: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
+#: AutocorrectConfigDialog.cpp:364
+#, kde-format
+msgid "Autocorrection"
+msgstr "自動修正"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_1)
+#: AutocorrectConfig.ui:24
+#, kde-format
+msgid "Si&mple Autocorrection"
+msgstr "単純な自動修正(&M)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
+#: AutocorrectConfig.ui:30
+#, kde-format
+msgid ""
+"Detect when a new sentence is started and always ensure that the first "
+"character is an uppercase character"
+msgstr "新しい文の始まりを検知し、最初の文字が必ず大文字になるようにします。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, upperCase)
+#: AutocorrectConfig.ui:34
+#, kde-format
+msgid ""
+"Convert &first letter of a sentence automatically to uppercase\n"
+"(e.g. \"my house. in this town\" to \"my house. In this town\")"
+msgstr ""
+"文の最初の文字を自動的に大文字にする(&F)\n"
+"(例 “my house. in this town” を “my house. In this town” に)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, upperUpper)
+#: AutocorrectConfig.ui:44
+#, kde-format
+msgid ""
+"All words are checked for the common mistake of holding the shift key down a "
+"bit too long. If some words must have two uppercase characters, then those "
+"exceptions should be added in the 'Exceptions' tab."
+msgstr ""
+"すべての単語をチェックして、Shift キーを長く押し過ぎることで起こる間違いが発"
+"生していないか確認します。大文字を 2 文字含む単語があれば、例外として「例外」"
+"タブに追加してください。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, upperUpper)
+#: AutocorrectConfig.ui:48
+#, kde-format
+msgid ""
+"Convert &two uppercase characters to one uppercase and one lowercase "
+"character\n"
+" (e.g. PErfect to Perfect)"
+msgstr ""
+"大文字 2 文字を大文字 1 文字と小文字 1 文字にする(&T)\n"
+"(例 PErfect を Perfect に)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoFormatUrl)
+#: AutocorrectConfig.ui:55
+#, kde-format
+msgid ""
+"Detect when a URL (Uniform Resource Locator) is typed and provide formatting "
+"that matches the way an Internet browser would show a URL."
+msgstr ""
+"URL (Uniform Resource Locator) の入力を検知し、インターネットブラウザが URL "
+"を表示する形にフォーマットします。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoFormatUrl)
+#: AutocorrectConfig.ui:58
+#, kde-format
+msgid "Autoformat &URLs"
+msgstr "URL を自動フォーマットする(&U)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, ignoreDoubleSpace)
+#: AutocorrectConfig.ui:65
+#, kde-format
+msgid ""
+"Make sure that more than one space cannot be typed, as this is a common "
+"mistake which is quite hard to find in formatted text."
+msgstr ""
+"フォーマットされたテキストでは見つけにくい 2 文字以上のスペースを入力できない"
+"ようにします。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, ignoreDoubleSpace)
+#: AutocorrectConfig.ui:68
+#, kde-format
+msgid "&Suppress double spaces"
+msgstr "二重スペースを抑制する(&S)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, trimParagraphs)
+#: AutocorrectConfig.ui:75
+#, kde-format
+msgid ""
+"Keep correct formatting and indenting of sentences by automatically removing "
+"spaces typed at the beginning and end of a paragraph."
+msgstr ""
+"段落の最初と最後に入力されたスペースを自動的に削除し、正しいフォーマットと字"
+"下げを保ちます。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, trimParagraphs)
+#: AutocorrectConfig.ui:78
+#, kde-format
+msgid "R&emove spaces at the beginning and end of paragraphs"
+msgstr "段落の最初と最後のスペースを削除する(&E)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoChangeFormat)
+#: AutocorrectConfig.ui:85
+#, kde-format
+msgid ""
+"When you use _underline_ or *bold*, the text between the underscores or "
+"asterisks will be converted to underlined or bold text."
+msgstr ""
+"「_下線_」や「*ボールド*」とすると、アンダースコア (_) やアスタリスク (*) 間"
+"のテキストが自動的に下線付きまたはボールドになります。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoChangeFormat)
+#: AutocorrectConfig.ui:88
+#, kde-format
+msgid "Automatically do &bold and underline formatting"
+msgstr "自動的にボールドや下線のフォーマットを行う(&B)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, autoReplaceNumber)
+#: AutocorrectConfig.ui:95
+#, kde-format
+msgid "Most standard fraction notations will be converted when available"
+msgstr "利用可能であれば最も標準的な分数表記に変換します。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoReplaceNumber)
+#: AutocorrectConfig.ui:98
+#, kde-format
+msgid "Re&place 1/2... with ½..."
+msgstr "1/2... を ½... に置換する(&P)"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, useNumberStyle)
+#: AutocorrectConfig.ui:108
+#, kde-format
+msgid ""
+"When typing '1)' or similar in front of a paragraph, automatically convert "
+"the paragraph to use that numbering style. This has the advantage that "
+"further paragraphs will also be numbered and the spacing is done correctly."
+msgstr ""
+"“1)” またはこれに類似するものを段落の最初に入力すると、段落にそのスタイルの番"
+"号付けが適用されます。このオプションを使うと、続く段落にも自動的に番号が付"
+"き、段落の間隔も正しく設定されます。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, useNumberStyle)
+#: AutocorrectConfig.ui:111
+#, kde-format
+msgid "Use &autonumbering for numbered paragraphs"
+msgstr "段落に自動的に番号を付ける(&A)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoSuperScript)
+#: AutocorrectConfig.ui:121
+#, kde-format
+msgid "Rep&lace 1st... with 1^st..."
+msgstr "1st... を 1^st... に置換する(&L)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, capitalizeDaysName)
+#: AutocorrectConfig.ui:128
+#, kde-format
+msgid "Capitalize name of days"
+msgstr "曜日名を大文字にする"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, useBulletStyle)
+#: AutocorrectConfig.ui:138
+#, kde-format
+msgid ""
+"When typing '*' or '-' in front of a paragraph, automatically convert the "
+"paragraph to use that list-style. Using a list-style formatting means that a "
+"correct bullet is used to draw the list."
+msgstr ""
+"アスタリスク (*) やハイフン (-) を段落の最初に入力すると、段落にそのリストス"
+"タイルが適用されます。このオプションを使うと、自動的にリストに正しいビュレッ"
+"トが付きます。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, useBulletStyle)
+#: AutocorrectConfig.ui:141
+#, kde-format
+msgid "Use l&ist-formatting for bulleted paragraphs"
+msgstr "ビュレット付きの段落に自動的にリストフォーマットを適用する(&I)"
+
+#. i18n: ectx: property (text), widget (QPushButton, defaultBulletStyle)
+#. i18n: ectx: property (text), widget (QPushButton, doubleDefault)
+#. i18n: ectx: property (text), widget (QPushButton, singleDefault)
+#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
+#: AutocorrectConfig.ui:178 AutocorrectConfig.ui:253 AutocorrectConfig.ui:308
+#: AutocorrectConfig.ui:360
+#, kde-format
+msgid "Default"
+msgstr "デフォルト"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_2)
+#: AutocorrectConfig.ui:214
+#, kde-format
+msgid "Custom &Quotes"
+msgstr "カスタム引用符(&Q)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, typographicDoubleQuotes)
+#: AutocorrectConfig.ui:220
+#, kde-format
+msgid "Replace &double quotes with typographical quotes"
+msgstr "二重引用符を活版印刷の引用符に置換する(&D)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, typographicSingleQuotes)
+#: AutocorrectConfig.ui:275
+#, kde-format
+msgid "Replace &single quotes with typographical quotes"
+msgstr "一重引用符を活版印刷の引用符に置換する(&S)"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_3)
+#: AutocorrectConfig.ui:344
+#, kde-format
+msgid "Ad&vanced Autocorrection"
+msgstr "高度な自動修正(&V)"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: AutocorrectConfig.ui:352
+#, kde-format
+msgid "Replacements and exceptions for language:"
+msgstr "置換と例外を適用する言語:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, autoFormatLanguage)
+#: AutocorrectConfig.ui:365
+#, kde-format
+msgid "All Languages"
+msgstr "すべての言語"
+
+#. i18n: ectx: property (text), widget (QCheckBox, advancedAutocorrection)
+#: AutocorrectConfig.ui:375
+#, kde-format
+msgid "&Enable word replacement"
+msgstr "単語置換を有効にする(&E)"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoCorrectionWithFormat)
+#: AutocorrectConfig.ui:385
+#, kde-format
+msgid "Replace &text with format"
+msgstr "テキストを書式付きで置換する(&T)"
+
+#. i18n: ectx: property (text), widget (QLabel, findLabel)
+#: AutocorrectConfig.ui:394
+#, kde-format
+msgid "&Find"
+msgstr "検索(&F)"
+
+#. i18n: ectx: property (text), widget (QToolButton, specialChar1)
+#. i18n: ectx: property (text), widget (QToolButton, specialChar2)
+#: AutocorrectConfig.ui:407 AutocorrectConfig.ui:427
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, replaceLabel)
+#: AutocorrectConfig.ui:414
+#, kde-format
+msgid "Re&place"
+msgstr "置換(&P)"
+
+#. i18n: ectx: property (text), widget (QPushButton, addButton)
+#. i18n: ectx: property (text), widget (QPushButton, add1)
+#: AutocorrectConfig.ui:438 AutocorrectConfig.ui:562
+#: AutocorrectConfigDialog.cpp:281
+#, kde-format
+msgid "&Add"
+msgstr "追加(&A)"
+
+#. i18n: ectx: property (text), widget (QPushButton, removeButton)
+#. i18n: ectx: property (text), widget (QPushButton, remove2)
+#: AutocorrectConfig.ui:445 AutocorrectConfig.ui:637
+#, kde-format
+msgid "Remove"
+msgstr "削除"
+
+#. i18n: ectx: property (text), widget (QPushButton, changeFormat)
+#: AutocorrectConfig.ui:455
+#, kde-format
+msgid "C&hange Format..."
+msgstr "書式を変更(&H)..."
+
+#. i18n: ectx: property (text), widget (QPushButton, clearFormat)
+#: AutocorrectConfig.ui:465
+#, kde-format
+msgid "C&lear Format"
+msgstr "書式をクリア(&L)"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
+#: AutocorrectConfig.ui:503
+#, kde-format
+msgid "Find"
+msgstr "検索"
+
+#. i18n: ectx: property (text), widget (QTableWidget, tableWidget)
+#: AutocorrectConfig.ui:508
+#, kde-format
+msgid "Replace"
+msgstr "置換"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tab_4)
+#: AutocorrectConfig.ui:517
+#, kde-format
+msgid "E&xceptions"
+msgstr "例外(&X)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: AutocorrectConfig.ui:525
+#, kde-format
+msgid "Do not treat as the end of a sentence:"
+msgstr "文の終わりとして扱わない文字列:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, autoinclude1)
+#. i18n: ectx: property (text), widget (QCheckBox, autoinclude2)
+#: AutocorrectConfig.ui:551 AutocorrectConfig.ui:619
+#, kde-format
+msgid "Autoinclude"
+msgstr "自動取り込み"
+
+#. i18n: ectx: property (text), widget (QPushButton, remove1)
+#: AutocorrectConfig.ui:569
+#, kde-format
+msgid "R&emove"
+msgstr "削除(&E)"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: AutocorrectConfig.ui:593
+#, kde-format
+msgid "Accept two uppercase letters in:"
+msgstr "2 文字の大文字を誤りとしない単語:"
+
+#. i18n: ectx: property (text), widget (QPushButton, add2)
+#: AutocorrectConfig.ui:630
+#, kde-format
+msgid "A&dd"
+msgstr "追加(&D)"
+
+#: AutocorrectConfigDialog.cpp:277
+#, kde-format
+msgid "&Modify"
+msgstr "変更(&M)"
+
+#: AutocorrectConfigDialog.cpp:378
+#, kde-format
+msgid "Select Character"
+msgstr "文字を選択"
+
+#: AutocorrectFactory.cpp:16
+#, kde-format
+msgid "Autocorrect"
+msgstr "自動修正"

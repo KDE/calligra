@@ -1,0 +1,271 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Brad</firstname
+> <surname
+>Hards</surname
+> <affiliation
+> <address
+><email
+>bradh@frogmouth.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Danny</firstname
+> <surname
+>Allen</surname
+> <affiliation
+> <address
+><email
+>danny@dannyallen.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+
+<othercredit role="translator"
+><firstname
+>Алексей</firstname
+><surname
+>Опарин</surname
+><affiliation
+><address
+><email
+>opaleksej@yandex.ru</email
+></address
+></affiliation
+><contrib
+>Перевод на русский</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Мария</firstname
+><surname
+>Шикунова</surname
+><affiliation
+><address
+><email
+>translation-team@basealt.ru</email
+></address
+></affiliation
+><contrib
+>Обновление перевода на русский</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo>
+<title
+>Подробное руководство</title>
+
+<para
+>Эта глава описывает использование некоторых распространённых действий &stage;.</para>
+
+<sect1 id="html-wizard">
+<title
+>Создание &HTML; презентации</title>
+
+<para
+>Превратите существующую презентацию в стандартные страницы &HTML; с соответствующими навигационными возможностями.</para>
+
+<para
+>Для начала создайте новую презентацию или откройте существующую. Затем выберите <menuchoice
+><guimenu
+>Файл</guimenu
+><guimenuitem
+>Экспорт в HTML...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Появится диалог для уточнения некоторых деталей:</para>
+
+<screenshot>
+<screeninfo
+>Ввод данных для &HTML;-презентации</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Ввод данных для &HTML;-презентации</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Заполните поля <guilabel
+>Заголовок</guilabel
+> и <guilabel
+>Автор</guilabel
+>. Выберите слайды для экспорта. Чтобы изменить имя, используемое на странице &HTML; для каждого слайда, дважды щёлкните по названию и отредактируйте его в строке.</para>
+
+<para
+>В области <guilabel
+>Предварительный просмотр вывода</guilabel
+> отображаются миниатюры слайдов, и это позволяет проверить правильный порядок слайдов и просмотреть презентацию с помощью кнопок <guiicon
+>&lt;</guiicon
+> и <guiicon
+>&gt;</guiicon
+>. </para>
+
+<para
+>Далее выберите таблицу стилей с настройкой параметров &HTML;.</para>
+
+<para
+>Чтобы завершить создание &HTML;-презентации, нажмите кнопку <guibutton
+>Экспорт</guibutton
+> и выберите каталог.</para>
+
+<para
+>Теперь есть заново созданные папки <filename
+>html</filename
+> и <filename
+>pics</filename
+>, созданные в ранее указанном каталоге:</para>
+
+<screenshot>
+<screeninfo
+>Созданные каталоги с &HTML;-презентацией</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Созданные каталоги с &HTML;-презентацией</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Кроме того, в этом каталоге находится файл <filename
+>index.html</filename
+> для запуска презентации.</para>
+
+<para
+>Теперь возможно увидеть свою презентацию, открыв файл <filename
+>index.html</filename
+> в диспетчере файлов или браузере. Нажмите на этот файл, чтобы отобразился первый слайд. Он будет вести себя так же, как и в презентации.</para>
+
+<para
+>Каждый щелчок по значкам со стрелками приведёт к следующему или предыдущему слайду. Чтобы вернуться к началу презентации, нажмите на значок слайда.</para>
+
+<tip
+><para
+>Чтобы поделиться презентацией со всем миром, перенесите созданные файлы в то место, где они будут доступны для всеобщего просмотра (то есть, в интернет), не забыва сохранить правильную структуру каталогов.</para
+></tip>
+</sect1>
+
+<sect1 id="creating-templates">
+<title
+>Создание шаблонов &stage;</title>
+
+<para
+>Добавить новые шаблоны в &stage; очень просто.</para>
+
+<para
+>Если была создана презентация в стиле, который требуется использовать повторно, возможно сохранить его в виде шаблона.</para>
+
+<para
+>Это руководство покажет, как сделать новый шаблон и сохранить его.</para>
+
+<para
+>Откройте &stage; и создайте новый документ.</para>
+
+<para
+>Чтобы оживить пустой слайд, измените его фон с помощью <guimenu
+>Формат</guimenu
+> 
+> <guimenuitem
+>Фон слайда...</guimenuitem
+> или соответствующего пункта контекстного меню.</para>
+
+<para
+>Чтобы фон был приятным для глаза, перейдите к выбору цвета через контекстное меню, а зате выберите нужный оттенок, нажав на подходящий цветной квадратик. В качестве фонового возможно выбрать и любое изображение с помощью вкладки <guibutton
+>Рисунок</guibutton
+>.</para>
+
+<screenshot>
+<screeninfo
+>Выбор фона для слайда</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject
+><phrase
+>Выбор фона для слайда</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Теперь у слайда будет желаемый фон. Создайте текстовое поле и введите в нём заголовок слайда:</para>
+
+<screenshot>
+<screeninfo
+>Добавление заголовка в новый шаблон</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Добавление заголовка в новый шаблон</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Если полученный шаблон удовлетворяет требованием, перейдите в меню <menuchoice
+><guimenu
+>Файл</guimenu
+> <guimenuitem
+>Сохранить как...</guimenuitem
+></menuchoice
+> в диалоге сохранения выберите тип файла <guilabel
+>Шаблон презентации Opendocument</guilabel
+></para>
+
+</sect1>
+
+</chapter>

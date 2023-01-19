@@ -1,0 +1,337 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jean Cayron <jean.cayron@gmail.com>, 2009, 2010.
+# Djan Cayron <jean.cayron@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: koffice-dockers\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2010-12-24 14:38+0100\n"
+"Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
+"Language-Team: Walloon <linux@walon.org>\n"
+"Language: wa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Dji n' a trové nole fôme el ramexhnêye! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, fuzzy, kde-format
+#| msgid "Not a valid KOffice file: %1"
+msgid "Not a valid Calligra file: %1"
+msgstr "Çouci n' est nén on fitchî KOffice valåbe : %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Dji n' a trové pont d' etikete body e fitchî: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Dji n' a trové pont d' etikete office:drawing e fitchî: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Dji n' a trové nou fôme e fitchî: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Radjouter fôme"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Co ds ôtes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Drovi ramexhnêye des fômes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Oister ramexhnêye des fômes"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Prémetou"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Djeyometreye"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Fletches"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Plaijhant"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Aroke di ramexhnêye"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Prôpietés del fôme"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr ""
+
+#, fuzzy
+#~| msgid "Found no shapes in the collection! %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Found no shapes in the collection! %1"
+#~ msgstr "Dji n' a trové nole fôme el ramexhnêye! %1"
+
+#, fuzzy
+#~| msgid "Not a valid KOffice file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Not a valid Calligra file: %1"
+#~ msgstr "Çouci n' est nén on fitchî KOffice valåbe : %1"
+
+#, fuzzy
+#~| msgid "No body tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No body tag found in file: %1"
+#~ msgstr "Dji n' a trové pont d' etikete body e fitchî: %1"
+
+#, fuzzy
+#~| msgid "No office:drawing tag found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No office:drawing tag found in file: %1"
+#~ msgstr "Dji n' a trové pont d' etikete office:drawing e fitchî: %1"
+
+#, fuzzy
+#~| msgid "No shapes found in file: %1"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "No shapes found in file: %1"
+#~ msgstr "Dji n' a trové nou fôme e fitchî: %1"
+
+#, fuzzy
+#~| msgid "Add Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Shape"
+#~ msgstr "Radjouter fôme"
+
+#, fuzzy
+#~| msgid "More"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "More"
+#~ msgstr "Co ds ôtes"
+
+#, fuzzy
+#~| msgid "Open Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Open Shape Collection"
+#~ msgstr "Drovi ramexhnêye des fômes"
+
+#, fuzzy
+#~| msgid "Remove Shape Collection"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Shape Collection"
+#~ msgstr "Oister ramexhnêye des fômes"
+
+#, fuzzy
+#~| msgid "Default"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Default"
+#~ msgstr "Prémetou"
+
+#, fuzzy
+#~| msgid "Geometrics"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Geometrics"
+#~ msgstr "Djeyometreye"
+
+#, fuzzy
+#~| msgid "Arrows"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Arrows"
+#~ msgstr "Fletches"
+
+#, fuzzy
+#~| msgid "Funny"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Funny"
+#~ msgstr "Plaijhant"
+
+#, fuzzy
+#~| msgid "Collection Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Collection Error"
+#~ msgstr "Aroke di ramexhnêye"
+
+#, fuzzy
+#~| msgid "Shape Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Shape Properties"
+#~ msgstr "Prôpietés del fôme"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Tchoezixheu di coleur"
+
+#~ msgid "Shadow Properties"
+#~ msgstr "Prôpietés di l' ombion"
+
+#~ msgid "Creation error"
+#~ msgstr "Aroke d' askepiaedje"
+
+#~ msgid "File not found"
+#~ msgstr "Fitchî nén trové"
+
+#~ msgid "Cannot create storage"
+#~ msgstr "Dji n' sai ahiver l' sitocaedje"
+
+#~ msgid "Bad MIME type"
+#~ msgstr "Mwaijhe sôre MIME"
+
+#~ msgid "Error in embedded document"
+#~ msgstr "Åk ni va nén dins l' ravalé documint"
+
+#~ msgid "Format not recognized"
+#~ msgstr "Cogne nén rconoxhowe"
+
+#~ msgid "Not implemented"
+#~ msgstr "Dji n' sai nén fé ça"
+
+#~ msgid "Parsing error"
+#~ msgstr "Aroke d' analijhe del sintake"
+
+#~ msgid "Document is password protected"
+#~ msgstr "Li documint est waeranti pas on scret"
+
+#~ msgid "Internal error"
+#~ msgstr "Divintrinne aroke"
+
+#~ msgid "Out of memory"
+#~ msgstr "Pupont d' memwere"
+
+#~ msgid "Unknown error"
+#~ msgstr "Aroke nén cnoxhowe"
+
+#~ msgid ""
+#~ "Could not open\n"
+#~ "%2.\n"
+#~ "Reason: %1"
+#~ msgstr ""
+#~ "Dji n' a savou drovi\n"
+#~ "%2\n"
+#~ "Vochal li råjhon : %1"
+
+#~ msgid "Failed to import the file: %1"
+#~ msgstr "L' abagaedje do fitchî a fwait berwete: %1"
+
+#~ msgid "Opacity:"
+#~ msgstr "Zerovoeyaedje :"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Nole"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Solide"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradyint"
+
+#~ msgid "Pattern"
+#~ msgstr "Patron"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Rimplixhaedje paire-impaire"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Rimplixhaedje avou do vint"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Prôpietés do trait"
+
+#~ msgid "Style:"
+#~ msgstr "Stîle:"
+
+#~ msgid "Width:"
+#~ msgstr "Lårdjeur:"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Defini l' lårdjeur del roye do tchoes"
+
+#~ msgid "Cap:"
+#~ msgstr "Difinmint"
+
+#~ msgid "Butt cap"
+#~ msgstr "Difinmint e nuk"
+
+#~ msgid "Round cap"
+#~ msgstr "Rond difinmint"
+
+#~ msgid "Square cap"
+#~ msgstr "Cwåré difinmint"
+
+#~ msgid "Join:"
+#~ msgstr "Djondaedje:"
+
+#~ msgid "Miter join"
+#~ msgstr "Droet djondaedje"
+
+#~ msgid "Round join"
+#~ msgstr "Rond djondaedje"
+
+#~ msgid "Bevel join"
+#~ msgstr "Djondaedje e xhuflet"
+
+#~ msgid "Miter limit:"
+#~ msgstr "Limite do racoird"
+
+#~ msgid "Set miter limit"
+#~ msgstr "Defni limite do racoird"
+
+#~ msgid "Styles"
+#~ msgstr "Stîles"
+
+#~ msgid "Shapes"
+#~ msgstr "Fômes"
+
+#~ msgid "Open..."
+#~ msgstr "Drovi..."
+
+#~ msgid "Save Book..."
+#~ msgstr "Schaper live..."
+
+#~ msgid "New Folder..."
+#~ msgstr "Novea ridant..."
+
+#~ msgid "Zoom In"
+#~ msgstr "Zoumer"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Diszoumer"
+
+#~ msgid "Remove Folder"
+#~ msgstr "Oister ridant"
+
+#~ msgid "Templates"
+#~ msgstr "Modeles"

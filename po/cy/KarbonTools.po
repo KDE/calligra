@@ -1,0 +1,2209 @@
+# translation of karbon.po to Cymraeg
+# Penbwrdd yn Gymraeg.
+# Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+# www.kyfieithu.co.uk<kyfieithu@dotmon.com>, www.gyfieithu.co.uk<kyfieithu@dotmon.com>, 2003.
+# KD at KGyfieithu <kyfieithu@dotmon.com>, 2004.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2004-07-06 15:43+0100\n"
+"Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
+"Language-Team: Cymraeg <cy@li.org>\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"www.gyfieithu.co.uk<kyfieithu@dotmon.com>\n"
+"X-Generator: KBabel 1.2\n"
+"\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Ellipse Tool"
+msgid "A calligraphic shape"
+msgstr "Erfyn Hirgylch"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#, fuzzy, kde-format
+#| msgid "Ellipse Tool"
+msgid "Calligraphic Shape"
+msgstr "Erfyn Hirgylch"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
+#, fuzzy, kde-format
+#| msgid "Add Layer"
+msgid "Save profile as..."
+msgstr "Ychwanegu Haen"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
+#, fuzzy, kde-format
+#| msgid "Add Layer"
+msgid "Remove profile"
+msgstr "Ychwanegu Haen"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
+#, fuzzy, kde-format
+#| msgid "Delete Objects"
+msgid "&Follow selected path"
+msgstr "Dileu Gwrthrychau"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
+#, fuzzy, kde-format
+#| msgid "Start angle:"
+msgid "Use tablet &pressure"
+msgstr "Ongl gychwynnol:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
+#, fuzzy, kde-format
+msgid "Width:"
+msgstr "Lled:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
+#, kde-format
+msgid "Thinning:"
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
+#, fuzzy, kde-format
+#| msgid "Start angle:"
+msgid "Use tablet &angle"
+msgstr "Ongl gychwynnol:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
+#, kde-format
+msgid "Angle:"
+msgstr "Ongl:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
+#, fuzzy, kde-format
+#| msgid "Orientation:"
+msgid "Fixation:"
+msgstr "Cyfeiriadaeth:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
+#, fuzzy, kde-format
+#| msgid "Cap:"
+msgid "Caps:"
+msgstr "Cap:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
+#, kde-format
+msgid "Mass:"
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
+#, kde-format
+msgid "Drag:"
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#, fuzzy, kde-format
+#| msgid "Curve"
+msgid "Current"
+msgstr "Cromlin"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
+#, fuzzy, kde-format
+#| msgid "Effects"
+msgid "Profile name"
+msgstr "Effeithiau"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
+#, kde-format
+msgid "Please insert the name by which you want to save this profile:"
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#, kde-format
+msgctxt "invalid profile name"
+msgid "Invalid name."
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#, kde-format
+msgid ""
+"A profile with that name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#, kde-format
+msgid "Mouse"
+msgstr ""
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#, fuzzy, kde-format
+#| msgid "Gradient"
+msgid "Graphics Pen"
+msgstr "Graddiant"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#, kde-format
+msgid "Fill"
+msgstr "Llenwi"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#, fuzzy, kde-format
+#| msgid "Ellipse Tool"
+msgid "Calligraphy: increase width"
+msgstr "Erfyn Hirgylch"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#, fuzzy, kde-format
+#| msgid "Ellipse Tool"
+msgid "Calligraphy: decrease width"
+msgstr "Erfyn Hirgylch"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#, fuzzy, kde-format
+#| msgid "Ellipse Tool"
+msgid "Calligraphy: increase angle"
+msgstr "Erfyn Hirgylch"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#, fuzzy, kde-format
+#| msgid "Ellipse Tool"
+msgid "Calligraphy: decrease angle"
+msgstr "Erfyn Hirgylch"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
+#, fuzzy, kde-format
+#| msgid "Ellipse Tool"
+msgid "Calligraphy"
+msgstr "Erfyn Hirgylch"
+
+#: filterEffectTool/FilterAddCommand.cpp:18
+#, fuzzy
+#| msgid "Add Layer"
+msgctxt "(qtundo-format)"
+msgid "Add filter effect"
+msgstr "Ychwanegu Haen"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#, fuzzy, kde-format
+msgid "Add effect to current filter stack"
+msgstr "Gosod Lled Llinell"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#, fuzzy, kde-format
+#| msgid "&Add to Predefined Gradients"
+msgid "Add to filter presets"
+msgstr "&Ychwanegu at y Graddfeydd Rhagosodol"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#, fuzzy, kde-format
+#| msgid "Add Layer"
+msgid "Remove filter preset"
+msgstr "Ychwanegu Haen"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, fuzzy, kde-format
+#| msgid "Effects"
+msgid "Effect name"
+msgstr "Effeithiau"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#, kde-format
+msgid "Please enter a name for the filter effect"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
+#: filterEffectTool/FilterEffectEditWidget.ui:32
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#, fuzzy, kde-format
+#| msgid "Pattern Tool"
+msgid "Filter Effect Editor"
+msgstr "Erfyn Patrwm"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: filterEffectTool/FilterEffectEditWidget.ui:40
+#, fuzzy, kde-format
+#| msgid "Object Properties"
+msgid "Effects and Connections"
+msgstr "Nodweddion Gwrthrych"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addEffect)
+#. i18n: ectx: property (text), widget (QToolButton, raiseEffect)
+#. i18n: ectx: property (text), widget (QToolButton, lowerEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addPreset)
+#. i18n: ectx: property (text), widget (QToolButton, removePreset)
+#: filterEffectTool/FilterEffectEditWidget.ui:57
+#: filterEffectTool/FilterEffectEditWidget.ui:67
+#: filterEffectTool/FilterEffectEditWidget.ui:74
+#: filterEffectTool/FilterEffectEditWidget.ui:81
+#: filterEffectTool/FilterEffectEditWidget.ui:102
+#: filterEffectTool/FilterEffectEditWidget.ui:109
+#, kde-format
+msgid "..."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: filterEffectTool/FilterEffectEditWidget.ui:92
+#, fuzzy, kde-format
+#| msgid "&Add to Predefined Gradients"
+msgid "Filter Presets"
+msgstr "&Ychwanegu at y Graddfeydd Rhagosodol"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: filterEffectTool/FilterEffectEditWidget.ui:116
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#, fuzzy, kde-format
+#| msgid "Object Properties"
+msgid "Effect Properties"
+msgstr "Nodweddion Gwrthrych"
+
+#: filterEffectTool/FilterRemoveCommand.cpp:19
+#, fuzzy
+#| msgid "Add Layer"
+msgctxt "(qtundo-format)"
+msgid "Remove filter effect"
+msgstr "Ychwanegu Haen"
+
+#: filterEffectTool/FilterStackSetCommand.cpp:23
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Set filter stack"
+msgstr "Gosod Lled Llinell"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#, fuzzy, kde-format
+#| msgid "Effe&cts"
+msgid "Effects"
+msgstr "Effe&ithiau"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#, kde-format
+msgid "View and edit filter"
+msgstr ""
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#, fuzzy, kde-format
+#| msgid "Add Layer"
+msgid "Remove filter from object"
+msgstr "Ychwanegu Haen"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#, fuzzy, kde-format
+#| msgid "Add Layer"
+msgid "Add Filter"
+msgstr "Ychwanegu Haen"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#, kde-format
+msgid "W:"
+msgstr "W:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#, kde-format
+msgid "H:"
+msgstr "H:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#, fuzzy, kde-format
+#| msgid "Effects"
+msgid "Effect Region"
+msgstr "Effeithiau"
+
+#: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
+#, fuzzy, kde-format
+#| msgid "Pattern Tool"
+msgid "Filter effects editing"
+msgstr "Erfyn Patrwm"
+
+#: KarbonGradientTool.cpp:198
+#, kde-format
+msgid "Drag to move gradient position."
+msgstr ""
+
+#: KarbonGradientTool.cpp:207
+#, kde-format
+msgid "Drag to move color stop. Double click to remove color stop."
+msgstr ""
+
+#: KarbonGradientTool.cpp:209
+#, kde-format
+msgid "Drag to move color stop."
+msgstr ""
+
+#: KarbonGradientTool.cpp:216
+#, kde-format
+msgid "Drag to move gradient position. Double click to insert color stop."
+msgstr ""
+
+#: KarbonGradientTool.cpp:494
+#, kde-format
+msgid "Edit Gradient"
+msgstr "Golygu Graddiant"
+
+#: KarbonGradientTool.cpp:496
+#, kde-format
+msgid "Predefined Gradients"
+msgstr "Graddfeydd Rhagosodol"
+
+#: KarbonGradientToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Gradient Tool"
+msgid "Gradient editing"
+msgstr "Erfyn Graddiant"
+
+#: KarbonPatternOptionsWidget.cpp:21
+#, kde-format
+msgid "Original"
+msgstr ""
+
+#: KarbonPatternOptionsWidget.cpp:22
+#, fuzzy, kde-format
+msgid "Tiled"
+msgstr "Llenwi"
+
+#: KarbonPatternOptionsWidget.cpp:23
+#, kde-format
+msgid "Stretched"
+msgstr ""
+
+#: KarbonPatternOptionsWidget.cpp:25
+#, fuzzy, kde-format
+#| msgctxt "Horizontal alignment"
+#| msgid "Left"
+msgid "Top Left"
+msgstr "Chwith"
+
+#: KarbonPatternOptionsWidget.cpp:26
+#, kde-format
+msgid "Top"
+msgstr ""
+
+#: KarbonPatternOptionsWidget.cpp:27
+#, fuzzy, kde-format
+#| msgctxt "Horizontal alignment"
+#| msgid "Right"
+msgid "Top Right"
+msgstr "De"
+
+#: KarbonPatternOptionsWidget.cpp:28
+#, fuzzy, kde-format
+#| msgctxt "Horizontal alignment"
+#| msgid "Left"
+msgid "Left"
+msgstr "Chwith"
+
+#: KarbonPatternOptionsWidget.cpp:29
+#, fuzzy, kde-format
+#| msgctxt "Horizontal alignment"
+#| msgid "Center"
+msgid "Center"
+msgstr "Canol"
+
+#: KarbonPatternOptionsWidget.cpp:30
+#, fuzzy, kde-format
+#| msgctxt "Horizontal alignment"
+#| msgid "Right"
+msgid "Right"
+msgstr "De"
+
+#: KarbonPatternOptionsWidget.cpp:31
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Bottom Left"
+msgstr "Alinio i'r Gwaelod"
+
+#: KarbonPatternOptionsWidget.cpp:32
+#, fuzzy, kde-format
+#| msgid "Align Bottom"
+msgid "Bottom"
+msgstr "Alinio i'r Gwaelod"
+
+#: KarbonPatternOptionsWidget.cpp:33
+#, fuzzy, kde-format
+#| msgctxt "Horizontal alignment"
+#| msgid "Right"
+msgid "Bottom Right"
+msgstr "De"
+
+#: KarbonPatternTool.cpp:273
+#, fuzzy, kde-format
+#| msgid "Pattern Tool"
+msgid "Pattern Options"
+msgstr "Erfyn Patrwm"
+
+#: KarbonPatternTool.cpp:275
+#, kde-format
+msgid "Patterns"
+msgstr "Patrymau"
+
+#: KarbonPatternToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Pattern Tool"
+msgid "Pattern editing"
+msgstr "Erfyn Patrwm"
+
+#, fuzzy
+#~| msgid "Object Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects and Connections"
+#~ msgstr "Nodweddion Gwrthrych"
+
+#, fuzzy
+#~| msgid "&Add to Predefined Gradients"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Presets"
+#~ msgstr "&Ychwanegu at y Graddfeydd Rhagosodol"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Follow selected path"
+#~ msgstr "Dileu Gwrthrychau"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Lled:"
+
+#, fuzzy
+#~| msgid "Start angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &angle"
+#~ msgstr "Ongl gychwynnol:"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Ongl:"
+
+#, fuzzy
+#~| msgid "Orientation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fixation:"
+#~ msgstr "Cyfeiriadaeth:"
+
+#, fuzzy
+#~| msgid "Cap:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Caps:"
+#~ msgstr "Cap:"
+
+#, fuzzy
+#~| msgid "Curve"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current"
+#~ msgstr "Cromlin"
+
+#, fuzzy
+#~| msgid "Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Graphics Pen"
+#~ msgstr "Graddiant"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Llenwi"
+
+#, fuzzy
+#~| msgid "Ellipse Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy"
+#~ msgstr "Erfyn Hirgylch"
+
+#, fuzzy
+#~| msgid "&Add to Predefined Gradients"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to filter presets"
+#~ msgstr "&Ychwanegu at y Graddfeydd Rhagosodol"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect name"
+#~ msgstr "Effeithiau"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Effect Editor"
+#~ msgstr "Erfyn Patrwm"
+
+#, fuzzy
+#~| msgid "Effe&cts"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Effe&ithiau"
+
+#, fuzzy
+#~| msgid "Add Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter from object"
+#~ msgstr "Ychwanegu Haen"
+
+#, fuzzy
+#~| msgid "Add Layer"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Filter"
+#~ msgstr "Ychwanegu Haen"
+
+#, fuzzy
+#~| msgid "Object Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Properties"
+#~ msgstr "Nodweddion Gwrthrych"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "W:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W:"
+#~ msgstr "W:"
+
+#, fuzzy
+#~| msgid "H:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Region"
+#~ msgstr "Effeithiau"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter effects editing"
+#~ msgstr "Erfyn Patrwm"
+
+#, fuzzy
+#~| msgid "Edit Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Gradient"
+#~ msgstr "Golygu Graddiant"
+
+#, fuzzy
+#~| msgid "Predefined Gradients"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Predefined Gradients"
+#~ msgstr "Graddfeydd Rhagosodol"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gradient editing"
+#~ msgstr "Erfyn Graddiant"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tiled"
+#~ msgstr "Llenwi"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left"
+#~ msgstr "Chwith"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right"
+#~ msgstr "De"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Chwith"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "Canol"
+
+#, fuzzy
+#~| msgctxt "Horizontal alignment"
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "De"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom"
+#~ msgstr "Alinio i'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern Options"
+#~ msgstr "Erfyn Patrwm"
+
+#, fuzzy
+#~| msgid "Patterns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Patterns"
+#~ msgstr "Patrymau"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern editing"
+#~ msgstr "Erfyn Patrwm"
+
+#~ msgid "Target:"
+#~ msgstr "Targed:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgid "Line"
+#~ msgstr "Llinol"
+
+#~ msgid "Type:"
+#~ msgstr "Math:"
+
+#, fuzzy
+#~| msgid "Linear"
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Llinol"
+
+#, fuzzy
+#~| msgid "Radial"
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Rheiddiol"
+
+#, fuzzy
+#~| msgid "Conical"
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Conigol"
+
+#~ msgid "Repeat:"
+#~ msgstr "Ail-adrodd:"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Dim"
+
+#~ msgid "Reflect"
+#~ msgstr "Adlewyrchu"
+
+#~ msgid "Repeat"
+#~ msgstr "Ail-adrodd"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Didreiddiad cyffredinol:"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color."
+#~ msgstr "Lliw'r Trawiad"
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Ychwanegu at y Graddfeydd Rhagosodol"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point:"
+#~ msgstr "Cyfeiriad"
+
+#, fuzzy
+#~| msgid "Reference"
+#~ msgid "Reference Point Offset"
+#~ msgstr "Cyfeiriad"
+
+#, fuzzy
+#~| msgid "Offset:"
+#~ msgid "Tile Offset"
+#~ msgstr "Atred:"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Pattern Size"
+#~ msgstr "Patrwm"
+
+#~ msgid "Stroke"
+#~ msgstr "Trawiad"
+
+#, fuzzy
+#~| msgid "Position:"
+#~ msgid "Precision:"
+#~ msgstr "Lleoliad:"
+
+#, fuzzy
+#~| msgid "Raw"
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Amrwd"
+
+#~ msgid "Curve"
+#~ msgstr "Cromlin"
+
+#~ msgid "Straight"
+#~ msgstr "Syth"
+
+#~ msgid "Optimize"
+#~ msgstr "Optimeiddio"
+
+#~ msgid "Exactness:"
+#~ msgstr "Cywirdeb :"
+
+#, fuzzy
+#~ msgid "Combine angle:"
+#~ msgstr "Cyfuno Ongl"
+
+#, fuzzy
+#~| msgid "Stroke Color"
+#~ msgid "Stop color:"
+#~ msgstr "Lliw'r Trawiad"
+
+#, fuzzy
+#~| msgid "Gradient Tool"
+#~ msgid "Gradient tool"
+#~ msgstr "Erfyn Graddiant"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Pattern tool"
+#~ msgstr "Erfyn Patrwm"
+
+#, fuzzy
+#~| msgid "Pencil Tool"
+#~ msgid "Pencil tool"
+#~ msgstr "Erfyn Pensil"
+
+#, fuzzy
+#~| msgid "Pattern Tool"
+#~ msgid "Filter effects tool"
+#~ msgstr "Erfyn Patrwm"
+
+#, fuzzy
+#~| msgid "None"
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Dim"
+
+#, fuzzy
+#~| msgid "Solid"
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Solet"
+
+#~ msgid "Gradient"
+#~ msgstr "Graddiant"
+
+#~ msgid "Pattern"
+#~ msgstr "Patrwm"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kyfieithu: Peter Bradley, jr, KD"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ " _: EMAIL OF TRANSLATORS\n"
+#~ " apvx95@dsl.pipex.com"
+
+#~ msgid "&Order"
+#~ msgstr "&Trefn"
+
+#~ msgid "&Align"
+#~ msgstr "&Alinio"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "Llenwi"
+
+#~ msgid "&Object"
+#~ msgstr "&Gwrthrych"
+
+#~ msgid "&Distribute"
+#~ msgstr "D&osbarthu"
+
+#, fuzzy
+#~ msgid "&Path"
+#~ msgstr "llwybr"
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "Gosodiadau Pensil"
+
+#~ msgid "Object"
+#~ msgstr "Gwrthrych"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "&Alinio"
+
+#~ msgid "File to open"
+#~ msgstr "Ffeil i agor"
+
+#~ msgid "Boolean Operation"
+#~ msgstr "Gweithred Booleaidd"
+
+#~ msgid "Raise Layer"
+#~ msgstr "Codi Haen"
+
+#~ msgid "Lower Layer"
+#~ msgstr "Gostwng Haen"
+
+#, fuzzy
+#~ msgid "Configure"
+#~ msgstr "Ffurfweddu Karbon..."
+
+#~ msgid "Interface"
+#~ msgstr "Rhwngwyneb"
+
+#~ msgid "Misc"
+#~ msgstr "Amrywiol"
+
+#~ msgid "Grid"
+#~ msgstr "Grid"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Dogfen"
+
+#~ msgid "Document Settings"
+#~ msgstr "Gosodiadau Dogfennau"
+
+#~ msgid "Show status bar"
+#~ msgstr "Dangos y bar cyflwr"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Nifer o ffeiliau diweddar:"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Atred y copi:"
+
+#~ msgid "Units:"
+#~ msgstr "Unedau:"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Dangos &grid"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Snapio i'r grid."
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "Lliw'r grid:"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "Llorweddol:"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "Fertigol:"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Hunangadw (mun):"
+
+#~ msgid "No auto save"
+#~ msgstr "Dim hunangadw"
+
+#~ msgid "min"
+#~ msgstr "mun"
+
+#~ msgid "Create backup file"
+#~ msgstr "Creu ffeil wrth gefn"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer view"
+#~ msgstr "Haenau"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Haen newydd"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "Dileu Gwrthrychau"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "Dileu Gwrthrychau"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "Dileu Gwrthrychau"
+
+#~ msgid "New Layer"
+#~ msgstr "Haen Newydd"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Rhowch enw'r haen newydd:"
+
+#~ msgid "New layer"
+#~ msgstr "Haen newydd"
+
+#, fuzzy
+#~ msgid "Create Layer"
+#~ msgstr "Ail-enwi Haen"
+
+#~ msgid "Delete Layer"
+#~ msgstr "Dileu Haen"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer"
+#~ msgstr "Haenau"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "grŵp"
+
+#, fuzzy
+#~| msgid "Spoke"
+#~ msgid "Shape"
+#~ msgstr "Adain olwyn"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Dewis Patrwm i'w Ychwanegu"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Dewis Patrwm"
+
+#~ msgid "None"
+#~ msgstr "Dim"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgid "Stroke:"
+#~ msgstr "Trawiad"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgid "Fill:"
+#~ msgstr "Llenwi"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "Styles"
+#~ msgstr "Arddull:"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Lleddfu Llwybr..."
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgid "Flatten Path"
+#~ msgstr "Lleddfu Llwybr"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Priodweddau Trawiadau"
+
+#~ msgid "Flatness:"
+#~ msgstr "Gwastadrwydd:"
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgid "Flatten path"
+#~ msgstr "Lleddfu Llwybr"
+
+#, fuzzy
+#~ msgid "Refine path"
+#~ msgstr "Cau Llwybr"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgid "&Refine Path..."
+#~ msgstr "&Lleddfu Llwybr..."
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Cau Llwybr"
+
+#~ msgid "Round Corners"
+#~ msgstr "Corneli Crwn"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "C&orneli Crwn..."
+
+#~ msgid "Radius:"
+#~ msgstr "Radiws:"
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Troelli/Gwasgu"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Troelli/Cywasgu..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Troelli/Gwasgu"
+
+#~ msgid "Pinch:"
+#~ msgstr "Gwasgu:"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Dogfen OASIS annilys.  Ni chanfuwyd tag office:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Dogfen OASIS annilys.  Ni chanfuwyd tag office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Dogfen OASIS annilys.  Ni chanfuwyd tag draw:page."
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Blwch offer"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Dewis Patrwm i'w Ychwanegu"
+
+#, fuzzy
+#~ msgid "Group shapes"
+#~ msgstr "Casglu Gwrthrychau"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Datgasglu Gwrthrychau"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgid "Outline &Mode"
+#~ msgstr "&Modd Golwg"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Dangos Ymylon Tudalen"
+
+#, fuzzy
+#~| msgid "Show Page Margins"
+#~ msgid "Hide Page Margins"
+#~ msgstr "Dangos Ymylon Tudalen"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "&Mewnforio Graffeg..."
+
+#~ msgid "D&elete"
+#~ msgstr "D&ileu"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "&Dyblyg"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Dosbarthu i'r Canol (Llorweddol)"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Dosbarthu Bylchau (Llorweddol)"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Dosbarthu Ymylon Chwith"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Dosbarthu Ymylon De"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Dosbarthu i'r Canol (Fertigol)"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Dosbarthu Bylchau (Fertigol)"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Dosbarthu Ymylon Gwaelod"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Dosbarthu Ymylon Brig"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Dangos Mesuryddion"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Cuddio Mesuryddion"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Dangos neu guddio mesuryddion."
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Dangos Grid"
+
+#, fuzzy
+#~| msgid "Hide Grid"
+#~ msgid "Hide Guides"
+#~ msgstr "Cuddio Grid"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Dangos neu guddio grid."
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Snapio i'r Grid"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "Snapio i'r grid."
+
+#~ msgid "&Group Objects"
+#~ msgstr "&Casglu gwrthrychau"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "&Dadgasglu gwrthrychau"
+
+#~ msgid "&Close Path"
+#~ msgstr "&Cau Llwybr"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "Cau Llwybr"
+
+#, fuzzy
+#~ msgid "Se&parate Path"
+#~ msgstr "Lleddfu Llwybr"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Re&verse Path"
+#~ msgstr "&Cau Llwybr"
+
+#, fuzzy
+#~| msgid "Edit Base Path"
+#~ msgid "Intersect Paths"
+#~ msgstr "Golygu'r Llwybr Sail"
+
+#, fuzzy
+#~ msgid "Subtract Paths"
+#~ msgstr "Lleddfu Llwybr"
+
+#, fuzzy
+#~| msgid "Edit Base Path"
+#~ msgid "Unite Paths"
+#~ msgstr "Golygu'r Llwybr Sail"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Ffurfweddu Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "&Haenlun Tudalen..."
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Detholiad"
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Detholiad"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Erfyn Chwyddo"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "Anfon i'r &Blaen"
+
+#~ msgid "&Raise"
+#~ msgstr "&Codi"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Gostwng"
+
+#~ msgid "Send to &Back"
+#~ msgstr "Anfon i'r &Cefn"
+
+#~ msgid "Show Grid"
+#~ msgstr "Dangos Grid"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Cuddio Grid"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Dangos neu guddio grid."
+
+#~ msgid "Align Left"
+#~ msgstr "Alinio i'r Chwith"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "Alinio i'r Canol (Llorweddol)"
+
+#~ msgid "Align Right"
+#~ msgstr "Alinio i'r Dde"
+
+#~ msgid "Align Top"
+#~ msgstr "Alinio i'r Pen"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "Alinio i'r Canol (Fertigol)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "Alinio i'r Gwaelod"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Didreiddiad:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Dangos y bar cyflwr"
+
+#~ msgid "Opacity"
+#~ msgstr "Didreiddiad"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Edit Pattern"
+#~ msgstr "Patrwm"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Dewis Patrwm"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Rhagosodol"
+
+#~ msgid "Transform"
+#~ msgstr "Trawsffurfio"
+
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Gosod lleoliad-x y detholiad penodol"
+
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Gosod lleoliad-y y detholiad penodol"
+
+#~ msgid "Set width of actual selection"
+#~ msgstr "Gosod lled y detholiad penodol"
+
+#~ msgid "Set height of actual selection"
+#~ msgstr "Gosod uchder y detholiad penodol"
+
+#~ msgid "R:"
+#~ msgstr "R:"
+
+#~ msgid "Rotate actual selection"
+#~ msgstr "Cylchdroi detholiad penodol"
+
+#~ msgid "SX:"
+#~ msgstr "SX:"
+
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Croesrwygo detholiad penodol yng nghyfeiriad x"
+
+#~ msgid "SY:"
+#~ msgstr "SY:"
+
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Croesrwygo detholiad penodol yng nghyfeiriad y"
+
+#~ msgid "Shear"
+#~ msgstr "Croesrwygo"
+
+#~ msgid "Rotate"
+#~ msgstr "Cylchdroi"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Lleddfu Llwybr"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Lleddfu Llwybr"
+
+#, fuzzy
+#~| msgid "Convert to Shapes"
+#~ msgid "Convert to Path"
+#~ msgstr "Trosi i Siapiau"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Erfyn Testun"
+
+#~ msgid "Save as path"
+#~ msgstr "Cadw fel llwybr"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Lliw Unffurf"
+
+#~ msgid "Old:"
+#~ msgstr "Hen:"
+
+#~ msgid "New:"
+#~ msgstr "Newydd:"
+
+#~ msgid "Components"
+#~ msgstr "Cydrannau"
+
+#~ msgid "G:"
+#~ msgstr "G:"
+
+#~ msgid "B:"
+#~ msgstr "B:"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr " V:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Math"
+
+#~ msgid "Cap"
+#~ msgstr "Cap"
+
+#~ msgid "Join"
+#~ msgstr "Uniad"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Dewis Lliwiau"
+
+#~ msgid "Height:"
+#~ msgstr "Uchder:"
+
+#~ msgid "Layers:"
+#~ msgstr "Haenau:"
+
+#~ msgid "Format:"
+#~ msgstr "Fformat:"
+
+#~ msgid "Resources"
+#~ msgstr "Adnoddau"
+
+#~ msgid "Clipart"
+#~ msgstr "Clipgelf"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Mewnforio"
+
+#, fuzzy
+#~ msgid "Delete"
+#~ msgstr "D&ileu"
+
+#~ msgid "Stroke: None"
+#~ msgstr "Trawiad: Dim"
+
+#~ msgid "Fill: None"
+#~ msgstr "Llenwad: Dim"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Llenwad: RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Llenwad: CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Llenwad: HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Llenwad: Graddlwyd"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Llenwad: Lliw"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Llenwad: Graddiant"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Llenwad: Patrwm"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Trawiad: RGB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Trawiad: CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Trawiad: HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Trawiad: Graddlwyd"
+
+#~ msgid "Stroke: Color"
+#~ msgstr "Trawiad: Lliw"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Trawiad: Graddiant"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Trawiad: Patrwm"
+
+#~ msgid "Polygonize"
+#~ msgstr "Aml-ochreiddio"
+
+#~ msgid "Round corners:"
+#~ msgstr "Corneli crwn:"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "&Effaith Gysgod..."
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Creu Effaith Gysgod"
+
+#~ msgid "Distance:"
+#~ msgstr "Pellter:"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Creu Cysgod"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "D&ileu"
+
+#~ msgid "&Import"
+#~ msgstr "&Mewnforio"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Erfyn Delwedd"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Dadwneud:"
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "&Ailwneud:"
+
+#~ msgid "&Undo: "
+#~ msgstr "&Dadwneud:"
+
+#~ msgid "&Redo: "
+#~ msgstr "&Ailwneud:"
+
+#~ msgid "Fill Objects"
+#~ msgstr "Llenwi Gwrthrychau"
+
+#~ msgid "Fill Object"
+#~ msgstr "Llenwi Gwrthrych"
+
+#~ msgid "Insert Text"
+#~ msgstr "Mewnosod Testun"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Trawsffurfio Gwrthrychau"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Dyblygu Gwrthrych"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Dyblygu Gwrthrychau"
+
+#~ msgid "Transform Object"
+#~ msgstr "Trawsffurfio Gwrthrych"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Trosi Gwrthrychau"
+
+#~ msgid "Translate Object"
+#~ msgstr "Trosi Gwrthrych"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Graddio Gwrthrychau"
+
+#~ msgid "Scale Object"
+#~ msgstr "Graddio Gwrthrych"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Croesrwygo Gwrthrychau"
+
+#~ msgid "Shear Object"
+#~ msgstr "Croesrwygo Gwrthrych"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Cylchdroi Gwrthrychau"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Cylchdroi Gwrthrych"
+
+#~ msgid "Translate Bezier"
+#~ msgstr "Trosi Bezier"
+
+#, fuzzy
+#~ msgid "Translate Points"
+#~ msgstr "Trosi Gwrthrychau"
+
+#, fuzzy
+#~ msgid "Translate Point"
+#~ msgstr "Trosi"
+
+#~ msgid "Ellipse"
+#~ msgstr "Hirgylch"
+
+#~ msgid "Polygon"
+#~ msgstr "Polygon"
+
+#~ msgid "Polyline"
+#~ msgstr "Polylinell"
+
+#~ msgid "Sinus"
+#~ msgstr "Sinws"
+
+#~ msgid "Spiral"
+#~ msgstr "Troellyn"
+
+#~ msgid "Star"
+#~ msgstr "Seren"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Erfyn siapiau</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i leoli'ch siap eich hun.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Cliciwch</i> i leoli siap wrth ddefnyddio gwerthoedd nodweddion yr "
+#~ "erfyn.</qt>"
+
+#~ msgid "Insert Sinus"
+#~ msgstr "Mewnosod Sinws"
+
+#~ msgid "Periods:"
+#~ msgstr "Cyfnodau:"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Erfyn Sinws"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Mewnosod Troellyn"
+
+#~ msgid "Round"
+#~ msgstr "Crwn"
+
+#~ msgid "Rectangular"
+#~ msgstr "Petryal"
+
+#~ msgid "Segments:"
+#~ msgstr "Cylchrannau:"
+
+#~ msgid "Fade:"
+#~ msgstr "Pylu:"
+
+#~ msgid "Clockwise"
+#~ msgstr "Clocwedd"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Gwrth-glocwedd"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Erfyn Troelliad"
+
+#~ msgid "Insert Star"
+#~ msgstr "Mewnosod Seren"
+
+#~ msgid "Star Outline"
+#~ msgstr "Amlinell Seren"
+
+#~ msgid "Wheel"
+#~ msgstr "Olwyn"
+
+#~ msgid "Framed Star"
+#~ msgstr "Seren wedi'i Fframio"
+
+#~ msgid "Gear"
+#~ msgstr "Gêr"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Radiws allanol:"
+
+#~ msgid "Inner radius:"
+#~ msgstr "Radiws mewnol:"
+
+#~ msgid "Edges:"
+#~ msgstr "Ymylon:"
+
+#~ msgid "Inner angle:"
+#~ msgstr "Ongl fewnol:"
+
+#~ msgid "Roundness:"
+#~ msgstr "Crwnder"
+
+#~ msgid "Star Tool"
+#~ msgstr "Erfyn Seren"
+
+#~ msgid "Shadow"
+#~ msgstr "Cysgod"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Lluniadu cysgod tryleu"
+
+#~ msgid "Text"
+#~ msgstr "Testun"
+
+#~ msgid "Bold"
+#~ msgstr "Trwm"
+
+#~ msgid "Alignment:"
+#~ msgstr "Aliniad:"
+
+#~ msgid "Position"
+#~ msgstr "Lleoliad"
+
+#~ msgid "Edit Base Path"
+#~ msgstr "Golygu'r Llwybr Sail"
+
+#~ msgid "New text"
+#~ msgstr "Testun Newydd"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "On"
+#~ msgstr "Ymlaen"
+
+#, fuzzy
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Erfyn siapiau</b><br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i leoli'ch siap eich hun.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i chwyddo ardal betryal.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr "<i>Cliciwch</i> ar y lliw sydd ei eisiau yn y dewisydd.<br>"
+
+#, fuzzy
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr "<i>De-gliciwch</i> ar bwynt lliw i gael gwared â fo.</qt>"
+
+#~ msgid "Change Text"
+#~ msgstr "Newid y Testun"
+
+#~ msgid "Text Conversion"
+#~ msgstr "Trosi Testun"
+
+#~ msgid "path"
+#~ msgstr "llwybr"
+
+#~ msgid "text"
+#~ msgstr "testun"
+
+#~ msgid "image"
+#~ msgstr "delwedd"
+
+#, fuzzy
+#~ msgid "Paste Object"
+#~ msgstr "Cylchdroi Gwrthrych"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Gludo Gwrthrychau"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "Gwastadu Cromliniau"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Priodweddau Trawiadau"
+
+#, fuzzy
+#~ msgid "Round cap"
+#~ msgstr "Crwn"
+
+#~ msgid "Join:"
+#~ msgstr "Uniad:"
+
+#, fuzzy
+#~ msgid "Round join"
+#~ msgstr "Corneli Crwn"
+
+#~ msgid "P&urge"
+#~ msgstr "G&waredu"
+
+#~ msgid "&History"
+#~ msgstr "&Hanes"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "Mewnosod &Clymau..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Mewnosod Clymau"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Mewnosod Clipgelf"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "Gwrthrychau Trawiad"
+
+#~ msgid "Stroke Object"
+#~ msgstr "Gwrthrych Trawiad"
+
+#~ msgid "Stroke Width"
+#~ msgstr "Lled y Trawiad"
+
+#, fuzzy
+#~ msgid "Dash Pattern"
+#~ msgstr "Patrwm"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Erfyn Chwyddo:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i chwyddo ardal betryal.<br>"
+
+#, fuzzy
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr "<i>De-gliciwch</i> ar bwynt lliw i gael gwared â fo.</qt>"
+
+#~ msgid "<i>Pressing +/- keys</i><br>to zoom into/out of canvas."
+#~ msgstr " <i>Chwyddo bysyll +/-</i><br>i nesáu/pellháu  y cynfas."
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Erfyn Chwyddo"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Dadwneud/ailwneud y terfyn:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Erfyn polylinell:</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Cliciwch</i> i ychwanegu nôd a <i>llusgo</i> i osod ei fector bezier."
+#~ "<br>"
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Gwasgwch <i>Ctrl</i> tra'n llusgo i olygu'r fector bezier blaenorol.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Gwasgwch <i>Shift</i> tra'n llusgo i newid y cromlin mewn llinell syth."
+#~ "<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr "- Gwasgwch <i>Backspace</i> i ddiddymu'r cromlin  diweddaraf.<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr "- Gwasgwch <i>Esc</i> i ddiddymu'r holl polylinell.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Gwasgwch <i>Dychwelyd</i> neu <i>dwbl-gliciwch</i> i ddarfod yr aml-"
+#~ "linell.</qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Erfyn Polylinell"
+
+#~ msgid "Translate"
+#~ msgstr "Trosi"
+
+#~ msgid "Relative &position"
+#~ msgstr "Lleoliad c&ymharol"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Ni cheir dadwneud y weithred hon nes ymlaen.  Ydych wir eisiau parhau?"
+
+#~ msgid "Purge History"
+#~ msgstr "Gwaredu Hanes"
+
+#~ msgid "Zoom Width"
+#~ msgstr "Lled y Chwyddo"
+
+#~ msgid "Whole Page"
+#~ msgstr "Tudalen Gyfan"
+
+#~ msgid "Normal"
+#~ msgstr "Arferol"
+
+#~ msgid "Wireframe"
+#~ msgstr "Ffrâm wifren"
+
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#~ msgid "800%"
+#~ msgstr "800%"
+
+#~ msgid "Line Style"
+#~ msgstr "Arddull Llinell"
+
+#~ msgid "History"
+#~ msgstr "Hanes"
+
+#~ msgid "Align Objects"
+#~ msgstr "Alinio Gwrthrychau"
+
+#~ msgid "Clean Up"
+#~ msgstr "Tacluso"
+
+#~ msgid "Delete Object"
+#~ msgstr "Dileu Gwrthrych"
+
+#~ msgid "Delete Node"
+#~ msgstr "Dileu Nôd"
+
+#~ msgid "Distribute Objects"
+#~ msgstr "Dosbarthu Gwrthrychau"
+
+#~ msgid "Order Selection"
+#~ msgstr "Trefnu Dewisiad"
+
+#~ msgid "Snap to g&rid"
+#~ msgstr "Snapio i'r g&rid"
+
+#~ msgid "Snap Distance"
+#~ msgstr "Pellter Snapio"
+
+#~ msgid "H&orizontal:"
+#~ msgstr "Ll&orweddol:"
+
+#~ msgid "V&ertical:"
+#~ msgstr "Fertigol:"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgctxt "document width"
+#~ msgid "Width:"
+#~ msgstr "Lled:"
+
+#~ msgid "New"
+#~ msgstr "Newydd"
+
+#~ msgid "Raise"
+#~ msgstr "Codi"
+
+#~ msgid "Lower"
+#~ msgstr "Gostwng"
+
+#~ msgid "Item"
+#~ msgstr "Eitem"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Gwrthrych Cyfredol"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Newid enw'r gwrthrych:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Ail-enwi'r haen gyfredol:"
+
+#~ msgid "Commands"
+#~ msgstr "Gorchmynion"
+
+#~ msgid "Group commands"
+#~ msgstr "Casglu gorchmynion"
+
+#~ msgid "Rectangle"
+#~ msgstr "Hirsgwâr"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Mewnosod Hirgylch"
+
+#~ msgid "Full"
+#~ msgstr "Llawn"
+
+#~ msgid "Section"
+#~ msgstr "Adran"
+
+#~ msgid "Pie"
+#~ msgstr "Pei"
+
+#~ msgid "Arc"
+#~ msgstr "Cromlin"
+
+#~ msgctxt "object width"
+#~ msgid "Width:"
+#~ msgstr "Lled:"
+
+#~ msgid "End angle:"
+#~ msgstr "Ongl derfynol:"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Erfyn graddiant:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i ddewis fector y raddfa.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i ddewis fector y raddfa.<br>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i ddewis fector y raddfa.<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Golygu graddiant:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i symud pwyntiau.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Dwbl-gliciwch</i> ar bwynt lliw i'w olygu.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr "<i>De-gliciwch</i> ar bwynt lliw i gael gwared â fo.</qt>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Erfyn Patrymau:</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Cliciwch</i> ar y lliw sydd ei eisiau yn y dewisydd.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "<i>Cliciwch a llusgo</i> i ddewis fector y patrwm.</qt>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Dewiswch batrwm."
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Erfyn pensil:</b><br>"
+
+#~ msgid "- <i>Click</i> to begin drawing, release when you have finished."
+#~ msgstr ""
+#~ "- <i>Cliciwch</i> i ddechrau tynnu llun, rhyddhau pan fyddwch wedi "
+#~ "gorffen."
+
+#~ msgid "Pencil"
+#~ msgstr "Pensil"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Mewnosod Polygon"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Erfyn Polygon"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Mewnosod Petryal"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Erfyn Petryal"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Rotate Tool"
+
+#~ msgid "Insert Round Rect"
+#~ msgstr "Mewnosod Petryal Crwn"
+
+#~ msgid "Height (%1):"
+#~ msgstr "Uchder (%1):"
+
+#~ msgid "Edge radius X:"
+#~ msgstr "Radiws ymyl X:"
+
+#~ msgid "Edge radius Y:"
+#~ msgstr "Radiws ymyl Y:"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Erfyn Petryal Crwn"
+
+#, fuzzy
+#~ msgid "Round Rectangle"
+#~ msgstr "Erfyn Petryal Crwn"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "Nodau Golygu"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Erfyn Dethol Nodau"
+
+#, fuzzy
+#~ msgid "Select Nodes"
+#~ msgstr "Erfyn Dethol Nodau"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Modd Dethol"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Dethol yn yr haen gyfredol"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Dethol yn yr haenau gweledol"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Dethol yn yr haenau detholedig"
+
+#~ msgid "Select"
+#~ msgstr "Dethol"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Erfyn dethol:</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Dethol yn yr haen gyfredol:</i> <br>Gwneir y detholiad yn yr haen "
+#~ "ddetholedig yn y docydd haenau.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i>Dethol yn yr haenau gweledol:</i><br>Gwneir y detholiad yn yr haenau "
+#~ "gweledol (llygad yn y docydd haenau).<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Dethol yn yr haenau detholedig:</i><br>Gwneir y detholiad yn yr haenau "
+#~ "wedi'u britho yn y docydd haenau.<br><br>"
+
+#~ msgid ""
+#~ "<i>Position using arrow keys</i><br>The selection can be positioned up, "
+#~ "down, left and right using the corresponding arrow keys."
+#~ msgstr ""
+#~ "<i>Lleoli gan ddefnyddio'r bysellau saeth</i><br>Ceir lleoli'r detholiad "
+#~ "i fyny, i lawr, i'r chwith ac i'r dde gan ddefnyddio'r bysellau saeth "
+#~ "cyfatebol."
+
+#~ msgid "No selection"
+#~ msgstr "Dim detholiad"
+
+#~ msgid "Select Tool"
+#~ msgstr "Erfyn Dethol"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Erfyn Croesrwygo"
+
+#~ msgctxt "selection width"
+#~ msgid "Width:"
+#~ msgstr "Lled:"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Erfyn delwedd:</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Dewis Delwedd i'w Hychwanegu"
+
+#~ msgid "Insert Image"
+#~ msgstr "Mewnosod Delwedd"
+
+#~ msgid "Image"
+#~ msgstr "Delwedd"
+
+#~ msgid "Knots:"
+#~ msgstr "Clymau:"

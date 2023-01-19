@@ -1,0 +1,2410 @@
+# KDE3 - koffice/karbon.po Russian translation.
+# Copyright (C) 2006, KDE Russian translation team.
+#
+# Andrey Cherepanov <sibskull@mail.ru>, 2002-2006.
+# Nickolai Shaforostoff <shafff@ukr.net>, 2004.
+# Nick Shaforostoff <shafff@ukr.net>, 2005.
+# Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2006.
+# Nick Shaforostoff <shaforostoff@kde.ru>, 2009.
+# Yuri Efremov <yur.arh@gmail.com>, 2010, 2011.
+# Georgiy Syptchenko <superzhook@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: karbon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2014-07-06 07:52+0400\n"
+"Last-Translator: Georgiy Syptchenko <superzhook@gmail.com>\n"
+"Language-Team: Russian <kde-russian@lists.kde.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:16
+#, kde-format
+msgid "A calligraphic shape"
+msgstr "Каллиграфический объект"
+
+#: CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:18
+#, kde-format
+msgid "Calligraphic Shape"
+msgstr "Каллиграфический объект"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:56
+#, kde-format
+msgid "Save profile as..."
+msgstr "Сохранить профиль как..."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:61
+#, kde-format
+msgid "Remove profile"
+msgstr "Удалить профиль"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:69
+#, kde-format
+msgid "&Follow selected path"
+msgstr "Следовать за в&ыделенным контуром"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
+#, kde-format
+msgid "Use tablet &pressure"
+msgstr "&Учитывать нажим пером планшета"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
+#, kde-format
+msgid "Width:"
+msgstr "Толщина:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:83
+#, kde-format
+msgid "Thinning:"
+msgstr "Сужение:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
+#, kde-format
+msgid "Use tablet &angle"
+msgstr "У&читывать угол пера к плоскости планшета"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
+#, kde-format
+msgid "Angle:"
+msgstr "Угол:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:104
+#, kde-format
+msgid "Fixation:"
+msgstr "Фиксация:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:113
+#, kde-format
+msgid "Caps:"
+msgstr "Концы:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:122
+#, kde-format
+msgid "Mass:"
+msgstr "Масса:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:131
+#, kde-format
+msgid "Drag:"
+msgstr "Инерция:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:188
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:189
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:213
+#, kde-format
+msgid "Current"
+msgstr "Текущий"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:207
+#, kde-format
+msgid "Profile name"
+msgstr "Имя профиля"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:208
+#, kde-format
+msgid "Please insert the name by which you want to save this profile:"
+msgstr "Укажите имя, под которым хотите сохранить этот профиль:"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:215
+#, kde-format
+msgid "Sorry, the name you entered is invalid."
+msgstr "Извините, но введённое имя некорректно."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:216
+#, kde-format
+msgctxt "invalid profile name"
+msgid "Invalid name."
+msgstr "Неправильное имя."
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:224
+#, kde-format
+msgid ""
+"A profile with that name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"Профиль с таким названием уже существует.\n"
+"Заменить его?"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:360
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:385
+#, kde-format
+msgid "Mouse"
+msgstr "Мышь"
+
+#: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:373
+#, kde-format
+msgid "Graphics Pen"
+msgstr "Перо планшета"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:338
+#, kde-format
+msgid "Fill"
+msgstr "Заливка"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:377
+#, kde-format
+msgid "Calligraphy: increase width"
+msgstr "Каллиграфическое перо: увеличить толщину"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:382
+#, kde-format
+msgid "Calligraphy: decrease width"
+msgstr "Каллиграфическое перо: уменьшить толщину"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:387
+#, kde-format
+msgid "Calligraphy: increase angle"
+msgstr "Каллиграфическое перо: увеличить угол"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:392
+#, kde-format
+msgid "Calligraphy: decrease angle"
+msgstr "Каллиграфическое перо: уменьшить угол"
+
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:399
+#: CalligraphyTool/KarbonCalligraphyTool.cpp:400
+#: CalligraphyTool/KarbonCalligraphyToolFactory.cpp:19
+#, kde-format
+msgid "Calligraphy"
+msgstr "Каллиграфическое перо"
+
+#: filterEffectTool/FilterAddCommand.cpp:18
+msgctxt "(qtundo-format)"
+msgid "Add filter effect"
+msgstr ""
+"Добавление фильтра эффектов\n"
+"добавление фильтра эффектов"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:58
+#, kde-format
+msgid "Add effect to current filter stack"
+msgstr "Добавление эффекта к текущему набору"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:68
+#, kde-format
+msgid "Add to filter presets"
+msgstr "Добавление профиля фильтра"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:72
+#, kde-format
+msgid "Remove filter preset"
+msgstr "Удаление профиля фильтра"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:335
+#, kde-format
+msgid "Effect name"
+msgstr "Название эффекта"
+
+#: filterEffectTool/FilterEffectEditWidget.cpp:336
+#, kde-format
+msgid "Please enter a name for the filter effect"
+msgstr "Введите название для фильтра"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, FilterEffectEditWidget)
+#: filterEffectTool/FilterEffectEditWidget.ui:32
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:314
+#, kde-format
+msgid "Filter Effect Editor"
+msgstr "Редактор фильтра эффектов"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: filterEffectTool/FilterEffectEditWidget.ui:40
+#, kde-format
+msgid "Effects and Connections"
+msgstr "Эффекты и соединения"
+
+#. i18n: ectx: property (text), widget (QToolButton, removeEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addEffect)
+#. i18n: ectx: property (text), widget (QToolButton, raiseEffect)
+#. i18n: ectx: property (text), widget (QToolButton, lowerEffect)
+#. i18n: ectx: property (text), widget (QToolButton, addPreset)
+#. i18n: ectx: property (text), widget (QToolButton, removePreset)
+#: filterEffectTool/FilterEffectEditWidget.ui:57
+#: filterEffectTool/FilterEffectEditWidget.ui:67
+#: filterEffectTool/FilterEffectEditWidget.ui:74
+#: filterEffectTool/FilterEffectEditWidget.ui:81
+#: filterEffectTool/FilterEffectEditWidget.ui:102
+#: filterEffectTool/FilterEffectEditWidget.ui:109
+#, kde-format
+msgid "..."
+msgstr "..."
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: filterEffectTool/FilterEffectEditWidget.ui:92
+#, kde-format
+msgid "Filter Presets"
+msgstr "Профили фильтров"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: filterEffectTool/FilterEffectEditWidget.ui:116
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:470
+#, kde-format
+msgid "Effect Properties"
+msgstr "Свойства эффекта"
+
+#: filterEffectTool/FilterRemoveCommand.cpp:19
+msgctxt "(qtundo-format)"
+msgid "Remove filter effect"
+msgstr ""
+"Удаление фильтра эффектов\n"
+"удаление фильтра эффектов"
+
+#: filterEffectTool/FilterStackSetCommand.cpp:23
+msgctxt "(qtundo-format)"
+msgid "Set filter stack"
+msgstr ""
+"Редактирование набора эффекта\n"
+"редактирование набора эффекта"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:433
+#, kde-format
+msgid "Effects"
+msgstr "Эффекты"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:443
+#, kde-format
+msgid "View and edit filter"
+msgstr "Просмотр и редактирование фильтра"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:449
+#, kde-format
+msgid "Remove filter from object"
+msgstr "Удаление фильтра с объекта"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:453
+#, kde-format
+msgid "Add Filter"
+msgstr "Добавление фильтра"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:482
+#, kde-format
+msgid "X:"
+msgstr "X:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:488
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:494
+#, kde-format
+msgid "W:"
+msgstr "Ш:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:500
+#, kde-format
+msgid "H:"
+msgstr "В:"
+
+#: filterEffectTool/KarbonFilterEffectsTool.cpp:505
+#, kde-format
+msgid "Effect Region"
+msgstr "Область применения эффекта"
+
+#: filterEffectTool/KarbonFilterEffectsToolFactory.cpp:16
+#, kde-format
+msgid "Filter effects editing"
+msgstr "Редактор фильтра эффектов"
+
+#: KarbonGradientTool.cpp:198
+#, kde-format
+msgid "Drag to move gradient position."
+msgstr "Перетащите для перемещения градиента"
+
+#: KarbonGradientTool.cpp:207
+#, kde-format
+msgid "Drag to move color stop. Double click to remove color stop."
+msgstr ""
+"Перетащите для перемещения опорной точки градиента. Дважды щёлкните по "
+"опорной точке , чтобы удалить её."
+
+#: KarbonGradientTool.cpp:209
+#, kde-format
+msgid "Drag to move color stop."
+msgstr "Перетащите для перемещения опорной точки градиента."
+
+#: KarbonGradientTool.cpp:216
+#, kde-format
+msgid "Drag to move gradient position. Double click to insert color stop."
+msgstr ""
+"Перетащите для перемещения градиента. Дважды щёлкните для добавления опорной "
+"точки градиента."
+
+#: KarbonGradientTool.cpp:494
+#, kde-format
+msgid "Edit Gradient"
+msgstr "Правка градиента"
+
+#: KarbonGradientTool.cpp:496
+#, kde-format
+msgid "Predefined Gradients"
+msgstr "Набор градиентов"
+
+#: KarbonGradientToolFactory.cpp:17
+#, kde-format
+msgid "Gradient editing"
+msgstr "Редактор градиентов"
+
+#: KarbonPatternOptionsWidget.cpp:21
+#, kde-format
+msgid "Original"
+msgstr "Оригинал"
+
+#: KarbonPatternOptionsWidget.cpp:22
+#, kde-format
+msgid "Tiled"
+msgstr "Мозаикой"
+
+#: KarbonPatternOptionsWidget.cpp:23
+#, kde-format
+msgid "Stretched"
+msgstr "Растянутая текстура"
+
+#: KarbonPatternOptionsWidget.cpp:25
+#, kde-format
+msgid "Top Left"
+msgstr "Вверху слева"
+
+#: KarbonPatternOptionsWidget.cpp:26
+#, kde-format
+msgid "Top"
+msgstr "Вверху"
+
+#: KarbonPatternOptionsWidget.cpp:27
+#, kde-format
+msgid "Top Right"
+msgstr "Вверху справа"
+
+#: KarbonPatternOptionsWidget.cpp:28
+#, kde-format
+msgid "Left"
+msgstr "Слева"
+
+#: KarbonPatternOptionsWidget.cpp:29
+#, kde-format
+msgid "Center"
+msgstr "По центру"
+
+#: KarbonPatternOptionsWidget.cpp:30
+#, kde-format
+msgid "Right"
+msgstr "Справа"
+
+#: KarbonPatternOptionsWidget.cpp:31
+#, kde-format
+msgid "Bottom Left"
+msgstr "Внизу слева"
+
+#: KarbonPatternOptionsWidget.cpp:32
+#, kde-format
+msgid "Bottom"
+msgstr "Внизу"
+
+#: KarbonPatternOptionsWidget.cpp:33
+#, kde-format
+msgid "Bottom Right"
+msgstr "Внизу справа"
+
+#: KarbonPatternTool.cpp:273
+#, kde-format
+msgid "Pattern Options"
+msgstr "Параметры текстурной заливки"
+
+#: KarbonPatternTool.cpp:275
+#, kde-format
+msgid "Patterns"
+msgstr "Текстуры"
+
+#: KarbonPatternToolFactory.cpp:17
+#, kde-format
+msgid "Pattern editing"
+msgstr "Редактор текстур"
+
+#, fuzzy
+#~| msgid "Effects and Connections"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects and Connections"
+#~ msgstr "Эффекты и соединения"
+
+#, fuzzy
+#~| msgid "..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "..."
+#~ msgstr "..."
+
+#, fuzzy
+#~| msgid "Filter Presets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Presets"
+#~ msgstr "Профили фильтров"
+
+#, fuzzy
+#~| msgid "A calligraphic shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A calligraphic shape"
+#~ msgstr "Каллиграфический объект"
+
+#, fuzzy
+#~| msgid "Calligraphic Shape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphic Shape"
+#~ msgstr "Каллиграфический объект"
+
+#, fuzzy
+#~| msgid "Save profile as..."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Save profile as..."
+#~ msgstr "Сохранить профиль как..."
+
+#, fuzzy
+#~| msgid "Remove profile"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove profile"
+#~ msgstr "Удалить профиль"
+
+#, fuzzy
+#~| msgid "&Follow selected path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "&Follow selected path"
+#~ msgstr "Следовать за в&ыделенным контуром"
+
+#, fuzzy
+#~| msgid "Use tablet &pressure"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &pressure"
+#~ msgstr "&Учитывать нажим пером планшета"
+
+#, fuzzy
+#~| msgid "Width:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Width:"
+#~ msgstr "Толщина:"
+
+#, fuzzy
+#~| msgid "Thinning:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Thinning:"
+#~ msgstr "Сужение:"
+
+#, fuzzy
+#~| msgid "Use tablet &angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Use tablet &angle"
+#~ msgstr "У&читывать угол пера к плоскости планшета"
+
+#, fuzzy
+#~| msgid "Angle:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Angle:"
+#~ msgstr "Угол:"
+
+#, fuzzy
+#~| msgid "Fixation:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fixation:"
+#~ msgstr "Фиксация:"
+
+#, fuzzy
+#~| msgid "Caps:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Caps:"
+#~ msgstr "Концы:"
+
+#, fuzzy
+#~| msgid "Mass:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mass:"
+#~ msgstr "Масса:"
+
+#, fuzzy
+#~| msgid "Drag:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag:"
+#~ msgstr "Инерция:"
+
+#, fuzzy
+#~| msgid "Current"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Current"
+#~ msgstr "Текущий"
+
+#, fuzzy
+#~| msgid "Profile name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Profile name"
+#~ msgstr "Имя профиля"
+
+#, fuzzy
+#~| msgid "Please insert the name by which you want to save this profile:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please insert the name by which you want to save this profile:"
+#~ msgstr "Укажите имя, под которым хотите сохранить этот профиль:"
+
+#, fuzzy
+#~| msgid "Sorry, the name you entered is invalid."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Sorry, the name you entered is invalid."
+#~ msgstr "Извините, но введённое имя некорректно."
+
+#, fuzzy
+#~| msgctxt "invalid profile name"
+#~| msgid "Invalid name."
+#~ msgctxt "(qtundo-format) invalid profile name"
+#~ msgid "Invalid name."
+#~ msgstr "Неправильное имя."
+
+#, fuzzy
+#~| msgid ""
+#~| "A profile with that name already exists.\n"
+#~| "Do you want to overwrite it?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "A profile with that name already exists.\n"
+#~ "Do you want to overwrite it?"
+#~ msgstr ""
+#~ "Профиль с таким названием уже существует.\n"
+#~ "Заменить его?"
+
+#, fuzzy
+#~| msgid "Mouse"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Mouse"
+#~ msgstr "Мышь"
+
+#, fuzzy
+#~| msgid "Graphics Pen"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Graphics Pen"
+#~ msgstr "Перо планшета"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Fill"
+#~ msgstr "Заливка"
+
+#, fuzzy
+#~| msgid "Calligraphy: increase width"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase width"
+#~ msgstr "Каллиграфическое перо: увеличить толщину"
+
+#, fuzzy
+#~| msgid "Calligraphy: decrease width"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease width"
+#~ msgstr "Каллиграфическое перо: уменьшить толщину"
+
+#, fuzzy
+#~| msgid "Calligraphy: increase angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: increase angle"
+#~ msgstr "Каллиграфическое перо: увеличить угол"
+
+#, fuzzy
+#~| msgid "Calligraphy: decrease angle"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy: decrease angle"
+#~ msgstr "Каллиграфическое перо: уменьшить угол"
+
+#, fuzzy
+#~| msgid "Calligraphy"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calligraphy"
+#~ msgstr "Каллиграфическое перо"
+
+#, fuzzy
+#~| msgid "Add effect to current filter stack"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add effect to current filter stack"
+#~ msgstr "Добавление эффекта к текущему набору"
+
+#, fuzzy
+#~| msgid "Add to filter presets"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add to filter presets"
+#~ msgstr "Добавление профиля фильтра"
+
+#, fuzzy
+#~| msgid "Remove filter preset"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter preset"
+#~ msgstr "Удаление профиля фильтра"
+
+#, fuzzy
+#~| msgid "Effect name"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect name"
+#~ msgstr "Название эффекта"
+
+#, fuzzy
+#~| msgid "Please enter a name for the filter effect"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Please enter a name for the filter effect"
+#~ msgstr "Введите название для фильтра"
+
+#, fuzzy
+#~| msgid "Filter Effect Editor"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter Effect Editor"
+#~ msgstr "Редактор фильтра эффектов"
+
+#, fuzzy
+#~| msgid "Effects"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effects"
+#~ msgstr "Эффекты"
+
+#, fuzzy
+#~| msgid "View and edit filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "View and edit filter"
+#~ msgstr "Просмотр и редактирование фильтра"
+
+#, fuzzy
+#~| msgid "Remove filter from object"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove filter from object"
+#~ msgstr "Удаление фильтра с объекта"
+
+#, fuzzy
+#~| msgid "Add Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Filter"
+#~ msgstr "Добавление фильтра"
+
+#, fuzzy
+#~| msgid "Effect Properties"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Properties"
+#~ msgstr "Свойства эффекта"
+
+#, fuzzy
+#~| msgid "X:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "X:"
+#~ msgstr "X:"
+
+#, fuzzy
+#~| msgid "Y:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Y:"
+#~ msgstr "Y:"
+
+#, fuzzy
+#~| msgid "W:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "W:"
+#~ msgstr "Ш:"
+
+#, fuzzy
+#~| msgid "H:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "H:"
+#~ msgstr "В:"
+
+#, fuzzy
+#~| msgid "Effect Region"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Effect Region"
+#~ msgstr "Область применения эффекта"
+
+#, fuzzy
+#~| msgid "Filter effects editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Filter effects editing"
+#~ msgstr "Редактор фильтра эффектов"
+
+#, fuzzy
+#~| msgid "Drag to move gradient position."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position."
+#~ msgstr "Перетащите для перемещения градиента"
+
+#, fuzzy
+#~| msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop. Double click to remove color stop."
+#~ msgstr ""
+#~ "Перетащите для перемещения опорной точки градиента. Дважды щёлкните по "
+#~ "опорной точке , чтобы удалить её."
+
+#, fuzzy
+#~| msgid "Drag to move color stop."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move color stop."
+#~ msgstr "Перетащите для перемещения опорной точки градиента."
+
+#, fuzzy
+#~| msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Drag to move gradient position. Double click to insert color stop."
+#~ msgstr ""
+#~ "Перетащите для перемещения градиента. Дважды щёлкните для добавления "
+#~ "опорной точки градиента."
+
+#, fuzzy
+#~| msgid "Edit Gradient"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Edit Gradient"
+#~ msgstr "Правка градиента"
+
+#, fuzzy
+#~| msgid "Predefined Gradients"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Predefined Gradients"
+#~ msgstr "Набор градиентов"
+
+#, fuzzy
+#~| msgid "Gradient editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Gradient editing"
+#~ msgstr "Редактор градиентов"
+
+#, fuzzy
+#~| msgid "Original"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Original"
+#~ msgstr "Оригинал"
+
+#, fuzzy
+#~| msgid "Tiled"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Tiled"
+#~ msgstr "Мозаикой"
+
+#, fuzzy
+#~| msgid "Stretched"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Stretched"
+#~ msgstr "Растянутая текстура"
+
+#, fuzzy
+#~| msgid "Top Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Left"
+#~ msgstr "Вверху слева"
+
+#, fuzzy
+#~| msgid "Top"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top"
+#~ msgstr "Вверху"
+
+#, fuzzy
+#~| msgid "Top Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Top Right"
+#~ msgstr "Вверху справа"
+
+#, fuzzy
+#~| msgid "Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Left"
+#~ msgstr "Слева"
+
+#, fuzzy
+#~| msgid "Center"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Center"
+#~ msgstr "По центру"
+
+#, fuzzy
+#~| msgid "Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Right"
+#~ msgstr "Справа"
+
+#, fuzzy
+#~| msgid "Bottom Left"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Left"
+#~ msgstr "Внизу слева"
+
+#, fuzzy
+#~| msgid "Bottom"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom"
+#~ msgstr "Внизу"
+
+#, fuzzy
+#~| msgid "Bottom Right"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Bottom Right"
+#~ msgstr "Внизу справа"
+
+#, fuzzy
+#~| msgid "Pattern Options"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern Options"
+#~ msgstr "Параметры текстурной заливки"
+
+#, fuzzy
+#~| msgid "Patterns"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Patterns"
+#~ msgstr "Текстуры"
+
+#, fuzzy
+#~| msgid "Pattern editing"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Pattern editing"
+#~ msgstr "Редактор текстур"
+
+#~ msgid "Target:"
+#~ msgstr "Использование:"
+
+#~ msgid "Line"
+#~ msgstr "Линия"
+
+#~ msgid "Type:"
+#~ msgstr "Тип:"
+
+#~ msgctxt "Linear gradient type"
+#~ msgid "Linear"
+#~ msgstr "Линейный"
+
+#~ msgctxt "Radial gradient type"
+#~ msgid "Radial"
+#~ msgstr "Радиальный"
+
+#~ msgctxt "Conical gradient type"
+#~ msgid "Conical"
+#~ msgstr "Конический"
+
+#~ msgid "Repeat:"
+#~ msgstr "Повтор:"
+
+#~ msgctxt "No gradient spread"
+#~ msgid "None"
+#~ msgstr "Нет"
+
+#~ msgid "Reflect"
+#~ msgstr "Отражение"
+
+#~ msgid "Repeat"
+#~ msgstr "Повтор"
+
+#~ msgid "Overall opacity:"
+#~ msgstr "Общая непрозрачность:"
+
+#~ msgid "Color stop:"
+#~ msgstr "Цвет опорной точки:"
+
+#~ msgid "Stop color."
+#~ msgstr "Цвет опорной точки."
+
+#~ msgid "&Add to Predefined Gradients"
+#~ msgstr "&Добавить к стандартному набору градиентов"
+
+#~ msgid "Reference Point:"
+#~ msgstr "Точка отсчёта:"
+
+#~ msgid "Reference Point Offset"
+#~ msgstr "Смещение базовой точки"
+
+#~ msgid "Tile Offset"
+#~ msgstr "Смещение элемента"
+
+#~ msgid "Pattern Size"
+#~ msgstr "Размер текстуры"
+
+#~ msgid "Calligraphy Tool"
+#~ msgstr "Каллиграфическая кисть"
+
+#~ msgid "Stroke"
+#~ msgstr "Контур"
+
+#~ msgid "Precision:"
+#~ msgstr "Точность:"
+
+#~ msgctxt "The raw line data"
+#~ msgid "Raw"
+#~ msgstr "Без обработки"
+
+#~ msgid "Curve"
+#~ msgstr "Сглаженные линии"
+
+#~ msgid "Straight"
+#~ msgstr "Прямые линии"
+
+#~ msgid "Optimize"
+#~ msgstr "Оптимизировать"
+
+#~ msgid "Exactness:"
+#~ msgstr "Точность:"
+
+#~ msgid "Combine angle:"
+#~ msgstr "Объединение углов:"
+
+#~ msgid "Freehand Path Drawing Tool"
+#~ msgstr "Рисовать произвольные контуры"
+
+#~ msgid "Stop color:"
+#~ msgstr "Цвет опорной точки:"
+
+#~ msgid "Gradient tool"
+#~ msgstr "Редактор градиентной заливки"
+
+#~ msgid "Pattern tool"
+#~ msgstr "Редактор текстурной заливки"
+
+#~ msgid "Pencil tool"
+#~ msgstr "Линия от руки"
+
+#~ msgid "Calligraphy tool"
+#~ msgstr "Каллиграфическая кисть"
+
+#, fuzzy
+#~| msgid "Pattern Editing Tool"
+#~ msgid "Filter effects tool"
+#~ msgstr "Редактор текстурной заливки"
+
+#~ msgctxt "No stroke or fill"
+#~ msgid "None"
+#~ msgstr "Нет"
+
+#~ msgctxt "Solid color stroke or fill"
+#~ msgid "Solid"
+#~ msgstr "Сплошной"
+
+#~ msgid "Gradient"
+#~ msgstr "Градиент"
+
+#~ msgid "Pattern"
+#~ msgstr "Текстура"
+
+#~ msgid "Even-Odd Fill"
+#~ msgstr "Заливка чётом-нечётом"
+
+#~ msgid "Winding Fill"
+#~ msgstr "Извилистая заливка"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "А. Л. Клютченя, Андрей Черепанов, Александр Прокудин"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "asoneofus@kde.ru, sibskull@mail.ru, alexandre.prokoudine@gmail.com"
+
+#~ msgid "&Order"
+#~ msgstr "&Порядок"
+
+#~ msgid "&Align"
+#~ msgstr "&Выровнять"
+
+#, fuzzy
+#~ msgid "&File"
+#~ msgstr "Заливка"
+
+#~ msgid "&Object"
+#~ msgstr "&Объект"
+
+#~ msgid "&Distribute"
+#~ msgstr "Р&асставить"
+
+#, fuzzy
+#~ msgid "&Path"
+#~ msgstr "Контур"
+
+#, fuzzy
+#~ msgid "&Settings"
+#~ msgstr "Параметры линии от руки"
+
+#~ msgid "Object"
+#~ msgstr "Объект"
+
+#, fuzzy
+#~ msgid "Align"
+#~ msgstr "&Выровнять"
+
+#~ msgid "File to open"
+#~ msgstr "Открыть файл"
+
+#~ msgid "Boolean Operation"
+#~ msgstr "Логические операции"
+
+#~ msgid "Raise Layer"
+#~ msgstr "Поднять слой"
+
+#~ msgid "Lower Layer"
+#~ msgstr "Опустить слой"
+
+#, fuzzy
+#~ msgid "Configure"
+#~ msgstr "Настроить Karbon..."
+
+#~ msgid "Interface"
+#~ msgstr "Интерфейс"
+
+#~ msgid "Misc"
+#~ msgstr "Прочее"
+
+#~ msgid "Grid"
+#~ msgstr "Сетка"
+
+#, fuzzy
+#~| msgid "Document"
+#~ msgctxt "@title:tab Document settings page"
+#~ msgid "Document"
+#~ msgstr "Документ"
+
+#~ msgid "Document Settings"
+#~ msgstr "Параметры документа"
+
+#~ msgid "Show status bar"
+#~ msgstr "Показать строку состояния"
+
+#~ msgid "Number of recent files:"
+#~ msgstr "Количество последних файлов:"
+
+#~ msgid "Copy offset:"
+#~ msgstr "Смещение при копировании:"
+
+#~ msgid "Palette font size:"
+#~ msgstr "Кегль шрифта в палитрах:"
+
+#~ msgid "Units:"
+#~ msgstr "Единица измерения:"
+
+#, fuzzy
+#~| msgid "Show &grid"
+#~ msgid "Show grid:"
+#~ msgstr "Показать &сетку"
+
+#, fuzzy
+#~ msgid "Snap to grid:"
+#~ msgstr "Прилипать к сетке."
+
+#, fuzzy
+#~| msgid "Grid &color:"
+#~ msgid "Grid color:"
+#~ msgstr "&Цвет сетки:"
+
+#, fuzzy
+#~| msgid "&Horizontal:"
+#~ msgctxt "Horizontal grid spacing"
+#~ msgid "&Horizontal:"
+#~ msgstr "&Горизонтальные линии"
+
+#, fuzzy
+#~| msgid "&Vertical:"
+#~ msgctxt "Vertical grid spacing"
+#~ msgid "&Vertical:"
+#~ msgstr "&Вертикальные линии"
+
+#~ msgid "Auto save (min):"
+#~ msgstr "Автосохранение:"
+
+#~ msgid "No auto save"
+#~ msgstr "Без автосохранения"
+
+#~ msgid "min"
+#~ msgstr "мин."
+
+#~ msgid "Create backup file"
+#~ msgstr "Создать резервную копию"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer view"
+#~ msgstr "Слои"
+
+#, fuzzy
+#~| msgid "New layer"
+#~ msgid "Add a new layer"
+#~ msgstr "Новый слой"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Delete selected objects"
+#~ msgstr "Удаление объектов"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Raise selected objects"
+#~ msgstr "Удаление объектов"
+
+#, fuzzy
+#~| msgid "Delete Objects"
+#~ msgid "Lower selected objects"
+#~ msgstr "Удаление объектов"
+
+#~ msgid "New Layer"
+#~ msgstr "Новый слой"
+
+#~ msgid "Enter the name of the new layer:"
+#~ msgstr "Введите имя нового слоя:"
+
+#~ msgid "New layer"
+#~ msgstr "Новый слой"
+
+#, fuzzy
+#~ msgid "Create Layer"
+#~ msgstr "Переименование слоя"
+
+#~ msgid "Delete Layer"
+#~ msgstr "Удалить слой"
+
+#, fuzzy
+#~| msgid "Layers"
+#~ msgid "Layer"
+#~ msgstr "Слои"
+
+#, fuzzy
+#~| msgid "group"
+#~ msgctxt "A group of shapes"
+#~ msgid "Group"
+#~ msgstr "Группа"
+
+#, fuzzy
+#~| msgid "Spoke"
+#~ msgid "Shape"
+#~ msgstr "Лучи к вершинам звезды"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Gradient to Add"
+#~ msgstr "Выберите добавляемую текстуру"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern to Add"
+#~ msgstr "Выбор текстуры"
+
+#~ msgid "None"
+#~ msgstr "Нет"
+
+#, fuzzy
+#~| msgid "Stroke"
+#~ msgid "Stroke:"
+#~ msgstr "Контур"
+
+#, fuzzy
+#~| msgid "Fill"
+#~ msgid "Fill:"
+#~ msgstr "Заливка"
+
+#, fuzzy
+#~| msgid "Style:"
+#~ msgid "Styles"
+#~ msgstr "Стиль:"
+
+#~ msgid "&Flatten Path..."
+#~ msgstr "&Сгладить кривую..."
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgid "Flatten Path"
+#~ msgstr "Сгладить кривую"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Контур"
+
+#~ msgid "Flatness:"
+#~ msgstr "Сглаживание:"
+
+#, fuzzy
+#~| msgid "Flatten Path"
+#~ msgid "Flatten path"
+#~ msgstr "Сгладить кривую"
+
+#, fuzzy
+#~ msgid "Refine path"
+#~ msgstr "Замкнуть контур"
+
+#, fuzzy
+#~| msgid "&Flatten Path..."
+#~ msgid "&Refine Path..."
+#~ msgstr "&Сгладить кривую..."
+
+#, fuzzy
+#~ msgid "Refine Path"
+#~ msgstr "Замкнуть контур"
+
+#~ msgid "Round Corners"
+#~ msgstr "Закругление углов"
+
+#~ msgid "&Round Corners..."
+#~ msgstr "&Закругление углов..."
+
+#~ msgid "Radius:"
+#~ msgstr "Радиус:"
+
+#, fuzzy
+#~| msgid "Whirl Pinch"
+#~ msgid "Whirl & pinch"
+#~ msgstr "Кручение и сжатие"
+
+#~ msgid "&Whirl/Pinch..."
+#~ msgstr "&Кручение и сжатие..."
+
+#~ msgid "Whirl Pinch"
+#~ msgstr "Кручение и сжатие"
+
+#~ msgid "Pinch:"
+#~ msgstr "Сжатие:"
+
+#~ msgid "Invalid OASIS document. No office:body tag found."
+#~ msgstr "Недопустимый формат документа OASIS. Не найден тег office:body."
+
+#~ msgid "Invalid OASIS document. No office:drawing tag found."
+#~ msgstr "Недопустимый формат документа OASIS. Не найден тег office:drawing."
+
+#~ msgid "Invalid OASIS document. No draw:page tag found."
+#~ msgstr "Недопустимый формат документа OASIS. Не найден тег office:page."
+
+#, fuzzy
+#~| msgid "Toolbox"
+#~ msgid "Tools"
+#~ msgstr "Панель инструментов"
+
+#, fuzzy
+#~| msgid "Choose Pattern to Add"
+#~ msgid "Choose Graphic to Add"
+#~ msgstr "Выберите добавляемую текстуру"
+
+#, fuzzy
+#~ msgid "Group shapes"
+#~ msgstr "Группировка объектов"
+
+#, fuzzy
+#~ msgid "Ungroup shapes"
+#~ msgstr "Разгруппированы объекты"
+
+#, fuzzy
+#~| msgid "View &Mode"
+#~ msgid "Outline &Mode"
+#~ msgstr "Режим пр&осмотра"
+
+#~ msgid "Show Page Margins"
+#~ msgstr "Показать поля страницы"
+
+#~ msgid "Hide Page Margins"
+#~ msgstr "Скрыть поля страницы"
+
+#~ msgid "&Import Graphic..."
+#~ msgstr "Вставить и&зображение..."
+
+#~ msgid "D&elete"
+#~ msgstr "У&далить"
+
+#, fuzzy
+#~| msgid "&Duplicate"
+#~ msgctxt "Duplicate selection"
+#~ msgid "&Duplicate"
+#~ msgstr "Про&дублировать"
+
+#~ msgid "Distribute Center (Horizontal)"
+#~ msgstr "Равноудалённо расставить центры по горизонтали"
+
+#~ msgid "Distribute Gaps (Horizontal)"
+#~ msgstr "Выровнять интервалы между объектами по горизонтали"
+
+#~ msgid "Distribute Left Borders"
+#~ msgstr "Равноудалённо расставить левые края"
+
+#~ msgid "Distribute Right Borders"
+#~ msgstr "Равноудалённо расставить правые края"
+
+#~ msgid "Distribute Center (Vertical)"
+#~ msgstr "Равноудалённо расставить центры по вертикали"
+
+#~ msgid "Distribute Gaps (Vertical)"
+#~ msgstr "Выровнять интервалы между объектами по вертикали"
+
+#~ msgid "Distribute Bottom Borders"
+#~ msgstr "Равноудалённо расставить нижние края"
+
+#~ msgid "Distribute Top Borders"
+#~ msgstr "Равноудалённо расставить верхние края"
+
+#~ msgid "Show Rulers"
+#~ msgstr "Показать линейки"
+
+#~ msgid "Hide Rulers"
+#~ msgstr "Скрыть линейки"
+
+#, fuzzy
+#~ msgid "Shows or hides rulers"
+#~ msgstr "Показать или скрыть линейки."
+
+#, fuzzy
+#~| msgid "Show Grid"
+#~ msgid "Show Guides"
+#~ msgstr "Показать сетку"
+
+#, fuzzy
+#~| msgid "Hide Grid"
+#~ msgid "Hide Guides"
+#~ msgstr "Скрыть сетку"
+
+#, fuzzy
+#~ msgid "Shows or hides guides"
+#~ msgstr "Показать или скрыть сетку."
+
+#~ msgid "Snap to Grid"
+#~ msgstr "Прилипание к сетке"
+
+#, fuzzy
+#~ msgid "Snaps to grid"
+#~ msgstr "Прилипать к сетке."
+
+#~ msgid "&Group Objects"
+#~ msgstr "С&группировать объекты"
+
+#~ msgid "&Ungroup Objects"
+#~ msgstr "&Разгруппировать объекты"
+
+#~ msgid "&Close Path"
+#~ msgstr "&Замкнуть контур"
+
+#, fuzzy
+#~ msgid "Com&bine Path"
+#~ msgstr "Замкнуть контур"
+
+#, fuzzy
+#~ msgid "Se&parate Path"
+#~ msgstr "Сгладить кривую"
+
+#, fuzzy
+#~| msgid "&Close Path"
+#~ msgid "Re&verse Path"
+#~ msgstr "&Замкнуть контур"
+
+#, fuzzy
+#~| msgid "Edit Base Path"
+#~ msgid "Intersect Paths"
+#~ msgstr "Изменить базовый контур"
+
+#, fuzzy
+#~ msgid "Subtract Paths"
+#~ msgstr "Сгладить кривую"
+
+#, fuzzy
+#~| msgid "Edit Base Path"
+#~ msgid "Unite Paths"
+#~ msgstr "Изменить базовый контур"
+
+#~ msgid "Configure Karbon..."
+#~ msgstr "Настроить Karbon..."
+
+#~ msgid "Page &Layout..."
+#~ msgstr "&Свойства страницы..."
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgid "Zoom to Selection"
+#~ msgstr "Выделение"
+
+#, fuzzy
+#~| msgid "Selection"
+#~ msgid "Zoom to Drawing"
+#~ msgstr "Выделение"
+
+#, fuzzy
+#~ msgid "Zoom"
+#~ msgstr "Масштаб"
+
+#~ msgid "Bring to &Front"
+#~ msgstr "На самый &верх"
+
+#~ msgid "&Raise"
+#~ msgstr "&Поднять"
+
+#, fuzzy
+#~| msgid "&Lower"
+#~ msgctxt "Lower selected shapes"
+#~ msgid "&Lower"
+#~ msgstr "&Опустить"
+
+#~ msgid "Send to &Back"
+#~ msgstr "В самый &низ"
+
+#~ msgid "Show Grid"
+#~ msgstr "Показать сетку"
+
+#~ msgid "Hide Grid"
+#~ msgstr "Скрыть сетку"
+
+#, fuzzy
+#~ msgid "Shows or hides grid"
+#~ msgstr "Показать или скрыть сетку."
+
+#~ msgid "Align Left"
+#~ msgstr "По левому краю"
+
+#~ msgid "Align Center (Horizontal)"
+#~ msgstr "По центру (горизонтально)"
+
+#~ msgid "Align Right"
+#~ msgstr "По правому краю"
+
+#~ msgid "Align Top"
+#~ msgstr "По верхнему краю"
+
+#~ msgid "Align Middle (Vertical)"
+#~ msgstr "По центру (вертикально)"
+
+#, fuzzy
+#~| msgid "Align Bottom"
+#~ msgid "Align Bottom"
+#~ msgstr "По нижнему краю"
+
+#, fuzzy
+#~| msgid "Opacity:"
+#~ msgid "Stop opacity:"
+#~ msgstr "Непрозрачность:"
+
+#, fuzzy
+#~| msgid "Show status bar"
+#~ msgid "Show details >>"
+#~ msgstr "Показать строку состояния"
+
+#~ msgid "Opacity"
+#~ msgstr "Прозрачность"
+
+#, fuzzy
+#~| msgid "Pattern"
+#~ msgid "Edit Pattern"
+#~ msgstr "Текстура"
+
+#, fuzzy
+#~| msgid "Choose Pattern"
+#~ msgid "Choose Pattern"
+#~ msgstr "Выбор текстуры"
+
+#, fuzzy
+#~| msgid "Predefined"
+#~ msgid "Undefined"
+#~ msgstr "Набор"
+
+#~ msgid "Transform"
+#~ msgstr "Размеры и преобразования"
+
+#~ msgid "Set x-position of actual selection"
+#~ msgstr "Установить положение текущего выделения по оси X "
+
+#~ msgid "Set y-position of actual selection"
+#~ msgstr "Установить положение текущего выделения по оси Y"
+
+#~ msgid "Set width of actual selection"
+#~ msgstr "Установить ширину текущего выделения"
+
+#~ msgid "Set height of actual selection"
+#~ msgstr "Установить высоту текущего выделения"
+
+#~ msgid "R:"
+#~ msgstr "R(К):"
+
+#~ msgid "Rotate actual selection"
+#~ msgstr "Вращение текущего выделения"
+
+#~ msgid "SX:"
+#~ msgstr "SX:"
+
+#~ msgid "Shear actual selection in x-direction"
+#~ msgstr "Скосить текущее выделение в направлении оси X"
+
+#~ msgid "SY:"
+#~ msgstr "SY:"
+
+#~ msgid "Shear actual selection in y-direction"
+#~ msgstr "Скосить текущее выделение в направлении оси Y"
+
+#~ msgid "Shear"
+#~ msgstr "Сдвиг"
+
+#~ msgid "Rotate"
+#~ msgstr "Вращение"
+
+#, fuzzy
+#~ msgid "Attach Path"
+#~ msgstr "Сгладить кривую"
+
+#, fuzzy
+#~ msgid "Detach Path"
+#~ msgstr "Сгладить кривую"
+
+#, fuzzy
+#~| msgid "Convert to Shapes"
+#~ msgid "Convert to Path"
+#~ msgstr "Преобразовать в фигуру"
+
+#, fuzzy
+#~| msgid "Text Tool"
+#~ msgid "Simple Text Tool"
+#~ msgstr "Текст"
+
+#~ msgid "Save as path"
+#~ msgstr "Преобразовывать объекты в кривые"
+
+#~ msgid "Uniform Color"
+#~ msgstr "Общий цвет"
+
+#~ msgid "Old:"
+#~ msgstr "Старый:"
+
+#~ msgid "New:"
+#~ msgstr "Новый:"
+
+#~ msgid "Components"
+#~ msgstr "Компоненты"
+
+#~ msgid "G:"
+#~ msgstr "G(З):"
+
+#~ msgid "B:"
+#~ msgstr "B(Г):"
+
+#~ msgctxt "Hue:"
+#~ msgid "H:"
+#~ msgstr "H:"
+
+#~ msgctxt "Saturation:"
+#~ msgid "S:"
+#~ msgstr "S:"
+
+#~ msgctxt "Value:"
+#~ msgid "V:"
+#~ msgstr "V:"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "Type"
+#~ msgstr "Тип"
+
+#~ msgid "Cap"
+#~ msgstr "Отсоединить"
+
+#~ msgid "Join"
+#~ msgstr "Присоединить"
+
+#~ msgid "Color Chooser"
+#~ msgstr "Выбор цвета"
+
+#~ msgid "Height:"
+#~ msgstr "Высота:"
+
+#~ msgid "Layers:"
+#~ msgstr "Слоёв:"
+
+#~ msgid "Format:"
+#~ msgstr "Формат:"
+
+#~ msgid "Resources"
+#~ msgstr "Ресурсы"
+
+#~ msgid "Clipart"
+#~ msgstr "Иллюстрация"
+
+#, fuzzy
+#~ msgid "Import"
+#~ msgstr "&Импорт"
+
+#, fuzzy
+#~ msgid "Delete"
+#~ msgstr "У&далить"
+
+#~ msgid "Stroke: None"
+#~ msgstr "Контур: нет"
+
+#~ msgid "Fill: None"
+#~ msgstr "Заливка: нет"
+
+#~ msgid "Fill: RGB"
+#~ msgstr "Заливка: RGB"
+
+#~ msgid "Fill: CMYK"
+#~ msgstr "Заливка: CMYK"
+
+#~ msgid "Fill: HSB"
+#~ msgstr "Заливка: HSB"
+
+#~ msgid "Fill: Grayscale"
+#~ msgstr "Заливка: градации серого"
+
+#~ msgid "Fill: Color"
+#~ msgstr "Заливка: сплошной цвет"
+
+#~ msgid "Fill: Gradient"
+#~ msgstr "Заливка: градиент"
+
+#~ msgid "Fill: Pattern"
+#~ msgstr "Заливка: текстура"
+
+#~ msgid "Stroke: RGB"
+#~ msgstr "Контур: RGB"
+
+#~ msgid "Stroke: CMYK"
+#~ msgstr "Контур: CMYK"
+
+#~ msgid "Stroke: HSB"
+#~ msgstr "Контур: HSB"
+
+#~ msgid "Stroke: Grayscale"
+#~ msgstr "Контур: градации серого"
+
+#~ msgid "Stroke: Color"
+#~ msgstr "Контур: сплошной цвет"
+
+#~ msgid "Stroke: Gradient"
+#~ msgstr "Контур: градиент"
+
+#~ msgid "Stroke: Pattern"
+#~ msgstr "Контур: текстура"
+
+#~ msgid "Polygonize"
+#~ msgstr "Выпрямить линии"
+
+#~ msgid "Round corners:"
+#~ msgstr "Закругление углов:"
+
+#~ msgid "&Shadow Effect..."
+#~ msgstr "&Тень..."
+
+#~ msgid "Create Shadow Effect"
+#~ msgstr "Создать тень"
+
+#~ msgid "Distance:"
+#~ msgstr "Расстояние:"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "Create Shadow"
+#~ msgstr "Создать тень"
+
+#, fuzzy
+#~ msgid "&Delete"
+#~ msgstr "У&далить"
+
+#~ msgid "&Import"
+#~ msgstr "&Импорт"
+
+#, fuzzy
+#~| msgid "Image Tool"
+#~ msgid "Unnamed Tool"
+#~ msgstr "Картинка"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Отмена: "
+
+#, fuzzy
+#~ msgid "&Redo"
+#~ msgstr "&Повтор: "
+
+#~ msgid "&Undo: "
+#~ msgstr "&Отмена: "
+
+#~ msgid "&Redo: "
+#~ msgstr "&Повтор: "
+
+#~ msgid "Fill Objects"
+#~ msgstr "Заливка объектов"
+
+#~ msgid "Fill Object"
+#~ msgstr "Заливка объекта"
+
+#~ msgid "Insert Text"
+#~ msgstr "Вставка текста"
+
+#~ msgid "Transform Objects"
+#~ msgstr "Преобразование объектов"
+
+#~ msgid "Duplicate Object"
+#~ msgstr "Продублировать объект"
+
+#~ msgid "Duplicate Objects"
+#~ msgstr "Продублировать объекты"
+
+#~ msgid "Transform Object"
+#~ msgstr "Преобразование объекта"
+
+#~ msgid "Translate Objects"
+#~ msgstr "Перемещение объектов"
+
+#~ msgid "Translate Object"
+#~ msgstr "Перемещение объекта"
+
+#~ msgid "Scale Objects"
+#~ msgstr "Масштабированы объекты"
+
+#~ msgid "Scale Object"
+#~ msgstr "Масштабирован объект"
+
+#~ msgid "Shear Objects"
+#~ msgstr "Скошены объекты"
+
+#~ msgid "Shear Object"
+#~ msgstr "Скошен объект"
+
+#~ msgid "Rotate Objects"
+#~ msgstr "Вращение объектов"
+
+#~ msgid "Rotate Object"
+#~ msgstr "Вращение объекта"
+
+#~ msgid "Translate Bezier"
+#~ msgstr "Перемещена кривая Безье"
+
+#~ msgid "Translate Points"
+#~ msgstr "Перемещение узлов"
+
+#~ msgid "Translate Point"
+#~ msgstr "Перемещение узла"
+
+#~ msgid "Ellipse"
+#~ msgstr "Эллипс"
+
+#~ msgid "Polygon"
+#~ msgstr "Многоугольник"
+
+#~ msgid "Polyline"
+#~ msgstr "Ломаная"
+
+#~ msgid "Sinus"
+#~ msgstr "Синусоида"
+
+#~ msgid "Spiral"
+#~ msgstr "Спираль"
+
+#~ msgid "Star"
+#~ msgstr "Звезда"
+
+#~ msgid "<qt><b>Shape tool</b><br>"
+#~ msgstr "<qt><b>Фигура</b><br>"
+
+#~ msgid "<i>Click and drag</i> to place your own shape.<br>"
+#~ msgstr ""
+#~ "<i>Щёлкните и растяните</i> для добавления фигуры указанного размера.<br>"
+
+#~ msgid "<i>Click</i> to place a shape using the tool properties values.</qt>"
+#~ msgstr ""
+#~ "<i>Щёлкните</i> для добавления фигуры с использованием параметров по "
+#~ "умолчанию.</qt>"
+
+#~ msgid "Insert Sinus"
+#~ msgstr "Вставка синусоиды"
+
+#~ msgid "Periods:"
+#~ msgstr "Период:"
+
+#~ msgid "Sinus Tool"
+#~ msgstr "Синусоида"
+
+#~ msgid "Insert Spiral"
+#~ msgstr "Вставка спирали"
+
+#~ msgid "Round"
+#~ msgstr "Скругление"
+
+#~ msgid "Rectangular"
+#~ msgstr "Прямоугольный"
+
+#~ msgid "Segments:"
+#~ msgstr "Сегменты:"
+
+#~ msgid "Fade:"
+#~ msgstr "Сочность:"
+
+#~ msgid "Clockwise"
+#~ msgstr "По часовой стрелке"
+
+#~ msgid "Counter Clockwise"
+#~ msgstr "Счётчик по часовой стрелке"
+
+#~ msgid "Spiral Tool"
+#~ msgstr "Спираль"
+
+#~ msgid "Insert Star"
+#~ msgstr "Вставка звезды"
+
+#~ msgid "Star Outline"
+#~ msgstr "Контур звезды"
+
+#~ msgid "Wheel"
+#~ msgstr "Звезда в виде колеса"
+
+#~ msgid "Framed Star"
+#~ msgstr "Звезда в описанном многоугольнике"
+
+#~ msgid "Gear"
+#~ msgstr "Обычная звезда"
+
+#~ msgid "Outer radius:"
+#~ msgstr "Внешний радиус:"
+
+#~ msgid "Inner radius:"
+#~ msgstr "Внутренний радиус:"
+
+#~ msgid "Edges:"
+#~ msgstr "Углов:"
+
+#~ msgid "Inner angle:"
+#~ msgstr "Внутренний угол:"
+
+#~ msgid "Roundness:"
+#~ msgstr "Закругление:"
+
+#~ msgid "Star Tool"
+#~ msgstr "Звезда"
+
+#~ msgid "Draw a star"
+#~ msgstr "Звезда"
+
+#~ msgid "Shadow"
+#~ msgstr "Тень"
+
+#~ msgid "Draw translucent shadow"
+#~ msgstr "Полупрозрачная тень"
+
+#~ msgid "Text"
+#~ msgstr "Текст"
+
+#~ msgid "Bold"
+#~ msgstr "Полужирный"
+
+#~ msgid "Alignment:"
+#~ msgstr "Выравнивание текста:"
+
+#~ msgid "Position"
+#~ msgstr "Позиция"
+
+#~ msgid "Edit Base Path"
+#~ msgstr "Изменить базовый контур"
+
+#~ msgid "New text"
+#~ msgstr "Текст"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Above"
+#~ msgstr "Над линией"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "On"
+#~ msgstr "По линии"
+
+#~ msgctxt "Vertical alignment"
+#~ msgid "Under"
+#~ msgstr "Под линией"
+
+#~ msgid "<qt><b>Text Tool</b><br>"
+#~ msgstr "<qt><b>Текст</b><br>"
+
+#~ msgid "<i>Click</i> on document to place horizontal text.<br>"
+#~ msgstr ""
+#~ "<i>Щёлкните</i> на документе для добавления горизонтального текста.<br>"
+
+#~ msgid "<i>Click and drag</i> in document to place directional text.<br>"
+#~ msgstr ""
+#~ "<i>Щёлкните и переместите</i> курсор мыши для расположения текста под "
+#~ "углом<br>"
+
+#~ msgid ""
+#~ "<i>Click</i> on a selected path object to place text along its outline."
+#~ "<br>"
+#~ msgstr ""
+#~ "<i>Щёлкните</i> выбранный контур для расположения текста по нему.<br>"
+
+#~ msgid "<i>Click</i> on a selected text object to change it.<br></qt>"
+#~ msgstr "<i>Щёлкните</i> по текстовому объекту для его правки.<br></qt>"
+
+#~ msgid "Change Text"
+#~ msgstr "Изменить текст"
+
+#~ msgid "Text Conversion"
+#~ msgstr "Преобразование текста"
+
+#~ msgid "One object"
+#~ msgid_plural "%1 objects"
+#~ msgstr[0] "%1 объект"
+#~ msgstr[1] "%1 объекта"
+#~ msgstr[2] "%1 объектов"
+#~ msgstr[3] "%1 объект"
+
+#~ msgid "path"
+#~ msgstr "Контур"
+
+#~ msgid "One group, containing one object"
+#~ msgid_plural "One group, containing %1 objects"
+#~ msgstr[0] "Группа, содержащая %1 объект"
+#~ msgstr[1] "Группа, содержащая %1 объекта"
+#~ msgstr[2] "Группа, содержащая %1 объектов"
+#~ msgstr[3] "Группа, содержащая %1 объект"
+
+#~ msgid "text"
+#~ msgstr "Текст"
+
+#~ msgid "image"
+#~ msgstr "Рисунок"
+
+#~ msgid "Paste Object"
+#~ msgstr "Вставить объект"
+
+#~ msgid "Paste Objects"
+#~ msgstr "Вставить объекты"
+
+#~ msgid "Flatten Curves"
+#~ msgstr "Сглаживание контуров"
+
+#~ msgid "Stroke Properties"
+#~ msgstr "Контур"
+
+#~ msgid "Set line width of actual selection"
+#~ msgstr "Установить толщину линии как в текущем выделении"
+
+#~ msgid "Butt cap"
+#~ msgstr "Плоские"
+
+#~ msgid "Round cap"
+#~ msgstr "Круглые"
+
+#~ msgid "Square cap"
+#~ msgstr "Квадратные"
+
+#~ msgid "Join:"
+#~ msgstr "Соединение:"
+
+#~ msgid "Miter join"
+#~ msgstr "Острое"
+
+#~ msgid "Round join"
+#~ msgstr "Скруглённое"
+
+#~ msgid "Bevel join"
+#~ msgstr "Фаска"
+
+#, fuzzy
+#~ msgid "Miter limit:"
+#~ msgstr "Острое"
+
+#~ msgid "P&urge"
+#~ msgstr "О&чистить"
+
+#~ msgid "&History"
+#~ msgstr "&Историю редактирования"
+
+#~ msgid "&Insert Knots..."
+#~ msgstr "&Вставить узлы..."
+
+#~ msgid "Insert Knots"
+#~ msgstr "Вставка узлов"
+
+#~ msgid "Insert Clipart"
+#~ msgstr "Вставка иллюстрации"
+
+#~ msgid "Stroke Objects"
+#~ msgstr "Контур объектов"
+
+#~ msgid "Stroke Object"
+#~ msgstr "Контур объекта"
+
+#~ msgid "Stroke Width"
+#~ msgstr "Толщина контура"
+
+#~ msgid "Dash Pattern"
+#~ msgstr "Штриховая текстурная заливка"
+
+#~ msgid "<qt><b>Zoom tool:</b><br>"
+#~ msgstr "<qt><b>Масштаб:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to zoom into a rectangular area.<br>"
+#~ msgstr "<i>Щёлкните и переместите</i> чтобы выбрать область для показа.<br>"
+
+#~ msgid "<i>Right click</i> to zoom out of canvas.<br>"
+#~ msgstr "<i>Щёлкните правой кнопкой мыши</i> для отдаления вида.<br>"
+
+#~ msgid "<i>Pressing +/- keys</i><br>to zoom into/out of canvas."
+#~ msgstr "<i>Нажимайте клавиши +/-</i><br> для приближения и отдаления вида."
+
+#~ msgid "Zoom Tool"
+#~ msgstr "Масштаб"
+
+#~ msgid "Undo/redo limit:"
+#~ msgstr "Запоминаемых действий для отмены и повтора:"
+
+#~ msgid "<qt><b>Polyline tool:</b><br>"
+#~ msgstr "<qt><b>Ломаная:</b><br>"
+
+#~ msgid ""
+#~ "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>"
+#~ msgstr ""
+#~ "- <i>Щёлкните</i> для добавления нового узла и <i>переместите</i> для "
+#~ "установки вектора Безье.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>"
+#~ msgstr ""
+#~ "- Нажмите <i>Ctrl</i> при перетаскивании для изменения предыдущего "
+#~ "вектора.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Shift</i> while dragging to change the curve in a straight "
+#~ "line.<br>"
+#~ msgstr ""
+#~ "- Нажмите <i>Shift</i> при перетаскивании для преобразования вектора в "
+#~ "прямую линию.<br>"
+
+#~ msgid "- Press <i>Backspace</i> to cancel the last curve.<br>"
+#~ msgstr "- Нажмите <i>Backspace</i> для отмены последнего вектора.<br>"
+
+#~ msgid "- Press <i>Esc</i> to cancel the whole polyline.<br>"
+#~ msgstr "- Нажмите <i>Esc</i> для удаления всей ломаной.<br>"
+
+#~ msgid ""
+#~ "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>"
+#~ msgstr ""
+#~ "- Нажмите <i>Enter</i> или <i>дважды щёлкните</i> для окончания рисования "
+#~ "ломаной.</qt>"
+
+#~ msgid "Polyline Tool"
+#~ msgstr "Ломаная"
+
+#~ msgid "Translate"
+#~ msgstr "Преобразовать"
+
+#~ msgid "Relative &position"
+#~ msgstr "Настоящее по&ложение"
+
+#~ msgid "This action cannot be undone later. Do you really want to continue?"
+#~ msgstr ""
+#~ "Данное действие невозможно будет отменить. Вы действительно хотите "
+#~ "продолжить?"
+
+#~ msgid "Purge History"
+#~ msgstr "Очистить историю"
+
+#~ msgid "Zoom Width"
+#~ msgstr "По ширине страницы"
+
+#~ msgid "Whole Page"
+#~ msgstr "Страница целиком"
+
+#~ msgid "Normal"
+#~ msgstr "Обычный"
+
+#~ msgid "Wireframe"
+#~ msgstr "Каркас"
+
+#~ msgid "25%"
+#~ msgstr "25%"
+
+#~ msgid "50%"
+#~ msgstr "50%"
+
+#~ msgid "100%"
+#~ msgstr "100%"
+
+#~ msgid "200%"
+#~ msgstr "200%"
+
+#~ msgid "300%"
+#~ msgstr "300%"
+
+#~ msgid "400%"
+#~ msgstr "400%"
+
+#~ msgid "800%"
+#~ msgstr "800%"
+
+#~ msgid "Line Style"
+#~ msgstr "Стиль линии"
+
+#~ msgid "History"
+#~ msgstr "История действий"
+
+#~ msgid "Align Objects"
+#~ msgstr "Выровнять объекты"
+
+#~ msgid "Clean Up"
+#~ msgstr "Очистить"
+
+#~ msgid "Delete Object"
+#~ msgstr "Удаление объекта"
+
+#~ msgid "Delete Node"
+#~ msgstr "Удаление узла"
+
+#~ msgid "Distribute Objects"
+#~ msgstr "Расстановка объектов"
+
+#~ msgid "Order Selection"
+#~ msgstr "Выбор нескольких объектов"
+
+#~ msgid "Snap to g&rid"
+#~ msgstr "Прилипать к с&етке"
+
+#~ msgid "Snap Distance"
+#~ msgstr "Зона прилипания"
+
+#~ msgid "H&orizontal:"
+#~ msgstr "По г&оризонтали:"
+
+#~ msgid "V&ertical:"
+#~ msgstr "По в&ертикали:"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Alpha (opacity)"
+#~ msgstr "Альфа (непрозрачность)"
+
+#~ msgctxt "document width"
+#~ msgid "Width:"
+#~ msgstr "Ширина:"
+
+#~ msgid "New"
+#~ msgstr "Новый"
+
+#~ msgid "Raise"
+#~ msgstr "Поднять"
+
+#~ msgid "Lower"
+#~ msgstr "Опустить"
+
+#~ msgid "Item"
+#~ msgstr "Объект"
+
+#~ msgid "L"
+#~ msgstr "L"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Current Object"
+#~ msgstr "Текущий объект"
+
+#~ msgid "Change the name of the object:"
+#~ msgstr "Переименовать объект:"
+
+#~ msgid "Change the name of the current layer:"
+#~ msgstr "Переименовать слой:"
+
+#~ msgid "Commands"
+#~ msgstr "Команды"
+
+#~ msgid "Group commands"
+#~ msgstr "Группировать команды"
+
+#~ msgid "Rectangle"
+#~ msgstr "Прямоугольник"
+
+#~ msgid "Insert Ellipse"
+#~ msgstr "Вставка эллипса"
+
+#~ msgid "Full"
+#~ msgstr "Эллипс"
+
+#~ msgid "Section"
+#~ msgstr "Хорда"
+
+#~ msgid "Pie"
+#~ msgstr "Сектор"
+
+#~ msgid "Arc"
+#~ msgstr "Дуга"
+
+#~ msgctxt "object width"
+#~ msgid "Width:"
+#~ msgstr "Ширина:"
+
+#~ msgid "End angle:"
+#~ msgstr "Конечный угол"
+
+#~ msgid "<qt><b>Gradient tool:</b><br>"
+#~ msgstr "<qt><b>Градиент:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to choose the gradient vector.<br>"
+#~ msgstr "<i>Щёлкните и переместите</i> для выбора вектора градиента.<br>"
+
+#~ msgid ""
+#~ "<i>Click and drag</i> a gradient vector handle to change the gradient "
+#~ "vector.<br>"
+#~ msgstr ""
+#~ "<i>Щёлкните и переместите</i> рычаг вектора градиента для смены его "
+#~ "направления.<br>"
+
+#~ msgid ""
+#~ "<i>Shift click and drag</i> to move the radial gradient focal point.<br>"
+#~ msgstr ""
+#~ "<i>Щёлкните и переместите</i> для перемещения точки фокуса радиального "
+#~ "градиента.<br>"
+
+#~ msgid ""
+#~ "<i>Press i or Shift+i</i> to decrease or increase the handle size.<br>"
+#~ msgstr ""
+#~ "<i>Нажмите i или Shift+i</i> для уменьшения или увеличения размера рычага."
+#~ "<br>"
+
+#~ msgid "<br><b>Gradient editing:</b><br>"
+#~ msgstr "<br><b>Правка градиента:</b><br>"
+
+#~ msgid "<i>Click and drag</i> to move points.<br>"
+#~ msgstr ""
+#~ "<i>Щёлкните и переместите</i> ползунок цвета для перемещения цвета.<br>"
+
+#~ msgid "<i>Double click</i> on a color point to edit it.<br>"
+#~ msgstr "<i>Дважды щёлкните</i> на ползунке цвета для изменения цвета.<br>"
+
+#~ msgid "<i>Right click</i> on a color point to remove it.</qt>"
+#~ msgstr ""
+#~ "<i>Щёлкните правой кнопкой мыши</i> на ползунке цвета для удаления цвета."
+#~ "</qt>"
+
+#~ msgid "<qt><b>Pattern tool:</b><br>"
+#~ msgstr "<qt><b>Текстурная заливка:</b><br>"
+
+#~ msgid "<i>Click</i> on the pattern you want in the chooser.<br>"
+#~ msgstr "<i>Щёлкните и переместите</i> для добавления узора.<br>"
+
+#~ msgid "<i>Click and drag</i> to choose the pattern vector.</qt>"
+#~ msgstr "<i>Щёлкните и переместите</i> для выбора вектора градиента.</qt>"
+
+#~ msgid "Please select a pattern."
+#~ msgstr "Выберите текстуру"
+
+#~ msgid "<qt><b>Pencil tool:</b><br>"
+#~ msgstr "<qt><b>Линия от руки:</b><br>"
+
+#~ msgid "- <i>Click</i> to begin drawing, release when you have finished."
+#~ msgstr ""
+#~ "- <i>Щелчок кнопкой мыши</i> для начала рисования, отжатие кнопки - "
+#~ "окончание."
+
+#~ msgid "Pencil"
+#~ msgstr "Линия от руки"
+
+#~ msgid "Insert Polygon"
+#~ msgstr "Вставка многоугольника"
+
+#~ msgid "Polygon Tool"
+#~ msgstr "Многоугольник"
+
+#~ msgid "Insert Rectangle"
+#~ msgstr "Вставка прямоугольника"
+
+#~ msgid "Rectangle Tool"
+#~ msgstr "Прямоугольник"
+
+#~ msgid "Rotate Tool"
+#~ msgstr "Поворот"
+
+#~ msgid "Insert Round Rect"
+#~ msgstr "Вставка скруглённого прямоугольника"
+
+#~ msgid "Height (%1):"
+#~ msgstr "Высота (%1):"
+
+#~ msgid "Edge radius X:"
+#~ msgstr "Радиус края по X:"
+
+#~ msgid "Edge radius Y:"
+#~ msgstr "Радиус края по Y:"
+
+#~ msgid "Round Rectangle Tool"
+#~ msgstr "Скруглённый прямоугольник"
+
+#~ msgid "Round Rectangle"
+#~ msgstr "Скруглённый прямоугольник"
+
+#~ msgid "Editing Nodes"
+#~ msgstr "Изменение узлов"
+
+#~ msgid "Select Nodes Tool"
+#~ msgstr "Изменение узлов"
+
+#~ msgid "Select Nodes"
+#~ msgstr "Изменение узлов"
+
+#~ msgid "Selection Mode"
+#~ msgstr "Режим выделения"
+
+#~ msgid "Select in current layer"
+#~ msgstr "Выбрать на текущем слое"
+
+#~ msgid "Select in visible layers"
+#~ msgstr "Выбрать на всех видимых слоях"
+
+#~ msgid "Select in selected layers"
+#~ msgstr "Выбрать на всех выделенных слоях"
+
+#~ msgid "Select"
+#~ msgstr "Выбрать"
+
+#~ msgid "<qt><b>Selection tool:</b><br>"
+#~ msgstr "<qt><b>Выбор:</b><br>"
+
+#~ msgid ""
+#~ "<i>Select in current layer:</i><br>The selection is made in the layer "
+#~ "selected in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Выбрать на текущем слое:</i><br>Будут выбраны объекты на слое, "
+#~ "выделенном в списке слоев.<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in visible layers:</i><br>The selection is made in the visible "
+#~ "layers (eye in the layers docker).<br><br>"
+#~ msgstr ""
+#~ "<i>Выбрать на всех видимых слоях:</i><br>Будут выбраны объекты на всех "
+#~ "видимых слоях (отмечены в списке изображением глаза).<br><br>"
+
+#~ msgid ""
+#~ "<i>Select in selected layers:</i><br>The selection is made in the checked "
+#~ "layers in the layers docker.<br><br>"
+#~ msgstr ""
+#~ "<i>Выбрать на всех выделенных слоях:</i><br>Будут выбраны объекты на всех "
+#~ "слоях, отмеченных в списке слоев.<br><br>"
+
+#~ msgid ""
+#~ "<i>Position using arrow keys</i><br>The selection can be positioned up, "
+#~ "down, left and right using the corresponding arrow keys."
+#~ msgstr ""
+#~ "<i>Перемещение клавишами</i><br>Выделенные объекты будут перемещаться "
+#~ "вверх, вниз, влево и вправо при нажатии соответствующих клавиш "
+#~ "перемещения."
+
+#~ msgctxt "[(left,bottom), (right,top)] (actual unit)"
+#~ msgid "Selection [(%1, %2), (%3, %4)] (%5)"
+#~ msgstr "Выделение (%1, %2)-(%3, %4) %5 : "
+
+#~ msgid "No selection"
+#~ msgstr "Не выбран ни один объект"
+
+#~ msgid "Select Tool"
+#~ msgstr "Выбор объектов"
+
+#~ msgid "Shear Tool"
+#~ msgstr "Кадрирование"
+
+#~ msgctxt "selection width"
+#~ msgid "Width:"
+#~ msgstr "Ширина:"
+
+#~ msgid "<qt><b>Image tool:</b><br>"
+#~ msgstr "<qt><b>Картинка:</b><br>"
+
+#~ msgid "Choose Image to Add"
+#~ msgstr "Выберите изображение"
+
+#~ msgid "Insert Image"
+#~ msgstr "Вставка изображения"
+
+#~ msgid "Image"
+#~ msgstr "Изображение"
+
+#~ msgid "Knots:"
+#~ msgstr "Узлов:"

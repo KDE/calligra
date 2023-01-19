@@ -1,0 +1,228 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Marce</firstname
+><surname
+>Villarino</surname
+><affiliation
+><address
+><email
+>mvillarino@users.sourceforge.net</email
+></address
+></affiliation
+><contrib
+>Tradutor do proxecto Trasno</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Configuración dos Atallos de Teclado e Barras de Ferramentas de &kspread;</title>
+
+<sect1 id="configshort">
+<title
+>Atallos</title>
+<para
+>Para mudar os atallos de teclados usados por &kspread; escolla <menuchoice
+><guimenu
+>Configuración</guimenu
+><guimenuitem
+>Configurar Atallos de Teclado...</guimenuitem
+></menuchoice
+>. Isto mostrará un diálogo como o que se mostra en baixo. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Captura num. 1 da configuración dos atallos</phrase>
+</textobject>
+</mediaobject>
+<para
+>Procure pola lista a acción á que lle queira engadir ou mudar os atallos e escolla-a premendo co botón <mousebutton
+>esquerdo</mousebutton
+> no seu nome. Se escrebe o nome da acción na barra de procuras na parte de acima poderá achar rapidamente a acción desexada. Entón poderá mudar o atallo escollendo un dos botóns <guilabel
+>Nengún</guilabel
+>, <guilabel
+>Predefinido</guilabel
+> ou <guilabel
+>Personalizado</guilabel
+> ou premendo no botón grande na área de <guilabel
+>Atallo da Acción Escollida</guilabel
+>.</para>
+<para
+>Entón abrirase o diálogo de <guilabel
+>Configuración do Atallo de Teclado</guilabel
+>. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Configuración simples de atallo</phrase>
+</textobject>
+</mediaobject>
+<para
+>Agora prema a combinación de teclas que queira usar como atallo, por exemplo, <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>S</keycap
+></keycombo
+>. Entón pecharase o diálogo <guilabel
+>Configuración do Atallo</guilabel
+> en canto o atallo estexa configurado. </para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Configuración avanzada de atallos</phrase>
+</textobject>
+</mediaobject>
+<para
+>Tamén pode premer no botón <guibutton
+>Avanzado &gt;&gt;</guibutton
+> do diálogo <guilabel
+>Configuración do Atallo de Teclado</guilabel
+> para obter mais opcións. Aló poderá configurar un <guilabel
+>Atallo primario:</guilabel
+> e un <guilabel
+>Atallo alternativo:</guilabel
+>. Pode mesmo escoller o<guilabel
+>Modo multi-tecla</guilabel
+>, que lle permite engadir teclas adicionais ao atallo. </para>
+<para
+>Se configura o atallo co diálogo simples mudará o atallo primario. </para>
+
+<sect2 id="userdefmenus">
+<title
+>Menús Definidos polo Usuario</title>
+<para
+>Pode engadir o seu proprio menú contextual a &kspread; de tal xeito que premendo unha combinación de teclas faga aparecer o menú e premendo outra tecla, ou usando as teclas <keysym
+>Acima</keysym
+> e <keysym
+>Abaixo</keysym
+> seguidas de <keysym
+>Enter</keysym
+>, escolla un ítem del.</para>
+<para
+>Para facer isto engada un atallo <guilabel
+>Personalizado</guilabel
+> a cada unha das accións que queira ter no menú e marque no diálogo <guilabel
+>Configurar Atallos</guilabel
+> a opción <guilabel
+>Modo multi-tecla</guilabel
+>, prema a combinación de teclas que queira para mostrar o seu novo menú e logo, por separado, prema a tecla que escollerá o ítem no menú.</para>
+</sect2>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title
+>Barras de Ferramentas</title>
+<para
+>&kspread; ten cinco barras de ferramentas: <guilabel
+>Ficheiro</guilabel
+>, <guilabel
+>Editar</guilabel
+>, <guilabel
+>Navegación</guilabel
+>, <guilabel
+>Formato</guilabel
+> e <guilabel
+>Cor/Contorno</guilabel
+>, cada unha das cais pode ou non ser mostrada dependendo das súas escollas no menú <guimenu
+>Configuración</guimenu
+>.</para>
+<para
+>Pode escoller onde colocar a barra de ferramentas na xanela de &kspread;, sexa <guimenuitem
+>Acima</guimenuitem
+>, á <guimenuitem
+>Esquerda</guimenuitem
+>, á <guimenuitem
+>Direita</guimenuitem
+>, ou en <guimenuitem
+>Baixo</guimenuitem
+>, premendo co botón <mousebutton
+>direito</mousebutton
+> do rato na barra de ferramentas, co que se mostrará o menú de <guilabel
+>Barras de Ferramentas</guilabel
+>, e poderá escoller no submenú <guisubmenu
+>Orientación</guisubmenu
+>. Este <guilabel
+>Menu de Barra de Ferramentas</guilabel
+> tamén ten un submenú para escoller se a barra inclúe ícones, texto ou ambos os dous, e o tamaño dos ícones.</para>
+
+<para
+>Outro xeito de mover as barras de ferramentas é pondo o rato sobre as dúas barras verticais á esquerda de cada barra de ferramentas e manter premido o botón <mousebutton
+>esquerdo</mousebutton
+> mentres se arrasta a barra para a posición desexada. Cando arrastre unha barra desta maneira poderá soltar o botón do rato cando estexa a unha pequena distancia de calquer dos lados da xanela de &kspread;, e obterá unha barra flutuante, que non estará suxeita a nengunha parte específica da xanela de &kspread; e que pode de feito ser movida para fora da xanela. Para pór unha barra flutuante de novo nun dos bordes da vista, prema co botón <mousebutton
+>direito</mousebutton
+> na súa barra de título para mostrar o <guilabel
+>Menú da Barra de Ferramentas</guilabel
+> e escolla unha das opcións no submenú <guisubmenu
+>Orientación</guisubmenu
+></para>
+<para
+>Tamén pode <quote
+>aplanar</quote
+> unha barra de ferramentas se preme co botón <mousebutton
+>esquerdo</mousebutton
+> nas dúas barras verticais á esquerda da barra ou se escolle <menuchoice
+><guisubmenu
+>Orientación</guisubmenu
+> <guimenuitem
+>Plana</guimenuitem
+></menuchoice
+> no <guilabel
+>Menú da Barra de Ferramentas</guilabel
+>. Unha barra <quote
+>aplanada</quote
+> parece un rectángulo cativo que contén dúas barras horizontais xusto por baixo da Barra do menú de &kspread;. Pode ser restaurada premendo nela co botón <mousebutton
+>esquerdo</mousebutton
+>. </para>
+<para
+>Se escolle <guimenuitem
+>Configurar Barras de Ferramentas...</guimenuitem
+> no menú <guimenu
+>Configuración</guimenu
+> mostrarase un diálogo que lle permite engadir ou quitar botóns ás barras de &kspread;.</para>
+<para
+>Para usar o diálogo de <guilabel
+>Configurar Barras de Ferramentas</guilabel
+> comece por escoller unha barra na lista despregábel <guilabel
+>Barra de ferramentas:</guilabel
+>. A lista da direita <guilabel
+>Accións actuais:</guilabel
+> mostrará os botóns que conteña a barra de ferramentas. Pode quitar un botón escollendo-o na lista da direita e premendo no botón coa frecha á esquerda, ou move-los coas frechas de arriba e abaixo. Para engadir un botón á barra escolla-o na lista <guilabel
+>Accións disponíbeis:</guilabel
+> e prema o botón coa frecha para a direita.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

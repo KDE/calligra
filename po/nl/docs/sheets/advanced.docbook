@@ -1,0 +1,1409 @@
+<chapter id="hardsums">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Natalie</firstname
+> <surname
+>Koning</surname
+><affiliation
+><address
+> <email
+>nat@switch.demon.nl</email
+></address
+></affiliation
+> <contrib
+>Vertaler</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>&sheets; voor gevorderden</title>
+<sect1 id="series">
+<title
+>Reeksen</title>
+<para
+>Bij het maken van een rekenblad zijn er vaak getallenreeksen in rijen of kolommen nodig, zoals 10, 11, 12.... Er zijn verscheidene manieren waarop u dat in &sheets; kunt doen.</para>
+<para
+>Voor een korte reeks, zoals 5, 6, 7, 8..., is <quote
+>Slepen en kopiëren</quote
+> de eenvoudigste methode. Typ de beginwaarde in de eerste cel en de volgende waarde in de aangrenzende cel. Selecteer de twee cellen en plaats de muiswijzer op het zwarte vierkantje in de rechterbenedenhoek; de muiswijzer verandert in een diagonale dubbele pijl. Houd de <mousebutton
+>linker</mousebutton
+>muisknop ingedrukt terwijl u de muis omlaag of naar rechts sleept.</para>
+<para
+>De stapgrootte wordt berekend als het verschil tussen de twee beginwaarden. Als u bijvoorbeeld <userinput
+>4</userinput
+> in cel A1 en <userinput
+>3,5</userinput
+> in cel A2 intypt en dan de twee cellen selecteert en omlaag kopieert, is de stapgrootte de waarde in A2 min de waarde in A1, in dit geval -0,5. De reeks 4, 3,5, 3, 2,5, 2... is het resultaat.</para>
+
+<para
+><quote
+>Slepen en kopiëren</quote
+> werkt ook bij reeksen waar de stapgrootte geen constante waarde, maar zelf ook een reeks is. Als u begint met 1, 3, 4, 6 zal "Slepen en kopiëren" de reeks aanvullen tot 1, 3, 4, 6, 7, 9, 10, 12...;,de stapgrootte is in dit geval de reeks 2, 1, 2, 1...</para>
+
+ <!--FIXME does not work here -->
+<para
+>&sheets; herkent ook enkele speciale <quote
+>reeksen</quote
+> zoals de dagen van de week. U kunt bijvoorbeeld <userinput
+>vrijdag</userinput
+> in een cel intypen (let op hoofd- en kleine letters) en omlaag "Slepen en kopiëren". Kies <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Aangepaste lijsten...</guimenuitem
+></menuchoice
+> om te zien welke reeksen er beschikbaar zijn. Hier kunt u ook zelf reeksen aanmaken.</para>
+
+<para
+>Als u een cel selecteert en <guimenuitem
+>Reeksen...</guimenuitem
+> in het menu <guimenu
+>Invoegen</guimenu
+> kiest, verschijnt het dialoogvenster <guilabel
+>Reeksen</guilabel
+>. In dit dialoogvenster kunt u reeksen aanmaken die te lang zijn voor de methode "Slepen en  kopiëren", of om meetkundige reeksen zoals 1, 1,5, 2,25, 3,375... te maken waarin de waarde 1,5 gebruikt wordt als factor.</para>
+<para
+>Als een reeks te ingewikkeld is voor beide voorgaande methoden kunt u een formule gebruiken en die "Slepen en kopiëren". Om bijvoorbeeld een reeks te creëren met de waarden 2, 4, 15, 256..., typt u <userinput
+>2</userinput
+> in cel A1, <userinput
+>=A1*A1</userinput
+> in cel A2, en kopieert u cel A2 omlaag.</para>
+</sect1>
+
+<sect1 id="formulas">
+<title
+>Formules</title>
+<sect2 id="builtin">
+<title
+>Ingebouwde functies</title>
+<para
+>&sheets; beschikt over een groot aantal ingebouwde wiskundige en andere  <link linkend="functions"
+>functies</link
+> die in formules gebruikt kunnen worden. U vindt ze in het menu <guimenuitem
+>Functie...</guimenuitem
+><guimenu
+>Invoegen</guimenu
+>. U krijgt zo het dialoogvenster <guilabel
+>Functie</guilabel
+>.</para>
+<para
+>Selecteer de gewenste formule in de keuzelijst aan de linkerkant. Op het tabblad <guilabel
+>Help</guilabel
+> kunt u een beschrijving, het teruggegeven type, de syntaxis, de parameters en voorbeelden voor deze functie zien. Bovendien zijn er op dit tabblad vaak koppelingen naar gerelateerde functies. Klik vervolgens op de knop met de pijl omlaag om de formule in het tekstvak onderin het dialoogvenster te plakken.</para>
+<para
+>Het tabblad <guilabel
+>Parameters</guilabel
+> wordt beschikbaar, hier kunt u de parameter(s) voor de formule invullen. U kunt de waarde voor een parameter in het tekstvak op het tabblad <guilabel
+>Parameters</guilabel
+> typen. Om een celverwijzing in plaats van een waarde in te vullen klikt u met de <mousebutton
+>linker</mousebutton
+>muisknop in het tekstvak op het tabblad <guilabel
+>Parameters</guilabel
+> en daarna klikt u met de <mousebutton
+>linker</mousebutton
+>muisknop in de cel op het rekenblad.</para>
+<para
+>In plaats van het tabblad <guilabel
+>Parameters</guilabel
+> te gebruiken kunt u celverwijzingen zoals <userinput
+>B6</userinput
+> ook direct in het onderste tekstvak in het dialoogvenster <guilabel
+>Functie</guilabel
+> intypen. Als een functie meer dan één parameter heeft, moeten deze gescheiden worden door een puntkomma (<keysym
+>;</keysym
+>).</para>
+<para
+>Klik op <guibutton
+>OK</guibutton
+> om de functie in de huidige cel in te voegen en het dialoogvenster <guilabel
+>Functie</guilabel
+> te sluiten.</para>
+<para
+>U kunt formules natuurlijk ook zonder het dialoogvenster <guilabel
+>Functie</guilabel
+> gebruiken door de complete formule in de <guilabel
+>Celbewerker</guilabel
+> in de formulebalk te typen. De namen van de functies zijn niet hoofdlettergevoelig. Vergeet niet dat alle formules met een <keysym
+>=</keysym
+> moeten beginnen.</para>
+</sect2>
+
+<sect2 id="logical">
+<title
+>Logische vergelijkingen</title>
+<para
+>Aan logische functies zoals IF(), AND(), OR() worden parameters meegegeven die de logische (booleaanse) waarde Waar of Onwaar hebben. Deze waarden kunnen geproduceerd worden door andere logische functies zoals ISEVEN() of door het vergelijken van waarden in cellen met behulp van de vergelijkende symbolen, die in de volgende tabel staan.</para>
+
+<informaltable
+><tgroup cols="3">
+<thead>
+<row>
+<entry
+>Symbool </entry>
+<entry
+>Beschrijving </entry>
+<entry
+>Voorbeeld </entry
+></row>
+</thead>
+<tbody>
+
+<row
+><entry
+><keysym
+>=</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>Is gelijk aan</entry>
+<entry
+><userinput
+>A2==B3</userinput
+> is Waar als de waarde in A2 gelijk is aan de waarde in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>!</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>Is niet gelijk aan</entry>
+<entry
+><userinput
+>A2!=B3</userinput
+> is Waar als de waarde in A2 niet gelijk is aan de waarde in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>Is niet gelijk aan</entry>
+<entry
+>Is hetzelfde als <userinput
+>A2!=B3</userinput
+></entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+></entry>
+<entry
+>Is kleiner dan</entry>
+<entry
+><userinput
+>A2&lt;B3</userinput
+> is Waar als de waarde in A2 kleiner is dan de waarde in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&lt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>Is kleiner dan of gelijk aan</entry>
+<entry
+><userinput
+>A2&lt;=B3</userinput
+> is Waar als de waarde in A2 kleiner dan of gelijk is aan de waarde in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+></entry>
+<entry
+>Is groter dan</entry>
+<entry
+><userinput
+>A2&gt;B3</userinput
+> is Waar als de waarde in A2 groter is dan de waarde in B3</entry>
+</row>
+
+<row
+><entry
+><keysym
+>&gt;</keysym
+><keysym
+>=</keysym
+></entry>
+<entry
+>Is groter dan of gelijk aan</entry>
+<entry
+><userinput
+>A2&gt;=B3</userinput
+> is Waar als de waarde in A2 groter dan of gelijk is aan de waarde in B3</entry>
+</row>
+
+</tbody
+></tgroup
+></informaltable>
+
+<para
+>Als u <userinput
+>=IF(B3&gt;B1;"GROTER";"")</userinput
+> in een cel intypt, zal GROTER getoond worden als de waarde in B3 groter is dan de waarde in B1, in andere gevallen wordt er niets getoond.</para>
+</sect2>
+
+<sect2 id="absolute">
+<title
+>Absolute celverwijzingen</title>
+<para
+>Als een formule een celverwijzing bevat, wordt deze verwijzing gewoonlijk gewijzigd wanneer de cel naar een ander gedeelte van het werkblad gekopieerd wordt. Plaats een <keysym
+>$</keysym
+> vóór de kolomletter, het rijnummer, of beide, om de verwijzing niet te laten veranderen. </para>
+
+<itemizedlist>
+<listitem
+><para
+>Als A1 de formule <userinput
+>=D5</userinput
+> bevat en naar B2 gekopieerd wordt, zal de formule gewijzigd worden in <userinput
+>=E6</userinput
+> (standaard). </para
+></listitem>
+<listitem
+><para
+>Als A1 de formule <userinput
+>=$D5</userinput
+> bevat en naar B2 gekopieerd wordt, zal de formule gewijzigd worden in <userinput
+>=D6</userinput
+> (de kolomletter wordt niet gewijzigd). </para
+></listitem>
+<listitem
+><para
+>Als A1 de formule <userinput
+>=D$5</userinput
+> bevat en naar B2 gekopieerd wordt, zal de formule gewijzigd worden in <userinput
+>=E5</userinput
+> (het rijnummer wordt niet gewijzigd). </para
+></listitem>
+<listitem
+><para
+>Als A1 de formule <userinput
+>=$D$5</userinput
+> bevat en naar B2 gekopieerd wordt, zal de formule <userinput
+>=D5</userinput
+> blijven (noch de kolomletter, noch het rijnummer wordt gewijzigd). </para
+></listitem>
+
+</itemizedlist>
+<para
+>Wanneer u een celverwijzing in een formule intypt of bewerkt, kunt u met de sneltoets <keysym
+>F4</keysym
+> deze vier mogelijkheden laten rouleren.</para>
+<para
+><link linkend="namedareas"
+>Benoemde cellen</link
+> kunnen op een soortgelijke manier gebruikt worden om een statische celverwijzing in een formule op te nemen. </para>
+</sect2>
+</sect1>
+
+<sect1 id="sumspecialpaste">
+<title
+>Berekeningen met "Speciaal plakken"</title>
+<para
+>Soms kan het nodig zijn om een bepaalde waarde bij een aantal cellen op te tellen, of er vanaf te trekken, of om de cellen met een waarde te vermenigvuldigen of erdoor te delen. Met de optie <guimenuitem
+>Speciaal plakken...</guimenuitem
+> kunt u dit snel en eenvoudig doen.</para>
+<para
+>Vul eerst ergens in een aparte cel op het rekenblad de vervangingswaarde in en <guimenuitem
+>Kopieer</guimenuitem
+> deze. Selecteer dan de cellen die u wilt wijzigen, kies <guimenuitem
+>Speciaal plakken...</guimenuitem
+> in het menu <guimenu
+>Bewerken</guimenu
+>, of in het contextmenu dat verschijnt na klikken met de <mousebutton
+>rechter</mousebutton
+>muisknop. Kies dan <guilabel
+>Optelling</guilabel
+>, <guilabel
+>Aftrekking</guilabel
+>,<guilabel
+>Vermenigvuldiging</guilabel
+> of <guilabel
+>Deling</guilabel
+> in het gedeelte <guilabel
+>Handeling</guilabel
+> van het dialoogvenster.</para>
+<para
+>U kunt ook verschillende wijzigingswaarden op verschillende rijen of kolommen toepassen door een bereik te kopiëren dat de gewenste wijzigingswaarden bevat voordat u het doelbereik selecteert en <guimenuitem
+>Speciaal plakken...</guimenuitem
+> kiest. Als u bijvoorbeeld <userinput
+>5</userinput
+> in cel A1 en <userinput
+>10</userinput
+> in cel B1 invult, beide cellen selecteert en <guimenuitem
+>Kopieert</guimenuitem
+>, daarna <guimenuitem
+>Speciaal plakken...</guimenuitem
+><guilabel
+>Optelling</guilabel
+> in de cellen A10 tot en met D15 uitvoert, zal 5 bij A10:A15 en C10:C15 opgeteld worden en zal 10 bij cel B10:B15 en D10:D15 opgeteld worden.</para>
+<para
+>Een wijzigingswaarde kan zowel een formule als een eenvoudige numerieke waarde zijn. Als een formule gebruikt wordt, zal &sheets; de celverwijzingen aanpassen zoals dat bij normaal <guimenuitem
+>Plakken</guimenuitem
+> ook gebeurt.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title
+>Array formules</title>
+<para
+>In &sheets; is het mogelijk formules te gebruiken die resulteren in een matrix of een waardenbereik. Gewoonlijk wordt in een cel alleen de eerste waarde weergegeven. Indien u de gehele matrix wilt laten weergeven, gebruikt u hiertoe <keycombo
+>&Ctrl;&Alt;&Enter;</keycombo
+> bij het bewerken van een formule, deze wordt dan omgezet in een array-formule, waarmee ook de nodige naburige cellen worden gevuld.</para>
+<para
+>Cellen die deel uitmaken van een array-formule kunnen niet bewerkt worden.</para>
+</sect1>
+
+<sect1 id="goalseek">
+<title
+>Doel zoeken</title>
+<para
+>&sheets; kan worden gebruikt om algebraïsche expressies te beantwoorden, zoals <emphasis
+>x + x^2 = 4</emphasis
+> ofwel <emphasis
+>Voor welke waarde van x is x + x-kwadraat gelijk aan 4?</emphasis
+>.</para>
+<para
+>Voor dit voorbeeld zou u <userinput
+>A2+A2*A2</userinput
+> in A1 kunnen invullen en dan net zo lang een waarde in A2 kunnen proberen tot het resultaat in A1 de waarde <emphasis
+>4</emphasis
+> voldoende benadert. Een snellere manier is &sheets; automatisch de waarde te laten berekenen met behulp van <guimenuitem
+>Doel zoeken...</guimenuitem
+>, die ditzelfde automatisch doet.</para>
+<para
+>Kies <guimenuitem
+>Doel zoeken...</guimenuitem
+> in het menu <guimenu
+>Gegevens</guimenu
+>. Er verschijnt een dialoogvenster waarin u de celverwijzing met de doelwaarde (in dit geval <userinput
+>A1</userinput
+>) bij <guilabel
+>Cel instellen:</guilabel
+> invult, de doelwaarde (<userinput
+>4</userinput
+>) bij <guilabel
+>Naar waarde:</guilabel
+> en de celverwijzing die veranderd moet worden (<userinput
+>A2</userinput
+>) bij <guilabel
+>Door het veranderen van cel:</guilabel
+>. Let erop dat u een beginwaarde in de cel die veranderd moet worden ingevuld moet hebben voordat u <guimenuitem
+>Doel zoeken...</guimenuitem
+> kunt uitvoeren.</para>
+<para
+>Klikken op de knop <guibutton
+>Starten</guibutton
+> in het dialoogvenster <guilabel
+>Doel zoeken</guilabel
+> start de berekening. Als een  antwoord is gevonden, klikt u op <guibutton
+>OK</guibutton
+> om het resultaat te accepteren of op <guibutton
+>Annuleren</guibutton
+> om de oorspronkelijke waarde te behouden. </para>
+</sect1>
+
+ <sect1 id="pivottable">
+   <title
+>Kruistabellen</title>
+   <para
+>&sheets; kan gebruikt worden om <ulink url="http://nl.wikipedia.org/wiki/Kruistabel"
+>kruistabellen</ulink
+> te maken met de gegevens uit de huidige tabel. </para>
+   <para
+>Deze functie kan worden opgeroepen door <guimenuitem
+>Kruistabel...</guimenuitem
+> in het menu <guimenu
+>Gegevens</guimenu
+> te selecteren. Onderstaand is een voorbeeld van het genereren van een kruistabel. </para>
+   <para
+>Veronderstel dat we de volgende gegevens hebben. </para>
+   <para>
+     <mediaobject>
+       <imageobject>
+	 <imagedata fileref="pivot1.png" format="PNG"/>
+       </imageobject>
+       <textobject>
+	 <phrase
+>Initiële tabel</phrase>
+       </textobject>
+     </mediaobject>
+   </para>
+   <para
+>We willen een kruistabel naar onze keuze en vereisten maken. We kiezen dus <menuchoice
+> <guimenu
+>Gegevens</guimenu
+> <guimenuitem
+>Kruistabel...</guimenuitem
+></menuchoice
+>. </para>
+     <para
+>Het dialoogvak dat zal verschijnen stelt de gebruiker in staat om de gegevensbron te selecteren. De gegevens kunnen genomen worden uit het huidige werkblad of uit een externe bron zoals een database of <abbrev
+>ODS</abbrev
+>-bestand. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot2.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>De gegevensbron kiezen</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>Hier is het dialoogvak dat de gebruiker in staat stelt om de kruistabel aan te passen. De kolom labels in de brongegevens worden geconverteerd naar labels die functioneren als de werkvelden. De labels kunnen versleept en los gelaten worden in een van de drie gebieden (<guilabel
+>Rijen</guilabel
+>, <guilabel
+>kolommen</guilabel
+> of <guilabel
+>Waarden</guilabel
+>) om de kruistabel te genereren. U kunt uw keuzes herstellen met de knop <guibutton
+>Reset DnD</guibutton
+>. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot3.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Het dialoogvenster voor aanpassen van de kruistabel</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+>In ons voorbeeld, wordt <replaceable
+>Naam</replaceable
+> versleept naar <guilabel
+>Rijen</guilabel
+>, <replaceable
+>Categorie</replaceable
+> naar <guilabel
+>Kolommen</guilabel
+>, <replaceable
+>Score</replaceable
+> naar <guilabel
+>Waarden</guilabel
+>. Gebruikergedefineerde functies zoals som, gemiddelde, maximum, minimum, aantal, &etc; kunnen geselecteerd worden uit de lijst met <guilabel
+>Selectie-opties</guilabel
+>. </para>
+     <para
+>De knop <guibutton
+>Filter toevoegen</guibutton
+> kan gebruikt worden om het filterdialoogvak te openen om de gewenste gegevens te filteren. Met dit vakje kunt u meerdere filters definiëren gebaseerd op het kolomlabel en de relatie er tussen (<guimenuitem
+>En</guimenuitem
+> of <guimenuitem
+>Of</guimenuitem
+>). Dit zou u zeer veel vrijheid moeten bieden om de uitvoer aan te passen. </para>
+     <para>
+       <mediaobject>
+	 <imageobject>
+	   <imagedata fileref="pivot4.png" format="PNG"/>
+	 </imageobject>
+	 <textobject>
+	   <phrase
+>Het dialoogvenster voor filteren van de kruistabel</phrase>
+	 </textobject>
+       </mediaobject>
+     </para>
+     <para
+><guilabel
+>Totaal rijen</guilabel
+> en <guilabel
+>Totaal kolommen</guilabel
+>: deze activeren stelt u in staat om automatisch de bijbehorende rijen en kolommen in de kruistabel te totaliseren. </para>
+   </sect1>
+
+<sect1 id="worksheets">
+<title
+>Meerdere werkbladen gebruiken</title>
+<para
+>Wanneer u een nieuw, leeg document maakt, zal &sheets; een aantal lege werkbladen aanmaken. Dit aantal is afhankelijk van het gebruikte sjabloon.</para>
+<para
+><menuchoice
+><guimenu
+>Invoegen</guimenu
+> <guimenuitem
+>Werkblad</guimenuitem
+></menuchoice
+> voegt een nieuw blad aan het document toe.</para>
+<para
+>U kunt ook naar een ander werkblad overschakelen met sneltoetsen: met <keycombo action="simul"
+>&Ctrl;<keysym
+>PageDown</keysym
+></keycombo
+> krijgt u het volgende werkblad, met <keycombo action="simul"
+>&Ctrl;<keysym
+>PageUp</keysym
+></keycombo
+> het vorige werkblad.</para>
+<para
+>Werkbladen krijgen standaard de namen <emphasis
+>Werkblad 1</emphasis
+>,<emphasis
+>Werkblad 2</emphasis
+>... U kunt een werkblad een andere naam geven door met de <mousebutton
+>rechter</mousebutton
+> muisknop op het tabblad te klikken en <guimenuitem
+>Werkblad hernoemen...</guimenuitem
+> te kiezen.</para>
+<para
+>Om een werkblad te verwijderen kiest u de optie <guimenuitem
+>Werkblad verwijderen</guimenuitem
+> in het contextmenu dat verschijnt als u met de  <mousebutton
+>rechter</mousebutton
+>muisknop op het tabblad van het werkblad dat u wilt verwijderen, klikt.</para>
+<para
+>Met de overige items in het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guisubmenu
+>Werkblad</guisubmenu
+></menuchoice
+> kunt u werkbladen verbergen of tonen op dezelfde manier waarop rijen en kolommen verborgen kunnen worden.</para>
+<para
+>Als u een formule op het ene werkblad naar een cel op een ander werkblad wilt laten verwijzen, moet de celverwijzing beginnen met de naam van het werkblad gevolgd door een uitroepteken (<keysym
+>!</keysym
+>). Als u bijvoorbeeld <userinput
+>=Werkblad2!A2</userinput
+> in een cel op Werkblad 1 typt, zal de waarde in cel A2 op Werkblad 2 gebruikt worden. De namen van de werkbladen zijn hoofdlettergevoelig.</para>
+
+
+<sect2 id="consolidate">
+<title
+>Gegevens consolideren</title>
+<para
+>Wanneer u een document hebt dat verscheidene werkbladen bevat met gelijksoortige gegevens voor bijvoorbeeld verschillende maanden in een jaar, kunt u een werkblad toevoegen dat een overzicht bevat van de geconsolideerde (&eg; som of gemiddelde) waarden van de overeenkomende gegevens op de overige werkbladen.</para>
+<para
+>Deze taak kan eenvoudiger gemaakt worden door <guimenuitem
+> Consolideren...</guimenuitem
+> in het menu <guimenu
+>Gegevens</guimenu
+> te gebruiken.</para>
+<para
+>Door dit menu-item te kiezen wordt het dialoogvenster <guilabel
+>Consolideren</guilabel
+> geopend.</para>
+<para
+>Voor elk van de bronwerkbladen vult u een verwijzing naar de gewenste gegevens in bij <guilabel
+>Referentie:</guilabel
+> in het dialoogvenster <guilabel
+>Consolideren</guilabel
+>. Klik op de knop <guibutton
+>Toevoegen</guibutton
+> om de verwijzing aan <guilabel
+>Ingevoerde referenties:</guilabel
+> toe te voegen. De verwijzing moet ook de naam van het werkblad met de brongegevens bevatten, zoals bijvoorbeeld <userinput
+>januari!A1:A10</userinput
+>, dit wordt automatisch gedaan als u het celbereik op het juiste werkblad selecteert.</para>
+<para
+>Wanneer u alle verwijzingen voor de brongegevens ingevoerd hebt, selecteert u op het doelwerkblad de cel waar de linkerbovenhoek van het geconsolideerde resultaat moet komen. Kies daarna de gewenste <guilabel
+>Functie</guilabel
+> in de keuzelijst en klik op <guibutton
+>OK</guibutton
+>.</para>
+<para
+>Als u op de knop <guilabel
+>Details 
+>
+></guilabel
+> klikt en in het dialoogvenster <guilabel
+>Gegevens kopiëren</guilabel
+> selecteert, zullen de waarden die het gevolg zijn van het consolideren in de doelcellen worden geplaatst in plaats van de formules waarmee die zijn berekend. </para>
+</sect2>
+</sect1>
+<sect1 id="insertchart">
+<title
+>Een grafiek invoegen</title>
+<para
+>U kunt een grafiek op een werkblad invoegen om een grafisch overzicht van de gegevens te zien.</para>
+<para
+>Activeer eerst de "docker" <guilabel
+>Figuur toevoegen</guilabel
+> met het menu-item <menuchoice
+> <guimenu
+>Instellingen</guimenu
+><guimenuitem
+>Dockers</guimenuitem
+> </menuchoice
+>.</para>
+<para
+>Selecteer eerst het celbereik met de gegevens en kies dan het menu <menuchoice
+><guimenu
+>Grafiek</guimenu
+> <guimenuitem
+>Vorm toevoegen</guimenuitem
+></menuchoice
+>. Sleep de muisaanwijzer over het werkblad, met ingedrukte <mousebutton
+>linker</mousebutton
+> muisknop, en markeer zo een gebied waarbinnen de grafiek moet komen. Dit hoeft u niet erg precies te doen, omdat later de grootte van de grafiek nog heel gemakkelijk kan worden gewijzigd. Wanneer u nu de muisknop loslaat verschijnt er een dialoogvenster voor de <guilabel
+>grafiekopties</guilabel
+>.</para>
+<para
+>Het gebied met gegevens is al ingevuld met het geselecteerde celbereik. Selecteer de eerste rij en kolom als verklarende tekst, selecteer <guilabel
+>Gegevens in rijen</guilabel
+> en klik op <guibutton
+>OK</guibutton
+>. De dialoog verdwijnt, en de grafiek verschijnt in het werkblad.</para>
+<para
+>Selecteer nu het hu;lpmiddel <guibutton
+>Kaart bewerken</guibutton
+> in de "docker" <guibutton
+>Hulpmiddelen</guibutton
+>, en bewerk de eigenschappen van de kaart, zoals type grafiek, verklarende teksten en assen, in  <guilabel
+>Kaart bewerken</guilabel
+>.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="chart1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Schermafdruk van ingebedde grafiek</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Om een grafiek te verplaatsen, van grootte te veranderen of zelfs te verwijderen gebruikt u het hulpmiddel <guibutton
+>Grafiek wijzigen</guibutton
+>en klikt u ergens binnen het gebied van de grafiek. De rand er omheen moet nu groen worden, met een klein geel vierkantje op elke hoek en in het midden van elke zijde. </para>
+<para
+>Als u de muiswijzer op één van de  vierkantjes plaatst, verandert deze in een dubbele pijl. U kunt nu de grootte van de grafiek wijzigen door een vierkantje te verslepen terwijl u de <mousebutton
+>linker</mousebutton
+> muisknop ingedrukt houdt. Om de grafiek te verwijderen klikt u met de <mousebutton
+>rechter</mousebutton
+> muisknop op één van de vierkantjes en kiest u <guimenuitem
+>Verwijderen</guimenuitem
+>.</para>
+<para
+>Om de grafiek te verplaatsen plaatst u de muiswijzer ergens in de grafiek, de muiswijzer verandert in een kruisje. Druk op de <mousebutton
+>linker</mousebutton
+> muisknop, houd de knop ingedrukt en sleep de grafiek naar de gewenste plaats.</para>
+<para
+>Klik ergens buiten de grafiek wanneer u klaar bent met wijzigen.</para>
+<para
+>Om de opmaak van de kaart zelf te wijzigen klikt u twee keer met de <mousebutton
+>linker</mousebutton
+> muisknop binnen de kaart. In de "docker" verschijnt nu de optie <guilabel
+>Kaart bewerken</guilabel
+>, die u kunt gebruiken om de kaart te wijzigen.</para>
+</sect1>
+
+<sect1 id="insertdata">
+<title
+>Externe gegevens invoegen</title>
+<para
+>U kunt gegevens vanuit een tekstbestand of vanaf het klembord in een werkblad invoegen door eerst de cel waar het eerste ingevoegde gegeven moet komen, te selecteren en daarna <guimenuitem
+>Vanuit een tekstbestand...</guimenuitem
+> of <guimenuitem
+>Vanaf het klembord...</guimenuitem
+> in het menu <menuchoice
+><guimenu
+>Invoegen</guimenu
+><guisubmenu
+>Externe gegevens</guisubmenu
+></menuchoice
+> te kiezen.</para>
+<para
+>In beide gevallen gaat &sheets; ervan uit dat de gegevens in <acronym
+>CSV</acronym
+>-opmaak zijn (Comma Separated Values, is door komma's gescheiden waarden). Er verschijnt een dialoogvenster waarin u kunt regelen hoe de gegevens uit het bestand of van het klembord moeten worden gelezen, en in de cellen van het werkblad moeten worden geplaatst.</para>
+<para
+>Als uw systeem het ondersteunt, kan &sheets; ook gegevens uit een <acronym
+>SQL</acronym
+>-database in een werkblad invoegen. Selecteer hiervoor het menu <menuchoice
+><guimenu
+>Invoegen</guimenu
+> <guisubmenu
+>Externe gegevens</guisubmenu
+><guimenuitem
+>Vanuit database...</guimenuitem
+></menuchoice
+>.</para>
+</sect1>
+
+<sect1 id="hyper">
+<title
+>Cellen koppelen</title>
+<para
+>Een cel op een werkblad kan aan een handeling gekoppeld worden zodat wanneer u er met de <mousebutton
+>linker</mousebutton
+>muisknop op klikt, bijvoorbeeld de webbrowser geopend wordt. Om een koppeling aan een cel toe te voegen kiest u het menu <menuchoice
+><guimenu
+>Invoegen</guimenu
+> <guimenuitem
+>Koppeling...</guimenuitem
+></menuchoice
+>. Het dialoogvenster <guilabel
+>Koppeling invoegen</guilabel
+> verschijnt, hierin kunt u kiezen uit vier verschillende koppelingen:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Een <guilabel
+>Internet</guilabel
+>-koppeling zal uw webbrowser openen met de &URL; die in het tekstvak <guilabel
+>Internetadres</guilabel
+> van het dialoogvenster <guilabel
+>Koppeling invoegen</guilabel
+> is ingevuld. Bijvoorbeeld <userinput
+>http://www.calligra.org</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Wanneer u op een cel met een <guilabel
+>E-mail</guilabel
+>-koppeling klikt, wordt uw e-mailprogramma geopend met het adres dat in het tekstvak <guilabel
+>E-mail:</guilabel
+> is ingevuld als het Aan: adres. Bijvoorbeeld <userinput
+>anon@example.com</userinput
+>. </para
+></listitem>
+
+<listitem
+><para
+>Een cel met een <guilabel
+>Bestand</guilabel
+>-koppeling  bevat het pad naar een bestand of een map, zoals ingevuld in het tekstvak <guilabel
+>Bestandslocatie:</guilabel
+>. Wanneer u erop klikt zal het bestand of de map geopend worden in een daarvoor geschikte toepassing. </para
+></listitem>
+
+<listitem
+><para
+>Een cel met een koppeling naar een <guilabel
+>Cel</guilabel
+> bevat een &sheets;-verwijzing naar een cel, zoals is ingevuld in het tekstvak <guilabel
+>Cel of benoemd gebied</guilabel
+>. Wanneer u met de <mousebutton
+>linker</mousebutton
+> muisknop op dergelijke cel klikt, zal &sheets; de cursor naar de doelcel verplaatsen. </para
+></listitem>
+</itemizedlist>
+
+<para
+>In elk van de vier typen cellen die een koppeling bevatten, moet een geschikte tekst staan, die is ingevuld in het tekstvak <guilabel
+>Te tonen tekst</guilabel
+> in het dialoogvenster <guilabel
+>Koppeling invoegen</guilabel
+>. Dit is de tekst die in de cel wordt getoond.</para>
+</sect1>
+
+<sect1 id="validcheck">
+<title
+>Geldigheid controleren</title>
+<para
+>&sheets; kan automatisch de geldigheid van ingevoerde gegevens aan de hand van een aantal criteria controleren en een foutmelding tonen als de gegevens ongeldig zijn.</para>
+<para
+>Om deze functie in te schakelen selecteert u de cel(len) die gecontroleerd moeten worden en daarna kiest u het menu <menuchoice
+><guimenu
+>Gegevens</guimenu
+> <guimenuitem
+>Geldigheid...</guimenuitem
+></menuchoice
+>. &sheets; opent het dialoogvenster <guilabel
+>Geldigheid</guilabel
+>, dat drie tabbladen heeft.</para>
+<para
+>Op het tabblad <guilabel
+>Criteria</guilabel
+> kiest u het geldige gegevenstype in de keuzelijst <guilabel
+>Toestaan</guilabel
+>. U definieert de geldige waarden door één van de opties in de keuzelijst <guilabel
+>Gegevens</guilabel
+> te selecteren en de toegestane waarde(n) in een of beide tekstvak(ken) in te vullen.</para>
+<para
+>In het tabblad <guilabel
+>Foutmelding</guilabel
+> kunt u het type van de melding kiezen (<guimenuitem
+>Stoppen</guimenuitem
+>, <guimenuitem
+>Waarschuwing</guimenuitem
+> of <guimenuitem
+>Informatie</guimenuitem
+>) dat getoond wordt bij ongeldige invoer. U kunt hier ook de titel en de tekst van de melding instellen.</para>
+<!--FIXME missing Input Help tab-->
+<para
+>Deze functie controleert alleen gegevens die in de cel ingevoerd worden. Het controleren van resultaten van formulecellen wordt beschreven in <link linkend="formatdata"
+>Voorwaardelijke celattributen</link
+>.</para>
+</sect1>
+
+<sect1 id="protection">
+<title
+>Bescherming</title>
+
+<sect2 id="doc-protection">
+<title
+>Documentbescherming</title>
+<para
+>Wanneer een document beschermd is, moet het wachtwoord ingevoerd worden om werkbladen te kunnen toevoegen of verwijderen. Individuele cellen worden niet beschermd door een document te beschermen.</para>
+<para
+>Kies het menu <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+> Document beschermen...</guimenuitem
+></menuchoice
+>. Er verschijnt een dialoogvenster waarin uw wachtwoord wordt gevraagd. In <guilabel
+>Sterkte van wachtwoord:</guilabel
+> kunt u zien of uw wachtwoord veilig genoeg is. Hoe langer de indicator, hoe veiliger uw wachtwoord.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het dialoogvenster "Document beschermen"</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Dat wachtwoord is nodig om de bescherming van het document op te heffen.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellprotection2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Het dialoogvenster "Documentbescherming opheffen"</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Wanneer een document beschermd is, kunt u geen:</para>
+<itemizedlist>
+<listitem
+><para
+>Werkblad hernoemen </para
+></listitem>
+<listitem
+><para
+>Werkblad invoegen </para
+></listitem>
+<listitem
+><para
+>Werkblad verwijderen </para
+></listitem>
+<listitem
+><para
+>Werkblad verbergen </para
+></listitem>
+<listitem
+><para
+>Werkblad tonen </para
+></listitem>
+<listitem
+><para
+>Eigenschappen van een werkblad zien </para
+></listitem>
+<listitem
+><para
+>Cellen samenvoegen en losmaken </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="sheet-protection">
+<title
+>Een werkblad beschermen</title>
+<para
+>Wanneer een werkblad beschermd is, betekent dit dat de inhoud van alle beschermde cellen en objecten in dat werkblad beschermd worden. Van cellen of celbereiken op een beschermd werkblad kan de bescherming opgeheven worden, zie <link linkend="cell-protection"
+>het volgende gedeelte</link
+>.</para>
+<para
+>Om een werkblad te beschermen kiest u het menu <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Werkblad beschermen...</guimenuitem
+></menuchoice
+>. Er verschijnt een dialoogvenster waarin u een wachtwoord kunt intypen. Bij <guilabel
+>Sterkte van wachtwoord:</guilabel
+> kunt u zien of uw wachtwoord veilig genoeg is. Hoe langer de indicator, hoe veiliger uw wachtwoord is.</para>
+<para
+>Dat wachtwoord is nodig om de bescherming van het werkblad op te heffen.</para>
+<para
+>Wanneer een werkblad beschermd is, kunt u geen:</para>
+<itemizedlist>
+<listitem
+><para
+>Object of grafiek invoegen </para
+></listitem>
+<listitem
+><para
+>Cellen opmaken </para
+></listitem>
+<listitem
+><para
+>Rijen of kolommen invoegen </para
+></listitem>
+<listitem
+><para
+>Inhoud van cellen bewerken en wijzigen </para
+></listitem>
+<listitem
+><para
+>Wijzigingen aan het werkblad maken </para
+></listitem>
+</itemizedlist>
+
+<note
+><para
+>Het beschermen van een werkblad kan vooral nuttig zijn om te voorkomen dat formules per ongeluk verwijderd worden.</para
+></note>
+</sect2>
+
+<sect2 id="cell-protection">
+<title
+>Cellen beschermen</title>
+<warning
+><para
+>Alle cellen zijn standaard beschermd, maar de bescherming wordt pas actief wanneer de bescherming van het werkblad ingeschakeld wordt. Als u de standaardinstellingen aanhoudt, hoeft u alleen het werkblad te beschermen om alle cellen te beschermen.</para
+></warning>
+<para
+>Als u alleen bepaalde cellen wilt beschermen moet deze standaardbescherming voor alle andere cellen uitgeschakeld worden. U zou het bijvoorbeeld mogelijk willen maken dat in de meeste cellen gegevens ingevoerd kunnen worden (hiervoor moet u de optie <guilabel
+>Beschermd</guilabel
+> uitschakelen), maar dat sommige cellen (zoals titels) niet gewijzigd kunnen worden. Er zijn drie stappen nodig om de bescherming voor slechts enkele cellen in te schakelen: de bescherming voor alle cellen opheffen; de cellen die wel beschermd moeten worden selecteren en beschermen; het werkblad beschermen.</para>
+<para
+>Om de bescherming van alle cellen op te heffen:</para>
+<itemizedlist>
+<listitem
+><para
+>Selecteer het gehele werkblad met de muis. </para
+></listitem>
+<listitem
+><para
+>Kies het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Celopmaak...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>In het dialoogvenster klikt u op het tabblad <guilabel
+>Celbescherming</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Schakel <guilabel
+>alles verbergen</guilabel
+> in en schakel <guilabel
+>Beschermd</guilabel
+> uit om de bescherming van alle cellen op te heffen. De cellen zijn nu allemaal onbeschermd. </para
+></listitem>
+</itemizedlist>
+<para
+>Om een aantal al dan niet aaneengesloten cellen te beschermen:</para>
+<itemizedlist>
+<listitem
+><para
+>Selecteer de cellen die u wilt beschernmen. Gebruik de <keycombo action="simul"
+>&Ctrl;</keycombo
+>-toets om niet-aaneengesloten cellen te selecteren. </para
+></listitem>
+<listitem
+><para
+>Wanneer alle gewenste cellen geselecteerd zijn kiest u het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Celopmaak...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>In het dialoogvenster klikt u op het tabblad <guilabel
+>Celbescherming</guilabel
+>. </para
+></listitem>
+<listitem
+><para
+>Schakel de bescherming in door het keuzevakje <guilabel
+>Beschermd</guilabel
+> te markeren en klik daarna op <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+</itemizedlist>
+<para
+>Zodra de cellen gemarkeerd zijn om beschermd te worden, moet de bescherming voor het werkblad ingeschakeld worden om de bescherming voor de cellen te activeren.</para>
+<itemizedlist>
+<listitem
+><para
+>Kies het menu <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+><guimenuitem
+>Werkblad beschermen...</guimenuitem
+></menuchoice
+>. </para
+></listitem>
+<listitem
+><para
+>Er verschijnt een dialoogvenster. Typ hier een veilig wachtwoord in, typ het nogmaals in bij "Verificatie" en klik daarna op <guibutton
+>OK</guibutton
+>. </para
+></listitem>
+<listitem
+><para
+>Beschermde cellen in een beschermd werkblad kunnen niet bewerkt worden zonder eerst de bescherming van het werkblad op te heffen. Andere wijzigingen aan het werkblad zijn ook niet mogelijk. Er kunnen bijvoorbeeld geen rijen of kolommen ingevoegd worden, de kolombreedte of rijhoogte kan niet gewijzigd worden en er kunnen geen grafieken ingevoegd worden. </para
+></listitem>
+</itemizedlist>
+</sect2>
+
+<sect2 id="hide-formula">
+<title
+>Formules verbergen</title>
+<para
+>In bepaalde gevallen wilt u misschien de formules op een werkblad verbergen, zodat anderen ze niet kunnen zien. Standaard is elke cel beschermd, maar niet verborgen. Het is van belang om te onthouden dat deze opties pas effectief worden als het werkblad zelf beschermd is.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Een standaardcel met een formule</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Om de formule in een of meer cellen te verbergen selecteert u de cellen (houd <keycombo action="simul"
+>&Ctrl;</keycombo
+> ingedrukt om niet-aaneengesloten bereiken te selecteren) en kiest u het menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Celopmaak...</guimenuitem
+></menuchoice
+>. Klik op het tabblad <guilabel
+>Celbescherming</guilabel
+> en schakel de optie <guilabel
+>Formule verbergen</guilabel
+> in. Nadat u het werkblad beschermd hebt, zijn de resultaten van de formules zichtbaar, maar de formules zelf niet. </para>
+<para
+>Nu moet het werkblad beschermd worden: kies het menu <menuchoice
+><guimenu
+>Hulpmiddelen</guimenu
+> <guimenuitem
+>Werkblad beschermen...</guimenuitem
+></menuchoice
+>. Typ een veilig wachtwoord in om te voorkomen dat anderen de bescherming van het werkblad kunnen opheffen. </para>
+<para
+>Wanneer <guilabel
+>Formule verbergen</guilabel
+> ingeschakeld en <guilabel
+>Beschermd</guilabel
+> uitgeschakeld is, wordt de formule verborgen als het werkblad beschermd is, maar de inhoud van de cel kan wel gewijzigd woren.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject
+>    
+<textobject>
+<phrase
+><guilabel
+>Formule verbergen</guilabel
+> is ingeschakeld, de cel is niet beschermd, het werkblad is wel beschermd</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Wanneer <guilabel
+>Formule verbergen</guilabel
+> en <guilabel
+>Beschermd</guilabel
+> ingeschakeld zijn, wordt de formule verborgen als het werkblad beschermd is, en de inhoud van de cel kan niet gewijzigd woren.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Formule verbergen</guilabel
+> en <guilabel
+>Beschermd</guilabel
+> zijn ingeschakeld bij <guilabel
+>Celbescherming</guilabel
+> en het werkblad is beschermd</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Vergeet niet dat het vrij eenvoudig is om het wachtwoord van een beschermd werkblad te kraken. Deze oplossing biedt dus geen garantie op complete beveiliging.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title
+>Alle inhoud van een cel verbergen</title>
+<para
+>U kunt zowel de formule als de inhoud van de cel verbergen door <guilabel
+>Alles verbergen</guilabel
+> op het tabblad "Celbescherming" in te schakelen. (Menu <menuchoice
+><guimenu
+>Opmaak</guimenu
+> <guimenuitem
+>Celopmaak...</guimenuitem
+></menuchoice
+>. In de schermafdruk hieronder is de cel zelf niet beschermd (<guilabel
+>Beschermd</guilabel
+> is niet ingeschakeld), de inhoud van de cel kan dus gewijzigd worden.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Alleen <guilabel
+>Alles verbergen</guilabel
+> is ingeschakeld (de cel is niet beschermd) en het werkblad is beschermd</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Hier is de cel zelf beschermd, zodat de inhoud niet gewijzigd kan worden.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+><guilabel
+>Alles verbergen</guilabel
+> en <guilabel
+>Beschermd</guilabel
+> zijn ingeschakeld en het werkblad is beschermd</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
+</sect1>
+
+
+<sect1 id="other">
+<title
+>Overige functies</title>
+<!-- no split view in 2.4
+<sect2 id="splitview">
+<title
+>Splitting the View</title>
+<para
+>If your spreadsheet is so large that you cannot see all of it at once, 
+splitting &sheets;'s window into two or more views can help you work on it. 
+This is done by selecting <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Split View</guimenuitem
+></menuchoice
+> which will split the current view into 
+two parts. <menuchoice
+><guimenu
+>View</guimenu
+><guisubmenu
+>Splitter Orientation
+</guisubmenu
+></menuchoice
+> lets you choose between 
+<guimenuitem
+>Horizontal</guimenuitem
+> and <guimenuitem
+>Vertical</guimenuitem
+> 
+splitting.</para>
+<para
+>This technique is particularly useful when you want to select an area 
+of the spreadsheet that is larger than can be shown in one view, perhaps to
+paste a copied cell into it. 
+Use the scrollbars to position the two views to show the top left and 
+bottom right cells of the wanted area, select the top left cell in one 
+view then hold the &Shift; key pressed while you select the 
+bottom right cell with the <mousebutton
+>left</mousebutton
+> mouse button.</para>
+<para
+>If there is more than one sheet in your document, you can show a 
+different sheet in each of the split views.</para>
+<para
+>The relative sizes of the views can be changed by dragging the thick bar 
+separating the views.</para>
+<para
+>To remove a view select <menuchoice
+><guimenu
+>View</guimenu
+><guimenuitem>
+Remove View</guimenuitem
+></menuchoice
+></para>
+</sect2>
+-->
+
+<sect2 id="namedareas">
+<title
+>Benoemde cellen en celbereiken</title>
+<para
+>U kunt een cel of een celbereik een naam geven, bijvoorbeeld <userinput
+>inkomsten</userinput
+>, door de cel of het celbereik te selecteren en daarna <guimenuitem
+>Bereiknaam...</guimenuitem
+> te kiezen in het menu dat verschijnt wanneer u met de <mousebutton
+>rechter</mousebutton
+>muisknop klikt. In het dialoogvenster <guilabel
+>Bereiknaam</guilabel
+> kunt u een naam intypen.</para>
+<para
+>U kunt ook een cel of een bereik selecteren en de naam in het tekstvak dat de celverwijzing bevat, links op de formulebalk, intypen.</para>
+<para
+>Als u hier een naam intypt die al in gebruik is zal &sheets; de cursor naar die benoemde cel(len) verplaatsen.</para>
+<para
+>Het menu <menuchoice
+><guimenu
+>Gegevens</guimenu
+><guimenuitem
+>Benoemde gebieden...</guimenuitem
+></menuchoice
+> opent een lijst van reeds bestaande namen en laat u focus van &sheets; naar elk van hen wijzigen of een naam verwijderen. </para>
+<para
+>Benoemde cellen kunnen nuttig zijn als een alternatief voor <link linkend="absolute"
+>absolute celverwijzingen</link
+> omdat de namen gebruikt kunnen worden in plaats van de gewone celverwijzingen. De namen veranderen niet wanneer de cel die de formule bevat gekopieerd wordt. Wanneer een naam in een formule gebruikt wordt moet deze ingesloten worden in enkele aanhalingstekens.</para>
+<para
+>Als cel A1 bijvoorbeeld de naam <userinput
+>hond</userinput
+> heeft, kunt u een formule als <userinput
+>='hond' + 2</userinput
+> in een andere cel invoeren, die altijd 2 bij de waarde in cel A1 optelt, onafhankelijk waar de formulecel naartoe wordt gekopieerd.</para>
+<para
+>Onthoud dat celnamen en bereiknamen behandeld worden alsof ze alleen kleine letters bevatten.</para>
+</sect2>
+
+<sect2 id="cellcomments">
+<title
+>Celcommentaren</title>
+<para
+>Een cel kan een commentaar bevatten dat niet direct zichtbaar is, maar wel zichtbaar gemaakt kan worden. Commentaren worden niet afgedrukt.</para>
+<para
+>Om een commentaar toe te voegen selecteert u de cel en kiest u <guimenuitem
+>Commentaar...</guimenuitem
+> in het contextmenu dat verschijnt wanneer u met de <mousebutton
+>rechter</mousebutton
+> muisknop op de cel klikt, of u kiest het menu <guimenu
+>Invoegen</guimenu
+> en typt u uw commentaar in in het dialoogvenster <guilabel
+>Celcommentaar</guilabel
+> dat verschijnt.</para>
+<para
+>Om commentaar te zien plaatst u de muiswijzer boven de cel. Dit commentaar wordt in een tekstballon getoond. </para>
+<para
+>Als u het keuzevakje <guilabel
+>Commentaarindicator tonen</guilabel
+> in het dialoogvenster <guilabel
+>Werkbladeigenschappen</guilabel
+> markeert, worden de cellen die een commentaar bevatten geaccentueerd met een rood driehoekje in de rechterbovenhoek.</para>
+<para
+>Dit dialoogvenster kunt u openen door met de <mousebutton
+>rechter</mousebutton
+>muisknop op de werbladtab onderin het venster te klikken en <guimenuitem
+>Werkbladeigenschappen</guimenuitem
+> in het contextmenu te kiezen. U kunt het openen door <menuchoice
+><guimenu
+>Opmaak</guimenu
+><guisubmenu
+>Werkblad</guisubmenu
+></menuchoice
+> in het menu te kiezen.</para>
+
+<para
+>Om een commentaar uit een cel te verwijderen kiest u <guimenuitem
+>Commentaar verwijderen</guimenuitem
+> in het contextmenu dat verschijnt wanneer u met de <mousebutton
+>rechter</mousebutton
+> muisknop op de cel klikt, of u kiest het menu <menuchoice
+><guimenu
+>Bewerken</guimenu
+> <guisubmenu
+>Wissen</guisubmenu
+> <guimenuitem
+>Commentaar</guimenuitem
+></menuchoice
+>.</para>
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

@@ -1,0 +1,343 @@
+# Translation for calligrasheets_calendar.po to Euskara/Basque (eu).
+# Copyright (C) 2010, 2011, Free Software Foundation.
+# Copyright (C) 2012-2021, This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# KDE euskaratzeko proiektuko arduraduna <xalba@euskalnet.net>.
+#
+# Translators:
+# Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
+# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2010, 2021.
+# Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2021-01-18 21:33+0100\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 20.12.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: CalendarTool.cpp:60
+#, kde-format
+msgid ""
+"End date is before start date! Please make sure that end date comes after "
+"start date."
+msgstr ""
+"Amaiera-data hasiera-data baino lehenagokoa da. Ziurtatu amaiera-data "
+"hasiera-data baino geroagokoa dela."
+
+#: CalendarTool.cpp:60 CalendarTool.cpp:65
+#, kde-format
+msgid "Error"
+msgstr "Errorea"
+
+#: CalendarTool.cpp:65
+#, kde-format
+msgid ""
+"Calendars should not be longer than 10 years. If you really need such long "
+"periods you need to split them up."
+msgstr ""
+"Egutegiek ez lukete izan behar 10 urtekoak baino gehiagokoak. Halako "
+"denboraldi luzeak behar badituzu, zatitu egin beharko dituzu."
+
+#: CalendarTool.cpp:70
+#, kde-format
+msgid ""
+"Start and end dates are equal! Only one day will be inserted, do you want to "
+"continue?"
+msgstr ""
+"Hasiera-data eta amaiera-data berdinak dira.Egun bakarra txertatuko da. "
+"Jarraitu nahi duzu?"
+
+#: CalendarTool.cpp:70 CalendarTool.cpp:75 CalendarTool.cpp:91
+#, kde-format
+msgid "Warning"
+msgstr "Abisua"
+
+#: CalendarTool.cpp:75
+#, kde-format
+msgid ""
+"Creating a calendar for a longer period than a year can take up a lot of "
+"space, do you want to continue?"
+msgstr ""
+"Egutegia urtebeterako baino gehiagorako sortzeak leku asko har dezake. "
+"Jarraitu nahi duzu?"
+
+#: CalendarTool.cpp:91
+#, kde-format
+msgid ""
+"The area where the calendar is inserted is NOT empty, are you sure you want "
+"to continue, overwriting existing data? If you choose No the area that would "
+"be required for the desired calendar will be selected so you can see what "
+"data would be overwritten."
+msgstr ""
+"Egutegia txertatu den area ez dago hutsik. Ziur zaude lehendik dauden datuak "
+"gainidazten jarraitu nahi duzula? 'Ez' aukeratzen baduzu, hautatu egingo da "
+"nahi den egutegirako beharko litzatekeen area, zer datu gainidatziko "
+"liratekeen ikus dezazun."
+
+#: CalendarTool.cpp:102
+msgctxt "(qtundo-format)"
+msgid "Insert Calendar"
+msgstr "Txertatu egutegia"
+
+#: CalendarTool.cpp:107
+#, kde-format
+msgid "Calendar from %1 to %2"
+msgstr "Egutegia %1(e)tik %2(e)ra"
+
+#: CalendarTool.cpp:149
+#, kde-format
+msgid "week"
+msgstr "astea"
+
+#: CalendarToolFactory.cpp:24
+#, kde-format
+msgid "Calendar"
+msgstr "Egutegia"
+
+#. i18n: ectx: property (windowTitle), widget (QWidget, CalendarToolWidget)
+#: CalendarToolWidget.ui:13
+#, kde-format
+msgid "Calendar Tool"
+msgstr "Egutegi-tresna"
+
+#. i18n: ectx: property (text), widget (QPushButton, m_insertButton)
+#: CalendarToolWidget.ui:19
+#, kde-format
+msgid "Insert"
+msgstr "Txertatu"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: CalendarToolWidget.ui:26
+#, kde-format
+msgid "Start date:"
+msgstr "Hasiera-data:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: CalendarToolWidget.ui:56
+#, kde-format
+msgid "End date:"
+msgstr "Amaiera-data:"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar Tool"
+#~ msgstr "Egutegi-tresna"
+
+#, fuzzy
+#~| msgid "Insert"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert"
+#~ msgstr "Txertatu"
+
+#, fuzzy
+#~| msgid "Start date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Start date:"
+#~ msgstr "Hasiera-data:"
+
+#, fuzzy
+#~| msgid "End date:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "End date:"
+#~ msgstr "Amaiera-data:"
+
+#, fuzzy
+#~| msgid ""
+#~| "End date is before start date! Please make sure that end date comes "
+#~| "after start date."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "End date is before start date! Please make sure that end date comes after "
+#~ "start date."
+#~ msgstr ""
+#~ "Amaiera-data hasiera-data baino lehenagokoa da. Ziurtatu amaiera-data "
+#~ "hasiera-data baino geroagokoa dela."
+
+#, fuzzy
+#~| msgid "Error"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Error"
+#~ msgstr "Errorea"
+
+#, fuzzy
+#~| msgid ""
+#~| "Calendars should not be longer than 10 years. If you really need such "
+#~| "long periods you need to split them up."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Calendars should not be longer than 10 years. If you really need such "
+#~ "long periods you need to split them up."
+#~ msgstr ""
+#~ "Egutegiek ez lukete izan behar 10 urtekoak baino gehiagokoak. Halako "
+#~ "denboraldi luzeak behar badituzu, zatitu egin beharko dituzu."
+
+#, fuzzy
+#~| msgid ""
+#~| "Start and end dates are equal! Only one day will be inserted, do you "
+#~| "want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Start and end dates are equal! Only one day will be inserted, do you want "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Hasiera-data eta amaiera-data berdinak dira.Egun bakarra txertatuko da. "
+#~ "Jarraitu nahi duzu?"
+
+#, fuzzy
+#~| msgid "Warning"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Warning"
+#~ msgstr "Abisua"
+
+#, fuzzy
+#~| msgid ""
+#~| "Creating a calendar for a longer period than a year can take up a lot of "
+#~| "space, do you want to continue?"
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "Creating a calendar for a longer period than a year can take up a lot of "
+#~ "space, do you want to continue?"
+#~ msgstr ""
+#~ "Egutegia urtebeterako baino gehiagorako sortzeak leku asko har dezake. "
+#~ "Jarraitu nahi duzu?"
+
+#, fuzzy
+#~| msgid ""
+#~| "The area where the calendar is inserted is NOT empty, are you sure you "
+#~| "want to continue, overwriting existing data? If you choose No the area "
+#~| "that would be required for the desired calendar will be selected so you "
+#~| "can see what data would be overwritten."
+#~ msgctxt "(qtundo-format)"
+#~ msgid ""
+#~ "The area where the calendar is inserted is NOT empty, are you sure you "
+#~ "want to continue, overwriting existing data? If you choose No the area "
+#~ "that would be required for the desired calendar will be selected so you "
+#~ "can see what data would be overwritten."
+#~ msgstr ""
+#~ "Egutegia txertatu den area ez dago hutsik. Ziur zaude lehendik dauden "
+#~ "datuak gainidazten jarraitu nahi duzula? 'Ez' aukeratzen baduzu, hautatu "
+#~ "egingo da nahi den egutegirako beharko litzatekeen area, zer datu "
+#~ "gainidatziko liratekeen ikus dezazun."
+
+#, fuzzy
+#~| msgid "Calendar from %1 to %2"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar from %1 to %2"
+#~ msgstr "Egutegia %1(e)tik %2(e)ra"
+
+#, fuzzy
+#~| msgid "week"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "week"
+#~ msgstr "astea"
+
+#, fuzzy
+#~| msgid "Calendar Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Calendar"
+#~ msgstr "Egutegi-tresna"
+
+#, fuzzy
+#~| msgid ""
+#~| "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~| "want to insert. When you have choosen the desired dates, simply press "
+#~| "the Insert button to insert the calendar into the spreadsheet, starting "
+#~| "at the cell you have currently selected."
+#~ msgctxt "This what's this help applies for the entire dialog."
+#~ msgid ""
+#~ "The Insert Calendar dialog lets you set the dates of the calendar you "
+#~ "want to insert. When you have chosen the desired dates, simply press the "
+#~ "Insert button to insert the calendar into the spreadsheet, starting at "
+#~ "the cell you have currently selected."
+#~ msgstr ""
+#~ "\"Txertatu egutegia\" elkarrizketak txertatu nahi ditun egutegiaren datak "
+#~ "ezartzeko aukera ematen dizu. Nahi dituzun datak hautatu ondoren, sakatu "
+#~ "Txertatu botoia egutegia kalkulu-orrian txertatzeko, uneko hautatutako "
+#~ "gelaxkan hasita."
+
+#, fuzzy
+#~ msgid "Set the start date of the calendar you want to insert"
+#~ msgstr "Ezarri txertatu nahi duzun egutegiaren hasierako data."
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should start. The "
+#~ "selected date will be the first day of the inserted calendar. You can "
+#~ "also choose a date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "Hemen zure egutegia zein datatan hasi behar den hauta dezakezu. "
+#~ "Hautatutako data txertatutako egutegiko lehenengo data izango da. "
+#~ "Egutegitik data bat hautatzeko \"Hautatu data\" ere saka dezakezu."
+
+#~ msgid "Date Picker"
+#~ msgstr "Data hautatzailea"
+
+#, fuzzy
+#~ msgid "Use a graphical date picker to select a date"
+#~ msgstr "Erabili data hautatzaile grafiko bat data bat hautatzeko."
+
+#, fuzzy
+#~ msgid "Set the end date of the calendar you want to insert"
+#~ msgstr "Ezarri txertatu nahi duzun egutegiko amaierako data."
+
+#~ msgid ""
+#~ "Here you can choose on which date your calendar should end. The selected "
+#~ "date will be the last day of the inserted calendar. You can also choose a "
+#~ "date from a calendar dialog by pressing Select Date."
+#~ msgstr ""
+#~ "Hemen zure egutegia zein datatan amaitu behar den hauta dezakezu. "
+#~ "Hautatutako data txertatutako egutegiko azken data izango da. Egutegitik "
+#~ "data bat hautatzeko \"Hautatu data\" ere saka dezakezu."
+
+#, fuzzy
+#~ msgctxt "Tooltip for the insert button of the insert calendar plugin"
+#~ msgid "Insert the calendar at the currently selected cell"
+#~ msgstr "Txertatu egutegia uneko hautatutako gelaxkan."
+
+#, fuzzy
+#~| msgid ""
+#~| "A new calendar will be inserted starting at the currently selected cell."
+#~ msgctxt "What's this for the insert button of the insert calendar plugin"
+#~ msgid ""
+#~ "A new calendar will be inserted starting at the currently selected cell."
+#~ msgstr "Egutegi berri bat txertatuko da uneko hautatutako gelaxkan hasita."
+
+#, fuzzy
+#~ msgid "Do not insert a calendar"
+#~ msgstr "Ez egutegirik txertatu."
+
+#~ msgid ""
+#~ "Quits the dialog and does not insert a calendar. Use this to cancel this "
+#~ "operation."
+#~ msgstr ""
+#~ "Elkarrizketa itxi eta ez du egutegirik txertatzen. Erabili hau eragiketa "
+#~ "hau ezeztatzeko."
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Ion Gaztañaga"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "igaztanaga@gmail.com"
+
+#~ msgid "Insert Calendar..."
+#~ msgstr "Txertatu egutegia..."
+
+#~ msgid "KSpread Insert Calendar Plugin"
+#~ msgstr "KSpread-en \"Txertatu egutegia\" plugina"
+
+#~ msgid "(c) 2005, The KSpread Team"
+#~ msgstr "(c) 2005, KSpread taldea"
+
+#, fuzzy
+#~ msgid "Cannot insert calendar because no document is set!"
+#~ msgstr "Ezin da egutegia txertatu dokumenturik ezarri ez delako!"

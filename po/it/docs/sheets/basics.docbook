@@ -1,0 +1,947 @@
+<chapter id="basics">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Pamela</firstname
+> <surname
+>Robert</surname
+> <affiliation
+> <address
+><email
+>pamroberts@blueyonder.co.uk</email
+></address>
+</affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>Andrea</firstname
+><surname
+>Celli</surname
+><affiliation
+><address
+><email
+>andrea.celli@libero.it</email
+></address
+></affiliation
+><contrib
+>Traduzione italiana</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Vincenzo</firstname
+><surname
+>Reale</surname
+><affiliation
+><address
+><email
+>smart2128vr@gmail.com</email
+></address
+></affiliation
+><contrib
+>Traduzione italiana</contrib
+></othercredit
+> 
+</authorgroup>
+</chapterinfo
+> 
+<title
+>Fondamenti di &sheets;</title>
+
+<note
+><para
+>Come tutto &kde;, &sheets; è estremamente configurabile. Ciò può provocare dei problemi ad un lettore che cerchi di confrontare quello che trova in un manuale come questo con quello che viene mostrato dalla versione di &sheets; in esecuzione sul suo desktop. Per eliminare sul nascere alcune possibili cause di confusione quando si inizia ad usare &sheets;, suggeriamo di configurare le impostazioni predefinite in tutte le schede della finestra di configurazione di &sheets; (che si apre selezionando <menuchoice
+><guimenu
+>Impostazioni</guimenu
+><guimenuitem
+>Configura Sheets...</guimenuitem
+></menuchoice
+>). </para
+></note>
+
+<sect1 id="starting">
+<title
+>Fogli elettronici per principianti</title>
+
+<para
+>Questa sezione cerca di spiegare tramite esempi cosa fa realmente un foglio elettronico come &sheets; e perché sia uno strumento tanto utile tutte le volte che ti trovi a maneggiare dei numeri. Se hai già usato un foglio elettronico puoi tranquillamente saltare alla prossima sezione.</para>
+
+<para
+>La prima cosa da fare è avviare &sheets;. Puoi farlo premendo il pulsante <mousebutton
+>sinistro</mousebutton
+> del mouse sull'icona di &sheets;, se è presente sul tuo desktop o sul pannello. Altrimenti, puoi selezionare dal &kmenu; <menuchoice
+><guimenu
+>Ufficio</guimenu
+><guimenuitem
+>&sheets;</guimenuitem
+> </menuchoice
+>.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Il primo avvio di &sheets;</phrase>
+</textobject>
+</mediaobject
+>Quando parte il programma ti viene proposta la scelta tra riaprire un documento recente, crearne uno nuovo usando uno dei modelli (suddivisi in categorie) o riaprire un vecchio documento. Seleziona la categoria <guilabel
+>Generale</guilabel
+>, che trovi a sinistra, e scegli <guilabel
+>Foglio vuoto</guilabel
+>. Poi premi il tasto <guibutton
+>Usa questo modello</guibutton
+>.</para>
+
+<para
+>Se guardi &sheets; subito dopo che è partito, vedrai un foglio riempito da celle distribuite in righe numerate e colonne contrassegnate da lettere. È dove potrai immettere i tuoi dati, formule, testi e diagrammi. <mediaobject>
+<imageobject>
+<imagedata fileref="starting1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Immagine "avvio-1"</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Adesso, prova a immettere i testi e i numeri mostrati nelle prime 5 righe della schermata qui sopra nelle corrispondenti celle del tuo foglio elettronico. Per il momento, ignora la riga 7. Per immettere qualcosa in una cella, prima fai clic su di essa con il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse, poi scrivi quello che vuoi, premi il tasto &Enter; o usa le freccette per spostare la selezione su un'altra cella. </para>
+<para
+>Quello che abbiamo appena immesso potrebbe essere un semplice preventivo per i prossimi due mesi, in cui elenchiamo quanto pensiamo di spendere per il vitto, la casa, l'abbigliamento e spese varie. Ora seleziona la cella B7 (colonna B, riga 7) e digita <userinput
+>=B2+B3+B4+B5</userinput
+> e premi &Enter;. Poiché inizia con il segno <keycap
+>=</keycap
+>, &sheets; lo interpreta come una formula, qualcosa da calcolare, in questo caso sommando i valori contenuti nelle quattro celle da B2 a B5. Quello che verrà mostrato nella cella B7  sarà il risultato di questo calcolo.</para>
+<para
+>A questo punto potresti voler inserire una formula simile in C7, che questa volta dovrebbe essere <userinput
+>=C2+C3+C4+C5</userinput
+>. C'è un modo più semplice per farlo: basta fare un «copia» della cella B7, seguito da un «incolla» sulla cella C7. &sheets; aggiusterà automaticamente i riferimenti alle celle (da B a C) quando viene eseguito l'incolla.</para>
+<para
+>A questo punto, potresti pensare che &sheets; non ha fatto niente di più di quanto tu potresti fare con carta, penna e calcolatrice. Non avresti del tutto torto, ma ricordati che questo è solo un piccolo esempio di foglio elettronico, in cui si fanno conti semplicissimi su pochi numeri. Con una tabella contenente una quantità consistente di numeri o di dati usare un foglio elettronico per fare i conti è molto più veloce ed accurato che farli a mano.</para>
+<para
+>Inoltre, con un foglio elettronico puoi giocare a <quote
+>Cosa succede se?</quote
+>. Poiché ogni formula è ricalcolata automaticamente non appena uno dei valori interessati viene cambiato, puoi rapidamente vedere cosa succede se ne modifichi uno. Nel nostro esempio, basterà sostituire il valore in C2 per vedere l'effetto di una riduzione delle spese per il vitto in dicembre. Se tu avessi un foglio che modella accuratamente l'effetto serra, probabilmente potresti vedere l'effetto di una riduzione del 50 per cento delle immissioni di metano nell'atmosfera.</para>
+</sect1>
+
+<sect1 id="selecting">
+<title
+>Selezionare delle celle</title>
+<para
+>Puoi selezionare una singola cella o un'area rettangolare di celle del foglio. Le celle selezionate verranno evidenziate con uno spesso bordo nero. </para>
+<itemizedlist>
+<title
+>Per selezionare una cella puoi usare uno di questi metodi:</title>
+<listitem
+><para
+>premere il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse su di essa </para
+></listitem>
+<listitem
+><para
+>digitare il riferimento alla cella (ad es. <userinput
+>B5</userinput
+>) nella casella all'estremità sinistra delle opzioni dello strumento <guilabel
+>Editor delle celle</guilabel
+> e premi &Enter;</para
+></listitem>
+<listitem
+><para
+>usa l'opzione di menu <menuchoice
+><guimenu
+>Vai</guimenu
+><guimenuitem
+>Vai alla cella...</guimenuitem
+></menuchoice
+></para
+></listitem>
+</itemizedlist>
+
+<para
+>Puoi girovagare su tutto il foglio usando i tasti <keysym
+>freccia</keysym
+>. Mentre, premendo il tasto &Enter;, ti sposterai di una posizione in su, in giù, a destra o a sinistra, a seconda di ciò che hai impostato nella pagina <guilabel
+>Interfaccia</guilabel
+> della <link linkend="configinterface"
+>finestra di configurazione</link
+> di &sheets;.</para
+> <para
+>Se tieni premuto il tasto <keycombo action="simul"
+>&Shift;</keycombo
+> mentre usi le <keysym
+>frecce</keysym
+>, la selezione si sposterà alla prima o all'ultima delle celle attualmente occupate.</para>
+<para
+>Per selezionare un'area di celle contigue trascina il cursore del mouse da un'estremità all'altra del rettangolo desiderato, tenendo premuto il tasto <mousebutton
+>sinistro</mousebutton
+>. Oppure, scrivi i riferimenti della cella in alto a sinistra e di quella in basso a destra, separati da ":", nella casella dei riferimenti di cella dell'<guilabel
+>Editor delle celle</guilabel
+> (ad esempio <userinput
+>B7:C14 </userinput
+>) e premi &Enter;. O, ancora, inserisci i riferimenti di quelle celle, con un formato simile, nella finestra di dialogo che si apre richiamando la voce di menu <menuchoice
+><guimenu
+>Vai</guimenu
+><guimenuitem
+>Vai alla cella...</guimenuitem
+></menuchoice
+>.</para>
+<para
+>Puoi anche selezionare un'area selezionando una prima cella posta in un angolo del rettangolo desiderato e poi premere contemporaneamente <keycombo action="simul"
+>&Shift; </keycombo
+> e il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse sulla cella situata nell'angolo diametralmente opposto.</para>
+
+<para
+>Per selezionare delle celle non contigue devi fare clic sulla prima e poi, tenendo premuto il tasto  <keycombo action="simul"
+>&Ctrl;</keycombo
+> selezionare tutte le altre.</para>
+
+<para
+>Per selezionare un'intera riga o colonna di celle dovrai premere il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse sul numero che identifica la riga (sulla sinistra del foglio di lavoro) o sulla lettera che indica la colonna (in alto). Per selezionare più righe o colonne adiacenti trascina il cursore del mouse, sempre con il tasto <mousebutton
+>sinistro</mousebutton
+> pigiato, sui relativi numeri o lettere, a seconda che si tratti di righe o colonne.</para>
+<para
+>Per selezionare delle righe o colonne di celle non contigue, devi fare clic sul primo numero di riga o lettera di colonna e poi, tenendo premuto il tasto <keycombo action="simul"
+>&Ctrl;</keycombo
+> selezionare tutte le altre.</para>
+
+</sect1>
+
+<sect1 id="entering">
+<title
+>Immettere dei dati</title>
+<para
+>Immettere dei dati in una cella è semplicissimo. Non richiede altro che selezionare la cella, digitare i dati sulla tastiera e poi premere &Enter; o spostare la selezione su un'altra cella, ad esempio usando una <keysym
+>freccia</keysym
+>. A seconda di come inserisci i dati, &sheets; li interpreterà come numeri, date, orari o testo:</para>
+<itemizedlist>
+<listitem
+><para
+>I numeri vengono inseriti nel modo più ovvio; <userinput
+>123</userinput
+>, <userinput
+> -123</userinput
+>, <userinput
+>456.7</userinput
+> o in notazione scientifica <userinput
+>-1.2E-5</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>Le date vanno inserite nel formato scelto per tutto il <quote
+>Sistema</quote
+> e che è stato definito in &systemsettings; nella pagina <menuchoice
+><guimenu
+>Localizzazione</guimenu
+><guisubmenu
+>Lingua e paese</guisubmenu
+><guimenuitem
+>Data e ora</guimenuitem
+> </menuchoice
+>. Se, ad esempio, stai usando il formato DD/MM/YYYY dovrai immettere <userinput
+>30/03/2012</userinput
+> per 30 marzo 2012. Puoi tralasciare gli zeri iniziali per il giorno e il mese. Per gli anni di questo secolo basta indicare una o due cifre finali, ad esempio <userinput
+>9/1/9</userinput
+> per il 9 gennaio 2009. </para
+></listitem>
+<listitem
+><para
+>Gli orari vanno anch'essi indicati nel formato del <quote
+>Sistema</quote
+>. Se, per esempio, stai usando il formato "12 ore", allora dovrai scrivere l'ora nella forma "HH:MIN am|pm" o "HH:MIN:SS am|pm", ossia <userinput
+>9:42 am</userinput
+> o <userinput
+> 10:30:52 pm</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>&sheets; considererà un qualsiasi dato immesso come <quote
+>testo</quote
+> se non riesce a riconoscerlo come numero, data od orario. </para
+></listitem>
+</itemizedlist>
+<note
+><para
+>In modo predefinito, &sheets; allinea a destra della cella i numeri, le date e gli orari, mentre allinea a sinistra tutto il resto. Questa è una utile indicazione per capire se hai immesso correttamente un numero o una data. Ma ricordati che il modo di incolonnare i dati può essere modificato cambiando il <link linkend="formatdata"
+>formato della cella</link
+>.</para
+></note>
+
+<para
+>La casella per l'immissione di testo più grande che si trova nelle opzioni dello strumento <guilabel
+>Editor delle celle</guilabel
+> fornisce un facile modo per modificare il contenuto di una cella selezionata. Dopo aver cambiato qualcosa, se sei soddisfatto delle modifiche puoi premere &Enter; o il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse sulla "V" verde a fianco della casella. Se, invece, vuoi annullare le modifiche fatte, puoi fare clic sulla "X" rossa.</para>
+
+<sect2 id="genericformat">
+<title
+>Formato generale per le celle</title>
+<para
+>In modo predefinito, &sheets; utilizza il formato di cella <quote
+>Generico</quote
+>. Quando questo formato è in funzione, &sheets; rileva automaticamente il tipo di dati corrispondente al contenuto attuale della cella. Ad esempio, se digiti del testo in una cella e poi lo sostituisci con un numero, &sheets; interpreterà automaticamente il nuovo dato come numero. Se vuoi specificare il tipo di dato, puoi impostarlo esplicitamente con <link linkend="formatdata"
+>Formato cella</link
+>. Potrai tornare al formato <quote
+>Generico</quote
+> in qualsiasi momento. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="copypaste">
+<title
+>Copiare, tagliare e incollare</title>
+
+<para
+>A prima vista, i <guimenuitem
+>Taglia</guimenuitem
+>, <guimenuitem
+>Copia</guimenuitem
+> e <guimenuitem
+>Incolla</guimenuitem
+> di &sheets; sembrano molto simili a quelli delle altre applicazioni di &kde;. Dopo aver selezionato una o più celle, puoi scegliere <guimenuitem
+>Copia</guimenuitem
+> o <guimenuitem
+>Taglia</guimenuitem
+> dal menu <guimenu
+>Modifica</guimenu
+> posto in alto o dal menu a comparsa che compare tenendo premuto il tasto <mousebutton
+>destro</mousebutton
+> del mouse su una delle celle selezionate. Puoi usare anche le scorciatoie <keycombo action="simul"
+>&Ctrl;<keycap
+>C</keycap
+> </keycombo
+> e <keycombo action="simul"
+>&Ctrl;<keycap
+>X</keycap
+> </keycombo
+>. Adesso puoi spostarti per selezionare la cella di destinazione e scegliere <guimenuitem
+>Incolla</guimenuitem
+> da uno dei due menu o premere <keycombo action="simul"
+> &Ctrl;<keycap
+>V</keycap
+></keycombo
+>. Comunque ci sono alcune particolarità nell'uso di queste funzioni in &sheets; che ora esamineremo.</para>
+
+<para
+>Se una cella contiene una formula, verrà copiata la formula e non il risultato mostrato. Inoltre, se la formula contiene un riferimento ad una cella, questo riferimento viene modificato dall'operazione di <guimenuitem
+>Taglia</guimenuitem
+>/<guimenuitem
+>Copia</guimenuitem
+> e<guimenuitem
+>Incolla</guimenuitem
+> in modo che punti alla cella che è nella stessa posizione relativa. Per esempio, se la cella A2 contiene la formula <userinput
+> =B3</userinput
+> e viene copiata in C4, la cella C4 conterrà <userinput
+>=D5 </userinput
+>.</para>
+<para
+>Questo può sembrare un modo abbastanza strampalato per fare una copia, ma è esattamente quello che serve nel 99% dei casi. Se non è questo quello che vuoi, vedi la sezione relativa ai <link linkend="absolute"
+>riferimenti assoluti a celle</link
+>. Ad esempio, nella semplice lista della spesa qui sotto, la cella D2 deve contenere <userinput
+>=B2 * C2</userinput
+>, D3 deve essere <userinput
+>=B3 * C3</userinput
+>, D4 <userinput
+>=B4 * C4</userinput
+> e così via. Invece di inserire una diversa formula in ogni cella, ti basterà scrivere la prima formula in D2 e poi copiarla nelle altre celle. Ci penserà &sheets; ad aggiustare i riferimenti alle celle nel modo opportuno.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="copy1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Immagine copia-1</phrase>
+</textobject>
+</mediaobject>
+
+<sect2 id="copypasteareas">
+<title
+>Copiare ed incollare blocchi di celle</title>
+<para
+>Nell'esempio precedente avremmo potuto copiare D2 in un colpo solo sulle tre celle D3, D4 e D5. Basta selezionare tutta l'area D3:D5 prima di dare "Incolla".</para>
+<para
+>Un blocco rettangolare di celle può essere tagliato o copiato in un solo colpo. Basta selezionarlo tutto prima di copiare o tagliare. Poi dovrai selezionare l'angolo superiore sinistro dell'area su cui vuoi incollarlo e, infine, dare il comando di incolla.</para>
+<para
+>Se copi o tagli un blocco rettangolare di celle, diciamo B2:C3, e lo incolli su un'area più grande, ad es. A10:D13, la disposizione delle celle originali sarà ripetuta fino a completare la nuova area.</para>
+<para
+>&sheets; fornisce anche un metodo di <quote
+>Trascinamento e copia</quote
+> per copiare delle celle su altre celle poste immediatamente sotto o a destra delle prime. Per usare questo metodo, seleziona le celle che vuoi copiare, poi posiziona il cursore del mouse sul quadratino che appare nell'angolo inferiore destro del blocco di celle. Il cursore prenderà la forma di una doppia freccia. A questo punto, tenendo premuto il tasto <mousebutton
+>sinistro</mousebutton
+> del mouse potrai trascinare le celle selezionate fin dove vuoi. Tieni conto che nelle eventuali formule i riferimenti ad altre celle saranno incrementati in base al cambiamento di posizione relativa. I riferimenti assoluti non vengono modificati.</para>
+</sect2>
+
+<sect2 id="specialpaste">
+<title
+>Modalità speciali per Incolla</title>
+<para
+>Una cella può contenere del testo, un valore o una formula ma può anche contenere <link linkend="formatspread"
+>informazioni per la formattazione</link
+> di un carattere speciale, dei bordi o di uno sfondo. &sheets; ha delle versioni speciali di Incolla che ti permettono di gestire queste informazioni in diversi modi.</para>
+
+<para
+><menuchoice
+><guimenu
+>Modifica</guimenu
+><guimenuitem
+>Incolla speciale...</guimenuitem
+></menuchoice
+> attiva la finestra di dialogo <guilabel
+>Incolla speciale</guilabel
+>. Selezionando la voce appropriata nella parte alta di questa finestra, puoi scegliere di incollare <guilabel
+>Tutto</guilabel
+>, solo il <guilabel
+>Testo</guilabel
+>, il <guilabel
+>Formato</guilabel
+> della cella, qualsiasi <guilabel
+>Commento</guilabel
+> nelle celle o <guilabel
+>Tutto tranne i bordi</guilabel
+>. Le voci nella parte destra di questa finestra ti permettono di eseguire delle semplici <link linkend="sumspecialpaste"
+> operazioni su un blocco di celle</link
+>. </para>
+
+<para
+><guimenuitem
+>Incolla inserendo...</guimenuitem
+> inserisce le celle copiate nel foglio di calcolo spostando le celle che verrebbero sovrascritte di un opportuno numero di righe o colonne verso il basso o verso destra. Può essere usato anche per inserire nel foglio di lavoro intere righe o colonne precedentemente copiate.</para>
+</sect2>
+
+</sect1>
+<!-- ME insdel -->
+<sect1 id="insdel">
+<title
+>Inserire e rimuovere</title>
+<para
+>Puoi usare il tasto <keysym
+>Canc</keysym
+> o <menuchoice
+><guimenu
+>Modifica </guimenu
+><guisubmenu
+>Pulisci</guisubmenu
+><guimenuitem
+>Contenuto</guimenuitem
+> </menuchoice
+> per rimuovere testo, valori o formule dalle celle/righe/colonne selezionate senza modificare nient'altro.</para>
+
+<para
+>Per eliminare tutto dalle celle, righe o colonne selezionate, inclusi i commenti e le formattazioni speciali, scegli l'opzione <guimenuitem
+>Tutto</guimenuitem
+> dal menu <menuchoice
+><guimenu
+>Modifica</guimenu
+><guisubmenu
+>Pulisci</guisubmenu
+></menuchoice
+> o dal menu a comparsa che appare premendo il tasto <mousebutton
+>destro</mousebutton
+> del mouse su una selezione. </para>
+<para
+>Per rimuovere completamente le righe o colonne selezionate, puoi usare le voci <guimenuitem
+>Elimina righe</guimenuitem
+> o <guimenuitem
+>Elimina colonne </guimenuitem
+> dal menu a scomparsa collegato al tasto <mousebutton
+>destro</mousebutton
+> del mouse.</para>
+<para
+>Se selezioni una o più celle e scegli <guimenuitem
+>Rimuovi celle...</guimenuitem
+> dal menu a scomparsa collegato al tasto <mousebutton
+>destro</mousebutton
+> del mouse, potrai scegliere se spostare in su o a sinistra le altre celle del foglio per riempire lo spazio lasciato vuoto.</para>
+<para
+>Se vuoi inserire nel foglio delle nuove righe o colonne vuote, seleziona la riga o colonna dove vuoi inserirle e scegli l'opzione <guimenuitem
+>Inserisci righe</guimenuitem
+> o <guimenuitem
+>Inserisci colonne</guimenuitem
+> dal menu a scomparsa collegato al tasto <mousebutton
+>destro</mousebutton
+> del mouse.</para>
+<para
+>Puoi inserire delle nuove celle nel foglio di lavoro. Basta selezionare l'area dove vuoi che appaiono e attivare l'opzione <guimenuitem
+> Inserisci celle...</guimenuitem
+> dal menu a scomparsa collegato al tasto <mousebutton
+>destro</mousebutton
+> del mouse. Ti verrà chiesto dove vuoi spostare le celle attualmente presenti nell'area (a destra o in basso) per fare posto alle nuove celle.</para>
+
+</sect1>
+
+<sect1 id="simplesums">
+<title
+>Semplici calcoli</title>
+<para
+>Se il primo carattere in una cella è il segno uguale (<keycap
+>=</keycap
+>) &sheets; considererà il contenuto della cella come una formula da calcolare. Il risultato sarà visualizzato nella cella al posto della formula che l'ha generato. Ad esempio, se digiti <userinput
+>=2+3</userinput
+> in una cella, vedrai apparire <emphasis
+>5</emphasis
+>.</para>
+<para
+>L'aspetto più interessante è che una formula può contenere riferimenti ad altre celle. Così, ad esempio, <userinput
+>=B4+A3</userinput
+> calcolerà la somma dei valori contenuti nelle celle B4 e A3 e il risultato cambierà se verranno modifichi le celle B4 o A3.</para>
+<para
+>Oltre che addizioni, una formula può contenere i simboli <keycap
+>-</keycap
+> per la sottrazione, <keycap
+>*</keycap
+> per la moltiplicazione e <keycap
+> /</keycap
+> per la divisione. Le parentesi tonde, <keycap
+>(</keycap
+> e <keycap
+>)</keycap
+>, possono essere usate come nella normale algebra. Quindi puoi costruire formule più complesse come <userinput
+>=((B10 + C3) *5 - F11) / 2 </userinput
+>.</para>
+
+<para
+>Le celle che contengono una formula vengono segnate con un triangolino blu nell'angolo inferiore sinistro se è attivata l'opzione <guilabel
+>Mostra indicatore formula</guilabel
+> nella scheda <menuchoice
+><guimenu
+>Formato</guimenu
+> <guisubmenu
+>Foglio</guisubmenu
+><guisubmenu
+>Proprietà del foglio</guisubmenu
+> </menuchoice
+>.</para>
+<para
+>&sheets; include anche un gran numero di funzioni per le applicazioni, ad es. per calcoli statistici, trigonometrici e finanziari. Il loro utilizzo verrà esaminato più in dettaglio nella <link linkend="formulas"
+>successiva sezione</link
+> di questo manuale, ma se sei curioso di vedere subito cosa c'è, scegli <guimenuitem
+>Funzione...</guimenuitem
+> dal menu <guimenu
+>Inserisci </guimenu
+> e dai un'occhiata alla finestra di dialogo <guilabel
+>Funzione </guilabel
+> che si aprirà.</para>
+<para
+>Per ora, limitiamoci a notare che la funzione <userinput
+>SUM</userinput
+> può essere comoda perché calcola la somma di tutti i valori in un blocco di celle specificato. Per esempio <userinput
+>=SUM(B4:C10)</userinput
+> calcola la somme di tutti i valori delle celle comprese nel rettangolo tra B4 e C10.</para>
+<para
+>Se &sheets; visualizza <keycap
+>#VALORE!</keycap
+> quando inserisci una formula, di solito significa che non è in grado di interpretare ciò che hai digitato. Se la fila di simboli termina con una freccetta rossa, allora significa semplicemente che la cella non è abbastanza grande per mostrare tutto il risultato. In tal caso, devi allargare la cella o cambiare il suo <link linkend="formatdata"
+>formato</link
+>, in modo che il risultato si adatti correttamente.</para>
+
+<sect2 id="recalc">
+<title
+>Ricalcolo</title>
+<para
+>Se la casella <guilabel
+>Ricalcolo automatico</guilabel
+> nella scheda <menuchoice
+><guimenu
+>Formato</guimenu
+> <guisubmenu
+>Foglio</guisubmenu
+><guisubmenu
+>Proprietà del foglio</guisubmenu
+> </menuchoice
+> è marcata, &sheets; ricalcolerà i valori delle celle ogni volta che nel foglio viene modificato qualcosa da cui esse dipendono.</para>
+<para
+>Quando <guilabel
+>Ricalcolo automatico</guilabel
+>non è attivo nel foglio su cui lavori, puoi chiedere a &sheets; di effettuare, in qualsiasi momento, un ricalcolo utilizzando l'opzione <guimenuitem
+>Ricalcola foglio</guimenuitem
+> o l'opzione <guimenuitem
+>Ricalcola documento</guimenuitem
+> del menu <guimenu
+>Strumenti</guimenu
+>. Puoi anche usare le relative scorciatoie <keycombo action="simul"
+>&Shift;<keysym
+>F9</keysym
+> </keycombo
+> o <keysym
+>F9</keysym
+>.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sort">
+<title
+>Ordinare i dati</title>
+<para
+>In questo semplice esempio, i dati sono i nomi, lo stato di appartenenza di alcune montagne e la loro altezza sul livello del mare. &sheets; può ordinare questi dati in diversi modi.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sort1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Immagine di dati ordinati</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para
+>Potresti volere che i dati siano messi in ordine alfabetico. Per farlo basta selezionare l'area che contiene i dati (in questo caso A2:C7) e scegliere <guimenuitem
+>Ordina...</guimenuitem
+> dal menu <guimenu
+>Dati</guimenu
+>. Verrà così aperta la finestra <guilabel
+>Ordinamento</guilabel
+>.</para
+> 
+<para
+>Se non cambi nulla, i dati vengono ordinati in modo alfanumerico, distinguendo maiuscole da minuscole; i numeri precedono le lettere maiuscole che, a loro volta, precedono le minuscole. Quindi, delle celle che contengano <userinput
+>Como</userinput
+>, <userinput
+>bari</userinput
+>, <userinput
+>77</userinput
+> e <userinput
+>Bari</userinput
+> saranno poste nel seguente ordine: <emphasis
+>77 Bari Como bari</emphasis
+>.</para>
+<!-- Obsolete, AFAICT (Phil)
+<para
+>The <guimenuitem
+>Sort Increasing</guimenuitem
+> and <guimenuitem
+>Sort 
+Decreasing</guimenuitem
+> options from the <guimenu
+>Data</guimenu
+> menu options 
+sort the data according to the contents of the cells in the left column of the 
+selected area. For more complex sorting select <menuchoice
+><guimenu
+>Data
+</guimenu
+><guimenuitem
+>Sort...</guimenuitem
+></menuchoice
+> to bring up the 
+<guilabel
+>Sort</guilabel
+> dialog box.</para>
+-->
+<para
+>Nell'area <guilabel
+>Direzione</guilabel
+> di questo riquadro, seleziona l'ordinamento in righe e colonne. Se marchi la casella <guilabel
+>La prima riga contiene le intestazioni di colonna</guilabel
+> o <guilabel
+>La prima colonna contiene le intestazioni di riga</guilabel
+> la prima riga o colonna saranno escluse dall'ordinamento.</para>
+<para
+>Le righe e le colonne sono ordinate nell'ordine specificato, che può essere cambiato utilizzando i pulsanti <guibutton
+>Sposta su</guibutton
+> e <guibutton
+>Sposta giù</guibutton
+>. Utilizzando l'esempio nella schermata precedente, la scelta della colonna B come chiave primaria e della colonna C come secondaria ordinerà i dati per paese e, per ogni paese, per altezza.</para>
+<para
+>Deseleziona l'opzione <guilabel
+>Distingui le maiuscole</guilabel
+> per ottenere un ordinamento che non tenga conto della differenza tra maiuscole e minuscole e cambiare l'ordinamento da <guilabel
+>Crescente</guilabel
+> a <guilabel
+>Decrescente</guilabel
+> facendo clic sulle celle nella colonna <guilabel
+>Ordinamento</guilabel
+>. </para>
+
+<para
+>L'estensione <guilabel
+>Dettagli 
+>
+></guilabel
+> di questa finestra ti permette di ordinare i dati usando l'ordine degli elementi in un elenco personalizzato (ad es. gennaio, febbraio,...), invece che alfanumerico. Il formato della cella sarà spostato insieme ai dati. Se selezioni <guilabel
+>Copia formattazione di cella (bordi, colori, stile del testo)</guilabel
+>. </para>
+</sect1>
+
+
+<sect1 id="statusbarsum">
+<title
+>Il calcolatore nella barra di stato</title>
+<para
+>L'estremità sinistra della barra di stato mostra in modo predefinito un riepilogo dei valori presenti nelle celle selezionate. A seconda di cosa hai scelto nella casella combinata <guilabel
+>Funzione mostrata nella barra di stato</guilabel
+> della scheda <guilabel
+>Interfaccia</guilabel
+> della finestra di dialogo per la configurazione di &sheets;, il riepilogo può essere:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><guilabel
+>Nessuno</guilabel
+></term>
+<listitem
+><para
+>Non si effettua nessun calcolo. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Media</guilabel
+></term>
+<listitem
+><para
+>Il valore mostrato è la media dei valori presenti nelle celle selezionate. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Conteggio</guilabel
+></term>
+<listitem
+><para
+>Il valore mostrato è il numero di celle selezionate che contiene un valore numerico. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>ConteggioA</guilabel
+></term>
+<listitem
+><para
+>Il valore visualizzato è il numero di celle non vuote. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Massimo</guilabel
+></term>
+<listitem
+><para
+>Il valore mostrato è il maggiore tra i valori presenti nelle celle selezionate. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Minimo</guilabel
+></term>
+<listitem
+><para
+>Il valore mostrato è il minore tra i valori presenti nelle celle selezionate. </para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>Somma</guilabel
+></term>
+<listitem
+><para
+>Il valore mostrato è la somma dei valori presenti nelle celle selezionate. </para
+></listitem>
+</varlistentry>
+
+</variablelist>
+<para
+>Il metodo di calcolo può essere cambiato premendo il tasto <mousebutton
+>destro</mousebutton
+> del mouse sulla casella che contiene il risultato del calcolatore e scegliendo una delle operazioni proposte dal menu a comparsa.</para>
+
+</sect1>
+
+<sect1 id="saving">
+<title
+>Salvare il proprio lavoro</title>
+<para
+>&sheets; salva tutto il documento, che può comprendere diversi fogli di lavoro, come un unico file.</para>
+<para
+>Se hai creato un nuovo documento, o vuoi salvarne uno vecchio con un nome diverso, utilizza <menuchoice
+><guimenu
+>File</guimenu
+><guimenuitem
+>Salva come...</guimenuitem
+></menuchoice
+>. Si aprirà la finestra di dialogo tipica di &kde; <guilabel
+>Salva documento come</guilabel
+>. Scegli la cartella in cui vuoi salvare il documento e assegnagli un nome opportuno scrivendolo nella casella <guilabel
+>Nome</guilabel
+>. I documenti prodotti da &sheets; vengono normalmente registrati automaticamente con l'estensione <filename
+>.ods</filename
+> e, quindi, non hai bisogno di aggiungerla al nome del file. Comunque, assicurati che sia selezionato <guilabel
+>Foglio di calcolo  OpenDocument</guilabel
+> come <guilabel
+>Filtro</guilabel
+>.</para>
+<para
+>Per salvare il tuo documento senza cambiargli nome, utilizza semplicemente <menuchoice
+><guimenu
+>File</guimenu
+><guimenuitem
+>Salva</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Puoi anche salvare un documento di &sheets; in un formato diverso selezionando il formato dalla casella combinata <guilabel
+>Filtro:</guilabel
+>.</para>
+<para
+>Quando salvi una versione modificata di un documento esistente, &sheets; conserverà la versione precedente come copia di sicurezza.Per distinguerla aggiungerà il simbolo <literal
+>~</literal
+> alla fine del nome del file.</para>
+<para
+>&sheets; cerca di proteggerti dalla perdita del lavoro fatto quando, ad esempio, il computer si blocca o tu chiudi &sheets; senza salvare il documento aperto. A tal fine, ogni tanto, salva automaticamente l'ultima versione del documento su cui stai lavorando, utilizzando un nome modificato del file. La versione salvata automaticamente viene di solito distrutta quando salvi il tuo documento. In questo modo essa esiste solo se è più aggiornata della versione che hai salvato manualmente. Quando apri un documento, &sheets; verifica per te se esiste una versione salvata automaticamente. Se la trova, ti proporrà di usarla.</para>
+<para
+>I documenti salvati automaticamente vengono registrati con un nome della forma <filename
+>.nome_tuo_file.autosave</filename
+> (nota il punto all'inizio del nome). Così che <filename
+>foglio1.ods</filename
+> sarà salvato automaticamente come <filename
+>.foglio1.ods.autosave</filename
+>. Questa funzionalità può essere personalizzata nella <link linkend="configinterface"
+> finestra di configurazione</link
+>.</para>
+
+<sect2 id="templates">
+<title
+>Modelli</title>
+<para
+>Se pensi di dover creare diversi documenti simili, puoi risparmiare tempo e fatica creando subito un modello che poi utilizzerai come base per i singoli documenti.</para>
+<para
+>Per farlo, basta creare un documento che contiene solo gli elementi comuni e poi salvarlo scegliendo<menuchoice
+><guimenu
+>File</guimenu
+><guimenuitem
+> Creazione modello da documento</guimenuitem
+></menuchoice
+>. Questo farà aprire la finestra di dialogo <guilabel
+>Crea un modello</guilabel
+>. Digita un nome per il nuovo modello nel riquadro di testo <guilabel
+>Nome:</guilabel
+> e premi il pulsante <guibutton
+>OK</guibutton
+>. La prossima volta che inizierai un nuovo documento selezionando <menuchoice
+><guimenu
+>File</guimenu
+> <guimenuitem
+>Nuovo</guimenuitem
+></menuchoice
+> o lancerai &sheets;, la finestra di avvio ti presenterà la possibilità di creare il nuovo documento sulla base del tuo modello.</para>
+<para
+>La finestra di dialogo <guilabel
+>Crea un modello</guilabel
+> ti permette anche di scegliere un'icona diversa da associare al nome del modello nella finestra di avvio. Inoltre, ti consente di salvare i tuoi modelli sotto gruppi con nomi diversi, che appariranno in schede separate nella finestra di dialogo.</para>
+<para
+>I modelli sono salvati come file <literal role="extension"
+>.kst</literal
+> in <filename
+>~/.kde/share/apps/tables/templates/</filename
+>. </para>
+</sect2>
+
+</sect1>
+
+<sect1 id="printing">
+<title
+>Stampare un foglio elettronico</title>
+<para
+>Sostanzialmente, per stampare un foglio elettronico basta selezionare <menuchoice
+><guimenu
+>File</guimenu
+><guimenuitem
+>Stampa...</guimenuitem
+></menuchoice
+> che fa apparire la finestra di dialogo <guilabel
+>Stampa</guilabel
+> di &kde;, dove potrai scegliere tra l'altro la stampante da utilizzare, il numero di copie e se stampare tutto o solo le pagine selezionate.</para>
+<para
+>In modo predefinito, &sheets; stamperà tutti gli elementi del documento aperto, ma puoi delimitare la stampa selezionando prima la zona che vuoi stampare e poi scegliere <guimenuitem
+>Definisci intervallo di stampa</guimenuitem
+> dal sottomenu <menuchoice
+><guimenu
+>Formato</guimenu
+><guisubmenu
+>Intervallo di stampa</guisubmenu
+></menuchoice
+>.</para>
+<para
+>&sheets; stamperà tutti i fogli necessari per includere tutti gli elementi del documento. Puoi rapidamente vedere come un foglio sarà suddiviso in pagine di stampa, marcando la casella <menuchoice
+><guimenu
+>Visualizza</guimenu
+><guimenuitem
+>Delimitazioni pagina</guimenuitem
+></menuchoice
+>. I bordi di ogni pagina di stampa saranno segnati da linee colorate sul foglio di lavoro.</para>
+
+<para
+>Per vedere più dettagliatamente cosa verrà inviato alla stampante, compreso tutto quello che hai chiesto di inserire come intestazioni e piè di pagina (vedi più avanti), seleziona <menuchoice
+><guimenu
+>File</guimenu
+><guimenuitem
+>Anteprima di stampa...</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Per migliorare l'aspetto del documento stampato, puoi cambiare i font, i colori, i bordi e la dimensione delle celle del foglio. Vedi la sezione <link linkend="formatspread"
+>Formattazione del documento</link
+> per maggiori dettagli.</para>
+
+<para
+>Puoi anche utilizzare la finestra di dialogo <guilabel
+>Aspetto pagina</guilabel
+>, che si richiama selezionando <menuchoice
+><guimenu
+>Formato</guimenu
+><guimenuitem
+> Aspetto pagina...</guimenuitem
+></menuchoice
+>, per cambiare l'orientazione e la dimensione delle pagine stampate (quest'ultima è legata ai fogli che hai nella stampante) e lo spessore dei margini.</para>
+<para
+>Il <guilabel
+>Foglio</guilabel
+> fornisce altre opzioni. La sezione <guilabel
+> Impostazioni di stampa</guilabel
+> ti permette di selezionare se stampare o meno la griglia, gli indicatori dei commenti e delle formule, oggetti e grafici. La sezione <guilabel
+>Ripetizioni su ogni pagina</guilabel
+> consente di ripetere le colonne o le righe selezionate su ogni pagina stampata. Nella sezione <guilabel
+>Ridimensionamento</guilabel
+> puoi impostare un fattore di scala o limitare il numero di pagine da stampare.</para>
+
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

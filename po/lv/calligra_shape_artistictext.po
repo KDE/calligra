@@ -1,0 +1,239 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Nauris <mreloads@yahoo.co.uk>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2009-08-27 06:30+0300\n"
+"Last-Translator: Nauris <mreloads@yahoo.co.uk>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+
+#: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
+#, fuzzy
+#| msgid "Add text range"
+msgctxt "(qtundo-format)"
+msgid "Add text range"
+msgstr "Pievienot teksta diapazonu"
+
+#: ArtisticTextShapeFactory.cpp:17
+#, kde-format
+msgid "ArtisticTextShape"
+msgstr "Mākslinieciska teksta objekts"
+
+#: ArtisticTextShapeFactory.cpp:19
+#, kde-format
+msgid "A shape which shows a single text line"
+msgstr "Teksta objekts, kas attēlo vienu teksta rindu"
+
+#: ArtisticTextShapeFactory.cpp:29
+#, kde-format
+msgid "Artistic Text"
+msgstr "Māksliniecisks teksts"
+
+#: ArtisticTextTool.cpp:64
+#, kde-format
+msgid "Detach Path"
+msgstr "Atvienot ceļu"
+
+#: ArtisticTextTool.cpp:69
+#, kde-format
+msgid "Convert to Path"
+msgstr "Pārveidot par ceļu"
+
+#: ArtisticTextTool.cpp:74
+#, kde-format
+msgid "Bold text"
+msgstr ""
+
+#: ArtisticTextTool.cpp:79
+#, kde-format
+msgid "Italic text"
+msgstr ""
+
+#: ArtisticTextTool.cpp:84
+#, kde-format
+msgid "Superscript"
+msgstr ""
+
+#: ArtisticTextTool.cpp:89
+#, kde-format
+msgid "Subscript"
+msgstr ""
+
+#: ArtisticTextTool.cpp:94
+#, kde-format
+msgid "Anchor at Start"
+msgstr ""
+
+#: ArtisticTextTool.cpp:99
+#, kde-format
+msgid "Anchor at Middle"
+msgstr ""
+
+#: ArtisticTextTool.cpp:104
+#, kde-format
+msgid "Anchor at End"
+msgstr ""
+
+#: ArtisticTextTool.cpp:295
+#, kde-format
+msgid "Click to change cursor position."
+msgstr ""
+
+#: ArtisticTextTool.cpp:297
+#, kde-format
+msgid "Click to select text shape."
+msgstr ""
+
+#: ArtisticTextTool.cpp:300
+#, kde-format
+msgid "Double click to put text on path."
+msgstr ""
+
+#: ArtisticTextTool.cpp:303
+#, kde-format
+msgid "Drag handle to change start offset."
+msgstr ""
+
+#: ArtisticTextTool.cpp:307
+#, fuzzy, kde-format
+#| msgid "Press return to finish editing."
+msgid "Press escape to finish editing."
+msgstr "Lai pabeigtu labošanu, nospiediet 'Enter'."
+
+#: ArtisticTextTool.cpp:489
+#, kde-format
+msgid "Press return to finish editing."
+msgstr "Lai pabeigtu labošanu, nospiediet 'Enter'."
+
+#: ArtisticTextTool.cpp:583
+#, fuzzy
+#| msgid "Convert to Path"
+msgctxt "(qtundo-format)"
+msgid "Convert to Path"
+msgstr "Pārveidot par ceļu"
+
+#: ArtisticTextTool.cpp:596
+#, kde-format
+msgid "Text Properties"
+msgstr ""
+
+#: ArtisticTextTool.cpp:606
+#, fuzzy, kde-format
+#| msgid "Detach Path"
+msgid "Text On Path"
+msgstr "Atvienot ceļu"
+
+#: ArtisticTextToolFactory.cpp:17
+#, fuzzy, kde-format
+#| msgid "Artistic Text Editing Tool"
+msgid "Artistic text editing"
+msgstr "Mākslinieciska teksta labošanas rīks"
+
+#: AttachTextToPathCommand.cpp:15
+#, fuzzy
+#| msgid "Attach Path"
+msgctxt "(qtundo-format)"
+msgid "Attach Path"
+msgstr "Pievienot ceļu"
+
+#: ChangeTextAnchorCommand.cpp:14
+msgctxt "(qtundo-format)"
+msgid "Change text anchor"
+msgstr ""
+
+#: ChangeTextFontCommand.cpp:16
+msgctxt "(qtundo-format)"
+msgid "Change font"
+msgstr ""
+
+#: ChangeTextOffsetCommand.cpp:15
+msgctxt "(qtundo-format)"
+msgid "Change Text Offset"
+msgstr ""
+
+#: DetachTextFromPathCommand.cpp:14
+#, fuzzy
+#| msgid "Detach Path"
+msgctxt "(qtundo-format)"
+msgid "Detach Path"
+msgstr "Atvienot ceļu"
+
+#: RemoveTextRangeCommand.cpp:16
+#, fuzzy
+#| msgid "Remove text range"
+msgctxt "(qtundo-format)"
+msgid "Remove text range"
+msgstr "Noņemt teksta diapazonu"
+
+#: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
+#: ReplaceTextRangeCommand.cpp:30
+#, fuzzy
+#| msgid "Remove text range"
+msgctxt "(qtundo-format)"
+msgid "Replace text range"
+msgstr "Noņemt teksta diapazonu"
+
+#, fuzzy
+#~| msgid "ArtisticTextShape"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "ArtisticTextShape"
+#~ msgstr "Mākslinieciska teksta objekts"
+
+#, fuzzy
+#~| msgid "A shape which shows a single text line"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "A shape which shows a single text line"
+#~ msgstr "Teksta objekts, kas attēlo vienu teksta rindu"
+
+#, fuzzy
+#~| msgid "Artistic Text"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic Text"
+#~ msgstr "Māksliniecisks teksts"
+
+#, fuzzy
+#~| msgid "Press return to finish editing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press escape to finish editing."
+#~ msgstr "Lai pabeigtu labošanu, nospiediet 'Enter'."
+
+#, fuzzy
+#~| msgid "Press return to finish editing."
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Press return to finish editing."
+#~ msgstr "Lai pabeigtu labošanu, nospiediet 'Enter'."
+
+#, fuzzy
+#~| msgid "Detach Path"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Text On Path"
+#~ msgstr "Atvienot ceļu"
+
+#, fuzzy
+#~| msgid "Artistic Text Editing Tool"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Artistic text editing"
+#~ msgstr "Mākslinieciska teksta labošanas rīks"
+
+#~ msgid "Family:"
+#~ msgstr "Kopa:"
+
+#~ msgid "Size:"
+#~ msgstr "Izmērs:"
+
+#~ msgid "Offset:"
+#~ msgstr "Nobīde:"
+
+#~ msgid "Artistic Text Tool"
+#~ msgstr "Mākslinieciska teksta rīks"
