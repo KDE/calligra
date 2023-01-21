@@ -152,10 +152,6 @@ protected Q_SLOTS:
 
     // -- cell style actions --
     void cellStyle();
-    // -- font actions --
-    void font(const QString& font);
-    void fontSize(int size);
-    void changeTextColor(const KoColor &);
     // -- border actions --
     void borderColor(const KoColor &);
     // -- misc style attribute actions --

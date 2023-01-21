@@ -12,6 +12,7 @@ set (actions_DIR_SRCS
     actions/Consolidate.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
+    actions/Font.cpp
     actions/Goto.cpp
     actions/Indent.cpp
     actions/InsertSeries.cpp

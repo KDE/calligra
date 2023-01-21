@@ -51,10 +51,6 @@
 #include <KoColor.h>
 #include <KoIcon.h>
 
-// KF5
-#include <kfontaction.h>
-#include <kfontsizeaction.h>
-
 // Qt
 #include <QApplication>
 #include <QPainter>
@@ -85,11 +81,6 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
 void CellToolBase::Private::updateActions(const Cell& cell)
 {
     // TODO - this should eventually be removed, all the checks are done in the CellAction classes instead
-
-    const Style style = cell.style();
-
-    static_cast<KFontAction*>(q->action("font"))->setFont(style.fontFamily());
-    static_cast<KFontSizeAction*>(q->action("fontSize"))->setFontSize(style.fontSize());
 
     // Now, activate/deactivate some actions depending on what is selected.
     if (!q->selection()->activeSheet()->isProtected()) {

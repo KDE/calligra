@@ -90,8 +90,6 @@
 
 // KF5
 #include <kfind.h>
-#include <kfontaction.h>
-#include <kfontsizeaction.h>
 #include <kmessagebox.h>
 #include <kreplace.h>
 #include <kstandardaction.h>
@@ -158,28 +156,9 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::cellStyle);
     action->setToolTip(i18n("Set the cell formatting"));
 
-    // -- font actions --
-
-    auto fontAction = new KFontAction(i18n("Select Font..."), this);
-    fontAction->setIconText(i18n("Font"));
-    addAction("font", fontAction);
-    connect(fontAction, QOverload<const QString &>::of(&KFontAction::triggered), this, &CellToolBase::font);
-
-    auto fontSizeAction = new KFontSizeAction(i18n("Select Font Size"), this);
-    fontSizeAction->setIconText(i18n("Font Size"));
-    addAction("fontSize", fontSizeAction);
-    connect(fontSizeAction, &KFontSizeAction::fontSizeChanged, this, &CellToolBase::fontSize);
-
-    auto colorAction = new KoColorPopupAction(this);
-    colorAction->setIcon(koIcon("format-text-color"));
-    colorAction->setText(i18n("Text Color"));
-    colorAction->setToolTip(i18n("Set the text color"));
-    addAction("textColor", colorAction);
-    connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::changeTextColor);
-
     // -- border actions --
 
-    colorAction = new KoColorPopupAction(this);
+    auto colorAction = new KoColorPopupAction(this);
     colorAction->setIcon(koIcon("format-stroke-color"));
     colorAction->setToolTip(i18n("Select a new border color"));
     colorAction->setText(i18n("Border Color"));
@@ -1160,58 +1139,6 @@ void CellToolBase::cellStyle()
         command->execute(canvas());
     }
     delete dialog;
-}
-
-void CellToolBase::font(const QString& font)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontFamily(font.toLatin1());
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-    // Don't leave the focus in the toolbars combo box ...
-    if (editor()) {
-        const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
-        editor()->setEditorFont(style.font(), true, canvas()->viewConverter());
-        focusEditorRequested();
-    } else {
-        canvas()->canvasWidget()->setFocus();
-    }
-}
-
-void CellToolBase::fontSize(int size)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Font"));
-    Style s;
-    s.setFontSize(size);
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
-    // Don't leave the focus in the toolbars combo box ...
-    if (editor()) {
-        const Cell cell(selection()->activeSheet(), selection()->marker());
-        editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
-        focusEditorRequested();
-    } else {
-        canvas()->canvasWidget()->setFocus();
-    }
-}
-
-void CellToolBase::changeTextColor(const KoColor &color)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Text Color"));
-    Style s;
-    s.setFontColor(color.toQColor());
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::borderColor(const KoColor &color)

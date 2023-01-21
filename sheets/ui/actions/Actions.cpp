@@ -16,6 +16,7 @@
 #include "Consolidate.h"
 #include "CSVActions.h"
 #include "Fill.h"
+#include "Font.h"
 #include "Goto.h"
 #include "Indent.h"
 #include "InsertSeries.h"
@@ -104,6 +105,10 @@ void Actions::createActions()
     addAction(new Fill(this, FillManipulator::Down));
     addAction(new Fill(this, FillManipulator::Left));
     addAction(new Fill(this, FillManipulator::Right));
+    // Font
+    addAction(new Font(this));
+    addAction(new FontSize(this));
+    addAction(new FontColor(this));
     // Goto
     addAction(new Goto(this));
     // Indent
@@ -190,14 +195,17 @@ void Actions::updateOnChange(bool readWrite, Selection *selection, const Cell &a
 {
     for (CellAction *cellAction : cellActions) {
         QAction *a = cellAction->action();
+        const bool blocked = a->blockSignals(true);
 
         bool enabled = cellAction->shouldBeEnabled(readWrite, selection, activeCell);
         a->setEnabled(enabled);
 
         bool checked = cellAction->shouldBeChecked(selection, activeCell);
-        const bool blocked = a->blockSignals(true);
         a->setChecked(checked);
+
         a->blockSignals(blocked);
+
+        cellAction->updateOnChange(selection, activeCell);
     }
 }
 
