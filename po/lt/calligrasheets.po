@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-02 01:02+0000\n"
+"POT-Creation-Date: 2023-01-22 00:57+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -849,7 +849,7 @@ msgstr "Skaičius"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -904,7 +904,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Reikšmė"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Duombazė"
@@ -12053,8 +12053,8 @@ msgstr "Aktyvuoti"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
-#: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
+#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
 msgstr "Šriftas"
@@ -13446,404 +13446,372 @@ msgstr "Skaičius A"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
+#: part/ViewAdaptor.cpp:128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Keisti &teksto spalvą:"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Keisti fono spalvą"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:511
+#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kapo Verdė"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Reikšmės"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:157
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Reikšmės"
 
 #: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Select Font..."
-msgstr "Pasirinkti šriftą..."
-
-#: ui/CellToolBase.cpp:168
-#, fuzzy, kde-format
-#| msgid "Select Font..."
-msgid "Select Font Size"
-msgstr "Pasirinkti šriftą..."
-
-#: ui/CellToolBase.cpp:169
-#, kde-format
-msgid "Font Size"
-msgstr "Šrifto dydis"
-
-#: ui/CellToolBase.cpp:175
-#, kde-format
-msgid "Text Color"
-msgstr "Teksto spalva"
-
-#: ui/CellToolBase.cpp:176
-#, fuzzy, kde-format
-msgid "Set the text color"
-msgstr "Fono spalva:"
-
-#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "Fono spalva:"
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "Border Color"
 msgstr "Rėmelio spalva:"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "Fono spalva:"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Background Color"
 msgstr "Fono spalva"
 
-#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Clear All"
 msgstr "Valyti viską"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Contents"
 msgstr "Turinys"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Clear Contents"
 msgstr "Šalinti turinį"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:188
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:192
 #, fuzzy, kde-format
 msgid "Conditional Styles..."
 msgstr "Sąlyginiai stiliai"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Sąlyginiai stiliai"
 
-#: ui/CellToolBase.cpp:219
+#: ui/CellToolBase.cpp:198
 #, fuzzy, kde-format
 #| msgid "Conditional Styles"
 msgid "Remove Conditional Styles"
 msgstr "Sąlyginiai stiliai"
 
-#: ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 msgid "Remove the conditional cell styles"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:205
 #, fuzzy, kde-format
 msgid "&Auto-Filter"
 msgstr "Automatinis filtras"
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:212
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Įprastoji išraiška"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:225
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Pasirinktas..."
 
-#: ui/CellToolBase.cpp:249
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Parametrų parinkimas"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:256
+#: ui/CellToolBase.cpp:235
 #, fuzzy, kde-format
 msgid "&Pivot Tables..."
 msgstr "Daliniai rezultatai"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 msgid "Create Pivot Tables"
 msgstr "Daliniai rezultatai"
 
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:240
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Įterpti lakštą"
 
-#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
+#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Kiti"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Keisti langelį"
 
-#: ui/CellToolBase.cpp:276
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:258
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:262
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:287
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 msgid "Special Paste..."
 msgstr "Ypatingi &simboliai"
 
-#: ui/CellToolBase.cpp:293
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert Cells"
 msgid "Paste with Insertion"
 msgstr "Įterpti langelius"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:277
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Įterpti lakštą"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:280
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:301
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:307
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rodyti lakštą"
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:313
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Automatinis formatavimas"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Reikšmės"
 
-#: ui/CellToolBase.cpp:339
+#: ui/CellToolBase.cpp:318
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:342
+#: ui/CellToolBase.cpp:321
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:325
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:329
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:330
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:1137
+#: ui/CellToolBase.cpp:1116
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Font"
-msgstr "Keisti šriftą"
-
-#: ui/CellToolBase.cpp:1256
+#: ui/CellToolBase.cpp:1183
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Išvalyti tekstą"
 
-#: ui/CellToolBase.cpp:1310
+#: ui/CellToolBase.cpp:1237
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1339
+#: ui/CellToolBase.cpp:1266
 #, kde-format
 msgid "You must select multiple cells."
 msgstr "Būtina pasirinkti keletą laukelių."
 
-#: ui/CellToolBase.cpp:1814
+#: ui/CellToolBase.cpp:1741
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Pakeisti"
 
-#: ui/CellToolBase_p.cpp:480
+#: ui/CellToolBase_p.cpp:471
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Skaičiaus formatas"
 
-#: ui/CellToolBase_p.cpp:486
+#: ui/CellToolBase_p.cpp:477
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Valiuta"
 
-#: ui/CellToolBase_p.cpp:491
+#: ui/CellToolBase_p.cpp:482
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Formatas"
 
-#: ui/CellToolBase_p.cpp:496
+#: ui/CellToolBase_p.cpp:487
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Laiko formatas"
 
-#: ui/CellToolBase_p.cpp:501
+#: ui/CellToolBase_p.cpp:492
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Datos formatas"
 
-#: ui/CellToolBase_p.cpp:506
+#: ui/CellToolBase_p.cpp:497
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Formatas"
 
-#: ui/CellToolBase_p.cpp:910
+#: ui/CellToolBase_p.cpp:901
 #, fuzzy, kde-format
 msgid "Selection List..."
 msgstr "Rinkinių sąrašas"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:18
+#: ui/CellToolOptionWidgets.xml:21
 #, kde-format
 msgid "Alignment"
 msgstr "Lygiavimas"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:39
+#: ui/CellToolOptionWidgets.xml:42
 #, kde-format
 msgid "Borders"
 msgstr "Rėmeliai"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:55
+#: ui/CellToolOptionWidgets.xml:58
 #, kde-format
 msgid "Number format"
 msgstr "Skaičiaus formatas"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:65
+#: ui/CellToolOptionWidgets.xml:68
 #, fuzzy, kde-format
 #| msgid "Merge Cells"
 msgid "Merge"
@@ -16146,6 +16114,29 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Atverti nuorodą"
+
+#~ msgid "Select Font..."
+#~ msgstr "Pasirinkti šriftą..."
+
+#, fuzzy
+#~| msgid "Select Font..."
+#~ msgid "Select Font Size"
+#~ msgstr "Pasirinkti šriftą..."
+
+#~ msgid "Font Size"
+#~ msgstr "Šrifto dydis"
+
+#~ msgid "Text Color"
+#~ msgstr "Teksto spalva"
+
+#, fuzzy
+#~ msgid "Set the text color"
+#~ msgstr "Fono spalva:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Font"
+#~ msgstr "Keisti šriftą"
 
 #, fuzzy
 #~ msgid "Apply a predefined style to the selected cells"

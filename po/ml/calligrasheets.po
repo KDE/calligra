@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-02 01:02+0000\n"
+"POT-Creation-Date: 2023-01-22 00:57+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -868,7 +868,7 @@ msgstr "അക്കം"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -923,7 +923,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 99 നല്‍കുന്നു"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "വിവരസംഭരണി"
@@ -12305,8 +12305,8 @@ msgstr "സജീവ ഷീറ്റ്"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
-#: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
+#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
 msgstr "അക്ഷരസഞ്ചയം"
@@ -13743,13 +13743,13 @@ msgstr "എണ്ണം: "
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
+#: part/ViewAdaptor.cpp:128
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത്തില്‍ വരാന്‍."
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13757,412 +13757,380 @@ msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത�
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:511
+#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "പ്രൊഫൈല്‍ _മാറ്റുക"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Cell Format..."
 msgstr "കളം ഫോര്‍മാറ്റ്..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:157
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
 
 #: ui/CellToolBase.cpp:163
 #, fuzzy, kde-format
-msgid "Select Font..."
-msgstr "ഒരു അറ തെരഞ്ഞെടുക്കുക"
-
-#: ui/CellToolBase.cpp:168
-#, fuzzy, kde-format
-msgid "Select Font Size"
-msgstr "തുടങ്ങാന്‍ തിരഞ്ഞെടുത്ത് പുറത്ത് കടക്കുക."
-
-#: ui/CellToolBase.cpp:169
-#, kde-format
-msgid "Font Size"
-msgstr "അക്ഷരസഞ്ചയ വലിപ്പം"
-
-#: ui/CellToolBase.cpp:175
-#, kde-format
-msgid "Text Color"
-msgstr "പദാവലി നിറം"
-
-#: ui/CellToolBase.cpp:176
-#, fuzzy, kde-format
-msgid "Set the text color"
-msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
-
-#: ui/CellToolBase.cpp:184
-#, fuzzy, kde-format
 msgid "Select a new border color"
 msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത്തില്‍ വരാന്‍."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "Border Color"
 msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത്തില്‍ വരാന്‍."
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Set the background color"
 msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Background Color"
 msgstr "പശ്ചാത്തലനിറം"
 
-#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Clear All"
 msgstr "എല്ലാം തുടച്ചുനീക്കുക"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "ഈ കളത്തിന്റെ ഉള്ളടക്കങ്ങളും ഫോര്‍മാറ്റിങ്ങും വൃത്തിയാക്കുക"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Contents"
 msgstr "ഉള്ളടക്കങ്ങള്‍"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:187
 #, kde-format
 msgid "Clear Contents"
 msgstr "ഉള്ളടക്കങ്ങള്‍ വൃത്തിയാക്കുക"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:188
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "ഈ കളത്തിന്റെ ഉള്ളടക്കങ്ങള്‍ നീക്കം ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:192
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Conditional Styles..."
 msgstr "അവസ്ഥ"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Conditional Styles"
 msgstr "അവസ്ഥ"
 
-#: ui/CellToolBase.cpp:219
+#: ui/CellToolBase.cpp:198
 #, fuzzy, kde-format
 #| msgid "Condition"
 msgid "Remove Conditional Styles"
 msgstr "അവസ്ഥ"
 
-#: ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 #| msgid "Move to the last sheet"
 msgid "Remove the conditional cell styles"
 msgstr "അവസാനത്തെ ഷീറ്റിലേക്കു് നീങ്ങുക"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:205
 #, fuzzy, kde-format
 msgid "&Auto-Filter"
 msgstr "ഓട്ടോ-ഓപ്പണ്‍ ഉറപ്പു് വരുത്തുക"
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:212
 #, kde-format
 msgid "&Function..."
 msgstr "&ഫങ്ഷന്‍..."
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "രഹസ്യ രീതിയില്‍ പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "സി.ഡിയില്‍ നിന്നും ഓഡിയോ കംപ്യൂട്ടറിലേയ്ക്കു് പകര്‍ത്തുന്നു"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "സി.ഡിയില്‍ നിന്നും ഓഡിയോ കംപ്യൂട്ടറിലേയ്ക്കു് പകര്‍ത്തുന്നു"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:225
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "പ്രിയ ജാലകം"
 
-#: ui/CellToolBase.cpp:249
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 #| msgid "Goal Seek"
 msgid "&Goal Seek..."
 msgstr "ഗോള്‍ തെരയുക"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:256
+#: ui/CellToolBase.cpp:235
 #, fuzzy, kde-format
 #| msgid "Subtotal"
 msgid "&Pivot Tables..."
 msgstr "മൊത്തം"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr ""
 
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:240
 #, kde-format
 msgid "Formula Selection"
 msgstr "ഫോര്‍മുല തെരഞ്ഞെടുക്കല്‍"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Insert a function"
 msgstr "ഫങ്ഷന്‍ ചേര്‍ക്കുക"
 
-#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
+#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
 #, kde-format
 msgid "Others..."
 msgstr "മറ്റുള്ളവ..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "Modify Cell"
 msgstr "കളത്തില്‍ മാറ്റം വരുത്തുക"
 
-#: ui/CellToolBase.cpp:276
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "_വീഡിയോ ഘടിപ്പിയ്ക്കുമ്പോള്‍ എഡിറ്റ് ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:258
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "കളവസ്തു ക്ലിപ്ബോര്‍ഡിലേക്കു് നീക്കുക"
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "കളവസ്തു ക്ലിപ്ബോര്‍ഡിലേക്കു് പകര്‍ത്തുക"
 
-#: ui/CellToolBase.cpp:287
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ കഴ്സറുള്ളിടത്തു് ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "Special Paste..."
 msgstr "പ്രത്യേക ഒട്ടിപ്പു്..."
 
-#: ui/CellToolBase.cpp:293
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ പ്രത്യേക ഐച്ഛികങ്ങളോടുകൂടി ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "ഇതേ പേരുള്ള ഒരു ഫയല്‍ നിലവിലുണ്ട്"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:277
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ കഴ്സറുള്ളിടത്തു് ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:280
 #, fuzzy, kde-format
 #| msgid "Select all sheets"
 msgid "Selects all cells in the current sheet"
 msgstr "എല്ലാ ഷീറ്റുകളും തെരഞ്ഞെടുക്കുക"
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:298
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "പരിശോധന ബിറ്റ്"
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:301
 #, fuzzy, kde-format
 msgid "Run Inspector..."
 msgstr "ഓട്ടോ-റണ്‍ ഉറപ്പു് വരുത്തുക"
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:307
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "ഷീറ്റ് കാണിക്കുക..."
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:313
 #, kde-format
 msgid "Auto-Format..."
 msgstr "സ്വയം-ഫോര്‍മാറ്റ്:"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
 
-#: ui/CellToolBase.cpp:339
+#: ui/CellToolBase.cpp:318
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "സെറ്റ് UI ലോക്കലെ (Set UI Locale): "
 
-#: ui/CellToolBase.cpp:342
+#: ui/CellToolBase.cpp:321
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "വെബ്കാം ഡിവൈസ് സ്ട്രിങ് സൂചകം"
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:325
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "സുരക്ഷിതത്വം"
 
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:329
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "സുരക്ഷിതത്വം"
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:330
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ കഴ്സറുള്ളിടത്തു് ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:1137
+#: ui/CellToolBase.cpp:1116
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
-#, fuzzy
-#| msgid "Change Font"
-msgctxt "(qtundo-format)"
-msgid "Change Font"
-msgstr "അക്ഷരസഞ്ചയം മാറ്റുക"
-
-#: ui/CellToolBase.cpp:1256
+#: ui/CellToolBase.cpp:1183
 #, fuzzy
 #| msgid "Clear Text"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "പദാവലി വൃത്തിയാക്കുക"
 
-#: ui/CellToolBase.cpp:1310
+#: ui/CellToolBase.cpp:1237
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1339
+#: ui/CellToolBase.cpp:1266
 #, fuzzy, kde-format
 #| msgid "Select Multiple Cells"
 msgid "You must select multiple cells."
 msgstr "അനവധി കളങ്ങള്‍ തെരഞ്ഞെടുക്കുക"
 
-#: ui/CellToolBase.cpp:1814
+#: ui/CellToolBase.cpp:1741
 #, fuzzy
 #| msgid "September"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "സെപ്റ്റംബര്‍"
 
-#: ui/CellToolBase_p.cpp:480
+#: ui/CellToolBase_p.cpp:471
 #, fuzzy
 #| msgid "Number Format"
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "അക്കം ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:486
+#: ui/CellToolBase_p.cpp:477
 #, fuzzy
 #| msgid "Currency Format"
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "കറന്‍സി ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:491
+#: ui/CellToolBase_p.cpp:482
 #, fuzzy
 #| msgid "Percentage Format"
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "ശതമാന ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:496
+#: ui/CellToolBase_p.cpp:487
 #, fuzzy
 #| msgid "Time Format"
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "സമയം ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:501
+#: ui/CellToolBase_p.cpp:492
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "തീയതി ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:506
+#: ui/CellToolBase_p.cpp:497
 #, fuzzy
 #| msgid "Scientific Format"
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "ശാസ്ത്രീയ ഫോര്‍മാറ്റ്"
 
-#: ui/CellToolBase_p.cpp:910
+#: ui/CellToolBase_p.cpp:901
 #, kde-format
 msgid "Selection List..."
 msgstr "തെരഞ്ഞെടുപ്പു് പട്ടിക..."
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:18
+#: ui/CellToolOptionWidgets.xml:21
 #, fuzzy, kde-format
 msgid "Alignment"
 msgstr "ഇടത്തേ പതാക"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:39
+#: ui/CellToolOptionWidgets.xml:42
 #, fuzzy, kde-format
 #| msgid "No Borders"
 msgid "Borders"
 msgstr "അതിര്‍ത്തികളില്ല"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:55
+#: ui/CellToolOptionWidgets.xml:58
 #, fuzzy, kde-format
 #| msgid "Number Format"
 msgid "Number format"
 msgstr "അക്കം ഫോര്‍മാറ്റ്"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:65
+#: ui/CellToolOptionWidgets.xml:68
 #, fuzzy, kde-format
 #| msgid "Merge Cells"
 msgid "Merge"
@@ -16510,6 +16478,30 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "കണ്ണി തുറക്കട്ടെ?"
+
+#, fuzzy
+#~ msgid "Select Font..."
+#~ msgstr "ഒരു അറ തെരഞ്ഞെടുക്കുക"
+
+#, fuzzy
+#~ msgid "Select Font Size"
+#~ msgstr "തുടങ്ങാന്‍ തിരഞ്ഞെടുത്ത് പുറത്ത് കടക്കുക."
+
+#~ msgid "Font Size"
+#~ msgstr "അക്ഷരസഞ്ചയ വലിപ്പം"
+
+#~ msgid "Text Color"
+#~ msgstr "പദാവലി നിറം"
+
+#, fuzzy
+#~ msgid "Set the text color"
+#~ msgstr "സമയ മേഖല ഉറപ്പിക്കുക: "
+
+#, fuzzy
+#~| msgid "Change Font"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Font"
+#~ msgstr "അക്ഷരസഞ്ചയം മാറ്റുക"
 
 #, fuzzy
 #~ msgid "Style Manager..."

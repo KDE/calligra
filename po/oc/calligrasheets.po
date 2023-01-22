@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-02 01:02+0000\n"
+"POT-Creation-Date: 2023-01-22 00:57+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -907,7 +907,7 @@ msgstr "Nombre"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -970,7 +970,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "valor"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Donadas"
@@ -12841,8 +12841,8 @@ msgstr "Tornar nomenar lo fuèlh"
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
-#: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
+#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
 msgstr "Poliça"
@@ -14355,14 +14355,14 @@ msgstr "Comptar"
 msgid "%1x%2"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
+#: part/ViewAdaptor.cpp:128
 #, fuzzy
 #| msgid "Text Color"
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Color del tèxt"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
@@ -14371,20 +14371,20 @@ msgstr "Cambiar la color de fons"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:511
+#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 #| msgid "Border"
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Bordadura"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "Cell Format..."
 msgstr "valor"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:157
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "Set the cell formatting"
@@ -14392,415 +14392,380 @@ msgstr "valor"
 
 #: ui/CellToolBase.cpp:163
 #, fuzzy, kde-format
-#| msgid "Function"
-msgid "Select Font..."
-msgstr "Foncion"
-
-#: ui/CellToolBase.cpp:168
-#, fuzzy, kde-format
-#| msgid "Font Size"
-msgid "Select Font Size"
-msgstr "Talha de poliça"
-
-#: ui/CellToolBase.cpp:169
-#, kde-format
-msgid "Font Size"
-msgstr "Talha de poliça"
-
-#: ui/CellToolBase.cpp:175
-#, kde-format
-msgid "Text Color"
-msgstr "Color del tèxt"
-
-#: ui/CellToolBase.cpp:176
-#, fuzzy, kde-format
-#| msgid "Text Color"
-msgid "Set the text color"
-msgstr "Color del tèxt"
-
-#: ui/CellToolBase.cpp:184
-#, fuzzy, kde-format
 #| msgid "Change Background Color"
 msgid "Select a new border color"
 msgstr "Cambiar la color de fons"
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 #| msgid "Change Background Color"
 msgid "Border Color"
 msgstr "Cambiar la color de fons"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Background color:"
 msgid "Set the background color"
 msgstr "Color de fons :"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Background Color"
 msgstr "Color de fons"
 
-#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Clear All"
 msgstr "Tot voidar"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Contents"
 msgstr "Ensenhador"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:187
 #, fuzzy, kde-format
 #| msgid "Comment"
 msgid "Clear Contents"
 msgstr "Comentari"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:188
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Remove the contents of the current cell"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:192
 #, fuzzy, kde-format
 #| msgid "Conditional Styles"
 msgid "Conditional Styles..."
 msgstr "Estils condicionals"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Set cell style based on certain conditions"
 msgstr ""
 
-#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
+#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
 #, kde-format
 msgid "Conditional Styles"
 msgstr "Estils condicionals"
 
-#: ui/CellToolBase.cpp:219
+#: ui/CellToolBase.cpp:198
 #, fuzzy, kde-format
 #| msgid "Conditional Styles"
 msgid "Remove Conditional Styles"
 msgstr "Estils condicionals"
 
-#: ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 #| msgid "Conditional Styles"
 msgid "Remove the conditional cell styles"
 msgstr "Estils condicionals"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:205
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "&Auto-Filter"
 msgstr "Filtre"
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:212
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "&Function..."
 msgstr "Foncion"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 #| msgid "Insert Series"
 msgid "Insert math expression"
 msgstr "Inserir una seria de donadas"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "Donadas"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "Insert data from a SQL database"
 msgstr "Donadas"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:225
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom Lists..."
 msgstr "Personalizat..."
 
-#: ui/CellToolBase.cpp:249
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "&Goal Seek..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:256
+#: ui/CellToolBase.cpp:235
 #, kde-format
 msgid "&Pivot Tables..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Create Pivot Tables"
 msgstr ""
 
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:240
 #, fuzzy, kde-format
 #| msgid "Clear Selection"
 msgid "Formula Selection"
 msgstr "Proteccion"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Insert a function"
 msgstr "Foncion"
 
-#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
+#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "Sèria"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "Modificar"
 
-#: ui/CellToolBase.cpp:276
+#: ui/CellToolBase.cpp:255
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:258
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:287
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 #| msgid "Parameters"
 msgid "Special Paste..."
 msgstr "Paramètres"
 
-#: ui/CellToolBase.cpp:293
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr ""
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 #| msgid "Insert Cells"
 msgid "Paste with Insertion"
 msgstr "Inserir de cellulas"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:280
 #, fuzzy, kde-format
 #| msgid "Sheet"
 msgid "Selects all cells in the current sheet"
 msgstr "Fuèlhs"
 
-#: ui/CellToolBase.cpp:319
+#: ui/CellToolBase.cpp:298
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:301
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:307
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "Mostrar la fuèlha"
 
-#: ui/CellToolBase.cpp:334
+#: ui/CellToolBase.cpp:313
 #, fuzzy, kde-format
 #| msgid "Format"
 msgid "Auto-Format..."
 msgstr "Format"
 
-#: ui/CellToolBase.cpp:337
+#: ui/CellToolBase.cpp:316
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "Set the worksheet formatting"
 msgstr "valor"
 
-#: ui/CellToolBase.cpp:339
+#: ui/CellToolBase.cpp:318
 #, fuzzy, kde-format
 #| msgid "Printing"
 msgid "Document Settings..."
 msgstr "Estampatge"
 
-#: ui/CellToolBase.cpp:342
+#: ui/CellToolBase.cpp:321
 #, fuzzy, kde-format
 #| msgid "Printing"
 msgid "Show document settings dialog"
 msgstr "Estampatge"
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:325
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Proteccion"
 
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:329
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Proteccion"
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:330
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1137
+#: ui/CellToolBase.cpp:1116
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
-#, fuzzy
-#| msgid "Change Font"
-msgctxt "(qtundo-format)"
-msgid "Change Font"
-msgstr "Modificar la poliça"
-
-#: ui/CellToolBase.cpp:1256
+#: ui/CellToolBase.cpp:1183
 #, fuzzy
 #| msgid "Clear"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Netejar"
 
-#: ui/CellToolBase.cpp:1310
+#: ui/CellToolBase.cpp:1237
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1339
+#: ui/CellToolBase.cpp:1266
 #, fuzzy, kde-format
 #| msgid "Insert Columns"
 msgid "You must select multiple cells."
 msgstr "Suprimir de colomnas"
 
-#: ui/CellToolBase.cpp:1814
+#: ui/CellToolBase.cpp:1741
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Remplaçar"
 
-#: ui/CellToolBase_p.cpp:480
+#: ui/CellToolBase_p.cpp:471
 #, fuzzy
 #| msgid "Number"
 msgctxt "(qtundo-format)"
 msgid "Number Format"
 msgstr "Nombre"
 
-#: ui/CellToolBase_p.cpp:486
+#: ui/CellToolBase_p.cpp:477
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Currency Format"
 msgstr "Format de data"
 
-#: ui/CellToolBase_p.cpp:491
+#: ui/CellToolBase_p.cpp:482
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Percentage Format"
 msgstr "Format de data"
 
-#: ui/CellToolBase_p.cpp:496
+#: ui/CellToolBase_p.cpp:487
 #, fuzzy
 #| msgid "Time format"
 msgctxt "(qtundo-format)"
 msgid "Time Format"
 msgstr "Format de l'ora"
 
-#: ui/CellToolBase_p.cpp:501
+#: ui/CellToolBase_p.cpp:492
 #, fuzzy
 #| msgid "Date Format"
 msgctxt "(qtundo-format)"
 msgid "Date Format"
 msgstr "Format de data"
 
-#: ui/CellToolBase_p.cpp:506
+#: ui/CellToolBase_p.cpp:497
 #, fuzzy
 #| msgid "Scientific"
 msgctxt "(qtundo-format)"
 msgid "Scientific Format"
 msgstr "Scientific"
 
-#: ui/CellToolBase_p.cpp:910
+#: ui/CellToolBase_p.cpp:901
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Selection List..."
 msgstr "Foncion"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:18
+#: ui/CellToolOptionWidgets.xml:21
 #, fuzzy, kde-format
 #| msgid "Align Left"
 msgid "Alignment"
 msgstr "Alinhar a esquèrra"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:39
+#: ui/CellToolOptionWidgets.xml:42
 #, fuzzy, kde-format
 #| msgid "Border"
 msgid "Borders"
 msgstr "Bordadura"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:55
+#: ui/CellToolOptionWidgets.xml:58
 #, fuzzy, kde-format
 #| msgid "Number"
 msgid "Number format"
 msgstr "Nombre"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:65
+#: ui/CellToolOptionWidgets.xml:68
 #, fuzzy, kde-format
 #| msgid "Merge Cells"
 msgid "Merge"
@@ -17204,6 +17169,33 @@ msgstr ""
 #| msgid "Insert Link"
 msgid "Open Link?"
 msgstr "Inserir un ligam"
+
+#, fuzzy
+#~| msgid "Function"
+#~ msgid "Select Font..."
+#~ msgstr "Foncion"
+
+#, fuzzy
+#~| msgid "Font Size"
+#~ msgid "Select Font Size"
+#~ msgstr "Talha de poliça"
+
+#~ msgid "Font Size"
+#~ msgstr "Talha de poliça"
+
+#~ msgid "Text Color"
+#~ msgstr "Color del tèxt"
+
+#, fuzzy
+#~| msgid "Text Color"
+#~ msgid "Set the text color"
+#~ msgstr "Color del tèxt"
+
+#, fuzzy
+#~| msgid "Change Font"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Font"
+#~ msgstr "Modificar la poliça"
 
 #, fuzzy
 #~| msgid "Insert Columns"
