@@ -3,19 +3,20 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2006, 2007.
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2011, 2019.
+# Mincho Kondarev <mkondarev@yahoo.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2019-08-12 19:38+0200\n"
-"Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
+"PO-Revision-Date: 2023-01-21 16:41+0100\n"
+"Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <dict@ludost.net>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -68,7 +69,7 @@ msgstr "Точност:"
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
-msgstr ""
+msgstr "Необработено"
 
 #: basicflakes/tools/KoPencilTool.cpp:276
 #: flake/KoConnectionShapeConfigWidget.cpp:20
@@ -86,12 +87,12 @@ msgstr "Права"
 #: basicflakes/tools/KoPencilTool.cpp:292
 #, kde-format
 msgid "Optimize"
-msgstr ""
+msgstr "Оптимизиране"
 
 #: basicflakes/tools/KoPencilTool.cpp:298
 #, kde-format
 msgid "Exactness:"
-msgstr ""
+msgstr "Точност:"
 
 #: basicflakes/tools/KoPencilTool.cpp:331
 #: basicflakes/tools/KoPencilTool.cpp:332
@@ -213,10 +214,9 @@ msgid "Create shape"
 msgstr "Създаване на форма"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:43
-#, fuzzy
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
-msgstr "Изтриване на форма"
+msgstr "Изтриване на фигура"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
@@ -337,7 +337,7 @@ msgstr "Премахване на част от път"
 #: flake/KoConnectionShapeConfigWidget.cpp:17
 #, kde-format
 msgid "Standard"
-msgstr ""
+msgstr "Стандартно"
 
 #: flake/KoConnectionShapeConfigWidget.cpp:18
 #, kde-format
@@ -434,13 +434,13 @@ msgstr "Разстояние, от което се задейства приле
 #: flake/SnapGuideConfigWidget.ui:75
 #, kde-format
 msgid " px"
-msgstr ""
+msgstr " px"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, orthogonalSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:85
 #, kde-format
 msgid "Orthogonal"
-msgstr ""
+msgstr "Перпендикулярно"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:98
@@ -467,7 +467,7 @@ msgstr "Създаване на обект"
 #: flake/tools/KoPanToolFactory.cpp:17
 #, kde-format
 msgid "Pan"
-msgstr ""
+msgstr "Пан"
 
 #: flake/tools/KoPathSegmentChangeStrategy.cpp:133
 msgctxt "(qtundo-format)"
@@ -748,9 +748,9 @@ msgid "Redo %1"
 msgstr "Повторение на %1"
 
 #: kundo2/kundo2model.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "<empty>"
-msgstr "Празно"
+msgstr "<празно>"
 
 #: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1511
 #: main/KoUndoStackAction.cpp:33
@@ -789,20 +789,20 @@ msgid "Document Settings"
 msgstr "Настройки на документ"
 
 #: main/config/KoConfigDocumentPage.cpp:62
-#, fuzzy, kde-format
+#, kde-format
 msgid "No autosave"
-msgstr "Без автоматичен запис"
+msgstr "Без автозапис"
 
 #: main/config/KoConfigDocumentPage.cpp:63
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
-msgstr ""
+msgstr " мин"
 
 #: main/config/KoConfigDocumentPage.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Autosave interval:"
-msgstr "Автоматичен запис (минути):"
+msgstr "Интервал на автозапис:"
 
 #: main/config/KoConfigDocumentPage.cpp:69
 #, fuzzy, kde-format
@@ -934,7 +934,7 @@ msgstr ""
 #: main/KoApplication.cpp:208
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr ""
+msgstr "Файл(ове) или адрес за отваряне"
 
 #: main/KoApplication.cpp:218
 #, kde-format
@@ -986,12 +986,12 @@ msgstr "Запис на палитра"
 #: main/KoAutoSaveRecoveryDialog.cpp:171
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr ""
+msgstr "Следните автоматично запазени файлове могат да се възстановят:"
 
 #: main/KoAutoSaveRecoveryDialog.cpp:174
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr ""
+msgstr "Следните автоматично запазени файлове могат да се възстановят:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:94
@@ -1432,9 +1432,9 @@ msgid "Versions..."
 msgstr "Версии..."
 
 #: main/KoMainWindow.cpp:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Отваряне на този документ"
+msgstr "Отваряне на съ&ществуващ документ като неозаглавен..."
 
 #: main/KoMainWindow.cpp:288
 #, kde-format
@@ -1467,9 +1467,9 @@ msgid "Full Screen Mode"
 msgstr "Режим на пълен екран"
 
 #: main/KoMainWindow.cpp:337
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Dockers"
-msgstr "Показване на лента с инструменти %1"
+msgstr "Показване на панели"
 
 #: main/KoMainWindow.cpp:342
 #, fuzzy, kde-format
@@ -1478,9 +1478,9 @@ msgid "Show Docker Titlebars"
 msgstr "Показване на лента с инструменти %1"
 
 #: main/KoMainWindow.cpp:349
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dockers"
-msgstr "Заглавни редове"
+msgstr "Контейнери"
 
 #: main/KoMainWindow.cpp:654
 #, kde-format
@@ -1531,9 +1531,9 @@ msgid "Export"
 msgstr "Изнасяне"
 
 #: main/KoMainWindow.cpp:957
-#, fuzzy, kde-format
+#, kde-format
 msgid "untitled"
-msgstr "Неозаглавено"
+msgstr "неозаглавено"
 
 #: main/KoMainWindow.cpp:1281
 #, kde-format
@@ -1546,9 +1546,9 @@ msgid "Import Document"
 msgstr "Внасяне на документ"
 
 #: main/KoMainWindow.cpp:1454
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export as PDF"
-msgstr "Изнасяне в PDF..."
+msgstr "Експортиране в PDF"
 
 #: main/KoMainWindow.cpp:1491
 #, kde-format
@@ -1591,9 +1591,9 @@ msgstr "Скриване на лента с инструменти %1"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_openExistingButton)
 #: main/KoOpenPane.cpp:123 main/KoOpenPane.cpp:187 main/KoOpenPaneBase.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open Existing Document"
-msgstr "Отваряне на този документ"
+msgstr "Отваряне на съществуващ документ"
 
 #: main/KoOpenPane.cpp:199
 #, kde-format
@@ -1611,9 +1611,9 @@ msgid "Stop"
 msgstr "Спиране"
 
 #: main/KoPrintingDialog.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgid "Printing"
-msgstr "Отпечатването приключи"
+msgstr "Printing"
 
 #: main/KoPrintingDialog_p.h:136
 #, kde-format
@@ -1663,7 +1663,7 @@ msgid "Create Template"
 msgstr "Създаване на шаблон"
 
 #: main/KoTemplateCreateDia.cpp:113
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Template name"
 msgid "Name:"
 msgstr "Име:"
@@ -1689,14 +1689,14 @@ msgid "Picture"
 msgstr "Изображение"
 
 #: main/KoTemplateCreateDia.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Preview"
-msgstr "Преглед:"
+msgstr "&Предварителен преглед"
 
 #: main/KoTemplateCreateDia.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom:"
-msgstr "Потребителски"
+msgstr "Персонализиран:"
 
 #: main/KoTemplateCreateDia.cpp:159
 #, kde-format
@@ -1809,15 +1809,15 @@ msgid "Date: %1"
 msgstr "Дата: %1"
 
 #: main/KoView.cpp:330
-#, fuzzy, kde-format
+#, kde-format
 msgid "Active Author Profile"
-msgstr "Активен инструмент: %1"
+msgstr "Активен профил на автора"
 
 #: main/KoView.cpp:342 main/KoView.cpp:396
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
-msgstr ""
+msgstr "Анонимен"
 
 #: main/KoView.cpp:395 widgets/KoConfigAuthorPage.cpp:69
 #, fuzzy, kde-format
@@ -2164,7 +2164,7 @@ msgid "Document"
 msgstr "Документ"
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Автор"
@@ -2222,10 +2222,9 @@ msgid "Shape"
 msgstr "Форма"
 
 #: pageapp/KoPADocumentModel.cpp:272
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
-msgstr "Поставяне на кадър"
+msgstr "Преименуване на слайд"
 
 #: pageapp/KoPADocumentModel.cpp:274
 #, fuzzy
@@ -2271,9 +2270,9 @@ msgid "&Copy Here"
 msgstr "Копиране на зелено"
 
 #: pageapp/KoPADocumentModel.cpp:694
-#, fuzzy, kde-format
+#, kde-format
 msgid "C&ancel"
-msgstr "От&каз"
+msgstr "О&тказ"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:89
 #, kde-format
@@ -2440,9 +2439,9 @@ msgid "Show/hide the view's rulers"
 msgstr ""
 
 #: pageapp/KoPAView.cpp:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Show Page Margins"
-msgstr "Показване на основните страници"
+msgstr "Показване на краищата на страницата"
 
 #: pageapp/KoPAView.cpp:383
 #, kde-format
@@ -2532,9 +2531,9 @@ msgstr "Задаване на фоново изображение..."
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
 #: pageapp/widgets/KoPABackgroundFillWidget.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background"
-msgstr "Задаване на фон"
+msgstr "Фон"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundTool.cpp:90
 #, fuzzy, kde-format
@@ -2667,13 +2666,13 @@ msgstr "Осветеност"
 #: pigment/KoBasicHistogramProducers.cpp:430
 #, kde-format
 msgid "a*"
-msgstr ""
+msgstr "a*"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:33
 #: pigment/KoBasicHistogramProducers.cpp:431
 #, kde-format
 msgid "b*"
-msgstr ""
+msgstr "b*"
 
 #: pigment/colorspaces/KoRgbU16ColorSpace.cpp:26
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:51
@@ -2801,7 +2800,7 @@ msgstr ""
 #: pigment/KoCompositeOpRegistry.cpp:77
 #, kde-format
 msgid "Parallel"
-msgstr ""
+msgstr "Успоредна права"
 
 #: pigment/compositeops/KoCompositeOps.h:107
 #: pigment/KoCompositeOpRegistry.cpp:78
@@ -2811,21 +2810,21 @@ msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:109
 #: pigment/KoCompositeOpRegistry.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Screen"
 msgstr "Екран"
 
 #: pigment/compositeops/KoCompositeOps.h:110
 #: pigment/KoCompositeOpRegistry.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Dodge"
-msgstr "Име на цвят:"
+msgstr "Осветляване на цветовете"
 
 #: pigment/compositeops/KoCompositeOps.h:111
 #: pigment/KoCompositeOpRegistry.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear Dodge"
-msgstr "Линии"
+msgstr "Линейно осветляване"
 
 #: pigment/compositeops/KoCompositeOps.h:112 pigment/KoCompositeOp.cpp:23
 #: pigment/KoCompositeOpRegistry.cpp:28 pigment/KoCompositeOpRegistry.cpp:51
@@ -3047,21 +3046,21 @@ msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:184
 #: pigment/KoCompositeOpRegistry.cpp:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation HSI"
-msgstr "Насищане"
+msgstr "Насищане на HSI:"
 
 #: pigment/compositeops/KoCompositeOps.h:185
 #: pigment/KoCompositeOpRegistry.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Saturation HSI"
-msgstr "Увеличаване на насищането"
+msgstr "Увеличаване на насищане на HSI:"
 
 #: pigment/compositeops/KoCompositeOps.h:186
 #: pigment/KoCompositeOpRegistry.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Saturation HSI"
-msgstr "Намаляване на насищането"
+msgstr "Намаляване на насищане на HSI:"
 
 #: pigment/compositeops/KoCompositeOps.h:187
 #: pigment/KoCompositeOpRegistry.cpp:102
@@ -3095,39 +3094,39 @@ msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:193
 #: pigment/KoCompositeOpRegistry.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation HSL"
-msgstr "Насищане"
+msgstr "Насищане на HSI"
 
 #: pigment/compositeops/KoCompositeOps.h:194
 #: pigment/KoCompositeOpRegistry.cpp:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Saturation HSL"
-msgstr "Увеличаване на насищането"
+msgstr "Увеличаване на насищане на HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:195
 #: pigment/KoCompositeOpRegistry.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Saturation HSL"
-msgstr "Намаляване на насищането"
+msgstr "Намаляване на насищане на HSL"
 
 #: pigment/compositeops/KoCompositeOps.h:197
 #: pigment/KoCompositeOpRegistry.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Lightness"
-msgstr "Увеличаване на осветеността"
+msgstr "Увеличаване на светлост"
 
 #: pigment/compositeops/KoCompositeOps.h:198
 #: pigment/KoCompositeOpRegistry.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Lightness"
-msgstr "Намаляване на осветеността"
+msgstr "Намаляване на светлост"
 
 #: pigment/compositeops/KoCompositeOps.h:200
 #: pigment/KoCompositeOpRegistry.cpp:117
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color HSV"
-msgstr "Цвят"
+msgstr "HSV цвят"
 
 #: pigment/compositeops/KoCompositeOps.h:201
 #: pigment/KoCompositeOpRegistry.cpp:118
@@ -3137,21 +3136,21 @@ msgstr ""
 
 #: pigment/compositeops/KoCompositeOps.h:202
 #: pigment/KoCompositeOpRegistry.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation HSV"
-msgstr "Насищане"
+msgstr "Насищане на HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:203
 #: pigment/KoCompositeOpRegistry.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increase Saturation HSV"
-msgstr "Увеличаване на насищането"
+msgstr "Увеличаване на насищане на HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:204
 #: pigment/KoCompositeOpRegistry.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decrease Saturation HSV"
-msgstr "Намаляване на насищането"
+msgstr "Намаляване на насищане на HSV"
 
 #: pigment/compositeops/KoCompositeOps.h:205
 #: pigment/KoCompositeOpRegistry.cpp:120
@@ -3195,37 +3194,37 @@ msgstr "С"
 #: pigment/KoBasicHistogramProducers.cpp:425
 #, kde-format
 msgid "L*a*b* Histogram"
-msgstr ""
+msgstr "L*a*b* Histogram"
 
 #: pigment/KoBasicHistogramProducers.cpp:429
 #, kde-format
 msgid "L*"
-msgstr ""
+msgstr "L*"
 
 #: pigment/KoBasicHistogramProducers.cpp:503
 #, kde-format
 msgid "Generic L*a*b* Histogram"
-msgstr ""
+msgstr "Generic L*a*b* Histogram"
 
 #: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
 msgid "XYZ"
-msgstr ""
+msgstr "XYZ"
 
 #: pigment/KoColorModelStandardIds.cpp:15
 #, kde-format
 msgid "L*a*b*"
-msgstr ""
+msgstr "L*a*b*"
 
 #: pigment/KoColorModelStandardIds.cpp:16
 #, kde-format
 msgid "CMYK"
-msgstr ""
+msgstr "CMYK"
 
 #: pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
@@ -3240,7 +3239,7 @@ msgstr "Сиво (без прозрачност)"
 #: pigment/KoColorModelStandardIds.cpp:19
 #, kde-format
 msgid "YCbCr"
-msgstr ""
+msgstr "YCbCr"
 
 #: pigment/KoColorModelStandardIds.cpp:21
 #, kde-format
@@ -3280,22 +3279,22 @@ msgstr "Отрицателно"
 #: pigment/KoCompositeOp.cpp:25 pigment/KoCompositeOpRegistry.cpp:32
 #, kde-format
 msgid "HSY"
-msgstr ""
+msgstr "HSY"
 
 #: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
 #, kde-format
 msgid "HSI"
-msgstr ""
+msgstr "HSI"
 
 #: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
 #, kde-format
 msgid "HSL"
-msgstr ""
+msgstr "HSL"
 
 #: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
 #, kde-format
 msgid "HSV"
-msgstr ""
+msgstr "HSV"
 
 #: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
 #, kde-format
@@ -3343,9 +3342,9 @@ msgid "Select the object you want to reference"
 msgstr ""
 
 #: rdf/KoDocumentRdf.cpp:618
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reference"
-msgstr "Разлика"
+msgstr "Препратка"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:229
 #, kde-format
@@ -3491,6 +3490,60 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "family:'Verdana'; font-size:13pt;\"></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"># Insert your SPARQL query here<br /># "
+"Results are shown below.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix rdf:  &lt;http://www.w3."
+"org/1999/02/22-rdf-syntax-ns#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix foaf: &lt;http://xmlns.com/"
+"foaf/0.1/&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix pkg:  &lt;http://docs.oasis-open."
+"org/ns/office/1.2/meta/pkg#&gt; </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">prefix geo84: &lt;http://www.w3."
+"org/2003/01/geo/wgs84_pos#&gt;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">select ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">where { </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\"> ?s ?p ?o </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'Verdana'; font-size:13pt;\">}</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'Verdana'; font-size:13pt;\"></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_sparqlExecute)
 #: rdf/KoDocumentRdfEditWidget.ui:191
@@ -3588,7 +3641,7 @@ msgstr ""
 #: rdf/KoSopranoTableModel.cpp:77 rdf/KoSopranoTableModelDelegate.cpp:32
 #, kde-format
 msgid "Blank"
-msgstr ""
+msgstr "Празен"
 
 #: rdf/KoSopranoTableModel.cpp:119
 #, kde-format
@@ -3596,9 +3649,9 @@ msgid "Valid"
 msgstr ""
 
 #: rdf/KoSopranoTableModel.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subject"
-msgstr "Тема:"
+msgstr "Тема"
 
 #: rdf/KoSopranoTableModel.cpp:123
 #, kde-format
@@ -3692,14 +3745,14 @@ msgid "Do you want to save the password?"
 msgstr "Да се запомни ли паролата?"
 
 #: store/KoNetAccess.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgid "File '%1' is not readable"
-msgstr "Файлът %1 не съществува."
+msgstr "Файлът \"%1\" не може да бъде прочетен"
 
 #: store/KoNetAccess.cpp:409
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
-msgstr ""
+msgstr "ГРЕШКА: Неизвестен протокол \"%1\""
 
 #: store/KoStore.cpp:168
 #, kde-format
@@ -3739,7 +3792,6 @@ msgid "Text"
 msgstr "Текст"
 
 #: text/commands/DeleteCommand.cpp:57
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "Изтриване"
@@ -3839,7 +3891,6 @@ msgid "Paste As Text"
 msgstr "Поставяне на страница"
 
 #: text/commands/TextPasteCommand.cpp:53
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste"
 msgstr "Поставяне"
@@ -3928,7 +3979,6 @@ msgid "New Paragraph"
 msgstr "Задаване стил на абзац"
 
 #: text/KoTextEditor.cpp:470
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Bookmark"
 msgstr "Добавяне на отметка"
@@ -3965,13 +4015,11 @@ msgid "Insert Table"
 msgstr "Вмъкване на таблица"
 
 #: text/KoTextEditor.cpp:1080
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Cells"
 msgstr "Сливане на клетки"
 
 #: text/KoTextEditor.cpp:1097
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Cells"
 msgstr "Разделяне на клетки"
@@ -4020,28 +4068,24 @@ msgid "Typing"
 msgstr ""
 
 #: text/KoTextEditor_format.cpp:54
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Bold"
-msgstr "Получерно"
+msgstr "Получер"
 
 #: text/KoTextEditor_format.cpp:67
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Italic"
 msgstr "Курсив"
 
 #: text/KoTextEditor_format.cpp:80
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Underline"
-msgstr "Подчертано"
+msgstr "Подчертаване"
 
 #: text/KoTextEditor_format.cpp:99
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Strike Out"
-msgstr "Зачертано"
+msgstr "Зачертаване"
 
 #: text/KoTextEditor_format.cpp:132 text/KoTextEditor_format.cpp:133
 #, fuzzy
@@ -4056,13 +4100,11 @@ msgid "Set Vertical Alignment"
 msgstr "Задаване на вертикално подравняване"
 
 #: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
 msgstr "Намаляване на отстъпа"
 
 #: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Increase Indent"
 msgstr "Увеличаване на отстъпа"
@@ -4116,13 +4158,11 @@ msgid "Set Paragraph Style"
 msgstr "Задаване стил на абзац"
 
 #: text/KoTextEditor_format.cpp:517
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Formatting"
-msgstr "Формат"
+msgstr "Форматиране"
 
 #: text/KoTextEditor_p.h:145 text/KoTextEditor_p.h:181
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Format"
 msgstr "Формат"
@@ -4150,7 +4190,7 @@ msgstr "Добавяне и премахване на цветове..."
 #: widgets/KoConfigAuthorPage.cpp:51
 #, kde-format
 msgid "Add new author profile (starts out as a copy of current)"
-msgstr ""
+msgstr "Добавяне на нов авторски профил (започва като копие на текущия)"
 
 #: widgets/KoConfigAuthorPage.cpp:55
 #, fuzzy, kde-format
@@ -4163,9 +4203,9 @@ msgid "Name (not duplicate or blank name):"
 msgstr ""
 
 #: widgets/KoConfigAuthorPage.cpp:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "Name of Profile"
-msgstr "Активен инструмент: %1"
+msgstr "Име на профила"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
 #: widgets/KoConfigAuthorPage.ui:20 widgets/koDocumentInfoAuthorWidget.ui:20
@@ -4446,35 +4486,35 @@ msgstr "Внасяне на редове:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: widgets/KoCsvImportDialog.ui:486 widgets/KoCsvImportDialog.ui:509
-#, fuzzy, kde-format
+#, kde-format
 msgid "to"
-msgstr "Спиране"
+msgstr "до"
 
 #: widgets/KoDialog.cpp:247
 #, kde-format
 msgid "&Try"
-msgstr ""
+msgstr "&Проба"
 
 #: widgets/KoDialog.cpp:460
-#, fuzzy, kde-format
+#, kde-format
 msgid "modified"
-msgstr "Променен:"
+msgstr "променено"
 
 #: widgets/KoDialog.cpp:471
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
-msgstr ""
+msgstr " – "
 
 #: widgets/KoDialog.cpp:846
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Details"
-msgstr "Подробно"
+msgstr "&Подробности"
 
 #: widgets/KoDialog.cpp:1004
 #, kde-format
 msgid "Get help..."
-msgstr ""
+msgstr "Помощ..."
 
 #: widgets/KoDockWidgetTitleBar.cpp:52
 #, fuzzy, kde-format
@@ -4539,7 +4579,7 @@ msgstr "Шифриране:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:188
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Document title"
 msgid "Title:"
 msgstr "Заглавие:"
@@ -4582,9 +4622,9 @@ msgstr "&Възстановяване"
 
 #. i18n: ectx: property (text), widget (QLabel, lbLanguageDesc)
 #: widgets/koDocumentInfoAboutWidget.ui:297
-#, fuzzy, kde-format
+#, kde-format
 msgid "Language:"
-msgstr "Последна страница"
+msgstr "Език:"
 
 #: widgets/KoDocumentInfoDlg.cpp:104 widgets/KoDocumentInfoDlg.cpp:105
 #, kde-format
@@ -4592,9 +4632,9 @@ msgid "General"
 msgstr "Общи"
 
 #: widgets/KoDocumentInfoDlg.cpp:132
-#, fuzzy, kde-format
+#, kde-format
 msgid "Last saved by"
-msgstr "Последна страница"
+msgstr "Последно записан от"
 
 #: widgets/KoDocumentInfoDlg.cpp:189
 #, kde-format
@@ -4770,17 +4810,17 @@ msgstr "Без"
 #, kde-format
 msgctxt "Solid color stroke or fill"
 msgid "Solid"
-msgstr ""
+msgstr "Плътно"
 
 #: widgets/KoFillConfigWidget.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gradient"
-msgstr "Преливка SVG"
+msgstr "Преливка"
 
 #: widgets/KoFillConfigWidget.cpp:235
 #, kde-format
 msgid "Pattern"
-msgstr ""
+msgstr "Шаблон"
 
 #: widgets/KoFillConfigWidget.cpp:249
 #, fuzzy, kde-format
@@ -4800,38 +4840,38 @@ msgstr "Промяна на основния кадър"
 #: widgets/KoGradientEditWidget.cpp:145
 #, kde-format
 msgid "Target:"
-msgstr ""
+msgstr "Цел:"
 
 #: widgets/KoGradientEditWidget.cpp:148
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "Запълване"
 
 #: widgets/KoGradientEditWidget.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Linear gradient type"
 msgid "Linear"
-msgstr "Линии"
+msgstr "Линейно"
 
 #: widgets/KoGradientEditWidget.cpp:155
 #, kde-format
 msgctxt "Radial gradient type"
 msgid "Radial"
-msgstr ""
+msgstr "Радиално"
 
 #: widgets/KoGradientEditWidget.cpp:156
 #, kde-format
 msgctxt "Conical gradient type"
 msgid "Conical"
-msgstr ""
+msgstr "Конично"
 
 #: widgets/KoGradientEditWidget.cpp:159
 #, kde-format
 msgid "Repeat:"
-msgstr ""
+msgstr "Повторение:"
 
 #: widgets/KoGradientEditWidget.cpp:161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "No gradient spread"
 msgid "None"
 msgstr "Без"
@@ -4839,12 +4879,12 @@ msgstr "Без"
 #: widgets/KoGradientEditWidget.cpp:162
 #, kde-format
 msgid "Reflect"
-msgstr ""
+msgstr "Отразяване"
 
 #: widgets/KoGradientEditWidget.cpp:163
 #, kde-format
 msgid "Repeat"
-msgstr ""
+msgstr "Повторение"
 
 #: widgets/KoGradientEditWidget.cpp:166
 #, fuzzy, kde-format
@@ -4864,7 +4904,7 @@ msgstr ""
 #: widgets/KoGradientEditWidget.cpp:182
 #, kde-format
 msgid "&Add to Predefined Gradients"
-msgstr ""
+msgstr "&Добавяне към предварително дефинирани градиенти"
 
 #: widgets/KoModeBox.cpp:575
 #, fuzzy, kde-format
@@ -4874,7 +4914,7 @@ msgstr "Текст"
 #: widgets/KoModeBox.cpp:576
 #, kde-format
 msgid "Icon only"
-msgstr ""
+msgstr "Само икони"
 
 #: widgets/KoModeBox.cpp:579
 #, fuzzy, kde-format
@@ -4892,14 +4932,14 @@ msgid "Bottom side"
 msgstr "Долу"
 
 #: widgets/KoModeBox.cpp:587
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left side"
-msgstr "Отстъп отляво"
+msgstr "Отляво"
 
 #: widgets/KoModeBox.cpp:588
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right side"
-msgstr "Отстъп отдясно"
+msgstr "Отдясно"
 
 #: widgets/KoPageLayoutDialog.cpp:33
 #, kde-format
@@ -5067,28 +5107,28 @@ msgid "Bottom:"
 msgstr "Долу:"
 
 #: widgets/KoResourceItemChooser.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
-msgstr "Внасяне на ресурс"
+msgstr "Импортиране на ресурс"
 
 #: widgets/KoResourceItemChooser.cpp:144
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
-msgstr "Изтриване на ресурса"
+msgstr "Изтриване на ресурс"
 
 #: widgets/KoResourceItemChooser.cpp:192
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Add"
 msgstr "Изберете файл за добавяне"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:107
 #: widgets/KoTagToolButton.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "New tag"
-msgstr "Нов слой"
+msgstr "Нов етикет"
 
 #: widgets/KoResourceItemChooserContextMenu.cpp:140
 #, kde-format
@@ -5108,7 +5148,7 @@ msgstr "Премахване на точка"
 #: widgets/KoResourceModel.cpp:78
 #, kde-format
 msgid "Tags"
-msgstr ""
+msgstr "Етикети"
 
 #: widgets/KoResourceTaggingManager.cpp:143
 #, kde-format
@@ -5145,19 +5185,19 @@ msgstr "Отстъп отдясно"
 #: widgets/KoShadowConfigWidget.cpp:55
 #, kde-format
 msgid "Change the color of the shadow"
-msgstr ""
+msgstr "Промяна на цвета на сянката"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/KoShadowConfigWidget.ui:67
 #, kde-format
 msgid "Blur:"
-msgstr ""
+msgstr "Замъгляване:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/KoShadowConfigWidget.ui:84
 #, kde-format
 msgid "Distance:"
-msgstr ""
+msgstr "Разстояние:"
 
 #: widgets/KoStrokeConfigWidget.cpp:83
 #, kde-format
@@ -5197,7 +5237,7 @@ msgstr "Основен кадър"
 #: widgets/KoStrokeConfigWidget.cpp:203
 #, kde-format
 msgid "Thickness:"
-msgstr ""
+msgstr "Дебелина:"
 
 #: widgets/KoStrokeConfigWidget.cpp:213
 #, kde-format
@@ -5212,7 +5252,7 @@ msgstr ""
 #: widgets/KoTagChooserWidget.cpp:41
 #, kde-format
 msgid "Tag"
-msgstr ""
+msgstr "Таг"
 
 #: widgets/KoTagFilterWidget.cpp:39
 #, kde-format
@@ -5269,9 +5309,9 @@ msgid "Rename tag"
 msgstr "Домашна страница"
 
 #: widgets/KoTagToolButton.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Delete this tag"
-msgstr "Изтриване на страница"
+msgstr "Изтриване на етикет"
 
 #: widgets/KoTagToolButton.cpp:89
 #, kde-format
@@ -5279,17 +5319,17 @@ msgid "Clear undelete list"
 msgstr ""
 
 #: widgets/KoTagToolButton.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undelete"
-msgstr "изтриване"
+msgstr "Отмяна на изтриването"
 
 #: widgets/KoToolBox.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgid "Icon Size"
-msgstr "Задаване размер на шрифта"
+msgstr "Размер на икона"
 
 #: widgets/KoToolBox.cpp:295
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "По подразбиране"
@@ -5297,22 +5337,22 @@ msgstr "По подразбиране"
 #: widgets/KoToolBox.cpp:302
 #, kde-format
 msgid "%1x%2"
-msgstr ""
+msgstr "%1x%2"
 
 #: widgets/KoToolBoxButton.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "%1"
-msgstr "%1%"
+msgstr "%1"
 
 #: widgets/KoToolBoxButton.cpp:56
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: widgets/KoToolBoxDocker.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toolbox"
 msgstr "Инструменти"
 
@@ -5358,9 +5398,9 @@ msgid "Actual Pixels"
 msgstr ""
 
 #: widgets/KoZoomMode.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fit Text Width"
-msgstr "Напасване по широчина"
+msgstr "Напасване на широчината на текста"
 
 #: widgets/KoZoomWidget.cpp:69
 #, kde-format
@@ -5380,10 +5420,10 @@ msgstr "Мащабиране до избраното"
 #: widgetutils/KoFileDialog.cpp:463
 #, kde-format
 msgid "All supported formats"
-msgstr ""
+msgstr "Всички поддържани формати"
 
 #: widgetutils/KoGroupButton.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
-msgstr "%1%"
+msgstr "%1"
