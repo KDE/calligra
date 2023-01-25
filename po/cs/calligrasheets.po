@@ -16096,22 +16096,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otevřít odkaz?"
-
-#~ msgid "Select Font..."
-#~ msgstr "Vybrat písmo..."
-
-#~ msgid "Select Font Size"
-#~ msgstr "Vybrat velikost písma"
-
-#~ msgid "Font Size"
-#~ msgstr "Velikost písma"
-
-#~ msgid "Text Color"
-#~ msgstr "Barva textu"
-
-#~ msgid "Set the text color"
-#~ msgstr "Nastavit barvu textu"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Font"
-#~ msgstr "Změnit písmo"
