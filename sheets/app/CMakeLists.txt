@@ -7,7 +7,7 @@ if(WIN32)
     set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
 endif()
 
-kf5_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
+add_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 
 if (APPLE)
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -16,17 +16,14 @@ set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calli
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligrasheets_KDEINIT_SRCS.icns DESTINATION ${KDE_INSTALL_BUNDLEDIR}/calligrasheets.app/Contents/Resources)
 endif ()
 
-target_link_libraries(kdeinit_calligrasheets calligrasheetsui komain )
+target_link_libraries(calligrasheets calligrasheetsui komain )
 
-target_include_directories( kdeinit_calligrasheets
+target_include_directories(calligrasheets
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../
     ${CMAKE_CURRENT_BINARY_DIR}/../
 )
 
-install(TARGETS kdeinit_calligrasheets  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( PROGRAMS  org.kde.calligrasheets.desktop DESTINATION ${KDE_INSTALL_APPDIR})

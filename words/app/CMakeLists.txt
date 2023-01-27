@@ -13,7 +13,7 @@ if(WIN32)
     set(_resourcefile "${CMAKE_CURRENT_BINARY_DIR}/kdeinit_app_ICONS_SRCS.rc")
 endif()
 
-kf5_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
+add_executable( calligrawords ${words_KDEINIT_SRCS})
 
 if (APPLE)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -22,11 +22,10 @@ if (APPLE)
    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/words_KDEINIT_SRCS.icns DESTINATION ${KDE_INSTALL_BUNDLEDIR}/calligrawords.app/Contents/Resources)
 endif ()
 
-target_link_libraries(kdeinit_calligrawords   komain )
+target_link_libraries(calligrawords   komain )
 
-install(TARGETS kdeinit_calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( calligrawords kdeinit_calligrawords )
 install(TARGETS calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( PROGRAMS org.kde.calligrawords.desktop  DESTINATION ${KDE_INSTALL_APPDIR})

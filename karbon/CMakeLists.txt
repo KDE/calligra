@@ -61,7 +61,7 @@ ecm_install_icons(ICONS
     DESTINATION ${KDE_INSTALL_ICONDIR}
 )
 
-kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
+add_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (APPLE)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
@@ -70,10 +70,7 @@ if (APPLE)
    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/karbon_KDEINIT_SRCS.icns DESTINATION ${KDE_INSTALL_BUNDLEDIR}/karbon.app/Contents/Resources)
 endif()
 
-target_link_libraries(kdeinit_karbon karbonui)
+target_link_libraries(karbon karbonui)
 
-install(TARGETS kdeinit_karbon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_link_libraries(karbon kdeinit_karbon)
 install(TARGETS karbon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

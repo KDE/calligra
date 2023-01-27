@@ -39,7 +39,7 @@ public:
 };
 #endif
 
-extern "C" Q_DECL_EXPORT int kdemain( int argc, char* argv[] )
+int main( int argc, char* argv[] )
 {
     /**
      * Disable debug output by default, only log warnings.

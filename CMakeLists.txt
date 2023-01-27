@@ -196,7 +196,6 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     GuiAddons
     I18n
     IconThemes
-    Init
     ItemViews
     JobWidgets
     KCMUtils
