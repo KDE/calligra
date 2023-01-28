@@ -21,7 +21,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
@@ -65,28 +64,31 @@ class ConditionalDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    ConditionalDialog(QWidget* parent, Selection* selection);
+    ConditionalDialog(QWidget* parent);
 
     void init();
+
+    void setStyleNames(const QStringList &list);
+    void setValueRow(int id, Validity::Type type, const QString &val1, const QString &val2, const QString &style);
+
+    Validity::Type getType(int id);
+    QString getValue1(int id);
+    QString getValue2(int id);
+    QString getStyleName(int id);
 
 public Q_SLOTS:
     void slotOk();
 
 protected:
-    Selection*          m_selection;
     ConditionalWidget * m_dlg;
     Validity::Type   m_result;
 
 private:
-    void init(Conditional const & tmp, int numCondition);
     Validity::Type typeOfCondition(KComboBox const * const cb) const;
 
     bool checkInputData(KLineEdit const * const edit1,
                         KLineEdit const * const edit2);
     bool checkInputData();
-    bool getCondition(Conditional & newCondition, const KComboBox * cb,
-                      const KLineEdit * edit1, const KLineEdit * edit2,
-                      const KComboBox * sb);
 
 };
 

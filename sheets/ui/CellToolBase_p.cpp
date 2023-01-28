@@ -71,14 +71,7 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     }
 }
 
-#define ACTION_EXEC( name, command ) { \
-        QAction *a = q->action(name); \
-        const bool blocked = a->blockSignals(true); \
-        a->command; \
-        a->blockSignals(blocked); \
-    }
-
-void CellToolBase::Private::updateActions(const Cell& cell)
+void CellToolBase::Private::updateActions()
 {
     // TODO - this should eventually be removed, all the checks are done in the CellAction classes instead
 

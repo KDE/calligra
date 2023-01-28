@@ -9,6 +9,7 @@ set (actions_DIR_SRCS
     actions/Border.cpp
     actions/Cells.cpp
     actions/Comment.cpp
+    actions/Conditional.cpp
     actions/Consolidate.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
@@ -34,6 +35,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/AngleDialog.cpp
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/CommentDialog.cpp
+    actions/dialogs/ConditionalDialog.cpp
     actions/dialogs/ConsolidateDialog.cpp
     actions/dialogs/CSVDialog.cpp
     actions/dialogs/GotoDialog.cpp
@@ -66,7 +68,6 @@ set (commands_DIR_SRCS
     commands/AutoFilterCommand.cpp
     commands/AutoFormatCommand.cpp
     commands/BorderColorCommand.cpp
-    commands/ConditionCommand.cpp
     commands/DeleteCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
@@ -82,7 +83,6 @@ set (commands_DIR_SRCS
 
 set (dialogs_DIR_SRCS
     dialogs/AutoFormatDialog.cpp
-    dialogs/ConditionalDialog.cpp
     dialogs/DatabaseDialog.cpp
     dialogs/DocumentSettingsDialog.cpp
     dialogs/FindDialog.cpp

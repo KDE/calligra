@@ -87,7 +87,7 @@ public:
 
 public:
     void updateEditor(const Cell& cell);
-    void updateActions(const Cell& cell);
+    void updateActions();
     void setProtectedActionsEnabled(bool enable);
 
     Calligra::Sheets::MoveTo directionForKey(int key);

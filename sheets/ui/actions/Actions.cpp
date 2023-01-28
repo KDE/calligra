@@ -13,6 +13,7 @@
 #include "Border.h"
 #include "Cells.h"
 #include "Comment.h"
+#include "Conditional.h"
 #include "Consolidate.h"
 #include "CSVActions.h"
 #include "Fill.h"
@@ -94,6 +95,9 @@ void Actions::createActions()
     // Comment
     addAction(new Comment(this));
     addAction(new ClearComment(this));
+    // Conditional
+    addAction(new SetCondition(this));
+    addAction(new ClearCondition(this));
     // Consolidate
     addAction(new Consolidate(this));
     // CSVActions

@@ -1,5 +1,5 @@
 // This file is part of the KDE project
-// SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
+// SPDX-FileCopyrightText: 2022-2023 Tomas Mecir <mecirt@gmail.com>
 // SPDX-FileCopyrightText: 2006-2008 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 // SPDX-FileCopyrightText: 2005-2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 // SPDX-FileCopyrightText: 2002-2005 Ariya Hidayat <ariya@kde.org>
@@ -47,7 +47,6 @@
 // commands
 #include "commands/AutoFilterCommand.h"
 #include "commands/BorderColorCommand.h"
-#include "commands/ConditionCommand.h"
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
@@ -60,7 +59,6 @@
 
 // dialogs
 #include "dialogs/AutoFormatDialog.h"
-#include "dialogs/ConditionalDialog.h"
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/GoalSeekDialog.h"
@@ -188,17 +186,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Remove the contents of the current cell"));
     addAction("clearContents", action);
     connect(action, &QAction::triggered, this, &CellToolBase::clearContents);
-
-    action = new QAction(i18n("Conditional Styles..."), this);
-    action->setToolTip(i18n("Set cell style based on certain conditions"));
-    addAction("conditional", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::conditional);
-
-    action = new QAction(i18n("Conditional Styles"), this);
-    action->setIconText(i18n("Remove Conditional Styles"));
-    action->setToolTip(i18n("Remove the conditional cell styles"));
-    addAction("clearConditional", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::clearConditionalStyles);
 
     // -- sorting/filtering action --
 
@@ -1103,7 +1090,7 @@ void CellToolBase::updateActions()
     Sheet *sheet = selection()->activeSheet();
     bool readWrite = sheet->fullMap()->doc()->isReadWrite();
     const Cell cell = Cell(sheet, selection()->cursor());
-    d->updateActions(cell);  // TODO - eventuaully get rid of this one
+    d->updateActions();  // TODO - eventuaully get rid of this one
     d->actions->updateOnChange(readWrite, selection(), cell);
 }
 
@@ -1185,26 +1172,6 @@ void CellToolBase::clearContents()
     // no actual parsing shall be done
     command->setParsing(true);
     command->setValue(Value(""));
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::conditional()
-{
-    QPointer<ConditionalDialog> dialog = new ConditionalDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::clearConditionalStyles()
-{
-    // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::ConditionalCellAttribute))
-        return;
-
-    ConditionCommand* command = new ConditionCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setConditionList(QLinkedList<Conditional>());
     command->add(*selection());
     command->execute(canvas());
 }

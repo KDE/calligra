@@ -1,4 +1,5 @@
 // This file is part of the KDE project
+// SPDX-FileCopyrightText: 2022-2023 Tomas Mecir <mecirt@gmail.com>
 // SPDX-FileCopyrightText: 2006-2008 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 // SPDX-FileCopyrightText: 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 // SPDX-FileCopyrightText: 2002-2004 Ariya Hidayat <ariya@kde.org>
@@ -159,8 +160,6 @@ protected Q_SLOTS:
     // -- cell content actions --
     void clearAll();
     void clearContents();
-    void conditional();
-    void clearConditionalStyles();
     // -- sorting/filtering action --
     void autoFilter();
     // -- data insert actions --

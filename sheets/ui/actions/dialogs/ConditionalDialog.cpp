@@ -10,20 +10,10 @@
 
 #include "ConditionalDialog.h"
 
-#include "engine/ValueConverter.h"
-#include "engine/ValueParser.h"
-#include "core/Cell.h"
-#include "core/Map.h"
-#include "core/Sheet.h"
-#include "core/StyleManager.h"
-#include "../Selection.h"
-
-// commands
-#include "../commands/ConditionCommand.h"
-
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
+#include <KLocalizedString>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -233,19 +223,12 @@ void ConditionalWidget::slotTextChanged3(const QString & text)
  * ConditionalDialog
  * Sets conditional cell formattings.
  */
-ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
+ConditionalDialog::ConditionalDialog(QWidget* parent)
         : KoDialog(parent),
-        m_selection(selection),
         m_dlg(new ConditionalWidget(this))
 {
     setButtons(KoDialog::Ok | KoDialog::Cancel);
     setCaption(i18n("Conditional Styles"));
-
-    QStringList list(m_selection->activeSheet()->fullMap()->styleManager()->styleNames());
-
-    m_dlg->m_style_1->insertItems(0, list);
-    m_dlg->m_style_2->insertItems(0, list);
-    m_dlg->m_style_3->insertItems(0, list);
 
     setMainWidget(m_dlg);
 
@@ -254,97 +237,47 @@ ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
     init();
 }
 
+void ConditionalDialog::setStyleNames(const QStringList &list)
+{
+    m_dlg->m_style_1->clear();
+    m_dlg->m_style_2->clear();
+    m_dlg->m_style_3->clear();
+    m_dlg->m_style_1->insertItems(0, list);
+    m_dlg->m_style_2->insertItems(0, list);
+    m_dlg->m_style_3->insertItems(0, list);
+}
+
 void ConditionalDialog::init()
 {
-    QLinkedList<Conditional> conditionList;
-    QLinkedList<Conditional> otherList;
-    bool found;
-    int numCondition;
-
-    QLinkedList<Conditional>::iterator it1;
-    QLinkedList<Conditional>::iterator it2;
-
-    Sheet* sheet = m_selection->activeSheet();
-
-    conditionList = Cell(sheet, m_selection->marker()).conditions().conditionList();
-    /* this is the list, but only display the conditions common to all selected
-       cells*/
-
-    for (int x = m_selection->lastRange().left(); x <= m_selection->lastRange().right(); x++) {
-        for (int y = m_selection->lastRange().top(); y <= m_selection->lastRange().bottom(); y++) {
-            otherList = Cell(sheet, x, y).conditions().conditionList();
-
-            it1 = conditionList.begin();
-            while (it1 != conditionList.end()) {
-                debugSheets << "Here";
-                found = false;
-                for (it2 = otherList.begin(); !found && it2 != otherList.end(); ++it2) {
-                    debugSheets << "Found:" << found;
-                    found = ((*it1).value1 == (*it2).value1 &&
-                             (*it1).value2 == (*it2).value2 &&
-                             (*it1).cond == (*it2).cond);
-
-                    if (!found)
-                        continue;
-
-                    if ((*it1).styleName != (*it2).styleName)
-                        found = false;
-                }
-
-                if (!found) {  /* if it's not here, don't display this condition */
-                    it1 = conditionList.erase(it1);
-                } else {
-                    ++it1;
-                }
-            }
-        }
-    }
-
-    debugSheets << "Conditions:" << conditionList.size();
-
     m_dlg->m_condition_2->setEnabled(false);
     m_dlg->m_condition_3->setEnabled(false);
 
     m_dlg->m_style_1->setEnabled(false);
     m_dlg->m_style_2->setEnabled(false);
     m_dlg->m_style_3->setEnabled(false);
-
-    numCondition = 0;
-    for (it1 = conditionList.begin(); numCondition < 3 && it1 != conditionList.end(); ++it1) {
-        init(*it1, numCondition);
-
-        ++numCondition;
-    }
-    // Enable the next condition too
-    if (numCondition == 0) m_dlg->m_condition_1->setEnabled(true);
-    if (numCondition == 1) m_dlg->m_condition_2->setEnabled(true);
-    if (numCondition == 2) m_dlg->m_condition_3->setEnabled(true);
 }
 
-void ConditionalDialog::init(Conditional const & tmp, int numCondition)
+void ConditionalDialog::setValueRow(int id, Validity::Type type, const QString &val1, const QString &val2, const QString &style)
 {
-    debugSheets << "Adding" << numCondition;
-    KComboBox * cb  = 0;
-    KComboBox * sb  = 0;
-    KLineEdit * kl1 = 0;
-    KLineEdit * kl2 = 0;
-    MapBase *const map = m_selection->activeSheet()->map();
-    ValueConverter *const converter = map->converter();
+    KComboBox * cb  = nullptr;
+    KComboBox * sb  = nullptr;
+    KLineEdit * kl1 = nullptr;
+    KLineEdit * kl2 = nullptr;
 
-    switch (numCondition) {
-    case 0:
+    switch (id) {
+    case 1:
         cb  = m_dlg->m_condition_1;
         sb  = m_dlg->m_style_1;
         kl1 = m_dlg->m_firstValue_1;
         kl2 = m_dlg->m_secondValue_1;
         break;
-    case 1:
+    case 2:
         cb  = m_dlg->m_condition_2;
         sb  = m_dlg->m_style_2;
         kl1 = m_dlg->m_firstValue_2;
         kl2 = m_dlg->m_secondValue_2;
         break;
-    case 2:
+    case 3:
         cb  = m_dlg->m_condition_3;
         sb  = m_dlg->m_style_3;
         kl1 = m_dlg->m_firstValue_3;
@@ -354,13 +287,12 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
         return;
     }
 
-    if (!tmp.styleName.isEmpty()) {
-        sb->setCurrentIndex(sb->findText(tmp.styleName));
-        cb->setEnabled(true);
+    if (!style.isEmpty()) {
+        sb->setCurrentIndex(sb->findText(style));
         sb->setEnabled(true);
     }
 
-    switch (tmp.cond) {
+    switch (type) {
     case Validity::None :
     case Validity::IsTrueFormula: // was unhandled
         break;
@@ -387,61 +319,45 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 
     case Validity::Between :
         cb->setCurrentIndex(6);
-        kl2->setText(converter->asString(tmp.value2).asString());
+        kl2->setText(val2);
         break;
 
     case Validity::Different :
         cb->setCurrentIndex(7);
-        kl2->setText(converter->asString(tmp.value2).asString());
+        kl2->setText(val2);
         break;
     case Validity::DifferentTo :
         cb->setCurrentIndex(8);
         break;
     }
 
-    if (tmp.cond != Validity::None) {
+    if (type != Validity::None) {
+        cb->setEnabled(true);
         kl1->setEnabled(true);
-        kl1->setText(converter->asString(tmp.value1).asString());
+        kl1->setText(val1);
     }
+
+    cb->setEnabled(true);
+    // Enable the next condition too
+    if (id == 1) m_dlg->m_condition_2->setEnabled(true);
+    if (id == 2) m_dlg->m_condition_3->setEnabled(true);
 }
 
 Validity::Type ConditionalDialog::typeOfCondition(KComboBox const * const cb) const
 {
-    Validity::Type result = Validity::None;
     switch (cb->currentIndex()) {
-    case 0 :
-        result = Validity::None;
-        break;
-    case 1 :
-        result = Validity::Equal;
-        break;
-    case 2 :
-        result = Validity::Superior;
-        break;
-    case 3 :
-        result = Validity::Inferior;
-        break;
-    case 4 :
-        result = Validity::SuperiorEqual;
-        break;
-    case 5 :
-        result = Validity::InferiorEqual;
-        break;
-    case 6 :
-        result = Validity::Between;
-        break;
-    case 7 :
-        result = Validity::Different;
-        break;
-    case 8 :
-        result = Validity::DifferentTo;
-        break;
-    default:
-        debugSheets << "Error in list";
-        break;
+    case 0 : return Validity::None;
+    case 1 : return Validity::Equal;
+    case 2 : return Validity::Superior;
+    case 3 : return Validity::Inferior;
+    case 4 : return Validity::SuperiorEqual;
+    case 5 : return Validity::InferiorEqual;
+    case 6 : return Validity::Between;
+    case 7 : return Validity::Different;
+    case 8 : return Validity::DifferentTo;
+    default: break;
     }
-
-    return result;
+    return Validity::None;
 }
 
 bool ConditionalDialog::checkInputData(KLineEdit const * const edit1,
@@ -479,55 +395,38 @@ bool ConditionalDialog::checkInputData()
     return true;
 }
 
-bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox * cb,
-                                     const KLineEdit * edit1, const KLineEdit * edit2,
-                                     const KComboBox * sb)
-{
-    newCondition.cond = typeOfCondition(cb);
-    if (newCondition.cond == Validity::None)
-        return false;
-
-    MapBase *const map = m_selection->activeSheet()->map();
-    ValueParser *const parser = map->parser();
-
-    newCondition.value1 = parser->parse(edit1->text());
-    newCondition.value2 = parser->parse(edit2->text());
-    newCondition.styleName = sb->currentText();
-
-    return true;
+Validity::Type ConditionalDialog::getType(int id) {
+    if (id == 1) return typeOfCondition(m_dlg->m_condition_1);
+    if (id == 2) return typeOfCondition(m_dlg->m_condition_2);
+    if (id == 3) return typeOfCondition(m_dlg->m_condition_3);
+    return Validity::None;
 }
+
+QString ConditionalDialog::getValue1(int id) {
+    if (id == 1) return m_dlg->m_firstValue_1->text();
+    if (id == 2) return m_dlg->m_firstValue_2->text();
+    if (id == 3) return m_dlg->m_firstValue_3->text();
+    return QString();
+}
+
+QString ConditionalDialog::getValue2(int id) {
+    if (id == 1) return m_dlg->m_secondValue_1->text();
+    if (id == 2) return m_dlg->m_secondValue_2->text();
+    if (id == 3) return m_dlg->m_secondValue_3->text();
+    return QString();
+}
+
+QString ConditionalDialog::getStyleName(int id) {
+    if (id == 1) return m_dlg->m_style_1->currentText();
+    if (id == 2) return m_dlg->m_style_2->currentText();
+    if (id == 3) return m_dlg->m_style_3->currentText();
+    return QString();
+}
+
 
 void ConditionalDialog::slotOk()
 {
-    debugSheets << "slotOk";
-
     if (!checkInputData())
         return;
-
-    debugSheets << "Input data is valid";
-
-    QLinkedList<Conditional> newList;
-
-    Conditional newCondition;
-
-    if (getCondition(newCondition, m_dlg->m_condition_1, m_dlg->m_firstValue_1,
-                     m_dlg->m_secondValue_1, m_dlg->m_style_1))
-        newList.append(newCondition);
-
-    if (getCondition(newCondition, m_dlg->m_condition_2, m_dlg->m_firstValue_2,
-                     m_dlg->m_secondValue_2, m_dlg->m_style_2))
-        newList.append(newCondition);
-
-    if (getCondition(newCondition, m_dlg->m_condition_3, m_dlg->m_firstValue_3,
-                     m_dlg->m_secondValue_3, m_dlg->m_style_3))
-        newList.append(newCondition);
-
-    debugSheets << "Setting conditional list";
-    ConditionCommand* manipulator = new ConditionCommand();
-    manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setConditionList(newList);
-    manipulator->add(*m_selection);
-    manipulator->execute(m_selection->canvas());
-
     accept();
 }
