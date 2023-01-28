@@ -2,24 +2,25 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Yasen Pramatarov <yasen@lindeas.com>, 2011.
+# Mincho Kondarev <mkondarev@yahoo.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2011-07-28 02:00+0300\n"
-"Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
-"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"PO-Revision-Date: 2023-01-22 23:15+0100\n"
+"Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
+"Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 22.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpui.rc:8
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:menu"
 msgid "Shapes"
 msgstr "Форми"
@@ -111,9 +112,9 @@ msgid "State tool options"
 msgstr "Настройки на инструмента за състояние"
 
 #: plugins/stateshape/StateToolFactory.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "State editing"
-msgstr "Форма за уеб"
+msgstr "Редактиране на състояние"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/webshape/WebShapeConfigWidget.ui:17
@@ -138,9 +139,9 @@ msgid "A web shape"
 msgstr "Форма за уеб"
 
 #: plugins/webshape/WebToolFactory.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Web shape editing"
-msgstr "Форма за уеб"
+msgstr "Редактиране на уеб форма"
 
 #: src/AboutData.h:31
 #, kde-format
@@ -160,14 +161,14 @@ msgid ""
 msgstr ""
 
 #: src/AboutData.h:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
-msgstr "(c) 2009, 2010, Cyrille Berger"
+msgstr "(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"
 
 #: src/AboutData.h:39 src/AboutData.h:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Former maintainer"
-msgstr "Поддръжка"
+msgstr "Предишна поддръжка"
 
 #: src/AboutData.h:39
 #, kde-format
@@ -235,7 +236,7 @@ msgid "Delete the whiteboard"
 msgstr "Изтриване на таблото"
 
 #: src/import/DockerManager_p.h:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Tool Bars"
 msgstr "Контейнер за ленти с инструменти"
 

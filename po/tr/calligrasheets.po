@@ -5,13 +5,13 @@
 # Görkem Çetin <gorkem@kde.org>, 2003.
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-22 00:57+0000\n"
-"PO-Revision-Date: 2022-12-11 19:56+0300\n"
+"PO-Revision-Date: 2023-01-27 18:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2457,7 +2457,7 @@ msgid ""
 "ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight "
 "(hundredweight)."
 msgstr ""
-"Desteklenen kütle birimleri: g (gram), sg (adet), lbm (pound), u (atom "
+"Desteklenen kütle birimleri: g (gram), sg (adet), lbm (libre), u (atom "
 "kütlesi), ozm (ons), taş, ton, tahıl, pweight (pennyweight), hweight (yüzlük "
 "ağırlık)."
 
@@ -3805,7 +3805,7 @@ msgid ""
 "COMPOUND(5000;0.12;4;5) or $9030.56."
 msgstr ""
 "Anapara, nominal faiz oranı, birleşik faiz hesaplamanın sıklığı ve zamanı, "
-"COMPOUND() işlevina verildiğinde, yatırımın değerini geri döndürür. Örneğin: "
+"COMPOUND() işlevine verildiğinde, yatırımın değerini geri döndürür. Örneğin: "
 "5 yıl için üç aylık evrede hesaplanan %​12'lik faiz ile $5000, COMPOUND(5000; "
 "0,12; 4; 5) veya $9030,56 olacaktır."
 
