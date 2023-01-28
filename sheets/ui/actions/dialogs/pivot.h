@@ -23,13 +23,13 @@ namespace Calligra{
     class Selection;
   
 
-    class Pivot : public KoDialog
+    class PivotDialog : public KoDialog
     {
       Q_OBJECT
 
     public:
-      Pivot(QWidget* parent,Selection* selection);
-      ~Pivot() override;
+      PivotDialog(QWidget* parent,Selection* selection);
+      ~PivotDialog() override;
 
     private Q_SLOTS:
       void slotUser2Clicked();

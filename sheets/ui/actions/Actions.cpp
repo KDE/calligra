@@ -26,6 +26,7 @@
 #include "Merge.h"
 #include "NamedAreas.h"
 #include "PageBreak.h"
+// #include "Pivot.h"
 #include "Sort.h"
 #include "Style.h"
 #include "Styles.h"
@@ -136,6 +137,8 @@ void Actions::createActions()
     // PageBreak
     addAction(new PageBreakColumn(this));
     addAction(new PageBreakRow(this));
+    // Pivot
+//    addAction(new Pivot(this));
     // Sort
     addAction(new Sort(this));
     addAction(new SortInc(this));

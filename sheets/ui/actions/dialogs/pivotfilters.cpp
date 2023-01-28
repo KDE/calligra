@@ -11,7 +11,7 @@
 
 #include "core/Cell.h"
 #include "core/Sheet.h"
-#include "../Selection.h"
+#include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 

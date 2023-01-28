@@ -50,8 +50,6 @@
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
-#include "commands/MergeCommand.h"
-#include "commands/PageBreakCommand.h"
 #include "commands/PasteCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SpellCheckCommand.h"
@@ -66,7 +64,6 @@
 #include "dialogs/ListDialog.h"
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/SpecialPasteDialog.h"
-#include "dialogs/pivot.h"
 
 // strategies
 #include "strategy/AutoFillStrategy.h"
@@ -218,12 +215,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("goalSeek", action);
     connect(action, &QAction::triggered, this, &CellToolBase::goalSeek);
     action->setToolTip(i18n("Repeating calculation to find a specific value"));
-
-    action = new QAction(i18n("&Pivot Tables..."), this);
-    addAction("Pivot", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::pivot);
-    action->setToolTip(i18n("Create Pivot Tables"));
-    
+   
     KSelectAction *selectAction = new KSelectAction(i18n("Formula Selection"), this);
     addAction("formulaSelection", selectAction);
     selectAction->setToolTip(i18n("Insert a function"));
@@ -1225,18 +1217,6 @@ void CellToolBase::goalSeek()
 
     GoalSeekDialog* dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later
-}
-
-void CellToolBase::pivot()
-{
-    if ((selection()->lastRange().width() < 2) || (selection()->lastRange().height() < 2)) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
-        return;
-    }
-
-    QPointer<Pivot> dialog = new Pivot(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
 }
 
 void CellToolBase::formulaSelection(const QString& expression)

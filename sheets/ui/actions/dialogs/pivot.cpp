@@ -16,7 +16,7 @@
 
 using namespace Calligra::Sheets;
 
-class Pivot::Private
+class PivotDialog::Private
 {
 public:
     Selection *selection;
@@ -24,7 +24,7 @@ public:
 };
 
 
-Pivot::Pivot(QWidget* parent,Selection* selection):
+PivotDialog::PivotDialog(QWidget* parent,Selection* selection):
     KoDialog(parent),
     d(new Private)
 {
@@ -36,16 +36,16 @@ Pivot::Pivot(QWidget* parent,Selection* selection):
     d->mainWidget.Current->setChecked(true);
     setMainWidget(widget);
     d->selection=selection;
-    connect(this, &KoDialog::okClicked, this, &Pivot::slotUser2Clicked);
+    connect(this, &KoDialog::okClicked, this, &PivotDialog::slotUser2Clicked);
 
 }
 
-Pivot::~Pivot()
+PivotDialog::~PivotDialog()
 {
     delete d;
 }
 
-void Pivot::slotUser2Clicked()
+void PivotDialog::slotUser2Clicked()
 {
 	  if(d->mainWidget.Current->isChecked())
 	  {
@@ -60,7 +60,7 @@ void Pivot::slotUser2Clicked()
 	      msgBox.setText("Functionality Yet to be Added");
 	      msgBox.exec();
 	      
-	      Pivot *p=new Pivot(this,d->selection);
+	      PivotDialog *p=new PivotDialog(this,d->selection);
 	      p->setModal(true);
 	      p->exec();
 	  }

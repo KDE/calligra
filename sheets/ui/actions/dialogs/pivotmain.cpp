@@ -16,12 +16,11 @@
 #include "engine/Value.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
-// #include <sheets/DocBase.h>
 #include "core/Cell.h"
 #include "core/Map.h"
 #include "core/Style.h"
 #include "core/Sheet.h"
-#include "../Selection.h"
+#include "ui/Selection.h"
 
 
 using namespace Calligra::Sheets;

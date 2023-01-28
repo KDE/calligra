@@ -22,6 +22,7 @@ set (actions_DIR_SRCS
     actions/Merge.cpp
     actions/NamedAreas.cpp
     actions/PageBreak.cpp
+#    actions/Pivot.cpp
     actions/Sort.cpp
     actions/Style.cpp
     actions/Styles.cpp
@@ -49,6 +50,10 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/StyleManagerDialog.cpp
     actions/dialogs/SubtotalDialog.cpp
     actions/dialogs/ValidityDialog.cpp
+#    actions/dialogs/pivot.cpp
+#    actions/dialogs/pivotfilters.cpp
+#    actions/dialogs/pivotoptions.cpp
+#    actions/dialogs/pivotmain.cpp
     )
 
 ki18n_wrap_ui(action_dialogs_DIR_SRCS
@@ -58,6 +63,10 @@ ki18n_wrap_ui(action_dialogs_DIR_SRCS
     actions/dialogs/SortDetailsWidget.ui
     actions/dialogs/SubtotalWidget.ui
     actions/dialogs/SubtotalsDetailsWidget.ui
+#    actions/dialogs/pivot.ui
+#    actions/dialogs/pivotfilters.ui
+#    actions/dialogs/pivotoptions.ui
+#    actions/dialogs/pivotmain.ui
     )
 
 set (commands_DIR_SRCS
@@ -101,10 +110,6 @@ set (dialogs_DIR_SRCS
     dialogs/PasteInsertDialog.cpp
     dialogs/ShowDialog.cpp
     dialogs/SpecialPasteDialog.cpp
-    dialogs/pivot.cpp
-    dialogs/pivotfilters.cpp
-    dialogs/pivotoptions.cpp
-    dialogs/pivotmain.cpp
     )
 
 
@@ -114,10 +119,6 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/PositionWidget.ui
     dialogs/ProtectionWidget.ui
     dialogs/SpecialPasteWidget.ui
-    dialogs/pivot.ui
-    dialogs/pivotfilters.ui
-    dialogs/pivotoptions.ui
-    dialogs/pivotmain.ui
 
     )
 
@@ -186,11 +187,6 @@ install( FILES
 
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
-
-    dialogs/pivot.h
-    dialogs/pivotfilters.h
-    dialogs/pivotoptions.h
-    dialogs/pivotmain.h
 
 DESTINATION ${KDE_INSTALL_INCLUDEDIR}/sheets/ui COMPONENT Devel)
 
