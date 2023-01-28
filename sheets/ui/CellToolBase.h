@@ -22,8 +22,6 @@
 #include "core/Cell.h"
 #include "core/ApplicationSettings.h"
 
-class KoColor;
-
 namespace Calligra
 {
 namespace Sheets
@@ -108,8 +106,6 @@ public:
     virtual QPointF offset() const = 0;
     virtual QSizeF size() const = 0;
 
-    QColor selectedBorderColor() const;
-
 public Q_SLOTS:
     /**
      * Scrolls to the cell located at \p location.
@@ -153,10 +149,6 @@ protected Q_SLOTS:
 
     // -- cell style actions --
     void cellStyle();
-    // -- border actions --
-    void borderColor(const KoColor &);
-    // -- misc style attribute actions --
-    void changeBackgroundColor(const KoColor &);
     // -- cell content actions --
     void clearAll();
     void clearContents();

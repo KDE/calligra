@@ -76,7 +76,6 @@ set (commands_DIR_SRCS
     commands/AutoFillCommand.cpp
     commands/AutoFilterCommand.cpp
     commands/AutoFormatCommand.cpp
-    commands/BorderColorCommand.cpp
     commands/DeleteCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp

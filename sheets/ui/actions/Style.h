@@ -14,6 +14,10 @@
 #include "ui/commands/AbstractRegionCommand.h"
 
 
+class KoColor;
+class KoColorPopupAction;
+
+
 namespace Calligra
 {
 namespace Sheets
@@ -180,6 +184,21 @@ public:
 protected:
     bool performCommands() override;
     bool m_decrease  : 1;
+};
+
+class FillColor : public CellAction {
+Q_OBJECT
+public:
+    FillColor(Actions *actions);
+    virtual ~FillColor();
+
+protected Q_SLOTS:
+    void triggeredFillColor(const KoColor &color);
+protected:
+    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    QAction *createAction() override;
+
+    KoColorPopupAction *m_colorAction;
 };
 
 

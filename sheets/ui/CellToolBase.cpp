@@ -46,7 +46,6 @@
 
 // commands
 #include "commands/AutoFilterCommand.h"
-#include "commands/BorderColorCommand.h"
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
@@ -76,11 +75,9 @@
 // Calligra
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoColorPopupAction.h>
 #include <KoPointerEvent.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
-#include <KoColor.h>
 #include <KoIcon.h>
 
 // KF5
@@ -119,7 +116,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->initialized = false;
     d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
-    d->borderColor = Qt::black;
 
     d->findOptions = 0;
     d->findLeftColumn = 0;
@@ -150,25 +146,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
     connect(action, &QAction::triggered, this, &CellToolBase::cellStyle);
     action->setToolTip(i18n("Set the cell formatting"));
-
-    // -- border actions --
-
-    auto colorAction = new KoColorPopupAction(this);
-    colorAction->setIcon(koIcon("format-stroke-color"));
-    colorAction->setToolTip(i18n("Select a new border color"));
-    colorAction->setText(i18n("Border Color"));
-    colorAction->setCurrentColor(selectedBorderColor());
-    addAction("borderColor", colorAction);
-    connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::borderColor);
-
-    // -- misc style attribute actions --
-
-    colorAction = new KoColorPopupAction(this);
-    colorAction->setIcon(koIcon("format-fill-color"));
-    colorAction->setToolTip(i18n("Set the background color"));
-    colorAction->setText(i18n("Background Color"));
-    addAction("backgroundColor", colorAction);
-    connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::changeBackgroundColor);
 
     // -- cell content actions --
 
@@ -1095,11 +1072,6 @@ void CellToolBase::triggerAction(const QString &name)
         KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to locate action %1", name));
 }
 
-QColor CellToolBase::selectedBorderColor() const
-{
-    return d->borderColor;
-}
-
 void CellToolBase::cellStyle()
 {
     LayoutDialog *dialog = new LayoutDialog(canvas()->canvasWidget(), selection()->activeSheet(), nullptr, false);
@@ -1118,29 +1090,6 @@ void CellToolBase::cellStyle()
         command->execute(canvas());
     }
     delete dialog;
-}
-
-void CellToolBase::borderColor(const KoColor &color)
-{
-    BorderColorCommand* command = new BorderColorCommand();
-    command->setSheet(selection()->activeSheet());
-    QColor c = color.toQColor();
-    d->borderColor = c;
-    command->setColor(c);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::changeBackgroundColor(const KoColor &color)
-{
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Change Background Color"));
-    Style s;
-    s.setBackgroundColor(color.toQColor());
-    command->setStyle(s);
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::clearAll()

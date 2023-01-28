@@ -305,7 +305,6 @@ protected:
 private:
     friend class StyleStorage;
     friend class StyleStorageLoaderJob;
-    friend class BorderColorCommand;
 
     class Private;
     QSharedDataPointer<Private> d;

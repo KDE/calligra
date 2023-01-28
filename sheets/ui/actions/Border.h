@@ -10,7 +10,11 @@
 
 
 #include "CellAction.h"
+#include "ui/commands/AbstractRegionCommand.h"
 
+
+class KoColor;
+class KoColorPopupAction;
 
 namespace Calligra
 {
@@ -93,6 +97,42 @@ protected:
     QAction *createAction() override;
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 };
+
+class BorderColor : public CellAction {
+Q_OBJECT
+public:
+    BorderColor(Actions *actions);
+    virtual ~BorderColor();
+
+    QColor selectedColor();
+protected Q_SLOTS:
+    void triggeredBorderColor(const KoColor &color);
+protected:
+    virtual void execute(Selection *, Sheet *, QWidget *) override {}  // never called
+    QAction *createAction() override;
+
+    KoColorPopupAction *m_colorAction;
+};
+
+/**
+ * \ingroup Commands
+ * \brief Applies a color to an existing border.
+ */
+class BorderColorCommand : public AbstractRegionCommand
+{
+public:
+    BorderColorCommand();
+    void setColor(const QColor& color) {
+        m_color = color;
+    }
+
+protected:
+    bool performCommands() override;
+
+private:
+    QColor m_color;
+};
+
 
 
 

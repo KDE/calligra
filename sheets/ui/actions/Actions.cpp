@@ -90,6 +90,7 @@ void Actions::createActions()
     addAction(new BorderAll(this));
     addAction(new BorderNone(this));
     addAction(new BorderOutline(this));
+    addAction(new BorderColor(this));
     // Cells
     addAction(new CellsInsert(this));
     addAction(new CellsRemove(this));
@@ -156,6 +157,7 @@ void Actions::createActions()
     addAction(new DecreasePrecision(this));
     addAction(new PercentFormat(this));
     addAction(new MoneyFormat(this));
+    addAction(new FillColor(this));
     addAction(new DefaultStyle(this));
     // Styles
     addAction(new StyleFromCell(this));

@@ -17,6 +17,8 @@
 #include "ui/CellToolBase.h"
 
 #include <KoCanvasBase.h>
+#include <KoColor.h>
+#include <KoColorPopupAction.h>
 
 #include <KLocalizedString>
 
@@ -440,6 +442,39 @@ void DefaultStyle::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->execute(selection->canvas());
 }
 
+
+FillColor::FillColor(Actions *actions)
+    : CellAction(actions, "backgroundColor", i18n("Background Color"), koIcon("format-fill-color"), i18n("Set the background color"))
+{
+}
+
+FillColor::~FillColor()
+{
+}
+
+QAction *FillColor::createAction() {
+    m_colorAction = new KoColorPopupAction(m_actions->tool());
+    m_colorAction->setIcon(m_icon);
+    m_colorAction->setToolTip(m_tooltip);
+    m_colorAction->setText(m_caption);
+    connect(m_colorAction, &KoColorPopupAction::colorChanged, this, &FillColor::triggeredFillColor);
+    return m_colorAction;
+}
+
+void FillColor::triggeredFillColor(const KoColor &color) {
+    CellToolBase *tool = m_actions->tool();
+    Selection *selection = tool->selection();
+    Sheet *sheet = selection->activeSheet();
+
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(sheet);
+    command->setText(kundo2_i18n("Change Background Color"));
+    Style s;
+    s.setBackgroundColor(color.toQColor());
+    command->setStyle(s);
+    command->add(*selection);
+    command->execute(selection->canvas());
+}
 
 
 

@@ -8,9 +8,13 @@
 #include "Border.h"
 #include "Actions.h"
 
+#include "core/CellStorage.h"
 #include "core/Sheet.h"
 #include "ui/CellToolBase.h"
 #include "ui/commands/StyleCommand.h"
+
+#include <KoColor.h>
+#include <KoColorPopupAction.h>
 
 #include <KLocalizedString>
 
@@ -35,8 +39,8 @@ QAction *BorderLeft::createAction() {
 
 void BorderLeft::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CellToolBase *tool = m_actions->tool();
-    QColor color = tool->selectedBorderColor();
+    BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
+    QColor color = a->selectedColor();
 
     StyleCommand* command = new StyleCommand();
     command->setSheet(sheet);
@@ -69,8 +73,8 @@ QAction *BorderRight::createAction() {
 
 void BorderRight::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CellToolBase *tool = m_actions->tool();
-    QColor color = tool->selectedBorderColor();
+    BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
+    QColor color = a->selectedColor();
 
     StyleCommand* command = new StyleCommand();
     command->setSheet(sheet);
@@ -102,8 +106,8 @@ QAction *BorderTop::createAction() {
 
 void BorderTop::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CellToolBase *tool = m_actions->tool();
-    QColor color = tool->selectedBorderColor();
+    BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
+    QColor color = a->selectedColor();
 
     StyleCommand* command = new StyleCommand();
     command->setSheet(sheet);
@@ -133,8 +137,8 @@ QAction *BorderBottom::createAction() {
 
 void BorderBottom::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CellToolBase *tool = m_actions->tool();
-    QColor color = tool->selectedBorderColor();
+    BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
+    QColor color = a->selectedColor();
 
     StyleCommand* command = new StyleCommand();
     command->setSheet(sheet);
@@ -163,8 +167,8 @@ QAction *BorderAll::createAction() {
 
 void BorderAll::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CellToolBase *tool = m_actions->tool();
-    QColor color = tool->selectedBorderColor();
+    BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
+    QColor color = a->selectedColor();
 
     StyleCommand* command = new StyleCommand();
     command->setSheet(sheet);
@@ -232,8 +236,8 @@ QAction *BorderOutline::createAction() {
 
 void BorderOutline::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    CellToolBase *tool = m_actions->tool();
-    QColor color = tool->selectedBorderColor();
+    BorderColor *a = dynamic_cast<BorderColor *>(m_actions->cellAction("borderColor"));
+    QColor color = a->selectedColor();
 
     StyleCommand* command = new StyleCommand();
     command->setSheet(sheet);
@@ -247,5 +251,106 @@ void BorderOutline::execute(Selection *selection, Sheet *sheet, QWidget *)
     command->add(*selection);
     command->execute(selection->canvas());
 }
+
+
+BorderColor::BorderColor(Actions *actions)
+    : CellAction(actions, "borderColor", i18n("Border Color"), koIcon("format-stroke-color"), i18n("Select a new border color"))
+{
+}
+
+BorderColor::~BorderColor()
+{
+}
+
+QAction *BorderColor::createAction() {
+    m_colorAction = new KoColorPopupAction(m_actions->tool());
+    m_colorAction->setIcon(m_icon);
+    m_colorAction->setToolTip(m_tooltip);
+    m_colorAction->setText(m_caption);
+    connect(m_colorAction, &KoColorPopupAction::colorChanged, this, &BorderColor::triggeredBorderColor);
+    return m_colorAction;
+}
+
+QColor BorderColor::selectedColor()
+{
+    return m_colorAction->currentColor();
+}
+
+void BorderColor::triggeredBorderColor(const KoColor &color) {
+    CellToolBase *tool = m_actions->tool();
+    Selection *selection = tool->selection();
+    Sheet *sheet = selection->activeSheet();
+
+    BorderColorCommand* command = new BorderColorCommand();
+    command->setSheet(sheet);
+    QColor c = color.toQColor();
+    command->setColor(c);
+    command->add(*selection);
+    command->execute(selection->canvas());
+}
+
+
+BorderColorCommand::BorderColorCommand()
+        : AbstractRegionCommand()
+{
+    setText(kundo2_i18n("Change Border Color"));
+}
+
+bool BorderColorCommand::performCommands()
+{
+    QRect cur = firstRange();
+    for (int y = cur.top(); y < cur.top() + cur.height(); ++y) {
+        if (y > m_sheet->fullCellStorage()->rows()) break;
+        for (int x = cur.left(); x < cur.left() + cur.width(); ++x) {
+            if (y > m_sheet->fullCellStorage()->rows()) break;
+
+            Style style = m_sheet->fullCellStorage()->style(x, y);
+            Style newStyle;
+            bool adjusted = false;
+            QPen pen;
+            pen = style.leftBorderPen();
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setLeftBorderPen(pen);
+                adjusted = true;
+            }
+            pen = style.rightBorderPen();
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setRightBorderPen(pen);
+                adjusted = true;
+            }
+            pen = style.topBorderPen();
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setTopBorderPen(pen);
+                adjusted = true;
+            }
+            pen = style.bottomBorderPen();
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setBottomBorderPen(pen);
+                adjusted = true;
+            }
+            pen = style.fallDiagonalPen();
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setFallDiagonalPen(pen);
+                adjusted = true;
+            }
+            pen = style.goUpDiagonalPen();
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setGoUpDiagonalPen(pen);
+                adjusted = true;
+            }
+
+            if (adjusted)
+                m_sheet->fullCellStorage()->setStyle(Region(QPoint(x, y)), newStyle);
+        }
+    }
+    return true;
+}
+
 
 
