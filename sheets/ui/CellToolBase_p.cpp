@@ -42,7 +42,7 @@
 #include "CellEditor.h"
 #include "ExternalEditor.h"
 #include "actions/Actions.h"
-#include "commands/StyleCommand.h"
+#include "actions/CellAction.h"
 
 // Calligra
 #include <KoCanvasBase.h>
@@ -52,8 +52,12 @@
 #include <KoIcon.h>
 
 // Qt
+#include <QAction>
 #include <QApplication>
 #include <QPainter>
+
+#include <KLocalizedString>
+
 
 using namespace Calligra::Sheets;
 
@@ -442,74 +446,37 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
     return true;
 }
 
+void CellToolBase::Private::triggerAction(const QString &name)
+{
+    CellAction *a = actions->cellAction(name);
+    if (a) a->trigger();
+}
+
 bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
 {
     if (!(_ev->modifiers() & Qt::ControlModifier))
         return false;
 
     int key = _ev->key();
-    if (key != Qt::Key_Exclam && key != Qt::Key_At &&
-            key != Qt::Key_Ampersand && key != Qt::Key_Dollar &&
-            key != Qt::Key_Percent && key != Qt::Key_AsciiCircum &&
-            key != Qt::Key_NumberSign)
+    if (key == Qt::Key_Exclam)
+        triggerAction("numeric");
+    else if (key == Qt::Key_AsciiCircum)
+        triggerAction("scientific");
+    else if (key == Qt::Key_Dollar)
+        triggerAction("currency");
+    else if (key == Qt::Key_Percent)
+        triggerAction("percent");
+    else if (key == Qt::Key_At)
+        triggerAction("time");
+    else if (key == Qt::Key_NumberSign)
+        triggerAction("date");
+    else if (key == Qt::Key_Ampersand)
+        triggerAction("borderOutline");
+    else 
         return false;
 
-    StyleCommand* command = new StyleCommand();
-    command->setSheet(q->selection()->activeSheet());
-    Style s;
-    QPen pen;
-
-    switch (_ev->key()) {
-    case Qt::Key_Exclam:
-        command->setText(kundo2_i18n("Number Format"));
-        s.setFormatType(Format::Number);
-        s.setPrecision(2);
-        break;
-
-    case Qt::Key_Dollar:
-        command->setText(kundo2_i18n("Currency Format"));
-        s.setFormatType(Format::Money);
-        break;
-
-    case Qt::Key_Percent:
-        command->setText(kundo2_i18n("Percentage Format"));
-        s.setFormatType(Format::Percentage);
-        break;
-
-    case Qt::Key_At:
-        command->setText(kundo2_i18n("Time Format"));
-        s.setFormatType(Format::SecondeTime);
-        break;
-
-    case Qt::Key_NumberSign:
-        command->setText(kundo2_i18n("Date Format"));
-        s.setFormatType(Format::ShortDate);
-        break;
-
-    case Qt::Key_AsciiCircum:
-        command->setText(kundo2_i18n("Scientific Format"));
-        s.setFormatType(Format::Scientific);
-        break;
-
-    case Qt::Key_Ampersand:
-        command->setText(kundo2_i18n("Change Border"));
-        pen = QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine);
-        s.setTopBorderPen(pen);
-        s.setBottomBorderPen(pen);
-        s.setLeftBorderPen(pen);
-        s.setRightBorderPen(pen);
-        break;
-
-    default:
-        delete command;
-        return false;
-    }
-
-    command->setStyle(s);
-    command->add(*q->selection());
-    command->execute();
-    _ev->accept(); // QKeyEvent
-
+    // Processed.
+    _ev->accept();
     return true;
 }
 

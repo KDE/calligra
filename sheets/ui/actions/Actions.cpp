@@ -155,8 +155,12 @@ void Actions::createActions()
     addAction(new DecreaseFontSize(this));
     addAction(new IncreasePrecision(this));
     addAction(new DecreasePrecision(this));
+    addAction(new NumberFormat(this));
+    addAction(new ScientificFormat(this));
     addAction(new PercentFormat(this));
     addAction(new MoneyFormat(this));
+    addAction(new DateFormat(this));
+    addAction(new TimeFormat(this));
     addAction(new FillColor(this));
     addAction(new DefaultStyle(this));
     // Styles

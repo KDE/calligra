@@ -233,6 +233,76 @@ bool VerticalText::checkedForSelection(Selection *, const Cell &activeCell)
     return style.verticalText();
 }
 
+
+NumberFormat::NumberFormat(Actions *actions)
+    : ToggleableCellAction(actions, "numeric", i18n("Number Format"), QIcon(), i18n("Set the cell formatting to a number"))
+{
+}
+
+NumberFormat::~NumberFormat()
+{
+}
+
+QAction *NumberFormat::createAction() {
+    QAction *res = ToggleableCellAction::createAction();
+    res->setIconText(i18n("Number"));
+    return res;
+}
+
+void NumberFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
+{
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(sheet);
+    command->setText(kundo2_i18n("Format Number"));
+    Style s;
+    s.setFormatType(selected ? Format::Number : Format::Generic);
+    command->setStyle(s);
+    command->add(*selection);
+    command->execute(selection->canvas());
+}
+
+bool NumberFormat::checkedForSelection(Selection *, const Cell &activeCell)
+{
+    const Style style = activeCell.style();
+    Format::Type ft = style.formatType();
+    return isNumber(ft);
+}
+
+ScientificFormat::ScientificFormat(Actions *actions)
+    : ToggleableCellAction(actions, "scientific", i18n("Scientific Format"), koIcon("wizard_math"), i18n("Set the cell formatting to a scientific format"))
+{
+}
+
+ScientificFormat::~ScientificFormat()
+{
+}
+
+QAction *ScientificFormat::createAction() {
+    QAction *res = ToggleableCellAction::createAction();
+    res->setIconText(i18n("Scientific"));
+    return res;
+}
+
+void ScientificFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
+{
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(sheet);
+    command->setText(kundo2_i18n("Format Scientific"));
+    Style s;
+    s.setFormatType(selected ? Format::Scientific : Format::Generic);
+    command->setStyle(s);
+    command->add(*selection);
+    command->execute(selection->canvas());
+}
+
+bool ScientificFormat::checkedForSelection(Selection *, const Cell &activeCell)
+{
+    const Style style = activeCell.style();
+    Format::Type ft = style.formatType();
+    return (ft == Format::Scientific);
+}
+
+
 PercentFormat::PercentFormat(Actions *actions)
     : ToggleableCellAction(actions, "percent", i18n("Percent Format"), koIcon("format-number-percent"), i18n("Set the cell formatting to look like a percentage"))
 {
@@ -301,6 +371,76 @@ bool MoneyFormat::checkedForSelection(Selection *, const Cell &activeCell)
     Format::Type ft = style.formatType();
     return (ft == Format::Money);
 }
+
+DateFormat::DateFormat(Actions *actions)
+    : ToggleableCellAction(actions, "date", i18n("Date Format"), koIcon("view-calendar"), i18n("Set the cell formatting to a date"))
+{
+}
+
+DateFormat::~DateFormat()
+{
+}
+
+QAction *DateFormat::createAction() {
+    QAction *res = ToggleableCellAction::createAction();
+    res->setIconText(i18n("Date"));
+    return res;
+}
+
+void DateFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
+{
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(sheet);
+    command->setText(kundo2_i18n("Format Date"));
+    Style s;
+    s.setFormatType(selected ? Format::ShortDate : Format::Generic);
+    command->setStyle(s);
+    command->add(*selection);
+    command->execute(selection->canvas());
+}
+
+bool DateFormat::checkedForSelection(Selection *, const Cell &activeCell)
+{
+    const Style style = activeCell.style();
+    Format::Type ft = style.formatType();
+    return isDate(ft);
+}
+
+TimeFormat::TimeFormat(Actions *actions)
+    : ToggleableCellAction(actions, "time", i18n("Time Format"), koIcon("player-time"), i18n("Set the cell formatting to a time"))
+{
+}
+
+TimeFormat::~TimeFormat()
+{
+}
+
+QAction *TimeFormat::createAction() {
+    QAction *res = ToggleableCellAction::createAction();
+    res->setIconText(i18n("Time"));
+    return res;
+}
+
+void TimeFormat::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *)
+{
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(sheet);
+    command->setText(kundo2_i18n("Format Time"));
+    Style s;
+    s.setFormatType(selected ? Format::SecondeTime : Format::Generic);
+    command->setStyle(s);
+    command->add(*selection);
+    command->execute(selection->canvas());
+}
+
+bool TimeFormat::checkedForSelection(Selection *, const Cell &activeCell)
+{
+    const Style style = activeCell.style();
+    Format::Type ft = style.formatType();
+    return isTime(ft);
+}
+
+
 
 IncreaseFontSize::IncreaseFontSize(Actions *actions)
     : CellAction(actions, "increaseFontSize", i18n("Increase Font Size"), koIcon("format-font-size-more"), QString())

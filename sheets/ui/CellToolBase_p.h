@@ -88,6 +88,8 @@ public:
     void updateEditor(const Cell& cell);
     void updateActions();
     void setProtectedActionsEnabled(bool enable);
+    /** Directly triggers an action. */
+    void triggerAction(const QString &name);
 
     Calligra::Sheets::MoveTo directionForKey(int key);
 

@@ -107,15 +107,18 @@ ToggleableCellAction::~ToggleableCellAction() {
 
 QAction *ToggleableCellAction::createAction()
 {
-    KToggleAction *res;
     if (!m_icon.isNull())
-        res = new KToggleAction(m_icon, m_caption, m_actions->tool());
+        m_toggleAction = new KToggleAction(m_icon, m_caption, m_actions->tool());
     else
-        res = new KToggleAction(m_caption, m_actions->tool());
-    if (m_tooltip.length()) res->setToolTip(m_tooltip);
-    connect(res, &KToggleAction::triggered, this, &ToggleableCellAction::triggered);
+        m_toggleAction = new KToggleAction(m_caption, m_actions->tool());
+    if (m_tooltip.length()) m_toggleAction->setToolTip(m_tooltip);
+    connect(m_toggleAction, &KToggleAction::triggered, this, &ToggleableCellAction::triggered);
 
-    return res;
+    return m_toggleAction;
+}
+
+void ToggleableCellAction::trigger() {
+    triggered(!m_toggleAction->isChecked());
 }
 
 void ToggleableCellAction::triggered(bool enabled) {

@@ -427,6 +427,13 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
         return;
     }
 
+    // Check for formatting key combination CTRL + ...
+    // Qt::Key_Exclam, Qt::Key_At, Qt::Key_Ampersand, Qt::Key_Dollar
+    // Qt::Key_Percent, Qt::Key_AsciiCircum, Qt::Key_NumberSign
+    if (d->formatKeyPress(event)) {
+        return;
+    }
+
     // Don't handle the remaining special keys.
     if (event->modifiers() & (Qt::AltModifier | Qt::ControlModifier) &&
             (event->key() != Qt::Key_Down) &&
@@ -437,13 +444,6 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
             (event->key() != Qt::Key_Enter) &&
             (event->key() != Qt::Key_Return)) {
         event->ignore(); // QKeyEvent
-        return;
-    }
-
-    // Check for formatting key combination CTRL + ...
-    // Qt::Key_Exclam, Qt::Key_At, Qt::Key_Ampersand, Qt::Key_Dollar
-    // Qt::Key_Percent, Qt::Key_AsciiCircum, Qt::Key_NumberSign
-    if (d->formatKeyPress(event)) {
         return;
     }
 

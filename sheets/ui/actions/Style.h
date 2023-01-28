@@ -93,6 +93,30 @@ protected:
     virtual bool checkedForSelection(Selection *selection, const Cell &activeCell) override;
 };
 
+class NumberFormat : public ToggleableCellAction {
+Q_OBJECT
+public:
+    NumberFormat(Actions *actions);
+    virtual ~NumberFormat();
+
+protected:
+    virtual QAction *createAction() override;
+    virtual void executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual bool checkedForSelection(Selection *selection, const Cell &activeCell) override;
+};
+
+class ScientificFormat : public ToggleableCellAction {
+Q_OBJECT
+public:
+    ScientificFormat(Actions *actions);
+    virtual ~ScientificFormat();
+
+protected:
+    virtual QAction *createAction() override;
+    virtual void executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual bool checkedForSelection(Selection *selection, const Cell &activeCell) override;
+};
+
 class PercentFormat : public ToggleableCellAction {
 Q_OBJECT
 public:
@@ -116,6 +140,32 @@ protected:
     virtual void executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     virtual bool checkedForSelection(Selection *selection, const Cell &activeCell) override;
 };
+
+class DateFormat : public ToggleableCellAction {
+Q_OBJECT
+public:
+    DateFormat(Actions *actions);
+    virtual ~DateFormat();
+
+protected:
+    virtual QAction *createAction() override;
+    virtual void executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual bool checkedForSelection(Selection *selection, const Cell &activeCell) override;
+};
+
+class TimeFormat : public ToggleableCellAction {
+Q_OBJECT
+public:
+    TimeFormat(Actions *actions);
+    virtual ~TimeFormat();
+
+protected:
+    virtual QAction *createAction() override;
+    virtual void executeToggled(bool selected, Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual bool checkedForSelection(Selection *selection, const Cell &activeCell) override;
+};
+
+
 
 class IncreaseFontSize : public CellAction {
 Q_OBJECT

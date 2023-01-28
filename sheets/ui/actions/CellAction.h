@@ -20,6 +20,7 @@
 
 class QAction;
 class QWidget;
+class KToggleAction;
 
 namespace Calligra
 {
@@ -46,7 +47,7 @@ public:
     bool shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell);
     virtual bool shouldBeChecked(Selection *, const Cell &) { return false; }
     virtual void updateOnChange(Selection *, const Cell & /*activeCell*/) {}
-    void trigger();
+    virtual void trigger();
     /** For actions that need access to the cell tool, which isn't yet constructed fully in the constructor. */
     virtual void init() {};
 protected Q_SLOTS:
@@ -78,6 +79,7 @@ public:
     virtual ~ToggleableCellAction();
 
     virtual bool shouldBeChecked(Selection *selection, const Cell &activeCell) override;
+    virtual void trigger() override;
 protected Q_SLOTS:
 
     void triggered(bool enabled);
@@ -90,6 +92,8 @@ protected:
     virtual QAction *createAction() override;
 
     virtual bool checkedForSelection(Selection *selection, const Cell &activeCell);
+
+    KToggleAction *m_toggleAction;
 };
 
 
