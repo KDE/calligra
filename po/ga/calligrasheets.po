@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kspread.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -741,10 +741,9 @@ msgstr "Filleann CARX(12;1.5707) é seo: 0.00115592"
 msgid "CARX(12;0) returns 12"
 msgstr "Filleann CARX(12;0) é seo: 12"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "Luach"
@@ -850,7 +849,7 @@ msgstr "Uimhir"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -905,7 +904,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Filleann ARABIC(\"XCIX\") é seo: 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Bunachar Sonraí"
@@ -4154,7 +4153,6 @@ msgstr ""
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "Filleann IPMT(0.1;3;3;8000) é seo: -292.45"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4162,7 +4160,7 @@ msgstr "Filleann IPMT(0.1;3;3;8000) é seo: -292.45"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr "Luachanna"
@@ -5550,8 +5548,7 @@ msgstr "Filleann NOT(false) é seo: True"
 msgid "NOT(true) returns False"
 msgstr "Filleann NOT(true) é seo: False"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "Coinníoll"
@@ -5634,9 +5631,7 @@ msgstr ""
 msgid "Math"
 msgstr "Matamaitic"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "Feidhm"
@@ -12330,51 +12325,35 @@ msgstr "Ar Chlé"
 msgid "Down, First Column"
 msgstr "Síos, An Chéad Cholún"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Neamhní"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Suim"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Íos"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Uas"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Meán"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Líon"
@@ -13289,7 +13268,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Athraigh Dath an Téacs"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13297,347 +13276,245 @@ msgstr "Athraigh Dath an Chúlra"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Athraigh an Imlíne"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "Formáid Cille..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Formáid Cille"
 
-#: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Select a new border color"
-msgstr "Roghnaigh dath nua na himlíne"
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "Dath na hImlíne"
-
-#: ui/CellToolBase.cpp:173
-#, kde-format
-msgid "Set the background color"
-msgstr "Socraigh dath an chúlra"
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "Dath an Chúlra"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Clear All"
 msgstr "Glan Gach Rud"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Removes the cells from the spreadsheet"
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Bain na cealla as an scarbhileog"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "Ábhar"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Clear Contents"
 msgstr "Glan an tInneachar"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Removes the cells from the spreadsheet"
 msgid "Remove the contents of the current cell"
 msgstr "Bain na cealla as an scarbhileog"
 
-#: ui/CellToolBase.cpp:192
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Conditional Styles..."
-msgstr "Stíleanna Coinníollacha"
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr ""
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr "Stíleanna Coinníollacha"
-
-#: ui/CellToolBase.cpp:198
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Remove Conditional Styles"
-msgstr "Stíleanna Coinníollacha"
-
-#: ui/CellToolBase.cpp:199
-#, fuzzy, kde-format
-#| msgid "Remove the active sheet"
-msgid "Remove the conditional cell styles"
-msgstr "Bain an bhileog reatha"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "&Auto-Filter"
 msgstr "Scagaire"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "&Function..."
 msgstr "&Feidhm..."
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert math expression"
 msgstr "Ionsáigh slonn matamaiticiúil"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "From &Database..."
 msgstr "Ó &Bhunachar Sonraí..."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Ionsáigh sonraí ó bhunachar sonraí SQL"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Liostaí Saincheaptha..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Cuardach i dtreo &Sprice..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:235
-#, fuzzy, kde-format
-#| msgid "Subtotals"
-msgid "&Pivot Tables..."
-msgstr "Fo-Iomláin"
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr ""
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Glan Roghnúchán"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Insert a function"
 msgstr "Ionsáigh feidhm"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, kde-format
 msgid "Others..."
 msgstr "Eile..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Modify Cell"
 msgstr "Athraigh Cill"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Cuir an chill aibhsithe in eagar"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Move the cell object to the clipboard"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Special Paste..."
 msgstr "Greamú Speisialta..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Greamú le hIonsá"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 #| msgid "Insert a blank cell into the spreadsheet"
 msgid "Selects all cells in the current sheet"
 msgstr "Ionsáigh cill bhán isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Check the spelling"
 msgstr "Seiceáil an litriú"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Taispeáin QTableView..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "Auto-Format..."
 msgstr "UathFhormáidigh..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Formáid Cille"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, kde-format
 msgid "Document Settings..."
 msgstr "Socruithe na Cáipéise..."
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Taispeáin dialóg socruithe na cáipéise"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Cosaint"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Cosaint"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Glan Téacs"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1266
-#, fuzzy, kde-format
-#| msgid "Select Multiple Cells"
-msgid "You must select multiple cells."
-msgstr "Roghnaigh Níos Mó Ná Cill Amháin"
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Ionadaigh"
 
-#: ui/CellToolBase_p.cpp:471
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "Formáid Uimhreacha"
-
-#: ui/CellToolBase_p.cpp:477
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "Formáid Airgeadra"
-
-#: ui/CellToolBase_p.cpp:482
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "Formáid na Sonraí"
-
-#: ui/CellToolBase_p.cpp:487
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "Formáid Ama"
-
-#: ui/CellToolBase_p.cpp:492
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "Formáid an Dáta"
-
-#: ui/CellToolBase_p.cpp:497
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "Eolaíoch"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, kde-format
 msgid "Selection List..."
 msgstr "Liosta Roghnúchán..."
@@ -13896,12 +13773,6 @@ msgstr "Scagaire"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "UathFhormáidigh"
-
-#: ui/commands/BorderColorCommand.cpp:20
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "Athraigh Dath na hImlíne"
 
 #: ui/commands/ConditionCommand.cpp:30
 #, fuzzy
@@ -14195,103 +14066,6 @@ msgstr "Ní féidir íomhá %1 a aimsiú."
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Ní féidir íomhá %1 a aimsiú."
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<neamhní>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "cothrom le"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "níos mó ná"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "níos lú ná"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "greater than"
-msgid "equal to or greater than"
-msgstr "níos mó ná"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "less than"
-msgid "equal to or less than"
-msgstr "níos lú ná"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "idir"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, fuzzy, kde-format
-msgid "outside range"
-msgstr "Raon cille"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, kde-format
-msgid "First Condition"
-msgstr "An Chéad Choinníoll"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, kde-format
-msgid "Second Condition"
-msgstr "An Dara Choinníoll"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, kde-format
-msgid "Third Condition"
-msgstr "An Tríú Choinníoll"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, fuzzy, kde-format
-#| msgid "Cells:"
-msgid "Cell is"
-msgstr "Cealla:"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, fuzzy, kde-format
-#| msgid "All Styles"
-msgid "Cell style"
-msgstr "Gach Stíl"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
 msgid "Insert Data From Database"
@@ -14359,8 +14133,7 @@ msgstr "Roghnaigh colúin:"
 msgid "Table"
 msgstr "Tábla"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "Colúin"
@@ -14432,16 +14205,12 @@ msgstr "níos lú ná nó cothrom le"
 msgid "Sorted by"
 msgstr "Sórtáilte de réir"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "Ag dul suas"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "Ag dul síos"
@@ -14825,8 +14594,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "Gnách"
@@ -15441,214 +15209,6 @@ msgstr "Bog faoi dheis"
 msgid "Move towards bottom"
 msgstr "Bog faoi dheis"
 
-#: ui/dialogs/pivot.cpp:31
-#, fuzzy, kde-format
-#| msgid "Select Character"
-msgid "Select Source"
-msgstr "Roghnaigh Carachtar"
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, fuzzy, kde-format
-#| msgid "Clear Selection"
-msgid "Current Selection"
-msgstr "Glan Roghnúchán"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, fuzzy, kde-format
-#| msgid "&External Data"
-msgid "External Source"
-msgstr "Sonraí S&eachtracha"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Operator"
-msgstr "Oibríocht"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, fuzzy, kde-format
-#| msgid "Add"
-msgid "And"
-msgstr "Cuir Leis"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, fuzzy, kde-format
-#| msgid "Yield"
-msgid "Field"
-msgstr "Toradh"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:53
-#, fuzzy, kde-format
-#| msgid "Filter"
-msgid "Add Filter"
-msgstr "Scagaire"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, fuzzy, kde-format
-#| msgid "TextLabel"
-msgid "Labels"
-msgstr "Lipéad"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, fuzzy, kde-format
-#| msgid "Text Functions"
-msgid "Select Option"
-msgstr "Feidhmeanna Téacs"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, fuzzy, kde-format
-#| msgid "Sum"
-msgid "sum"
-msgstr "Suim"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, fuzzy, kde-format
-#| msgid "Average"
-msgid "average"
-msgstr "Meán"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Max"
-msgid "max"
-msgstr "Uas"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, fuzzy, kde-format
-#| msgid "min"
-msgctxt "minimum"
-msgid "min"
-msgstr "nóiméad"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, fuzzy, kde-format
-#| msgid "Count"
-msgid "count"
-msgstr "Líon"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, fuzzy, kde-format
-#| msgid "Sort &Rows"
-msgid "Total Rows"
-msgstr "Sórtáil &Rónna"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, fuzzy, kde-format
-#| msgid "Sort &Columns"
-msgid "Total Columns"
-msgstr "Sórtáil &Colúin"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr "Rónna"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, fuzzy, kde-format
-#| msgid "Bit Operations"
-msgid "Pivot Options"
-msgstr "Oibríocht Giotán"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, fuzzy, kde-format
-#| msgid "Value"
-msgid "Value Type"
-msgstr "Luach"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, fuzzy, kde-format
-#| msgid "Yield"
-msgid "Base Field"
-msgstr "Toradh"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, fuzzy, kde-format
-#| msgid "Item"
-msgid "Base Item"
-msgstr "Mír"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, fuzzy, kde-format
-msgid "Manual Selection"
-msgstr "Glan Roghnúchán"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "Iolrach"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, kde-format
-msgid "Sort By"
-msgstr "Sórtáil De Réir"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16000,6 +15560,243 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Oscail an Nasc?"
+
+#~ msgid "Select a new border color"
+#~ msgstr "Roghnaigh dath nua na himlíne"
+
+#~ msgid "Border Color"
+#~ msgstr "Dath na hImlíne"
+
+#~ msgid "Set the background color"
+#~ msgstr "Socraigh dath an chúlra"
+
+#~ msgid "Background Color"
+#~ msgstr "Dath an Chúlra"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Conditional Styles..."
+#~ msgstr "Stíleanna Coinníollacha"
+
+#~ msgid "Conditional Styles"
+#~ msgstr "Stíleanna Coinníollacha"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "Stíleanna Coinníollacha"
+
+#, fuzzy
+#~| msgid "Remove the active sheet"
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "Bain an bhileog reatha"
+
+#, fuzzy
+#~| msgid "Subtotals"
+#~ msgid "&Pivot Tables..."
+#~ msgstr "Fo-Iomláin"
+
+#, fuzzy
+#~| msgid "Select Multiple Cells"
+#~ msgid "You must select multiple cells."
+#~ msgstr "Roghnaigh Níos Mó Ná Cill Amháin"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "Formáid Uimhreacha"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "Formáid Airgeadra"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "Formáid na Sonraí"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "Formáid Ama"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "Formáid an Dáta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "Eolaíoch"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "Athraigh Dath na hImlíne"
+
+#~ msgid "<none>"
+#~ msgstr "<neamhní>"
+
+#~ msgid "equal to"
+#~ msgstr "cothrom le"
+
+#~ msgid "greater than"
+#~ msgstr "níos mó ná"
+
+#~ msgid "less than"
+#~ msgstr "níos lú ná"
+
+#, fuzzy
+#~| msgid "greater than"
+#~ msgid "equal to or greater than"
+#~ msgstr "níos mó ná"
+
+#, fuzzy
+#~| msgid "less than"
+#~ msgid "equal to or less than"
+#~ msgstr "níos lú ná"
+
+#~ msgid "between"
+#~ msgstr "idir"
+
+#, fuzzy
+#~ msgid "outside range"
+#~ msgstr "Raon cille"
+
+#~ msgid "First Condition"
+#~ msgstr "An Chéad Choinníoll"
+
+#~ msgid "Second Condition"
+#~ msgstr "An Dara Choinníoll"
+
+#~ msgid "Third Condition"
+#~ msgstr "An Tríú Choinníoll"
+
+#, fuzzy
+#~| msgid "Cells:"
+#~ msgid "Cell is"
+#~ msgstr "Cealla:"
+
+#, fuzzy
+#~| msgid "All Styles"
+#~ msgid "Cell style"
+#~ msgstr "Gach Stíl"
+
+#, fuzzy
+#~| msgid "Select Character"
+#~ msgid "Select Source"
+#~ msgstr "Roghnaigh Carachtar"
+
+#, fuzzy
+#~| msgid "Clear Selection"
+#~ msgid "Current Selection"
+#~ msgstr "Glan Roghnúchán"
+
+#, fuzzy
+#~| msgid "&External Data"
+#~ msgid "External Source"
+#~ msgstr "Sonraí S&eachtracha"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Operator"
+#~ msgstr "Oibríocht"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgid "And"
+#~ msgstr "Cuir Leis"
+
+#, fuzzy
+#~| msgid "Yield"
+#~ msgid "Field"
+#~ msgstr "Toradh"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgid "Add Filter"
+#~ msgstr "Scagaire"
+
+#, fuzzy
+#~| msgid "TextLabel"
+#~ msgid "Labels"
+#~ msgstr "Lipéad"
+
+#, fuzzy
+#~| msgid "Text Functions"
+#~ msgid "Select Option"
+#~ msgstr "Feidhmeanna Téacs"
+
+#, fuzzy
+#~| msgid "Sum"
+#~ msgid "sum"
+#~ msgstr "Suim"
+
+#, fuzzy
+#~| msgid "Average"
+#~ msgid "average"
+#~ msgstr "Meán"
+
+#, fuzzy
+#~| msgid "Max"
+#~ msgid "max"
+#~ msgstr "Uas"
+
+#, fuzzy
+#~| msgid "min"
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "nóiméad"
+
+#, fuzzy
+#~| msgid "Count"
+#~ msgid "count"
+#~ msgstr "Líon"
+
+#, fuzzy
+#~| msgid "Sort &Rows"
+#~ msgid "Total Rows"
+#~ msgstr "Sórtáil &Rónna"
+
+#, fuzzy
+#~| msgid "Sort &Columns"
+#~ msgid "Total Columns"
+#~ msgstr "Sórtáil &Colúin"
+
+#~ msgid "Rows"
+#~ msgstr "Rónna"
+
+#, fuzzy
+#~| msgid "Bit Operations"
+#~ msgid "Pivot Options"
+#~ msgstr "Oibríocht Giotán"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Value Type"
+#~ msgstr "Luach"
+
+#, fuzzy
+#~| msgid "Yield"
+#~ msgid "Base Field"
+#~ msgstr "Toradh"
+
+#, fuzzy
+#~| msgid "Item"
+#~ msgid "Base Item"
+#~ msgstr "Mír"
+
+#, fuzzy
+#~ msgid "Manual Selection"
+#~ msgstr "Glan Roghnúchán"
+
+#~ msgid "Product"
+#~ msgstr "Iolrach"
+
+#~ msgid "Sort By"
+#~ msgstr "Sórtáil De Réir"
 
 #~ msgid "Select Font..."
 #~ msgstr "Roghnaigh Cló..."

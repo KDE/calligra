@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2023-01-04 12:01+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -801,10 +801,9 @@ msgstr "Η CARX(12;1.5707) επιστρέφει 0.00115592"
 msgid "CARX(12;0) returns 12"
 msgstr "Η CARX(12;0) επιστρέφει 12"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "Τιμή"
@@ -914,7 +913,7 @@ msgstr "Αριθμός"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -973,7 +972,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") επιστρέφει 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Βάση δεδομένων"
@@ -4575,7 +4574,6 @@ msgstr "IPMT(επιτόκιο; περίοδος; ΑριθμΠερ; ΠΑ; ΜΑ; �
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "IPMT(0.1;3;3;8000) ισούται με -292.45"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4583,7 +4581,7 @@ msgstr "IPMT(0.1;3;3;8000) ισούται με -292.45"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr "Τιμές"
@@ -6164,8 +6162,7 @@ msgstr "NOT(false) επιστρέφει True"
 msgid "NOT(true) returns False"
 msgstr "NOT(true) επιστρέφει False"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "Συνθήκη"
@@ -6259,9 +6256,7 @@ msgstr ""
 msgid "Math"
 msgstr "Μαθηματικά"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "Συνάρτηση"
@@ -13609,51 +13604,35 @@ msgstr "Αριστερά"
 msgid "Down, First Column"
 msgstr "Κάτω, πρώτη στήλη"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Κανένα"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Άθροισμα"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Ελάχιστο"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Μέγιστο"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Μέσος όρος"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Αριθμός"
@@ -14576,284 +14555,228 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Τροποποίηση χρώματος κειμένου"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Τροποποίηση χρώματος φόντου"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Τροποποίηση περιγράμματος"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "Μορφή κελιού..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Ορισμός μορφοποίησης του κελιού"
 
-#: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Select a new border color"
-msgstr "Επιλογή ενός νέου χρώματος περιγράμματος"
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "Χρώμα περιγράμματος"
-
-#: ui/CellToolBase.cpp:173
-#, kde-format
-msgid "Set the background color"
-msgstr "Ορισμός του χρώματος φόντου"
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "Χρώμα φόντου"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Clear All"
 msgstr "Καθαρισμός όλων"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Καθαρισμός όλων των περιεχομένων και μορφοποίησης του τρέχοντος κελιού"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "Περιεχόμενα"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Clear Contents"
 msgstr "Καθαρισμός περιεχομένων"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Αφαίρεση των περιεχομένων του τρέχοντος κελιού"
 
-#: ui/CellToolBase.cpp:192
-#, kde-format
-msgid "Conditional Styles..."
-msgstr "Υπό συνθήκη στιλ..."
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr "Ορισμός στιλ του κελιού βασισμένο σε διάφορες συνθήκες"
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr "Υπό συνθήκη στιλ"
-
-#: ui/CellToolBase.cpp:198
-#, kde-format
-msgid "Remove Conditional Styles"
-msgstr "Αφαίρεση των υπό συνθήκη στιλ"
-
-#: ui/CellToolBase.cpp:199
-#, kde-format
-msgid "Remove the conditional cell styles"
-msgstr "Αφαίρεση των υπό συνθήκη στιλ κελιών"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Αυτόματο φίλτρο"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Προσθήκη ενός αυτόματου φίλτρο σε ένα εύρος κελιών"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "&Function..."
 msgstr "&Συνάρτηση..."
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert math expression"
 msgstr "Εισαγωγή μαθηματικής έκφρασης"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "From &Database..."
 msgstr "Από &βάση δεδομένων..."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Εισαγωγή δεδομένων από μια βάση δεδομένων SQL"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Προσαρμοσμένες λίστες..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Δημιουργία προσαρμοσμένων λιστών για ταξινόμηση ή αυτόματη συμπλήρωση"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Αναζήτηση &στόχου..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Επανάληψη υπολογισμού για την εύρεση μιας συγκεκριμένης τιμής"
 
-#: ui/CellToolBase.cpp:235
-#, kde-format
-msgid "&Pivot Tables..."
-msgstr "Συγκεντρωτικοί (&pivot) πίνακες..."
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr "Δημιουργία συγκεντρωτικών πινάκων"
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Formula Selection"
 msgstr "Επιλογή μαθηματικού τύπου"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Insert a function"
 msgstr "Εισαγωγή μιας συνάρτησης"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, kde-format
 msgid "Others..."
 msgstr "Άλλες..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Modify Cell"
 msgstr "Τροποποίηση κελιού"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Επεξεργασία του τονισμένου κελιού"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Μετακίνηση του αντικειμένου του κελιού στο πρόχειρο"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Αντιγραφή του αντικειμένου του κελιού στο πρόχειρο"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Επικόλληση των περιεχομένων του προχείρου στο δρομέα"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Special Paste..."
 msgstr "Ειδική επικόλληση..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Επικόλληση των περιεχομένων του προχείρου με ειδικές επιλογές"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Επικόλληση με εισαγωγή"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Εισάγει ένα κελί από το πρόχειρο στο φύλλο εργασίας"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Επιλογή όλων των κελιών στο τρέχον φύλλο εργασίας"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Check the spelling"
 msgstr "Ορθογραφικός έλεγχος"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Εκτέλεση επιθεωρητή..."
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Εμφάνιση QTableView..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Αυτόματη μορφοποίηση..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Καθορισμός της μορφοποίησης του φύλλου εργασίας"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, kde-format
 msgid "Document Settings..."
 msgstr "Ρυθμίσεις εγγράφου..."
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Εμφάνιση διαλόγου ρυθμίσεων εγγράφου"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Μετάθεση σταθερού σημείου αναφοράς"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, kde-format
 msgid "Permute fixation"
 msgstr "Μετάθεση σταθερού σημείου"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Μετάθεση του σταθερού σημείου αναφοράς στο δρομέα κειμένου"
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Αδυναμία εντοπισμού ενέργειας %1"
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Καθαρισμός κειμένου"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14862,47 +14785,12 @@ msgstr ""
 "Δεν υπάρχουν διαθέσιμοι οδηγοί βάσης δεδομένων. Πρέπει να εγκαταστήσετε τους "
 "απαραίτητους οδηγούς βάσης δεδομένων της Qt."
 
-#: ui/CellToolBase.cpp:1266
-#, kde-format
-msgid "You must select multiple cells."
-msgstr "Πρέπει να επιλέξετε πολλαπλά κελιά."
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: ui/CellToolBase_p.cpp:471
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "Μορφή αριθμού"
-
-#: ui/CellToolBase_p.cpp:477
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "Μορφή νομίσματος"
-
-#: ui/CellToolBase_p.cpp:482
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "Μορφή ποσοστού"
-
-#: ui/CellToolBase_p.cpp:487
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "Μορφή ώρας"
-
-#: ui/CellToolBase_p.cpp:492
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "Μορφή ημερομηνίας"
-
-#: ui/CellToolBase_p.cpp:497
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "Επιστημονική μορφή"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, kde-format
 msgid "Selection List..."
 msgstr "Λίστα επιλογής..."
@@ -15158,11 +15046,6 @@ msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Αυτόματη διαμόρφωση"
 
-#: ui/commands/BorderColorCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "Αλλαγή χρώματος περιγράμματος"
-
 #: ui/commands/ConditionCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove Conditional Formatting"
@@ -15402,103 +15285,6 @@ msgstr "Αδυναμία εύρεσης του αρχείου XML στιλ φύ�
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Σφάλμα ανάλυσης στο αρχείο XML στιλ φύλλο %1."
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<κανένα>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "ίσο με"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "μεγαλύτερο από"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "μικρότερο από"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, kde-format
-msgid "equal to or greater than"
-msgstr "ίσο με ή μεγαλύτερο από"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, kde-format
-msgid "equal to or less than"
-msgstr "ίσο με ή μικρότερο από"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "ανάμεσα σε"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, kde-format
-msgid "outside range"
-msgstr "εκτός εύρους"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr "διαφορετικό από"
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, kde-format
-msgid "First Condition"
-msgstr "Πρώτη συνθήκη"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, kde-format
-msgid "Second Condition"
-msgstr "Δεύτερη συνθήκη"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, kde-format
-msgid "Third Condition"
-msgstr "Τρίτη συνθήκη"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, kde-format
-msgid "Cell is"
-msgstr "Το κελί είναι"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, kde-format
-msgid "Cell style"
-msgstr "Στιλ κελιού"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr "διαφορετικό από"
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr ""
-"Αν η πρώτη τιμή είναι ένας αριθμός, η δεύτερη τιμή πρέπει επίσης να είναι "
-"ένας αριθμός."
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-"Αν η πρώτη τιμή είναι μια συμβολοσειρά, η δεύτερη τιμή πρέπει επίσης να "
-"είναι μια συμβολοσειρά."
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
 msgid "Insert Data From Database"
@@ -15566,8 +15352,7 @@ msgstr "Επιλογή στηλών:"
 msgid "Table"
 msgstr "Πίνακας"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "Στήλες"
@@ -15639,16 +15424,12 @@ msgstr "μικρότερο ή ίσο"
 msgid "Sorted by"
 msgstr "Ταξινόμηση κατά"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "Αύξουσα"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "Φθίνουσα"
@@ -16040,8 +15821,7 @@ msgstr ""
 "επιλεγμένων κελιών σε έντονο."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "Κανονικό"
@@ -16744,194 +16524,6 @@ msgstr "Μετακίνηση προς τα δεξιά"
 msgid "Move towards bottom"
 msgstr "Μετακίνηση προς τα κάτω"
 
-#: ui/dialogs/pivot.cpp:31
-#, kde-format
-msgid "Select Source"
-msgstr "Επιλογή πηγής"
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, kde-format
-msgid "Current Selection"
-msgstr "Τρέχουσα επιλογή"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, kde-format
-msgid "External Source"
-msgstr "Εξωτερική πηγή"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, kde-format
-msgid "Operator"
-msgstr "Χειριστής"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, kde-format
-msgid "And"
-msgstr "Και"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr "Ή"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, kde-format
-msgid "Field"
-msgstr "Πεδίο"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr "=="
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr "!="
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr "Παράθυρο διαμόρφωσης συγκεντρωτικών πινάκων"
-
-#: ui/dialogs/pivotmain.cpp:53
-#, kde-format
-msgid "Add Filter"
-msgstr "Προσθήκη φίλτρου"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr "Ανακτήστε από ετικέτες και αποθέστε στο επιθυμητό πεδίο"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, kde-format
-msgid "Labels"
-msgstr "Ετικέτες"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, kde-format
-msgid "Select Option"
-msgstr "Επιλογή"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, kde-format
-msgid "sum"
-msgstr "άθροισμα"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, kde-format
-msgid "average"
-msgstr "μέσος όρος"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, kde-format
-msgid "max"
-msgstr "μέγιστο"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, kde-format
-msgctxt "minimum"
-msgid "min"
-msgstr "λεπτά"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, kde-format
-msgid "count"
-msgstr "πλήθος"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, kde-format
-msgid "Total Rows"
-msgstr "Σύνολο γραμμών"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, kde-format
-msgid "Total Columns"
-msgstr "Σύνολο στηλών"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr "Γραμμές"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, kde-format
-msgid "Pivot Options"
-msgstr "Επιλογές συγκεντρωτικών (pivot)"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, kde-format
-msgid "Value Type"
-msgstr "Τύπος τιμής"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, kde-format
-msgid "Base Field"
-msgstr "Βασικό πεδίο"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, kde-format
-msgid "Base Item"
-msgstr "Βασικό αντικείμενο"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, kde-format
-msgid "Manual Selection"
-msgstr "Χειροκίνητη επιλογή"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "Γινόμενο"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, kde-format
-msgid "Sort By"
-msgstr "Ταξινόμηση κατά"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -17336,6 +16928,221 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Άνοιγμα δεσμού;"
+
+#~ msgid "Select a new border color"
+#~ msgstr "Επιλογή ενός νέου χρώματος περιγράμματος"
+
+#~ msgid "Border Color"
+#~ msgstr "Χρώμα περιγράμματος"
+
+#~ msgid "Set the background color"
+#~ msgstr "Ορισμός του χρώματος φόντου"
+
+#~ msgid "Background Color"
+#~ msgstr "Χρώμα φόντου"
+
+#~ msgid "Conditional Styles..."
+#~ msgstr "Υπό συνθήκη στιλ..."
+
+#~ msgid "Set cell style based on certain conditions"
+#~ msgstr "Ορισμός στιλ του κελιού βασισμένο σε διάφορες συνθήκες"
+
+#~ msgid "Conditional Styles"
+#~ msgstr "Υπό συνθήκη στιλ"
+
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "Αφαίρεση των υπό συνθήκη στιλ"
+
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "Αφαίρεση των υπό συνθήκη στιλ κελιών"
+
+#~ msgid "&Pivot Tables..."
+#~ msgstr "Συγκεντρωτικοί (&pivot) πίνακες..."
+
+#~ msgid "Create Pivot Tables"
+#~ msgstr "Δημιουργία συγκεντρωτικών πινάκων"
+
+#~ msgid "You must select multiple cells."
+#~ msgstr "Πρέπει να επιλέξετε πολλαπλά κελιά."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "Μορφή αριθμού"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "Μορφή νομίσματος"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "Μορφή ποσοστού"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "Μορφή ώρας"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "Μορφή ημερομηνίας"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "Επιστημονική μορφή"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "Αλλαγή χρώματος περιγράμματος"
+
+#~ msgid "<none>"
+#~ msgstr "<κανένα>"
+
+#~ msgid "equal to"
+#~ msgstr "ίσο με"
+
+#~ msgid "greater than"
+#~ msgstr "μεγαλύτερο από"
+
+#~ msgid "less than"
+#~ msgstr "μικρότερο από"
+
+#~ msgid "equal to or greater than"
+#~ msgstr "ίσο με ή μεγαλύτερο από"
+
+#~ msgid "equal to or less than"
+#~ msgstr "ίσο με ή μικρότερο από"
+
+#~ msgid "between"
+#~ msgstr "ανάμεσα σε"
+
+#~ msgid "outside range"
+#~ msgstr "εκτός εύρους"
+
+#~ msgid "different to"
+#~ msgstr "διαφορετικό από"
+
+#~ msgid "First Condition"
+#~ msgstr "Πρώτη συνθήκη"
+
+#~ msgid "Second Condition"
+#~ msgstr "Δεύτερη συνθήκη"
+
+#~ msgid "Third Condition"
+#~ msgstr "Τρίτη συνθήκη"
+
+#~ msgid "Cell is"
+#~ msgstr "Το κελί είναι"
+
+#~ msgid "Cell style"
+#~ msgstr "Στιλ κελιού"
+
+#~ msgid "different from"
+#~ msgstr "διαφορετικό από"
+
+#~ msgid ""
+#~ "If the first value is a number, the second value also has to be a number."
+#~ msgstr ""
+#~ "Αν η πρώτη τιμή είναι ένας αριθμός, η δεύτερη τιμή πρέπει επίσης να είναι "
+#~ "ένας αριθμός."
+
+#~ msgid ""
+#~ "If the first value is a string, the second value also has to be a string."
+#~ msgstr ""
+#~ "Αν η πρώτη τιμή είναι μια συμβολοσειρά, η δεύτερη τιμή πρέπει επίσης να "
+#~ "είναι μια συμβολοσειρά."
+
+#~ msgid "Select Source"
+#~ msgstr "Επιλογή πηγής"
+
+#~ msgid "Current Selection"
+#~ msgstr "Τρέχουσα επιλογή"
+
+#~ msgid "External Source"
+#~ msgstr "Εξωτερική πηγή"
+
+#~ msgid "Operator"
+#~ msgstr "Χειριστής"
+
+#~ msgid "And"
+#~ msgstr "Και"
+
+#~ msgid "Or"
+#~ msgstr "Ή"
+
+#~ msgid "Field"
+#~ msgstr "Πεδίο"
+
+#~ msgid "<"
+#~ msgstr "<"
+
+#~ msgid ">"
+#~ msgstr ">"
+
+#~ msgid "=="
+#~ msgstr "=="
+
+#~ msgid "!="
+#~ msgstr "!="
+
+#~ msgid "Pivot Table Configuration Window"
+#~ msgstr "Παράθυρο διαμόρφωσης συγκεντρωτικών πινάκων"
+
+#~ msgid "Add Filter"
+#~ msgstr "Προσθήκη φίλτρου"
+
+#~ msgid "Drag from Labels and drop in the desired field"
+#~ msgstr "Ανακτήστε από ετικέτες και αποθέστε στο επιθυμητό πεδίο"
+
+#~ msgid "Labels"
+#~ msgstr "Ετικέτες"
+
+#~ msgid "Select Option"
+#~ msgstr "Επιλογή"
+
+#~ msgid "sum"
+#~ msgstr "άθροισμα"
+
+#~ msgid "average"
+#~ msgstr "μέσος όρος"
+
+#~ msgid "max"
+#~ msgstr "μέγιστο"
+
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "λεπτά"
+
+#~ msgid "count"
+#~ msgstr "πλήθος"
+
+#~ msgid "Total Rows"
+#~ msgstr "Σύνολο γραμμών"
+
+#~ msgid "Total Columns"
+#~ msgstr "Σύνολο στηλών"
+
+#~ msgid "Rows"
+#~ msgstr "Γραμμές"
+
+#~ msgid "Pivot Options"
+#~ msgstr "Επιλογές συγκεντρωτικών (pivot)"
+
+#~ msgid "Value Type"
+#~ msgstr "Τύπος τιμής"
+
+#~ msgid "Base Field"
+#~ msgstr "Βασικό πεδίο"
+
+#~ msgid "Base Item"
+#~ msgstr "Βασικό αντικείμενο"
+
+#~ msgid "Manual Selection"
+#~ msgstr "Χειροκίνητη επιλογή"
+
+#~ msgid "Product"
+#~ msgstr "Γινόμενο"
+
+#~ msgid "Sort By"
+#~ msgstr "Ταξινόμηση κατά"
 
 #~ msgid "Select Font..."
 #~ msgstr "Επιλογή γραμματοσειράς..."

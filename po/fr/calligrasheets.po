@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2022-11-13 19:53+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -816,10 +816,9 @@ msgstr "CARX (12 ; 1,5707) renvoie 0,00115592"
 msgid "CARX(12;0) returns 12"
 msgstr "CARX (12 ; 0) renvoie 12"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "Valeur"
@@ -929,7 +928,7 @@ msgstr "Nombre"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -987,7 +986,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC (« XCIX ») renvoie 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Base de données"
@@ -4577,7 +4576,6 @@ msgstr ""
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "La fonction IPMT (0,1  ; 3  ; 3  ; 8000) renvoie -292,45"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4585,7 +4583,7 @@ msgstr "La fonction IPMT (0,1  ; 3  ; 3  ; 8000) renvoie -292,45"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr "Valeurs"
@@ -6176,8 +6174,7 @@ msgstr "La fonction NOT (« faux ») renvoie « vrai »"
 msgid "NOT(true) returns False"
 msgstr "La fonction NOT (« vrai ») renvoie « faux »"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "Condition"
@@ -6271,9 +6268,7 @@ msgstr ""
 msgid "Math"
 msgstr "Maths"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "Fonction"
@@ -13676,51 +13671,35 @@ msgstr "Gauche"
 msgid "Down, First Column"
 msgstr "En bas, première colonne"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Aucun"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Somme"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Max"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Moyenne"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Compte"
@@ -14645,285 +14624,229 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Changer la couleur du texte"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Changer la couleur du fond"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Changer la bordure"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "Format de cellule..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Définir le format de la cellule"
 
-#: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Select a new border color"
-msgstr "Choisie une nouvelle couleur de bordure"
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "Couleur de la bordure"
-
-#: ui/CellToolBase.cpp:173
-#, kde-format
-msgid "Set the background color"
-msgstr "Définir la couleur du fond"
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "Couleur du fond"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Clear All"
 msgstr "Tout effacer"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Effacer tout le contenu et le formatage de la cellule courante"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "Contenus"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Clear Contents"
 msgstr "Effacer les contenus"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Supprimer le contenu de la cellule courante"
 
-#: ui/CellToolBase.cpp:192
-#, kde-format
-msgid "Conditional Styles..."
-msgstr "Styles conditionnels..."
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr "Déterminer le style de la cellule selon certaines conditions"
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr "Styles conditionnels"
-
-#: ui/CellToolBase.cpp:198
-#, kde-format
-msgid "Remove Conditional Styles"
-msgstr "Supprimer des styles conditionnels"
-
-#: ui/CellToolBase.cpp:199
-#, kde-format
-msgid "Remove the conditional cell styles"
-msgstr "Supprimer des styles conditionnels de cellules"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Filtrage automatique"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Ajouter un filtre automatique à une plage de cellules"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "&Function..."
 msgstr "&Fonction..."
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert math expression"
 msgstr "Insérer une expression mathématique"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "From &Database..."
 msgstr "D'une &base de données..."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Insérer des données d'une base de données SQL"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Listes personnalisées..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 "Créer des listes personnalisées pour le tri ou le remplissage automatique"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Recherche de solution..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Calcul répété pour trouver une valeur spécifique"
 
-#: ui/CellToolBase.cpp:235
-#, kde-format
-msgid "&Pivot Tables..."
-msgstr "Tables de &pivot..."
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr "Créer des tables de pivot"
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Formula Selection"
 msgstr "Sélection de formule"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Insert a function"
 msgstr "Insérer une fonction"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, kde-format
 msgid "Others..."
 msgstr "Autres..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modifier la cellule"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Modifier la cellule surlignée"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Déplacer l'objet de la cellule dans le presse-papier"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Copier l'objet de la cellule dans le presse-papier"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Coller le contenu du presse-papier sous le curseur"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Special Paste..."
 msgstr "Collage spécial..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Coller le contenu du presse-papier avec des options spéciales"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Coller avec insertion"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Insère une cellule du presse-papier dans le tableur"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Sélectionne toutes les cellules dans la feuille courante"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Check the spelling"
 msgstr "Vérifier l'orthographe"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Lancer le contrôleur..."
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Afficher QTableView..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Auto-Format..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Définir le formatage de la feuille"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, kde-format
 msgid "Document Settings..."
 msgstr "Configuration du document"
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Afficher la configuration du document"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permuter la fixation des références"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permuter la fixation"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permuter la fixation de la référence au curseur"
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Impossible de trouver un emplacement %1"
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Effacer le texte"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14932,47 +14855,12 @@ msgstr ""
 "Aucun pilote de base de données disponible. L'usage de cette fonctionnalité "
 "nécessite l'installation des pilotes de base de données Qt."
 
-#: ui/CellToolBase.cpp:1266
-#, kde-format
-msgid "You must select multiple cells."
-msgstr "Vous devez sélectionner plusieurs cellules."
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Remplacer"
 
-#: ui/CellToolBase_p.cpp:471
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "Format du nombre"
-
-#: ui/CellToolBase_p.cpp:477
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "Format de monnaie"
-
-#: ui/CellToolBase_p.cpp:482
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "Format de pourcentage"
-
-#: ui/CellToolBase_p.cpp:487
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "Format d'heure"
-
-#: ui/CellToolBase_p.cpp:492
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "Format de date"
-
-#: ui/CellToolBase_p.cpp:497
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "Format scientifique"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, kde-format
 msgid "Selection List..."
 msgstr "Liste de sélections..."
@@ -15227,11 +15115,6 @@ msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Auto-Format..."
 
-#: ui/commands/BorderColorCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "Changer la couleur de la bordure"
-
 #: ui/commands/ConditionCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove Conditional Formatting"
@@ -15471,103 +15354,6 @@ msgstr "Impossible de trouver le fichier de style de feuille XML « %1 »."
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Erreur d'analyse dans le fichier « %1 » de style de feuille XML."
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<rien>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "égal à"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "plus grand que"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "plus petit que"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, kde-format
-msgid "equal to or greater than"
-msgstr "plus grand ou égal à"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, kde-format
-msgid "equal to or less than"
-msgstr "plus petit ou égal à"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "entre"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, kde-format
-msgid "outside range"
-msgstr "en dehors de la plage"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr "différent de"
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, kde-format
-msgid "First Condition"
-msgstr "Première condition"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, kde-format
-msgid "Second Condition"
-msgstr "Deuxième condition"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, kde-format
-msgid "Third Condition"
-msgstr "Troisième condition"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, kde-format
-msgid "Cell is"
-msgstr "La cellule est"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, kde-format
-msgid "Cell style"
-msgstr "Style de cellule"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr "différente de"
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr ""
-"Si la première valeur est un nombre, la seconde valeur doit aussi être un "
-"nombre."
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-"Si la première valeur est une chaîne, la seconde valeur doit aussi être une "
-"chaîne."
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
 msgid "Insert Data From Database"
@@ -15635,8 +15421,7 @@ msgstr "Sélectionner des colonnes :"
 msgid "Table"
 msgstr "Tableau"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "Colonnes"
@@ -15708,16 +15493,12 @@ msgstr "plus petit ou égal"
 msgid "Sorted by"
 msgstr "Trié par"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "Ascendant"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "Descendant"
@@ -16113,8 +15894,7 @@ msgstr ""
 "sera mis en gras."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
@@ -16814,195 +16594,6 @@ msgstr "Déplacer vers la droite"
 msgid "Move towards bottom"
 msgstr "Déplacer vers le bas"
 
-#: ui/dialogs/pivot.cpp:31
-#, kde-format
-msgid "Select Source"
-msgstr "Sélectionner la source"
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, kde-format
-msgid "Current Selection"
-msgstr "Sélection courante"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, kde-format
-msgid "External Source"
-msgstr "Source externe"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, kde-format
-msgid "Operator"
-msgstr "Opérateur"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, kde-format
-msgid "And"
-msgstr "Et"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr "Ou"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, kde-format
-msgid "Field"
-msgstr "Champ"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr "=="
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr "!="
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr "Fenêtre de configuration de la table de pivot"
-
-#: ui/dialogs/pivotmain.cpp:53
-#, kde-format
-msgid "Add Filter"
-msgstr "Ajouter un filtre"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr ""
-"Faites glisser à partir des étiquettes et déposer dans le champ souhaité"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, kde-format
-msgid "Labels"
-msgstr "Libellés"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, kde-format
-msgid "Select Option"
-msgstr "Sélectionnez une option"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, kde-format
-msgid "sum"
-msgstr "somme"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, kde-format
-msgid "average"
-msgstr "moyenne"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, kde-format
-msgid "max"
-msgstr "max"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, kde-format
-msgctxt "minimum"
-msgid "min"
-msgstr "min"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, kde-format
-msgid "count"
-msgstr "compte"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, kde-format
-msgid "Total Rows"
-msgstr "Nombre de lignes"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, kde-format
-msgid "Total Columns"
-msgstr "Nombre de colonnes"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr "Lignes"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, kde-format
-msgid "Pivot Options"
-msgstr "Options de pivot"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, kde-format
-msgid "Value Type"
-msgstr "Type de valeur"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, kde-format
-msgid "Base Field"
-msgstr "Champ de base"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, kde-format
-msgid "Base Item"
-msgstr "Élément de base"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, kde-format
-msgid "Manual Selection"
-msgstr "Sélection manuelle"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "Produit"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, kde-format
-msgid "Sort By"
-msgstr "Trier par"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -17411,6 +17002,222 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Ouvrir le lien ?"
+
+#~ msgid "Select a new border color"
+#~ msgstr "Choisie une nouvelle couleur de bordure"
+
+#~ msgid "Border Color"
+#~ msgstr "Couleur de la bordure"
+
+#~ msgid "Set the background color"
+#~ msgstr "Définir la couleur du fond"
+
+#~ msgid "Background Color"
+#~ msgstr "Couleur du fond"
+
+#~ msgid "Conditional Styles..."
+#~ msgstr "Styles conditionnels..."
+
+#~ msgid "Set cell style based on certain conditions"
+#~ msgstr "Déterminer le style de la cellule selon certaines conditions"
+
+#~ msgid "Conditional Styles"
+#~ msgstr "Styles conditionnels"
+
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "Supprimer des styles conditionnels"
+
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "Supprimer des styles conditionnels de cellules"
+
+#~ msgid "&Pivot Tables..."
+#~ msgstr "Tables de &pivot..."
+
+#~ msgid "Create Pivot Tables"
+#~ msgstr "Créer des tables de pivot"
+
+#~ msgid "You must select multiple cells."
+#~ msgstr "Vous devez sélectionner plusieurs cellules."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "Format du nombre"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "Format de monnaie"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "Format de pourcentage"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "Format d'heure"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "Format de date"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "Format scientifique"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "Changer la couleur de la bordure"
+
+#~ msgid "<none>"
+#~ msgstr "<rien>"
+
+#~ msgid "equal to"
+#~ msgstr "égal à"
+
+#~ msgid "greater than"
+#~ msgstr "plus grand que"
+
+#~ msgid "less than"
+#~ msgstr "plus petit que"
+
+#~ msgid "equal to or greater than"
+#~ msgstr "plus grand ou égal à"
+
+#~ msgid "equal to or less than"
+#~ msgstr "plus petit ou égal à"
+
+#~ msgid "between"
+#~ msgstr "entre"
+
+#~ msgid "outside range"
+#~ msgstr "en dehors de la plage"
+
+#~ msgid "different to"
+#~ msgstr "différent de"
+
+#~ msgid "First Condition"
+#~ msgstr "Première condition"
+
+#~ msgid "Second Condition"
+#~ msgstr "Deuxième condition"
+
+#~ msgid "Third Condition"
+#~ msgstr "Troisième condition"
+
+#~ msgid "Cell is"
+#~ msgstr "La cellule est"
+
+#~ msgid "Cell style"
+#~ msgstr "Style de cellule"
+
+#~ msgid "different from"
+#~ msgstr "différente de"
+
+#~ msgid ""
+#~ "If the first value is a number, the second value also has to be a number."
+#~ msgstr ""
+#~ "Si la première valeur est un nombre, la seconde valeur doit aussi être un "
+#~ "nombre."
+
+#~ msgid ""
+#~ "If the first value is a string, the second value also has to be a string."
+#~ msgstr ""
+#~ "Si la première valeur est une chaîne, la seconde valeur doit aussi être "
+#~ "une chaîne."
+
+#~ msgid "Select Source"
+#~ msgstr "Sélectionner la source"
+
+#~ msgid "Current Selection"
+#~ msgstr "Sélection courante"
+
+#~ msgid "External Source"
+#~ msgstr "Source externe"
+
+#~ msgid "Operator"
+#~ msgstr "Opérateur"
+
+#~ msgid "And"
+#~ msgstr "Et"
+
+#~ msgid "Or"
+#~ msgstr "Ou"
+
+#~ msgid "Field"
+#~ msgstr "Champ"
+
+#~ msgid "<"
+#~ msgstr "<"
+
+#~ msgid ">"
+#~ msgstr ">"
+
+#~ msgid "=="
+#~ msgstr "=="
+
+#~ msgid "!="
+#~ msgstr "!="
+
+#~ msgid "Pivot Table Configuration Window"
+#~ msgstr "Fenêtre de configuration de la table de pivot"
+
+#~ msgid "Add Filter"
+#~ msgstr "Ajouter un filtre"
+
+#~ msgid "Drag from Labels and drop in the desired field"
+#~ msgstr ""
+#~ "Faites glisser à partir des étiquettes et déposer dans le champ souhaité"
+
+#~ msgid "Labels"
+#~ msgstr "Libellés"
+
+#~ msgid "Select Option"
+#~ msgstr "Sélectionnez une option"
+
+#~ msgid "sum"
+#~ msgstr "somme"
+
+#~ msgid "average"
+#~ msgstr "moyenne"
+
+#~ msgid "max"
+#~ msgstr "max"
+
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "min"
+
+#~ msgid "count"
+#~ msgstr "compte"
+
+#~ msgid "Total Rows"
+#~ msgstr "Nombre de lignes"
+
+#~ msgid "Total Columns"
+#~ msgstr "Nombre de colonnes"
+
+#~ msgid "Rows"
+#~ msgstr "Lignes"
+
+#~ msgid "Pivot Options"
+#~ msgstr "Options de pivot"
+
+#~ msgid "Value Type"
+#~ msgstr "Type de valeur"
+
+#~ msgid "Base Field"
+#~ msgstr "Champ de base"
+
+#~ msgid "Base Item"
+#~ msgstr "Élément de base"
+
+#~ msgid "Manual Selection"
+#~ msgstr "Sélection manuelle"
+
+#~ msgid "Product"
+#~ msgstr "Produit"
+
+#~ msgid "Sort By"
+#~ msgstr "Trier par"
 
 #~ msgid "Select Font..."
 #~ msgstr "Choisir la police..."

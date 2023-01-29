@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2006-12-17 13:47+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -741,10 +741,9 @@ msgstr "Tuvalu"
 msgid "CARX(12;0) returns 12"
 msgstr "Tuvalu"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "Qiymat"
@@ -850,7 +849,7 @@ msgstr "Son"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -905,7 +904,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Tuvalu"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Maʼlumot bazasi"
@@ -4144,7 +4143,6 @@ msgstr ""
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "Qiymat"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4152,7 +4150,7 @@ msgstr "Qiymat"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, fuzzy, kde-format
 #| msgid "&Values"
 msgid "Values"
@@ -5543,8 +5541,7 @@ msgstr "Qiymat"
 msgid "NOT(true) returns False"
 msgstr "Qiymat"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, fuzzy, kde-format
 msgid "Condition"
 msgstr "Qoʻshish"
@@ -5627,9 +5624,7 @@ msgstr ""
 msgid "Math"
 msgstr "Matematika"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "Funksiya"
@@ -12349,51 +12344,35 @@ msgstr "Lt"
 msgid "Down, First Column"
 msgstr "&Ustunlarni saralash"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Yoʻq"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Yigʻindi"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Maks"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Oʻrtacha"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, fuzzy, kde-format
 msgid "Count"
 msgstr "Soni: "
@@ -13297,7 +13276,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Matnni oʻzgartirish"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -13305,339 +13284,241 @@ msgstr "Orqa fon rangi"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Chegara rangini oʻzgartirish"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "Katakning formati"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Katakning koʻrinishini moslash."
 
-#: ui/CellToolBase.cpp:163
-#, fuzzy, kde-format
-msgid "Select a new border color"
-msgstr "Yangi chegara rangini tanlash."
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "Chegara rangi"
-
-#: ui/CellToolBase.cpp:173
-#, fuzzy, kde-format
-msgid "Set the background color"
-msgstr "Orqa fon rangini koʻrsatish."
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "Orqa fon rangi"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Clear &All"
 msgid "Clear All"
 msgstr "&Hammasini tozalash"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Joriy katakning formati va tarkibini olib tashlash."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "Contents"
 msgstr "Izohlar"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Clear Contents"
 msgstr "Izohlar"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Joriy katak tarkibini olib tashlash."
 
-#: ui/CellToolBase.cpp:192
-#, fuzzy, kde-format
-#| msgid "Conditional Cell Attributes..."
-msgid "Conditional Styles..."
-msgstr "Katakning shartli atributlari..."
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr ""
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, fuzzy, kde-format
-msgid "Conditional Styles"
-msgstr "Katakning shartli atributlari..."
-
-#: ui/CellToolBase.cpp:198
-#, fuzzy, kde-format
-msgid "Remove Conditional Styles"
-msgstr "Katakning koʻrinishini moslash."
-
-#: ui/CellToolBase.cpp:199
-#, fuzzy, kde-format
-msgid "Remove the conditional cell styles"
-msgstr "Katakning koʻrinishini moslash."
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "Avto-toʻldirish"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "&Function..."
 msgstr "&Funksiya..."
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Matematik ifoda qoʻshish."
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "From &Database..."
 msgstr "&Maʼlumot bazasidan..."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Maʼlumotni SQL maʼlumotlar bazasidan qoʻyish."
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Boshqa roʻyxatlar..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Varaqni koʻrsatish..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:235
-#, fuzzy, kde-format
-msgid "&Pivot Tables..."
-msgstr "S&aralash..."
-
-#: ui/CellToolBase.cpp:238
-#, fuzzy, kde-format
-msgid "Create Pivot Tables"
-msgstr "S&aralash..."
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formula tanlash"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Funksiyani qoʻyish"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, kde-format
 msgid "Others..."
 msgstr "Boshqalar..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Modify Cell"
 msgstr "Katakni oʻzgartirish"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Tanlangan katakni tahrirlash."
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Tanlangan varaqni eng pastga koʻchirish."
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Tanlangan varaqni eng pastga koʻchirish."
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Joriy katak tarkibini olib tashlash."
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Special Paste..."
 msgstr "Maxsus qoʻyish"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Joriy katak tarkibini olib tashlash."
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Katakni qoʻyish"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Elektron jadvalga yangi satr qoʻshish."
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Joriy katak tarkibini olib tashlash."
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "Imloni tekshirish."
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Varaqni koʻrsatish..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Katakning formati"
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Katakning koʻrinishini moslash."
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Moslamalar"
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Formula panelini koʻrsatish."
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Himoyalash"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Himoyalash"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Joriy katak tarkibini olib tashlash."
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Matnni oʻzgartirish"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1266
-#, fuzzy, kde-format
-msgid "You must select multiple cells."
-msgstr "Jadvallarni tanlang:"
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Sentyabr"
 
-#: ui/CellToolBase_p.cpp:471
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "Raqam"
-
-#: ui/CellToolBase_p.cpp:477
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "Pulning koʻrinishi: %1"
-
-#: ui/CellToolBase_p.cpp:482
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "Foiz"
-
-#: ui/CellToolBase_p.cpp:487
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "Vaqtning koʻrinishi"
-
-#: ui/CellToolBase_p.cpp:492
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "Sananing koʻrinishi"
-
-#: ui/CellToolBase_p.cpp:497
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "Ilmiy"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, kde-format
 msgid "Selection List..."
 msgstr "Tanlanganning roʻyxati"
@@ -13897,12 +13778,6 @@ msgstr "Avto-toʻldirish"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Katakning formati"
-
-#: ui/commands/BorderColorCommand.cpp:20
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "Chegara rangini oʻzgartirish"
 
 #: ui/commands/ConditionCommand.cpp:30
 #, fuzzy
@@ -14210,99 +14085,6 @@ msgstr ""
 msgid "Parsing error in sheet-style XML file %1."
 msgstr ""
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<yoʻq>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "teng"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, fuzzy, kde-format
-msgid "greater than"
-msgstr "koʻproq"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, fuzzy, kde-format
-msgid "equal to or greater than"
-msgstr "koʻproq"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, fuzzy, kde-format
-msgid "equal to or less than"
-msgstr "koʻproq"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, fuzzy, kde-format
-msgid "between"
-msgstr "Shvetsiya"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, fuzzy, kde-format
-msgid "outside range"
-msgstr "Katakning koʻrinishi"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, fuzzy, kde-format
-msgid "First Condition"
-msgstr "Qoʻshish"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, fuzzy, kde-format
-msgid "Second Condition"
-msgstr "Qidirish yoʻnalishi:"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, fuzzy, kde-format
-msgid "Third Condition"
-msgstr "Qoʻshish"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Cell is"
-msgstr "Kataklar:"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, kde-format
-msgid "Cell style"
-msgstr "Katak uslubi"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
 msgid "Insert Data From Database"
@@ -14371,8 +14153,7 @@ msgstr "Ustunlarni tanlang:"
 msgid "Table"
 msgstr "Tala"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "Ustunlar"
@@ -14444,16 +14225,12 @@ msgstr "kam yoki teng"
 msgid "Sorted by"
 msgstr "Saralash"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "Koʻpayish boʻyicha"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "Kamayish boʻyicha"
@@ -14834,8 +14611,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "Oddiy"
@@ -15454,212 +15230,6 @@ msgstr "Oʻngga koʻchirish"
 msgid "Move towards bottom"
 msgstr "Pastga koʻchirish"
 
-#: ui/dialogs/pivot.cpp:31
-#, fuzzy, kde-format
-#| msgid "S&pecial Character..."
-msgid "Select Source"
-msgstr "Ma&xsus belgi..."
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, fuzzy, kde-format
-#| msgid "Sheet Selection"
-msgid "Current Selection"
-msgstr "Varaqni tanlash"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, fuzzy, kde-format
-#| msgid "&External Data"
-msgid "External Source"
-msgstr "&Tashqi maʼlumot"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Operator"
-msgstr "Amal"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, fuzzy, kde-format
-#| msgid "&Add"
-msgid "And"
-msgstr "&Qoʻshish"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, fuzzy, kde-format
-#| msgid "Riel"
-msgid "Field"
-msgstr "Riel"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:53
-#, fuzzy, kde-format
-msgid "Add Filter"
-msgstr "fayl"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, fuzzy, kde-format
-msgid "Labels"
-msgstr "Matn"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, fuzzy, kde-format
-#| msgid "Text Option"
-msgid "Select Option"
-msgstr "Matn moslamalari"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, fuzzy, kde-format
-#| msgid "Sum"
-msgid "sum"
-msgstr "Yigʻindi"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, fuzzy, kde-format
-#| msgid "Average"
-msgid "average"
-msgstr "Oʻrtacha"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Max"
-msgid "max"
-msgstr "Maks"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, fuzzy, kde-format
-#| msgid "min"
-msgctxt "minimum"
-msgid "min"
-msgstr "daqiqa"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, fuzzy, kde-format
-msgid "count"
-msgstr "Soni: "
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, fuzzy, kde-format
-#| msgid "Sort &Rows"
-msgid "Total Rows"
-msgstr "&Satrlarni saralash"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, fuzzy, kde-format
-#| msgid "Sort &Columns"
-msgid "Total Columns"
-msgstr "&Ustunlarni saralash"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, fuzzy, kde-format
-#| msgid "Row"
-msgid "Rows"
-msgstr "Satr"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Pivot Options"
-msgstr "Amal"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, fuzzy, kde-format
-#| msgid "Value"
-msgid "Value Type"
-msgstr "Qiymat"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, fuzzy, kde-format
-#| msgid "Riel"
-msgid "Base Field"
-msgstr "Riel"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, fuzzy, kde-format
-#| msgid "Bs"
-msgid "Base Item"
-msgstr "Bs"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, fuzzy, kde-format
-msgid "Manual Selection"
-msgstr "Formula tanlash"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, fuzzy, kde-format
-msgid "Sort By"
-msgstr "Saralash"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16012,6 +15582,240 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bogʻni ochishni istaysizmi?"
+
+#, fuzzy
+#~ msgid "Select a new border color"
+#~ msgstr "Yangi chegara rangini tanlash."
+
+#~ msgid "Border Color"
+#~ msgstr "Chegara rangi"
+
+#, fuzzy
+#~ msgid "Set the background color"
+#~ msgstr "Orqa fon rangini koʻrsatish."
+
+#~ msgid "Background Color"
+#~ msgstr "Orqa fon rangi"
+
+#, fuzzy
+#~| msgid "Conditional Cell Attributes..."
+#~ msgid "Conditional Styles..."
+#~ msgstr "Katakning shartli atributlari..."
+
+#, fuzzy
+#~ msgid "Conditional Styles"
+#~ msgstr "Katakning shartli atributlari..."
+
+#, fuzzy
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "Katakning koʻrinishini moslash."
+
+#, fuzzy
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "Katakning koʻrinishini moslash."
+
+#, fuzzy
+#~ msgid "&Pivot Tables..."
+#~ msgstr "S&aralash..."
+
+#, fuzzy
+#~ msgid "Create Pivot Tables"
+#~ msgstr "S&aralash..."
+
+#, fuzzy
+#~ msgid "You must select multiple cells."
+#~ msgstr "Jadvallarni tanlang:"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "Raqam"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "Pulning koʻrinishi: %1"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "Foiz"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "Vaqtning koʻrinishi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "Sananing koʻrinishi"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "Ilmiy"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "Chegara rangini oʻzgartirish"
+
+#~ msgid "<none>"
+#~ msgstr "<yoʻq>"
+
+#~ msgid "equal to"
+#~ msgstr "teng"
+
+#, fuzzy
+#~ msgid "greater than"
+#~ msgstr "koʻproq"
+
+#, fuzzy
+#~ msgid "equal to or greater than"
+#~ msgstr "koʻproq"
+
+#, fuzzy
+#~ msgid "equal to or less than"
+#~ msgstr "koʻproq"
+
+#, fuzzy
+#~ msgid "between"
+#~ msgstr "Shvetsiya"
+
+#, fuzzy
+#~ msgid "outside range"
+#~ msgstr "Katakning koʻrinishi"
+
+#, fuzzy
+#~ msgid "First Condition"
+#~ msgstr "Qoʻshish"
+
+#, fuzzy
+#~ msgid "Second Condition"
+#~ msgstr "Qidirish yoʻnalishi:"
+
+#, fuzzy
+#~ msgid "Third Condition"
+#~ msgstr "Qoʻshish"
+
+#, fuzzy
+#~ msgid "Cell is"
+#~ msgstr "Kataklar:"
+
+#~ msgid "Cell style"
+#~ msgstr "Katak uslubi"
+
+#, fuzzy
+#~| msgid "S&pecial Character..."
+#~ msgid "Select Source"
+#~ msgstr "Ma&xsus belgi..."
+
+#, fuzzy
+#~| msgid "Sheet Selection"
+#~ msgid "Current Selection"
+#~ msgstr "Varaqni tanlash"
+
+#, fuzzy
+#~| msgid "&External Data"
+#~ msgid "External Source"
+#~ msgstr "&Tashqi maʼlumot"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Operator"
+#~ msgstr "Amal"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgid "And"
+#~ msgstr "&Qoʻshish"
+
+#, fuzzy
+#~| msgid "Riel"
+#~ msgid "Field"
+#~ msgstr "Riel"
+
+#, fuzzy
+#~ msgid "Add Filter"
+#~ msgstr "fayl"
+
+#, fuzzy
+#~ msgid "Labels"
+#~ msgstr "Matn"
+
+#, fuzzy
+#~| msgid "Text Option"
+#~ msgid "Select Option"
+#~ msgstr "Matn moslamalari"
+
+#, fuzzy
+#~| msgid "Sum"
+#~ msgid "sum"
+#~ msgstr "Yigʻindi"
+
+#, fuzzy
+#~| msgid "Average"
+#~ msgid "average"
+#~ msgstr "Oʻrtacha"
+
+#, fuzzy
+#~| msgid "Max"
+#~ msgid "max"
+#~ msgstr "Maks"
+
+#, fuzzy
+#~| msgid "min"
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "daqiqa"
+
+#, fuzzy
+#~ msgid "count"
+#~ msgstr "Soni: "
+
+#, fuzzy
+#~| msgid "Sort &Rows"
+#~ msgid "Total Rows"
+#~ msgstr "&Satrlarni saralash"
+
+#, fuzzy
+#~| msgid "Sort &Columns"
+#~ msgid "Total Columns"
+#~ msgstr "&Ustunlarni saralash"
+
+#, fuzzy
+#~| msgid "Row"
+#~ msgid "Rows"
+#~ msgstr "Satr"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Pivot Options"
+#~ msgstr "Amal"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Value Type"
+#~ msgstr "Qiymat"
+
+#, fuzzy
+#~| msgid "Riel"
+#~ msgid "Base Field"
+#~ msgstr "Riel"
+
+#, fuzzy
+#~| msgid "Bs"
+#~ msgid "Base Item"
+#~ msgstr "Bs"
+
+#, fuzzy
+#~ msgid "Manual Selection"
+#~ msgstr "Formula tanlash"
+
+#, fuzzy
+#~ msgid "Sort By"
+#~ msgstr "Saralash"
 
 #~ msgid "Select Font..."
 #~ msgstr "Shriftni tanlash"

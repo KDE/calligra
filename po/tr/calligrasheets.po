@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2023-01-27 18:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -787,10 +787,9 @@ msgstr "CARX(12;1.5707) işlevi, 0,00115592 döndürür"
 msgid "CARX(12;0) returns 12"
 msgstr "CARX(12;0) işlevi, 12 döndürür"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "Değer"
@@ -901,7 +900,7 @@ msgstr "Sayı"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -959,7 +958,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") işlevi, 99 döndürür"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Veritabanı"
@@ -4477,7 +4476,6 @@ msgstr "IPMT(Oran;Dönem;Dsay;ŞD;GD;Tür)"
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "IPMT(0,1;3;3;8000) eşittir -292,45"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4485,7 +4483,7 @@ msgstr "IPMT(0,1;3;3;8000) eşittir -292,45"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr "Değerler"
@@ -6027,8 +6025,7 @@ msgstr "NOT(false), True döndürür"
 msgid "NOT(true) returns False"
 msgstr "NOT(true), False döndürür"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "Koşul"
@@ -6118,9 +6115,7 @@ msgstr ""
 msgid "Math"
 msgstr "Mat"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "İşlev"
@@ -13342,51 +13337,35 @@ msgstr "Sol"
 msgid "Down, First Column"
 msgstr "Aşağı, İlk Sütun"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Hiçbiri"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Toplam"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "En Düşük"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "En Yüksek"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Ortalama"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Sayım"
@@ -14303,284 +14282,228 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Metin Rengini Değiştir"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "Arka Plan Rengini Değiştir"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kenarlığı Değiştir"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "Hücre Biçimi..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Hücre biçimini ayarla"
 
-#: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Select a new border color"
-msgstr "Yeni bir kenarlık rengi seç"
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "Kenarlık Rengi"
-
-#: ui/CellToolBase.cpp:173
-#, kde-format
-msgid "Set the background color"
-msgstr "Arka plan rengini ayarla"
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "Arka Plan Rengi"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Clear All"
 msgstr "Tümünü Temizle"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Geçerli hücrenin tüm içeriğini ve biçimlenmesini sil"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "İçerik"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Clear Contents"
 msgstr "İçeriği Temizle"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Geçerli hücrenin içeriğini sil"
 
-#: ui/CellToolBase.cpp:192
-#, kde-format
-msgid "Conditional Styles..."
-msgstr "Koşullu Biçemler..."
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr "Hücre biçemini belirli durumlara göre değiştir"
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr "Koşullu Biçemler"
-
-#: ui/CellToolBase.cpp:198
-#, kde-format
-msgid "Remove Conditional Styles"
-msgstr "Koşullu Biçemleri Kaldır"
-
-#: ui/CellToolBase.cpp:199
-#, kde-format
-msgid "Remove the conditional cell styles"
-msgstr "Koşullu hücre biçemlerini kaldır"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Otomatik Süzme"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Bir hücre aralığına otomatik süzgeç ekle"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "&Function..."
 msgstr "&İşlev..."
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert math expression"
 msgstr "Matematiksel ifade ekle"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "From &Database..."
 msgstr "&Veritabanından..."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL veritabanından veri ekle"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Özel Listeler..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Sıralama veya otomatik tamamlama için özel liseler oluştur"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Hedef Araması..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "İşlemi kesin bir değer bulmak için tekrarlıyor"
 
-#: ui/CellToolBase.cpp:235
-#, kde-format
-msgid "&Pivot Tables..."
-msgstr "&Özet Tablolar..."
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr "Özet Tablolar Oluştur"
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formül Seçimi"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Insert a function"
 msgstr "Bir işlev ekle"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, kde-format
 msgid "Others..."
 msgstr "Diğerleri..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Modify Cell"
 msgstr "Hücreyi Düzenle"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Vurgulanmış hücreyi düzenle"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Hücre nesnesini panoya taşı"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Hücre nesnesini panoya kopyala"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Pano içeriğini imlecin olduğu yere yapıştır"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Special Paste..."
 msgstr "Özel Yapıştır..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Pano içeriğini özel seçeneklerle yapıştır"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Ekleyerek Yapıştır"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Panodan bir hücreyi hesap tablosuna ekler"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Geçerli çalışma tablosundaki tüm hücreleri seçer"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Check the spelling"
 msgstr "Yazım denetimi yap"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Denetleyiciyi Çalıştır..."
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView Ögesini Göster..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Otomatik Biçim..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Çalışma tablosu biçimini ayarla"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, kde-format
 msgid "Document Settings..."
 msgstr "Belge Ayarları..."
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Belge ayarları penceresini göster"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, kde-format
 msgid "Permute fixation"
 msgstr "Sabiti değiştir"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Metin imlecindeki başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "%1 eylemi bulunamıyor"
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Metni Temizle"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14589,47 +14512,12 @@ msgstr ""
 "Veritabanı sürücüsü bulunamadı. Bu özelliği kullanabilmeniz için Qt "
 "veritabanı sürücülerine gerek duyuluyor."
 
-#: ui/CellToolBase.cpp:1266
-#, kde-format
-msgid "You must select multiple cells."
-msgstr "Birden fazla hücre seçmelisiniz."
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Değiştir"
 
-#: ui/CellToolBase_p.cpp:471
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "Sayı Biçimi"
-
-#: ui/CellToolBase_p.cpp:477
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "Para Birimi Biçimi"
-
-#: ui/CellToolBase_p.cpp:482
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "Yüzde Biçimi"
-
-#: ui/CellToolBase_p.cpp:487
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "Saat Biçimi"
-
-#: ui/CellToolBase_p.cpp:492
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "Tarih Biçimi"
-
-#: ui/CellToolBase_p.cpp:497
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "Bilimsel Biçim"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, kde-format
 msgid "Selection List..."
 msgstr "Seçim Listesi..."
@@ -14883,11 +14771,6 @@ msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Otomatik Biçimlendirme"
 
-#: ui/commands/BorderColorCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "Kenarlık Rengini Değiştir"
-
 #: ui/commands/ConditionCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove Conditional Formatting"
@@ -15127,100 +15010,6 @@ msgstr "Sayfa biçemi XML dosyası '%1' bulunamadı."
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Sayfa biçemi XML dosyası '%1' ayrıştırma hatası."
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<hiçbiri>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "Eşit"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "daha çok"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "daha az"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, kde-format
-msgid "equal to or greater than"
-msgstr "eşit veya daha büyük"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, kde-format
-msgid "equal to or less than"
-msgstr "eşit veya daha küçük"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "arasında"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, kde-format
-msgid "outside range"
-msgstr "aralık dışında"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr "farklı"
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, kde-format
-msgid "First Condition"
-msgstr "İlk Durum"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, kde-format
-msgid "Second Condition"
-msgstr "İkinci Durum"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, kde-format
-msgid "Third Condition"
-msgstr "Üçüncü Durum"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, kde-format
-msgid "Cell is"
-msgstr "Hücre"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, kde-format
-msgid "Cell style"
-msgstr "Hücre biçemi"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr "şundan farklı"
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr "İlk değer bir sayıysa, ikinci değerinde br sayı olması gerekir."
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-"Eğer birinci değer bir dizeyse, ikinci değerin de bir dize olması gerekir."
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
 msgid "Insert Data From Database"
@@ -15288,8 +15077,7 @@ msgstr "Sütunları seçin:"
 msgid "Table"
 msgstr "Tablo"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "Sütunlar"
@@ -15361,16 +15149,12 @@ msgstr "eşit veya küçük"
 msgid "Sorted by"
 msgstr "Sıralama ölçütü"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "Artan"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "Azalan"
@@ -15761,8 +15545,7 @@ msgstr ""
 "hücrelerin yazıtipi ağırlığı Kalın olarak değiştirilir."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
@@ -16446,194 +16229,6 @@ msgstr "Sağa doğru ilerle"
 msgid "Move towards bottom"
 msgstr "Aşağı doğru ilerle"
 
-#: ui/dialogs/pivot.cpp:31
-#, kde-format
-msgid "Select Source"
-msgstr "Kaynak Seç"
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, kde-format
-msgid "Current Selection"
-msgstr "Geçerli Seçim"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, kde-format
-msgid "External Source"
-msgstr "Dış Kaynak"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, kde-format
-msgid "Operator"
-msgstr "İşleç"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, kde-format
-msgid "And"
-msgstr "Ve"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr "Veya"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, kde-format
-msgid "Field"
-msgstr "Alan"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr "=="
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr "!="
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr "Pivot Tablo Yapılandırma Penceresi"
-
-#: ui/dialogs/pivotmain.cpp:53
-#, kde-format
-msgid "Add Filter"
-msgstr "Süzgeç Ekle"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr "Etiketleri sürükleyin ve istediğiniz alana bırakın"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, kde-format
-msgid "Labels"
-msgstr "Etiketler"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, kde-format
-msgid "Select Option"
-msgstr "Seçenek Seçin"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, kde-format
-msgid "sum"
-msgstr "toplam"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, kde-format
-msgid "average"
-msgstr "ortalama"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, kde-format
-msgid "max"
-msgstr "en yüksek"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, kde-format
-msgctxt "minimum"
-msgid "min"
-msgstr "en düşük"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, kde-format
-msgid "count"
-msgstr "say"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, kde-format
-msgid "Total Rows"
-msgstr "Toplam Satırlar"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, kde-format
-msgid "Total Columns"
-msgstr "Toplam Sütunlar"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr "Satırlar"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, kde-format
-msgid "Pivot Options"
-msgstr "Pivot Seçenekleri"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, kde-format
-msgid "Value Type"
-msgstr "Değer Türü"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, kde-format
-msgid "Base Field"
-msgstr "Temel Alan"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, kde-format
-msgid "Base Item"
-msgstr "Temel Öge"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, kde-format
-msgid "Manual Selection"
-msgstr "Elle Seçim"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "Çarpım"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, kde-format
-msgid "Sort By"
-msgstr "Şuna Göre Sırala"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -17026,6 +16621,218 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bağlantıyı Aç?"
+
+#~ msgid "Select a new border color"
+#~ msgstr "Yeni bir kenarlık rengi seç"
+
+#~ msgid "Border Color"
+#~ msgstr "Kenarlık Rengi"
+
+#~ msgid "Set the background color"
+#~ msgstr "Arka plan rengini ayarla"
+
+#~ msgid "Background Color"
+#~ msgstr "Arka Plan Rengi"
+
+#~ msgid "Conditional Styles..."
+#~ msgstr "Koşullu Biçemler..."
+
+#~ msgid "Set cell style based on certain conditions"
+#~ msgstr "Hücre biçemini belirli durumlara göre değiştir"
+
+#~ msgid "Conditional Styles"
+#~ msgstr "Koşullu Biçemler"
+
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "Koşullu Biçemleri Kaldır"
+
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "Koşullu hücre biçemlerini kaldır"
+
+#~ msgid "&Pivot Tables..."
+#~ msgstr "&Özet Tablolar..."
+
+#~ msgid "Create Pivot Tables"
+#~ msgstr "Özet Tablolar Oluştur"
+
+#~ msgid "You must select multiple cells."
+#~ msgstr "Birden fazla hücre seçmelisiniz."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "Sayı Biçimi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "Para Birimi Biçimi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "Yüzde Biçimi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "Saat Biçimi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "Tarih Biçimi"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "Bilimsel Biçim"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "Kenarlık Rengini Değiştir"
+
+#~ msgid "<none>"
+#~ msgstr "<hiçbiri>"
+
+#~ msgid "equal to"
+#~ msgstr "Eşit"
+
+#~ msgid "greater than"
+#~ msgstr "daha çok"
+
+#~ msgid "less than"
+#~ msgstr "daha az"
+
+#~ msgid "equal to or greater than"
+#~ msgstr "eşit veya daha büyük"
+
+#~ msgid "equal to or less than"
+#~ msgstr "eşit veya daha küçük"
+
+#~ msgid "between"
+#~ msgstr "arasında"
+
+#~ msgid "outside range"
+#~ msgstr "aralık dışında"
+
+#~ msgid "different to"
+#~ msgstr "farklı"
+
+#~ msgid "First Condition"
+#~ msgstr "İlk Durum"
+
+#~ msgid "Second Condition"
+#~ msgstr "İkinci Durum"
+
+#~ msgid "Third Condition"
+#~ msgstr "Üçüncü Durum"
+
+#~ msgid "Cell is"
+#~ msgstr "Hücre"
+
+#~ msgid "Cell style"
+#~ msgstr "Hücre biçemi"
+
+#~ msgid "different from"
+#~ msgstr "şundan farklı"
+
+#~ msgid ""
+#~ "If the first value is a number, the second value also has to be a number."
+#~ msgstr "İlk değer bir sayıysa, ikinci değerinde br sayı olması gerekir."
+
+#~ msgid ""
+#~ "If the first value is a string, the second value also has to be a string."
+#~ msgstr ""
+#~ "Eğer birinci değer bir dizeyse, ikinci değerin de bir dize olması gerekir."
+
+#~ msgid "Select Source"
+#~ msgstr "Kaynak Seç"
+
+#~ msgid "Current Selection"
+#~ msgstr "Geçerli Seçim"
+
+#~ msgid "External Source"
+#~ msgstr "Dış Kaynak"
+
+#~ msgid "Operator"
+#~ msgstr "İşleç"
+
+#~ msgid "And"
+#~ msgstr "Ve"
+
+#~ msgid "Or"
+#~ msgstr "Veya"
+
+#~ msgid "Field"
+#~ msgstr "Alan"
+
+#~ msgid "<"
+#~ msgstr "<"
+
+#~ msgid ">"
+#~ msgstr ">"
+
+#~ msgid "=="
+#~ msgstr "=="
+
+#~ msgid "!="
+#~ msgstr "!="
+
+#~ msgid "Pivot Table Configuration Window"
+#~ msgstr "Pivot Tablo Yapılandırma Penceresi"
+
+#~ msgid "Add Filter"
+#~ msgstr "Süzgeç Ekle"
+
+#~ msgid "Drag from Labels and drop in the desired field"
+#~ msgstr "Etiketleri sürükleyin ve istediğiniz alana bırakın"
+
+#~ msgid "Labels"
+#~ msgstr "Etiketler"
+
+#~ msgid "Select Option"
+#~ msgstr "Seçenek Seçin"
+
+#~ msgid "sum"
+#~ msgstr "toplam"
+
+#~ msgid "average"
+#~ msgstr "ortalama"
+
+#~ msgid "max"
+#~ msgstr "en yüksek"
+
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "en düşük"
+
+#~ msgid "count"
+#~ msgstr "say"
+
+#~ msgid "Total Rows"
+#~ msgstr "Toplam Satırlar"
+
+#~ msgid "Total Columns"
+#~ msgstr "Toplam Sütunlar"
+
+#~ msgid "Rows"
+#~ msgstr "Satırlar"
+
+#~ msgid "Pivot Options"
+#~ msgstr "Pivot Seçenekleri"
+
+#~ msgid "Value Type"
+#~ msgstr "Değer Türü"
+
+#~ msgid "Base Field"
+#~ msgstr "Temel Alan"
+
+#~ msgid "Base Item"
+#~ msgstr "Temel Öge"
+
+#~ msgid "Manual Selection"
+#~ msgstr "Elle Seçim"
+
+#~ msgid "Product"
+#~ msgstr "Çarpım"
+
+#~ msgid "Sort By"
+#~ msgstr "Şuna Göre Sırala"
 
 #~ msgid "Select Font..."
 #~ msgstr "Yazıtipi Seç..."

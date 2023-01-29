@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -769,10 +769,9 @@ msgstr "CARX(12;1.5707)은 0.00115592를 반환함"
 msgid "CARX(12;0) returns 12"
 msgstr "CARX(12; 0)은 12를 반환함"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "값"
@@ -879,7 +878,7 @@ msgstr "숫자"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -936,7 +935,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\")는 99를 반환함"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "데이터베이스"
@@ -4349,7 +4348,6 @@ msgstr "IPMT(이율; 기간; NPer; PV; FV; 형식)"
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "IPMT(0.1;3;3;8000)은 -292.45를 반환함"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4357,7 +4355,7 @@ msgstr "IPMT(0.1;3;3;8000)은 -292.45를 반환함"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr "값"
@@ -5878,8 +5876,7 @@ msgstr "NOT(false)는 True를 반환함"
 msgid "NOT(true) returns False"
 msgstr "NOT(true)는 False를 반환함"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "조건"
@@ -5969,9 +5966,7 @@ msgstr ""
 msgid "Math"
 msgstr "수학"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "함수"
@@ -13041,51 +13036,35 @@ msgstr "왼쪽"
 msgid "Down, First Column"
 msgstr "아래, 첫 번째 열"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "없음"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "합계"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "최소"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "최대"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "평균"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "개수"
@@ -13993,285 +13972,229 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "글자색 변경"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr "배경색 바꾸기"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "테두리 변경"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "셀 서식..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "셀 서식 설정"
 
-#: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Select a new border color"
-msgstr "새 테두리 색 선택"
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "테두리 색"
-
-#: ui/CellToolBase.cpp:173
-#, kde-format
-msgid "Set the background color"
-msgstr "배경색 설정"
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "배경색"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Clear All"
 msgstr "모두 지우기"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "현재 셀의 모든 내용 및 서식 지우기"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "내용"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Clear Contents"
 msgstr "내용 지우기"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "현재 셀의 내용 삭제"
 
-#: ui/CellToolBase.cpp:192
-#, kde-format
-msgid "Conditional Styles..."
-msgstr "조건부 스타일..."
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr "지정한 조건에 따라 셀 스타일 설정"
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr "조건부 스타일"
-
-#: ui/CellToolBase.cpp:198
-#, kde-format
-msgid "Remove Conditional Styles"
-msgstr "조건부 스타일 삭제"
-
-#: ui/CellToolBase.cpp:199
-#, kde-format
-msgid "Remove the conditional cell styles"
-msgstr "조건부 셀 스타일 삭제"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "자동 필터(&A)"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "셀 범위에 자동 필터 추가"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "&Function..."
 msgstr "함수(&F)..."
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert math expression"
 msgstr "수식 삽입"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "From &Database..."
 msgstr "데이터베이스에서(&D)..."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL 데이터베이스에서 데이터 삽입"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Custom Lists..."
 msgstr "사용자 정의 목록..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "정렬 또는 자동 완성에 사용할 사용자 목록 만들기"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "목표값 찾기(&G)..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "특정한 값을 찾으려고 계산 반복"
 
-#: ui/CellToolBase.cpp:235
-#, kde-format
-msgid "&Pivot Tables..."
-msgstr "피벗 테이블(&P)..."
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr "피벗 테이블 만들기"
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Formula Selection"
 msgstr "수식 선택"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Insert a function"
 msgstr "함수 삽입"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, kde-format
 msgid "Others..."
 msgstr "기타..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Modify Cell"
 msgstr "셀 수정"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "강조 표시된 셀 편집"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "셀 객체를 클립보드로 이동"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "셀 객체를 클립보드에 복사"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "클립보드의 내용을 커서 위치에 붙여넣기"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Special Paste..."
 msgstr "선택하여 붙여넣기..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "클립보드의 내용을 선택하여 붙여넣기"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "삽입하며 붙여넣기"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "클립보드의 셀을 스프레드시트에 삽입"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "현재 시트의 모든 셀 선택"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Check the spelling"
 msgstr "맞춤법 검사"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr "요소 검사 실행..."
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView 표시..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, kde-format
 msgid "Auto-Format..."
 msgstr "자동 서식..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "워크시트 서식 설정"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, kde-format
 msgid "Document Settings..."
 msgstr "문서 설정..."
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "문서 설정 대화 상자 표시"
 
 # https://support.office.com/ko-kr/article/%EC%83%81%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EC%A0%88%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EB%B0%8F-%ED%98%BC%ED%95%A9-%EC%B0%B8%EC%A1%B0-%EA%B0%84-%EC%A0%84%ED%99%98-dfec08cd-ae65-4f56-839e-5f0d8d0baca9
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "참조 형식 전환"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, kde-format
 msgid "Permute fixation"
 msgstr "참조 형식 전환"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "텍스트 커서의 참조 형식(상대, 절대, 혼합) 전환"
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "텍스트 지우기"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14280,47 +14203,12 @@ msgstr ""
 "사용 가능한 데이터베이스 드라이버가 없습니다. 이 기능을 사용하려면 필요한 Qt "
 "데이터베이스 드라이버를 설치해야 합니다."
 
-#: ui/CellToolBase.cpp:1266
-#, kde-format
-msgid "You must select multiple cells."
-msgstr "여러 셀을 선택해야 합니다."
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "바꾸기"
 
-#: ui/CellToolBase_p.cpp:471
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "숫자 서식"
-
-#: ui/CellToolBase_p.cpp:477
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "통화 서식"
-
-#: ui/CellToolBase_p.cpp:482
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "백분율 서식"
-
-#: ui/CellToolBase_p.cpp:487
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "시간 서식"
-
-#: ui/CellToolBase_p.cpp:492
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "날짜 서식"
-
-#: ui/CellToolBase_p.cpp:497
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "과학적 서식"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, kde-format
 msgid "Selection List..."
 msgstr "선택 목록..."
@@ -14573,11 +14461,6 @@ msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "자동 서식"
 
-#: ui/commands/BorderColorCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "테두리 색상 변경"
-
 #: ui/commands/ConditionCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Remove Conditional Formatting"
@@ -14817,99 +14700,6 @@ msgstr "시트 스타일 XML 파일 '%1'을(를) 찾을 수 없습니다."
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "시트 스타일 XML 파일 %1을(를) 처리하는 중 오류가 발생했습니다."
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<없음>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "같음"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "초과"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "미만"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, kde-format
-msgid "equal to or greater than"
-msgstr "이상"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, kde-format
-msgid "equal to or less than"
-msgstr "이하"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "다음 사이"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, kde-format
-msgid "outside range"
-msgstr "범위 밖"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr "다름"
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, kde-format
-msgid "First Condition"
-msgstr "첫 번째 조건"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, kde-format
-msgid "Second Condition"
-msgstr "두 번째 조건"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, kde-format
-msgid "Third Condition"
-msgstr "세 번째 조건"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, kde-format
-msgid "Cell is"
-msgstr "셀이"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, kde-format
-msgid "Cell style"
-msgstr "셀 스타일"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr "다름"
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr "첫 번째 값이 숫자이면 두 번째 값도 숫자여야 합니다."
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr "첫 번째 값이 문자열이면 두 번째 값도 문자열이어야 합니다."
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
 msgid "Insert Data From Database"
@@ -14977,8 +14767,7 @@ msgstr "열 선택:"
 msgid "Table"
 msgstr "테이블"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "열"
@@ -15050,16 +14839,12 @@ msgstr "작거나 같음"
 msgid "Sorted by"
 msgstr "정렬 순서"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "오름차순"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "내림차순"
@@ -15449,8 +15234,7 @@ msgstr ""
 "선택한 모든 셀의 글꼴을 굵게 변경합니다."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "일반"
@@ -16127,194 +15911,6 @@ msgstr "오른쪽으로 이동"
 msgid "Move towards bottom"
 msgstr "아래쪽으로 이동"
 
-#: ui/dialogs/pivot.cpp:31
-#, kde-format
-msgid "Select Source"
-msgstr "원본 선택"
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, kde-format
-msgid "Current Selection"
-msgstr "현재 선택"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, kde-format
-msgid "External Source"
-msgstr "외부 원본"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, kde-format
-msgid "Operator"
-msgstr "연산자"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, kde-format
-msgid "And"
-msgstr "그리고"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr "또는"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, kde-format
-msgid "Field"
-msgstr "필드"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr "=="
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr "!="
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr "피벗 테이블 설정 창"
-
-#: ui/dialogs/pivotmain.cpp:53
-#, kde-format
-msgid "Add Filter"
-msgstr "필터 추가"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr "레이블에서 끌어다 필요한 필드에 놓으십시오"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, kde-format
-msgid "Labels"
-msgstr "레이블"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, kde-format
-msgid "Select Option"
-msgstr "옵션 선택"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, kde-format
-msgid "sum"
-msgstr "합계"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, kde-format
-msgid "average"
-msgstr "평균"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, kde-format
-msgid "max"
-msgstr "최대"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, kde-format
-msgctxt "minimum"
-msgid "min"
-msgstr "최소"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, kde-format
-msgid "count"
-msgstr "개수"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, kde-format
-msgid "Total Rows"
-msgstr "총 행"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, kde-format
-msgid "Total Columns"
-msgstr "총 열"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr "행"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, kde-format
-msgid "Pivot Options"
-msgstr "피벗 옵션"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, kde-format
-msgid "Value Type"
-msgstr "값 서식"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, kde-format
-msgid "Base Field"
-msgstr "기반 필드"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, kde-format
-msgid "Base Item"
-msgstr "기반 항목"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, kde-format
-msgid "Manual Selection"
-msgstr "수동 선택"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "곱"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, kde-format
-msgid "Sort By"
-msgstr "정렬 순서"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16704,6 +16300,217 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "링크를 여시겠습니까?"
+
+#~ msgid "Select a new border color"
+#~ msgstr "새 테두리 색 선택"
+
+#~ msgid "Border Color"
+#~ msgstr "테두리 색"
+
+#~ msgid "Set the background color"
+#~ msgstr "배경색 설정"
+
+#~ msgid "Background Color"
+#~ msgstr "배경색"
+
+#~ msgid "Conditional Styles..."
+#~ msgstr "조건부 스타일..."
+
+#~ msgid "Set cell style based on certain conditions"
+#~ msgstr "지정한 조건에 따라 셀 스타일 설정"
+
+#~ msgid "Conditional Styles"
+#~ msgstr "조건부 스타일"
+
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "조건부 스타일 삭제"
+
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "조건부 셀 스타일 삭제"
+
+#~ msgid "&Pivot Tables..."
+#~ msgstr "피벗 테이블(&P)..."
+
+#~ msgid "Create Pivot Tables"
+#~ msgstr "피벗 테이블 만들기"
+
+#~ msgid "You must select multiple cells."
+#~ msgstr "여러 셀을 선택해야 합니다."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "숫자 서식"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "통화 서식"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "백분율 서식"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "시간 서식"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "날짜 서식"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "과학적 서식"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "테두리 색상 변경"
+
+#~ msgid "<none>"
+#~ msgstr "<없음>"
+
+#~ msgid "equal to"
+#~ msgstr "같음"
+
+#~ msgid "greater than"
+#~ msgstr "초과"
+
+#~ msgid "less than"
+#~ msgstr "미만"
+
+#~ msgid "equal to or greater than"
+#~ msgstr "이상"
+
+#~ msgid "equal to or less than"
+#~ msgstr "이하"
+
+#~ msgid "between"
+#~ msgstr "다음 사이"
+
+#~ msgid "outside range"
+#~ msgstr "범위 밖"
+
+#~ msgid "different to"
+#~ msgstr "다름"
+
+#~ msgid "First Condition"
+#~ msgstr "첫 번째 조건"
+
+#~ msgid "Second Condition"
+#~ msgstr "두 번째 조건"
+
+#~ msgid "Third Condition"
+#~ msgstr "세 번째 조건"
+
+#~ msgid "Cell is"
+#~ msgstr "셀이"
+
+#~ msgid "Cell style"
+#~ msgstr "셀 스타일"
+
+#~ msgid "different from"
+#~ msgstr "다름"
+
+#~ msgid ""
+#~ "If the first value is a number, the second value also has to be a number."
+#~ msgstr "첫 번째 값이 숫자이면 두 번째 값도 숫자여야 합니다."
+
+#~ msgid ""
+#~ "If the first value is a string, the second value also has to be a string."
+#~ msgstr "첫 번째 값이 문자열이면 두 번째 값도 문자열이어야 합니다."
+
+#~ msgid "Select Source"
+#~ msgstr "원본 선택"
+
+#~ msgid "Current Selection"
+#~ msgstr "현재 선택"
+
+#~ msgid "External Source"
+#~ msgstr "외부 원본"
+
+#~ msgid "Operator"
+#~ msgstr "연산자"
+
+#~ msgid "And"
+#~ msgstr "그리고"
+
+#~ msgid "Or"
+#~ msgstr "또는"
+
+#~ msgid "Field"
+#~ msgstr "필드"
+
+#~ msgid "<"
+#~ msgstr "<"
+
+#~ msgid ">"
+#~ msgstr ">"
+
+#~ msgid "=="
+#~ msgstr "=="
+
+#~ msgid "!="
+#~ msgstr "!="
+
+#~ msgid "Pivot Table Configuration Window"
+#~ msgstr "피벗 테이블 설정 창"
+
+#~ msgid "Add Filter"
+#~ msgstr "필터 추가"
+
+#~ msgid "Drag from Labels and drop in the desired field"
+#~ msgstr "레이블에서 끌어다 필요한 필드에 놓으십시오"
+
+#~ msgid "Labels"
+#~ msgstr "레이블"
+
+#~ msgid "Select Option"
+#~ msgstr "옵션 선택"
+
+#~ msgid "sum"
+#~ msgstr "합계"
+
+#~ msgid "average"
+#~ msgstr "평균"
+
+#~ msgid "max"
+#~ msgstr "최대"
+
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "최소"
+
+#~ msgid "count"
+#~ msgstr "개수"
+
+#~ msgid "Total Rows"
+#~ msgstr "총 행"
+
+#~ msgid "Total Columns"
+#~ msgstr "총 열"
+
+#~ msgid "Rows"
+#~ msgstr "행"
+
+#~ msgid "Pivot Options"
+#~ msgstr "피벗 옵션"
+
+#~ msgid "Value Type"
+#~ msgstr "값 서식"
+
+#~ msgid "Base Field"
+#~ msgstr "기반 필드"
+
+#~ msgid "Base Item"
+#~ msgstr "기반 항목"
+
+#~ msgid "Manual Selection"
+#~ msgstr "수동 선택"
+
+#~ msgid "Product"
+#~ msgstr "곱"
+
+#~ msgid "Sort By"
+#~ msgstr "정렬 순서"
 
 #~ msgid "Select Font..."
 #~ msgstr "글꼴 선택..."

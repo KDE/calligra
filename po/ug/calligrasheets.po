@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -773,10 +773,9 @@ msgstr "AREAS(A1) نەتىجىسى 1"
 msgid "CARX(12;0) returns 12"
 msgstr "AREAS(A1) نەتىجىسى 1"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "قىممەت"
@@ -888,7 +887,7 @@ msgstr "نومۇرى"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -946,7 +945,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") نەتىجىسى 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "ساندان"
@@ -4393,7 +4392,6 @@ msgstr ""
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "ATAN2(0.5;1.0) نەتىجىسى 1.107149"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4401,7 +4399,7 @@ msgstr "ATAN2(0.5;1.0) نەتىجىسى 1.107149"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr "قىممەتلەر"
@@ -5877,8 +5875,7 @@ msgstr "AND(true;false) نەتىجىسى False"
 msgid "NOT(true) returns False"
 msgstr "AND(true;false) نەتىجىسى False"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "شەرت"
@@ -5963,9 +5960,7 @@ msgstr ""
 msgid "Math"
 msgstr "ماتېماتىكا"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "فۇنكسىيە"
@@ -13091,51 +13086,35 @@ msgstr "سول"
 msgid "Down, First Column"
 msgstr "ئىستون قىستۇر"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "يوق"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "يىغىندا"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "ئەڭ كىچىك قىممەت"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "ئەڭ چوڭ قىممەت"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "ئوتتۇرىچە"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "سانى"
@@ -14088,7 +14067,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "تېكىست رەڭگى ئۆزگەرت"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 #, fuzzy
 #| msgid "Background Color"
 msgctxt "(qtundo-format)"
@@ -14097,362 +14076,258 @@ msgstr "تەگلىك رەڭگى"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "يان رامكا ئۆزگەرت"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Select Font..."
 msgid "Cell Format..."
 msgstr "خەت نۇسخا تاللاش…"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Set the cell formatting"
 msgstr "كاتەكچە رايونى"
 
-#: ui/CellToolBase.cpp:163
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Border"
-msgid "Select a new border color"
-msgstr "يان رامكا ئۆزگەرت"
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "گىرۋەك رەڭگى"
-
-#: ui/CellToolBase.cpp:173
-#, fuzzy, kde-format
-#| msgid "Background color:"
-msgid "Set the background color"
-msgstr "تەگلىك رەڭگى:"
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "تەگلىك رەڭگى"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Clear All"
 msgstr "ھەممىنى تازىلا"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Align cell contents along the bottom of the cell"
 msgid "Clear all contents and formatting of the current cell"
 msgstr "كاتەكچە مەزمۇنىنى كاتەكچىنىڭ ئاستىغا توغرىلايدۇ"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "مەزمۇنلار"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Clear Contents"
 msgstr "مەزمۇنلارنى تازىلا"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Align cell contents along the bottom of the cell"
 msgid "Remove the contents of the current cell"
 msgstr "كاتەكچە مەزمۇنىنى كاتەكچىنىڭ ئاستىغا توغرىلايدۇ"
 
-#: ui/CellToolBase.cpp:192
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Conditional Styles..."
-msgstr "شەرت ئۇسلۇبى"
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr ""
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr "شەرت ئۇسلۇبى"
-
-#: ui/CellToolBase.cpp:198
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Remove Conditional Styles"
-msgstr "شەرت ئۇسلۇبى"
-
-#: ui/CellToolBase.cpp:199
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Remove the conditional cell styles"
-msgstr "شەرت ئۇسلۇبى"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "&Auto-Filter"
 msgstr "سۈزگۈچ"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "كاتەكچە دائىرىسىگە ئاپتوماتىك سۈزگۈچ قوشىدۇ"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "&Function..."
 msgstr "فۇنكسىيە(&F)…"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "مۇنتىزىم ئىپادە"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "ساندان"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, fuzzy, kde-format
 #| msgid "Insert Data From Database"
 msgid "Insert data from a SQL database"
 msgstr "سانداندىن سانلىق-مەلۇمات ئىمپورت قىلىش"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Custom..."
 msgid "Custom Lists..."
 msgstr "ئادەت..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 #| msgid "Goal Seek"
 msgid "&Goal Seek..."
 msgstr "ئۆزگەرگۈچى مىقدار يېشىمى"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:235
-#, fuzzy, kde-format
-#| msgid "Subtotals"
-msgid "&Pivot Tables..."
-msgstr "تۈرگە ئايرىپ خۇلاسىلە"
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr ""
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Fill Selection"
 msgid "Formula Selection"
 msgstr "تاللانغان رايوننى تولدۇر"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, fuzzy, kde-format
 #| msgid "Insert function"
 msgid "Insert a function"
 msgstr "قىستۇرۇش فۇنكسىيىسى"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "يۈرۈشلۈك"
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "ئۆزگەرت"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, fuzzy, kde-format
 #| msgid "Select Character"
 msgid "Special Paste..."
 msgstr "ھەرپ تاللا"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr ""
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert Cells"
 msgid "Paste with Insertion"
 msgstr "كاتەكچە قىستۇر"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "ۋاراق كۆرسەت"
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 #| msgid "Automatic"
 msgid "Auto-Format..."
 msgstr "ئاپتوماتىك"
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr ""
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Document Settings..."
 msgstr "پۈتۈك تەڭشىكى"
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "پۈتۈك تەڭشىكى"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "قوغدا"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "قوغدا"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "تېكىستنى تازىلاش"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1266
-#, kde-format
-msgid "You must select multiple cells."
-msgstr "بىر قانچە كاتەكچىنى تاللىشىڭىز كېرەك."
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "ئالماشتۇر"
 
-#: ui/CellToolBase_p.cpp:471
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "رەقەم فورماتى"
-
-#: ui/CellToolBase_p.cpp:477
-#, fuzzy
-#| msgid "Currency:"
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "پۇل:"
-
-#: ui/CellToolBase_p.cpp:482
-#, fuzzy
-#| msgid "Percent"
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "پىرسەنت"
-
-#: ui/CellToolBase_p.cpp:487
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "ۋاقىت ئىپادىلىنىشى"
-
-#: ui/CellToolBase_p.cpp:492
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "چېسلا پىچىمى"
-
-#: ui/CellToolBase_p.cpp:497
-#, fuzzy
-#| msgid "Scientific"
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "پەن-تېخنىكا"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, kde-format
 msgid "Selection List..."
 msgstr "تاللاش تىزىملىكى …"
@@ -14708,14 +14583,6 @@ msgstr "سۈزگۈچ"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "ئاپتوماتىك"
-
-#: ui/commands/BorderColorCommand.cpp:20
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Border"
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "يان رامكا ئۆزگەرت"
 
 #: ui/commands/ConditionCommand.cpp:30
 #, fuzzy
@@ -14999,107 +14866,6 @@ msgstr ""
 msgid "Parsing error in sheet-style XML file %1."
 msgstr ""
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<يوق>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "تەڭ"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "چوڭ"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "كىچىك"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "greater than"
-msgid "equal to or greater than"
-msgstr "چوڭ"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "less than"
-msgid "equal to or less than"
-msgstr "كىچىك"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "ئارىسىدا"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, fuzzy, kde-format
-#| msgid "Cell range"
-msgid "outside range"
-msgstr "كاتەكچە رايونى"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, fuzzy, kde-format
-#| msgid "Condition"
-msgid "First Condition"
-msgstr "شەرت"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, fuzzy, kde-format
-#| msgid "Condition"
-msgid "Second Condition"
-msgstr "شەرت"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Condition"
-msgid "Third Condition"
-msgstr "شەرت"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, fuzzy, kde-format
-#| msgid "Cell"
-msgid "Cell is"
-msgstr "كاتەكچە"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, fuzzy, kde-format
-#| msgid "All Styles"
-msgid "Cell style"
-msgstr "بارلىق ئۇسلۇبلار"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
 msgid "Insert Data From Database"
@@ -15163,8 +14929,7 @@ msgstr "ئىستون ئۆچۈر"
 msgid "Table"
 msgstr "جەدۋەل"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "ئىستونلار"
@@ -15239,16 +15004,12 @@ msgstr "تەڭسىز"
 msgid "Sorted by"
 msgstr "تەرتىپلە"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "ئۆسكۈچى"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "كېمەيگۈچى"
@@ -15641,8 +15402,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "نورمال"
@@ -16266,216 +16026,6 @@ msgstr ""
 msgid "Move towards bottom"
 msgstr ""
 
-#: ui/dialogs/pivot.cpp:31
-#, fuzzy, kde-format
-#| msgid "Select Character"
-msgid "Select Source"
-msgstr "ھەرپ تاللا"
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, fuzzy, kde-format
-#| msgid "Clear Selection"
-msgid "Current Selection"
-msgstr "تاللانمىنى تازىلا"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, fuzzy, kde-format
-#| msgid "&External Data"
-msgid "External Source"
-msgstr "سىرتقى سانلىق-مەلۇمات(&E)"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Operator"
-msgstr "مەشغۇلات"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, fuzzy, kde-format
-#| msgid "Add"
-msgid "And"
-msgstr "قوش"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, fuzzy, kde-format
-#| msgid "Yield"
-msgid "Field"
-msgstr "Yield"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:53
-#, fuzzy, kde-format
-#| msgid "Filter"
-msgid "Add Filter"
-msgstr "سۈزگۈچ"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, kde-format
-msgid "Labels"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, fuzzy, kde-format
-#| msgid "File Options"
-msgid "Select Option"
-msgstr "ھۆججەت تاللانمىلىرى"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, fuzzy, kde-format
-#| msgid "Sum"
-msgid "sum"
-msgstr "يىغىندا"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, fuzzy, kde-format
-#| msgid "Average"
-msgid "average"
-msgstr "ئوتتۇرىچە"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Max"
-msgid "max"
-msgstr "ئەڭ چوڭ قىممەت"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, fuzzy, kde-format
-#| msgid "min"
-msgctxt "minimum"
-msgid "min"
-msgstr "مىنۇت"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, fuzzy, kde-format
-#| msgid "Count"
-msgid "count"
-msgstr "سانى"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, fuzzy, kde-format
-#| msgid "Show Rows"
-msgid "Total Rows"
-msgstr "قۇر كۆرسەت"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, fuzzy, kde-format
-#| msgid "Show Columns"
-msgid "Total Columns"
-msgstr "ئىستون كۆرسەت"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr "قۇرلار"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, fuzzy, kde-format
-#| msgid "More Options"
-msgid "Pivot Options"
-msgstr "باشقا تاللانما"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, fuzzy, kde-format
-#| msgid "Value"
-msgid "Value Type"
-msgstr "قىممەت"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, fuzzy, kde-format
-#| msgid "Yield"
-msgid "Base Field"
-msgstr "Yield"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, fuzzy, kde-format
-#| msgid "Item"
-msgid "Base Item"
-msgstr "تۈرلەر"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Fill Selection"
-msgid "Manual Selection"
-msgstr "تاللانغان رايوننى تولدۇر"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "مەھسۇلات"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, fuzzy, kde-format
-#| msgid "Sort"
-msgid "Sort By"
-msgstr "تەرتىپلە"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16830,6 +16380,254 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "ئۇلانمىنى ئاچسۇنمۇ؟"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Change Border"
+#~ msgid "Select a new border color"
+#~ msgstr "يان رامكا ئۆزگەرت"
+
+#~ msgid "Border Color"
+#~ msgstr "گىرۋەك رەڭگى"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgid "Set the background color"
+#~ msgstr "تەگلىك رەڭگى:"
+
+#~ msgid "Background Color"
+#~ msgstr "تەگلىك رەڭگى"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Conditional Styles..."
+#~ msgstr "شەرت ئۇسلۇبى"
+
+#~ msgid "Conditional Styles"
+#~ msgstr "شەرت ئۇسلۇبى"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "شەرت ئۇسلۇبى"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "شەرت ئۇسلۇبى"
+
+#, fuzzy
+#~| msgid "Subtotals"
+#~ msgid "&Pivot Tables..."
+#~ msgstr "تۈرگە ئايرىپ خۇلاسىلە"
+
+#~ msgid "You must select multiple cells."
+#~ msgstr "بىر قانچە كاتەكچىنى تاللىشىڭىز كېرەك."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "رەقەم فورماتى"
+
+#, fuzzy
+#~| msgid "Currency:"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "پۇل:"
+
+#, fuzzy
+#~| msgid "Percent"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "پىرسەنت"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "ۋاقىت ئىپادىلىنىشى"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "چېسلا پىچىمى"
+
+#, fuzzy
+#~| msgid "Scientific"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "پەن-تېخنىكا"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Change Border"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "يان رامكا ئۆزگەرت"
+
+#~ msgid "<none>"
+#~ msgstr "<يوق>"
+
+#~ msgid "equal to"
+#~ msgstr "تەڭ"
+
+#~ msgid "greater than"
+#~ msgstr "چوڭ"
+
+#~ msgid "less than"
+#~ msgstr "كىچىك"
+
+#, fuzzy
+#~| msgid "greater than"
+#~ msgid "equal to or greater than"
+#~ msgstr "چوڭ"
+
+#, fuzzy
+#~| msgid "less than"
+#~ msgid "equal to or less than"
+#~ msgstr "كىچىك"
+
+#~ msgid "between"
+#~ msgstr "ئارىسىدا"
+
+#, fuzzy
+#~| msgid "Cell range"
+#~ msgid "outside range"
+#~ msgstr "كاتەكچە رايونى"
+
+#, fuzzy
+#~| msgid "Condition"
+#~ msgid "First Condition"
+#~ msgstr "شەرت"
+
+#, fuzzy
+#~| msgid "Condition"
+#~ msgid "Second Condition"
+#~ msgstr "شەرت"
+
+#, fuzzy
+#~| msgid "Condition"
+#~ msgid "Third Condition"
+#~ msgstr "شەرت"
+
+#, fuzzy
+#~| msgid "Cell"
+#~ msgid "Cell is"
+#~ msgstr "كاتەكچە"
+
+#, fuzzy
+#~| msgid "All Styles"
+#~ msgid "Cell style"
+#~ msgstr "بارلىق ئۇسلۇبلار"
+
+#, fuzzy
+#~| msgid "Select Character"
+#~ msgid "Select Source"
+#~ msgstr "ھەرپ تاللا"
+
+#, fuzzy
+#~| msgid "Clear Selection"
+#~ msgid "Current Selection"
+#~ msgstr "تاللانمىنى تازىلا"
+
+#, fuzzy
+#~| msgid "&External Data"
+#~ msgid "External Source"
+#~ msgstr "سىرتقى سانلىق-مەلۇمات(&E)"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Operator"
+#~ msgstr "مەشغۇلات"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgid "And"
+#~ msgstr "قوش"
+
+#, fuzzy
+#~| msgid "Yield"
+#~ msgid "Field"
+#~ msgstr "Yield"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgid "Add Filter"
+#~ msgstr "سۈزگۈچ"
+
+#, fuzzy
+#~| msgid "File Options"
+#~ msgid "Select Option"
+#~ msgstr "ھۆججەت تاللانمىلىرى"
+
+#, fuzzy
+#~| msgid "Sum"
+#~ msgid "sum"
+#~ msgstr "يىغىندا"
+
+#, fuzzy
+#~| msgid "Average"
+#~ msgid "average"
+#~ msgstr "ئوتتۇرىچە"
+
+#, fuzzy
+#~| msgid "Max"
+#~ msgid "max"
+#~ msgstr "ئەڭ چوڭ قىممەت"
+
+#, fuzzy
+#~| msgid "min"
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "مىنۇت"
+
+#, fuzzy
+#~| msgid "Count"
+#~ msgid "count"
+#~ msgstr "سانى"
+
+#, fuzzy
+#~| msgid "Show Rows"
+#~ msgid "Total Rows"
+#~ msgstr "قۇر كۆرسەت"
+
+#, fuzzy
+#~| msgid "Show Columns"
+#~ msgid "Total Columns"
+#~ msgstr "ئىستون كۆرسەت"
+
+#~ msgid "Rows"
+#~ msgstr "قۇرلار"
+
+#, fuzzy
+#~| msgid "More Options"
+#~ msgid "Pivot Options"
+#~ msgstr "باشقا تاللانما"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Value Type"
+#~ msgstr "قىممەت"
+
+#, fuzzy
+#~| msgid "Yield"
+#~ msgid "Base Field"
+#~ msgstr "Yield"
+
+#, fuzzy
+#~| msgid "Item"
+#~ msgid "Base Item"
+#~ msgstr "تۈرلەر"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Fill Selection"
+#~ msgid "Manual Selection"
+#~ msgstr "تاللانغان رايوننى تولدۇر"
+
+#~ msgid "Product"
+#~ msgstr "مەھسۇلات"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgid "Sort By"
+#~ msgstr "تەرتىپلە"
 
 #~ msgid "Select Font..."
 #~ msgstr "خەت نۇسخا تاللاش…"

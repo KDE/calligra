@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -781,10 +781,9 @@ msgstr ""
 msgid "CARX(12;0) returns 12"
 msgstr "संदर्भ"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "मान"
@@ -892,7 +891,7 @@ msgstr "संख्या"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -954,7 +953,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "मान"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -4327,7 +4326,6 @@ msgstr ""
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4335,7 +4333,7 @@ msgstr ""
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr "मान"
@@ -5785,8 +5783,7 @@ msgstr "मान"
 msgid "NOT(true) returns False"
 msgstr "मान"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "स्थिति"
@@ -5871,9 +5868,7 @@ msgstr ""
 msgid "Math"
 msgstr "गणित"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "फंक्शन"
@@ -12932,51 +12927,35 @@ msgstr "बामाँ"
 msgid "Down, First Column"
 msgstr "कोष्ठ जोडू"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "किछु नहि"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "जोड़"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "न्यूनतम"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "अधिकतम"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "औसत"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "गिनती"
@@ -13943,7 +13922,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "पाठ रंग"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 #, fuzzy
 #| msgid "Change Background Color"
 msgctxt "(qtundo-format)"
@@ -13952,373 +13931,263 @@ msgstr "पृष्ठभूमि रंग बदलू"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 #| msgid "Page order"
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "पृष्ठ क्रम"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Cell Format..."
 msgstr "सेल परिसर"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Set the cell formatting"
 msgstr "सेल परिसर"
 
-#: ui/CellToolBase.cpp:163
-#, fuzzy, kde-format
-#| msgid "Border Color"
-msgid "Select a new border color"
-msgstr "किनारे क' रंग"
-
-#: ui/CellToolBase.cpp:164
-#, kde-format
-msgid "Border Color"
-msgstr "किनारे क' रंग"
-
-#: ui/CellToolBase.cpp:173
-#, fuzzy, kde-format
-#| msgid "Background color:"
-msgid "Set the background color"
-msgstr "पृष्ठभूमि क' रंगः"
-
-#: ui/CellToolBase.cpp:174
-#, kde-format
-msgid "Background Color"
-msgstr "पृष्ठभूमि रँग"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Clear All"
 msgstr "सभकेँ हटाबू"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "विषय सूची"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 #| msgid "Comment"
 msgid "Clear Contents"
 msgstr "टिप्पणी"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Remove the contents of the current cell"
 msgstr "नाम बदलू शीट"
 
-#: ui/CellToolBase.cpp:192
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Conditional Styles..."
-msgstr "सशर्त शैली"
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr ""
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr "सशर्त शैली"
-
-#: ui/CellToolBase.cpp:198
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Remove Conditional Styles"
-msgstr "सशर्त शैली"
-
-#: ui/CellToolBase.cpp:199
-#, fuzzy, kde-format
-#| msgid "Conditional Styles"
-msgid "Remove the conditional cell styles"
-msgstr "सशर्त शैली"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "&Auto-Filter"
 msgstr "फिल्टर"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "&Function..."
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "नियमित वर्णन"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "Insert data from a SQL database"
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Custom..."
 msgid "Custom Lists..."
 msgstr "मनपसिन्न..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 #| msgid "Goal Seek"
 msgid "&Goal Seek..."
 msgstr "लक्ष्य प्राप्ति"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:235
-#, fuzzy, kde-format
-#| msgid "Subtotals"
-msgid "&Pivot Tables..."
-msgstr "समग्र योग"
-
-#: ui/CellToolBase.cpp:238
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr ""
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, fuzzy, kde-format
 #| msgid "File Options"
 msgid "Formula Selection"
 msgstr "फाइल विकल्प"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Insert a function"
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "श्रृंखला"
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "सुधारू"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, kde-format
 msgid "Special Paste..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr ""
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 #| msgid "Insert Cells"
 msgid "Paste with Insertion"
 msgstr "कोष्ठ जोडू"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 #| msgid "Sheets"
 msgid "Selects all cells in the current sheet"
 msgstr "शीट"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "शीट देखाउ"
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 #| msgid "Format"
 msgid "Auto-Format..."
 msgstr "प्रारूप"
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Set the worksheet formatting"
 msgstr "सेल परिसर"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 #| msgid "Print settings"
 msgid "Document Settings..."
 msgstr "छपाइ जमावट"
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, fuzzy, kde-format
 #| msgid "Formula"
 msgid "Show document settings dialog"
 msgstr "सूत्र"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 #, fuzzy
 #| msgid "Clear"
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "खाली"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1266
-#, fuzzy, kde-format
-#| msgid "&Delete..."
-msgid "You must select multiple cells."
-msgstr "मेटाबू (&D)..."
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 #, fuzzy
 #| msgid "Replace"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "बदलू"
 
-#: ui/CellToolBase_p.cpp:471
-#, fuzzy
-#| msgid "Number Format"
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "सँख्या प्रारूप"
-
-#: ui/CellToolBase_p.cpp:477
-#, fuzzy
-#| msgid "Currency"
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "मुद्रा"
-
-#: ui/CellToolBase_p.cpp:482
-#, fuzzy
-#| msgid "Percent Format"
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "प्रतिशत प्रारूप"
-
-#: ui/CellToolBase_p.cpp:487
-#, fuzzy
-#| msgid "Time Format"
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "समय प्रारूप"
-
-#: ui/CellToolBase_p.cpp:492
-#, fuzzy
-#| msgid "Date Format"
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "तिथि प्रारूप"
-
-#: ui/CellToolBase_p.cpp:497
-#, fuzzy
-#| msgid "Scientific"
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "वैज्ञानिक"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, fuzzy, kde-format
 #| msgid "File Options"
 msgid "Selection List..."
@@ -14583,13 +14452,6 @@ msgstr "फिल्टर"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "प्रारूप"
-
-#: ui/commands/BorderColorCommand.cpp:20
-#, fuzzy
-#| msgid "Border Color"
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "किनारे क' रंग"
 
 #: ui/commands/ConditionCommand.cpp:30
 #, fuzzy
@@ -14902,107 +14764,6 @@ msgstr ""
 msgid "Parsing error in sheet-style XML file %1."
 msgstr ""
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<कोनो नहि>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "एकर समान"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "सँ बेसी"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "एकरासँ कम"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "greater than"
-msgid "equal to or greater than"
-msgstr "सँ बेसी"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "less than"
-msgid "equal to or less than"
-msgstr "एकरासँ कम"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "बीचमे"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, fuzzy, kde-format
-#| msgid "Cell range"
-msgid "outside range"
-msgstr "सेल परिसर"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, fuzzy, kde-format
-#| msgid "Condition"
-msgid "First Condition"
-msgstr "स्थिति"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, fuzzy, kde-format
-#| msgid "Condition"
-msgid "Second Condition"
-msgstr "स्थिति"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Condition"
-msgid "Third Condition"
-msgstr "स्थिति"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, fuzzy, kde-format
-#| msgid "Cell"
-msgid "Cell is"
-msgstr "सेल"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, fuzzy, kde-format
-#| msgid "All Styles"
-msgid "Cell style"
-msgstr "सभ शैली"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, fuzzy, kde-format
 #| msgid "Database"
@@ -15068,8 +14829,7 @@ msgstr "कालम मेटाउ"
 msgid "Table"
 msgstr "सारणी"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "कालम"
@@ -15145,16 +14905,12 @@ msgstr "समान नहि"
 msgid "Sorted by"
 msgstr "क'द्वारा छाँटू"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "आरोहण क्रम"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "अवरोहण क्रम"
@@ -15552,8 +15308,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "सामान्य"
@@ -16181,214 +15936,6 @@ msgstr ""
 msgid "Move towards bottom"
 msgstr ""
 
-#: ui/dialogs/pivot.cpp:31
-#, fuzzy, kde-format
-#| msgid "Protect Sheet"
-msgid "Select Source"
-msgstr "शीटकेँ रक्षा करू"
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, fuzzy, kde-format
-#| msgid "File Options"
-msgid "Current Selection"
-msgstr "फाइल विकल्प"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, fuzzy, kde-format
-#| msgid "Data source"
-msgid "External Source"
-msgstr "आँकड़ा श्रोत"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Operator"
-msgstr "सँक्रिया"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, fuzzy, kde-format
-#| msgid "Add"
-msgid "And"
-msgstr "जोड़ू"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, fuzzy, kde-format
-#| msgid "Yield"
-msgid "Field"
-msgstr "उपज"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:53
-#, fuzzy, kde-format
-#| msgid "Filter"
-msgid "Add Filter"
-msgstr "फिल्टर"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, kde-format
-msgid "Labels"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, fuzzy, kde-format
-#| msgid "File Options"
-msgid "Select Option"
-msgstr "फाइल विकल्प"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, fuzzy, kde-format
-#| msgid "Sum"
-msgid "sum"
-msgstr "जोड़"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, fuzzy, kde-format
-#| msgid "Average"
-msgid "average"
-msgstr "औसत"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Max"
-msgid "max"
-msgstr "अधिकतम"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, fuzzy, kde-format
-#| msgid "min"
-msgctxt "minimum"
-msgid "min"
-msgstr "min"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, fuzzy, kde-format
-#| msgid "Count"
-msgid "count"
-msgstr "गिनती"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, fuzzy, kde-format
-#| msgid "Text to Columns"
-msgid "Total Rows"
-msgstr "पाठसँ कालम"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, fuzzy, kde-format
-#| msgid "Text to Columns"
-msgid "Total Columns"
-msgstr "पाठसँ कालम"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr "पंक्ति"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Pivot Options"
-msgstr "सँक्रिया"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, fuzzy, kde-format
-#| msgid "Value"
-msgid "Value Type"
-msgstr "मान"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, fuzzy, kde-format
-#| msgid "Yield"
-msgid "Base Field"
-msgstr "उपज"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, fuzzy, kde-format
-#| msgid "Base"
-msgid "Base Item"
-msgstr "आधार"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, fuzzy, kde-format
-#| msgid "File Options"
-msgid "Manual Selection"
-msgstr "फाइल विकल्प"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "उत्पाद"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, kde-format
-msgid "Sort By"
-msgstr "क'द्वारा छाँटू"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16747,6 +16294,257 @@ msgstr ""
 #| msgid "Insert Link"
 msgid "Open Link?"
 msgstr "कड़ी डालू"
+
+#, fuzzy
+#~| msgid "Border Color"
+#~ msgid "Select a new border color"
+#~ msgstr "किनारे क' रंग"
+
+#~ msgid "Border Color"
+#~ msgstr "किनारे क' रंग"
+
+#, fuzzy
+#~| msgid "Background color:"
+#~ msgid "Set the background color"
+#~ msgstr "पृष्ठभूमि क' रंगः"
+
+#~ msgid "Background Color"
+#~ msgstr "पृष्ठभूमि रँग"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Conditional Styles..."
+#~ msgstr "सशर्त शैली"
+
+#~ msgid "Conditional Styles"
+#~ msgstr "सशर्त शैली"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "सशर्त शैली"
+
+#, fuzzy
+#~| msgid "Conditional Styles"
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "सशर्त शैली"
+
+#, fuzzy
+#~| msgid "Subtotals"
+#~ msgid "&Pivot Tables..."
+#~ msgstr "समग्र योग"
+
+#, fuzzy
+#~| msgid "&Delete..."
+#~ msgid "You must select multiple cells."
+#~ msgstr "मेटाबू (&D)..."
+
+#, fuzzy
+#~| msgid "Number Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "सँख्या प्रारूप"
+
+#, fuzzy
+#~| msgid "Currency"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "मुद्रा"
+
+#, fuzzy
+#~| msgid "Percent Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "प्रतिशत प्रारूप"
+
+#, fuzzy
+#~| msgid "Time Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "समय प्रारूप"
+
+#, fuzzy
+#~| msgid "Date Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "तिथि प्रारूप"
+
+#, fuzzy
+#~| msgid "Scientific"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "वैज्ञानिक"
+
+#, fuzzy
+#~| msgid "Border Color"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "किनारे क' रंग"
+
+#~ msgid "<none>"
+#~ msgstr "<कोनो नहि>"
+
+#~ msgid "equal to"
+#~ msgstr "एकर समान"
+
+#~ msgid "greater than"
+#~ msgstr "सँ बेसी"
+
+#~ msgid "less than"
+#~ msgstr "एकरासँ कम"
+
+#, fuzzy
+#~| msgid "greater than"
+#~ msgid "equal to or greater than"
+#~ msgstr "सँ बेसी"
+
+#, fuzzy
+#~| msgid "less than"
+#~ msgid "equal to or less than"
+#~ msgstr "एकरासँ कम"
+
+#~ msgid "between"
+#~ msgstr "बीचमे"
+
+#, fuzzy
+#~| msgid "Cell range"
+#~ msgid "outside range"
+#~ msgstr "सेल परिसर"
+
+#, fuzzy
+#~| msgid "Condition"
+#~ msgid "First Condition"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Condition"
+#~ msgid "Second Condition"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Condition"
+#~ msgid "Third Condition"
+#~ msgstr "स्थिति"
+
+#, fuzzy
+#~| msgid "Cell"
+#~ msgid "Cell is"
+#~ msgstr "सेल"
+
+#, fuzzy
+#~| msgid "All Styles"
+#~ msgid "Cell style"
+#~ msgstr "सभ शैली"
+
+#, fuzzy
+#~| msgid "Protect Sheet"
+#~ msgid "Select Source"
+#~ msgstr "शीटकेँ रक्षा करू"
+
+#, fuzzy
+#~| msgid "File Options"
+#~ msgid "Current Selection"
+#~ msgstr "फाइल विकल्प"
+
+#, fuzzy
+#~| msgid "Data source"
+#~ msgid "External Source"
+#~ msgstr "आँकड़ा श्रोत"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Operator"
+#~ msgstr "सँक्रिया"
+
+#, fuzzy
+#~| msgid "Add"
+#~ msgid "And"
+#~ msgstr "जोड़ू"
+
+#, fuzzy
+#~| msgid "Yield"
+#~ msgid "Field"
+#~ msgstr "उपज"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgid "Add Filter"
+#~ msgstr "फिल्टर"
+
+#, fuzzy
+#~| msgid "File Options"
+#~ msgid "Select Option"
+#~ msgstr "फाइल विकल्प"
+
+#, fuzzy
+#~| msgid "Sum"
+#~ msgid "sum"
+#~ msgstr "जोड़"
+
+#, fuzzy
+#~| msgid "Average"
+#~ msgid "average"
+#~ msgstr "औसत"
+
+#, fuzzy
+#~| msgid "Max"
+#~ msgid "max"
+#~ msgstr "अधिकतम"
+
+#, fuzzy
+#~| msgid "min"
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "min"
+
+#, fuzzy
+#~| msgid "Count"
+#~ msgid "count"
+#~ msgstr "गिनती"
+
+#, fuzzy
+#~| msgid "Text to Columns"
+#~ msgid "Total Rows"
+#~ msgstr "पाठसँ कालम"
+
+#, fuzzy
+#~| msgid "Text to Columns"
+#~ msgid "Total Columns"
+#~ msgstr "पाठसँ कालम"
+
+#~ msgid "Rows"
+#~ msgstr "पंक्ति"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Pivot Options"
+#~ msgstr "सँक्रिया"
+
+#, fuzzy
+#~| msgid "Value"
+#~ msgid "Value Type"
+#~ msgstr "मान"
+
+#, fuzzy
+#~| msgid "Yield"
+#~ msgid "Base Field"
+#~ msgstr "उपज"
+
+#, fuzzy
+#~| msgid "Base"
+#~ msgid "Base Item"
+#~ msgstr "आधार"
+
+#, fuzzy
+#~| msgid "File Options"
+#~ msgid "Manual Selection"
+#~ msgstr "फाइल विकल्प"
+
+#~ msgid "Product"
+#~ msgstr "उत्पाद"
+
+#~ msgid "Sort By"
+#~ msgstr "क'द्वारा छाँटू"
 
 #, fuzzy
 #~| msgid "File Options"

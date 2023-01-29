@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-22 00:57+0000\n"
+"POT-Creation-Date: 2023-01-29 00:58+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -771,10 +771,9 @@ msgstr "CARX(12;1.5707) верне 0.00115592"
 msgid "CARX(12;0) returns 12"
 msgstr "CARX(12;0) верне 12"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, fuzzy, kde-format
 msgid "Value"
 msgstr "Значэнне"
@@ -884,7 +883,7 @@ msgstr "Нумар"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:153 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, fuzzy, kde-format
 msgid "Format"
@@ -941,7 +940,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") верне 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:219 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "База дадзеных"
@@ -4402,7 +4401,6 @@ msgstr "IPMT(стаўка; перыяд; NPER; PV; FV; тып)"
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "IPMT(0.1;3;3;8000) ураўноўваецца -292.45"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4410,7 +4408,7 @@ msgstr "IPMT(0.1;3;3;8000) ураўноўваецца -292.45"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, fuzzy, kde-format
 msgid "Values"
 msgstr "Значэнні"
@@ -5919,8 +5917,7 @@ msgstr "NOT(False) верне True"
 msgid "NOT(true) returns False"
 msgstr "NOT(True) верне False"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, fuzzy, kde-format
 msgid "Condition"
 msgstr "Умова"
@@ -6005,9 +6002,7 @@ msgstr ""
 msgid "Math"
 msgstr "Матэматычныя"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, fuzzy, kde-format
 msgid "Function"
 msgstr "Функцыя"
@@ -13057,51 +13052,35 @@ msgstr "Леваруч"
 msgid "Down, First Column"
 msgstr "Уніз, першы слупок"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, fuzzy, kde-format
 msgid "None"
 msgstr "Няма"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, fuzzy, kde-format
 msgid "Sum"
 msgstr "Сума"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, fuzzy, kde-format
 msgid "Min"
 msgstr "Мін"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, fuzzy, kde-format
 msgid "Max"
 msgstr "Макс"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, fuzzy, kde-format
 msgid "Average"
 msgstr "Сярэдняе"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, fuzzy, kde-format
 msgid "Count"
 msgstr "Колькасць"
@@ -14011,7 +13990,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr "Змяніць тэкст"
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1159
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
@@ -14019,280 +13998,224 @@ msgstr "Колер фону"
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:502
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Змяніць колер меж"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Фармат вочак..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Усталяваць параметры фарматавання вочка."
 
-#: ui/CellToolBase.cpp:163
-#, fuzzy, kde-format
-msgid "Select a new border color"
-msgstr "Змяніць колер мяжы"
-
-#: ui/CellToolBase.cpp:164
-#, fuzzy, kde-format
-msgid "Border Color"
-msgstr "Колер мяжы"
-
-#: ui/CellToolBase.cpp:173
-#, fuzzy, kde-format
-msgid "Set the background color"
-msgstr "Усталяваць колер фону."
-
-#: ui/CellToolBase.cpp:174
-#, fuzzy, kde-format
-msgid "Background Color"
-msgstr "Колер фону"
-
-#: ui/CellToolBase.cpp:180 ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 msgid "Clear All"
 msgstr "Ачысціць усё"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "Clear all contents and formatting of the current cell"
 msgstr "Выдаліць усё змесціва і фарматаванне бягучага вочка"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Contents"
 msgstr "Змест"
 
-#: ui/CellToolBase.cpp:187
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 #| msgid "Contents"
 msgid "Clear Contents"
 msgstr "Змест"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Remove the contents of the current cell"
 msgstr "Выдаліць усё змесціва бягучага вочка"
 
-#: ui/CellToolBase.cpp:192
-#, fuzzy, kde-format
-msgid "Conditional Styles..."
-msgstr "Фарматаванне па ўмове..."
-
-#: ui/CellToolBase.cpp:193
-#, fuzzy, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr "Усталяваць фарматаванне ў залежнасці ад вызначаных умоў"
-
-#: ui/CellToolBase.cpp:197 ui/dialogs/ConditionalDialog.cpp:242
-#, fuzzy, kde-format
-msgid "Conditional Styles"
-msgstr "Фарматаванне па ўмове"
-
-#: ui/CellToolBase.cpp:198
-#, fuzzy, kde-format
-msgid "Remove Conditional Styles"
-msgstr "Прыбраць фарматаванне вочка па ўмове"
-
-#: ui/CellToolBase.cpp:199
-#, fuzzy, kde-format
-msgid "Remove the conditional cell styles"
-msgstr "Прыбраць фарматаванне вочка па ўмове"
-
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "&Auto-Filter"
 msgstr "Аўтазапаўненне"
 
-#: ui/CellToolBase.cpp:208
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Функцыя..."
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Уставіць матэматычны выраз"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "З базы дадзеных..."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:183
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Уставіць дадзеныя з базы дадзеных SQL"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Спісы карыстача..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:189
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Кіраванне карыстацкімі спісамі для сартавання або аўтазапаўненні"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Пошук рашэння..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:194
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Паўтор вылічэння для пошуку патрэбнага значэння"
 
-#: ui/CellToolBase.cpp:235
-#, fuzzy, kde-format
-msgid "&Pivot Tables..."
-msgstr "Падвынікі..."
-
-#: ui/CellToolBase.cpp:238
-#, fuzzy, kde-format
-msgid "Create Pivot Tables"
-msgstr "Падвынікі..."
-
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:196
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Выбар формулы"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:198
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Уставіць функцыю"
 
-#: ui/CellToolBase.cpp:243 ui/CellToolBase.cpp:1277
+#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Іншыя..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Змяніць вочка"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:211
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Змяніць бягучае вочка"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:214
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Выразаць аб'ект вочка ў буфер абмену"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Скапіраваць аб'ект табліцы ў буфер абмену"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:225
 #, fuzzy, kde-format
 msgid "Special Paste..."
 msgstr "Адмысловая ўстаўка..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:228
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Уставіць змесціва буфера абмену па адмысловых умовах"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:230
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Уставіць са зрухам"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Уставіць вочкі з буфера абмену"
 
-#: ui/CellToolBase.cpp:280
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Пералічыць значэнне кожнага вочка на бягучым лісце"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "Праверка арфаграфіі"
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:257
 #, fuzzy, kde-format
 msgid "Run Inspector..."
 msgstr "Запуск інспектара..."
 
-#: ui/CellToolBase.cpp:307
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Паказаць ліст..."
 
-#: ui/CellToolBase.cpp:313
+#: ui/CellToolBase.cpp:269
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Аўтафармат..."
 
-#: ui/CellToolBase.cpp:316
+#: ui/CellToolBase.cpp:272
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Налада фарматавання ліста"
 
-#: ui/CellToolBase.cpp:318
+#: ui/CellToolBase.cpp:274
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Налада лакалі"
 
-#: ui/CellToolBase.cpp:321
+#: ui/CellToolBase.cpp:277
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Паказваць індыкатар каментара"
 
-#: ui/CellToolBase.cpp:325
+#: ui/CellToolBase.cpp:281
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Абарона ад змен"
 
-#: ui/CellToolBase.cpp:329
+#: ui/CellToolBase.cpp:285
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Абарона ад змен"
 
-#: ui/CellToolBase.cpp:330
+#: ui/CellToolBase.cpp:286
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
 
-#: ui/CellToolBase.cpp:1116
+#: ui/CellToolBase.cpp:1072
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1183
+#: ui/CellToolBase.cpp:1111
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clear Text"
 msgstr "Змяніць тэкст"
 
-#: ui/CellToolBase.cpp:1237
+#: ui/CellToolBase.cpp:1145
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14300,60 +14223,13 @@ msgid ""
 msgstr ""
 "Драйверы баз дадзеных недаступныя. Перазбярыце Qt з неабходнымі драйверамі."
 
-#: ui/CellToolBase.cpp:1266
-#, fuzzy, kde-format
-msgid "You must select multiple cells."
-msgstr "Вы павінны вылучыць некалькі вочак."
-
-#: ui/CellToolBase.cpp:1741
+#: ui/CellToolBase.cpp:1637
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Тэкст замены"
 
-#: ui/CellToolBase_p.cpp:471
-#, fuzzy
-#| msgid "Number Format"
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr "Фармат лікаў"
-
-#: ui/CellToolBase_p.cpp:477
-#, fuzzy
-#| msgid "Currency Format"
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr "Фармат грашовай сумы"
-
-#: ui/CellToolBase_p.cpp:482
-#, fuzzy
-#| msgid "Percentage Format"
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr "Адсоткавы фармат"
-
-#: ui/CellToolBase_p.cpp:487
-#, fuzzy
-#| msgid "Time Format"
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr "Фармат часу"
-
-#: ui/CellToolBase_p.cpp:492
-#, fuzzy
-#| msgid "Date Format"
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr "Фармат даты"
-
-#: ui/CellToolBase_p.cpp:497
-#, fuzzy
-#| msgid "Scientific Format"
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr "Навуковы фармат"
-
-#: ui/CellToolBase_p.cpp:901
+#: ui/CellToolBase_p.cpp:861
 #, fuzzy, kde-format
 msgid "Selection List..."
 msgstr "Паўтарыць..."
@@ -14610,12 +14486,6 @@ msgstr "Аўтазапаўненне"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Аўтафармат..."
-
-#: ui/commands/BorderColorCommand.cpp:20
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr "Змяніць колер меж"
 
 #: ui/commands/ConditionCommand.cpp:30
 #, fuzzy
@@ -14893,103 +14763,6 @@ msgstr "Немагчыма знайсці файл стылю XML '%1'."
 msgid "Parsing error in sheet-style XML file %1."
 msgstr "Няслушны фармат файла стылю XML '%1'."
 
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, fuzzy, kde-format
-msgid "<none>"
-msgstr "<няма>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, fuzzy, kde-format
-msgid "equal to"
-msgstr "роўна"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, fuzzy, kde-format
-msgid "greater than"
-msgstr "больш чым"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, fuzzy, kde-format
-msgid "less than"
-msgstr "менш чым"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, fuzzy, kde-format
-msgid "equal to or greater than"
-msgstr "роўна або больш чым"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, fuzzy, kde-format
-msgid "equal to or less than"
-msgstr "роўна або менш чым"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, fuzzy, kde-format
-msgid "between"
-msgstr "паміж"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, fuzzy, kde-format
-msgid "outside range"
-msgstr "іншы дыяпазон"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, fuzzy, kde-format
-msgid "different to"
-msgstr "да"
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, fuzzy, kde-format
-msgid "First Condition"
-msgstr "Першая ўмова"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, fuzzy, kde-format
-msgid "Second Condition"
-msgstr "Другая ўмова"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, fuzzy, kde-format
-msgid "Third Condition"
-msgstr "Трэцяя ўмова"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Cell is"
-msgstr "Вочка"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, fuzzy, kde-format
-msgid "Cell style"
-msgstr "Стыль вочка"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, fuzzy, kde-format
-msgid "different from"
-msgstr "ад"
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, fuzzy, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr ""
-"Калі першае значэнне з'яўляецца лікам, другое значэнне таксама павінна быць "
-"лікам."
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, fuzzy, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-"Калі першае значэнне з'яўляецца радком, другое значэнне таксама павінна быць "
-"радком."
-
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, fuzzy, kde-format
 msgid "Insert Data From Database"
@@ -15057,8 +14830,7 @@ msgstr "Вылучыце слупкі:"
 msgid "Table"
 msgstr "Тала"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, fuzzy, kde-format
 msgid "Columns"
 msgstr "Слупкі"
@@ -15130,16 +14902,12 @@ msgstr "менш або роўна"
 msgid "Sorted by"
 msgstr "Сартаваць"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, fuzzy, kde-format
 msgid "Ascending"
 msgstr "У алфавітным парадку"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, fuzzy, kde-format
 msgid "Descending"
 msgstr "У зваротным парадку"
@@ -15527,8 +15295,7 @@ msgstr ""
 "вылучаных вочках будзе паказаны паўтлустым."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, fuzzy, kde-format
 msgid "Normal"
 msgstr "Звычайны"
@@ -16192,194 +15959,6 @@ msgstr "Ссунуць направа"
 msgid "Move towards bottom"
 msgstr "Ссунуць уніз"
 
-#: ui/dialogs/pivot.cpp:31
-#, fuzzy, kde-format
-msgid "Select Source"
-msgstr "Адмысловы знак..."
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, fuzzy, kde-format
-msgid "Current Selection"
-msgstr "Выбар ліста"
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, fuzzy, kde-format
-msgid "External Source"
-msgstr "Знешнія дадзеныя"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, fuzzy, kde-format
-msgid "Operator"
-msgstr "Аперацыя"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, fuzzy, kde-format
-msgid "And"
-msgstr "&Дадаць"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, fuzzy, kde-format
-msgid "Field"
-msgstr "Ріэль"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:53
-#, fuzzy, kde-format
-msgid "Add Filter"
-msgstr "Файл"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, fuzzy, kde-format
-msgid "Labels"
-msgstr "Тэкст"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, fuzzy, kde-format
-msgid "Select Option"
-msgstr "Уласцівасці тэксту"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, fuzzy, kde-format
-msgid "sum"
-msgstr "Сума"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, fuzzy, kde-format
-msgid "average"
-msgstr "Сярэдняе"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, fuzzy, kde-format
-msgid "max"
-msgstr "Макс"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, fuzzy, kde-format
-msgctxt "minimum"
-msgid "min"
-msgstr "хв"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, fuzzy, kde-format
-msgid "count"
-msgstr "Колькасць"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, fuzzy, kde-format
-msgid "Total Rows"
-msgstr "Сартаваць па радках"
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, fuzzy, kde-format
-msgid "Total Columns"
-msgstr "Сартаваць па слупках"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, fuzzy, kde-format
-msgid "Rows"
-msgstr "Радок"
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, fuzzy, kde-format
-msgid "Pivot Options"
-msgstr "Аперацыя"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, fuzzy, kde-format
-msgid "Value Type"
-msgstr "Значэнне"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, fuzzy, kde-format
-msgid "Base Field"
-msgstr "Ріэль"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, fuzzy, kde-format
-msgid "Base Item"
-msgstr "База"
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, fuzzy, kde-format
-msgid "Manual Selection"
-msgstr "Выбар формулы"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, fuzzy, kde-format
-msgid "Product"
-msgstr "Прадукт"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, fuzzy, kde-format
-msgid "Sort By"
-msgstr "Сартаваць па"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, fuzzy, kde-format
@@ -16764,6 +16343,266 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Адкрыць спасылку?"
+
+#, fuzzy
+#~ msgid "Select a new border color"
+#~ msgstr "Змяніць колер мяжы"
+
+#, fuzzy
+#~ msgid "Border Color"
+#~ msgstr "Колер мяжы"
+
+#, fuzzy
+#~ msgid "Set the background color"
+#~ msgstr "Усталяваць колер фону."
+
+#, fuzzy
+#~ msgid "Background Color"
+#~ msgstr "Колер фону"
+
+#, fuzzy
+#~ msgid "Conditional Styles..."
+#~ msgstr "Фарматаванне па ўмове..."
+
+#, fuzzy
+#~ msgid "Set cell style based on certain conditions"
+#~ msgstr "Усталяваць фарматаванне ў залежнасці ад вызначаных умоў"
+
+#, fuzzy
+#~ msgid "Conditional Styles"
+#~ msgstr "Фарматаванне па ўмове"
+
+#, fuzzy
+#~ msgid "Remove Conditional Styles"
+#~ msgstr "Прыбраць фарматаванне вочка па ўмове"
+
+#, fuzzy
+#~ msgid "Remove the conditional cell styles"
+#~ msgstr "Прыбраць фарматаванне вочка па ўмове"
+
+#, fuzzy
+#~ msgid "&Pivot Tables..."
+#~ msgstr "Падвынікі..."
+
+#, fuzzy
+#~ msgid "Create Pivot Tables"
+#~ msgstr "Падвынікі..."
+
+#, fuzzy
+#~ msgid "You must select multiple cells."
+#~ msgstr "Вы павінны вылучыць некалькі вочак."
+
+#, fuzzy
+#~| msgid "Number Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Number Format"
+#~ msgstr "Фармат лікаў"
+
+#, fuzzy
+#~| msgid "Currency Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Currency Format"
+#~ msgstr "Фармат грашовай сумы"
+
+#, fuzzy
+#~| msgid "Percentage Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Percentage Format"
+#~ msgstr "Адсоткавы фармат"
+
+#, fuzzy
+#~| msgid "Time Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Time Format"
+#~ msgstr "Фармат часу"
+
+#, fuzzy
+#~| msgid "Date Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Date Format"
+#~ msgstr "Фармат даты"
+
+#, fuzzy
+#~| msgid "Scientific Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Scientific Format"
+#~ msgstr "Навуковы фармат"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Change Border Color"
+#~ msgstr "Змяніць колер меж"
+
+#, fuzzy
+#~ msgid "<none>"
+#~ msgstr "<няма>"
+
+#, fuzzy
+#~ msgid "equal to"
+#~ msgstr "роўна"
+
+#, fuzzy
+#~ msgid "greater than"
+#~ msgstr "больш чым"
+
+#, fuzzy
+#~ msgid "less than"
+#~ msgstr "менш чым"
+
+#, fuzzy
+#~ msgid "equal to or greater than"
+#~ msgstr "роўна або больш чым"
+
+#, fuzzy
+#~ msgid "equal to or less than"
+#~ msgstr "роўна або менш чым"
+
+#, fuzzy
+#~ msgid "between"
+#~ msgstr "паміж"
+
+#, fuzzy
+#~ msgid "outside range"
+#~ msgstr "іншы дыяпазон"
+
+#, fuzzy
+#~ msgid "different to"
+#~ msgstr "да"
+
+#, fuzzy
+#~ msgid "First Condition"
+#~ msgstr "Першая ўмова"
+
+#, fuzzy
+#~ msgid "Second Condition"
+#~ msgstr "Другая ўмова"
+
+#, fuzzy
+#~ msgid "Third Condition"
+#~ msgstr "Трэцяя ўмова"
+
+#, fuzzy
+#~ msgid "Cell is"
+#~ msgstr "Вочка"
+
+#, fuzzy
+#~ msgid "Cell style"
+#~ msgstr "Стыль вочка"
+
+#, fuzzy
+#~ msgid "different from"
+#~ msgstr "ад"
+
+#, fuzzy
+#~ msgid ""
+#~ "If the first value is a number, the second value also has to be a number."
+#~ msgstr ""
+#~ "Калі першае значэнне з'яўляецца лікам, другое значэнне таксама павінна "
+#~ "быць лікам."
+
+#, fuzzy
+#~ msgid ""
+#~ "If the first value is a string, the second value also has to be a string."
+#~ msgstr ""
+#~ "Калі першае значэнне з'яўляецца радком, другое значэнне таксама павінна "
+#~ "быць радком."
+
+#, fuzzy
+#~ msgid "Select Source"
+#~ msgstr "Адмысловы знак..."
+
+#, fuzzy
+#~ msgid "Current Selection"
+#~ msgstr "Выбар ліста"
+
+#, fuzzy
+#~ msgid "External Source"
+#~ msgstr "Знешнія дадзеныя"
+
+#, fuzzy
+#~ msgid "Operator"
+#~ msgstr "Аперацыя"
+
+#, fuzzy
+#~ msgid "And"
+#~ msgstr "&Дадаць"
+
+#, fuzzy
+#~ msgid "Field"
+#~ msgstr "Ріэль"
+
+#, fuzzy
+#~ msgid "Add Filter"
+#~ msgstr "Файл"
+
+#, fuzzy
+#~ msgid "Labels"
+#~ msgstr "Тэкст"
+
+#, fuzzy
+#~ msgid "Select Option"
+#~ msgstr "Уласцівасці тэксту"
+
+#, fuzzy
+#~ msgid "sum"
+#~ msgstr "Сума"
+
+#, fuzzy
+#~ msgid "average"
+#~ msgstr "Сярэдняе"
+
+#, fuzzy
+#~ msgid "max"
+#~ msgstr "Макс"
+
+#, fuzzy
+#~ msgctxt "minimum"
+#~ msgid "min"
+#~ msgstr "хв"
+
+#, fuzzy
+#~ msgid "count"
+#~ msgstr "Колькасць"
+
+#, fuzzy
+#~ msgid "Total Rows"
+#~ msgstr "Сартаваць па радках"
+
+#, fuzzy
+#~ msgid "Total Columns"
+#~ msgstr "Сартаваць па слупках"
+
+#, fuzzy
+#~ msgid "Rows"
+#~ msgstr "Радок"
+
+#, fuzzy
+#~ msgid "Pivot Options"
+#~ msgstr "Аперацыя"
+
+#, fuzzy
+#~ msgid "Value Type"
+#~ msgstr "Значэнне"
+
+#, fuzzy
+#~ msgid "Base Field"
+#~ msgstr "Ріэль"
+
+#, fuzzy
+#~ msgid "Base Item"
+#~ msgstr "База"
+
+#, fuzzy
+#~ msgid "Manual Selection"
+#~ msgstr "Выбар формулы"
+
+#, fuzzy
+#~ msgid "Product"
+#~ msgstr "Прадукт"
+
+#, fuzzy
+#~ msgid "Sort By"
+#~ msgstr "Сартаваць па"
 
 #, fuzzy
 #~ msgid "Select Font..."
