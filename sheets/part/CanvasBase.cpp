@@ -59,7 +59,6 @@
 #include "ui/CellView.h"
 #include "ui/Selection.h"
 #include "ui/SheetView.h"
-#include "ui/commands/DeleteCommand.h"
 #include "ui/commands/PasteCommand.h"
 
 #define MIN_SIZE 10

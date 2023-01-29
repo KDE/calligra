@@ -12,6 +12,7 @@
 #include "AutoSum.h"
 #include "Border.h"
 #include "Cells.h"
+#include "Clear.h"
 #include "Comment.h"
 #include "Conditional.h"
 #include "Consolidate.h"
@@ -94,6 +95,9 @@ void Actions::createActions()
     // Cells
     addAction(new CellsInsert(this));
     addAction(new CellsRemove(this));
+    // Clear
+    addAction(new ClearAll(this));
+    addAction(new ClearContents(this));
     // Comment
     addAction(new Comment(this));
     addAction(new ClearComment(this));

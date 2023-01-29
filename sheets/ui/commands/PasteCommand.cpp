@@ -12,7 +12,6 @@
 #include <QMimeData>
 
 #include "DataManipulators.h"
-#include "DeleteCommand.h"
 #include "PageBreakCommand.h"
 #include "RowColumnManipulators.h"
 
@@ -20,6 +19,8 @@
 #include "engine/DependencyManager.h"
 #include "engine/MapBase.h"
 #include "core/CellStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/ColFormatStorage.h"
 #include "core/Sheet.h"
 #include "core/ksp/SheetsKsp.h"
 

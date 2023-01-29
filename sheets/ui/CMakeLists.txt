@@ -8,6 +8,7 @@ set (actions_DIR_SRCS
     actions/AutoSum.cpp
     actions/Border.cpp
     actions/Cells.cpp
+    actions/Clear.cpp
     actions/Comment.cpp
     actions/Conditional.cpp
     actions/Consolidate.cpp
@@ -76,7 +77,6 @@ set (commands_DIR_SRCS
     commands/AutoFillCommand.cpp
     commands/AutoFilterCommand.cpp
     commands/AutoFormatCommand.cpp
-    commands/DeleteCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
     commands/PageBreakCommand.cpp

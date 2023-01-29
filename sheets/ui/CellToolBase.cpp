@@ -48,7 +48,6 @@
 #include "commands/AutoFilterCommand.h"
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
-#include "commands/DeleteCommand.h"
 #include "commands/PasteCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SpellCheckCommand.h"
@@ -146,20 +145,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
     connect(action, &QAction::triggered, this, &CellToolBase::cellStyle);
     action->setToolTip(i18n("Set the cell formatting"));
-
-    // -- cell content actions --
-
-    action = new QAction(koIcon("deletecell"), i18n("Clear All"), this);
-    action->setIconText(i18n("Clear All"));
-    action->setToolTip(i18n("Clear all contents and formatting of the current cell"));
-    addAction("clearAll", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::clearAll);
-
-    action = new QAction(koIcon("edit-clear"), i18n("Contents"), this);
-    action->setIconText(i18n("Clear Contents"));
-    action->setToolTip(i18n("Remove the contents of the current cell"));
-    addAction("clearContents", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::clearContents);
 
     // -- sorting/filtering action --
 
@@ -506,8 +491,9 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
 
     case Qt::Key_Backspace:
     case Qt::Key_Delete:
-	clearContents();
-	break;
+        d->triggerAction("clearContents");
+        event->accept();
+    	break;
 
     case Qt::Key_F2:
 	edit();
@@ -1092,31 +1078,6 @@ void CellToolBase::cellStyle()
     delete dialog;
 }
 
-void CellToolBase::clearAll()
-{
-    DeleteCommand* command = new DeleteCommand();
-    command->setSheet(selection()->activeSheet());
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::clearContents()
-{
-    // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection()))
-        return;
-
-    DataManipulator* command = new DataManipulator();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Clear Text"));
-    // parsing gets set only so that parseUserInput is called as it should be,
-    // no actual parsing shall be done
-    command->setParsing(true);
-    command->setValue(Value(""));
-    command->add(*selection());
-    command->execute(canvas());
-}
-
 void CellToolBase::autoFilter()
 {
     AutoFilterCommand* command = new AutoFilterCommand();
@@ -1370,7 +1331,7 @@ void CellToolBase::pasteWithInsertion()
 
 void CellToolBase::deleteSelection()
 {
-    clearContents();
+    d->triggerAction("clearContents");
 }
 
 void CellToolBase::selectAll()

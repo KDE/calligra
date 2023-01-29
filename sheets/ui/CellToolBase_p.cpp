@@ -808,15 +808,15 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
         popupActions.append(q->action("specialPaste"));
         popupActions.append(q->action("pasteWithInsertion"));
         popupActions.append(popupMenuActions["separator2"]);
-        popupActions.append(q->action("clearAll"));
-        popupActions.append(q->action("adjust"));
+        popupActions.append(actions->action("clearAll"));
+        popupActions.append(actions->action("adjust"));
         popupActions.append(actions->action("setDefaultStyle"));
         popupActions.append(actions->action("setAreaName"));
 
         if (!q->selection()->isColumnOrRowSelected()) {
             popupActions.append(popupMenuActions["separator3"]);
-            popupActions.append(q->action("insertCell"));
-            popupActions.append(q->action("deleteCell"));
+            popupActions.append(actions->action("insertCell"));
+            popupActions.append(actions->action("deleteCell"));
         } else if (q->selection()->isColumnSelected()) {
             popupActions.append(actions->action("resizeCol"));
             popupActions.append(actions->action("adjustColumn"));
