@@ -80,7 +80,8 @@ if (SHOULD_BUILD_PLUGIN_VIDEOSHAPE)
 endif ()
 
 if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
-    add_subdirectory( semanticitems )
+    message(WARNING "--- semanicitems is not built. It needs to be ported from kdelibs4")
+    #add_subdirectory( semanticitems )
 endif()
 
 if(SHOULD_BUILD_PLUGIN_SHAPEFILTEREFFECTS)
