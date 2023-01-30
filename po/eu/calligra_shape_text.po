@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-29 01:16+0100\n"
+"PO-Revision-Date: 2023-01-29 12:59+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 22.12.1\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
@@ -78,7 +78,7 @@ msgstr "Aldatu zerrenda-maila"
 #: commands/RejectChangeCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reject change"
-msgstr ""
+msgstr "Errefusatu aldaketak"
 
 #: commands/ShowChangesCommand.cpp:40
 msgctxt "(qtundo-format)"
@@ -187,7 +187,7 @@ msgstr "Atzizkia:"
 #: dialogs/BibliographyConfigureDialog.ui:70
 #, kde-format
 msgid "Number entries"
-msgstr ""
+msgstr "Zenbaki sarrerak"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/BibliographyConfigureDialog.ui:80
@@ -205,13 +205,13 @@ msgstr "Sailkatu kokalekuaren arabera"
 #: dialogs/BibliographyConfigureDialog.ui:93
 #, kde-format
 msgid "Sort keys"
-msgstr ""
+msgstr "Sailkatzeko gakoak"
 
 #. i18n: ectx: property (text), widget (QPushButton, addSortKeyButton)
 #: dialogs/BibliographyConfigureDialog.ui:103
 #, kde-format
 msgid "Add sort key"
-msgstr ""
+msgstr "Gehitu sailkatzeko gakoa"
 
 #. i18n: ectx: property (text), widget (QLabel, sortAlgorithmLabel)
 #: dialogs/BibliographyConfigureDialog.ui:131
@@ -238,23 +238,23 @@ msgstr "Erreferentziak"
 #: dialogs/ChangeConfigureDialog.cpp:136
 #, kde-format
 msgid "This is a line of inserted text."
-msgstr ""
+msgstr "Hau txertatutako testu-lerro bat."
 
 #: dialogs/ChangeConfigureDialog.cpp:142
 #, kde-format
 msgid "This is a line of deleted text."
-msgstr ""
+msgstr "Hau da ezabatutako testu-lerro bat."
 
 #: dialogs/ChangeConfigureDialog.cpp:148
 #, kde-format
 msgid "This is a line of text whose format has been changed."
-msgstr ""
+msgstr "Hau da formatua aldatu zaion testu-lerro bat."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChangeConfigureDialog)
 #: dialogs/ChangeConfigureDialog.ui:17
 #, kde-format
 msgid "Configure Change Tracking"
-msgstr ""
+msgstr "Konfiguratu aldaketen jarraipena"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ChangeConfigureDialog.ui:30
@@ -266,19 +266,19 @@ msgstr "Ezarpen orokorrak"
 #: dialogs/ChangeConfigureDialog.ui:37
 #, kde-format
 msgid "Saving Format"
-msgstr ""
+msgstr "Gordetzeko formatua"
 
 #. i18n: ectx: property (text), widget (QRadioButton, odf12RadioButton)
 #: dialogs/ChangeConfigureDialog.ui:44
 #, kde-format
 msgid "ODF 1.2"
-msgstr ""
+msgstr "ODF 1.2"
 
 #. i18n: ectx: property (text), widget (QRadioButton, deltaXmlRadioButton)
 #: dialogs/ChangeConfigureDialog.ui:51
 #, kde-format
 msgid "DeltaXML (Experimental)"
-msgstr ""
+msgstr "DeltaXML (Experimentala)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ChangeConfigureDialog.ui:58
@@ -290,13 +290,13 @@ msgstr "Egilearen izena"
 #: dialogs/ChangeConfigureDialog.ui:75
 #, kde-format
 msgid "Change Visualization Settings"
-msgstr ""
+msgstr "Aldatu irudikatze ezarpenak"
 
 #. i18n: ectx: property (title), widget (QGroupBox, insertionGroupBox)
 #: dialogs/ChangeConfigureDialog.ui:89
 #, kde-format
 msgid "Insertions"
-msgstr ""
+msgstr "Txertaketak"
 
 #. i18n: ectx: property (text), widget (QLabel, insertionColorLabel)
 #. i18n: ectx: property (text), widget (QLabel, deletionColorLabel)
@@ -353,7 +353,7 @@ msgstr "Atzeko planoko kolorea"
 #: dialogs/SimpleTableWidget.ui:137
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (html), widget (QTextEdit, previewTextEdit)
 #: dialogs/ChangeConfigureDialog.ui:158
@@ -405,36 +405,82 @@ msgid ""
 "format-change text. This is a line of text whose format has been changed. "
 "This is a line of text after the format-change text.</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; text-"
+"decoration: underline;\">Aurreikusi</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;"
+"\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Txertatutako testua</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Hori, txertatutako testuaren "
+"aurreko testu-lerro bat da. Hori, txertatutako testu-lerro bat da. Hori, "
+"txertatutako testuaren ondoko lerro bat da.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Ezabatutako testua</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Hori, ezabatutako testuaren "
+"aurreko testu bat da. Hori, ezabatutako testu-lerro bat da. Hori, "
+"ezabatutako testuaren ondoko lerro bat da.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Formatua duen testua</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Hori, formatu-aldaketa testuaren "
+"aurreko testu-lerro bat da. Hori, formatua aldatu zaion testu-lerro bat da. "
+"Hori, da formatu-aldaketa testuaren ondoko testu-lerro bat.</span></p></"
+"body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, deletionGroupBox)
 #: dialogs/ChangeConfigureDialog.ui:172
 #, kde-format
 msgid "Deletions"
-msgstr ""
+msgstr "Ezabatzeak"
 
 #. i18n: ectx: property (title), widget (QGroupBox, formatGroupBox)
 #: dialogs/ChangeConfigureDialog.ui:231
 #, kde-format
 msgid "Format Changes"
-msgstr ""
+msgstr "Formatu aldaketak"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ChangeTrackingOptions)
 #: dialogs/ChangeTrackingOptionsWidget.ui:14
 #, kde-format
 msgid "Change Tracking Options"
-msgstr ""
+msgstr "Aldatu jarraipen aukerak"
 
 #. i18n: ectx: property (text), widget (QPushButton, configureChangeTrackingButton)
 #: dialogs/ChangeTrackingOptionsWidget.ui:142
 #, kde-format
 msgid "Configure Settings"
-msgstr ""
+msgstr "Konfiguratu ezarpenak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, recordChangesCheckBox)
 #: dialogs/ChangeTrackingOptionsWidget.ui:175
 #, kde-format
 msgid "Record Changes"
-msgstr ""
+msgstr "Erregistratu aldaketak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showChangesCheckBox)
 #: dialogs/ChangeTrackingOptionsWidget.ui:182
@@ -470,13 +516,13 @@ msgstr "Hurrengo estiloa:"
 #: dialogs/CharacterGeneral.ui:62
 #, kde-format
 msgid "Parent style:"
-msgstr ""
+msgstr "Guraso-estiloa:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, inToc)
 #: dialogs/CharacterGeneral.ui:78
 #, kde-format
 msgid "Include in table of contents"
-msgstr ""
+msgstr "Barneratu eduki-taulan"
 
 #: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
 #, kde-format
@@ -484,9 +530,9 @@ msgid "Normal"
 msgstr "Arrunta"
 
 #: dialogs/CharacterHighlighting.cpp:261
-#, fuzzy, kde-format
+#, kde-format
 msgid "Small Caps"
-msgstr "Maiuskula txikiak"
+msgstr "Larri txikiak"
 
 #: dialogs/CharacterHighlighting.cpp:262
 #, kde-format
@@ -499,7 +545,7 @@ msgid "Lowercase"
 msgstr "Letra xeheak"
 
 #: dialogs/CharacterHighlighting.cpp:264
-#, fuzzy, kde-format
+#, kde-format
 msgid "Capitalize"
 msgstr "Hitzeko aurreneko letra letra-larriz ipintzea"
 
@@ -511,7 +557,7 @@ msgstr "Goi-indizea"
 #: dialogs/CharacterHighlighting.cpp:273 TextTool.cpp:285
 #, kde-format
 msgid "Subscript"
-msgstr "Azpindizea"
+msgstr "Azpi-indizea"
 
 #. i18n: ectx: property (text), widget (QLabel, textColorLabel)
 #: dialogs/CharacterHighlighting.ui:27 dialogs/FontDecorations.ui:49
@@ -529,7 +575,7 @@ msgstr "Atzeko planoaren kolorea:"
 #: dialogs/CharacterHighlighting.ui:110
 #, kde-format
 msgid "Underlining:"
-msgstr ""
+msgstr "Azpimarratzea:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:141
@@ -539,13 +585,13 @@ msgstr "Marratua:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:172
-#, fuzzy, kde-format
+#, kde-format
 msgid "Capitalization:"
-msgstr "Maiuskulaz:"
+msgstr "Aurreko letra letra-larriz ipintzea:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:185
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Character position"
 msgid "Position:"
 msgstr "Kokapena:"
@@ -561,6 +607,8 @@ msgid ""
 "The document already contains the bibliography entry with different data.\n"
 "Do you want to adjust existing entries?"
 msgstr ""
+"Dokumentuak dagoeneko bibliografia-sarrera datu ezberdinekin dauka.\n"
+"Dauden sarrerak doitu nahi dituzu?"
 
 #: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
 #, kde-format
@@ -571,25 +619,25 @@ msgstr "Abisua"
 #: dialogs/CitationInsertionDialog.cpp:73
 #, kde-format
 msgid "Short name%1"
-msgstr ""
+msgstr "Izen laburra%1"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, CitationInsertionDialog)
 #: dialogs/CitationInsertionDialog.ui:20
 #, kde-format
 msgid "Insert Bibliography entry"
-msgstr ""
+msgstr "Txertatu bibliografia-sarrera"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/CitationInsertionDialog.ui:32
 #, kde-format
 msgid "Insert Bibliography Entry Details"
-msgstr ""
+msgstr "Sartu bibliografia-sarreraren xehetasunak"
 
 #. i18n: ectx: property (text), widget (QLabel, shortnameLabel)
 #: dialogs/CitationInsertionDialog.ui:38
 #, kde-format
 msgid "Short Name:"
-msgstr ""
+msgstr "Izen laburra:"
 
 #. i18n: ectx: property (text), widget (QLabel, sourcetypeLabel)
 #: dialogs/CitationInsertionDialog.ui:52
@@ -636,19 +684,19 @@ msgstr "E-posta"
 #: dialogs/CitationInsertionDialog.ui:85
 #, kde-format
 msgid "Inbook"
-msgstr ""
+msgstr "Liburuan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:90
 #, kde-format
 msgid "Incollection"
-msgstr ""
+msgstr "Bilduman"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:95
 #, kde-format
 msgid "Inproceedings"
-msgstr ""
+msgstr "Prozeduretan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -672,15 +720,15 @@ msgstr "Eskuliburua"
 #: dialogs/InsertBibliographyDialog.ui:111
 #, kde-format
 msgid "Masters thesis"
-msgstr ""
+msgstr "Maisutasun tesian"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/CitationInsertionDialog.ui:115
 #: dialogs/InsertBibliographyDialog.ui:116
-#, fuzzy, kde-format
+#, kde-format
 msgid "Misc"
-msgstr "Hainbat"
+msgstr "askotarikoa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -688,7 +736,7 @@ msgstr "Hainbat"
 #: dialogs/InsertBibliographyDialog.ui:121
 #, kde-format
 msgid "PhD thesis"
-msgstr ""
+msgstr "Doktorego tesi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -696,13 +744,13 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:126
 #, kde-format
 msgid "Proceedings"
-msgstr ""
+msgstr "Prozedurak"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:130
 #, kde-format
 msgid "Tech Report"
-msgstr ""
+msgstr "Txosten teknikoa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -710,7 +758,7 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:136
 #, kde-format
 msgid "Unpublished"
-msgstr ""
+msgstr "Argitaratu gabea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -718,78 +766,78 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:141
 #, kde-format
 msgid "WWW"
-msgstr ""
+msgstr "WWW"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom 1"
-msgstr "Pertsonalizatua"
+msgstr "neurrira 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom 2"
-msgstr "Pertsonalizatua"
+msgstr "neurrira 2"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom 3"
-msgstr "Pertsonalizatua"
+msgstr "neurrira 3"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:160
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom 4"
-msgstr "Pertsonalizatua"
+msgstr "neurrira 4"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom 5"
-msgstr "Pertsonalizatua"
+msgstr "neurrira 5"
 
 #. i18n: ectx: property (text), widget (QLabel, authorLabel)
 #: dialogs/CitationInsertionDialog.ui:173
-#, fuzzy, kde-format
+#, kde-format
 msgid "Author:"
 msgstr "Egilea:"
 
 #. i18n: ectx: property (text), widget (QLabel, titleLabel)
 #: dialogs/CitationInsertionDialog.ui:183
 #: dialogs/InsertBibliographyDialog.ui:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Title:"
 msgstr "Titulua:"
 
 #. i18n: ectx: property (text), widget (QLabel, yearLabel)
 #: dialogs/CitationInsertionDialog.ui:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Year:"
 msgstr "Urtea:"
 
 #. i18n: ectx: property (text), widget (QLabel, publisherLabel)
 #: dialogs/CitationInsertionDialog.ui:203
-#, fuzzy, kde-format
+#, kde-format
 msgid "Publisher:"
 msgstr "Argitaratzailea:"
 
 #. i18n: ectx: property (text), widget (QLabel, addressLabel)
 #: dialogs/CitationInsertionDialog.ui:213
-#, fuzzy, kde-format
+#, kde-format
 msgid "Address:"
 msgstr "Helbidea:"
 
 #. i18n: ectx: property (text), widget (QLabel, isbnLabel)
 #: dialogs/CitationInsertionDialog.ui:223
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISBN:"
-msgstr "ISBN#"
+msgstr "ISBN:"
 
 #. i18n: ectx: property (text), widget (QLabel, chapterLabel)
 #: dialogs/CitationInsertionDialog.ui:233
-#, fuzzy, kde-format
+#, kde-format
 msgid "Chapter:"
 msgstr "Kapitulua"
 
@@ -797,165 +845,165 @@ msgstr "Kapitulua"
 #: dialogs/CitationInsertionDialog.ui:243
 #, kde-format
 msgid "ISSN:"
-msgstr ""
+msgstr "ISSN:"
 
 #. i18n: ectx: property (text), widget (QLabel, editorLabel)
 #: dialogs/CitationInsertionDialog.ui:253
-#, fuzzy, kde-format
+#, kde-format
 msgid "Editor:"
-msgstr "Editorea:"
+msgstr "Argitaratzailea:"
 
 #. i18n: ectx: property (text), widget (QLabel, pagesLabel)
 #: dialogs/CitationInsertionDialog.ui:263
 #, kde-format
 msgid "Page(s):"
-msgstr ""
+msgstr "Orrialdea(k):"
 
 #. i18n: ectx: property (text), widget (QLabel, booktitleLabel)
 #: dialogs/CitationInsertionDialog.ui:273
-#, fuzzy, kde-format
+#, kde-format
 msgid "Book title:"
-msgstr "Liburuaren izenburua"
+msgstr "Liburuaren titulua:"
 
 #. i18n: ectx: property (text), widget (QLabel, editionLabel)
 #: dialogs/CitationInsertionDialog.ui:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edition:"
-msgstr "Argitalpena"
+msgstr "Argitaraldia:"
 
 #. i18n: ectx: property (text), widget (QLabel, publicationLabel)
 #: dialogs/CitationInsertionDialog.ui:293
 #, kde-format
 msgid "Publication:"
-msgstr ""
+msgstr "Argitalpena:"
 
 #. i18n: ectx: property (text), widget (QLabel, volumeLabel)
 #: dialogs/CitationInsertionDialog.ui:303
-#, fuzzy, kde-format
+#, kde-format
 msgid "Volume:"
-msgstr "Bolumena"
+msgstr "Bolumena:"
 
 #. i18n: ectx: property (text), widget (QLabel, institutionLabel)
 #: dialogs/CitationInsertionDialog.ui:313
-#, fuzzy, kde-format
+#, kde-format
 msgid "Institution:"
-msgstr "Erakundea: %1"
+msgstr "Instituzioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, organisationLabel)
 #: dialogs/CitationInsertionDialog.ui:323
 #, kde-format
 msgid "Organisation:"
-msgstr ""
+msgstr "Erakundea:"
 
 #. i18n: ectx: property (text), widget (QLabel, reporttypeLabel)
 #: dialogs/CitationInsertionDialog.ui:333
 #, kde-format
 msgid "Type of Report:"
-msgstr ""
+msgstr "Txosten mota:"
 
 #. i18n: ectx: property (text), widget (QLabel, schoolLabel)
 #: dialogs/CitationInsertionDialog.ui:343
-#, fuzzy, kde-format
+#, kde-format
 msgid "University:"
-msgstr "Unibertsitatea"
+msgstr "Unibertsitatea:"
 
 #. i18n: ectx: property (text), widget (QLabel, journalLabel)
 #: dialogs/CitationInsertionDialog.ui:353
-#, fuzzy, kde-format
+#, kde-format
 msgid "Journal:"
-msgstr "Egunkaria"
+msgstr "Egunkaria:"
 
 #. i18n: ectx: property (text), widget (QLabel, monthLabel)
 #: dialogs/CitationInsertionDialog.ui:363
-#, fuzzy, kde-format
+#, kde-format
 msgid "Month:"
 msgstr "Hilabetea:"
 
 #. i18n: ectx: property (text), widget (QLabel, seriesLabel)
 #: dialogs/CitationInsertionDialog.ui:373
-#, fuzzy, kde-format
+#, kde-format
 msgid "Series:"
-msgstr "Serieak"
+msgstr "Sortak:"
 
 #. i18n: ectx: property (text), widget (QLabel, numberLabel)
 #: dialogs/CitationInsertionDialog.ui:383
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number:"
 msgstr "Zenbakia:"
 
 #. i18n: ectx: property (text), widget (QLabel, noteLabel)
 #: dialogs/CitationInsertionDialog.ui:393
-#, fuzzy, kde-format
+#, kde-format
 msgid "Note:"
 msgstr "Oharra:"
 
 #. i18n: ectx: property (text), widget (QLabel, annotationLabel)
 #: dialogs/CitationInsertionDialog.ui:403
-#, fuzzy, kde-format
+#, kde-format
 msgid "Annotation:"
-msgstr "Idatzoharra"
+msgstr "Idatzoharra:"
 
 #. i18n: ectx: property (text), widget (QLabel, urlLabel)
 #: dialogs/CitationInsertionDialog.ui:413
-#, fuzzy, kde-format
+#, kde-format
 msgid "URL:"
-msgstr "URLa:"
+msgstr "URL:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud1Label)
 #: dialogs/CitationInsertionDialog.ui:423
-#, fuzzy, kde-format
+#, kde-format
 msgid "User-defined 1:"
-msgstr "(erabiltzaileak definitua)"
+msgstr "Erabiltzaileak definitua 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud3Label)
 #: dialogs/CitationInsertionDialog.ui:433
-#, fuzzy, kde-format
+#, kde-format
 msgid "User-defined 3:"
-msgstr "(erabiltzaileak definitua)"
+msgstr "Erabiltzaileak definitua 3:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud2Label)
 #: dialogs/CitationInsertionDialog.ui:440
-#, fuzzy, kde-format
+#, kde-format
 msgid "User-defined 2:"
-msgstr "(erabiltzaileak definitua)"
+msgstr "Erabiltzaileak definitua 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud4Label)
 #: dialogs/CitationInsertionDialog.ui:453
-#, fuzzy, kde-format
+#, kde-format
 msgid "User-defined 4:"
-msgstr "(erabiltzaileak definitua)"
+msgstr "Erabiltzaileak definitua 4:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud5Label)
 #: dialogs/CitationInsertionDialog.ui:463
-#, fuzzy, kde-format
+#, kde-format
 msgid "User-defined 5:"
-msgstr "(erabiltzaileak definitua)"
+msgstr "Erabiltzaileak definitua 5:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CitationInsertionDialog.ui:485
-#, fuzzy, kde-format
+#, kde-format
 msgid "OR"
-msgstr "OR"
+msgstr "EDO"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/CitationInsertionDialog.ui:509
 #, kde-format
 msgid "From the document:"
-msgstr ""
+msgstr "Dokumentutik:"
 
 #: dialogs/DockerStylesComboModel.cpp:61
 #, kde-format
 msgid "Used Styles"
-msgstr ""
+msgstr "Erabilitako estiloak"
 
 #: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Unused Styles"
-msgstr ""
+msgstr "Erabili gabeko estiloak"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/FontDecorations.ui:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colors"
 msgstr "Koloreak"
 
@@ -963,23 +1011,23 @@ msgstr "Koloreak"
 #: dialogs/FontDecorations.ui:95
 #, kde-format
 msgid "Text Shadow"
-msgstr ""
+msgstr "Testuaren itzala"
 
 #. i18n: ectx: property (text), widget (QLabel, shadowColorLabel)
 #: dialogs/FontDecorations.ui:244
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color:"
 msgstr "Kolorea:"
 
 #. i18n: ectx: property (text), widget (QLabel, shadowDistanceLabel)
 #: dialogs/FontDecorations.ui:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance:"
 msgstr "Distantzia:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, positionGroupBox)
 #: dialogs/FontDecorations.ui:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "Position"
 msgstr "Kokapena"
 
@@ -987,15 +1035,14 @@ msgstr "Kokapena"
 #: dialogs/FontDecorations.ui:295
 #, kde-format
 msgid "Automatic hyphenation"
-msgstr ""
+msgstr "Hitzen banaketa automatikoa"
 
 #: dialogs/FontDia.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select Font"
 msgstr "Hautatu letra-tipoa"
 
 #: dialogs/FontDia.cpp:68
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Font"
 msgstr "Letra-tipoa"
@@ -1004,7 +1051,7 @@ msgstr "Letra-tipoa"
 #. i18n: ectx: property (windowTitle), widget (QDialog, InsertBibliographyDialog)
 #: dialogs/InsertBibliographyDialog.ui:17
 #: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Bibliography"
 msgstr "Txertatu bibliografia"
 
@@ -1012,85 +1059,85 @@ msgstr "Txertatu bibliografia"
 #: dialogs/InsertBibliographyDialog.ui:26
 #, kde-format
 msgid "Bibliography title"
-msgstr ""
+msgstr "Bibliografia titulua"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/InsertBibliographyDialog.ui:45
 #, kde-format
 msgid "Bibliography entries"
-msgstr ""
+msgstr "Bibliografia sarrerak"
 
 #. i18n: ectx: property (text), widget (QLabel, bibTypesLabel)
 #: dialogs/InsertBibliographyDialog.ui:53
 #, kde-format
 msgid "Bibliography type:"
-msgstr ""
+msgstr "Bibliografia mota:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:86
 #, kde-format
 msgid "In book"
-msgstr ""
+msgstr "Liburuan"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:91
 #, kde-format
 msgid "In collection"
-msgstr ""
+msgstr "Bilduman"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:96
 #, kde-format
 msgid "In proceedings"
-msgstr ""
+msgstr "Prozeduran"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:131
 #, kde-format
 msgid "Tech report"
-msgstr ""
+msgstr "Txosten teknikoa"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom1"
-msgstr "Pertsonalizatua"
+msgstr "neurrira1"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom2"
-msgstr "Pertsonalizatua"
+msgstr "neurrira2"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:156
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom3"
-msgstr "Pertsonalizatua"
+msgstr "neurrira3"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:161
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom4"
-msgstr "Pertsonalizatua"
+msgstr "neurrira4"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:166
-#, fuzzy, kde-format
+#, kde-format
 msgid "custom5"
-msgstr "Pertsonalizatua"
+msgstr "neurrira5"
 
 #. i18n: ectx: property (text), widget (QLabel, availableFieldsLabel)
 #: dialogs/InsertBibliographyDialog.ui:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Available fields "
-msgstr "Eremu &erabilgarriak:"
+msgstr "Eremu erabilgarriak"
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: dialogs/InsertBibliographyDialog.ui:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add >>"
-msgstr "Gehitu"
+msgstr "Gehitu >>"
 
 #. i18n: ectx: property (text), widget (QPushButton, span)
 #: dialogs/InsertBibliographyDialog.ui:199
@@ -1100,69 +1147,69 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: dialogs/InsertBibliographyDialog.ui:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "<<Remove"
-msgstr "Kendu"
+msgstr "<< Kendu"
 
 #. i18n: ectx: property (text), widget (QLabel, addedFieldsLabel)
 #: dialogs/InsertBibliographyDialog.ui:217
 #, kde-format
 msgid "Fields added"
-msgstr ""
+msgstr "Gehitutako eremuak"
 
 #: dialogs/InsertCharacter.cpp:16
-#, fuzzy, kde-format
+#, kde-format
 msgid "Special Characters"
 msgstr "Karaktere bereziak"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
 #: ReferencesTool.cpp:114 TextTool.cpp:2259
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert"
 msgstr "Txertatu"
 
 #: dialogs/InsertCharacter.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Close dialog"
 msgid "Close"
 msgstr "Itxi"
 
 #. i18n: ectx: property (text), widget (QLabel, filterLabel)
 #: dialogs/LanguageTab.ui:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Quick search:"
-msgstr "Bilaketa bizkorra"
+msgstr "Bilaketa bizkorra:"
 
 #: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
 #: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
-#, fuzzy, kde-format
+#, kde-format
 msgid "The URL is invalid"
-msgstr "%1 url baliogabea da"
+msgstr "URLa baliogabea da"
 
 #: dialogs/LinkInsertionDialog.cpp:88
 #, kde-format
 msgid "Bookmark does not exist"
-msgstr ""
+msgstr "Liburu-marka ez da existitzen"
 
 #: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
-msgstr ""
+msgstr "Titulua ekartzen: &percnt;0 osatuta"
 
 #: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
 msgid "Fetch timed out"
-msgstr ""
+msgstr "Ekartzeko denbora-muga gainditu da"
 
 #: dialogs/LinkInsertionDialog.cpp:268
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
-msgstr ""
+msgstr "Titulua ekartzen: &percnt;%1 osatuta"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
 #: dialogs/LinkInsertionDialog.ui:14
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link"
 msgstr "Esteka"
 
@@ -1170,7 +1217,7 @@ msgstr "Esteka"
 #: dialogs/LinkInsertionDialog.ui:30
 #, kde-format
 msgid "Web Link"
-msgstr ""
+msgstr "Web-esteka"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, weblinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:34
@@ -1180,18 +1227,21 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
+"Txertatu estekak web-dokumentuetan. Estekaren URLa eta estekarentzako "
+"etiketa eman ditzakezu,\n"
+"edo URLa bakarrik sartu eta sakatu \"Ekarri titulua URLtik\""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:42
 #, kde-format
 msgid "The address of your document (Uniform Resource Locator)"
-msgstr ""
+msgstr "Zure dokumentuaren helbidea (URL - Baliabideen bilatzaile uniformea)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgid " URL:"
-msgstr "URLa:"
+msgstr " URL:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:58
@@ -1200,26 +1250,28 @@ msgid ""
 "Hit this button to get the title from the URL. Redirections are also "
 "handled. "
 msgstr ""
+"Sakatu botoi hori URLtik titulua lortzeko. Berbideratzeak ere maneiatzen "
+"ditu."
 
 #. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:61
 #, kde-format
 msgid "Fetch Title From URL"
-msgstr ""
+msgstr "Ekarri Titulua URLtik"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #: dialogs/LinkInsertionDialog.ui:81 dialogs/LinkInsertionDialog.ui:165
 #, kde-format
 msgid "The text that will be displayed for your link"
-msgstr ""
+msgstr "Zure estekarekin azalduko den testua"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/LinkInsertionDialog.ui:84 dialogs/LinkInsertionDialog.ui:168
-#, fuzzy, kde-format
+#, kde-format
 msgid " Text:"
-msgstr "Testua"
+msgstr " Testua:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:113
@@ -1243,9 +1295,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:135
-#, fuzzy, kde-format
+#, kde-format
 msgid " Name:"
-msgstr "Izena"
+msgstr " Izena:"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ParagraphIndentSpacing)
 #. i18n: ectx: property (whatsThis), widget (QGroupBox)
@@ -1254,7 +1306,7 @@ msgstr "Izena"
 #: dialogs/ParagraphIndentSpacing.ui:97
 #, kde-format
 msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
-msgstr ""
+msgstr "<p><ul><li><b>Bakuna</b>: Lerro-tarte arrunta</li></ul></p> "
 
 #. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
 #: dialogs/ListLevelWidget.ui:47
@@ -1266,17 +1318,17 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:71
 #, kde-format
 msgid "Tab character"
-msgstr ""
+msgstr "Tab karakterea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:76
 #, kde-format
 msgid "Space character"
-msgstr ""
+msgstr "Zuriune karakterea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "Nothing"
 msgstr "Ezer ez"
 
@@ -1292,12 +1344,19 @@ msgid ""
 "cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
 "est laborum."
 msgstr ""
+"              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed "
+"do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+"minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+"ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+"cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
+"est laborum."
 
 #. i18n: ectx: property (text), widget (QLabel, labelLabel)
 #: dialogs/ListLevelWidget.ui:117
-#, fuzzy, kde-format
+#, kde-format
 msgid "LABEL"
-msgstr "Etiketa"
+msgstr "ETIKETA"
 
 #. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
 #: dialogs/ListLevelWidget.ui:149
@@ -1334,13 +1393,13 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, numberTab)
 #: dialogs/ListLevelWidget.ui:334
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number"
 msgstr "Zenbakia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ListLevelWidget.ui:366
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format:"
 msgstr "Formatua:"
 
@@ -1354,17 +1413,17 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:436
 #, kde-format
 msgid "Letter synchronization"
-msgstr ""
+msgstr "Letrak sinkronizatzea"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
 #: dialogs/ListLevelWidget.ui:454
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bullet"
-msgstr "Bala"
+msgstr "Buleta"
 
 #. i18n: ectx: attribute (title), widget (QWidget, imageTab)
 #: dialogs/ListLevelWidget.ui:459
-#, fuzzy, kde-format
+#, kde-format
 msgid "Picture"
 msgstr "Irudia"
 
@@ -1372,54 +1431,54 @@ msgstr "Irudia"
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr ""
+msgstr "Zamatu Irudia..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Rename"
-msgstr "&Izena aldatu"
+msgstr "Be&rrizendatu"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: dialogs/ManageBookmark.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Delete"
-msgstr "&Ezabatu"
+msgstr "E&zabatu"
 
 #: dialogs/ManageBookmarkDialog.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename Bookmark"
-msgstr "Izena aldatu laster-markari"
+msgstr "Berrizendatu laster-marka"
 
 #: dialogs/ManageBookmarkDialog.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr "Eman beste izen bat laster-markari."
+msgstr "Mesedez, eman laster-markarentzako izen berri bat"
 
 #: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr "Badago lehendik \"%1\" izena duen laster-marka bat."
+msgstr "Lehendik badago \"%1\" izena duen laster-marka bat."
 
 #: dialogs/ManageBookmarkDialog.cpp:110
 #, kde-format
 msgid "Insert Bookmark"
-msgstr ""
+msgstr "Txertatu laster-marka"
 
 #: dialogs/ManageBookmarkDialog.cpp:111
 #, kde-format
 msgid "Please provide a name for the bookmark"
-msgstr ""
+msgstr "Mesedez, eman laster-markarentzako izen bat"
 
 #: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage Bookmarks"
 msgstr "Kudeatu laster-markak"
 
 #: dialogs/NotesConfigurationDialog.cpp:24
 #, kde-format
 msgid "Footnote Settings"
-msgstr ""
+msgstr "Orri-oin ezarpenak"
 
 #: dialogs/NotesConfigurationDialog.cpp:27
 #, kde-format
@@ -1430,53 +1489,53 @@ msgstr ""
 #: dialogs/NotesConfigurationDialog.ui:54
 #, kde-format
 msgid "Automatic Numbering:"
-msgstr ""
+msgstr "Zenbakitze automatikoa:"
 
 #. i18n: ectx: property (text), widget (QLabel, prefix)
 #: dialogs/NotesConfigurationDialog.ui:75
-#, fuzzy, kde-format
+#, kde-format
 msgid " Prefix:"
-msgstr "Aurrizkia:"
+msgstr " Aurrizkia:"
 
 #. i18n: ectx: property (text), widget (QLabel, startAt)
 #: dialogs/NotesConfigurationDialog.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid " Start at:"
-msgstr "Hasiera:"
+msgstr " Noiz hemendik:"
 
 #. i18n: ectx: property (text), widget (QLabel, numStyle)
 #: dialogs/NotesConfigurationDialog.ui:95
-#, fuzzy, kde-format
+#, kde-format
 msgid " Format:"
-msgstr "Formatua"
+msgstr " Formatua:"
 
 #. i18n: ectx: property (text), widget (QLabel, suffix)
 #: dialogs/NotesConfigurationDialog.ui:111
-#, fuzzy, kde-format
+#, kde-format
 msgid " Suffix:"
-msgstr "Atzizkia:"
+msgstr " Atzizkia:"
 
 #. i18n: ectx: property (text), widget (QLabel, beginAt)
 #: dialogs/NotesConfigurationDialog.ui:127
 #, kde-format
 msgid "Starts over at:"
-msgstr ""
+msgstr "Hasi berriz hemendik:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page"
-msgstr "Orria"
+msgstr "Orrialdea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Chapter"
 msgstr "Kapitulua"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Document"
 msgstr "Dokumentua"
 
@@ -1484,43 +1543,43 @@ msgstr "Dokumentua"
 #: dialogs/NotesConfigurationDialog.ui:233
 #, kde-format
 msgid "1, 2, 3, ..."
-msgstr ""
+msgstr "1, 2, 3, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:238
 #, kde-format
 msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
-msgstr ""
+msgstr "a, b, c, ..., aa, ab, ..., ba, bb, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:243
 #, kde-format
 msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
-msgstr ""
+msgstr "A, B, C, ..., AA, AB, ..., BA, BB, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:248
 #, kde-format
 msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
-msgstr ""
+msgstr "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:253
 #, kde-format
 msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
-msgstr ""
+msgstr "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:258
 #, kde-format
 msgid "i, ii, iii, ..."
-msgstr ""
+msgstr "i, ii, iii, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:263
 #, kde-format
 msgid "I,II,III, ..."
-msgstr ""
+msgstr "I,II,III, ..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, continuationBox)
 #: dialogs/NotesConfigurationDialog.ui:290
@@ -1541,7 +1600,7 @@ msgid " Text saying it will continue:"
 msgstr ""
 
 #: dialogs/ParagraphBulletsNumbers.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Automatic horizontal alignment"
 msgid "Auto"
 msgstr "Automatikoa"
@@ -1571,13 +1630,13 @@ msgid "Tab Stop"
 msgstr ""
 
 #: dialogs/ParagraphBulletsNumbers.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Space"
 msgid "Space"
 msgstr "Zuriunea"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "None"
 msgid "Nothing"
 msgstr "Ezer ez"
@@ -1589,19 +1648,19 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphBulletsNumbers.ui:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start at:"
-msgstr "Hasiera:"
+msgstr "Hasi hemen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/ParagraphBulletsNumbers.ui:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alignment:"
-msgstr "Lerrokadura:"
+msgstr "Lerrokatzea:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/ParagraphBulletsNumbers.ui:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Depth:"
 msgstr "Sakonera:"
 
@@ -1609,13 +1668,13 @@ msgstr "Sakonera:"
 #: dialogs/ParagraphBulletsNumbers.ui:128
 #, kde-format
 msgid "Display Levels:"
-msgstr ""
+msgstr "Azaltzeko mailak:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: dialogs/ParagraphBulletsNumbers.ui:148
 #, kde-format
 msgid "Bullet/Number followed by"
-msgstr ""
+msgstr "Buleta/zenbakia ondoren"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_2)
@@ -1623,9 +1682,9 @@ msgstr ""
 #: dialogs/ParagraphBulletsNumbers.ui:158
 #: dialogs/ParagraphBulletsNumbers.ui:175
 #: dialogs/ParagraphBulletsNumbers.ui:192
-#, fuzzy, kde-format
+#, kde-format
 msgid " cm"
-msgstr "cm"
+msgstr " cm"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: dialogs/ParagraphBulletsNumbers.ui:165
@@ -1655,54 +1714,54 @@ msgstr ""
 #: dialogs/ParagraphBulletsNumbers.ui:241
 #, kde-format
 msgid "Restart numbering at this paragraph"
-msgstr ""
+msgstr "Berriz hasi zenbaketa paragrafo honetan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, letterSynchronization)
 #: dialogs/ParagraphBulletsNumbers.ui:248
 #, kde-format
 msgid "Letter Synchronization"
-msgstr ""
+msgstr "Letrak sinkronizatzea"
 
 #. i18n: ectx: property (text), widget (QLabel, widthLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:257
-#, fuzzy, kde-format
+#, kde-format
 msgid "Width"
 msgstr "Zabalera"
 
 #. i18n: ectx: property (text), widget (QLabel, insertImageLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:264
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Image"
-msgstr "Txertatu irudia"
+msgstr "Txertatu Irudia"
 
 #. i18n: ectx: property (text), widget (QLabel, heightLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:274
-#, fuzzy, kde-format
+#, kde-format
 msgid "Height"
 msgstr "Altuera"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertImage)
 #: dialogs/ParagraphBulletsNumbers.ui:284
-#, fuzzy, kde-format
+#, kde-format
 msgid "Browse..."
 msgstr "Arakatu..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background"
 msgstr "Atzeko planoa"
 
 #. i18n: ectx: property (text), widget (QLabel, backgroundColorLabel)
 #: dialogs/ParagraphDecorations.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background color"
 msgstr "Atzeko planoaren kolorea"
 
 #: dialogs/ParagraphDropCaps.cpp:20
 #, kde-format
 msgid "Whole Word"
-msgstr ""
+msgstr "Hitz osoa"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ParagraphDropCaps.ui:32
@@ -1714,13 +1773,13 @@ msgstr ""
 #: dialogs/ParagraphDropCaps.ui:84
 #, kde-format
 msgid "Distance to paragraph:"
-msgstr ""
+msgstr "Paragrafora distantzia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/ParagraphDropCaps.ui:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number of characters:"
-msgstr "Karaktere kopurua"
+msgstr "Karaktere kopurua:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ParagraphDropCaps.ui:104
@@ -1731,22 +1790,22 @@ msgstr ""
 #: dialogs/ParagraphGeneral.cpp:40
 #, kde-format
 msgid "Indent/Spacing"
-msgstr ""
+msgstr "Koskatzea/tartekatzea"
 
 #: dialogs/ParagraphGeneral.cpp:45
 #, kde-format
 msgid "General Layout"
-msgstr ""
+msgstr "Antolamendu orokorra"
 
 #: dialogs/ParagraphGeneral.cpp:50
 #, kde-format
 msgid "Bullets/Numbers"
-msgstr ""
+msgstr "Buletak/Zenbakiak"
 
 #: dialogs/ParagraphGeneral.cpp:55
 #, kde-format
 msgid "Decorations"
-msgstr ""
+msgstr "Apaingarriak"
 
 #: dialogs/ParagraphGeneral.cpp:60
 #, kde-format
@@ -1754,70 +1813,70 @@ msgid "Drop Caps"
 msgstr ""
 
 #: dialogs/ParagraphIndentSpacing.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing value"
 msgid "Single"
-msgstr "Bakarra"
+msgstr "Bakuna"
 
 #: dialogs/ParagraphIndentSpacing.cpp:26
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing value"
 msgid "1.5 Lines"
 msgstr "1,5 lerro"
 
 #: dialogs/ParagraphIndentSpacing.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing value"
 msgid "Double"
 msgstr "Bikoitza"
 
 #: dialogs/ParagraphIndentSpacing.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing type"
 msgid "Proportional"
 msgstr "Proportzionala"
 
 #: dialogs/ParagraphIndentSpacing.cpp:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing type"
 msgid "Additional"
 msgstr "Osagarria"
 
 #: dialogs/ParagraphIndentSpacing.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing type"
 msgid "Fixed"
 msgstr "Finkoa"
 
 #: dialogs/ParagraphIndentSpacing.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Line spacing type"
 msgid "At least"
 msgstr "Gutxienez"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphIndentSpacing.ui:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Indent"
 msgstr "Koska"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left:"
-msgstr "Ezkerrean:"
+msgstr "Ezkerretik:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right:"
-msgstr "Eskuinera:"
+msgstr "Eskuinetik:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:71
 #, kde-format
 msgid "First Line:"
-msgstr ""
+msgstr "Lehen lerroa:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:87
@@ -1827,7 +1886,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/ParagraphIndentSpacing.ui:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Spacing"
 msgstr "Lerroartea"
 
@@ -1835,13 +1894,13 @@ msgstr "Lerroartea"
 #: dialogs/ParagraphIndentSpacing.ui:134
 #, no-c-format, kde-format
 msgid " %"
-msgstr ""
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:180
 #, kde-format
 msgid "Use Font Metrics:"
-msgstr ""
+msgstr "Erabili letra-tipoaren metrikak:"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/ParagraphIndentSpacing.ui:202
@@ -1851,25 +1910,25 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:208
-#, fuzzy, kde-format
+#, kde-format
 msgid "Before:"
-msgstr "Aurretik"
+msgstr "Aurretik:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:221
-#, fuzzy, kde-format
+#, kde-format
 msgid "After:"
-msgstr "Hau iraganda:"
+msgstr "Ondoren:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphLayout.ui:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alignment"
 msgstr "Lerrokatzea"
 
 #. i18n: ectx: property (text), widget (QRadioButton, justify)
 #: dialogs/ParagraphLayout.ui:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Justify"
 msgstr "Justifikatu"
 
@@ -1877,25 +1936,25 @@ msgstr "Justifikatu"
 #: dialogs/ParagraphLayout.ui:54
 #, kde-format
 msgid "Behavior at End of Frame/Page"
-msgstr ""
+msgstr "Marko/Orrialde amaierako jokabidea"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:60
 #, kde-format
 msgid "Keep lines together"
-msgstr ""
+msgstr "Mantendu lerroak batera"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakBefore)
 #: dialogs/ParagraphLayout.ui:67
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert break before paragraph"
-msgstr "Txertatu jauzia parrafoa baina lehen"
+msgstr "Txertatu haustura paragrafo aurretik"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
 #: dialogs/ParagraphLayout.ui:74
 #, kde-format
 msgid "Insert break after paragraph"
-msgstr ""
+msgstr "Txertatu haustura paragrafo ondoren"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ParagraphLayout.ui:83
@@ -1906,80 +1965,80 @@ msgstr ""
 #: dialogs/ParagraphSettingsDialog.cpp:28
 #, kde-format
 msgid "Paragraph Format"
-msgstr ""
+msgstr "Paragrafoen formatua"
 
 #: dialogs/QuickTableButton.cpp:146
 #, kde-format
 msgid "Insert a table"
-msgstr ""
+msgstr "Txertatu taula bat"
 
 #: dialogs/SectionFormatDialog.cpp:41
 #, kde-format
 msgid "Section name"
-msgstr ""
+msgstr "Atalaren izena"
 
 #: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
 #, kde-format
 msgid "Configure sections"
-msgstr ""
+msgstr "Konfiguratu atalak"
 
 #: dialogs/SectionFormatDialog.cpp:154
 #, kde-format
 msgid "Invalid characters or section with such name exists."
-msgstr ""
+msgstr "Karaktere baliogabeak edo halako izena duen atal bat dago."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/SectionFormatDialog.ui:29
 #, kde-format
 msgid "Section name:"
-msgstr ""
+msgstr "Atalaren izena:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
 #: dialogs/SectionsSplitDialog.ui:6
 #, kde-format
 msgid "Split sections"
-msgstr ""
+msgstr "Zatitu atalak"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/SectionsSplitDialog.ui:12
 #, kde-format
 msgid "Insert paragraph..."
-msgstr ""
+msgstr "Txertatu paragrafoa..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
 #, kde-format
 msgid "before start of section:"
-msgstr ""
+msgstr "atala hasi baino lehen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/SectionsSplitDialog.ui:37
 #, kde-format
 msgid "after end of section:"
-msgstr ""
+msgstr "atala bukatu ondoren:"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:29
 #, kde-format
 msgid "Insert Note"
-msgstr ""
+msgstr "Txertatu Oharra"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:39
 #, kde-format
 msgid "Remove Note"
-msgstr ""
+msgstr "Kendu Oharra"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
 #: dialogs/SimpleCaptionsWidget.ui:34
 #, kde-format
 msgid "Add caption"
-msgstr ""
+msgstr "Gehitu epigrafea"
 
 #: dialogs/SimpleCharacterWidget.cpp:53
 #, kde-format
 msgid "Change font format"
-msgstr ""
+msgstr "Aldatu letra-tipoaren formatua"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
 #: dialogs/SimpleCitationBibliographyWidget.ui:23
@@ -1997,12 +2056,12 @@ msgstr ""
 #: dialogs/SimpleCitationBibliographyWidget.ui:55
 #, kde-format
 msgid "Configure Bibliography"
-msgstr ""
+msgstr "Konfiguratu Bibliografia"
 
 #: dialogs/SimpleFootEndNotesWidget.cpp:27
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
-msgstr ""
+msgstr "Kurtsorearen kokalekuan oin-ohar bat txertatzen du"
 
 #: dialogs/SimpleFootEndNotesWidget.cpp:32
 #, kde-format
@@ -2019,7 +2078,7 @@ msgstr ""
 #: dialogs/SimpleFootEndNotesWidget.ui:48
 #, kde-format
 msgid "Footnote"
-msgstr ""
+msgstr "Oin-oharra"
 
 #. i18n: ectx: property (toolTip), widget (QWidget, SimpleInsertWidget)
 #: dialogs/SimpleInsertWidget.ui:20
@@ -2891,32 +2950,32 @@ msgstr ""
 #: TextTool.cpp:488
 #, kde-format
 msgid "Insert Comment"
-msgstr ""
+msgstr "Txertatu Iruzkina"
 
 #: TextTool.cpp:574
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insertion"
 msgstr "Txertatzea"
 
 #: TextTool.cpp:576
-#, fuzzy, kde-format
+#, kde-format
 msgid "Deletion"
 msgstr "Ezabatzea"
 
 #: TextTool.cpp:578
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formatting"
-msgstr "Formatua"
+msgstr "Formatua ematea"
 
 #: TextTool.cpp:593
 #, kde-format
 msgid "Ctrl+click to go to link "
-msgstr ""
+msgstr "Ktrl+klik estekara joateko"
 
 #: TextTool.cpp:600
 #, kde-format
 msgid "Ctrl+click to go to the note "
-msgstr ""
+msgstr "Ktrl+klik oharrera joateko"
 
 #: TextTool.cpp:606
 #, kde-format
@@ -2931,64 +2990,60 @@ msgstr ""
 #: TextTool.cpp:737
 #, kde-format
 msgid "Press shift to not resize this"
-msgstr ""
+msgstr "Sakatu Maius. honen neurria ez aldatzeko"
 
 #: TextTool.cpp:939
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
-msgstr "Aldatu ertz-formatua"
+msgstr "Aldatu Ertz-formatua"
 
 #: TextTool.cpp:1158
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Ebaki"
 
 #: TextTool.cpp:1418
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
 msgstr "Doitu zutabe-zabalera"
 
 #: TextTool.cpp:1461
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
 msgstr "Doitu errenkada-altuera"
 
 #: TextTool.cpp:2257
-#, fuzzy, kde-format
+#, kde-format
 msgid "Table"
 msgstr "Taula"
 
 #: TextTool.cpp:2616 TextTool.cpp:2621
-#, fuzzy, kde-format
+#, kde-format
 msgid "Autocorrection"
-msgstr "Auto-zuzenketa"
+msgstr "Zuzenketa automatikoa"
 
 #: TextTool.cpp:2616
-#, fuzzy, kde-format
+#, kde-format
 msgid "Key Press"
 msgstr "Tekla-sakatzea"
 
 #: TextTool.cpp:2912
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "This link points to the program or script '%1'.\n"
 "Malicious programs can harm your computer. Are you sure that you want to run "
 "this program?"
 msgstr ""
-"Esteka honek '%1' programa edo escriptera darama. Programa gaiztoek "
-"ordenagailua kaltetu dezakete. Seguru zaude programa hori exekutatu nahi "
-"duzula?"
+"Esteka honek '%1' programa edo gidoira darama.\n"
+"Programa maltzurrek zure ordenagailua kaltetu dezakete. Ziur zaude programa "
+"hori exekutatu nahi duzula?"
 
 #: TextTool.cpp:2917
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open Link?"
-msgstr "Ireki esteka?"
+msgstr "Esteka ireki?"
 
 #: TextToolFactory.cpp:18
 #, kde-format
 msgid "Text editing"
-msgstr ""
+msgstr "Testua editatzea"
