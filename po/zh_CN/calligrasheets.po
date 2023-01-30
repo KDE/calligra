@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:58+0000\n"
+"POT-Creation-Date: 2023-01-30 00:57+0000\n"
 "PO-Revision-Date: 2023-01-12 10:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -856,7 +856,7 @@ msgstr "数字"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -911,7 +911,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 返回 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "数据库"
@@ -12147,7 +12147,7 @@ msgstr "字体"
 msgid "Color/Border"
 msgstr "颜色/边框"
 
-#: part/CanvasBase.cpp:681
+#: part/CanvasBase.cpp:680
 #, kde-format
 msgid "Comment:"
 msgstr "注释："
@@ -13513,224 +13513,194 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "更改边框"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "单元格格式..."
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "设置单元格格式"
 
-#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
-#, kde-format
-msgid "Clear All"
-msgstr "全部清除"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Clear all contents and formatting of the current cell"
-msgstr "删除当前单元格的所有内容和格式信息"
-
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "Contents"
-msgstr "内容"
-
-#: ui/CellToolBase.cpp:159
-#, kde-format
-msgid "Clear Contents"
-msgstr "清除内容"
-
-#: ui/CellToolBase.cpp:160
-#, kde-format
-msgid "Remove the contents of the current cell"
-msgstr "删除当前单元格的内容"
-
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "自动过滤(&A)"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "向单元格范围添加自动过滤"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "&Function..."
 msgstr "函数(&F)..."
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Insert math expression"
 msgstr "插入数学表达式"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "From &Database..."
 msgstr "从数据库(&D)..."
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "从 SQL 数据库插入数据"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Custom Lists..."
 msgstr "自定义列表..."
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "创建自定义的列表用于排序或自动填充"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "规划求解(&G)..."
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "重复计算以寻找指定的数值"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Formula Selection"
 msgstr "公式选择"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert a function"
 msgstr "插入一个函数"
 
-#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
+#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
 #, kde-format
 msgid "Others..."
 msgstr "其他..."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Modify Cell"
 msgstr "修改单元格"
 
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "编辑加亮显示的单元格"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "将单元格里的对象移到剪贴板上"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "将单元格对象拷贝到剪贴板"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "在光标处粘贴剪贴板的内容"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Special Paste..."
 msgstr "选择性粘贴..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "使用特殊的选项粘贴剪贴板上的内容"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "粘贴并插入"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "从剪贴板插入一个单元格到工作表中"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "重新计算当前工作工作表中每个单元格的值"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "Check the spelling"
 msgstr "检查拼写"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Run Inspector..."
 msgstr "运行检视器..."
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:248
 #, kde-format
 msgid "Show QTableView..."
 msgstr "显示 QTableView..."
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Auto-Format..."
 msgstr "自动套用格式..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "设定工作表的格式"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Document Settings..."
 msgstr "文档设置..."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "显示文档设置对话框"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:271
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1072
+#: ui/CellToolBase.cpp:1058
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1111
-msgctxt "(qtundo-format)"
-msgid "Clear Text"
-msgstr "清除文本"
-
-#: ui/CellToolBase.cpp:1145
+#: ui/CellToolBase.cpp:1106
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr "没有可用的数据库驱动。您需要重新编译 Qt 3 包含必要的驱动程序。"
 
-#: ui/CellToolBase.cpp:1637
+#: ui/CellToolBase.cpp:1598
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "替换"
@@ -13987,16 +13957,6 @@ msgstr "自动过滤"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "自动套用格式"
-
-#: ui/commands/ConditionCommand.cpp:30
-msgctxt "(qtundo-format)"
-msgid "Remove Conditional Formatting"
-msgstr "删除条件单元格格式"
-
-#: ui/commands/ConditionCommand.cpp:32
-msgctxt "(qtundo-format)"
-msgid "Add Conditional Formatting"
-msgstr "添加条件单元格格式"
 
 #: ui/commands/DataManipulators.cpp:107
 msgctxt "(qtundo-format)"
@@ -15707,6 +15667,33 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
+
+#~ msgid "Clear All"
+#~ msgstr "全部清除"
+
+#~ msgid "Clear all contents and formatting of the current cell"
+#~ msgstr "删除当前单元格的所有内容和格式信息"
+
+#~ msgid "Contents"
+#~ msgstr "内容"
+
+#~ msgid "Clear Contents"
+#~ msgstr "清除内容"
+
+#~ msgid "Remove the contents of the current cell"
+#~ msgstr "删除当前单元格的内容"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear Text"
+#~ msgstr "清除文本"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Conditional Formatting"
+#~ msgstr "删除条件单元格格式"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Conditional Formatting"
+#~ msgstr "添加条件单元格格式"
 
 #~ msgid "Select a new border color"
 #~ msgstr "选择新的边框颜色"

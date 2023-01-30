@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:58+0000\n"
+"POT-Creation-Date: 2023-01-30 00:57+0000\n"
 "PO-Revision-Date: 2021-09-05 11:41-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -926,7 +926,7 @@ msgstr "Рақам"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -987,7 +987,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") бозгаштҳо 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Асосӣ маълумот"
@@ -13333,7 +13333,7 @@ msgstr "Форинт"
 msgid "Color/Border"
 msgstr "Ранг/Ҳудуд"
 
-#: part/CanvasBase.cpp:681
+#: part/CanvasBase.cpp:680
 #, kde-format
 msgid "Comment:"
 msgstr "Мулоҳиза:"
@@ -14759,224 +14759,192 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Нест кардани Ранги Сархад"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "Андозаи Ячейка..."
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Танзим кардани параметрҳои ба андоза дарории ячейка."
 
-#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
-#, fuzzy, kde-format
-#| msgid "Clear &All"
-msgid "Clear All"
-msgstr "Ҳама &Тоза Кунед"
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-msgid "Clear all contents and formatting of the current cell"
-msgstr "Ҳузф намудани тамоми оканот ва ба андоза дарории ячейкаҳои равон."
-
-#: ui/CellToolBase.cpp:158
-#, fuzzy, kde-format
-msgid "Contents"
-msgstr "Шарх"
-
-#: ui/CellToolBase.cpp:159
-#, fuzzy, kde-format
-msgid "Clear Contents"
-msgstr "Шарх"
-
-#: ui/CellToolBase.cpp:160
-#, fuzzy, kde-format
-msgid "Remove the contents of the current cell"
-msgstr "Нобуд кардани ҳама окана ячейкаи равон."
-
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "Пур кардани худкор"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "&Function..."
 msgstr "&Функсия..."
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Мондани ифодаи математикӣ."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "From &Database..."
 msgstr "Аз &Асосӣ Маълумот..."
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Таърих монед аз асосӣ маълумот SQL."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Рӯйхатҳои Оддӣ..."
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:174
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Эҷоди рӯйхати истифодакунӣ барои тартиб дарорӣ ё худ пуркунӣ."
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Ҷустуҷӯи ҳал..."
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Такрори ҳисобкунӣ барои ҷустуҷӯи мақодири даркорӣ."
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Formula Selection"
 msgstr "Интихоби формула"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:183
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Мондани функсия."
 
-#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
+#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
 #, kde-format
 msgid "Others..."
 msgstr "Дигарҳо..."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Modify Cell"
 msgstr "Дигаргун кардани ячейка"
 
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:196
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Ячейкаи аз таги рафтани дигаргун кардан"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Буридани мавзӯъи ячейка дар буфери иваз."
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Нусха кардани мавзӯъи ҷадвал дар буфери иваз."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Мондани оканаи буфери иваз дар вазъияти курсори равон."
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Special Paste..."
 msgstr "Замимаи махсус..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Мондани оканаи буфери иваз аз рӯи талаботи махсус."
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Мондани бо ҷунбондан"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Мондани ячейкаҳо аз буфери иваз."
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:221
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Ҳисоб кардани маънои ҳар ячейка дар варақи равон."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:239
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "Тафтиши имло"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Намоиши Варақ..."
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 #| msgid "AutoFormat..."
 msgid "Auto-Format..."
 msgstr "Андозаи худкор..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:257
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Андозаи варақро мирзоб кардан"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Мамлакат ва забон"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:262
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "&Намоиши индикатори шарҳ"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Мудофиа"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:270
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Мудофиа"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:271
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Мондани оканаи буфери иваз дар вазъияти курсори равон."
 
-#: ui/CellToolBase.cpp:1072
+#: ui/CellToolBase.cpp:1058
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1111
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Clear Text"
-msgstr "Матн Дигаргун кунед"
-
-#: ui/CellToolBase.cpp:1145
+#: ui/CellToolBase.cpp:1106
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14985,7 +14953,7 @@ msgstr ""
 "Драйверҳои бонки додаҳо дастрас нестанд! Шумо бояд Qt-ро бо драйверҳои "
 "лозимӣ низ ҷамъ кунед."
 
-#: ui/CellToolBase.cpp:1637
+#: ui/CellToolBase.cpp:1598
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -15252,18 +15220,6 @@ msgstr "Пур кардани худкор"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Андозаи худкор..."
-
-#: ui/commands/ConditionCommand.cpp:30
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Remove Conditional Formatting"
-msgstr "Ҳузфи андоза дарории ячейкаи дастурӣ."
-
-#: ui/commands/ConditionCommand.cpp:32
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Add Conditional Formatting"
-msgstr "Ҳузфи андоза дарории ячейкаи дастурӣ."
 
 #: ui/commands/DataManipulators.cpp:107
 #, fuzzy
@@ -17062,6 +17018,42 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Оё пайванди шумо боз аст?"
+
+#, fuzzy
+#~| msgid "Clear &All"
+#~ msgid "Clear All"
+#~ msgstr "Ҳама &Тоза Кунед"
+
+#, fuzzy
+#~ msgid "Clear all contents and formatting of the current cell"
+#~ msgstr "Ҳузф намудани тамоми оканот ва ба андоза дарории ячейкаҳои равон."
+
+#, fuzzy
+#~ msgid "Contents"
+#~ msgstr "Шарх"
+
+#, fuzzy
+#~ msgid "Clear Contents"
+#~ msgstr "Шарх"
+
+#, fuzzy
+#~ msgid "Remove the contents of the current cell"
+#~ msgstr "Нобуд кардани ҳама окана ячейкаи равон."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear Text"
+#~ msgstr "Матн Дигаргун кунед"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Conditional Formatting"
+#~ msgstr "Ҳузфи андоза дарории ячейкаи дастурӣ."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Conditional Formatting"
+#~ msgstr "Ҳузфи андоза дарории ячейкаи дастурӣ."
 
 #, fuzzy
 #~ msgid "Select a new border color"

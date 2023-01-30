@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:58+0000\n"
+"POT-Creation-Date: 2023-01-30 00:57+0000\n"
 "PO-Revision-Date: 2023-01-27 18:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -900,7 +900,7 @@ msgstr "Sayı"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -958,7 +958,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") işlevi, 99 döndürür"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Veritabanı"
@@ -12872,7 +12872,7 @@ msgstr "Yazıtipi"
 msgid "Color/Border"
 msgstr "Renk/Çerçeve"
 
-#: part/CanvasBase.cpp:681
+#: part/CanvasBase.cpp:680
 #, kde-format
 msgid "Comment:"
 msgstr "Açıklama:"
@@ -14293,217 +14293,187 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kenarlığı Değiştir"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "Hücre Biçimi..."
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Hücre biçimini ayarla"
 
-#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
-#, kde-format
-msgid "Clear All"
-msgstr "Tümünü Temizle"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Clear all contents and formatting of the current cell"
-msgstr "Geçerli hücrenin tüm içeriğini ve biçimlenmesini sil"
-
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "Contents"
-msgstr "İçerik"
-
-#: ui/CellToolBase.cpp:159
-#, kde-format
-msgid "Clear Contents"
-msgstr "İçeriği Temizle"
-
-#: ui/CellToolBase.cpp:160
-#, kde-format
-msgid "Remove the contents of the current cell"
-msgstr "Geçerli hücrenin içeriğini sil"
-
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Otomatik Süzme"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Bir hücre aralığına otomatik süzgeç ekle"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "&Function..."
 msgstr "&İşlev..."
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Insert math expression"
 msgstr "Matematiksel ifade ekle"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "From &Database..."
 msgstr "&Veritabanından..."
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL veritabanından veri ekle"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Özel Listeler..."
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Sıralama veya otomatik tamamlama için özel liseler oluştur"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Hedef Araması..."
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "İşlemi kesin bir değer bulmak için tekrarlıyor"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formül Seçimi"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert a function"
 msgstr "Bir işlev ekle"
 
-#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
+#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
 #, kde-format
 msgid "Others..."
 msgstr "Diğerleri..."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Modify Cell"
 msgstr "Hücreyi Düzenle"
 
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Vurgulanmış hücreyi düzenle"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Hücre nesnesini panoya taşı"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Hücre nesnesini panoya kopyala"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Pano içeriğini imlecin olduğu yere yapıştır"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Special Paste..."
 msgstr "Özel Yapıştır..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Pano içeriğini özel seçeneklerle yapıştır"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Ekleyerek Yapıştır"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Panodan bir hücreyi hesap tablosuna ekler"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Geçerli çalışma tablosundaki tüm hücreleri seçer"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "Check the spelling"
 msgstr "Yazım denetimi yap"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Denetleyiciyi Çalıştır..."
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:248
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView Ögesini Göster..."
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Otomatik Biçim..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Çalışma tablosu biçimini ayarla"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Document Settings..."
 msgstr "Belge Ayarları..."
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Belge ayarları penceresini göster"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:266
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:270
 #, kde-format
 msgid "Permute fixation"
 msgstr "Sabiti değiştir"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:271
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Metin imlecindeki başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:1072
+#: ui/CellToolBase.cpp:1058
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "%1 eylemi bulunamıyor"
 
-#: ui/CellToolBase.cpp:1111
-msgctxt "(qtundo-format)"
-msgid "Clear Text"
-msgstr "Metni Temizle"
-
-#: ui/CellToolBase.cpp:1145
+#: ui/CellToolBase.cpp:1106
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14512,7 +14482,7 @@ msgstr ""
 "Veritabanı sürücüsü bulunamadı. Bu özelliği kullanabilmeniz için Qt "
 "veritabanı sürücülerine gerek duyuluyor."
 
-#: ui/CellToolBase.cpp:1637
+#: ui/CellToolBase.cpp:1598
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Değiştir"
@@ -14770,16 +14740,6 @@ msgstr "Otomatik Süzme"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Otomatik Biçimlendirme"
-
-#: ui/commands/ConditionCommand.cpp:30
-msgctxt "(qtundo-format)"
-msgid "Remove Conditional Formatting"
-msgstr "Koşullu Biçimlendirmeyi Kaldır"
-
-#: ui/commands/ConditionCommand.cpp:32
-msgctxt "(qtundo-format)"
-msgid "Add Conditional Formatting"
-msgstr "Koşullu Biçimlendirme Ekle"
 
 #: ui/commands/DataManipulators.cpp:107
 msgctxt "(qtundo-format)"
@@ -16621,6 +16581,33 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bağlantıyı Aç?"
+
+#~ msgid "Clear All"
+#~ msgstr "Tümünü Temizle"
+
+#~ msgid "Clear all contents and formatting of the current cell"
+#~ msgstr "Geçerli hücrenin tüm içeriğini ve biçimlenmesini sil"
+
+#~ msgid "Contents"
+#~ msgstr "İçerik"
+
+#~ msgid "Clear Contents"
+#~ msgstr "İçeriği Temizle"
+
+#~ msgid "Remove the contents of the current cell"
+#~ msgstr "Geçerli hücrenin içeriğini sil"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear Text"
+#~ msgstr "Metni Temizle"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Conditional Formatting"
+#~ msgstr "Koşullu Biçimlendirmeyi Kaldır"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Conditional Formatting"
+#~ msgstr "Koşullu Biçimlendirme Ekle"
 
 #~ msgid "Select a new border color"
 #~ msgstr "Yeni bir kenarlık rengi seç"

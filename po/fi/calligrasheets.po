@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kcells\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:58+0000\n"
+"POT-Creation-Date: 2023-01-30 00:57+0000\n"
 "PO-Revision-Date: 2022-07-29 11:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -909,7 +909,7 @@ msgstr "Luku"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -967,7 +967,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") palauttaa 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Tietokanta"
@@ -12709,7 +12709,7 @@ msgstr "Fontti"
 msgid "Color/Border"
 msgstr "Väri/reunaviiva"
 
-#: part/CanvasBase.cpp:681
+#: part/CanvasBase.cpp:680
 #, kde-format
 msgid "Comment:"
 msgstr "Kommentti:"
@@ -14137,222 +14137,190 @@ msgstr ""
 "Muuta reunoja\n"
 "reunojen muuttaminen"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "Solun muotoilu…"
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Asettaa solun muotoilun"
 
-#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
-#, kde-format
-msgid "Clear All"
-msgstr "Tyhjennä kaikki"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Clear all contents and formatting of the current cell"
-msgstr "Poista nykyisen solun sisältö ja muotoilut"
-
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "Contents"
-msgstr "Sisältö"
-
-#: ui/CellToolBase.cpp:159
-#, kde-format
-msgid "Clear Contents"
-msgstr "Poista sisältö"
-
-#: ui/CellToolBase.cpp:160
-#, kde-format
-msgid "Remove the contents of the current cell"
-msgstr "Poistaa valitun solun sisältö"
-
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "&Auto-Filter"
 msgstr "&Automaattisuodatin"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr "Lisää automaattisen suodattimen solualueelle"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "&Function..."
 msgstr "&Funktio…"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Insert math expression"
 msgstr "Lisää matemaattinen lauseke"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "From &Database..."
 msgstr "&Tietokannasta…"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Lisää tietoja SQL-tietokannasta"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Omat luettelot…"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Luo omia luetteloita lajittelua ja automaattista täyttöä varten"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Tavoitteen haku…"
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Toistuva laskutoimitus määräarvon löytämiseksi"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Formula Selection"
 msgstr "Kaavan valinta"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:183
 #, kde-format
 msgid "Insert a function"
 msgstr "Lisää funktio"
 
-#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
+#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
 #, kde-format
 msgid "Others..."
 msgstr "Muut…"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Modify Cell"
 msgstr "Muokkaa solua"
 
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Muokkaa korostettua solua"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Siirrä solu leikepöydälle."
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopio solu leikepöydälle."
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Liitä leikepöydän sisältö kohdistimen kohdalle."
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Special Paste..."
 msgstr "Liitä määräten…"
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Liitä leikepöydän sisältö määrittelyin…"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Liitä lisäten"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:218
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Lisää solun leikepöydältä laskentataulukkoon"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Valitsee laskentataulukon kaikki solut"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "Check the spelling"
 msgstr "Oikolue"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Suorita tarkistus…"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:248
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Näytä QTableView…"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Automaattimuotoilu…"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:257
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Muuttaa laskentataulukon muotoilua"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Document Settings..."
 msgstr "Tiedoston asetukset…"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Näytä tiedoston asetusikkuna"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Suojaus"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:270
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Suojaus"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:271
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Liitä leikepöydän sisältö kohdistimen kohdalle."
 
-#: ui/CellToolBase.cpp:1072
+#: ui/CellToolBase.cpp:1058
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1111
-msgctxt "(qtundo-format)"
-msgid "Clear Text"
-msgstr ""
-"Poista teksti\n"
-"tekstin poisto"
-
-#: ui/CellToolBase.cpp:1145
+#: ui/CellToolBase.cpp:1106
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14361,7 +14329,7 @@ msgstr ""
 "Tietokanta-ajureita ei ole saatavilla. Ominaisuuden käyttämiseksi on "
 "asennettava tarvittavat Qt-tietokanta-ajurit."
 
-#: ui/CellToolBase.cpp:1637
+#: ui/CellToolBase.cpp:1598
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr ""
@@ -14630,20 +14598,6 @@ msgid "Auto-Format"
 msgstr ""
 "Automaattimuotoilu\n"
 "automaattimuotoilu"
-
-#: ui/commands/ConditionCommand.cpp:30
-msgctxt "(qtundo-format)"
-msgid "Remove Conditional Formatting"
-msgstr ""
-"Poista ehdollinen muotoilu\n"
-"ehdollisen muotoilun poisto"
-
-#: ui/commands/ConditionCommand.cpp:32
-msgctxt "(qtundo-format)"
-msgid "Add Conditional Formatting"
-msgstr ""
-"Lisää ehdollinen muotoilu\n"
-"ehdollisen muotoilun lisäys"
 
 #: ui/commands/DataManipulators.cpp:107
 msgctxt "(qtundo-format)"
@@ -16561,6 +16515,39 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Avataanko linkki?"
+
+#~ msgid "Clear All"
+#~ msgstr "Tyhjennä kaikki"
+
+#~ msgid "Clear all contents and formatting of the current cell"
+#~ msgstr "Poista nykyisen solun sisältö ja muotoilut"
+
+#~ msgid "Contents"
+#~ msgstr "Sisältö"
+
+#~ msgid "Clear Contents"
+#~ msgstr "Poista sisältö"
+
+#~ msgid "Remove the contents of the current cell"
+#~ msgstr "Poistaa valitun solun sisältö"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear Text"
+#~ msgstr ""
+#~ "Poista teksti\n"
+#~ "tekstin poisto"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Conditional Formatting"
+#~ msgstr ""
+#~ "Poista ehdollinen muotoilu\n"
+#~ "ehdollisen muotoilun poisto"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Conditional Formatting"
+#~ msgstr ""
+#~ "Lisää ehdollinen muotoilu\n"
+#~ "ehdollisen muotoilun lisäys"
 
 #~ msgid "Select a new border color"
 #~ msgstr "Valitse uusi reunaväri"

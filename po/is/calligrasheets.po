@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:58+0000\n"
+"POT-Creation-Date: 2023-01-30 00:57+0000\n"
 "PO-Revision-Date: 2011-07-07 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -879,7 +879,7 @@ msgstr "Tala"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -939,7 +939,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") skilar 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:180 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Gagnagrunnur"
@@ -12290,7 +12290,7 @@ msgstr "Letur"
 msgid "Color/Border"
 msgstr "Litur/umgjörð"
 
-#: part/CanvasBase.cpp:681
+#: part/CanvasBase.cpp:680
 #, kde-format
 msgid "Comment:"
 msgstr "Athugasemd:"
@@ -13670,226 +13670,195 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Breyta ramma"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Formhönnun reita..."
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:152 ui/CellToolBase.cpp:153
-#, fuzzy, kde-format
-msgid "Clear All"
-msgstr "Hreinsa allt"
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-msgid "Clear all contents and formatting of the current cell"
-msgstr "Eyða athugasemd"
-
-#: ui/CellToolBase.cpp:158
-#, fuzzy, kde-format
-msgid "Contents"
-msgstr "Innihald"
-
-#: ui/CellToolBase.cpp:159
-#, fuzzy, kde-format
-msgid "Clear Contents"
-msgstr "Eyða innihaldi"
-
-#: ui/CellToolBase.cpp:160
-#, fuzzy, kde-format
-msgid "Remove the contents of the current cell"
-msgstr "Eyða athugasemd"
-
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 #| msgid "Autofill"
 msgid "&Auto-Filter"
 msgstr "Sjálffylling"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Add an automatic filter to a cell range"
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Fall"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "&Stærðfræðileg segð..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Raða listum..."
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:176
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "&Raðir..."
 
-#: ui/CellToolBase.cpp:194
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Formula Selection"
 msgstr "Velja formúlu"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:183
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Setja inn dálk(a)"
 
-#: ui/CellToolBase.cpp:199 ui/CellToolBase.cpp:1173
+#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
 #, kde-format
 msgid "Others..."
 msgstr "Aðrir..."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Modify Cell"
 msgstr "Breyta reit"
 
-#: ui/CellToolBase.cpp:211
+#: ui/CellToolBase.cpp:196
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Breyta lit á texta"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:203
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:225
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Special Paste..."
 msgstr "Líma sérstakt..."
 
-#: ui/CellToolBase.cpp:228
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:230
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Líma með innsetningu..."
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:218
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Bæta við töflu"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:221
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:239
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Sýna fyrirsögn á röð"
 
-#: ui/CellToolBase.cpp:269
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Formhönnun reita..."
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:257
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:274
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Staðbundin viðföng"
 
-#: ui/CellToolBase.cpp:277
+#: ui/CellToolBase.cpp:262
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Sýna vísir að athugasemd"
 
-#: ui/CellToolBase.cpp:281
+#: ui/CellToolBase.cpp:266
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:285
+#: ui/CellToolBase.cpp:270
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:286
+#: ui/CellToolBase.cpp:271
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:1072
+#: ui/CellToolBase.cpp:1058
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1111
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Clear Text"
-msgstr "Breyta texta"
-
-#: ui/CellToolBase.cpp:1145
+#: ui/CellToolBase.cpp:1106
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1637
+#: ui/CellToolBase.cpp:1598
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -14154,18 +14123,6 @@ msgstr "Sjálffylling"
 msgctxt "(qtundo-format)"
 msgid "Auto-Format"
 msgstr "Formhönnun reita..."
-
-#: ui/commands/ConditionCommand.cpp:30
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Remove Conditional Formatting"
-msgstr "Eyða athugasemd"
-
-#: ui/commands/ConditionCommand.cpp:32
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Add Conditional Formatting"
-msgstr "Eyða athugasemd"
 
 #: ui/commands/DataManipulators.cpp:107
 #, fuzzy
@@ -15905,6 +15862,41 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Setja inn dálk(a)"
+
+#, fuzzy
+#~ msgid "Clear All"
+#~ msgstr "Hreinsa allt"
+
+#, fuzzy
+#~ msgid "Clear all contents and formatting of the current cell"
+#~ msgstr "Eyða athugasemd"
+
+#, fuzzy
+#~ msgid "Contents"
+#~ msgstr "Innihald"
+
+#, fuzzy
+#~ msgid "Clear Contents"
+#~ msgstr "Eyða innihaldi"
+
+#, fuzzy
+#~ msgid "Remove the contents of the current cell"
+#~ msgstr "Eyða athugasemd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Clear Text"
+#~ msgstr "Breyta texta"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Remove Conditional Formatting"
+#~ msgstr "Eyða athugasemd"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Add Conditional Formatting"
+#~ msgstr "Eyða athugasemd"
 
 #, fuzzy
 #~ msgid "Select a new border color"
