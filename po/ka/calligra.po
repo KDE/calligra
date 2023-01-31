@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
-"PO-Revision-Date: 2023-01-02 04:38+0100\n"
+"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"PO-Revision-Date: 2023-01-30 10:35+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3657,7 +3657,7 @@ msgstr "გნებავთ, შევინახოთ პაროლი?"
 msgid "File '%1' is not readable"
 msgstr "ფაილი \"%1\" წაკითხვადი არაა"
 
-#: store/KoNetAccess.cpp:409
+#: store/KoNetAccess.cpp:390
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr "შეცდომა: უცნობი პროტოკოლი '%1'"
@@ -5067,7 +5067,7 @@ msgstr ""
 #: widgets/KoShadowConfigWidget.ui:67
 #, kde-format
 msgid "Blur:"
-msgstr ""
+msgstr "ბუნდოვნება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/KoShadowConfigWidget.ui:84

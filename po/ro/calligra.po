@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
+"POT-Creation-Date: 2023-01-31 00:58+0000\n"
 "PO-Revision-Date: 2022-03-14 12:28+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -3931,7 +3931,7 @@ msgstr "Doriți să salvați parola?"
 msgid "File '%1' is not readable"
 msgstr "Fișierul %1 nu există."
 
-#: store/KoNetAccess.cpp:409
+#: store/KoNetAccess.cpp:390
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""

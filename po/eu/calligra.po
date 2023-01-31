@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
+"POT-Creation-Date: 2023-01-31 00:58+0000\n"
 "PO-Revision-Date: 2020-12-06 07:56+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque\n"
@@ -3860,7 +3860,7 @@ msgstr "Pasahitza gorde nahi duzu?"
 msgid "File '%1' is not readable"
 msgstr "\"%1\" datu-base fitxategia ezin da irakurri."
 
-#: store/KoNetAccess.cpp:409
+#: store/KoNetAccess.cpp:390
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""

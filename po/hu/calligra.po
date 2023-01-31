@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
+"POT-Creation-Date: 2023-01-31 00:58+0000\n"
 "PO-Revision-Date: 2015-09-08 10:39+0200\n"
 "Last-Translator: Kristóf Kiszel <ulysses@kubuntu.org>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -3847,7 +3847,7 @@ msgstr "El szeretné menteni a jelszót?"
 msgid "File '%1' is not readable"
 msgstr "Nem olvasható a(z) „%1” adatbázisfájl."
 
-#: store/KoNetAccess.cpp:409
+#: store/KoNetAccess.cpp:390
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""

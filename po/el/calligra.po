@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
+"POT-Creation-Date: 2023-01-31 00:58+0000\n"
 "PO-Revision-Date: 2023-01-04 11:52+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -3780,7 +3780,7 @@ msgstr "Επιθυμείτε την αποθήκευση του κωδικού;"
 msgid "File '%1' is not readable"
 msgstr "Το αρχείο '%1' δεν είναι αναγνώσιμο"
 
-#: store/KoNetAccess.cpp:409
+#: store/KoNetAccess.cpp:390
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr "ΣΦΑΛΜΑ: Άγνωστο πρωτόκολλο '%1'"

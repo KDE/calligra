@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-01 00:57+0000\n"
-"PO-Revision-Date: 2023-01-19 22:32+0300\n"
+"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"PO-Revision-Date: 2023-01-31 00:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -699,12 +699,12 @@ msgstr "Koleksiyon klasörüne ekle"
 #: kross/KoScriptManagerAdd.cpp:67
 #, kde-format
 msgid "Install script package file"
-msgstr "Betik paketi dosyası yükle"
+msgstr "Betik paketi dosyası kur"
 
 #: kross/KoScriptManagerAdd.cpp:71
 #, kde-format
 msgid "Install online script package"
-msgstr "Çevrimiçi betik paketi yükle"
+msgstr "Çevrimiçi betik paketi kur"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, add)
 #: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
@@ -3765,7 +3765,7 @@ msgstr "Parolayı gerçekten kaydetmek istiyor musunuz?"
 msgid "File '%1' is not readable"
 msgstr "'%1' dosyası okunabilir değil"
 
-#: store/KoNetAccess.cpp:409
+#: store/KoNetAccess.cpp:390
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr "HATA: Bilinmeyen protokol '%1'"
