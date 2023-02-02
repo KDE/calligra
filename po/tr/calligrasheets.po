@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-30 00:57+0000\n"
-"PO-Revision-Date: 2023-01-27 18:49+0300\n"
+"PO-Revision-Date: 2023-02-02 01:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7581,8 +7581,7 @@ msgid ""
 "The RANDNORM() function returns a Normal(Gaussian)-distributed pseudo-random "
 "number."
 msgstr ""
-"RANDNORM() işlevi, Normal(Gaussian)-dağıtık yalancı-rastgele bir sayı "
-"döndürür."
+"RANDNORM() işlevi, Normal(Gauss)-dağıtık yalancı-rastgele bir sayı döndürür."
 
 #: functions/math.xml:1062
 #, kde-format
