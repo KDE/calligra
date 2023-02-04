@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:58+0000\n"
-"PO-Revision-Date: 2023-01-30 10:35+0100\n"
+"PO-Revision-Date: 2023-02-03 15:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2221,7 +2221,7 @@ msgstr "სლაიდი"
 #: pageapp/KoPADocumentModel.cpp:317
 #, kde-format
 msgid "Visible"
-msgstr "_ხილული"
+msgstr "ხილული"
 
 #: pageapp/KoPADocumentModel.cpp:318
 #, kde-format
@@ -2246,7 +2246,7 @@ msgstr "აქ ჩაკოპირება"
 #: pageapp/KoPADocumentModel.cpp:694
 #, kde-format
 msgid "C&ancel"
-msgstr "გაუქმება"
+msgstr "&გაუქმება"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:89
 #, kde-format
@@ -2630,7 +2630,7 @@ msgstr ""
 #: pigment/KoCompositeOpRegistry.cpp:111
 #, kde-format
 msgid "Lightness"
-msgstr "სიკა_შკაშე"
+msgstr "სიკაშკაშე"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:32
 #: pigment/KoBasicHistogramProducers.cpp:430
@@ -4054,7 +4054,7 @@ msgstr "ნაგულისხმები"
 #: widgets/KoColorPopupAction.cpp:76
 #, kde-format
 msgid "Opacity"
-msgstr "_გაუმჭირვალობა"
+msgstr "გაუმჭვირვალობა"
 
 #: widgets/KoColorSetWidget.cpp:148
 #, kde-format

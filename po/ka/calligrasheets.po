@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-30 00:57+0000\n"
-"PO-Revision-Date: 2023-01-30 10:34+0100\n"
+"PO-Revision-Date: 2023-02-03 15:51+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12042,7 +12042,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:212
 #, kde-format
 msgid "Custom..."
-msgstr "გა_მართვა..."
+msgstr "ხელით..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/InterfaceOptionsWidget.ui:198
@@ -13395,7 +13395,7 @@ msgstr "რიცხვის ფორმატი"
 #: ui/CellToolOptionWidgets.xml:68
 #, kde-format
 msgid "Merge"
-msgstr "_შერწყმა"
+msgstr "შერწყმა"
 
 #: ui/commands/AbstractRegionCommand.cpp:174
 #, kde-format
@@ -14905,7 +14905,7 @@ msgstr "ჩანაწერი:"
 #: ui/dialogs/ListDialog.cpp:70
 #, kde-format
 msgid "Add"
-msgstr "_დამატება"
+msgstr "დამატება"
 
 #: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
 #, kde-format

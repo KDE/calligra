@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2022-12-04 06:51+0100\n"
+"PO-Revision-Date: 2023-02-03 15:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -114,7 +114,7 @@ msgstr "უარყოფა"
 #: dialogs/AcceptRejectChangeDialog.ui:70
 #, kde-format
 msgid "Cancel"
-msgstr "_გაუქმება"
+msgstr "გაუქმება"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AcceptRejectChangeDialog.ui:96
@@ -708,7 +708,7 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:136
 #, kde-format
 msgid "Unpublished"
-msgstr ""
+msgstr "გამოუქვეყნებელი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -1717,7 +1717,7 @@ msgstr ""
 #: dialogs/ParagraphDropCaps.ui:94
 #, kde-format
 msgid "Number of characters:"
-msgstr ""
+msgstr "სიმბოლოების რაოდენობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ParagraphDropCaps.ui:104
@@ -2511,7 +2511,7 @@ msgstr ""
 #: ReviewTool.cpp:53 ReviewTool.cpp:54
 #, kde-format
 msgid "Remove Comment"
-msgstr ""
+msgstr "კომენტარის წაშლა"
 
 #: ReviewTool.cpp:98
 #, kde-format
@@ -2561,7 +2561,7 @@ msgstr ""
 #: TextTool.cpp:213
 #, kde-format
 msgid "Paste As Text"
-msgstr ""
+msgstr "ტექსტის სახით ჩასმა"
 
 #: TextTool.cpp:218
 #, kde-format
@@ -2602,7 +2602,7 @@ msgstr "ცენტრზე სწორება"
 #: TextTool.cpp:264
 #, kde-format
 msgid "Align Block"
-msgstr ""
+msgstr "ბლოკის სწორება"
 
 #: TextTool.cpp:271
 #, kde-format
@@ -2622,7 +2622,7 @@ msgstr "დაშორების გაზრდა"
 #: TextTool.cpp:302
 #, kde-format
 msgid "Decrease Indent"
-msgstr ""
+msgstr "შეწევის შემცირება"
 
 #: TextTool.cpp:306
 #, kde-format
@@ -2667,7 +2667,7 @@ msgstr ""
 #: TextTool.cpp:340
 #, kde-format
 msgid "Insert Index"
-msgstr ""
+msgstr "ინდექსის ჩასმა"
 
 #: TextTool.cpp:345
 #, kde-format
@@ -2762,7 +2762,7 @@ msgstr "მწკრივი ზემოთ"
 #: TextTool.cpp:416
 #, kde-format
 msgid "Insert Row Above"
-msgstr ""
+msgstr "მწკრივის ზემოთ ჩასმა"
 
 #: TextTool.cpp:420
 #, kde-format
@@ -2772,7 +2772,7 @@ msgstr "მწკრივი ქვემოთ"
 #: TextTool.cpp:421
 #, kde-format
 msgid "Insert Row Below"
-msgstr ""
+msgstr "მწკრივის ქვემოთ ჩასმა"
 
 #: TextTool.cpp:425
 #, kde-format
@@ -2782,7 +2782,7 @@ msgstr "სვეტი მარცხნივ"
 #: TextTool.cpp:426
 #, kde-format
 msgid "Insert Column Left"
-msgstr ""
+msgstr "სვეტის მარცხნივ ჩასმა"
 
 #: TextTool.cpp:430
 #, kde-format
@@ -2792,7 +2792,7 @@ msgstr "სვეტი მარჯვნივ"
 #: TextTool.cpp:431
 #, kde-format
 msgid "Insert Column Right"
-msgstr ""
+msgstr "სვეტის მარჯვნივ ჩასმა"
 
 #: TextTool.cpp:435
 #, kde-format
@@ -2933,7 +2933,7 @@ msgstr ""
 #: TextTool.cpp:939
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
-msgstr ""
+msgstr "ჩარჩოს ფორმატირების შეცვლა"
 
 #: TextTool.cpp:1158
 msgctxt "(qtundo-format)"
@@ -2943,12 +2943,12 @@ msgstr "ამოჭრა"
 #: TextTool.cpp:1418
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
-msgstr ""
+msgstr "სვეტის სიგანის მორგება"
 
 #: TextTool.cpp:1461
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr ""
+msgstr "მწკრივის სიმაღლის მორგება"
 
 #: TextTool.cpp:2257
 #, kde-format

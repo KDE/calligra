@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012.
-# Vit Pelcak <vit@pelcak.org>, 2021, 2022.
+# Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-30 00:57+0000\n"
-"PO-Revision-Date: 2022-10-10 16:52+0200\n"
+"PO-Revision-Date: 2023-01-30 11:21+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -14764,7 +14764,7 @@ msgstr "přeškrtnuté"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "Zvolte velikost písma."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -14913,7 +14913,7 @@ msgstr "Pozadí"
 #: ui/dialogs/LayoutDialog.cpp:143
 #, kde-format
 msgid "Cell Protection"
-msgstr ""
+msgstr "Ochrana buňky"
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format
@@ -15652,226 +15652,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otevřít odkaz?"
-
-#~ msgid "Clear All"
-#~ msgstr "Vyprázdnit vše"
-
-#~ msgid "Clear all contents and formatting of the current cell"
-#~ msgstr "Smazat veškerý obsah a formátování současné buňky"
-
-#~ msgid "Contents"
-#~ msgstr "Obsah"
-
-#~ msgid "Clear Contents"
-#~ msgstr "Smazat obsah"
-
-#~ msgid "Remove the contents of the current cell"
-#~ msgstr "Odstranit obsah současné buňky"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clear Text"
-#~ msgstr "Vymazat text"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove Conditional Formatting"
-#~ msgstr "Odstranit podmíněné formátování"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add Conditional Formatting"
-#~ msgstr "Přidat podmíněné formátování"
-
-#~ msgid "Select a new border color"
-#~ msgstr "Vyberte novou barvu ohraničení"
-
-#~ msgid "Border Color"
-#~ msgstr "Barva ohraničení"
-
-#~ msgid "Set the background color"
-#~ msgstr "Nastavit barvu pozadí"
-
-#~ msgid "Background Color"
-#~ msgstr "Barva pozadí"
-
-#~ msgid "Conditional Styles..."
-#~ msgstr "Podmíněné styly..."
-
-#~ msgid "Set cell style based on certain conditions"
-#~ msgstr "Nastavit formát buňky podle určitých podmínek"
-
-#~ msgid "Conditional Styles"
-#~ msgstr "Podmíněné styly"
-
-#~ msgid "Remove Conditional Styles"
-#~ msgstr "Odstranit podmíněné styly"
-
-#~ msgid "Remove the conditional cell styles"
-#~ msgstr "Odstranit podmíněné styly buňky"
-
-#~ msgid "You must select multiple cells."
-#~ msgstr "Musíte vybrat několik buněk."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number Format"
-#~ msgstr "Číselný formát"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Currency Format"
-#~ msgstr "Formát měny"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Percentage Format"
-#~ msgstr "Formát procenta"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Time Format"
-#~ msgstr "Formát času"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Date Format"
-#~ msgstr "Formát dat"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scientific Format"
-#~ msgstr "Vědecký formát"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Border Color"
-#~ msgstr "Změnit barvu ohraničení"
-
-#~ msgid "<none>"
-#~ msgstr "<none>"
-
-#~ msgid "equal to"
-#~ msgstr "rovno"
-
-#~ msgid "greater than"
-#~ msgstr "větší než"
-
-#~ msgid "less than"
-#~ msgstr "menší než"
-
-#~ msgid "equal to or greater than"
-#~ msgstr "vetší nebo rovna"
-
-#~ msgid "equal to or less than"
-#~ msgstr "menší nebo rovna"
-
-#~ msgid "between"
-#~ msgstr "mezi"
-
-#~ msgid "outside range"
-#~ msgstr "mimo rozsah"
-
-#~ msgid "different to"
-#~ msgstr "rozdílná od"
-
-#~ msgid "First Condition"
-#~ msgstr "První podmínka"
-
-#~ msgid "Second Condition"
-#~ msgstr "Druhá podmínka"
-
-#~ msgid "Third Condition"
-#~ msgstr "Třetí podmínka"
-
-#~ msgid "Cell is"
-#~ msgstr "Buňka je"
-
-#~ msgid "Cell style"
-#~ msgstr "Styl buňky"
-
-#~ msgid "different from"
-#~ msgstr "rozdílná od"
-
-#~ msgid ""
-#~ "If the first value is a number, the second value also has to be a number."
-#~ msgstr "Je-li první hodnota číslo, pak i druhá musí být číslo."
-
-#~ msgid ""
-#~ "If the first value is a string, the second value also has to be a string."
-#~ msgstr "Je-li první hodnota text, pak i druhá musí být text."
-
-#~ msgid "Select Source"
-#~ msgstr "Vyberte zdroj"
-
-#~ msgid "Current Selection"
-#~ msgstr "Stávající výběr"
-
-#~ msgid "External Source"
-#~ msgstr "Externí zdroj"
-
-#~ msgid "Operator"
-#~ msgstr "Operátor"
-
-#~ msgid "And"
-#~ msgstr "A"
-
-#~ msgid "Or"
-#~ msgstr "Nebo"
-
-#~ msgid "Field"
-#~ msgstr "Pole"
-
-#~ msgid "<"
-#~ msgstr "<"
-
-#~ msgid ">"
-#~ msgstr ">"
-
-#~ msgid "=="
-#~ msgstr "=="
-
-#~ msgid "!="
-#~ msgstr "!="
-
-#~ msgid "Add Filter"
-#~ msgstr "Přidat filtr"
-
-#~ msgid "Labels"
-#~ msgstr "Popisky"
-
-#~ msgid "Select Option"
-#~ msgstr "Zvolte možnost"
-
-#~ msgid "sum"
-#~ msgstr "suma"
-
-#~ msgid "average"
-#~ msgstr "průměr"
-
-#~ msgid "max"
-#~ msgstr "max"
-
-#~ msgctxt "minimum"
-#~ msgid "min"
-#~ msgstr "min"
-
-#~ msgid "count"
-#~ msgstr "počet"
-
-#~ msgid "Total Rows"
-#~ msgstr "Celkem řádků"
-
-#~ msgid "Total Columns"
-#~ msgstr "Celkem sloupců"
-
-#~ msgid "Rows"
-#~ msgstr "Řádky"
-
-#~ msgid "Value Type"
-#~ msgstr "Typ hodnoty"
-
-#~ msgid "Base Field"
-#~ msgstr "Základní pole"
-
-#~ msgid "Base Item"
-#~ msgstr "Základní položka"
-
-#~ msgid "Manual Selection"
-#~ msgstr "Ruční výběr"
-
-#~ msgid "Product"
-#~ msgstr "Součin"
-
-#~ msgid "Sort By"
-#~ msgstr "Řadit dle"

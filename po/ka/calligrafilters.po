@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2022-12-04 06:53+0100\n"
+"PO-Revision-Date: 2023-02-03 15:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -91,7 +91,7 @@ msgstr "ფერი"
 #: karbon/image/ImageExportOptionsWidget.ui:143
 #, kde-format
 msgid "Opacity"
-msgstr "_გაუმჭვირვალობა"
+msgstr "გაუმჭირვალობა"
 
 #: libmsooxml/MsooXmlDocPropertiesReader.cpp:63
 #: libmsooxml/MsooXmlReader.cpp:171 libmsooxml/MsooXmlThemesReader.cpp:351
