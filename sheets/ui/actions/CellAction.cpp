@@ -91,6 +91,137 @@ bool CellAction::enabledForSelection(Selection *, const Cell &)
     return true;
 }
 
+QRect CellAction::shrinkToUsedArea(QRect rect, Sheet *sheet)
+{
+    // If it's a single cell, keep it as it is.
+    if ((rect.height() == 1) && (rect.width() == 1)) return rect;
+
+    QRect used = sheet->usedArea();
+    int usex = used.right();
+    int usey = used.bottom();
+    if (rect.top() > usey) rect.setBottom(rect.top());
+    else if (rect.bottom() > usey) rect.setBottom(usey);
+    if (rect.left() > usex) rect.setRight(rect.left());
+    else if (rect.right() > usex) rect.setRight(usex);
+
+    // Remove empty rows/columns
+    while (rect.bottom() > rect.top()) {
+        int y = rect.bottom();
+        bool used = false;
+        for (int x = rect.left(); x <= rect.right(); ++x) {
+            Value v = CellBase(sheet, x, y).value();
+            if (!v.isNull()) used = true;
+        }
+        if (used) break;
+        rect.setBottom(y - 1);
+    }
+    while (rect.right() > rect.left()) {
+        int x = rect.right();
+        bool used = false;
+        for (int y = rect.top(); y <= rect.bottom(); ++y) {
+            Value v = CellBase(sheet, x, y).value();
+            if (!v.isNull()) used = true;
+        }
+        if (used) break;
+        rect.setRight(x - 1);
+    }
+
+    return rect;
+}
+
+QRect CellAction::extendSelectionToColumn(const CellBase &cell, bool numeric)
+{
+    SheetBase *sheet = cell.sheet();
+    int x = cell.column();
+    int y = cell.row();
+    Value cur = cell.value();
+    QRect res(x, y, 1, 1);
+
+    int yy = y;
+    // We do not check the current x/y cell - this lets us place the cursor directly under a column and have it extend to it
+    while (yy > 1) {
+        yy--;
+        Value v = CellBase(sheet, x, yy).value();
+        if (numeric) {
+            if (v.isNumber()) continue;
+        } else {
+            if (!v.isEmpty()) continue;
+        }
+        res.setTop(yy + 1);
+        break;
+    }
+
+    // If we are in the middle of a column, expand downwards too
+    if ((numeric && cur.isNumber()) || ((!numeric) && (!cur.isEmpty()))) {
+        yy = y;
+        while (yy < KS_rowMax) {
+            yy++;
+            Value v = CellBase(sheet, x, yy).value();
+            if (numeric) {
+                if (v.isNumber()) continue;
+            } else {
+                if (!v.isEmpty()) continue;
+            }
+            res.setBottom(yy - 1);
+            break;
+        }
+    }
+
+    return res;
+}
+
+// Same as the above function, just swaps col/row
+QRect CellAction::extendSelectionToRow(const CellBase &cell, bool numeric)
+{
+    SheetBase *sheet = cell.sheet();
+    int x = cell.column();
+    int y = cell.row();
+    Value cur = cell.value();
+    QRect res(x, y, 1, 1);
+
+    int xx = x;
+    // We do not check the current x/y cell - this lets us place the cursor directly next to a row and have it extend to it
+    while (xx > 1) {
+        xx--;
+        Value v = CellBase(sheet, xx, y).value();
+        if (numeric) {
+            if (v.isNumber()) continue;
+        } else {
+            if (!v.isEmpty()) continue;
+        }
+        res.setLeft(xx + 1);
+        break;
+    }
+
+    // If we are in the middle of a column, expand downwards too
+    if ((numeric && cur.isNumber()) || ((!numeric) && (!cur.isEmpty()))) {
+        xx = x;
+        while (xx < KS_colMax) {
+            xx++;
+            Value v = CellBase(sheet, xx, y).value();
+            if (numeric) {
+                if (v.isNumber()) continue;
+            } else {
+                if (!v.isEmpty()) continue;
+            }
+            res.setRight(xx - 1);
+            break;
+        }
+    }
+
+    return res;
+}
+
+QRect CellAction::extendSelectionToRange(const CellBase &cell, bool numeric)
+{
+    QRect r1 = extendSelectionToColumn(cell, numeric);
+    CellBase topCell(cell.sheet(), cell.column(), r1.top());
+    QRect r2 = extendSelectionToRow(topCell, numeric);
+    QRect res(QPoint(r2.left(), r1.top()), QPoint(r2.right(), r1.bottom()));
+    return res;
+}
+
+
 
 // *********** ToggleableCellAction ***********
 

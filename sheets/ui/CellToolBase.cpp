@@ -45,7 +45,6 @@
 #include "actions/Comment.h"   // for CommentCommand, which is used by the Find action
 
 // commands
-#include "commands/AutoFilterCommand.h"
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/PasteCommand.h"
@@ -145,13 +144,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
     connect(action, &QAction::triggered, this, &CellToolBase::cellStyle);
     action->setToolTip(i18n("Set the cell formatting"));
-
-    // -- sorting/filtering action --
-
-    action = new QAction(koIcon("view-filter"), i18n("&Auto-Filter"), this);
-    addAction("autoFilter", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::autoFilter);
-    action->setToolTip(i18n("Add an automatic filter to a cell range"));
 
     // -- data insert actions --
 
@@ -1076,14 +1068,6 @@ void CellToolBase::cellStyle()
         command->execute(canvas());
     }
     delete dialog;
-}
-
-void CellToolBase::autoFilter()
-{
-    AutoFilterCommand* command = new AutoFilterCommand();
-    command->setSheet(selection()->activeSheet());
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::insertFormula()

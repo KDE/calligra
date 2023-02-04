@@ -36,7 +36,14 @@ void Sort::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
 
-    const QRect range = selection->lastRange();
+    QRect range = selection->lastRange();
+    CellBase criteriaCell(sheet, range.left(), range.top());
+    if ((range.width() == 1) && (range.height() == 1)) {
+        range = extendSelectionToRange(criteriaCell, false);
+        selection->initialize(range, sheet);
+        selection->emitModified();
+    }
+
     QVector<Value> firstRow, firstCol;
     if ((!selection->isRowSelected()) && (range.width() > 1)) {
         // not a full row selection - fill in the first row data
@@ -87,19 +94,12 @@ void Sort::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
             command->setUseCustomList(true);
             command->setCustomList(clist);
         }
-        command->add(range);
+        command->add(range, sheet);
         command->execute(selection->canvas());
     }
 
     delete m_dlg;
     m_dlg = nullptr;
-}
-
-// TODO - autodetect the boundaries instead of using provided ones?
-bool Sort::enabledForSelection(Selection *selection, const Cell &)
-{
-    if (selection->isSingular()) return false;  // must have more than one cell
-    return true;
 }
 
 
@@ -115,23 +115,25 @@ SortInc::~SortInc()
 
 void SortInc::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
+    QRect range = selection->lastRange();
+    CellBase criteriaCell(sheet, range.left(), range.top());
+    if ((range.width() == 1) && (range.height() == 1)) {
+        range = extendSelectionToRange(criteriaCell, false);
+        selection->initialize(range, sheet);
+        selection->emitModified();
+    }
+
     SortManipulator* command = new SortManipulator();
-    command->add(*selection);
+    command->add(range, sheet);
     command->setSheet(sheet);
 
     // Entire row(s) selected ? Or just one row ? Sort by rows if yes.
-    QRect range = selection->lastRange();
     bool sortCols = selection->isRowSelected();
     sortCols = sortCols || (range.top() == range.bottom());
     command->setSortRows(!sortCols);
-    command->addCriterion(0, Qt::AscendingOrder, Qt::CaseInsensitive);
+    command->setSkipFirst(true);
+    command->addCriterion(criteriaCell.column() - range.left(), Qt::AscendingOrder, Qt::CaseInsensitive);
     command->execute(selection->canvas());
-}
-
-bool SortInc::enabledForSelection(Selection *selection, const Cell &)
-{
-    if (selection->isSingular()) return false;  // must have more than one cell
-    return true;
 }
 
 
@@ -146,23 +148,25 @@ SortDesc::~SortDesc()
 
 void SortDesc::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
+    QRect range = selection->lastRange();
+    CellBase criteriaCell(sheet, range.left(), range.top());
+    if ((range.width() == 1) && (range.height() == 1)) {
+        range = extendSelectionToRange(criteriaCell, false);
+        selection->initialize(range, sheet);
+        selection->emitModified();
+    }
+
     SortManipulator* command = new SortManipulator();
-    command->add(*selection);
+    command->add(range, sheet);
     command->setSheet(sheet);
 
     // Entire row(s) selected ? Or just one row ? Sort by rows if yes.
-    QRect range = selection->lastRange();
     bool sortCols = selection->isRowSelected();
     sortCols = sortCols || (range.top() == range.bottom());
     command->setSortRows(!sortCols);
-    command->addCriterion(0, Qt::DescendingOrder, Qt::CaseInsensitive);
+    command->setSkipFirst(true);
+    command->addCriterion(criteriaCell.column() - range.left(), Qt::DescendingOrder, Qt::CaseInsensitive);
     command->execute(selection->canvas());
-}
-
-bool SortDesc::enabledForSelection(Selection *selection, const Cell &)
-{
-    if (selection->isSingular()) return false;  // must have more than one cell
-    return true;
 }
 
 

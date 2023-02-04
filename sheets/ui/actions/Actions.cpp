@@ -9,6 +9,7 @@
 #include "AdjustRowCol.h"
 #include "Align.h"
 #include "Angle.h"
+#include "AutoFilter.h"
 #include "AutoSum.h"
 #include "Border.h"
 #include "Cells.h"
@@ -81,6 +82,8 @@ void Actions::createActions()
     addAction(new AlignMiddle(this));
     // Angle
     addAction(new Angle(this));
+    // AutoFilter
+    addAction(new AutoFilter(this));
     // AutoSum
     addAction(new AutoSum(this));
     // Border

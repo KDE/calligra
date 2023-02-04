@@ -37,84 +37,14 @@ void AutoSum::execute(Selection *selection, Sheet *sheet, QWidget *)
     QRect sel = selection->lastRange();
 
     // shrink to used area, reduce to 1 column/row if outside (there's nothing in those cells anyway).
-    QRect used = sheet->usedArea();
-    int usex = used.right();
-    int usey = used.bottom();
-    if (sel.top() > usey) sel.setBottom(sel.top());
-    else if (sel.bottom() > usey) sel.setBottom(usey);
-    if (sel.left() > usex) sel.setRight(sel.left());
-    else if (sel.right() > usex) sel.setRight(usex);
+    sel = shrinkToUsedArea(sel, sheet);
 
-    // Remove empty rows/columns
-    while (sel.bottom() > sel.top()) {
-        int y = sel.bottom();
-        bool used = false;
-        for (int x = sel.left(); x <= sel.right(); ++x) {
-            Value v = CellBase(sheet, x, y).value();
-            if (!v.isNull()) used = true;
-        }
-        if (used) break;
-        sel.setBottom(y - 1);
-    }
-    while (sel.right() > sel.left()) {
-        int x = sel.right();
-        bool used = false;
-        for (int y = sel.top(); y <= sel.bottom(); ++y) {
-            Value v = CellBase(sheet, x, y).value();
-            if (!v.isNull()) used = true;
-        }
-        if (used) break;
-        sel.setRight(x - 1);
-    }
-
+    CellBase cur = CellBase(sheet, sel.left(), sel.top());
     // If we have a single cell, we want to expand to the full column of values.
-    if ((sel.height() == 1) && (sel.width() == 1)) {
-        int x = sel.left();
-        int y = sel.top();
-        Value cur = CellBase(sheet, x, y).value();
-        int yy = y;
-        // We do not check the current x/y cell - this lets us place the cursor directly under a column of numbers and have it be counted.
-        while (yy > 1) {
-            yy--;
-            Value v = CellBase(sheet, x, yy).value();
-            if (v.isNumber()) continue;
-            sel.setTop(yy + 1);
-            break;
-        }
-        // If the current cell contains a number, we expand to the down, too.
-        if (cur.isNumber()) {
-            yy = y;
-            while (yy <= usey) {  // need to go to usey+1 so that we set the bottom correctly if our edge is = usey
-                yy++;
-                Value v = CellBase(sheet, x, yy).value();
-                if (v.isNumber()) continue;
-                sel.setBottom(yy - 1);
-                break;
-            }
-        }
-
-        // If we fail to find the column, try the row instead.
-        if (sel.height() == 1) {
-            int xx = x;
-            while (xx > 1) {
-                xx--;
-                Value v = CellBase(sheet, xx, y).value();
-                if (v.isNumber()) continue;
-                sel.setLeft(xx + 1);
-                break;
-            }
-            if (cur.isNumber()) {
-                xx = x;
-                while (xx <= usex) {
-                    xx++;
-                    Value v = CellBase(sheet, xx, y).value();
-                    if (v.isNumber()) continue;
-                    sel.setRight(xx - 1);
-                    break;
-                }
-            }
-        }
-    }
+    if ((sel.height() == 1) && (sel.width() == 1))
+        sel = extendSelectionToRow(cur, true);
+    if ((sel.height() == 1) && (sel.width() == 1))
+        sel = extendSelectionToColumn(cur, true);
 
     if ((sel.height() > 1) || (sel.width() > 1)) {
         AutoSumCommand* command = new AutoSumCommand();

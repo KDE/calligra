@@ -149,8 +149,6 @@ protected Q_SLOTS:
 
     // -- cell style actions --
     void cellStyle();
-    // -- sorting/filtering action --
-    void autoFilter();
     // -- data insert actions --
     void insertFormula();
     void insertFromDatabase();

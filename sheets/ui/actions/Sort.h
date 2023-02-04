@@ -28,7 +28,6 @@ public:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-    virtual bool enabledForSelection(Selection *selection, const Cell &activeCell) override;
 
     SortDialog *m_dlg;
     Selection *m_selection;
@@ -42,7 +41,6 @@ public:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-    virtual bool enabledForSelection(Selection *selection, const Cell &activeCell) override;
 };
 
 class SortDesc : public CellAction {
@@ -53,7 +51,6 @@ public:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-    virtual bool enabledForSelection(Selection *selection, const Cell &activeCell) override;
 };
 
 

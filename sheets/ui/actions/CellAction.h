@@ -59,6 +59,11 @@ protected:
     virtual bool enabledIfProtected() const { return false; }
     virtual bool enabledForSelection(Selection *selection, const Cell &activeCell);
 
+    QRect shrinkToUsedArea(QRect rect, Sheet *sheet);
+    QRect extendSelectionToColumn(const CellBase &cell, bool numeric);
+    QRect extendSelectionToRow(const CellBase &cell, bool numeric);
+    QRect extendSelectionToRange(const CellBase &cell, bool numeric);
+
     /** Creates the QAction or a derived class. */
     virtual QAction *createAction();
 

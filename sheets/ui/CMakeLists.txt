@@ -5,6 +5,7 @@ set (actions_DIR_SRCS
     actions/AdjustRowCol.cpp
     actions/Align.cpp
     actions/Angle.cpp
+    actions/AutoFilter.cpp
     actions/AutoSum.cpp
     actions/Border.cpp
     actions/Cells.cpp
@@ -75,7 +76,6 @@ set (commands_DIR_SRCS
     commands/DataManipulators.cpp
     commands/ApplyFilterCommand.cpp
     commands/AutoFillCommand.cpp
-    commands/AutoFilterCommand.cpp
     commands/AutoFormatCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
