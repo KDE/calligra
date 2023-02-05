@@ -992,6 +992,7 @@ void View::initConfig()
     sett->setMoveToValue((Calligra::Sheets::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
     sett->setIndentValue(parameterGroup.readEntry("Indent", 10.0));
     sett->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc", (int)(SumOfNumber)));
+    sett->setSortingList(parameterGroup.readEntry("Other list", QStringList()));
     if (!configFromDoc)
         sett->setShowTabBar(parameterGroup.readEntry("Tabbar", true));
 

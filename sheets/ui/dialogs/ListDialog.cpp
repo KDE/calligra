@@ -14,19 +14,18 @@
 #include <QListWidget>
 #include <QPushButton>
 
-#include <KSharedConfig>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <ktextedit.h>
 
-#include "../commands/AutoFillCommand.h"
+#include "engine/Localization.h"
+
 
 using namespace Calligra::Sheets;
 
 class ListDialog::Private
 {
 public:
-    KSharedConfigPtr config;
-
     QListWidget* list;
     KTextEdit* textEdit;
     QPushButton* addButton;
@@ -97,7 +96,6 @@ ListDialog::ListDialog(QWidget* parent)
     connect(d->list, &QListWidget::currentRowChanged, this, &ListDialog::slotCurrentRowChanged);
     connect(this, &KoDialog::okClicked, this, &ListDialog::slotOk);
 
-    init();
     d->textEdit->setEnabled(false);
     d->modifyButton->setEnabled(false);
     slotCurrentRowChanged(0);
@@ -120,72 +118,61 @@ void ListDialog::slotCurrentRowChanged(int row)
     d->textEdit->clear();
 }
 
-void ListDialog::init()
-{
-    QString month =
-        i18n("January") + ", " +
-        i18n("February") + ", " +
-        i18n("March") + ", " +
-        i18n("April") + ", " +
-        i18n("May") + ", " +
-        i18n("June") + ", " +
-        i18n("July") + ", " +
-        i18n("August") + ", " +
-        i18n("September") + ", " +
-        i18n("October") + ", " +
-        i18n("November") + ", " +
-        i18n("December");
+void ListDialog::setCustomLists(const QStringList &list, Localization *locale) {
     QStringList lst;
-    lst.append(month);
 
-    QString smonth =
-        i18n("Jan") + ", " +
-        i18n("Feb") + ", " +
-        i18n("Mar") + ", " +
-        i18n("Apr") + ", " +
-        i18n("May") + ", " +
-        i18n("Jun") + ", " +
-        i18n("Jul") + ", " +
-        i18n("Aug") + ", " +
-        i18n("Sep") + ", " +
-        i18n("Oct") + ", " +
-        i18n("Nov") + ", ";
-        i18n("Dec");
-    lst.append(smonth);
+    QString e;
+    for (int month = 1; month <= 12; ++month) {
+        e += locale->monthName(month);
+        if (month < 12) e += ", ";
+    }
+    lst << e;
+    e = QString();
+    for (int month = 1; month <= 12; ++month) {
+        e += locale->monthName(month, false);
+        if (month < 12) e += ", ";
+    }
+    lst << e;
 
-    QString day =
-        i18n("Monday") + ", " +
-        i18n("Tuesday") + ", " +
-        i18n("Wednesday") + ", " +
-        i18n("Thursday") + ", " +
-        i18n("Friday") + ", " +
-        i18n("Saturday") + ", "+ 
-        i18n("Sunday");
-    lst.append(day);
+    e = QString();
+    for (int day = 1; day <= 7; ++day) {
+        e += locale->dayName(day);
+        if (day < 7) e += ", ";
+    }
+    lst << e;
+    e = QString();
+    for (int day = 1; day <= 7; ++day) {
+        e += locale->dayName(day, false);
+        if (day < 7) e += ", ";
+    }
+    lst << e;
 
-    QString sday =
-        i18n("Mon") + ", " +
-        i18n("Tue") + ", " +
-        i18n("Wed") + ", " +
-        i18n("Thu") + ", " +
-        i18n("Fri") + ", " +
-        i18n("Sat") + ", " +
-        i18n("Sun");
-    lst.append(sday);
-
-    d->config = KSharedConfig::openConfig();
-    const QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
-    for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {
+    for (QStringList::ConstIterator it = list.begin(); it != list.end(); ++it) {
         if ((*it) != "\\") {
             tmp += (*it) + ", ";
-        } else if (it != other.begin()) {
+        } else if (it != list.begin()) {
             tmp = tmp.left(tmp.length() - 2);
             lst.append(tmp);
             tmp.clear();
         }
     }
     d->list->addItems(lst);
+}
+
+QStringList ListDialog::customLists() {
+    QStringList result;
+    result.append("\\");
+
+    //don't save the first built-in lines
+    for (int i = numBuiltinLists - 1; i < d->list->count(); ++i) {
+        QStringList tmp = d->list->item(i)->text().split(", ", QString::SkipEmptyParts);
+        if (!tmp.isEmpty()) {
+            result += tmp;
+            result += "\\";
+        }
+    }
+    return result;
 }
 
 void ListDialog::slotDoubleClicked()
@@ -262,6 +249,10 @@ void ListDialog::slotRemove()
     d->changed = true;
 }
 
+bool ListDialog::changed() {
+    return d->changed;
+}
+
 void ListDialog::slotOk()
 {
     if (!d->textEdit->toPlainText().isEmpty()) {
@@ -269,24 +260,6 @@ void ListDialog::slotOk()
         if (ret == 4) { // response = No
             return;
         }
-    }
-    if (d->changed) {
-        QStringList result;
-        result.append("\\");
-
-        //don't save the first built-in lines
-        for (int i = numBuiltinLists - 1; i < d->list->count(); ++i) {
-            QStringList tmp = d->list->item(i)->text().split(", ", QString::SkipEmptyParts);
-            if (!tmp.isEmpty()) {
-                result += tmp;
-                result += "\\";
-            }
-        }
-        d->config->group("Parameters").writeEntry("Other list", result);
-        //todo refresh AutoFillCommand::other
-        // I don't know how to do for the moment
-        delete(AutoFillCommand::other);
-        AutoFillCommand::other = 0;
     }
     accept();
 }

@@ -24,6 +24,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class Localization;
 class Selection;
 
 /**
@@ -36,6 +37,8 @@ class SortDialog : public KoDialog
 public:
     SortDialog(QWidget* parent, QRect rect, const QVector<Value> &firstRow, const QVector<Value> &firstCol);
     ~SortDialog() override;
+
+    void setCustomLists(const QStringList &lsts, Localization *locale);
 
     bool sortRows() const;
     bool skipFirst() const;

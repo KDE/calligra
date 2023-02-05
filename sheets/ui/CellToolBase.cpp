@@ -21,6 +21,7 @@
 #include "engine/Localization.h"
 #include "engine/ValueConverter.h"
 
+#include "core/ApplicationSettings.h"
 #include "core/CellStorage.h"
 #include "core/ColFormatStorage.h"
 #include "core/Database.h"
@@ -45,6 +46,7 @@
 #include "actions/Comment.h"   // for CommentCommand, which is used by the Find action
 
 // commands
+#include "commands/AutoFillCommand.h"
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/PasteCommand.h"
@@ -81,6 +83,7 @@
 #include <kfind.h>
 #include <kmessagebox.h>
 #include <kreplace.h>
+#include <KSharedConfig>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 
@@ -1093,7 +1096,20 @@ void CellToolBase::insertFromDatabase()
 void CellToolBase::sortList()
 {
     QPointer<ListDialog> dialog = new ListDialog(canvas()->canvasWidget());
-    dialog->exec();
+    Map *map = selection()->activeSheet()->fullMap();
+    ApplicationSettings *sett = map->applicationSettings();
+    Localization *locale = map->calculationSettings()->locale();
+    dialog->setCustomLists(sett->sortingList(), locale);
+    if (dialog->exec() && dialog->changed()) {
+        QStringList result = dialog->customLists();
+        auto config = KSharedConfig::openConfig();
+        config->group("Parameters").writeEntry("Other list", result);
+
+        // TODO do this better
+        delete(AutoFillCommand::other);
+        AutoFillCommand::other = nullptr;
+    }
+    sett->setSortingList(dialog->customLists());
     delete dialog;
 }
 

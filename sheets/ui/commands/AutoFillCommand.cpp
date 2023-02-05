@@ -15,21 +15,23 @@
 
 #include "AutoFillCommand.h"
 
-#include "engine/MapBase.h"
-#include "engine/SheetBase.h"
 #include "engine/ValueConverter.h"
+#include "core/ApplicationSettings.h"
 #include "core/Cell.h"
-
-#include <KSharedConfig>
-#include <kconfiggroup.h>
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
-QStringList *AutoFillCommand::month = 0;
-QStringList *AutoFillCommand::shortMonth = 0;
-QStringList *AutoFillCommand::day = 0;
-QStringList *AutoFillCommand::shortDay = 0;
-QStringList *AutoFillCommand::other = 0;
+QStringList *AutoFillCommand::month = nullptr;
+QStringList *AutoFillCommand::shortMonth = nullptr;
+QStringList *AutoFillCommand::day = nullptr;
+QStringList *AutoFillCommand::shortDay = nullptr;
+QStringList *AutoFillCommand::other = nullptr;
+
+
+// TODO - this needs redoing, it is generally poorly written
+
 
 /**********************************************************************************
  *
@@ -49,7 +51,7 @@ class AutoFillSequenceItem
 public:
     enum Type { VALUE, FORMULA, DAY, SHORTDAY, MONTH, SHORTMONTH, OTHER };
 
-    explicit AutoFillSequenceItem(const Cell& cell);
+    explicit AutoFillSequenceItem(const Cell& cell, ApplicationSettings *sett);
 
     Value delta(AutoFillSequenceItem *_seq, bool *ok) const;
 
@@ -80,7 +82,7 @@ protected:
 } // namespace Calligra
 
 
-AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
+AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell, ApplicationSettings *sett)
         : m_value()
         , m_type(VALUE)
         , m_otherBegin(0)
@@ -156,11 +158,8 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
             AutoFillCommand::shortDay->append(i18n("Sun"));
         }
 
-        if (AutoFillCommand::other == 0) {
-            // AutoFillCommand::other = new QStringList();
-            KSharedConfigPtr config = KSharedConfig::openConfig();
-            AutoFillCommand::other = new QStringList(config->group("Parameters").readEntry("Other list", QStringList()));
-        }
+        if (!AutoFillCommand::other)
+            AutoFillCommand::other = new QStringList(sett->sortingList());
 
         if (AutoFillCommand::month->contains(m_value.asString())) {
             m_type = MONTH;
@@ -698,6 +697,8 @@ bool AutoFillCommand::performCommands()
     if (m_sourceRange.contains(m_targetRange))
         return false;
 
+    ApplicationSettings *sett = m_sheet->fullMap()->applicationSettings();
+
     // Fill from left to right
     if (m_sourceRange.left() == m_targetRange.left() && m_sourceRange.right() < m_targetRange.right()) {
         for (int y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y) {
@@ -710,7 +711,7 @@ bool AutoFillCommand::performCommands()
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
             for (x = m_sourceRange.left(); x <= m_sourceRange.right(); ++x)
-                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y), sett));
             fillSequence(srcList, destList, seqList);
             qDeleteAll(seqList);
         }
@@ -728,7 +729,7 @@ bool AutoFillCommand::performCommands()
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
             for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y)
-                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y), sett));
             fillSequence(srcList, destList, seqList);
             qDeleteAll(seqList);
         }
@@ -746,7 +747,7 @@ bool AutoFillCommand::performCommands()
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
             for (x = m_sourceRange.left(); x <= m_sourceRange.right(); ++x)
-                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y), sett));
             fillSequence(srcList, destList, seqList, false);
             qDeleteAll(seqList);
         }
@@ -766,7 +767,7 @@ bool AutoFillCommand::performCommands()
                 srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
             for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y)
-                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y), sett));
             fillSequence(srcList, destList, seqList, false);
             qDeleteAll(seqList);
         }

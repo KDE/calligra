@@ -11,7 +11,10 @@
 
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
+#include "engine/CalculationSettings.h"
+#include "core/ApplicationSettings.h"
 #include "core/CellStorage.h"
+#include "core/Map.h"
 #include "core/Sheet.h"
 
 #include <KLocalizedString>
@@ -66,7 +69,11 @@ void Sort::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
         }
     }
 
+    ApplicationSettings *sett = sheet->fullMap()->applicationSettings();
+    Localization *locale = sheet->map()->calculationSettings()->locale();
     m_dlg = new SortDialog(canvasWidget, range, firstRow, firstCol);
+    m_dlg->setCustomLists(sett->sortingList(), locale);
+
     if (m_dlg->exec()) {
         SortManipulator *const command = new SortManipulator();
         command->setSheet(sheet);

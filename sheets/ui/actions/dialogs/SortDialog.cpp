@@ -17,14 +17,13 @@
 #include "SortDialog.h"
 
 #include "engine/CellBase.h"
+#include "engine/Localization.h"
 
 // ui
 #include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"
 
 #include <KoIcon.h>
-
-#include <KSharedConfig>
 
 // Qt
 #include <QStyledItemDelegate>
@@ -328,31 +327,6 @@ SortDialog::~SortDialog()
 
 void SortDialog::init()
 {
-    QStringList lst;
-    lst << i18n("January") + ',' + i18n("February") + ',' + i18n("March") +
-    ',' + i18n("April") + ',' + i18n("May") + ',' + i18n("June") +
-    ',' + i18n("July") + ',' + i18n("August") + ',' + i18n("September") +
-    ',' + i18n("October") + ',' + i18n("November") +
-    ',' + i18n("December");
-
-    lst << i18n("Monday") + ',' + i18n("Tuesday") + ',' + i18n("Wednesday") +
-    ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
-    ',' + i18n("Sunday");
-
-    KSharedConfigPtr config = KSharedConfig::openConfig();
-    const QStringList other = config->group("Parameters").readEntry("Other list", QStringList());
-    QString tmp;
-    for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {
-        if ((*it) != "\\")
-            tmp += (*it) + ", ";
-        else if (it != other.begin()) {
-            tmp = tmp.left(tmp.length() - 2);
-            lst.append(tmp);
-            tmp.clear();
-        }
-    }
-    d->detailsWidget.m_customList->insertItems(0, lst);
-
     d->mainWidget.m_sortHorizontal->setEnabled(true);
     d->mainWidget.m_sortVertical->setEnabled(true);
 
@@ -390,6 +364,35 @@ void SortDialog::init()
 
     // Initialize the criteria.
     slotButtonClicked(Reset);
+}
+
+void SortDialog::setCustomLists(const QStringList &lsts, Localization *locale) {
+    QStringList lst;
+    QString e;
+    for (int month = 1; month <= 12; ++month) {
+        e += locale->monthName(month);
+        if (month < 12) e += ", ";
+    }
+    lst << e;
+
+    e = QString();
+    for (int day = 1; day <= 7; ++day) {
+        e += locale->dayName(day);
+        if (day < 7) e += ", ";
+    }
+    lst << e;
+
+    QString tmp;
+    for (QStringList::ConstIterator it = lsts.begin(); it != lsts.end(); ++it) {
+        if ((*it) != "\\")
+            tmp += (*it) + ", ";
+        else if (it != lsts.begin()) {
+            tmp = tmp.left(tmp.length() - 2);
+            lst.append(tmp);
+            tmp.clear();
+        }
+    }
+    d->detailsWidget.m_customList->insertItems(0, lst);
 }
 
 bool SortDialog::sortRows() const {

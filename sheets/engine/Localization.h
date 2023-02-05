@@ -84,9 +84,9 @@ public:
     bool timeWithAMPM() const;
     QString dateSeparator(bool longDate) const;
     int firstDayOfWeek() const;
-    QString dayName(int day) const;
+    QString dayName(int day, bool longFormat = true) const;
     /** Name of month, 1-12 */
-    QString monthName(int month) const;
+    QString monthName(int month, bool longFormat = true) const;
 
     QString formatBool(bool val) const;
 

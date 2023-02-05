@@ -145,6 +145,9 @@ public:
     QColor pageOutlineColor() const;
     void changePageOutlineColor(const QColor& color);
 
+    QStringList sortingList() const;
+    void setSortingList(const QStringList &lst);
+
 private:
     class Private;
     Private * const d;

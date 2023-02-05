@@ -16,6 +16,7 @@ public:
     KCompletion::CompletionMode completionMode;
     Calligra::Sheets::MoveTo moveTo;
     MethodOfCalc calcMethod;
+    QStringList sortingList;
     double indentValue;
     bool verticalScrollBar      : 1;
     bool horizontalScrollBar    : 1;
@@ -165,5 +166,15 @@ QColor ApplicationSettings::pageOutlineColor() const
 void ApplicationSettings::changePageOutlineColor(const QColor& color)
 {
     d->pageOutlineColor = color;
+}
+
+QStringList ApplicationSettings::sortingList() const
+{
+    return d->sortingList;
+}
+
+void ApplicationSettings::setSortingList(const QStringList &lst)
+{
+    d->sortingList = lst;
 }
 

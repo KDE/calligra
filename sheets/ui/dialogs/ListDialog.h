@@ -15,6 +15,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class Localization;
 
 /**
  * \ingroup UI
@@ -27,7 +28,9 @@ public:
     explicit ListDialog(QWidget *parent);
     ~ListDialog() override;
 
-    void init();
+    void setCustomLists(const QStringList &list, Localization *locale);
+    QStringList customLists();
+    bool changed();
 
 public Q_SLOTS:
     virtual void slotOk();

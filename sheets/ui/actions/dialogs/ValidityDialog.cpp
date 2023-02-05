@@ -516,7 +516,6 @@ void ValidityDialog::done(int r) {
 }
 
 Validity ValidityDialog::getValidity() {
-    const Localization* locale = m_settings->locale();
     Validity validity;
 
     int idx = chooseType->currentIndex();

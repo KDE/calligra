@@ -216,14 +216,14 @@ int Localization::firstDayOfWeek() const
     return (int) d->locale.firstDayOfWeek();
 }
 
-QString Localization::dayName(int day) const
+QString Localization::dayName(int day, bool longFormat) const
 {
-    return d->locale.dayName(day);
+    return d->locale.standaloneDayName(day, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
-QString Localization::monthName(int month) const
+QString Localization::monthName(int month, bool longFormat) const
 {
-    return d->locale.monthName(month);
+    return d->locale.standaloneMonthName(month, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
 
