@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-30 00:57+0000\n"
+"POT-Creation-Date: 2023-02-05 00:58+0000\n"
 "PO-Revision-Date: 2013-10-17 04:56+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -901,7 +901,7 @@ msgstr "Сан"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -959,7 +959,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") қайтаратыны 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Деректер қоры"
@@ -14351,187 +14351,177 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Шегін өзгерту"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:141
 #, kde-format
 msgid "Cell Format..."
 msgstr "Ұяшық пішімі..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Ұяшықты пішімдеу"
 
-#: ui/CellToolBase.cpp:151
-#, kde-format
-msgid "&Auto-Filter"
-msgstr "&Авто-сүзгі"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Add an automatic filter to a cell range"
-msgstr "Ұяшық аумағына авто-сүзгіні қосу"
-
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "&Function..."
 msgstr "&Функция..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Insert math expression"
 msgstr "Математикалық өрнегін ендіру"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "From &Database..."
 msgstr "&Деректер қорынан..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL деректер қорынан деректерді ендіру"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:163
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Өзінің тізімдері..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Реттеу не автотолтыру үшін өзінің тізімдерін құру"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Керегін іздеу..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Керек мәнін табу үшін есептеуді қайталау"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Formula Selection"
 msgstr "Формуланы таңдау"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Insert a function"
 msgstr "Функцияны ендіру"
 
-#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
+#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
 #, kde-format
 msgid "Others..."
 msgstr "Басқа..."
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:184
 #, kde-format
 msgid "Modify Cell"
 msgstr "Ұяшықты өзгерту"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:188
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Бояуланған ұяшықты өңдеу"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Ұяшықтағыны алмасу буферіне алу"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:195
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Ұяшықтағыны алмасу буферіне көшірмелеу"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Алмасу буферіндегіні меңзер көрсеткенге орналастыру"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:202
 #, kde-format
 msgid "Special Paste..."
 msgstr "Арнаулы орналастыру..."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:205
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Алмасу буферіндегіні түрлі әдістерімен орналастыру"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Ығыстырып орналастыру"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Ұяшықты алмасу буферінен кестеге ендіру"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Назардағы беттің барлық ұяшықтарын таңдау"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Check the spelling"
 msgstr "Емлесін тексеру"
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:234
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Инспекторды жегу..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:240
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView-ді көрсету..."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Auto-Format..."
 msgstr "Авто-Пішім..."
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:249
 #, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Беттің пішімін орнату"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "Document Settings..."
 msgstr "Құжаттың параметрлері..."
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Құжаттың параметрлер диалогын шығару"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:258
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Сілтеме бекітуін өзгерту"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:262
 #, kde-format
 msgid "Permute fixation"
 msgstr "Бекітуін өзгерту"
 
-#: ui/CellToolBase.cpp:271
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Мәтін меңзер орналасқан ұяшық сілтемесінің бекітуін өзгерту"
 
-#: ui/CellToolBase.cpp:1058
+#: ui/CellToolBase.cpp:1050
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1106
+#: ui/CellToolBase.cpp:1090
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14543,7 +14533,7 @@ msgstr ""
 "Деректер қорларының драйверлері жоқ.  Бұны қолдану үшін қажетті Qt 3 "
 "деректер қорларының драйверлерін орнату керек."
 
-#: ui/CellToolBase.cpp:1598
+#: ui/CellToolBase.cpp:1582
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Алмастыру"
@@ -14792,11 +14782,6 @@ msgstr "Жк"
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Автотолтыру"
-
-#: ui/commands/AutoFilterCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Auto-Filter"
-msgstr "Авто-Сүзгі"
 
 #: ui/commands/AutoFormatCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -16671,6 +16656,16 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Сілтеме ашылсын ба?"
+
+#~ msgid "&Auto-Filter"
+#~ msgstr "&Авто-сүзгі"
+
+#~ msgid "Add an automatic filter to a cell range"
+#~ msgstr "Ұяшық аумағына авто-сүзгіні қосу"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Filter"
+#~ msgstr "Авто-Сүзгі"
 
 #~ msgid "Clear All"
 #~ msgstr "Барлығын тазалау"

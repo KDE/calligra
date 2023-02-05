@@ -7,13 +7,13 @@
 # Serdar Cevher <scevher@anet.com.tr>, 2000.
 # obsoleteman <tulliana@gmail.com>, 2008-2009.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2022-11-21 22:28+0300\n"
+"PO-Revision-Date: 2023-02-04 11:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -1078,7 +1078,7 @@ msgstr "Gri Üst ve Alt"
 #, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr "Calligra Words"
+msgstr "Calligra Sözcükler"
 
 #: part/KWAboutData.h:22
 #, kde-format
@@ -1088,7 +1088,7 @@ msgstr "Sözcük işlemci"
 #: part/KWAboutData.h:24
 #, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "Telif hakkı 1998-%1, Words Takımı"
+msgstr "Telif hakkı 1998-%1, Sözcükler Takımı"
 
 #: part/KWAboutData.h:32 part/KWAboutData.h:33
 #, kde-format
@@ -1429,7 +1429,7 @@ msgstr "Standart"
 #: part/KWPart.cpp:141
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
-msgstr "Gereken metin bileşeni bulunamadı. Words şimdi çıkacak"
+msgstr "Gereken metin bileşeni bulunamadı. Sözcükler şimdi çıkacak"
 
 #: part/KWPart.cpp:142
 #, kde-format
@@ -1553,7 +1553,7 @@ msgid ""
 "printing characters."
 msgstr ""
 "Yazdırılmayan karakterleri görüntülemeyi aç/kapat.<br/><br/>Bu etkin "
-"olduğunda, Words size girdileri, boşlukları, satır başlarını ve diğer "
+"olduğunda, Sözcükler size girdileri, boşlukları, satır başlarını ve diğer "
 "basılmayan karakterleri gösterir."
 
 #: part/KWView.cpp:301
@@ -1612,8 +1612,9 @@ msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
-"Tablo kenarlıkları görünümünü aç/kapat.<br/><br/>Bu etkin olduğunda, Words "
-"size tüm görünmez tablo kenarlıklarını ince bir gri çizgi ile gösterir."
+"Tablo kenarlıkları görünümünü aç/kapat.<br/><br/>Bu etkin olduğunda, "
+"Sözcükler size tüm görünmez tablo kenarlıklarını ince bir gri çizgi ile "
+"gösterir."
 
 #: part/KWView.cpp:328
 #, kde-format

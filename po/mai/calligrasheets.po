@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-30 00:57+0000\n"
+"POT-Creation-Date: 2023-02-05 00:58+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -891,7 +891,7 @@ msgstr "संख्या"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -953,7 +953,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "मान"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -13937,216 +13937,205 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "पृष्ठ क्रम"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:141
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Cell Format..."
 msgstr "सेल परिसर"
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Set the cell formatting"
 msgstr "सेल परिसर"
 
-#: ui/CellToolBase.cpp:151
-#, fuzzy, kde-format
-#| msgid "Filter"
-msgid "&Auto-Filter"
-msgstr "फिल्टर"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Add an automatic filter to a cell range"
-msgstr ""
-
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "&Function..."
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "नियमित वर्णन"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "Insert data from a SQL database"
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:163
 #, fuzzy, kde-format
 #| msgid "Custom..."
 msgid "Custom Lists..."
 msgstr "मनपसिन्न..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 #| msgid "Goal Seek"
 msgid "&Goal Seek..."
 msgstr "लक्ष्य प्राप्ति"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "File Options"
 msgid "Formula Selection"
 msgstr "फाइल विकल्प"
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:175
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Insert a function"
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
+#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "श्रृंखला"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "सुधारू"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:188
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:195
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:202
 #, kde-format
 msgid "Special Paste..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:205
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr ""
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 #| msgid "Insert Cells"
 msgid "Paste with Insertion"
 msgstr "कोष्ठ जोडू"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 #| msgid "Sheets"
 msgid "Selects all cells in the current sheet"
 msgstr "शीट"
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:234
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:240
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "शीट देखाउ"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 #| msgid "Format"
 msgid "Auto-Format..."
 msgstr "प्रारूप"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:249
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Set the worksheet formatting"
 msgstr "सेल परिसर"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 #| msgid "Print settings"
 msgid "Document Settings..."
 msgstr "छपाइ जमावट"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 #| msgid "Formula"
 msgid "Show document settings dialog"
 msgstr "सूत्र"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:258
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:262
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:271
+#: ui/CellToolBase.cpp:263
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1058
+#: ui/CellToolBase.cpp:1050
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1106
+#: ui/CellToolBase.cpp:1090
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1598
+#: ui/CellToolBase.cpp:1582
 #, fuzzy
 #| msgid "Replace"
 msgctxt "(qtundo-format)"
@@ -14404,13 +14393,6 @@ msgstr "रवि"
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "एंग्विला"
-
-#: ui/commands/AutoFilterCommand.cpp:20
-#, fuzzy
-#| msgid "Filter"
-msgctxt "(qtundo-format)"
-msgid "Auto-Filter"
-msgstr "फिल्टर"
 
 #: ui/commands/AutoFormatCommand.cpp:17
 #, fuzzy
@@ -16248,6 +16230,17 @@ msgstr ""
 #| msgid "Insert Link"
 msgid "Open Link?"
 msgstr "कड़ी डालू"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgid "&Auto-Filter"
+#~ msgstr "फिल्टर"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Filter"
+#~ msgstr "फिल्टर"
 
 #~ msgid "Clear All"
 #~ msgstr "सभकेँ हटाबू"

@@ -4,13 +4,13 @@
 # Translators:
 # Anıl Özbek <ozbekanil@gmail.com>, 2012.
 # obsoleteman <tulliana@gmail.com>, 2009.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 02:41+0200\n"
-"PO-Revision-Date: 2022-10-20 12:04+0300\n"
+"PO-Revision-Date: 2023-02-04 11:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #. i18n: ectx: Menu (tools)
 #: scripting.rc:4
@@ -161,7 +161,7 @@ msgid ""
 "Python script that uses the KHTML Part to display the Words Scripting online "
 "help"
 msgstr ""
-"Words Scripting çevrimiçi yardımını göstermek için KHTML Part kullanan "
+"Sözcükler Scripting çevrimiçi yardımını göstermek için KHTML Part kullanan "
 "Python betiği"
 
 #. i18n: tag collection attribute text
@@ -175,7 +175,7 @@ msgstr "Değişkenler"
 #: scripts/scripts.rc:60
 #, kde-format
 msgid "Scripting variables for Words"
-msgstr "Words için betik değişkenleri"
+msgstr "Sözcükler için betik değişkenleri"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:62
@@ -199,7 +199,7 @@ msgstr "Örnekler"
 #: scripts/scripts.rc:80
 #, kde-format
 msgid "Samples to demonstrate scripting with Words"
-msgstr "Words ile betik kullanımını gösteren örnekler"
+msgstr "Sözcükler ile betik kullanımını gösteren örnekler"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:81

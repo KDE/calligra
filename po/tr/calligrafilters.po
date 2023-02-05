@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2023-01-18 22:31+0300\n"
+"PO-Revision-Date: 2023-02-04 11:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -602,13 +602,13 @@ msgstr "Belge Biçemi"
 #: sheets/latex/export/latexexportwidget.ui:38
 #, kde-format
 msgid "Latex style"
-msgstr "Latex tarzı"
+msgstr "Latex tarzında"
 
 #. i18n: ectx: property (text), widget (QRadioButton, wordsStyleButton)
 #: sheets/latex/export/latexexportwidget.ui:45
 #, kde-format
 msgid "Words style"
-msgstr "Words tarzı"
+msgstr "Sözcükler tarzında"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: sheets/latex/export/latexexportwidget.ui:58
@@ -874,7 +874,7 @@ msgstr "Slayt %1"
 #: words/ascii/ImportDialog.cc:32
 #, kde-format
 msgid "Words's Plain Text Import Filter"
-msgstr "Words'ün Düz Metin İçe Aktarma Süzgeci"
+msgstr "Sözcükler Düz Metin İçe Aktarma Süzgeci"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ImportDialogUI)
 #: words/ascii/ImportDialogUI.ui:16
@@ -955,7 +955,7 @@ msgstr "Belge, bir RTF belgesi değil gibi göründüğünden yüklenemedi."
 #: words/rtf/import/rtfimport.cpp:80
 #, kde-format
 msgid "Words's RTF Import Filter"
-msgstr "Words'ün Zengin Metin İçe Aktarma Süzgeci"
+msgstr "Sözcükler Zengin Metin İçe Aktarma Süzgeci"
 
 #: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
 #, kde-format

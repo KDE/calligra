@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-30 00:57+0000\n"
+"POT-Creation-Date: 2023-02-05 00:58+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -848,7 +848,7 @@ msgstr "Skaičius"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -903,7 +903,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Reikšmė"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:165 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Duombazė"
@@ -13443,199 +13443,189 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kapo Verdė"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:141
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Reikšmės"
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Reikšmės"
 
-#: ui/CellToolBase.cpp:151
-#, fuzzy, kde-format
-msgid "&Auto-Filter"
-msgstr "Automatinis filtras"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Add an automatic filter to a cell range"
-msgstr ""
-
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Įprastoji išraiška"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:163
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Pasirinktas..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Parametrų parinkimas"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:183
+#: ui/CellToolBase.cpp:175
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Įterpti lakštą"
 
-#: ui/CellToolBase.cpp:184 ui/CellToolBase.cpp:1134
+#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Kiti"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:184
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Keisti langelį"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:188
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:203
+#: ui/CellToolBase.cpp:195
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:199
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:202
 #, fuzzy, kde-format
 msgid "Special Paste..."
 msgstr "Ypatingi &simboliai"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:205
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Insert Cells"
 msgid "Paste with Insertion"
 msgstr "Įterpti langelius"
 
-#: ui/CellToolBase.cpp:218
+#: ui/CellToolBase.cpp:210
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Įterpti lakštą"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Check the spelling"
 msgstr ""
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:234
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:240
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rodyti lakštą"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:246
 #, fuzzy, kde-format
 msgid "Auto-Format..."
 msgstr "Automatinis formatavimas"
 
-#: ui/CellToolBase.cpp:257
+#: ui/CellToolBase.cpp:249
 #, fuzzy, kde-format
 msgid "Set the worksheet formatting"
 msgstr "Reikšmės"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:266
+#: ui/CellToolBase.cpp:258
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:270
+#: ui/CellToolBase.cpp:262
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:271
+#: ui/CellToolBase.cpp:263
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:1058
+#: ui/CellToolBase.cpp:1050
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1106
+#: ui/CellToolBase.cpp:1090
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1598
+#: ui/CellToolBase.cpp:1582
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -13884,11 +13874,6 @@ msgstr "Sk"
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Automatinis užpildymas"
-
-#: ui/commands/AutoFilterCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Auto-Filter"
-msgstr "Automatinis filtras"
 
 #: ui/commands/AutoFormatCommand.cpp:17
 msgctxt "(qtundo-format)"
@@ -15645,6 +15630,14 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Atverti nuorodą"
+
+#, fuzzy
+#~ msgid "&Auto-Filter"
+#~ msgstr "Automatinis filtras"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Filter"
+#~ msgstr "Automatinis filtras"
 
 #~ msgid "Clear All"
 #~ msgstr "Valyti viską"
