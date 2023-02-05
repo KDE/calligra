@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="Calligra Sheets" version="43" translationDomain="calligrasheets">
+<gui name="Calligra Sheets" version="44" translationDomain="calligrasheets">
 <MenuBar>
 <!-- <<<<<<<<<<<<<<<<<<<<<>>>>><   File Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="file"><text>&amp;File</text>
@@ -99,7 +99,7 @@
   <Action name="setStyle"/>
   <Action name="createStyleFromCell"/>
   <Action name="conditional"/>
-  <Action name="sheetFormat"/>
+  <Action name="autoFormat"/>
   <Separator/>
   <Menu name="MergeCellMenu" icon="mergecell"><text>Merge Cells</text>
     <Action name="mergeCells"/>
@@ -353,7 +353,7 @@
     <Action name="setStyle"/>
     <Action name="createStyleFromCell"/>
     <Action name="conditional"/>
-    <Action name="sheetFormat"/><!--Auto-Format..-->
+    <Action name="autoFormat"/>
     <Action name="mergeCells"/>
     <Action name="mergeCellsHorizontal"/>
     <Action name="mergeCellsVertical"/>

@@ -20,7 +20,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
@@ -30,9 +29,11 @@ class AutoFormatDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit AutoFormatDialog(QWidget* parent, Selection* selection);
+    explicit AutoFormatDialog(QWidget* parent);
     ~AutoFormatDialog() override;
 
+    void setList(const QMap<QString, QPixmap> &list);
+    QString selectedOption();
 private Q_SLOTS:
     void slotActivated(int index);
     void slotOk();

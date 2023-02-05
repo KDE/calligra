@@ -1,16 +1,135 @@
 /* This file is part of the KDE project
-   SPDX-FileCopyrightText: 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   SPDX-FileCopyrightText: 1998-2022 The Calligra Team <calligra-devel@kde.org>
+   SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "AutoFormatCommand.h"
+#include "AutoFormat.h"
+#include "Actions.h"
+#include "dialogs/AutoFormatDialog.h"
 
+#include <KLocalizedString>
+#include <kconfig.h>
+#include <kmessagebox.h>
+
+#include <KoResourcePaths.h>
+#include <KoXmlReader.h>
+
+#include "core/Cell.h"
 #include "core/CellStorage.h"
+#include "core/Database.h"
 #include "core/Sheet.h"
 #include "core/Style.h"
+#include "core/ksp/SheetsKsp.h"
+
+
 
 using namespace Calligra::Sheets;
+
+
+AutoFormat::AutoFormat(Actions *actions)
+    : CellAction(actions, "autoFormat", i18n("Auto-Format..."), QIcon(), i18n("Apply pre-defined formatting to a range of cells."))
+    , m_dlg(nullptr)
+{
+}
+
+AutoFormat::~AutoFormat()
+{
+    if (m_dlg) delete m_dlg;
+}
+
+void AutoFormat::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+{
+    m_dlg = new AutoFormatDialog(canvasWidget);
+
+    const QStringList lst = KoResourcePaths::findAllResources("sheet-styles", "*.ksts", KoResourcePaths::Recursive);
+    QMap<QString, QPixmap> pixmaps;
+    QMap<QString, QString> xmls;
+
+    for (const QString &fname : lst) {
+        KConfig config(fname, KConfig::SimpleConfig);
+        const KConfigGroup sheetStyleGroup = config.group("Sheet-Style");
+        QString name = sheetStyleGroup.readEntry("Name");
+        QString xml = sheetStyleGroup.readEntry("XML");
+        QString image = sheetStyleGroup.readEntry("Image");
+
+        QString imageName = KoResourcePaths::findResource("sheet-styles", image);
+        if (imageName.isEmpty()) continue;
+        QPixmap pixmap(imageName);
+        if (pixmap.isNull()) continue;
+
+        xmls[name] = xml;
+        pixmaps[name] = pixmap;
+    }
+    m_dlg->setList(pixmaps);
+
+    if (m_dlg->exec()) {
+        QString name = m_dlg->selectedOption();
+        delete m_dlg;
+        m_dlg = nullptr;
+        if (xmls.contains(name)) {
+            QString xml = xmls[name];
+            QString xmlname = KoResourcePaths::findResource("sheet-styles", xml);
+            if (xmlname.isEmpty()) {
+                KMessageBox::error(canvasWidget, i18n("Could not find sheet-style XML file '%1'.", xmlname));
+                return;
+            }
+
+            QFile file(xmlname);
+            file.open(QIODevice::ReadOnly);
+            KoXmlDocument doc;
+            doc.setContent(&file);
+            file.close();
+
+            bool ok;
+            QList<Style> styles = parseXML(doc, &ok);
+            if (!ok) {
+                KMessageBox::error(canvasWidget, i18n("Parsing error in sheet-style XML file %1.", xmlname));
+                return;
+            }
+
+            AutoFormatCommand* command = new AutoFormatCommand();
+            command->setSheet(sheet);
+            command->setStyles(styles);
+            command->add(*selection);
+            command->execute(selection->canvas());
+        }
+    }
+
+    delete m_dlg;
+    m_dlg = nullptr;
+}
+
+QList<Style> AutoFormat::parseXML(const KoXmlDocument& doc, bool *ok)
+{
+    *ok = false;
+    QList<Style> styles;
+    styles.clear();
+    for (int i = 0; i < 16; ++i)
+        styles.append(Style());
+
+    for (KoXmlNode node = doc.documentElement().firstChild(); !node.isNull(); node = node.nextSibling()) {
+        KoXmlElement e = node.toElement();
+        if (e.tagName() == "cell") {
+            Style style;
+            KoXmlElement tmpElement(e.namedItem("format").toElement());
+            if (!Ksp::loadStyle (&style, tmpElement))
+                return styles;
+
+            int row = e.attribute("row").toInt();
+            int column = e.attribute("column").toInt();
+            int i = (row - 1) * 4 + (column - 1);
+            if (i < 0 || i >= 16)
+                return styles;
+
+            styles[i] = style;
+        }
+    }
+    *ok = true;
+    return styles;
+}
+
 
 AutoFormatCommand::AutoFormatCommand()
 {
@@ -163,4 +282,15 @@ bool AutoFormatCommand::process(Element* element)
     }
     return true;
 }
+
+bool AutoFormat::enabledForSelection(Selection *selection, const Cell &) {
+    if (!selection->isContiguous()) return false;
+    // don't allow full rows/columns
+    if (selection->isRowSelected()) return false;
+    if (selection->isColumnSelected()) return false;
+    QRect range = selection->lastRange();
+    if ((range.width() < 2) && (range.height() < 2)) return false;
+    return true;
+}
+
 

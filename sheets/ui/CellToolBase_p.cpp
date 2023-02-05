@@ -75,19 +75,6 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     }
 }
 
-void CellToolBase::Private::updateActions()
-{
-    // TODO - this should eventually be removed, all the checks are done in the CellAction classes instead
-
-    // Now, activate/deactivate some actions depending on what is selected.
-    if (!q->selection()->activeSheet()->isProtected()) {
-        const bool colSelected = q->selection()->isColumnSelected();
-        const bool rowSelected = q->selection()->isRowSelected();
-        const bool simpleSelection = q->selection()->isSingular() || colSelected || rowSelected;
-        q->action("sheetFormat")->setEnabled(!simpleSelection);
-    }
-}
-
 void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
 {
     // TODO - this should eventually be removed, all the checks are done in the CellAction classes instead

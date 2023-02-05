@@ -10,6 +10,7 @@
 #include "Align.h"
 #include "Angle.h"
 #include "AutoFilter.h"
+#include "AutoFormat.h"
 #include "AutoSum.h"
 #include "Border.h"
 #include "Cells.h"
@@ -84,6 +85,8 @@ void Actions::createActions()
     addAction(new Angle(this));
     // AutoFilter
     addAction(new AutoFilter(this));
+    // AutoFormat
+    addAction(new AutoFormat(this));
     // AutoSum
     addAction(new AutoSum(this));
     // Border

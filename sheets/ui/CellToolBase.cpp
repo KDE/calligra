@@ -53,7 +53,6 @@
 #include "commands/StyleCommand.h"
 
 // dialogs
-#include "dialogs/AutoFormatDialog.h"
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/GoalSeekDialog.h"
@@ -242,11 +241,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(action, &QAction::triggered, this, &CellToolBase::qTableView);
 #endif
-
-    action = new QAction(i18n("Auto-Format..."), this);
-    addAction("sheetFormat", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::sheetFormat);
-    action->setToolTip(i18n("Set the worksheet formatting"));
 
     action = new QAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Document Settings..."), this);
     addAction("documentSettingsDialog", action);
@@ -731,7 +725,6 @@ void CellToolBase::selectionChanged(const Region& region)
     if (!cell) {
         return;
     }
-    d->updateEditor(cell);
 
     if (selection()->activeSheet()->isProtected()) {
         const Style style = cell.style();
@@ -1037,7 +1030,6 @@ void CellToolBase::updateActions()
     Sheet *sheet = selection()->activeSheet();
     bool readWrite = sheet->fullMap()->doc()->isReadWrite();
     const Cell cell = Cell(sheet, selection()->cursor());
-    d->updateActions();  // TODO - eventuaully get rid of this one
     d->actions->updateOnChange(readWrite, selection(), cell);
 }
 
@@ -1653,13 +1645,6 @@ void CellToolBase::qTableView()
     delete dialog;
     delete model;
 #endif
-}
-
-void CellToolBase::sheetFormat()
-{
-    QPointer<AutoFormatDialog> dialog = new AutoFormatDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
 }
 
 void CellToolBase::listChoosePopupMenu()

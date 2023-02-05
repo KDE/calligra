@@ -182,7 +182,6 @@ protected Q_SLOTS:
     void spellCheck();
     void inspector();
     void qTableView();
-    void sheetFormat();
     void listChoosePopupMenu();
     void listChooseItemSelected(QAction*);
     void documentSettingsDialog();

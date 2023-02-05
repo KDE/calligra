@@ -6,6 +6,7 @@ set (actions_DIR_SRCS
     actions/Align.cpp
     actions/Angle.cpp
     actions/AutoFilter.cpp
+    actions/AutoFormat.cpp
     actions/AutoSum.cpp
     actions/Border.cpp
     actions/Cells.cpp
@@ -36,6 +37,7 @@ set (actions_DIR_SRCS
 set (action_dialogs_DIR_SRCS
     actions/dialogs/AddNamedAreaDialog.cpp
     actions/dialogs/AngleDialog.cpp
+    actions/dialogs/AutoFormatDialog.cpp
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/CommentDialog.cpp
     actions/dialogs/ConditionalDialog.cpp
@@ -76,7 +78,6 @@ set (commands_DIR_SRCS
     commands/DataManipulators.cpp
     commands/ApplyFilterCommand.cpp
     commands/AutoFillCommand.cpp
-    commands/AutoFormatCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
     commands/PageBreakCommand.cpp
@@ -90,7 +91,6 @@ set (commands_DIR_SRCS
 
 
 set (dialogs_DIR_SRCS
-    dialogs/AutoFormatDialog.cpp
     dialogs/DatabaseDialog.cpp
     dialogs/DocumentSettingsDialog.cpp
     dialogs/FindDialog.cpp
