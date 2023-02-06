@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-05 00:58+0000\n"
+"POT-Creation-Date: 2023-02-06 01:00+0000\n"
 "PO-Revision-Date: 2017-05-16 06:38-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
@@ -884,7 +884,7 @@ msgstr "מספר"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -940,7 +940,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "(\"ARABIC(\"XCIX מחזירה 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "מסד נתונים"
@@ -13329,7 +13329,7 @@ msgstr "מאפייני גיליון"
 msgid "Modify current sheet's properties"
 msgstr "שינוי המאפיינים של הגיליון הנוכחי."
 
-#: part/View.cpp:235 part/View.cpp:2034
+#: part/View.cpp:235 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "הוסף גיליון"
@@ -13349,12 +13349,12 @@ msgstr "חשב גיליון מחדש"
 msgid "Duplicate the selected sheet"
 msgstr "הסתרת הגיליון הפעיל."
 
-#: part/View.cpp:246 part/View.cpp:1844 part/View.cpp:1848 part/View.cpp:2039
+#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "הסר גיליון"
 
-#: part/View.cpp:247 part/View.cpp:2035 part/View.cpp:2040
+#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "הסרת הגיליון הפעיל."
@@ -13474,12 +13474,12 @@ msgstr "יצירת &תבנית מתוך המסמך..."
 msgid "Anchor"
 msgstr "אנדורה"
 
-#: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
+#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "תא"
 
-#: part/View.cpp:316 part/View.cpp:1084
+#: part/View.cpp:316 part/View.cpp:1085
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "עמוד"
@@ -13650,63 +13650,63 @@ msgstr "חישוב באמצעות ספירה."
 msgid "Calculate using the countA"
 msgstr "ספירה באמצעות הפונקציה countA."
 
-#: part/View.cpp:1433 part/View.cpp:1452 part/View.cpp:1866
+#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "אין אפשרות לשנות גיליון מוגן."
 
-#: part/View.cpp:1472
+#: part/View.cpp:1473
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "אין אפשרות להסתיר את הגיליון הגלוי האחרון."
 
-#: part/View.cpp:1552
+#: part/View.cpp:1553
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "הזן את שם התחום:"
 
-#: part/View.cpp:1564
+#: part/View.cpp:1565
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "הזן את שם התחום:"
 
-#: part/View.cpp:1572
+#: part/View.cpp:1573
 #, kde-format
 msgid "Password is incorrect."
 msgstr "הסיסמה שגויה."
 
-#: part/View.cpp:1590
+#: part/View.cpp:1591
 #, kde-format
 msgid "Protect Document"
 msgstr "הגנה על מסמך"
 
-#: part/View.cpp:1593
+#: part/View.cpp:1594
 #, kde-format
 msgid "Unprotect Document"
 msgstr "ביטול הגנה על מסמך"
 
-#: part/View.cpp:1613
+#: part/View.cpp:1614
 #, kde-format
 msgid "Protect Sheet"
 msgstr "הגנה על גיליון"
 
-#: part/View.cpp:1616
+#: part/View.cpp:1617
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "ביטול הגנה על גיליון"
 
-#: part/View.cpp:1835
+#: part/View.cpp:1836
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "אפס טווח הדפסה"
 
-#: part/View.cpp:1844
+#: part/View.cpp:1845
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "אין אפשרות למחוק את הגיליון היחיד שיש."
 
-#: part/View.cpp:1847
+#: part/View.cpp:1848
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13715,62 +13715,62 @@ msgstr ""
 "אתה עומד להסיר את הגיליון הפעיל.\n"
 "האם ברצונך להמשיך?"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Enter name:"
 msgstr "הזן שם:"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Rename Sheet"
 msgstr "שינוי שם גיליון"
 
-#: part/View.cpp:1877 part/View.cpp:1883
+#: part/View.cpp:1878 part/View.cpp:1884
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "שינוי שם גיליון"
 
-#: part/View.cpp:1877
+#: part/View.cpp:1878
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "שם הגיליון לא יכול להיות ריק."
 
-#: part/View.cpp:1883
+#: part/View.cpp:1884
 #, kde-format
 msgid "This name is already used."
 msgstr "שם זה כבר בשימוש."
 
-#: part/View.cpp:1951
+#: part/View.cpp:1952
 #, kde-format
 msgid "Sum: "
 msgstr "סכום: "
 
-#: part/View.cpp:1955
+#: part/View.cpp:1956
 #, kde-format
 msgid "Average: "
 msgstr "ממוצע: "
 
-#: part/View.cpp:1959
+#: part/View.cpp:1960
 #, kde-format
 msgid "Min: "
 msgstr "מינימום: "
 
-#: part/View.cpp:1963
+#: part/View.cpp:1964
 #, kde-format
 msgid "Max: "
 msgstr "מקסימום: "
 
-#: part/View.cpp:1967
+#: part/View.cpp:1968
 #, kde-format
 msgid "Count: "
 msgstr "ספירה: "
 
-#: part/View.cpp:1971
+#: part/View.cpp:1972
 #, kde-format
 msgid "CountA: "
 msgstr "ספירה (CountA): "
 
-#: part/View.cpp:1978
+#: part/View.cpp:1979
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -13794,177 +13794,167 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "שינוי צבע גבול"
 
-#: ui/CellToolBase.cpp:141
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "עיצוב תא..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "הגדרת העיצוב של התא."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "&Function..."
 msgstr "&פונקציה..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "הוספת ביטוי מתמטי."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "From &Database..."
 msgstr "מתוך &מסד נתונים..."
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "הוספת נתונים מתוך מסד נתונים של SQL."
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Custom Lists..."
 msgstr "רשימות מותאמות אישית..."
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "יצירת רשימות מותאמות אישית למיון או מילוי אוטומטי."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&חתירה למטרה..."
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "חזרה על חישוב כדי למצוא ערך מסויים."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Formula Selection"
 msgstr "בחירת נוסחה"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:177
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "הוספת פונקציה."
 
-#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
+#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
 #, kde-format
 msgid "Others..."
 msgstr "אחר..."
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Modify Cell"
 msgstr "שנה תא"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "עריכת התא הנבחר."
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "העברת אובייקט התא אל לוח העריכה."
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "העתקת אובייקט התא אל לוח העריכה."
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:201
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "הדבקת תוכן לוח העריכה במיקום הסמן."
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Special Paste..."
 msgstr "הדבקה מיוחדת..."
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "הדבקת תוכן לוח העריכה עם אפשרויות מיוחדות."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:209
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "הדבק והוסף"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:212
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "הוספת תא לגיליון האלקטרוני מתוך לוח העריכה."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "חישוב מחדש של הערכים של כל התאים בגיליון העבודה הנוכחי."
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "בדיקת האיות."
 
-#: ui/CellToolBase.cpp:234
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Run Inspector..."
 msgstr "הרצת הבוחן..."
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "הצגת גיליון..."
 
-#: ui/CellToolBase.cpp:246
-#, fuzzy, kde-format
-msgid "Auto-Format..."
-msgstr "עיצוב אוטומטי..."
-
-#: ui/CellToolBase.cpp:249
-#, fuzzy, kde-format
-msgid "Set the worksheet formatting"
-msgstr "הגדרת העיצוב של גיליון העבודה."
-
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "פרמטרים מקומיים"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "הצג &סימון הערות"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "הגנה"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "הגנה"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:260
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "הדבקת תוכן לוח העריכה במיקום הסמן."
 
-#: ui/CellToolBase.cpp:1050
+#: ui/CellToolBase.cpp:1045
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1090
+#: ui/CellToolBase.cpp:1085
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -13972,13 +13962,13 @@ msgid ""
 msgstr ""
 "אין מנהלי התקן זמינים למסדי נתונים. יש להדר את Qt עם מנהלי ההתקן הדרושים."
 
-#: ui/CellToolBase.cpp:1582
+#: ui/CellToolBase.cpp:1590
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "החלפה"
 
-#: ui/CellToolBase_p.cpp:861
+#: ui/CellToolBase_p.cpp:848
 #, kde-format
 msgid "Selection List..."
 msgstr "רשימת בחירה..."
@@ -14025,209 +14015,202 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "החלת סגנון"
 
-#: ui/commands/AutoFillCommand.cpp:107 ui/dialogs/ListDialog.cpp:126
+#: ui/commands/AutoFillCommand.cpp:109
 #, kde-format
 msgid "January"
 msgstr "ינואר"
 
-#: ui/commands/AutoFillCommand.cpp:108 ui/dialogs/ListDialog.cpp:127
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "February"
 msgstr "פברואר"
 
-#: ui/commands/AutoFillCommand.cpp:109 ui/dialogs/ListDialog.cpp:128
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "March"
 msgstr "מרץ"
 
-#: ui/commands/AutoFillCommand.cpp:110 ui/dialogs/ListDialog.cpp:129
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "April"
 msgstr "אפריל"
 
-#: ui/commands/AutoFillCommand.cpp:111 ui/dialogs/ListDialog.cpp:130
-#: ui/dialogs/ListDialog.cpp:146
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "May"
 msgstr "מאי"
 
-#: ui/commands/AutoFillCommand.cpp:112 ui/dialogs/ListDialog.cpp:131
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "June"
 msgstr "יוני"
 
-#: ui/commands/AutoFillCommand.cpp:113 ui/dialogs/ListDialog.cpp:132
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "July"
 msgstr "יולי"
 
-#: ui/commands/AutoFillCommand.cpp:114 ui/dialogs/ListDialog.cpp:133
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "August"
 msgstr "אוגוסט"
 
-#: ui/commands/AutoFillCommand.cpp:115 ui/dialogs/ListDialog.cpp:134
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "September"
 msgstr "ספטמבר"
 
-#: ui/commands/AutoFillCommand.cpp:116 ui/dialogs/ListDialog.cpp:135
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "October"
 msgstr "אוקטובר"
 
-#: ui/commands/AutoFillCommand.cpp:117 ui/dialogs/ListDialog.cpp:136
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "November"
 msgstr "נובמבר"
 
-#: ui/commands/AutoFillCommand.cpp:118 ui/dialogs/ListDialog.cpp:137
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "December"
 msgstr "דצמבר"
 
-#: ui/commands/AutoFillCommand.cpp:123 ui/dialogs/ListDialog.cpp:142
+#: ui/commands/AutoFillCommand.cpp:125
 #, kde-format
 msgid "Jan"
 msgstr "ינו'"
 
-#: ui/commands/AutoFillCommand.cpp:124 ui/dialogs/ListDialog.cpp:143
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Feb"
 msgstr "פבר'"
 
-#: ui/commands/AutoFillCommand.cpp:125 ui/dialogs/ListDialog.cpp:144
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "Mar"
 msgstr "מרץ"
 
-#: ui/commands/AutoFillCommand.cpp:126 ui/dialogs/ListDialog.cpp:145
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "Apr"
 msgstr "אפר'"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "מאי"
 
-#: ui/commands/AutoFillCommand.cpp:128 ui/dialogs/ListDialog.cpp:147
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Jun"
 msgstr "יונ'"
 
-#: ui/commands/AutoFillCommand.cpp:129 ui/dialogs/ListDialog.cpp:148
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Jul"
 msgstr "יול'"
 
-#: ui/commands/AutoFillCommand.cpp:130 ui/dialogs/ListDialog.cpp:149
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Aug"
 msgstr "אוג'"
 
-#: ui/commands/AutoFillCommand.cpp:131 ui/dialogs/ListDialog.cpp:150
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Sep"
 msgstr "ספט'"
 
-#: ui/commands/AutoFillCommand.cpp:132 ui/dialogs/ListDialog.cpp:151
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Oct"
 msgstr "אוק'"
 
-#: ui/commands/AutoFillCommand.cpp:133 ui/dialogs/ListDialog.cpp:152
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Nov"
 msgstr "נוב'"
 
-#: ui/commands/AutoFillCommand.cpp:134 ui/dialogs/ListDialog.cpp:153
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Dec"
 msgstr "דצמ'"
 
-#: ui/commands/AutoFillCommand.cpp:139 ui/dialogs/ListDialog.cpp:157
+#: ui/commands/AutoFillCommand.cpp:141
 #, fuzzy, kde-format
 msgid "Monday"
 msgstr "כסף"
 
-#: ui/commands/AutoFillCommand.cpp:140 ui/dialogs/ListDialog.cpp:158
+#: ui/commands/AutoFillCommand.cpp:142
 #, fuzzy, kde-format
 msgid "Tuesday"
 msgstr "טורקיה"
 
-#: ui/commands/AutoFillCommand.cpp:141 ui/dialogs/ListDialog.cpp:159
+#: ui/commands/AutoFillCommand.cpp:143
 #, fuzzy, kde-format
 msgid "Wednesday"
 msgstr "טורקיה"
 
-#: ui/commands/AutoFillCommand.cpp:142 ui/dialogs/ListDialog.cpp:160
+#: ui/commands/AutoFillCommand.cpp:144
 #, fuzzy, kde-format
 msgid "Thursday"
 msgstr "טורקיה"
 
-#: ui/commands/AutoFillCommand.cpp:143 ui/dialogs/ListDialog.cpp:161
+#: ui/commands/AutoFillCommand.cpp:145
 #, fuzzy, kde-format
 msgid "Friday"
 msgstr "ו'"
 
-#: ui/commands/AutoFillCommand.cpp:144 ui/dialogs/ListDialog.cpp:162
+#: ui/commands/AutoFillCommand.cpp:146
 #, fuzzy, kde-format
 msgid "Saturday"
 msgstr "פירעון"
 
-#: ui/commands/AutoFillCommand.cpp:145 ui/dialogs/ListDialog.cpp:163
+#: ui/commands/AutoFillCommand.cpp:147
 #, fuzzy, kde-format
 msgid "Sunday"
 msgstr "סודן"
 
-#: ui/commands/AutoFillCommand.cpp:150 ui/dialogs/ListDialog.cpp:167
+#: ui/commands/AutoFillCommand.cpp:152
 #, kde-format
 msgid "Mon"
 msgstr "ב'"
 
-#: ui/commands/AutoFillCommand.cpp:151 ui/dialogs/ListDialog.cpp:168
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Tue"
 msgstr "ג'"
 
-#: ui/commands/AutoFillCommand.cpp:152 ui/dialogs/ListDialog.cpp:169
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Wed"
 msgstr "ד'"
 
-#: ui/commands/AutoFillCommand.cpp:153 ui/dialogs/ListDialog.cpp:170
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Thu"
 msgstr "ה'"
 
-#: ui/commands/AutoFillCommand.cpp:154 ui/dialogs/ListDialog.cpp:171
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Fri"
 msgstr "ו'"
 
-#: ui/commands/AutoFillCommand.cpp:155 ui/dialogs/ListDialog.cpp:172
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Sat"
 msgstr "שבת"
 
-#: ui/commands/AutoFillCommand.cpp:156 ui/dialogs/ListDialog.cpp:173
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sun"
 msgstr "א'"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:678
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "מילוי אוטומטי"
-
-#: ui/commands/AutoFormatCommand.cpp:17
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Auto-Format"
-msgstr "עיצוב אוטומטי..."
 
 #: ui/commands/DataManipulators.cpp:107
 #, fuzzy
@@ -14462,36 +14445,6 @@ msgstr "סגנון גיליון"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "שינוי זווית"
-
-#: ui/dialogs/AutoFormatDialog.cpp:60
-#, kde-format
-msgid "Sheet Style"
-msgstr "סגנון גיליון"
-
-#: ui/dialogs/AutoFormatDialog.cpp:70
-#, kde-format
-msgid "Select the sheet style to apply:"
-msgstr "בחר את סגנון הגיליון שיש להחיל."
-
-#: ui/dialogs/AutoFormatDialog.cpp:114
-#, kde-format
-msgid "Could not find image %1."
-msgstr "אין אפשרות למצוא את התמונה %1."
-
-#: ui/dialogs/AutoFormatDialog.cpp:121
-#, kde-format
-msgid "Could not load image %1."
-msgstr "אין אפשרות לטעון את התמונה %1."
-
-#: ui/dialogs/AutoFormatDialog.cpp:132
-#, fuzzy, kde-format
-msgid "Could not find sheet-style XML file '%1'."
-msgstr "אין אפשרות למצוא את קובץ ה־XML של סגנון הטבלה \"%1\"."
-
-#: ui/dialogs/AutoFormatDialog.cpp:143
-#, fuzzy, kde-format
-msgid "Parsing error in sheet-style XML file %1."
-msgstr "שגיאת פירוק בקובץ ה־XML של סגנון הטבלה %1."
 
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
@@ -15543,62 +15496,62 @@ msgstr "צבע רקע:"
 msgid "No Color"
 msgstr "ללא צבע"
 
-#: ui/dialogs/ListDialog.cpp:47
+#: ui/dialogs/ListDialog.cpp:46
 #, kde-format
 msgid "Custom Lists"
 msgstr "רשימות מותאמות אישית"
 
-#: ui/dialogs/ListDialog.cpp:57
+#: ui/dialogs/ListDialog.cpp:56
 #, kde-format
 msgid "List:"
 msgstr "רשימה:"
 
-#: ui/dialogs/ListDialog.cpp:64
+#: ui/dialogs/ListDialog.cpp:63
 #, kde-format
 msgid "Entry:"
 msgstr "ערך:"
 
-#: ui/dialogs/ListDialog.cpp:70
+#: ui/dialogs/ListDialog.cpp:69
 #, fuzzy, kde-format
 msgid "Add"
 msgstr "ה&וסף"
 
-#: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
+#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
 #, fuzzy, kde-format
 msgid "Cancel"
 msgstr "צרפת"
 
-#: ui/dialogs/ListDialog.cpp:78
+#: ui/dialogs/ListDialog.cpp:77
 #, fuzzy, kde-format
 msgid "New"
 msgstr "&חדש"
 
-#: ui/dialogs/ListDialog.cpp:81
+#: ui/dialogs/ListDialog.cpp:80
 #, fuzzy, kde-format
 msgid "Remove"
 msgstr "הסר הכל"
 
-#: ui/dialogs/ListDialog.cpp:84
+#: ui/dialogs/ListDialog.cpp:83
 #, fuzzy, kde-format
 msgid "Modify"
 msgstr "&שינוי..."
 
-#: ui/dialogs/ListDialog.cpp:87
+#: ui/dialogs/ListDialog.cpp:86
 #, fuzzy, kde-format
 msgid "Copy"
 msgstr "הע&תק"
 
-#: ui/dialogs/ListDialog.cpp:251
+#: ui/dialogs/ListDialog.cpp:238
 #, kde-format
 msgid "Do you really want to remove this list?"
 msgstr "האם אתה בטוח שברצונך להסיר רשימה זו?"
 
-#: ui/dialogs/ListDialog.cpp:252
+#: ui/dialogs/ListDialog.cpp:239
 #, kde-format
 msgid "Remove List"
 msgstr "הסרת רשימה"
 
-#: ui/dialogs/ListDialog.cpp:268
+#: ui/dialogs/ListDialog.cpp:259
 #, kde-format
 msgid ""
 "Entry area is not empty.\n"
@@ -15974,6 +15927,39 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "פתיחת קישור"
+
+#, fuzzy
+#~ msgid "Auto-Format..."
+#~ msgstr "עיצוב אוטומטי..."
+
+#, fuzzy
+#~ msgid "Set the worksheet formatting"
+#~ msgstr "הגדרת העיצוב של גיליון העבודה."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Format"
+#~ msgstr "עיצוב אוטומטי..."
+
+#~ msgid "Sheet Style"
+#~ msgstr "סגנון גיליון"
+
+#~ msgid "Select the sheet style to apply:"
+#~ msgstr "בחר את סגנון הגיליון שיש להחיל."
+
+#~ msgid "Could not find image %1."
+#~ msgstr "אין אפשרות למצוא את התמונה %1."
+
+#~ msgid "Could not load image %1."
+#~ msgstr "אין אפשרות לטעון את התמונה %1."
+
+#, fuzzy
+#~ msgid "Could not find sheet-style XML file '%1'."
+#~ msgstr "אין אפשרות למצוא את קובץ ה־XML של סגנון הטבלה \"%1\"."
+
+#, fuzzy
+#~ msgid "Parsing error in sheet-style XML file %1."
+#~ msgstr "שגיאת פירוק בקובץ ה־XML של סגנון הטבלה %1."
 
 #, fuzzy
 #~ msgid "&Auto-Filter"

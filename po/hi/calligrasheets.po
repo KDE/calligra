@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-05 00:58+0000\n"
+"POT-Creation-Date: 2023-02-06 01:00+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -888,7 +888,7 @@ msgstr "क्रमांक"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -943,7 +943,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") का परिणाम होगा 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -13373,7 +13373,7 @@ msgstr "शीट गुण"
 msgid "Modify current sheet's properties"
 msgstr "मौज़ूदा शीट के गुणों को संपादित करें"
 
-#: part/View.cpp:235 part/View.cpp:2034
+#: part/View.cpp:235 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "शीट प्रविष्ट करें"
@@ -13393,12 +13393,12 @@ msgstr "शीट की नक़ल बनाएं"
 msgid "Duplicate the selected sheet"
 msgstr "चयनित शीट की अनुकृति बनाएँ"
 
-#: part/View.cpp:246 part/View.cpp:1844 part/View.cpp:1848 part/View.cpp:2039
+#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "शीट मिटाएं"
 
-#: part/View.cpp:247 part/View.cpp:2035 part/View.cpp:2040
+#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "सक्रिय शीट मिटाएं"
@@ -13522,12 +13522,12 @@ msgstr "दस्तावेज़ से टैम्प्लेट तैय
 msgid "Anchor"
 msgstr "अंडोरा"
 
-#: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
+#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "कक्ष"
 
-#: part/View.cpp:316 part/View.cpp:1084
+#: part/View.cpp:316 part/View.cpp:1085
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "Page"
@@ -13709,64 +13709,64 @@ msgstr "count का प्रयोग कर गणना करें"
 msgid "Calculate using the countA"
 msgstr "countA का प्रयोग कर गणना करें"
 
-#: part/View.cpp:1433 part/View.cpp:1452 part/View.cpp:1866
+#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "आप संरक्षित शीट को बदल नहीं सकते."
 
-#: part/View.cpp:1472
+#: part/View.cpp:1473
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "आप अंतिम दिखाई दे रहे शीट को छुपा नहीं सकते."
 
-#: part/View.cpp:1552
+#: part/View.cpp:1553
 #, kde-format
 msgid "Enter a password."
 msgstr "पासवर्ड भरें."
 
-#: part/View.cpp:1564
+#: part/View.cpp:1565
 #, kde-format
 msgid "Enter the password."
 msgstr "पासवर्ड भरें."
 
-#: part/View.cpp:1572
+#: part/View.cpp:1573
 #, kde-format
 msgid "Password is incorrect."
 msgstr "पासवर्ड गलत है."
 
-#: part/View.cpp:1590
+#: part/View.cpp:1591
 #, kde-format
 msgid "Protect Document"
 msgstr "दस्तावेज़ संरक्षित करें"
 
-#: part/View.cpp:1593
+#: part/View.cpp:1594
 #, kde-format
 msgid "Unprotect Document"
 msgstr "दस्तावेज़ असंरक्षित करें"
 
-#: part/View.cpp:1613
+#: part/View.cpp:1614
 #, kde-format
 msgid "Protect Sheet"
 msgstr "शीट संरक्षित करें"
 
-#: part/View.cpp:1616
+#: part/View.cpp:1617
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "शीट असंरक्षित करें"
 
-#: part/View.cpp:1835
+#: part/View.cpp:1836
 #, fuzzy
 #| msgid "Reset Print Range"
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "छपाीई सीमा रीसेट करें"
 
-#: part/View.cpp:1844
+#: part/View.cpp:1845
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "आप सिर्फ अकेले शीट को मिटा नहीं सकते."
 
-#: part/View.cpp:1847
+#: part/View.cpp:1848
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13775,62 +13775,62 @@ msgstr ""
 "आप सक्रिय शीट को मिटाने वाले हैं.\n"
 "क्या आप सचमुच जारी रखना चाहते हैं?"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Enter name:"
 msgstr "नाम भरें:"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Rename Sheet"
 msgstr "शीट का नाम बदलें"
 
-#: part/View.cpp:1877 part/View.cpp:1883
+#: part/View.cpp:1878 part/View.cpp:1884
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "शीट नाम बदलें"
 
-#: part/View.cpp:1877
+#: part/View.cpp:1878
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "शीट नाम नाम रिक्त नहीं हो सकता."
 
-#: part/View.cpp:1883
+#: part/View.cpp:1884
 #, kde-format
 msgid "This name is already used."
 msgstr "यह नाम पहले से ही उपयोग में है."
 
-#: part/View.cpp:1951
+#: part/View.cpp:1952
 #, kde-format
 msgid "Sum: "
 msgstr "योग:"
 
-#: part/View.cpp:1955
+#: part/View.cpp:1956
 #, kde-format
 msgid "Average: "
 msgstr "औसत:"
 
-#: part/View.cpp:1959
+#: part/View.cpp:1960
 #, kde-format
 msgid "Min: "
 msgstr "न्यून.:"
 
-#: part/View.cpp:1963
+#: part/View.cpp:1964
 #, kde-format
 msgid "Max: "
 msgstr "अधि:"
 
-#: part/View.cpp:1967
+#: part/View.cpp:1968
 #, kde-format
 msgid "Count: "
 msgstr "गणना:"
 
-#: part/View.cpp:1971
+#: part/View.cpp:1972
 #, kde-format
 msgid "CountA: "
 msgstr "CountA: "
 
-#: part/View.cpp:1978
+#: part/View.cpp:1979
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -13857,197 +13857,187 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "किनारा बदलें"
 
-#: ui/CellToolBase.cpp:141
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "कक्ष फ़ॉर्मेट..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "कक्ष फ़ॉर्मेटिंग सेट करें"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "&Function..."
 msgstr "फंक्शन... (&F)"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Insert math expression"
 msgstr "मैथ एक्सप्रेशन प्रविष्ट करें"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "From &Database..."
 msgstr "डाटाबेस से... (&D)"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "एसक्यूएल डाटाबेस में से डाटा जोड़ें"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Custom Lists..."
 msgstr "मनपसंद सूची..."
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "छांटने या स्वतः भरने के लिए मनपसंद सूची बनाएं"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "लक्ष्य ढूंढें... (&G)"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "किसी विशिष्ट मान को ढूंढने के लिए गणना दोहराना"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Formula Selection"
 msgstr "सूत्र चयन"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:177
 #, kde-format
 msgid "Insert a function"
 msgstr "फ़ंक्शन प्रविष्ट करें"
 
-#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
+#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
 #, kde-format
 msgid "Others..."
 msgstr "अन्य..."
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Modify Cell"
 msgstr "कक्ष परिवर्धित करें"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:190
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "उभारे गए कक्ष का संपादन करें"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "कक्ष वस्तु को क्लिपबोर्ड में खिसकाएं"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "कक्ष वस्तु को क्लिपबोर्ड पर नक़ल करें"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:201
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "संकेतक स्थान पर क्लिपबोर्ड सामग्री को चिपकाएं."
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Special Paste..."
 msgstr "विशेष चिपकाएँ..."
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "क्लिपबोर्ड की समाग्रियों को विशिष्ट विकल्पों के साथ चिपकाएं"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:209
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "प्रविष्ट करते हुए चिपकाएं"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:212
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "क्लिपबोर्ड से कक्ष को स्प्रेडशीट में प्रविष्ट करें"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "मौज़ूदा शीट में सभी कक्षों को चुनें"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Check the spelling"
 msgstr "वर्तनी जांचें"
 
-#: ui/CellToolBase.cpp:234
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Run Inspector..."
 msgstr "इंसपेक्टर चलाएं..."
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "शीट दिखाएं..."
 
-#: ui/CellToolBase.cpp:246
-#, kde-format
-msgid "Auto-Format..."
-msgstr "स्वतः फ़ॉर्मेट..."
-
-#: ui/CellToolBase.cpp:249
-#, kde-format
-msgid "Set the worksheet formatting"
-msgstr "वर्कशीट फ़ॉर्मेटिंग सेट करें"
-
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "स्थानीय विन्यास"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "टिप्पणी संकेतक दिखाएँ (&o)"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "संरक्षा"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "संरक्षा"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:260
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "संकेतक स्थान पर क्लिपबोर्ड सामग्री को चिपकाएं."
 
-#: ui/CellToolBase.cpp:1050
+#: ui/CellToolBase.cpp:1045
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1090
+#: ui/CellToolBase.cpp:1085
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1582
+#: ui/CellToolBase.cpp:1590
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "बदला"
 
-#: ui/CellToolBase_p.cpp:861
+#: ui/CellToolBase_p.cpp:848
 #, kde-format
 msgid "Selection List..."
 msgstr "चयन सूची..."
@@ -14100,211 +14090,203 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "फिल्टर लागू करें"
 
-#: ui/commands/AutoFillCommand.cpp:107 ui/dialogs/ListDialog.cpp:126
+#: ui/commands/AutoFillCommand.cpp:109
 #, kde-format
 msgid "January"
 msgstr "जनवरी"
 
-#: ui/commands/AutoFillCommand.cpp:108 ui/dialogs/ListDialog.cpp:127
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "February"
 msgstr "फरवरी"
 
-#: ui/commands/AutoFillCommand.cpp:109 ui/dialogs/ListDialog.cpp:128
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "March"
 msgstr "मार्च"
 
-#: ui/commands/AutoFillCommand.cpp:110 ui/dialogs/ListDialog.cpp:129
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "April"
 msgstr "अप्रैल"
 
-#: ui/commands/AutoFillCommand.cpp:111 ui/dialogs/ListDialog.cpp:130
-#: ui/dialogs/ListDialog.cpp:146
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "May"
 msgstr "मई"
 
-#: ui/commands/AutoFillCommand.cpp:112 ui/dialogs/ListDialog.cpp:131
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "June"
 msgstr "जून"
 
-#: ui/commands/AutoFillCommand.cpp:113 ui/dialogs/ListDialog.cpp:132
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "July"
 msgstr "जुलाई"
 
-#: ui/commands/AutoFillCommand.cpp:114 ui/dialogs/ListDialog.cpp:133
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "August"
 msgstr "अगस्त"
 
-#: ui/commands/AutoFillCommand.cpp:115 ui/dialogs/ListDialog.cpp:134
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "September"
 msgstr "सितम्बर"
 
-#: ui/commands/AutoFillCommand.cpp:116 ui/dialogs/ListDialog.cpp:135
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "October"
 msgstr "अक्टूबर"
 
-#: ui/commands/AutoFillCommand.cpp:117 ui/dialogs/ListDialog.cpp:136
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "November"
 msgstr "नवम्बर"
 
-#: ui/commands/AutoFillCommand.cpp:118 ui/dialogs/ListDialog.cpp:137
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "December"
 msgstr "दिसम्बर"
 
-#: ui/commands/AutoFillCommand.cpp:123 ui/dialogs/ListDialog.cpp:142
+#: ui/commands/AutoFillCommand.cpp:125
 #, kde-format
 msgid "Jan"
 msgstr "जन."
 
-#: ui/commands/AutoFillCommand.cpp:124 ui/dialogs/ListDialog.cpp:143
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Feb"
 msgstr "फर."
 
-#: ui/commands/AutoFillCommand.cpp:125 ui/dialogs/ListDialog.cpp:144
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "Mar"
 msgstr "मार्च"
 
-#: ui/commands/AutoFillCommand.cpp:126 ui/dialogs/ListDialog.cpp:145
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "Apr"
 msgstr "अप्रै."
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "मई"
 
-#: ui/commands/AutoFillCommand.cpp:128 ui/dialogs/ListDialog.cpp:147
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Jun"
 msgstr "जून"
 
-#: ui/commands/AutoFillCommand.cpp:129 ui/dialogs/ListDialog.cpp:148
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Jul"
 msgstr "जु."
 
-#: ui/commands/AutoFillCommand.cpp:130 ui/dialogs/ListDialog.cpp:149
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Aug"
 msgstr "अग."
 
-#: ui/commands/AutoFillCommand.cpp:131 ui/dialogs/ListDialog.cpp:150
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Sep"
 msgstr "सित."
 
-#: ui/commands/AutoFillCommand.cpp:132 ui/dialogs/ListDialog.cpp:151
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Oct"
 msgstr "अक्तू."
 
-#: ui/commands/AutoFillCommand.cpp:133 ui/dialogs/ListDialog.cpp:152
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Nov"
 msgstr "नवं."
 
-#: ui/commands/AutoFillCommand.cpp:134 ui/dialogs/ListDialog.cpp:153
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Dec"
 msgstr "दिसं."
 
-#: ui/commands/AutoFillCommand.cpp:139 ui/dialogs/ListDialog.cpp:157
+#: ui/commands/AutoFillCommand.cpp:141
 #, kde-format
 msgid "Monday"
 msgstr "सोमवार"
 
-#: ui/commands/AutoFillCommand.cpp:140 ui/dialogs/ListDialog.cpp:158
+#: ui/commands/AutoFillCommand.cpp:142
 #, kde-format
 msgid "Tuesday"
 msgstr "मंगलवार"
 
-#: ui/commands/AutoFillCommand.cpp:141 ui/dialogs/ListDialog.cpp:159
+#: ui/commands/AutoFillCommand.cpp:143
 #, kde-format
 msgid "Wednesday"
 msgstr "बुधवार"
 
-#: ui/commands/AutoFillCommand.cpp:142 ui/dialogs/ListDialog.cpp:160
+#: ui/commands/AutoFillCommand.cpp:144
 #, kde-format
 msgid "Thursday"
 msgstr "गुरुवार"
 
-#: ui/commands/AutoFillCommand.cpp:143 ui/dialogs/ListDialog.cpp:161
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Friday"
 msgstr "शुक्रवार"
 
-#: ui/commands/AutoFillCommand.cpp:144 ui/dialogs/ListDialog.cpp:162
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Saturday"
 msgstr "शनिवार"
 
-#: ui/commands/AutoFillCommand.cpp:145 ui/dialogs/ListDialog.cpp:163
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Sunday"
 msgstr "रविवार"
 
-#: ui/commands/AutoFillCommand.cpp:150 ui/dialogs/ListDialog.cpp:167
+#: ui/commands/AutoFillCommand.cpp:152
 #, kde-format
 msgid "Mon"
 msgstr "सोम"
 
-#: ui/commands/AutoFillCommand.cpp:151 ui/dialogs/ListDialog.cpp:168
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Tue"
 msgstr "मंगल"
 
-#: ui/commands/AutoFillCommand.cpp:152 ui/dialogs/ListDialog.cpp:169
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Wed"
 msgstr "बुध"
 
-#: ui/commands/AutoFillCommand.cpp:153 ui/dialogs/ListDialog.cpp:170
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Thu"
 msgstr "गुरू"
 
-#: ui/commands/AutoFillCommand.cpp:154 ui/dialogs/ListDialog.cpp:171
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Fri"
 msgstr "शुक्र"
 
-#: ui/commands/AutoFillCommand.cpp:155 ui/dialogs/ListDialog.cpp:172
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Sat"
 msgstr "शनि"
 
-#: ui/commands/AutoFillCommand.cpp:156 ui/dialogs/ListDialog.cpp:173
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sun"
 msgstr "रवि"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:678
 #, fuzzy
 #| msgid "Autofill"
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "स्वतःभरें"
-
-#: ui/commands/AutoFormatCommand.cpp:17
-#, fuzzy
-#| msgid "Auto-Format"
-msgctxt "(qtundo-format)"
-msgid "Auto-Format"
-msgstr "स्वतः फ़ॉर्मेट"
 
 #: ui/commands/DataManipulators.cpp:107
 #, fuzzy
@@ -14576,36 +14558,6 @@ msgstr "शैली रीसेट करें"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "शैली बदलें"
-
-#: ui/dialogs/AutoFormatDialog.cpp:60
-#, kde-format
-msgid "Sheet Style"
-msgstr "शीट शैली"
-
-#: ui/dialogs/AutoFormatDialog.cpp:70
-#, kde-format
-msgid "Select the sheet style to apply:"
-msgstr "शीट शैली लागू करने के लिए चुनें:"
-
-#: ui/dialogs/AutoFormatDialog.cpp:114
-#, kde-format
-msgid "Could not find image %1."
-msgstr "छवि '%1' ढूंढ नहीं पाया"
-
-#: ui/dialogs/AutoFormatDialog.cpp:121
-#, kde-format
-msgid "Could not load image %1."
-msgstr "छवि %1 लोड नहीं कर सकता."
-
-#: ui/dialogs/AutoFormatDialog.cpp:132
-#, kde-format
-msgid "Could not find sheet-style XML file '%1'."
-msgstr "शीट-शैली एक्सएमएल फ़ाइल '%1' नहीं मिला."
-
-#: ui/dialogs/AutoFormatDialog.cpp:143
-#, kde-format
-msgid "Parsing error in sheet-style XML file %1."
-msgstr "शीट-शैली एक्सएमएल फ़ाइल %1 में पार्सिंग त्रुटि."
 
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
@@ -15668,62 +15620,62 @@ msgstr "पृष्ठभूमि का रंगः"
 msgid "No Color"
 msgstr "कोई रंग नहीं"
 
-#: ui/dialogs/ListDialog.cpp:47
+#: ui/dialogs/ListDialog.cpp:46
 #, kde-format
 msgid "Custom Lists"
 msgstr "मनपसंद सूचियाँ"
 
-#: ui/dialogs/ListDialog.cpp:57
+#: ui/dialogs/ListDialog.cpp:56
 #, kde-format
 msgid "List:"
 msgstr "सूची:"
 
-#: ui/dialogs/ListDialog.cpp:64
+#: ui/dialogs/ListDialog.cpp:63
 #, kde-format
 msgid "Entry:"
 msgstr "प्रविष्टि:"
 
-#: ui/dialogs/ListDialog.cpp:70
+#: ui/dialogs/ListDialog.cpp:69
 #, kde-format
 msgid "Add"
 msgstr "जोड़ें"
 
-#: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
+#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Cancel"
 msgstr "रद्द करें"
 
-#: ui/dialogs/ListDialog.cpp:78
+#: ui/dialogs/ListDialog.cpp:77
 #, kde-format
 msgid "New"
 msgstr "नया"
 
-#: ui/dialogs/ListDialog.cpp:81
+#: ui/dialogs/ListDialog.cpp:80
 #, kde-format
 msgid "Remove"
 msgstr "हटाएँ"
 
-#: ui/dialogs/ListDialog.cpp:84
+#: ui/dialogs/ListDialog.cpp:83
 #, kde-format
 msgid "Modify"
 msgstr "सुधारें"
 
-#: ui/dialogs/ListDialog.cpp:87
+#: ui/dialogs/ListDialog.cpp:86
 #, kde-format
 msgid "Copy"
 msgstr "नक़ल"
 
-#: ui/dialogs/ListDialog.cpp:251
+#: ui/dialogs/ListDialog.cpp:238
 #, kde-format
 msgid "Do you really want to remove this list?"
 msgstr "क्या आप सचमुच इस सूची को मिटाना चाहते हैं?"
 
-#: ui/dialogs/ListDialog.cpp:252
+#: ui/dialogs/ListDialog.cpp:239
 #, kde-format
 msgid "Remove List"
 msgstr "सूची मिटाएँ"
 
-#: ui/dialogs/ListDialog.cpp:268
+#: ui/dialogs/ListDialog.cpp:259
 #, kde-format
 msgid ""
 "Entry area is not empty.\n"
@@ -16105,6 +16057,36 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "लिंक खोलें?"
+
+#~ msgid "Auto-Format..."
+#~ msgstr "स्वतः फ़ॉर्मेट..."
+
+#~ msgid "Set the worksheet formatting"
+#~ msgstr "वर्कशीट फ़ॉर्मेटिंग सेट करें"
+
+#, fuzzy
+#~| msgid "Auto-Format"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Format"
+#~ msgstr "स्वतः फ़ॉर्मेट"
+
+#~ msgid "Sheet Style"
+#~ msgstr "शीट शैली"
+
+#~ msgid "Select the sheet style to apply:"
+#~ msgstr "शीट शैली लागू करने के लिए चुनें:"
+
+#~ msgid "Could not find image %1."
+#~ msgstr "छवि '%1' ढूंढ नहीं पाया"
+
+#~ msgid "Could not load image %1."
+#~ msgstr "छवि %1 लोड नहीं कर सकता."
+
+#~ msgid "Could not find sheet-style XML file '%1'."
+#~ msgstr "शीट-शैली एक्सएमएल फ़ाइल '%1' नहीं मिला."
+
+#~ msgid "Parsing error in sheet-style XML file %1."
+#~ msgstr "शीट-शैली एक्सएमएल फ़ाइल %1 में पार्सिंग त्रुटि."
 
 #~ msgid "&Auto-Filter"
 #~ msgstr "स्वतः फ़िल्टर (&A)"

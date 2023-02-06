@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-05 00:58+0000\n"
+"POT-Creation-Date: 2023-02-06 01:00+0000\n"
 "PO-Revision-Date: 2013-12-23 17:34+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
 "Language-Team: Basque <kde-i18n-doc@kde.org>\n"
@@ -906,7 +906,7 @@ msgstr "Zenbakia"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -964,7 +964,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") funtzioak 99 itzultzen du"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Datu-basea"
@@ -14079,7 +14079,7 @@ msgstr "Orriaren propietateak..."
 msgid "Modify current sheet's properties"
 msgstr "Uneko orriaren propietateak aldatu"
 
-#: part/View.cpp:235 part/View.cpp:2034
+#: part/View.cpp:235 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Txertatu orria"
@@ -14099,12 +14099,12 @@ msgstr "Bikoiztu orria"
 msgid "Duplicate the selected sheet"
 msgstr "Bikoiztu hautatutako orria"
 
-#: part/View.cpp:246 part/View.cpp:1844 part/View.cpp:1848 part/View.cpp:2039
+#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Kendu orria"
 
-#: part/View.cpp:247 part/View.cpp:2035 part/View.cpp:2040
+#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Kendu orri aktiboa"
@@ -14225,12 +14225,12 @@ msgstr "Sortu &txantiloia dokumentu batetik..."
 msgid "Anchor"
 msgstr "Ainguratu"
 
-#: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
+#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Gelaxka"
 
-#: part/View.cpp:316 part/View.cpp:1084
+#: part/View.cpp:316 part/View.cpp:1085
 #, kde-format
 msgid "Page"
 msgstr "Orria"
@@ -14401,62 +14401,62 @@ msgstr "Kalkulatu kontaketa (COUNT) erabiliz"
 msgid "Calculate using the countA"
 msgstr "Kalkulatu kontaketa (COUNTA) erabiliz"
 
-#: part/View.cpp:1433 part/View.cpp:1452 part/View.cpp:1866
+#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Ezin da aldatu babestutako orri bat."
 
-#: part/View.cpp:1472
+#: part/View.cpp:1473
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Ezin da ezkutatu ageriko azken orria."
 
-#: part/View.cpp:1552
+#: part/View.cpp:1553
 #, kde-format
 msgid "Enter a password."
 msgstr "Idatzi pasahitz bat."
 
-#: part/View.cpp:1564
+#: part/View.cpp:1565
 #, kde-format
 msgid "Enter the password."
 msgstr "Idatzi pasahitza."
 
-#: part/View.cpp:1572
+#: part/View.cpp:1573
 #, kde-format
 msgid "Password is incorrect."
 msgstr "Pasahitza ez da zuzena."
 
-#: part/View.cpp:1590
+#: part/View.cpp:1591
 #, kde-format
 msgid "Protect Document"
 msgstr "Babestu dokumentua"
 
-#: part/View.cpp:1593
+#: part/View.cpp:1594
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Kendu babesa dokumentuari"
 
-#: part/View.cpp:1613
+#: part/View.cpp:1614
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Babestu orria"
 
-#: part/View.cpp:1616
+#: part/View.cpp:1617
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Kendu babesa orriari"
 
-#: part/View.cpp:1835
+#: part/View.cpp:1836
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Berrezarri inprimatze-area"
 
-#: part/View.cpp:1844
+#: part/View.cpp:1845
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Ezin da ezabatu gelditzen den orri bakarra."
 
-#: part/View.cpp:1847
+#: part/View.cpp:1848
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14465,62 +14465,62 @@ msgstr ""
 "Orri aktiboa kenduko duzu. \n"
 "Jarraitu nahi duzu?"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Enter name:"
 msgstr "Idatzi izena:"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Izena aldatu orriari"
 
-#: part/View.cpp:1877 part/View.cpp:1883
+#: part/View.cpp:1878 part/View.cpp:1884
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Aldatu orriaren izena"
 
-#: part/View.cpp:1877
+#: part/View.cpp:1878
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Orriaren izena ezin da hutsik utzi."
 
-#: part/View.cpp:1883
+#: part/View.cpp:1884
 #, kde-format
 msgid "This name is already used."
 msgstr "Izen hori erabili da dagoeneko."
 
-#: part/View.cpp:1951
+#: part/View.cpp:1952
 #, kde-format
 msgid "Sum: "
 msgstr "Batura:"
 
-#: part/View.cpp:1955
+#: part/View.cpp:1956
 #, kde-format
 msgid "Average: "
 msgstr "Batez bestekoa:"
 
-#: part/View.cpp:1959
+#: part/View.cpp:1960
 #, kde-format
 msgid "Min: "
 msgstr "Minimoa:"
 
-#: part/View.cpp:1963
+#: part/View.cpp:1964
 #, kde-format
 msgid "Max: "
 msgstr "Maximoa:"
 
-#: part/View.cpp:1967
+#: part/View.cpp:1968
 #, kde-format
 msgid "Count: "
 msgstr "Zenbat:"
 
-#: part/View.cpp:1971
+#: part/View.cpp:1972
 #, kde-format
 msgid "CountA: "
 msgstr "Zenbat ez-huts:"
 
-#: part/View.cpp:1978
+#: part/View.cpp:1979
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -14541,179 +14541,169 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ertza aldatu"
 
-#: ui/CellToolBase.cpp:141
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "Gelaxka-formatua..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Ezarri gelaxka-formatua"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "&Function..."
 msgstr "&Funtzioa..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Insert math expression"
 msgstr "Adierazpen matematiko bat txertatzen du"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "From &Database..."
 msgstr "&Datu-basetik..."
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Datuak txertatzen ditu SQL datu-base batetik"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Zerrenda pertsonalizatuak..."
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:168
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 "Zerrenda pertsonalizatuak sortzen ditu, ordenatzeko edo automatikoki "
 "betetzeko."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Xede-bilaketa..."
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Kalkuluak errepikatzen ditu, balio jakin bat bilatzeko"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formula-hautapena"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:177
 #, kde-format
 msgid "Insert a function"
 msgstr "Funtzio bat txertatzen du"
 
-#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
+#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
 #, kde-format
 msgid "Others..."
 msgstr "Beste zenbait..."
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Modify Cell"
 msgstr "Aldatu gelaxka"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:190
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Gelaxka nabarmendua editatzen du"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Gelaxkako objektua arbelera eramaten du."
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Gelaxkako objektua arbelean kopiatzen du."
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:201
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Arbeleko edukia kurtsorea dagoen tokian itsasten du."
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Special Paste..."
 msgstr "Itsaste berezia..."
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:207
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Arbeleko edukia itsasten du aukera bereziekin"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:209
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Itsatsi txertatuz"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:212
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Arbeleko gelaxka bat kalkulu-orrian txertatzen du"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:215
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Uneko kalkulu-orriko gelaxka guztiak hautatzen ditu"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Check the spelling"
 msgstr "Ortografia egiaztatu"
 
-#: ui/CellToolBase.cpp:234
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Exekutatu ikuskatzailea..."
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:242
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView bistaratu..."
 
-#: ui/CellToolBase.cpp:246
-#, kde-format
-msgid "Auto-Format..."
-msgstr "Formatu automatikoa"
-
-#: ui/CellToolBase.cpp:249
-#, kde-format
-msgid "Set the worksheet formatting"
-msgstr "Kalkulu-orriaren formatua ezartzen du"
-
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:248
 #, kde-format
 msgid "Document Settings..."
 msgstr "Dokumentuaren ezarpenak..."
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:251
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Dokumentu-ezarpenen elkarrizketa-koadroa bistaratzen du"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:255
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Trukatu finkatze-erreferentzia"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:259
 #, kde-format
 msgid "Permute fixation"
 msgstr "Trukatu finkatzea"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:260
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Erreferentzia testu-kurtsorera finkatzeko modua trukatzen du"
 
-#: ui/CellToolBase.cpp:1050
+#: ui/CellToolBase.cpp:1045
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1090
+#: ui/CellToolBase.cpp:1085
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14725,12 +14715,12 @@ msgstr ""
 "Ez dago erabilgarri datu-basearen kontrolatzailerik. Eginbide hau "
 "erabiltzeko, beharrezkoa da Qt 3 datu-basearen kontrolatzaileak instalatzea."
 
-#: ui/CellToolBase.cpp:1582
+#: ui/CellToolBase.cpp:1590
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Ordeztu"
 
-#: ui/CellToolBase_p.cpp:861
+#: ui/CellToolBase_p.cpp:848
 #, kde-format
 msgid "Selection List..."
 msgstr "Hautapen-zerrenda..."
@@ -14778,207 +14768,201 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Aplikatu iragazkia"
 
-#: ui/commands/AutoFillCommand.cpp:107 ui/dialogs/ListDialog.cpp:126
+#: ui/commands/AutoFillCommand.cpp:109
 #, kde-format
 msgid "January"
 msgstr "Urtarrila"
 
-#: ui/commands/AutoFillCommand.cpp:108 ui/dialogs/ListDialog.cpp:127
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "February"
 msgstr "Otsaila"
 
-#: ui/commands/AutoFillCommand.cpp:109 ui/dialogs/ListDialog.cpp:128
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "March"
 msgstr "Martxoa"
 
-#: ui/commands/AutoFillCommand.cpp:110 ui/dialogs/ListDialog.cpp:129
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "April"
 msgstr "Apirila"
 
-#: ui/commands/AutoFillCommand.cpp:111 ui/dialogs/ListDialog.cpp:130
-#: ui/dialogs/ListDialog.cpp:146
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "May"
 msgstr "Maiatza"
 
-#: ui/commands/AutoFillCommand.cpp:112 ui/dialogs/ListDialog.cpp:131
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "June"
 msgstr "Ekaina"
 
-#: ui/commands/AutoFillCommand.cpp:113 ui/dialogs/ListDialog.cpp:132
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "July"
 msgstr "Uztaila"
 
-#: ui/commands/AutoFillCommand.cpp:114 ui/dialogs/ListDialog.cpp:133
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "August"
 msgstr "Abuztua"
 
-#: ui/commands/AutoFillCommand.cpp:115 ui/dialogs/ListDialog.cpp:134
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "September"
 msgstr "Iraila"
 
-#: ui/commands/AutoFillCommand.cpp:116 ui/dialogs/ListDialog.cpp:135
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "October"
 msgstr "Urria"
 
-#: ui/commands/AutoFillCommand.cpp:117 ui/dialogs/ListDialog.cpp:136
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "November"
 msgstr "Azaroa"
 
-#: ui/commands/AutoFillCommand.cpp:118 ui/dialogs/ListDialog.cpp:137
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "December"
 msgstr "Abendua"
 
-#: ui/commands/AutoFillCommand.cpp:123 ui/dialogs/ListDialog.cpp:142
+#: ui/commands/AutoFillCommand.cpp:125
 #, kde-format
 msgid "Jan"
 msgstr "urt."
 
-#: ui/commands/AutoFillCommand.cpp:124 ui/dialogs/ListDialog.cpp:143
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Feb"
 msgstr "ots."
 
-#: ui/commands/AutoFillCommand.cpp:125 ui/dialogs/ListDialog.cpp:144
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "Mar"
 msgstr "mar."
 
-#: ui/commands/AutoFillCommand.cpp:126 ui/dialogs/ListDialog.cpp:145
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "Apr"
 msgstr "api."
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "mai."
 
-#: ui/commands/AutoFillCommand.cpp:128 ui/dialogs/ListDialog.cpp:147
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Jun"
 msgstr "eka."
 
-#: ui/commands/AutoFillCommand.cpp:129 ui/dialogs/ListDialog.cpp:148
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Jul"
 msgstr "uzt."
 
-#: ui/commands/AutoFillCommand.cpp:130 ui/dialogs/ListDialog.cpp:149
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Aug"
 msgstr "abu."
 
-#: ui/commands/AutoFillCommand.cpp:131 ui/dialogs/ListDialog.cpp:150
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Sep"
 msgstr "ira."
 
-#: ui/commands/AutoFillCommand.cpp:132 ui/dialogs/ListDialog.cpp:151
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Oct"
 msgstr "urr."
 
-#: ui/commands/AutoFillCommand.cpp:133 ui/dialogs/ListDialog.cpp:152
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Nov"
 msgstr "aza."
 
-#: ui/commands/AutoFillCommand.cpp:134 ui/dialogs/ListDialog.cpp:153
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Dec"
 msgstr "abe."
 
-#: ui/commands/AutoFillCommand.cpp:139 ui/dialogs/ListDialog.cpp:157
+#: ui/commands/AutoFillCommand.cpp:141
 #, kde-format
 msgid "Monday"
 msgstr "Astelehena"
 
-#: ui/commands/AutoFillCommand.cpp:140 ui/dialogs/ListDialog.cpp:158
+#: ui/commands/AutoFillCommand.cpp:142
 #, kde-format
 msgid "Tuesday"
 msgstr "Asteartea"
 
-#: ui/commands/AutoFillCommand.cpp:141 ui/dialogs/ListDialog.cpp:159
+#: ui/commands/AutoFillCommand.cpp:143
 #, kde-format
 msgid "Wednesday"
 msgstr "Asteazkena"
 
-#: ui/commands/AutoFillCommand.cpp:142 ui/dialogs/ListDialog.cpp:160
+#: ui/commands/AutoFillCommand.cpp:144
 #, kde-format
 msgid "Thursday"
 msgstr "Osteguna"
 
-#: ui/commands/AutoFillCommand.cpp:143 ui/dialogs/ListDialog.cpp:161
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Friday"
 msgstr "Ostirala"
 
-#: ui/commands/AutoFillCommand.cpp:144 ui/dialogs/ListDialog.cpp:162
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Saturday"
 msgstr "Larunbata"
 
-#: ui/commands/AutoFillCommand.cpp:145 ui/dialogs/ListDialog.cpp:163
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Sunday"
 msgstr "Igandea"
 
-#: ui/commands/AutoFillCommand.cpp:150 ui/dialogs/ListDialog.cpp:167
+#: ui/commands/AutoFillCommand.cpp:152
 #, kde-format
 msgid "Mon"
 msgstr "al."
 
-#: ui/commands/AutoFillCommand.cpp:151 ui/dialogs/ListDialog.cpp:168
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Tue"
 msgstr "ar."
 
-#: ui/commands/AutoFillCommand.cpp:152 ui/dialogs/ListDialog.cpp:169
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Wed"
 msgstr "az."
 
-#: ui/commands/AutoFillCommand.cpp:153 ui/dialogs/ListDialog.cpp:170
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Thu"
 msgstr "og."
 
-#: ui/commands/AutoFillCommand.cpp:154 ui/dialogs/ListDialog.cpp:171
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Fri"
 msgstr "or."
 
-#: ui/commands/AutoFillCommand.cpp:155 ui/dialogs/ListDialog.cpp:172
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Sat"
 msgstr "lr."
 
-#: ui/commands/AutoFillCommand.cpp:156 ui/dialogs/ListDialog.cpp:173
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sun"
 msgstr "ig."
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:678
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Bete automatikoki"
-
-#: ui/commands/AutoFormatCommand.cpp:17
-msgctxt "(qtundo-format)"
-msgid "Auto-Format"
-msgstr "Formatu automatikoa"
 
 #: ui/commands/DataManipulators.cpp:107
 msgctxt "(qtundo-format)"
@@ -15208,36 +15192,6 @@ msgstr "Berrezarri estiloa"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Aldatu estiloa"
-
-#: ui/dialogs/AutoFormatDialog.cpp:60
-#, kde-format
-msgid "Sheet Style"
-msgstr "Orriaren estiloa"
-
-#: ui/dialogs/AutoFormatDialog.cpp:70
-#, kde-format
-msgid "Select the sheet style to apply:"
-msgstr "Hautatu aplikatu beharreko orri-estiloa:"
-
-#: ui/dialogs/AutoFormatDialog.cpp:114
-#, kde-format
-msgid "Could not find image %1."
-msgstr "Ezin izan da %1 irudia aurkitu."
-
-#: ui/dialogs/AutoFormatDialog.cpp:121
-#, kde-format
-msgid "Could not load image %1."
-msgstr "Ezin izan da %1 irudia kargatu."
-
-#: ui/dialogs/AutoFormatDialog.cpp:132
-#, kde-format
-msgid "Could not find sheet-style XML file '%1'."
-msgstr "Ezin izan da orri-estiloaren '%1' XML fitxategia aurkitu."
-
-#: ui/dialogs/AutoFormatDialog.cpp:143
-#, kde-format
-msgid "Parsing error in sheet-style XML file %1."
-msgstr "Analisi-errorea gertatu da orri-estiloaren %1 XML fitxategian."
 
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
@@ -16391,62 +16345,62 @@ msgstr "Atzeko planoko kolorea:"
 msgid "No Color"
 msgstr "Kolorerik ez"
 
-#: ui/dialogs/ListDialog.cpp:47
+#: ui/dialogs/ListDialog.cpp:46
 #, kde-format
 msgid "Custom Lists"
 msgstr "Zerrenda pertsonalizatuak"
 
-#: ui/dialogs/ListDialog.cpp:57
+#: ui/dialogs/ListDialog.cpp:56
 #, kde-format
 msgid "List:"
 msgstr "Zerrenda:"
 
-#: ui/dialogs/ListDialog.cpp:64
+#: ui/dialogs/ListDialog.cpp:63
 #, kde-format
 msgid "Entry:"
 msgstr "Sarrera:"
 
-#: ui/dialogs/ListDialog.cpp:70
+#: ui/dialogs/ListDialog.cpp:69
 #, kde-format
 msgid "Add"
 msgstr "Gehitu"
 
-#: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
+#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Cancel"
 msgstr "Utzi"
 
-#: ui/dialogs/ListDialog.cpp:78
+#: ui/dialogs/ListDialog.cpp:77
 #, kde-format
 msgid "New"
 msgstr "Berria"
 
-#: ui/dialogs/ListDialog.cpp:81
+#: ui/dialogs/ListDialog.cpp:80
 #, kde-format
 msgid "Remove"
 msgstr "Kendu"
 
-#: ui/dialogs/ListDialog.cpp:84
+#: ui/dialogs/ListDialog.cpp:83
 #, kde-format
 msgid "Modify"
 msgstr "Aldatu"
 
-#: ui/dialogs/ListDialog.cpp:87
+#: ui/dialogs/ListDialog.cpp:86
 #, kde-format
 msgid "Copy"
 msgstr "Kopiatu"
 
-#: ui/dialogs/ListDialog.cpp:251
+#: ui/dialogs/ListDialog.cpp:238
 #, kde-format
 msgid "Do you really want to remove this list?"
 msgstr "Benetan kendu nahi duzu zerrenda hau?"
 
-#: ui/dialogs/ListDialog.cpp:252
+#: ui/dialogs/ListDialog.cpp:239
 #, kde-format
 msgid "Remove List"
 msgstr "Kendu zerrenda"
 
-#: ui/dialogs/ListDialog.cpp:268
+#: ui/dialogs/ListDialog.cpp:259
 #, kde-format
 msgid ""
 "Entry area is not empty.\n"
@@ -16875,6 +16829,34 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Ireki esteka?"
+
+#~ msgid "Auto-Format..."
+#~ msgstr "Formatu automatikoa"
+
+#~ msgid "Set the worksheet formatting"
+#~ msgstr "Kalkulu-orriaren formatua ezartzen du"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Format"
+#~ msgstr "Formatu automatikoa"
+
+#~ msgid "Sheet Style"
+#~ msgstr "Orriaren estiloa"
+
+#~ msgid "Select the sheet style to apply:"
+#~ msgstr "Hautatu aplikatu beharreko orri-estiloa:"
+
+#~ msgid "Could not find image %1."
+#~ msgstr "Ezin izan da %1 irudia aurkitu."
+
+#~ msgid "Could not load image %1."
+#~ msgstr "Ezin izan da %1 irudia kargatu."
+
+#~ msgid "Could not find sheet-style XML file '%1'."
+#~ msgstr "Ezin izan da orri-estiloaren '%1' XML fitxategia aurkitu."
+
+#~ msgid "Parsing error in sheet-style XML file %1."
+#~ msgstr "Analisi-errorea gertatu da orri-estiloaren %1 XML fitxategian."
 
 #~ msgid "&Auto-Filter"
 #~ msgstr "&Iragazki automatikoa"

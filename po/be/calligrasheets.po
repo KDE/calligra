@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-05 00:58+0000\n"
+"POT-Creation-Date: 2023-02-06 01:00+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -883,7 +883,7 @@ msgstr "Нумар"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, fuzzy, kde-format
 msgid "Format"
@@ -940,7 +940,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") верне 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "База дадзеных"
@@ -13539,7 +13539,7 @@ msgstr "Уласцівасці ліста"
 msgid "Modify current sheet's properties"
 msgstr "Змена ўласцівасцяў ліста"
 
-#: part/View.cpp:235 part/View.cpp:2034
+#: part/View.cpp:235 part/View.cpp:2035
 #, fuzzy, kde-format
 msgid "Insert Sheet"
 msgstr "Уставіць ліст"
@@ -13559,12 +13559,12 @@ msgstr "Пералічыць ліст"
 msgid "Duplicate the selected sheet"
 msgstr "Схаваць бягучы ліст"
 
-#: part/View.cpp:246 part/View.cpp:1844 part/View.cpp:1848 part/View.cpp:2039
+#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, fuzzy, kde-format
 msgid "Remove Sheet"
 msgstr "Выдаліць ліст"
 
-#: part/View.cpp:247 part/View.cpp:2035 part/View.cpp:2040
+#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Выдаліць бягучы ліст"
@@ -13684,12 +13684,12 @@ msgstr "Стварыць шаблон з дакумента..."
 msgid "Anchor"
 msgstr "Андора"
 
-#: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
+#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
 #, fuzzy, kde-format
 msgid "Cell"
 msgstr "Вочка"
 
-#: part/View.cpp:316 part/View.cpp:1084
+#: part/View.cpp:316 part/View.cpp:1085
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "ліст"
@@ -13861,125 +13861,125 @@ msgstr "Паказаць колькасць лікаў у вылучаных в�
 msgid "Calculate using the countA"
 msgstr "Паказаць колькасць непустых вылучаных вочак"
 
-#: part/View.cpp:1433 part/View.cpp:1452 part/View.cpp:1866
+#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Вы не можаце рэдагаваць абаронены ліст"
 
-#: part/View.cpp:1472
+#: part/View.cpp:1473
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Вы не можаце схаваць апошні бачны ліст."
 
-#: part/View.cpp:1552
+#: part/View.cpp:1553
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Імя дыяпазону:"
 
-#: part/View.cpp:1564
+#: part/View.cpp:1565
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Імя дыяпазону:"
 
-#: part/View.cpp:1572
+#: part/View.cpp:1573
 #, fuzzy, kde-format
 msgid "Password is incorrect."
 msgstr "Пароль няслушны."
 
-#: part/View.cpp:1590
+#: part/View.cpp:1591
 #, fuzzy, kde-format
 msgid "Protect Document"
 msgstr "Абараніць дакумент"
 
-#: part/View.cpp:1593
+#: part/View.cpp:1594
 #, fuzzy, kde-format
 msgid "Unprotect Document"
 msgstr "Зняць абарону з дакумента"
 
-#: part/View.cpp:1613
+#: part/View.cpp:1614
 #, fuzzy, kde-format
 msgid "Protect Sheet"
 msgstr "Абараніць ліст"
 
-#: part/View.cpp:1616
+#: part/View.cpp:1617
 #, fuzzy, kde-format
 msgid "Unprotect Sheet"
 msgstr "Зняць абарону з ліста"
 
-#: part/View.cpp:1835
+#: part/View.cpp:1836
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Прыбраць"
 
-#: part/View.cpp:1844
+#: part/View.cpp:1845
 #, fuzzy, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Вы не можаце выдаліць апошні ліст."
 
-#: part/View.cpp:1847
+#: part/View.cpp:1848
 #, fuzzy, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr "Выдаліць бягучы ліст?"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Увядзіце імя:"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, fuzzy, kde-format
 msgid "Rename Sheet"
 msgstr "Пераназваць ліст"
 
-#: part/View.cpp:1877 part/View.cpp:1883
+#: part/View.cpp:1878 part/View.cpp:1884
 #, fuzzy, kde-format
 msgid "Change Sheet Name"
 msgstr "Змяніць імя ліста"
 
-#: part/View.cpp:1877
+#: part/View.cpp:1878
 #, fuzzy, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Імя ліста не можа быць пустым."
 
-#: part/View.cpp:1883
+#: part/View.cpp:1884
 #, fuzzy, kde-format
 msgid "This name is already used."
 msgstr "Гэтае імя ўжо скарыстана."
 
-#: part/View.cpp:1951
+#: part/View.cpp:1952
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr "Сума: "
 
-#: part/View.cpp:1955
+#: part/View.cpp:1956
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "Сярэдняе: "
 
-#: part/View.cpp:1959
+#: part/View.cpp:1960
 #, fuzzy, kde-format
 msgid "Min: "
 msgstr "Мінімум: "
 
-#: part/View.cpp:1963
+#: part/View.cpp:1964
 #, fuzzy, kde-format
 msgid "Max: "
 msgstr "Максімум: "
 
-#: part/View.cpp:1967
+#: part/View.cpp:1968
 #, fuzzy, kde-format
 msgid "Count: "
 msgstr "Колькасць лікаў: "
 
-#: part/View.cpp:1971
+#: part/View.cpp:1972
 #, fuzzy, kde-format
 msgid "CountA: "
 msgstr "Колькасць: "
 
-#: part/View.cpp:1978
+#: part/View.cpp:1979
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -14003,177 +14003,167 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Змяніць колер меж"
 
-#: ui/CellToolBase.cpp:141
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Фармат вочак..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Усталяваць параметры фарматавання вочка."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Функцыя..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Уставіць матэматычны выраз"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "З базы дадзеных..."
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Уставіць дадзеныя з базы дадзеных SQL"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:165
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Спісы карыстача..."
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Кіраванне карыстацкімі спісамі для сартавання або аўтазапаўненні"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Пошук рашэння..."
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Паўтор вылічэння для пошуку патрэбнага значэння"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:175
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Выбар формулы"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:177
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Уставіць функцыю"
 
-#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
+#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Іншыя..."
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Змяніць вочка"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Змяніць бягучае вочка"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Выразаць аб'ект вочка ў буфер абмену"
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Скапіраваць аб'ект табліцы ў буфер абмену"
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:201
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:204
 #, fuzzy, kde-format
 msgid "Special Paste..."
 msgstr "Адмысловая ўстаўка..."
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Уставіць змесціва буфера абмену па адмысловых умовах"
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:209
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Уставіць са зрухам"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:212
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Уставіць вочкі з буфера абмену"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Пералічыць значэнне кожнага вочка на бягучым лісце"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "Праверка арфаграфіі"
 
-#: ui/CellToolBase.cpp:234
+#: ui/CellToolBase.cpp:236
 #, fuzzy, kde-format
 msgid "Run Inspector..."
 msgstr "Запуск інспектара..."
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Паказаць ліст..."
 
-#: ui/CellToolBase.cpp:246
-#, fuzzy, kde-format
-msgid "Auto-Format..."
-msgstr "Аўтафармат..."
-
-#: ui/CellToolBase.cpp:249
-#, fuzzy, kde-format
-msgid "Set the worksheet formatting"
-msgstr "Налада фарматавання ліста"
-
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Налада лакалі"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Паказваць індыкатар каментара"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Абарона ад змен"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Абарона ад змен"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:260
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
 
-#: ui/CellToolBase.cpp:1050
+#: ui/CellToolBase.cpp:1045
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1090
+#: ui/CellToolBase.cpp:1085
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14181,13 +14171,13 @@ msgid ""
 msgstr ""
 "Драйверы баз дадзеных недаступныя. Перазбярыце Qt з неабходнымі драйверамі."
 
-#: ui/CellToolBase.cpp:1582
+#: ui/CellToolBase.cpp:1590
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Тэкст замены"
 
-#: ui/CellToolBase_p.cpp:861
+#: ui/CellToolBase_p.cpp:848
 #, fuzzy, kde-format
 msgid "Selection List..."
 msgstr "Паўтарыць..."
@@ -14235,209 +14225,202 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Ужыць стыль"
 
-#: ui/commands/AutoFillCommand.cpp:107 ui/dialogs/ListDialog.cpp:126
+#: ui/commands/AutoFillCommand.cpp:109
 #, kde-format
 msgid "January"
 msgstr "Студзень"
 
-#: ui/commands/AutoFillCommand.cpp:108 ui/dialogs/ListDialog.cpp:127
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "February"
 msgstr "Люты"
 
-#: ui/commands/AutoFillCommand.cpp:109 ui/dialogs/ListDialog.cpp:128
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "March"
 msgstr "Сакавік"
 
-#: ui/commands/AutoFillCommand.cpp:110 ui/dialogs/ListDialog.cpp:129
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "April"
 msgstr "Красавік"
 
-#: ui/commands/AutoFillCommand.cpp:111 ui/dialogs/ListDialog.cpp:130
-#: ui/dialogs/ListDialog.cpp:146
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "May"
 msgstr "Тра"
 
-#: ui/commands/AutoFillCommand.cpp:112 ui/dialogs/ListDialog.cpp:131
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "June"
 msgstr "Чэрвень"
 
-#: ui/commands/AutoFillCommand.cpp:113 ui/dialogs/ListDialog.cpp:132
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "July"
 msgstr "Ліпень"
 
-#: ui/commands/AutoFillCommand.cpp:114 ui/dialogs/ListDialog.cpp:133
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "August"
 msgstr "Жнівень"
 
-#: ui/commands/AutoFillCommand.cpp:115 ui/dialogs/ListDialog.cpp:134
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "September"
 msgstr "Верасень"
 
-#: ui/commands/AutoFillCommand.cpp:116 ui/dialogs/ListDialog.cpp:135
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "October"
 msgstr "Кастрычнік"
 
-#: ui/commands/AutoFillCommand.cpp:117 ui/dialogs/ListDialog.cpp:136
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "November"
 msgstr "Лістапад"
 
-#: ui/commands/AutoFillCommand.cpp:118 ui/dialogs/ListDialog.cpp:137
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "December"
 msgstr "Снежань"
 
-#: ui/commands/AutoFillCommand.cpp:123 ui/dialogs/ListDialog.cpp:142
+#: ui/commands/AutoFillCommand.cpp:125
 #, kde-format
 msgid "Jan"
 msgstr "Сту"
 
-#: ui/commands/AutoFillCommand.cpp:124 ui/dialogs/ListDialog.cpp:143
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Feb"
 msgstr "Лют"
 
-#: ui/commands/AutoFillCommand.cpp:125 ui/dialogs/ListDialog.cpp:144
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "Mar"
 msgstr "Сак"
 
-#: ui/commands/AutoFillCommand.cpp:126 ui/dialogs/ListDialog.cpp:145
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "Apr"
 msgstr "Кра"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "Тра"
 
-#: ui/commands/AutoFillCommand.cpp:128 ui/dialogs/ListDialog.cpp:147
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Jun"
 msgstr "Чэр"
 
-#: ui/commands/AutoFillCommand.cpp:129 ui/dialogs/ListDialog.cpp:148
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Jul"
 msgstr "Ліп"
 
-#: ui/commands/AutoFillCommand.cpp:130 ui/dialogs/ListDialog.cpp:149
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Aug"
 msgstr "Жні"
 
-#: ui/commands/AutoFillCommand.cpp:131 ui/dialogs/ListDialog.cpp:150
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Sep"
 msgstr "Вер"
 
-#: ui/commands/AutoFillCommand.cpp:132 ui/dialogs/ListDialog.cpp:151
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Oct"
 msgstr "Кас"
 
-#: ui/commands/AutoFillCommand.cpp:133 ui/dialogs/ListDialog.cpp:152
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Nov"
 msgstr "Ліс"
 
-#: ui/commands/AutoFillCommand.cpp:134 ui/dialogs/ListDialog.cpp:153
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Dec"
 msgstr "Сне"
 
-#: ui/commands/AutoFillCommand.cpp:139 ui/dialogs/ListDialog.cpp:157
+#: ui/commands/AutoFillCommand.cpp:141
 #, kde-format
 msgid "Monday"
 msgstr "Панядзелак"
 
-#: ui/commands/AutoFillCommand.cpp:140 ui/dialogs/ListDialog.cpp:158
+#: ui/commands/AutoFillCommand.cpp:142
 #, kde-format
 msgid "Tuesday"
 msgstr "Аўторак"
 
-#: ui/commands/AutoFillCommand.cpp:141 ui/dialogs/ListDialog.cpp:159
+#: ui/commands/AutoFillCommand.cpp:143
 #, kde-format
 msgid "Wednesday"
 msgstr "Серада"
 
-#: ui/commands/AutoFillCommand.cpp:142 ui/dialogs/ListDialog.cpp:160
+#: ui/commands/AutoFillCommand.cpp:144
 #, kde-format
 msgid "Thursday"
 msgstr "Чацвер"
 
-#: ui/commands/AutoFillCommand.cpp:143 ui/dialogs/ListDialog.cpp:161
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Friday"
 msgstr "Пятніца"
 
-#: ui/commands/AutoFillCommand.cpp:144 ui/dialogs/ListDialog.cpp:162
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Saturday"
 msgstr "Субота"
 
-#: ui/commands/AutoFillCommand.cpp:145 ui/dialogs/ListDialog.cpp:163
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Sunday"
 msgstr "Нядзеля"
 
-#: ui/commands/AutoFillCommand.cpp:150 ui/dialogs/ListDialog.cpp:167
+#: ui/commands/AutoFillCommand.cpp:152
 #, kde-format
 msgid "Mon"
 msgstr "Пан"
 
-#: ui/commands/AutoFillCommand.cpp:151 ui/dialogs/ListDialog.cpp:168
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Tue"
 msgstr "Аўт"
 
-#: ui/commands/AutoFillCommand.cpp:152 ui/dialogs/ListDialog.cpp:169
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Wed"
 msgstr "Сер"
 
-#: ui/commands/AutoFillCommand.cpp:153 ui/dialogs/ListDialog.cpp:170
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Thu"
 msgstr "Чац"
 
-#: ui/commands/AutoFillCommand.cpp:154 ui/dialogs/ListDialog.cpp:171
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Fri"
 msgstr "Пят"
 
-#: ui/commands/AutoFillCommand.cpp:155 ui/dialogs/ListDialog.cpp:172
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Sat"
 msgstr "Суб"
 
-#: ui/commands/AutoFillCommand.cpp:156 ui/dialogs/ListDialog.cpp:173
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sun"
 msgstr "Няд"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:678
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Аўтазапаўненне"
-
-#: ui/commands/AutoFormatCommand.cpp:17
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Auto-Format"
-msgstr "Аўтафармат..."
 
 #: ui/commands/DataManipulators.cpp:107
 #, fuzzy
@@ -14672,36 +14655,6 @@ msgstr "Стыль ліста"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Змяніць кут"
-
-#: ui/dialogs/AutoFormatDialog.cpp:60
-#, fuzzy, kde-format
-msgid "Sheet Style"
-msgstr "Стыль ліста"
-
-#: ui/dialogs/AutoFormatDialog.cpp:70
-#, fuzzy, kde-format
-msgid "Select the sheet style to apply:"
-msgstr "Ужыць стыль табліцы:"
-
-#: ui/dialogs/AutoFormatDialog.cpp:114
-#, fuzzy, kde-format
-msgid "Could not find image %1."
-msgstr "Немагчыма знайсці малюнак %1."
-
-#: ui/dialogs/AutoFormatDialog.cpp:121
-#, fuzzy, kde-format
-msgid "Could not load image %1."
-msgstr "Немагчыма загрузіць малюнак %1."
-
-#: ui/dialogs/AutoFormatDialog.cpp:132
-#, fuzzy, kde-format
-msgid "Could not find sheet-style XML file '%1'."
-msgstr "Немагчыма знайсці файл стылю XML '%1'."
-
-#: ui/dialogs/AutoFormatDialog.cpp:143
-#, fuzzy, kde-format
-msgid "Parsing error in sheet-style XML file %1."
-msgstr "Няслушны фармат файла стылю XML '%1'."
 
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, fuzzy, kde-format
@@ -15815,62 +15768,62 @@ msgstr "Фонавы колер:"
 msgid "No Color"
 msgstr "Няма колеру"
 
-#: ui/dialogs/ListDialog.cpp:47
+#: ui/dialogs/ListDialog.cpp:46
 #, fuzzy, kde-format
 msgid "Custom Lists"
 msgstr "Спісы карыстача"
 
-#: ui/dialogs/ListDialog.cpp:57
+#: ui/dialogs/ListDialog.cpp:56
 #, fuzzy, kde-format
 msgid "List:"
 msgstr "Спіс:"
 
-#: ui/dialogs/ListDialog.cpp:64
+#: ui/dialogs/ListDialog.cpp:63
 #, fuzzy, kde-format
 msgid "Entry:"
 msgstr "Элемент:"
 
-#: ui/dialogs/ListDialog.cpp:70
+#: ui/dialogs/ListDialog.cpp:69
 #, fuzzy, kde-format
 msgid "Add"
 msgstr "&Дадаць"
 
-#: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
+#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
 #, fuzzy, kde-format
 msgid "Cancel"
 msgstr "&Скасаваць"
 
-#: ui/dialogs/ListDialog.cpp:78
+#: ui/dialogs/ListDialog.cpp:77
 #, fuzzy, kde-format
 msgid "New"
 msgstr "&Новы"
 
-#: ui/dialogs/ListDialog.cpp:81
+#: ui/dialogs/ListDialog.cpp:80
 #, fuzzy, kde-format
 msgid "Remove"
 msgstr "Выдаліць"
 
-#: ui/dialogs/ListDialog.cpp:84
+#: ui/dialogs/ListDialog.cpp:83
 #, fuzzy, kde-format
 msgid "Modify"
 msgstr "З&мяніць"
 
-#: ui/dialogs/ListDialog.cpp:87
+#: ui/dialogs/ListDialog.cpp:86
 #, fuzzy, kde-format
 msgid "Copy"
 msgstr "Стварыць &копію"
 
-#: ui/dialogs/ListDialog.cpp:251
+#: ui/dialogs/ListDialog.cpp:238
 #, fuzzy, kde-format
 msgid "Do you really want to remove this list?"
 msgstr "Вы сапраўды жадаеце выдаліць гэты спіс?"
 
-#: ui/dialogs/ListDialog.cpp:252
+#: ui/dialogs/ListDialog.cpp:239
 #, fuzzy, kde-format
 msgid "Remove List"
 msgstr "Выдаліць спіс"
 
-#: ui/dialogs/ListDialog.cpp:268
+#: ui/dialogs/ListDialog.cpp:259
 #, fuzzy, kde-format
 msgid ""
 "Entry area is not empty.\n"
@@ -16283,6 +16236,43 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Адкрыць спасылку?"
+
+#, fuzzy
+#~ msgid "Auto-Format..."
+#~ msgstr "Аўтафармат..."
+
+#, fuzzy
+#~ msgid "Set the worksheet formatting"
+#~ msgstr "Налада фарматавання ліста"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Format"
+#~ msgstr "Аўтафармат..."
+
+#, fuzzy
+#~ msgid "Sheet Style"
+#~ msgstr "Стыль ліста"
+
+#, fuzzy
+#~ msgid "Select the sheet style to apply:"
+#~ msgstr "Ужыць стыль табліцы:"
+
+#, fuzzy
+#~ msgid "Could not find image %1."
+#~ msgstr "Немагчыма знайсці малюнак %1."
+
+#, fuzzy
+#~ msgid "Could not load image %1."
+#~ msgstr "Немагчыма загрузіць малюнак %1."
+
+#, fuzzy
+#~ msgid "Could not find sheet-style XML file '%1'."
+#~ msgstr "Немагчыма знайсці файл стылю XML '%1'."
+
+#, fuzzy
+#~ msgid "Parsing error in sheet-style XML file %1."
+#~ msgstr "Няслушны фармат файла стылю XML '%1'."
 
 #, fuzzy
 #~ msgid "&Auto-Filter"

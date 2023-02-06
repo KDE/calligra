@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-05 00:58+0000\n"
+"POT-Creation-Date: 2023-02-06 01:00+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -928,7 +928,7 @@ msgstr "Nommer"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:142 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -991,7 +991,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Arabiese(\"Xcix\") gee terug 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:157 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Databasis"
@@ -14009,7 +14009,7 @@ msgstr "Staat Styl..."
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:235 part/View.cpp:2034
+#: part/View.cpp:235 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Voeg by Staat"
@@ -14030,12 +14030,12 @@ msgstr "Herbereken Staat"
 msgid "Duplicate the selected sheet"
 msgstr "Steek weg die aktief staat."
 
-#: part/View.cpp:246 part/View.cpp:1844 part/View.cpp:1848 part/View.cpp:2039
+#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Verwyder Staat"
 
-#: part/View.cpp:247 part/View.cpp:2035 part/View.cpp:2040
+#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Verwyder die aktief staat."
@@ -14158,12 +14158,12 @@ msgstr "Skep Werkvoorbeeld Van Dokument..."
 msgid "Anchor"
 msgstr "Andorra"
 
-#: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
+#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Sel"
 
-#: part/View.cpp:316 part/View.cpp:1084
+#: part/View.cpp:316 part/View.cpp:1085
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "Page"
@@ -14344,64 +14344,64 @@ msgstr "Bereken te gebruik die tel"
 msgid "Calculate using the countA"
 msgstr "Bereken te gebruik die tel"
 
-#: part/View.cpp:1433 part/View.cpp:1452 part/View.cpp:1866
+#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Jy kan nie uitvee die slegs staat."
 
-#: part/View.cpp:1472
+#: part/View.cpp:1473
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Jy kan nie steek weg die laaste sigbare tabel."
 
-#: part/View.cpp:1552
+#: part/View.cpp:1553
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Invoer naam:"
 
-#: part/View.cpp:1564
+#: part/View.cpp:1565
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Invoer naam:"
 
-#: part/View.cpp:1572
+#: part/View.cpp:1573
 #, kde-format
 msgid "Password is incorrect."
 msgstr ""
 
-#: part/View.cpp:1590
+#: part/View.cpp:1591
 #, fuzzy, kde-format
 msgid "Protect Document"
 msgstr "Presisie"
 
-#: part/View.cpp:1593
+#: part/View.cpp:1594
 #, fuzzy, kde-format
 msgid "Unprotect Document"
 msgstr "Presisie"
 
-#: part/View.cpp:1613
+#: part/View.cpp:1614
 #, fuzzy, kde-format
 msgid "Protect Sheet"
 msgstr "Vooraf kies"
 
-#: part/View.cpp:1616
+#: part/View.cpp:1617
 #, fuzzy, kde-format
 msgid "Unprotect Sheet"
 msgstr "Vooraf kies"
 
-#: part/View.cpp:1835
+#: part/View.cpp:1836
 #, fuzzy
 #| msgid "Reset Print Range"
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Herstel Druk Omvang"
 
-#: part/View.cpp:1844
+#: part/View.cpp:1845
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Jy kan nie uitvee die slegs staat."
 
-#: part/View.cpp:1847
+#: part/View.cpp:1848
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14410,62 +14410,62 @@ msgstr ""
 "Jy word aangaande na verwyder die aktief staat.\n"
 "Doen Jy wil hê na gaan voort?"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Enter name:"
 msgstr "Invoer naam:"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Herbenaam Staat"
 
-#: part/View.cpp:1877 part/View.cpp:1883
+#: part/View.cpp:1878 part/View.cpp:1884
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Verander Staat Naam"
 
-#: part/View.cpp:1877
+#: part/View.cpp:1878
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Staat naam kan nie wees leeg."
 
-#: part/View.cpp:1883
+#: part/View.cpp:1884
 #, kde-format
 msgid "This name is already used."
 msgstr "Hierdie naam is alreeds gebruik word."
 
-#: part/View.cpp:1951
+#: part/View.cpp:1952
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr " Som: %1"
 
-#: part/View.cpp:1955
+#: part/View.cpp:1956
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "Gemiddelde: %1"
 
-#: part/View.cpp:1959
+#: part/View.cpp:1960
 #, fuzzy, kde-format
 msgid "Min: "
 msgstr "Min: %1"
 
-#: part/View.cpp:1963
+#: part/View.cpp:1964
 #, fuzzy, kde-format
 msgid "Max: "
 msgstr "Max: %1"
 
-#: part/View.cpp:1967
+#: part/View.cpp:1968
 #, fuzzy, kde-format
 msgid "Count: "
 msgstr "Tel: %1"
 
-#: part/View.cpp:1971
+#: part/View.cpp:1972
 #, fuzzy, kde-format
 msgid "CountA: "
 msgstr "Tel: %1"
 
-#: part/View.cpp:1978
+#: part/View.cpp:1979
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -14489,178 +14489,168 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Verander Grens Kleur"
 
-#: ui/CellToolBase.cpp:141
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Cell Format..."
 msgstr "Sel Formaat..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Stel die sel formatering."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "&Function..."
 msgstr "Funksie..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Voeg by wiskunde uitdrukking."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "From &Database..."
 msgstr "Van Databasis..."
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Voeg by data van 'n Sql databasis"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Pasmaak Lyste..."
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:168
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Skep pasmaak lyste vir besig om te sorteer of outo-opvul"
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Teiken Soek..."
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Herhaal berekening na soek 'n spesifieke waarde"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:175
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formule Keuse"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:177
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Voeg by 'n funksie."
 
-#: ui/CellToolBase.cpp:176 ui/CellToolBase.cpp:1118
+#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
 #, kde-format
 msgid "Others..."
 msgstr "Andere..."
 
-#: ui/CellToolBase.cpp:184
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Modify Cell"
 msgstr "Verander Sel"
 
-#: ui/CellToolBase.cpp:188
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Redigeer die verlig sel."
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Beweeg die sel voorwerp na die klipbord."
 
-#: ui/CellToolBase.cpp:195
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopie die sel voorwerp na die klipbord."
 
-#: ui/CellToolBase.cpp:199
+#: ui/CellToolBase.cpp:201
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Plak die inhoud van die klipbord na die plekaanduier"
 
-#: ui/CellToolBase.cpp:202
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Special Paste..."
 msgstr "Spesiaal Plak..."
 
-#: ui/CellToolBase.cpp:205
+#: ui/CellToolBase.cpp:207
 #, fuzzy, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Plak die inhoud van die klipbord met spesiaal opsies."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:209
 #, fuzzy, kde-format
 msgid "Paste with Insertion"
 msgstr "Plak met Invoeg..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:212
 #, fuzzy, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Voeg in 'n sel van die klipbord binnein die spreiblad."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:215
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Herbereken die waarde van elke sel in die huidige werkvel."
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Check the spelling"
 msgstr "Bevestig die spelling."
 
-#: ui/CellToolBase.cpp:234
+#: ui/CellToolBase.cpp:236
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:240
+#: ui/CellToolBase.cpp:242
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Vertoon Staat..."
 
-#: ui/CellToolBase.cpp:246
-#, fuzzy, kde-format
-msgid "Auto-Format..."
-msgstr "Sel Formaat..."
-
-#: ui/CellToolBase.cpp:249
-#, fuzzy, kde-format
-msgid "Set the worksheet formatting"
-msgstr "Stel die werkvel formatering."
-
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:248
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Lokalisering Parameters"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:251
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Vertoon kommentaar aanduier"
 
-#: ui/CellToolBase.cpp:258
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Presisie"
 
-#: ui/CellToolBase.cpp:262
+#: ui/CellToolBase.cpp:259
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Presisie"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:260
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Plak die inhoud van die klipbord na die plekaanduier"
 
-#: ui/CellToolBase.cpp:1050
+#: ui/CellToolBase.cpp:1045
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1090
+#: ui/CellToolBase.cpp:1085
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14669,13 +14659,13 @@ msgstr ""
 "Nee databasis drywers beskikbaar! Jy benodig na kompileer Qt met die nodige "
 "drywers."
 
-#: ui/CellToolBase.cpp:1582
+#: ui/CellToolBase.cpp:1590
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "September"
 
-#: ui/CellToolBase_p.cpp:861
+#: ui/CellToolBase_p.cpp:848
 #, kde-format
 msgid "Selection List..."
 msgstr "Keuse Lys..."
@@ -14724,211 +14714,204 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Styl:"
 
-#: ui/commands/AutoFillCommand.cpp:107 ui/dialogs/ListDialog.cpp:126
+#: ui/commands/AutoFillCommand.cpp:109
 #, kde-format
 msgid "January"
 msgstr "Januarie"
 
-#: ui/commands/AutoFillCommand.cpp:108 ui/dialogs/ListDialog.cpp:127
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "February"
 msgstr "Februarie"
 
-#: ui/commands/AutoFillCommand.cpp:109 ui/dialogs/ListDialog.cpp:128
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "March"
 msgstr "Maart"
 
-#: ui/commands/AutoFillCommand.cpp:110 ui/dialogs/ListDialog.cpp:129
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "April"
 msgstr "April"
 
-#: ui/commands/AutoFillCommand.cpp:111 ui/dialogs/ListDialog.cpp:130
-#: ui/dialogs/ListDialog.cpp:146
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "May"
 msgstr "Dalk mag"
 
-#: ui/commands/AutoFillCommand.cpp:112 ui/dialogs/ListDialog.cpp:131
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "June"
 msgstr "Junie"
 
-#: ui/commands/AutoFillCommand.cpp:113 ui/dialogs/ListDialog.cpp:132
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "July"
 msgstr "Julie"
 
-#: ui/commands/AutoFillCommand.cpp:114 ui/dialogs/ListDialog.cpp:133
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "August"
 msgstr "Augustus"
 
-#: ui/commands/AutoFillCommand.cpp:115 ui/dialogs/ListDialog.cpp:134
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "September"
 msgstr "September"
 
-#: ui/commands/AutoFillCommand.cpp:116 ui/dialogs/ListDialog.cpp:135
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "October"
 msgstr "Oktober"
 
-#: ui/commands/AutoFillCommand.cpp:117 ui/dialogs/ListDialog.cpp:136
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "November"
 msgstr "November"
 
-#: ui/commands/AutoFillCommand.cpp:118 ui/dialogs/ListDialog.cpp:137
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "December"
 msgstr "Desember"
 
-#: ui/commands/AutoFillCommand.cpp:123 ui/dialogs/ListDialog.cpp:142
+#: ui/commands/AutoFillCommand.cpp:125
 #, fuzzy, kde-format
 msgid "Jan"
 msgstr "Japan"
 
-#: ui/commands/AutoFillCommand.cpp:124 ui/dialogs/ListDialog.cpp:143
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Feb"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:125 ui/dialogs/ListDialog.cpp:144
+#: ui/commands/AutoFillCommand.cpp:127
 #, fuzzy, kde-format
 msgid "Mar"
 msgstr "Maart"
 
-#: ui/commands/AutoFillCommand.cpp:126 ui/dialogs/ListDialog.cpp:145
+#: ui/commands/AutoFillCommand.cpp:128
 #, fuzzy, kde-format
 msgid "Apr"
 msgstr "April"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:129
 #, fuzzy, kde-format
 #| msgid "May"
 msgctxt "May short"
 msgid "May"
 msgstr "Dalk mag"
 
-#: ui/commands/AutoFillCommand.cpp:128 ui/dialogs/ListDialog.cpp:147
+#: ui/commands/AutoFillCommand.cpp:130
 #, fuzzy, kde-format
 msgid "Jun"
 msgstr "Junie"
 
-#: ui/commands/AutoFillCommand.cpp:129 ui/dialogs/ListDialog.cpp:148
+#: ui/commands/AutoFillCommand.cpp:131
 #, fuzzy, kde-format
 msgid "Jul"
 msgstr "Julie"
 
-#: ui/commands/AutoFillCommand.cpp:130 ui/dialogs/ListDialog.cpp:149
+#: ui/commands/AutoFillCommand.cpp:132
 #, fuzzy, kde-format
 msgid "Aug"
 msgstr "Augustus"
 
-#: ui/commands/AutoFillCommand.cpp:131 ui/dialogs/ListDialog.cpp:150
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Sep"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:132 ui/dialogs/ListDialog.cpp:151
+#: ui/commands/AutoFillCommand.cpp:134
 #, fuzzy, kde-format
 msgid "Oct"
 msgstr "Voorwerp..."
 
-#: ui/commands/AutoFillCommand.cpp:133 ui/dialogs/ListDialog.cpp:152
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Nov"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:134 ui/dialogs/ListDialog.cpp:153
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Dec"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:139 ui/dialogs/ListDialog.cpp:157
+#: ui/commands/AutoFillCommand.cpp:141
 #, fuzzy, kde-format
 msgid "Monday"
 msgstr "Geld"
 
-#: ui/commands/AutoFillCommand.cpp:140 ui/dialogs/ListDialog.cpp:158
+#: ui/commands/AutoFillCommand.cpp:142
 #, fuzzy, kde-format
 msgid "Tuesday"
 msgstr "Turkeye"
 
-#: ui/commands/AutoFillCommand.cpp:141 ui/dialogs/ListDialog.cpp:159
+#: ui/commands/AutoFillCommand.cpp:143
 #, fuzzy, kde-format
 msgid "Wednesday"
 msgstr "Turkeye"
 
-#: ui/commands/AutoFillCommand.cpp:142 ui/dialogs/ListDialog.cpp:160
+#: ui/commands/AutoFillCommand.cpp:144
 #, fuzzy, kde-format
 msgid "Thursday"
 msgstr "Turkeye"
 
-#: ui/commands/AutoFillCommand.cpp:143 ui/dialogs/ListDialog.cpp:161
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Friday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:144 ui/dialogs/ListDialog.cpp:162
+#: ui/commands/AutoFillCommand.cpp:146
 #, fuzzy, kde-format
 msgid "Saturday"
 msgstr "Mauritius"
 
-#: ui/commands/AutoFillCommand.cpp:145 ui/dialogs/ListDialog.cpp:163
+#: ui/commands/AutoFillCommand.cpp:147
 #, fuzzy, kde-format
 msgid "Sunday"
 msgstr "Sudan"
 
-#: ui/commands/AutoFillCommand.cpp:150 ui/dialogs/ListDialog.cpp:167
+#: ui/commands/AutoFillCommand.cpp:152
 #, fuzzy, kde-format
 msgid "Mon"
 msgstr "Geld"
 
-#: ui/commands/AutoFillCommand.cpp:151 ui/dialogs/ListDialog.cpp:168
+#: ui/commands/AutoFillCommand.cpp:153
 #, fuzzy, kde-format
 msgid "Tue"
 msgstr "Waar"
 
-#: ui/commands/AutoFillCommand.cpp:152 ui/dialogs/ListDialog.cpp:169
+#: ui/commands/AutoFillCommand.cpp:154
 #, fuzzy, kde-format
 msgid "Wed"
 msgstr "Afgaande"
 
-#: ui/commands/AutoFillCommand.cpp:153 ui/dialogs/ListDialog.cpp:170
+#: ui/commands/AutoFillCommand.cpp:155
 #, fuzzy, kde-format
 msgid "Thu"
 msgstr "Waar"
 
-#: ui/commands/AutoFillCommand.cpp:154 ui/dialogs/ListDialog.cpp:171
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Fri"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:155 ui/dialogs/ListDialog.cpp:172
+#: ui/commands/AutoFillCommand.cpp:157
 #, fuzzy, kde-format
 msgid "Sat"
 msgstr "Begin"
 
-#: ui/commands/AutoFillCommand.cpp:156 ui/dialogs/ListDialog.cpp:173
+#: ui/commands/AutoFillCommand.cpp:158
 #, fuzzy, kde-format
 msgid "Sun"
 msgstr "Sudan"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:678
 #, fuzzy
 #| msgid "Autofill"
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Outo-opvul"
-
-#: ui/commands/AutoFormatCommand.cpp:17
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Auto-Format"
-msgstr "Sel Formaat..."
 
 #: ui/commands/DataManipulators.cpp:107
 #, fuzzy
@@ -15185,36 +15168,6 @@ msgstr "Staat Styl"
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Verander Hoek"
-
-#: ui/dialogs/AutoFormatDialog.cpp:60
-#, kde-format
-msgid "Sheet Style"
-msgstr "Staat Styl"
-
-#: ui/dialogs/AutoFormatDialog.cpp:70
-#, fuzzy, kde-format
-msgid "Select the sheet style to apply:"
-msgstr "Kies Weg gesteekte Ry na Vertoon"
-
-#: ui/dialogs/AutoFormatDialog.cpp:114
-#, fuzzy, kde-format
-msgid "Could not find image %1."
-msgstr "Kon nie soek beeld %1"
-
-#: ui/dialogs/AutoFormatDialog.cpp:121
-#, fuzzy, kde-format
-msgid "Could not load image %1."
-msgstr "Kon nie las beeld %1"
-
-#: ui/dialogs/AutoFormatDialog.cpp:132
-#, fuzzy, kde-format
-msgid "Could not find sheet-style XML file '%1'."
-msgstr "Kon nie soek table-style Xml lêer '%1'"
-
-#: ui/dialogs/AutoFormatDialog.cpp:143
-#, fuzzy, kde-format
-msgid "Parsing error in sheet-style XML file %1."
-msgstr "Verwerking fout in table-style Xml lêer %1"
 
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
@@ -16272,65 +16225,65 @@ msgstr "Agtergrond kleur:"
 msgid "No Color"
 msgstr "Nee Kleur"
 
-#: ui/dialogs/ListDialog.cpp:47
+#: ui/dialogs/ListDialog.cpp:46
 #, kde-format
 msgid "Custom Lists"
 msgstr "Pasmaak Lyste"
 
-#: ui/dialogs/ListDialog.cpp:57
+#: ui/dialogs/ListDialog.cpp:56
 #, kde-format
 msgid "List:"
 msgstr "Lys:"
 
-#: ui/dialogs/ListDialog.cpp:64
+#: ui/dialogs/ListDialog.cpp:63
 #, kde-format
 msgid "Entry:"
 msgstr "Inskrywing:"
 
-#: ui/dialogs/ListDialog.cpp:70
+#: ui/dialogs/ListDialog.cpp:69
 #, fuzzy, kde-format
 #| msgid "&Add"
 msgid "Add"
 msgstr "Voeg by"
 
-#: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
+#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
 #, fuzzy, kde-format
 msgid "Cancel"
 msgstr "Frankryk"
 
-#: ui/dialogs/ListDialog.cpp:78
+#: ui/dialogs/ListDialog.cpp:77
 #, fuzzy, kde-format
 #| msgid "&New"
 msgid "New"
 msgstr "Nuwe"
 
-#: ui/dialogs/ListDialog.cpp:81
+#: ui/dialogs/ListDialog.cpp:80
 #, fuzzy, kde-format
 msgid "Remove"
 msgstr "Verwyder Sel"
 
-#: ui/dialogs/ListDialog.cpp:84
+#: ui/dialogs/ListDialog.cpp:83
 #, fuzzy, kde-format
 msgid "Modify"
 msgstr "Voeg by/Verander Kommentaar..."
 
-#: ui/dialogs/ListDialog.cpp:87
+#: ui/dialogs/ListDialog.cpp:86
 #, fuzzy, kde-format
 #| msgid "Co&py"
 msgid "Copy"
 msgstr "Kopie"
 
-#: ui/dialogs/ListDialog.cpp:251
+#: ui/dialogs/ListDialog.cpp:238
 #, kde-format
 msgid "Do you really want to remove this list?"
 msgstr "Doen jy rerig wil hê na verwyder hierdie lys?"
 
-#: ui/dialogs/ListDialog.cpp:252
+#: ui/dialogs/ListDialog.cpp:239
 #, fuzzy, kde-format
 msgid "Remove List"
 msgstr "Verwyder Sel"
 
-#: ui/dialogs/ListDialog.cpp:268
+#: ui/dialogs/ListDialog.cpp:259
 #, kde-format
 msgid ""
 "Entry area is not empty.\n"
@@ -16711,6 +16664,42 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Open Skakel?"
+
+#, fuzzy
+#~ msgid "Auto-Format..."
+#~ msgstr "Sel Formaat..."
+
+#, fuzzy
+#~ msgid "Set the worksheet formatting"
+#~ msgstr "Stel die werkvel formatering."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Auto-Format"
+#~ msgstr "Sel Formaat..."
+
+#~ msgid "Sheet Style"
+#~ msgstr "Staat Styl"
+
+#, fuzzy
+#~ msgid "Select the sheet style to apply:"
+#~ msgstr "Kies Weg gesteekte Ry na Vertoon"
+
+#, fuzzy
+#~ msgid "Could not find image %1."
+#~ msgstr "Kon nie soek beeld %1"
+
+#, fuzzy
+#~ msgid "Could not load image %1."
+#~ msgstr "Kon nie las beeld %1"
+
+#, fuzzy
+#~ msgid "Could not find sheet-style XML file '%1'."
+#~ msgstr "Kon nie soek table-style Xml lêer '%1'"
+
+#, fuzzy
+#~ msgid "Parsing error in sheet-style XML file %1."
+#~ msgstr "Verwerking fout in table-style Xml lêer %1"
 
 #, fuzzy
 #~| msgid "Autofill"
