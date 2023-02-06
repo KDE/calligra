@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-12 10:09+0100\n"
+"PO-Revision-Date: 2023-02-05 09:52+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -673,7 +673,7 @@ msgstr "სვეტების ჩასმა"
 #: commands/RowColumnManipulators.cpp:592
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
-msgstr ""
+msgstr "სვეტების წაშლა"
 
 #: commands/RowColumnManipulators.cpp:694
 #: commands/RowColumnManipulators.cpp:713
@@ -3933,17 +3933,17 @@ msgstr ""
 #: dialogs/ConditionalDialog.cpp:144 dialogs/ValidityDialog.cpp:87
 #, kde-format
 msgid "equal to"
-msgstr ""
+msgstr "უდრის"
 
 #: dialogs/ConditionalDialog.cpp:145 dialogs/ValidityDialog.cpp:88
 #, kde-format
 msgid "greater than"
-msgstr ""
+msgstr "მეტი ვიდრე"
 
 #: dialogs/ConditionalDialog.cpp:146 dialogs/ValidityDialog.cpp:89
 #, kde-format
 msgid "less than"
-msgstr ""
+msgstr "ნაკლები, ვიდრე"
 
 #: dialogs/ConditionalDialog.cpp:147 dialogs/ValidityDialog.cpp:90
 #, kde-format
@@ -4756,7 +4756,7 @@ msgstr ""
 #: dialogs/FindDialog.cpp:35
 #, kde-format
 msgid "Search in:"
-msgstr ""
+msgstr "ძებნა:"
 
 #: dialogs/FindDialog.cpp:43
 #, kde-format
@@ -6852,7 +6852,7 @@ msgstr ""
 #: dialogs/ValidityDialog.cpp:280 dialogs/ValidityDialog.cpp:346
 #, kde-format
 msgid "Number:"
-msgstr ""
+msgstr "ნომერი:"
 
 #: dialogs/ValidityDialog.cpp:139
 #, kde-format
@@ -6917,7 +6917,7 @@ msgstr ""
 #: functions/information.xml:11
 #, kde-format
 msgid "Error"
-msgstr ""
+msgstr "შეცდომა"
 
 #: dialogs/ValidityDialog.cpp:477 dialogs/ValidityDialog.cpp:483
 #: dialogs/ValidityDialog.cpp:491 dialogs/ValidityDialog.cpp:497
@@ -10208,7 +10208,7 @@ msgstr "COUPNUM(\"2/28/2001\"; \"8/31/2001\"; 2; 0) 1-ს აბრუნებ�
 #: functions/financial.xml:212 functions/financial.xml:249
 #, kde-format
 msgid "rate"
-msgstr ""
+msgstr "სიხშირე"
 
 #: functions/financial.xml:216 functions/financial.xml:253
 #, kde-format
@@ -10540,7 +10540,7 @@ msgstr ""
 #: functions/financial.xml:522
 #, kde-format
 msgid "EURO(currency)"
-msgstr ""
+msgstr "EURO(ვალუტა)"
 
 #: functions/financial.xml:523
 #, kde-format
@@ -10550,12 +10550,12 @@ msgstr "EURO(\"DEM\") უდრის 1.95583"
 #: functions/financial.xml:536
 #, kde-format
 msgid "Source currency"
-msgstr ""
+msgstr "საწყისი ვალუტა"
 
 #: functions/financial.xml:540
 #, kde-format
 msgid "Target currency"
-msgstr ""
+msgstr "სამიზნე ვალუტა"
 
 #: functions/financial.xml:544
 #, kde-format
@@ -18231,7 +18231,7 @@ msgstr "Lukáš Tinkl"
 #: part/AboutData.h:77
 #, kde-format
 msgid "Tomas Mecir"
-msgstr ""
+msgstr "Tomas Mecir"
 
 #: part/AboutData.h:78
 #, kde-format
@@ -18511,7 +18511,7 @@ msgstr ""
 #: part/dialogs/PageLayoutSheetPage.ui:58
 #, kde-format
 msgid "Charts"
-msgstr ""
+msgstr "გრაფიკები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, objectsCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:71
@@ -19902,7 +19902,7 @@ msgstr "მაღალი რეგისტრი"
 #: ui/CellToolBase.cpp:400
 #, kde-format
 msgid "Upper"
-msgstr ""
+msgstr "ზედა რეგისტრში"
 
 #: ui/CellToolBase.cpp:403
 #, kde-format
@@ -20007,7 +20007,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:460
 #, kde-format
 msgid "Remove Columns"
-msgstr ""
+msgstr "სვეტების წაშლა"
 
 #: ui/CellToolBase.cpp:461
 #, kde-format
@@ -20187,7 +20187,7 @@ msgstr ""
 #: ui/CellToolBase.cpp:563
 #, kde-format
 msgid "Remove Comment"
-msgstr ""
+msgstr "კომენტარის წაშლა"
 
 #: ui/CellToolBase.cpp:564
 #, kde-format

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-29 12:59+0100\n"
+"PO-Revision-Date: 2023-02-05 23:58+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -1195,7 +1195,7 @@ msgstr "Liburu-marka ez da existitzen"
 #: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
-msgstr "Titulua ekartzen: &percnt;0 osatuta"
+msgstr "Titulua ekartzen: % 0 osatuta"
 
 #: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
@@ -1205,7 +1205,7 @@ msgstr "Ekartzeko denbora-muga gainditu da"
 #: dialogs/LinkInsertionDialog.cpp:268
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
-msgstr "Titulua ekartzen: &percnt;%1 osatuta"
+msgstr "Titulua ekartzen: %%1 osatuta"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
 #: dialogs/LinkInsertionDialog.ui:14
