@@ -15591,38 +15591,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otevřít odkaz?"
-
-#~ msgid "Auto-Format..."
-#~ msgstr "Automatický formát..."
-
-#~ msgid "Set the worksheet formatting"
-#~ msgstr "Nastavit formát pracovního listu"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto-Format"
-#~ msgstr "Automatický formát..."
-
-#~ msgid "Sheet Style"
-#~ msgstr "Styl listu"
-
-#~ msgid "Select the sheet style to apply:"
-#~ msgstr "Zvolte, který styl aplikovat:"
-
-#~ msgid "Could not find image %1."
-#~ msgstr "Nelze najít obrázek %1."
-
-#~ msgid "Could not load image %1."
-#~ msgstr "Nelze načíst obrázek %1."
-
-#~ msgid "Could not find sheet-style XML file '%1'."
-#~ msgstr "Nelze najít soubor '%1' s XML tabulkou stylu."
-
-#~ msgid "Parsing error in sheet-style XML file %1."
-#~ msgstr "Chyba při zpracování souboru '%1' s XML tabulkou stylu."
-
-#~ msgid "&Auto-Filter"
-#~ msgstr "&Automatické vyplnění"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto-Filter"
-#~ msgstr "Automatické vyplnění"
