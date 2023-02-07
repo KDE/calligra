@@ -39,4 +39,6 @@ set_target_properties(autocorrection PROPERTIES
 
 install(TARGETS autocorrection  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-add_subdirectory(autotests)
+if(BUILD_TESTING)
+    add_subdirectory(autotests)
+endif()
