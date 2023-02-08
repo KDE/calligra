@@ -19,7 +19,9 @@
 #include <KLocalizedString>
 #include <QUrl>
 
-#include <pwd.h>
+#ifndef Q_OS_WIN
+    #include <pwd.h>
+#endif
 #include <unistd.h>
 
 
@@ -130,19 +132,14 @@ QString HeaderFooter::completeHeading(const QString &_data, int _page, int _page
         organization = info->authorInfo("company");
     }
 
-    char hostname[80];
-    struct passwd *p;
+// FIXME Get user on windows too
+#ifndef Q_OS_WIN
+     char hostname[80];
+     struct passwd *p;
 
-    p = getpwuid(getuid());
-    gethostname(hostname, sizeof(hostname));
-
-#ifndef Q_OS_ANDROID
-    if (full_name.isEmpty())
-        full_name = p->pw_gecos;
+     if (email_addr.isEmpty())
+         email_addr = QString("%1@%2").arg(p->pw_name).arg(hostname);
 #endif
-
-    if (email_addr.isEmpty())
-        email_addr = QString("%1@%2").arg(p->pw_name).arg(hostname);
 
     tmp = _data;
     int pos = 0;
