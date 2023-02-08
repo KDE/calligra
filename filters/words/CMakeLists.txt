@@ -72,7 +72,9 @@ if(SHOULD_BUILD_FILTER_ODT_TO_MOBI)
 endif()
 
 if(SHOULD_BUILD_FILTER_DOC_TO_ODT)
-    add_subdirectory(msword-odf)
+  if(NOT WIN32) # FIXME
+     add_subdirectory(msword-odf)
+  endif()
 endif()
 
 if(SHOULD_BUILD_FILTER_DOCX_TO_ODT)

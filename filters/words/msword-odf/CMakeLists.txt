@@ -1,4 +1,7 @@
-add_subdirectory(wv2)
+# FIXME Build wv2 on windows
+if(NOT WIN32)
+    add_subdirectory(wv2)
+endif()
 
 include_directories(
     ${ICONV_INCLUDE_DIR}
