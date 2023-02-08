@@ -50,7 +50,7 @@ class RectStorageLoader;
  * \note For data assigned to points use PointStorage.
  */
 template<typename T>
-class CALLIGRA_SHEETS_ENGINE_EXPORT RectStorage : public StorageBase
+class RectStorage : public StorageBase
 {
 public:
     explicit RectStorage(MapBase* map);
