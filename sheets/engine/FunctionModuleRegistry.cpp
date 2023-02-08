@@ -6,7 +6,6 @@
 
 #include "SheetsDebug.h"
 #include "Function.h"
-#include "FunctionModule.h"
 #include "FunctionRepository.h"
 
 #include <KConfigGroup>

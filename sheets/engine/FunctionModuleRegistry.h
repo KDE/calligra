@@ -9,12 +9,12 @@
 
 #include "sheets_engine_export.h"
 
+#include "FunctionModule.h"
+
 namespace Calligra
 {
 namespace Sheets
 {
-
-class FunctionModule;
 
 /**
  * \ingroup Plugin
