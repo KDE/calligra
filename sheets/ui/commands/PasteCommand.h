@@ -29,7 +29,7 @@ class SheetBase;
  * \ingroup Commands
  * \brief Command to paste cell data.
  */
-class CALLIGRA_SHEETS_UI_TEST_EXPORT PasteCommand : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT PasteCommand : public AbstractRegionCommand
 {
 public:
     PasteCommand(KUndo2Command *parent = 0);
