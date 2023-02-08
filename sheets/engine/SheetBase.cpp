@@ -216,7 +216,9 @@ void SheetBase::setFirstLetterUpper(bool _firstUpper)
 
 void SheetBase::showStatusMessage(const QString & /*message*/, int /*timeout*/) const {
     // TODO
+#ifndef Q_CC_MSVC
 #warning Implement this.
+#endif
 }
 
 bool SheetBase::onValidationFailed(Validity::Action action, const CellBase *cell, const QString &/*message*/, const QString &/*title*/) const
