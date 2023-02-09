@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-06 01:00+0000\n"
+"POT-Creation-Date: 2023-02-09 01:02+0000\n"
 "PO-Revision-Date: 2015-02-24 23:33+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -19,52 +19,52 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:52 core/HeaderFooter.cpp:75
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, kde-format
 msgid "page"
 msgstr "strana"
 
-#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, kde-format
 msgid "pages"
 msgstr "strane"
 
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "file"
 msgstr "datoteka"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "name"
 msgstr "ime"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, kde-format
 msgid "time"
 msgstr "vrijeme"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, kde-format
 msgid "date"
 msgstr "datum"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "author"
 msgstr "autor"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
 #, kde-format
 msgid "email"
 msgstr "email"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
 #, kde-format
 msgid "org"
 msgstr "org"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:63 core/HeaderFooter.cpp:86
 #, kde-format
 msgid "sheet"
 msgstr "tabela"
@@ -278,7 +278,7 @@ msgstr "tačno"
 msgid "false"
 msgstr "netačno"
 
-#: engine/SheetBase.cpp:343
+#: engine/SheetBase.cpp:345
 #, kde-format
 msgid "Dependency"
 msgstr "Zavisnost"
