@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-02-05 09:52+0100\n"
+"PO-Revision-Date: 2023-02-08 11:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -54,7 +54,7 @@ msgstr "წაშლა"
 #: calligrasheets.rc:54 calligrasheets_readonly.rc:9
 #, kde-format
 msgid "&View"
-msgstr "_ხედი"
+msgstr "&ხედი"
 
 #. i18n: ectx: Menu (go)
 #: calligrasheets.rc:65
@@ -20839,7 +20839,7 @@ msgstr "რიცხვის ფორმატი"
 #: ui/CellToolOptionWidgets.xml:65
 #, kde-format
 msgid "Merge"
-msgstr "_შერწყმა"
+msgstr "შერწყმა"
 
 #: ui/ExternalEditor.cpp:56
 #, kde-format

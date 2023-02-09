@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-12 10:06+0100\n"
+"PO-Revision-Date: 2023-02-08 10:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -594,7 +594,7 @@ msgstr "გადიდება"
 #: flake/tools/KoZoomToolWidget.ui:30
 #, kde-format
 msgid "Zoom Out"
-msgstr "და_პატარავება"
+msgstr "დაპატარავება"
 
 #. i18n: ectx: property (text), widget (QToolButton, corner)
 #. i18n: ectx: property (text), widget (QToolButton, smooth)
@@ -2221,7 +2221,7 @@ msgstr "სლაიდი"
 #: pageapp/KoPADocumentModel.cpp:317
 #, kde-format
 msgid "Visible"
-msgstr "_ხილული"
+msgstr "ხილული"
 
 #: pageapp/KoPADocumentModel.cpp:318
 #, kde-format
@@ -2630,7 +2630,7 @@ msgstr ""
 #: pigment/KoCompositeOpRegistry.cpp:111
 #, kde-format
 msgid "Lightness"
-msgstr "სიკა_შკაშე"
+msgstr "სიკაშკაშე"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:32
 #: pigment/KoBasicHistogramProducers.cpp:430
@@ -4054,7 +4054,7 @@ msgstr "ნაგულისხმები"
 #: widgets/KoColorPopupAction.cpp:76
 #, kde-format
 msgid "Opacity"
-msgstr "_გაუმჭვირვალობა"
+msgstr "გაუმჭვირვალობა"
 
 #: widgets/KoColorSetWidget.cpp:148
 #, kde-format
@@ -5068,7 +5068,7 @@ msgstr ""
 #: widgets/KoShadowConfigWidget.ui:67
 #, kde-format
 msgid "Blur:"
-msgstr ""
+msgstr "ბუნდოვნება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: widgets/KoShadowConfigWidget.ui:84

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-12 10:09+0100\n"
+"PO-Revision-Date: 2023-02-08 11:23+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -34,7 +34,7 @@ msgstr "&ჩასწორება"
 #: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
 #, kde-format
 msgid "&View"
-msgstr "ხ_ედი"
+msgstr "&ხედი"
 
 #. i18n: ectx: Menu (view_displaymodes)
 #. i18n: ectx: Menu (view)
@@ -264,7 +264,7 @@ msgstr ""
 #: part/dialogs/KWConfigureDialog.cpp:28
 #, kde-format
 msgid "Configure"
-msgstr ""
+msgstr "კონფიგურირება"
 
 #: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
 #, kde-format
@@ -617,7 +617,7 @@ msgstr ""
 #: part/dialogs/KWSelectBookmark.ui:27
 #, kde-format
 msgid "&Delete"
-msgstr ""
+msgstr "&წაშლა"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:68
 #, kde-format
@@ -1792,8 +1792,8 @@ msgstr ""
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ნაპოვნია 1 დამთხვევა"
+msgstr[1] "ნაპოვნია %1 დამთხვევა"
 
 #: part/widgets/KoFindToolbar.cpp:210
 #, kde-format
