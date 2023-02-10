@@ -11,7 +11,9 @@
 #include <QLocale>
 
 #include <KLocalizedString>
+#ifndef Q_OS_WIN
 #include <QSharedDataPointer>
+#endif
 
 #include "sheets_engine_export.h"
 
@@ -28,6 +30,9 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Localization
 {
 public:
     Localization();
+#ifdef Q_OS_WIN
+    Localization(const Localization &other);
+#endif
     ~Localization();
 
     void setDefaultLocale();
@@ -110,8 +115,13 @@ public:
     QString languageName(bool full) const;
 private:
     class Private;
+#ifndef Q_OS_WIN
     QSharedDataPointer<Private> d;
-
+#else
+    Private *pd;
+    class LocalizationPrivateData;
+    LocalizationPrivateData *d = nullptr;
+#endif
     void setLocale(const QLocale &l);
 };
 

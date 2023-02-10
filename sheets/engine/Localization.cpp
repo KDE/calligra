@@ -9,6 +9,51 @@
 
 #include <QDateTime>
 
+#ifdef Q_OS_WIN
+#include <QSharedDataPointer>
+
+namespace Calligra
+{
+namespace Sheets
+{
+
+class Q_DECL_HIDDEN LocalizationPrivateData : public QSharedData
+ {
+ public:
+    QLocale locale;
+    QString timeSep, dateSepShort, dateSepLong;
+    QStringList dateTimeFormats, dateFormats, timeFormats;
+    bool includesAMPM;
+    QString trueString, falseString;
+ };
+class Q_DECL_HIDDEN Localization::Private
+{
+public:
+    Private(LocalizationPrivateData *pd = nullptr) : data(pd) {}
+    QSharedDataPointer<LocalizationPrivateData> data;
+};
+}}
+
+using namespace Calligra::Sheets;
+
+Localization::Localization()
+    : pd(new Private(new LocalizationPrivateData))
+{
+    d = pd->data;
+    setDefaultLocale();
+}
+Localization::Localization(const Localization &other)
+{
+    pd->data = other.pd->data;
+    d = pd->data;
+}
+
+// This must be defined or we get errors.
+Localization::~Localization()
+{
+    delete d;
+}
+#else
 using namespace Calligra::Sheets;
 
 class Q_DECL_HIDDEN Localization::Private : public QSharedData
@@ -31,6 +76,7 @@ Localization::Localization()
 Localization::~Localization()
 {
 }
+#endif
 
 void Localization::setDefaultLocale()
 {
