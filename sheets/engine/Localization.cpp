@@ -10,6 +10,7 @@
 #include <QDateTime>
 
 #ifdef Q_OS_WIN
+// HACK to get this to compile on msvc
 #include <QSharedDataPointer>
 
 namespace Calligra
