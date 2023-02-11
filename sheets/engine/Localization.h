@@ -120,7 +120,7 @@ private:
 #else
     Private *pd;
     class PrivateData;
-    LocalizationPrivateData *d = nullptr;
+    PrivateData *d = nullptr;
 #endif
     void setLocale(const QLocale &l);
 };
