@@ -45,6 +45,7 @@ Localization::Localization()
 }
 Localization::Localization(const Localization &other)
 {
+    delete pd->data;
     pd->data = other.pd->data;
     d = pd->data;
 }
