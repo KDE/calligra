@@ -31,6 +31,7 @@
 #include "PageBreak.h"
 // #include "Pivot.h"
 #include "Sort.h"
+#include "SpellCheck.h"
 #include "Style.h"
 #include "Styles.h"
 #include "Subtotals.h"
@@ -154,6 +155,8 @@ void Actions::createActions()
     addAction(new Sort(this));
     addAction(new SortInc(this));
     addAction(new SortDesc(this));
+    // SpellCheck
+    addAction(new SpellCheck(this));
     // Style
     addAction(new Bold(this));
     addAction(new Italic(this));

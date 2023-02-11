@@ -51,7 +51,6 @@
 #include "commands/DataManipulators.h"
 #include "commands/PasteCommand.h"
 #include "commands/RowColumnManipulators.h"
-#include "commands/SpellCheckCommand.h"
 #include "commands/StyleCommand.h"
 
 // dialogs
@@ -228,10 +227,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("edit_replace", action);
 
     // -- misc actions --
-
-    action = KStandardAction::spelling(this, SLOT(spellCheck()), this);
-    action->setToolTip(i18n("Check the spelling"));
-    addAction("tools_spelling", action);
 
     action = new QAction(koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), i18n("Run Inspector..."), this);
     addAction("inspector", action);
@@ -1631,12 +1626,6 @@ void CellToolBase::slotReplace(const QString &newText, int, int, int)
         command->setSheet(d->searchInSheets.currentSheet);
         command->add(Region(d->findPos, d->searchInSheets.currentSheet));
     }
-}
-
-void CellToolBase::spellCheck()
-{
-    SpellCheckCommand* command = new SpellCheckCommand(*selection(), canvas());
-    command->start();
 }
 
 void CellToolBase::inspector()

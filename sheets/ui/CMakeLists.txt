@@ -27,6 +27,7 @@ set (actions_DIR_SRCS
     actions/PageBreak.cpp
 #    actions/Pivot.cpp
     actions/Sort.cpp
+    actions/SpellCheck.cpp
     actions/Style.cpp
     actions/Styles.cpp
     actions/Subtotals.cpp
@@ -83,7 +84,6 @@ set (commands_DIR_SRCS
     commands/PageBreakCommand.cpp
     commands/RowColumnManipulators.cpp
     commands/SheetCommands.cpp
-    commands/SpellCheckCommand.cpp
     commands/StyleCommand.cpp
     commands/CopyCommand.cpp
     commands/PasteCommand.cpp
