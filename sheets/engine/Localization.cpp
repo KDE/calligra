@@ -18,7 +18,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class Q_DECL_HIDDEN LocalizationPrivateData : public QSharedData
+class Q_DECL_HIDDEN Localization::PrivateData : public QSharedData
  {
  public:
     QLocale locale;
@@ -30,15 +30,15 @@ class Q_DECL_HIDDEN LocalizationPrivateData : public QSharedData
 class Q_DECL_HIDDEN Localization::Private
 {
 public:
-    Private(LocalizationPrivateData *pd = nullptr) : data(pd) {}
-    QSharedDataPointer<LocalizationPrivateData> data;
+    Private(Localization::PrivateData *pd = nullptr) : data(pd) {}
+    QSharedDataPointer<Localization::PrivateData> data;
 };
 }}
 
 using namespace Calligra::Sheets;
 
 Localization::Localization()
-    : pd(new Private(new LocalizationPrivateData))
+    : pd(new Private(new PrivateData))
 {
     d = pd->data;
     setDefaultLocale();

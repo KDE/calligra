@@ -119,7 +119,7 @@ private:
     QSharedDataPointer<Private> d;
 #else
     Private *pd;
-    class LocalizationPrivateData;
+    class PrivateData;
     LocalizationPrivateData *d = nullptr;
 #endif
     void setLocale(const QLocale &l);
