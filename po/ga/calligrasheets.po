@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kspread.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-09 01:02+0000\n"
+"POT-Creation-Date: 2023-02-12 00:58+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -849,7 +849,7 @@ msgstr "Uimhir"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -904,7 +904,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Filleann ARABIC(\"XCIX\") é seo: 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Bunachar Sonraí"
@@ -13281,181 +13281,176 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Athraigh an Imlíne"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "Formáid Cille..."
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Formáid Cille"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "&Function..."
 msgstr "&Feidhm..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Insert math expression"
 msgstr "Ionsáigh slonn matamaiticiúil"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:157
 #, kde-format
 msgid "From &Database..."
 msgstr "Ó &Bhunachar Sonraí..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Ionsáigh sonraí ó bhunachar sonraí SQL"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Liostaí Saincheaptha..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Cuardach i dtreo &Sprice..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:172
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Glan Roghnúchán"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert a function"
 msgstr "Ionsáigh feidhm"
 
-#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
+#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
 #, kde-format
 msgid "Others..."
 msgstr "Eile..."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Modify Cell"
 msgstr "Athraigh Cill"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Cuir an chill aibhsithe in eagar"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:192
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Move the cell object to the clipboard"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:197
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:201
+#: ui/CellToolBase.cpp:200
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Special Paste..."
 msgstr "Greamú Speisialta..."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:206
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Greamú le hIonsá"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:214
 #, fuzzy, kde-format
 #| msgid "Insert a blank cell into the spreadsheet"
 msgid "Selects all cells in the current sheet"
 msgstr "Ionsáigh cill bhán isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:233
-#, kde-format
-msgid "Check the spelling"
-msgstr "Seiceáil an litriú"
-
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Taispeáin QTableView..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Document Settings..."
 msgstr "Socruithe na Cáipéise..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Taispeáin dialóg socruithe na cáipéise"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:250
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Cosaint"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:254
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Cosaint"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:255
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:1045
+#: ui/CellToolBase.cpp:1040
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1085
+#: ui/CellToolBase.cpp:1080
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1590
+#: ui/CellToolBase.cpp:1585
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -13932,17 +13927,6 @@ msgstr "Bain Bileog"
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "Athraigh Airíonna na Bileoige"
-
-#: ui/commands/SpellCheckCommand.cpp:90
-#, kde-format
-msgid "Do you want to check the spelling in the next sheet?"
-msgstr ""
-
-#: ui/commands/SpellCheckCommand.cpp:119
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Correct Misspelled Words"
-msgstr "Ceartaigh Focail Mhílitrithe"
 
 #: ui/commands/StyleCommand.cpp:36
 #, fuzzy
@@ -15450,6 +15434,14 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Oscail an Nasc?"
+
+#~ msgid "Check the spelling"
+#~ msgstr "Seiceáil an litriú"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Correct Misspelled Words"
+#~ msgstr "Ceartaigh Focail Mhílitrithe"
 
 #~ msgid "Auto-Format..."
 #~ msgstr "UathFhormáidigh..."

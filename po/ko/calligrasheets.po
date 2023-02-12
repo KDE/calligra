@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-09 01:02+0000\n"
+"POT-Creation-Date: 2023-02-12 00:58+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -878,7 +878,7 @@ msgstr "숫자"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -935,7 +935,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\")는 99를 반환함"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "데이터베이스"
@@ -13983,168 +13983,163 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "테두리 변경"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "셀 서식..."
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "셀 서식 설정"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "&Function..."
 msgstr "함수(&F)..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Insert math expression"
 msgstr "수식 삽입"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:157
 #, kde-format
 msgid "From &Database..."
 msgstr "데이터베이스에서(&D)..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL 데이터베이스에서 데이터 삽입"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Custom Lists..."
 msgstr "사용자 정의 목록..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "정렬 또는 자동 완성에 사용할 사용자 목록 만들기"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "목표값 찾기(&G)..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:172
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "특정한 값을 찾으려고 계산 반복"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Formula Selection"
 msgstr "수식 선택"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert a function"
 msgstr "함수 삽입"
 
-#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
+#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
 #, kde-format
 msgid "Others..."
 msgstr "기타..."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Modify Cell"
 msgstr "셀 수정"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "강조 표시된 셀 편집"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "셀 객체를 클립보드로 이동"
 
-#: ui/CellToolBase.cpp:197
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "셀 객체를 클립보드에 복사"
 
-#: ui/CellToolBase.cpp:201
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "클립보드의 내용을 커서 위치에 붙여넣기"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Special Paste..."
 msgstr "선택하여 붙여넣기..."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:206
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "클립보드의 내용을 선택하여 붙여넣기"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "삽입하며 붙여넣기"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "클립보드의 셀을 스프레드시트에 삽입"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "현재 시트의 모든 셀 선택"
 
-#: ui/CellToolBase.cpp:233
-#, kde-format
-msgid "Check the spelling"
-msgstr "맞춤법 검사"
-
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Run Inspector..."
 msgstr "요소 검사 실행..."
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView 표시..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Document Settings..."
 msgstr "문서 설정..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "문서 설정 대화 상자 표시"
 
 # https://support.office.com/ko-kr/article/%EC%83%81%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EC%A0%88%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EB%B0%8F-%ED%98%BC%ED%95%A9-%EC%B0%B8%EC%A1%B0-%EA%B0%84-%EC%A0%84%ED%99%98-dfec08cd-ae65-4f56-839e-5f0d8d0baca9
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "참조 형식 전환"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Permute fixation"
 msgstr "참조 형식 전환"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:255
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "텍스트 커서의 참조 형식(상대, 절대, 혼합) 전환"
 
-#: ui/CellToolBase.cpp:1045
+#: ui/CellToolBase.cpp:1040
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1085
+#: ui/CellToolBase.cpp:1080
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14153,7 +14148,7 @@ msgstr ""
 "사용 가능한 데이터베이스 드라이버가 없습니다. 이 기능을 사용하려면 필요한 Qt "
 "데이터베이스 드라이버를 설치해야 합니다."
 
-#: ui/CellToolBase.cpp:1590
+#: ui/CellToolBase.cpp:1585
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "바꾸기"
@@ -14578,16 +14573,6 @@ msgstr "시트 삭제"
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "시트 속성 변경"
-
-#: ui/commands/SpellCheckCommand.cpp:90
-#, kde-format
-msgid "Do you want to check the spelling in the next sheet?"
-msgstr "다음 시트에서 맞춤법을 검사하시겠습니까?"
-
-#: ui/commands/SpellCheckCommand.cpp:119
-msgctxt "(qtundo-format)"
-msgid "Correct Misspelled Words"
-msgstr "맞춤법이 잘못된 단어 수정"
 
 #: ui/commands/StyleCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -16199,6 +16184,16 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "링크를 여시겠습니까?"
+
+#~ msgid "Check the spelling"
+#~ msgstr "맞춤법 검사"
+
+#~ msgid "Do you want to check the spelling in the next sheet?"
+#~ msgstr "다음 시트에서 맞춤법을 검사하시겠습니까?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Correct Misspelled Words"
+#~ msgstr "맞춤법이 잘못된 단어 수정"
 
 #~ msgid "Auto-Format..."
 #~ msgstr "자동 서식..."

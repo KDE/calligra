@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1644185 2023-02-09 01:50:52Z scripty $
+# $Id: calligrasheets.po 1644360 2023-02-12 01:47:35Z scripty $
 # $Source$
 #
 #
@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-09 01:02+0000\n"
+"POT-Creation-Date: 2023-02-12 00:58+0000\n"
 "PO-Revision-Date: 2022-11-14 08:55+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -905,7 +905,7 @@ msgstr "Število"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:144 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -963,7 +963,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vrne 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:159 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Zbirka podatkov"
@@ -14223,167 +14223,162 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Spremeni obrobo"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "Oblika celice ..."
 
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Določite oblikovanje celice"
 
-#: ui/CellToolBase.cpp:152
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkcija ..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Insert math expression"
 msgstr "Vstavi matematični izraz"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:157
 #, kde-format
 msgid "From &Database..."
 msgstr "Iz &zbirke podatkov ..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Vstavi podatke iz zbirke podatkov SQL"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Lastni seznami ..."
 
-#: ui/CellToolBase.cpp:168
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Ustvari lastne sezname za razvrščanje ali samodejno zapolnjevanje"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Iskanje &cilja ..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:172
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Ponavljajoč izračun za iskanje določene vrednosti"
 
-#: ui/CellToolBase.cpp:175
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Formula Selection"
 msgstr "Izbor formule"
 
-#: ui/CellToolBase.cpp:177
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert a function"
 msgstr "Vstavi funkcijo"
 
-#: ui/CellToolBase.cpp:178 ui/CellToolBase.cpp:1126
+#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
 #, kde-format
 msgid "Others..."
 msgstr "Drugo ..."
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Modify Cell"
 msgstr "Uredi celico"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Uredi poudarjeno celico"
 
-#: ui/CellToolBase.cpp:193
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Premakni predmet celice na odložišče"
 
-#: ui/CellToolBase.cpp:197
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopiraj predmet celice v odložišče"
 
-#: ui/CellToolBase.cpp:201
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr "Prilepi vsebino odložišča ob kazalcu"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Special Paste..."
 msgstr "Posebno lepljenje ..."
 
-#: ui/CellToolBase.cpp:207
+#: ui/CellToolBase.cpp:206
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr "Prilepi vsebino odložišča s posebnimi možnostmi"
 
-#: ui/CellToolBase.cpp:209
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Prilepi z vstavljanjem"
 
-#: ui/CellToolBase.cpp:212
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr "Vstavi celico iz odložišča v preglednico"
 
-#: ui/CellToolBase.cpp:215
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Preračunaj vrednost vseh celic na trenutnem listu"
 
-#: ui/CellToolBase.cpp:233
-#, kde-format
-msgid "Check the spelling"
-msgstr "Preveri črkovanje"
-
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Zaženi Inšpektorja ..."
 
-#: ui/CellToolBase.cpp:242
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Prikaži QTableView ..."
 
-#: ui/CellToolBase.cpp:248
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Document Settings..."
 msgstr "Nastavitve dokumenta ..."
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Prikaži pogovorno okno za nastavitev dokumenta"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permutiraj referenčno fiksacijo"
 
-#: ui/CellToolBase.cpp:259
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permutiraj fiksacijo"
 
-#: ui/CellToolBase.cpp:260
+#: ui/CellToolBase.cpp:255
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permutirajte fiksacijo sklica na kazalec besedila"
 
-#: ui/CellToolBase.cpp:1045
+#: ui/CellToolBase.cpp:1040
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Ni mogoče locirati dejavnosti %1"
 
-#: ui/CellToolBase.cpp:1085
+#: ui/CellToolBase.cpp:1080
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14392,7 +14387,7 @@ msgstr ""
 "Na voljo ni gonilnikov za baze podatkov. Če želite uporabljati to zmožnost, "
 "morate namestiti ustrezne gonilnike za podatkovno bazo Qt."
 
-#: ui/CellToolBase.cpp:1590
+#: ui/CellToolBase.cpp:1585
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Zamenjaj"
@@ -14818,16 +14813,6 @@ msgstr "Odstrani list"
 msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr "Spremeni lastnosti lista"
-
-#: ui/commands/SpellCheckCommand.cpp:90
-#, kde-format
-msgid "Do you want to check the spelling in the next sheet?"
-msgstr "Bi radi preverili črkovanje v naslednjem listu?"
-
-#: ui/commands/SpellCheckCommand.cpp:119
-msgctxt "(qtundo-format)"
-msgid "Correct Misspelled Words"
-msgstr "Popravi napačne besede"
 
 #: ui/commands/StyleCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -16448,6 +16433,16 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Odprem povezavo?"
+
+#~ msgid "Check the spelling"
+#~ msgstr "Preveri črkovanje"
+
+#~ msgid "Do you want to check the spelling in the next sheet?"
+#~ msgstr "Bi radi preverili črkovanje v naslednjem listu?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Correct Misspelled Words"
+#~ msgstr "Popravi napačne besede"
 
 #~ msgid "Auto-Format..."
 #~ msgstr "Samodejno oblikovanje ..."
