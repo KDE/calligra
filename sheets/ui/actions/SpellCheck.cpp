@@ -34,13 +34,13 @@ using namespace Calligra::Sheets;
 class SpellChecker::Private
 {
 public:
-    KoCanvasBase* canvasBase;
+    KoCanvasBase* canvas;
+    Selection *selection;
     Region region;
     CellBase currentCell;
     SheetBase *currentSheet, *firstSheet;
     Sonnet::Speller speller;
     Sonnet::Dialog* dialog;
-    KUndo2Command* command;
 };
 
 SpellChecker::SpellChecker(QObject *parent)
@@ -61,8 +61,9 @@ SpellChecker::~SpellChecker()
 void SpellChecker::check(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     d->currentSheet = d->firstSheet = sheet;
+    d->selection = selection;
     d->region = *selection;
-    d->canvasBase = selection->canvas();
+    d->canvas = selection->canvas();
     d->currentCell = CellBase();
     setSpeller(d->speller);
     if (!d->dialog) {
@@ -84,7 +85,7 @@ bool SpellChecker::nextSheet() {
 
     // Ask whether we should continue on the next sheet.
     const QString question = i18n("Do you want to check the spelling in the next sheet?");
-    if (KMessageBox::questionYesNo(d->canvasBase->canvasWidget(), question) != KMessageBox::Yes)
+    if (KMessageBox::questionYesNo(d->canvas->canvasWidget(), question) != KMessageBox::Yes)
         return false;
 
     const MapBase *map = d->currentSheet->map();
@@ -94,6 +95,7 @@ bool SpellChecker::nextSheet() {
     if (nextSheet == d->firstSheet)   // Reached the original sheet - we're done
         return false;
 
+    d->currentSheet = nextSheet;
     d->currentCell = CellBase();
     return true;
 }
@@ -178,9 +180,10 @@ QString SpellChecker::fetchMoreText()
 
         if (d->currentCell.isNull()) {
             // No more cells. Try the next sheet if we can.
-            if (d->region.isSingular() && nextSheet()) continue;
+            // If we successfully hit the next sheet, restart the function. A 'continue' would fail the end-loop check, so this is easier.
+            if (d->region.isSingular() && nextSheet()) return fetchMoreText();
 
-            break;   // We cannot advance, therefore we are done.
+            return QString();   // We cannot advance, therefore we are done.
         }
 
         Value value = d->currentCell.value();
@@ -192,33 +195,35 @@ QString SpellChecker::fetchMoreText()
         }
     } while (!d->currentCell.isNull());
 
+    if (!d->currentCell.isNull()) {
+        Sheet *sheet = dynamic_cast<Sheet *>(d->currentSheet);
+        if (d->selection->activeSheet() != sheet) {
+            d->selection->emitVisibleSheetRequested(sheet);
+        }
+        d->selection->initialize(d->currentCell.cellPosition(), sheet);
+        d->selection->scrollToCursor();
+    }
+
     return text;
 }
 
 
-// TODO - do we want to use the command like this?
 void SpellChecker::finishedCurrentFeed()
 {
     if (d->dialog->originalBuffer() == d->dialog->buffer()) return;
 
-    // TODO Stefan: KUndo2Command-based undo recording for CellStorage.
-    if (!d->command) {
-        d->command = new KUndo2Command(kundo2_i18n("Correct Misspelled Words"));
-    }
-    DataManipulator* command = new DataManipulator(d->command);
+    DataManipulator* command = new DataManipulator();
     Sheet *sheet = dynamic_cast<Sheet *>(d->currentSheet);
     command->setSheet(sheet);
     command->setValue(Value(d->dialog->buffer()));
     command->setParsing(false);
-    command->add(QPoint(d->currentCell.column(), d->currentCell.row()));
+    command->add(d->currentCell.cellPosition());
     command->setRegisterUndo(false);
+    command->execute(d->canvas);
 }
 
 void SpellChecker::finishCommand()
 {
-    if (d->command) {
-        d->canvasBase->addCommand(d->command);
-    }
     // TODO Stefan: Save the ignored words in document.
 }
 
