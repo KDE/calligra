@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-02-08 10:39+0100\n"
+"PO-Revision-Date: 2023-02-11 07:05+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1159,7 +1159,7 @@ msgstr "შიდა შეცდომა"
 #: main/KoDocument.cpp:1514
 #, kde-format
 msgid "Out of memory"
-msgstr ""
+msgstr "არასაკმარისი მეხსიერება"
 
 #: main/KoDocument.cpp:1517
 #, kde-format
@@ -1603,7 +1603,7 @@ msgstr "დაბეჭდვა დასრულებულია"
 #: main/KoPrintingDialog_p.h:137
 #, kde-format
 msgid "Close"
-msgstr "დაკეტვა"
+msgstr "დახურვა"
 
 #: main/KoPrintingDialog_p.h:157
 #, kde-format

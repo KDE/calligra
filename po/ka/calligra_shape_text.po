@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-12 10:08+0100\n"
+"PO-Revision-Date: 2023-02-11 07:05+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -708,7 +708,7 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:136
 #, kde-format
 msgid "Unpublished"
-msgstr ""
+msgstr "გამოუქვეყნებელი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -1123,7 +1123,7 @@ msgstr "ჩასმა"
 #, kde-format
 msgctxt "Close dialog"
 msgid "Close"
-msgstr "დაკეტვა"
+msgstr "დახურვა"
 
 #. i18n: ectx: property (text), widget (QLabel, filterLabel)
 #: dialogs/LanguageTab.ui:19
@@ -2511,7 +2511,7 @@ msgstr ""
 #: ReviewTool.cpp:53 ReviewTool.cpp:54
 #, kde-format
 msgid "Remove Comment"
-msgstr ""
+msgstr "კომენტარის წაშლა"
 
 #: ReviewTool.cpp:98
 #, kde-format
