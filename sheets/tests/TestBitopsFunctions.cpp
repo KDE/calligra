@@ -15,9 +15,9 @@ void TestBitopsFunctions::initTestCase()
 }
 
 // because we may need to promote expected value from integer to float
-#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,&z),(z)); }
+#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestBitopsFunctions::evaluate(const QString& formula, Value* ex) // use pointer here so msvc compiles
+Value TestBitopsFunctions::evaluate(const QString& formula, Value& ex)
 {
     Formula f;
     QString expr = formula;
@@ -26,9 +26,9 @@ Value TestBitopsFunctions::evaluate(const QString& formula, Value* ex) // use po
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex->isInteger())
-        *ex = Value(ex->asFloat());
-    if (result.isInteger() && ex->isFloat())
+    if (result.isFloat() && ex.isInteger())
+        ex = Value(ex.asFloat());
+    if (result.isInteger() && ex.isFloat())
         result = Value(result.asFloat());
 
     return result;
