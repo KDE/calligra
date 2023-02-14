@@ -15576,13 +15576,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otevřít odkaz?"
-
-#~ msgid "Check the spelling"
-#~ msgstr "Zkontrolovat pravopis"
-
-#~ msgid "Do you want to check the spelling in the next sheet?"
-#~ msgstr "Přejete si zkontrolovat pravopis v následujícím listu?"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Correct Misspelled Words"
-#~ msgstr "Opravit překlepy ve slovech"
