@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-12 00:58+0000\n"
+"POT-Creation-Date: 2023-02-15 00:59+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -269,12 +269,12 @@ msgstr "ഉദാഹരണങ്ങള്‍"
 msgid "Related Functions"
 msgstr "ഗണിത ഫങ്ഷനുകള്‍"
 
-#: engine/Localization.cpp:416
+#: engine/Localization.cpp:464
 #, kde-format
 msgid "true"
 msgstr "ശരി"
 
-#: engine/Localization.cpp:417
+#: engine/Localization.cpp:465
 #, kde-format
 msgid "false"
 msgstr "തെറ്റ്"

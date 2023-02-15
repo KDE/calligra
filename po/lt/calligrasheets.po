@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-12 00:58+0000\n"
+"POT-Creation-Date: 2023-02-15 00:59+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -267,12 +267,12 @@ msgstr "Pavyzdžiai"
 msgid "Related Functions"
 msgstr "Susijusios funkcijos"
 
-#: engine/Localization.cpp:416
+#: engine/Localization.cpp:464
 #, fuzzy, kde-format
 msgid "true"
 msgstr "tiesa"
 
-#: engine/Localization.cpp:417
+#: engine/Localization.cpp:465
 #, fuzzy, kde-format
 msgid "false"
 msgstr "netiesa"

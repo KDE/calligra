@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-12 00:58+0000\n"
+"POT-Creation-Date: 2023-02-15 00:59+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -268,12 +268,12 @@ msgstr "예제"
 msgid "Related Functions"
 msgstr "관련 함수"
 
-#: engine/Localization.cpp:416
+#: engine/Localization.cpp:464
 #, kde-format
 msgid "true"
 msgstr "참"
 
-#: engine/Localization.cpp:417
+#: engine/Localization.cpp:465
 #, kde-format
 msgid "false"
 msgstr "거짓"
