@@ -3,21 +3,21 @@
 # Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
 # Marcos  <marcos@euskalgnu.org>, 2005.
 # Hizkuntza Politika Sailburuordetza <hizpol@ej-gv.es>, 2013.
-# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2013.
+# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2013, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-15 00:59+0000\n"
-"PO-Revision-Date: 2013-12-23 17:34+0100\n"
-"Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
-"Language-Team: Basque <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-02-15 06:27+0100\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -14922,37 +14922,37 @@ msgstr "Igandea"
 #: ui/commands/AutoFillCommand.cpp:152
 #, kde-format
 msgid "Mon"
-msgstr "al."
+msgstr "Asl"
 
 #: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Tue"
-msgstr "ar."
+msgstr "Asr"
 
 #: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Wed"
-msgstr "az."
+msgstr "Asz"
 
 #: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Thu"
-msgstr "og."
+msgstr "Osg"
 
 #: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Fri"
-msgstr "or."
+msgstr "Osr"
 
 #: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Sat"
-msgstr "lr."
+msgstr "Lar"
 
 #: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sun"
-msgstr "ig."
+msgstr "Iga"
 
 #: ui/commands/AutoFillCommand.cpp:678
 msgctxt "(qtundo-format)"

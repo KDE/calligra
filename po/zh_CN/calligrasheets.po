@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-15 00:59+0000\n"
-"PO-Revision-Date: 2023-02-07 11:00\n"
+"PO-Revision-Date: 2023-02-15 11:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -15591,13 +15591,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
-
-#~ msgid "Check the spelling"
-#~ msgstr "检查拼写"
-
-#~ msgid "Do you want to check the spelling in the next sheet?"
-#~ msgstr "您想要在下一张工作表中检查拼写吗？"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Correct Misspelled Words"
-#~ msgstr "更正拼错的单词"

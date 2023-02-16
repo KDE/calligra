@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
-"PO-Revision-Date: 2023-02-07 11:00\n"
+"PO-Revision-Date: 2023-02-15 11:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -223,7 +223,7 @@ msgstr "条目“%1”不是文件。"
 #: libmsooxml/MsooXmlUtils.cpp:388
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
-msgstr "无法打开条目“%1”以写入。"
+msgstr "无法打开项目“%1”进行写入。"
 
 #: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
 #: libmsooxml/MsooXmlUtils.cpp:399
