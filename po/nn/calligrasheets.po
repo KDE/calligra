@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-12 00:58+0000\n"
+"POT-Creation-Date: 2023-02-15 00:59+0000\n"
 "PO-Revision-Date: 2022-05-29 19:18+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -272,12 +272,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr ""
 
-#: engine/Localization.cpp:416
+#: engine/Localization.cpp:464
 #, kde-format
 msgid "true"
 msgstr ""
 
-#: engine/Localization.cpp:417
+#: engine/Localization.cpp:465
 #, kde-format
 msgid "false"
 msgstr ""
