@@ -16,19 +16,17 @@
 
 #include <KLocalizedString>
 
-#include "../Selection.h"
+#include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 
-PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
+PasteInsertDialog::PasteInsertDialog(QWidget* parent)
         : KoDialog(parent)
 {
     setCaption(i18n("Paste Inserting Cells"));
     setObjectName(QLatin1String("PasteInsertDialog"));
     setModal(true);
     setButtons(Ok | Cancel);
-    m_selection = selection;
-    rect = selection->lastRange();
 
     QWidget *page = new QWidget();
     setMainWidget(page);

@@ -791,9 +791,9 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
     }
     popupActions.append(q->action("copy"));
     if (!isProtected) {
-        popupActions.append(q->action("paste"));
-        popupActions.append(q->action("specialPaste"));
-        popupActions.append(q->action("pasteWithInsertion"));
+        popupActions.append(actions->action("paste"));
+        popupActions.append(actions->action("specialPaste"));
+        popupActions.append(actions->action("pasteWithInsertion"));
         popupActions.append(popupMenuActions["separator2"]);
         popupActions.append(actions->action("clearAll"));
         popupActions.append(actions->action("adjust"));

@@ -159,9 +159,6 @@ protected Q_SLOTS:
     void edit();
     void cut() override;
     void copy() const override;
-    bool paste() override;
-    void specialPaste();
-    void pasteWithInsertion();
     void selectAll();
     void find();
     void findNext();

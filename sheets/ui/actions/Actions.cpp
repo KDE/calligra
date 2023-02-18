@@ -29,6 +29,7 @@
 #include "Merge.h"
 #include "NamedAreas.h"
 #include "PageBreak.h"
+#include "Paste.h"
 // #include "Pivot.h"
 #include "Sort.h"
 #include "SpellCheck.h"
@@ -149,6 +150,10 @@ void Actions::createActions()
     // PageBreak
     addAction(new PageBreakColumn(this));
     addAction(new PageBreakRow(this));
+    // Paste
+    addAction(new PasteRegular(this));
+    addAction(new PasteSpecial(this));
+    addAction(new PasteWithInsert(this));
     // Pivot
 //    addAction(new Pivot(this));
     // Sort

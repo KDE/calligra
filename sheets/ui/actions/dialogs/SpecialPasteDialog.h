@@ -20,7 +20,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
@@ -30,14 +29,24 @@ class SpecialPasteDialog : public KoDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:
-    explicit SpecialPasteDialog(QWidget* parent, Selection* selection);
+    explicit SpecialPasteDialog(QWidget* parent);
+
+    bool wantEverything() const;
+    bool wantText() const;
+    bool wantFormat() const;
+    bool wantNoBorder() const;
+    bool wantComment() const;
+    bool wantResult() const;
+    bool opOverwrite() const;
+    bool opAdd() const;
+    bool opSub() const;
+    bool opMul() const;
+    bool opDiv() const;
 
 public Q_SLOTS:
     void slotOk();
     void slotToggled(bool);
 
-private:
-    Selection* m_selection;
 };
 
 } // namespace Sheets

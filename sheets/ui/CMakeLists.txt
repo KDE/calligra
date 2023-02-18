@@ -25,6 +25,7 @@ set (actions_DIR_SRCS
     actions/Merge.cpp
     actions/NamedAreas.cpp
     actions/PageBreak.cpp
+    actions/Paste.cpp
 #    actions/Pivot.cpp
     actions/Sort.cpp
     actions/SpellCheck.cpp
@@ -48,10 +49,12 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/InsertDialog.cpp
     actions/dialogs/LinkDialog.cpp
     actions/dialogs/NamedAreaDialog.cpp
+    actions/dialogs/PasteInsertDialog.cpp
     actions/dialogs/Resize2Dialog.cpp
     actions/dialogs/SeriesDialog.cpp
     actions/dialogs/ShowColRowDialog.cpp
     actions/dialogs/SortDialog.cpp
+    actions/dialogs/SpecialPasteDialog.cpp
     actions/dialogs/StyleManagerDialog.cpp
     actions/dialogs/SubtotalDialog.cpp
     actions/dialogs/ValidityDialog.cpp
@@ -66,6 +69,7 @@ ki18n_wrap_ui(action_dialogs_DIR_SRCS
     actions/dialogs/ConsolidateDetailsWidget.ui
     actions/dialogs/SortWidget.ui
     actions/dialogs/SortDetailsWidget.ui
+    actions/dialogs/SpecialPasteWidget.ui
     actions/dialogs/SubtotalWidget.ui
     actions/dialogs/SubtotalsDetailsWidget.ui
 #    actions/dialogs/pivot.ui
@@ -106,9 +110,7 @@ set (dialogs_DIR_SRCS
     dialogs/LayoutPage_Protection.cpp
     dialogs/LayoutDialog.cpp
     dialogs/ListDialog.cpp
-    dialogs/PasteInsertDialog.cpp
     dialogs/ShowDialog.cpp
-    dialogs/SpecialPasteDialog.cpp
     )
 
 
@@ -117,8 +119,6 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/GoalSeekWidget.ui
     dialogs/PositionWidget.ui
     dialogs/ProtectionWidget.ui
-    dialogs/SpecialPasteWidget.ui
-
     )
 
 set (strategy_DIR_SRCS

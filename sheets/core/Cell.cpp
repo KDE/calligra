@@ -291,7 +291,7 @@ void Cell::copyContent(const Cell& cell, Paste::Mode mode, Paste::Operation op)
         else if (op == Paste::Mul) val = calc->mul (cur, val);
         else if (op == Paste::Sub) val = calc->sub (cur, val);
         else if (op == Paste::Div) val = calc->div (cur, val);
-        setCellValue (cell.value());
+        setCellValue (val);
         return;
     }
 

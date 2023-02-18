@@ -30,7 +30,6 @@
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 #include "core/StyleManager.h"
-#include "core/odf/SheetsOdf.h"
 
 #include "ActionOptionWidget.h"
 #include "CellEditor.h"
@@ -49,7 +48,6 @@
 #include "commands/AutoFillCommand.h"
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
-#include "commands/PasteCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/StyleCommand.h"
 
@@ -59,8 +57,6 @@
 #include "dialogs/GoalSeekDialog.h"
 #include "dialogs/LayoutDialog.h"
 #include "dialogs/ListDialog.h"
-#include "dialogs/PasteInsertDialog.h"
-#include "dialogs/SpecialPasteDialog.h"
 
 // strategies
 #include "strategy/AutoFillStrategy.h"
@@ -88,6 +84,7 @@
 
 // Qt
 #include <QStandardPaths>
+#include <QApplication>
 #include <QClipboard>
 #include <QBuffer>
 #include <QMimeData>
@@ -195,20 +192,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = KStandardAction::copy(this, SLOT(copy()), this);
     action->setToolTip(i18n("Copy the cell object to the clipboard"));
     addAction("copy", action);
-
-    action = KStandardAction::paste(this, SLOT(paste()), this);
-    action->setToolTip(i18n("Paste the contents of the clipboard at the cursor"));
-    addAction("paste", action);
-
-    action = new QAction(koIcon("special_paste"), i18n("Special Paste..."), this);
-    addAction("specialPaste", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::specialPaste);
-    action->setToolTip(i18n("Paste the contents of the clipboard with special options"));
-
-    action = new QAction(koIcon("insertcellcopy"), i18n("Paste with Insertion"), this);
-    addAction("pasteWithInsertion", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::pasteWithInsertion);
-    action->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet"));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     action->setToolTip(i18n("Selects all cells in the current sheet"));
@@ -1183,137 +1166,6 @@ void CellToolBase::copy() const
     mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
 
     QApplication::clipboard()->setMimeData(mimeData);
-}
-
-bool CellToolBase::paste()
-{
-    if (!selection()->activeSheet()->fullMap()->isReadWrite()) // don't paste into a read only document
-        return false;
-
-    QClipboard *clipboard = QApplication::clipboard();
-    const QMimeData* mimeData = clipboard->mimeData(QClipboard::Clipboard);
-
-    if (mimeData->hasFormat("application/vnd.oasis.opendocument.spreadsheet")) {
-        QByteArray returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
-        QByteArray arr = mimeData->data(returnedTypeMime);
-        if (arr.isEmpty())
-            return false;
-        QBuffer buffer(&arr);
-        Map *map = selection()->activeSheet()->fullMap();
-        if (!Odf::paste(buffer, map)) return false;
-    }
-
-    if (!editor()) {
-        const QMimeData* mimedata = QApplication::clipboard()->mimeData();
-        if (!mimedata->hasFormat("application/x-calligra-sheets-snippet") &&
-            !mimedata->hasHtml() && mimedata->hasText() &&
-            mimeData->text().split('\n').count() >= 2 )
-        {
-            triggerAction("insertFromClipboard");
-        } else {
-            //debugSheetsUI <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
-            PasteCommand *const command = new PasteCommand();
-            command->setSheet(selection()->activeSheet());
-            command->add(*selection());
-            command->setMimeData(mimedata, clipboard->ownsClipboard());
-            command->setPasteFC(true);
-            command->execute(canvas());
-        }
-        d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
-    } else {
-        editor()->paste();
-    }
-    selection()->emitModified();
-    return true;
-}
-
-void CellToolBase::specialPaste()
-{
-    QPointer<SpecialPasteDialog> dialog = new SpecialPasteDialog(canvas()->canvasWidget(), selection());
-    if (dialog->exec()) {
-        selection()->emitModified();
-    }
-    delete dialog;
-}
-
-void CellToolBase::pasteWithInsertion()
-{
-    QClipboard *clipboard = QApplication::clipboard();
-    const QMimeData *const mimeData = clipboard->mimeData();
-
-    PasteCommand *const command = new PasteCommand();
-    command->setSheet(selection()->activeSheet());
-    command->add(*selection());
-    command->setMimeData(mimeData, clipboard->ownsClipboard());   // this sets the source, if applicable
-
-
-    // First the insertion, then the actual pasting
-    int shiftMode = -1;   // 0 = right, 1 = down
-
-    if (command->unknownShiftDirection()) {
-        QPointer<PasteInsertDialog> dialog= new PasteInsertDialog(canvas()->canvasWidget(), selection());
-        int res = dialog->exec();
-        if (dialog->checkedRight())
-            shiftMode = 0;   // right
-        else
-            shiftMode = 1;   // down
-        delete dialog;
-        if (res != QDialog::Accepted) {
-            delete command;
-            return;
-        }
-    } else {
-        // Determine the shift direction, if needed.
-        if (command->isColumnSelected())
-            shiftMode = 0;   // right
-        else
-            shiftMode = 1;   // down
-    }
-
-    // The paste command has now generated the correct areas for us, so let's perform the insertion.
-    for (Region::ConstIterator it = command->constBegin(); it != command->constEnd(); ++it) {
-        QRect moverect = (*it)->rect();
-        SheetBase *movesheet = (*it)->sheet();
-        AbstractRegionCommand *shiftCommand = nullptr;
-
-        // Shift cells down.
-        if (shiftMode == 1) {
-            if (moverect.width() >= KS_colMax) {
-                // Rows present.
-                shiftCommand = new InsertDeleteRowManipulator();
-            } else {
-                ShiftManipulator *const command = new ShiftManipulator();
-                command->setDirection(ShiftManipulator::ShiftBottom);
-                shiftCommand = command;
-            }
-        }
-        // Shift cells right.
-        if (shiftMode == 0) {
-            if (moverect.height() >= KS_rowMax) {
-                // Columns present.
-                shiftCommand = new InsertDeleteColumnManipulator();
-            } else {
-                // Neither columns, nor rows present.
-                ShiftManipulator *const command = new ShiftManipulator();
-                command->setDirection(ShiftManipulator::ShiftRight);
-                shiftCommand = command;
-            }
-        }
-
-        // shift the data
-        if (shiftCommand) {
-            shiftCommand->setSheet(dynamic_cast<Sheet *>(movesheet));
-            shiftCommand->add(Region(moverect, movesheet));
-
-            shiftCommand->execute(canvas());
-        }
-    }
-
-    // And now we can actually execute the paste command.
-    // TODO - this works, but undo is separate for cell shift and actual paste ... maybe group these?
-    command->execute(canvas());
-
-    d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
 }
 
 void CellToolBase::deleteSelection()
