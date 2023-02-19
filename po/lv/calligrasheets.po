@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2008-07-04 16:32+0300\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -167,11 +167,10 @@ msgid "s"
 msgstr "s"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Teksts"
@@ -878,11 +877,10 @@ msgid "Number"
 msgstr "Numurs"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Formāts"
@@ -941,7 +939,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") atgriež 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Datums"
@@ -13856,169 +13854,144 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Mainīt apmales krāsu"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Cell Format..."
 msgstr "Rūtiņas Formāts..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "&Matemātiskā izteiksme..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Datums"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Datums"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Kārtot sarakstus..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "&Sērijas"
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "Forrmulas Iezīmējums"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Iespraust funkciju"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "Citi..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "Mainīt Rūtiņu"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Mainīt teksta krāsu"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:200
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Izņemt komentāru"
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "Īpaši Ielīmēt..."
-
-#: ui/CellToolBase.cpp:206
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "Izņemt komentāru"
-
-#: ui/CellToolBase.cpp:208
-#, fuzzy, kde-format
-msgid "Paste with Insertion"
-msgstr "Ielīmēt ar ievietošanu..."
-
-#: ui/CellToolBase.cpp:211
-#, fuzzy, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Iespraust Tabulu"
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rādīt &Rindas Galveni"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Lokāles Parametri"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Rādīt komentāra &indikātoru"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Precizitāte"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Precizitāte"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -14662,8 +14635,7 @@ msgstr "Iespraust funkciju"
 msgid "Starting in cell"
 msgstr "RInda"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, fuzzy, kde-format
 msgid "Result"
 msgstr "Rezultāts Y"
@@ -15600,26 +15572,6 @@ msgstr ""
 "Ievada lauks nav tukš.\n"
 "Vai vēlaties turpināt?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, fuzzy, kde-format
-msgid "Paste Inserting Cells"
-msgstr "Ielīmēt ievietojot rūtiņu(as)"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, fuzzy, kde-format
-msgid "Insert"
-msgstr "Internets"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "Pārvietoties pa labi"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr "Pārvietoties uz apakšu"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15845,71 +15797,6 @@ msgstr "Rādīt &Rindas Galveni"
 msgid "Select hidden sheets to show:"
 msgstr "Slēptas tabulas nosaukums:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "Ielīmēt Īpaši"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, fuzzy, kde-format
-msgid "Content"
-msgstr "Komentārs"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "Visu"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "Komentārs"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "Visu bez apmales"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "Operācija"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "Pārrakstīt"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "Papildinājums"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, fuzzy, kde-format
-msgid "Subtraction"
-msgstr "Atņemšana"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "Reizināšana"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "Dalīšana"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -15970,6 +15857,74 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Atvērt Norādi?"
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "Izņemt komentāru"
+
+#~ msgid "Special Paste..."
+#~ msgstr "Īpaši Ielīmēt..."
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "Izņemt komentāru"
+
+#, fuzzy
+#~ msgid "Paste with Insertion"
+#~ msgstr "Ielīmēt ar ievietošanu..."
+
+#, fuzzy
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "Iespraust Tabulu"
+
+#, fuzzy
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Ielīmēt ievietojot rūtiņu(as)"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Internets"
+
+#~ msgid "Move towards right"
+#~ msgstr "Pārvietoties pa labi"
+
+#~ msgid "Move towards bottom"
+#~ msgstr "Pārvietoties uz apakšu"
+
+#~ msgid "Special Paste"
+#~ msgstr "Ielīmēt Īpaši"
+
+#, fuzzy
+#~ msgid "Content"
+#~ msgstr "Komentārs"
+
+#~ msgid "Everything"
+#~ msgstr "Visu"
+
+#~ msgid "Comment"
+#~ msgstr "Komentārs"
+
+#~ msgid "Everything without border"
+#~ msgstr "Visu bez apmales"
+
+#~ msgid "Operation"
+#~ msgstr "Operācija"
+
+#~ msgid "Overwrite"
+#~ msgstr "Pārrakstīt"
+
+#~ msgid "Addition"
+#~ msgstr "Papildinājums"
+
+#, fuzzy
+#~ msgid "Subtraction"
+#~ msgstr "Atņemšana"
+
+#~ msgid "Multiplication"
+#~ msgstr "Reizināšana"
+
+#~ msgid "Division"
+#~ msgstr "Dalīšana"
 
 #, fuzzy
 #~ msgid "Auto-Format..."

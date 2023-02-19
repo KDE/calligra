@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2022-09-24 14:59+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -173,11 +173,10 @@ msgid "s"
 msgstr "s"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -899,11 +898,10 @@ msgid "Number"
 msgstr "Nummer"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Format"
@@ -960,7 +958,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") returnerar 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Databas"
@@ -14354,162 +14352,137 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ändra kant"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Cell Format..."
 msgstr "Cellformat..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "Ange cellformatering"
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "&Function..."
 msgstr "&Funktion..."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "Insert math expression"
 msgstr "Infoga matematiskt uttryck"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "From &Database..."
 msgstr "Från &databas..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Infoga data från en SQL-databas"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Egna listor..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Skapa egna listor för att sortera eller automatisk ifyllnad"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "M&ålsök..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Upprepad beräkning för att hitta ett särskilt värde"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formelval"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Insert a function"
 msgstr "Infoga en funktion"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "Andra..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "Ändra cell"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Redigera den markerade cellen"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Flytta cellobjektet till klippbordet"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Kopiera cellobjektet till klippbordet"
 
-#: ui/CellToolBase.cpp:200
-#, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Klistra in innehållet från klippbordet vid markören"
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "Klistra in special..."
-
-#: ui/CellToolBase.cpp:206
-#, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "Klistra in innehållet från klippbordet med särskilda alternativ"
-
-#: ui/CellToolBase.cpp:208
-#, kde-format
-msgid "Paste with Insertion"
-msgstr "Klistra in och infoga"
-
-#: ui/CellToolBase.cpp:211
-#, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Infogar en cell från klippbordet i kalkylarket"
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Markerar alla celler på det aktuella arbetsbladet"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Kör inspektör..."
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Visa QTableView..."
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Document Settings..."
 msgstr "Dokumentinställningar..."
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Visa dialogruta med dokumentinställningar"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permutera referensfixering"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permutera fixering"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permutera fixeringen av referensen vid textmarkören"
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Kan inte hitta åtgärd %1"
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14518,7 +14491,7 @@ msgstr ""
 "Inga databasdrivrutiner tillgängliga. För att använda funktionen måste du "
 "installera nödvändiga Qt databasdrivrutiner."
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Ersätt"
@@ -15130,8 +15103,7 @@ msgstr "Infoga i område"
 msgid "Starting in cell"
 msgstr "Starta i cell"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, kde-format
 msgid "Result"
 msgstr "Resultat"
@@ -16157,26 +16129,6 @@ msgstr ""
 "Inmatningsområdet är inte tomt.\n"
 "Vill du fortsätta?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, kde-format
-msgid "Paste Inserting Cells"
-msgstr "Klistra in och infoga celler"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, kde-format
-msgid "Insert"
-msgstr "Infoga"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "Flytta åt höger"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr "Flytta nedåt"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16443,71 +16395,6 @@ msgstr "Visa arbetsblad"
 msgid "Select hidden sheets to show:"
 msgstr "Välj dolda arbetsblad att visa:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "Klistra in special"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, kde-format
-msgid "Content"
-msgstr "Innehåll"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "Allting"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "Kommentar"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "Allting utan kant"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "Åtgärd"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "Skriv över"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "Addition"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, kde-format
-msgid "Subtraction"
-msgstr "Subtraktion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "Multiplikation"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "Division"
-
 #: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply"
@@ -16569,6 +16456,66 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Öppna länk?"
+
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "Klistra in innehållet från klippbordet vid markören"
+
+#~ msgid "Special Paste..."
+#~ msgstr "Klistra in special..."
+
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "Klistra in innehållet från klippbordet med särskilda alternativ"
+
+#~ msgid "Paste with Insertion"
+#~ msgstr "Klistra in och infoga"
+
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "Infogar en cell från klippbordet i kalkylarket"
+
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Klistra in och infoga celler"
+
+#~ msgid "Insert"
+#~ msgstr "Infoga"
+
+#~ msgid "Move towards right"
+#~ msgstr "Flytta åt höger"
+
+#~ msgid "Move towards bottom"
+#~ msgstr "Flytta nedåt"
+
+#~ msgid "Special Paste"
+#~ msgstr "Klistra in special"
+
+#~ msgid "Content"
+#~ msgstr "Innehåll"
+
+#~ msgid "Everything"
+#~ msgstr "Allting"
+
+#~ msgid "Comment"
+#~ msgstr "Kommentar"
+
+#~ msgid "Everything without border"
+#~ msgstr "Allting utan kant"
+
+#~ msgid "Operation"
+#~ msgstr "Åtgärd"
+
+#~ msgid "Overwrite"
+#~ msgstr "Skriv över"
+
+#~ msgid "Addition"
+#~ msgstr "Addition"
+
+#~ msgid "Subtraction"
+#~ msgstr "Subtraktion"
+
+#~ msgid "Multiplication"
+#~ msgstr "Multiplikation"
+
+#~ msgid "Division"
+#~ msgstr "Division"
 
 #~ msgid "Check the spelling"
 #~ msgstr "Kontrollera stavning"

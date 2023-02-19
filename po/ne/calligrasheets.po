@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2007-08-24 15:27+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -176,11 +176,10 @@ msgid "s"
 msgstr "सेकेन्ड"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "पाठ"
@@ -918,11 +917,10 @@ msgid "Number"
 msgstr "सङ्ख्या"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "ढाँचा"
@@ -984,7 +982,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "टुभालु"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -14657,168 +14655,143 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "किनारा परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Cell Format..."
 msgstr "कक्ष ढाँचा..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "कक्ष ढाँचा सेट गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "&Function..."
 msgstr "प्रकार्य..."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "Insert math expression"
 msgstr "गणित अभिव्यक्ति घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "From &Database..."
 msgstr "डाटाबेसबाट..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL डाटाबेसबाट डेटा घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Custom Lists..."
 msgstr "अनुकूल सूची..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "क्रमबद्धता वा स्वत: भर्नका लागि अनुकूल सूची सिर्जना गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "लक्ष्य खोजी..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "निर्दिष्ट मान फेला पार्न गणना दोहोर्याउनुहोस्"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "सूत्र चयन"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Insert a function"
 msgstr "प्रकार्य घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "अन्य..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "कक्ष परिमार्जन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "हाइलाइट गरिएको कक्ष सम्पादन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "कक्ष वस्तु क्लिपबोर्डमा सार्नुहोस्"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "क्लिपबोर्डमा वस्तु कक्ष प्रतिलिपि गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:200
-#, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "कर्सरमा क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "विशेष टाँस्नुहोस्..."
-
-#: ui/CellToolBase.cpp:206
-#, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "विशेष विकल्पसहित क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
-
-#: ui/CellToolBase.cpp:208
-#, kde-format
-msgid "Paste with Insertion"
-msgstr "प्रवेशनसँग टाँस्नुहोस्"
-
-#: ui/CellToolBase.cpp:211
-#, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "क्लिपबोर्डबाट स्प्रेडसिटमा कक्ष घुसाउँदछ"
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "हालको पानामा सबै कक्ष चयन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr "निरीक्षक चलाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "पाना देखाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "लोकेल सेटिङ"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "टिप्पणी सूचक देखाउनुहोस्"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "कर्सरमा क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14830,7 +14803,7 @@ msgstr ""
 "डाटाबेस ड्राइभर उपलब्ध छैन ।  यो विशेषता प्रयोग गर्न तपाईँले आवश्यकिय Qt 3 डाटाबेस "
 "ड्राइभर स्थापना गर्नु आवश्यक हुन्छ ।"
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 #| msgid "Replace Named Area"
 msgctxt "(qtundo-format)"
@@ -15521,8 +15494,7 @@ msgstr "क्षेत्रमा घुसाउनुहोस्"
 msgid "Starting in cell"
 msgstr "कक्ष भित्र सुरुआत गरिँदै"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, kde-format
 msgid "Result"
 msgstr "परिणाम"
@@ -16603,26 +16575,6 @@ msgstr ""
 "प्रविष्टि क्षेत्र खाली छैन ।\n"
 "तपाईँ जारी राख्न चाहनुहुन्छ?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, kde-format
-msgid "Paste Inserting Cells"
-msgstr "घुसाइएका कक्ष टाँस्नुहोस्"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, kde-format
-msgid "Insert"
-msgstr "घुसाउनुहोस्"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "दायाँतिर सार्नुहोस्"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr "तलतिर सार्नुहोस्"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16909,72 +16861,6 @@ msgstr "पाना देखाउनुहोस्"
 msgid "Select hidden sheets to show:"
 msgstr "देखाउनका लागि लुकेका पाना चयन गर्नुहोस्:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "विशेष टँसाई"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, kde-format
-msgid "Content"
-msgstr "सामाग्री"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "हरेक चिज"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "टिप्पणी"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "किनारा बाहेकका हरेक चिज"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "सञ्चालन"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "अधिलेखन"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "थप"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, fuzzy, kde-format
-#| msgid "Substraction"
-msgid "Subtraction"
-msgstr "घटाउ"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "गुणन"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "भाग"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -17039,6 +16925,68 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "लिङ्क खोल्नुहुन्छ ?"
+
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "कर्सरमा क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
+
+#~ msgid "Special Paste..."
+#~ msgstr "विशेष टाँस्नुहोस्..."
+
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "विशेष विकल्पसहित क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
+
+#~ msgid "Paste with Insertion"
+#~ msgstr "प्रवेशनसँग टाँस्नुहोस्"
+
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "क्लिपबोर्डबाट स्प्रेडसिटमा कक्ष घुसाउँदछ"
+
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "घुसाइएका कक्ष टाँस्नुहोस्"
+
+#~ msgid "Insert"
+#~ msgstr "घुसाउनुहोस्"
+
+#~ msgid "Move towards right"
+#~ msgstr "दायाँतिर सार्नुहोस्"
+
+#~ msgid "Move towards bottom"
+#~ msgstr "तलतिर सार्नुहोस्"
+
+#~ msgid "Special Paste"
+#~ msgstr "विशेष टँसाई"
+
+#~ msgid "Content"
+#~ msgstr "सामाग्री"
+
+#~ msgid "Everything"
+#~ msgstr "हरेक चिज"
+
+#~ msgid "Comment"
+#~ msgstr "टिप्पणी"
+
+#~ msgid "Everything without border"
+#~ msgstr "किनारा बाहेकका हरेक चिज"
+
+#~ msgid "Operation"
+#~ msgstr "सञ्चालन"
+
+#~ msgid "Overwrite"
+#~ msgstr "अधिलेखन"
+
+#~ msgid "Addition"
+#~ msgstr "थप"
+
+#, fuzzy
+#~| msgid "Substraction"
+#~ msgid "Subtraction"
+#~ msgstr "घटाउ"
+
+#~ msgid "Multiplication"
+#~ msgstr "गुणन"
+
+#~ msgid "Division"
+#~ msgstr "भाग"
 
 #~ msgid "Check the spelling"
 #~ msgstr "हिज्जे जाँच गर्नुहोस्"

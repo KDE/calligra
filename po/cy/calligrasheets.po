@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2004-09-09 12:35+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -177,11 +177,10 @@ msgid "s"
 msgstr "s"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Testun"
@@ -920,11 +919,10 @@ msgid "Number"
 msgstr "Rhif"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Fformat"
@@ -983,7 +981,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Mae ARABIC(\"XCIX\") yn dychwelyd 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Cronfa Ddata"
@@ -14726,166 +14724,141 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Newid Lliw'r Ffin"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Cell Format..."
 msgstr "Fformat Cell..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Gosod fformatio'r gell."
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "&Function..."
 msgstr "&Ffwythiant..."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Mewnosod mynegiad mathemateg"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "From &Database..."
 msgstr "O Gronfa &Ddata..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Mewnosod data o gronfa ddata SQL."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Rhestr Addasiedig..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Creu rhestri addasiedig i drefnu neu hunan-lenwi. "
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Ymofyn Cyrchnod..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Ailadrodd cyfrifiad i ganfod gwerth penodol."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "Dewis Fformiwla"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Mewnosod ffwythiant."
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "Eraill..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "Addasu Cell"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Golygu'r gell amlygedig."
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Symud y gwrthrych cell i'r gludfwrdd."
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Copïo'r gwrthrych cell i'r gludfwrdd."
 
-#: ui/CellToolBase.cpp:200
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "Gludo Arbennig..."
-
-#: ui/CellToolBase.cpp:206
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "Gludo cynnwys y gludfwrdd efo dewisiadau arbennig."
-
-#: ui/CellToolBase.cpp:208
-#, kde-format
-msgid "Paste with Insertion"
-msgstr "Gludo wrth Fewnosod"
-
-#: ui/CellToolBase.cpp:211
-#, fuzzy, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Mewnosod cell o'r gludfwrdd yn y daenlen."
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Ail-gyfrifo gwerth pob cell yn y weithlen gyfredol."
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Dangos Dalen..."
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Paramedrau Bro"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "D&angos dangosydd sylwad"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14894,7 +14867,7 @@ msgstr ""
 "Dim gyrryddion cronfa ddata ar gael!  Rhaid i chi grynhoi Qt efo'r "
 "gyrryddion angenrheidiol."
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
@@ -15573,8 +15546,7 @@ msgstr "Mewnosod mewn ardal"
 msgid "Starting in cell"
 msgstr "Dechrau yng nghell"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, kde-format
 msgid "Result"
 msgstr "Canlyniad"
@@ -16530,26 +16502,6 @@ msgstr ""
 "Nid yw'r ardal wag yn wag.\n"
 "Ydych am barhau?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, kde-format
-msgid "Paste Inserting Cells"
-msgstr "Gludo gan Fewnosod Celloedd"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, fuzzy, kde-format
-msgid "Insert"
-msgstr "Rhyngrwyd"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "Symud i'r dde"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr "Symud i'r gwaelod"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16775,71 +16727,6 @@ msgstr "Dangos Dalen"
 msgid "Select hidden sheets to show:"
 msgstr "Dewis dalenni cudd i'w dangos:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "Gludo Arbennig"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, fuzzy, kde-format
-msgid "Content"
-msgstr "Sylwad"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "Popeth"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "Sylwad"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "Popeth heb ffin"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "Gweithrediad"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "Trosysgrifo"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "Adio"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, fuzzy, kde-format
-msgid "Subtraction"
-msgstr "Tynnu"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "Lluosi"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "Rhannu"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -16902,6 +16789,72 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Agor Cyswllt?"
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
+
+#~ msgid "Special Paste..."
+#~ msgstr "Gludo Arbennig..."
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "Gludo cynnwys y gludfwrdd efo dewisiadau arbennig."
+
+#~ msgid "Paste with Insertion"
+#~ msgstr "Gludo wrth Fewnosod"
+
+#, fuzzy
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "Mewnosod cell o'r gludfwrdd yn y daenlen."
+
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Gludo gan Fewnosod Celloedd"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Rhyngrwyd"
+
+#~ msgid "Move towards right"
+#~ msgstr "Symud i'r dde"
+
+#~ msgid "Move towards bottom"
+#~ msgstr "Symud i'r gwaelod"
+
+#~ msgid "Special Paste"
+#~ msgstr "Gludo Arbennig"
+
+#, fuzzy
+#~ msgid "Content"
+#~ msgstr "Sylwad"
+
+#~ msgid "Everything"
+#~ msgstr "Popeth"
+
+#~ msgid "Comment"
+#~ msgstr "Sylwad"
+
+#~ msgid "Everything without border"
+#~ msgstr "Popeth heb ffin"
+
+#~ msgid "Operation"
+#~ msgstr "Gweithrediad"
+
+#~ msgid "Overwrite"
+#~ msgstr "Trosysgrifo"
+
+#~ msgid "Addition"
+#~ msgstr "Adio"
+
+#, fuzzy
+#~ msgid "Subtraction"
+#~ msgstr "Tynnu"
+
+#~ msgid "Multiplication"
+#~ msgstr "Lluosi"
+
+#~ msgid "Division"
+#~ msgstr "Rhannu"
 
 #, fuzzy
 #~ msgid "Check the spelling"

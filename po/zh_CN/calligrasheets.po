@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2023-02-15 11:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -168,11 +168,10 @@ msgid "s"
 msgstr "秒"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "文字"
@@ -853,11 +852,10 @@ msgid "Number"
 msgstr "数字"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "格式"
@@ -911,7 +909,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 返回 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "数据库"
@@ -13513,169 +13511,144 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "更改边框"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Cell Format..."
 msgstr "单元格格式..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Set the cell formatting"
 msgstr "设置单元格格式"
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "&Function..."
 msgstr "函数(&F)..."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "Insert math expression"
 msgstr "插入数学表达式"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "From &Database..."
 msgstr "从数据库(&D)..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "从 SQL 数据库插入数据"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Custom Lists..."
 msgstr "自定义列表..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "创建自定义的列表用于排序或自动填充"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "规划求解(&G)..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "重复计算以寻找指定的数值"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "公式选择"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Insert a function"
 msgstr "插入一个函数"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "其他..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "修改单元格"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "编辑加亮显示的单元格"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "将单元格里的对象移到剪贴板上"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "将单元格对象拷贝到剪贴板"
 
-#: ui/CellToolBase.cpp:200
-#, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "在光标处粘贴剪贴板的内容"
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "选择性粘贴..."
-
-#: ui/CellToolBase.cpp:206
-#, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "使用特殊的选项粘贴剪贴板上的内容"
-
-#: ui/CellToolBase.cpp:208
-#, kde-format
-msgid "Paste with Insertion"
-msgstr "粘贴并插入"
-
-#: ui/CellToolBase.cpp:211
-#, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "从剪贴板插入一个单元格到工作表中"
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "重新计算当前工作工作表中每个单元格的值"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr "运行检视器..."
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, kde-format
 msgid "Show QTableView..."
 msgstr "显示 QTableView..."
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Document Settings..."
 msgstr "文档设置..."
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "显示文档设置对话框"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr "没有可用的数据库驱动。您需要重新编译 Qt 3 包含必要的驱动程序。"
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "替换"
@@ -14285,8 +14258,7 @@ msgstr "在区域内插入"
 msgid "Starting in cell"
 msgstr "开始于单元格"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, kde-format
 msgid "Result"
 msgstr "结果"
@@ -15222,26 +15194,6 @@ msgstr ""
 "项目区域不为空。\n"
 "您要继续吗？"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, kde-format
-msgid "Paste Inserting Cells"
-msgstr "插入粘贴单元格"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, kde-format
-msgid "Insert"
-msgstr "插入"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "向右移动"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr "向下移动"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15466,71 +15418,6 @@ msgstr "显示工作表"
 msgid "Select hidden sheets to show:"
 msgstr "选择要显示的隐藏工作表："
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "选择性粘贴"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, kde-format
-msgid "Content"
-msgstr "内容"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "所有内容"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "注释"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "所有内容边框除外"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "操作"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "覆盖"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "相加"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, kde-format
-msgid "Subtraction"
-msgstr "相减"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "相乘"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "相除"
-
 #: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply"
@@ -15591,3 +15478,63 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
+
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "在光标处粘贴剪贴板的内容"
+
+#~ msgid "Special Paste..."
+#~ msgstr "选择性粘贴..."
+
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "使用特殊的选项粘贴剪贴板上的内容"
+
+#~ msgid "Paste with Insertion"
+#~ msgstr "粘贴并插入"
+
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "从剪贴板插入一个单元格到工作表中"
+
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "插入粘贴单元格"
+
+#~ msgid "Insert"
+#~ msgstr "插入"
+
+#~ msgid "Move towards right"
+#~ msgstr "向右移动"
+
+#~ msgid "Move towards bottom"
+#~ msgstr "向下移动"
+
+#~ msgid "Special Paste"
+#~ msgstr "选择性粘贴"
+
+#~ msgid "Content"
+#~ msgstr "内容"
+
+#~ msgid "Everything"
+#~ msgstr "所有内容"
+
+#~ msgid "Comment"
+#~ msgstr "注释"
+
+#~ msgid "Everything without border"
+#~ msgstr "所有内容边框除外"
+
+#~ msgid "Operation"
+#~ msgstr "操作"
+
+#~ msgid "Overwrite"
+#~ msgstr "覆盖"
+
+#~ msgid "Addition"
+#~ msgstr "相加"
+
+#~ msgid "Subtraction"
+#~ msgstr "相减"
+
+#~ msgid "Multiplication"
+#~ msgstr "相乘"
+
+#~ msgid "Division"
+#~ msgstr "相除"

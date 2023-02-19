@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2011-01-17 22:04+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -176,11 +176,10 @@ msgid "s"
 msgstr "s"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Tecse"
@@ -908,11 +907,10 @@ msgid "Number"
 msgstr "Limero"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Cogne"
@@ -969,7 +967,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ritoûne 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Båze di dnêyes"
@@ -14689,166 +14687,141 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Candjî boirdeure"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Cell Format..."
 msgstr "Cogne del boesse..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Defini l' cogne pol håynaedje do contnou del boesse."
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "&Function..."
 msgstr "&Fonccion..."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Adresse rantoele:"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "From &Database..."
 msgstr "D' ene båze di &dnêyes.."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 #| msgid "From &Database..."
 msgid "Insert data from a SQL database"
 msgstr "D' ene båze di &dnêyes.."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Djivêyes da vosse..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "C&weraedje del solucion..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "Tchoes del formule"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Insert a function"
 msgstr "Sititchî ene fonccion"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "Ôtes..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "Candjî boesse"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Candjî l' boesse e sorbriyance"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Bodjî l' cayet boesse e presse-papî"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Copyî l' cayet boesse e presse-papî"
 
-#: ui/CellToolBase.cpp:200
-#, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Aclaper l' ådvins do presse-papî a l' eplaeçmint do cursoe"
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "Sipeciå aclapaedje..."
-
-#: ui/CellToolBase.cpp:206
-#, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "Aclaper l' ådvins do presse-papî avou des speciålès tchuzes"
-
-#: ui/CellToolBase.cpp:208
-#, kde-format
-msgid "Paste with Insertion"
-msgstr "Aclaper avou Stitchaedje"
-
-#: ui/CellToolBase.cpp:211
-#, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Sititche ene boesse a pårti do presse-papî dins l' tåvlea"
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Tchoezi totes les boesses dins l' foye do moumint"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Enonder Inspector..."
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Mostrer QTableView..."
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, kde-format
 msgid "Document Settings..."
 msgstr "Apontiaedjes do documint..."
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Mostrer l' divize des apontiaedjes do documint"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Waerantixhaedje"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Waerantixhaedje"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Aclaper l' ådvins do tchapea emacralé a l' eplaeçmint do cursoe"
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14860,7 +14833,7 @@ msgstr ""
 "I gn a pont d' mineu d' båze di dnêyes. Po vs siervi di cisse fonccionålité "
 "vos avoz dandjî d' astaler les mineus d' båze di dnêyes Qt 3 k' i fåt."
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 #| msgid "Replace"
 msgctxt "(qtundo-format)"
@@ -15536,8 +15509,7 @@ msgstr "Adresse rantoele:"
 msgid "Starting in cell"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, kde-format
 msgid "Result"
 msgstr "Rizultat"
@@ -16493,29 +16465,6 @@ msgstr ""
 "Li redjon d' intrêye n' est nén vude\n"
 "Voloz continouwer?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, fuzzy, kde-format
-#| msgid "Insert Cell"
-msgid "Paste Inserting Cells"
-msgstr "Sititchî boesse"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, kde-format
-msgid "Insert"
-msgstr "Sititchî"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, fuzzy, kde-format
-#| msgid "Move to the last sheet"
-msgid "Move towards right"
-msgstr "Bodjî al dierinne foye"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, fuzzy, kde-format
-#| msgid "Move to the last sheet"
-msgid "Move towards bottom"
-msgstr "Bodjî al dierinne foye"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16749,71 +16698,6 @@ msgstr "Mostrer foye..."
 msgid "Select hidden sheets to show:"
 msgstr "Tchoezi catcheyès foyes a mostrer:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "Sipeciå aclapaedje"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, kde-format
-msgid "Content"
-msgstr "Ådvins"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "Totafwait"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "Rawete di tecse"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "Totafwait sins boirdeure"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "Operåcion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "Sipotchî"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "Acdicion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, kde-format
-msgid "Subtraction"
-msgstr "Sostraccion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "Mopliyaedje"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "Divizion"
-
 #: ui/ExternalEditor.cpp:56
 #, kde-format
 msgid "Apply"
@@ -16874,6 +16758,72 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Drovi hårdêye?"
+
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "Aclaper l' ådvins do presse-papî a l' eplaeçmint do cursoe"
+
+#~ msgid "Special Paste..."
+#~ msgstr "Sipeciå aclapaedje..."
+
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "Aclaper l' ådvins do presse-papî avou des speciålès tchuzes"
+
+#~ msgid "Paste with Insertion"
+#~ msgstr "Aclaper avou Stitchaedje"
+
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "Sititche ene boesse a pårti do presse-papî dins l' tåvlea"
+
+#, fuzzy
+#~| msgid "Insert Cell"
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Sititchî boesse"
+
+#~ msgid "Insert"
+#~ msgstr "Sititchî"
+
+#, fuzzy
+#~| msgid "Move to the last sheet"
+#~ msgid "Move towards right"
+#~ msgstr "Bodjî al dierinne foye"
+
+#, fuzzy
+#~| msgid "Move to the last sheet"
+#~ msgid "Move towards bottom"
+#~ msgstr "Bodjî al dierinne foye"
+
+#~ msgid "Special Paste"
+#~ msgstr "Sipeciå aclapaedje"
+
+#~ msgid "Content"
+#~ msgstr "Ådvins"
+
+#~ msgid "Everything"
+#~ msgstr "Totafwait"
+
+#~ msgid "Comment"
+#~ msgstr "Rawete di tecse"
+
+#~ msgid "Everything without border"
+#~ msgstr "Totafwait sins boirdeure"
+
+#~ msgid "Operation"
+#~ msgstr "Operåcion"
+
+#~ msgid "Overwrite"
+#~ msgstr "Sipotchî"
+
+#~ msgid "Addition"
+#~ msgstr "Acdicion"
+
+#~ msgid "Subtraction"
+#~ msgstr "Sostraccion"
+
+#~ msgid "Multiplication"
+#~ msgstr "Mopliyaedje"
+
+#~ msgid "Division"
+#~ msgstr "Divizion"
 
 #~ msgid "Check the spelling"
 #~ msgstr "Coridjî l' ortografeye"

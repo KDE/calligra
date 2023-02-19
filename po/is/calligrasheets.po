@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2011-07-07 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -169,11 +169,10 @@ msgid "s"
 msgstr "sek"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Texti"
@@ -876,11 +875,10 @@ msgid "Number"
 msgstr "Tala"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Snið"
@@ -939,7 +937,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") skilar 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Gagnagrunnur"
@@ -13670,169 +13668,144 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Breyta ramma"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Formhönnun reita..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Fall"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "&Stærðfræðileg segð..."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Raða listum..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "&Raðir..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "Velja formúlu"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Setja inn dálk(a)"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "Aðrir..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "Breyta reit"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Breyta lit á texta"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:200
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Eyða athugasemd"
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "Líma sérstakt..."
-
-#: ui/CellToolBase.cpp:206
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "Eyða athugasemd"
-
-#: ui/CellToolBase.cpp:208
-#, fuzzy, kde-format
-msgid "Paste with Insertion"
-msgstr "Líma með innsetningu..."
-
-#: ui/CellToolBase.cpp:211
-#, fuzzy, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Bæta við töflu"
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Sýna fyrirsögn á röð"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Staðbundin viðföng"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Sýna vísir að athugasemd"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -14475,8 +14448,7 @@ msgstr "Setja inn dálk(a)"
 msgid "Starting in cell"
 msgstr "Strengur"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, fuzzy, kde-format
 msgid "Result"
 msgstr "Útkoma"
@@ -15412,26 +15384,6 @@ msgstr ""
 "Svæðið er ekki tómt.\n"
 "Viltu halda áfram?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, fuzzy, kde-format
-msgid "Paste Inserting Cells"
-msgstr "Líma með innsettum reit(um)"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, fuzzy, kde-format
-msgid "Insert"
-msgstr "Setja inn"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "Fara til hægri"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr "Fara niður"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15657,71 +15609,6 @@ msgstr "Sýna blað"
 msgid "Select hidden sheets to show:"
 msgstr "Nafn falins dálks:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "Líma sérstakt"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, fuzzy, kde-format
-msgid "Content"
-msgstr "Innihald"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "Allt"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "Athugasemd"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "Allt án ramma"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "Aðgerð"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "Yfirskrifa"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "Viðlögn"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, fuzzy, kde-format
-msgid "Subtraction"
-msgstr "Frádráttur"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "Margföldun"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "Deilling"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -15782,6 +15669,74 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Setja inn dálk(a)"
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "Eyða athugasemd"
+
+#~ msgid "Special Paste..."
+#~ msgstr "Líma sérstakt..."
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "Eyða athugasemd"
+
+#, fuzzy
+#~ msgid "Paste with Insertion"
+#~ msgstr "Líma með innsetningu..."
+
+#, fuzzy
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "Bæta við töflu"
+
+#, fuzzy
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Líma með innsettum reit(um)"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Setja inn"
+
+#~ msgid "Move towards right"
+#~ msgstr "Fara til hægri"
+
+#~ msgid "Move towards bottom"
+#~ msgstr "Fara niður"
+
+#~ msgid "Special Paste"
+#~ msgstr "Líma sérstakt"
+
+#, fuzzy
+#~ msgid "Content"
+#~ msgstr "Innihald"
+
+#~ msgid "Everything"
+#~ msgstr "Allt"
+
+#~ msgid "Comment"
+#~ msgstr "Athugasemd"
+
+#~ msgid "Everything without border"
+#~ msgstr "Allt án ramma"
+
+#~ msgid "Operation"
+#~ msgstr "Aðgerð"
+
+#~ msgid "Overwrite"
+#~ msgstr "Yfirskrifa"
+
+#~ msgid "Addition"
+#~ msgstr "Viðlögn"
+
+#, fuzzy
+#~ msgid "Subtraction"
+#~ msgstr "Frádráttur"
+
+#~ msgid "Multiplication"
+#~ msgstr "Margföldun"
+
+#~ msgid "Division"
+#~ msgstr "Deilling"
 
 #, fuzzy
 #~ msgid "Auto-Format..."

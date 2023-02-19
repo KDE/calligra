@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2021-09-05 11:41-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -179,11 +179,10 @@ msgid "s"
 msgstr "s"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Матн"
@@ -923,11 +922,10 @@ msgid "Number"
 msgstr "Рақам"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Андоза"
@@ -987,7 +985,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") бозгаштҳо 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Асосӣ маълумот"
@@ -14759,165 +14757,140 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Нест кардани Ранги Сархад"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Cell Format..."
 msgstr "Андозаи Ячейка..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Танзим кардани параметрҳои ба андоза дарории ячейка."
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, kde-format
 msgid "&Function..."
 msgstr "&Функсия..."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Мондани ифодаи математикӣ."
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "From &Database..."
 msgstr "Аз &Асосӣ Маълумот..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Таърих монед аз асосӣ маълумот SQL."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Рӯйхатҳои Оддӣ..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Эҷоди рӯйхати истифодакунӣ барои тартиб дарорӣ ё худ пуркунӣ."
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Ҷустуҷӯи ҳал..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Такрори ҳисобкунӣ барои ҷустуҷӯи мақодири даркорӣ."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Formula Selection"
 msgstr "Интихоби формула"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Мондани функсия."
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, kde-format
 msgid "Others..."
 msgstr "Дигарҳо..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Modify Cell"
 msgstr "Дигаргун кардани ячейка"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Ячейкаи аз таги рафтани дигаргун кардан"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Буридани мавзӯъи ячейка дар буфери иваз."
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Нусха кардани мавзӯъи ҷадвал дар буфери иваз."
 
-#: ui/CellToolBase.cpp:200
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Мондани оканаи буфери иваз дар вазъияти курсори равон."
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Special Paste..."
-msgstr "Замимаи махсус..."
-
-#: ui/CellToolBase.cpp:206
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "Мондани оканаи буфери иваз аз рӯи талаботи махсус."
-
-#: ui/CellToolBase.cpp:208
-#, kde-format
-msgid "Paste with Insertion"
-msgstr "Мондани бо ҷунбондан"
-
-#: ui/CellToolBase.cpp:211
-#, fuzzy, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Мондани ячейкаҳо аз буфери иваз."
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Ҳисоб кардани маънои ҳар ячейка дар варақи равон."
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Намоиши Варақ..."
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Мамлакат ва забон"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "&Намоиши индикатори шарҳ"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Мудофиа"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Мудофиа"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Мондани оканаи буфери иваз дар вазъияти курсори равон."
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14926,7 +14899,7 @@ msgstr ""
 "Драйверҳои бонки додаҳо дастрас нестанд! Шумо бояд Qt-ро бо драйверҳои "
 "лозимӣ низ ҷамъ кунед."
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -15604,8 +15577,7 @@ msgstr "Мондани дар диапазон"
 msgid "Starting in cell"
 msgstr "Сар кардани аз ячейка"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, kde-format
 msgid "Result"
 msgstr "Натиҷа"
@@ -16562,26 +16534,6 @@ msgstr ""
 "Доираи вуруд холӣ нест.\n"
 "Шумо мехоҳед давом диҳед?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, kde-format
-msgid "Paste Inserting Cells"
-msgstr "Мондани ячейкаҳо бо ҷунбондан"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, fuzzy, kde-format
-msgid "Insert"
-msgstr "Интернет"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr "Ғеҷондани ба рост"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr "Ғеҷондани ба поён"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16807,71 +16759,6 @@ msgstr "Намоиши Варақ"
 msgid "Select hidden sheets to show:"
 msgstr "Намоиши варақҳои пинҳонӣ:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, kde-format
-msgid "Special Paste"
-msgstr "Мондани махсус"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, fuzzy, kde-format
-msgid "Content"
-msgstr "Шарх"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "Ҳама"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "Шарх"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr "Бе сарҳад"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "Кор"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "Нусха бардоштан"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "Ҷамъ кардан"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, fuzzy, kde-format
-msgid "Subtraction"
-msgstr "Тарҳ кардан"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "Зиёдкунӣ"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "Тақсимот"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -16934,6 +16821,72 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Оё пайванди шумо боз аст?"
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "Мондани оканаи буфери иваз дар вазъияти курсори равон."
+
+#~ msgid "Special Paste..."
+#~ msgstr "Замимаи махсус..."
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "Мондани оканаи буфери иваз аз рӯи талаботи махсус."
+
+#~ msgid "Paste with Insertion"
+#~ msgstr "Мондани бо ҷунбондан"
+
+#, fuzzy
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "Мондани ячейкаҳо аз буфери иваз."
+
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Мондани ячейкаҳо бо ҷунбондан"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Интернет"
+
+#~ msgid "Move towards right"
+#~ msgstr "Ғеҷондани ба рост"
+
+#~ msgid "Move towards bottom"
+#~ msgstr "Ғеҷондани ба поён"
+
+#~ msgid "Special Paste"
+#~ msgstr "Мондани махсус"
+
+#, fuzzy
+#~ msgid "Content"
+#~ msgstr "Шарх"
+
+#~ msgid "Everything"
+#~ msgstr "Ҳама"
+
+#~ msgid "Comment"
+#~ msgstr "Шарх"
+
+#~ msgid "Everything without border"
+#~ msgstr "Бе сарҳад"
+
+#~ msgid "Operation"
+#~ msgstr "Кор"
+
+#~ msgid "Overwrite"
+#~ msgstr "Нусха бардоштан"
+
+#~ msgid "Addition"
+#~ msgstr "Ҷамъ кардан"
+
+#, fuzzy
+#~ msgid "Subtraction"
+#~ msgstr "Тарҳ кардан"
+
+#~ msgid "Multiplication"
+#~ msgstr "Зиёдкунӣ"
+
+#~ msgid "Division"
+#~ msgstr "Тақсимот"
 
 #, fuzzy
 #~ msgid "Check the spelling"

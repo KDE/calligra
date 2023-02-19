@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-02 01:02+0000\n"
+"POT-Creation-Date: 2023-02-15 00:59+0000\n"
 "PO-Revision-Date: 2006-05-09 22:19+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -24,52 +24,52 @@ msgstr ""
 #. Please use the same words (even upper/lower case) as in
 #. KoPageLayoutDia.cc function setupTab2(), without the brackets "<" and ">"
 #.
-#: core/HeaderFooter.cpp:52 core/HeaderFooter.cpp:75
+#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
 #, kde-format
 msgid "page"
 msgstr "siidu"
 
-#: core/HeaderFooter.cpp:53 core/HeaderFooter.cpp:76
+#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
 #, kde-format
 msgid "pages"
 msgstr "siiddut"
 
-#: core/HeaderFooter.cpp:54 core/HeaderFooter.cpp:77
+#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
 #, kde-format
 msgid "file"
 msgstr "fiila"
 
-#: core/HeaderFooter.cpp:55 core/HeaderFooter.cpp:78
+#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
 #, kde-format
 msgid "name"
 msgstr "namma"
 
-#: core/HeaderFooter.cpp:56 core/HeaderFooter.cpp:79
+#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
 #, kde-format
 msgid "time"
 msgstr "áigi"
 
-#: core/HeaderFooter.cpp:57 core/HeaderFooter.cpp:80
+#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
 #, kde-format
 msgid "date"
 msgstr "beaivi"
 
-#: core/HeaderFooter.cpp:58 core/HeaderFooter.cpp:81
+#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
 #, kde-format
 msgid "author"
 msgstr "čálli"
 
-#: core/HeaderFooter.cpp:59 core/HeaderFooter.cpp:82
+#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
 #, kde-format
 msgid "email"
 msgstr "e-boasta"
 
-#: core/HeaderFooter.cpp:60 core/HeaderFooter.cpp:83
+#: core/HeaderFooter.cpp:62 core/HeaderFooter.cpp:85
 #, kde-format
 msgid "org"
 msgstr "org"
 
-#: core/HeaderFooter.cpp:61 core/HeaderFooter.cpp:84
+#: core/HeaderFooter.cpp:63 core/HeaderFooter.cpp:86
 #, kde-format
 msgid "sheet"
 msgstr "árka"
@@ -269,17 +269,17 @@ msgstr ""
 msgid "Related Functions"
 msgstr ""
 
-#: engine/Localization.cpp:416
+#: engine/Localization.cpp:464
 #, kde-format
 msgid "true"
 msgstr ""
 
-#: engine/Localization.cpp:417
+#: engine/Localization.cpp:465
 #, kde-format
 msgid "false"
 msgstr ""
 
-#: engine/SheetBase.cpp:343
+#: engine/SheetBase.cpp:345
 #, kde-format
 msgid "Dependency"
 msgstr "Sorjjasvuohta"
@@ -758,10 +758,9 @@ msgstr "CARX(12;1,5707) dieđiha 0,00115592"
 msgid "CARX(12;0) returns 12"
 msgstr "CARX(12;0) dieđiha 12"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
 #: functions/conversion.xml:187 functions/information.xml:40
 #: functions/math.xml:729 functions/statistical.xml:1028 functions/text.xml:140
-#: functions/text.xml:155 ui/dialogs/pivotfilters.ui:122
+#: functions/text.xml:155
 #, kde-format
 msgid "Value"
 msgstr "Árvu"
@@ -870,7 +869,7 @@ msgstr "Nummir"
 #. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:155 ui/dialogs/DataFormatWidget.ui:35
+#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
 #: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
 #, kde-format
 msgid "Format"
@@ -925,7 +924,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") dieđiha 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:240 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Diehtovuođđu"
@@ -4278,7 +4277,6 @@ msgstr ""
 msgid "IPMT(0.1;3;3;8000) equals -292.45"
 msgstr "IPMT(0,1;3;3;8000) dieđiha -292,45"
 
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: functions/financial.xml:678 functions/financial.xml:796
 #: functions/financial.xml:1395 functions/financial.xml:1422
 #: functions/math.xml:15 functions/math.xml:292 functions/math.xml:310
@@ -4286,7 +4284,7 @@ msgstr "IPMT(0,1;3;3;8000) dieđiha -292,45"
 #: functions/math.xml:471 functions/math.xml:489 functions/math.xml:503
 #: functions/math.xml:520 functions/math.xml:537 functions/math.xml:558
 #: functions/math.xml:579 functions/math.xml:600 functions/math.xml:621
-#: functions/math.xml:639 ui/dialogs/pivotmain.ui:143
+#: functions/math.xml:639
 #, kde-format
 msgid "Values"
 msgstr ""
@@ -5697,8 +5695,7 @@ msgstr "NOT(False) dieđiha True"
 msgid "NOT(true) returns False"
 msgstr "NOT(True) dieđiha False"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: functions/logic.xml:201 ui/dialogs/pivotfilters.ui:81
+#: functions/logic.xml:201
 #, kde-format
 msgid "Condition"
 msgstr "Eaktu"
@@ -5781,9 +5778,7 @@ msgstr ""
 msgid "Math"
 msgstr "Matematihkka"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
-#: ui/dialogs/pivotoptions.ui:19
 #, kde-format
 msgid "Function"
 msgstr "Funkšuvdna"
@@ -12145,8 +12140,8 @@ msgstr ""
 
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
-#: part/calligrasheets.rc:231 ui/CellToolBase.cpp:164
-#: ui/CellToolOptionWidgets.xml:3 ui/dialogs/LayoutDialog.cpp:130
+#: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
+#: ui/dialogs/LayoutDialog.cpp:130
 #, kde-format
 msgid "Font"
 msgstr ""
@@ -12157,7 +12152,7 @@ msgstr ""
 msgid "Color/Border"
 msgstr "Ivdni/ravda"
 
-#: part/CanvasBase.cpp:681
+#: part/CanvasBase.cpp:680
 #, kde-format
 msgid "Comment:"
 msgstr "Kommeanta:"
@@ -12604,51 +12599,35 @@ msgstr ""
 msgid "Down, First Column"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseField)
-#. i18n: ectx: property (text), item, widget (QComboBox, BaseItem)
-#. i18n: ectx: property (text), widget (QRadioButton, None)
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124 ui/dialogs/pivotfilters.ui:36
-#: ui/dialogs/pivotoptions.ui:95 ui/dialogs/pivotoptions.ui:104
-#: ui/dialogs/pivotsubtotals.ui:21
+#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Ii oktage"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
-#: ui/dialogs/pivotsubtotals.ui:38
 #, kde-format
 msgid "Sum"
 msgstr "Submi"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
-#: ui/dialogs/pivotsubtotals.ui:58
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
-#: ui/dialogs/pivotsubtotals.ui:53
 #, kde-format
 msgid "Max"
 msgstr "Max"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
-#: ui/dialogs/pivotsubtotals.ui:48
 #, kde-format
 msgid "Average"
 msgstr "Gaskamearri"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
 #: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
-#: ui/dialogs/pivotsubtotals.ui:43
 #, kde-format
 msgid "Count"
 msgstr "Lohku"
@@ -13076,7 +13055,7 @@ msgstr ""
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:235 part/View.cpp:2034
+#: part/View.cpp:235 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Bija sisa árkka"
@@ -13096,12 +13075,12 @@ msgstr ""
 msgid "Duplicate the selected sheet"
 msgstr ""
 
-#: part/View.cpp:246 part/View.cpp:1844 part/View.cpp:1848 part/View.cpp:2039
+#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Váldde eret árkka"
 
-#: part/View.cpp:247 part/View.cpp:2035 part/View.cpp:2040
+#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
 #, kde-format
 msgid "Remove the active sheet"
 msgstr ""
@@ -13221,12 +13200,12 @@ msgstr "&Ráhkat málle dokumentta vuodul …"
 msgid "Anchor"
 msgstr ""
 
-#: part/View.cpp:315 part/View.cpp:1084 part/View.cpp:1544
+#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Sealla"
 
-#: part/View.cpp:316 part/View.cpp:1084
+#: part/View.cpp:316 part/View.cpp:1085
 #, kde-format
 msgid "Page"
 msgstr ""
@@ -13397,62 +13376,62 @@ msgstr ""
 msgid "Calculate using the countA"
 msgstr ""
 
-#: part/View.cpp:1433 part/View.cpp:1452 part/View.cpp:1866
+#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "It sáhte rievdadit suddjejuvvon árkka"
 
-#: part/View.cpp:1472
+#: part/View.cpp:1473
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "It sáhte čiehkat maŋemuš oidnos árkka."
 
-#: part/View.cpp:1552
+#: part/View.cpp:1553
 #, kde-format
 msgid "Enter a password."
 msgstr ""
 
-#: part/View.cpp:1564
+#: part/View.cpp:1565
 #, kde-format
 msgid "Enter the password."
 msgstr ""
 
-#: part/View.cpp:1572
+#: part/View.cpp:1573
 #, kde-format
 msgid "Password is incorrect."
 msgstr "Boasto beassansátni."
 
-#: part/View.cpp:1590
+#: part/View.cpp:1591
 #, kde-format
 msgid "Protect Document"
 msgstr "Suddje dokumeantta"
 
-#: part/View.cpp:1593
+#: part/View.cpp:1594
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Ále šat suoje dokumeantta"
 
-#: part/View.cpp:1613
+#: part/View.cpp:1614
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Sudje árkka"
 
-#: part/View.cpp:1616
+#: part/View.cpp:1617
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Ale šat sudje árkka"
 
-#: part/View.cpp:1835
+#: part/View.cpp:1836
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr ""
 
-#: part/View.cpp:1844
+#: part/View.cpp:1845
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "It sáhte sihkkut áidna árkka mii lea."
 
-#: part/View.cpp:1847
+#: part/View.cpp:1848
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13461,450 +13440,274 @@ msgstr ""
 "Don leat sihkkumin doaibmi árkka.\n"
 "Hálidatgo joatkit?"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Enter name:"
 msgstr "Čále nama:"
 
-#: part/View.cpp:1872
+#: part/View.cpp:1873
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Bija árkii ođđa nama"
 
-#: part/View.cpp:1877 part/View.cpp:1883
+#: part/View.cpp:1878 part/View.cpp:1884
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Rievdat árkka nama"
 
-#: part/View.cpp:1877
+#: part/View.cpp:1878
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Árkka namma ii sáhte leat guorus."
 
-#: part/View.cpp:1883
+#: part/View.cpp:1884
 #, kde-format
 msgid "This name is already used."
 msgstr "Namma lea juo anus."
 
-#: part/View.cpp:1951
+#: part/View.cpp:1952
 #, kde-format
 msgid "Sum: "
 msgstr "Submi: "
 
-#: part/View.cpp:1955
+#: part/View.cpp:1956
 #, kde-format
 msgid "Average: "
 msgstr "Gaskamearri: "
 
-#: part/View.cpp:1959
+#: part/View.cpp:1960
 #, kde-format
 msgid "Min: "
 msgstr "Min: "
 
-#: part/View.cpp:1963
+#: part/View.cpp:1964
 #, kde-format
 msgid "Max: "
 msgstr "Max: "
 
-#: part/View.cpp:1967
+#: part/View.cpp:1968
 #, kde-format
 msgid "Count: "
 msgstr "Lohku: "
 
-#: part/View.cpp:1971
+#: part/View.cpp:1972
 #, kde-format
 msgid "CountA: "
 msgstr "Lohku-A: "
 
-#: part/View.cpp:1978
+#: part/View.cpp:1979
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: part/ViewAdaptor.cpp:128 ui/CellToolBase.cpp:1209
+#: part/ViewAdaptor.cpp:128
 msgctxt "(qtundo-format)"
 msgid "Change Text Color"
 msgstr ""
 
-#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152 ui/CellToolBase.cpp:1232
+#: part/ViewAdaptor.cpp:140 part/ViewAdaptor.cpp:152
 msgctxt "(qtundo-format)"
 msgid "Change Background Color"
 msgstr ""
 
 #: part/ViewAdaptor.cpp:164 part/ViewAdaptor.cpp:179 part/ViewAdaptor.cpp:191
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
-#: ui/CellToolBase_p.cpp:511
 msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr ""
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Cell Format..."
 msgstr "Seallahápmi …"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Set the cell formatting"
 msgstr ""
 
-#: ui/CellToolBase.cpp:163
-#, kde-format
-msgid "Select Font..."
-msgstr "Vállje fontta …"
-
-#: ui/CellToolBase.cpp:168
-#, kde-format
-msgid "Select Font Size"
-msgstr "Vállje fontasturrodaga"
-
-#: ui/CellToolBase.cpp:169
-#, kde-format
-msgid "Font Size"
-msgstr ""
-
-#: ui/CellToolBase.cpp:175
-#, kde-format
-msgid "Text Color"
-msgstr "Teakstaivdni"
-
-#: ui/CellToolBase.cpp:176
-#, kde-format
-msgid "Set the text color"
-msgstr ""
-
-#: ui/CellToolBase.cpp:184
-#, kde-format
-msgid "Select a new border color"
-msgstr ""
-
-#: ui/CellToolBase.cpp:185
-#, kde-format
-msgid "Border Color"
-msgstr "Ravdda ivdni"
-
-#: ui/CellToolBase.cpp:194
-#, kde-format
-msgid "Set the background color"
-msgstr ""
-
-#: ui/CellToolBase.cpp:195
-#, kde-format
-msgid "Background Color"
-msgstr "Duogášivdni"
-
-#: ui/CellToolBase.cpp:201 ui/CellToolBase.cpp:202
-#, kde-format
-msgid "Clear All"
-msgstr ""
-
-#: ui/CellToolBase.cpp:203
-#, kde-format
-msgid "Clear all contents and formatting of the current cell"
-msgstr ""
-
-#: ui/CellToolBase.cpp:207
-#, kde-format
-msgid "Contents"
-msgstr ""
-
-#: ui/CellToolBase.cpp:208
-#, kde-format
-msgid "Clear Contents"
-msgstr ""
-
-#: ui/CellToolBase.cpp:209
-#, kde-format
-msgid "Remove the contents of the current cell"
-msgstr ""
-
-#: ui/CellToolBase.cpp:213
-#, kde-format
-msgid "Conditional Styles..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:214
-#, kde-format
-msgid "Set cell style based on certain conditions"
-msgstr ""
-
-#: ui/CellToolBase.cpp:218 ui/dialogs/ConditionalDialog.cpp:242
-#, kde-format
-msgid "Conditional Styles"
-msgstr ""
-
-#: ui/CellToolBase.cpp:219
-#, kde-format
-msgid "Remove Conditional Styles"
-msgstr ""
-
-#: ui/CellToolBase.cpp:220
-#, kde-format
-msgid "Remove the conditional cell styles"
-msgstr ""
-
-#: ui/CellToolBase.cpp:226
-#, kde-format
-msgid "&Auto-Filter"
-msgstr ""
-
-#: ui/CellToolBase.cpp:229
-#, kde-format
-msgid "Add an automatic filter to a cell range"
-msgstr ""
-
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:151
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkšuvdna …"
 
-#: ui/CellToolBase.cpp:236
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Insert math expression"
 msgstr ""
 
-#: ui/CellToolBase.cpp:239
+#: ui/CellToolBase.cpp:157
 #, kde-format
 msgid "From &Database..."
 msgstr "&Diehtovuođus …"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Gárvves listtut …"
 
-#: ui/CellToolBase.cpp:249
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:251
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Moala ohcan …"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:172
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:256
-#, kde-format
-msgid "&Pivot Tables..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:259
-#, kde-format
-msgid "Create Pivot Tables"
-msgstr ""
-
-#: ui/CellToolBase.cpp:261
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Formula Selection"
 msgstr "Hápmoválljen"
 
-#: ui/CellToolBase.cpp:263
+#: ui/CellToolBase.cpp:176
 #, kde-format
 msgid "Insert a function"
 msgstr ""
 
-#: ui/CellToolBase.cpp:264 ui/CellToolBase.cpp:1350
+#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
 #, kde-format
 msgid "Others..."
 msgstr "Eará …"
 
-#: ui/CellToolBase.cpp:272
+#: ui/CellToolBase.cpp:185
 #, kde-format
 msgid "Modify Cell"
 msgstr "Rievdat sealla"
 
-#: ui/CellToolBase.cpp:276
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:279
+#: ui/CellToolBase.cpp:192
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:283
+#: ui/CellToolBase.cpp:196
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:287
+#: ui/CellToolBase.cpp:200
 #, kde-format
 msgid "Paste the contents of the clipboard at the cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:290
+#: ui/CellToolBase.cpp:203
 #, kde-format
 msgid "Special Paste..."
 msgstr "Erenoamáš sisaliibmen …"
 
-#: ui/CellToolBase.cpp:293
+#: ui/CellToolBase.cpp:206
 #, kde-format
 msgid "Paste the contents of the clipboard with special options"
 msgstr ""
 
-#: ui/CellToolBase.cpp:295
+#: ui/CellToolBase.cpp:208
 #, kde-format
 msgid "Paste with Insertion"
 msgstr "Liibme seallaid gaskii"
 
-#: ui/CellToolBase.cpp:298
+#: ui/CellToolBase.cpp:211
 #, kde-format
 msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:301
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:319
-#, kde-format
-msgid "Check the spelling"
-msgstr ""
-
-#: ui/CellToolBase.cpp:322
+#: ui/CellToolBase.cpp:231
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:328
+#: ui/CellToolBase.cpp:237
 #, kde-format
 msgid "Show QTableView..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:334
-#, kde-format
-msgid "Auto-Format..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:337
-#, kde-format
-msgid "Set the worksheet formatting"
-msgstr ""
-
-#: ui/CellToolBase.cpp:339
+#: ui/CellToolBase.cpp:243
 #, kde-format
 msgid "Document Settings..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:342
+#: ui/CellToolBase.cpp:246
 #, kde-format
 msgid "Show document settings dialog"
 msgstr ""
 
-#: ui/CellToolBase.cpp:346
+#: ui/CellToolBase.cpp:250
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:350
+#: ui/CellToolBase.cpp:254
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:351
+#: ui/CellToolBase.cpp:255
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1137
+#: ui/CellToolBase.cpp:1040
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1169 ui/CellToolBase.cpp:1189
-msgctxt "(qtundo-format)"
-msgid "Change Font"
-msgstr ""
-
-#: ui/CellToolBase.cpp:1256
-msgctxt "(qtundo-format)"
-msgid "Clear Text"
-msgstr ""
-
-#: ui/CellToolBase.cpp:1310
+#: ui/CellToolBase.cpp:1080
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1339
-#, kde-format
-msgid "You must select multiple cells."
-msgstr "Don fertet válljet moanaid seallaid."
-
-#: ui/CellToolBase.cpp:1814
+#: ui/CellToolBase.cpp:1585
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr ""
 
-#: ui/CellToolBase_p.cpp:480
-msgctxt "(qtundo-format)"
-msgid "Number Format"
-msgstr ""
-
-#: ui/CellToolBase_p.cpp:486
-msgctxt "(qtundo-format)"
-msgid "Currency Format"
-msgstr ""
-
-#: ui/CellToolBase_p.cpp:491
-msgctxt "(qtundo-format)"
-msgid "Percentage Format"
-msgstr ""
-
-#: ui/CellToolBase_p.cpp:496
-msgctxt "(qtundo-format)"
-msgid "Time Format"
-msgstr ""
-
-#: ui/CellToolBase_p.cpp:501
-msgctxt "(qtundo-format)"
-msgid "Date Format"
-msgstr ""
-
-#: ui/CellToolBase_p.cpp:506
-msgctxt "(qtundo-format)"
-msgid "Scientific Format"
-msgstr ""
-
-#: ui/CellToolBase_p.cpp:910
+#: ui/CellToolBase_p.cpp:848
 #, kde-format
 msgid "Selection List..."
 msgstr "Válljenlistu …"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:18
+#: ui/CellToolOptionWidgets.xml:21
 #, kde-format
 msgid "Alignment"
 msgstr ""
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:39
+#: ui/CellToolOptionWidgets.xml:42
 #, kde-format
 msgid "Borders"
 msgstr "Ravddat"
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:55
+#: ui/CellToolOptionWidgets.xml:58
 #, kde-format
 msgid "Number format"
 msgstr ""
 
 #. i18n: tag optionWidget attribute name
-#: ui/CellToolOptionWidgets.xml:65
+#: ui/CellToolOptionWidgets.xml:68
 #, kde-format
 msgid "Merge"
 msgstr ""
@@ -13926,226 +13729,200 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:107 ui/dialogs/ListDialog.cpp:126
+#: ui/commands/AutoFillCommand.cpp:109
 #, kde-format
 msgid "January"
 msgstr "Ođđajagemánnu"
 
-#: ui/commands/AutoFillCommand.cpp:108 ui/dialogs/ListDialog.cpp:127
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "February"
 msgstr "Guovvamánnu"
 
-#: ui/commands/AutoFillCommand.cpp:109 ui/dialogs/ListDialog.cpp:128
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "March"
 msgstr "Njukčamánnu"
 
-#: ui/commands/AutoFillCommand.cpp:110 ui/dialogs/ListDialog.cpp:129
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "April"
 msgstr "Cuoŋománnu"
 
-#: ui/commands/AutoFillCommand.cpp:111 ui/dialogs/ListDialog.cpp:130
-#: ui/dialogs/ListDialog.cpp:146
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "May"
 msgstr "Miessemánnu"
 
-#: ui/commands/AutoFillCommand.cpp:112 ui/dialogs/ListDialog.cpp:131
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "June"
 msgstr "Geassemánnu"
 
-#: ui/commands/AutoFillCommand.cpp:113 ui/dialogs/ListDialog.cpp:132
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "July"
 msgstr "Suoidnemánnu"
 
-#: ui/commands/AutoFillCommand.cpp:114 ui/dialogs/ListDialog.cpp:133
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "August"
 msgstr "Borgemánnu"
 
-#: ui/commands/AutoFillCommand.cpp:115 ui/dialogs/ListDialog.cpp:134
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "September"
 msgstr "Čakčamánnu"
 
-#: ui/commands/AutoFillCommand.cpp:116 ui/dialogs/ListDialog.cpp:135
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "October"
 msgstr "Golggotmánnu"
 
-#: ui/commands/AutoFillCommand.cpp:117 ui/dialogs/ListDialog.cpp:136
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "November"
 msgstr "Skábmamánnu"
 
-#: ui/commands/AutoFillCommand.cpp:118 ui/dialogs/ListDialog.cpp:137
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "December"
 msgstr "Juovlamánnu"
 
-#: ui/commands/AutoFillCommand.cpp:123 ui/dialogs/ListDialog.cpp:142
+#: ui/commands/AutoFillCommand.cpp:125
 #, kde-format
 msgid "Jan"
 msgstr "Ođđj"
 
-#: ui/commands/AutoFillCommand.cpp:124 ui/dialogs/ListDialog.cpp:143
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Feb"
 msgstr "Guov"
 
-#: ui/commands/AutoFillCommand.cpp:125 ui/dialogs/ListDialog.cpp:144
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "Mar"
 msgstr "Njuk"
 
-#: ui/commands/AutoFillCommand.cpp:126 ui/dialogs/ListDialog.cpp:145
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "Apr"
 msgstr "Cuoŋ"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "Mies"
 
-#: ui/commands/AutoFillCommand.cpp:128 ui/dialogs/ListDialog.cpp:147
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgid "Jun"
 msgstr "Geas"
 
-#: ui/commands/AutoFillCommand.cpp:129 ui/dialogs/ListDialog.cpp:148
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Jul"
 msgstr "Suoi"
 
-#: ui/commands/AutoFillCommand.cpp:130 ui/dialogs/ListDialog.cpp:149
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Aug"
 msgstr "Borg"
 
-#: ui/commands/AutoFillCommand.cpp:131 ui/dialogs/ListDialog.cpp:150
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Sep"
 msgstr "Čakč"
 
-#: ui/commands/AutoFillCommand.cpp:132 ui/dialogs/ListDialog.cpp:151
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Oct"
 msgstr "Golg"
 
-#: ui/commands/AutoFillCommand.cpp:133 ui/dialogs/ListDialog.cpp:152
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Nov"
 msgstr "Skáb"
 
-#: ui/commands/AutoFillCommand.cpp:134 ui/dialogs/ListDialog.cpp:153
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Dec"
 msgstr "Juov"
 
-#: ui/commands/AutoFillCommand.cpp:139 ui/dialogs/ListDialog.cpp:157
+#: ui/commands/AutoFillCommand.cpp:141
 #, kde-format
 msgid "Monday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:140 ui/dialogs/ListDialog.cpp:158
+#: ui/commands/AutoFillCommand.cpp:142
 #, kde-format
 msgid "Tuesday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:141 ui/dialogs/ListDialog.cpp:159
+#: ui/commands/AutoFillCommand.cpp:143
 #, kde-format
 msgid "Wednesday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:142 ui/dialogs/ListDialog.cpp:160
+#: ui/commands/AutoFillCommand.cpp:144
 #, kde-format
 msgid "Thursday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:143 ui/dialogs/ListDialog.cpp:161
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Friday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:144 ui/dialogs/ListDialog.cpp:162
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Saturday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:145 ui/dialogs/ListDialog.cpp:163
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Sunday"
 msgstr ""
 
-#: ui/commands/AutoFillCommand.cpp:150 ui/dialogs/ListDialog.cpp:167
+#: ui/commands/AutoFillCommand.cpp:152
 #, kde-format
 msgid "Mon"
 msgstr "Vuos"
 
-#: ui/commands/AutoFillCommand.cpp:151 ui/dialogs/ListDialog.cpp:168
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Tue"
 msgstr "Maŋ"
 
-#: ui/commands/AutoFillCommand.cpp:152 ui/dialogs/ListDialog.cpp:169
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Wed"
 msgstr "Gask"
 
-#: ui/commands/AutoFillCommand.cpp:153 ui/dialogs/ListDialog.cpp:170
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Thu"
 msgstr "Duor"
 
-#: ui/commands/AutoFillCommand.cpp:154 ui/dialogs/ListDialog.cpp:171
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Fri"
 msgstr "Bear"
 
-#: ui/commands/AutoFillCommand.cpp:155 ui/dialogs/ListDialog.cpp:172
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Sat"
 msgstr "Láv"
 
-#: ui/commands/AutoFillCommand.cpp:156 ui/dialogs/ListDialog.cpp:173
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sun"
 msgstr "Sotn"
 
-#: ui/commands/AutoFillCommand.cpp:679
+#: ui/commands/AutoFillCommand.cpp:678
 msgctxt "(qtundo-format)"
 msgid "Autofill"
-msgstr ""
-
-#: ui/commands/AutoFilterCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Auto-Filter"
-msgstr ""
-
-#: ui/commands/AutoFormatCommand.cpp:17
-msgctxt "(qtundo-format)"
-msgid "Auto-Format"
-msgstr ""
-
-#: ui/commands/BorderColorCommand.cpp:20
-msgctxt "(qtundo-format)"
-msgid "Change Border Color"
-msgstr ""
-
-#: ui/commands/ConditionCommand.cpp:30
-msgctxt "(qtundo-format)"
-msgid "Remove Conditional Formatting"
-msgstr ""
-
-#: ui/commands/ConditionCommand.cpp:32
-msgctxt "(qtundo-format)"
-msgid "Add Conditional Formatting"
 msgstr ""
 
 #: ui/commands/DataManipulators.cpp:107
@@ -14327,16 +14104,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Sheet Properties"
 msgstr ""
 
-#: ui/commands/SpellCheckCommand.cpp:90
-#, kde-format
-msgid "Do you want to check the spelling in the next sheet?"
-msgstr "Hálidatgo dárkkuhit riektačállima boahtte árkkas?"
-
-#: ui/commands/SpellCheckCommand.cpp:119
-msgctxt "(qtundo-format)"
-msgid "Correct Misspelled Words"
-msgstr ""
-
 #: ui/commands/StyleCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
@@ -14346,130 +14113,6 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr ""
-
-#: ui/dialogs/AutoFormatDialog.cpp:60
-#, kde-format
-msgid "Sheet Style"
-msgstr "Árkastiila"
-
-#: ui/dialogs/AutoFormatDialog.cpp:70
-#, kde-format
-msgid "Select the sheet style to apply:"
-msgstr "Vállje árkastiilla maid geavahit:"
-
-#: ui/dialogs/AutoFormatDialog.cpp:114
-#, kde-format
-msgid "Could not find image %1."
-msgstr "Ii gávdnan gova %1."
-
-#: ui/dialogs/AutoFormatDialog.cpp:121
-#, kde-format
-msgid "Could not load image %1."
-msgstr "Ii sáhttán viežžat gova %1."
-
-#: ui/dialogs/AutoFormatDialog.cpp:132
-#, kde-format
-msgid "Could not find sheet-style XML file '%1'."
-msgstr ""
-
-#: ui/dialogs/AutoFormatDialog.cpp:143
-#, kde-format
-msgid "Parsing error in sheet-style XML file %1."
-msgstr ""
-
-#: ui/dialogs/ConditionalDialog.cpp:140 ui/dialogs/ConditionalDialog.cpp:178
-#: ui/dialogs/ConditionalDialog.cpp:197 ui/dialogs/ConditionalDialog.cpp:216
-#, kde-format
-msgid "<none>"
-msgstr "<ii oktage>"
-
-#. i18ncheckarg
-#: ui/dialogs/ConditionalDialog.cpp:141
-#, kde-format
-msgid "equal to"
-msgstr "lea ovttamađu"
-
-#: ui/dialogs/ConditionalDialog.cpp:142
-#, kde-format
-msgid "greater than"
-msgstr "stuorit go"
-
-#: ui/dialogs/ConditionalDialog.cpp:143
-#, kde-format
-msgid "less than"
-msgstr "unnit go"
-
-#: ui/dialogs/ConditionalDialog.cpp:144
-#, kde-format
-msgid "equal to or greater than"
-msgstr "ovttamađu dahje stuorit go"
-
-#: ui/dialogs/ConditionalDialog.cpp:145
-#, kde-format
-msgid "equal to or less than"
-msgstr "ovttamađu dahje unnit go"
-
-#: ui/dialogs/ConditionalDialog.cpp:146 ui/dialogs/ConditionalDialog.cpp:185
-#: ui/dialogs/ConditionalDialog.cpp:204 ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "between"
-msgstr "gaskal"
-
-#: ui/dialogs/ConditionalDialog.cpp:147
-#, kde-format
-msgid "outside range"
-msgstr "gaskka olggobealde"
-
-#: ui/dialogs/ConditionalDialog.cpp:148
-#, kde-format
-msgid "different to"
-msgstr "lea nuppelágán go"
-
-#: ui/dialogs/ConditionalDialog.cpp:157
-#, kde-format
-msgid "First Condition"
-msgstr "Vuosttaš eaktu"
-
-#: ui/dialogs/ConditionalDialog.cpp:158
-#, kde-format
-msgid "Second Condition"
-msgstr "Nubbi eaktu"
-
-#: ui/dialogs/ConditionalDialog.cpp:159
-#, kde-format
-msgid "Third Condition"
-msgstr "Goalmmát eaktu"
-
-#: ui/dialogs/ConditionalDialog.cpp:160 ui/dialogs/ConditionalDialog.cpp:161
-#: ui/dialogs/ConditionalDialog.cpp:162
-#, kde-format
-msgid "Cell is"
-msgstr "Sealla lea"
-
-#: ui/dialogs/ConditionalDialog.cpp:163 ui/dialogs/ConditionalDialog.cpp:164
-#: ui/dialogs/ConditionalDialog.cpp:165
-#, kde-format
-msgid "Cell style"
-msgstr "Seallastiila"
-
-#: ui/dialogs/ConditionalDialog.cpp:185 ui/dialogs/ConditionalDialog.cpp:204
-#: ui/dialogs/ConditionalDialog.cpp:222
-#, kde-format
-msgid "different from"
-msgstr "lea nuppelágán go"
-
-#: ui/dialogs/ConditionalDialog.cpp:461
-#, kde-format
-msgid ""
-"If the first value is a number, the second value also has to be a number."
-msgstr "Jos vuosttáš árvu lea nummir, de ferte nubbi árvu maid leat nummir."
-
-#: ui/dialogs/ConditionalDialog.cpp:463
-#, kde-format
-msgid ""
-"If the first value is a string, the second value also has to be a string."
-msgstr ""
-"Jos vuosttáš árvu lea streaŋga, de ferte nubbi árvu maid leat streaŋga."
 
 #: ui/dialogs/DatabaseDialog.cpp:54
 #, kde-format
@@ -14538,8 +14181,7 @@ msgstr "Vállje čuolddaid:"
 msgid "Table"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DatabaseDialog.cpp:179 ui/dialogs/pivotmain.ui:129
+#: ui/dialogs/DatabaseDialog.cpp:179
 #, kde-format
 msgid "Columns"
 msgstr "Čuolddat"
@@ -14611,16 +14253,12 @@ msgstr "unnit dahje ovttamađu"
 msgid "Sorted by"
 msgstr "Sorterejuvvon dán bokte"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#: ui/dialogs/pivotsubtotals.ui:84
 #, kde-format
 msgid "Ascending"
 msgstr "Lassáneaddji"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, Order)
 #: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#: ui/dialogs/pivotsubtotals.ui:89
 #, kde-format
 msgid "Descending"
 msgstr "Geahppáneaddji"
@@ -14996,8 +14634,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, weight_combo)
-#. i18n: ectx: property (text), item, widget (QComboBox, ValueType)
-#: ui/dialogs/FontWidget.ui:78 ui/dialogs/pivotoptions.ui:81
+#: ui/dialogs/FontWidget.ui:78
 #, kde-format
 msgid "Normal"
 msgstr "Dábálaš"
@@ -15524,62 +15161,62 @@ msgstr "Duogášivdni:"
 msgid "No Color"
 msgstr "Ivnniid haga"
 
-#: ui/dialogs/ListDialog.cpp:47
+#: ui/dialogs/ListDialog.cpp:46
 #, kde-format
 msgid "Custom Lists"
 msgstr "Iežat listtut"
 
-#: ui/dialogs/ListDialog.cpp:57
+#: ui/dialogs/ListDialog.cpp:56
 #, kde-format
 msgid "List:"
 msgstr "Listu:"
 
-#: ui/dialogs/ListDialog.cpp:64
+#: ui/dialogs/ListDialog.cpp:63
 #, kde-format
 msgid "Entry:"
 msgstr "Mearkkuš:"
 
-#: ui/dialogs/ListDialog.cpp:70
+#: ui/dialogs/ListDialog.cpp:69
 #, kde-format
 msgid "Add"
 msgstr ""
 
-#: ui/dialogs/ListDialog.cpp:74 ui/ExternalEditor.cpp:61
+#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
 #, kde-format
 msgid "Cancel"
 msgstr ""
 
-#: ui/dialogs/ListDialog.cpp:78
+#: ui/dialogs/ListDialog.cpp:77
 #, kde-format
 msgid "New"
 msgstr ""
 
-#: ui/dialogs/ListDialog.cpp:81
+#: ui/dialogs/ListDialog.cpp:80
 #, kde-format
 msgid "Remove"
 msgstr ""
 
-#: ui/dialogs/ListDialog.cpp:84
+#: ui/dialogs/ListDialog.cpp:83
 #, kde-format
 msgid "Modify"
 msgstr ""
 
-#: ui/dialogs/ListDialog.cpp:87
+#: ui/dialogs/ListDialog.cpp:86
 #, kde-format
 msgid "Copy"
 msgstr ""
 
-#: ui/dialogs/ListDialog.cpp:251
+#: ui/dialogs/ListDialog.cpp:238
 #, kde-format
 msgid "Do you really want to remove this list?"
 msgstr "Hálidatgo duođaid váldit eret dán listtu?"
 
-#: ui/dialogs/ListDialog.cpp:252
+#: ui/dialogs/ListDialog.cpp:239
 #, kde-format
 msgid "Remove List"
 msgstr "Váldde eret listtu"
 
-#: ui/dialogs/ListDialog.cpp:268
+#: ui/dialogs/ListDialog.cpp:259
 #, kde-format
 msgid ""
 "Entry area is not empty.\n"
@@ -15607,194 +15244,6 @@ msgstr "Sirdde olgešbeallái"
 #, kde-format
 msgid "Move towards bottom"
 msgstr "Sirdit vulosguvlui"
-
-#: ui/dialogs/pivot.cpp:31
-#, kde-format
-msgid "Select Source"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, Current)
-#: ui/dialogs/pivot.ui:25
-#, kde-format
-msgid "Current Selection"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, External)
-#: ui/dialogs/pivot.ui:32
-#, kde-format
-msgid "External Source"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotfilters.ui:21
-#, kde-format
-msgid "Operator"
-msgstr "Operáhtor"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:41
-#, kde-format
-msgid "And"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Operator)
-#: ui/dialogs/pivotfilters.ui:46
-#, kde-format
-msgid "Or"
-msgstr "dahje"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotfilters.ui:61
-#, kde-format
-msgid "Field"
-msgstr "Gieddi"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:89
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:94
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:99
-#, kde-format
-msgid "=="
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, Condition)
-#: ui/dialogs/pivotfilters.ui:104
-#, kde-format
-msgid "!="
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:49
-#, kde-format
-msgid "Pivot Table Configuration Window"
-msgstr ""
-
-#: ui/dialogs/pivotmain.cpp:53
-#, kde-format
-msgid "Add Filter"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/pivotmain.ui:19
-#, kde-format
-msgid "Drag from Labels and drop in the desired field"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: ui/dialogs/pivotmain.ui:32
-#, kde-format
-msgid "Labels"
-msgstr "Gilkorat"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotmain.ui:46
-#, kde-format
-msgid "Select Option"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:54 ui/dialogs/pivotoptions.ui:52
-#, kde-format
-msgid "sum"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:59 ui/dialogs/pivotoptions.ui:57
-#, kde-format
-msgid "average"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:64 ui/dialogs/pivotoptions.ui:67
-#, kde-format
-msgid "max"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:69 ui/dialogs/pivotoptions.ui:72
-#, kde-format
-msgctxt "minimum"
-msgid "min"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QComboBox, selectOption)
-#. i18n: ectx: property (text), item, widget (QComboBox, SelectFunction)
-#: ui/dialogs/pivotmain.ui:74 ui/dialogs/pivotoptions.ui:62
-#, kde-format
-msgid "count"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalRows)
-#: ui/dialogs/pivotmain.ui:93
-#, kde-format
-msgid "Total Rows"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, TotalColumns)
-#: ui/dialogs/pivotmain.ui:100
-#, kde-format
-msgid "Total Columns"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotmain.ui:115
-#, kde-format
-msgid "Rows"
-msgstr ""
-
-#: ui/dialogs/pivotoptions.cpp:29
-#, kde-format
-msgid "Pivot Options"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/pivotoptions.ui:26
-#, kde-format
-msgid "Value Type"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/pivotoptions.ui:33
-#, kde-format
-msgid "Base Field"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/pivotoptions.ui:40
-#, kde-format
-msgid "Base Item"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, ManualSelection)
-#: ui/dialogs/pivotsubtotals.ui:28
-#, kde-format
-msgid "Manual Selection"
-msgstr "Manuella válljen"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, Functions)
-#: ui/dialogs/pivotsubtotals.ui:63
-#, kde-format
-msgid "Product"
-msgstr "Buvtta"
-
-#. i18n: ectx: property (text), widget (QCheckBox, SortBy)
-#: ui/dialogs/pivotsubtotals.ui:73
-#, kde-format
-msgid "Sort By"
-msgstr "Sortere dán bokte"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45

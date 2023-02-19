@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -170,11 +170,10 @@ msgid "s"
 msgstr "s"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Tèxt"
@@ -903,11 +902,10 @@ msgid "Number"
 msgstr "Nombre"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Format"
@@ -969,7 +967,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "valor"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Donadas"
@@ -14356,188 +14354,161 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Bordadura"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "Cell Format..."
 msgstr "valor"
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "Set the cell formatting"
 msgstr "valor"
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "&Function..."
 msgstr "Foncion"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 #| msgid "Insert Series"
 msgid "Insert math expression"
 msgstr "Inserir una seria de donadas"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "Donadas"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "Insert data from a SQL database"
 msgstr "Donadas"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom Lists..."
 msgstr "Personalizat..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "&Goal Seek..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 #| msgid "Clear Selection"
 msgid "Formula Selection"
 msgstr "Proteccion"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Insert a function"
 msgstr "Foncion"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "Sèria"
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "Modificar"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr ""
 
-#: ui/CellToolBase.cpp:200
-#, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr ""
-
-#: ui/CellToolBase.cpp:203
-#, fuzzy, kde-format
-#| msgid "Parameters"
-msgid "Special Paste..."
-msgstr "Paramètres"
-
-#: ui/CellToolBase.cpp:206
-#, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr ""
-
-#: ui/CellToolBase.cpp:208
-#, fuzzy, kde-format
-#| msgid "Insert Cells"
-msgid "Paste with Insertion"
-msgstr "Inserir de cellulas"
-
-#: ui/CellToolBase.cpp:211
-#, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr ""
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 #| msgid "Sheet"
 msgid "Selects all cells in the current sheet"
 msgstr "Fuèlhs"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "Mostrar la fuèlha"
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 #| msgid "Printing"
 msgid "Document Settings..."
 msgstr "Estampatge"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, fuzzy, kde-format
 #| msgid "Printing"
 msgid "Show document settings dialog"
 msgstr "Estampatge"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Proteccion"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Proteccion"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
@@ -15234,8 +15205,7 @@ msgstr "Foncion"
 msgid "Starting in cell"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, kde-format
 msgid "Result"
 msgstr "Resulta"
@@ -16204,27 +16174,6 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, fuzzy, kde-format
-#| msgid "Insert Cells"
-msgid "Paste Inserting Cells"
-msgstr "Inserir de cellulas"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, kde-format
-msgid "Insert"
-msgstr "Inserir"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, kde-format
-msgid "Move towards right"
-msgstr ""
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, kde-format
-msgid "Move towards bottom"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16455,73 +16404,6 @@ msgstr "Mostrar la fuèlha"
 msgid "Select hidden sheets to show:"
 msgstr "Protegir la fuèlha"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, fuzzy, kde-format
-#| msgid "Parameters"
-msgid "Special Paste"
-msgstr "Paramètres"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, kde-format
-msgid "Content"
-msgstr "Contengut"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, kde-format
-msgid "Everything"
-msgstr "Tot"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, kde-format
-msgid "Comment"
-msgstr "Comentari"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, kde-format
-msgid "Everything without border"
-msgstr ""
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, kde-format
-msgid "Operation"
-msgstr "Operacion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, kde-format
-msgid "Overwrite"
-msgstr "Remplaçar"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, kde-format
-msgid "Addition"
-msgstr "Adicion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, fuzzy, kde-format
-#| msgid "Fraction"
-msgid "Subtraction"
-msgstr "Fraccion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, kde-format
-msgid "Multiplication"
-msgstr "Multiplicacion"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, kde-format
-msgid "Division"
-msgstr "Division"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -16585,6 +16467,58 @@ msgstr ""
 #| msgid "Insert Link"
 msgid "Open Link?"
 msgstr "Inserir un ligam"
+
+#, fuzzy
+#~| msgid "Parameters"
+#~ msgid "Special Paste..."
+#~ msgstr "Paramètres"
+
+#, fuzzy
+#~| msgid "Insert Cells"
+#~ msgid "Paste with Insertion"
+#~ msgstr "Inserir de cellulas"
+
+#, fuzzy
+#~| msgid "Insert Cells"
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Inserir de cellulas"
+
+#~ msgid "Insert"
+#~ msgstr "Inserir"
+
+#, fuzzy
+#~| msgid "Parameters"
+#~ msgid "Special Paste"
+#~ msgstr "Paramètres"
+
+#~ msgid "Content"
+#~ msgstr "Contengut"
+
+#~ msgid "Everything"
+#~ msgstr "Tot"
+
+#~ msgid "Comment"
+#~ msgstr "Comentari"
+
+#~ msgid "Operation"
+#~ msgstr "Operacion"
+
+#~ msgid "Overwrite"
+#~ msgstr "Remplaçar"
+
+#~ msgid "Addition"
+#~ msgstr "Adicion"
+
+#, fuzzy
+#~| msgid "Fraction"
+#~ msgid "Subtraction"
+#~ msgstr "Fraccion"
+
+#~ msgid "Multiplication"
+#~ msgstr "Multiplicacion"
+
+#~ msgid "Division"
+#~ msgstr "Division"
 
 #, fuzzy
 #~| msgid "Format"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-15 00:59+0000\n"
+"POT-Creation-Date: 2023-02-19 00:58+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -171,11 +171,10 @@ msgid "s"
 msgstr "с"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
-#. i18n: ectx: property (text), widget (QRadioButton, textButton)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
 #: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94 ui/dialogs/SpecialPasteWidget.ui:51
+#: ui/dialogs/LayoutPage_Float.cpp:94
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "Тэкст"
@@ -880,11 +879,10 @@ msgid "Number"
 msgstr "Нумар"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), widget (QRadioButton, formatButton)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:143 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52 ui/dialogs/SpecialPasteWidget.ui:58
+#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, fuzzy, kde-format
 msgid "Format"
 msgstr "Фармат"
@@ -940,7 +938,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") верне 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:158 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "База дадзеных"
@@ -14003,162 +14001,137 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Змяніць колер меж"
 
-#: ui/CellToolBase.cpp:142
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Cell Format..."
 msgstr "Фармат вочак..."
 
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 msgid "Set the cell formatting"
 msgstr "Усталяваць параметры фарматавання вочка."
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:148
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Функцыя..."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:151
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Уставіць матэматычны выраз"
 
-#: ui/CellToolBase.cpp:157
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "З базы дадзеных..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:158
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Уставіць дадзеныя з базы дадзеных SQL"
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Спісы карыстача..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:164
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Кіраванне карыстацкімі спісамі для сартавання або аўтазапаўненні"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Пошук рашэння..."
 
-#: ui/CellToolBase.cpp:172
+#: ui/CellToolBase.cpp:169
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Паўтор вылічэння для пошуку патрэбнага значэння"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Выбар формулы"
 
-#: ui/CellToolBase.cpp:176
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Уставіць функцыю"
 
-#: ui/CellToolBase.cpp:177 ui/CellToolBase.cpp:1121
+#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Іншыя..."
 
-#: ui/CellToolBase.cpp:185
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Змяніць вочка"
 
-#: ui/CellToolBase.cpp:189
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Змяніць бягучае вочка"
 
-#: ui/CellToolBase.cpp:192
+#: ui/CellToolBase.cpp:189
 #, fuzzy, kde-format
 msgid "Move the cell object to the clipboard"
 msgstr "Выразаць аб'ект вочка ў буфер абмену"
 
-#: ui/CellToolBase.cpp:196
+#: ui/CellToolBase.cpp:193
 #, fuzzy, kde-format
 msgid "Copy the cell object to the clipboard"
 msgstr "Скапіраваць аб'ект табліцы ў буфер абмену"
 
-#: ui/CellToolBase.cpp:200
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard at the cursor"
-msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
-
-#: ui/CellToolBase.cpp:203
-#, fuzzy, kde-format
-msgid "Special Paste..."
-msgstr "Адмысловая ўстаўка..."
-
-#: ui/CellToolBase.cpp:206
-#, fuzzy, kde-format
-msgid "Paste the contents of the clipboard with special options"
-msgstr "Уставіць змесціва буфера абмену па адмысловых умовах"
-
-#: ui/CellToolBase.cpp:208
-#, fuzzy, kde-format
-msgid "Paste with Insertion"
-msgstr "Уставіць са зрухам"
-
-#: ui/CellToolBase.cpp:211
-#, fuzzy, kde-format
-msgid "Inserts a cell from the clipboard into the spreadsheet"
-msgstr "Уставіць вочкі з буфера абмену"
-
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:197
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Пералічыць значэнне кожнага вочка на бягучым лісце"
 
-#: ui/CellToolBase.cpp:231
+#: ui/CellToolBase.cpp:214
 #, fuzzy, kde-format
 msgid "Run Inspector..."
 msgstr "Запуск інспектара..."
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:220
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Паказаць ліст..."
 
-#: ui/CellToolBase.cpp:243
+#: ui/CellToolBase.cpp:226
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Налада лакалі"
 
-#: ui/CellToolBase.cpp:246
+#: ui/CellToolBase.cpp:229
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Паказваць індыкатар каментара"
 
-#: ui/CellToolBase.cpp:250
+#: ui/CellToolBase.cpp:233
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Абарона ад змен"
 
-#: ui/CellToolBase.cpp:254
+#: ui/CellToolBase.cpp:237
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Абарона ад змен"
 
-#: ui/CellToolBase.cpp:255
+#: ui/CellToolBase.cpp:238
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
 
-#: ui/CellToolBase.cpp:1040
+#: ui/CellToolBase.cpp:1023
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1080
+#: ui/CellToolBase.cpp:1063
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14166,7 +14139,7 @@ msgid ""
 msgstr ""
 "Драйверы баз дадзеных недаступныя. Перазбярыце Qt з неабходнымі драйверамі."
 
-#: ui/CellToolBase.cpp:1585
+#: ui/CellToolBase.cpp:1437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Replace"
@@ -14814,8 +14787,7 @@ msgstr "Уставіць у дыяпазон"
 msgid "Starting in cell"
 msgstr "Пачынальна з вочка"
 
-#. i18n: ectx: property (text), widget (QRadioButton, resultButton)
-#: ui/dialogs/DatabaseDialog.cpp:321 ui/dialogs/SpecialPasteWidget.ui:72
+#: ui/dialogs/DatabaseDialog.cpp:321
 #, fuzzy, kde-format
 msgid "Result"
 msgstr "Вынік"
@@ -15816,26 +15788,6 @@ msgstr ""
 "Дыяпазон утрымоўвае дадзеныя.\n"
 "Жадаеце працягнуць?"
 
-#: ui/dialogs/PasteInsertDialog.cpp:26
-#, fuzzy, kde-format
-msgid "Paste Inserting Cells"
-msgstr "Уставіць вочкі са зрухам"
-
-#: ui/dialogs/PasteInsertDialog.cpp:37
-#, fuzzy, kde-format
-msgid "Insert"
-msgstr "Уставіць"
-
-#: ui/dialogs/PasteInsertDialog.cpp:39
-#, fuzzy, kde-format
-msgid "Move towards right"
-msgstr "Ссунуць направа"
-
-#: ui/dialogs/PasteInsertDialog.cpp:40
-#, fuzzy, kde-format
-msgid "Move towards bottom"
-msgstr "Ссунуць уніз"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, fuzzy, kde-format
@@ -16094,71 +16046,6 @@ msgstr "Паказаць ліст"
 msgid "Select hidden sheets to show:"
 msgstr "Паказаць утоеныя лісты:"
 
-#: ui/dialogs/SpecialPasteDialog.cpp:29
-#, fuzzy, kde-format
-msgid "Special Paste"
-msgstr "Адмысловая ўстаўка"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: ui/dialogs/SpecialPasteWidget.ui:35
-#, kde-format
-msgid "Content"
-msgstr "Змест"
-
-#. i18n: ectx: property (text), widget (QRadioButton, everythingButton)
-#: ui/dialogs/SpecialPasteWidget.ui:41
-#, fuzzy, kde-format
-msgid "Everything"
-msgstr "Усё"
-
-#. i18n: ectx: property (text), widget (QRadioButton, commentButton)
-#: ui/dialogs/SpecialPasteWidget.ui:65
-#, fuzzy, kde-format
-msgid "Comment"
-msgstr "Каментар"
-
-#. i18n: ectx: property (text), widget (QRadioButton, noBorderButton)
-#: ui/dialogs/SpecialPasteWidget.ui:79
-#, fuzzy, kde-format
-msgid "Everything without border"
-msgstr "Без мяжы "
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: ui/dialogs/SpecialPasteWidget.ui:89
-#, fuzzy, kde-format
-msgid "Operation"
-msgstr "Аперацыя"
-
-#. i18n: ectx: property (text), widget (QRadioButton, overwriteButton)
-#: ui/dialogs/SpecialPasteWidget.ui:95
-#, fuzzy, kde-format
-msgid "Overwrite"
-msgstr "Замяніць"
-
-#. i18n: ectx: property (text), widget (QRadioButton, additionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:105
-#, fuzzy, kde-format
-msgid "Addition"
-msgstr "Скласці"
-
-#. i18n: ectx: property (text), widget (QRadioButton, subtractionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:112
-#, fuzzy, kde-format
-msgid "Subtraction"
-msgstr "Адыманне"
-
-#. i18n: ectx: property (text), widget (QRadioButton, multiplicationButton)
-#: ui/dialogs/SpecialPasteWidget.ui:119
-#, fuzzy, kde-format
-msgid "Multiplication"
-msgstr "Множанне"
-
-#. i18n: ectx: property (text), widget (QRadioButton, divisionButton)
-#: ui/dialogs/SpecialPasteWidget.ui:126
-#, fuzzy, kde-format
-msgid "Division"
-msgstr "Дзяленне"
-
 #: ui/ExternalEditor.cpp:56
 #, fuzzy, kde-format
 #| msgid "April"
@@ -16220,6 +16107,85 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Адкрыць спасылку?"
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard at the cursor"
+#~ msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
+
+#, fuzzy
+#~ msgid "Special Paste..."
+#~ msgstr "Адмысловая ўстаўка..."
+
+#, fuzzy
+#~ msgid "Paste the contents of the clipboard with special options"
+#~ msgstr "Уставіць змесціва буфера абмену па адмысловых умовах"
+
+#, fuzzy
+#~ msgid "Paste with Insertion"
+#~ msgstr "Уставіць са зрухам"
+
+#, fuzzy
+#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
+#~ msgstr "Уставіць вочкі з буфера абмену"
+
+#, fuzzy
+#~ msgid "Paste Inserting Cells"
+#~ msgstr "Уставіць вочкі са зрухам"
+
+#, fuzzy
+#~ msgid "Insert"
+#~ msgstr "Уставіць"
+
+#, fuzzy
+#~ msgid "Move towards right"
+#~ msgstr "Ссунуць направа"
+
+#, fuzzy
+#~ msgid "Move towards bottom"
+#~ msgstr "Ссунуць уніз"
+
+#, fuzzy
+#~ msgid "Special Paste"
+#~ msgstr "Адмысловая ўстаўка"
+
+#~ msgid "Content"
+#~ msgstr "Змест"
+
+#, fuzzy
+#~ msgid "Everything"
+#~ msgstr "Усё"
+
+#, fuzzy
+#~ msgid "Comment"
+#~ msgstr "Каментар"
+
+#, fuzzy
+#~ msgid "Everything without border"
+#~ msgstr "Без мяжы "
+
+#, fuzzy
+#~ msgid "Operation"
+#~ msgstr "Аперацыя"
+
+#, fuzzy
+#~ msgid "Overwrite"
+#~ msgstr "Замяніць"
+
+#, fuzzy
+#~ msgid "Addition"
+#~ msgstr "Скласці"
+
+#, fuzzy
+#~ msgid "Subtraction"
+#~ msgstr "Адыманне"
+
+#, fuzzy
+#~ msgid "Multiplication"
+#~ msgstr "Множанне"
+
+#, fuzzy
+#~ msgid "Division"
+#~ msgstr "Дзяленне"
 
 #, fuzzy
 #~ msgid "Check the spelling"
