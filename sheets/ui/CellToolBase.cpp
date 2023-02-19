@@ -55,7 +55,6 @@
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/GoalSeekDialog.h"
-#include "dialogs/LayoutDialog.h"
 #include "dialogs/ListDialog.h"
 
 // strategies
@@ -136,13 +135,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     // -- cell style actions --
     d->actions = new Actions(this);
 
-    action = new QAction(koIcon("cell_layout"), i18n("Cell Format..."), this);
-    action->setIconText(i18n("Format"));
-    addAction("cellStyle", action);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
-    connect(action, &QAction::triggered, this, &CellToolBase::cellStyle);
-    action->setToolTip(i18n("Set the cell formatting"));
-
     // -- data insert actions --
 
     action = new QAction(koIcon("insert-math-expression"), i18n("&Function..."), this);
@@ -184,14 +176,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(action, &QAction::triggered, this, &CellToolBase::edit);
     action->setToolTip(i18n("Edit the highlighted cell"));
-
-    action = KStandardAction::cut(this, SLOT(cut()), this);
-    action->setToolTip(i18n("Move the cell object to the clipboard"));
-    addAction("cut", action);
-
-    action = KStandardAction::copy(this, SLOT(copy()), this);
-    action->setToolTip(i18n("Copy the cell object to the clipboard"));
-    addAction("copy", action);
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     action->setToolTip(i18n("Selects all cells in the current sheet"));
@@ -1023,26 +1007,6 @@ void CellToolBase::triggerAction(const QString &name)
         KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to locate action %1", name));
 }
 
-void CellToolBase::cellStyle()
-{
-    LayoutDialog *dialog = new LayoutDialog(canvas()->canvasWidget(), selection()->activeSheet(), nullptr, false);
-    QRect range = selection()->firstRange();
-    CellStorage *cs = selection()->activeSheet()->fullCellStorage();
-    Style style = cs->style(range);
-    bool multicell = ((range.width() > 1) || (range.height() > 1));
-    dialog->setStyle(style, multicell);
-    if (dialog->exec()) {
-        // TODO - this needs a macro command as there are non-style options in that dialog, see LayoutDialog::slotApply
-        Style style = dialog->style(multicell);
-        StyleCommand* command = new StyleCommand();
-        command->setSheet(selection()->activeSheet());
-        command->add(*selection());
-        command->setStyle(style);
-        command->execute(canvas());
-    }
-    delete dialog;
-}
-
 void CellToolBase::insertFormula()
 {
     if (! d->formulaDialog) {
@@ -1131,41 +1095,6 @@ void CellToolBase::edit()
     } else {
         editor()->widget()->setFocus();
     }
-}
-
-void CellToolBase::cut()
-{
-    if (editor()) {
-        editor()->cut();
-        selection()->emitModified();
-        return;
-    }
-
-    QString snippet = CopyCommand::saveAsSnippet(*selection());
-    snippet = "CUT\n" + snippet;
-
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
-    mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
-
-    QApplication::clipboard()->setMimeData(mimeData);
-}
-
-void CellToolBase::copy() const
-{
-    Selection* selection = const_cast<CellToolBase*>(this)->selection();
-    if (editor()) {
-        editor()->copy();
-        return;
-    }
-
-    QString snippet = CopyCommand::saveAsSnippet(*selection);
-
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setText(CopyCommand::saveAsPlainText(*selection));
-    mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
-
-    QApplication::clipboard()->setMimeData(mimeData);
 }
 
 void CellToolBase::deleteSelection()

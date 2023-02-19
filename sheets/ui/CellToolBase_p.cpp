@@ -86,7 +86,6 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     if (externalEditor) externalEditor->setEnabled(enable);
 
     // These actions are always enabled.
-    q->action("copy")->setEnabled(true);
     q->action("edit_find")->setEnabled(true);
     q->action("edit_find_next")->setEnabled(true);
     q->action("edit_find_last")->setEnabled(true);
@@ -242,13 +241,14 @@ bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
 
 bool CellToolBase::Private::processEndKey(QKeyEvent *event)
 {
-     Sheet * const sheet = q->selection()->activeSheet();
+    Selection *sel = q->selection();
+    Sheet * const sheet = sel->activeSheet();
     if (!sheet)
         return false;
 
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
     Cell cell;
-    QPoint marker = q->selection()->marker();
+    QPoint marker = sel->marker();
 
     if (q->editor()) {
         // We are in edit mode -> go end of line
@@ -260,7 +260,7 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
 
         CellStorage *cells = sheet->fullCellStorage();
         cell = cells->lastInRow(marker.y(), CellStorage::VisitContent);
-        while (!cell.isNull() && cell.column() > q->selection()->marker().x() && cell.isEmpty()) {
+        while (!cell.isNull() && cell.column() > sel->marker().x() && cell.isEmpty()) {
             cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
         }
 
@@ -271,9 +271,9 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
             return false;
 
         if (makingSelection) {
-            q->selection()->update(destination);
+            sel->update(destination);
         } else {
-            q->selection()->initialize(destination, sheet);
+            sel->initialize(destination, sheet);
         }
         q->scrollToCell(destination);
         event->accept(); // QKeyEvent
@@ -283,19 +283,20 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
 
 bool CellToolBase::Private::processPriorKey(QKeyEvent *event)
 {
+    Selection *sel = q->selection();
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-    q->selection()->emitCloseEditor(true); // save changes
+    sel->emitCloseEditor(true); // save changes
 
-    QPoint marker = q->selection()->marker();
+    QPoint marker = sel->marker();
 
     QPoint destination(marker.x(), qMax(1, marker.y() - 10));
     if (destination == marker)
         return false;
 
     if (makingSelection) {
-        q->selection()->update(destination);
+        sel->update(destination);
     } else {
-        q->selection()->initialize(destination, q->selection()->activeSheet());
+        sel->initialize(destination, sel->activeSheet());
     }
     q->scrollToCell(destination);
     event->accept(); // QKeyEvent
@@ -304,20 +305,21 @@ bool CellToolBase::Private::processPriorKey(QKeyEvent *event)
 
 bool CellToolBase::Private::processNextKey(QKeyEvent *event)
 {
+    Selection *sel = q->selection();
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
-    q->selection()->emitCloseEditor(true); // save changes
+    sel->emitCloseEditor(true); // save changes
 
-    QPoint marker = q->selection()->marker();
+    QPoint marker = sel->marker();
     QPoint destination(marker.x(), qMax(1, marker.y() + 10));
 
     if (marker == destination)
         return false;
 
     if (makingSelection) {
-        q->selection()->update(destination);
+        sel->update(destination);
     } else {
-        q->selection()->initialize(destination, q->selection()->activeSheet());
+        sel->initialize(destination, sel->activeSheet());
     }
     q->scrollToCell(destination);
     event->accept(); // QKeyEvent
@@ -410,14 +412,15 @@ Cell CellToolBase::Private::nextMarginCellInDirection(const Cell &cell, Calligra
 
 bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
 {
-    Sheet * const sheet = q->selection()->activeSheet();
+    Selection *sel = q->selection();
+    Sheet * const sheet = sel->activeSheet();
     if (!sheet)
         return false;
 
     Calligra::Sheets::MoveTo direction = directionForKey(event->key());
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
-    QPoint marker = q->selection()->marker();
+    QPoint marker = sel->marker();
     Cell cell = Cell(sheet, marker.x(), marker.y());
 
     Cell tgcell = nextMarginCellInDirection(cell, direction);
@@ -425,9 +428,9 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
     if (destination == marker) return false;
 
     if (makingSelection) {
-        q->selection()->update(destination);
+        sel->update(destination);
     } else {
-        q->selection()->initialize(destination, sheet);
+        sel->initialize(destination, sheet);
     }
     q->scrollToCell(destination);
     return true;
@@ -509,20 +512,21 @@ QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, b
 {
     debugSheetsUI << "Canvas::moveDirection";
 
-     Sheet * const sheet = q->selection()->activeSheet();
+    Selection *sel = q->selection();
+    Sheet * const sheet = sel->activeSheet();
     if (!sheet)
         return QRect();
 
-    QPoint cursor = q->selection()->cursor();
+    QPoint cursor = sel->cursor();
     QPoint destination = CellToolBase::Private::visibleCellInDirection(cursor, sheet, direction);
 
     if (extendSelection) {
-        q->selection()->update(destination);
+        sel->update(destination);
     } else {
-        q->selection()->initialize(destination, sheet);
+        sel->initialize(destination, sheet);
     }
     q->scrollToCell(destination);
-    updateEditor(Cell(q->selection()->activeSheet(), q->selection()->cursor()));
+    updateEditor(Cell(sel->activeSheet(), sel->cursor()));
 
     return QRect(cursor, destination);
 }
@@ -779,17 +783,18 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
 
 QList<QAction*> CellToolBase::Private::popupActionList() const
 {
+    Selection *sel = q->selection();
     QList<QAction*> popupActions;
-    const Cell cell = Cell(q->selection()->activeSheet(), q->selection()->marker());
-    const bool isProtected = !q->selection()->activeSheet()->fullMap()->isReadWrite() ||
-                             (q->selection()->activeSheet()->isProtected() &&
-                              !(cell.style().notProtected() && q->selection()->isSingular()));
+    const Cell cell = Cell(sel->activeSheet(), sel->marker());
+    const bool isProtected = !sel->activeSheet()->fullMap()->isReadWrite() ||
+                             (sel->activeSheet()->isProtected() &&
+                              !(cell.style().notProtected() && sel->isSingular()));
     if (!isProtected) {
-        popupActions.append(q->action("cellStyle"));
+        popupActions.append(actions->action("cellStyle"));
         popupActions.append(popupMenuActions["separator1"]);
-        popupActions.append(q->action("cut"));
+        popupActions.append(actions->action("cut"));
     }
-    popupActions.append(q->action("copy"));
+    popupActions.append(actions->action("copy"));
     if (!isProtected) {
         popupActions.append(actions->action("paste"));
         popupActions.append(actions->action("specialPaste"));
@@ -800,11 +805,11 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
         popupActions.append(actions->action("setDefaultStyle"));
         popupActions.append(actions->action("setAreaName"));
 
-        if (!q->selection()->isColumnOrRowSelected()) {
+        if (!sel->isColumnOrRowSelected()) {
             popupActions.append(popupMenuActions["separator3"]);
             popupActions.append(actions->action("insertCell"));
             popupActions.append(actions->action("deleteCell"));
-        } else if (q->selection()->isColumnSelected()) {
+        } else if (sel->isColumnSelected()) {
             popupActions.append(actions->action("resizeCol"));
             popupActions.append(actions->action("adjustColumn"));
             popupActions.append(popupMenuActions["separator4"]);
@@ -812,7 +817,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             popupActions.append(actions->action("deleteColumn"));
             popupActions.append(actions->action("hideColumn"));
             popupActions.append(actions->action("showSelColumns"));
-        } else if (q->selection()->isRowSelected()) {
+        } else if (sel->isRowSelected()) {
             popupActions.append(actions->action("resizeRow"));
             popupActions.append(actions->action("adjustRow"));
             popupActions.append(popupMenuActions["separator5"]);
@@ -827,7 +832,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             popupActions.append(actions->action("clearComment"));
         }
 
-        if (testListChoose(q->selection())) {
+        if (testListChoose(sel)) {
             popupActions.append(popupMenuActions["separator7"]);
             popupActions.append(popupMenuActions["listChoose"]);
         }

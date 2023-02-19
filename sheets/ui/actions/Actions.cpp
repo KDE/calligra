@@ -18,6 +18,7 @@
 #include "Comment.h"
 #include "Conditional.h"
 #include "Consolidate.h"
+#include "Copy.h"
 #include "CSVActions.h"
 #include "Fill.h"
 #include "Font.h"
@@ -114,6 +115,9 @@ void Actions::createActions()
     addAction(new ClearCondition(this));
     // Consolidate
     addAction(new Consolidate(this));
+    // Copy
+    addAction(new Copy(this));
+    addAction(new Cut(this));
     // CSVActions
     addAction(new InsertFromFile(this));
     addAction(new InsertFromClipboard(this));
@@ -163,6 +167,7 @@ void Actions::createActions()
     // SpellCheck
     addAction(new SpellCheck(this));
     // Style
+    addAction(new CellStyle(this));
     addAction(new Bold(this));
     addAction(new Italic(this));
     addAction(new Underline(this));

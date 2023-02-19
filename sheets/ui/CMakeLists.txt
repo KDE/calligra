@@ -14,6 +14,7 @@ set (actions_DIR_SRCS
     actions/Comment.cpp
     actions/Conditional.cpp
     actions/Consolidate.cpp
+    actions/Copy.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
     actions/Font.cpp

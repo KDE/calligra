@@ -13,6 +13,7 @@
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
 #include "ui/commands/StyleCommand.h"
+#include "ui/dialogs/LayoutDialog.h"
 #include "ui/CellEditorBase.h"
 #include "ui/CellToolBase.h"
 
@@ -23,8 +24,47 @@
 #include <KLocalizedString>
 
 
-
 using namespace Calligra::Sheets;
+
+
+CellStyle::CellStyle(Actions *actions)
+    : CellAction(actions, "cellStyle", i18n("Cell Format..."), koIcon("cell_layout"), i18n("Set the cell formatting"))
+    , m_dlg(nullptr)
+{
+}
+
+CellStyle::~CellStyle()
+{
+    if (m_dlg) delete m_dlg;
+}
+
+void CellStyle::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+{
+    m_dlg = new LayoutDialog(canvasWidget, sheet, nullptr, false);
+    QRect range = selection->firstRange();
+    CellStorage *cs = sheet->fullCellStorage();
+    Style style = cs->style(range);
+    bool multicell = ((range.width() > 1) || (range.height() > 1));
+    m_dlg->setStyle(style, multicell);
+    if (m_dlg->exec()) {
+        Style style = m_dlg->style(multicell);
+        StyleCommand* command = new StyleCommand();
+        command->setSheet(sheet);
+        command->add(*selection);
+        command->setStyle(style);
+        command->execute(selection->canvas());
+    }
+    delete m_dlg;
+    m_dlg = nullptr;
+}
+
+QAction *CellStyle::createAction() {
+    QAction *res = CellAction::createAction();
+    res->setIconText(i18n("Format"));
+    res->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
+    return res;
+}
+
 
 
 Bold::Bold(Actions *actions)

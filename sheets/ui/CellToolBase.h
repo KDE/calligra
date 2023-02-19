@@ -147,8 +147,6 @@ protected Q_SLOTS:
     void sheetProtectionToggled(bool enable);
     void handleDamages();
 
-    // -- cell style actions --
-    void cellStyle();
     // -- data insert actions --
     void insertFormula();
     void insertFromDatabase();
@@ -157,8 +155,6 @@ protected Q_SLOTS:
     void formulaSelection(const QString& expression);
     // -- general editing actions --
     void edit();
-    void cut() override;
-    void copy() const override;
     void selectAll();
     void find();
     void findNext();

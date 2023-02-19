@@ -23,6 +23,21 @@ namespace Calligra
 namespace Sheets
 {
 
+class LayoutDialog;
+
+class CellStyle : public CellAction {
+Q_OBJECT
+public:
+    CellStyle(Actions *actions);
+    virtual ~CellStyle();
+
+protected:
+    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual QAction *createAction() override;
+    LayoutDialog *m_dlg;
+};
+
+
 class Bold : public ToggleableCellAction {
 Q_OBJECT
 public:
