@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-19 00:58+0000\n"
+"POT-Creation-Date: 2023-02-20 00:57+0000\n"
 "PO-Revision-Date: 2023-02-04 11:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -899,8 +899,7 @@ msgstr "Sayı"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Biçim"
@@ -957,7 +956,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") işlevi, 99 döndürür"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Veritabanı"
@@ -14292,137 +14291,117 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kenarlığı Değiştir"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "Cell Format..."
-msgstr "Hücre Biçimi..."
-
-#: ui/CellToolBase.cpp:144
-#, kde-format
-msgid "Set the cell formatting"
-msgstr "Hücre biçimini ayarla"
-
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:140
 #, kde-format
 msgid "&Function..."
 msgstr "&İşlev..."
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Insert math expression"
 msgstr "Matematiksel ifade ekle"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "From &Database..."
 msgstr "&Veritabanından..."
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL veritabanından veri ekle"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Özel Listeler..."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Sıralama veya otomatik tamamlama için özel liseler oluştur"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Hedef Araması..."
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "İşlemi kesin bir değer bulmak için tekrarlıyor"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:163
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formül Seçimi"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Insert a function"
 msgstr "Bir işlev ekle"
 
-#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
+#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
 #, kde-format
 msgid "Others..."
 msgstr "Diğerleri..."
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Modify Cell"
 msgstr "Hücreyi Düzenle"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Vurgulanmış hücreyi düzenle"
 
-#: ui/CellToolBase.cpp:189
-#, kde-format
-msgid "Move the cell object to the clipboard"
-msgstr "Hücre nesnesini panoya taşı"
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Copy the cell object to the clipboard"
-msgstr "Hücre nesnesini panoya kopyala"
-
-#: ui/CellToolBase.cpp:197
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Geçerli çalışma tablosundaki tüm hücreleri seçer"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Denetleyiciyi Çalıştır..."
 
-#: ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView Ögesini Göster..."
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Document Settings..."
 msgstr "Belge Ayarları..."
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Belge ayarları penceresini göster"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:217
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Permute fixation"
 msgstr "Sabiti değiştir"
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Metin imlecindeki başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:1023
+#: ui/CellToolBase.cpp:1007
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "%1 eylemi bulunamıyor"
 
-#: ui/CellToolBase.cpp:1063
+#: ui/CellToolBase.cpp:1027
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14431,12 +14410,12 @@ msgstr ""
 "Veritabanı sürücüsü bulunamadı. Bu özelliği kullanabilmeniz için Qt "
 "veritabanı sürücülerine gerek duyuluyor."
 
-#: ui/CellToolBase.cpp:1437
+#: ui/CellToolBase.cpp:1366
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Değiştir"
 
-#: ui/CellToolBase_p.cpp:848
+#: ui/CellToolBase_p.cpp:853
 #, kde-format
 msgid "Selection List..."
 msgstr "Seçim Listesi..."
@@ -16393,6 +16372,18 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bağlantıyı Aç?"
+
+#~ msgid "Cell Format..."
+#~ msgstr "Hücre Biçimi..."
+
+#~ msgid "Set the cell formatting"
+#~ msgstr "Hücre biçimini ayarla"
+
+#~ msgid "Move the cell object to the clipboard"
+#~ msgstr "Hücre nesnesini panoya taşı"
+
+#~ msgid "Copy the cell object to the clipboard"
+#~ msgstr "Hücre nesnesini panoya kopyala"
 
 #~ msgid "Paste the contents of the clipboard at the cursor"
 #~ msgstr "Pano içeriğini imlecin olduğu yere yapıştır"

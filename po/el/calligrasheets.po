@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-19 00:58+0000\n"
+"POT-Creation-Date: 2023-02-20 00:57+0000\n"
 "PO-Revision-Date: 2023-01-04 12:01+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -911,8 +911,7 @@ msgstr "Αριθμός"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Μορφή"
@@ -970,7 +969,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") επιστρέφει 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Βάση δεδομένων"
@@ -14564,137 +14563,117 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Τροποποίηση περιγράμματος"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "Cell Format..."
-msgstr "Μορφή κελιού..."
-
-#: ui/CellToolBase.cpp:144
-#, kde-format
-msgid "Set the cell formatting"
-msgstr "Ορισμός μορφοποίησης του κελιού"
-
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:140
 #, kde-format
 msgid "&Function..."
 msgstr "&Συνάρτηση..."
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Insert math expression"
 msgstr "Εισαγωγή μαθηματικής έκφρασης"
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "From &Database..."
 msgstr "Από &βάση δεδομένων..."
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Εισαγωγή δεδομένων από μια βάση δεδομένων SQL"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Προσαρμοσμένες λίστες..."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Δημιουργία προσαρμοσμένων λιστών για ταξινόμηση ή αυτόματη συμπλήρωση"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Αναζήτηση &στόχου..."
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Επανάληψη υπολογισμού για την εύρεση μιας συγκεκριμένης τιμής"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:163
 #, kde-format
 msgid "Formula Selection"
 msgstr "Επιλογή μαθηματικού τύπου"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:165
 #, kde-format
 msgid "Insert a function"
 msgstr "Εισαγωγή μιας συνάρτησης"
 
-#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
+#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
 #, kde-format
 msgid "Others..."
 msgstr "Άλλες..."
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Modify Cell"
 msgstr "Τροποποίηση κελιού"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:178
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Επεξεργασία του τονισμένου κελιού"
 
-#: ui/CellToolBase.cpp:189
-#, kde-format
-msgid "Move the cell object to the clipboard"
-msgstr "Μετακίνηση του αντικειμένου του κελιού στο πρόχειρο"
-
-#: ui/CellToolBase.cpp:193
-#, kde-format
-msgid "Copy the cell object to the clipboard"
-msgstr "Αντιγραφή του αντικειμένου του κελιού στο πρόχειρο"
-
-#: ui/CellToolBase.cpp:197
+#: ui/CellToolBase.cpp:181
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Επιλογή όλων των κελιών στο τρέχον φύλλο εργασίας"
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Εκτέλεση επιθεωρητή..."
 
-#: ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:204
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Εμφάνιση QTableView..."
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:210
 #, kde-format
 msgid "Document Settings..."
 msgstr "Ρυθμίσεις εγγράφου..."
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:213
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Εμφάνιση διαλόγου ρυθμίσεων εγγράφου"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:217
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Μετάθεση σταθερού σημείου αναφοράς"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:221
 #, kde-format
 msgid "Permute fixation"
 msgstr "Μετάθεση σταθερού σημείου"
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:222
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Μετάθεση του σταθερού σημείου αναφοράς στο δρομέα κειμένου"
 
-#: ui/CellToolBase.cpp:1023
+#: ui/CellToolBase.cpp:1007
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Αδυναμία εντοπισμού ενέργειας %1"
 
-#: ui/CellToolBase.cpp:1063
+#: ui/CellToolBase.cpp:1027
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14703,12 +14682,12 @@ msgstr ""
 "Δεν υπάρχουν διαθέσιμοι οδηγοί βάσης δεδομένων. Πρέπει να εγκαταστήσετε τους "
 "απαραίτητους οδηγούς βάσης δεδομένων της Qt."
 
-#: ui/CellToolBase.cpp:1437
+#: ui/CellToolBase.cpp:1366
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: ui/CellToolBase_p.cpp:848
+#: ui/CellToolBase_p.cpp:853
 #, kde-format
 msgid "Selection List..."
 msgstr "Λίστα επιλογής..."
@@ -16699,6 +16678,18 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Άνοιγμα δεσμού;"
+
+#~ msgid "Cell Format..."
+#~ msgstr "Μορφή κελιού..."
+
+#~ msgid "Set the cell formatting"
+#~ msgstr "Ορισμός μορφοποίησης του κελιού"
+
+#~ msgid "Move the cell object to the clipboard"
+#~ msgstr "Μετακίνηση του αντικειμένου του κελιού στο πρόχειρο"
+
+#~ msgid "Copy the cell object to the clipboard"
+#~ msgstr "Αντιγραφή του αντικειμένου του κελιού στο πρόχειρο"
 
 #~ msgid "Paste the contents of the clipboard at the cursor"
 #~ msgstr "Επικόλληση των περιεχομένων του προχείρου στο δρομέα"

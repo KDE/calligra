@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-19 00:58+0000\n"
+"POT-Creation-Date: 2023-02-20 00:57+0000\n"
 "PO-Revision-Date: 2004-11-29 01:53-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team: Tamil <en@li.org>\n"
@@ -906,8 +906,7 @@ msgstr "எண்"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/CellToolBase.cpp:140 ui/dialogs/DataFormatWidget.ui:35
-#: ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "வடிவம்"
@@ -965,7 +964,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 99 திரும்பும்"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:155 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "தரவுத்தளம்"
@@ -14444,140 +14443,120 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "ஓரம் நிறம் மாற்றுக"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "Cell Format..."
-msgstr "அறை வடிவமைப்பு"
-
-#: ui/CellToolBase.cpp:144
-#, fuzzy, kde-format
-msgid "Set the cell formatting"
-msgstr "அறைகளை தானாக வடிவமைத்தல்."
-
-#: ui/CellToolBase.cpp:148
+#: ui/CellToolBase.cpp:140
 #, kde-format
 msgid "&Function..."
 msgstr "செயல்கூறு..."
 
-#: ui/CellToolBase.cpp:151
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "math  தொடரை சொருகு."
 
-#: ui/CellToolBase.cpp:154
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "From &Database..."
 msgstr "துவக்கம் &தரவுத்தளம் ..."
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL தரவுத்தளத்திலிருந்து பொருளை செருகவும்"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Custom Lists..."
 msgstr "தனிப்பயன் பட்டியல்..."
 
-#: ui/CellToolBase.cpp:164
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "வரிசையாக்கம் அல்லது தானேநிரப்ப தனிப்பயன்பட்டியலை உருவாக்குக "
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:158
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&இலக்குத்தேடு"
 
-#: ui/CellToolBase.cpp:169
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "திரும்பத்திரும்ப கணக்கிடப்படுகிறது ஒரு குறித்த பொருளை தேட."
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:163
 #, kde-format
 msgid "Formula Selection"
 msgstr "வாய்பாடு தேர்வு"
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:165
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "செயல்கூற்றை செருகு"
 
-#: ui/CellToolBase.cpp:174 ui/CellToolBase.cpp:1104
+#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
 #, kde-format
 msgid "Others..."
 msgstr "மற்றவைகள்..."
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:174
 #, kde-format
 msgid "Modify Cell"
 msgstr "சிற்றறையை மாற்று"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:178
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "முனைப்புறுத்தப்பட்ட அறைகளை திருத்து "
 
-#: ui/CellToolBase.cpp:189
-#, fuzzy, kde-format
-msgid "Move the cell object to the clipboard"
-msgstr "அறை பொருளை இடைநிலைப் பலகைக்கு கொண்டு செல்."
-
-#: ui/CellToolBase.cpp:193
-#, fuzzy, kde-format
-msgid "Copy the cell object to the clipboard"
-msgstr "அறை பொருளை இடைநிலைப் பலகைக்கு மாற்றுக."
-
-#: ui/CellToolBase.cpp:197
+#: ui/CellToolBase.cpp:181
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "தற்போதைய தாளில் உள்ள அனைத்து அறையின் மதிப்பையும் மறுகணக்கிடு."
 
-#: ui/CellToolBase.cpp:214
+#: ui/CellToolBase.cpp:198
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:220
+#: ui/CellToolBase.cpp:204
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "தாளை காட்டு"
 
-#: ui/CellToolBase.cpp:226
+#: ui/CellToolBase.cpp:210
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "வட்டார அளவுருக்கள்"
 
-#: ui/CellToolBase.cpp:229
+#: ui/CellToolBase.cpp:213
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "விளக்க சுட்டியை காட்டு"
 
-#: ui/CellToolBase.cpp:233
+#: ui/CellToolBase.cpp:217
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:237
+#: ui/CellToolBase.cpp:221
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:238
+#: ui/CellToolBase.cpp:222
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "இடைநிலையின் உள்ளடக்கத்தின் காட்டியில் ஒட்டுக. "
 
-#: ui/CellToolBase.cpp:1023
+#: ui/CellToolBase.cpp:1007
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1063
+#: ui/CellToolBase.cpp:1027
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14585,14 +14564,14 @@ msgid ""
 msgstr ""
 "தகவல்தள இயக்கிகள் ஏதும் காணப்படவில்லை. தங்கள் Qt யை தேவையான இயக்கியுடன் தொகுக்க வேண்டும்."
 
-#: ui/CellToolBase.cpp:1437
+#: ui/CellToolBase.cpp:1366
 #, fuzzy
 #| msgid "Replacement"
 msgctxt "(qtundo-format)"
 msgid "Replace"
 msgstr "இடமாற்றம்"
 
-#: ui/CellToolBase_p.cpp:848
+#: ui/CellToolBase_p.cpp:853
 #, kde-format
 msgid "Selection List..."
 msgstr "தேர்ந்தெடுத்த பட்டியல்"
@@ -16501,6 +16480,21 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "இணைப்பை திற"
+
+#~ msgid "Cell Format..."
+#~ msgstr "அறை வடிவமைப்பு"
+
+#, fuzzy
+#~ msgid "Set the cell formatting"
+#~ msgstr "அறைகளை தானாக வடிவமைத்தல்."
+
+#, fuzzy
+#~ msgid "Move the cell object to the clipboard"
+#~ msgstr "அறை பொருளை இடைநிலைப் பலகைக்கு கொண்டு செல்."
+
+#, fuzzy
+#~ msgid "Copy the cell object to the clipboard"
+#~ msgstr "அறை பொருளை இடைநிலைப் பலகைக்கு மாற்றுக."
 
 #, fuzzy
 #~ msgid "Paste the contents of the clipboard at the cursor"
