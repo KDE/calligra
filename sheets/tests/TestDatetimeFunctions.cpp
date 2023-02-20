@@ -7,10 +7,28 @@
 #include "TestKspreadCommon.h"
 #include "engine/Localization.h"
 
+#include <engine/MapBase.h>
+#include <engine/SheetBase.h>
+#include <engine/ValueConverter.h>
+#include <engine/CalculationSettings.h>
+
+#include <QTest>
+
+void TestDatetimeFunctions::cleanupTestCase()
+{
+    delete m_map;
+}
+
 void TestDatetimeFunctions::initTestCase()
 {
-    KLocalizedString::setApplicationDomain("sheets");
+    KLocalizedString::setApplicationDomain("calligrasheets");
+    m_map = new MapBase;
+    m_map->addNewSheet();
+    m_sheet = m_map->sheet(0);
     FunctionModuleRegistry::instance()->loadFunctionModules();
+
+    setlocale(LC_ALL, "C.UTF-8");
+    m_map->calculationSettings()->locale()->setLanguage("C.UTF-8");
 }
 
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
@@ -59,7 +77,7 @@ static Value RoundNumber(const Value& v)
 
 Value TestDatetimeFunctions::evaluate(const QString& formula, Value& ex)
 {
-    Formula f;
+    Formula f(m_sheet);
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -383,29 +401,83 @@ void TestDatetimeFunctions::testEOMONTH()
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEOMONTH(\"2006-01-01\";0)  =DATE(2006;01;31)", Value(true)); // alternate function name
 }
 
+void TestDatetimeFunctions::testHOUR_data()
+{
+    QTest::addColumn<QString>("locale");
+    QTest::addColumn<QString>("value");
+    QTest::addColumn<Value>("expected");
+    QTest::addColumn<QString>("fail");
+
+    QTest::newRow("en_US 5/24") << "en_US" << "HOUR(5/24)" << Value(5) << QString();
+    QTest::newRow("en_US 5/24-1/(24*60*60)") << "en_US" << "HOUR(5/24-1/(24*60*60))" << Value(4) << QString();
+    QTest::newRow("en_US 0.75") << "en_US" << "HOUR(0.75)" << Value(18) << QString();
+    QTest::newRow("en_US 1.75") << "en_US" << "HOUR(1.75)" << Value(18) << QString();
+
+    QTest::newRow("en_US 9") << "en_US" << "HOUR(\"9\")" << Value(9) << "Must have a time separator";
+    QTest::newRow("en_US 9:") << "en_US" << "HOUR(\"9:\")" << Value(9) << QString();
+    QTest::newRow("en_US 9: AM") << "en_US" << "HOUR(\"9: AM\")" << Value(9) << QString();
+    QTest::newRow("en_US 9: PM") << "en_US" << "HOUR(\"9: PM\")" << Value(21) << QString();
+    QTest::newRow("en_US 9:0") << "en_US" << "HOUR(\"9:0\")" << Value(9) << QString();
+    QTest::newRow("en_US 9:0 AM") << "en_US" << "HOUR(\"9:0 AM\")" << Value(9) << QString();
+    QTest::newRow("en_US 9:00") << "en_US" << "HOUR(\"9:00\")" << Value(9) << QString();
+    QTest::newRow("en_US 09:0") << "en_US" << "HOUR(\"09:0\")" << Value(9) << QString();
+    QTest::newRow("en_US 09:00") << "en_US" << "HOUR(\"09:00\")" << Value(9) << QString();
+
+    QTest::newRow("en_US 11:00 PM") << "en_US" << "HOUR(\"11:00 PM\")" << Value(23) << QString();
+    QTest::newRow("en_US 11:00 AM") << "en_US" << "HOUR(\"11:00 AM\")" << Value(11) << QString();
+    QTest::newRow("en_US 14:00") << "en_US" << "HOUR(\"14:00\")" << Value(14) << QString();
+    QTest::newRow("en_US 23:00") << "en_US" << "HOUR(\"23:00\")" << Value(23) << QString();
+    QTest::newRow("en_US 14:00 AM") << "en_US" << "HOUR(\"14:00 AM\")" << Value(14) << "Invalid, time must be <= 12";
+    QTest::newRow("en_US 14:00 PM") << "en_US" << "HOUR(\"14:00 PM\")" << Value(14) << "Invalid, time must be <= 12";
+    QTest::newRow("en_US 0: AM") << "en_US" << "HOUR(\"0: AM\")" << Value(0) << QString();
+    QTest::newRow("en_US 0: PM") << "en_US" << "HOUR(\"0: PM\")" << Value(12) << QString();
+    QTest::newRow("en_US 9:1:2") << "en_US" << "HOUR(\"9:1:2\")" << Value(9) << QString();
+
+    QTest::newRow("en_US 9:1:2.4") << "en_US" << "HOUR(\"9:1:2.4\")" << Value(9) << QString();
+    QTest::newRow("en_US 9:1:2.43") << "en_US" << "HOUR(\"9:1:2.43\")" << Value(9) << QString();
+    QTest::newRow("en_US 9:1:2.432") << "en_US" << "HOUR(\"9:1:2.432\")" << Value(9) << QString();
+    QTest::newRow("en_US 9:1:2.4321") << "en_US" << "HOUR(\"9:1:2.4321\")" << Value(9) << "4 digit ms is not accepted here";
+
+    QTest::newRow("en_US 09:01:02.4") << "en_US" << "HOUR(\"09:01:02.004\")" << Value(9) << QString();
+    QTest::newRow("en_US 09:01:02.4") << "en_US" << "HOUR(\"09:01:02.4\")" << Value(9) << QString();
+    QTest::newRow("en_US 09:01:02.43") << "en_US" << "HOUR(\"09:01:02.43\")" << Value(9) << QString();
+    QTest::newRow("en_US 09:01:02.432") << "en_US" << "HOUR(\"09:01:02.432\")" << Value(9) << QString();
+    QTest::newRow("en_US 09:01:02.4321") << "en_US" << "HOUR(\"09:01:02.4321\")" << Value(9) << QString(); // 4 digit ms is accepted here
+
+    QTest::newRow("da_DK 5/24") << "da_DK" << "HOUR(5/24)" << Value(5) << QString();
+    QTest::newRow("da_DK 5/24-1/(24*60*60)") << "da_DK" << "HOUR(5/24-1/(24*60*60))" << Value(4) << QString();
+    QTest::newRow("da_DK 0,75") << "da_DK" << "HOUR(0,75)" << Value(18) << QString();
+    QTest::newRow("da_DK 1,75") << "da_DK" << "HOUR(1,75)" << Value(18) << QString();
+
+    QTest::newRow("da_DK 9") << "da_DK" << "HOUR(\"9\")" << Value(9) << "Must have a time separator";
+    QTest::newRow("da_DK 9.") << "da_DK" << "HOUR(\"9.\")" << Value(9) << QString();
+    QTest::newRow("da_DK 9.0") << "da_DK" << "HOUR(\"9.0\")" << Value(9) << QString();
+    QTest::newRow("da_DK 9.00") << "da_DK" << "HOUR(\"9.00\")" << Value(9) << QString();
+    QTest::newRow("da_DK 09.0") << "da_DK" << "HOUR(\"09.0\")" << Value(9) << QString();
+    QTest::newRow("da_DK 09.00") << "da_DK" << "HOUR(\"09.00\")" << Value(9) << QString();
+
+    QTest::newRow("da_DK 11.00 PM") << "da_DK" << "HOUR(\"11.00 PM\")" << Value(23) << QString();
+    QTest::newRow("da_DK 11.00 AM") << "da_DK" << "HOUR(\"11.00 AM\")" << Value(11) << QString();
+    QTest::newRow("da_DK 14.00") << "da_DK" << "HOUR(\"14.00\")" << Value(14) << QString();
+    QTest::newRow("da_DK 23.00") << "da_DK" << "HOUR(\"23.00\")" << Value(23) << QString();
+    QTest::newRow("da_DK 14.00") << "da_DK" << "HOUR(\"14.00 AM\")" << Value(14) << "Invalid, time must be <= 12";
+    QTest::newRow("da_DK 14.00") << "da_DK" << "HOUR(\"14.00 PM\")" << Value(14) << "Invalid, time must be <= 12";
+}
+
 void TestDatetimeFunctions::testHOUR()
 {
-    // Hacky way to test for 12h clock
-    Localization locale;
-    bool twelveHourClock = locale.timeFormat(true).contains("%I");
+    QFETCH(QString, locale);
+    QFETCH(QString, value);
+    QFETCH(Value, expected);
+    QFETCH(QString, fail);
 
-    CHECK_EVAL("HOUR(5/24)",              Value(5));      // 5/24ths of a day is 5 hours, aka 5AM.
-    CHECK_EVAL("HOUR(5/24-1/(24*60*60))", Value(4));      // A second before 5AM, it's 4AM.
-    // TimeParam accepts text
-    CHECK_EVAL("HOUR(\"9:00\")",          Value(9));
-    CHECK_EVAL("HOUR(\"09:00\")",         Value(9));
-    CHECK_EVAL("HOUR(\"11:00 PM\")",      Value(23));
-    CHECK_EVAL("HOUR(\"11:00 AM\")",      Value(11));
+    m_map->converter()->settings()->locale()->setLanguage(locale);
 
-    // These are locale dependent
-    if (twelveHourClock) {
-        CHECK_FAIL("HOUR(\"14:00\")",         Value(14), "12h clock, hour must be <= 12");
-        CHECK_FAIL("HOUR(\"23:00\")",         Value(23), "12h clock, hour must be <= 12");
+    if (fail.isEmpty()) {
+        CHECK_EVAL(value, expected);
     } else {
-        CHECK_EVAL("HOUR(\"14:00\")",         Value(14));
-        CHECK_EVAL("HOUR(\"23:00\")",         Value(23));
+        CHECK_FAIL(value, expected, fail.toLatin1());
     }
-
 }
 
 void TestDatetimeFunctions::testISOWEEKNUM()

@@ -14,11 +14,15 @@ namespace Calligra
 namespace Sheets
 {
 
+class MapBase;
+class SheetBase;
+
 class TestDatetimeFunctions: public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
+    void cleanupTestCase();
     void initTestCase();
     void testYEARFRAC();
     void testDATEDIF();
@@ -38,6 +42,7 @@ private Q_SLOTS:
     void testDAYS360();
     void testEDATE();
     void testEOMONTH();
+    void testHOUR_data();
     void testHOUR();
     void testISOWEEKNUM();
     void testMINUTE();
@@ -54,6 +59,8 @@ private Q_SLOTS:
     void testWEEKS();
 
 private:
+    MapBase *m_map;
+    SheetBase* m_sheet;
     Value evaluate(const QString&, Value& ex);
 };
 
