@@ -1392,7 +1392,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
     }
 
     if (d->dirty) {
-        Tokens tokens = scan(d->expression);
+        Tokens tokens = scan(d->expression, locale());
         d->valid = tokens.valid();
         if (tokens.valid())
             compile(tokens);
