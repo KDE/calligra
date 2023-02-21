@@ -9,6 +9,7 @@
 #define CALLIGRA_SHEETS_LOCALIZATION
 
 #include <QLocale>
+#include <QDebug>
 
 #include <KLocalizedString>
 #ifndef Q_OS_WIN
@@ -127,5 +128,8 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug dbg, const Calligra::Sheets::Localization *l);
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug dbg, const Calligra::Sheets::Localization &l);
 
 #endif // CALLIGRA_SHEETS_LOCALIZATION

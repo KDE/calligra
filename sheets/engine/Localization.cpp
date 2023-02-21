@@ -444,25 +444,143 @@ void Localization::setLocale(const QLocale &l) {
 
 
     // time separator
-    shortFormat = timeFormat(false);
+    shortFormat = d->locale.timeFormat(QLocale::ShortFormat);
     d->timeSep = getSeparator(shortFormat);
-    longFormat = timeFormat(true);
-    if (longFormat.indexOf("A") >= 0) d->includesAMPM = true;
-    else d->includesAMPM = false;
 
     // time formats
     d->timeFormats.clear();
-    d->timeFormats.append (longFormat);
-    d->timeFormats.append (shortFormat);
-    longFormat = longFormat.replace("AP", "").replace("t", "").trimmed();
-    shortFormat = shortFormat.replace("AP", "").replace("t", "").trimmed();
-    d->timeFormats.append (longFormat);
-    d->timeFormats.append (shortFormat);
 
+    // hours
+    QString format = QStringLiteral("h%1").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1 A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1 A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    // minutes
+    format = QStringLiteral("h%1m").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1m A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1m").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1m A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("h%1mm").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1mm A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1mm").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1mm A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    // seconds single
+    format = QStringLiteral("h%1m%1s").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1m%1s A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1m%1s").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1m%1s A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("h%1mm%1s").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1mm%1s A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1mm%1s").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1mm%1s A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    // seconds double
+    format = QStringLiteral("h%1m%1ss").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1m%1ss A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1m%1ss").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1m%1ss A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("h%1mm%1ss").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1mm%1ss A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1mm%1ss").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1mm%1ss A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    // milliseconds
+    format = QStringLiteral("h%1m%1s.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1m%1s.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1m%1s.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1m%1s.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("h%1mm%1s.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1mm%1s.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1mm%1s.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1mm%1s.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("h%1m%1ss.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1m%1ss.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1m%1ss.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1m%1ss.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("h%1mm%1ss.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("h%1mm%1ss.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+
+    format = QStringLiteral("hh%1mm%1ss.z").arg(d->timeSep);
+    d->timeFormats.prepend(format);
+    format = QStringLiteral("hh%1mm%1ss.z A").arg(d->timeSep);
+    d->timeFormats.prepend(format);
 
     // cache true/false
     d->trueString = translateString(ki18n("true")).toLower();
     d->falseString = translateString(ki18n("false")).toLower();
 }
 
+QDebug operator<<(QDebug dbg, const Calligra::Sheets::Localization *l)
+{
+    if (l) {
+        return operator<<(dbg, *l);
+    }
+    dbg.noquote().nospace()<<"Calligra::Sheets::Localization("<<(void*)l<<')';
+    return dbg.quote().space();
+}
 
+QDebug operator<<(QDebug dbg, const Calligra::Sheets::Localization &l)
+{
+    dbg.noquote().nospace()<<"Calligra::Sheets::Localization("<<l.languageName(false)<<" t='"<<l.thousandsSeparator()<<"' d='"<<l.decimalSymbol()<<"')";
+    return dbg.quote().space();
+}
