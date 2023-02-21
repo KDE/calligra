@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:58+0000\n"
-"PO-Revision-Date: 2023-02-13 15:17+0300\n"
+"PO-Revision-Date: 2023-02-20 17:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2688,13 +2688,13 @@ msgstr "b*"
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:51
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr "RGB (16-bit tamsayı/kanal, yönetilmiyor)"
+msgstr "KYM (16 bit tamsayı/kanal, yönetilmiyor)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
 #: pigment/colorspaces/KoRgbU8ColorSpace.h:52
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr "RGB (8-bit tamsayı/kanal, yönetilmiyor)"
+msgstr "KYM (8 bit tamsayı/kanal, yönetilmiyor)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
 #, kde-format
@@ -3046,31 +3046,31 @@ msgstr "Daha Açık Renk"
 #: pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
 msgid "Color HSI"
-msgstr "Renk HSI"
+msgstr "Renk TDY"
 
 #: pigment/compositeops/KoCompositeOps.h:183
 #: pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
 msgid "Hue HSI"
-msgstr "Renk HSI"
+msgstr "Renk TDY"
 
 #: pigment/compositeops/KoCompositeOps.h:184
 #: pigment/KoCompositeOpRegistry.cpp:101
 #, kde-format
 msgid "Saturation HSI"
-msgstr "Doygunluk HSI"
+msgstr "Doygunluk TDY"
 
 #: pigment/compositeops/KoCompositeOps.h:185
 #: pigment/KoCompositeOpRegistry.cpp:104
 #, kde-format
 msgid "Increase Saturation HSI"
-msgstr "Doygunluk HSI Artır"
+msgstr "Doygunluk TDY Artır"
 
 #: pigment/compositeops/KoCompositeOps.h:186
 #: pigment/KoCompositeOpRegistry.cpp:103
 #, kde-format
 msgid "Decrease Saturation HSI"
-msgstr "Doygunluk HSI Azalt"
+msgstr "Doygunluk TDY Azalt"
 
 #: pigment/compositeops/KoCompositeOps.h:187
 #: pigment/KoCompositeOpRegistry.cpp:102
@@ -3094,31 +3094,31 @@ msgstr "Yoğunluğu Azalt"
 #: pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
 msgid "Color HSL"
-msgstr "Renk HSL"
+msgstr "Renk TDA"
 
 #: pigment/compositeops/KoCompositeOps.h:192
 #: pigment/KoCompositeOpRegistry.cpp:109
 #, kde-format
 msgid "Hue HSL"
-msgstr "Renk HSL"
+msgstr "Renk TDA"
 
 #: pigment/compositeops/KoCompositeOps.h:193
 #: pigment/KoCompositeOpRegistry.cpp:110
 #, kde-format
 msgid "Saturation HSL"
-msgstr "Doygunluk HSL"
+msgstr "Doygunluk TDA"
 
 #: pigment/compositeops/KoCompositeOps.h:194
 #: pigment/KoCompositeOpRegistry.cpp:113
 #, kde-format
 msgid "Increase Saturation HSL"
-msgstr "Doygunluk HSL Artır"
+msgstr "Doygunluk TDA Artır"
 
 #: pigment/compositeops/KoCompositeOps.h:195
 #: pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
 msgid "Decrease Saturation HSL"
-msgstr "Doygunluk HSL Azalt"
+msgstr "Doygunluk TDA Azalt"
 
 #: pigment/compositeops/KoCompositeOps.h:197
 #: pigment/KoCompositeOpRegistry.cpp:115
@@ -3136,31 +3136,31 @@ msgstr "Açıklığı Azalt"
 #: pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
 msgid "Color HSV"
-msgstr "Renk HSV"
+msgstr "Renk TDD"
 
 #: pigment/compositeops/KoCompositeOps.h:201
 #: pigment/KoCompositeOpRegistry.cpp:118
 #, kde-format
 msgid "Hue HSV"
-msgstr "Renk HSV"
+msgstr "Renk TDD"
 
 #: pigment/compositeops/KoCompositeOps.h:202
 #: pigment/KoCompositeOpRegistry.cpp:119
 #, kde-format
 msgid "Saturation HSV"
-msgstr "Doygunluk HSV"
+msgstr "Doygunluk TDD"
 
 #: pigment/compositeops/KoCompositeOps.h:203
 #: pigment/KoCompositeOpRegistry.cpp:122
 #, kde-format
 msgid "Increase Saturation HSV"
-msgstr "Doygunluk HSV Artır"
+msgstr "Doygunluk TDD Artır"
 
 #: pigment/compositeops/KoCompositeOps.h:204
 #: pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
 msgid "Decrease Saturation HSV"
-msgstr "Doygunluk HSV Azalt"
+msgstr "Doygunluk TDD Azalt"
 
 #: pigment/compositeops/KoCompositeOps.h:205
 #: pigment/KoCompositeOpRegistry.cpp:120
@@ -3184,7 +3184,7 @@ msgstr "Değeri Azalt"
 #: pigment/KoBasicHistogramProducers.cpp:419
 #, kde-format
 msgid "Generic RGB Histogram"
-msgstr "Genel RGB Sütun Grafiği"
+msgstr "Genel KYM Sütun Grafiği"
 
 #: pigment/KoBasicHistogramProducers.cpp:356
 #, kde-format
@@ -3219,7 +3219,7 @@ msgstr "Genel  L*a*b* Sütun Grafiği"
 #: pigment/KoColorModelStandardIds.cpp:13
 #, kde-format
 msgid "RGB"
-msgstr "RGB"
+msgstr "KYM"
 
 #: pigment/KoColorModelStandardIds.cpp:14
 #, kde-format
@@ -3294,17 +3294,17 @@ msgstr "HSY"
 #: pigment/KoCompositeOp.cpp:26 pigment/KoCompositeOpRegistry.cpp:33
 #, kde-format
 msgid "HSI"
-msgstr "HSI"
+msgstr "TDY"
 
 #: pigment/KoCompositeOp.cpp:27 pigment/KoCompositeOpRegistry.cpp:34
 #, kde-format
 msgid "HSL"
-msgstr "HSL"
+msgstr "TDA"
 
 #: pigment/KoCompositeOp.cpp:28 pigment/KoCompositeOpRegistry.cpp:35
 #, kde-format
 msgid "HSV"
-msgstr "HSV"
+msgstr "TDD"
 
 #: pigment/KoCompositeOp.cpp:29 pigment/KoCompositeOpRegistry.cpp:30
 #, kde-format
