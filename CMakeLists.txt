@@ -296,6 +296,9 @@ add_definitions(
     -DQT_DISABLE_DEPRECATED_BEFORE=0x050600
     )
 
+#Force building tests: This is for testing on windows/craft
+set(BUILD_TESTING ON)
+
 # only with this definition will all the FOO_TEST_EXPORT macro do something
 # TODO: check if this can be moved to only those places which make use of it,
 # to reduce global compiler definitions that would trigger a recompile of
