@@ -188,7 +188,7 @@ void TestValueFormatter::testCreateNumberFormat_data()
     QTest::addColumn<QString>("currencySymbol");
     QTest::addColumn<QString>("formatString");
     QTest::addColumn<bool>("thousandsSep");
-    QTest::addColumn<QString>("result");
+    QTest::addColumn<QString>("expected");
 
     Style::FloatFormat def = Style::DefaultFloatFormat;
 
@@ -204,8 +204,14 @@ void TestValueFormatter::testCreateNumberFormat_data()
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << false << "3000";
     QTest::newRow("with thousands separator") <<
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000";
-    QTest::newRow("bigger numberr") <<
-            300000.456 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.456";
+    QTest::newRow("bigger number 0") <<
+            300000.456 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000";
+    QTest::newRow("bigger number 1") <<
+            300000.456 << 1 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.5";
+    QTest::newRow("bigger number 2") <<
+            300000.456 << 2 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.46";
+    QTest::newRow("bigger number 3") <<
+            300000.456 << 3 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.456";
 
     // scientific
     Format::Type scient = Format::Scientific;
@@ -254,29 +260,15 @@ void TestValueFormatter::testCreateNumberFormat()
     QFETCH(QString, currencySymbol);
     QFETCH(QString, formatString);
     QFETCH(bool, thousandsSep);
-    QFETCH(QString, result);
+    QFETCH(QString, expected);
+
+    m_calcsettings->locale()->setLanguage("en_US");
 
     Number num(value);
     PublicValueFormatter fmt(m_converter);
 
-    QString res = result;
-
-    QString decpoint =  m_calcsettings->locale()->decimalSymbol();
-    QString thousep = m_calcsettings->locale()->thousandsSeparator();
-    int decimalpos = res.indexOf('.');
-    if (thousep != ",") {
-        if (res.contains(',')) {
-            res = res.replace(',', thousep);
-        }
-    }
-    if (decpoint != ".") {
-        if (decimalpos != -1) {
-            decimalpos = res.lastIndexOf('.'); // the thousand separator may now be '.'
-            res = res.replace(decimalpos, 1, decpoint);
-        }
-    }
-
-    QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep), res);
+    auto actual = fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep);
+    QCOMPARE(actual, expected);
 }
 
 
