@@ -588,6 +588,7 @@ void TestValueConverter::testAsString()
     m_calcsettings->locale()->setLanguage(locale);
 
     Value result = m_converter->asString(value);
+    qInfo()<<result<<Value(expected)<<m_converter->toString(value)<<expected;
     QCOMPARE(result, Value(expected));
     QCOMPARE(m_converter->toString(value), expected);
 }
