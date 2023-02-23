@@ -47,7 +47,7 @@ void TestValueConverter::initTestCase()
 
     QStandardPaths::setTestModeEnabled(true);
 
-#ifndef Q_MS_OS
+#ifndef Q_OS_WIN
     // Setting locale to 'C.UTF-8' makes sure we have a valid locale
     char *l = setlocale(LC_ALL, "C.UTF-8");
     qDebug()<<"Locale as been set to:"<<l;
