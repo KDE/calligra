@@ -616,7 +616,7 @@ void TestValueConverter::testAsDateTime_data()
         << ValueWithFormat(10.3, Value::fmt_DateTime);
 
     QTest::newRow("string valid") << "C" << Value("1999-11-23") << true
-        << ValueWithFormat(-39, Value::fmt_DateTime);
+        << ValueWithFormat(-39.0, Value::fmt_DateTime);
     // TODO(mek): This should probably not have a format.
     QTest::newRow("string invalid") << "C" << Value("invalid") << false
         << ValueWithFormat(Value::errorVALUE(), Value::fmt_DateTime);
@@ -657,7 +657,7 @@ void TestValueConverter::testAsDateTime()
         QVERIFY(result.asFloat() >= expected.asFloat() - 1.0/(24*60*60));
         QCOMPARE(result.format(), expected.format());
     } else {
-      qDebug() << result << " != " << expected;
+        qDebug() << result << " != " << expected;
         QCOMPARE(result, expected);
         QCOMPARE(result.format(), expected.format());
     }
