@@ -47,13 +47,12 @@ void TestValueConverter::initTestCase()
 
     QStandardPaths::setTestModeEnabled(true);
 
-    // If run with 'C' locale translations will fail
-    // Setting it to 'C.UTF-8' fixes this
-    char *l = setlocale(LC_MESSAGES, 0);
-    if (l && strcmp(l, "C") == 0) {
-        setlocale(LC_MESSAGES, "C.UTF-8");
-        qDebug()<<"Set locale:"<<l<<"->"<<setlocale(LC_MESSAGES, 0);
-    }
+#ifndef Q_MS_OS
+    // Setting locale to 'C.UTF-8' makes sure we have a valid locale
+    char *l = setlocale(LC_ALL, "C.UTF-8");
+    qDebug()<<"Locale as been set to:"<<l;
+#endif
+
     // check that translation ok, else lot of tests will fail later
     QString s = ki18n("true").toString(QStringList()<<QLatin1String(USE_LANGUAGE));
     QVERIFY2(s == QStringLiteral("sann"), "Translation failed, check that calligrasheets is translated to the selected language");
