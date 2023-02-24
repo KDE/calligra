@@ -48,9 +48,14 @@ void TestValueConverter::initTestCase()
     QStandardPaths::setTestModeEnabled(true);
 
 #ifndef Q_OS_WIN
-    // Setting locale to 'C.UTF-8' makes sure we have a valid locale
-    char *l = setlocale(LC_ALL, "C.UTF-8");
-    qDebug()<<"Locale as been set to:"<<l;
+    // If run with 'C' locale translations will fail
+    // Setting it to 'C.UTF-8' fixes this
+    // HACK: (Since I don't really know why)
+    char *l = setlocale(LC_MESSAGES, 0);
+    if (l && strcmp(l, "C") == 0) {
+        setlocale(LC_MESSAGES, "C.UTF-8");
+        qDebug()<<"Set locale:"<<l<<"->"<<setlocale(LC_MESSAGES, 0);
+    }
 #endif
 
     // check that translation ok, else lot of tests will fail later
@@ -452,8 +457,8 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("integer plain") << "C" << Value(123) << "123";
     QTest::newRow("integer percent") << "C" << ValueWithFormat(3, Value::fmt_Percent)
         << "300 %";
-    QTest::newRow("integer time") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00:00 CET";
-    QTest::newRow("integer time us") << "en_US" << ValueWithFormat(4, Value::fmt_Time) << "12:00:00 AM CET";
+    QTest::newRow("integer time") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00:00";
+    QTest::newRow("integer time us") << "en_US" << ValueWithFormat(4, Value::fmt_Time) << "12:00:00 AM";
     // TODO(mek): These next ones should almost certainly be using short date format.
     QTest::newRow("integer date 1") << "C" << ValueWithFormat(0, Value::fmt_Date) << "Saturday, 1 January 2000";
     QTest::newRow("integer date 2") << "C" << ValueWithFormat(2000, Value::fmt_Date) << "Thursday, 23 June 2005";
@@ -461,12 +466,12 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("integer date 1 xx") << USE_LOCALE << ValueWithFormat(0, Value::fmt_Date) << "lørdag 1. januar 2000";
     QTest::newRow("integer date 2 xx") << USE_LOCALE << ValueWithFormat(2000, Value::fmt_Date) << "torsdag 23. juni 2005";
     QTest::newRow("integer date 3 xx") << USE_LOCALE << ValueWithFormat(-10, Value::fmt_Date) << "onsdag 22. desember 1999";
-    QTest::newRow("integer datetime 1") << "C" << ValueWithFormat(4, Value::fmt_DateTime) << "Wednesday, 5 January 2000 00:00:00 UTC";
-    QTest::newRow("integer datetime 1 us") << "en_US" << ValueWithFormat(4, Value::fmt_DateTime) << "Wednesday, January 5, 2000 12:00:00 AM UTC";
-    QTest::newRow("integer datetime 1 xx") << USE_LOCALE << ValueWithFormat(4, Value::fmt_DateTime) << "onsdag 5. januar 2000 00:00:00 UTC";
-    QTest::newRow("integer datetime 2") << "C" << ValueWithFormat(-10, Value::fmt_DateTime) << "Wednesday, 22 December 1999 00:00:00 UTC";
-    QTest::newRow("integer datetime 2 xx") << "en_US" << ValueWithFormat(-10, Value::fmt_DateTime) << "Wednesday, December 22, 1999 12:00:00 AM UTC";
-    QTest::newRow("integer datetime 2 xx") << USE_LOCALE << ValueWithFormat(-10, Value::fmt_DateTime) << "onsdag 22. desember 1999 00:00:00 UTC";
+    QTest::newRow("integer datetime 1") << "C" << ValueWithFormat(4, Value::fmt_DateTime) << "Wednesday, 5 January 2000 00:00:00";
+    QTest::newRow("integer datetime 1 us") << "en_US" << ValueWithFormat(4, Value::fmt_DateTime) << "Wednesday, January 5, 2000 12:00:00 AM";
+    QTest::newRow("integer datetime 1 xx") << USE_LOCALE << ValueWithFormat(4, Value::fmt_DateTime) << "onsdag 5. januar 2000 00:00:00";
+    QTest::newRow("integer datetime 2") << "C" << ValueWithFormat(-10, Value::fmt_DateTime) << "Wednesday, 22 December 1999 00:00:00";
+    QTest::newRow("integer datetime 2 xx") << "en_US" << ValueWithFormat(-10, Value::fmt_DateTime) << "Wednesday, December 22, 1999 12:00:00 AM";
+    QTest::newRow("integer datetime 2 xx") << USE_LOCALE << ValueWithFormat(-10, Value::fmt_DateTime) << "onsdag 22. desember 1999 00:00:00";
 
     QTest::newRow("float 123") << "C" << Value(123.0) << "123";
     QTest::newRow("float -3.14") << "C" << Value(-3.14) << "-3.14";
@@ -479,12 +484,12 @@ void TestValueConverter::testAsString_data()
     // TODO(mek): Currently buggy/inconsistent in implementation.
     //QTest::newRow("float percent") << "C" << ValueWithFormat(3.45, Value::fmt_Percent)
     //    << "345 %";
-    QTest::newRow("float time 0") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00:00 CET";
-    QTest::newRow("float time 1") << "C" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00:00 CET";
-    QTest::newRow("float time 2") << "C" << ValueWithFormat(3.675, Value::fmt_Time) << "16:12:00 CET";
-    QTest::newRow("float time 0 us") << "en_US" << ValueWithFormat(4.0, Value::fmt_Time) << "12:00:00 AM CET";
-    QTest::newRow("float time 1 us") << "en_US" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00:00 PM CET";
-    QTest::newRow("float time 2 us") << "en_US" << ValueWithFormat(3.675, Value::fmt_Time) << "4:12:00 PM CET";
+    QTest::newRow("float time 0") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00:00";
+    QTest::newRow("float time 1") << "C" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00:00";
+    QTest::newRow("float time 2") << "C" << ValueWithFormat(3.675, Value::fmt_Time) << "16:12:00";
+    QTest::newRow("float time 0 us") << "en_US" << ValueWithFormat(4.0, Value::fmt_Time) << "12:00:00 AM";
+    QTest::newRow("float time 1 us") << "en_US" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00:00 PM";
+    QTest::newRow("float time 2 us") << "en_US" << ValueWithFormat(3.675, Value::fmt_Time) << "4:12:00 PM";
     QTest::newRow("float date 1") << "C" << ValueWithFormat(0.5, Value::fmt_Date) << "Saturday, 1 January 2000";
     QTest::newRow("float date 2") << "C" << ValueWithFormat(2000.324, Value::fmt_Date) << "Thursday, 23 June 2005";
     QTest::newRow("float date 3") << "C" << ValueWithFormat(-9.234, Value::fmt_Date) << "Wednesday, 22 December 1999";
@@ -507,22 +512,22 @@ void TestValueConverter::testAsString_data()
         << "2.2e+99+3.3e+88i";
     QTest::newRow("complex time 0") << "C"
         << ValueWithFormat(complex<Number>(4, 3), Value::fmt_Time)
-        << "00:00:00 CET";
+        << "00:00:00";
     QTest::newRow("complex time 1") << "C"
         << ValueWithFormat(complex<Number>(0.5, -3), Value::fmt_Time)
-        << "12:00:00 CET";
+        << "12:00:00";
     QTest::newRow("complex time 2") << "C"
         << ValueWithFormat(complex<Number>(3.675, 653), Value::fmt_Time)
-        << "16:12:00 CET";
+        << "16:12:00";
     QTest::newRow("complex time 0 us") << "en_US"
         << ValueWithFormat(complex<Number>(4, 634), Value::fmt_Time)
-        << "12:00:00 AM CET";
+        << "12:00:00 AM";
     QTest::newRow("complex time 1 us") << "en_US"
         << ValueWithFormat(complex<Number>(0.5, 2.3), Value::fmt_Time)
-        << "12:00:00 PM CET";
+        << "12:00:00 PM";
     QTest::newRow("complex time 2 us") << "en_US"
         << ValueWithFormat(complex<Number>(3.675, 2), Value::fmt_Time)
-        << "4:12:00 PM CET";
+        << "4:12:00 PM";
     QTest::newRow("complex date 1") << "C"
         << ValueWithFormat(complex<Number>(0.5, 0), Value::fmt_Date)
         << "Saturday, 1 January 2000";
@@ -588,7 +593,6 @@ void TestValueConverter::testAsString()
     m_calcsettings->locale()->setLanguage(locale);
 
     Value result = m_converter->asString(value);
-    qInfo()<<result<<Value(expected)<<m_converter->toString(value)<<expected;
     QCOMPARE(result, Value(expected));
     QCOMPARE(m_converter->toString(value), expected);
 }
