@@ -55,7 +55,6 @@ public:
     // Initialization flag.
     bool initialized;
     // For "Selection List..." action
-    QMenu* popupListChoose;
     Editor lastEditorWithFocus;
 
     // Find and Replace context. We remember the options and
@@ -141,17 +140,6 @@ public:
 
     QList<QAction*> popupActionList() const;
     void createPopupMenuActions();
-
-
-    /**
-     * \ingroup UI
-     * Tests for text values in the selection cursor's column, that are
-     * different to the one at the selection cursor.
-     * Used to create a popup menu consisting of text values to choose from.
-     * \param selection the selection of cells to work on
-     * \return \c true if there are text values in the selection cursor's column
-     */
-    bool testListChoose(Selection *selection) const;
 
 private:
     CellToolBase* q;

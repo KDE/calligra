@@ -28,6 +28,7 @@ public:
     ~CellTool() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
+    SheetView* sheetView(Sheet* sheet) const override;
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
@@ -39,7 +40,6 @@ protected:
     QPointF canvasOffset() const override;
     int maxCol() const override;
     int maxRow() const override;
-    SheetView* sheetView(Sheet* sheet) const override;
 
 protected Q_SLOTS:
     // -- misc actions --

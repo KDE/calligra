@@ -87,7 +87,6 @@
 #include <QClipboard>
 #include <QBuffer>
 #include <QMimeData>
-#include <QMenu>
 #include <QPainter>
 #include <QDomDocument>
 #ifndef QT_NO_SQL
@@ -109,7 +108,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->externalEditor = 0;
     d->formulaDialog = 0;
     d->initialized = false;
-    d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
 
     d->findOptions = 0;
@@ -228,7 +226,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 CellToolBase::~CellToolBase()
 {
     delete d->formulaDialog;
-    delete d->popupListChoose;
     delete d->cellEditor;
     delete d->actions;
     qDeleteAll(d->popupMenuActions);
@@ -1431,93 +1428,6 @@ void CellToolBase::qTableView()
     delete dialog;
     delete model;
 #endif
-}
-
-void CellToolBase::listChoosePopupMenu()
-{
-    if (!selection()->activeSheet()->fullMap()->isReadWrite()) {
-        return;
-    }
-
-    delete d->popupListChoose;
-    d->popupListChoose = new QMenu();
-
-    Sheet *const sheet = selection()->activeSheet();
-    const Cell cursorCell(sheet, selection()->cursor());
-    const QString text = cursorCell.userInput();
-    const CellStorage *const storage = sheet->fullCellStorage();
-
-    QStringList itemList;
-    const Region::ConstIterator end(selection()->constEnd());
-    for (Region::ConstIterator it(selection()->constBegin()); it != end; ++it) {
-        const QRect range = (*it)->rect();
-        if (cursorCell.column() < range.left() || cursorCell.column() > range.right()) {
-            continue; // next range
-        }
-        Cell cell;
-        if (range.top() == 1) {
-            cell = storage->firstInColumn(cursorCell.column(), CellStorage::Values);
-        } else {
-            cell = storage->nextInColumn(cursorCell.column(), range.top() - 1, CellStorage::Values);
-        }
-        while (!cell.isNull() && cell.row() <= range.bottom()) {
-            if (!cell.isPartOfMerged() && !(cell == cursorCell)) {
-                const QString userInput = cell.userInput();
-                if (cell.value().isString() && userInput != text && !userInput.isEmpty()) {
-                    if (itemList.indexOf(userInput) == -1) {
-                        itemList.append(userInput);
-                    }
-                }
-            }
-            cell = storage->nextInColumn(cell.column(), cell.row(), CellStorage::Values);
-        }
-    }
-
-    for (QStringList::ConstIterator it = itemList.constBegin(); it != itemList.constEnd(); ++it) {
-        d->popupListChoose->addAction((*it));
-    }
-
-    if (itemList.isEmpty()) {
-        return;
-    }
-    double tx = sheet->columnPosition(selection()->marker().x());
-    double ty = sheet->rowPosition(selection()->marker().y());
-    double h = cursorCell.height();
-    if (sheetView(sheet)->obscuresCells(selection()->marker())) {
-        const CellView& cellView = sheetView(sheet)->cellView(selection()->marker().x(), selection()->marker().y());
-        h = cellView.cellHeight();
-    }
-    ty += h;
-
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-        tx = canvas()->canvasWidget()->width() - tx;
-    }
-
-    QPoint p((int)tx, (int)ty);
-    QPoint p2 = canvas()->canvasWidget()->mapToGlobal(p);
-
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-        p2.setX(p2.x() - d->popupListChoose->sizeHint().width() + 1);
-    }
-
-    d->popupListChoose->popup(p2);
-    connect(d->popupListChoose, &QMenu::triggered,
-            this, &CellToolBase::listChooseItemSelected);
-}
-
-
-void CellToolBase::listChooseItemSelected(QAction* action)
-{
-    const Cell cell(selection()->activeSheet(), selection()->marker());
-    if (action->text() == cell.userInput())
-        return;
-
-    DataManipulator *command = new DataManipulator;
-    command->setSheet(selection()->activeSheet());
-    command->setValue(Value(action->text()));
-    command->setParsing(true);
-    command->add(selection()->marker());
-    command->execute(canvas());
 }
 
 void CellToolBase::documentSettingsDialog()

@@ -33,6 +33,7 @@
 #include "engine/CalculationSettings.h"
 #include "core/ApplicationSettings.h"
 #include "core/CellStorage.h"
+#include "core/DocBase.h"
 #include "core/Map.h"
 #include "core/ColFormatStorage.h"
 #include "core/RowFormatStorage.h"
@@ -832,9 +833,10 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             popupActions.append(actions->action("clearComment"));
         }
 
-        if (testListChoose(sel)) {
+        bool readWrite = sel->activeSheet()->fullMap()->doc()->isReadWrite();
+        if (actions->cellAction("listChoose")->shouldBeEnabled(readWrite, sel, cell)) {
             popupActions.append(popupMenuActions["separator7"]);
-            popupActions.append(popupMenuActions["listChoose"]);
+            popupActions.append(actions->action("listChoose"));
         }
     }
     return popupActions;
@@ -849,43 +851,6 @@ void CellToolBase::Private::createPopupMenuActions()
         action->setSeparator(true);
         popupMenuActions.insert(QString("separator%1").arg(i), action);
     }
-
-    action = new QAction(i18n("Selection List..."), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::listChoosePopupMenu);
-    popupMenuActions.insert("listChoose", action);
 }
 
-bool CellToolBase::Private::testListChoose(Selection *selection) const
-{
-    Sheet *sheet = selection->activeSheet();
-    const Cell cursorCell(sheet, selection->cursor());
-    const CellStorage *const storage = sheet->fullCellStorage();
 
-    const Region::ConstIterator end(selection->constEnd());
-    for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
-        const QRect range = (*it)->rect();
-        if (cursorCell.column() < range.left() || cursorCell.column() > range.right()) {
-            continue; // next range
-        }
-        Cell cell;
-        if (range.top() == 1) {
-            cell = storage->firstInColumn(cursorCell.column(), CellStorage::Values);
-        } else {
-            cell = storage->nextInColumn(cursorCell.column(), range.top() - 1, CellStorage::Values);
-        }
-        while (!cell.isNull() && cell.row() <= range.bottom()) {
-            if (cell.isDefault() || cell.isPartOfMerged()
-                    || cell.isFormula() || cell.isTime() || cell.isDate()
-                    || cell.value().isNumber() || cell.value().asString().isEmpty()
-                    || (cell == cursorCell)) {
-                cell = storage->nextInColumn(cell.column(), cell.row(), CellStorage::Values);
-                continue;
-            }
-            if (cell.userInput() != cursorCell.userInput()) {
-                return true;
-            }
-            cell = storage->nextInColumn(cell.column(), cell.row(), CellStorage::Values);
-        }
-    }
-    return false;
-}

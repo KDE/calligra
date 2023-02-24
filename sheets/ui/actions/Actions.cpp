@@ -27,6 +27,7 @@
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
 #include "Link.h"
+#include "ListChoose.h"
 #include "Merge.h"
 #include "NamedAreas.h"
 #include "PageBreak.h"
@@ -143,6 +144,8 @@ void Actions::createActions()
     // Link
     addAction(new Link(this));
     addAction(new ClearLink(this));
+    // ListChoose
+    addAction(new ListChoose(this));
     // Merge
     addAction(new Merge(this, false, false));
     addAction(new Merge(this, true, false));

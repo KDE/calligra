@@ -23,6 +23,7 @@ set (actions_DIR_SRCS
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
     actions/Link.cpp
+    actions/ListChoose.cpp
     actions/Merge.cpp
     actions/NamedAreas.cpp
     actions/PageBreak.cpp
