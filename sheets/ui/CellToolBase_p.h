@@ -16,19 +16,12 @@
 
 // Sheets
 #include "CellToolBase.h"
-// #include "Global.h"
 
 // dialogs
-#include "dialogs/FindDialog.h"
 #include "dialogs/FormulaDialog.h"
 
-// Qt
-// #include <QAction>
-// #include <QHash>
 
 class KUndo2Command;
-class KFind;
-class KReplace;
 
 
 namespace Calligra
@@ -57,31 +50,8 @@ public:
     // For "Selection List..." action
     Editor lastEditorWithFocus;
 
-    // Find and Replace context. We remember the options and
-    // the strings used previously.
-    long findOptions;
-    QStringList findStrings;
-    QStringList replaceStrings;
-    FindOption::searchTypeValue typeValue;
-    FindOption::searchDirectionValue directionValue;
-    // Current "find" operation
-    KFind* find;
-    KReplace* replace;
-    KUndo2Command* replaceCommand;
-    int findLeftColumn;
-    int findRightColumn;
-    int findTopRow;
-    int findBottomRow;
-    QPoint findStart;
-    QPoint findPos;
-    QPoint findEnd;
     QHash<int, QString> wordCollection;
     Actions *actions;
-
-    struct {
-        Sheet * currentSheet;
-        Sheet * firstSheet;
-    } searchInSheets;
 
 public:
     void updateEditor(const Cell& cell);

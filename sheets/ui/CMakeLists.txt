@@ -17,6 +17,7 @@ set (actions_DIR_SRCS
     actions/Copy.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
+    actions/FindReplace.cpp
     actions/Font.cpp
     actions/Goto.cpp
     actions/Indent.cpp
@@ -47,6 +48,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/ConditionalDialog.cpp
     actions/dialogs/ConsolidateDialog.cpp
     actions/dialogs/CSVDialog.cpp
+    actions/dialogs/FindDialog.cpp
     actions/dialogs/GotoDialog.cpp
     actions/dialogs/InsertDialog.cpp
     actions/dialogs/LinkDialog.cpp
@@ -99,7 +101,6 @@ set (commands_DIR_SRCS
 set (dialogs_DIR_SRCS
     dialogs/DatabaseDialog.cpp
     dialogs/DocumentSettingsDialog.cpp
-    dialogs/FindDialog.cpp
     dialogs/FormulaDialog.cpp
     dialogs/GoalSeekDialog.cpp
     dialogs/LayoutWidgets.cpp

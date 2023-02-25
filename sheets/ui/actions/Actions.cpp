@@ -21,6 +21,7 @@
 #include "Copy.h"
 #include "CSVActions.h"
 #include "Fill.h"
+#include "FindReplace.h"
 #include "Font.h"
 #include "Goto.h"
 #include "Indent.h"
@@ -128,6 +129,11 @@ void Actions::createActions()
     addAction(new Fill(this, FillManipulator::Down));
     addAction(new Fill(this, FillManipulator::Left));
     addAction(new Fill(this, FillManipulator::Right));
+    // FindReplace
+    addAction(new Find(this));
+    addAction(new FindNext(this));
+    addAction(new FindPrevious(this));
+    addAction(new Replace(this));
     // Font
     addAction(new Font(this));
     addAction(new FontSize(this));

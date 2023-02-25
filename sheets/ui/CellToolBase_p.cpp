@@ -85,11 +85,6 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
         actions[i]->setEnabled(enable);
     q->action("insertFormula")->setEnabled(enable);
     if (externalEditor) externalEditor->setEnabled(enable);
-
-    // These actions are always enabled.
-    q->action("edit_find")->setEnabled(true);
-    q->action("edit_find_next")->setEnabled(true);
-    q->action("edit_find_last")->setEnabled(true);
 }
 
 void CellToolBase::Private::processEnterKey(QKeyEvent* event)
