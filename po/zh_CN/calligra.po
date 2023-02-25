@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-02-15 11:06\n"
+"PO-Revision-Date: 2023-02-24 12:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1442,7 +1442,7 @@ msgstr "加密文档 (&C)"
 #: main/KoMainWindow.cpp:297
 #, kde-format
 msgid "&Uncompress to Directory"
-msgstr "解压缩到目录 (&U)"
+msgstr "解压到目录 (&U)"
 
 #: main/KoMainWindow.cpp:302
 #, kde-format

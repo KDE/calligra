@@ -293,21 +293,6 @@
 ></para
 > &underFDL; &underGPL; </chapter>
 
-<appendix id="installation">
-<title
->Instalação</title>
-
-<para
->O &sheets; é integrante do pacote &calligra; do &kde; e usa várias bibliotecas do &calligra;. O &calligra; propriamente dito é parte do &kde; e depende das suas bibliotecas gerais.</para>
-<para
->Para instruções sobre aquisição e instalação do &kde;, &calligra; e &sheets; por favor visite o <ulink url="http://www.kde.org"
->http://www.kde.org</ulink
-> e <ulink url="http://www.calligra.org"
->http://www.calligra.org</ulink
->.</para>
-
-</appendix>
-
 &documentation.index;
 </book>
 

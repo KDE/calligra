@@ -848,9 +848,9 @@
 
 <sect1 id="validcheck">
 <title
->Checar Validade</title>
+>Verificar validade</title>
 <para
->O &sheets; pode automaticamente checar a validade de dados inseridos baseado num determinado critério, e exibir uma caixa de mensagem se o dado é inválido.</para>
+>O &sheets; pode automaticamente verificar a validade de dados inseridos baseado num determinado critério, e exibir uma caixa de mensagem se o dado é inválido.</para>
 <para
 >Para ativar esta funcionalidade, selecione as células a serem monitoradas e escolha <menuchoice
 ><guimenu

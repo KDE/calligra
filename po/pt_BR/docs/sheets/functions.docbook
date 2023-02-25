@@ -10751,7 +10751,7 @@ all changes will be overwritten on the next script run
 <para
 >Tipo (opcional) define a data devida. 1 para pagamento no início de um período e 0 (padrão) para pagamento no final do período.</para>
 <para
->O exemplo mostra o juro pago no último ano de um empréstimo de três anos. A taxa de juros é de 10 por cento.</para>
+>O exemplo mostra o juro pago no último ano de um empréstimo de três anos. A taxa de juros é de 10 porcento.</para>
 <para
 ><segmentedlist
 ><segtitle
