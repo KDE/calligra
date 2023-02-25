@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-20 00:57+0000\n"
-"PO-Revision-Date: 2023-01-30 11:21+0100\n"
+"PO-Revision-Date: 2023-02-24 11:07+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -11793,7 +11793,7 @@ msgstr "Tabulkový procesor"
 #: part/AboutData.h:32
 #, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
-msgstr "Copyright 1998-%1, Tým Calligra Sheets"
+msgstr "Autorská práva 1998-%1, Tým Calligra Sheets"
 
 #: part/AboutData.h:40
 #, kde-format

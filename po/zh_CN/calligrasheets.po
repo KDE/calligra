@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-20 00:57+0000\n"
-"PO-Revision-Date: 2023-02-15 11:03\n"
+"PO-Revision-Date: 2023-02-24 12:42\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -15457,75 +15457,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
-
-#~ msgid "Cell Format..."
-#~ msgstr "单元格格式..."
-
-#~ msgid "Set the cell formatting"
-#~ msgstr "设置单元格格式"
-
-#~ msgid "Move the cell object to the clipboard"
-#~ msgstr "将单元格里的对象移到剪贴板上"
-
-#~ msgid "Copy the cell object to the clipboard"
-#~ msgstr "将单元格对象拷贝到剪贴板"
-
-#~ msgid "Paste the contents of the clipboard at the cursor"
-#~ msgstr "在光标处粘贴剪贴板的内容"
-
-#~ msgid "Special Paste..."
-#~ msgstr "选择性粘贴..."
-
-#~ msgid "Paste the contents of the clipboard with special options"
-#~ msgstr "使用特殊的选项粘贴剪贴板上的内容"
-
-#~ msgid "Paste with Insertion"
-#~ msgstr "粘贴并插入"
-
-#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
-#~ msgstr "从剪贴板插入一个单元格到工作表中"
-
-#~ msgid "Paste Inserting Cells"
-#~ msgstr "插入粘贴单元格"
-
-#~ msgid "Insert"
-#~ msgstr "插入"
-
-#~ msgid "Move towards right"
-#~ msgstr "向右移动"
-
-#~ msgid "Move towards bottom"
-#~ msgstr "向下移动"
-
-#~ msgid "Special Paste"
-#~ msgstr "选择性粘贴"
-
-#~ msgid "Content"
-#~ msgstr "内容"
-
-#~ msgid "Everything"
-#~ msgstr "所有内容"
-
-#~ msgid "Comment"
-#~ msgstr "注释"
-
-#~ msgid "Everything without border"
-#~ msgstr "所有内容边框除外"
-
-#~ msgid "Operation"
-#~ msgstr "操作"
-
-#~ msgid "Overwrite"
-#~ msgstr "覆盖"
-
-#~ msgid "Addition"
-#~ msgstr "相加"
-
-#~ msgid "Subtraction"
-#~ msgstr "相减"
-
-#~ msgid "Multiplication"
-#~ msgstr "相乘"
-
-#~ msgid "Division"
-#~ msgstr "相除"
