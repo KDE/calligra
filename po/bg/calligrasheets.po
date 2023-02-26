@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2011-07-25 20:04+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -935,7 +935,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") връща 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "База данни"
@@ -13994,117 +13994,117 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Промяна на контур"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "&Функция..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Вмъкване на математически израз."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "От ба&за данни..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Вмъкване на данни от SQL база данни."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Потребителски списъци..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Създаване на потребителски списъци за сортиране или автопопълване."
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Търсене на решение..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Повтаряне на изчисление, за да се намери определена стойност."
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "Избор на формула"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Вмъкване на функция."
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "Други..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "Модифициране на клетка"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Редактиране на маркираната клетка."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Преизчисляване стойността на всяка клетка в текущия работен лист."
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Стартиране на инспектор..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Показване на лист..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Локални настройки"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Показване &индикатор на коментар"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Защита"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Защита"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Поставяне на съдържанието на буфера при показалеца."
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14112,17 +14112,6 @@ msgid ""
 msgstr ""
 "Няма налични драйвери за база данни. За да използвате тази възможност трябва "
 "да инсталирате необходимите Qt 3 драйвери."
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Заместване"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Списък със селекции..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14990,51 +14979,6 @@ msgstr "Формат за време: %1"
 #, kde-format
 msgid "Currency format: %1"
 msgstr "Формат за валута: %1"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Допълнителни настройки"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Търсене в целия лист"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Търсене в:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Стойности на клетка"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Коментари"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Посока на търсене:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Напречно и надолу"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Надолу и напречно"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "По-малко настройки"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16097,6 +16041,41 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Отваряне на връзката?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Заместване"
+
+#~ msgid "Selection List..."
+#~ msgstr "Списък със селекции..."
+
+#~ msgid "More Options"
+#~ msgstr "Допълнителни настройки"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "Търсене в целия лист"
+
+#~ msgid "Search in:"
+#~ msgstr "Търсене в:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Стойности на клетка"
+
+#~ msgid "Comments"
+#~ msgstr "Коментари"
+
+#~ msgid "Search direction:"
+#~ msgstr "Посока на търсене:"
+
+#~ msgid "Across then Down"
+#~ msgstr "Напречно и надолу"
+
+#~ msgid "Down then Across"
+#~ msgstr "Надолу и напречно"
+
+#~ msgid "Fewer Options"
+#~ msgstr "По-малко настройки"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Форматиране на клетка..."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2011-01-17 22:04+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -966,7 +966,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ritoûne 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Båze di dnêyes"
@@ -14686,121 +14686,121 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Candjî boirdeure"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "&Fonccion..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Adresse rantoele:"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "D' ene båze di &dnêyes.."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, fuzzy, kde-format
 #| msgid "From &Database..."
 msgid "Insert data from a SQL database"
 msgstr "D' ene båze di &dnêyes.."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Djivêyes da vosse..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "C&weraedje del solucion..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "Tchoes del formule"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "Insert a function"
 msgstr "Sititchî ene fonccion"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "Ôtes..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "Candjî boesse"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Candjî l' boesse e sorbriyance"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Tchoezi totes les boesses dins l' foye do moumint"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Enonder Inspector..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Mostrer QTableView..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Document Settings..."
 msgstr "Apontiaedjes do documint..."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Mostrer l' divize des apontiaedjes do documint"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Waerantixhaedje"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Waerantixhaedje"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Aclaper l' ådvins do tchapea emacralé a l' eplaeçmint do cursoe"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14811,18 +14811,6 @@ msgid ""
 msgstr ""
 "I gn a pont d' mineu d' båze di dnêyes. Po vs siervi di cisse fonccionålité "
 "vos avoz dandjî d' astaler les mineus d' båze di dnêyes Qt 3 k' i fåt."
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-#| msgid "Replace"
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Mete el plaece"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Djivêye do tchoes..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15742,51 +15730,6 @@ msgstr "Cogne po håyner l' tins"
 #| msgid "Currency Format"
 msgid "Currency format: %1"
 msgstr "Cogne del manoye"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-msgid "More Options"
-msgstr "Tchuzes di cweraedje"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "Candjî tecse"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-msgid "Search in:"
-msgstr "Candjî tecse"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-msgid "Cell Values"
-msgstr "Valixhances"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Comments"
-msgstr "Rawete di tecse"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-msgid "Search direction:"
-msgstr "Candjî tecse"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "Tchuzes djeneråles"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16737,6 +16680,43 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Drovi hårdêye?"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Mete el plaece"
+
+#~ msgid "Selection List..."
+#~ msgstr "Djivêye do tchoes..."
+
+#, fuzzy
+#~ msgid "More Options"
+#~ msgstr "Tchuzes di cweraedje"
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "Candjî tecse"
+
+#, fuzzy
+#~ msgid "Search in:"
+#~ msgstr "Candjî tecse"
+
+#, fuzzy
+#~ msgid "Cell Values"
+#~ msgstr "Valixhances"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "Rawete di tecse"
+
+#, fuzzy
+#~ msgid "Search direction:"
+#~ msgstr "Candjî tecse"
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "Tchuzes djeneråles"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Cogne del boesse..."

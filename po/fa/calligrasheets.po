@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2011-09-26 14:19+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -985,7 +985,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "تووالو"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "دادگان"
@@ -14657,123 +14657,123 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "تغيير لبه"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "&تابع...‌"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Insert math expression"
 msgstr "درج عبارت ریاضی"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "از &دادگان...‌"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "درج داده از دادگان SQL"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "فهرستهای سفارشی..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "ایجاد فهرستهای سفارشی برای مرتب‌سازی یا پر کردن خودکار"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "پیگردی &هدف...‌"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "تکرار محاسبه برای یافتن مقدار مشخص"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "گزینش فرمول"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "Insert a function"
 msgstr "درج یک تابع"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "غیره..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "تغییر سلول"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "ویرایش سلول مشخص‌شده"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "همه سلولها را در کاربرگ جاری برمی‌گزیند"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr "اجرای بازرس..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "نمایش برگه..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "تنظیمات محلی"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "نمایش شاخص &توضیح‌"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "حفاظت"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "حفاظت"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "چسباندن محتویات تخته یادداشت در مکان‌نما"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14784,18 +14784,6 @@ msgid ""
 msgstr ""
 "گردانندگان دادگان موجود نیست.  برای استفاده از این ویژگی، لازم است "
 "گردانندگان دادگان Qt 3 لازم را نصب کنید."
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-#| msgid "Replace Named Area"
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "جایگزینی ناحیه نام‌دار"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "فهرست گزینش..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15729,51 +15717,6 @@ msgstr "قالب زمان: %1"
 #, kde-format
 msgid "Currency format: %1"
 msgstr "قالب واحد پول: %1"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "گزینه‌های بیشتر"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "جستجوی برگه کامل"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "جستجو در:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "مقادیر سلول"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "توضیحات"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "جهت جستجو:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "از عرض سپس پایین"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "پایین سپس از عرض"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "گزینه‌های کمتر"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16903,6 +16846,42 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "پیوند باز شود؟"
+
+#, fuzzy
+#~| msgid "Replace Named Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "جایگزینی ناحیه نام‌دار"
+
+#~ msgid "Selection List..."
+#~ msgstr "فهرست گزینش..."
+
+#~ msgid "More Options"
+#~ msgstr "گزینه‌های بیشتر"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "جستجوی برگه کامل"
+
+#~ msgid "Search in:"
+#~ msgstr "جستجو در:"
+
+#~ msgid "Cell Values"
+#~ msgstr "مقادیر سلول"
+
+#~ msgid "Comments"
+#~ msgstr "توضیحات"
+
+#~ msgid "Search direction:"
+#~ msgstr "جهت جستجو:"
+
+#~ msgid "Across then Down"
+#~ msgstr "از عرض سپس پایین"
+
+#~ msgid "Down then Across"
+#~ msgstr "پایین سپس از عرض"
+
+#~ msgid "Fewer Options"
+#~ msgstr "گزینه‌های کمتر"
 
 #~ msgid "Cell Format..."
 #~ msgstr "قالب سلول..."

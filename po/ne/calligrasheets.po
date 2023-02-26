@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2007-08-24 15:27+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -981,7 +981,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "टुभालु"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -14654,123 +14654,123 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "किनारा परिवर्तन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "प्रकार्य..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Insert math expression"
 msgstr "गणित अभिव्यक्ति घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "डाटाबेसबाट..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL डाटाबेसबाट डेटा घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "अनुकूल सूची..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "क्रमबद्धता वा स्वत: भर्नका लागि अनुकूल सूची सिर्जना गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "लक्ष्य खोजी..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "निर्दिष्ट मान फेला पार्न गणना दोहोर्याउनुहोस्"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "सूत्र चयन"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "Insert a function"
 msgstr "प्रकार्य घुसाउनुहोस्"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "अन्य..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "कक्ष परिमार्जन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "हाइलाइट गरिएको कक्ष सम्पादन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "हालको पानामा सबै कक्ष चयन गर्नुहोस्"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr "निरीक्षक चलाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "पाना देखाउनुहोस्..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "लोकेल सेटिङ"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "टिप्पणी सूचक देखाउनुहोस्"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "कर्सरमा क्लिपबोर्डका सामाग्री टाँस्नुहोस्"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -14781,18 +14781,6 @@ msgid ""
 msgstr ""
 "डाटाबेस ड्राइभर उपलब्ध छैन ।  यो विशेषता प्रयोग गर्न तपाईँले आवश्यकिय Qt 3 डाटाबेस "
 "ड्राइभर स्थापना गर्नु आवश्यक हुन्छ ।"
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-#| msgid "Replace Named Area"
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "नामाकरण गरिएको क्षेत्र प्रतिस्थापन गर्नुहोस्"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "चयन सूची..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15727,51 +15715,6 @@ msgstr "समय ढाँचा: %1"
 #, kde-format
 msgid "Currency format: %1"
 msgstr "मुद्रा ढाँचा: %1"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "धेरै विकल्प"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "पूरै पाना खोज्नुहोस्"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "यसमा खोज्नुहोस्:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "कक्ष मान"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "टिप्पणी"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "दिशा खोज्नुहोस्:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "वारपार गरेपछि तल सार्नुहोस्"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "तल सारेपछि वारपार गर्नुहोस्"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "थोरै विकल्प"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16904,6 +16847,42 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "लिङ्क खोल्नुहुन्छ ?"
+
+#, fuzzy
+#~| msgid "Replace Named Area"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "नामाकरण गरिएको क्षेत्र प्रतिस्थापन गर्नुहोस्"
+
+#~ msgid "Selection List..."
+#~ msgstr "चयन सूची..."
+
+#~ msgid "More Options"
+#~ msgstr "धेरै विकल्प"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "पूरै पाना खोज्नुहोस्"
+
+#~ msgid "Search in:"
+#~ msgstr "यसमा खोज्नुहोस्:"
+
+#~ msgid "Cell Values"
+#~ msgstr "कक्ष मान"
+
+#~ msgid "Comments"
+#~ msgstr "टिप्पणी"
+
+#~ msgid "Search direction:"
+#~ msgstr "दिशा खोज्नुहोस्:"
+
+#~ msgid "Across then Down"
+#~ msgstr "वारपार गरेपछि तल सार्नुहोस्"
+
+#~ msgid "Down then Across"
+#~ msgstr "तल सारेपछि वारपार गर्नुहोस्"
+
+#~ msgid "Fewer Options"
+#~ msgstr "थोरै विकल्प"
 
 #~ msgid "Cell Format..."
 #~ msgstr "कक्ष ढाँचा..."

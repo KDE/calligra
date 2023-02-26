@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -900,7 +900,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Reikšmė"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Duombazė"
@@ -13440,136 +13440,125 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kapo Verdė"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Įprastoji išraiška"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Pasirinktas..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Parametrų parinkimas"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Įterpti lakštą"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Kiti"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Keisti langelį"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rodyti lakštą"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Pakeisti"
-
-#: ui/CellToolBase_p.cpp:853
-#, fuzzy, kde-format
-msgid "Selection List..."
-msgstr "Rinkinių sąrašas"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14453,51 +14442,6 @@ msgstr "Laiko formatas: %1"
 #, fuzzy, kde-format
 msgid "Currency format: %1"
 msgstr "Valiuta"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Daugiau parinkčių"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "Pasirinkti šriftą..."
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Ieškoti:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Laukelio reikšmės"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Komentarai"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Paieškos kryptis:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Mažiau pasirinkčių"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -15431,6 +15375,37 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Atverti nuorodą"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Pakeisti"
+
+#, fuzzy
+#~ msgid "Selection List..."
+#~ msgstr "Rinkinių sąrašas"
+
+#~ msgid "More Options"
+#~ msgstr "Daugiau parinkčių"
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "Pasirinkti šriftą..."
+
+#~ msgid "Search in:"
+#~ msgstr "Ieškoti:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Laukelio reikšmės"
+
+#~ msgid "Comments"
+#~ msgstr "Komentarai"
+
+#~ msgid "Search direction:"
+#~ msgstr "Paieškos kryptis:"
+
+#~ msgid "Fewer Options"
+#~ msgstr "Mažiau pasirinkčių"
 
 #, fuzzy
 #~ msgid "Cell Format..."

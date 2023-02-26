@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2006-12-17 13:47+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -901,7 +901,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Тувалу"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Маълумот базаси"
@@ -13284,136 +13284,125 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Чегара рангини ўзгартириш"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "&Функция..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Математик ифода қўшиш."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "&Маълумот базасидан..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Маълумотни SQL маълумотлар базасидан қўйиш."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Бошқа рўйхатлар..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "&Goal Seek..."
 msgstr "Варақни кўрсатиш..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "Формула танлаш"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Функцияни қўйиш"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "Бошқалар..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "Катакни ўзгартириш"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Танланган катакни таҳрирлаш."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Жорий катак таркибини олиб ташлаш."
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Варақни кўрсатиш..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Мосламалар"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Формула панелини кўрсатиш."
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Ҳимоялаш"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Ҳимоялаш"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Жорий катак таркибини олиб ташлаш."
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Сентябрь"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Танланганнинг рўйхати"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14332,51 +14321,6 @@ msgstr "Вақтнинг кўриниши: %1"
 #, kde-format
 msgid "Currency format: %1"
 msgstr "Пулнинг кўриниши: %1"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Қўшимча мосламалар"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Бутун варақда қидириш"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Қаерда қидириш:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Катак қийматлари"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Изоҳлар"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Қидириш йўналиши:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, fuzzy, kde-format
-msgid "Down then Across"
-msgstr "Бекитилган сатрларни кўрсатиш."
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "Умумий мосламалар"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -15320,6 +15264,40 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Боғни очишни истайсизми?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Сентябрь"
+
+#~ msgid "Selection List..."
+#~ msgstr "Танланганнинг рўйхати"
+
+#~ msgid "More Options"
+#~ msgstr "Қўшимча мосламалар"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "Бутун варақда қидириш"
+
+#~ msgid "Search in:"
+#~ msgstr "Қаерда қидириш:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Катак қийматлари"
+
+#~ msgid "Comments"
+#~ msgstr "Изоҳлар"
+
+#~ msgid "Search direction:"
+#~ msgstr "Қидириш йўналиши:"
+
+#, fuzzy
+#~ msgid "Down then Across"
+#~ msgstr "Бекитилган сатрларни кўрсатиш."
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "Умумий мосламалар"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Катакнинг формати"

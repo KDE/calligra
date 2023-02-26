@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2019-09-29 19:44+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -953,7 +953,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vracia 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Databáza"
@@ -14182,117 +14182,117 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Zmeniť okraj"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkcia..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Insert math expression"
 msgstr "Vložiť matematický výraz"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "Z &databázy..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Vložiť dáta z SQL databázy"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Vlastné zoznamy..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Vytvoriť vlastné zoznamy pre triedenie alebo automatické vypĺňanie"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "Hľadanie &cieľa..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Opakovaný výpočet pre nájdenie špecifickej hodnoty"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "Výber vzorca"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "Insert a function"
 msgstr "Vložiť funkciu"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "Iné..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "Upraviť bunku"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Upraviť zvýraznenú bunku"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Vyberie všetky bunky v aktuálnom liste"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Spustiť riešiteľa..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Zobraziť QTableView..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Document Settings..."
 msgstr "Nastavenia dokumentu"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Zobraziť dialóg vlastností dokumentu"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Zmeniť ochranu odkazu"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, kde-format
 msgid "Permute fixation"
 msgstr "Zmeniť ochranu"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Zmeniť ochranu odkazu na textovom kurzore"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14300,16 +14300,6 @@ msgid ""
 msgstr ""
 "Nie je dostupný žiadny ovládač databázy. Potrebujete nainštalovať potrebné "
 "Qt databázové ovládače."
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Nahradiť"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Zoznam výberu..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15157,51 +15147,6 @@ msgstr "Formát času: %1"
 #, kde-format
 msgid "Currency format: %1"
 msgstr "Formát meny: %1"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Viac možností"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Prehľadať celý list"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Prehľadať:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Hodnoty buniek"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Poznámky"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Smer hľadania:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Naprieč a potom dole"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Dole a potom naprieč"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Menej možností"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16257,6 +16202,40 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otvoriť odkaz?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Nahradiť"
+
+#~ msgid "Selection List..."
+#~ msgstr "Zoznam výberu..."
+
+#~ msgid "More Options"
+#~ msgstr "Viac možností"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "Prehľadať celý list"
+
+#~ msgid "Search in:"
+#~ msgstr "Prehľadať:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Hodnoty buniek"
+
+#~ msgid "Comments"
+#~ msgstr "Poznámky"
+
+#~ msgid "Search direction:"
+#~ msgstr "Smer hľadania:"
+
+#~ msgid "Across then Down"
+#~ msgstr "Naprieč a potom dole"
+
+#~ msgid "Down then Across"
+#~ msgstr "Dole a potom naprieč"
+
+#~ msgid "Fewer Options"
+#~ msgstr "Menej možností"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Formát bunky..."

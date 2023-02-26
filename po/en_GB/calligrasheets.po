@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2022-11-26 12:33+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -956,7 +956,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") returns 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Database"
@@ -14364,117 +14364,117 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Change Border"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "&Function..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Insert math expression"
 msgstr "Insert maths expression"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "From &Database..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Insert data from an SQL database"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Custom Lists..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Create custom lists for sorting or autofill"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Goal Seek..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Repeating calculation to find a specific value"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formula Selection"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, kde-format
 msgid "Insert a function"
 msgstr "Insert a function"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "Others..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modify Cell"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Edit the highlighted cell"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Selects all cells in the current sheet"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Run Inspector..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Show QTableView..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, kde-format
 msgid "Document Settings..."
 msgstr "Document Settings..."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Show document settings dialogue"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permute reference fixation"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permute fixation"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permute the fixation of the reference at the text cursor"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Unable to locate action %1"
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14482,16 +14482,6 @@ msgid ""
 msgstr ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Replace"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Selection List..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15338,51 +15328,6 @@ msgstr "Time format: %1"
 #, kde-format
 msgid "Currency format: %1"
 msgstr "Currency format: %1"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "More Options"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Search entire sheet"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Search in:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Cell Values"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Comments"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Search direction:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Across then Down"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Down then Across"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Fewer Options"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16453,6 +16398,40 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Open Link?"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Replace"
+
+#~ msgid "Selection List..."
+#~ msgstr "Selection List..."
+
+#~ msgid "More Options"
+#~ msgstr "More Options"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "Search entire sheet"
+
+#~ msgid "Search in:"
+#~ msgstr "Search in:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Cell Values"
+
+#~ msgid "Comments"
+#~ msgstr "Comments"
+
+#~ msgid "Search direction:"
+#~ msgstr "Search direction:"
+
+#~ msgid "Across then Down"
+#~ msgstr "Across then Down"
+
+#~ msgid "Down then Across"
+#~ msgstr "Down then Across"
+
+#~ msgid "Fewer Options"
+#~ msgstr "Fewer Options"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Cell Format..."

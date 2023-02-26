@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2002-10-10 12:25+0200\n"
 "Last-Translator: Lwandle Mgidlana <lwandle@translate.org.za>\n"
 "Language-Team:  <xh@li.org>\n"
@@ -983,7 +983,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ibuyisela 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Isiseko sedata"
@@ -14301,118 +14301,118 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Tshintsha Umbala Womda"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "&Umsebenzi..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Faka uchazo lwe math."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "Ukusuka &Kwisiseko sedata..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Faka i data esuka kwisiseko sedata ye SQL"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Lungisa ngendlela Uluhlu..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Yenza uluhlu lwesiko lokukhetha okanye ukugcwalisa ngokuzenzekelayo"
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&Ukhangelo Lwesiphumo..."
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "Uphindo lobalo ukufumana ixabiso elikhankanyiweyo"
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "Ukhetho Lwefomula"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Faka umsebenzi."
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "Ezinye..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "Guqula kancinane Iseli"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Hlela iseli ephawulweyo."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Bala kwakhona ixabiso leseli nganye kwiphepha "
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Bonisa Ikhasi..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Iparameters ze Locale"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Bonisa isalathiso &sogqabazo"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Cola umxholo webhodi eqhotyoshwayo kwisalathisi"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14420,17 +14420,6 @@ msgid ""
 msgstr ""
 "Akukho mqhubi wesiseko sedata esikhoyo! Kufuneka uqokolele nabaqhubi "
 "abafunwayo."
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Septemba"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Uluhlu Lokhetho..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15343,51 +15332,6 @@ msgstr "Fomati yexesha"
 #, fuzzy, kde-format
 msgid "Currency format: %1"
 msgstr "Imali yeloo lizwe"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-msgid "More Options"
-msgstr "Funa iinketho"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "Okubhaliweyo okuthe nkqo"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-msgid "Search in:"
-msgstr "Okubhaliweyo okuthe nkqo"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-msgid "Cell Values"
-msgstr "Amaxabiso"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Comments"
-msgstr "Gqabaza"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-msgid "Search direction:"
-msgstr "Imeko Yesibini"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, fuzzy, kde-format
-msgid "Down then Across"
-msgstr "Ibonisa imiqolo efihlakeleyo."
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "Funa iinketho"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16325,6 +16269,46 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Vula Ikhonkco?"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Septemba"
+
+#~ msgid "Selection List..."
+#~ msgstr "Uluhlu Lokhetho..."
+
+#, fuzzy
+#~ msgid "More Options"
+#~ msgstr "Funa iinketho"
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "Okubhaliweyo okuthe nkqo"
+
+#, fuzzy
+#~ msgid "Search in:"
+#~ msgstr "Okubhaliweyo okuthe nkqo"
+
+#, fuzzy
+#~ msgid "Cell Values"
+#~ msgstr "Amaxabiso"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "Gqabaza"
+
+#, fuzzy
+#~ msgid "Search direction:"
+#~ msgstr "Imeko Yesibini"
+
+#, fuzzy
+#~ msgid "Down then Across"
+#~ msgstr "Ibonisa imiqolo efihlakeleyo."
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "Funa iinketho"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Ifomati Yeseli..."

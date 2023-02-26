@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2004-11-29 01:53-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team: Tamil <en@li.org>\n"
@@ -964,7 +964,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 99 திரும்பும்"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "தரவுத்தளம்"
@@ -14443,138 +14443,126 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "ஓரம் நிறம் மாற்றுக"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, kde-format
 msgid "&Function..."
 msgstr "செயல்கூறு..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "math  தொடரை சொருகு."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, kde-format
 msgid "From &Database..."
 msgstr "துவக்கம் &தரவுத்தளம் ..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL தரவுத்தளத்திலிருந்து பொருளை செருகவும்"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, kde-format
 msgid "Custom Lists..."
 msgstr "தனிப்பயன் பட்டியல்..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "வரிசையாக்கம் அல்லது தானேநிரப்ப தனிப்பயன்பட்டியலை உருவாக்குக "
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "&Goal Seek..."
 msgstr "&இலக்குத்தேடு"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr "திரும்பத்திரும்ப கணக்கிடப்படுகிறது ஒரு குறித்த பொருளை தேட."
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, kde-format
 msgid "Formula Selection"
 msgstr "வாய்பாடு தேர்வு"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "செயல்கூற்றை செருகு"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, kde-format
 msgid "Others..."
 msgstr "மற்றவைகள்..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Modify Cell"
 msgstr "சிற்றறையை மாற்று"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "முனைப்புறுத்தப்பட்ட அறைகளை திருத்து "
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "தற்போதைய தாளில் உள்ள அனைத்து அறையின் மதிப்பையும் மறுகணக்கிடு."
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "தாளை காட்டு"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "வட்டார அளவுருக்கள்"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "விளக்க சுட்டியை காட்டு"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "இடைநிலையின் உள்ளடக்கத்தின் காட்டியில் ஒட்டுக. "
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
 "தகவல்தள இயக்கிகள் ஏதும் காணப்படவில்லை. தங்கள் Qt யை தேவையான இயக்கியுடன் தொகுக்க வேண்டும்."
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-#| msgid "Replacement"
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "இடமாற்றம்"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "தேர்ந்தெடுத்த பட்டியல்"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15490,51 +15478,6 @@ msgstr "நேர வடிவமைப்பு"
 #, fuzzy, kde-format
 msgid "Currency format: %1"
 msgstr "பணம்"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-msgid "More Options"
-msgstr "வினவல் தேர்வுகள் "
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "தேடப்பட்ட உரை"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-msgid "Search in:"
-msgstr "தேடப்பட்ட உரை"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-msgid "Cell Values"
-msgstr "மதிப்புகள்"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Comments"
-msgstr "குறிப்புரை"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-msgid "Search direction:"
-msgstr "உருவரை திசை:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, fuzzy, kde-format
-msgid "Down then Across"
-msgstr "மறைந்த கிடக்கையை காட்டு"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "பொதுவான தேர்வுகள்"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16480,6 +16423,47 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "இணைப்பை திற"
+
+#, fuzzy
+#~| msgid "Replacement"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "இடமாற்றம்"
+
+#~ msgid "Selection List..."
+#~ msgstr "தேர்ந்தெடுத்த பட்டியல்"
+
+#, fuzzy
+#~ msgid "More Options"
+#~ msgstr "வினவல் தேர்வுகள் "
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "தேடப்பட்ட உரை"
+
+#, fuzzy
+#~ msgid "Search in:"
+#~ msgstr "தேடப்பட்ட உரை"
+
+#, fuzzy
+#~ msgid "Cell Values"
+#~ msgstr "மதிப்புகள்"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "குறிப்புரை"
+
+#, fuzzy
+#~ msgid "Search direction:"
+#~ msgstr "உருவரை திசை:"
+
+#, fuzzy
+#~ msgid "Down then Across"
+#~ msgstr "மறைந்த கிடக்கையை காட்டு"
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "பொதுவான தேர்வுகள்"
 
 #~ msgid "Cell Format..."
 #~ msgstr "அறை வடிவமைப்பு"

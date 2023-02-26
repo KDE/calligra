@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-26 00:58+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -950,7 +950,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "मान"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -13934,151 +13934,138 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "पृष्ठ क्रम"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:121
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "&Function..."
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "नियमित वर्णन"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:127
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:131
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "Insert data from a SQL database"
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:134
 #, fuzzy, kde-format
 #| msgid "Custom..."
 msgid "Custom Lists..."
 msgstr "मनपसिन्न..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:158
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 #| msgid "Goal Seek"
 msgid "&Goal Seek..."
 msgstr "लक्ष्य प्राप्ति"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Repeating calculation to find a specific value"
 msgstr ""
 
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:144
 #, fuzzy, kde-format
 #| msgid "File Options"
 msgid "Formula Selection"
 msgstr "फाइल विकल्प"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:146
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Insert a function"
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "श्रृंखला"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "सुधारू"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 #| msgid "Sheets"
 msgid "Selects all cells in the current sheet"
 msgstr "शीट"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:167
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:173
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "शीट देखाउ"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:179
 #, fuzzy, kde-format
 #| msgid "Print settings"
 msgid "Document Settings..."
 msgstr "छपाइ जमावट"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:182
 #, fuzzy, kde-format
 #| msgid "Formula"
 msgid "Show document settings dialog"
 msgstr "सूत्र"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:186
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:190
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:191
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:995
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-#| msgid "Replace"
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "बदलू"
-
-#: ui/CellToolBase_p.cpp:853
-#, fuzzy, kde-format
-#| msgid "File Options"
-msgid "Selection List..."
-msgstr "फाइल विकल्प"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15016,57 +15003,6 @@ msgstr "समय प्रारूप"
 #| msgid "Currency"
 msgid "Currency format: %1"
 msgstr "मुद्रा"
-
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "File Options"
-msgid "More Options"
-msgstr "फाइल विकल्प"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-#| msgid "Sheets"
-msgid "Search entire sheet"
-msgstr "शीट"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-#| msgid "value"
-msgid "Search in:"
-msgstr "मान"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-#| msgid "Values"
-msgid "Cell Values"
-msgstr "मान"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "टिप्पणी"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-#| msgid "Protection"
-msgid "Search direction:"
-msgstr "सुरक्षा"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-#| msgid "File Options"
-msgid "Fewer Options"
-msgstr "फाइल विकल्प"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16024,6 +15960,50 @@ msgstr ""
 #| msgid "Insert Link"
 msgid "Open Link?"
 msgstr "कड़ी डालू"
+
+#, fuzzy
+#~| msgid "Replace"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "बदलू"
+
+#, fuzzy
+#~| msgid "File Options"
+#~ msgid "Selection List..."
+#~ msgstr "फाइल विकल्प"
+
+#, fuzzy
+#~| msgid "File Options"
+#~ msgid "More Options"
+#~ msgstr "फाइल विकल्प"
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgid "Search entire sheet"
+#~ msgstr "शीट"
+
+#, fuzzy
+#~| msgid "value"
+#~ msgid "Search in:"
+#~ msgstr "मान"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgid "Cell Values"
+#~ msgstr "मान"
+
+#~ msgid "Comments"
+#~ msgstr "टिप्पणी"
+
+#, fuzzy
+#~| msgid "Protection"
+#~ msgid "Search direction:"
+#~ msgstr "सुरक्षा"
+
+#, fuzzy
+#~| msgid "File Options"
+#~ msgid "Fewer Options"
+#~ msgstr "फाइल विकल्प"
 
 #, fuzzy
 #~| msgid "Cell range"
