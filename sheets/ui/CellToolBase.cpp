@@ -18,16 +18,11 @@
 // Sheets
 #include "engine/CalculationSettings.h"
 #include "engine/Damages.h"
-#include "engine/Localization.h"
-#include "engine/ValueConverter.h"
 
-#include "core/ApplicationSettings.h"
 #include "core/CellStorage.h"
-#include "core/ColFormatStorage.h"
 #include "core/Database.h"
 #include "core/DocBase.h"
 #include "core/Map.h"
-#include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 #include "core/StyleManager.h"
 
@@ -45,10 +40,7 @@
 
 // commands
 #include "commands/AutoFillCommand.h"
-#include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
-#include "commands/RowColumnManipulators.h"
-#include "commands/StyleCommand.h"
 
 // dialogs
 #include "dialogs/DatabaseDialog.h"
@@ -69,20 +61,14 @@
 #include <KoPointerEvent.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
-#include <KoIcon.h>
 
 // KF5
 #include <kmessagebox.h>
 #include <KSharedConfig>
 #include <kstandardaction.h>
-#include <ktoggleaction.h>
 
 // Qt
-#include <QStandardPaths>
 #include <QApplication>
-#include <QClipboard>
-#include <QBuffer>
-#include <QMimeData>
 #include <QPainter>
 #include <QDomDocument>
 #ifndef QT_NO_SQL
