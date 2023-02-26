@@ -53,7 +53,6 @@
 // dialogs
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
-#include "dialogs/GoalSeekDialog.h"
 #include "dialogs/ListDialog.h"
 
 // strategies
@@ -136,11 +135,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::sortList);
     action->setToolTip(i18n("Create custom lists for sorting or autofill"));
 
-    action = new QAction(i18n("&Goal Seek..."), this);
-    addAction("goalSeek", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::goalSeek);
-    action->setToolTip(i18n("Repeating calculation to find a specific value"));
-   
     KSelectAction *selectAction = new KSelectAction(i18n("Formula Selection"), this);
     addAction("formulaSelection", selectAction);
     selectAction->setToolTip(i18n("Insert a function"));
@@ -1021,14 +1015,6 @@ void CellToolBase::sortList()
     }
     sett->setSortingList(dialog->customLists());
     delete dialog;
-}
-
-void CellToolBase::goalSeek()
-{
-    selection()->emitCloseEditor(true);
-
-    GoalSeekDialog* dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
-    dialog->show(); // dialog deletes itself later
 }
 
 void CellToolBase::formulaSelection(const QString& expression)

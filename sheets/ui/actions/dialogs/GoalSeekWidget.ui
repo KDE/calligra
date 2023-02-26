@@ -24,8 +24,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>262</width>
-    <height>148</height>
+    <width>379</width>
+    <height>110</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -63,7 +63,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     <widget class="Calligra::Sheets::RegionSelector" name="selector3" native="true"/>
    </item>
    <item row="3" column="0" colspan="2">
-    <widget class="QWidget" name="preview" native="true">
+    <widget class="QWidget" name="outcome" native="true">
      <layout class="QFormLayout" name="formLayout_preview">
       <item row="0" column="0" colspan="2">
        <widget class="QLabel" name="label4">
@@ -72,34 +72,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
         </property>
         <property name="wordWrap">
          <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label5">
-        <property name="text">
-         <string>New value:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="newValue">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label6">
-        <property name="text">
-         <string>Current value:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="currentValue">
-        <property name="text">
-         <string/>
         </property>
        </widget>
       </item>

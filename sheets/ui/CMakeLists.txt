@@ -19,6 +19,7 @@ set (actions_DIR_SRCS
     actions/Fill.cpp
     actions/FindReplace.cpp
     actions/Font.cpp
+    actions/GoalSeek.cpp
     actions/Goto.cpp
     actions/Indent.cpp
     actions/InsertSeries.cpp
@@ -49,6 +50,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/ConsolidateDialog.cpp
     actions/dialogs/CSVDialog.cpp
     actions/dialogs/FindDialog.cpp
+    actions/dialogs/GoalSeekDialog.cpp
     actions/dialogs/GotoDialog.cpp
     actions/dialogs/InsertDialog.cpp
     actions/dialogs/LinkDialog.cpp
@@ -71,6 +73,7 @@ set (action_dialogs_DIR_SRCS
 ki18n_wrap_ui(action_dialogs_DIR_SRCS
     actions/dialogs/ConsolidateWidget.ui
     actions/dialogs/ConsolidateDetailsWidget.ui
+    actions/dialogs/GoalSeekWidget.ui
     actions/dialogs/SortWidget.ui
     actions/dialogs/SortDetailsWidget.ui
     actions/dialogs/SpecialPasteWidget.ui
@@ -102,7 +105,6 @@ set (dialogs_DIR_SRCS
     dialogs/DatabaseDialog.cpp
     dialogs/DocumentSettingsDialog.cpp
     dialogs/FormulaDialog.cpp
-    dialogs/GoalSeekDialog.cpp
     dialogs/LayoutWidgets.cpp
     dialogs/LayoutPage_Border.cpp
     dialogs/LayoutPage_Float.cpp
@@ -119,7 +121,6 @@ set (dialogs_DIR_SRCS
 
 ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/FontWidget.ui
-    dialogs/GoalSeekWidget.ui
     dialogs/PositionWidget.ui
     dialogs/ProtectionWidget.ui
     )

@@ -152,7 +152,6 @@ protected Q_SLOTS:
     void insertFormula();
     void insertFromDatabase();
     void sortList();
-    void goalSeek();
     void formulaSelection(const QString& expression);
     // -- general editing actions --
     void edit();

@@ -23,6 +23,7 @@
 #include "Fill.h"
 #include "FindReplace.h"
 #include "Font.h"
+#include "GoalSeek.h"
 #include "Goto.h"
 #include "Indent.h"
 #include "InsertSeries.h"
@@ -138,6 +139,8 @@ void Actions::createActions()
     addAction(new Font(this));
     addAction(new FontSize(this));
     addAction(new FontColor(this));
+    // GoalSeek
+    addAction(new GoalSeek(this));
     // Goto
     addAction(new Goto(this));
     // Indent
