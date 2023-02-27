@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -940,7 +940,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") का परिणाम होगा 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -13854,123 +13854,113 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "किनारा बदलें"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "फंक्शन... (&F)"
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "मैथ एक्सप्रेशन प्रविष्ट करें"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "डाटाबेस से... (&D)"
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "एसक्यूएल डाटाबेस में से डाटा जोड़ें"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "मनपसंद सूची..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "छांटने या स्वतः भरने के लिए मनपसंद सूची बनाएं"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "लक्ष्य ढूंढें... (&G)"
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "किसी विशिष्ट मान को ढूंढने के लिए गणना दोहराना"
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "सूत्र चयन"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "फ़ंक्शन प्रविष्ट करें"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "अन्य..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "कक्ष परिवर्धित करें"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "उभारे गए कक्ष का संपादन करें"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "मौज़ूदा शीट में सभी कक्षों को चुनें"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "इंसपेक्टर चलाएं..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "शीट दिखाएं..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "स्थानीय विन्यास"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "टिप्पणी संकेतक दिखाएँ (&o)"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "संरक्षा"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "संरक्षा"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "संकेतक स्थान पर क्लिपबोर्ड सामग्री को चिपकाएं."
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15083,88 +15073,6 @@ msgstr "इस फ़ंक्शन में कोीई पैरामी�
 msgid "Description is not available."
 msgstr "वर्णन उपलब्ध नहीं है."
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "गोल देखें"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "कक्ष प्रसंग अवैध है."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "लक्ष्य मूल्य अवैध है."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "स्रोत कक्ष में संख्यात्मक मान होना चाहिए."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "लक्ष्य कक्ष में सूत्र होना चाहिए."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "प्रारंभ किया जा रहा है..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "इटेरेशन:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "नया मान:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "कक्ष %1 के साथ लक्ष्य ढूंढने पर हल मिला:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "कक्ष %1 के साथ लक्ष्य ढूंढने पर कोई हल नहीं मिला."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "कक्ष सेट करें:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "के लिए मूल्य:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "कक्ष बदल कर:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, fuzzy, kde-format
-#| msgid "Goal seeking with cell %1 found a solution:"
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "कक्ष %1 के साथ लक्ष्य ढूंढने पर हल मिला:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "वर्तमान मूल्य:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -15848,6 +15756,59 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "लिंक खोलें?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "लक्ष्य ढूंढें... (&G)"
+
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "किसी विशिष्ट मान को ढूंढने के लिए गणना दोहराना"
+
+#~ msgid "Goal Seek"
+#~ msgstr "गोल देखें"
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "कक्ष प्रसंग अवैध है."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "लक्ष्य मूल्य अवैध है."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "स्रोत कक्ष में संख्यात्मक मान होना चाहिए."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "लक्ष्य कक्ष में सूत्र होना चाहिए."
+
+#~ msgid "Starting..."
+#~ msgstr "प्रारंभ किया जा रहा है..."
+
+#~ msgid "Iteration:"
+#~ msgstr "इटेरेशन:"
+
+#~ msgid "New value:"
+#~ msgstr "नया मान:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "कक्ष %1 के साथ लक्ष्य ढूंढने पर हल मिला:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "कक्ष %1 के साथ लक्ष्य ढूंढने पर कोई हल नहीं मिला."
+
+#~ msgid "Set cell:"
+#~ msgstr "कक्ष सेट करें:"
+
+#~ msgid "To value:"
+#~ msgstr "के लिए मूल्य:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "कक्ष बदल कर:"
+
+#, fuzzy
+#~| msgid "Goal seeking with cell %1 found a solution:"
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "कक्ष %1 के साथ लक्ष्य ढूंढने पर हल मिला:"
+
+#~ msgid "Current value:"
+#~ msgstr "वर्तमान मूल्य:"
 
 #, fuzzy
 #~| msgid "Replacement"

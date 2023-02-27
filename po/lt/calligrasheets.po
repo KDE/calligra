@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -900,7 +900,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Reikšmė"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Duombazė"
@@ -13440,120 +13440,110 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kapo Verdė"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Įprastoji išraiška"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Pasirinktas..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:139
-#, fuzzy, kde-format
-msgid "&Goal Seek..."
-msgstr "Parametrų parinkimas"
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Įterpti lakštą"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Kiti"
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Keisti langelį"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rodyti lakštą"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14615,88 +14605,6 @@ msgstr ""
 msgid "Description is not available."
 msgstr "Funkcija"
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Parametrų parinkimas"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Paleidžiama..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Iteracija:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Nauja reikšmė:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, fuzzy, kde-format
-#| msgid "Merge cells"
-msgid "Set cell:"
-msgstr "Apjungti langelius"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, fuzzy, kde-format
-msgid "To value:"
-msgstr "Reikšmė"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, fuzzy, kde-format
-msgid "Current value:"
-msgstr "Dabartinė vertė"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
 msgid "Cell Format"
@@ -15375,6 +15283,35 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Atverti nuorodą"
+
+#, fuzzy
+#~ msgid "&Goal Seek..."
+#~ msgstr "Parametrų parinkimas"
+
+#~ msgid "Goal Seek"
+#~ msgstr "Parametrų parinkimas"
+
+#~ msgid "Starting..."
+#~ msgstr "Paleidžiama..."
+
+#~ msgid "Iteration:"
+#~ msgstr "Iteracija:"
+
+#~ msgid "New value:"
+#~ msgstr "Nauja reikšmė:"
+
+#, fuzzy
+#~| msgid "Merge cells"
+#~ msgid "Set cell:"
+#~ msgstr "Apjungti langelius"
+
+#, fuzzy
+#~ msgid "To value:"
+#~ msgstr "Reikšmė"
+
+#, fuzzy
+#~ msgid "Current value:"
+#~ msgstr "Dabartinė vertė"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

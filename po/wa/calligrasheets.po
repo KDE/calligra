@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2011-01-17 22:04+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -966,7 +966,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ritoûne 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Båze di dnêyes"
@@ -14686,121 +14686,111 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Candjî boirdeure"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Fonccion..."
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Adresse rantoele:"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "D' ene båze di &dnêyes.."
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 #| msgid "From &Database..."
 msgid "Insert data from a SQL database"
 msgstr "D' ene båze di &dnêyes.."
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Djivêyes da vosse..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "C&weraedje del solucion..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Tchoes del formule"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Sititchî ene fonccion"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Ôtes..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Candjî boesse"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Candjî l' boesse e sorbriyance"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Tchoezi totes les boesses dins l' foye do moumint"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Enonder Inspector..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Mostrer QTableView..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "Apontiaedjes do documint..."
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Mostrer l' divize des apontiaedjes do documint"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Waerantixhaedje"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Waerantixhaedje"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Aclaper l' ådvins do tchapea emacralé a l' eplaeçmint do cursoe"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15906,90 +15896,6 @@ msgstr "Ci documint ci n' a nole foye (tåvlea)."
 msgid "Description is not available."
 msgstr "Çouchal n' est nén ene valixhance valide!"
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, fuzzy, kde-format
-#| msgid "&Goal Seek..."
-msgid "Goal Seek"
-msgstr "C&weraedje del solucion..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Enondaedje..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Iteration:"
-msgstr "Operåcion"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Novele valixhance:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, fuzzy, kde-format
-#| msgid "Enter cell:"
-msgid "Set cell:"
-msgstr "Taper boesse:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, fuzzy, kde-format
-msgid "To value:"
-msgstr "Touvalou"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Valixhance do moumint:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -16680,6 +16586,37 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Drovi hårdêye?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "C&weraedje del solucion..."
+
+#, fuzzy
+#~| msgid "&Goal Seek..."
+#~ msgid "Goal Seek"
+#~ msgstr "C&weraedje del solucion..."
+
+#~ msgid "Starting..."
+#~ msgstr "Enondaedje..."
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Iteration:"
+#~ msgstr "Operåcion"
+
+#~ msgid "New value:"
+#~ msgstr "Novele valixhance:"
+
+#, fuzzy
+#~| msgid "Enter cell:"
+#~ msgid "Set cell:"
+#~ msgstr "Taper boesse:"
+
+#, fuzzy
+#~ msgid "To value:"
+#~ msgstr "Touvalou"
+
+#~ msgid "Current value:"
+#~ msgstr "Valixhance do moumint:"
 
 #, fuzzy
 #~| msgid "Replace"

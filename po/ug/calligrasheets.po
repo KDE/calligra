@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -942,7 +942,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") نەتىجىسى 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "ساندان"
@@ -14077,133 +14077,122 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "يان رامكا ئۆزگەرت"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "فۇنكسىيە(&F)…"
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "مۇنتىزىم ئىپادە"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "ساندان"
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 #| msgid "Insert Data From Database"
 msgid "Insert data from a SQL database"
 msgstr "سانداندىن سانلىق-مەلۇمات ئىمپورت قىلىش"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 #| msgid "Custom..."
 msgid "Custom Lists..."
 msgstr "ئادەت..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:139
-#, fuzzy, kde-format
-#| msgid "Goal Seek"
-msgid "&Goal Seek..."
-msgstr "ئۆزگەرگۈچى مىقدار يېشىمى"
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Fill Selection"
 msgid "Formula Selection"
 msgstr "تاللانغان رايوننى تولدۇر"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 #| msgid "Insert function"
 msgid "Insert a function"
 msgstr "قىستۇرۇش فۇنكسىيىسى"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "يۈرۈشلۈك"
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "ئۆزگەرت"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr ""
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "ۋاراق كۆرسەت"
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Document Settings..."
 msgstr "پۈتۈك تەڭشىكى"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "پۈتۈك تەڭشىكى"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "قوغدا"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "قوغدا"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15281,92 +15270,6 @@ msgstr ""
 msgid "Description is not available."
 msgstr "ئىستونلاردىكى سانلىق-مەلۇمات توپلىمى"
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "ئۆزگەرگۈچى مىقدار يېشىمى"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "باشلاۋاتىدۇ…"
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, fuzzy, kde-format
-#| msgid "Operation"
-msgid "Iteration:"
-msgstr "مەشغۇلات"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, fuzzy, kde-format
-#| msgid "Zero values"
-msgid "New value:"
-msgstr "نۆل قىممەت"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, fuzzy, kde-format
-#| msgid "Merge cells"
-msgid "Set cell:"
-msgstr "كاتەكچە بىرلەشتۈر"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, fuzzy, kde-format
-#| msgid "value"
-msgid "To value:"
-msgstr "قىممىتى"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, fuzzy, kde-format
-#| msgid "Clear Selection"
-msgid "Current value:"
-msgstr "تاللانمىنى تازىلا"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -16054,6 +15957,42 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "ئۇلانمىنى ئاچسۇنمۇ؟"
+
+#, fuzzy
+#~| msgid "Goal Seek"
+#~ msgid "&Goal Seek..."
+#~ msgstr "ئۆزگەرگۈچى مىقدار يېشىمى"
+
+#~ msgid "Goal Seek"
+#~ msgstr "ئۆزگەرگۈچى مىقدار يېشىمى"
+
+#~ msgid "Starting..."
+#~ msgstr "باشلاۋاتىدۇ…"
+
+#, fuzzy
+#~| msgid "Operation"
+#~ msgid "Iteration:"
+#~ msgstr "مەشغۇلات"
+
+#, fuzzy
+#~| msgid "Zero values"
+#~ msgid "New value:"
+#~ msgstr "نۆل قىممەت"
+
+#, fuzzy
+#~| msgid "Merge cells"
+#~ msgid "Set cell:"
+#~ msgstr "كاتەكچە بىرلەشتۈر"
+
+#, fuzzy
+#~| msgid "value"
+#~ msgid "To value:"
+#~ msgstr "قىممىتى"
+
+#, fuzzy
+#~| msgid "Clear Selection"
+#~ msgid "Current value:"
+#~ msgstr "تاللانمىنى تازىلا"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Replace"

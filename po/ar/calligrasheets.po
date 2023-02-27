@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2013-10-16 08:25+0000\n"
 "Last-Translator: safaalfulaij <safa1996alfulaij@gmail.com>\n"
 "Language-Team: \n"
@@ -942,7 +942,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "الدالة ARABIC(\"XCIX\") ترجع 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "قاعدة بيانات"
@@ -13998,117 +13998,107 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "غيّر الحد"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&دالة..."
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "أدرج تعبير رياضي"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "من &قاعدة بيانات..."
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "أدرج بيانات من قاعدة بيانات SQL"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "قوائم مخصصة..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "أنشئ قوائم مخصصة للفرز أو الملء التلقائي"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "الـ&سعي للهدف..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "إعادة الحساب للعثور على قيمة محددة"
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "انتقاء صيغة"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "أدرج دالة"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "أخرى..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "عدل الخلية"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "حرر الخلية المميزة"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "ينتقي كل الخلايا في الورقة الحالية"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "شغّل المحقق..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "اعرض الورقة..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "التعيينات المحلية"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "اعرض &مميز التعليقات"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "الحماية"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "الحماية"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "الصق محتويات الحافظة عند المؤشر"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15212,87 +15202,6 @@ msgstr "ليس لهذه الدالة معاملات."
 msgid "Description is not available."
 msgstr "الوصف ليس متاحا."
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "السعي للهدف"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "مرجع الخلية غير صالح."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "قيمة الهدف غير صالحة."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "الخلية المصدر يجب أن تحتوي قيمة رقمية."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "الخلية المستهدفة يجب أن تحتوي على صيغة."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "يجري البدء..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "الإعادة:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "قيمة جديدة:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "السعي للهدف مع الخلية %1 عثر على حل:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "السعي للهدف مع الخلية %1 لم يعثر على حلول."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "عَيِّن الخلية:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "إلى القيمة:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "بتغيير الخلية:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, fuzzy, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "السعي للهدف مع الخلية %1 عثر على حل:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "القيمة الحالية:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -16065,6 +15974,58 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "فتح الارتباط؟"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "الـ&سعي للهدف..."
+
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "إعادة الحساب للعثور على قيمة محددة"
+
+#~ msgid "Goal Seek"
+#~ msgstr "السعي للهدف"
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "مرجع الخلية غير صالح."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "قيمة الهدف غير صالحة."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "الخلية المصدر يجب أن تحتوي قيمة رقمية."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "الخلية المستهدفة يجب أن تحتوي على صيغة."
+
+#~ msgid "Starting..."
+#~ msgstr "يجري البدء..."
+
+#~ msgid "Iteration:"
+#~ msgstr "الإعادة:"
+
+#~ msgid "New value:"
+#~ msgstr "قيمة جديدة:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "السعي للهدف مع الخلية %1 عثر على حل:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "السعي للهدف مع الخلية %1 لم يعثر على حلول."
+
+#~ msgid "Set cell:"
+#~ msgstr "عَيِّن الخلية:"
+
+#~ msgid "To value:"
+#~ msgstr "إلى القيمة:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "بتغيير الخلية:"
+
+#, fuzzy
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "السعي للهدف مع الخلية %1 عثر على حل:"
+
+#~ msgid "Current value:"
+#~ msgstr "القيمة الحالية:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2010-12-26 09:50+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -918,7 +918,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr ""
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 #| msgid "Enter name:"
 msgid "Database"
@@ -13555,127 +13555,117 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ ਬਦਲੋ"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, fuzzy, kde-format
 #| msgid "Action:"
 msgid "&Function..."
 msgstr "ਐਕਸ਼ਨ:"
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 #| msgid "Insert Link"
 msgid "Insert math expression"
 msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, fuzzy, kde-format
 #| msgid "Text File"
 msgid "From &Database..."
 msgstr "ਟੈਕਸਟ ਫਾਇਲ"
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 #| msgid "Selection List..."
 msgid "Custom Lists..."
 msgstr "ਲਿਸਟ ਚੋਣ..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, fuzzy, kde-format
 #| msgid "Clear Text"
 msgid "Formula Selection"
 msgstr "ਟੈਕਸਟ ਸਾਫ਼ ਕਰੋ"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 #| msgid "Action:"
 msgid "Insert a function"
 msgstr "ਐਕਸ਼ਨ:"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "ਹੋਰ..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "ਸੈੱਲ ਸੋਧੋ"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 #| msgid "Select Multiple Cells"
 msgid "Selects all cells in the current sheet"
 msgstr "ਕਈ ਸੈੱਲ ਚੁਣੋ"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Show Rows..."
 msgid "Show QTableView..."
 msgstr "ਕਤਾਰਾਂ ਵੇਖੋ..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 #| msgid "Formula"
 msgid "Show document settings dialog"
 msgstr "ਫਾਰਮੂਲਾ"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Action:"
 msgid "Permute fixation"
 msgstr "ਐਕਸ਼ਨ:"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14792,93 +14782,6 @@ msgstr ""
 msgid "Description is not available."
 msgstr ""
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, fuzzy, kde-format
-#| msgid "Status Bar"
-msgid "Starting..."
-msgstr "ਹਾਲਤ ਪੱਟੀ"
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, fuzzy, kde-format
-#| msgid "Number Format"
-msgid "Iteration:"
-msgstr "ਨੰਬਰ ਫਾਰਮੈਟ"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, fuzzy, kde-format
-#| msgid "Change Angle..."
-msgid "New value:"
-msgstr "ਕੋਣ ਬਦਲੋ..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, fuzzy, kde-format
-#| msgid "Insert Link"
-msgid "Set cell:"
-msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, fuzzy, kde-format
-#| msgid "Change Angle..."
-msgid "To value:"
-msgstr "ਕੋਣ ਬਦਲੋ..."
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, fuzzy, kde-format
-#| msgid "Clear Text"
-msgid "Current value:"
-msgstr "ਟੈਕਸਟ ਸਾਫ਼ ਕਰੋ"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
 #| msgid "Change Angle..."
@@ -15574,6 +15477,36 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "ਲਿੰਕ ਖੋਲ੍ਹਣਾ?"
+
+#, fuzzy
+#~| msgid "Status Bar"
+#~ msgid "Starting..."
+#~ msgstr "ਹਾਲਤ ਪੱਟੀ"
+
+#, fuzzy
+#~| msgid "Number Format"
+#~ msgid "Iteration:"
+#~ msgstr "ਨੰਬਰ ਫਾਰਮੈਟ"
+
+#, fuzzy
+#~| msgid "Change Angle..."
+#~ msgid "New value:"
+#~ msgstr "ਕੋਣ ਬਦਲੋ..."
+
+#, fuzzy
+#~| msgid "Insert Link"
+#~ msgid "Set cell:"
+#~ msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
+
+#, fuzzy
+#~| msgid "Change Angle..."
+#~ msgid "To value:"
+#~ msgstr "ਕੋਣ ਬਦਲੋ..."
+
+#, fuzzy
+#~| msgid "Clear Text"
+#~ msgid "Current value:"
+#~ msgstr "ਟੈਕਸਟ ਸਾਫ਼ ਕਰੋ"
 
 #, fuzzy
 #~| msgid "Replace"

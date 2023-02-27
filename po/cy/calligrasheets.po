@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2004-09-09 12:35+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -980,7 +980,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Mae ARABIC(\"XCIX\") yn dychwelyd 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Cronfa Ddata"
@@ -14723,121 +14723,111 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Newid Lliw'r Ffin"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Ffwythiant..."
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Mewnosod mynegiad mathemateg"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "O Gronfa &Ddata..."
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Mewnosod data o gronfa ddata SQL."
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Rhestr Addasiedig..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Creu rhestri addasiedig i drefnu neu hunan-lenwi. "
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Ymofyn Cyrchnod..."
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Ailadrodd cyfrifiad i ganfod gwerth penodol."
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Dewis Fformiwla"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Mewnosod ffwythiant."
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Eraill..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Addasu Cell"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Golygu'r gell amlygedig."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Ail-gyfrifo gwerth pob cell yn y weithlen gyfredol."
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Dangos Dalen..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Paramedrau Bro"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "D&angos dangosydd sylwad"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15939,88 +15929,6 @@ msgstr "Nid oes paramedrau gan y ffwythiant hwn."
 msgid "Description is not available."
 msgstr "Disgrifiad yn y &golofn"
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Ymofyn Cyrchnod"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, fuzzy, kde-format
-msgid "Cell reference is invalid."
-msgstr "Mae'r cyfeirnod cell yn annilys!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, fuzzy, kde-format
-msgid "Target value is invalid."
-msgstr "Mae'r gwerth cyrchfan yn annilys!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, fuzzy, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Rhaid i'r gell darddiad gynnwys gwerth rhifol!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Rhaid i'r gell gyrchfan gynnwys fformiwla!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Cychwyn..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Adrifiad:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Gwerth newydd:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Mi wnaeth ymofyn cyrchnod efo cell %1 ganfod datrysiad:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Ni wnaeth ymofyn cyrchnod efo cell %1 DDIM canfod datrysiad:"
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Gosod cell:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Gwerth cyrchfan:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Gan newid cell:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, fuzzy, kde-format
-#| msgid "Goal seeking with cell %1 found a solution:"
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "Mi wnaeth ymofyn cyrchnod efo cell %1 ganfod datrysiad:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Gwerth cyfredol:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -16711,6 +16619,64 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Agor Cyswllt?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Ymofyn Cyrchnod..."
+
+#, fuzzy
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "Ailadrodd cyfrifiad i ganfod gwerth penodol."
+
+#~ msgid "Goal Seek"
+#~ msgstr "Ymofyn Cyrchnod"
+
+#, fuzzy
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Mae'r cyfeirnod cell yn annilys!"
+
+#, fuzzy
+#~ msgid "Target value is invalid."
+#~ msgstr "Mae'r gwerth cyrchfan yn annilys!"
+
+#, fuzzy
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Rhaid i'r gell darddiad gynnwys gwerth rhifol!"
+
+#, fuzzy
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Rhaid i'r gell gyrchfan gynnwys fformiwla!"
+
+#~ msgid "Starting..."
+#~ msgstr "Cychwyn..."
+
+#~ msgid "Iteration:"
+#~ msgstr "Adrifiad:"
+
+#~ msgid "New value:"
+#~ msgstr "Gwerth newydd:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Mi wnaeth ymofyn cyrchnod efo cell %1 ganfod datrysiad:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Ni wnaeth ymofyn cyrchnod efo cell %1 DDIM canfod datrysiad:"
+
+#~ msgid "Set cell:"
+#~ msgstr "Gosod cell:"
+
+#~ msgid "To value:"
+#~ msgstr "Gwerth cyrchfan:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Gan newid cell:"
+
+#, fuzzy
+#~| msgid "Goal seeking with cell %1 found a solution:"
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "Mi wnaeth ymofyn cyrchnod efo cell %1 ganfod datrysiad:"
+
+#~ msgid "Current value:"
+#~ msgstr "Gwerth cyfredol:"
 
 #, fuzzy
 #~| msgid "Replacement"

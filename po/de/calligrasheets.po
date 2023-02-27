@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2022-07-23 23:09+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -976,7 +976,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ergibt 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Datenbank"
@@ -14798,119 +14798,108 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Umrandung ändern"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Funktion ..."
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "Einen mathematischen Ausdruck einfügen"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "Aus &Datenbank ..."
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Daten aus einer SQL-Datenbank einfügen"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Benutzerdefinierte Listen ..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 "Benutzerdefinierte Listen zum Sortieren oder automatischem Füllen erstellen"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Zielwertsuche ..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-"Berechnung wird mehrfach wiederholt, um einen bestimmten Zielwert zu finden"
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formelauswahl"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Eine Funktion einfügen"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Sonstige ..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Zelle bearbeiten"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Die hervorgehobene Zelle bearbeiten"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Wählt alle Zellen in der aktuellen Tabelle aus"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Prüfung starten ..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView anzeigen ..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "Dokumenteinstellungen ..."
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Dokumenteinstellungen-Dialog anzeigen"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Zellenbezug umschalten"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Permute fixation"
 msgstr "Bezug umschalten"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Schaltet das Ziel des Bezugs an der Position des Text-Cursors um"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15963,87 +15952,6 @@ msgstr "Diese Funktion besitzt keine Parameter."
 msgid "Description is not available."
 msgstr "Die Beschreibung ist nicht verfügbar."
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Zielwertsuche"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Der Zellenverweis ist ungültig."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Der Zielwert ist ungültig."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Die Startzelle muss einen numerischen Wert enthalten."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Die Zielzelle muss eine Formel enthalten."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Suche starten ..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Durchlauf:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Neuer Wert:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Zielwertsuche mit Zelle %1 fand eine Lösung:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Zielwertsuche mit Zelle %1 fand KEINE Lösung."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Zelle festlegen:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Auf Wert:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Durch Änderung von Zelle:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "Zielwertsuche mit Zelle <zelle> fand <eine | keine> Lösung:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Gegenwärtiger Wert:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -16849,6 +16757,59 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Verknüpfung öffnen?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Zielwertsuche ..."
+
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr ""
+#~ "Berechnung wird mehrfach wiederholt, um einen bestimmten Zielwert zu "
+#~ "finden"
+
+#~ msgid "Goal Seek"
+#~ msgstr "Zielwertsuche"
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Der Zellenverweis ist ungültig."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "Der Zielwert ist ungültig."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Die Startzelle muss einen numerischen Wert enthalten."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Die Zielzelle muss eine Formel enthalten."
+
+#~ msgid "Starting..."
+#~ msgstr "Suche starten ..."
+
+#~ msgid "Iteration:"
+#~ msgstr "Durchlauf:"
+
+#~ msgid "New value:"
+#~ msgstr "Neuer Wert:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Zielwertsuche mit Zelle %1 fand eine Lösung:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Zielwertsuche mit Zelle %1 fand KEINE Lösung."
+
+#~ msgid "Set cell:"
+#~ msgstr "Zelle festlegen:"
+
+#~ msgid "To value:"
+#~ msgstr "Auf Wert:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Durch Änderung von Zelle:"
+
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "Zielwertsuche mit Zelle <zelle> fand <eine | keine> Lösung:"
+
+#~ msgid "Current value:"
+#~ msgstr "Gegenwärtiger Wert:"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Replace"

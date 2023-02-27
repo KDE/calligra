@@ -31,12 +31,12 @@ msgstr "Ne valida Calligra-dosiero: %1"
 #: shapecollection/OdfCollectionLoader.cpp:157
 #, kde-format
 msgid "No body tag found in file: %1"
-msgstr ""
+msgstr "Neniu korpa etikedo trovita en dosiero: %1"
 
 #: shapecollection/OdfCollectionLoader.cpp:165
 #, kde-format
 msgid "No office:drawing tag found in file: %1"
-msgstr ""
+msgstr "Neniu office:drawing etikedo trovita en dosiero: %1"
 
 #: shapecollection/OdfCollectionLoader.cpp:173
 #: shapecollection/OdfCollectionLoader.cpp:181
@@ -72,7 +72,7 @@ msgstr "Defaŭlta"
 #: shapecollection/ShapeCollectionDocker.cpp:334
 #, kde-format
 msgid "Geometrics"
-msgstr ""
+msgstr "Geometrio"
 
 #: shapecollection/ShapeCollectionDocker.cpp:345
 #, kde-format
@@ -82,19 +82,19 @@ msgstr "Sagoj"
 #: shapecollection/ShapeCollectionDocker.cpp:349
 #, kde-format
 msgid "Funny"
-msgstr ""
+msgstr "Amuza"
 
 #: shapecollection/ShapeCollectionDocker.cpp:522
 #, kde-format
 msgid "Collection Error"
-msgstr ""
+msgstr "Kolekta Eraro"
 
 #: shapeproperties/ShapePropertiesDocker.cpp:35
 #, kde-format
 msgid "Shape Properties"
-msgstr ""
+msgstr "Trajtoj de Formo"
 
 #: snapguidedocker/SnapGuideDocker.cpp:39
 #, kde-format
 msgid "Snap Settings"
-msgstr ""
+msgstr "Agordoj de Kapto"

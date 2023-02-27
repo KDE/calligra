@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2002-10-10 12:25+0200\n"
 "Last-Translator: Lwandle Mgidlana <lwandle@translate.org.za>\n"
 "Language-Team:  <xh@li.org>\n"
@@ -983,7 +983,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ibuyisela 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Isiseko sedata"
@@ -14301,118 +14301,108 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Tshintsha Umbala Womda"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Umsebenzi..."
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Faka uchazo lwe math."
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "Ukusuka &Kwisiseko sedata..."
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Faka i data esuka kwisiseko sedata ye SQL"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Lungisa ngendlela Uluhlu..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Yenza uluhlu lwesiko lokukhetha okanye ukugcwalisa ngokuzenzekelayo"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Ukhangelo Lwesiphumo..."
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Uphindo lobalo ukufumana ixabiso elikhankanyiweyo"
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Ukhetho Lwefomula"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Faka umsebenzi."
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Ezinye..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Guqula kancinane Iseli"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Hlela iseli ephawulweyo."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Bala kwakhona ixabiso leseli nganye kwiphepha "
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Bonisa Ikhasi..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Iparameters ze Locale"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Bonisa isalathiso &sogqabazo"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Cola umxholo webhodi eqhotyoshwayo kwisalathisi"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15505,88 +15495,6 @@ msgstr "Lo msebenzi awuna parameters."
 msgid "Description is not available."
 msgstr "In&kcazelo kumhlathi"
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Ukufuna Igowuli"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, fuzzy, kde-format
-msgid "Cell reference is invalid."
-msgstr "Ubhekiso lweseli alisebenzi!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, fuzzy, kde-format
-msgid "Target value is invalid."
-msgstr "Eli asiloxesha elisebenzayo!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, fuzzy, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Imvelaphi yeseli kufuneka iqulathe ixabiso lenani!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Itekeni leseli kufeka liqulathe i fomula!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Iqala..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Impindo:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Ixabiso elitsha:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Ukhangelo lwesiphumo nge seli %1 ifumane impendulo:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Ukhangelo lwesiphumo nge seli %1 AYIFUMANANGA mpendulo."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Cwangcisa iseli:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Kwixabiso:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Ngokutshintsha iseli:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, fuzzy, kde-format
-#| msgid "Goal seeking with cell %1 found a solution:"
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "Ukhangelo lwesiphumo nge seli %1 ifumane impendulo:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Ixabiso elikhoyo:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -16269,6 +16177,64 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Vula Ikhonkco?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Ukhangelo Lwesiphumo..."
+
+#, fuzzy
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "Uphindo lobalo ukufumana ixabiso elikhankanyiweyo"
+
+#~ msgid "Goal Seek"
+#~ msgstr "Ukufuna Igowuli"
+
+#, fuzzy
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Ubhekiso lweseli alisebenzi!"
+
+#, fuzzy
+#~ msgid "Target value is invalid."
+#~ msgstr "Eli asiloxesha elisebenzayo!"
+
+#, fuzzy
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Imvelaphi yeseli kufuneka iqulathe ixabiso lenani!"
+
+#, fuzzy
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Itekeni leseli kufeka liqulathe i fomula!"
+
+#~ msgid "Starting..."
+#~ msgstr "Iqala..."
+
+#~ msgid "Iteration:"
+#~ msgstr "Impindo:"
+
+#~ msgid "New value:"
+#~ msgstr "Ixabiso elitsha:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Ukhangelo lwesiphumo nge seli %1 ifumane impendulo:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Ukhangelo lwesiphumo nge seli %1 AYIFUMANANGA mpendulo."
+
+#~ msgid "Set cell:"
+#~ msgstr "Cwangcisa iseli:"
+
+#~ msgid "To value:"
+#~ msgstr "Kwixabiso:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Ngokutshintsha iseli:"
+
+#, fuzzy
+#~| msgid "Goal seeking with cell %1 found a solution:"
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "Ukhangelo lwesiphumo nge seli %1 ifumane impendulo:"
+
+#~ msgid "Current value:"
+#~ msgstr "Ixabiso elikhoyo:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

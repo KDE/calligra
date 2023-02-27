@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2023-02-15 06:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -961,7 +961,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") funtzioak 99 itzultzen du"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Datu-basea"
@@ -14538,119 +14538,109 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ertza aldatu"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Funtzioa..."
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "Adierazpen matematiko bat txertatzen du"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "&Datu-basetik..."
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Datuak txertatzen ditu SQL datu-base batetik"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Zerrenda pertsonalizatuak..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 "Zerrenda pertsonalizatuak sortzen ditu, ordenatzeko edo automatikoki "
 "betetzeko."
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Xede-bilaketa..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Kalkuluak errepikatzen ditu, balio jakin bat bilatzeko"
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formula-hautapena"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Funtzio bat txertatzen du"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Beste zenbait..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Aldatu gelaxka"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Gelaxka nabarmendua editatzen du"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Uneko kalkulu-orriko gelaxka guztiak hautatzen ditu"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Exekutatu ikuskatzailea..."
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView bistaratu..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "Dokumentuaren ezarpenak..."
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Dokumentu-ezarpenen elkarrizketa-koadroa bistaratzen du"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Trukatu finkatze-erreferentzia"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Permute fixation"
 msgstr "Trukatu finkatzea"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Erreferentzia testu-kurtsorera finkatzeko modua trukatzen du"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15740,87 +15730,6 @@ msgstr "Funtzio honek ez du parametrorik."
 msgid "Description is not available."
 msgstr "Deskribapena ez dago erabilgarri."
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Xede-bilaketa"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Gelaxkaren erreferentzia baliogabea da."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Xede-balioa baliogabea da."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Iturburu-gelaxkak zenbakizko balio bat eduki behar du."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Xede-gelaxkak formula bat eduki behar du."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Hasten..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Iterazioa:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Balio berria:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Emaitza bat aurkitu da %1 gelaxkarako xede bat bilatzean:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Ez da emaitzarik aurkitu %1 gelaxkarako xede bat bilatzean."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Ezarri gelaxka honi:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Balio hau:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Gelaxka hau aldatuz:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "<a | no> emaitza aurkitu da <cell> gelaxkarako xede bat bilatzean:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Uneko balioa:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -16625,6 +16534,57 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Ireki esteka?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Xede-bilaketa..."
+
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "Kalkuluak errepikatzen ditu, balio jakin bat bilatzeko"
+
+#~ msgid "Goal Seek"
+#~ msgstr "Xede-bilaketa"
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Gelaxkaren erreferentzia baliogabea da."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "Xede-balioa baliogabea da."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Iturburu-gelaxkak zenbakizko balio bat eduki behar du."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Xede-gelaxkak formula bat eduki behar du."
+
+#~ msgid "Starting..."
+#~ msgstr "Hasten..."
+
+#~ msgid "Iteration:"
+#~ msgstr "Iterazioa:"
+
+#~ msgid "New value:"
+#~ msgstr "Balio berria:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Emaitza bat aurkitu da %1 gelaxkarako xede bat bilatzean:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Ez da emaitzarik aurkitu %1 gelaxkarako xede bat bilatzean."
+
+#~ msgid "Set cell:"
+#~ msgstr "Ezarri gelaxka honi:"
+
+#~ msgid "To value:"
+#~ msgstr "Balio hau:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Gelaxka hau aldatuz:"
+
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "<a | no> emaitza aurkitu da <cell> gelaxkarako xede bat bilatzean:"
+
+#~ msgid "Current value:"
+#~ msgstr "Uneko balioa:"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Replace"

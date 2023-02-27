@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:58+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2008-04-17 22:27+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -946,7 +946,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") จะได้ค่า 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:128 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "ฐานข้อมูล"
@@ -13776,122 +13776,112 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "เปลี่ยนเส้นขอบ"
 
-#: ui/CellToolBase.cpp:121
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&ฟังก์ชัน..."
 
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "แทรกนิพจน์คณิตศาสตร์"
 
-#: ui/CellToolBase.cpp:127
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "จากฐาน&ข้อมูล..."
 
-#: ui/CellToolBase.cpp:131
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "แทรกข้อมูลจากฐานข้อมูลแบบ SQL"
 
-#: ui/CellToolBase.cpp:134
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "รายการกำหนดเอง..."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:122
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "สร้างรายการกำหนดเองสำหรับการเรียงลำดับหรือเติมเต็มอัตโนมัติ"
 
-#: ui/CellToolBase.cpp:139
-#, kde-format
-msgid "&Goal Seek..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:144
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "การเลือกสูตร"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "แทรกฟังก์ชัน"
 
-#: ui/CellToolBase.cpp:147 ui/CellToolBase.cpp:1036
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "อื่น ๆ..."
 
-#: ui/CellToolBase.cpp:155
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "แก้ไขเซลล์"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "แก้ไขการเน้นสีเซลล์"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "เลือกทุกเซลล์ที่อยู่ในแผ่นงานปัจจุบัน"
 
-#: ui/CellToolBase.cpp:167
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:173
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "แสดงแผ่นงาน..."
 
-#: ui/CellToolBase.cpp:179
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "รูปแบบภาษาท้องถิ่น"
 
-#: ui/CellToolBase.cpp:182
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "แสดงตัวบ่งว่ามี&หมายเหตุ"
 
-#: ui/CellToolBase.cpp:186
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:190
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:191
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "วางเนื้อหาจากคลิปบอร์ดไปยังตำแหน่งเคอร์เซอร์"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:995
+#: ui/CellToolBase.cpp:975
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15003,87 +14993,6 @@ msgstr "ฟังก์ชันนี้ไม่มีพารามิเต
 msgid "Description is not available."
 msgstr "คำอธิบายของส&ดมภ์"
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, fuzzy, kde-format
-msgid "Cell reference is invalid."
-msgstr "การอ้างอิงถึงเซลล์ไม่ถูกต้อง !"
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, fuzzy, kde-format
-msgid "Target value is invalid."
-msgstr "ค่าปลายทางไม่ถูกต้อง !"
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, fuzzy, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "เซลล์ต้นทางต้องมีค่าที่เป็นตัวเลข !"
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Target cell must contain a formula."
-msgstr "เซลล์ปลายทางต้องมีค่าที่เป็นสูตร !"
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "กำลังเริ่ม..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "ทำซ้ำ:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "ค่าใหม่:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "ตั้งค่าเซลล์:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "เป็นค่า:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "โดยการเปลี่ยนเซลล์:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "ค่าปัจจุบัน:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -15765,6 +15674,43 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "เปิดที่อยู่เชื่อมโยง ?"
+
+#, fuzzy
+#~ msgid "Cell reference is invalid."
+#~ msgstr "การอ้างอิงถึงเซลล์ไม่ถูกต้อง !"
+
+#, fuzzy
+#~ msgid "Target value is invalid."
+#~ msgstr "ค่าปลายทางไม่ถูกต้อง !"
+
+#, fuzzy
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "เซลล์ต้นทางต้องมีค่าที่เป็นตัวเลข !"
+
+#, fuzzy
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "เซลล์ปลายทางต้องมีค่าที่เป็นสูตร !"
+
+#~ msgid "Starting..."
+#~ msgstr "กำลังเริ่ม..."
+
+#~ msgid "Iteration:"
+#~ msgstr "ทำซ้ำ:"
+
+#~ msgid "New value:"
+#~ msgstr "ค่าใหม่:"
+
+#~ msgid "Set cell:"
+#~ msgstr "ตั้งค่าเซลล์:"
+
+#~ msgid "To value:"
+#~ msgstr "เป็นค่า:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "โดยการเปลี่ยนเซลล์:"
+
+#~ msgid "Current value:"
+#~ msgstr "ค่าปัจจุบัน:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: VariablesPlugin\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
 "PO-Revision-Date: 2023-01-06 10:00+0100\n"
@@ -147,58 +147,58 @@ msgstr "2 Ciferoj (01-12)"
 #: FixedDateFormat.cpp:129
 #, kde-format
 msgid "Possessive Abbreviated Name"
-msgstr ""
+msgstr "Poseda Mallongigita Nomo"
 
 #: FixedDateFormat.cpp:130
 #, kde-format
 msgid "Possessive Long Name"
-msgstr ""
+msgstr "Poseda Longa Nomo"
 
 #: FixedDateFormat.cpp:131
 #, kde-format
 msgid "2 Digits (01-99)"
-msgstr ""
+msgstr "2 Ciferoj (01-99)"
 
 #: FixedDateFormat.cpp:132
 #, kde-format
 msgid "4 Digits"
-msgstr ""
+msgstr "4 Ciferoj"
 
 #: FixedDateFormat.cpp:133
 #, kde-format
 msgid "Flexible Digits (1-23)"
-msgstr ""
+msgstr "Flekseblaj Ciferoj (1-23)"
 
 #: FixedDateFormat.cpp:134
 #, kde-format
 msgid "2 Digits (01-23)"
-msgstr ""
+msgstr "2 Ciferoj (01-23)"
 
 #: FixedDateFormat.cpp:135 FixedDateFormat.cpp:137
 #, kde-format
 msgid "Flexible Digits (1-59)"
-msgstr ""
+msgstr "Flekseblaj Ciferoj (1-59)"
 
 #: FixedDateFormat.cpp:136 FixedDateFormat.cpp:138
 #, kde-format
 msgid "2 Digits (01-59)"
-msgstr ""
+msgstr "2 Ciferoj (01-59)"
 
 #: FixedDateFormat.cpp:139
 #, kde-format
 msgid "am/pm"
-msgstr ""
+msgstr "am/pm"
 
 #: FixedDateFormat.cpp:140
 #, kde-format
 msgid "AM/PM"
-msgstr ""
+msgstr "AM/PM"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: FixedDateFormat.ui:21
 #, kde-format
 msgid "Date Correction:"
-msgstr ""
+msgstr "Data Korekto:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, correction)
 #: FixedDateFormat.ui:28
@@ -210,7 +210,7 @@ msgstr " tagoj"
 #: FixedDateFormat.ui:53
 #, kde-format
 msgid "Select the way the date should be displayed:"
-msgstr ""
+msgstr "Elektu kiel la dato estu montrata:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, custom)
 #: FixedDateFormat.ui:60
@@ -227,7 +227,7 @@ msgstr "..."
 #: InfoVariableFactory.cpp:25
 #, kde-format
 msgid "Author Name"
-msgstr ""
+msgstr "Nomo de aŭtoro"
 
 #: InfoVariableFactory.cpp:33
 #, kde-format
@@ -257,12 +257,12 @@ msgstr "Komentoj"
 #: PageVariableFactory.cpp:23
 #, kde-format
 msgid "Page Count"
-msgstr ""
+msgstr "Paĝkalkulo"
 
 #: PageVariableFactory.cpp:31
 #, kde-format
 msgid "Page Number"
-msgstr ""
+msgstr "Paĝa Nombro"
 
 #: UserVariableFactory.cpp:22
 #, kde-format
@@ -322,12 +322,12 @@ msgstr "Tempo"
 #: UserVariableOptionsWidget.cpp:70
 #, kde-format
 msgid "Formula"
-msgstr ""
+msgstr "Formulo"
 
 #: UserVariableOptionsWidget.cpp:71
 #, kde-format
 msgid "Void"
-msgstr ""
+msgstr "Malpleno"
 
 #: UserVariableOptionsWidget.cpp:76
 #, kde-format
@@ -347,7 +347,7 @@ msgstr "Nomo por nova variablo:"
 #: UserVariableOptionsWidget.cpp:165
 #, kde-format
 msgid "Delete variable <b>%1</b>?"
-msgstr "Forigi variablon <b>%1</b>?"
+msgstr "Ĉu forigi variablon <b>%1</b>?"
 
 #: UserVariableOptionsWidget.cpp:166
 #, kde-format

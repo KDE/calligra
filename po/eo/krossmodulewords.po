@@ -1,19 +1,22 @@
-# Translation of krossmodulekword into esperanto.
+# Translation of krossmodulewords.pot into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: krossmodulekword\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 02:41+0200\n"
-"PO-Revision-Date: 2023-01-06 10:00+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: ectx: Menu (tools)
@@ -45,31 +48,31 @@ msgstr "Teksta aŭ HTML-a Dosiero"
 #: scripts/scripts.rc:8
 #, kde-format
 msgid "Python script to import content from a text or html file"
-msgstr ""
+msgstr "Python-skripto por importi enhavon de teksto aŭ html-dosiero"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:12
 #, kde-format
 msgid "Doxygen XML"
-msgstr ""
+msgstr "Doxygen XML"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:12
 #, kde-format
 msgid "Python script to import content from a combined doxygen XML file"
-msgstr ""
+msgstr "Python-skripto por importi enhavon de kombinita doksigena XML-dosiero"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:16
 #, kde-format
 msgid "OpenOffice.org UNO"
-msgstr ""
+msgstr "OpenOffice.org UNO"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:16
 #, kde-format
 msgid "Python script to import content using OpenOffice.org PyUNO"
-msgstr ""
+msgstr "Python-skripto por importi enhavon per OpenOffice.org PyUNO"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:25
@@ -87,19 +90,20 @@ msgstr "Eksporti enhavon"
 #: scripts/scripts.rc:26
 #, kde-format
 msgid "Python script to export content to a text or html file"
-msgstr ""
+msgstr "Python-skripto por eksporti enhavon al teksto aŭ html-dosiero"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:30
 #, kde-format
 msgid "ReportLab.org PDF"
-msgstr ""
+msgstr "ReportLab.org PDF"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:30
 #, kde-format
 msgid "Python script to export content to a PDF file using ReportLab.org"
 msgstr ""
+"Python-skripto por eksporti enhavon al PDF-dosiero uzante ReportLab.org"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:40
@@ -117,7 +121,7 @@ msgstr "Diversaj skriptoj"
 #: scripts/scripts.rc:41
 #, kde-format
 msgid "XML Viewer"
-msgstr ""
+msgstr "XML-Vidilo"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:41
@@ -126,6 +130,8 @@ msgid ""
 "Python script to view the OpenDocument XML representation of the current "
 "document"
 msgstr ""
+"Python-skripto por rigardi la OpenDocument XML-reprezentadon de la nuna "
+"dokumento"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:45
@@ -137,7 +143,7 @@ msgstr "Dokumenta Arbo"
 #: scripts/scripts.rc:45
 #, kde-format
 msgid "QtRuby script that displays the document structure within a treeview"
-msgstr ""
+msgstr "QtRuby-skripto kiu montras la dokumentstrukturon ene de arbvido"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:49
@@ -152,6 +158,8 @@ msgid ""
 "Python script that uses the KHTML Part to display the Words Scripting online "
 "help"
 msgstr ""
+"Python-skripto kiu uzas la KHTML-Parton por montri la retan helpon de Words "
+"Scripting"
 
 #. i18n: tag collection attribute text
 #. i18n: tag script attribute text
@@ -176,19 +184,19 @@ msgstr "Legi el Dosiero.."
 #: scripts/scripts.rc:62
 #, kde-format
 msgid "Python script to read a variable from a file"
-msgstr ""
+msgstr "Python-skripto por legi variablon el dosiero"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "Samples"
-msgstr "Helevo"
+msgstr "Specimenoj"
 
 #. i18n: tag collection attribute comment
 #: scripts/scripts.rc:80
 #, kde-format
 msgid "Samples to demonstrate scripting with Words"
-msgstr ""
+msgstr "Specimenoj por pruvi skripton per Vortoj"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:81
@@ -200,7 +208,7 @@ msgstr "Enigi Formon..."
 #: scripts/scripts.rc:81
 #, kde-format
 msgid "Python script to insert a shape"
-msgstr ""
+msgstr "Python-skripto por enmeti formon"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:85
@@ -212,7 +220,7 @@ msgstr "Stiri Kursoron..."
 #: scripts/scripts.rc:85
 #, kde-format
 msgid "Ruby script that demonstrates how to control the cursor"
-msgstr ""
+msgstr "Ruby-skripto, kiu montras kiel regi la kursoron"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:89
@@ -224,7 +232,7 @@ msgstr "Plenumigi Agon..."
 #: scripts/scripts.rc:89
 #, kde-format
 msgid "Python script that demonstrates usage of actions"
-msgstr ""
+msgstr "Python-skripto, kiu montras uzadon de agoj"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:93
@@ -236,7 +244,7 @@ msgstr "Ilaj Agoj..."
 #: scripts/scripts.rc:93
 #, kde-format
 msgid "Python script that demonstrates usage of tool actions"
-msgstr ""
+msgstr "Python-skripto, kiu montras uzadon de ilaj agoj"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:97
@@ -248,7 +256,7 @@ msgstr "Progresbreto"
 #: scripts/scripts.rc:97
 #, kde-format
 msgid "Python script that demonstrates how to use the progressbar"
-msgstr ""
+msgstr "Python-skripto, kiu montras kiel uzi la progresbreton"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:101
@@ -260,7 +268,7 @@ msgstr "Teksto"
 #: scripts/scripts.rc:101
 #, kde-format
 msgid "Python script that demonstrates usage of the text engine"
-msgstr ""
+msgstr "Python-skripto, kiu montras uzadon de la teksta motoro"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:105
@@ -272,7 +280,7 @@ msgstr "Listoj kun HTML"
 #: scripts/scripts.rc:105
 #, kde-format
 msgid "Python script that demonstrates how to create lists with HTML"
-msgstr ""
+msgstr "Python-skripto, kiu montras kiel krei listojn per HTML"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:110
@@ -284,7 +292,7 @@ msgstr "Listoj kun Kursoro"
 #: scripts/scripts.rc:110
 #, kde-format
 msgid "Python script that demonstrates how to create lists with a cursor"
-msgstr ""
+msgstr "Python-skripto, kiu montras kiel krei listojn per kursoro"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:114
@@ -296,13 +304,13 @@ msgstr "Tabeloj"
 #: scripts/scripts.rc:114
 #, kde-format
 msgid "Python script that demonstrates how to deal with tables"
-msgstr ""
+msgstr "Python-skripto, kiu montras kiel trakti tabelojn"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:118
 #, kde-format
 msgid "Python script that demonstrates how to handle variables"
-msgstr ""
+msgstr "Python-skripto, kiu montras kiel manipuli variablojn"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:122
@@ -314,4 +322,4 @@ msgstr "Ĉiuj Formoj"
 #: scripts/scripts.rc:122
 #, kde-format
 msgid "Python script adds all shapes"
-msgstr ""
+msgstr "Python-skripto aldonas ĉiujn formojn"
