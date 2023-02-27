@@ -10,6 +10,7 @@
   <name xml:lang="de">Calligra Words</name>
   <name xml:lang="el">Calligra Words</name>
   <name xml:lang="en-GB">Calligra Words</name>
+  <name xml:lang="eo">Calligra Words</name>
   <name xml:lang="es">Calligra Words</name>
   <name xml:lang="et">Calligra Words</name>
   <name xml:lang="eu">Calligra Words</name>
@@ -41,6 +42,7 @@
   <summary xml:lang="de">Textverarbeitung</summary>
   <summary xml:lang="el">Επεξεργαστής κειμένου</summary>
   <summary xml:lang="en-GB">Word Processor</summary>
+  <summary xml:lang="eo">Tekstprilaborilo</summary>
   <summary xml:lang="es">Procesador de texto</summary>
   <summary xml:lang="et">Tekstitöötlus</summary>
   <summary xml:lang="eu">Testu-prozesatzailea</summary>
@@ -78,6 +80,7 @@
     <p xml:lang="de">Words ist eine intuitives Programm zur Textverarbeitung und Veröffentlichung. Damit  können damit leicht informative und attraktive Dokumente erstellen.</p>
     <p xml:lang="el">Το Words είναι ένας διαισθητικός επεξεργαστής κειμένου και εφαρμογή παραγωγής ηλεκτρονικών εκδόσεων. Με αυτό μπορείτε να δημιουργήσετε ενημερωτικά και ελκυστικά έγγραφα με απόλαυση και ευκολία.</p>
     <p xml:lang="en-GB">Words is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.</p>
+    <p xml:lang="eo">Words estas intuicia tekstprilaborilo kaj labortabla eldon-aplikaĵo. Per ĝi, vi povas krei informajn kaj allogajn dokumentojn kun plezuro kaj facileco.</p>
     <p xml:lang="es">Words es un procesador de texto intuitivo y un editor para el escritorio. Con él, podrá crear documentos informativos y atractivos con gusto y facilidad.</p>
     <p xml:lang="et">Words on intuitiivselt kasutatav tekstitöötlus- ja küljendusrakendus. Selle abil saab luua lusti ja rõõmuga teabeküllaseid ja silmailu pakkuvaid dokumente.</p>
     <p xml:lang="eu">Words, testu-prozesatzaile eta argitaratzeko mahaigaineko aplikazio intuitibo bat da. Hori erabiliz, dokumentu informatibo eta erakargarriak sor ditzakezu, erraz eta aise.</p>
@@ -110,6 +113,7 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="eo">Trajtoj:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="et">Omadused:</p>
     <p xml:lang="eu">Ezaugarriak:</p>
@@ -144,6 +148,7 @@
       <li xml:lang="de">Editor auf der Grundlage von Rahmen</li>
       <li xml:lang="el">Επεξεργασία με βάση πλαίσιο</li>
       <li xml:lang="en-GB">Frame-based editing</li>
+      <li xml:lang="eo">Kadro-bazita redaktado</li>
       <li xml:lang="es">Edición basada en marcos</li>
       <li xml:lang="et">Paneelipõhine redigeerimine</li>
       <li xml:lang="eu">Markoetan oinarritutako edizioa</li>
@@ -176,6 +181,7 @@
       <li xml:lang="de">Ermöglicht das Einbetten von Dokumenten</li>
       <li xml:lang="el">Επιτρέπει την ενσωμάτωση εγγράφων</li>
       <li xml:lang="en-GB">Allows embedding of Documents</li>
+      <li xml:lang="eo">Permesas enkonstrui Dokumentojn</li>
       <li xml:lang="es">Permite incrustar documentos</li>
       <li xml:lang="et">Dokumentide lõimimise toetamine</li>
       <li xml:lang="eu">Dokumentuak txertatzeko aukera ematen du</li>
@@ -209,6 +215,7 @@
       <li xml:lang="de">Anpassung der Benutzeroberfläche</li>
       <li xml:lang="el">Προσαρμογή του περιβάλλοντος χρήστη</li>
       <li xml:lang="en-GB">Customisation of user interface</li>
+      <li xml:lang="eo">Personigo de uzantinterfaco</li>
       <li xml:lang="es">Personalización de la interfaz de usuario</li>
       <li xml:lang="et">Kohandatav kasutajaliides</li>
       <li xml:lang="eu">Erabiltzaile-interfazea norbere gustura egokitzea</li>
@@ -242,6 +249,7 @@
       <li xml:lang="de">Enthält alle Funktionen einer modernen Textverarbeitung</li>
       <li xml:lang="el">Περιλαμβάνει όλες τις αναμενόμενες λειτουργίες από έναν μοντέρνο επεξεργαστή κειμένου</li>
       <li xml:lang="en-GB">Includes all features expected from a modern word processor</li>
+      <li xml:lang="eo">Inkluzivas ĉiujn funkciojn atenditajn de moderna tekstprilaborilo</li>
       <li xml:lang="es">Incluye todas las características que se esperan de un procesador de texto moderno</li>
       <li xml:lang="et">Kõigi tänapäeva tekstitöötlusrakendusele omaste võimaluste pakkumine</li>
       <li xml:lang="eu">Testu-prozesatzaile moderno batetik espero diren ezaugarri guztiak ditu</li>
@@ -274,6 +282,7 @@
       <li xml:lang="de">Unterstützung für ODT (Open Document Text)</li>
       <li xml:lang="el">Υποστήριξη ODT (Open Document Text)</li>
       <li xml:lang="en-GB">ODT (Open Document Text) support</li>
+      <li xml:lang="eo">Subteno de ODT (Open Document Text)</li>
       <li xml:lang="es">Admite el formato ODT («Open Document Text»)</li>
       <li xml:lang="et">ODT (OpenDocument Text) toetamine</li>
       <li xml:lang="eu">ODT (Open Document Text) onartzen du</li>

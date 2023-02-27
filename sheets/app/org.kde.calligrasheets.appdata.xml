@@ -10,6 +10,7 @@
   <name xml:lang="de">Calligra Sheets</name>
   <name xml:lang="el">Calligra Sheets</name>
   <name xml:lang="en-GB">Calligra Sheets</name>
+  <name xml:lang="eo">Calligra Sheets</name>
   <name xml:lang="es">Calligra Sheets</name>
   <name xml:lang="et">Calligra Sheets</name>
   <name xml:lang="eu">Calligra Sheets</name>
@@ -39,6 +40,7 @@
   <summary xml:lang="de">Tabellenkalkulation</summary>
   <summary xml:lang="el">Λογιστικό φύλλο</summary>
   <summary xml:lang="en-GB">Spreadsheet</summary>
+  <summary xml:lang="eo">Tabelfolio</summary>
   <summary xml:lang="es">Hoja de cálculo</summary>
   <summary xml:lang="et">Tabelitöötlus</summary>
   <summary xml:lang="eu">Kalkulu-orria</summary>
@@ -73,6 +75,7 @@
     <p xml:lang="de">Calligra Sheets ist ein voll funktionsfähiges Berechnungs- und Tabellenkalkulationsprogramm. Verwenden Sie es schnell verschiedene geschäftsbezogene Tabellenkalkulationen zu erstellen und zu berechnen, wie wie z. B. Einnahmen und Ausgaben, Arbeitszeiten der Mitarbeiter usw.</p>
     <p xml:lang="el">To Calligra Sheets είναι ένα πλήρες λειτουργιών εργαλείο υπολογισμών και λογιστικών πράξεων. Χρησιμοποιήστε το για να δημιουργήσετε και να υπολογίσετε γρήγορα επιχειρησιακά φύλλα εργασίας, όπως εισόδημα και έξοδα, εργάσιμες ώρες προσωπικού κτλ.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
+    <p xml:lang="eo">Calligra Sheets estas plene elstara kalkulo kaj kalkultabelo. Uzu ĝin por rapide krei kaj kalkuli diversajn komercajn kalkultabelojn, kiel enspezoj kaj elspezoj, laborhoroj de dungitoj ktp.</p>
     <p xml:lang="es">Calligra Sheets es una herramienta de hojas de cálculo completa. Puede utilizarla para crear y calcular rápidamente varias hojas de cálculo relacionadas con la empresa, como por ejemplo ingresos y gastos, horas de trabajo de los empleados, etc.</p>
     <p xml:lang="et">Calligra Sheets on kõiki võimaliku pakkuv tabelitöötluse ja arvutamise tööriist. Selle abil saab kiiresti luua ja välja arvutada mitmesuguseid ärimaailmas vajalikke tabeleid, näiteks tulud ja kulud, töötunnid jms.</p>
     <p xml:lang="eu">Calligra Sheets, kalkulatzeko tresna eta kalkulu-orri tresna guztiz funtzional bat da. Erabil ezazu negozioarekin lotutako hainbat kalkulu-orri azkar sortzeko eta kalkulatzeko, hala nola, diru-sarrerak eta gastuak, enplegatuen lanorduak, etab.</p>
@@ -103,6 +106,7 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="eo">Trajtoj:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="et">Omadused:</p>
     <p xml:lang="eu">Ezaugarriak:</p>
@@ -135,6 +139,7 @@
       <li xml:lang="de">Objekte für Notizen oder Mind-Maps</li>
       <li xml:lang="el">Χρησιμοποιήστε σχήματα για να κρατήσετε σημειώσεις ή νοηματικούς χάρτες</li>
       <li xml:lang="en-GB">Use shapes to take notes or mind maps</li>
+      <li xml:lang="eo">Uzi formojn por preni notojn aŭ mensmapojn</li>
       <li xml:lang="es">Usa formas para tomar notas o crear mapas mentales</li>
       <li xml:lang="et">Kujundite kasutamine märkmete või ideekaardi loomiseks</li>
       <li xml:lang="eu">Erabili formak, oharrak edo gogoeta-mapak egiteko</li>
@@ -165,6 +170,7 @@
       <li xml:lang="de">Viele vordefinierte Vorlagen aus vielen Bereichen</li>
       <li xml:lang="el">Μεγάλο εύρος προκαθορισμένος προτύπων</li>
       <li xml:lang="en-GB">Large range of pre-defined templates</li>
+      <li xml:lang="eo">Granda gamo de antaŭdifinitaj ŝablonoj</li>
       <li xml:lang="es">Dispone de una amplia gama de plantillas predefinidas</li>
       <li xml:lang="et">Suur valik valmismalle</li>
       <li xml:lang="eu">Aurrez definitutako txantiloien aukera zabala</li>
@@ -195,6 +201,7 @@
       <li xml:lang="de">Leistungsfähige und umfassende Liste von Formeln</li>
       <li xml:lang="el">Ισχυρή και κατανοητή λίστα μαθηματικών σχέσεων</li>
       <li xml:lang="en-GB">Powerful and comprehensive formula list</li>
+      <li xml:lang="eo">Potenca kaj ampleksa formullisto</li>
       <li xml:lang="es">Dispone de una lista de fórmulas potente y completa</li>
       <li xml:lang="et">Võimas ja põhjalik valemikogu</li>
       <li xml:lang="eu">Formula-zerrenda ahaltsu eta zehatza</li>
@@ -225,6 +232,7 @@
       <li xml:lang="de">Arbeiten in einer bekannten Arbeitsumgebung</li>
       <li xml:lang="el">Εργαστείτε σε γνώριμο περιβάλλον</li>
       <li xml:lang="en-GB">Work in a familiar environment</li>
+      <li xml:lang="eo">Laboru en konata medio</li>
       <li xml:lang="es">Funciona en un entorno familiar</li>
       <li xml:lang="et">Töötamine harjumuspärases keskkonnas</li>
       <li xml:lang="eu">Ingurune ezagun batean lan egitea</li>
