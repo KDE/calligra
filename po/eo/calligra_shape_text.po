@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"PO-Revision-Date: 2023-02-27 22:53+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22,72 +22,72 @@ msgstr ""
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
 msgid "Annotation"
-msgstr ""
+msgstr "Komentario"
 
 #: AnnotationTextShapeFactory.cpp:33
 #, kde-format
 msgid "Annotation shape to show annotation content"
-msgstr ""
+msgstr "Komentario formo por montri komentadan enhavon"
 
 #: AnnotationTextShapeFactory.cpp:41
 #, kde-format
 msgid "Annotation Shape"
-msgstr ""
+msgstr "Komentario Formo"
 
 #: commands/AcceptChangeCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Accept change"
-msgstr ""
+msgstr "Akceptu ŝanĝon"
 
 #: commands/AutoResizeCommand.cpp:19
 #, kde-format
 msgctxt "Disable Shrink To Fit"
 msgid "Disable"
-msgstr ""
+msgstr "Malebligu"
 
 #: commands/AutoResizeCommand.cpp:19
 #, kde-format
 msgctxt "Enable Shrink To Fit"
 msgid "Enable"
-msgstr ""
+msgstr "Ebligu"
 
 #: commands/AutoResizeCommand.cpp:22
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Grow To Fit Width"
 msgid "%1 Grow To Fit Width"
-msgstr ""
+msgstr "%1 Kreski Por Konveni Larĝon"
 
 #: commands/AutoResizeCommand.cpp:25
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Grow To Fit Height"
 msgid "%1 Grow To Fit Height"
-msgstr ""
+msgstr "%1 Kreski Por Konveni Alton"
 
 #: commands/AutoResizeCommand.cpp:28
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Shrink To Fit"
 msgid "%1 Shrink To Fit"
-msgstr ""
+msgstr "%1 Ŝrumpas Por Konveni"
 
 #: commands/ChangeListLevelCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Change List Level"
-msgstr ""
+msgstr "Ŝanĝi Listo de Nivelo"
 
 #: commands/RejectChangeCommand.cpp:34
 msgctxt "(qtundo-format)"
 msgid "Reject change"
-msgstr ""
+msgstr "Malakcepti ŝanĝon"
 
 #: commands/ShowChangesCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Show Changes"
-msgstr ""
+msgstr "Montru Ŝanĝojn"
 
 #: commands/ShowChangesCommand.cpp:42
 msgctxt "(qtundo-format)"
 msgid "Hide Changes"
-msgstr ""
+msgstr "Kaŝi Ŝanĝojn"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, TableOfContentsStyleConfigure)
 #. i18n: ectx: property (windowTitle), widget (QDialog, AcceptRejectChangeDialog)
@@ -115,25 +115,25 @@ msgstr "Malakcepti"
 #: dialogs/AcceptRejectChangeDialog.ui:70
 #, kde-format
 msgid "Cancel"
-msgstr ""
+msgstr "Nuligi"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/AcceptRejectChangeDialog.ui:96
 #, kde-format
 msgid "Change Log"
-msgstr ""
+msgstr "Ŝanĝi Protokolo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/AcceptRejectChangeDialog.ui:109
 #, kde-format
 msgid "Author"
-msgstr ""
+msgstr "Aŭtoro"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/AcceptRejectChangeDialog.ui:122
 #, kde-format
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/AcceptRejectChangeDialog.ui:135
@@ -144,12 +144,12 @@ msgstr "Tipo"
 #: dialogs/BibliographyConfigureDialog.cpp:96
 #, kde-format
 msgid "Ascending"
-msgstr ""
+msgstr "Ascendenta"
 
 #: dialogs/BibliographyConfigureDialog.cpp:97
 #, kde-format
 msgid "Descending"
-msgstr ""
+msgstr "Malkreskanta"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, BibliographyConfigureDialog)
 #. i18n: ectx: property (toolTip), widget (QToolButton, configureBibliography)
@@ -157,13 +157,13 @@ msgstr ""
 #: dialogs/SimpleCitationBibliographyWidget.ui:52
 #, kde-format
 msgid "Configure bibliography"
-msgstr ""
+msgstr "Agordu bibliografion"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/BibliographyConfigureDialog.ui:20
 #, kde-format
 msgid "Formatting of bibliography entries"
-msgstr ""
+msgstr "Formatado de bibliografiaj enskriboj"
 
 #. i18n: ectx: property (text), widget (QLabel, prefixLabel)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -180,54 +180,54 @@ msgstr "Prefikso:"
 #: dialogs/ParagraphBulletsNumbers.ui:86
 #, kde-format
 msgid "Suffix:"
-msgstr ""
+msgstr "Sufikso:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, numberedEntries)
 #: dialogs/BibliographyConfigureDialog.ui:70
 #, kde-format
 msgid "Number entries"
-msgstr ""
+msgstr "Nombraj enskriboj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/BibliographyConfigureDialog.ui:80
 #, kde-format
 msgid "Sort"
-msgstr ""
+msgstr "Ordigi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, sortByPosition)
 #: dialogs/BibliographyConfigureDialog.ui:86
 #, kde-format
 msgid "Sort by position"
-msgstr ""
+msgstr "Ordigi laŭ pozicio"
 
 #. i18n: ectx: property (title), widget (QGroupBox, sortKeyGroupBox)
 #: dialogs/BibliographyConfigureDialog.ui:93
 #, kde-format
 msgid "Sort keys"
-msgstr ""
+msgstr "Ordigi klavojn"
 
 #. i18n: ectx: property (text), widget (QPushButton, addSortKeyButton)
 #: dialogs/BibliographyConfigureDialog.ui:103
 #, kde-format
 msgid "Add sort key"
-msgstr ""
+msgstr "Aldonu ordigan ŝlosilon"
 
 #. i18n: ectx: property (text), widget (QLabel, sortAlgorithmLabel)
 #: dialogs/BibliographyConfigureDialog.ui:131
 #, kde-format
 msgid "Sort algorithm:"
-msgstr ""
+msgstr "Ordigo-algoritmo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sortAlgorithm)
 #: dialogs/BibliographyConfigureDialog.ui:139
 #, kde-format
 msgid "Alphanumeric"
-msgstr ""
+msgstr "Alfanumera"
 
 #: dialogs/BibliographyTemplate.cpp:30
 #, kde-format
 msgid "Bibliography"
-msgstr ""
+msgstr "Bibliografio"
 
 #: dialogs/BibliographyTemplate.cpp:42 ReferencesToolFactory.cpp:19
 #, kde-format
@@ -237,23 +237,23 @@ msgstr "Referencoj"
 #: dialogs/ChangeConfigureDialog.cpp:136
 #, kde-format
 msgid "This is a line of inserted text."
-msgstr ""
+msgstr "Ĉi tio estas linio de enmetita teksto."
 
 #: dialogs/ChangeConfigureDialog.cpp:142
 #, kde-format
 msgid "This is a line of deleted text."
-msgstr ""
+msgstr "Ĉi tio estas linio de forigita teksto."
 
 #: dialogs/ChangeConfigureDialog.cpp:148
 #, kde-format
 msgid "This is a line of text whose format has been changed."
-msgstr ""
+msgstr "Ĉi tio estas linio de teksto, kies formato estis ŝanĝita."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChangeConfigureDialog)
 #: dialogs/ChangeConfigureDialog.ui:17
 #, kde-format
 msgid "Configure Change Tracking"
-msgstr ""
+msgstr "Agordi Ŝanĝan Spuradon"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ChangeConfigureDialog.ui:30
@@ -265,37 +265,37 @@ msgstr "Ĝeneralaj Agordoj"
 #: dialogs/ChangeConfigureDialog.ui:37
 #, kde-format
 msgid "Saving Format"
-msgstr ""
+msgstr "Konservanta Formaton"
 
 #. i18n: ectx: property (text), widget (QRadioButton, odf12RadioButton)
 #: dialogs/ChangeConfigureDialog.ui:44
 #, kde-format
 msgid "ODF 1.2"
-msgstr ""
+msgstr "ODF 1.2"
 
 #. i18n: ectx: property (text), widget (QRadioButton, deltaXmlRadioButton)
 #: dialogs/ChangeConfigureDialog.ui:51
 #, kde-format
 msgid "DeltaXML (Experimental)"
-msgstr ""
+msgstr "DeltaXML (Eksperimenta)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ChangeConfigureDialog.ui:58
 #, kde-format
 msgid "Author Name"
-msgstr ""
+msgstr "Nomo de aŭtoro"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ChangeConfigureDialog.ui:75
 #, kde-format
 msgid "Change Visualization Settings"
-msgstr ""
+msgstr "Ŝanĝi Bildigajn Agordojn"
 
 #. i18n: ectx: property (title), widget (QGroupBox, insertionGroupBox)
 #: dialogs/ChangeConfigureDialog.ui:89
 #, kde-format
 msgid "Insertions"
-msgstr ""
+msgstr "Enmetoj"
 
 #. i18n: ectx: property (text), widget (QLabel, insertionColorLabel)
 #. i18n: ectx: property (text), widget (QLabel, deletionColorLabel)
@@ -304,7 +304,7 @@ msgstr ""
 #: dialogs/ChangeConfigureDialog.ui:247
 #, kde-format
 msgid "Background Color"
-msgstr ""
+msgstr "Fona Koloro"
 
 #. i18n: ectx: property (text), widget (QToolButton, moreOptions)
 #. i18n: ectx: property (text), widget (QToolButton, toolAutoSpellCheck)
@@ -404,42 +404,88 @@ msgid ""
 "format-change text. This is a line of text whose format has been changed. "
 "This is a line of text after the format-change text.</span></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Bitstream Vera Sans'; font-"
+"size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
+"style=\" font-family:'MS Shell Dlg 2'; font-size:11pt; font-weight:600; text-"
+"decoration: underline;\">Antaŭrigardo</span></p>\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-"
+"bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+"indent:0px; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:600;"
+"\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Enmetita Teksto</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Ĉi tio estas linio de teksto antaŭ "
+"la enmetita teksto. Ĉi tio estas linio de enmetita teksto. Ĉi tio estas "
+"linio post la enmetita teksto.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Forigita Teksto</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Ĉi tio estas linio de teksto antaŭ "
+"la forigita teksto. Ĉi tio estas linio de forigita teksto. Ĉi tio estas "
+"linio post la forigita teksto.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"family:'MS Shell Dlg 2';\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-weight:600;\">Formatita Teksto</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"family:'MS Shell Dlg 2'; font-size:8pt;\">Tio ĉi estas tekstlinio antaŭ la "
+"format-ŝanĝita teksto. Ĉi tio estas linio de teksto, kies formato estis "
+"ŝanĝita. Ĉi tio estas linio de teksto post la formato-ŝanĝa teksto.</p></"
+"body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, deletionGroupBox)
 #: dialogs/ChangeConfigureDialog.ui:172
 #, kde-format
 msgid "Deletions"
-msgstr ""
+msgstr "Forigoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, formatGroupBox)
 #: dialogs/ChangeConfigureDialog.ui:231
 #, kde-format
 msgid "Format Changes"
-msgstr ""
+msgstr "Formatŝanĝoj"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ChangeTrackingOptions)
 #: dialogs/ChangeTrackingOptionsWidget.ui:14
 #, kde-format
 msgid "Change Tracking Options"
-msgstr ""
+msgstr "Ŝanĝi Spurajn Opciojn"
 
 #. i18n: ectx: property (text), widget (QPushButton, configureChangeTrackingButton)
 #: dialogs/ChangeTrackingOptionsWidget.ui:142
 #, kde-format
 msgid "Configure Settings"
-msgstr ""
+msgstr "Agordi Agordojn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, recordChangesCheckBox)
 #: dialogs/ChangeTrackingOptionsWidget.ui:175
 #, kde-format
 msgid "Record Changes"
-msgstr ""
+msgstr "Rekordo Ŝanĝoj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showChangesCheckBox)
 #: dialogs/ChangeTrackingOptionsWidget.ui:182
 #, kde-format
 msgid "Show Changes"
-msgstr ""
+msgstr "Montri Ŝanĝojn"
 
 #: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
 #, kde-format
@@ -463,19 +509,19 @@ msgstr "Nomo:"
 #: dialogs/CharacterGeneral.ui:46
 #, kde-format
 msgid "Next style:"
-msgstr ""
+msgstr "Sekva stilo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CharacterGeneral.ui:62
 #, kde-format
 msgid "Parent style:"
-msgstr ""
+msgstr "Gepatra stilo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, inToc)
 #: dialogs/CharacterGeneral.ui:78
 #, kde-format
 msgid "Include in table of contents"
-msgstr ""
+msgstr "Enmeti en enhavtabelon"
 
 #: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
 #, kde-format
@@ -485,7 +531,7 @@ msgstr "Normala"
 #: dialogs/CharacterHighlighting.cpp:261
 #, kde-format
 msgid "Small Caps"
-msgstr ""
+msgstr "Malgrandaj Kapoj"
 
 #: dialogs/CharacterHighlighting.cpp:262
 #, kde-format
@@ -528,19 +574,19 @@ msgstr "Fona koloro:"
 #: dialogs/CharacterHighlighting.ui:110
 #, kde-format
 msgid "Underlining:"
-msgstr ""
+msgstr "Substrekado:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:141
 #, kde-format
 msgid "Strikethrough:"
-msgstr ""
+msgstr "Forstrekita:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:172
 #, kde-format
 msgid "Capitalization:"
-msgstr ""
+msgstr "Majuskligo:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:185
@@ -552,7 +598,7 @@ msgstr "Pozicio:"
 #: dialogs/CitationInsertionDialog.cpp:25
 #, kde-format
 msgid "Select"
-msgstr ""
+msgstr "Elekti"
 
 #: dialogs/CitationInsertionDialog.cpp:40
 #, kde-format
@@ -560,6 +606,8 @@ msgid ""
 "The document already contains the bibliography entry with different data.\n"
 "Do you want to adjust existing entries?"
 msgstr ""
+"La dokumento jam enhavas la bibliografian enskribon kun malsamaj datumoj.\n"
+"Ĉu vi volas alĝustigi ekzistantajn enskribojn?"
 
 #: dialogs/CitationInsertionDialog.cpp:40 dialogs/StyleManager.cpp:426
 #, kde-format
@@ -570,31 +618,31 @@ msgstr "Averto"
 #: dialogs/CitationInsertionDialog.cpp:73
 #, kde-format
 msgid "Short name%1"
-msgstr ""
+msgstr "Mallonga nomo%1"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, CitationInsertionDialog)
 #: dialogs/CitationInsertionDialog.ui:20
 #, kde-format
 msgid "Insert Bibliography entry"
-msgstr ""
+msgstr "Enmeti Bibliografian enskribon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/CitationInsertionDialog.ui:32
 #, kde-format
 msgid "Insert Bibliography Entry Details"
-msgstr ""
+msgstr "Enmeti Bibliografiajn Enirajn Detalojn"
 
 #. i18n: ectx: property (text), widget (QLabel, shortnameLabel)
 #: dialogs/CitationInsertionDialog.ui:38
 #, kde-format
 msgid "Short Name:"
-msgstr ""
+msgstr "Mallonga Nomo:"
 
 #. i18n: ectx: property (text), widget (QLabel, sourcetypeLabel)
 #: dialogs/CitationInsertionDialog.ui:52
 #, kde-format
 msgid "Source:"
-msgstr ""
+msgstr "Fonto:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -615,14 +663,14 @@ msgstr "Libro"
 #: dialogs/CitationInsertionDialog.ui:70 dialogs/InsertBibliographyDialog.ui:71
 #, kde-format
 msgid "Booklet"
-msgstr ""
+msgstr "Libreto"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/CitationInsertionDialog.ui:75 dialogs/InsertBibliographyDialog.ui:76
 #, kde-format
 msgid "Conference"
-msgstr ""
+msgstr "Konferenco"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -635,19 +683,19 @@ msgstr "Retpoŝto"
 #: dialogs/CitationInsertionDialog.ui:85
 #, kde-format
 msgid "Inbook"
-msgstr ""
+msgstr "Enlibro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:90
 #, kde-format
 msgid "Incollection"
-msgstr ""
+msgstr "Enkolekto"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:95
 #, kde-format
 msgid "Inproceedings"
-msgstr ""
+msgstr "Enprocedoj"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -655,7 +703,7 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:101
 #, kde-format
 msgid "Journal"
-msgstr ""
+msgstr "Ĵurnalo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -671,7 +719,7 @@ msgstr "Manlibro"
 #: dialogs/InsertBibliographyDialog.ui:111
 #, kde-format
 msgid "Masters thesis"
-msgstr ""
+msgstr "Magistra tezo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -687,7 +735,7 @@ msgstr "Diverso"
 #: dialogs/InsertBibliographyDialog.ui:121
 #, kde-format
 msgid "PhD thesis"
-msgstr ""
+msgstr "Doktora tezo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -695,13 +743,13 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:126
 #, kde-format
 msgid "Proceedings"
-msgstr ""
+msgstr "Procedoj"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:130
 #, kde-format
 msgid "Tech Report"
-msgstr ""
+msgstr "Teknika Raporto"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -709,7 +757,7 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:136
 #, kde-format
 msgid "Unpublished"
-msgstr ""
+msgstr "Neeldonita"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
@@ -717,43 +765,43 @@ msgstr ""
 #: dialogs/InsertBibliographyDialog.ui:141
 #, kde-format
 msgid "WWW"
-msgstr ""
+msgstr "WWW"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:145
 #, kde-format
 msgid "custom 1"
-msgstr ""
+msgstr "kutimo 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:150
 #, kde-format
 msgid "custom 2"
-msgstr ""
+msgstr "kutimo 2"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:155
 #, kde-format
 msgid "custom 3"
-msgstr ""
+msgstr "kutimo 3"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:160
 #, kde-format
 msgid "custom 4"
-msgstr ""
+msgstr "kutimo 4"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, sourceType)
 #: dialogs/CitationInsertionDialog.ui:165
 #, kde-format
 msgid "custom 5"
-msgstr ""
+msgstr "kutimo 5"
 
 #. i18n: ectx: property (text), widget (QLabel, authorLabel)
 #: dialogs/CitationInsertionDialog.ui:173
 #, kde-format
 msgid "Author:"
-msgstr ""
+msgstr "Aŭtoro:"
 
 #. i18n: ectx: property (text), widget (QLabel, titleLabel)
 #: dialogs/CitationInsertionDialog.ui:183
@@ -766,13 +814,13 @@ msgstr "Titolo:"
 #: dialogs/CitationInsertionDialog.ui:193
 #, kde-format
 msgid "Year:"
-msgstr ""
+msgstr "Jaro:"
 
 #. i18n: ectx: property (text), widget (QLabel, publisherLabel)
 #: dialogs/CitationInsertionDialog.ui:203
 #, kde-format
 msgid "Publisher:"
-msgstr ""
+msgstr "Eldonisto:"
 
 #. i18n: ectx: property (text), widget (QLabel, addressLabel)
 #: dialogs/CitationInsertionDialog.ui:213
@@ -784,91 +832,91 @@ msgstr "Adreso:"
 #: dialogs/CitationInsertionDialog.ui:223
 #, kde-format
 msgid "ISBN:"
-msgstr ""
+msgstr "ISBN:"
 
 #. i18n: ectx: property (text), widget (QLabel, chapterLabel)
 #: dialogs/CitationInsertionDialog.ui:233
 #, kde-format
 msgid "Chapter:"
-msgstr ""
+msgstr "Ĉapitro:"
 
 #. i18n: ectx: property (text), widget (QLabel, issnLabel)
 #: dialogs/CitationInsertionDialog.ui:243
 #, kde-format
 msgid "ISSN:"
-msgstr ""
+msgstr "ISSN:"
 
 #. i18n: ectx: property (text), widget (QLabel, editorLabel)
 #: dialogs/CitationInsertionDialog.ui:253
 #, kde-format
 msgid "Editor:"
-msgstr ""
+msgstr "Redaktoro:"
 
 #. i18n: ectx: property (text), widget (QLabel, pagesLabel)
 #: dialogs/CitationInsertionDialog.ui:263
 #, kde-format
 msgid "Page(s):"
-msgstr ""
+msgstr "Paĝo(j):"
 
 #. i18n: ectx: property (text), widget (QLabel, booktitleLabel)
 #: dialogs/CitationInsertionDialog.ui:273
 #, kde-format
 msgid "Book title:"
-msgstr ""
+msgstr "Librotitolo:"
 
 #. i18n: ectx: property (text), widget (QLabel, editionLabel)
 #: dialogs/CitationInsertionDialog.ui:283
 #, kde-format
 msgid "Edition:"
-msgstr ""
+msgstr "Eldono:"
 
 #. i18n: ectx: property (text), widget (QLabel, publicationLabel)
 #: dialogs/CitationInsertionDialog.ui:293
 #, kde-format
 msgid "Publication:"
-msgstr ""
+msgstr "Publikigo:"
 
 #. i18n: ectx: property (text), widget (QLabel, volumeLabel)
 #: dialogs/CitationInsertionDialog.ui:303
 #, kde-format
 msgid "Volume:"
-msgstr ""
+msgstr "Volumo:"
 
 #. i18n: ectx: property (text), widget (QLabel, institutionLabel)
 #: dialogs/CitationInsertionDialog.ui:313
 #, kde-format
 msgid "Institution:"
-msgstr ""
+msgstr "Institucio:"
 
 #. i18n: ectx: property (text), widget (QLabel, organisationLabel)
 #: dialogs/CitationInsertionDialog.ui:323
 #, kde-format
 msgid "Organisation:"
-msgstr ""
+msgstr "Organizo:"
 
 #. i18n: ectx: property (text), widget (QLabel, reporttypeLabel)
 #: dialogs/CitationInsertionDialog.ui:333
 #, kde-format
 msgid "Type of Report:"
-msgstr ""
+msgstr "Tipo de Raporto:"
 
 #. i18n: ectx: property (text), widget (QLabel, schoolLabel)
 #: dialogs/CitationInsertionDialog.ui:343
 #, kde-format
 msgid "University:"
-msgstr ""
+msgstr "Universitato:"
 
 #. i18n: ectx: property (text), widget (QLabel, journalLabel)
 #: dialogs/CitationInsertionDialog.ui:353
 #, kde-format
 msgid "Journal:"
-msgstr ""
+msgstr "Ĵurnalo:"
 
 #. i18n: ectx: property (text), widget (QLabel, monthLabel)
 #: dialogs/CitationInsertionDialog.ui:363
 #, kde-format
 msgid "Month:"
-msgstr ""
+msgstr "Monato:"
 
 #. i18n: ectx: property (text), widget (QLabel, seriesLabel)
 #: dialogs/CitationInsertionDialog.ui:373
@@ -880,7 +928,7 @@ msgstr "Serioj"
 #: dialogs/CitationInsertionDialog.ui:383
 #, kde-format
 msgid "Number:"
-msgstr ""
+msgstr "Nombro:"
 
 #. i18n: ectx: property (text), widget (QLabel, noteLabel)
 #: dialogs/CitationInsertionDialog.ui:393
@@ -892,65 +940,65 @@ msgstr "Noto:"
 #: dialogs/CitationInsertionDialog.ui:403
 #, kde-format
 msgid "Annotation:"
-msgstr ""
+msgstr "Komentario:"
 
 #. i18n: ectx: property (text), widget (QLabel, urlLabel)
 #: dialogs/CitationInsertionDialog.ui:413
 #, kde-format
 msgid "URL:"
-msgstr ""
+msgstr "URL:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud1Label)
 #: dialogs/CitationInsertionDialog.ui:423
 #, kde-format
 msgid "User-defined 1:"
-msgstr ""
+msgstr "Uzant-difinita 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud3Label)
 #: dialogs/CitationInsertionDialog.ui:433
 #, kde-format
 msgid "User-defined 3:"
-msgstr ""
+msgstr "Uzant-difinita 3:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud2Label)
 #: dialogs/CitationInsertionDialog.ui:440
 #, kde-format
 msgid "User-defined 2:"
-msgstr ""
+msgstr "Uzant-difinita 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud4Label)
 #: dialogs/CitationInsertionDialog.ui:453
 #, kde-format
 msgid "User-defined 4:"
-msgstr ""
+msgstr "Uzant-difinita 4:"
 
 #. i18n: ectx: property (text), widget (QLabel, ud5Label)
 #: dialogs/CitationInsertionDialog.ui:463
 #, kde-format
 msgid "User-defined 5:"
-msgstr ""
+msgstr "Uzant-difinita 5:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/CitationInsertionDialog.ui:485
 #, kde-format
 msgid "OR"
-msgstr ""
+msgstr "AŬ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/CitationInsertionDialog.ui:509
 #, kde-format
 msgid "From the document:"
-msgstr ""
+msgstr "El la dokumento:"
 
 #: dialogs/DockerStylesComboModel.cpp:61
 #, kde-format
 msgid "Used Styles"
-msgstr ""
+msgstr "Uzitaj Stiloj"
 
 #: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Unused Styles"
-msgstr ""
+msgstr "Neuzataj Stiloj"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/FontDecorations.ui:17
@@ -962,7 +1010,7 @@ msgstr "Koloroj"
 #: dialogs/FontDecorations.ui:95
 #, kde-format
 msgid "Text Shadow"
-msgstr ""
+msgstr "Teksta Ombro"
 
 #. i18n: ectx: property (text), widget (QLabel, shadowColorLabel)
 #: dialogs/FontDecorations.ui:244
@@ -986,7 +1034,7 @@ msgstr "Pozicio"
 #: dialogs/FontDecorations.ui:295
 #, kde-format
 msgid "Automatic hyphenation"
-msgstr ""
+msgstr "Aŭtomata dividdivido"
 
 #: dialogs/FontDia.cpp:34
 #, kde-format
@@ -1004,85 +1052,85 @@ msgstr "Tiparo"
 #: dialogs/SimpleCitationBibliographyWidget.ui:36 ReferencesTool.cpp:162
 #, kde-format
 msgid "Insert Bibliography"
-msgstr ""
+msgstr "Enmeti Bibliografion"
 
 #. i18n: ectx: property (title), widget (QGroupBox, titlegroupBox)
 #: dialogs/InsertBibliographyDialog.ui:26
 #, kde-format
 msgid "Bibliography title"
-msgstr ""
+msgstr "Bibliografia titolo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/InsertBibliographyDialog.ui:45
 #, kde-format
 msgid "Bibliography entries"
-msgstr ""
+msgstr "Bibliografiaj enskriboj"
 
 #. i18n: ectx: property (text), widget (QLabel, bibTypesLabel)
 #: dialogs/InsertBibliographyDialog.ui:53
 #, kde-format
 msgid "Bibliography type:"
-msgstr ""
+msgstr "Bibliografia tipo:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:86
 #, kde-format
 msgid "In book"
-msgstr ""
+msgstr "En libro"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:91
 #, kde-format
 msgid "In collection"
-msgstr ""
+msgstr "En kolekto"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:96
 #, kde-format
 msgid "In proceedings"
-msgstr ""
+msgstr "En procedoj"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:131
 #, kde-format
 msgid "Tech report"
-msgstr ""
+msgstr "Teknika raporto"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:146
 #, kde-format
 msgid "custom1"
-msgstr ""
+msgstr "kutimo1"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:151
 #, kde-format
 msgid "custom2"
-msgstr ""
+msgstr "kutimo2"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:156
 #, kde-format
 msgid "custom3"
-msgstr ""
+msgstr "kutimo3"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:161
 #, kde-format
 msgid "custom4"
-msgstr ""
+msgstr "kutimo4"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, bibTypes)
 #: dialogs/InsertBibliographyDialog.ui:166
 #, kde-format
 msgid "custom5"
-msgstr ""
+msgstr "kutimo5"
 
 #. i18n: ectx: property (text), widget (QLabel, availableFieldsLabel)
 #: dialogs/InsertBibliographyDialog.ui:178
 #, kde-format
 msgid "Available fields "
-msgstr ""
+msgstr "Disponeblaj kampoj"
 
 #. i18n: ectx: property (text), widget (QPushButton, add)
 #: dialogs/InsertBibliographyDialog.ui:192
@@ -1094,24 +1142,24 @@ msgstr "Aldoni >>"
 #: dialogs/InsertBibliographyDialog.ui:199
 #, kde-format
 msgid "Span"
-msgstr ""
+msgstr "Spano"
 
 #. i18n: ectx: property (text), widget (QPushButton, remove)
 #: dialogs/InsertBibliographyDialog.ui:206
 #, kde-format
 msgid "<<Remove"
-msgstr ""
+msgstr "<<Forigi"
 
 #. i18n: ectx: property (text), widget (QLabel, addedFieldsLabel)
 #: dialogs/InsertBibliographyDialog.ui:217
 #, kde-format
 msgid "Fields added"
-msgstr ""
+msgstr "Kampoj aldonitaj"
 
 #: dialogs/InsertCharacter.cpp:16
 #, kde-format
 msgid "Special Characters"
-msgstr ""
+msgstr "Specialaj Signoj"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonInsert)
 #: dialogs/InsertCharacter.cpp:26 dialogs/ManageBookmark.ui:34
@@ -1130,45 +1178,45 @@ msgstr "Fermi"
 #: dialogs/LanguageTab.ui:19
 #, kde-format
 msgid "Quick search:"
-msgstr ""
+msgstr "Rapida serĉo:"
 
 #: dialogs/LinkInsertionDialog.cpp:71 dialogs/LinkInsertionDialog.cpp:152
 #: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
 #, kde-format
 msgid "The URL is invalid"
-msgstr ""
+msgstr "La URL estas nevalida"
 
 #: dialogs/LinkInsertionDialog.cpp:88
 #, kde-format
 msgid "Bookmark does not exist"
-msgstr ""
+msgstr "Legomarko ne ekzistas"
 
 #: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
-msgstr ""
+msgstr "Akiro de la titolo: 0% kompleta"
 
 #: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
 msgid "Fetch timed out"
-msgstr ""
+msgstr "Akirtempo elĉerpita"
 
 #: dialogs/LinkInsertionDialog.cpp:268
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
-msgstr ""
+msgstr "Akiro de la titolo: %1% kompleta"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
 #: dialogs/LinkInsertionDialog.ui:14
 #, kde-format
 msgid "Link"
-msgstr "Ligo"
+msgstr "Ligilo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, weblinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:30
 #, kde-format
 msgid "Web Link"
-msgstr ""
+msgstr "Reteja Ligo"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, weblinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:34
@@ -1178,18 +1226,21 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
+"Enigu ligilojn al retdokumentoj. Vi povas provizi ambaŭ URL kaj etikedon por "
+"la ligilo,\n"
+" aŭ simple enigu la URL kaj premu \"Prenu la titolon el URL\""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:42
 #, kde-format
 msgid "The address of your document (Uniform Resource Locator)"
-msgstr ""
+msgstr "La adreso de via dokumento (Uniform Resource Locator)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:45
 #, kde-format
 msgid " URL:"
-msgstr ""
+msgstr "URL:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:58
@@ -1198,19 +1249,21 @@ msgid ""
 "Hit this button to get the title from the URL. Redirections are also "
 "handled. "
 msgstr ""
+"Premu ĉi tiun butonon por akiri la titolon de la URL. Alidirektoj ankaŭ "
+"estas pritraktitaj."
 
 #. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:61
 #, kde-format
 msgid "Fetch Title From URL"
-msgstr ""
+msgstr "Preni titolon el URL"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #: dialogs/LinkInsertionDialog.ui:81 dialogs/LinkInsertionDialog.ui:165
 #, kde-format
 msgid "The text that will be displayed for your link"
-msgstr ""
+msgstr "La teksto, kiu estos montrata por via ligilo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
@@ -1223,7 +1276,7 @@ msgstr " Teksto:"
 #: dialogs/LinkInsertionDialog.ui:113
 #, kde-format
 msgid "Link To Bookmark"
-msgstr ""
+msgstr "Ligo Al Legomarko"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:117
@@ -1232,12 +1285,14 @@ msgid ""
 "Insert links to Bookmarks. To create bookmarks,\n"
 "click \"Bookmarks\" in the Links and Bookmarks section"
 msgstr ""
+"Enigu ligilojn al Legosignoj. Por krei legosignojn,\n"
+"klaku \"Legosignoj\" en la sekcio Ligiloj kaj Legosignoj"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:132
 #, kde-format
 msgid "The name of the bookmark to where the link has to point to"
-msgstr ""
+msgstr "La nomo de la legosigno al kie la ligilo devas montri"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:135
@@ -1252,31 +1307,31 @@ msgstr " Nomo:"
 #: dialogs/ParagraphIndentSpacing.ui:97
 #, kde-format
 msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
-msgstr ""
+msgstr "<p> <ekz> <b>Ununura</b>: La normala interspaco</ekz></ekz>."
 
 #. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
 #: dialogs/ListLevelWidget.ui:47
 #, kde-format
 msgid "Add tab stop"
-msgstr ""
+msgstr "Aldoni tab-halton"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:71
 #, kde-format
 msgid "Tab character"
-msgstr ""
+msgstr "Tab-signo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:76
 #, kde-format
 msgid "Space character"
-msgstr ""
+msgstr "Spaca signo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:81
 #, kde-format
 msgid "Nothing"
-msgstr ""
+msgstr "Nenio"
 
 #. i18n: ectx: property (text), widget (QLabel, loremIpsum)
 #: dialogs/ListLevelWidget.ui:95
@@ -1290,18 +1345,25 @@ msgid ""
 "cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
 "est laborum."
 msgstr ""
+"              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed "
+"do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+"minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex "
+"ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+"velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+"cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id "
+"est laborum."
 
 #. i18n: ectx: property (text), widget (QLabel, labelLabel)
 #: dialogs/ListLevelWidget.ui:117
 #, kde-format
 msgid "LABEL"
-msgstr ""
+msgstr "ETIKEDO"
 
 #. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
 #: dialogs/ListLevelWidget.ui:149
 #, kde-format
 msgid "First line separated from label by:"
-msgstr ""
+msgstr "Unua linio apartigita de etikedo per:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
@@ -1328,49 +1390,49 @@ msgstr "Dekstra"
 #: dialogs/ListLevelWidget.ui:300
 #, kde-format
 msgid "Per level increase:"
-msgstr ""
+msgstr "Laŭnivela pliiĝo:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, numberTab)
 #: dialogs/ListLevelWidget.ui:334
 #, kde-format
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ListLevelWidget.ui:366
 #, kde-format
 msgid "Format:"
-msgstr ""
+msgstr "Formato:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ListLevelWidget.ui:429
 #, kde-format
 msgid "Display levels above:"
-msgstr ""
+msgstr "Montraj niveloj supre:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, synchro)
 #: dialogs/ListLevelWidget.ui:436
 #, kde-format
 msgid "Letter synchronization"
-msgstr ""
+msgstr "Letersinkronigo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
 #: dialogs/ListLevelWidget.ui:454
 #, kde-format
 msgid "Bullet"
-msgstr ""
+msgstr "Kuglo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, imageTab)
 #: dialogs/ListLevelWidget.ui:459
 #, kde-format
 msgid "Picture"
-msgstr ""
+msgstr "Bildo"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr ""
+msgstr "Ŝargi bildon..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
@@ -1392,22 +1454,22 @@ msgstr "Alinomi la legosignon"
 #: dialogs/ManageBookmarkDialog.cpp:70
 #, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr ""
+msgstr "Bonvolu doni novan nomon por la legosigno"
 
 #: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr ""
+msgstr "Legosigno kun la nomo \"%1\" jam ekzistas."
 
 #: dialogs/ManageBookmarkDialog.cpp:110
 #, kde-format
 msgid "Insert Bookmark"
-msgstr ""
+msgstr "Enmeti legosignon"
 
 #: dialogs/ManageBookmarkDialog.cpp:111
 #, kde-format
 msgid "Please provide a name for the bookmark"
-msgstr ""
+msgstr "Bonvolu doni nomon por la legosigno"
 
 #: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
 #, kde-format
@@ -1417,18 +1479,18 @@ msgstr "Administri Legosignojn"
 #: dialogs/NotesConfigurationDialog.cpp:24
 #, kde-format
 msgid "Footnote Settings"
-msgstr ""
+msgstr "Agordoj de piednotoj"
 
 #: dialogs/NotesConfigurationDialog.cpp:27
 #, kde-format
 msgid "Endnote Settings"
-msgstr ""
+msgstr "Finnotaj Agordoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/NotesConfigurationDialog.ui:54
 #, kde-format
 msgid "Automatic Numbering:"
-msgstr ""
+msgstr "Aŭtomata numerado:"
 
 #. i18n: ectx: property (text), widget (QLabel, prefix)
 #: dialogs/NotesConfigurationDialog.ui:75
@@ -1440,7 +1502,7 @@ msgstr " Prefikso:"
 #: dialogs/NotesConfigurationDialog.ui:85
 #, kde-format
 msgid " Start at:"
-msgstr ""
+msgstr " Komenci ĉe:"
 
 #. i18n: ectx: property (text), widget (QLabel, numStyle)
 #: dialogs/NotesConfigurationDialog.ui:95
@@ -1452,13 +1514,13 @@ msgstr " Formato:"
 #: dialogs/NotesConfigurationDialog.ui:111
 #, kde-format
 msgid " Suffix:"
-msgstr "Sufikso:"
+msgstr " Sufikso:"
 
 #. i18n: ectx: property (text), widget (QLabel, beginAt)
 #: dialogs/NotesConfigurationDialog.ui:127
 #, kde-format
 msgid "Starts over at:"
-msgstr ""
+msgstr "Rekomenciĝas je:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:144
@@ -1470,7 +1532,7 @@ msgstr "Paĝo"
 #: dialogs/NotesConfigurationDialog.ui:149
 #, kde-format
 msgid "Chapter"
-msgstr ""
+msgstr "Ĉapitro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, beginAtCombo)
 #: dialogs/NotesConfigurationDialog.ui:154
@@ -1488,25 +1550,25 @@ msgstr "1, 2, 3, ..."
 #: dialogs/NotesConfigurationDialog.ui:238
 #, kde-format
 msgid "a, b, c, ..., aa, ab, ..., ba, bb, ..."
-msgstr ""
+msgstr "a, b, c, ..., aa, ab, ..., ba, bb, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:243
 #, kde-format
 msgid "A, B, C, ..., AA, AB, ..., BA, BB, ..."
-msgstr ""
+msgstr "A, B, C, ..., AA, AB, ..., BA, BB, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:248
 #, kde-format
 msgid "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
-msgstr ""
+msgstr "a, b, c, ..., aa, bb, ..., aaa, bbb, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:253
 #, kde-format
 msgid "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
-msgstr ""
+msgstr "A, B, C, ..., AA, BB, ..., AAA, BBB, ..."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, numStyleCombo)
 #: dialogs/NotesConfigurationDialog.ui:258
@@ -1524,19 +1586,19 @@ msgstr "I,II,III, ..."
 #: dialogs/NotesConfigurationDialog.ui:290
 #, kde-format
 msgid "Continuation Notice:"
-msgstr ""
+msgstr "Daŭriga Avizo:"
 
 #. i18n: ectx: property (text), widget (QLabel, cont2)
 #: dialogs/NotesConfigurationDialog.ui:305
 #, kde-format
 msgid "Text saying it is a continuation:"
-msgstr ""
+msgstr "Teksto dirante ke ĝi estas daŭrigo:"
 
 #. i18n: ectx: property (text), widget (QLabel, cont1)
 #: dialogs/NotesConfigurationDialog.ui:315
 #, kde-format
 msgid " Text saying it will continue:"
-msgstr ""
+msgstr " Teksto dirante ke ĝi daŭrigos:"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:34
 #, kde-format
@@ -1566,7 +1628,7 @@ msgstr "Centre"
 #, kde-format
 msgctxt "Tab follows the bullet or number"
 msgid "Tab Stop"
-msgstr ""
+msgstr "Tab Stop"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:40
 #, kde-format
@@ -1578,18 +1640,18 @@ msgstr "Spaco"
 #, kde-format
 msgctxt "None"
 msgid "Nothing"
-msgstr ""
+msgstr "Nenio"
 
 #: dialogs/ParagraphBulletsNumbers.cpp:335
 #, kde-format
 msgid "Select a list image"
-msgstr ""
+msgstr "Elekti listbildon"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphBulletsNumbers.ui:31
 #, kde-format
 msgid "Start at:"
-msgstr ""
+msgstr "Komenci ĉe:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/ParagraphBulletsNumbers.ui:57
@@ -1601,19 +1663,19 @@ msgstr "Alĝustigo:"
 #: dialogs/ParagraphBulletsNumbers.ui:105
 #, kde-format
 msgid "Depth:"
-msgstr ""
+msgstr "Profundo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: dialogs/ParagraphBulletsNumbers.ui:128
 #, kde-format
 msgid "Display Levels:"
-msgstr ""
+msgstr "Montri Nivelojn:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: dialogs/ParagraphBulletsNumbers.ui:148
 #, kde-format
 msgid "Bullet/Number followed by"
-msgstr ""
+msgstr "Kuglo/Nombro sekvata de"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_2)
@@ -1623,67 +1685,67 @@ msgstr ""
 #: dialogs/ParagraphBulletsNumbers.ui:192
 #, kde-format
 msgid " cm"
-msgstr ""
+msgstr " cm"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: dialogs/ParagraphBulletsNumbers.ui:165
 #, kde-format
 msgid "at"
-msgstr ""
+msgstr "ĉe"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: dialogs/ParagraphBulletsNumbers.ui:182
 #, kde-format
 msgid "Aligned at"
-msgstr ""
+msgstr "Vicigita je"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: dialogs/ParagraphBulletsNumbers.ui:199
 #, kde-format
 msgid "Indented at"
-msgstr ""
+msgstr "Deŝovita ĉe"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ParagraphBulletsNumbers.ui:211
 #, kde-format
 msgid "Custom character:"
-msgstr ""
+msgstr "Propra signo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, restartNumbering)
 #: dialogs/ParagraphBulletsNumbers.ui:241
 #, kde-format
 msgid "Restart numbering at this paragraph"
-msgstr ""
+msgstr "Rekomenci numeradon ĉe ĉi tiu alineo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, letterSynchronization)
 #: dialogs/ParagraphBulletsNumbers.ui:248
 #, kde-format
 msgid "Letter Synchronization"
-msgstr ""
+msgstr "Sinkronigo de letero"
 
 #. i18n: ectx: property (text), widget (QLabel, widthLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:257
 #, kde-format
 msgid "Width"
-msgstr ""
+msgstr "Larĝo"
 
 #. i18n: ectx: property (text), widget (QLabel, insertImageLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:264
 #, kde-format
 msgid "Insert Image"
-msgstr ""
+msgstr "Enmeti Bildon"
 
 #. i18n: ectx: property (text), widget (QLabel, heightLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:274
 #, kde-format
 msgid "Height"
-msgstr ""
+msgstr "Alteco"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertImage)
 #: dialogs/ParagraphBulletsNumbers.ui:284
 #, kde-format
 msgid "Browse..."
-msgstr ""
+msgstr "Foliumi..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/ParagraphDecorations.ui:31 TextTool.cpp:385
@@ -1700,56 +1762,56 @@ msgstr "Fona koloro"
 #: dialogs/ParagraphDropCaps.cpp:20
 #, kde-format
 msgid "Whole Word"
-msgstr ""
+msgstr "Tuta Vorto"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ParagraphDropCaps.ui:32
 #, kde-format
 msgid "Drop caps:"
-msgstr ""
+msgstr "Gutiloj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphDropCaps.ui:84
 #, kde-format
 msgid "Distance to paragraph:"
-msgstr ""
+msgstr "Distanco al paragrafo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/ParagraphDropCaps.ui:94
 #, kde-format
 msgid "Number of characters:"
-msgstr ""
+msgstr "Nombro da signoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ParagraphDropCaps.ui:104
 #, kde-format
 msgid "Number of lines it covers:"
-msgstr ""
+msgstr "Nombro da linioj kiujn ĝi kovras:"
 
 #: dialogs/ParagraphGeneral.cpp:40
 #, kde-format
 msgid "Indent/Spacing"
-msgstr ""
+msgstr "Indent/Interspaco"
 
 #: dialogs/ParagraphGeneral.cpp:45
 #, kde-format
 msgid "General Layout"
-msgstr ""
+msgstr "Ĝenerala Aranĝo"
 
 #: dialogs/ParagraphGeneral.cpp:50
 #, kde-format
 msgid "Bullets/Numbers"
-msgstr ""
+msgstr "Kugloj/Nombroj"
 
 #: dialogs/ParagraphGeneral.cpp:55
 #, kde-format
 msgid "Decorations"
-msgstr ""
+msgstr "Dekoracioj"
 
 #: dialogs/ParagraphGeneral.cpp:60
 #, kde-format
 msgid "Drop Caps"
-msgstr ""
+msgstr "Drop Caps"
 
 #: dialogs/ParagraphIndentSpacing.cpp:25
 #, kde-format
@@ -1773,13 +1835,13 @@ msgstr "duobla"
 #, kde-format
 msgctxt "Line spacing type"
 msgid "Proportional"
-msgstr ""
+msgstr "Proporcia"
 
 #: dialogs/ParagraphIndentSpacing.cpp:29
 #, kde-format
 msgctxt "Line spacing type"
 msgid "Additional"
-msgstr ""
+msgstr "Pliaj"
 
 #: dialogs/ParagraphIndentSpacing.cpp:30
 #, kde-format
@@ -1815,19 +1877,19 @@ msgstr "Dekstre:"
 #: dialogs/ParagraphIndentSpacing.ui:71
 #, kde-format
 msgid "First Line:"
-msgstr ""
+msgstr "Unua Linio:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoTextIndent)
 #: dialogs/ParagraphIndentSpacing.ui:87
 #, kde-format
 msgid "Auto-infer from text size"
-msgstr ""
+msgstr "Aŭtomate konkludi el tekstograndeco"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/ParagraphIndentSpacing.ui:100
 #, kde-format
 msgid "Line Spacing"
-msgstr ""
+msgstr "Linia interspaco"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, proportional)
 #: dialogs/ParagraphIndentSpacing.ui:134
@@ -1839,19 +1901,19 @@ msgstr " %"
 #: dialogs/ParagraphIndentSpacing.ui:180
 #, kde-format
 msgid "Use Font Metrics:"
-msgstr ""
+msgstr "Uzi Font-Metrikojn:"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/ParagraphIndentSpacing.ui:202
 #, kde-format
 msgid "Paragraph Space"
-msgstr ""
+msgstr "Alinea Spaco"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:208
 #, kde-format
 msgid "Before:"
-msgstr ""
+msgstr "Antaŭ:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/ParagraphIndentSpacing.ui:221
@@ -1869,167 +1931,168 @@ msgstr "Alĝustigo"
 #: dialogs/ParagraphLayout.ui:44
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "Ĝisrandigi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: dialogs/ParagraphLayout.ui:54
 #, kde-format
 msgid "Behavior at End of Frame/Page"
-msgstr ""
+msgstr "Konduto ĉe Fino de Kadro/Paĝo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, keepTogether)
 #: dialogs/ParagraphLayout.ui:60
 #, kde-format
 msgid "Keep lines together"
-msgstr ""
+msgstr "Konservi liniojn kune"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakBefore)
 #: dialogs/ParagraphLayout.ui:67
 #, kde-format
 msgid "Insert break before paragraph"
-msgstr ""
+msgstr "Enmeti linisalton antaŭ alineo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, breakAfter)
 #: dialogs/ParagraphLayout.ui:74
 #, kde-format
 msgid "Insert break after paragraph"
-msgstr ""
+msgstr "Enmeti linisalton post alineo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ParagraphLayout.ui:83
 #, kde-format
 msgid "Leave at least this many lines (orphans):"
-msgstr ""
+msgstr "Lasi almenaŭ tiom da linioj (orfoj):"
 
 #: dialogs/ParagraphSettingsDialog.cpp:28
 #, kde-format
 msgid "Paragraph Format"
-msgstr ""
+msgstr "Formato de Alineo"
 
 #: dialogs/QuickTableButton.cpp:146
 #, kde-format
 msgid "Insert a table"
-msgstr ""
+msgstr "Enmeti tabelon"
 
 #: dialogs/SectionFormatDialog.cpp:41
 #, kde-format
 msgid "Section name"
-msgstr ""
+msgstr "Nomo de sekcio"
 
 #: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
 #, kde-format
 msgid "Configure sections"
-msgstr ""
+msgstr "Agordi sekciojn"
 
 #: dialogs/SectionFormatDialog.cpp:154
 #, kde-format
 msgid "Invalid characters or section with such name exists."
-msgstr ""
+msgstr "Nevalidaj signoj aŭ sekcio kun tia nomo ekzistas."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/SectionFormatDialog.ui:29
 #, kde-format
 msgid "Section name:"
-msgstr ""
+msgstr "Nomo de sekcio:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
 #: dialogs/SectionsSplitDialog.ui:6
 #, kde-format
 msgid "Split sections"
-msgstr ""
+msgstr "Dividi sekciojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/SectionsSplitDialog.ui:12
 #, kde-format
 msgid "Insert paragraph..."
-msgstr ""
+msgstr "Enigi alineon..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
 #, kde-format
 msgid "before start of section:"
-msgstr ""
+msgstr "antaŭ komenco de sekcio:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/SectionsSplitDialog.ui:37
 #, kde-format
 msgid "after end of section:"
-msgstr ""
+msgstr "post fino de sekcio:"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:29
 #, kde-format
 msgid "Insert Note"
-msgstr ""
+msgstr "Enigi Noton"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:39
 #, kde-format
 msgid "Remove Note"
-msgstr ""
+msgstr "Forigi Noton"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
 #: dialogs/SimpleCaptionsWidget.ui:34
 #, kde-format
 msgid "Add caption"
-msgstr ""
+msgstr "Aldoni bildotekston"
 
 #: dialogs/SimpleCharacterWidget.cpp:53
 #, kde-format
 msgid "Change font format"
-msgstr ""
+msgstr "Ŝanĝi tiparformaton"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addCitation)
 #: dialogs/SimpleCitationBibliographyWidget.ui:23
 #, kde-format
 msgid "Insert citation at current position"
-msgstr ""
+msgstr "Enigi citaĵon ĉe nuna pozicio"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
 #: dialogs/SimpleCitationBibliographyWidget.ui:26 ReferencesTool.cpp:157
 #, kde-format
 msgid "Insert Citation"
-msgstr ""
+msgstr "Enmeti Citon"
 
 #. i18n: ectx: property (text), widget (QToolButton, configureBibliography)
 #: dialogs/SimpleCitationBibliographyWidget.ui:55
 #, kde-format
 msgid "Configure Bibliography"
-msgstr ""
+msgstr "Agordi Bibliografion"
 
 #: dialogs/SimpleFootEndNotesWidget.cpp:27
 #, kde-format
 msgid "Inserts a footnote at the current cursor position"
-msgstr ""
+msgstr "Enmetas piednoton ĉe la aktuala pozicio de la kursoro"
 
 #: dialogs/SimpleFootEndNotesWidget.cpp:32
 #, kde-format
 msgid "Inserts an endnote at the current cursor position"
-msgstr ""
+msgstr "Enmetas finnoton ĉe la aktuala pozicio de la kursoro"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addEndnote)
 #: dialogs/SimpleFootEndNotesWidget.ui:29
 #, kde-format
 msgid "Endnote"
-msgstr ""
+msgstr "Finnoto"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addFootnote)
 #: dialogs/SimpleFootEndNotesWidget.ui:48
 #, kde-format
 msgid "Footnote"
-msgstr ""
+msgstr "Piednoto"
 
 #. i18n: ectx: property (toolTip), widget (QWidget, SimpleInsertWidget)
 #: dialogs/SimpleInsertWidget.ui:20
 #, kde-format
 msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
 msgstr ""
+"Aliaj enmetoj el \"Referencoj\" malsupre kaj en \"Aldoni Formon\"-doker"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertLink)
 #: dialogs/SimpleLinksWidget.ui:34
 #, kde-format
 msgid "Hyperlinks"
-msgstr ""
+msgstr "Hiperligiloj"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
 #: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
@@ -2040,17 +2103,17 @@ msgstr "Legosignoj"
 #: dialogs/SimpleParagraphWidget.cpp:84
 #, kde-format
 msgid "Change paragraph format"
-msgstr ""
+msgstr "Ŝanĝi alinean formaton"
 
 #: dialogs/SimpleParagraphWidget.cpp:292
 #, kde-format
 msgid "Recently Used Level Formats"
-msgstr ""
+msgstr "Lastatempe Uzitaj Nivelaj Formatoj"
 
 #: dialogs/SimpleParagraphWidget.cpp:297
 #, kde-format
 msgid "Library of Level Formats"
-msgstr ""
+msgstr "Biblioteko de Nivelaj Formatoj"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
@@ -2062,71 +2125,71 @@ msgstr "Forigi"
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
 msgid "Edit..."
-msgstr ""
+msgstr "Redakti..."
 
 #: dialogs/SimpleParagraphWidget.cpp:312
 #, kde-format
 msgid "Define New Level Format..."
-msgstr ""
+msgstr "Difini Novan Nivelan Formaton..."
 
 #: dialogs/SimpleParagraphWidget.cpp:313
 #, kde-format
 msgid "Define new bullet or numbering format"
-msgstr ""
+msgstr "Difini novan kuglon aŭ numeradan formaton"
 
 #: dialogs/SimpleParagraphWidget.cpp:333
 #, kde-format
 msgid "Define New List Level Format"
-msgstr ""
+msgstr "Difini Novan Listo-Nivelan Formaton"
 
 #: dialogs/SimpleParagraphWidget.cpp:532
 #, kde-format
 msgid "Edit List Level Format"
-msgstr ""
+msgstr "Redakti Liston-Nivelan Formaton"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addToC)
 #: dialogs/SimpleTableOfContentsWidget.ui:34
 #: dialogs/TableOfContentsTemplate.cpp:38
 #, kde-format
 msgid "Contents"
-msgstr ""
+msgstr "Enhavo"
 
 #: dialogs/SimpleTableWidget.cpp:45
 #, kde-format
 msgid "Set Border Color..."
-msgstr ""
+msgstr "Agordi Bordan Koloron..."
 
 #: dialogs/SimpleTableWidget.cpp:170
 #, kde-format
 msgctxt "No border - has to fit in 48pixels"
 msgid "None"
-msgstr ""
+msgstr "Neniu"
 
 #: dialogs/SimpleTableWidget.cpp:171
 #, kde-format
 msgid "No Border"
-msgstr ""
+msgstr "Neniu Bordero"
 
 #: dialogs/StyleManager.cpp:38
 #, kde-format
 msgid "Create a new style inheriting the current style"
-msgstr ""
+msgstr "Krei novan stilon heredante la nunan stilon"
 
 #: dialogs/StyleManager.cpp:342 dialogs/StyleManager.cpp:356
 #, kde-format
 msgid "New Style"
-msgstr ""
+msgstr "Nova Stilo"
 
 #: dialogs/StyleManager.cpp:426
 #, kde-format
 msgid "Another style named '%1' already exist. Please choose another name."
-msgstr ""
+msgstr "Alia stilo nomita '%1' jam ekzistas. Bonvolu elekti alian nomon."
 
 #. i18n: ectx: attribute (title), widget (QListView, paragraphStylesListView)
 #: dialogs/StyleManager.ui:46 TextTool.cpp:2251
 #, kde-format
 msgid "Paragraph"
-msgstr "Paragrafo"
+msgstr "Alineo"
 
 #. i18n: ectx: attribute (title), widget (QListView, characterStylesListView)
 #: dialogs/StyleManager.ui:60 TextTool.cpp:2249
@@ -2143,12 +2206,12 @@ msgstr "&Nova"
 #: dialogs/StyleManagerDialog.cpp:20
 #, kde-format
 msgid "Style Manager"
-msgstr ""
+msgstr "Stil-Mastrumilo"
 
 #: dialogs/StyleManagerDialog.cpp:49
 #, kde-format
 msgid "Save Changes"
-msgstr ""
+msgstr "Konservi Ŝanĝojn"
 
 #: dialogs/StyleManagerDialog.cpp:49
 #, kde-format
@@ -2156,6 +2219,8 @@ msgid ""
 "You have changes that are not applied. What do you want to do with those "
 "changes?"
 msgstr ""
+"Vi havas ŝanĝojn, kiuj ne estas aplikataj. Kion vi volas fari kun tiuj "
+"ŝanĝoj?"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/StyleManagerWelcome.ui:42
@@ -2177,33 +2242,48 @@ msgid ""
 "will reformat all text that previously got the named style assigned to it. "
 "Use the Styles docker to apply styles to text.</p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Eblas atribui nomitan "
+"stilon al teksto kaj ŝanĝi la stilajn trajtojn por ŝanĝi la tutan tekston "
+"per tiu stilo.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Aplikado de stilŝanĝo "
+"reformatigos ĉiun tekston, kiu antaŭe havis atribuon de la nomita stilo. Uzu "
+"la Stiloj-docker por apliki stilojn al teksto.</p></body></html>"
 
 #: dialogs/StylesComboPreview.cpp:68
 #, kde-format
 msgid "Create a new style with the current properties"
-msgstr ""
+msgstr "Krei novan stilon kun la nunaj propraĵoj"
 
 #: dialogs/StylesComboPreview.cpp:179
 #, kde-format
 msgid "New style"
-msgstr ""
+msgstr "Nova stilo"
 
 #: dialogs/StylesModel.cpp:38 dialogs/StylesModel.cpp:113
 #: dialogs/StylesModel.cpp:197
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "Neniu"
 
 #: dialogs/TableDialog.cpp:14
 #, kde-format
 msgid "Insert Table"
-msgstr ""
+msgstr "Enmeti Tabelon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupLogical)
 #: dialogs/TableDialog.ui:23
 #, kde-format
 msgid "Columns and rows"
-msgstr ""
+msgstr "Kolumnoj kaj vicoj"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColumns)
 #: dialogs/TableDialog.ui:32
@@ -2221,45 +2301,45 @@ msgstr "Nombro de linioj:"
 #: dialogs/TableDialog.ui:97
 #, kde-format
 msgid "Width strategy"
-msgstr ""
+msgstr "Strategio de larĝo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFixed)
 #: dialogs/TableDialog.ui:112
 #, kde-format
 msgid "Fixed column width:"
-msgstr ""
+msgstr "Fiksa kolumna larĝo:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFitContents)
 #: dialogs/TableDialog.ui:125
 #, kde-format
 msgid "Fit to contents"
-msgstr ""
+msgstr "Adapti al enhavo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFitAvail)
 #: dialogs/TableDialog.ui:138
 #, kde-format
 msgid "Fit to available surrounding"
-msgstr ""
+msgstr "Taŭga al disponebla ĉirkaŭaĵo"
 
 #: dialogs/TableOfContentsConfigure.cpp:62
 #, kde-format
 msgid "Table of Contents - Configure"
-msgstr ""
+msgstr "Enhavtabelo - Agordi"
 
 #: dialogs/TableOfContentsConfigure.cpp:64
 #, kde-format
 msgid "Table Title"
-msgstr ""
+msgstr "Tabela Titolo"
 
 #: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use outline"
-msgstr ""
+msgstr "Uzi skizon"
 
 #: dialogs/TableOfContentsConfigure.cpp:66
 #, kde-format
 msgid "Use styles"
-msgstr ""
+msgstr "Uzi stilojn"
 
 #: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
 #, kde-format
@@ -2269,7 +2349,7 @@ msgstr "Agordi"
 #: dialogs/TableOfContentsConfigure.cpp:68
 #, kde-format
 msgid "Index"
-msgstr ""
+msgstr "Indekso"
 
 #: dialogs/TableOfContentsConfigure.cpp:69
 #: dialogs/TableOfContentsStyleModel.cpp:232
@@ -2296,13 +2376,13 @@ msgstr "Titolo"
 #: dialogs/TableOfContentsConfigure.ui:78
 #, kde-format
 msgid "CheckBox"
-msgstr ""
+msgstr "CheckBox"
 
 #. i18n: ectx: property (text), widget (QPushButton, configureStyles)
 #: dialogs/TableOfContentsConfigure.ui:85
 #, kde-format
 msgid "PushButton"
-msgstr ""
+msgstr "PuŝButono"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: dialogs/TableOfContentsConfigure.ui:108
@@ -2313,7 +2393,7 @@ msgstr "Langeto 2"
 #: dialogs/TableOfContentsEntryModel.cpp:30
 #, kde-format
 msgid "Level %1"
-msgstr ""
+msgstr "Nivelo %1"
 
 #: dialogs/TableOfContentsEntryModel.cpp:137
 #: dialogs/TableOfContentsStyleModel.cpp:234
@@ -2329,18 +2409,18 @@ msgstr "Stilo"
 #: dialogs/TableOfContentsStyleConfigure.cpp:26
 #, kde-format
 msgid "Table of Contents - Configure Styles"
-msgstr ""
+msgstr "Enhavo - Agordi Stilojn"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:30
 #, kde-format
 msgid "Styles available"
-msgstr ""
+msgstr "Stiloj haveblaj"
 
 #. i18n: ectx: property (text), widget (QLabel, stylesAvailableLabel)
 #: dialogs/TableOfContentsStyleConfigure.ui:20
 #, kde-format
 msgid "TextLabel"
-msgstr "TekstaEtikedo"
+msgstr "TekstEtikedo"
 
 #: dialogs/TableOfContentsStyleDelegate.cpp:43
 #: dialogs/TableOfContentsStyleModel.cpp:97
@@ -2351,22 +2431,22 @@ msgstr "Malebligita"
 #: dialogs/TableOfContentsTemplate.cpp:27
 #, kde-format
 msgid "Table Of Contents"
-msgstr ""
+msgstr "Enhavtabelo"
 
 #: ReferencesTool.cpp:116
 #, kde-format
 msgid "Insert a Table of Contents into the document."
-msgstr ""
+msgstr "Enmetu Enhavtabelon en la dokumenton."
 
 #: ReferencesTool.cpp:118 TextTool.cpp:410
 #, kde-format
 msgid "Insert Custom..."
-msgstr ""
+msgstr "Enigu Propran..."
 
 #: ReferencesTool.cpp:120
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
-msgstr ""
+msgstr "Enmetu kutiman Enhavotabelon en la dokumenton."
 
 #: ReferencesTool.cpp:122
 #, kde-format
@@ -2376,62 +2456,62 @@ msgstr "Agordi..."
 #: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure the Table of Contents"
-msgstr ""
+msgstr "Agordi la Enhavotabelon"
 
 #: ReferencesTool.cpp:127
 #, kde-format
 msgid "Insert footnote with auto number"
-msgstr ""
+msgstr "Enigi piednoton kun aŭtomata numero"
 
 #: ReferencesTool.cpp:132
 #, kde-format
 msgid "Insert Labeled Footnote"
-msgstr ""
+msgstr "Enmeti Etikeditan piednoton"
 
 #: ReferencesTool.cpp:133 ReferencesTool.cpp:144
 #, kde-format
 msgid "Insert with label:"
-msgstr ""
+msgstr "Enmetu kun etikedo:"
 
 #: ReferencesTool.cpp:138
 #, kde-format
 msgid "Insert endnote with auto number"
-msgstr ""
+msgstr "Enigi finnoton kun aŭtomata numero"
 
 #: ReferencesTool.cpp:143
 #, kde-format
 msgid "Insert Labeled Endnote"
-msgstr ""
+msgstr "Enmeti Etikeditan Finnoton"
 
 #: ReferencesTool.cpp:149 ReferencesTool.cpp:153
 #, kde-format
 msgid "Settings..."
-msgstr ""
+msgstr "Agordoj..."
 
 #: ReferencesTool.cpp:159
 #, kde-format
 msgid "Insert a citation into the document."
-msgstr ""
+msgstr "Enigu citaĵon en la dokumenton."
 
 #: ReferencesTool.cpp:164
 #, kde-format
 msgid "Insert a bibliography into the document."
-msgstr ""
+msgstr "Enigu bibliografion en la dokumenton."
 
 #: ReferencesTool.cpp:166
 #, kde-format
 msgid "Insert Custom Bibliography"
-msgstr ""
+msgstr "Enmeti Propran Bibliografion"
 
 #: ReferencesTool.cpp:168
 #, kde-format
 msgid "Insert a custom Bibliography into the document."
-msgstr ""
+msgstr "Enigu propran Bibliografion en la dokumenton."
 
 #: ReferencesTool.cpp:172
 #, kde-format
 msgid "Configure the bibliography"
-msgstr ""
+msgstr "Agordi la bibliografion"
 
 #: ReferencesTool.cpp:175
 #, kde-format
@@ -2441,7 +2521,7 @@ msgstr "Enmeti ligon"
 #: ReferencesTool.cpp:177
 #, kde-format
 msgid "Insert a weblink or link to a bookmark."
-msgstr ""
+msgstr "Enigu retligilon aŭ ligon al legosigno."
 
 #: ReferencesTool.cpp:181
 #, kde-format
@@ -2459,6 +2539,8 @@ msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
 "the document"
 msgstr ""
+"Enigi legosignon. Ĉi tio utilas por krei ligilojn kiuj montras al areoj ene "
+"de la dokumento"
 
 #: ReferencesTool.cpp:191
 #, kde-format
@@ -2466,48 +2548,51 @@ msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
+"Montri ŝprucfenestron kiu gastigas la eblojn por aldoni novan Legosignon aŭ "
+"pritrakti ekzistantajn Legosignojn"
 
 #: ReferencesTool.cpp:195
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
 msgstr ""
+"Administri viajn Legosignojn. Kontrolu kien ili montras, Forigu aŭ Alinomu."
 
 #: ReferencesTool.cpp:231
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
-msgstr ""
+msgstr "Tabeloj, Listoj kaj Indeksoj"
 
 #: ReferencesTool.cpp:234
 #, kde-format
 msgid "Footnotes and Endnotes"
-msgstr ""
+msgstr "Piednotoj kaj Finnotoj"
 
 #: ReferencesTool.cpp:237
 #, kde-format
 msgid "Citations and Bibliography"
-msgstr ""
+msgstr "Citaĵoj kaj Bibliografio"
 
 #: ReferencesTool.cpp:240
 #, kde-format
 msgid "Links and Bookmarks"
-msgstr ""
+msgstr "Ligiloj kaj Legosignoj"
 
 #: ReferencesTool.cpp:366
 #, kde-format
 msgid "Bookmark cannot be empty"
-msgstr ""
+msgstr "Legomarko ne povas esti malplena"
 
 #: ReferencesTool.cpp:373
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
-msgstr ""
+msgstr "Duobliga Nomo. Alklaku \"Administri legosignojn\""
 
 #: ReferencesTool.cpp:374
 #, kde-format
 msgid "to Rename or Delete Bookmarks"
-msgstr ""
+msgstr "por Alinomi aŭ Forigi Legosignojn"
 
 #: ReviewTool.cpp:53 ReviewTool.cpp:54
 #, kde-format
@@ -2517,7 +2602,7 @@ msgstr "Forigi komenton"
 #: ReviewTool.cpp:98
 #, kde-format
 msgid "Spell check"
-msgstr ""
+msgstr "Literuma kontrolo"
 
 #: ReviewTool.cpp:101
 #, kde-format
@@ -2527,7 +2612,7 @@ msgstr "Komentoj"
 #: ReviewToolFactory.cpp:24
 #, kde-format
 msgid "Review"
-msgstr ""
+msgstr "Recenzo"
 
 #: TextShapeFactory.cpp:31 TextShapeFactory.cpp:41
 #, kde-format
@@ -2537,32 +2622,32 @@ msgstr "Teksto"
 #: TextShapeFactory.cpp:33
 #, kde-format
 msgid "A shape that shows text"
-msgstr ""
+msgstr "Formo kiu montras tekston"
 
 #: TextShapeFactory.cpp:43
 #, kde-format
 msgid "Text Shape"
-msgstr ""
+msgstr "Teksto Formo"
 
 #: TextTool.cpp:201
 #, kde-format
 msgid "Configure current section"
-msgstr ""
+msgstr "Agordi nunan sekcion"
 
 #: TextTool.cpp:205
 #, kde-format
 msgid "Insert new section"
-msgstr ""
+msgstr "Enigi novan sekcion"
 
 #: TextTool.cpp:209
 #, kde-format
 msgid "Insert paragraph between sections"
-msgstr ""
+msgstr "Enigi alineon inter sekcioj"
 
 #: TextTool.cpp:213
 #, kde-format
 msgid "Paste As Text"
-msgstr ""
+msgstr "Alglui Kiel Teksto"
 
 #: TextTool.cpp:218
 #, kde-format
@@ -2583,7 +2668,7 @@ msgstr "Substrekita"
 #: TextTool.cpp:236
 #, kde-format
 msgid "Strikethrough"
-msgstr ""
+msgstr "Strikethrough"
 
 #: TextTool.cpp:242
 #, kde-format
@@ -2603,17 +2688,17 @@ msgstr "Aranĝi meze"
 #: TextTool.cpp:264
 #, kde-format
 msgid "Align Block"
-msgstr ""
+msgstr "Vicigi Blokon"
 
 #: TextTool.cpp:271
 #, kde-format
 msgid "Change text direction"
-msgstr ""
+msgstr "Ŝanĝi tekstodirekton"
 
 #: TextTool.cpp:273
 #, kde-format
 msgid "Change writing direction"
-msgstr ""
+msgstr "Ŝanĝi skribdirekton"
 
 #: TextTool.cpp:295
 #, kde-format
@@ -2628,12 +2713,12 @@ msgstr "Malpligrandigi Deŝovon"
 #: TextTool.cpp:306
 #, kde-format
 msgid "Toggle List or List Level Formatting"
-msgstr ""
+msgstr "Baskuligi Liston aŭ List-Nivelformatadon"
 
 #: TextTool.cpp:307
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
-msgstr ""
+msgstr "Ŝalti/malŝalti liston aŭ ŝanĝi formaton de nuna nivelo"
 
 #: TextTool.cpp:310
 #, kde-format
@@ -2658,12 +2743,12 @@ msgstr "Variablo"
 #: TextTool.cpp:330
 #, kde-format
 msgid "Insert Non-Breaking Space"
-msgstr ""
+msgstr "Enmeti Ne-Rompan Spacon"
 
 #: TextTool.cpp:335
 #, kde-format
 msgid "Insert Non-Breaking Hyphen"
-msgstr ""
+msgstr "Enmeti Ne-Rompan Dividostrekon"
 
 #: TextTool.cpp:340
 #, kde-format
@@ -2673,27 +2758,27 @@ msgstr "Enmeti Indekson"
 #: TextTool.cpp:345
 #, kde-format
 msgid "Insert Soft Hyphen"
-msgstr ""
+msgstr "Enmeti Molan Dividostrekon"
 
 #: TextTool.cpp:351
 #, kde-format
 msgid "Line Break"
-msgstr ""
+msgstr "Liniorompo"
 
 #: TextTool.cpp:356
 #, kde-format
 msgid "Page Break"
-msgstr ""
+msgstr "Paĝrompo"
 
 #: TextTool.cpp:360
 #, kde-format
 msgid "Insert a page break"
-msgstr ""
+msgstr "Enmeti paĝrompon"
 
 #: TextTool.cpp:361
 #, kde-format
 msgid "All text after this point will be moved into the next page."
-msgstr ""
+msgstr "La tuta teksto post ĉi tiu punkto estos movita en la sekvan paĝon."
 
 #: TextTool.cpp:364
 #, kde-format
@@ -2703,12 +2788,12 @@ msgstr "Tiparo..."
 #: TextTool.cpp:367
 #, kde-format
 msgid "Change character size, font, boldface, italics etc."
-msgstr ""
+msgstr "Ŝanĝi signograndon, tiparon, grasan signojn, kursive ktp."
 
 #: TextTool.cpp:368
 #, kde-format
 msgid "Change the attributes of the currently selected characters."
-msgstr ""
+msgstr "Ŝanĝi la atributojn de la nuntempe elektitaj signoj."
 
 #: TextTool.cpp:371
 #, kde-format
@@ -2728,117 +2813,117 @@ msgstr "Tekstkoloro"
 #: TextTool.cpp:384
 #, kde-format
 msgid "Background Color..."
-msgstr ""
+msgstr "Fona Koloro..."
 
 #: TextTool.cpp:389
 #, kde-format
 msgid "Auto Resize To Content"
-msgstr ""
+msgstr "Aŭtomata Regrandigo Al Enhavo"
 
 #: TextTool.cpp:394
 #, kde-format
 msgid "Grow To Fit Width"
-msgstr ""
+msgstr "Kreski Por Konveni Larĝon"
 
 #: TextTool.cpp:399
 #, kde-format
 msgid "Grow To Fit Height"
-msgstr ""
+msgstr "Kreski Por Konveni Alteco"
 
 #: TextTool.cpp:404
 #, kde-format
 msgid "Shrink To Fit"
-msgstr ""
+msgstr "Ŝrumpi Por Konveni"
 
 #: TextTool.cpp:412
 #, kde-format
 msgid "Insert a table into the document."
-msgstr ""
+msgstr "Enigi tabelon en la dokumenton."
 
 #: TextTool.cpp:415
 #, kde-format
 msgid "Row Above"
-msgstr ""
+msgstr "Vico Supre"
 
 #: TextTool.cpp:416
 #, kde-format
 msgid "Insert Row Above"
-msgstr ""
+msgstr "Enigi Vicon Supre"
 
 #: TextTool.cpp:420
 #, kde-format
 msgid "Row Below"
-msgstr ""
+msgstr "Vico Malsupre"
 
 #: TextTool.cpp:421
 #, kde-format
 msgid "Insert Row Below"
-msgstr ""
+msgstr "Enmeti Vicon Malsupre"
 
 #: TextTool.cpp:425
 #, kde-format
 msgid "Column Left"
-msgstr ""
+msgstr "Kolumno Maldekstre"
 
 #: TextTool.cpp:426
 #, kde-format
 msgid "Insert Column Left"
-msgstr ""
+msgstr "Enmeti Kolumnon Maldekstre"
 
 #: TextTool.cpp:430
 #, kde-format
 msgid "Column Right"
-msgstr ""
+msgstr "Kolumno Dekstre"
 
 #: TextTool.cpp:431
 #, kde-format
 msgid "Insert Column Right"
-msgstr ""
+msgstr "Enmeti Kolumnon Dekstre"
 
 #: TextTool.cpp:435
 #, kde-format
 msgid "Column"
-msgstr ""
+msgstr "Kolumno"
 
 #: TextTool.cpp:436
 #, kde-format
 msgid "Delete Column"
-msgstr ""
+msgstr "Forigi Kolumnon"
 
 #: TextTool.cpp:440
 #, kde-format
 msgid "Row"
-msgstr ""
+msgstr "Vico"
 
 #: TextTool.cpp:441
 #, kde-format
 msgid "Delete Row"
-msgstr ""
+msgstr "Forigi Vicon"
 
 #: TextTool.cpp:445
 #, kde-format
 msgid "Merge Cells"
-msgstr ""
+msgstr "Kunfandi Ĉelojn"
 
 #: TextTool.cpp:449
 #, kde-format
 msgid "Split Cells"
-msgstr ""
+msgstr "Split Ĉeloj"
 
 #: TextTool.cpp:454
 #, kde-format
 msgid "Select a border style and paint that style onto a table"
-msgstr ""
+msgstr "Elekti randan stilon kaj pentri tiun stilon sur tabelo"
 
 #: TextTool.cpp:458
 #, kde-format
 msgid "Paragraph..."
-msgstr "Paragrafo..."
+msgstr "Alineo..."
 
 #: TextTool.cpp:461
 #, kde-format
 msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
-msgstr ""
+msgstr "Ŝanĝi alineajn randojn, tekstfluon, randojn, kuglojn, numeradon ktp."
 
 #: TextTool.cpp:462
 #, kde-format
@@ -2848,16 +2933,20 @@ msgid ""
 "selected paragraphs.</p><p>If no text is selected, the paragraph where the "
 "cursor is located will be changed.</p>"
 msgstr ""
+"<p>Ŝanĝi alineajn randojn, tekstfluon, randojn, kuglojn, numeradon ktp.</"
+"p><p>Elektu tekston en pluraj alineoj por ŝanĝi la formatadon de ĉiuj "
+"elektitaj alineoj.</p><p>Se neniu teksto estas elektita. , la alineo kie "
+"troviĝas la kursoro estos ŝanĝita.</p>"
 
 #: TextTool.cpp:465
 #, kde-format
 msgid "Style Manager..."
-msgstr ""
+msgstr "Stil-Mastrumilo..."
 
 #: TextTool.cpp:467
 #, kde-format
 msgid "Change attributes of styles"
-msgstr ""
+msgstr "Ŝanĝi atributojn de stiloj"
 
 #: TextTool.cpp:468
 #, kde-format
@@ -2865,41 +2954,43 @@ msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
 "be changed using the dialog box.</p>"
 msgstr ""
+"<p>Ŝanĝi tiparon kaj alineajn atributojn de stiloj.</p><p>Mulblajn stilojn "
+"oni povas ŝanĝi per la dialogujo.</p>"
 
 #: TextTool.cpp:475
 #, kde-format
 msgid "Special Character..."
-msgstr ""
+msgstr "Speciala Signo..."
 
 #: TextTool.cpp:479
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard"
-msgstr ""
+msgstr "Enigu unu aŭ pli da simboloj aŭ signoj ne trovitaj sur la klavaro"
 
 #: TextTool.cpp:480
 #, kde-format
 msgid "Insert one or more symbols or characters not found on the keyboard."
-msgstr ""
+msgstr "Enigu unu aŭ pli da simboloj aŭ signoj ne trovitaj sur la klavaro."
 
 #: TextTool.cpp:483
 #, kde-format
 msgid "Repaint"
-msgstr ""
+msgstr "Repentri"
 
 #: TextTool.cpp:488
 #, kde-format
 msgid "Insert Comment"
-msgstr ""
+msgstr "Enigi Komenton"
 
 #: TextTool.cpp:574
 #, kde-format
 msgid "Insertion"
-msgstr ""
+msgstr "Enmeto"
 
 #: TextTool.cpp:576
 #, kde-format
 msgid "Deletion"
-msgstr ""
+msgstr "Forigo"
 
 #: TextTool.cpp:578
 #, kde-format
@@ -2909,32 +3000,32 @@ msgstr "Formatado"
 #: TextTool.cpp:593
 #, kde-format
 msgid "Ctrl+click to go to link "
-msgstr ""
+msgstr "Ctrl+klako por iri al ligo"
 
 #: TextTool.cpp:600
 #, kde-format
 msgid "Ctrl+click to go to the note "
-msgstr ""
+msgstr "Ctrl+klako por iri al la noto"
 
 #: TextTool.cpp:606
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
-msgstr ""
+msgstr "Ctrl+klako por iri al la notreferenco"
 
 #: TextTool.cpp:707
 #, kde-format
 msgid "follows along"
-msgstr ""
+msgstr "sekvas"
 
 #: TextTool.cpp:737
 #, kde-format
 msgid "Press shift to not resize this"
-msgstr ""
+msgstr "Premi shift por ne regrandigi ĉi tion"
 
 #: TextTool.cpp:939
 msgctxt "(qtundo-format)"
 msgid "Change Border Formatting"
-msgstr ""
+msgstr "Ŝanĝi Borderformaton"
 
 #: TextTool.cpp:1158
 msgctxt "(qtundo-format)"
@@ -2944,12 +3035,12 @@ msgstr "Eltondi"
 #: TextTool.cpp:1418
 msgctxt "(qtundo-format)"
 msgid "Adjust Column Width"
-msgstr ""
+msgstr "Alĝustigi Kolumnan Larĝon"
 
 #: TextTool.cpp:1461
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr ""
+msgstr "Alĝustigi Vico-Alton"
 
 #: TextTool.cpp:2257
 #, kde-format
@@ -2964,7 +3055,7 @@ msgstr "Aŭtokorektado"
 #: TextTool.cpp:2616
 #, kde-format
 msgid "Key Press"
-msgstr ""
+msgstr "Klavopremo"
 
 #: TextTool.cpp:2930
 #, kde-format
@@ -2973,6 +3064,9 @@ msgid ""
 "Malicious programs can harm your computer. Are you sure that you want to run "
 "this program?"
 msgstr ""
+"Ĉi tiu ligo montras al la programo aŭ skripto '%1'.\n"
+"Malicaj programoj povas damaĝi vian komputilon. Ĉu vi certas, ke vi volas "
+"ruli ĉi tiun programon?"
 
 #: TextTool.cpp:2935
 #, kde-format
@@ -2982,4 +3076,4 @@ msgstr "Ĉu malfermi ligon?"
 #: TextToolFactory.cpp:18
 #, kde-format
 msgid "Text editing"
-msgstr ""
+msgstr "Tekstoredaktado"

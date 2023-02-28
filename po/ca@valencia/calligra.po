@@ -1,9 +1,9 @@
 # Translation of calligra.po to Catalan (Valencian)
-# Copyright (C) 2000-2022 This_file_is_part_of_KDE
+# Copyright (C) 2000-2023 This_file_is_part_of_KDE
 #
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2005, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2020, 2021, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2020, 2021, 2022, 2023.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-31 00:58+0000\n"
-"PO-Revision-Date: 2022-12-22 17:36+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2023-02-27 22:46+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -139,7 +139,7 @@ msgstr "Mou el punt de control"
 #: flake/commands/KoPathFillRuleCommand.cpp:31
 msgctxt "(qtundo-format)"
 msgid "Set fill rule"
-msgstr "Establix la regla de farciment"
+msgstr "Establix la regla de l'emplenat"
 
 #: flake/commands/KoPathPointInsertCommand.cpp:66
 msgctxt "(qtundo-format)"
@@ -792,7 +792,7 @@ msgstr "Fitxer"
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:46
 #, kde-format
 msgid "Document Settings"
-msgstr "Configuracions del document"
+msgstr "Configureu el document"
 
 #: main/config/KoConfigDocumentPage.cpp:62
 #, kde-format
@@ -2099,7 +2099,7 @@ msgstr "Canvia la pàgina mestra"
 #: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
-msgstr "Establix la disposició de la pàgina"
+msgstr "Establix la disposició de pàgina"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
 msgctxt "(qtundo-format)"
@@ -5281,7 +5281,7 @@ msgstr ""
 "la vista d'etiqueta actual.<para>Per a un filtre basat en el nom parcial "
 "d'un recurs sense distingir entre majúscules i minúscules:"
 "<br><icode>nom_parcial</icode> o <icode>!nom_parcial</icode>.</"
-"para><para>Incloure o excloure altres conjunts d'etiquetes:"
+"para><para>Inclou o excloure altres conjunts d'etiquetes:"
 "<br><icode>[Nom_etiqueta]</icode> o <icode>![Nom_etiqueta]</icode>.</"
 "para><para>Inclusió o exclusió distingint entre majúscules i minúscules i "
 "coincidència exacta de nom:<br><icode>\"Coincidencia_Exacta\"</icode> o "
@@ -5308,7 +5308,7 @@ msgstr ""
 "<qt>En introduir ací termes de busca, s'afegiran o s'eliminaran recursos de "
 "la vista d'etiqueta actual.<para>Per a filtrar en base el nom parcial d'un "
 "recurs sense distingir entre majúscules i minúscules:<br><icode>nom_parcial</"
-"icode> o <icode>!nom_parcial</icode>.</para><para>Incloure o excloure altres "
+"icode> o <icode>!nom_parcial</icode>.</para><para>Inclou o excloure altres "
 "conjunts d'etiquetes:<br><icode>[Nom_etiqueta]</icode> o <icode>!"
 "[Nom_etiqueta]</icode>.</para><para>Inclusió o exclusió distingint entre "
 "majúscules i minúscules i coincidència exacta de nom:<br><icode>"

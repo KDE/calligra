@@ -1,11 +1,11 @@
 # Translation of calligrasheets.po to Catalan (Valencian)
-# Copyright (C) 2000-2022 This_file_is_part_of_KDE
+# Copyright (C) 2000-2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022, 2023.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
 # Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 msgid ""
@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-27 01:01+0000\n"
-"PO-Revision-Date: 2022-11-13 09:32+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2023-02-27 22:35+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -923,7 +923,7 @@ msgid ""
 msgstr ""
 "La funció ROMAN() retorna el nombre en format romà. Només es poden convertir "
 "els nombres positius i enters. L'argument opcional Format especifica el "
-"nivell de concisió, i de manera predeterminada és 0."
+"nivell de concisió, i el predeterminat és 0."
 
 #: functions/conversion.xml:256
 #, kde-format
@@ -1288,8 +1288,8 @@ msgid ""
 "for monday, 1 for tuesday,..."
 msgstr ""
 "La funció WEEKDAY() retorna el dia de la setmana de la data donada. Si el "
-"mètode és 1 (de manera predeterminada), retorna 1 per a diumenge, 2 per a "
-"dilluns... si el mètode és 2, retorna 1 per a dilluns, 2 per a dimarts..."
+"mètode és 1 (predeterminat), retorna 1 per a diumenge, 2 per a dilluns... si "
+"el mètode és 2, retorna 1 per a dilluns, 2 per a dimarts..."
 
 #: functions/datetime.xml:20
 #, kde-format
@@ -3553,8 +3553,8 @@ msgid ""
 "The DELTA() function returns 1 if x equals y, otherwise returns 0. y "
 "defaults to 0."
 msgstr ""
-"La funció DELTA() retorna 1 si x és igual que y, altrament retorna 0. y de "
-"manera predeterminada és 0."
+"La funció DELTA() retorna 1 si x és igual que y, altrament retorna 0. y és 0 "
+"de manera predeterminada."
 
 #: functions/engineering.xml:883
 #, kde-format
@@ -3583,7 +3583,7 @@ msgid ""
 "0. y defaults to 0."
 msgstr ""
 "La funció GESTEP() retorna 1 si x és més gran o igual que y, altrament "
-"retorna 0. y de manera predeterminada és zero."
+"retorna 0. y és zero de manera predeterminada."
 
 #: functions/engineering.xml:903
 #, kde-format
@@ -3886,8 +3886,8 @@ msgid ""
 "days/365 or 4: European 30/360."
 msgstr ""
 "La funció COUPNUM retorna el nombre de cupons a pagar entre la liquidació i "
-"el venciment. Basat en el tipus de comptador de dies: 0 US 30/360 (de manera "
-"predeterminada), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o 4: "
+"el venciment. Basat en el tipus de comptador de dies: 0 US 30/360 "
+"(predeterminat), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o 4: "
 "europeu 30/360."
 
 #: functions/financial.xml:198
@@ -4051,8 +4051,8 @@ msgid ""
 "2: real days/360, 3: real days/365 or 4: European 30/360."
 msgstr ""
 "La funció DISC retorna la taxa de descompte d'un actiu. Basat en el tipus de "
-"comptador de dies: 0 US 30/360 (de manera predeterminada), 1: dies reals, 2: "
-"dies reals/360, 3 dies reals/365 o 4: europeu 30/360."
+"comptador de dies: 0 US 30/360 (predeterminat), 1: dies reals, 2: dies "
+"reals/360, 3 dies reals/365 o 4: europeu 30/360."
 
 #: functions/financial.xml:370
 #, kde-format
@@ -4395,9 +4395,9 @@ msgid ""
 "30/360."
 msgstr ""
 "La funció INTRATE retorna la proporció d'interés per a un actiu que cobrix "
-"tota la inversió. Basat en el tipus de comptador de dies: 0 US 30/360 (de "
-"manera predeterminada), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o "
-"4: europeu 30/360."
+"tota la inversió. Basat en el tipus de comptador de dies: 0 US 30/360 "
+"(predeterminat), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o 4: "
+"europeu 30/360."
 
 #: functions/financial.xml:625
 #, kde-format
@@ -4469,8 +4469,7 @@ msgstr "PV és el valor present en la seqüència de pagaments."
 #: functions/financial.xml:663 functions/financial.xml:1050
 #, kde-format
 msgid "FV (optional) is the desired (future) value.  default: 0."
-msgstr ""
-"FV (opcional) és el valor desitjat (futur). De manera predeterminada: 0."
+msgstr "FV (opcional) és el valor desitjat (futur). Predeterminat: 0."
 
 #: functions/financial.xml:664 functions/financial.xml:1051
 #, kde-format
@@ -4479,8 +4478,7 @@ msgid ""
 "period and 0 (default) for payment at the end of a period."
 msgstr ""
 "El tipus (opcional) definix la data donada. 1 per al pagament al principi "
-"del període i 0 (de manera predeterminada) per al pagament al final del "
-"període."
+"del període i 0 (predeterminat) per al pagament al final del període."
 
 #: functions/financial.xml:665
 #, kde-format
@@ -5035,9 +5033,9 @@ msgid ""
 msgstr ""
 "La funció RECEIVED retorna la quantitat rebuda a la data de venciment per a "
 "un actiu d'inversió. La base és el tipus de comptador de dies que voleu "
-"utilitzar: 0: US 30/360 (de manera predeterminada), 1: dies real, 2: dies "
-"reals/360, 3: dies reals/365 o 4: europeu 30/360. La data de liquidació ha "
-"d'estar abans que la data de venciment."
+"utilitzar: 0: US 30/360 (predeterminat), 1: dies real, 2: dies reals/360, 3: "
+"dies reals/365 o 4: europeu 30/360. La data de liquidació ha d'estar abans "
+"que la data de venciment."
 
 #: functions/financial.xml:1205
 #, kde-format
@@ -8091,8 +8089,8 @@ msgid ""
 "style."
 msgstr ""
 "L'estil A1 especifica l'estil de les adreces de retorn. Si s'establix A1 a "
-"CERT (de manera predeterminada) es retorna l'adreça en l'estil A1 si "
-"s'establix a FALS a l'estil R1C1."
+"CERT (predeterminat) es retorna l'adreça en l'estil A1 si s'establix a FALS "
+"a l'estil R1C1."
 
 #: functions/reference.xml:34
 #, kde-format
@@ -8478,9 +8476,9 @@ msgid ""
 msgstr ""
 "Busca el «valor de busca» en la primera fila de la «font de les dades». Si "
 "un valor coincidix, el valor en la «fila» i la columna, es retorna este "
-"valor. Si «ordenat» és cert (de manera predeterminada), la primera fila "
-"s'ordenarà. La busca finalitzarà si el «valor de busca» és més baix que el "
-"valor amb el qual es compara."
+"valor. Si «ordenat» és cert (predeterminat), la primera fila s'ordenarà. La "
+"busca finalitzarà si el «valor de busca» és més baix que el valor amb el "
+"qual es compara."
 
 #: functions/reference.xml:276
 #, kde-format
@@ -8507,9 +8505,9 @@ msgid ""
 msgstr ""
 "Busca el «valor de busca» en la primera fila de la «font de les dades». Si "
 "un valor coincidix, el valor en la «columna» i la fila, es retorna este "
-"valor. Si «ordenat» és cert (de manera predeterminada), la primera columna "
-"s'ordenarà. La busca finalitzarà si el «valor de busca» és més baix que el "
-"valor amb el qual es compara."
+"valor. Si «ordenat» és cert (predeterminat), la primera columna s'ordenarà. "
+"La busca finalitzarà si el «valor de busca» és més baix que el valor amb el "
+"qual es compara."
 
 #: functions/reference.xml:302
 #, kde-format
@@ -10484,8 +10482,8 @@ msgid ""
 msgstr ""
 "La línia de regressió es pot forçar que intersequi amb l'origen (X=0, Y=0) "
 "definit el 4t paràmetre, permetDesplaçament, a FALS o 0. Definit este "
-"paràmetre a CERT o 1 (de manera predeterminada) es permet que la línia de "
-"millor ajustament intersequi l'eix vertical amb un valor no zero d'Y. "
+"paràmetre a CERT o 1 (predeterminat) es permet que la línia de millor "
+"ajustament intersequi l'eix vertical amb un valor no zero d'Y. "
 
 # skip-rule: t-sc-plot
 #: functions/statistical.xml:1434
@@ -12021,7 +12019,7 @@ msgid ""
 "default is returned."
 msgstr ""
 "Retorna una part de la cadena que coincidix amb una expressió regular. Si la "
-"cadena no coincidix amb l'expressió regular, de manera predeterminada, es "
+"cadena no coincidix amb l'expressió regular, de manera predeterminada es "
 "retornarà el valor especificat."
 
 #: functions/text.xml:744
@@ -12409,8 +12407,7 @@ msgid ""
 msgstr ""
 "La funció ACOSH() calcula el cosinus hiperbòlic invers de x. És a dir el "
 "valor amb cosinus hiperbòlic igual que x. Si x és més xicotet que 1,0, "
-"ACOSH() retorna un no-nombre (not-a-number (NaN)) i es marca un error "
-"(errno)."
+"ACOSH() retorna un no-nombre (not-a-number (NaN) i es marca un error (errno)."
 
 #: functions/trig.xml:177
 #, kde-format
@@ -13095,7 +13092,7 @@ msgid ""
 "> Open Recent."
 msgstr ""
 "Controla el nombre màxim de noms de fitxer que es mostren quan seleccioneu "
-"Fitxer -> Obri document."
+"«Fitxer -> Obri'n un de recent»."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/FileOptionsWidget.ui:39
@@ -13141,7 +13138,7 @@ msgid ""
 "default."
 msgstr ""
 "Marqueu esta casella si voleu crear fitxers de seguretat. De manera "
-"predeterminada, està marcat."
+"predeterminada, està marcada."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/InterfaceOptionsWidget.ui:17
@@ -13188,7 +13185,7 @@ msgstr "&Unitat:"
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
 msgstr ""
-"Seleccioneu la unitat predeterminada que s'utilitzarà als vostres fulls."
+"Seleccioneu la unitat predeterminada que s'utilitzarà en els vostres fulls."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:68
@@ -13250,9 +13247,10 @@ msgid ""
 "displayed. Click here to choose another color for the borders than the "
 "default red."
 msgstr ""
-"Quan l'ítem del menú Visualitza ->Mostra les vores de pàgina està activat, "
-"es mostren les vores de la pàgina. Cliqueu ací per a escollir un altre color "
-"per a les vores que no siga el roig que ve de manera predeterminada."
+"Quan l'element de menú «Visualitza -> Mostra les vores de pàgina» està "
+"activat, es mostraran les vores de la pàgina. Cliqueu ací per a escollir un "
+"altre color per a les vores que no siga el roig que ve de manera "
+"predeterminada."
 
 #: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:93
 #: part/dialogs/PageLayoutDialog.cpp:97
@@ -13748,7 +13746,7 @@ msgid ""
 "If unchecked, the grid will be hidden."
 msgstr ""
 "Si està marcada, es mostraran els límits de la quadrícula (els límits de les "
-"cel·les). Este és el valor predeterminat. Si el desmarqueu, s'ocultarà la "
+"cel·les). Este és el valor predeterminat. Si la desmarqueu, s'ocultarà la "
 "quadrícula."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
@@ -14502,12 +14500,12 @@ msgstr "Mostra la QTableView..."
 #: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
-msgstr "Configuracions del document..."
+msgstr "Configureu el document..."
 
 #: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
-msgstr "Mostra el diàleg de configuracions del document"
+msgstr "Mostra el diàleg de configuració del document"
 
 #: ui/CellToolBase.cpp:166
 #, kde-format
@@ -15313,7 +15311,7 @@ msgstr "Prefix:"
 #: ui/dialogs/DocumentSettingsDialog.cpp:56
 #, kde-format
 msgid "Document Settings"
-msgstr "Configuracions del document"
+msgstr "Configureu el document"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:66
 #, kde-format
@@ -15417,7 +15415,7 @@ msgstr ""
 "per a la cel·la de text actual. La part baixa de la pàgina vos dona una "
 "vista prèvia del format del text seleccionat.\n"
 "El tipus de lletra predeterminat se selecciona per a totes les cel·les en el "
-"menú Format -> Gestor d'estils amb l'estil utilitzat actualment."
+"menú «Format -> Gestor d'estils» amb l'estil utilitzat actualment."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -15538,7 +15536,7 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:139
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
-msgstr "Barrarà el text de la cel·la actual si està marcat."
+msgstr "Si està marcada, es barrarà el text de la cel·la actual."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:142
@@ -15658,8 +15656,8 @@ msgid ""
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
 "La notació numèrica utilitza la notació que vàreu escollir globalment a "
-"Configuració del sistema -> Aparença i comportament usual -> Configuració "
-"regional -> País/regió i idioma -> Pestanya Nombres. De manera "
+"«Configuració del sistema -> Aparença i comportament usual -> Configuració "
+"regional -> País/regió i idioma -> pestanya Nombres». De manera "
 "predeterminada, els nombres s'alineen a la dreta."
 
 #: ui/dialogs/LayoutPage_Float.cpp:67
@@ -15693,9 +15691,9 @@ msgid ""
 "formatting to look like your current currency."
 msgstr ""
 "El format Diners convertix el vostre nombre en una notació de diners "
-"utilitzant les configuracions fixades globalment a Configuració del sistema -"
-"> Aparença i comportament usual -> Configuració regional -> País/Regió i "
-"idioma -> Diners. Es mostrarà el símbol actual de moneda i la precisió serà "
+"utilitzant la configuració fixada globalment a «Configuració del sistema -> "
+"Aparença i comportament usual -> Configuració regional -> País/Regió i "
+"idioma -> Diners». Es mostrarà el símbol actual de moneda i la precisió serà "
 "l'establida a Configuració del sistema.\n"
 "També podeu utilitzar la icona Moneda en la barra d'eines de format per a "
 "donar format a la cel·la amb la vostra moneda actual."
@@ -16232,18 +16230,18 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
-"Esta pestanya us permet d'establir la protecció de cel·les. De manera "
-"predeterminada, es protegixen totes les cel·les (açò vol dir que el "
+"Esta pestanya us permet establir la protecció de cel·les. De manera "
+"predeterminada, totes les cel·les es protegixen (açò vol dir que el "
 "contingut d'estes no es pot canviar) i, per a activar la protecció, també "
-"heu de protegir el full amb el menú Eines -> Protegix full... i posant-hi "
-"una contrasenya.\n"
+"heu de protegir el full amb el menú «Eines -> Protegix el full...» i posant-"
+"hi una contrasenya.\n"
 "També podeu ocultar la fórmula de la cel·la per tal de protegir la manera en "
 "què calculeu la fórmula. Per a açò també cal que establiu la protecció del "
 "full.\n"
 "Podeu ocultar el contingut de la cel·la amb Oculta-ho tot, i altra vegada "
 "cal protecció de full.\n"
-"Podeu aprendre més sobre tots estos configuracions al manual d'usuari, al "
-"capítol Sheets avançat de Calligra."
+"Podeu aprendre més sobre totes estes configuracions en el manual d'usuari, "
+"en el capítol Calligra Sheets avançat."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: ui/dialogs/ProtectionWidget.ui:41
@@ -16260,7 +16258,7 @@ msgid ""
 "Note that you can print it even if the cell is protected"
 msgstr ""
 "Si està marcada, el contingut de la cel·la no s'imprimirà. Si no està "
-"marcada (de manera predeterminada), el contingut de la cel·la s'imprimirà.\n"
+"marcada (predeterminat), el contingut de la cel·la s'imprimirà.\n"
 "Cal tindre present que podeu imprimir encara que la cel·la estiga protegida."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
@@ -16301,12 +16299,11 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
-"Si està marcada, es protegirà el contingut de la cel·la. Este és el "
-"comportament predeterminat. Heu de protegir tot el full amb el menú Eines-> "
-"Protegix document -> Protegix full... per tal que funcione la protecció de "
-"la cel·la individual. Per a més detalls, vegeu el manual, al capítol Sheets "
-"de Calligra avançat. Quan una cel·la està protegida, el seu contingut no es "
-"pot canviar."
+"Si està marcada, es protegirà el contingut. Este és el comportament "
+"predeterminat. Heu de protegir tot el full amb el menú «Eines -> Protegix el "
+"full...» per tal que funcione la protecció de la cel·la individual. Per a "
+"més detalls, vegeu el manual, en el capítol Calligra Sheets avançat. Quan "
+"una cel·la està protegida, el seu contingut no es pot canviar."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:100
@@ -16407,478 +16404,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Voleu obrir l'enllaç?"
-
-#~ msgid "&Goal Seek..."
-#~ msgstr "Bu&sca objectiu..."
-
-#~ msgid "Repeating calculation to find a specific value"
-#~ msgstr "Repetix càlculs per a trobar un valor específic"
-
-#~ msgid "Goal Seek"
-#~ msgstr "Busca d'objectius"
-
-#~ msgid "Cell reference is invalid."
-#~ msgstr "La referència de la cel·la no és vàlida."
-
-#~ msgid "Target value is invalid."
-#~ msgstr "El valor de l'objectiu no és vàlid."
-
-#~ msgid "Source cell must contain a numeric value."
-#~ msgstr "La cel·la font ha de contindre un valor numèric."
-
-#~ msgid "Target cell must contain a formula."
-#~ msgstr "La cel·la de destinació ha de contindre una fórmula."
-
-#~ msgid "Starting..."
-#~ msgstr "Iniciant..."
-
-#~ msgid "Iteration:"
-#~ msgstr "Iteració:"
-
-#~ msgid "New value:"
-#~ msgstr "Nou valor:"
-
-#~ msgid "Goal seeking with cell %1 found a solution:"
-#~ msgstr "La busca de valors amb la cel·la %1 ha trobat una solució:"
-
-#~ msgid "Goal seeking with cell %1 has found NO solution."
-#~ msgstr "La busca de valors amb la cel·la %1 NO ha trobat cap solució."
-
-#~ msgid "Set cell:"
-#~ msgstr "Establix la cel·la:"
-
-#~ msgid "To value:"
-#~ msgstr "Al valor:"
-
-#~ msgid "By changing cell:"
-#~ msgstr "Canviant la cel·la:"
-
-#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
-#~ msgstr ""
-#~ "La busca d'objectius amb la cel·la <cel·la> <ha | no ha> trobat una "
-#~ "solució:"
-
-#~ msgid "Current value:"
-#~ msgstr "Valor actual:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Replace"
-#~ msgstr "Substituïx"
-
-#~ msgid "Selection List..."
-#~ msgstr "Llista de selecció..."
-
-#~ msgid "More Options"
-#~ msgstr "Més opcions"
-
-#~ msgid "Search entire sheet"
-#~ msgstr "Busca a tot el full"
-
-#~ msgid "Search in:"
-#~ msgstr "Busca a:"
-
-#~ msgid "Cell Values"
-#~ msgstr "Valors de cel·la"
-
-#~ msgid "Comments"
-#~ msgstr "Comentaris"
-
-#~ msgid "Search direction:"
-#~ msgstr "Direcció de busca:"
-
-#~ msgid "Across then Down"
-#~ msgstr "Cap a la dreta, després avall"
-
-#~ msgid "Down then Across"
-#~ msgstr "Avall, després a la dreta"
-
-#~ msgid "Fewer Options"
-#~ msgstr "Menys opcions"
-
-#~ msgid "Cell Format..."
-#~ msgstr "Format de la cel·la..."
-
-#~ msgid "Set the cell formatting"
-#~ msgstr "Establix el format de la cel·la"
-
-#~ msgid "Move the cell object to the clipboard"
-#~ msgstr "Mou l'objecte de la cel·la al porta-retalls"
-
-#~ msgid "Copy the cell object to the clipboard"
-#~ msgstr "Copia l'objecte de la cel·la al porta-retalls"
-
-#~ msgid "Paste the contents of the clipboard at the cursor"
-#~ msgstr "Apega el contingut del porta-retalls a la posició actual"
-
-#~ msgid "Special Paste..."
-#~ msgstr "Apegat especial..."
-
-#~ msgid "Paste the contents of the clipboard with special options"
-#~ msgstr "Apega els continguts del porta-retalls amb opcions especials"
-
-#~ msgid "Paste with Insertion"
-#~ msgstr "Apega amb inserció"
-
-#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
-#~ msgstr "Inserix una cel·la del porta-retalls al full de càlcul"
-
-#~ msgid "Paste Inserting Cells"
-#~ msgstr "Copia inserint cel·les"
-
-#~ msgid "Insert"
-#~ msgstr "Inserix"
-
-#~ msgid "Move towards right"
-#~ msgstr "Mou cap a la dreta"
-
-#~ msgid "Move towards bottom"
-#~ msgstr "Mou cap a baix"
-
-#~ msgid "Special Paste"
-#~ msgstr "Apegat especial"
-
-#~ msgid "Content"
-#~ msgstr "Contingut"
-
-#~ msgid "Everything"
-#~ msgstr "Tot"
-
-#~ msgid "Comment"
-#~ msgstr "Comentari"
-
-#~ msgid "Everything without border"
-#~ msgstr "Tot excepte les vores"
-
-#~ msgid "Operation"
-#~ msgstr "Operació"
-
-#~ msgid "Overwrite"
-#~ msgstr "Sobreescriu"
-
-#~ msgid "Addition"
-#~ msgstr "Suma"
-
-#~ msgid "Subtraction"
-#~ msgstr "Resta"
-
-#~ msgid "Multiplication"
-#~ msgstr "Multiplicació"
-
-#~ msgid "Division"
-#~ msgstr "Divisió"
-
-#~ msgid "Check the spelling"
-#~ msgstr "Comprova l'ortografia"
-
-#~ msgid "Do you want to check the spelling in the next sheet?"
-#~ msgstr "Voleu comprovar l'ortografia del següent full?"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Correct Misspelled Words"
-#~ msgstr "Corregix les paraules mal escrites"
-
-# msgid "AutoFormat..."
-#~ msgid "Auto-Format..."
-#~ msgstr "Format automàtic..."
-
-#~ msgid "Set the worksheet formatting"
-#~ msgstr "Establix el format del full de treball"
-
-# msgid "AutoFormat..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto-Format"
-#~ msgstr "Format automàtic"
-
-#~ msgid "Sheet Style"
-#~ msgstr "Estil del full"
-
-#~ msgid "Select the sheet style to apply:"
-#~ msgstr "Seleccioneu l'estil de full que s'ha d'aplicar:"
-
-#~ msgid "Could not find image %1."
-#~ msgstr "No s'ha pogut trobar la imatge %1."
-
-#~ msgid "Could not load image %1."
-#~ msgstr "No s'ha pogut carregar la imatge %1."
-
-#~ msgid "Could not find sheet-style XML file '%1'."
-#~ msgstr "No s'ha pogut trobar el fitxer d'estil de full XML «%1»."
-
-#~ msgid "Parsing error in sheet-style XML file %1."
-#~ msgstr ""
-#~ "S'ha produït un error d'anàlisi en el fitxer XML d'estil de full %1."
-
-# msgid "Autofill"
-#~ msgid "&Auto-Filter"
-#~ msgstr "Filtre &automàtic"
-
-#~ msgid "Add an automatic filter to a cell range"
-#~ msgstr "Afig un filtre automàtic a un interval de cel·les"
-
-# msgid "Autofill"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto-Filter"
-#~ msgstr "Filtra automàticament"
-
-# msgid "Clear &All"
-#~ msgid "Clear All"
-#~ msgstr "Neteja-ho tot"
-
-#~ msgid "Clear all contents and formatting of the current cell"
-#~ msgstr "Neteja el contingut i el format de la cel·la actual"
-
-#~ msgid "Contents"
-#~ msgstr "Contingut"
-
-#~ msgid "Clear Contents"
-#~ msgstr "Neteja el contingut"
-
-#~ msgid "Remove the contents of the current cell"
-#~ msgstr "Elimina els continguts de la cel·la actual"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clear Text"
-#~ msgstr "Neteja el text"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove Conditional Formatting"
-#~ msgstr "Elimina el format condicional"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add Conditional Formatting"
-#~ msgstr "Afig el format condicional"
-
-#~ msgid "Select a new border color"
-#~ msgstr "Escolliu un color nou de la vora"
-
-#~ msgid "Border Color"
-#~ msgstr "Color de les vores"
-
-#~ msgid "Set the background color"
-#~ msgstr "Establix el color de fons"
-
-#~ msgid "Background Color"
-#~ msgstr "Color de fons"
-
-# msgid "Conditional Cell Attributes..."
-#~ msgid "Conditional Styles..."
-#~ msgstr "Estils condicionals..."
-
-#~ msgid "Set cell style based on certain conditions"
-#~ msgstr "Establix el format de la cel·la segon diferents condicions"
-
-# msgid "Conditional Cell Attributes"
-#~ msgid "Conditional Styles"
-#~ msgstr "Estils condicionals"
-
-#~ msgid "Remove Conditional Styles"
-#~ msgstr "Elimina els estils condicionals"
-
-#~ msgid "Remove the conditional cell styles"
-#~ msgstr "Elimina els estils condicionals"
-
-#~ msgid "&Pivot Tables..."
-#~ msgstr "&Taules pivot..."
-
-#~ msgid "Create Pivot Tables"
-#~ msgstr "Crea taules pivot"
-
-#~ msgid "You must select multiple cells."
-#~ msgstr "Heu de seleccionar múltiples cel·les."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number Format"
-#~ msgstr "Format de nombre"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Currency Format"
-#~ msgstr "Format de la moneda"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Percentage Format"
-#~ msgstr "Format de tant per cent"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Time Format"
-#~ msgstr "Format de l'hora"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Date Format"
-#~ msgstr "Format de data"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scientific Format"
-#~ msgstr "Format científic"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Border Color"
-#~ msgstr "Canvia el color de les vores"
-
-#~ msgid "<none>"
-#~ msgstr "<cap>"
-
-#~ msgid "equal to"
-#~ msgstr "igual que"
-
-#~ msgid "greater than"
-#~ msgstr "més gran que"
-
-#~ msgid "less than"
-#~ msgstr "més xicotet que"
-
-#~ msgid "equal to or greater than"
-#~ msgstr "igual o més gran que"
-
-#~ msgid "equal to or less than"
-#~ msgstr "igual o més xicotet que"
-
-#~ msgid "between"
-#~ msgstr "entre"
-
-#~ msgid "outside range"
-#~ msgstr "interval exterior"
-
-#~ msgid "different to"
-#~ msgstr "diferent de"
-
-#~ msgid "First Condition"
-#~ msgstr "Primera condició"
-
-#~ msgid "Second Condition"
-#~ msgstr "Segona condició"
-
-#~ msgid "Third Condition"
-#~ msgstr "Tercera condició"
-
-#~ msgid "Cell is"
-#~ msgstr "La cel·la és"
-
-#~ msgid "Cell style"
-#~ msgstr "Estil de cel·la"
-
-#~ msgid "different from"
-#~ msgstr "diferent de"
-
-#~ msgid ""
-#~ "If the first value is a number, the second value also has to be a number."
-#~ msgstr "Si el primer valor és un nombre, el segon també ho haurà de ser."
-
-#~ msgid ""
-#~ "If the first value is a string, the second value also has to be a string."
-#~ msgstr "Si el primer valor és una cadena, el segon també ho ha de ser."
-
-#~ msgid "Select Source"
-#~ msgstr "Seleccioneu l'origen"
-
-#~ msgid "Current Selection"
-#~ msgstr "Selecció actual"
-
-#~ msgid "External Source"
-#~ msgstr "Font externa"
-
-#~ msgid "Operator"
-#~ msgstr "Operador"
-
-# msgid "&Add"
-#~ msgid "And"
-#~ msgstr "I"
-
-#~ msgid "Or"
-#~ msgstr "O"
-
-#~ msgid "Field"
-#~ msgstr "Camp"
-
-#~ msgid "<"
-#~ msgstr "<"
-
-#~ msgid ">"
-#~ msgstr ">"
-
-#~ msgid "=="
-#~ msgstr "=="
-
-#~ msgid "!="
-#~ msgstr "!="
-
-#~ msgid "Pivot Table Configuration Window"
-#~ msgstr "Finestra de configuració de taules pivot"
-
-#~ msgid "Add Filter"
-#~ msgstr "Afig filtre"
-
-#~ msgid "Drag from Labels and drop in the desired field"
-#~ msgstr "Arrossegueu des de les etiquetes i deixeu anar en el camp desitjat"
-
-#~ msgid "Labels"
-#~ msgstr "Etiquetes"
-
-#~ msgid "Select Option"
-#~ msgstr "Seleccioneu una opció"
-
-#~ msgid "sum"
-#~ msgstr "suma"
-
-#~ msgid "average"
-#~ msgstr "mitjana"
-
-#~ msgid "max"
-#~ msgstr "max"
-
-#~ msgctxt "minimum"
-#~ msgid "min"
-#~ msgstr "min"
-
-#~ msgid "count"
-#~ msgstr "recompte"
-
-#~ msgid "Total Rows"
-#~ msgstr "Total de files"
-
-#~ msgid "Total Columns"
-#~ msgstr "Total de columnes"
-
-# msgid "&Row"
-#~ msgid "Rows"
-#~ msgstr "Files"
-
-#~ msgid "Pivot Options"
-#~ msgstr "Opcions de pivot"
-
-#~ msgid "Value Type"
-#~ msgstr "Tipus de valor"
-
-#~ msgid "Base Field"
-#~ msgstr "Camp base"
-
-#~ msgid "Base Item"
-#~ msgstr "Element base"
-
-# msgid "Formula Selection"
-#~ msgid "Manual Selection"
-#~ msgstr "Selecció manual"
-
-#~ msgid "Product"
-#~ msgstr "Producte"
-
-#~ msgid "Sort By"
-#~ msgstr "Ordena per"
-
-#~ msgid "Select Font..."
-#~ msgstr "Seleccioneu el tipus de lletra..."
-
-#~ msgid "Select Font Size"
-#~ msgstr "Seleccioneu la mida del tipus de lletra"
-
-#~ msgid "Font Size"
-#~ msgstr "Mida del tipus de lletra"
-
-#~ msgid "Text Color"
-#~ msgstr "Color de text"
-
-#~ msgid "Set the text color"
-#~ msgstr "Establix el color de text"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Font"
-#~ msgstr "Canvia el tipus de lletra"
