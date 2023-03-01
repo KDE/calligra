@@ -1,38 +1,41 @@
-# Translation of koffice-defaulttools into esperanto.
+# Translation of calligra-defaulttools into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice-defaulttools\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
 #: connectionTool/ConnectionPointWidget.ui:30
 #, kde-format
 msgid "Edit Mode"
-msgstr ""
+msgstr "Redakta Reĝimo"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEscape)
 #: connectionTool/ConnectionPointWidget.ui:37
 #, kde-format
 msgid "Escape Direction"
-msgstr ""
+msgstr "Eskapa Direkto"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAlign)
 #: connectionTool/ConnectionPointWidget.ui:97
 #, kde-format
 msgid "Alignment"
-msgstr "Alĝustigo"
+msgstr "Ĝisrandigo"
 
 #. i18n: ectx: property (text), widget (QToolButton, alignPercent)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, scaleXSpinBox)
@@ -45,106 +48,94 @@ msgid "%"
 msgstr "%"
 
 #: connectionTool/ConnectionTool.cpp:66
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Edit connection points"
-msgstr "Krei Formojn"
+msgstr "Redakti konektopunktojn"
 
 #: connectionTool/ConnectionTool.cpp:73
-#, fuzzy, kde-format
-#| msgid "Align Left"
+#, kde-format
 msgid "Align to left edge"
-msgstr "Aranĝi maldekstre"
+msgstr "Vicigi al maldekstra rando"
 
 #: connectionTool/ConnectionTool.cpp:76
-#, fuzzy, kde-format
-#| msgid "Horizontally Center"
+#, kde-format
 msgid "Align to horizontal center"
-msgstr "Centrigi Horizontale"
+msgstr "Vicigi al horizontala centro"
 
 #: connectionTool/ConnectionTool.cpp:79
-#, fuzzy, kde-format
-#| msgid "Align Right"
+#, kde-format
 msgid "Align to right edge"
-msgstr "Aranĝi dekstre"
+msgstr "Vicigi al dekstra rando"
 
 #: connectionTool/ConnectionTool.cpp:82
-#, fuzzy, kde-format
-#| msgid "Align Bottom"
+#, kde-format
 msgid "Align to top edge"
-msgstr "Vicigi Malsupre"
+msgstr "Vicigi al supra rando"
 
 #: connectionTool/ConnectionTool.cpp:85
-#, fuzzy, kde-format
-#| msgid "Horizontally Center"
+#, kde-format
 msgid "Align to vertical center"
-msgstr "Centrigi Horizontale"
+msgstr "Vicigi al vertikala centro"
 
 #: connectionTool/ConnectionTool.cpp:88
-#, fuzzy, kde-format
-#| msgid "Align Bottom"
+#, kde-format
 msgid "Align to bottom edge"
-msgstr "Vicigi Malsupre"
+msgstr "Vicigi al la malsupra rando"
 
 #: connectionTool/ConnectionTool.cpp:92
 #, kde-format
 msgid "Escape in all directions"
-msgstr ""
+msgstr "Eskapi en ĉiuj direktoj"
 
 #: connectionTool/ConnectionTool.cpp:95
 #, kde-format
 msgid "Escape in horizontal directions"
-msgstr ""
+msgstr "Eskapi en horizontalaj direktoj"
 
 #: connectionTool/ConnectionTool.cpp:98
 #, kde-format
 msgid "Escape in vertical directions"
-msgstr ""
+msgstr "Eskapi en vertikalaj direktoj"
 
 #: connectionTool/ConnectionTool.cpp:101
 #, kde-format
 msgid "Escape in left direction"
-msgstr ""
+msgstr "Eskapi en maldekstra direkto"
 
 #: connectionTool/ConnectionTool.cpp:104
 #, kde-format
 msgid "Escape in right direction"
-msgstr ""
+msgstr "Eskapi en ĝusta direkto"
 
 #: connectionTool/ConnectionTool.cpp:107
 #, kde-format
 msgid "Escape in up direction"
-msgstr ""
+msgstr "Eskapi en supra direkto"
 
 #: connectionTool/ConnectionTool.cpp:110
 #, kde-format
 msgid "Escape in down direction"
-msgstr ""
+msgstr "Eskapi en malsupra direkto"
 
 #: connectionTool/ConnectionTool.cpp:434
-#, fuzzy
-#| msgid "Connection"
 msgctxt "(qtundo-format)"
 msgid "Create Connection"
-msgstr "Konekto"
+msgstr "Krei Konekton"
 
 #: connectionTool/ConnectionTool.cpp:774 connectionTool/ConnectionTool.cpp:786
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Drag to edit connection."
-msgstr "Krei Formojn"
+msgstr "Trenu por redakti konekton."
 
 #: connectionTool/ConnectionTool.cpp:776 connectionTool/ConnectionTool.cpp:788
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Double click connection or press delete to remove it."
-msgstr "Krei Formojn"
+msgstr "Duoble alklaku konekton aŭ premu 'forĵeti' por forigi ĝin."
 
 #: connectionTool/ConnectionTool.cpp:778
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Click to edit connection points."
-msgstr "Krei Formojn"
+msgstr "Klaku por redakti konektopunktojn."
 
 #: connectionTool/ConnectionTool.cpp:792
 #, kde-format
@@ -152,24 +143,23 @@ msgid ""
 "Drag to move connection point. Double click connection or press delete to "
 "remove it."
 msgstr ""
+"Trenu por movi konektpunkton. Duoble alklaku konekton aŭ premu forigu por "
+"forigi ĝin."
 
 #: connectionTool/ConnectionTool.cpp:794
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Double click connection point or press delete to remove it."
-msgstr "Krei Formojn"
+msgstr "Duoble alklaku konektan punkton aŭ premu forigu por forigi ĝin."
 
 #: connectionTool/ConnectionTool.cpp:796
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Double click to add connection point."
-msgstr "Krei Formojn"
+msgstr "Duoble alklaku por aldoni konekton."
 
 #: connectionTool/ConnectionTool.cpp:799
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Drag to create new connection."
-msgstr "Krei Formojn"
+msgstr "Trenu por krei novan konekton."
 
 #: connectionTool/ConnectionTool.cpp:827
 #, kde-format
@@ -182,17 +172,14 @@ msgid "Line"
 msgstr "Linio"
 
 #: connectionTool/ConnectionTool.cpp:837
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Connection Point"
-msgstr "Krei Formojn"
+msgstr "Konekta Punkto"
 
 #: connectionTool/ConnectionToolFactory.cpp:18
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Group shapes"
+#, kde-format
 msgid "Connect shapes"
-msgstr "Grupigi formojn"
+msgstr "Konekti formojn"
 
 #: defaulttool/DefaultTool.cpp:205
 #, kde-format
@@ -217,7 +204,7 @@ msgstr "Sendi al Mal&antaŭo"
 #: defaulttool/DefaultTool.cpp:227
 #, kde-format
 msgid "Align Left"
-msgstr "Aranĝi maldekstre"
+msgstr "Vicigi Maldekstre"
 
 #: defaulttool/DefaultTool.cpp:232
 #, kde-format
@@ -227,7 +214,7 @@ msgstr "Centrigi Horizontale"
 #: defaulttool/DefaultTool.cpp:237
 #, kde-format
 msgid "Align Right"
-msgstr "Aranĝi dekstre"
+msgstr "Vicigi Dekstre"
 
 #: defaulttool/DefaultTool.cpp:241
 #, kde-format
@@ -235,10 +222,9 @@ msgid "Align Top"
 msgstr "Vicigi Supre"
 
 #: defaulttool/DefaultTool.cpp:246
-#, fuzzy, kde-format
-#| msgid "Horizontally Center"
+#, kde-format
 msgid "Vertically Center"
-msgstr "Centrigi Horizontale"
+msgstr "Vertikale Centrigi"
 
 #: defaulttool/DefaultTool.cpp:251
 #, kde-format
@@ -248,7 +234,7 @@ msgstr "Vicigi Malsupre"
 #: defaulttool/DefaultTool.cpp:256
 #, kde-format
 msgid "Group"
-msgstr "Grupo"
+msgstr "Grupigi"
 
 #: defaulttool/DefaultTool.cpp:261
 #, kde-format
@@ -258,34 +244,38 @@ msgstr "Malgrupigi"
 #: defaulttool/DefaultTool.cpp:447 defaulttool/DefaultTool.cpp:522
 #, kde-format
 msgid "Click and drag to move guide line."
-msgstr ""
+msgstr "Klaku kaj trenu por movi gvidlinion."
 
 #: defaulttool/DefaultTool.cpp:454
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
+"Maldekstra klako turniĝas ĉirkaŭ centro, dekstra klako ĉirkaŭ reliefigita "
+"pozicio."
 
 #: defaulttool/DefaultTool.cpp:456
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr ""
+msgstr "Klaku kaj trenu por tondi elekton."
 
 #: defaulttool/DefaultTool.cpp:459
 #, kde-format
 msgid "Click and drag to resize selection."
-msgstr ""
+msgstr "Klaku kaj trenu por aligrandigi elekton."
 
 #: defaulttool/DefaultTool.cpp:511
 #, kde-format
 msgid "Click and drag to move selection."
-msgstr ""
+msgstr "Klaku kaj trenu por movi elekton."
 
 #: defaulttool/DefaultTool.cpp:516
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr ""
+"Klaku kaj trenu por aligrandigi elekton. Mezklaku por agordi emfazitan "
+"pozicion."
 
 #: defaulttool/DefaultTool.cpp:1039
 msgctxt "(qtundo-format)"
@@ -300,7 +290,7 @@ msgstr "Malgrupigi formojn"
 #: defaulttool/DefaultTool.cpp:1161
 #, kde-format
 msgid "Arrange"
-msgstr ""
+msgstr "Aranĝi"
 
 #: defaulttool/DefaultTool.cpp:1164
 #, kde-format
@@ -310,7 +300,7 @@ msgstr "Geometrio"
 #: defaulttool/DefaultTool.cpp:1172
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "Plenigi"
 
 #: defaulttool/DefaultTool.cpp:1177
 #, kde-format
@@ -320,40 +310,34 @@ msgstr "Ombro"
 #: defaulttool/DefaultToolFactory.cpp:17
 #, kde-format
 msgid "Shape handling"
-msgstr ""
+msgstr "Manipulado de formoj"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:100
 #: defaulttool/ShapeRotateStrategy.cpp:137
 msgctxt "(qtundo-format)"
 msgid "Rotate"
-msgstr "Rotaciu"
+msgstr "Rotacii"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:138
-#, fuzzy
-#| msgid "Shear"
 msgctxt "(qtundo-format)"
 msgid "Shear X"
-msgstr "Tondi"
+msgstr "Tondi X"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:176
-#, fuzzy
-#| msgid "Shear"
 msgctxt "(qtundo-format)"
 msgid "Shear Y"
-msgstr "Tondi"
+msgstr "Tondi Y"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:218
 #: defaulttool/DefaultToolTransformWidget.cpp:255
-#, fuzzy
-#| msgid "Scale"
 msgctxt "(qtundo-format)"
 msgid "Scale"
-msgstr "Etendite"
+msgstr "Skali"
 
 #: defaulttool/DefaultToolTransformWidget.cpp:287
 msgctxt "(qtundo-format)"
 msgid "Reset Transformations"
-msgstr ""
+msgstr "Restarigi Transformojn"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, rotateSpinBox)
 #: defaulttool/DefaultToolTransformWidget.ui:25
@@ -365,53 +349,49 @@ msgstr "°"
 #: defaulttool/DefaultToolTransformWidget.ui:38
 #, kde-format
 msgid "Rotate"
-msgstr "Rotaciu"
+msgstr "Rotacii"
 
 #. i18n: ectx: property (text), widget (QPushButton, shearXButton)
 #: defaulttool/DefaultToolTransformWidget.ui:64
-#, fuzzy, kde-format
-#| msgid "Shear"
+#, kde-format
 msgid "Shear X"
-msgstr "Tondi"
+msgstr "Tondi X"
 
 #. i18n: ectx: property (text), widget (QPushButton, shearYButton)
 #: defaulttool/DefaultToolTransformWidget.ui:90
-#, fuzzy, kde-format
-#| msgid "Shear"
+#, kde-format
 msgid "Shear Y"
-msgstr "Tondi"
+msgstr "Tondi Y"
 
 #. i18n: ectx: property (text), widget (QPushButton, scaleXButton)
 #: defaulttool/DefaultToolTransformWidget.ui:122
-#, fuzzy, kde-format
-#| msgid "Scale"
+#, kde-format
 msgid "Scale X"
-msgstr "Etendite"
+msgstr "Skali X"
 
 #. i18n: ectx: property (text), widget (QPushButton, scaleYButton)
 #: defaulttool/DefaultToolTransformWidget.ui:154
-#, fuzzy, kde-format
-#| msgid "Scale"
+#, kde-format
 msgid "Scale Y"
-msgstr "Etendite"
+msgstr "Skali Y"
 
 #. i18n: ectx: property (text), widget (QCheckBox, scaleAspectCheckBox)
 #: defaulttool/DefaultToolTransformWidget.ui:161
 #, kde-format
 msgid "Keep aspect ratio"
-msgstr ""
+msgstr "Konservi bildproporciojn"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetButton)
 #: defaulttool/DefaultToolTransformWidget.ui:174
 #, kde-format
 msgid "Reset Transformations"
-msgstr ""
+msgstr "Restarigi Transformojn"
 
 #: defaulttool/DefaultToolWidget.cpp:225
 #: defaulttool/ShapeResizeStrategy.cpp:304
 msgctxt "(qtundo-format)"
 msgid "Resize"
-msgstr "Regrandigi"
+msgstr "Aligrandigi"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: defaulttool/DefaultToolWidget.ui:29
@@ -428,51 +408,48 @@ msgstr "Y:"
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
-msgstr ""
+msgstr "Premu ALT por teni x- aŭ y-pozicion."
 
 #: defaulttool/ShapeResizeStrategy.cpp:92
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr ""
+msgstr "Premu CTRL por regrandigi de la centro."
 
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr ""
+msgstr "Premu ALT por turni en 45-gradaj paŝoj."
 
 #: defaulttool/ShapeShearStrategy.cpp:169
-#, fuzzy
-#| msgid "Shear"
 msgctxt "(qtundo-format)"
 msgid "Shear"
 msgstr "Tondi"
 
 #: guidestool/GuidesTool.cpp:133
-#, fuzzy, kde-format
-#| msgid "Create Shapes"
+#, kde-format
 msgid "Double click to add guide line."
-msgstr "Krei Formojn"
+msgstr "Duoble alklaku por aldoni gvidlinion."
 
 #: guidestool/GuidesTool.cpp:136
 #, kde-format
 msgid "Click and drag to move guide line. Double click to remove guide line."
 msgstr ""
+"Klaku kaj trenu por movi gvidlinion. Duoble alklaku por forigi gvidlinion."
 
 #: guidestool/GuidesTool.cpp:374
 #, kde-format
 msgid "Guides Editor"
-msgstr ""
+msgstr "Redaktoro por Gvidiloj"
 
 #: guidestool/GuidesTool.cpp:382
 #, kde-format
 msgid "Guides Insertor"
-msgstr ""
+msgstr "Enigilo por Gvidiloj"
 
 #: guidestool/GuidesToolFactory.cpp:14
-#, fuzzy, kde-format
-#| msgid "Add Guide Line"
+#, kde-format
 msgid "Edit guidelines"
-msgstr "Aldoni gvidlinion"
+msgstr "Redakti gvidliniojn"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: guidestool/GuidesToolOptionWidget.cpp:18
@@ -516,276 +493,34 @@ msgstr "Forigi"
 #: guidestool/InsertGuidesToolOptionWidget.ui:38
 #, kde-format
 msgid "Insert this number of horizontal equally spaced guides."
-msgstr ""
+msgstr "Enmetu ĉi tiun nombron da horizontalaj egale interspacigitaj gvidiloj."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_horizontalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:51
 #, kde-format
 msgid "Insert guides at the horizontal edges."
-msgstr ""
+msgstr "Enmeti gvidilojn ĉe la horizontalaj randoj."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_verticalSpinBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:78
 #, kde-format
 msgid "Insert this number of vertical equally spaced guides."
-msgstr ""
+msgstr "Enmeti ĉi tiun nombron da vertikalaj egale interspacigitaj gvidiloj."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_verticalEdgesCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:91
 #, kde-format
 msgid "Insert guides at the vertical edges."
-msgstr ""
+msgstr "Enmeti gvidilojn ĉe la vertikalaj randoj."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_erasePreviousCheckBox)
 #: guidestool/InsertGuidesToolOptionWidget.ui:105
 #, kde-format
 msgid "Erase previous guides"
-msgstr ""
+msgstr "Forigi antaŭajn gvidilojn"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_createButton)
 #: guidestool/InsertGuidesToolOptionWidget.ui:112
 #, kde-format
 msgid "Create"
 msgstr "Krei"
-
-#, fuzzy
-#~| msgid "X:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "X:"
-#~ msgstr "X:"
-
-#, fuzzy
-#~| msgid "Y:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Y:"
-#~ msgstr "Y:"
-
-#, fuzzy
-#~| msgid "°"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "°"
-#~ msgstr "°"
-
-#, fuzzy
-#~| msgid "%"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "%"
-#~ msgstr "%"
-
-#, fuzzy
-#~| msgid "Scale"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale X"
-#~ msgstr "Etendite"
-
-#, fuzzy
-#~| msgid "Scale"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scale Y"
-#~ msgstr "Etendite"
-
-#, fuzzy
-#~| msgid "Orientation:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Orientation:"
-#~ msgstr "Orientiĝo:"
-
-#, fuzzy
-#~| msgid "Position:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Position:"
-#~ msgstr "Pozicio:"
-
-#, fuzzy
-#~| msgid "Add"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add"
-#~ msgstr "Aldoni"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create"
-#~ msgstr "Krei"
-
-#, fuzzy
-#~| msgid "Alignment"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Alignment"
-#~ msgstr "Alĝustigo"
-
-#, fuzzy
-#~| msgid "Create Shapes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit connection points"
-#~ msgstr "Krei Formojn"
-
-#, fuzzy
-#~| msgid "Align Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to left edge"
-#~ msgstr "Aranĝi maldekstre"
-
-#, fuzzy
-#~| msgid "Horizontally Center"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to horizontal center"
-#~ msgstr "Centrigi Horizontale"
-
-#, fuzzy
-#~| msgid "Align Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to right edge"
-#~ msgstr "Aranĝi dekstre"
-
-#, fuzzy
-#~| msgid "Align Bottom"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to top edge"
-#~ msgstr "Vicigi Malsupre"
-
-#, fuzzy
-#~| msgid "Align Bottom"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align to bottom edge"
-#~ msgstr "Vicigi Malsupre"
-
-#, fuzzy
-#~| msgid "Connection"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Connection"
-#~ msgstr "Konekto"
-
-#, fuzzy
-#~| msgid "Line"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Line"
-#~ msgstr "Linio"
-
-#, fuzzy
-#~| msgid "Create Shapes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Connection Point"
-#~ msgstr "Krei Formojn"
-
-#, fuzzy
-#~| msgid "Bring to &Front"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bring to &Front"
-#~ msgstr "Levi al Sur&faco"
-
-#, fuzzy
-#~| msgid "&Raise"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Raise"
-#~ msgstr "&Malfonigi"
-
-#, fuzzy
-#~| msgid "&Lower"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Lower"
-#~ msgstr "F&onigi"
-
-#, fuzzy
-#~| msgid "Send to &Back"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Send to &Back"
-#~ msgstr "Sendi al Mal&antaŭo"
-
-#, fuzzy
-#~| msgid "Align Left"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Left"
-#~ msgstr "Aranĝi maldekstre"
-
-#, fuzzy
-#~| msgid "Horizontally Center"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Horizontally Center"
-#~ msgstr "Centrigi Horizontale"
-
-#, fuzzy
-#~| msgid "Align Right"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Right"
-#~ msgstr "Aranĝi dekstre"
-
-#, fuzzy
-#~| msgid "Align Top"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Top"
-#~ msgstr "Vicigi Supre"
-
-#, fuzzy
-#~| msgid "Align Bottom"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align Bottom"
-#~ msgstr "Vicigi Malsupre"
-
-#, fuzzy
-#~| msgid "Group"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Group"
-#~ msgstr "Grupo"
-
-#, fuzzy
-#~| msgid "Ungroup"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ungroup"
-#~ msgstr "Malgrupigi"
-
-#, fuzzy
-#~| msgid "Geometry"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Geometry"
-#~ msgstr "Geometrio"
-
-#, fuzzy
-#~| msgid "Shadow"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shadow"
-#~ msgstr "Ombro"
-
-#, fuzzy
-#~| msgid "Add Guide Line"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit guidelines"
-#~ msgstr "Aldoni gvidlinion"
-
-#, fuzzy
-#~| msgid "Horizontal"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Horizontal"
-#~ msgstr "Horizontala"
-
-#, fuzzy
-#~| msgid "Vertical"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vertical"
-#~ msgstr "Vertikala"
-
-#~ msgid "None"
-#~ msgstr "Neniu"
-
-#~ msgid "Default tool"
-#~ msgstr "Apriora ilo"
-
-#~ msgid "Type:"
-#~ msgstr "Tipo:"
-
-#~ msgid "Standard"
-#~ msgstr "Defaŭlta"
-
-#~ msgid "Default Tool"
-#~ msgstr "Apriora Ilo"
-
-#, fuzzy
-#~| msgid "Guide Lines"
-#~ msgid "Edit Guidelines"
-#~ msgstr "Gvidlinioj..."

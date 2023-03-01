@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
-"PO-Revision-Date: 2023-02-15 11:03\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"PO-Revision-Date: 2023-02-24 12:42\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -908,7 +908,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 返回 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "数据库"
@@ -13510,132 +13510,112 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "更改边框"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "函数(&F)..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "插入数学表达式"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "从数据库(&D)..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "从 SQL 数据库插入数据"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "自定义列表..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "创建自定义的列表用于排序或自动填充"
 
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "规划求解(&G)..."
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "重复计算以寻找指定的数值"
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "公式选择"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "插入一个函数"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "其他..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "修改单元格"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "编辑加亮显示的单元格"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "重新计算当前工作工作表中每个单元格的值"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "运行检视器..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "显示 QTableView..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "文档设置..."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "显示文档设置对话框"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr "没有可用的数据库驱动。您需要重新编译 Qt 3 包含必要的驱动程序。"
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "替换"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "可选项列表..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14480,51 +14460,6 @@ msgstr "时间格式：%1"
 msgid "Currency format: %1"
 msgstr "货币格式：%1"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "更多选项"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "搜索整个工作表"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "搜索于："
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "单元格值"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "注释"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "搜索方向："
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "先向右再向下"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "先向下再向右"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "更少选项"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14699,87 +14634,6 @@ msgstr "该函数没有参数。"
 #, kde-format
 msgid "Description is not available."
 msgstr "描述不可用。"
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "规划求解"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "无效的单元格引用。"
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "无效的目标值。"
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "源单元格必须是数字值。"
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "目标单元格必须是公式。"
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "开始..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "迭代次数："
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "新的值："
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "用单元格%1进行目标求值的结果："
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "用单元格%1进行目标求值无解。"
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "目标单元格："
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "目标值："
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "可变单元格："
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "当前值："
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15458,74 +15312,84 @@ msgstr ""
 msgid "Open Link?"
 msgstr "打开链接？"
 
-#~ msgid "Cell Format..."
-#~ msgstr "单元格格式..."
+#~ msgid "&Goal Seek..."
+#~ msgstr "规划求解(&G)..."
 
-#~ msgid "Set the cell formatting"
-#~ msgstr "设置单元格格式"
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "重复计算以寻找指定的数值"
 
-#~ msgid "Move the cell object to the clipboard"
-#~ msgstr "将单元格里的对象移到剪贴板上"
+#~ msgid "Goal Seek"
+#~ msgstr "规划求解"
 
-#~ msgid "Copy the cell object to the clipboard"
-#~ msgstr "将单元格对象拷贝到剪贴板"
+#~ msgid "Cell reference is invalid."
+#~ msgstr "无效的单元格引用。"
 
-#~ msgid "Paste the contents of the clipboard at the cursor"
-#~ msgstr "在光标处粘贴剪贴板的内容"
+#~ msgid "Target value is invalid."
+#~ msgstr "无效的目标值。"
 
-#~ msgid "Special Paste..."
-#~ msgstr "选择性粘贴..."
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "源单元格必须是数字值。"
 
-#~ msgid "Paste the contents of the clipboard with special options"
-#~ msgstr "使用特殊的选项粘贴剪贴板上的内容"
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "目标单元格必须是公式。"
 
-#~ msgid "Paste with Insertion"
-#~ msgstr "粘贴并插入"
+#~ msgid "Starting..."
+#~ msgstr "开始..."
 
-#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
-#~ msgstr "从剪贴板插入一个单元格到工作表中"
+#~ msgid "Iteration:"
+#~ msgstr "迭代次数："
 
-#~ msgid "Paste Inserting Cells"
-#~ msgstr "插入粘贴单元格"
+#~ msgid "New value:"
+#~ msgstr "新的值："
 
-#~ msgid "Insert"
-#~ msgstr "插入"
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "用单元格%1进行目标求值的结果："
 
-#~ msgid "Move towards right"
-#~ msgstr "向右移动"
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "用单元格%1进行目标求值无解。"
 
-#~ msgid "Move towards bottom"
-#~ msgstr "向下移动"
+#~ msgid "Set cell:"
+#~ msgstr "目标单元格："
 
-#~ msgid "Special Paste"
-#~ msgstr "选择性粘贴"
+#~ msgid "To value:"
+#~ msgstr "目标值："
 
-#~ msgid "Content"
-#~ msgstr "内容"
+#~ msgid "By changing cell:"
+#~ msgstr "可变单元格："
 
-#~ msgid "Everything"
-#~ msgstr "所有内容"
+#~ msgid "Current value:"
+#~ msgstr "当前值："
 
-#~ msgid "Comment"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "替换"
+
+#~ msgid "Selection List..."
+#~ msgstr "可选项列表..."
+
+#~ msgid "More Options"
+#~ msgstr "更多选项"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "搜索整个工作表"
+
+#~ msgid "Search in:"
+#~ msgstr "搜索于："
+
+#~ msgid "Cell Values"
+#~ msgstr "单元格值"
+
+#~ msgid "Comments"
 #~ msgstr "注释"
 
-#~ msgid "Everything without border"
-#~ msgstr "所有内容边框除外"
+#~ msgid "Search direction:"
+#~ msgstr "搜索方向："
 
-#~ msgid "Operation"
-#~ msgstr "操作"
+#~ msgid "Across then Down"
+#~ msgstr "先向右再向下"
 
-#~ msgid "Overwrite"
-#~ msgstr "覆盖"
+#~ msgid "Down then Across"
+#~ msgstr "先向下再向右"
 
-#~ msgid "Addition"
-#~ msgstr "相加"
-
-#~ msgid "Subtraction"
-#~ msgstr "相减"
-
-#~ msgid "Multiplication"
-#~ msgstr "相乘"
-
-#~ msgid "Division"
-#~ msgstr "相除"
+#~ msgid "Fewer Options"
+#~ msgstr "更少选项"

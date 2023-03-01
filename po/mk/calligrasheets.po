@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2000-06-08 07:00+0100\n"
 "Last-Translator: Dimitar Indovski <dime@gord.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -897,7 +897,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Крајна вредност"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Датум"
@@ -13195,133 +13195,112 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Боја на Граница"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Функција"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Вметни Табела"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Датум"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Датум"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Подреди"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:158
-#, fuzzy, kde-format
-msgid "&Goal Seek..."
-msgstr "Серии..."
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Формула Избор"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Вметни колона"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Останати..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Уреди Келија"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Боја на текст"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Колона"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Стринг"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Формула"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Прецизност"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Прецизност"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Замени текст"
-
-#: ui/CellToolBase_p.cpp:853
-#, fuzzy, kde-format
-msgid "Selection List..."
-msgstr "Избери Фонт"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14196,51 +14175,6 @@ msgstr "Формат на Броеви"
 msgid "Currency format: %1"
 msgstr "Моментално"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-msgid "More Options"
-msgstr "Боја на Текст"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "Замени текст"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-msgid "Search in:"
-msgstr "Замени текст"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-msgid "Cell Values"
-msgstr "Вредност"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Comments"
-msgstr "Централно"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-msgid "Search direction:"
-msgstr "Втор услов"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, fuzzy, kde-format
-msgid "Down then Across"
-msgstr "Колона"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "Боја на Текст"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14412,87 +14346,6 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Description is not available."
 msgstr "Опис во Колона"
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, fuzzy, kde-format
-msgid "Goal Seek"
-msgstr "Серии..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, fuzzy, kde-format
-msgid "Cell reference is invalid."
-msgstr "Морате да внесете име"
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, fuzzy, kde-format
-msgid "Target value is invalid."
-msgstr "Морате да внесете име"
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, fuzzy, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Келијата ПодатокY не смее да биде формула"
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Келијата ПодатокY не смее да биде формула"
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, fuzzy, kde-format
-msgid "Starting..."
-msgstr "Стринг"
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, fuzzy, kde-format
-msgid "Iteration:"
-msgstr "Операција"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, fuzzy, kde-format
-msgid "New value:"
-msgstr "Идна Вредност"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, fuzzy, kde-format
-msgid "Set cell:"
-msgstr "Стринг"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, fuzzy, kde-format
-msgid "To value:"
-msgstr "Крајна вредност"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, fuzzy, kde-format
-msgid "By changing cell:"
-msgstr "Стринг"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, fuzzy, kde-format
-msgid "Current value:"
-msgstr "Сегашна Вредност"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
@@ -15172,6 +15025,99 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "&Goal Seek..."
+#~ msgstr "Серии..."
+
+#, fuzzy
+#~ msgid "Goal Seek"
+#~ msgstr "Серии..."
+
+#, fuzzy
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Морате да внесете име"
+
+#, fuzzy
+#~ msgid "Target value is invalid."
+#~ msgstr "Морате да внесете име"
+
+#, fuzzy
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Келијата ПодатокY не смее да биде формула"
+
+#, fuzzy
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Келијата ПодатокY не смее да биде формула"
+
+#, fuzzy
+#~ msgid "Starting..."
+#~ msgstr "Стринг"
+
+#, fuzzy
+#~ msgid "Iteration:"
+#~ msgstr "Операција"
+
+#, fuzzy
+#~ msgid "New value:"
+#~ msgstr "Идна Вредност"
+
+#, fuzzy
+#~ msgid "Set cell:"
+#~ msgstr "Стринг"
+
+#, fuzzy
+#~ msgid "To value:"
+#~ msgstr "Крајна вредност"
+
+#, fuzzy
+#~ msgid "By changing cell:"
+#~ msgstr "Стринг"
+
+#, fuzzy
+#~ msgid "Current value:"
+#~ msgstr "Сегашна Вредност"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Замени текст"
+
+#, fuzzy
+#~ msgid "Selection List..."
+#~ msgstr "Избери Фонт"
+
+#, fuzzy
+#~ msgid "More Options"
+#~ msgstr "Боја на Текст"
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "Замени текст"
+
+#, fuzzy
+#~ msgid "Search in:"
+#~ msgstr "Замени текст"
+
+#, fuzzy
+#~ msgid "Cell Values"
+#~ msgstr "Вредност"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "Централно"
+
+#, fuzzy
+#~ msgid "Search direction:"
+#~ msgstr "Втор услов"
+
+#, fuzzy
+#~ msgid "Down then Across"
+#~ msgstr "Колона"
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "Боја на Текст"
 
 #, fuzzy
 #~ msgid "Cell Format..."

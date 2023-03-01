@@ -47,13 +47,12 @@ void TestValueConverter::initTestCase()
 
     QStandardPaths::setTestModeEnabled(true);
 
-    // If run with 'C' locale translations will fail
-    // Setting it to 'C.UTF-8' fixes this
-    char *l = setlocale(LC_MESSAGES, 0);
-    if (l && strcmp(l, "C") == 0) {
-        setlocale(LC_MESSAGES, "C.UTF-8");
-        qDebug()<<"Set locale:"<<l<<"->"<<setlocale(LC_MESSAGES, 0);
-    }
+#ifndef Q_OS_WIN
+    // Setting locale to 'C.UTF-8' makes sure we have a valid locale
+    char *l = setlocale(LC_ALL, "C.UTF-8");
+    qDebug()<<"Locale as been set to:"<<l;
+#endif
+
     // check that translation ok, else lot of tests will fail later
     QString s = ki18n("true").toString(QStringList()<<QLatin1String(USE_LANGUAGE));
     QVERIFY2(s == QStringLiteral("sann"), "Translation failed, check that calligrasheets is translated to the selected language");
@@ -589,7 +588,11 @@ void TestValueConverter::testAsString()
     m_calcsettings->locale()->setLanguage(locale);
 
     Value result = m_converter->asString(value);
+<<<<<<< HEAD
     qInfo()<<value<<result<<'e'<<Value(expected);
+=======
+    qInfo()<<result<<Value(expected)<<m_converter->toString(value)<<expected;
+>>>>>>> master
     QCOMPARE(result, Value(expected));
     QCOMPARE(m_converter->toString(value), expected);
 }
@@ -617,7 +620,7 @@ void TestValueConverter::testAsDateTime_data()
         << ValueWithFormat(10.3, Value::fmt_DateTime);
 
     QTest::newRow("string valid") << "C" << Value("1999-11-23") << true
-        << ValueWithFormat(-39, Value::fmt_DateTime);
+        << ValueWithFormat(-39.0, Value::fmt_DateTime);
     // TODO(mek): This should probably not have a format.
     QTest::newRow("string invalid") << "C" << Value("invalid") << false
         << ValueWithFormat(Value::errorVALUE(), Value::fmt_DateTime);
@@ -658,7 +661,7 @@ void TestValueConverter::testAsDateTime()
         QVERIFY(result.asFloat() >= expected.asFloat() - 1.0/(24*60*60));
         QCOMPARE(result.format(), expected.format());
     } else {
-      qDebug() << result << " != " << expected;
+        qDebug() << result << " != " << expected;
         QCOMPARE(result, expected);
         QCOMPARE(result.format(), expected.format());
     }

@@ -1,45 +1,48 @@
 # Translation of ArtisticTextShape into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ArtisticTextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: AddTextRangeCommand.cpp:15 AddTextRangeCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Add text range"
-msgstr ""
+msgstr "Aldoni tekstan gamon"
 
 #: ArtisticTextShapeFactory.cpp:17
 #, kde-format
 msgid "ArtisticTextShape"
-msgstr ""
+msgstr "ArtecaTekstFormo"
 
 #: ArtisticTextShapeFactory.cpp:19
 #, kde-format
 msgid "A shape which shows a single text line"
-msgstr ""
+msgstr "Formo kiu montras ununuran tekstlinion"
 
 #: ArtisticTextShapeFactory.cpp:29
 #, kde-format
 msgid "Artistic Text"
-msgstr ""
+msgstr "Arta Teksto"
 
 #: ArtisticTextTool.cpp:64
 #, kde-format
 msgid "Detach Path"
-msgstr ""
+msgstr "Demeti Vojon"
 
 #: ArtisticTextTool.cpp:69
 #, kde-format
@@ -49,12 +52,12 @@ msgstr "Konverti al Pado"
 #: ArtisticTextTool.cpp:74
 #, kde-format
 msgid "Bold text"
-msgstr ""
+msgstr "Grasa teksto"
 
 #: ArtisticTextTool.cpp:79
 #, kde-format
 msgid "Italic text"
-msgstr ""
+msgstr "Kursiva teksto"
 
 #: ArtisticTextTool.cpp:84
 #, kde-format
@@ -69,47 +72,47 @@ msgstr "Subskribo"
 #: ArtisticTextTool.cpp:94
 #, kde-format
 msgid "Anchor at Start"
-msgstr ""
+msgstr "Ankro ĉe Komenco"
 
 #: ArtisticTextTool.cpp:99
 #, kde-format
 msgid "Anchor at Middle"
-msgstr ""
+msgstr "Ankro ĉe Mezo"
 
 #: ArtisticTextTool.cpp:104
 #, kde-format
 msgid "Anchor at End"
-msgstr ""
+msgstr "Ankro ĉe Fino"
 
 #: ArtisticTextTool.cpp:295
 #, kde-format
 msgid "Click to change cursor position."
-msgstr ""
+msgstr "Klaku por ŝanĝi la pozicion de la kursoro."
 
 #: ArtisticTextTool.cpp:297
 #, kde-format
 msgid "Click to select text shape."
-msgstr ""
+msgstr "Klaku por elekti tekstoformon."
 
 #: ArtisticTextTool.cpp:300
 #, kde-format
 msgid "Double click to put text on path."
-msgstr ""
+msgstr "Duoble alklaku por meti tekston sur vojon."
 
 #: ArtisticTextTool.cpp:303
 #, kde-format
 msgid "Drag handle to change start offset."
-msgstr ""
+msgstr "Trenu tenilon por ŝanĝi komencan ofseton."
 
 #: ArtisticTextTool.cpp:307
 #, kde-format
 msgid "Press escape to finish editing."
-msgstr ""
+msgstr "Premu eskapi por fini redaktadon."
 
 #: ArtisticTextTool.cpp:489
 #, kde-format
 msgid "Press return to finish editing."
-msgstr ""
+msgstr "Premu revenon por fini redaktadon."
 
 #: ArtisticTextTool.cpp:583
 msgctxt "(qtundo-format)"
@@ -119,71 +122,50 @@ msgstr "Konverti al Pado"
 #: ArtisticTextTool.cpp:596
 #, kde-format
 msgid "Text Properties"
-msgstr ""
+msgstr "Tekstaj Propraĵoj"
 
 #: ArtisticTextTool.cpp:606
 #, kde-format
 msgid "Text On Path"
-msgstr ""
+msgstr "Teksto Sur Vojo"
 
 #: ArtisticTextToolFactory.cpp:17
 #, kde-format
 msgid "Artistic text editing"
-msgstr ""
+msgstr "Arta tekstoredaktado"
 
 #: AttachTextToPathCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Attach Path"
-msgstr ""
+msgstr "Alligi Vojon"
 
 #: ChangeTextAnchorCommand.cpp:14
 msgctxt "(qtundo-format)"
 msgid "Change text anchor"
-msgstr ""
+msgstr "Ŝanĝi tekstan ankron"
 
 #: ChangeTextFontCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Change font"
-msgstr ""
+msgstr "Ŝanĝi tiparon"
 
 #: ChangeTextOffsetCommand.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Change Text Offset"
-msgstr ""
+msgstr "Ŝanĝi Tekstan Ofseton"
 
 #: DetachTextFromPathCommand.cpp:14
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
-msgstr ""
+msgstr "Demeti Vojon"
 
 #: RemoveTextRangeCommand.cpp:16
 msgctxt "(qtundo-format)"
 msgid "Remove text range"
-msgstr ""
+msgstr "Forigi tekstgamon"
 
 #: ReplaceTextRangeCommand.cpp:14 ReplaceTextRangeCommand.cpp:22
 #: ReplaceTextRangeCommand.cpp:30
 msgctxt "(qtundo-format)"
 msgid "Replace text range"
-msgstr ""
-
-#, fuzzy
-#~| msgid "Superscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Superscript"
-#~ msgstr "Superskribo"
-
-#, fuzzy
-#~| msgid "Subscript"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Subscript"
-#~ msgstr "Subskribo"
-
-#~ msgid "Family:"
-#~ msgstr "Familio:"
-
-#~ msgid "Size:"
-#~ msgstr "Grandeco:"
-
-#~ msgid "Offset:"
-#~ msgstr "Pozicio:"
+msgstr "Anstataŭigi tekstintervalon"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2022-11-13 19:20+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -959,7 +959,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") повертає 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "База даних"
@@ -14443,117 +14443,107 @@ msgstr ""
 "Змінити рамку\n"
 "зміну рамки"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Функція…"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "Вставити математичний вираз"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "З &бази даних…"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Вставити дані з бази даних SQL"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Нетипові списки…"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Створити нетипові списки для впорядкування або автозаповнення"
 
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Пошук розв’язку…"
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Повторення підрахунку, щоб знайти певне значення"
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Вибір формули"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Вставити функцію"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Інші…"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Змінити комірку"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Редагувати підсвічену комірку"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Обирає всі комірки поточного аркуша"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Запуск інспектора…"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Показати QTableView…"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "Параметри документа…"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Показати діалогове вікно параметрів документа"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Змінити прив’язку посилання"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Permute fixation"
 msgstr "Змінити порядок прив’язки"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Змінити порядок прив’язки посилання комірки, у якій перебуває курсор"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Не вдалося знайти дію %1"
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14561,18 +14551,6 @@ msgid ""
 msgstr ""
 "Драйвери баз даних недоступні. Щоб мати змогу скористатися цією можливістю, "
 "вам слід встановити необхідні драйвери баз даних з Qt."
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr ""
-"Замінити\n"
-"заміну"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Список вибору…"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15496,51 +15474,6 @@ msgstr "Формат часу: %1"
 msgid "Currency format: %1"
 msgstr "Формат валюти: %1"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Більше параметрів"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Пошук у всьому аркуші"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Шукати в:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Значення у комірках"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Коментарі"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Напрямок пошуку:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Впоперек, потім вниз"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Вниз, потім впоперек"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Менше параметрів"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15733,87 +15666,6 @@ msgstr "Ця функція не має параметрів."
 #, kde-format
 msgid "Description is not available."
 msgstr "Нема опису."
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Пошук розв’язку"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Некоректне посилання на комірку."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Некоректне цільове значення."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Вихідна комірка повинна містити числове значення."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Цільова комірка повинна містити формулу."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Запуск…"
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Ітерація:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Нове значення:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Пошук розв’язку у комірці %1, знайдено розв’язок:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Пошук розв’язку у комірці %1 виявив, що розв’язок НЕ знайдено."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Встановити комірку:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "До значення:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Змінюючи значення комірки:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "Пошук розв’язку у комірці <cell>, <знайдено | не знайдено> розв’язок:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Поточне значення:"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -16611,6 +16463,94 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Відкрити посилання?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Пошук розв’язку…"
+
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "Повторення підрахунку, щоб знайти певне значення"
+
+#~ msgid "Goal Seek"
+#~ msgstr "Пошук розв’язку"
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Некоректне посилання на комірку."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "Некоректне цільове значення."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Вихідна комірка повинна містити числове значення."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Цільова комірка повинна містити формулу."
+
+#~ msgid "Starting..."
+#~ msgstr "Запуск…"
+
+#~ msgid "Iteration:"
+#~ msgstr "Ітерація:"
+
+#~ msgid "New value:"
+#~ msgstr "Нове значення:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Пошук розв’язку у комірці %1, знайдено розв’язок:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Пошук розв’язку у комірці %1 виявив, що розв’язок НЕ знайдено."
+
+#~ msgid "Set cell:"
+#~ msgstr "Встановити комірку:"
+
+#~ msgid "To value:"
+#~ msgstr "До значення:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Змінюючи значення комірки:"
+
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr ""
+#~ "Пошук розв’язку у комірці <cell>, <знайдено | не знайдено> розв’язок:"
+
+#~ msgid "Current value:"
+#~ msgstr "Поточне значення:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr ""
+#~ "Замінити\n"
+#~ "заміну"
+
+#~ msgid "Selection List..."
+#~ msgstr "Список вибору…"
+
+#~ msgid "More Options"
+#~ msgstr "Більше параметрів"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "Пошук у всьому аркуші"
+
+#~ msgid "Search in:"
+#~ msgstr "Шукати в:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Значення у комірках"
+
+#~ msgid "Comments"
+#~ msgstr "Коментарі"
+
+#~ msgid "Search direction:"
+#~ msgstr "Напрямок пошуку:"
+
+#~ msgid "Across then Down"
+#~ msgstr "Впоперек, потім вниз"
+
+#~ msgid "Down then Across"
+#~ msgstr "Вниз, потім впоперек"
+
+#~ msgid "Fewer Options"
+#~ msgstr "Менше параметрів"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Формат комірки…"

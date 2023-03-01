@@ -22,6 +22,7 @@ namespace Calligra
 namespace Sheets
 {
 class Selection;
+class RegionSelector;
 
 /**
  * \ingroup UI
@@ -35,22 +36,25 @@ public:
     GoalSeekDialog(QWidget* parent, Selection* selection);
     ~GoalSeekDialog() override;
 
+    QString selectorValue(int id);
+    void focusSelector(int id);
+    void setNotice(const QString &text);
+
+Q_SIGNALS:
+    void calculate();
+
 protected:
     void closeEvent(QCloseEvent *) override;
+    RegionSelector *getSelector(int id);
 
 protected Q_SLOTS:
     void textChanged();
-
-protected Q_SLOTS: // reimplementations
-    // KoDialog interface
-    void accept() override;
-    void reject() override;
+    void slotStart();
+    void slotClose();
 
 private:
     class Private;
     Private *const d;
-
-    void startCalc(double _start, double _goal);
 };
 
 } // namespace Sheets

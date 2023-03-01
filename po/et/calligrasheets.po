@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2019-12-18 21:55+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -949,7 +949,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") tagastab 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Andmebaas"
@@ -14217,117 +14217,107 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Piirde muutmine"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Funktsioon..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "Lisab matemaatilise avaldise"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "An&dmebaasist..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Lisab andmed SQL-andmebaasist"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Kohandatud nimekirjad..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Tekitab kohandatud nimekirjad sorteerimise või automaattäitmise jaoks"
 
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Sihtmärgi otsing..."
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Arvutust korratakse leidmaks määratud väärtust"
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Valemi valik"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Lisab funktsiooni"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Teised..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Muuda lahtrit"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Muudab esiletõstetud lahtrit"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Valib kõik aktiivse lehe lahtrid"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Käivita inspektor..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Näita QTableView'd..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "Dokumendi seadistused..."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Dokumendi seadistuste dialoogi näitamine"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Keri võimalikud viited läbi"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Permute fixation"
 msgstr "Keri viited läbi"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Tekstikursori juures asuva viite variantide läbikerimine"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14335,16 +14325,6 @@ msgid ""
 msgstr ""
 "Andmebaasidraivereid pole saada. Selleks tuleb Qt kompileerida vajalike "
 "draiveritega."
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Asenda"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Valikute nimekiri..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15193,51 +15173,6 @@ msgstr "Kellaaja vorming: %1"
 msgid "Currency format: %1"
 msgstr "Rahavorming: %1"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Rohkem valikuid"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Otsimine kogu lehelt"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Otsimise koht:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Lahtri väärtused"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Kommentaarid"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Otsimise suund:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Risti, siis alla"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Alla, siis risti"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Vähem valikuid"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15428,87 +15363,6 @@ msgstr "Funktsioonil puuduvad argumendid."
 #, kde-format
 msgid "Description is not available."
 msgstr "Kirjeldus puudub."
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Sihtmärgi otsing"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Lahtri viide on vigane."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Sihtväärtus on vigane."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Lähtelahter peab sisaldama arvväärtust."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Sihtlahter peab sisaldama valemit."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Alustamine..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Kordumine:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Uus väärtus:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Sihtmärgi otsing lahtriga %1 leidis lahenduse:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Sihtmärgi otsing lahtriga %1 EI leidnud lahendust."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Sihtmärgilahter:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Sihtmärgi uus väärtus:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Tulemuslahter:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "Sihtmärgi otsing lahtriga <lahter> <leidis | ei leidnud> lahenduse:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Praegune väärtus:"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -16294,6 +16148,91 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Kas avada link?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Sihtmärgi otsing..."
+
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "Arvutust korratakse leidmaks määratud väärtust"
+
+#~ msgid "Goal Seek"
+#~ msgstr "Sihtmärgi otsing"
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Lahtri viide on vigane."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "Sihtväärtus on vigane."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Lähtelahter peab sisaldama arvväärtust."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Sihtlahter peab sisaldama valemit."
+
+#~ msgid "Starting..."
+#~ msgstr "Alustamine..."
+
+#~ msgid "Iteration:"
+#~ msgstr "Kordumine:"
+
+#~ msgid "New value:"
+#~ msgstr "Uus väärtus:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Sihtmärgi otsing lahtriga %1 leidis lahenduse:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Sihtmärgi otsing lahtriga %1 EI leidnud lahendust."
+
+#~ msgid "Set cell:"
+#~ msgstr "Sihtmärgilahter:"
+
+#~ msgid "To value:"
+#~ msgstr "Sihtmärgi uus väärtus:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Tulemuslahter:"
+
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "Sihtmärgi otsing lahtriga <lahter> <leidis | ei leidnud> lahenduse:"
+
+#~ msgid "Current value:"
+#~ msgstr "Praegune väärtus:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Asenda"
+
+#~ msgid "Selection List..."
+#~ msgstr "Valikute nimekiri..."
+
+#~ msgid "More Options"
+#~ msgstr "Rohkem valikuid"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "Otsimine kogu lehelt"
+
+#~ msgid "Search in:"
+#~ msgstr "Otsimise koht:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Lahtri väärtused"
+
+#~ msgid "Comments"
+#~ msgstr "Kommentaarid"
+
+#~ msgid "Search direction:"
+#~ msgstr "Otsimise suund:"
+
+#~ msgid "Across then Down"
+#~ msgstr "Risti, siis alla"
+
+#~ msgid "Down then Across"
+#~ msgstr "Alla, siis risti"
+
+#~ msgid "Fewer Options"
+#~ msgstr "Vähem valikuid"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Lahtri vorming..."

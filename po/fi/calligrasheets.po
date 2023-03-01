@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kcells\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2022-07-29 11:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -964,7 +964,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") palauttaa 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Tietokanta"
@@ -14134,120 +14134,110 @@ msgstr ""
 "Muuta reunoja\n"
 "reunojen muuttaminen"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Funktio…"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "Lisää matemaattinen lauseke"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "&Tietokannasta…"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Lisää tietoja SQL-tietokannasta"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Omat luettelot…"
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Luo omia luetteloita lajittelua ja automaattista täyttöä varten"
 
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Tavoitteen haku…"
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Toistuva laskutoimitus määräarvon löytämiseksi"
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Kaavan valinta"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Lisää funktio"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Muut…"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Muokkaa solua"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Muokkaa korostettua solua"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Valitsee laskentataulukon kaikki solut"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Suorita tarkistus…"
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Näytä QTableView…"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "Tiedoston asetukset…"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Näytä tiedoston asetusikkuna"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Suojaus"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Suojaus"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Liitä leikepöydän sisältö kohdistimen kohdalle."
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14255,18 +14245,6 @@ msgid ""
 msgstr ""
 "Tietokanta-ajureita ei ole saatavilla. Ominaisuuden käyttämiseksi on "
 "asennettava tarvittavat Qt-tietokanta-ajurit."
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr ""
-"Korvaa\n"
-"korvaus"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Valintaluettelo…"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15193,51 +15171,6 @@ msgstr "Kellonaikamuoto: %1"
 msgid "Currency format: %1"
 msgstr "Valuuttamuoto: %1"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Lisää asetuksia"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Etsi koko taulukko"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Etsi:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Solun arvot"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Kommentit"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Hakusuunta:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Ensin poikittain, sitten alas"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Ensin alas, sitten poikittain"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Vähemmän asetuksia"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15429,90 +15362,6 @@ msgstr "Tällä funktiolla ei ole parametreja."
 #, kde-format
 msgid "Description is not available."
 msgstr "Kuvausta ei ole saatavilla"
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Tavoitteen haku"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Virheellinen soluviittaus."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Virheellinen kohdearvo."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Lähdesolussa täytyy olla numeerinen arvo."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Kohdesolussa täytyy olla kaava."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Aloitetaan…"
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Iterointi:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Uusi arvo:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Solun %1 tavoitteen haussa löytyi ratkaisu:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Solun %1 tavoitteen hakuun EI LÖYTYNYT ratkaisuja."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Aseta solu:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Arvoon:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Muuttamalla solua:"
-
-# Vaikuttaa, että tämän ei kuuluisi olla käännettävissä. Ohjelma korvaa tämän tekstin ohjelmallisesti jommalla kummalla kahdesta samankaltaisesta viestistä eikä käyttäjä koskaan näe tätä.
-# KEHITTÄJILLE: text-ominaisuuden translatable-määrite falseksi?
-# *** LISÄYS: Kopioitu id str:ksi, jotta saa pois kääntämättömien listasta – ei kai tästä ole haittaa?
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "Goal seeking with cell <cell> found <a | no> solution:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Nykyinen arvo:"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -16299,6 +16148,96 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Avataanko linkki?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Tavoitteen haku…"
+
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "Toistuva laskutoimitus määräarvon löytämiseksi"
+
+#~ msgid "Goal Seek"
+#~ msgstr "Tavoitteen haku"
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Virheellinen soluviittaus."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "Virheellinen kohdearvo."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Lähdesolussa täytyy olla numeerinen arvo."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Kohdesolussa täytyy olla kaava."
+
+#~ msgid "Starting..."
+#~ msgstr "Aloitetaan…"
+
+#~ msgid "Iteration:"
+#~ msgstr "Iterointi:"
+
+#~ msgid "New value:"
+#~ msgstr "Uusi arvo:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Solun %1 tavoitteen haussa löytyi ratkaisu:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Solun %1 tavoitteen hakuun EI LÖYTYNYT ratkaisuja."
+
+#~ msgid "Set cell:"
+#~ msgstr "Aseta solu:"
+
+#~ msgid "To value:"
+#~ msgstr "Arvoon:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Muuttamalla solua:"
+
+# Vaikuttaa, että tämän ei kuuluisi olla käännettävissä. Ohjelma korvaa tämän tekstin ohjelmallisesti jommalla kummalla kahdesta samankaltaisesta viestistä eikä käyttäjä koskaan näe tätä.
+# KEHITTÄJILLE: text-ominaisuuden translatable-määrite falseksi?
+# *** LISÄYS: Kopioitu id str:ksi, jotta saa pois kääntämättömien listasta – ei kai tästä ole haittaa?
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "Goal seeking with cell <cell> found <a | no> solution:"
+
+#~ msgid "Current value:"
+#~ msgstr "Nykyinen arvo:"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr ""
+#~ "Korvaa\n"
+#~ "korvaus"
+
+#~ msgid "Selection List..."
+#~ msgstr "Valintaluettelo…"
+
+#~ msgid "More Options"
+#~ msgstr "Lisää asetuksia"
+
+#~ msgid "Search entire sheet"
+#~ msgstr "Etsi koko taulukko"
+
+#~ msgid "Search in:"
+#~ msgstr "Etsi:"
+
+#~ msgid "Cell Values"
+#~ msgstr "Solun arvot"
+
+#~ msgid "Comments"
+#~ msgstr "Kommentit"
+
+#~ msgid "Search direction:"
+#~ msgstr "Hakusuunta:"
+
+#~ msgid "Across then Down"
+#~ msgstr "Ensin poikittain, sitten alas"
+
+#~ msgid "Down then Across"
+#~ msgstr "Ensin alas, sitten poikittain"
+
+#~ msgid "Fewer Options"
+#~ msgstr "Vähemmän asetuksia"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Solun muotoilu…"

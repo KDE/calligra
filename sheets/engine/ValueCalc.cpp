@@ -457,6 +457,10 @@ bool ValueCalc::equal(const Value &a, const Value &b)
  *********************************************************************/
 bool ValueCalc::approxEqual(const Value &a, const Value &b)
 {
+    if ((a.isInteger()) && (b.isInteger())) {
+        // avoid possible rounding
+        return a.asInteger() == b.asInteger();
+    }
     Number aa = converter->toFloat(a);
     Number bb = converter->toFloat(b);
     if (aa == bb)
@@ -467,6 +471,10 @@ bool ValueCalc::approxEqual(const Value &a, const Value &b)
 
 bool ValueCalc::greater(const Value &a, const Value &b)
 {
+    if ((a.isInteger()) && (b.isInteger())) {
+        // avoid possible rounding
+        return a.asInteger() > b.asInteger();
+    }
     Number aa = converter->toFloat(a);
     Number bb = converter->toFloat(b);
     return (aa > bb);

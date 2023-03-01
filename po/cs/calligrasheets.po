@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
-"PO-Revision-Date: 2023-01-30 11:21+0100\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"PO-Revision-Date: 2023-02-24 11:07+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -921,7 +921,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vrací 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Databáze"
@@ -11793,7 +11793,7 @@ msgstr "Tabulkový procesor"
 #: part/AboutData.h:32
 #, kde-format
 msgid "Copyright 1998-%1, The Calligra Sheets Team"
-msgstr "Copyright 1998-%1, Tým Calligra Sheets"
+msgstr "Autorská práva 1998-%1, Tým Calligra Sheets"
 
 #: part/AboutData.h:40
 #, kde-format
@@ -13488,117 +13488,107 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Změnit ohraničení"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkce..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "Vložit matematický výraz"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "Z &databáze..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Vložit data z SQL databáze"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Vlastní seznamy..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Vytvořit vlastní seznamy pro řazení nebo automatické vyplnění"
 
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Hledání cíle..."
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Opakování výpočtu k nalezení určité hodnoty"
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Výběr vzorce"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Vložit funkci"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Jiné..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Upravit buňku"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Upravit zvýrazněnou buňku"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Vybrat všechny buňky v listu"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Spustit inspektor..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Zobrazit QTableView..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
 msgstr "Nastavení dokumentu..."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
 msgstr ""
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -13606,16 +13596,6 @@ msgid ""
 msgstr ""
 "Žádné databázové ovladače nejsou dostupné. Je třeba nainstalovat potřebné "
 "ovladače databáze Qt."
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Nahradit"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Výběrový seznam..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14462,51 +14442,6 @@ msgstr "Formát času: %1"
 msgid "Currency format: %1"
 msgstr "Formát měny: %1"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Více možností"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Prohledat celý list"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Hledat v:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Hodnoty buněk"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Komentáře"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Směr hledání:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Napříč, potom dolů"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Dolů, potom napříč"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Méně možností"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14683,87 +14618,6 @@ msgstr "Tato funkce nemá žádné parametry."
 #, kde-format
 msgid "Description is not available."
 msgstr "Popis je nedostupný."
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Vyhledání cíle"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Odkaz na buňku je neplatný."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Cílová hodnota je neplatná."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Zdrojová buňka musí obsahovat číselnou hodnotu."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Cílová buňka musí obsahovat vzorec."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Spouštím..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Iterace:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Nová hodnota:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Vyhledání cíle s buňkou %1 našlo řešení:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Vyhledání cíle s buňkou %1 nenašlo žádné řešení."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Nastavit buňku:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Na hodnotu:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Změnou buňky:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Současná hodnota:"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15442,75 +15296,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otevřít odkaz?"
-
-#~ msgid "Cell Format..."
-#~ msgstr "Formát buňky..."
-
-#~ msgid "Set the cell formatting"
-#~ msgstr "Nastavit formátování buňky"
-
-#~ msgid "Move the cell object to the clipboard"
-#~ msgstr "Přesunout obsah buňky do schránky"
-
-#~ msgid "Copy the cell object to the clipboard"
-#~ msgstr "Kopírovat obsah buňky do schránky"
-
-#~ msgid "Paste the contents of the clipboard at the cursor"
-#~ msgstr "Vložit obsah schránky na pozici kurzoru"
-
-#~ msgid "Special Paste..."
-#~ msgstr "Vložit jinak..."
-
-#~ msgid "Paste the contents of the clipboard with special options"
-#~ msgstr "Vložit obsah schránky se speciálními volbami"
-
-#~ msgid "Paste with Insertion"
-#~ msgstr "Vložit se vsunutím"
-
-#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
-#~ msgstr "Vloží buňku ze schránky to tabulky."
-
-#~ msgid "Paste Inserting Cells"
-#~ msgstr "Vložit vsouvané buňky"
-
-#~ msgid "Insert"
-#~ msgstr "Vložit"
-
-#~ msgid "Move towards right"
-#~ msgstr "Posunout doprava"
-
-#~ msgid "Move towards bottom"
-#~ msgstr "Posunout dolů"
-
-#~ msgid "Special Paste"
-#~ msgstr "Vložit jinak"
-
-#~ msgid "Content"
-#~ msgstr "Obsah"
-
-#~ msgid "Everything"
-#~ msgstr "Vše"
-
-#~ msgid "Comment"
-#~ msgstr "Komentář"
-
-#~ msgid "Everything without border"
-#~ msgstr "Vše bez ohraničení"
-
-#~ msgid "Operation"
-#~ msgstr "Operace"
-
-#~ msgid "Overwrite"
-#~ msgstr "Přepsat"
-
-#~ msgid "Addition"
-#~ msgstr "Přičíst"
-
-#~ msgid "Subtraction"
-#~ msgstr "Odečtení"
-
-#~ msgid "Multiplication"
-#~ msgstr "Vynásobit"
-
-#~ msgid "Division"
-#~ msgstr "Vydělit"

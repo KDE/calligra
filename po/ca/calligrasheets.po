@@ -1,26 +1,26 @@
 # Translation of calligrasheets.po to Catalan
-# Copyright (C) 2000-2022 This_file_is_part_of_KDE
+# Copyright (C) 2000-2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022, 2023.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
 # Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
-"PO-Revision-Date: 2022-11-13 09:32+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"PO-Revision-Date: 2023-02-27 22:35+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -150,7 +150,7 @@ msgstr "Capçalera1"
 #: ui/dialogs/LayoutPage_General.cpp:146
 #, kde-format
 msgid "Default"
-msgstr "Per defecte"
+msgstr "Predeterminat"
 
 #: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
 #, kde-format
@@ -922,7 +922,7 @@ msgid ""
 msgstr ""
 "La funció ROMAN() retorna el nombre en format romà. Només es poden convertir "
 "els nombres positius i enters. L'argument opcional Format especifica el "
-"nivell de concisió, i per defecte és 0."
+"nivell de concisió, i el predeterminat és 0."
 
 #: functions/conversion.xml:256
 #, kde-format
@@ -965,7 +965,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") retorna 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Base de dades"
@@ -1287,7 +1287,7 @@ msgid ""
 "for monday, 1 for tuesday,..."
 msgstr ""
 "La funció WEEKDAY() retorna el dia de la setmana de la data donada. Si el "
-"mètode és 1 (per defecte), retorna 1 per a diumenge, 2 per a dilluns... si "
+"mètode és 1 (predeterminat), retorna 1 per a diumenge, 2 per a dilluns... si "
 "el mètode és 2, retorna 1 per a dilluns, 2 per a dimarts..."
 
 #: functions/datetime.xml:20
@@ -2124,8 +2124,8 @@ msgid ""
 "Method is omitted.)"
 msgstr ""
 "WEEKNUM(A1; 1) retorna 11 quan A1 és «9 de març de 2008». Número de setmana "
-"en l'any, amb una setmana que comença en diumenge (1, aquest és el valor per "
-"defecte si s'omet el Mètode)."
+"en l'any, amb una setmana que comença en diumenge (1, aquest és el valor "
+"predeterminat si s'omet el Mètode)."
 
 #: functions/datetime.xml:614
 #, kde-format
@@ -3553,7 +3553,7 @@ msgid ""
 "defaults to 0."
 msgstr ""
 "La funció DELTA() retorna 1 si x és igual que y, altrament retorna 0. y és 0 "
-"per defecte."
+"de manera predeterminada."
 
 #: functions/engineering.xml:883
 #, kde-format
@@ -3582,7 +3582,7 @@ msgid ""
 "0. y defaults to 0."
 msgstr ""
 "La funció GESTEP() retorna 1 si x és més gran o igual que y, altrament "
-"retorna 0. y és zero per defecte."
+"retorna 0. y és zero de manera predeterminada."
 
 #: functions/engineering.xml:903
 #, kde-format
@@ -3885,9 +3885,9 @@ msgid ""
 "days/365 or 4: European 30/360."
 msgstr ""
 "La funció COUPNUM retorna el nombre de cupons a pagar entre la liquidació i "
-"el venciment. Basat en el tipus de comptador de dies: 0 US 30/360 (per "
-"defecte), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o 4: europeu "
-"30/360."
+"el venciment. Basat en el tipus de comptador de dies: 0 US 30/360 "
+"(predeterminat), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o 4: "
+"europeu 30/360."
 
 #: functions/financial.xml:198
 #, kde-format
@@ -4050,7 +4050,7 @@ msgid ""
 "2: real days/360, 3: real days/365 or 4: European 30/360."
 msgstr ""
 "La funció DISC retorna la taxa de descompte d'un actiu. Basat en el tipus de "
-"comptador de dies: 0 US 30/360 (per defecte), 1: dies reals, 2: dies "
+"comptador de dies: 0 US 30/360 (predeterminat), 1: dies reals, 2: dies "
 "reals/360, 3 dies reals/365 o 4: europeu 30/360."
 
 #: functions/financial.xml:370
@@ -4394,9 +4394,9 @@ msgid ""
 "30/360."
 msgstr ""
 "La funció INTRATE retorna la proporció d'interès per a un actiu que cobreix "
-"tota la inversió. Basat en el tipus de comptador de dies: 0 US 30/360 (per "
-"defecte), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o 4: europeu "
-"30/360."
+"tota la inversió. Basat en el tipus de comptador de dies: 0 US 30/360 "
+"(predeterminat), 1: dies reals, 2: dies reals/360, 3 dies reals/365 o 4: "
+"europeu 30/360."
 
 #: functions/financial.xml:625
 #, kde-format
@@ -4468,7 +4468,7 @@ msgstr "PV és el valor present a la seqüència de pagaments."
 #: functions/financial.xml:663 functions/financial.xml:1050
 #, kde-format
 msgid "FV (optional) is the desired (future) value.  default: 0."
-msgstr "FV (opcional) és el valor desitjat (futur). Per defecte: 0."
+msgstr "FV (opcional) és el valor desitjat (futur). Predeterminat: 0."
 
 #: functions/financial.xml:664 functions/financial.xml:1051
 #, kde-format
@@ -4477,7 +4477,7 @@ msgid ""
 "period and 0 (default) for payment at the end of a period."
 msgstr ""
 "El tipus (opcional) defineix la data donada. 1 per al pagament al principi "
-"del període i 0 (per defecte) per al pagament al final del període."
+"del període i 0 (predeterminat) per al pagament al final del període."
 
 #: functions/financial.xml:665
 #, kde-format
@@ -5032,7 +5032,7 @@ msgid ""
 msgstr ""
 "La funció RECEIVED retorna la quantitat rebuda a la data de venciment per a "
 "un actiu d'inversió. La base és el tipus de comptador de dies que voleu "
-"usar: 0: US 30/360 (per defecte), 1: dies real, 2: dies reals/360, 3: dies "
+"usar: 0: US 30/360 (predeterminat), 1: dies real, 2: dies reals/360, 3: dies "
 "reals/365 o 4: europeu 30/360. La data de liquidació ha d'estar abans que la "
 "data de venciment."
 
@@ -6096,8 +6096,8 @@ msgid ""
 "parameter (which defaults to being false)."
 msgstr ""
 "La funció IF() és una funció condicional. Retorna el segon paràmetre si la "
-"condició és Cert. Si no ho és, retorna el tercer paràmetre (que per defecte "
-"és Fals)."
+"condició és Cert. Si no ho és, retorna el tercer paràmetre (que de manera "
+"predeterminada és Fals)."
 
 #: functions/logic.xml:214
 #, kde-format
@@ -7365,9 +7365,9 @@ msgid ""
 "rounds away from zero, instead of up towards the positive infinity."
 msgstr ""
 "La funció CEILING() arrodoneix x cap a dalt (des de zero) al múltiple "
-"significatiu més proper que sigui més gran que l'entrada. El valor per "
-"defecte per a Significança és 1 (o -1 si el valor és negatiu), el que vol "
-"dir arrodonir cap a dalt a l'enter més proper. Si el paràmetre Mode és "
+"significatiu més proper que sigui més gran que l'entrada. El valor "
+"predeterminat per a Significança és 1 (o -1 si el valor és negatiu), el que "
+"vol dir arrodonir cap a dalt a l'enter més proper. Si el paràmetre Mode és "
 "diferent de zero, la funció arrodoneix diferent de zero, en comptes de pujar "
 "a l'infinit positiu."
 
@@ -7422,7 +7422,7 @@ msgid ""
 msgstr ""
 "La funció FLOOR() arrodoneix x cap avall (cap al zero) al múltiple "
 "significatiu més proper que sigui més petit que l'entrada.\n"
-"                 El valor per defecte per a la Significança és 1, si x és "
+"                 El valor predeterminat per a la Significança és 1, si x és "
 "positiu. És -1, si el valor és negatiu,\n"
 "                que és arrodonir cap amunt a l'enter més proper.\n"
 "                Si es dona un mode no igual que zero, la quantitat d'x "
@@ -8087,9 +8087,9 @@ msgid ""
 "(default) the address is returned in A1 style if it is set to FALSE in R1C1 "
 "style."
 msgstr ""
-"L'estil A1 especifica l'estil de les adreces de retorn. Si s'arranja A1 a "
-"CERT (per defecte) es retorna l'adreça a l'estil A1 si s'arranja a FALS a "
-"l'estil R1C1."
+"L'estil A1 especifica l'estil de les adreces de retorn. Si s'estableix A1 a "
+"CERT (predeterminat) es retorna l'adreça a l'estil A1 si s'estableix a FALS "
+"a l'estil R1C1."
 
 #: functions/reference.xml:34
 #, kde-format
@@ -8475,7 +8475,7 @@ msgid ""
 msgstr ""
 "Cerca el «valor de cerca» a la primera fila de la «font de les dades». Si un "
 "valor coincideix, el valor a la «fila» i la columna, es retorna aquest "
-"valor. Si «ordenat» és cert (per defecte), la primera fila s'ordenarà. La "
+"valor. Si «ordenat» és cert (predeterminat), la primera fila s'ordenarà. La "
 "cerca finalitzarà si el «valor de cerca» és més baix que el valor amb el "
 "qual es compara."
 
@@ -8504,8 +8504,8 @@ msgid ""
 msgstr ""
 "Cerca el «valor de cerca» a la primera fila de la «font de les dades». Si un "
 "valor coincideix, el valor a la «columna» i la fila, es retorna aquest "
-"valor. Si «ordenat» és cert (per defecte), la primera columna s'ordenarà. La "
-"cerca finalitzarà si el «valor de cerca» és més baix que el valor amb el "
+"valor. Si «ordenat» és cert (predeterminat), la primera columna s'ordenarà. "
+"La cerca finalitzarà si el «valor de cerca» és més baix que el valor amb el "
 "qual es compara."
 
 #: functions/reference.xml:302
@@ -8820,7 +8820,8 @@ msgid ""
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
 "Els paràmetres tercer i quart són opcionals. Estableixen el límit inferior i "
-"superior, que per defecte tenen els valors de 0,0 i 1,0, respectivament."
+"superior, que de manera predeterminada tenen els valors de 0,0 i 1,0, "
+"respectivament."
 
 #: functions/statistical.xml:117
 #, kde-format
@@ -8852,7 +8853,8 @@ msgid ""
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
 "Els paràmetres d'inici i final són opcionals. Estableixen el límit inferior "
-"i superior, que per defecte tenen els valors de 0,0 i 1,0, respectivament."
+"i superior, que de manera predeterminada tenen els valors de 0,0 i 1,0, "
+"respectivament."
 
 #: functions/statistical.xml:149
 #, kde-format
@@ -10478,7 +10480,7 @@ msgid ""
 msgstr ""
 "La línia de regressió es pot forçar que intersequi amb l'origen (X=0, Y=0) "
 "definit el 4t paràmetre, permetDesplaçament, a FALS o 0. Definit aquest "
-"paràmetre a CERT o 1 (per defecte) es permet que la línia de millor "
+"paràmetre a CERT o 1 (predeterminat) es permet que la línia de millor "
 "ajustament intersequi l'eix vertical amb un valor no zero d'Y. "
 
 # skip-rule: t-sc-plot
@@ -11996,7 +11998,7 @@ msgstr "Expressió regular"
 #: functions/text.xml:735
 #, kde-format
 msgid "Default value (optional)"
-msgstr "Valor per defecte (opcional)"
+msgstr "Valor predeterminat (opcional)"
 
 #: functions/text.xml:739
 #, kde-format
@@ -12011,8 +12013,8 @@ msgid ""
 "default is returned."
 msgstr ""
 "Retorna una part de la cadena que coincideix amb una expressió regular. Si "
-"la cadena no coincideix amb l'expressió regular, es retornarà el valor "
-"especificat per defecte."
+"la cadena no coincideix amb l'expressió regular, de manera predeterminada es "
+"retornarà el valor especificat."
 
 #: functions/text.xml:744
 #, kde-format
@@ -12029,14 +12031,14 @@ msgid ""
 "If no default value is given, an empty string is assumed. If no back-"
 "reference is given, 0 is assumed (so that entire matching part is returned)."
 msgstr ""
-"Si no es dona cap valor per defecte, s'assumeix una cadena buida. Si no hi "
+"Si no es dona cap valor predeterminat, s'assumeix una cadena buida. Si no hi "
 "ha cap referència enrere, s'assumeix 0 (així retorna aquesta part que "
 "coincideix)."
 
 #: functions/text.xml:746
 #, kde-format
 msgid "REGEXP(text; regexp; default; backref)"
-msgstr "REGEXP(text; regexp; per defecte; backref)"
+msgstr "REGEXP(text; regexp; predeterminat; backref)"
 
 #: functions/text.xml:747
 #, kde-format
@@ -12401,7 +12403,7 @@ msgid ""
 msgstr ""
 "La funció ACOSH() calcula el cosinus hiperbòlic invers de x. És a dir el "
 "valor amb cosinus hiperbòlic igual que x. Si x és més petit que 1,0, ACOSH() "
-"retorna un no-nombre (not-a-number (NaN)) i es marca un error (errno)."
+"retorna un no-nombre (not-a-number (NaN) i es marca un error (errno)."
 
 #: functions/trig.xml:177
 #, kde-format
@@ -13085,7 +13087,7 @@ msgid ""
 "> Open Recent."
 msgstr ""
 "Controla el nombre màxim de noms de fitxer que es mostren quan seleccioneu "
-"Fitxer -> Obre document."
+"«Fitxer -> Obre'n un de recent»."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: part/dialogs/FileOptionsWidget.ui:39
@@ -13130,8 +13132,8 @@ msgid ""
 "Check this box if you want some backup files created. This is checked per "
 "default."
 msgstr ""
-"Marqueu aquesta casella si voleu crear fitxers de seguretat. Està marcat per "
-"defecte."
+"Marqueu aquesta casella si voleu crear fitxers de seguretat. De manera "
+"predeterminada, està marcada."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/InterfaceOptionsWidget.ui:17
@@ -13177,7 +13179,7 @@ msgstr "&Unitat:"
 #: part/dialogs/InterfaceOptionsWidget.ui:61
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
-msgstr "Seleccioneu la unitat per defecte que s'usarà als vostres fulls."
+msgstr "Seleccioneu la unitat predeterminada que s'usarà en els vostres fulls."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:68
@@ -13239,9 +13241,10 @@ msgid ""
 "displayed. Click here to choose another color for the borders than the "
 "default red."
 msgstr ""
-"Quan l'ítem del menú Visualitza ->Mostra les vores de pàgina està activat, "
-"es mostren les vores de la pàgina. Cliqueu aquí per a escollir un altre "
-"color per a les vores que no sigui el vermell que ve per defecte."
+"Quan l'element de menú «Visualitza -> Mostra les vores de pàgina» està "
+"activat, es mostraran les vores de la pàgina. Cliqueu aquí per a escollir un "
+"altre color per a les vores que no sigui el vermell que ve de manera "
+"predeterminada."
 
 #: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:93
 #: part/dialogs/PageLayoutDialog.cpp:97
@@ -13591,9 +13594,9 @@ msgid ""
 "Right to Left, then the first column will be on the right and the others "
 "added from right to left."
 msgstr ""
-"El valor per defecte és que la primera columna del full sigui a l'esquerra. "
-"Si escolliu de dreta a esquerra, la primera columna estarà a la dreta i la "
-"resta s'afegiran de dreta a esquerra."
+"El valor predeterminat és que la primera columna del full sigui a "
+"l'esquerra. Si escolliu de dreta a esquerra, la primera columna estarà a la "
+"dreta i la resta s'afegiran de dreta a esquerra."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showCommentIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:110
@@ -13639,8 +13642,8 @@ msgid ""
 "the page borders if you want to print your sheet."
 msgstr ""
 "Si marqueu aquesta opció, es dibuixaran les vores de la pàgina del full "
-"actual. Per defecte, les vores de la pàgina no es mostren. Això és útil per "
-"a veure les vores de la pàgina si voleu imprimir el vostre full."
+"actual. De manera predeterminada, les vores de la pàgina no es mostren. Això "
+"és útil per a veure les vores de la pàgina si voleu imprimir el vostre full."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
@@ -13703,7 +13706,7 @@ msgid ""
 "as letters. Letters are default."
 msgstr ""
 "Si aquesta casella està marcada, les capçaleres de les columnes es mostraran "
-"com a números. Per defecte, són lletres."
+"com a números. De manera predeterminada, són lletres."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showColumnAsNumbersCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:173
@@ -13737,7 +13740,7 @@ msgid ""
 "If unchecked, the grid will be hidden."
 msgstr ""
 "Si està marcada, es mostraran els límits de la quadrícula (els límits de les "
-"cel·les). Aquest és el valor per defecte. Si el desmarqueu, s'ocultarà la "
+"cel·les). Aquest és el valor predeterminat. Si la desmarqueu, s'ocultarà la "
 "quadrícula."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
@@ -13753,7 +13756,7 @@ msgid ""
 "This setting controls whether formulae are recalculated automatically when "
 "the value of any cell they refer to changes."
 msgstr ""
-"Aquest arranjament controla si les fórmules es recalculen automàticament "
+"Aquesta configuració controla si les fórmules es recalculen automàticament "
 "quan es canvia el valor d'alguna de les cel·les implicat en els càlculs."
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoCalcCheckBox)
@@ -14417,118 +14420,108 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Canvia les vores"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Funció..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, kde-format
 msgid "Insert math expression"
 msgstr "Insereix una expressió matemàtica"
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "Des d'una &base de dades..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Insereix dades des d'una base de dades SQL"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Llistes personalitzades..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 "Crea llistes personalitzades per a les ordenacions o per a l'autocompleció"
 
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Cerca objectiu..."
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Repeteix càlculs per a trobar un valor específic"
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Selecció de fórmula"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, kde-format
 msgid "Insert a function"
 msgstr "Insereix una funció"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Altres..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modifica la cel·la"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Edita la cel·la marcada"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Selecciona totes les cel·les del full actual"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Inspector d'execució..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Mostra la QTableView..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, kde-format
 msgid "Document Settings..."
-msgstr "Arranjaments del document..."
+msgstr "Configuració del document..."
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, kde-format
 msgid "Show document settings dialog"
-msgstr "Mostra el diàleg d'arranjaments del document"
+msgstr "Mostra el diàleg de configuració del document"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permuta la fixació de referència"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permuta la fixació"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permuta la fixació de la referència al cursor de text"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "No s'ha pogut localitzar l'acció %1"
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14537,16 +14530,6 @@ msgstr ""
 "No hi ha controladors de base de dades disponibles. Per a usar aquesta "
 "característica, heu d'instal·lar els controladors Qt necessaris per a bases "
 "de dades."
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Substitueix"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Llista de selecció..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15322,7 +15305,7 @@ msgstr "Prefix:"
 #: ui/dialogs/DocumentSettingsDialog.cpp:56
 #, kde-format
 msgid "Document Settings"
-msgstr "Arranjaments del document"
+msgstr "Configuració del document"
 
 #: ui/dialogs/DocumentSettingsDialog.cpp:66
 #, kde-format
@@ -15387,7 +15370,7 @@ msgstr "Idioma: %1 (%2)"
 #: ui/dialogs/DocumentSettingsDialog.cpp:197
 #, kde-format
 msgid "Default number format: %1"
-msgstr "Format numèric per defecte: %1"
+msgstr "Format numèric predeterminat: %1"
 
 #. i18ncheckarg
 #: ui/dialogs/DocumentSettingsDialog.cpp:198
@@ -15410,51 +15393,6 @@ msgstr "Format de l'hora: %1"
 msgid "Currency format: %1"
 msgstr "Format de la moneda: %1"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr "Més opcions"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr "Cerca a tot el full"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr "Cerca a:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr "Valors de cel·la"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr "Comentaris"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr "Direcció de cerca:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr "Cap a la dreta, després avall"
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr "Avall, després a la dreta"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr "Menys opcions"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15470,8 +15408,8 @@ msgstr ""
 "incloent-hi algunes opcions addicionals com el subratllat o el text barrat "
 "per a la cel·la de text actual. La part baixa de la pàgina us dona una vista "
 "prèvia del format del text seleccionat.\n"
-"El tipus de lletra per defecte se selecciona per a totes les cel·les al menú "
-"Format -> Gestor d'estils amb l'estil usat actualment."
+"El tipus de lletra predeterminat se selecciona per a totes les cel·les en el "
+"menú «Format -> Gestor d'estils» amb l'estil usat actualment."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:41
@@ -15592,7 +15530,7 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:139
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
-msgstr "Això barrarà el text de la cel·la actual si està marcat."
+msgstr "Si està marcada, es barrarà el text de la cel·la actual."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:142
@@ -15651,88 +15589,6 @@ msgstr "Aquesta funció no té paràmetres."
 msgid "Description is not available."
 msgstr "Descripció no disponible."
 
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Cerca d'objectius"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "La referència de la cel·la no és vàlida."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "El valor de l'objectiu no és vàlid."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "La cel·la font ha de contenir un valor numèric."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "La cel·la de destinació ha de contenir una fórmula."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Iniciant..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Iteració:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Nou valor:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "La cerca de valors amb la cel·la %1 ha trobat una solució:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "La cerca de valors amb la cel·la %1 NO ha trobat cap solució."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Arranja la cel·la:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Al valor:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Canviant la cel·la:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-"La cerca d'objectius amb la cel·la <cel·la> <ha | no ha> trobat una solució:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Valor actual:"
-
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
 msgid "Cell Format"
@@ -15781,10 +15637,10 @@ msgid ""
 "justifies numbers, dates and times within a cell and left justifies anything "
 "else."
 msgstr ""
-"Aquest és el format per defecte i el Sheets detecta automàticament el tipus "
-"de dades real depenent de les dades de la cel·la actual. Per defecte, el "
-"Sheets posa els nombres a la dreta, les dates i les hores centrades i a "
-"l'esquerra tota la resta."
+"Aquest és el format predeterminat i el Sheets detecta automàticament el "
+"tipus de dades real depenent de les dades de la cel·la actual. De manera "
+"predeterminada, el Sheets posa els nombres a la dreta, les dates i les hores "
+"centrades i a l'esquerra tota la resta."
 
 #: ui/dialogs/LayoutPage_Float.cpp:63
 #, kde-format
@@ -15794,9 +15650,9 @@ msgid ""
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
 "La notació numèrica usa la notació que vàreu escollir globalment a "
-"Arranjament del sistema -> Aparença i comportament usual -> Configuració "
-"regional -> País/regió i idioma -> Pestanya Nombres. Els nombres s'alineen a "
-"la dreta per defecte."
+"«Arranjament del sistema -> Aparença i comportament usual -> Configuració "
+"regional -> País/regió i idioma -> pestanya Nombres». De manera "
+"predeterminada, els nombres s'alineen a la dreta."
 
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
@@ -15828,10 +15684,10 @@ msgid ""
 "formatting to look like your current currency."
 msgstr ""
 "El format Diners converteix el vostre nombre en una notació de diners usant "
-"els arranjaments fixats globalment a Arranjament del Sistema -> Aparença i "
+"la configuració fixada globalment a «Arranjament del Sistema -> Aparença i "
 "comportament usual -> Configuració regional -> País/Regió i idioma -> "
-"Diners. Es mostrarà el símbol actual de moneda i la precisió serà "
-"l'arranjada a Arranjament del sistema.\n"
+"Diners». Es mostrarà el símbol actual de moneda i la precisió serà "
+"l'establerta a Arranjament del sistema.\n"
 "També podeu usar la icona Moneda a la barra d'eines de format per a donar "
 "format a la cel·la amb la vostra moneda actual."
 
@@ -15882,10 +15738,10 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get dates."
 msgstr ""
-"Per a introduir una data, ho heu de fer en un dels formats arranjats a "
+"Per a introduir una data, ho heu de fer en un dels formats establerts a "
 "«Arranjament del sistema -> Aparença i comportament usual -> Configuració "
 "regional -> País/regió i idioma -> Data i hora». Aquí hi ha dos formats "
-"arranjats: el format de la data i el format curt de la data.\n"
+"establerts: el format de la data i el format curt de la data.\n"
 "Així com podeu fer córrer els números, també podeu arrossegar dates cap a "
 "baix i les següents cel·les també tindran dates."
 
@@ -15905,10 +15761,10 @@ msgstr ""
 "hora, ho heu de fer en el «Format de l'hora» establert a «Arranjament del "
 "sistema -> Aparença i comportament usual -> Configuració regional -> País/"
 "regió i idioma -> Data i hora». Al diàleg del format de cel·la, podeu "
-"arranjar com es mostrarà l'hora, escollint entre les opcions disponibles. El "
-"format per defecte és l'arranjat a Arranjament del sistema. Quan el nombre "
-"de la cel·la no sigui una hora, el Sheets el mostrarà com a 00:00 en el "
-"format global que teniu a Arranjament del sistema."
+"establir com es mostrarà l'hora, escollint entre les opcions disponibles. El "
+"format predeterminat és l'establert a Arranjament del sistema. Quan el "
+"nombre de la cel·la no sigui una hora, el Sheets el mostrarà com a 00:00 en "
+"el format global que teniu a Arranjament del sistema."
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -15926,10 +15782,11 @@ msgstr ""
 "introduir una data i hora, ho heu de fer en el «Format de l'hora» establert "
 "a «Arranjament del sistema -> Aparença i comportament usual -> Configuració "
 "regional -> País/regió i idioma -> Data i hora». Al diàleg del format de "
-"cel·la, podeu arranjar com es mostrarà l'hora, escollint entre les opcions "
-"disponibles. El format per defecte és l'arranjat a Arranjament del sistema. "
-"Quan el nombre de la cel·la no tingui sentit com a data i hora, el Sheets el "
-"mostrarà com a 00:00 en el format global que teniu a Arranjament del sistema."
+"cel·la, podeu establir com es mostrarà l'hora, escollint entre les opcions "
+"disponibles. El format predeterminat és l'establert a Arranjament del "
+"sistema. Quan el nombre de la cel·la no tingui sentit com a data i hora, el "
+"Sheets el mostrarà com a 00:00 en el format global que teniu a Arranjament "
+"del sistema."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
@@ -15942,9 +15799,9 @@ msgid ""
 msgstr ""
 "Això dona format al contingut de la cel·la com a un text. Això pot ser útil "
 "si voleu que es tracti un nombre com a text, per exemple per a codi postal "
-"(ZIP). Si s'arranja com a text, es posarà a l'esquerra. Quan els nombres es "
-"formaten com a text, no es poden fer servir per a càlculs ni fórmules. També "
-"canvia la manera en què es justifiquen les cel·les."
+"(ZIP). Si s'estableix com a text, es posarà a l'esquerra. Quan els nombres "
+"es formaten com a text, no es poden fer servir per a càlculs ni fórmules. "
+"També canvia la manera en què es justifiquen les cel·les."
 
 #: ui/dialogs/LayoutPage_Float.cpp:98
 #, kde-format
@@ -16214,8 +16071,8 @@ msgid ""
 "<b>Right</b> means the content of the cell will be displayed on the right of "
 "the cell.</qt>"
 msgstr ""
-"<qt>Arranja horitzontalment la posició del contingut a la cel·la.\n"
-"El valor per defecte és <b>Estàndard</b> i ve amb el format escollit.\n"
+"<qt>Estableix horitzontalment la posició del contingut a la cel·la.\n"
+"El valor predeterminat és <b>Estàndard</b> i ve amb el format escollit.\n"
 "<b>Esquerra</b> vol dir que el contingut es posarà a l'esquerra de la "
 "cel·la.\n"
 "<b>Centre</b> vol dir que el contingut es posarà al centre horitzontalment "
@@ -16268,7 +16125,7 @@ msgid ""
 "<b>Bottom</b> means the content of the cell will be displayed at the bottom "
 "of the cell.</qt>"
 msgstr ""
-"<qt>Arranja verticalment la posició del contingut de la cel·la.\n"
+"<qt>Estableix verticalment la posició del contingut de la cel·la.\n"
 "<b>A dalt</b> vol dir que el contingut es posarà a la part de dalt la "
 "cel·la.\n"
 "<b>Mig</b> vol dir que el contingut es posarà al mig verticalment de la "
@@ -16301,8 +16158,8 @@ msgid ""
 "Set the amount of indent that will be used in the cell when you choose the "
 "Increase Indent or Decrease Indent actions."
 msgstr ""
-"Arranja la quantitat de sagnat que hi haurà a la cel·la quan seleccioneu les "
-"accions «Augmenta el sagnat» o «Disminueix el sagnat»."
+"Estableix la quantitat de sagnat que hi haurà a la cel·la quan seleccioneu "
+"les accions «Augmenta el sagnat» o «Disminueix el sagnat»."
 
 #. i18n: ectx: property (title), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:168
@@ -16322,7 +16179,7 @@ msgid ""
 msgstr ""
 "Això només està disponible si la rotació és de 0°.\n"
 "Ajusta el text, l'ajusta de manera que encaixi en la mida prèvia de cel·la. "
-"Si no està marcat, el text es quedarà en una línia i s'ajustarà la mida de "
+"Si no està marcada, el text es quedarà en una línia i s'ajustarà la mida de "
 "la cel·la per a encabir el text.\n"
 "Text vertical disposa el vostre text verticalment."
 
@@ -16365,17 +16222,18 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
-"Aquesta pestanya us permet d'arranjar la protecció de cel·les. Totes les "
-"cel·les es protegeixen per defecte (això vol dir que el contingut d'aquestes "
-"no es pot canviar) i, per a activar la protecció, també heu de protegir el "
-"full amb el menú Eines -> Protegeix full... i posant-hi una contrasenya.\n"
+"Aquesta pestanya us permet establir la protecció de cel·les. De manera "
+"predeterminada, totes les cel·les es protegeixen (això vol dir que el "
+"contingut d'aquestes no es pot canviar) i, per a activar la protecció, també "
+"heu de protegir el full amb el menú «Eines -> Protegeix el full...» i posant-"
+"hi una contrasenya.\n"
 "També podeu ocultar la fórmula de la cel·la per tal de protegir la manera en "
 "què calculeu la fórmula. Per a això també cal que establiu la protecció del "
 "full.\n"
 "Podeu ocultar el contingut de la cel·la amb Oculta-ho tot, i altra vegada "
 "cal protecció de full.\n"
-"Podeu aprendre més sobre tots aquests arranjaments al manual d'usuari, al "
-"capítol Sheets avançat del Calligra."
+"Podeu aprendre més sobre totes aquestes configuracions en el manual "
+"d'usuari, en el capítol Calligra Sheets avançat."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: ui/dialogs/ProtectionWidget.ui:41
@@ -16391,8 +16249,8 @@ msgid ""
 "checked (default), the cell content will be printed.\n"
 "Note that you can print it even if the cell is protected"
 msgstr ""
-"Si està marcat, el contingut de la cel·la no s'imprimirà. Si no està marcat "
-"(per defecte), el contingut de la cel·la s'imprimirà.\n"
+"Si està marcada, el contingut de la cel·la no s'imprimirà. Si no està "
+"marcada (predeterminat), el contingut de la cel·la s'imprimirà.\n"
 "Cal tenir present que podeu imprimir encara que la cel·la estigui protegida."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bDontPrint)
@@ -16433,12 +16291,11 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
-"Si està marcat, es protegirà el contingut de la cel·la. Aquest és el "
-"comportament per defecte. Heu de protegir tot el full amb el menú Eines-> "
-"Protegeix document -> Protegeix full... per tal que funcioni la protecció de "
-"la cel·la individual. Mireu el manual per a més detalls, al capítol Sheets "
-"del Calligra avançat. Quan una cel·la està protegida, el seu contingut no es "
-"pot canviar."
+"Si està marcada, es protegirà el contingut. Aquest és el comportament "
+"predeterminat. Heu de protegir tot el full amb el menú «Eines -> Protegeix "
+"el full...» per tal que funcioni la protecció de la cel·la individual. Mireu "
+"el manual per a més detalls, en el capítol Calligra Sheets avançat. Quan una "
+"cel·la està protegida, el seu contingut no es pot canviar."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bIsProtected)
 #: ui/dialogs/ProtectionWidget.ui:100
@@ -16455,10 +16312,10 @@ msgid ""
 "contain formulae so the user cannot view the formula. And the sheet must be "
 "protected for this to work."
 msgstr ""
-"Quan està marcat, la cel·la encara és visible. En canvi, els seus continguts "
-"no apareixeran a la barra de fórmula. Oculta fórmula només funciona amb "
-"cel·les que contenen fórmules, de manera que l'usuari no pot veure-la. I el "
-"full ha d'estar protegit perquè això funcioni."
+"Quan està marcada, la cel·la encara és visible. En canvi, els seus "
+"continguts no apareixeran a la barra de fórmula. Oculta fórmula només "
+"funciona amb cel·les que contenen fórmules, de manera que l'usuari no pot "
+"veure-la. I el full ha d'estar protegit perquè això funcioni."
 
 #. i18n: ectx: property (text), widget (Calligra::Sheets::LayoutCheckbox, m_bHideFormula)
 #: ui/dialogs/ProtectionWidget.ui:133
@@ -16539,2736 +16396,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Obro l'enllaç?"
-
-#~ msgid "Cell Format..."
-#~ msgstr "Format de la cel·la..."
-
-#~ msgid "Set the cell formatting"
-#~ msgstr "Estableix el format de la cel·la"
-
-#~ msgid "Move the cell object to the clipboard"
-#~ msgstr "Mou l'objecte de la cel·la al porta-retalls"
-
-#~ msgid "Copy the cell object to the clipboard"
-#~ msgstr "Copia l'objecte de la cel·la al porta-retalls"
-
-#~ msgid "Paste the contents of the clipboard at the cursor"
-#~ msgstr "Enganxa el contingut del porta-retalls a la posició actual"
-
-#~ msgid "Special Paste..."
-#~ msgstr "Enganxat especial..."
-
-#~ msgid "Paste the contents of the clipboard with special options"
-#~ msgstr "Enganxa els continguts del porta-retalls amb opcions especials"
-
-#~ msgid "Paste with Insertion"
-#~ msgstr "Enganxa amb inserció"
-
-#~ msgid "Inserts a cell from the clipboard into the spreadsheet"
-#~ msgstr "Insereix una cel·la del porta-retalls al full de càlcul"
-
-#~ msgid "Paste Inserting Cells"
-#~ msgstr "Copia inserint cel·les"
-
-#~ msgid "Insert"
-#~ msgstr "Insereix"
-
-#~ msgid "Move towards right"
-#~ msgstr "Mou cap a la dreta"
-
-#~ msgid "Move towards bottom"
-#~ msgstr "Mou cap a baix"
-
-#~ msgid "Special Paste"
-#~ msgstr "Enganxat especial"
-
-#~ msgid "Content"
-#~ msgstr "Contingut"
-
-#~ msgid "Everything"
-#~ msgstr "Tot"
-
-#~ msgid "Comment"
-#~ msgstr "Comentari"
-
-#~ msgid "Everything without border"
-#~ msgstr "Tot excepte les vores"
-
-#~ msgid "Operation"
-#~ msgstr "Operació"
-
-#~ msgid "Overwrite"
-#~ msgstr "Sobreescriu"
-
-#~ msgid "Addition"
-#~ msgstr "Suma"
-
-#~ msgid "Subtraction"
-#~ msgstr "Resta"
-
-#~ msgid "Multiplication"
-#~ msgstr "Multiplicació"
-
-#~ msgid "Division"
-#~ msgstr "Divisió"
-
-#~ msgid "Check the spelling"
-#~ msgstr "Comprova l'ortografia"
-
-#~ msgid "Do you want to check the spelling in the next sheet?"
-#~ msgstr "Voleu comprovar l'ortografia del següent full?"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Correct Misspelled Words"
-#~ msgstr "Corregeix les paraules mal escrites"
-
-# msgid "AutoFormat..."
-#~ msgid "Auto-Format..."
-#~ msgstr "Format automàtic..."
-
-#~ msgid "Set the worksheet formatting"
-#~ msgstr "Estableix el format del full de treball"
-
-# msgid "AutoFormat..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto-Format"
-#~ msgstr "Format automàtic"
-
-#~ msgid "Sheet Style"
-#~ msgstr "Estil del full"
-
-#~ msgid "Select the sheet style to apply:"
-#~ msgstr "Seleccioneu l'estil de full a aplicar:"
-
-#~ msgid "Could not find image %1."
-#~ msgstr "No s'ha pogut trobar la imatge %1."
-
-#~ msgid "Could not load image %1."
-#~ msgstr "No s'ha pogut carregar la imatge %1."
-
-#~ msgid "Could not find sheet-style XML file '%1'."
-#~ msgstr "No s'ha pogut trobar el fitxer d'estil de full XML «%1»."
-
-#~ msgid "Parsing error in sheet-style XML file %1."
-#~ msgstr "Error d'anàlisi al fitxer XML d'estil de taula %1."
-
-# msgid "Autofill"
-#~ msgid "&Auto-Filter"
-#~ msgstr "Filtre &automàtic"
-
-#~ msgid "Add an automatic filter to a cell range"
-#~ msgstr "Afegeix un filtre automàtic a un interval de cel·les"
-
-# msgid "Autofill"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto-Filter"
-#~ msgstr "Filtra automàticament"
-
-# msgid "Clear &All"
-#~ msgid "Clear All"
-#~ msgstr "Neteja-ho tot"
-
-#~ msgid "Clear all contents and formatting of the current cell"
-#~ msgstr "Neteja el contingut i el format de la cel·la actual"
-
-#~ msgid "Contents"
-#~ msgstr "Contingut"
-
-#~ msgid "Clear Contents"
-#~ msgstr "Neteja el contingut"
-
-#~ msgid "Remove the contents of the current cell"
-#~ msgstr "Elimina els continguts de la cel·la actual"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clear Text"
-#~ msgstr "Neteja el text"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove Conditional Formatting"
-#~ msgstr "Elimina el format condicional"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add Conditional Formatting"
-#~ msgstr "Afegeix el format condicional"
-
-#~ msgid "Select a new border color"
-#~ msgstr "Escolliu un color nou de la vora"
-
-#~ msgid "Border Color"
-#~ msgstr "Color de les vores"
-
-#~ msgid "Set the background color"
-#~ msgstr "Arranja el color de fons"
-
-#~ msgid "Background Color"
-#~ msgstr "Color de fons"
-
-# msgid "Conditional Cell Attributes..."
-#~ msgid "Conditional Styles..."
-#~ msgstr "Estils condicionals..."
-
-#~ msgid "Set cell style based on certain conditions"
-#~ msgstr "Estableix el format de la cel·la segon diferents condicions"
-
-# msgid "Conditional Cell Attributes"
-#~ msgid "Conditional Styles"
-#~ msgstr "Estils condicionals"
-
-#~ msgid "Remove Conditional Styles"
-#~ msgstr "Elimina els estils condicionals"
-
-#~ msgid "Remove the conditional cell styles"
-#~ msgstr "Elimina els estils condicionals"
-
-#~ msgid "&Pivot Tables..."
-#~ msgstr "&Taules pivot..."
-
-#~ msgid "Create Pivot Tables"
-#~ msgstr "Crea taules pivot"
-
-#~ msgid "You must select multiple cells."
-#~ msgstr "Heu de seleccionar múltiples cel·les."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Number Format"
-#~ msgstr "Format de nombre"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Currency Format"
-#~ msgstr "Format de la moneda"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Percentage Format"
-#~ msgstr "Format de tant per cent"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Time Format"
-#~ msgstr "Format de l'hora"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Date Format"
-#~ msgstr "Format de data"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Scientific Format"
-#~ msgstr "Format científic"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Border Color"
-#~ msgstr "Canvia el color de les vores"
-
-#~ msgid "<none>"
-#~ msgstr "<cap>"
-
-#~ msgid "equal to"
-#~ msgstr "igual que"
-
-#~ msgid "greater than"
-#~ msgstr "més gran que"
-
-#~ msgid "less than"
-#~ msgstr "més petit que"
-
-#~ msgid "equal to or greater than"
-#~ msgstr "igual o més gran que"
-
-#~ msgid "equal to or less than"
-#~ msgstr "igual o més petit que"
-
-#~ msgid "between"
-#~ msgstr "entre"
-
-#~ msgid "outside range"
-#~ msgstr "interval exterior"
-
-#~ msgid "different to"
-#~ msgstr "diferent de"
-
-#~ msgid "First Condition"
-#~ msgstr "Primera condició"
-
-#~ msgid "Second Condition"
-#~ msgstr "Segona condició"
-
-#~ msgid "Third Condition"
-#~ msgstr "Tercera condició"
-
-#~ msgid "Cell is"
-#~ msgstr "La cel·la és"
-
-#~ msgid "Cell style"
-#~ msgstr "Estil de cel·la"
-
-#~ msgid "different from"
-#~ msgstr "diferent de"
-
-#~ msgid ""
-#~ "If the first value is a number, the second value also has to be a number."
-#~ msgstr "Si el primer valor és un nombre, el segon també ho haurà de ser."
-
-#~ msgid ""
-#~ "If the first value is a string, the second value also has to be a string."
-#~ msgstr "Si el primer valor és una cadena, el segon també ho ha de ser."
-
-#~ msgid "Select Source"
-#~ msgstr "Selecció de l'origen"
-
-#~ msgid "Current Selection"
-#~ msgstr "Selecció actual"
-
-#~ msgid "External Source"
-#~ msgstr "Font externa"
-
-#~ msgid "Operator"
-#~ msgstr "Operador"
-
-# msgid "&Add"
-#~ msgid "And"
-#~ msgstr "I"
-
-#~ msgid "Or"
-#~ msgstr "O"
-
-#~ msgid "Field"
-#~ msgstr "Camp"
-
-#~ msgid "<"
-#~ msgstr "<"
-
-#~ msgid ">"
-#~ msgstr ">"
-
-#~ msgid "=="
-#~ msgstr "=="
-
-#~ msgid "!="
-#~ msgstr "!="
-
-#~ msgid "Pivot Table Configuration Window"
-#~ msgstr "Finestra de configuració de taules pivot"
-
-#~ msgid "Add Filter"
-#~ msgstr "Afegeix filtre"
-
-#~ msgid "Drag from Labels and drop in the desired field"
-#~ msgstr "Arrossegueu des de les etiquetes i deixeu anar en el camp desitjat"
-
-#~ msgid "Labels"
-#~ msgstr "Etiquetes"
-
-#~ msgid "Select Option"
-#~ msgstr "Selecció d'opció"
-
-#~ msgid "sum"
-#~ msgstr "suma"
-
-#~ msgid "average"
-#~ msgstr "mitjana"
-
-#~ msgid "max"
-#~ msgstr "max"
-
-#~ msgctxt "minimum"
-#~ msgid "min"
-#~ msgstr "min"
-
-#~ msgid "count"
-#~ msgstr "recompte"
-
-#~ msgid "Total Rows"
-#~ msgstr "Total de files"
-
-#~ msgid "Total Columns"
-#~ msgstr "Total de columnes"
-
-# msgid "&Row"
-#~ msgid "Rows"
-#~ msgstr "Files"
-
-#~ msgid "Pivot Options"
-#~ msgstr "Opcions de pivot"
-
-#~ msgid "Value Type"
-#~ msgstr "Tipus de valor"
-
-#~ msgid "Base Field"
-#~ msgstr "Camp base"
-
-#~ msgid "Base Item"
-#~ msgstr "Element base"
-
-# msgid "Formula Selection"
-#~ msgid "Manual Selection"
-#~ msgstr "Selecció manual"
-
-#~ msgid "Product"
-#~ msgstr "Producte"
-
-#~ msgid "Sort By"
-#~ msgstr "Ordena per"
-
-#~ msgid "Select Font..."
-#~ msgstr "Selecció del tipus de lletra..."
-
-#~ msgid "Select Font Size"
-#~ msgstr "Selecció de la mida del tipus de lletra"
-
-#~ msgid "Font Size"
-#~ msgstr "Mida del tipus de lletra"
-
-#~ msgid "Text Color"
-#~ msgstr "Color de text"
-
-#~ msgid "Set the text color"
-#~ msgstr "Arranja el color de text"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Font"
-#~ msgstr "Canvia el tipus de lletra"
-
-#~ msgid "Style Manager..."
-#~ msgstr "Gestor d'estils..."
-
-#~ msgid "Edit and organize cell styles"
-#~ msgstr "Edita i organitza els estils de les cel·les"
-
-#~ msgid "Apply a predefined style to the selected cells"
-#~ msgstr "Aplica un estil predeterminat a les cel·les seleccionades"
-
-#~ msgid "Create Style From Cell..."
-#~ msgstr "Crea un estil a partir de la cel·la..."
-
-# msgid "Style of Cell"
-#~ msgid "Style From Cell"
-#~ msgstr "Estil des de la cel·la"
-
-#~ msgid "Create a new style based on the currently selected cell"
-#~ msgstr "Crea un estil nou basat en la cel·la seleccionada"
-
-#~ msgid "Create Style From Cell"
-#~ msgstr "Crea un estil a partir de la cel·la"
-
-#~ msgid "The style name cannot be empty."
-#~ msgstr "El nom de l'estil no pot estar buit."
-
-#~ msgid "Style Manager"
-#~ msgstr "Gestor d'estils"
-
-#~ msgid "All Styles"
-#~ msgstr "Tots els estils"
-
-#~ msgid "Custom Styles"
-#~ msgstr "Estils a mida"
-
-#~ msgid "Hierarchical"
-#~ msgstr "Jeràrquic"
-
-#~ msgid "&New..."
-#~ msgstr "&Nou..."
-
-#~ msgid "&Modify..."
-#~ msgstr "&Modifica..."
-
-#~ msgid "&Delete..."
-#~ msgstr "Su&primeix..."
-
-#~ msgid "style%1"
-#~ msgstr "estil %1"
-
-# msgid "Cells:"
-#~ msgid "Cells..."
-#~ msgstr "Cel·les..."
-
-#~ msgid "Insert Cells..."
-#~ msgstr "Insereix cel·les..."
-
-#~ msgid "Insert a blank cell into the spreadsheet"
-#~ msgstr "Insereix una cel·la buida al full de càlcul"
-
-#~ msgid "Remove Cells..."
-#~ msgstr "Elimina les cel·les..."
-
-#~ msgid "Removes the cells from the spreadsheet"
-#~ msgstr "Elimina les cel·les seleccionades del full de càlcul"
-
-#~ msgid "Delete Cells..."
-#~ msgstr "Elimina les cel·les..."
-
-#~ msgid "Insert rows"
-#~ msgstr "Insereix files"
-
-#~ msgid "Insert columns"
-#~ msgstr "Insereix columnes"
-
-#~ msgid "Insert Cells"
-#~ msgstr "Insereix cel·les"
-
-#~ msgid "Move towards left"
-#~ msgstr "Mou cap a l'esquerra"
-
-#~ msgid "Move towards top"
-#~ msgstr "Mou cap a dalt"
-
-#~ msgid "Remove rows"
-#~ msgstr "Elimina files"
-
-#~ msgid "Remove columns"
-#~ msgstr "Elimina columnes"
-
-#~ msgid "Remove Cells"
-#~ msgstr "Elimina cel·les"
-
-#~ msgid "&Subtotals..."
-#~ msgstr "&Subtotals..."
-
-#~ msgid "Create different kind of subtotals to a list or database"
-#~ msgstr "Crea diferents menes de subtotals d'una llista o base de dades"
-
-#~ msgid "Subtotals"
-#~ msgstr "Subtotals"
-
-#~ msgid "Remove All"
-#~ msgstr "Elimina-ho tot"
-
-#~ msgid "You need to select at least one column for adding subtotals."
-#~ msgstr "Heu d'escollir almenys una columna per a afegir subtotals."
-
-#~ msgid "Grand Total"
-#~ msgstr "Total gran"
-
-#~ msgid "Column '%1' "
-#~ msgstr "Columna «%1» "
-
-#~ msgid "StDev"
-#~ msgstr "StDev"
-
-#~ msgid "StDevP"
-#~ msgstr "StDevP"
-
-#~ msgid "Var"
-#~ msgstr "Var"
-
-#~ msgid "VarP"
-#~ msgstr "VarP"
-
-#~ msgid "&Replace current Subtotals"
-#~ msgstr "&Substitueix subtotals actuals"
-
-#~ msgid "&Page break between groups"
-#~ msgstr "Salt de &pàgina entre grups"
-
-#~ msgid "&Summary below data"
-#~ msgstr "Re&sum sota la data"
-
-#~ msgid "Summary &only"
-#~ msgstr "N&omés resum"
-
-#~ msgid "&Ignore empty cells when looking for changes"
-#~ msgstr "&Ignora les cel·les buides quan se cerquin canvis"
-
-#~ msgid "At each change in:"
-#~ msgstr "A cada canvi a:"
-
-#~ msgid "Use function:"
-#~ msgstr "Usa funció:"
-
-#~ msgid "Add Subtotal to:"
-#~ msgstr "Afegeix subtotal a:"
-
-#~ msgid "Goto Cell..."
-#~ msgstr "Ves a la cel·la..."
-
-# msgid "Goto Cell"
-#~ msgid "Goto"
-#~ msgstr "Ves"
-
-#~ msgid "Move to a particular cell"
-#~ msgstr "Mou a una cel·la en particular"
-
-#~ msgid "Break Before Column"
-#~ msgstr "Salt abans de la columna"
-
-# msgid "Show column as &numbers"
-#~ msgid "Column Break"
-#~ msgstr "Salt de columna"
-
-#~ msgid "Set a manual page break before the column"
-#~ msgstr "Arranja el salt de pàgina manual abans de la columna"
-
-#~ msgid "Break Before Row"
-#~ msgstr "Salt abans de la fila"
-
-#~ msgid "Row Break"
-#~ msgstr "Salt de fila"
-
-#~ msgid "Set a manual page break before the row"
-#~ msgstr "Arranja un salt de pàgina manual abans de la fila"
-
-#~ msgid "Goto Cell"
-#~ msgstr "Ves a la cel·la"
-
-#~ msgid "Enter cell:"
-#~ msgstr "Introduïu la cel·la:"
-
-#~ msgid "&Consolidate..."
-#~ msgstr "&Consolida..."
-
-#~ msgid "Create a region of summary data from a group of similar regions"
-#~ msgstr ""
-#~ "Crea una regió de dades resumides a partir d'un grup de regions similars"
-
-#~ msgid "Description in rows"
-#~ msgstr "Descripció en files"
-
-#~ msgid "Description in columns"
-#~ msgstr "Descripció en columnes"
-
-#~ msgid "Copy data"
-#~ msgstr "Copia les dades"
-
-#~ msgid "Consolidate"
-#~ msgstr "Consolida"
-
-#~ msgid "Standard Deviation"
-#~ msgstr "Desviació estàndard"
-
-#~ msgid "Variance"
-#~ msgstr "Variància"
-
-#~ msgid "You have to define at least one source range."
-#~ msgstr "Heu de definir almenys un interval de font."
-
-#~ msgid "%1 is not a valid cell range."
-#~ msgstr "%1 no és un interval vàlid de cel·la."
-
-#~ msgid ""
-#~ "The range\n"
-#~ "%1\n"
-#~ "is too small"
-#~ msgstr ""
-#~ "L'interval\n"
-#~ "%1\n"
-#~ "és massa petit"
-
-#~ msgid ""
-#~ "The range\n"
-#~ "%1\n"
-#~ "is too large"
-#~ msgstr ""
-#~ "L'interval\n"
-#~ "%1\n"
-#~ "és massa gran"
-
-#~ msgid ""
-#~ "The ranges\n"
-#~ "%1\n"
-#~ "and\n"
-#~ "%2\n"
-#~ "have different size"
-#~ msgstr ""
-#~ "Els intervals\n"
-#~ "%1\n"
-#~ "i\n"
-#~ "%2\n"
-#~ "tenen mides diferents"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Consolidate"
-#~ msgstr "Consolida"
-
-#~ msgid "The source range intersects the destination range."
-#~ msgstr "L'interval de fonts interseca amb l'interval de destinació."
-
-#~ msgid ""
-#~ "The range\n"
-#~ "%1\n"
-#~ " is malformed"
-#~ msgstr ""
-#~ "L'interval\n"
-#~ "%1\n"
-#~ " està mal format"
-
-#~ msgid "Function:"
-#~ msgstr "Funció:"
-
-#~ msgid "Reference:"
-#~ msgstr "Referència:"
-
-#~ msgid "Entered references:"
-#~ msgstr "Referències introduïdes:"
-
-#~ msgid "Change Angle..."
-#~ msgstr "Canvia l'angle..."
-
-# msgid "Angle:"
-#~ msgid "Angle"
-#~ msgstr "Angle"
-
-#~ msgid "Change the angle that cell contents are printed"
-#~ msgstr "Canvia l'angle en què s'imprimeixen els continguts de la cel·la"
-
-#~ msgid "Increase Precision"
-#~ msgstr "Incrementa la precisió"
-
-#~ msgid "Increase the decimal precision shown onscreen"
-#~ msgstr "Incrementa la precisió decimal que es mostra a la pantalla"
-
-#~ msgid "Decrease Precision"
-#~ msgstr "Disminueix la precisió"
-
-#~ msgid "Decrease the decimal precision shown onscreen"
-#~ msgstr "Disminueix la precisió decimal que es mostra a la pantalla"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Increase Precision"
-#~ msgstr "Incrementa la precisió"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Decrease Precision"
-#~ msgstr "Disminueix la precisió"
-
-#~ msgid "Change Angle"
-#~ msgstr "Canvia l'angle"
-
-#~ msgid "Angle:"
-#~ msgstr "Angle:"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Angle"
-#~ msgstr "Canvia l'angle"
-
-#~ msgid "Area Name..."
-#~ msgstr "Nom d'àrea..."
-
-#~ msgid "Set a name for a region of the spreadsheet"
-#~ msgstr "Posa un nom a una regió del full de càlcul"
-
-# msgid "Show Area..."
-#~ msgid "Named Areas..."
-#~ msgstr "Àrees amb nom..."
-
-# msgid "Remove Area"
-#~ msgid "Named Areas"
-#~ msgstr "Àrees amb nom"
-
-#~ msgid "Edit or select named areas"
-#~ msgstr "Edita o selecciona àrees amb nom"
-
-# msgid "Edit Area"
-#~ msgid "Add Named Area"
-#~ msgstr "Afegeix l'àrea anomenada"
-
-#~ msgid "Enter the area name:"
-#~ msgstr "Introduïu el nom de l'àrea:"
-
-#~ msgid ""
-#~ "The named area '%1' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "L'àrea anomenada «%1» ja existeix.\n"
-#~ "Voleu substituir-la?"
-
-#~ msgid "Replace Named Area"
-#~ msgstr "Substitueix l'àrea amb nom"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Replace Named Area"
-#~ msgstr "Substitueix l'àrea amb nom"
-
-# msgid "&Sheet"
-#~ msgid "&Select"
-#~ msgstr "&Selecciona"
-
-#~ msgid "Area: %1"
-#~ msgstr "Àrea %1"
-
-#~ msgid "&Edit..."
-#~ msgstr "&Edita..."
-
-#~ msgid "&Remove"
-#~ msgstr "&Elimina"
-
-# msgid "Remove Area"
-#~ msgid "New Named Area"
-#~ msgstr "Nova àrea amb nom"
-
-# msgid "Edit Area"
-#~ msgid "Edit Named Area"
-#~ msgstr "Edita l'àrea amb nom"
-
-# msgid "Do you really want to remove this area name?"
-#~ msgid "Do you really want to remove this named area?"
-#~ msgstr "Esteu segur de voler eliminar aquesta àrea amb nom?"
-
-# msgid "Remove Area"
-#~ msgid "Remove Named Area"
-#~ msgstr "Elimina l'àrea anomenada"
-
-#~ msgid "Cells:"
-#~ msgstr "Cel·les:"
-
-#~ msgid "Sheet:"
-#~ msgstr "Full:"
-
-#~ msgid "Area name:"
-#~ msgstr "Nom d'àrea:"
-
-#~ msgid "Align Left"
-#~ msgstr "Alinea a l'esquerra"
-
-#~ msgid "Left justify the cell contents"
-#~ msgstr "Posa a l'esquerra els continguts de la cel·la"
-
-#~ msgid "Align Center"
-#~ msgstr "Alinea al centre"
-
-#~ msgid "Center the cell contents"
-#~ msgstr "Centra els continguts de la cel·la"
-
-#~ msgid "Align Right"
-#~ msgstr "Alinea a la dreta"
-
-#~ msgid "Right justify the cell contents"
-#~ msgstr "Posa a la dreta els continguts de la cel·la"
-
-#~ msgid "Align Top"
-#~ msgstr "Alinea a dalt"
-
-#~ msgid "Align cell contents along the top of the cell"
-#~ msgstr "Posa els continguts de la cel·la a la part superior"
-
-#~ msgid "Align Middle"
-#~ msgstr "Alinea al mig"
-
-#~ msgid "Align cell contents centered in the cell"
-#~ msgstr "Posa els continguts de la cel·la al centre"
-
-#~ msgid "Align Bottom"
-#~ msgstr "Alinea a baix"
-
-#~ msgid "Align cell contents along the bottom of the cell"
-#~ msgstr "Posa els continguts de la cel·la a la part inferior"
-
-#~ msgid "Border Left"
-#~ msgstr "Vora de l'esquerra"
-
-#~ msgid "Set a left border to the selected area"
-#~ msgstr "Posa una vora esquerra a l'àrea seleccionada"
-
-#~ msgid "Border Right"
-#~ msgstr "Vora de la dreta"
-
-#~ msgid "Set a right border to the selected area"
-#~ msgstr "Posa una vora dreta a l'àrea seleccionada"
-
-#~ msgid "Border Top"
-#~ msgstr "Vora de dalt"
-
-#~ msgid "Set a top border to the selected area"
-#~ msgstr "Posa una vora a dalt a l'àrea seleccionada"
-
-#~ msgid "Border Bottom"
-#~ msgstr "Vora de baix"
-
-#~ msgid "Set a bottom border to the selected area"
-#~ msgstr "Posa una vora a baix a l'àrea seleccionada"
-
-#~ msgid "All Borders"
-#~ msgstr "Totes les vores"
-
-#~ msgid "Set a border around all cells in the selected area"
-#~ msgstr "Posa una vora a totes les cel·les de l'àrea seleccionada"
-
-# msgid "All Borders"
-#~ msgid "No Borders"
-#~ msgstr "Sense vores"
-
-#~ msgid "Remove all borders in the selected area"
-#~ msgstr "Elimina totes les vores de l'àrea seleccionada"
-
-#~ msgid "Border Outline"
-#~ msgstr "Contorn de la vora"
-
-# msgid "Border Outline"
-#~ msgid "Outline"
-#~ msgstr "Contorn"
-
-#~ msgid "Set a border to the outline of the selected area"
-#~ msgstr "Posa una vora al contorn de l'àrea seleccionada"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Horizontal Alignment"
-#~ msgstr "Canvia l'alineació horitzontal"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Vertical Alignment"
-#~ msgstr "Canvia l'alineació vertical"
-
-#~ msgid "Australia"
-#~ msgstr "Austràlia"
-
-#~ msgid "Dollar"
-#~ msgstr "Dòlar"
-
-#~ msgid "Canada"
-#~ msgstr "Canadà"
-
-#~ msgid "Caribbean"
-#~ msgstr "Carib"
-
-#~ msgid "New Zealand"
-#~ msgstr "Nova Zelanda"
-
-#~ msgid "United States"
-#~ msgstr "Estats Units"
-
-#~ msgid "Austria"
-#~ msgstr "Àustria"
-
-#~ msgid "Euro"
-#~ msgstr "Euro"
-
-#~ msgid "Belgium"
-#~ msgstr "Bèlgica"
-
-#~ msgid "Cyprus"
-#~ msgstr "Xipre"
-
-#~ msgid "Finland"
-#~ msgstr "Finlàndia"
-
-#~ msgid "France"
-#~ msgstr "França"
-
-#~ msgid "Germany"
-#~ msgstr "Alemanya"
-
-#~ msgid "Greece"
-#~ msgstr "Grècia"
-
-#~ msgid "Ireland"
-#~ msgstr "Irlanda"
-
-#~ msgid "Italy"
-#~ msgstr "Itàlia"
-
-#~ msgid "Latvia"
-#~ msgstr "Letònia"
-
-#~ msgid "Lithuania"
-#~ msgstr "Lituània"
-
-#~ msgid "Luxembourg"
-#~ msgstr "Luxemburg"
-
-#~ msgid "Malta"
-#~ msgstr "Malta"
-
-#~ msgid "Monaco"
-#~ msgstr "Mònaco"
-
-#~ msgid "Netherlands"
-#~ msgstr "Països Baixos"
-
-#~ msgid "Portugal"
-#~ msgstr "Portugal"
-
-#~ msgid "San Marino"
-#~ msgstr "San Marino"
-
-#~ msgid "Slovakia"
-#~ msgstr "Eslovàquia"
-
-#~ msgid "Slovenia"
-#~ msgstr "Eslovènia"
-
-#~ msgid "Spain"
-#~ msgstr "Espanya"
-
-#~ msgid "Pound"
-#~ msgstr "Lliura"
-
-#~ msgid "United Kingdom"
-#~ msgstr "Regne Unit"
-
-#~ msgid "Japan"
-#~ msgstr "Japó"
-
-#~ msgid "Yen"
-#~ msgstr "Ien"
-
-#~ msgid "AFA"
-#~ msgstr "AFA"
-
-#~ msgid "Afghani (old)"
-#~ msgstr "Afgani (antic)"
-
-#~ msgid "Afghanistan"
-#~ msgstr "Afganistan"
-
-#~ msgid "AFN"
-#~ msgstr "AFN"
-
-#~ msgid "Afghani"
-#~ msgstr "Afgani"
-
-#~ msgid "Albania"
-#~ msgstr "Albània"
-
-#~ msgid "Lek"
-#~ msgstr "Lek"
-
-#~ msgid "Algeria"
-#~ msgstr "Algèria"
-
-#~ msgid "Algerian Dinar"
-#~ msgstr "Dinar algerià"
-
-#~ msgid "DZD"
-#~ msgstr "DZD"
-
-#~ msgid "American Samoa"
-#~ msgstr "Samoa Americana"
-
-#~ msgid "US Dollar"
-#~ msgstr "Dòlar dels EUA"
-
-#~ msgid "USD"
-#~ msgstr "USD"
-
-#~ msgid "Andorra"
-#~ msgstr "Andorra"
-
-#~ msgid "EUR"
-#~ msgstr "EUR"
-
-#~ msgid "ADP"
-#~ msgstr "ADP"
-
-#~ msgid "Andorran Peseta"
-#~ msgstr "Pesseta andorrana"
-
-#~ msgid "AOA"
-#~ msgstr "AOA"
-
-#~ msgid "Angola"
-#~ msgstr "Angola"
-
-#~ msgid "Kwanza"
-#~ msgstr "Kwanza"
-
-#~ msgid "Anguilla"
-#~ msgstr "Anguilla"
-
-#~ msgid "East Caribbean Dollar"
-#~ msgstr "Dòlar del Carib Oriental"
-
-#~ msgid "XCD"
-#~ msgstr "XCD"
-
-#~ msgid "Antigua And Barbuda"
-#~ msgstr "Antigua i Barbuda"
-
-#~ msgid "ARS"
-#~ msgstr "ARS"
-
-#~ msgid "Argentina"
-#~ msgstr "Argentina"
-
-#~ msgid "Argentine Peso"
-#~ msgstr "Peso argentí"
-
-#~ msgid "AMD"
-#~ msgstr "AMD"
-
-#~ msgid "Armenia"
-#~ msgstr "Armènia"
-
-#~ msgid "Armenian Dram"
-#~ msgstr "Dram armeni"
-
-#~ msgid "AWG"
-#~ msgstr "AWG"
-
-#~ msgid "Aruba"
-#~ msgstr "Aruba"
-
-#~ msgid "Aruban Florin"
-#~ msgstr "Florí d'Aruba"
-
-#~ msgid "AUD"
-#~ msgstr "AUD"
-
-#~ msgid "Australian Dollar"
-#~ msgstr "Dòlar australià"
-
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgid "Schilling"
-#~ msgstr "Xíling"
-
-#~ msgid "AZM"
-#~ msgstr "AZM"
-
-#~ msgid "Azerbaijan"
-#~ msgstr "Azerbaidjan"
-
-#~ msgid "Azerbaijanian Manat"
-#~ msgstr "Manat azerbaidjanès"
-
-#~ msgid "BSD"
-#~ msgstr "BSD"
-
-#~ msgid "Bahamas"
-#~ msgstr "Bahames"
-
-#~ msgid "Bahamian Dollar"
-#~ msgstr "Dòlar de les Bahames"
-
-#~ msgid "BHD"
-#~ msgstr "BHD"
-
-#~ msgid "Bahrain"
-#~ msgstr "Bahrain"
-
-#~ msgid "Bahraini Dinar"
-#~ msgstr "Dinar de Bahrain"
-
-#~ msgid "BDT"
-#~ msgstr "BDT"
-
-#~ msgid "Bangladesh"
-#~ msgstr "Bangladesh"
-
-#~ msgid "Taka"
-#~ msgstr "Taka"
-
-#~ msgid "BBD"
-#~ msgstr "BBD"
-
-#~ msgid "Barbados"
-#~ msgstr "Barbados"
-
-#~ msgid "Barbados Dollar"
-#~ msgstr "Dòlar de Barbados"
-
-#~ msgid "Belarus"
-#~ msgstr "Bielorússia"
-
-#~ msgid "Belarusian Ruble"
-#~ msgstr "Ruble bielorús"
-
-#~ msgid "p."
-#~ msgstr "p."
-
-#~ msgid "BF"
-#~ msgstr "BF"
-
-#~ msgid "Franc"
-#~ msgstr "Franc"
-
-#~ msgid "BZ$"
-#~ msgstr "BZ$"
-
-#~ msgid "Belize"
-#~ msgstr "Belize"
-
-#~ msgid "Belize Dollar"
-#~ msgstr "Dòlar de Belize"
-
-#~ msgid "Benin"
-#~ msgstr "Benín"
-
-#~ msgid "CFA Franc BCEAO"
-#~ msgstr "Franc CFA de la BCEAO"
-
-#~ msgid "XOF"
-#~ msgstr "XOF"
-
-#~ msgid "BMD"
-#~ msgstr "BMD"
-
-#~ msgid "Bermuda"
-#~ msgstr "Bermuda"
-
-#~ msgid "Bermudian Dollar"
-#~ msgstr "Dòlar de les Bermudes"
-
-#~ msgid "Bhutan"
-#~ msgstr "Bhutan"
-
-#~ msgid "INR"
-#~ msgstr "INR"
-
-#~ msgid "Indian Rupee"
-#~ msgstr "Rupia índia"
-
-#~ msgid "BTN"
-#~ msgstr "BTN"
-
-#~ msgid "Ngultrum"
-#~ msgstr "Ngultrum"
-
-#~ msgid "Bolivia"
-#~ msgstr "Bolívia"
-
-#~ msgid "Boliviano"
-#~ msgstr "Boliviano"
-
-#~ msgid "Bs"
-#~ msgstr "Bs"
-
-#~ msgid "BOV"
-#~ msgstr "BOV"
-
-#~ msgid "Mvdol"
-#~ msgstr "Mvdol"
-
-#~ msgid "BAM"
-#~ msgstr "BAM"
-
-#~ msgid "Bosnia And Herzegovina"
-#~ msgstr "Bòsnia i Hercegovina"
-
-#~ msgid "Convertible Marks"
-#~ msgstr "Marcs convertibles"
-
-#~ msgid "BWP"
-#~ msgstr "BWP"
-
-#~ msgid "Botswana"
-#~ msgstr "Botswana"
-
-#~ msgid "Pula"
-#~ msgstr "Pula"
-
-#~ msgid "Bouvet Island"
-#~ msgstr "Illa Bouvet"
-
-#~ msgid "NOK"
-#~ msgstr "NOK"
-
-#~ msgid "Norwegian Krone"
-#~ msgstr "Corona noruega"
-
-#~ msgid "Brazil"
-#~ msgstr "Brasil"
-
-#~ msgid "Brazilian Real"
-#~ msgstr "Real brasiler"
-
-#~ msgid "R$"
-#~ msgstr "R$"
-
-#~ msgid "British Indian Ocean Territory"
-#~ msgstr "Territori Britànic de l'Oceà Índic"
-
-#~ msgid "BND"
-#~ msgstr "BND"
-
-#~ msgid "Brunei Darussalam"
-#~ msgstr "Brunei"
-
-#~ msgid "Brunei Dollar"
-#~ msgstr "Dòlar de Brunei"
-
-#~ msgid "BGL"
-#~ msgstr "BGL"
-
-#~ msgid "Bulgaria"
-#~ msgstr "Bulgària"
-
-#~ msgid "Lev"
-#~ msgstr "Lev"
-
-#~ msgid "BGN"
-#~ msgstr "BGN"
-
-#~ msgid "Bulgarian Lev"
-#~ msgstr "Lev búlgar"
-
-#~ msgid "Burkina Faso"
-#~ msgstr "Burkina Faso"
-
-#~ msgid "BIF"
-#~ msgstr "BIF"
-
-#~ msgid "Burundi"
-#~ msgstr "Burundi"
-
-#~ msgid "Burundi Franc"
-#~ msgstr "Franc de Burundi"
-
-#~ msgid "Cambodia"
-#~ msgstr "Cambodja"
-
-#~ msgid "KHR"
-#~ msgstr "KHR"
-
-#~ msgid "Riel"
-#~ msgstr "Riel"
-
-#~ msgid "CFA Franc BEAC"
-#~ msgstr "Franc CFA de la BEAC"
-
-#~ msgid "Cameroon"
-#~ msgstr "Camerun"
-
-#~ msgid "XAF"
-#~ msgstr "XAF"
-
-#~ msgid "CAD"
-#~ msgstr "CAD"
-
-#~ msgid "Canadian Dollar"
-#~ msgstr "Dòlar canadenc"
-
-#~ msgid "CVE"
-#~ msgstr "CVE"
-
-#~ msgid "Cape Verde"
-#~ msgstr "Cap Verd"
-
-#~ msgid "Cape Verde Escudo"
-#~ msgstr "Escut de Cap Verd"
-
-#~ msgid "Cayman Islands"
-#~ msgstr "Illes Caiman"
-
-#~ msgid "Cayman Islands Dollar"
-#~ msgstr "Dòlar de les Illes Caiman"
-
-#~ msgid "KYD"
-#~ msgstr "KYD"
-
-#~ msgid "Central African Republic"
-#~ msgstr "República Centreafricana"
-
-#~ msgid "Chad"
-#~ msgstr "Txad"
-
-#~ msgid "Ch$"
-#~ msgstr "Ch$"
-
-#~ msgid "Chile"
-#~ msgstr "Xile"
-
-#~ msgid "Chilean Peso"
-#~ msgstr "Peso xilè"
-
-#~ msgid "CLF"
-#~ msgstr "CLF"
-
-#~ msgid "Unidades de fomento"
-#~ msgstr "Unidades de fomento"
-
-#~ msgid "CNY"
-#~ msgstr "CNY"
-
-#~ msgid "China"
-#~ msgstr "Xina"
-
-#~ msgid "Yuan Renminbi"
-#~ msgstr "Iuan Renminbi"
-
-#~ msgid "Christmas Island"
-#~ msgstr "Illa Christmas"
-
-#~ msgid "Cocos (Keeling) Islands"
-#~ msgstr "Illes Cocos (Keeling)"
-
-#~ msgid "C$"
-#~ msgstr "C$"
-
-#~ msgid "Colombia"
-#~ msgstr "Colòmbia"
-
-#~ msgid "Colombian Peso"
-#~ msgstr "Peso colombià"
-
-#~ msgid "Comoro Franc"
-#~ msgstr "Franc de les Comores"
-
-#~ msgid "Comoros"
-#~ msgstr "Comores"
-
-#~ msgid "KMF"
-#~ msgstr "KMF"
-
-#~ msgid "Congo"
-#~ msgstr "Congo"
-
-#~ msgid "CDF"
-#~ msgstr "CDF"
-
-#~ msgid "Congo, The Democratic Republic Of"
-#~ msgstr "Congo, República Democràtica del"
-
-#~ msgid "Franc Congolais"
-#~ msgstr "Franc congolès"
-
-#~ msgid "Cook Islands"
-#~ msgstr "Illes Cook"
-
-#~ msgid "NZD"
-#~ msgstr "NZD"
-
-#~ msgid "New Zealand Dollar"
-#~ msgstr "Dòlar neozelandès"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "Costa Rica"
-#~ msgstr "Costa Rica"
-
-#~ msgid "Costa Rican Colon"
-#~ msgstr "Colon costa-riqueny"
-
-#~ msgid "Cote D'Ivoire"
-#~ msgstr "Costa d'Ivori"
-
-#~ msgid "Croatia"
-#~ msgstr "Croàcia"
-
-#~ msgid "Croatian kuna"
-#~ msgstr "Kuna croat"
-
-#~ msgid "kn"
-#~ msgstr "kn"
-
-#~ msgid "CUP"
-#~ msgstr "CUP"
-
-#~ msgid "Cuba"
-#~ msgstr "Cuba"
-
-#~ msgid "Cuban Peso"
-#~ msgstr "Peso cubà"
-
-#~ msgid "CYP"
-#~ msgstr "CYP"
-
-#~ msgid "Cyprus Pound"
-#~ msgstr "Lliura xipriota"
-
-#~ msgid "Czech Koruna"
-#~ msgstr "Corona txeca"
-
-#~ msgid "Czechia"
-#~ msgstr "Txèquia"
-
-#~ msgid "Kc"
-#~ msgstr "Kc"
-
-#~ msgid "Danish Krone"
-#~ msgstr "Corona danesa"
-
-#~ msgid "Denmark"
-#~ msgstr "Dinamarca"
-
-#~ msgid "kr"
-#~ msgstr "kr"
-
-#~ msgid "DJF"
-#~ msgstr "DJF"
-
-#~ msgid "Djibouti"
-#~ msgstr "Djibouti"
-
-#~ msgid "Djibouti Franc"
-#~ msgstr "Franc de Djibouti"
-
-#~ msgid "Dominica"
-#~ msgstr "Dominica"
-
-#~ msgid "RD$"
-#~ msgstr "RD$"
-
-#~ msgid "DOP"
-#~ msgstr "DOP"
-
-#~ msgid "Dominican Peso"
-#~ msgstr "Peso dominicà"
-
-#~ msgid "Dominican Republic"
-#~ msgstr "República Dominicana"
-
-#~ msgid "East Timor"
-#~ msgstr "Timor Oriental"
-
-#~ msgid "TPE"
-#~ msgstr "TPE"
-
-#~ msgid "Timor Escudo"
-#~ msgstr "Escut de Timor"
-
-#~ msgid "Ecuador"
-#~ msgstr "Equador"
-
-#~ msgid "EGP"
-#~ msgstr "EGP"
-
-#~ msgid "Egypt"
-#~ msgstr "Egipte"
-
-#~ msgid "Egyptian Pound"
-#~ msgstr "Lliura egípcia"
-
-#~ msgid "El Salvador"
-#~ msgstr "El Salvador"
-
-#~ msgid "El Salvador Colon"
-#~ msgstr "Colon salvadorenc"
-
-#~ msgid "Equatorial Guinea"
-#~ msgstr "Guinea Equatorial"
-
-#~ msgid "ERN"
-#~ msgstr "ERN"
-
-#~ msgid "Eritrea"
-#~ msgstr "Eritrea"
-
-#~ msgid "Nakfa"
-#~ msgstr "Nakfa"
-
-#~ msgid "Estonia"
-#~ msgstr "Estònia"
-
-#~ msgid "Kroon"
-#~ msgstr "Kroon"
-
-#~ msgid "ETB"
-#~ msgstr "ETB"
-
-#~ msgid "Ethiopia"
-#~ msgstr "Etiòpia"
-
-#~ msgid "Ethiopian Birr"
-#~ msgstr "Birr etíop"
-
-#~ msgid "FKP"
-#~ msgstr "FKP"
-
-#~ msgid "Falkland Island (Malvinas)"
-#~ msgstr "Illes Malvines (Falkland)"
-
-#~ msgid "Falkland Islands Pound"
-#~ msgstr "Lliura de les Malvines"
-
-#~ msgid "Faeroe Islands"
-#~ msgstr "Illes Fèroe"
-
-#~ msgid "FJD"
-#~ msgstr "FJD"
-
-#~ msgid "Fiji"
-#~ msgstr "Fiji"
-
-#~ msgid "Fiji Dollar"
-#~ msgstr "Dòlar de Fiji"
-
-#~ msgid "Markka"
-#~ msgstr "Markka"
-
-#~ msgid "mk"
-#~ msgstr "mk"
-
-#~ msgid "F"
-#~ msgstr "F"
-
-#~ msgid "French Guiana"
-#~ msgstr "Guaiana Francesa"
-
-#~ msgid "CFP Franc"
-#~ msgstr "Franc CFP"
-
-#~ msgid "French Polynesia"
-#~ msgstr "Polinèsia Francesa"
-
-#~ msgid "XPF"
-#~ msgstr "XPF"
-
-#~ msgid "Franc Southern Territories"
-#~ msgstr "Franc dels Territoris del Sud"
-
-#~ msgid "Gabon"
-#~ msgstr "Gabon"
-
-#~ msgid "Dalasi"
-#~ msgstr "Dalasi"
-
-#~ msgid "GMD"
-#~ msgstr "GMD"
-
-#~ msgid "Gambia"
-#~ msgstr "Gàmbia"
-
-#~ msgid "GEL"
-#~ msgstr "GEL"
-
-#~ msgid "Georgia"
-#~ msgstr "Geòrgia"
-
-#~ msgid "Lari"
-#~ msgstr "Lari"
-
-#~ msgid "DM"
-#~ msgstr "DM"
-
-#~ msgid "German Mark"
-#~ msgstr "Marc alemany"
-
-#~ msgid "Cedi"
-#~ msgstr "Cedi"
-
-#~ msgid "GHC"
-#~ msgstr "GHC"
-
-#~ msgid "Ghana"
-#~ msgstr "Ghana"
-
-#~ msgid "GIP"
-#~ msgstr "GIP"
-
-#~ msgid "Gibraltar"
-#~ msgstr "Gibraltar"
-
-#~ msgid "Gibraltar Pound"
-#~ msgstr "Lliura de Gibraltar"
-
-#~ msgid "Drachma"
-#~ msgstr "Dracma"
-
-#~ msgid "GRD"
-#~ msgstr "GRD"
-
-#~ msgid "DKK"
-#~ msgstr "DKK"
-
-#~ msgid "Greenland"
-#~ msgstr "Groenlàndia"
-
-#~ msgid "Grenada"
-#~ msgstr "Grenada"
-
-#~ msgid "Guadeloupe"
-#~ msgstr "Guadeloupe"
-
-#~ msgid "Guam"
-#~ msgstr "Guam"
-
-#~ msgid "Guatemala"
-#~ msgstr "Guatemala"
-
-#~ msgid "Q"
-#~ msgstr "Q"
-
-#~ msgid "Quetzal"
-#~ msgstr "Quetzal"
-
-#~ msgid "GNF"
-#~ msgstr "GNF"
-
-#~ msgid "Guinea"
-#~ msgstr "Guinea"
-
-#~ msgid "Guinea Franc"
-#~ msgstr "Franc de Guinea"
-
-#~ msgid "GWP"
-#~ msgstr "GWP"
-
-#~ msgid "Guinea-Bissau"
-#~ msgstr "Guinea Bissau"
-
-#~ msgid "Guinea-Bissau Peso"
-#~ msgstr "Pes de Guinea Bissau"
-
-#~ msgid "GYD"
-#~ msgstr "GYD"
-
-#~ msgid "Guyana"
-#~ msgstr "Guyana"
-
-#~ msgid "Guyana Dollar"
-#~ msgstr "Dòlar de Guyana"
-
-#~ msgid "Gourde"
-#~ msgstr "Gourde"
-
-#~ msgid "HTG"
-#~ msgstr "HTG"
-
-#~ msgid "Haiti"
-#~ msgstr "Haití"
-
-#~ msgid "Heard Island And McDonald Islands"
-#~ msgstr "Illa Heard i Illes McDonald"
-
-#~ msgid "Holy See (Vatican City State)"
-#~ msgstr "Ciutat del Vaticà"
-
-#~ msgid "Honduras"
-#~ msgstr "Hondures"
-
-#~ msgid "L"
-#~ msgstr "L"
-
-#~ msgid "Lempira"
-#~ msgstr "Lempira"
-
-#~ msgid "HKD"
-#~ msgstr "HKD"
-
-#~ msgid "Hong Kong"
-#~ msgstr "Hong Kong"
-
-#~ msgid "Hong Kong Dollar"
-#~ msgstr "Dòlar de Hong Kong"
-
-#~ msgid "Forint"
-#~ msgstr "Fòrint"
-
-#~ msgid "Ft"
-#~ msgstr "Ft"
-
-#~ msgid "Hungary"
-#~ msgstr "Hongria"
-
-#~ msgid "Iceland"
-#~ msgstr "Islàndia"
-
-#~ msgid "Iceland Krona"
-#~ msgstr "Corona islandesa"
-
-#~ msgid "kr."
-#~ msgstr "kr."
-
-#~ msgid "India"
-#~ msgstr "Índia"
-
-#~ msgid "Indonesia"
-#~ msgstr "Indonèsia"
-
-#~ msgid "Rp"
-#~ msgstr "Rp"
-
-#~ msgid "Rupiah"
-#~ msgstr "Rupia"
-
-#~ msgid "IRR"
-#~ msgstr "IRR"
-
-#~ msgid "Iran, Islamic Republic Of"
-#~ msgstr "Iran"
-
-#~ msgid "Iranian Rial"
-#~ msgstr "Rial iranià"
-
-#~ msgid "IQD"
-#~ msgstr "IQD"
-
-#~ msgid "Iraq"
-#~ msgstr "Iraq"
-
-#~ msgid "Iraqi Dinar"
-#~ msgstr "Dinar iraquià"
-
-#~ msgid "IR----"
-#~ msgstr "IR----"
-
-#~ msgid "Punt"
-#~ msgstr "Punt"
-
-#~ msgid "IEX"
-#~ msgstr "IEX"
-
-#~ msgid "Pence"
-#~ msgstr "Penic"
-
-#~ msgid "ILS"
-#~ msgstr "ILS"
-
-#~ msgid "Israel"
-#~ msgstr "Israel"
-
-#~ msgid "New Israeli Sheqel"
-#~ msgstr "Nou xéquel israelià"
-
-#~ msgid "L."
-#~ msgstr "L."
-
-#~ msgid "Lira"
-#~ msgstr "Lira"
-
-#~ msgid "J$"
-#~ msgstr "J$"
-
-#~ msgid "Jamaica"
-#~ msgstr "Jamaica"
-
-#~ msgid "Jamaican Dollar"
-#~ msgstr "Dòlar jamaicà"
-
-#~ msgid "JPY"
-#~ msgstr "JPY"
-
-#~ msgid "JOD"
-#~ msgstr "JOD"
-
-#~ msgid "Jordan"
-#~ msgstr "Jordània"
-
-#~ msgid "Jordanian Dinar"
-#~ msgstr "Dinar jordà"
-
-#~ msgid "KZT"
-#~ msgstr "KZT"
-
-#~ msgid "Kazakhstan"
-#~ msgstr "Kazakhstan"
-
-#~ msgid "Tenge"
-#~ msgstr "Tenge"
-
-#~ msgid "KES"
-#~ msgstr "KES"
-
-#~ msgid "Kenya"
-#~ msgstr "Kenya"
-
-#~ msgid "Kenyan Shilling"
-#~ msgstr "Xíling kenyà"
-
-#~ msgid "Kiribati"
-#~ msgstr "Kiribati"
-
-#~ msgid "KPW"
-#~ msgstr "KPW"
-
-#~ msgid "Korea, Democratic People's Republic Of"
-#~ msgstr "Corea, República Popular de"
-
-#~ msgid "North Korean Won"
-#~ msgstr "Won nord-coreà"
-
-#~ msgid "KRW"
-#~ msgstr "KRW"
-
-#~ msgid "Korea, Republic Of"
-#~ msgstr "Corea, República de"
-
-#~ msgid "Won"
-#~ msgstr "Won"
-
-#~ msgid "KWD"
-#~ msgstr "KWD"
-
-#~ msgid "Kuwait"
-#~ msgstr "Kuwait"
-
-#~ msgid "Kuwaiti Dinar"
-#~ msgstr "Dinar kuwaitià"
-
-#~ msgid "KGS"
-#~ msgstr "KGS"
-
-#~ msgid "Kyrgyzstan"
-#~ msgstr "Kirguizistan"
-
-#~ msgid "Som"
-#~ msgstr "Som"
-
-#~ msgid "Kip"
-#~ msgstr "Kip"
-
-#~ msgid "LAK"
-#~ msgstr "LAK"
-
-#~ msgid "Lao People's Democratic Republic"
-#~ msgstr "Laos"
-
-#~ msgid "Latvian Lats"
-#~ msgstr "Lats letó"
-
-#~ msgid "Ls"
-#~ msgstr "Ls"
-
-#~ msgid "LBP"
-#~ msgstr "LBP"
-
-#~ msgid "Lebanese Pound"
-#~ msgstr "Lliura libanesa"
-
-#~ msgid "Lebanon"
-#~ msgstr "Líban"
-
-#~ msgid "Lesotho"
-#~ msgstr "Lesotho"
-
-#~ msgid "Rand"
-#~ msgstr "Rand"
-
-#~ msgid "ZAR"
-#~ msgstr "ZAR"
-
-#~ msgid "LSL"
-#~ msgstr "LSL"
-
-#~ msgid "Loti"
-#~ msgstr "Loti"
-
-#~ msgid "LRD"
-#~ msgstr "LRD"
-
-#~ msgid "Liberia"
-#~ msgstr "Libèria"
-
-#~ msgid "Liberian Dollar"
-#~ msgstr "Dòlar liberià"
-
-#~ msgid "LYD"
-#~ msgstr "LYD"
-
-#~ msgid "Libyan Arab Jamahiriya"
-#~ msgstr "Líbia"
-
-#~ msgid "Libyan Dinar"
-#~ msgstr "Dinar libi"
-
-#~ msgid "CHF"
-#~ msgstr "CHF"
-
-#~ msgid "Liechtenstein"
-#~ msgstr "Liechtenstein"
-
-#~ msgid "Swiss Franc"
-#~ msgstr "Franc suís"
-
-#~ msgid "Lithuanian Litus"
-#~ msgstr "Litas lituà"
-
-#~ msgid "Lt"
-#~ msgstr "Lt"
-
-#~ msgid "MOP"
-#~ msgstr "MOP"
-
-#~ msgid "Macao"
-#~ msgstr "Macau"
-
-#~ msgid "Pataca"
-#~ msgstr "Pataca"
-
-#~ msgid "Denar"
-#~ msgstr "Denar"
-
-#~ msgid "MKD"
-#~ msgstr "MKD"
-
-#~ msgid "Macedonia, The Former Yugoslav Republic Of"
-#~ msgstr "Macedònia"
-
-#~ msgid "MGF"
-#~ msgstr "MGF"
-
-#~ msgid "Madagascar"
-#~ msgstr "Madagascar"
-
-#~ msgid "Malagasy Franc"
-#~ msgstr "Franc malgaix"
-
-#~ msgid "Kwacha"
-#~ msgstr "Kwacha"
-
-#~ msgid "MWK"
-#~ msgstr "MWK"
-
-#~ msgid "Malawi"
-#~ msgstr "Malawi"
-
-#~ msgid "MYR"
-#~ msgstr "MYR"
-
-#~ msgid "Malaysia"
-#~ msgstr "Malàisia"
-
-#~ msgid "Malaysian Ringgit"
-#~ msgstr "Ringgit de Malàisia"
-
-#~ msgid "MVR"
-#~ msgstr "MVR"
-
-#~ msgid "Maldives"
-#~ msgstr "Maldives"
-
-#~ msgid "Rufiyaa"
-#~ msgstr "Rufiyaa"
-
-#~ msgid "Mali"
-#~ msgstr "Mali"
-
-#~ msgid "EURO"
-#~ msgstr "EURO"
-
-#~ msgid "MTL"
-#~ msgstr "MTL"
-
-#~ msgid "Maltese Lira"
-#~ msgstr "Lira maltesa"
-
-#~ msgid "Marshall Islands"
-#~ msgstr "Illes Marshall"
-
-#~ msgid "Martinique"
-#~ msgstr "Martinica"
-
-#~ msgid "MRO"
-#~ msgstr "MRO"
-
-#~ msgid "Mauritania"
-#~ msgstr "Mauritània"
-
-#~ msgid "Ouguiya"
-#~ msgstr "Ouguiya"
-
-#~ msgid "MUR"
-#~ msgstr "MUR"
-
-#~ msgid "Mauritius"
-#~ msgstr "Maurici"
-
-#~ msgid "Mauritius Rupee"
-#~ msgstr "Rupia mauriciana"
-
-#~ msgid "Mayotte"
-#~ msgstr "Mayotte"
-
-#~ msgid "MXN"
-#~ msgstr "MXN"
-
-#~ msgid "Mexican Peso"
-#~ msgstr "Peso mexicà"
-
-#~ msgid "Mexico"
-#~ msgstr "Mèxic"
-
-#~ msgid "MXV"
-#~ msgstr "MXV"
-
-#~ msgid "Mexican Unidad de Inversion (UDI)"
-#~ msgstr "Unitat d'inversió mexicana (UDI)"
-
-#~ msgid "Micronesia, Federated States Of"
-#~ msgstr "Micronèsia (Estats Federats)"
-
-#~ msgid "MDL"
-#~ msgstr "MDL"
-
-#~ msgid "Moldova, Republic Of"
-#~ msgstr "Moldàvia"
-
-#~ msgid "Moldovan Leu"
-#~ msgstr "Leu moldau"
-
-#~ msgid "MNT"
-#~ msgstr "MNT"
-
-#~ msgid "Mongolia"
-#~ msgstr "Mongòlia"
-
-#~ msgid "Tugrik"
-#~ msgstr "Tugrik"
-
-#~ msgid "Montserrat"
-#~ msgstr "Montserrat"
-
-#~ msgid "MAD"
-#~ msgstr "MAD"
-
-#~ msgid "Moroccan Dirham"
-#~ msgstr "Dírham marroquí"
-
-#~ msgid "Morocco"
-#~ msgstr "Marroc"
-
-#~ msgid "MZM"
-#~ msgstr "MZM"
-
-#~ msgid "Metical"
-#~ msgstr "Metical"
-
-#~ msgid "Mozambique"
-#~ msgstr "Moçambic"
-
-#~ msgid "Kyat"
-#~ msgstr "Kyat"
-
-#~ msgid "MMK"
-#~ msgstr "MMK"
-
-#~ msgid "Myanmar"
-#~ msgstr "Myanmar"
-
-#~ msgid "Namibia"
-#~ msgstr "Namíbia"
-
-#~ msgid "NAD"
-#~ msgstr "NAD"
-
-#~ msgid "Namibia Dollar"
-#~ msgstr "Dòlar namibià"
-
-# skip-rule: iso_639-Nauru
-#~ msgid "Nauru"
-#~ msgstr "Nauru"
-
-#~ msgid "NPR"
-#~ msgstr "NPR"
-
-#~ msgid "Nepal"
-#~ msgstr "Nepal"
-
-#~ msgid "Nepalese Rupee"
-#~ msgstr "Rupia nepalesa"
-
-#~ msgid "Guilder"
-#~ msgstr "Florí"
-
-#~ msgid "fl"
-#~ msgstr "fl"
-
-#~ msgid "ANG"
-#~ msgstr "ANG"
-
-#~ msgid "Netherlands Antillean Guilder"
-#~ msgstr "Florí de les Antilles Neerlandeses"
-
-#~ msgid "Netherlands Antilles"
-#~ msgstr "Antilles Neerlandeses"
-
-#~ msgid "New Caledonia"
-#~ msgstr "Nova Caledònia"
-
-#~ msgid "Cordoba Oro"
-#~ msgstr "Córdoba Or"
-
-#~ msgid "NIO"
-#~ msgstr "NIO"
-
-#~ msgid "Nicaragua"
-#~ msgstr "Nicaragua"
-
-#~ msgid "Niger"
-#~ msgstr "Níger"
-
-#~ msgid "NGN"
-#~ msgstr "NGN"
-
-#~ msgid "Naira"
-#~ msgstr "Naira"
-
-#~ msgid "Nigeria"
-#~ msgstr "Nigèria"
-
-#~ msgid "Niue"
-#~ msgstr "Niue"
-
-#~ msgid "Norfolk Islands"
-#~ msgstr "Illes Norfolk"
-
-#~ msgid "Northern Mariana Islands"
-#~ msgstr "Illes Marianes Septentrionals"
-
-#~ msgid "Norway"
-#~ msgstr "Noruega"
-
-#~ msgid "OMR"
-#~ msgstr "OMR"
-
-#~ msgid "Oman"
-#~ msgstr "Oman"
-
-#~ msgid "Rial Omani"
-#~ msgstr "Rial omanita"
-
-#~ msgid "PKR"
-#~ msgstr "PKR"
-
-#~ msgid "Pakistan"
-#~ msgstr "Pakistan"
-
-#~ msgid "Pakistan Rupee"
-#~ msgstr "Rupia pakistanesa"
-
-#~ msgid "Palau"
-#~ msgstr "Palau"
-
-#~ msgid "Balboa"
-#~ msgstr "Balboa"
-
-#~ msgid "PAB"
-#~ msgstr "PAB"
-
-#~ msgid "Panama"
-#~ msgstr "Panamà"
-
-#~ msgid "Kina"
-#~ msgstr "Kina"
-
-#~ msgid "PGK"
-#~ msgstr "PGK"
-
-#~ msgid "Papua New Guinea"
-#~ msgstr "Papua Nova Guinea"
-
-#~ msgid "G"
-#~ msgstr "G"
-
-#~ msgid "Guarani"
-#~ msgstr "Guaraní"
-
-#~ msgid "Paraguay"
-#~ msgstr "Paraguai"
-
-#~ msgid "Nuevo Sol"
-#~ msgstr "Nuevo Sol"
-
-#~ msgid "PEN"
-#~ msgstr "PEN"
-
-#~ msgid "Peru"
-#~ msgstr "Perú"
-
-#~ msgid "PHP"
-#~ msgstr "PHP"
-
-#~ msgid "Philippine Peso"
-#~ msgstr "Peso filipí"
-
-#~ msgid "Philippines"
-#~ msgstr "Filipines"
-
-#~ msgid "Pitcairn"
-#~ msgstr "Pitcairn"
-
-#~ msgid "Poland"
-#~ msgstr "Polònia"
-
-#~ msgid "Zloty"
-#~ msgstr "Zloty"
-
-#~ msgid "zt"
-#~ msgstr "zt"
-
-#~ msgid "Esc."
-#~ msgstr "Esc."
-
-#~ msgid "Escudo"
-#~ msgstr "Escut"
-
-#~ msgid "Puerto Rico"
-#~ msgstr "Puerto Rico"
-
-#~ msgid "QAR"
-#~ msgstr "QAR"
-
-#~ msgid "Qatar"
-#~ msgstr "Qatar"
-
-#~ msgid "Qatari Rial"
-#~ msgstr "Rial de Qatar"
-
-#~ msgid "LEI"
-#~ msgstr "LEI"
-
-#~ msgid "Leu"
-#~ msgstr "Leu"
-
-#~ msgid "Romania"
-#~ msgstr "Romania"
-
-#~ msgid "RUR"
-#~ msgstr "RUR"
-
-#~ msgid "Russian Federation"
-#~ msgstr "Rússia"
-
-#~ msgid "Russian Ruble"
-#~ msgstr "Ruble rus"
-
-#~ msgid "RUB"
-#~ msgstr "RUB"
-
-#~ msgid "RWF"
-#~ msgstr "RWF"
-
-#~ msgid "Rwanda"
-#~ msgstr "Ruanda"
-
-#~ msgid "Rwanda Franc"
-#~ msgstr "Franc de Ruanda"
-
-#~ msgid "SHP"
-#~ msgstr "SHP"
-
-#~ msgid "Saint Helena"
-#~ msgstr "Saint Helena"
-
-#~ msgid "Saint Helena Pound"
-#~ msgstr "Lliura de Santa Helena"
-
-#~ msgid "Saint Kitts And Nevis"
-#~ msgstr "Saint Kitts i Nevis"
-
-#~ msgid "Saint Lucia"
-#~ msgstr "Saint Lucia"
-
-#~ msgid "Saint Pierre And Miquelon"
-#~ msgstr "Saint Pierre i Miquelon"
-
-#~ msgid "Saint Vincent And The Grenadines"
-#~ msgstr "Saint Vincent i les Grenadines"
-
-#~ msgid "Samoa"
-#~ msgstr "Samoa"
-
-#~ msgid "Tala"
-#~ msgstr "Tala"
-
-#~ msgid "WST"
-#~ msgstr "WST"
-
-#~ msgid "Dobra"
-#~ msgstr "Dobra"
-
-#~ msgid "STD"
-#~ msgstr "STD"
-
-#~ msgid "Sao Tome And Principe"
-#~ msgstr "Sao Tomé i Príncipe"
-
-#~ msgid "SAR"
-#~ msgstr "SAR"
-
-#~ msgid "Saudi Arabia"
-#~ msgstr "Aràbia Saudita"
-
-#~ msgid "Saudi Riyal"
-#~ msgstr "Rial saudita"
-
-#~ msgid "Senegal"
-#~ msgstr "Senegal"
-
-#~ msgid "SCR"
-#~ msgstr "SCR"
-
-#~ msgid "Seychelles"
-#~ msgstr "Seychelles"
-
-#~ msgid "Seychelles Rupee"
-#~ msgstr "Rupia de les Seychelles"
-
-#~ msgid "Leone"
-#~ msgstr "Leone"
-
-#~ msgid "SLL"
-#~ msgstr "SLL"
-
-#~ msgid "Sierra Leone"
-#~ msgstr "Sierra Leone"
-
-#~ msgid "SGD"
-#~ msgstr "SGD"
-
-#~ msgid "Singapore"
-#~ msgstr "Singapur"
-
-#~ msgid "Singapore Dollar"
-#~ msgstr "Dòlar de Singapur"
-
-#~ msgid "Sk"
-#~ msgstr "Sk"
-
-#~ msgid "Slovak Koruna"
-#~ msgstr "Corona eslovaca"
-
-#~ msgid "SIT"
-#~ msgstr "SIT"
-
-#~ msgid "Tolar"
-#~ msgstr "Tolar"
-
-#~ msgid "SBD"
-#~ msgstr "SBD"
-
-#~ msgid "Solomon Islands"
-#~ msgstr "Illes Salomó"
-
-#~ msgid "Solomon Islands Dollar"
-#~ msgstr "Dòlar de les Illes Salomó"
-
-#~ msgid "SOS"
-#~ msgstr "SOS"
-
-#~ msgid "Somali Shilling"
-#~ msgstr "Xíling somali"
-
-#~ msgid "Somalia"
-#~ msgstr "Somàlia"
-
-#~ msgid "R"
-#~ msgstr "R"
-
-#~ msgid "South Africa"
-#~ msgstr "Sud-àfrica"
-
-#~ msgid "Peseta"
-#~ msgstr "Pesseta"
-
-#~ msgid "Pts"
-#~ msgstr "Pts"
-
-#~ msgid "LKR"
-#~ msgstr "LKR"
-
-#~ msgid "Sri Lanka"
-#~ msgstr "Sri Lanka"
-
-#~ msgid "Sri Lanka Rupee"
-#~ msgstr "Rupia de Sri Lanka"
-
-#~ msgid "SDD"
-#~ msgstr "SDD"
-
-#~ msgid "Sudan"
-#~ msgstr "Sudan"
-
-#~ msgid "Sudanese Dinar"
-#~ msgstr "Dinar sudanès"
-
-#~ msgid "SRG"
-#~ msgstr "SRG"
-
-#~ msgid "Suriname"
-#~ msgstr "Surinam"
-
-#~ msgid "Suriname Guilder"
-#~ msgstr "Florí de Surinam"
-
-#~ msgid "Svalbard And Jan Mayen"
-#~ msgstr "Svalbard i Jan Mayen"
-
-#~ msgid "Lilangeni"
-#~ msgstr "Lilangeni"
-
-#~ msgid "SZL"
-#~ msgstr "SZL"
-
-#~ msgid "Swaziland"
-#~ msgstr "Swazilàndia"
-
-#~ msgid "Sweden"
-#~ msgstr "Suècia"
-
-#~ msgid "Swedish Krona"
-#~ msgstr "Corona sueca"
-
-#~ msgid "SFr."
-#~ msgstr "SFr."
-
-#~ msgid "Switzerland"
-#~ msgstr "Suïssa"
-
-#~ msgid "SYP"
-#~ msgstr "SYP"
-
-#~ msgid "Syrian Arab Republic"
-#~ msgstr "Síria"
-
-#~ msgid "Syrian Pound"
-#~ msgstr "Lliura siriana"
-
-#~ msgid "New Taiwan Dollar"
-#~ msgstr "Nou dòlar de Taiwan"
-
-#~ msgid "TWD"
-#~ msgstr "TWD"
-
-#~ msgid "Taiwan, Province Of China"
-#~ msgstr "Taiwan"
-
-#~ msgid "Somoni"
-#~ msgstr "Somoni"
-
-#~ msgid "TJS"
-#~ msgstr "TJS"
-
-#~ msgid "Tajikistan"
-#~ msgstr "Tadjikistan"
-
-#~ msgid "TZS"
-#~ msgstr "TZS"
-
-#~ msgid "Tanzania, United Republic Of"
-#~ msgstr "Tanzània"
-
-#~ msgid "Tanzanian Shilling"
-#~ msgstr "Xíling tanzà"
-
-#~ msgid "Baht"
-#~ msgstr "Baht"
-
-#~ msgid "THB"
-#~ msgstr "THB"
-
-#~ msgid "Thailand"
-#~ msgstr "Tailàndia"
-
-#~ msgid "Togo"
-#~ msgstr "Togo"
-
-# skip-rule: iso_639-Tokelau
-#~ msgid "Tokelau"
-#~ msgstr "Tokelau"
-
-#~ msgid "Pa'anga"
-#~ msgstr "Pa'anga"
-
-#~ msgid "TOP"
-#~ msgstr "TOP"
-
-#~ msgid "Tonga"
-#~ msgstr "Tonga"
-
-#~ msgid "TT$"
-#~ msgstr "TT$"
-
-#~ msgid "Trinidad And Tobago"
-#~ msgstr "Trinitat i Tobago"
-
-#~ msgid "Trinidad and Tobago Dollar"
-#~ msgstr "Dòlar de Trinitat i Tobago"
-
-#~ msgid "TND"
-#~ msgstr "TND"
-
-#~ msgid "Tunisia"
-#~ msgstr "Tunísia"
-
-#~ msgid "Tunisian Dinar"
-#~ msgstr "Dinar tunisià"
-
-#~ msgid "TL"
-#~ msgstr "TL"
-
-#~ msgid "Turkey"
-#~ msgstr "Turquia"
-
-#~ msgid "Turkish Lira"
-#~ msgstr "Lira turca"
-
-#~ msgid "Manat"
-#~ msgstr "Manat"
-
-#~ msgid "TMM"
-#~ msgstr "TMM"
-
-#~ msgid "Turkmenistan"
-#~ msgstr "Turkmenistan"
-
-#~ msgid "Turks And Caicos Islands"
-#~ msgstr "Illes Turks i Caicos"
-
-#~ msgid "Tuvalu"
-#~ msgstr "Tuvalu"
-
-#~ msgid "UGX"
-#~ msgstr "UGX"
-
-#~ msgid "Uganda"
-#~ msgstr "Uganda"
-
-#~ msgid "Uganda Shilling"
-#~ msgstr "Xíling ugandès"
-
-#~ msgid "Hryvnia"
-#~ msgstr "Hrívnia"
-
-#~ msgid "UAH"
-#~ msgstr "UAH"
-
-#~ msgid "Ukraine"
-#~ msgstr "Ucraïna"
-
-#~ msgid "AED"
-#~ msgstr "AED"
-
-#~ msgid "UAE Dirham"
-#~ msgstr "Dírham dels EAU"
-
-#~ msgid "United Arab Emirates"
-#~ msgstr "Emirats Àrabs Units"
-
-#~ msgid "GBP"
-#~ msgstr "GBP"
-
-#~ msgid "Pound Sterling"
-#~ msgstr "Lliura esterlina"
-
-#~ msgid "US Dollar (Next day)"
-#~ msgstr "Dòlar dels EUA (Dia següent)"
-
-#~ msgid "USN"
-#~ msgstr "USN"
-
-#~ msgid "US Dollar (Same day)"
-#~ msgstr "Dòlar dels EUA (Mateix dia)"
-
-#~ msgid "USS"
-#~ msgstr "USS"
-
-#~ msgid "NU$"
-#~ msgstr "NU$"
-
-#~ msgid "Peso Uruguayo"
-#~ msgstr "Peso uruguaià"
-
-#~ msgid "Uruguay"
-#~ msgstr "Uruguai"
-
-#~ msgid "UZS"
-#~ msgstr "UZS"
-
-#~ msgid "Uzbekistan"
-#~ msgstr "Uzbekistan"
-
-#~ msgid "Uzbekistan Sum"
-#~ msgstr "Som d'Uzbekistan"
-
-#~ msgid "VUV"
-#~ msgstr "VUV"
-
-#~ msgid "Vanuatu"
-#~ msgstr "Vanuatu"
-
-#~ msgid "Vatu"
-#~ msgstr "Vatu"
-
-#~ msgid "Bolivar"
-#~ msgstr "Bolívar"
-
-#~ msgid "Venezuela"
-#~ msgstr "Veneçuela"
-
-#~ msgid "Dong"
-#~ msgstr "Dong"
-
-#~ msgid "VND"
-#~ msgstr "VND"
-
-#~ msgid "Viet Nam"
-#~ msgstr "Vietnam"
-
-#~ msgid "Virgin Islands"
-#~ msgstr "Illes Verges"
-
-#~ msgid "Wallis And Futuna"
-#~ msgstr "Wallis i Futuna"
-
-#~ msgid "Western Sahara"
-#~ msgstr "Sàhara Occidental"
-
-#~ msgid "YER"
-#~ msgstr "YER"
-
-#~ msgid "Yemen"
-#~ msgstr "Iemen"
-
-#~ msgid "Yemeni Rial"
-#~ msgstr "Rial iemenita"
-
-#~ msgid "YUM"
-#~ msgstr "YUM"
-
-#~ msgid "Yugoslavia"
-#~ msgstr "Iugoslàvia"
-
-#~ msgid "Yugoslavian Dinar"
-#~ msgstr "Dinar de Iugoslàvia"
-
-#~ msgid "ZMK"
-#~ msgstr "ZMK"
-
-#~ msgid "Zambia"
-#~ msgstr "Zàmbia"
-
-#~ msgid "ZWD"
-#~ msgstr "ZWD"
-
-#~ msgid "Zimbabwe"
-#~ msgstr "Zimbàbue"
-
-#~ msgid "Zimbabwe Dollar"
-#~ msgstr "Dòlar de Zimbàbue"
-
-#~ msgid "Resets to the default format"
-#~ msgstr "Torna al format per defecte"
-
-#~ msgid "Strike Out"
-#~ msgstr "Barrat"
-
-#~ msgid "Increase Font Size"
-#~ msgstr "Augmenta la mida del tipus de lletra"
-
-#~ msgid "Decrease Font Size"
-#~ msgstr "Disminueix la mida del tipus de lletra"
-
-#~ msgid "Wrap Text"
-#~ msgstr "Ajusta el text"
-
-# msgid "Wrap text"
-#~ msgid "Wrap"
-#~ msgstr "Ajusta"
-
-#~ msgid "Make the cell text wrap onto multiple lines"
-#~ msgstr "Fa que el text s'estengui per múltiples línies"
-
-#~ msgid "Vertical Text"
-#~ msgstr "Text vertical"
-
-#~ msgid "Print cell contents vertically"
-#~ msgstr "Imprimeix els continguts de la cel·la verticalment"
-
-#~ msgid "Percent Format"
-#~ msgstr "Format de tant per cent"
-
-#~ msgid "Set the cell formatting to look like a percentage"
-#~ msgstr ""
-#~ "Arranja el format de les cel·les per tal que es vegin com a percentatge"
-
-#~ msgid "Money Format"
-#~ msgstr "Format dels diners"
-
-#~ msgid "Set the cell formatting to look like your local currency"
-#~ msgstr "Fa que les cel·les seleccionades tinguin el format de moneda local"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Wrap Text"
-#~ msgstr "Ajusta el text"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vertical Text"
-#~ msgstr "Text vertical"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Format Percent"
-#~ msgstr "Format de tant per cent"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Format Money"
-#~ msgstr "Format de diners"

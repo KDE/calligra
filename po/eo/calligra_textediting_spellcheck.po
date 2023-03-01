@@ -1,13 +1,16 @@
-# Translation of SpellCheckPlugin into esperanto.
-#
+# Translation of calligra_textediting_spellcheck.pot into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: SpellCheckPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2009-12-29 20:03+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-doc@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +22,12 @@ msgstr ""
 #: SpellCheck.cpp:45
 #, kde-format
 msgid "Configure &Spell Checking..."
-msgstr "Agordi Literumkontrolon..."
+msgstr "Agordi &Literumkontrolon..."
 
 #: SpellCheck.cpp:49
 #, kde-format
 msgid "Auto Spell Check"
-msgstr "Aŭtomata literumado"
+msgstr "Aŭtomata literumkontrolo"
 
 #: SpellCheckFactory.cpp:16
 #, kde-format
@@ -39,28 +42,4 @@ msgstr "Literumado"
 #: SpellCheckMenu.cpp:32
 #, kde-format
 msgid "Add to Dictionary"
-msgstr ""
-
-#, fuzzy
-#~| msgid "Configure &Spell Checking..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure &Spell Checking..."
-#~ msgstr "Agordi Literumkontrolon..."
-
-#, fuzzy
-#~| msgid "Auto Spell Check"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto Spell Check"
-#~ msgstr "Aŭtomata literumado"
-
-#, fuzzy
-#~| msgid "Check Spelling"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Check Spelling"
-#~ msgstr "Kontroli literumadon"
-
-#, fuzzy
-#~| msgid "Spelling"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spelling"
-#~ msgstr "Literumado"
+msgstr "Aldoni al vortaro"

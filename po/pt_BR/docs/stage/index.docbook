@@ -11,9 +11,6 @@
   <!ENTITY stage "<application
 >Calligra Stage</application
 >">
-  <!ENTITY flow "<application
->Calligra Flow</application
->">
   <!ENTITY plan "<application
 >Calligra Plan</application
 >">
@@ -234,7 +231,7 @@
 >&stage; </para>
 
 <para
->Direitos autorais do programa 1998-2000 de Reginald Stadlbauer <email
+>Direitos autorais do programa 1998-2000 Reginald Stadlbauer <email
 >reggie@kde.org</email
 > </para>
 
@@ -306,16 +303,6 @@
 >alvarenga@kde.org</email
 ></para
 > &underFDL; &underGPL; </chapter>
-
-<appendix id="installation">
-<title
->Instalação</title>
-
-&install.intro.documentation;
-
-&install.compile.documentation;
-
-</appendix>
 
 &documentation.index; 
 

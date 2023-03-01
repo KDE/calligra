@@ -4,7 +4,7 @@
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2020, 2021, 2022.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2020, 2021, 2022, 2023.
 # Pau Tallada Crespí <pau_tallada@telefonica.net>, 2006.
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2023-02-05 10:52+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2023-02-27 22:39+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -108,7 +108,7 @@ msgstr "&Eines"
 #: part/commands/KWChangePageStyleCommand.cpp:11
 msgctxt "(qtundo-format)"
 msgid "Set Page Style"
-msgstr "Arranja l'estil de pàgina"
+msgstr "Estableix l'estil de pàgina"
 
 #: part/commands/KWNewPageStyleCommand.cpp:12
 msgctxt "(qtundo-format)"
@@ -299,7 +299,7 @@ msgstr "Document"
 #: part/dialogs/KWConfigureDialog.cpp:45
 #, kde-format
 msgid "Document Settings"
-msgstr "Arranjaments del document"
+msgstr "Configuració del document"
 
 #: part/dialogs/KWConfigureDialog.cpp:49
 #, kde-format

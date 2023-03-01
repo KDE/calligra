@@ -1,14 +1,15 @@
 # Translation of calligra_shape_video.pot to esperanto.
 # Copyright (C) 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2010.
 # Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: VideoShape\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2023-01-04 22:00+0100\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -73,9 +74,9 @@ msgstr "Video"
 #: VideoShapeFactory.cpp:26
 #, kde-format
 msgid "Video, embedded or fullscreen"
-msgstr ""
+msgstr "Video, enigita aŭ plenekrana"
 
 #: VideoToolFactory.cpp:18
 #, kde-format
 msgid "Video handling"
-msgstr ""
+msgstr "Video-pritraktado"

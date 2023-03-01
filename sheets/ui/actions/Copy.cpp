@@ -41,7 +41,7 @@ QAction *Copy::createAction() {
 }
 
 
-void Copy::execute(Selection *selection, Sheet *sheet, QWidget *)
+void Copy::execute(Selection *selection, Sheet *, QWidget *)
 {
     CellToolBase *tool = m_actions->tool();
     if (tool->editor()) {
@@ -77,7 +77,7 @@ QAction *Cut::createAction() {
 }
 
 
-void Cut::execute(Selection *selection, Sheet *sheet, QWidget *)
+void Cut::execute(Selection *selection, Sheet *, QWidget *)
 {
     CellToolBase *tool = m_actions->tool();
     if (tool->editor()) {

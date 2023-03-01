@@ -94,6 +94,8 @@ public:
 
     void addCellAction(CellAction *a);
 
+    virtual SheetView* sheetView(Sheet* sheet) const = 0;
+
     /** Update all the actions' enabled/disabled status. */
     void updateActions();
 
@@ -133,7 +135,6 @@ protected:
 
     virtual int maxCol() const = 0;
     virtual int maxRow() const = 0;
-    virtual SheetView* sheetView(Sheet* sheet) const = 0;
 
     QList<QAction*> popupMenuActionList() const;
 
@@ -151,31 +152,13 @@ protected Q_SLOTS:
     void insertFormula();
     void insertFromDatabase();
     void sortList();
-    void goalSeek();
     void formulaSelection(const QString& expression);
     // -- general editing actions --
     void edit();
     void selectAll();
-    void find();
-    void findNext();
-    void findPrevious();
-    void replace();
-    void initFindReplace();
-    Cell findNextCell();
-    /**
-     * Called by find/replace (findNext) when it found a match
-     */
-    void slotHighlight(const QString &text, int matchingIndex, int matchedLength);
-    /**
-     * Called when replacing text in a cell
-     */
-    void slotReplace(const QString &newText, int, int, int);
-    Cell nextFindValidCell(int col, int row);
     // -- misc actions --
     void inspector();
     void qTableView();
-    void listChoosePopupMenu();
-    void listChooseItemSelected(QAction*);
     void documentSettingsDialog();
 
 private:

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -976,7 +976,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") mengembalikan 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Pangkalan Data"
@@ -14656,120 +14656,110 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ubah Warna Sempadan"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, kde-format
 msgid "&Function..."
 msgstr "&Fungsi..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Selitkan ungkapan matematik."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, kde-format
 msgid "From &Database..."
 msgstr "Dari &Pangkalan Data..."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Selitkan data dari pangkalan data SQL."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Custom Lists..."
 msgstr "Senarai Biasa..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, fuzzy, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr "Cipta senarai biasa untuk pengisihan atau autoisian."
 
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "Cari &Matlamat..."
-
-#: ui/CellToolBase.cpp:161
-#, fuzzy, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr "Mengulang semula pengiraan untuk mencari nilai tentu."
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Pemilihan Formula"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Selitkan fungsi."
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Lain-lain..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Ubah Suai Sel"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Edit sel yang ditonjolkan."
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Kira semula nilai setiap sel dalam helaian kerja semasa."
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Laksanakan Inspektor..."
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Papar Helaian..."
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Parameter Lokal"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Papar &penunjuk komen"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Perlindungan"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Perlindungan"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Tampal kandungan klipbod di kursor. "
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14777,18 +14767,6 @@ msgid ""
 msgstr ""
 "Tiada pemacu pangkalan data boleh didapatkan; anda perlu mengkompil Qy "
 "dengan pemacu yang sesuai."
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-#| msgid "Replacement"
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Penggantian"
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Senarai Pemilihan..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15712,51 +15690,6 @@ msgstr "Format masa"
 msgid "Currency format: %1"
 msgstr "Mata Wang:"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-msgid "More Options"
-msgstr "Pilihan Pertanyaan"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "Teks yang telah dicari"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-msgid "Search in:"
-msgstr "Teks yang telah dicari"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-msgid "Cell Values"
-msgstr "Nilai"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Comments"
-msgstr "Komen"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-msgid "Search direction:"
-msgstr "Arah bentangan:"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, fuzzy, kde-format
-msgid "Down then Across"
-msgstr "Papar baris tersembunyi"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "Pilihan Am"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15928,88 +15861,6 @@ msgstr "Fungsi ini tiada parameter."
 #, fuzzy, kde-format
 msgid "Description is not available."
 msgstr "&Huraian dalam lajur"
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Jangkau Matlamat "
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Rujukan sel tak sah."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Nilai sasaran tak sah."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Sel sumber mesti mengandungi nilai berangka."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Sel sasaran mesti mengandungi formula."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Memulakan..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Lelaran:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Nilai baru:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Jangkau matlamat dengan sel%1 menemui penyelesaian:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Jangkau matlamat dengan sel%1 TIDAK menemui penyelesaian."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Setkan sel:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Ke nilai:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Dengan mengubah sel:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, fuzzy, kde-format
-#| msgid "Goal seeking with cell %1 found a solution:"
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr "Jangkau matlamat dengan sel%1 menemui penyelesaian:"
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Nilai semasa:"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -16701,6 +16552,101 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Buka Pautan?"
+
+#~ msgid "&Goal Seek..."
+#~ msgstr "Cari &Matlamat..."
+
+#, fuzzy
+#~ msgid "Repeating calculation to find a specific value"
+#~ msgstr "Mengulang semula pengiraan untuk mencari nilai tentu."
+
+#~ msgid "Goal Seek"
+#~ msgstr "Jangkau Matlamat "
+
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Rujukan sel tak sah."
+
+#~ msgid "Target value is invalid."
+#~ msgstr "Nilai sasaran tak sah."
+
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Sel sumber mesti mengandungi nilai berangka."
+
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Sel sasaran mesti mengandungi formula."
+
+#~ msgid "Starting..."
+#~ msgstr "Memulakan..."
+
+#~ msgid "Iteration:"
+#~ msgstr "Lelaran:"
+
+#~ msgid "New value:"
+#~ msgstr "Nilai baru:"
+
+#~ msgid "Goal seeking with cell %1 found a solution:"
+#~ msgstr "Jangkau matlamat dengan sel%1 menemui penyelesaian:"
+
+#~ msgid "Goal seeking with cell %1 has found NO solution."
+#~ msgstr "Jangkau matlamat dengan sel%1 TIDAK menemui penyelesaian."
+
+#~ msgid "Set cell:"
+#~ msgstr "Setkan sel:"
+
+#~ msgid "To value:"
+#~ msgstr "Ke nilai:"
+
+#~ msgid "By changing cell:"
+#~ msgstr "Dengan mengubah sel:"
+
+#, fuzzy
+#~| msgid "Goal seeking with cell %1 found a solution:"
+#~ msgid "Goal seeking with cell <cell> found <a | no> solution:"
+#~ msgstr "Jangkau matlamat dengan sel%1 menemui penyelesaian:"
+
+#~ msgid "Current value:"
+#~ msgstr "Nilai semasa:"
+
+#, fuzzy
+#~| msgid "Replacement"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Penggantian"
+
+#~ msgid "Selection List..."
+#~ msgstr "Senarai Pemilihan..."
+
+#, fuzzy
+#~ msgid "More Options"
+#~ msgstr "Pilihan Pertanyaan"
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "Teks yang telah dicari"
+
+#, fuzzy
+#~ msgid "Search in:"
+#~ msgstr "Teks yang telah dicari"
+
+#, fuzzy
+#~ msgid "Cell Values"
+#~ msgstr "Nilai"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "Komen"
+
+#, fuzzy
+#~ msgid "Search direction:"
+#~ msgstr "Arah bentangan:"
+
+#, fuzzy
+#~ msgid "Down then Across"
+#~ msgstr "Papar baris tersembunyi"
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "Pilihan Am"
 
 #~ msgid "Cell Format..."
 #~ msgstr "Format Sel..."
