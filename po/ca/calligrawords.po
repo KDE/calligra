@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-02-05 10:52+0100\n"
+"PO-Revision-Date: 2023-02-28 10:11+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -956,7 +956,7 @@ msgstr "Groc"
 #, kde-format
 msgctxt "Style name"
 msgid "Colorful"
-msgstr "Ple de color"
+msgstr "Acolorit"
 
 #: part/i18n/stylenames.cpp:38
 #, kde-format
