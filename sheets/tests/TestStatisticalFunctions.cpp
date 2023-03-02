@@ -14,6 +14,8 @@
 #include <engine/Formula.h>
 #include <engine/MapBase.h>
 #include <engine/SheetBase.h>
+#include <engine/CalculationSettings.h>
+#include <engine/Localization.h>
 
 #include "TestKspreadCommon.h"
 
@@ -114,12 +116,13 @@ Value TestStatisticalFunctions::evaluate(const QString& formula)
 
 void TestStatisticalFunctions::initTestCase()
 {
-    KLocalizedString::setApplicationDomain("sheets");
+    KLocalizedString::setApplicationDomain("calligrasheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new MapBase;
     m_map->addNewSheet();
     SheetBase* sheet = m_map->sheet(0);
     CellBaseStorage* storage = sheet->cellStorage();
+    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
 
     //
     // Test case data set
