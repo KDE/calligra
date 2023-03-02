@@ -7,6 +7,7 @@
 #include "TestKspreadCommon.h"
 
 #include "engine/MapBase.h"
+#include "engine/SheetBase.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
 
