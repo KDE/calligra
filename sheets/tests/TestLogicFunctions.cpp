@@ -8,6 +8,8 @@
 
 #include <engine/MapBase.h>
 #include <engine/SheetBase.h>
+#include <engine/CalculationSettings.h>
+#include <engine/Localization.h>
 
 using namespace Calligra::Sheets;
 
@@ -16,6 +18,7 @@ void TestLogicFunctions::init()
     m_map = new MapBase;
     m_map->addNewSheet();
     m_sheet = m_map->sheet(0);
+    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
 }
 
 void TestLogicFunctions::cleanup()
@@ -25,7 +28,7 @@ void TestLogicFunctions::cleanup()
 
 void TestLogicFunctions::initTestCase()
 {
-    KLocalizedString::setApplicationDomain("sheets");
+    KLocalizedString::setApplicationDomain("calligrasheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 
