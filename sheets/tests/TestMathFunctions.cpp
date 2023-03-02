@@ -12,6 +12,7 @@
 #include <engine/MapBase.h>
 #include <engine/SheetBase.h>
 #include <engine/CalculationSettings.h>
+#include <engine/Localization.h>
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
@@ -82,12 +83,13 @@ Value TestMathFunctions::evaluate(const QString& formula)
 
 void TestMathFunctions::initTestCase()
 {
-    KLocalizedString::setApplicationDomain("sheets");
+    KLocalizedString::setApplicationDomain("calligrasheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     m_map = new MapBase;
     m_map->addNewSheet("Sheet1");
     m_map->addNewSheet("Sheet2");
+    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
 
     SheetBase* sheet1 = m_map->sheet(0);
     CellBaseStorage* storage1 = sheet1->cellStorage();
