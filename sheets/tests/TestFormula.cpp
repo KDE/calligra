@@ -7,6 +7,8 @@
 #include "TestKspreadCommon.h"
 
 #include "engine/MapBase.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Localization.h"
 
 using namespace Calligra::Sheets;
 
@@ -94,11 +96,12 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
 
 void TestFormula::initTestCase()
 {
-    KLocalizedString::setApplicationDomain("sheets");
+    KLocalizedString::setApplicationDomain("calligrasheets");
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     MapBase *map = new MapBase();
     m_sheet = map->addNewSheet();
+    map->calculationSettings()->locale()->setLanguage(QLocale::C);
     CellBase(m_sheet, 1, 1).setCellValue(Value(6));
     CellBase(m_sheet, 1, 2).setCellValue(Value(1.5));
 }
