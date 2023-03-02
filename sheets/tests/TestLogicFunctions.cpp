@@ -18,9 +18,7 @@ void TestLogicFunctions::init()
     m_map = new MapBase;
     m_map->addNewSheet();
     m_sheet = m_map->sheet(0);
-
-    setlocale(LC_ALL, "C.UTF-8");
-    m_map->calculationSettings()->locale()->setLanguage("C.UTF-8");
+    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
 }
 
 void TestLogicFunctions::cleanup()
@@ -31,7 +29,6 @@ void TestLogicFunctions::cleanup()
 void TestLogicFunctions::initTestCase()
 {
     KLocalizedString::setApplicationDomain("calligrasheets");
-
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
 

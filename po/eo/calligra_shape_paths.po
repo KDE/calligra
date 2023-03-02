@@ -1,9 +1,12 @@
-# Translation of PathShapes into esperanto.
+# Translation of calligra_shape_paths.pot into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PathShapes\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
 "PO-Revision-Date: 2009-11-15 12:06+0100\n"
@@ -13,37 +16,34 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ellipse/EllipseShapeConfigCommand.cpp:19
-#, fuzzy
-#| msgid "Ellipse"
 msgctxt "(qtundo-format)"
 msgid "Change ellipse"
-msgstr "Elipso"
+msgstr "Ŝanĝi elipson"
 
 #: ellipse/EllipseShapeConfigWidget.cpp:16
 #, kde-format
 msgid "Arc"
-msgstr ""
+msgstr "Arko"
 
 #: ellipse/EllipseShapeConfigWidget.cpp:17
 #, kde-format
 msgid "Pie"
-msgstr ""
+msgstr "Torto"
 
 #: ellipse/EllipseShapeConfigWidget.cpp:18
 #, kde-format
 msgid "Chord"
-msgstr ""
+msgstr "Akordo"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
 #: ellipse/EllipseShapeConfigWidget.ui:13
-#, fuzzy, kde-format
-#| msgid "Ellipse"
+#, kde-format
 msgid "Ellipse Shape"
-msgstr "Elipso"
+msgstr "Elipsa Formo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: ellipse/EllipseShapeConfigWidget.ui:19 spiral/SpiralShapeConfigWidget.ui:19
@@ -53,10 +53,9 @@ msgstr "Tipo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ellipse/EllipseShapeConfigWidget.ui:29
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "Start angle:"
-msgstr "Rektangulo"
+msgstr "Komenca angulo:"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, startAngle)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, endAngle)
@@ -70,14 +69,13 @@ msgstr "°"
 #: ellipse/EllipseShapeConfigWidget.ui:46
 #, kde-format
 msgid "End angle:"
-msgstr ""
+msgstr "Fina angulo:"
 
 #. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
 #: ellipse/EllipseShapeConfigWidget.ui:63
-#, fuzzy, kde-format
-#| msgid "Ellipse"
+#, kde-format
 msgid "Close ellipse"
-msgstr "Elipso"
+msgstr "Fermi elipson"
 
 #: ellipse/EllipseShapeFactory.cpp:21
 #, kde-format
@@ -85,64 +83,60 @@ msgid "Ellipse"
 msgstr "Elipso"
 
 #: ellipse/EllipseShapeFactory.cpp:23
-#, fuzzy, kde-format
-#| msgid "Ellipse"
+#, kde-format
 msgid "An ellipse"
 msgstr "Elipso"
 
 #: enhancedpath/CalloutShapeFactory.cpp:31
 #: enhancedpath/CalloutShapeFactory.cpp:33
-#, fuzzy, kde-format
-#| msgid "Spiral"
+#, kde-format
 msgid "A callout shape"
-msgstr "Spiralo"
+msgstr "Voka formo"
 
 #: enhancedpath/CalloutShapeFactory.cpp:149
 #, kde-format
 msgid "Rectangular Callout"
-msgstr ""
+msgstr "Rektangula Voko"
 
 #: enhancedpath/CalloutShapeFactory.cpp:151
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "A rectangular callout"
-msgstr "Rektangulo"
+msgstr "Rektangula voko"
 
 #: enhancedpath/CalloutShapeFactory.cpp:231
 #, kde-format
 msgid "Rounded Callout"
-msgstr ""
+msgstr "Rondigita Voko"
 
 #: enhancedpath/CalloutShapeFactory.cpp:233
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "A rounded rectangular callout"
-msgstr "Rektangulo"
+msgstr "Rondigita rektangula voko"
 
 #: enhancedpath/CalloutToolFactory.cpp:23
 #, kde-format
 msgid "Callout editing"
-msgstr ""
+msgstr "Voka redaktado"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:26
 #, kde-format
 msgid "An enhanced path shape"
-msgstr ""
+msgstr "Plibonigita vojformo"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:28
 #, kde-format
 msgid "An enhanced path"
-msgstr ""
+msgstr "Plifortigita vojo"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:145
 #, kde-format
 msgid "Cross"
-msgstr ""
+msgstr "Kruco"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:147
 #, kde-format
 msgid "A cross"
-msgstr ""
+msgstr "Kruco"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:180
 #: enhancedpath/EnhancedPathShapeFactory.cpp:213
@@ -156,8 +150,7 @@ msgstr "Sago"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:215
 #: enhancedpath/EnhancedPathShapeFactory.cpp:248
 #: enhancedpath/EnhancedPathShapeFactory.cpp:281
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "An arrow"
 msgstr "Sago"
 
@@ -165,55 +158,50 @@ msgstr "Sago"
 #: enhancedpath/EnhancedPathShapeFactory.cpp:326
 #, kde-format
 msgid "Smiley"
-msgstr ""
+msgstr "Rideto"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:404
 #, kde-format
 msgid "Circular Arrow"
-msgstr ""
+msgstr "Cirkla Sago"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:406
 #, kde-format
 msgid "A circular-arrow"
-msgstr ""
+msgstr "Cirkla sago"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:449
 #, kde-format
 msgid "Gearhead"
-msgstr ""
+msgstr "Ilarkapo"
 
 #: enhancedpath/EnhancedPathShapeFactory.cpp:451
 #, kde-format
 msgid "A gearhead"
-msgstr ""
+msgstr "Dentradulo"
 
 #: rectangle/RectangleShapeConfigCommand.cpp:19
-#, fuzzy
-#| msgid "Rectangle"
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
-msgstr "Rektangulo"
+msgstr "Ŝanĝi rektangulon"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
 #: rectangle/RectangleShapeConfigWidget.ui:13
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "Rectangle Shape"
-msgstr "Rektangulo"
+msgstr "Rektangula Formo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rectangle/RectangleShapeConfigWidget.ui:19
-#, fuzzy, kde-format
-#| msgid "Corners:"
+#, kde-format
 msgid "Corner radius x:"
-msgstr "Anguloj:"
+msgstr "Angula radiuso x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: rectangle/RectangleShapeConfigWidget.ui:29
-#, fuzzy, kde-format
-#| msgid "Corners:"
+#, kde-format
 msgid "Corner radius y:"
-msgstr "Anguloj:"
+msgstr "Angula radiuso y:"
 
 #: rectangle/RectangleShapeFactory.cpp:20
 #, kde-format
@@ -221,17 +209,14 @@ msgid "Rectangle"
 msgstr "Rektangulo"
 
 #: rectangle/RectangleShapeFactory.cpp:22
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgid "A rectangle"
 msgstr "Rektangulo"
 
 #: spiral/SpiralShapeConfigCommand.cpp:19
-#, fuzzy
-#| msgid "Rectangle"
 msgctxt "(qtundo-format)"
 msgid "Change spiral"
-msgstr "Rektangulo"
+msgstr "Ŝanĝi spiralon"
 
 #: spiral/SpiralShapeConfigWidget.cpp:16
 #, kde-format
@@ -246,31 +231,30 @@ msgstr "Linio"
 #: spiral/SpiralShapeConfigWidget.cpp:23
 #, kde-format
 msgid "Clockwise"
-msgstr ""
+msgstr "Dekstrume"
 
 #: spiral/SpiralShapeConfigWidget.cpp:24
 #, kde-format
 msgid "Anticlockwise"
-msgstr ""
+msgstr "Kontraŭhorloĝe"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: spiral/SpiralShapeConfigWidget.ui:13
-#, fuzzy, kde-format
-#| msgid "Spiral"
+#, kde-format
 msgid "Spiral Shape"
-msgstr "Spiralo"
+msgstr "Spirala Formo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: spiral/SpiralShapeConfigWidget.ui:29
 #, kde-format
 msgid "Fade:"
-msgstr ""
+msgstr "Fado:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: spiral/SpiralShapeConfigWidget.ui:55
 #, kde-format
 msgid "Direction:"
-msgstr ""
+msgstr "Direkto:"
 
 #: spiral/SpiralShapeFactory.cpp:18
 #, kde-format
@@ -278,30 +262,26 @@ msgid "Spiral"
 msgstr "Spiralo"
 
 #: spiral/SpiralShapeFactory.cpp:20
-#, fuzzy, kde-format
-#| msgid "Spiral"
+#, kde-format
 msgid "A spiral shape"
-msgstr "Spiralo"
+msgstr "Spirala formo"
 
 #: star/StarShapeConfigCommand.cpp:21
-#, fuzzy
-#| msgid "Rectangle"
 msgctxt "(qtundo-format)"
 msgid "Change star"
-msgstr "Rektangulo"
+msgstr "Ŝanĝi stelon"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StarShapeConfigWidget)
 #: star/StarShapeConfigWidget.ui:13
-#, fuzzy, kde-format
-#| msgid "Spiral"
+#, kde-format
 msgid "Star shape"
-msgstr "Spiralo"
+msgstr "Stela formo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: star/StarShapeConfigWidget.ui:19
 #, kde-format
 msgid "Polygon:"
-msgstr ""
+msgstr "Plurangulo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: star/StarShapeConfigWidget.ui:36
@@ -311,27 +291,25 @@ msgstr "Anguloj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: star/StarShapeConfigWidget.ui:46
-#, fuzzy, kde-format
-#| msgid "Corners:"
+#, kde-format
 msgid "Inner radius:"
-msgstr "Anguloj:"
+msgstr "Ena radiuso:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: star/StarShapeConfigWidget.ui:60
-#, fuzzy, kde-format
-#| msgid "Corners:"
+#, kde-format
 msgid "Outer radius:"
-msgstr "Anguloj:"
+msgstr "Ekstera radiuso:"
 
 #: star/StarShapeFactory.cpp:24
 #, kde-format
 msgid "A star shape"
-msgstr ""
+msgstr "Stela formo"
 
 #: star/StarShapeFactory.cpp:26 star/StarShapeFactory.cpp:38
 #, kde-format
 msgid "A star"
-msgstr ""
+msgstr "Stelo"
 
 #: star/StarShapeFactory.cpp:36
 #, kde-format
@@ -341,99 +319,29 @@ msgstr "Stelo"
 #: star/StarShapeFactory.cpp:50
 #, kde-format
 msgid "Flower"
-msgstr ""
+msgstr "Floro"
 
 #: star/StarShapeFactory.cpp:52
 #, kde-format
 msgid "A flower"
-msgstr ""
+msgstr "Floro"
 
 #: star/StarShapeFactory.cpp:67
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Pentagon"
-msgstr "Prezentaĵo"
+msgstr "Kvinangulo"
 
 #: star/StarShapeFactory.cpp:69
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "A pentagon"
-msgstr "Prezentaĵo"
+msgstr "Kvinangulo"
 
 #: star/StarShapeFactory.cpp:83
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "Hexagon"
-msgstr "Prezentaĵo"
+msgstr "Sesangulo"
 
 #: star/StarShapeFactory.cpp:85
-#, fuzzy, kde-format
-#| msgid "Presentation"
+#, kde-format
 msgid "A hexagon"
-msgstr "Prezentaĵo"
-
-#, fuzzy
-#~| msgid "Type:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Type:"
-#~ msgstr "Tipo:"
-
-#, fuzzy
-#~| msgid "°"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "°"
-#~ msgstr "°"
-
-#, fuzzy
-#~| msgid "Corners:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Corners:"
-#~ msgstr "Anguloj:"
-
-#, fuzzy
-#~| msgid "Ellipse"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ellipse"
-#~ msgstr "Elipso"
-
-#, fuzzy
-#~| msgid "Arrow"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Arrow"
-#~ msgstr "Sago"
-
-#, fuzzy
-#~| msgid "Rectangle"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rectangle"
-#~ msgstr "Rektangulo"
-
-#, fuzzy
-#~| msgid "Curve"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Curve"
-#~ msgstr "Kurbo"
-
-#, fuzzy
-#~| msgid "Line"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Line"
-#~ msgstr "Linio"
-
-#, fuzzy
-#~| msgid "Spiral"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spiral"
-#~ msgstr "Spiralo"
-
-#, fuzzy
-#~| msgid "Star"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Star"
-#~ msgstr "Stelo"
-
-#, fuzzy
-#~| msgid "Presentation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pentagon"
-#~ msgstr "Prezentaĵo"
+msgstr "Sesangulo"

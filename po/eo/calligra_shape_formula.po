@@ -1,5 +1,8 @@
-# Translation of FormulaShape into esperanto.
+# Translation of calligra_shape_formula.pot into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
@@ -13,73 +16,63 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Axel Rousseau,Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
 
 #: FormulaCommand.cpp:59
-#, fuzzy
-#| msgid "Formula"
 msgctxt "(qtundo-format)"
 msgid "Add text to formula"
-msgstr "Formulilo"
+msgstr "Aldoni tekston al formulo"
 
 #: FormulaCommand.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Change rows"
-msgstr ""
+msgstr "Ŝanĝi vicojn"
 
 #: FormulaEditor.cpp:74
 msgctxt "(qtundo-format)"
 msgid "Add text"
-msgstr ""
+msgstr "Aldoni tekston"
 
 #: FormulaEditor.cpp:107
-#, fuzzy
-#| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert row"
-msgstr "Enmeti"
+msgstr "Enmeti vicon"
 
 #: FormulaEditor.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Remove row"
-msgstr ""
+msgstr "Forigi vicon"
 
 #: FormulaEditor.cpp:120
-#, fuzzy
-#| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert column"
-msgstr "Enmeti"
+msgstr "Enmeti kolumnon"
 
 #: FormulaEditor.cpp:125
-#, fuzzy
-#| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Remove column"
-msgstr "Enmeti"
+msgstr "Forigi kolumnon"
 
 #: FormulaEditor.cpp:151
-#, fuzzy
-#| msgid "Insert"
 msgctxt "(qtundo-format)"
 msgid "Insert formula elements."
-msgstr "Enmeti"
+msgstr "Enmeti formulelementojn."
 
 #: FormulaEditor.cpp:184
 msgctxt "(qtundo-format)"
 msgid "Remove formula elements"
-msgstr ""
+msgstr "Forigi formulelementojn"
 
 #: FormulaToolWidget.cpp:72
 #, kde-format
@@ -99,7 +92,7 @@ msgstr "Rilatoj"
 #: FormulaToolWidget.cpp:81
 #, kde-format
 msgid "Operators"
-msgstr ""
+msgstr "Operaciistoj"
 
 #: FormulaToolWidget.cpp:85
 #, kde-format
@@ -114,16 +107,15 @@ msgstr "Enmeti"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupElements)
 #: FormulaToolWidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Element"
+#, kde-format
 msgid "Elements"
-msgstr "Elemento"
+msgstr "Elementoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupSymbols)
 #: FormulaToolWidget.ui:132
 #, kde-format
 msgid "Symbols"
-msgstr ""
+msgstr "Simboloj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupActions)
 #: FormulaToolWidget.ui:228
@@ -136,14 +128,13 @@ msgstr "Agoj"
 #, kde-format
 msgctxt "This button opens a file dialog to load a MathML file"
 msgid "Load..."
-msgstr ""
+msgstr "Ŝargi..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSave)
 #: FormulaToolWidget.ui:286
-#, fuzzy, kde-format
-#| msgid "New..."
+#, kde-format
 msgid "Save..."
-msgstr "Nova..."
+msgstr "Savi..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: FormulaToolWidget.ui:294
@@ -155,7 +146,7 @@ msgstr "Redakti"
 #: FormulaToolWidget.ui:300
 #, kde-format
 msgid "General options"
-msgstr ""
+msgstr "Ĝeneralaj opcioj"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: FormulaToolWidget.ui:325
@@ -173,7 +164,7 @@ msgstr "Koloroj:"
 #: FormulaToolWidget.ui:349
 #, kde-format
 msgid "Specific options"
-msgstr ""
+msgstr "Specifaj opcioj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: FormulaToolWidget.ui:371
@@ -191,7 +182,7 @@ msgstr "Kolumnoj:"
 #: FormulaToolWidget.ui:406
 #, kde-format
 msgid "View MathML"
-msgstr ""
+msgstr "Rigardi MathML"
 
 #: KoFormulaShape.cpp:210
 #, kde-format
@@ -215,289 +206,139 @@ msgstr "Elŝuti"
 #: KoFormulaShape.cpp:211
 #, kde-format
 msgid "Skip"
-msgstr "Pasigi"
+msgstr "Preterpasi"
 
 #: KoFormulaShapeFactory.cpp:21
-#, fuzzy, kde-format
-#| msgid "KFormula"
+#, kde-format
 msgid "Formula"
-msgstr "Formulilo"
+msgstr "Formulo"
 
 #: KoFormulaShapeFactory.cpp:23
-#, fuzzy, kde-format
-#| msgid "Formula"
+#, kde-format
 msgid "A formula"
-msgstr "Formulilo"
+msgstr "Formulo"
 
 #: KoFormulaTool.cpp:407
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert fenced element"
-msgstr "Enmeti"
+msgstr "Enmeti baritan elementon"
 
 #: KoFormulaTool.cpp:408
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert enclosed element"
-msgstr "Enmeti"
+msgstr "Enmeti enfermitan elementon"
 
 #: KoFormulaTool.cpp:411
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert root"
-msgstr "Enmeti"
+msgstr "Enmeti radikon"
 
 #: KoFormulaTool.cpp:412
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert square root"
-msgstr "Enmeti"
+msgstr "Enmeti kvadratan radikon"
 
 #: KoFormulaTool.cpp:414
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert fraction"
-msgstr "Enmeti"
+msgstr "Enmeti frakcion"
 
 #: KoFormulaTool.cpp:416
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert bevelled fraction"
-msgstr "Enmeti"
+msgstr "Enmeti bevelitan frakcion"
 
 #: KoFormulaTool.cpp:419
 #, kde-format
 msgid "Insert 3x3 table"
-msgstr ""
+msgstr "Enmeti 3x3 tabelon"
 
 #: KoFormulaTool.cpp:423
 #, kde-format
 msgid "Insert 2 dimensional vector"
-msgstr ""
+msgstr "Enmeti 2-dimensian vektoron"
 
 #: KoFormulaTool.cpp:426
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert subscript"
-msgstr "Enmeti"
+msgstr "Enigi malaltan skibon"
 
 #: KoFormulaTool.cpp:428
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert superscript"
-msgstr "Enmeti"
+msgstr "Enigi altan skribon"
 
 #: KoFormulaTool.cpp:430
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert sub- and superscript"
-msgstr "Enmeti"
+msgstr "Enigi malalt- kaj alt-skribon"
 
 #: KoFormulaTool.cpp:432
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert overscript"
-msgstr "Enmeti"
+msgstr "Enigi supran skribon"
 
 #: KoFormulaTool.cpp:434
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert underscript"
-msgstr "Enmeti"
+msgstr "Enigi suban skribon"
 
 #: KoFormulaTool.cpp:436
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert under- and overscript"
-msgstr "Enmeti"
+msgstr "Enmeti suban kaj supran skribon"
 
 #: KoFormulaTool.cpp:445
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert row"
-msgstr "Enmeti"
+msgstr "Enmeti vicon"
 
 #: KoFormulaTool.cpp:452
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Insert column"
-msgstr "Enmeti"
+msgstr "Enmeti kolumnon"
 
 #: KoFormulaTool.cpp:459
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Remove row"
-msgstr "Enmeti"
+msgstr "Forigi vicon"
 
 #: KoFormulaTool.cpp:466
-#, fuzzy, kde-format
-#| msgid "Insert"
+#, kde-format
 msgid "Remove column"
-msgstr "Enmeti"
+msgstr "Forigi kolumnon"
 
 #: KoFormulaToolFactory.cpp:17
-#, fuzzy, kde-format
-#| msgid "Formula Settings"
+#, kde-format
 msgid "Formula editing"
-msgstr "Formulilo agordo"
+msgstr "Formulredaktado"
 
 #: KoM2MMLForumulaTool.cpp:97
 #, kde-format
 msgid "Mode: "
-msgstr ""
+msgstr "Reĝimo:"
 
 #: KoM2MMLForumulaTool.cpp:100
 #, kde-format
 msgid "LaTeX"
-msgstr ""
+msgstr "LaTeX"
 
 #: KoM2MMLForumulaTool.cpp:102
 #, kde-format
 msgid "Matlab"
-msgstr ""
+msgstr "Matlab"
 
 #: KoM2MMLForumulaTool.cpp:171
 #, kde-format
 msgid "Parse error."
-msgstr ""
+msgstr "Analizeraro."
 
 #: KoM2MMLForumulaTool.cpp:201
 #, kde-format
 msgid "Edit formula with LaTeX/Matlab syntax"
-msgstr ""
+msgstr "Redakti formulon kun LaTeX/Matlab sintakso"
 
 #: KoM2MMLForumulaTool.cpp:203
 #, kde-format
 msgid "Edit formula with LaTeX syntax"
-msgstr ""
-
-#, fuzzy
-#~| msgid "Insert"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert"
-#~ msgstr "Enmeti"
-
-#, fuzzy
-#~| msgid "Element"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Elements"
-#~ msgstr "Elemento"
-
-#, fuzzy
-#~| msgid "Actions"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Actions"
-#~ msgstr "Agoj"
-
-#, fuzzy
-#~| msgid "New..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Save..."
-#~ msgstr "Nova..."
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit"
-#~ msgstr "Redakti"
-
-#, fuzzy
-#~| msgid "Font:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Font:"
-#~ msgstr "Tiparo:"
-
-#, fuzzy
-#~| msgid "Colors:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Colors:"
-#~ msgstr "Koloroj:"
-
-#, fuzzy
-#~| msgid "Rows:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rows:"
-#~ msgstr "Vicoj:"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns:"
-#~ msgstr "Kolumnoj:"
-
-#, fuzzy
-#~| msgid "Arrows"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Arrows"
-#~ msgstr "Sagoj"
-
-#, fuzzy
-#~| msgid "Greek"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Greek"
-#~ msgstr "Greka"
-
-#, fuzzy
-#~| msgid "Relations"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Relations"
-#~ msgstr "Rilatoj"
-
-#, fuzzy
-#~| msgid "Miscellaneous"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Miscellaneous"
-#~ msgstr "Diversaj"
-
-#, fuzzy
-#~| msgid ""
-#~| "This document contains an external link to a remote document\n"
-#~| "%1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "This document contains an external link to a remote document\n"
-#~ "%1"
-#~ msgstr ""
-#~ "Tiu dokumento enhavas eksteran ligon al ne-loka dokumento\n"
-#~ "%1"
-
-#, fuzzy
-#~| msgid "Confirmation Required"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Confirmation Required"
-#~ msgstr "Bezonas konfirmon"
-
-#, fuzzy
-#~| msgid "Download"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Download"
-#~ msgstr "Elŝuti"
-
-#, fuzzy
-#~| msgid "Skip"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Skip"
-#~ msgstr "Pasigi"
-
-#, fuzzy
-#~| msgid "KFormula"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Formula"
-#~ msgstr "Formulilo"
-
-#, fuzzy
-#~| msgid "Formula"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A formula"
-#~ msgstr "Formulilo"
-
-#, fuzzy
-#~| msgid "Formula Settings"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Formula editing"
-#~ msgstr "Formulilo agordo"
-
-#, fuzzy
-#~| msgid "Formula"
-#~ msgid "Formula tool"
-#~ msgstr "Formulilo"
+msgstr "Redakti formulon kun LaTeX-sintakso"

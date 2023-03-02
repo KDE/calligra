@@ -18,16 +18,11 @@
 // Sheets
 #include "engine/CalculationSettings.h"
 #include "engine/Damages.h"
-#include "engine/Localization.h"
-#include "engine/ValueConverter.h"
 
-#include "core/ApplicationSettings.h"
 #include "core/CellStorage.h"
-#include "core/ColFormatStorage.h"
 #include "core/Database.h"
 #include "core/DocBase.h"
 #include "core/Map.h"
-#include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 #include "core/StyleManager.h"
 
@@ -42,19 +37,14 @@
 // actions
 #include "actions/Actions.h"
 #include "actions/CellAction.h"
-#include "actions/Comment.h"   // for CommentCommand, which is used by the Find action
 
 // commands
 #include "commands/AutoFillCommand.h"
-#include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
-#include "commands/RowColumnManipulators.h"
-#include "commands/StyleCommand.h"
 
 // dialogs
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
-#include "dialogs/GoalSeekDialog.h"
 #include "dialogs/ListDialog.h"
 
 // strategies
@@ -71,23 +61,14 @@
 #include <KoPointerEvent.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
-#include <KoIcon.h>
 
 // KF5
-#include <kfind.h>
 #include <kmessagebox.h>
-#include <kreplace.h>
 #include <KSharedConfig>
 #include <kstandardaction.h>
-#include <ktoggleaction.h>
 
 // Qt
-#include <QStandardPaths>
 #include <QApplication>
-#include <QClipboard>
-#include <QBuffer>
-#include <QMimeData>
-#include <QMenu>
 #include <QPainter>
 #include <QDomDocument>
 #ifndef QT_NO_SQL
@@ -109,22 +90,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->externalEditor = 0;
     d->formulaDialog = 0;
     d->initialized = false;
-    d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
-
-    d->findOptions = 0;
-    d->findLeftColumn = 0;
-    d->findRightColumn = 0;
-    d->findTopRow = 0;
-    d->findBottomRow = 0;
-    d->typeValue = FindOption::Value;
-    d->directionValue = FindOption::Row;
-    d->find = 0;
-    d->replace = 0;
-    d->replaceCommand = 0;
-
-    d->searchInSheets.currentSheet = 0;
-    d->searchInSheets.firstSheet = 0;
 
     // Create the extra and ones with extended names for the context menu.
     d->createPopupMenuActions();
@@ -155,11 +121,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::sortList);
     action->setToolTip(i18n("Create custom lists for sorting or autofill"));
 
-    action = new QAction(i18n("&Goal Seek..."), this);
-    addAction("goalSeek", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::goalSeek);
-    action->setToolTip(i18n("Repeating calculation to find a specific value"));
-   
     KSelectAction *selectAction = new KSelectAction(i18n("Formula Selection"), this);
     addAction("formulaSelection", selectAction);
     selectAction->setToolTip(i18n("Insert a function"));
@@ -180,18 +141,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     action->setToolTip(i18n("Selects all cells in the current sheet"));
     addAction("selectAll", action);
-
-    action = KStandardAction::find(this, SLOT(find()), this);
-    addAction("edit_find", action);
-
-    action = KStandardAction::findNext(this, SLOT(findNext()), this);
-    addAction("edit_find_next", action);
-
-    action = KStandardAction::findPrev(this, SLOT(findPrevious()), this);
-    addAction("edit_find_last", action);
-
-    action = KStandardAction::replace(this, SLOT(replace()), this);
-    addAction("edit_replace", action);
 
     // -- misc actions --
 
@@ -228,7 +177,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 CellToolBase::~CellToolBase()
 {
     delete d->formulaDialog;
-    delete d->popupListChoose;
     delete d->cellEditor;
     delete d->actions;
     qDeleteAll(d->popupMenuActions);
@@ -1055,14 +1003,6 @@ void CellToolBase::sortList()
     delete dialog;
 }
 
-void CellToolBase::goalSeek()
-{
-    selection()->emitCloseEditor(true);
-
-    GoalSeekDialog* dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
-    dialog->show(); // dialog deletes itself later
-}
-
 void CellToolBase::formulaSelection(const QString& expression)
 {
     if (expression == i18n("Others...")) {
@@ -1107,308 +1047,6 @@ void CellToolBase::selectAll()
     selection()->selectAll();
 }
 
-void CellToolBase::find()
-{
-    QPointer<FindDlg> dialog = new FindDlg(canvas()->canvasWidget(), "Find", d->findOptions, d->findStrings);
-    dialog->setHasSelection(!selection()->isSingular());
-    dialog->setHasCursor(true);
-    if (KFindDialog::Accepted != dialog->exec())
-        return;
-
-    // Save for next time
-    d->findOptions = dialog->options();
-    d->findStrings = dialog->findHistory();
-    d->typeValue = dialog->searchType();
-    d->directionValue = dialog->searchDirection();
-
-    // Create the KFind object
-    delete d->find;
-    delete d->replace;
-    d->find = new KFind(dialog->pattern(), dialog->options(), canvas()->canvasWidget());
-    d->replace = 0;
-    d->replaceCommand = 0;
-
-    d->searchInSheets.currentSheet = selection()->activeSheet();
-    d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
-
-    initFindReplace();
-    findNext();
-    delete dialog;
-}
-
-// Initialize a find or replace operation, using d->find or d->replace,
-// and d->findOptions.
-void CellToolBase::initFindReplace()
-{
-    KFind* findObj = d->find ? d->find : d->replace;
-    Q_ASSERT(findObj);
-    connect(findObj, QOverload<const QString &, int, int>::of(&KFind::highlight),
-            this, &CellToolBase::slotHighlight);
-    connect(findObj, &KFind::findNext,
-            this, &CellToolBase::findNext);
-
-    bool bck = d->findOptions & KFind::FindBackwards;
-    Sheet* currentSheet = d->searchInSheets.currentSheet;
-
-    QRect region = (d->findOptions & KFind::SelectedText)
-                   ? selection()->lastRange()
-                   : QRect(1, 1, currentSheet->fullCellStorage()->columns(), currentSheet->fullCellStorage()->rows()); // All cells
-
-    int colStart = !bck ? region.left() : region.right();
-    int colEnd = !bck ? region.right() : region.left();
-    int rowStart = !bck ? region.top() : region.bottom();
-    int rowEnd = !bck ? region.bottom() : region.top();
-
-    d->findLeftColumn = region.left();
-    d->findRightColumn = region.right();
-    d->findTopRow = region.top();
-    d->findBottomRow = region.bottom();
-
-    d->findStart = QPoint(colStart, rowStart);
-    d->findPos = (d->findOptions & KFind::FromCursor) ? selection()->marker() : d->findStart;
-    d->findEnd = QPoint(colEnd, rowEnd);
-    //debugSheets << d->findPos <<" to" << d->findEnd;
-    //debugSheets <<"leftcol=" << d->findLeftColumn <<" rightcol=" << d->findRightColumn;
-}
-
-void CellToolBase::findNext()
-{
-    KFind* findObj = d->find ? d->find : d->replace;
-    if (!findObj)  {
-        find();
-        return;
-    }
-    KFind::Result res = KFind::NoMatch;
-    Cell cell = findNextCell();
-    bool forw = !(d->findOptions & KFind::FindBackwards);
-    while (res == KFind::NoMatch && !cell.isNull()) {
-        if (findObj->needData()) {
-            if (d->typeValue == FindOption::Note)
-                findObj->setData(cell.comment());
-            else
-                findObj->setData(cell.userInput());
-            d->findPos = QPoint(cell.column(), cell.row());
-            //debugSheets <<"setData(cell" << d->findPos << ')';
-        }
-
-        // Let KFind inspect the text fragment, and display a dialog if a match is found
-        if (d->find)
-            res = d->find->find();
-        else
-            res = d->replace->replace();
-
-        if (res == KFind::NoMatch)  {
-            // Go to next cell, skipping unwanted cells
-            if (d->directionValue == FindOption::Row) {
-                if (forw)
-                    ++d->findPos.rx();
-                else
-                    --d->findPos.rx();
-            } else {
-                if (forw)
-                    ++d->findPos.ry();
-                else
-                    --d->findPos.ry();
-            }
-            cell = findNextCell();
-        }
-    }
-
-    if (res == KFind::NoMatch) {
-        //emitUndoRedo();
-        //removeHighlight();
-        if (findObj->shouldRestart()) {
-            d->findOptions &= ~KFind::FromCursor;
-            d->findPos = d->findStart;
-            findObj->resetCounts();
-            findNext();
-        } else { // done, close the 'find next' dialog
-            if (d->find)
-                d->find->closeFindNextDialog();
-            else {
-                canvas()->addCommand(d->replaceCommand);
-                d->replaceCommand = 0;
-                d->replace->closeReplaceNextDialog();
-            }
-        }
-    }
-    else if (!cell.isNull()) {
-        // move to the cell
-        Sheet *sheet = dynamic_cast<Sheet *>(cell.sheet());
-        if (sheet != selection()->activeSheet())
-            selection()->emitVisibleSheetRequested(sheet);
-        selection()->initialize (Region (cell.column(), cell.row(), cell.sheet()), sheet);
-        scrollToCell (selection()->cursor());
-    }
-}
-
-Cell CellToolBase::nextFindValidCell(int col, int row)
-{
-    Cell cell = Cell(d->searchInSheets.currentSheet, col, row);
-    if (cell.isDefault() || cell.isPartOfMerged() || cell.isFormula())
-        cell = Cell();
-    if (d->typeValue == FindOption::Note && !cell.isNull() && cell.comment().isEmpty())
-        cell = Cell();
-    return cell;
-}
-
-Cell CellToolBase::findNextCell()
-{
-    // cellStorage()->firstInRow / cellStorage()->nextInRow would be faster at doing that,
-    // but it doesn't seem to be easy to combine it with 'start a column d->find.x()'...
-
-    Sheet* sheet = d->searchInSheets.currentSheet;
-    Cell cell;
-    bool forw = !(d->findOptions & KFind::FindBackwards);
-    int col = d->findPos.x();
-    int row = d->findPos.y();
-    int maxRow = sheet->fullCellStorage()->rows();
-//     warnSheets <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
-
-    if (d->directionValue == FindOption::Row) {
-        while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
-            while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
-                cell = nextFindValidCell(col, row);
-                if (forw) ++col;
-                else --col;
-            }
-            if (!cell.isNull())
-                break;
-            // Prepare looking in the next row
-            if (forw)  {
-                col = d->findLeftColumn;
-                ++row;
-            } else {
-                col = d->findRightColumn;
-                --row;
-            }
-            //warnSheets <<"next row:" << col << ',' << row;
-        }
-    } else {
-        while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
-            while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
-                cell = nextFindValidCell(col, row);
-                if (forw) ++row;
-                else --row;
-            }
-            if (!cell.isNull())
-                break;
-            // Prepare looking in the next col
-            if (forw)  {
-                row = d->findTopRow;
-                ++col;
-            } else {
-                row = d->findBottomRow;
-                --col;
-            }
-            //debugSheets <<"next row:" << col << ',' << row;
-        }
-    }
-    // if (!cell)
-    // No more next cell - TODO go to next sheet (if not looking in a selection)
-    // (and make d->findEnd(max, max) in that case...)
-//    if (cell.isNull()) warnSheets<<"returning null"<<endl;
-//    else warnSheets <<" returning" << cell;
-
-    return cell;
-}
-
-void CellToolBase::findPrevious()
-{
-    KFind* findObj = d->find ? d->find : d->replace;
-    if (!findObj)  {
-        find();
-        return;
-    }
-    //debugSheets <<"findPrevious";
-    int opt = d->findOptions;
-    bool forw = !(opt & KFind::FindBackwards);
-    if (forw)
-        d->findOptions = (opt | KFind::FindBackwards);
-    else
-        d->findOptions = (opt & ~KFind::FindBackwards);
-
-    findNext();
-
-    d->findOptions = opt; // restore initial options
-}
-
-void CellToolBase::replace()
-{
-    QPointer<SearchDlg> dialog = new SearchDlg(canvas()->canvasWidget(), "Replace", d->findOptions, d->findStrings, d->replaceStrings);
-    dialog->setHasSelection(!selection()->isSingular());
-    dialog->setHasCursor(true);
-    if (KReplaceDialog::Accepted != dialog->exec())
-        return;
-
-    d->findOptions = dialog->options();
-    d->findStrings = dialog->findHistory();
-    d->replaceStrings = dialog->replacementHistory();
-    d->typeValue = dialog->searchType();
-
-    delete d->find;
-    delete d->replace;
-    d->find = 0;
-    // NOTE Stefan: Avoid beginning of line replacements with nothing which
-    //              will lead to an infinite loop (Bug #125535). The reason
-    //              for this is unclear to me, but who cares and who would
-    //              want to do something like this, häh?!
-    if (dialog->pattern() == "^" && dialog->replacement().isEmpty())
-        return;
-    d->replace = new KReplace(dialog->pattern(), dialog->replacement(), dialog->options());
-
-    d->searchInSheets.currentSheet = selection()->activeSheet();
-    d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
-    initFindReplace();
-    connect(d->replace, QOverload<const QString &, int, int, int>::of(&KReplace::replace),
-            this, &CellToolBase::slotReplace);
-
-    d->replaceCommand = new KUndo2Command(kundo2_i18n("Replace"));
-
-    findNext();
-    delete dialog;
-
-#if 0
-    // Refresh the editWidget
-    // TODO - after a replacement only?
-    Cell cell = Cell(activeSheet(), selection()->marker());
-    if (cell.userInput() != 0)
-        d->editWidget->setText(cell.userInput());
-    else
-        d->editWidget->setText("");
-#endif
-}
-
-void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/)
-{
-    selection()->initialize(d->findPos);
-    QDialog *dialog = 0;
-    if (d->find)
-        dialog = d->find->findNextDialog();
-    else
-        dialog = d->replace->replaceNextDialog();
-    debugSheets << " baseDialog :" << dialog;
-    QRect globalRect(d->findPos, d->findEnd);
-    globalRect.moveTopLeft(canvas()->canvasWidget()->mapToGlobal(globalRect.topLeft()));
-    KoDialog::avoidArea(dialog, QRect(d->findPos, d->findEnd));
-}
-
-void CellToolBase::slotReplace(const QString &newText, int, int, int)
-{
-    if (d->typeValue == FindOption::Value) {
-        DataManipulator* command = new DataManipulator(d->replaceCommand);
-        command->setParsing(true);
-        command->setSheet(d->searchInSheets.currentSheet);
-        command->setValue(Value(newText));
-        command->add(Region(d->findPos, d->searchInSheets.currentSheet));
-    } else if (d->typeValue == FindOption::Note) {
-        CommentCommand* command = new CommentCommand(d->replaceCommand);
-        command->setComment(newText);
-        command->setSheet(d->searchInSheets.currentSheet);
-        command->add(Region(d->findPos, d->searchInSheets.currentSheet));
-    }
-}
-
 void CellToolBase::inspector()
 {
     // useful to inspect objects
@@ -1431,93 +1069,6 @@ void CellToolBase::qTableView()
     delete dialog;
     delete model;
 #endif
-}
-
-void CellToolBase::listChoosePopupMenu()
-{
-    if (!selection()->activeSheet()->fullMap()->isReadWrite()) {
-        return;
-    }
-
-    delete d->popupListChoose;
-    d->popupListChoose = new QMenu();
-
-    Sheet *const sheet = selection()->activeSheet();
-    const Cell cursorCell(sheet, selection()->cursor());
-    const QString text = cursorCell.userInput();
-    const CellStorage *const storage = sheet->fullCellStorage();
-
-    QStringList itemList;
-    const Region::ConstIterator end(selection()->constEnd());
-    for (Region::ConstIterator it(selection()->constBegin()); it != end; ++it) {
-        const QRect range = (*it)->rect();
-        if (cursorCell.column() < range.left() || cursorCell.column() > range.right()) {
-            continue; // next range
-        }
-        Cell cell;
-        if (range.top() == 1) {
-            cell = storage->firstInColumn(cursorCell.column(), CellStorage::Values);
-        } else {
-            cell = storage->nextInColumn(cursorCell.column(), range.top() - 1, CellStorage::Values);
-        }
-        while (!cell.isNull() && cell.row() <= range.bottom()) {
-            if (!cell.isPartOfMerged() && !(cell == cursorCell)) {
-                const QString userInput = cell.userInput();
-                if (cell.value().isString() && userInput != text && !userInput.isEmpty()) {
-                    if (itemList.indexOf(userInput) == -1) {
-                        itemList.append(userInput);
-                    }
-                }
-            }
-            cell = storage->nextInColumn(cell.column(), cell.row(), CellStorage::Values);
-        }
-    }
-
-    for (QStringList::ConstIterator it = itemList.constBegin(); it != itemList.constEnd(); ++it) {
-        d->popupListChoose->addAction((*it));
-    }
-
-    if (itemList.isEmpty()) {
-        return;
-    }
-    double tx = sheet->columnPosition(selection()->marker().x());
-    double ty = sheet->rowPosition(selection()->marker().y());
-    double h = cursorCell.height();
-    if (sheetView(sheet)->obscuresCells(selection()->marker())) {
-        const CellView& cellView = sheetView(sheet)->cellView(selection()->marker().x(), selection()->marker().y());
-        h = cellView.cellHeight();
-    }
-    ty += h;
-
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-        tx = canvas()->canvasWidget()->width() - tx;
-    }
-
-    QPoint p((int)tx, (int)ty);
-    QPoint p2 = canvas()->canvasWidget()->mapToGlobal(p);
-
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-        p2.setX(p2.x() - d->popupListChoose->sizeHint().width() + 1);
-    }
-
-    d->popupListChoose->popup(p2);
-    connect(d->popupListChoose, &QMenu::triggered,
-            this, &CellToolBase::listChooseItemSelected);
-}
-
-
-void CellToolBase::listChooseItemSelected(QAction* action)
-{
-    const Cell cell(selection()->activeSheet(), selection()->marker());
-    if (action->text() == cell.userInput())
-        return;
-
-    DataManipulator *command = new DataManipulator;
-    command->setSheet(selection()->activeSheet());
-    command->setValue(Value(action->text()));
-    command->setParsing(true);
-    command->add(selection()->marker());
-    command->execute(canvas());
 }
 
 void CellToolBase::documentSettingsDialog()

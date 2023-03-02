@@ -122,6 +122,7 @@ void TestStatisticalFunctions::initTestCase()
     m_map->addNewSheet();
     SheetBase* sheet = m_map->sheet(0);
     CellBaseStorage* storage = sheet->cellStorage();
+    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
 
     setlocale(LC_ALL, "C.UTF-8");
     m_map->calculationSettings()->locale()->setLanguage("C.UTF-8");

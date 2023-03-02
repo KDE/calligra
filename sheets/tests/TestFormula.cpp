@@ -7,7 +7,6 @@
 #include "TestKspreadCommon.h"
 
 #include "engine/MapBase.h"
-#include "engine/SheetBase.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
 
@@ -102,10 +101,7 @@ void TestFormula::initTestCase()
 
     MapBase *map = new MapBase();
     m_sheet = map->addNewSheet();
-
-    setlocale(LC_ALL, "C.UTF-8");
-    m_sheet->map()->calculationSettings()->locale()->setLanguage("C.UTF-8");
-
+    map->calculationSettings()->locale()->setLanguage(QLocale::C);
     CellBase(m_sheet, 1, 1).setCellValue(Value(6));
     CellBase(m_sheet, 1, 2).setCellValue(Value(1.5));
 }

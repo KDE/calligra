@@ -1,16 +1,17 @@
 # Translation of calligra_shape_music.po to Catalan
-# Copyright (C) 2008-2016 This_file_is_part_of_KDE
+# Copyright (C) 2008-2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the MusicShape package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008.
 # Josep M. Ferrer <txemaq@gmail.com>, 2012, 2014, 2015, 2016.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2016-11-20 22:37+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2023-02-27 22:43+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +21,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: actions/AccidentalAction.cpp:54
 #, kde-format
@@ -253,7 +254,7 @@ msgstr "Afegeix punt"
 #: commands/AddNoteCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
-msgstr "Arranja la durada de l'acord"
+msgstr "Estableix la durada de l'acord"
 
 #: commands/AddNoteCommand.cpp:31
 msgctxt "(qtundo-format)"
@@ -328,7 +329,7 @@ msgstr "Elimina l'element del pentagrama"
 #: commands/SetAccidentalsCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
-msgstr "Arranja els accidentals"
+msgstr "Estableix els accidentals"
 
 #: commands/SetClefCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -354,7 +355,7 @@ msgstr "Commuta la nota lligada"
 #: dialogs/KeySignatureDialog.cpp:15
 #, kde-format
 msgid "Set key signature"
-msgstr "Arranja la signatura de clau"
+msgstr "Estableix la signatura de clau"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/KeySignatureDialog.ui:63

@@ -212,24 +212,24 @@
 <varlistentry>
 <term
 ><guilabel
->Percentagem</guilabel
+>Porcentagem</guilabel
 ></term>
 <listitem
 ><para
 >Quando você tiver um número na célula atual e mudar o formato da célula de <guilabel
 >Genérico</guilabel
 > para <guilabel
->Percentagem</guilabel
+>Porcentagem</guilabel
 >, o número da célula atual será multiplicado por 100.</para>
 <para
 >Por exemplo, se tiver 2 e definir o formato da célula como <guilabel
->Percentagem</guilabel
+>Porcentagem</guilabel
 >, o número ficará igual a 200 %. Se mudar de volta para o formato de célula <guilabel
 >Genérico</guilabel
 >, seu valor retornará a 2.</para>
 <para
 >Você poderá também usar o ícone <guiicon
->Percentagem</guiicon
+>Porcentagem</guiicon
 > na Barra de <guilabel
 >Formatação</guilabel
 >: <inlinemediaobject

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2011-07-07 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -936,7 +936,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") skilar 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Gagnagrunnur"
@@ -13667,133 +13667,112 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Breyta ramma"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Fall"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "&Stærðfræðileg segð..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Dags."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Raða listum..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:158
-#, fuzzy, kde-format
-msgid "&Goal Seek..."
-msgstr "&Raðir..."
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Velja formúlu"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Setja inn dálk(a)"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Aðrir..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Breyta reit"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Breyta lit á texta"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Sýna fyrirsögn á röð"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Staðbundin viðföng"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Sýna vísir að athugasemd"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Nákvæmni"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Eyða athugasemd"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Skipta út"
-
-#: ui/CellToolBase_p.cpp:853
-#, fuzzy, kde-format
-msgid "Selection List..."
-msgstr "Vallisti..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14672,51 +14651,6 @@ msgstr "Tímasnið"
 msgid "Currency format: %1"
 msgstr "Núviriði"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-msgid "More Options"
-msgstr "Fleiri valmöguleikar"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "Lóðréttur texti"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-msgid "Search in:"
-msgstr "Leita í:"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-msgid "Cell Values"
-msgstr "Gildi"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Comments"
-msgstr "Athugasemdir"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-msgid "Search direction:"
-msgstr "Lóðréttur texti"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, fuzzy, kde-format
-msgid "Down then Across"
-msgstr "Sýna röð(raðir)"
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "Textakostur:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14888,87 +14822,6 @@ msgstr "Þetta fall hefur enga stika."
 #, fuzzy, kde-format
 msgid "Description is not available."
 msgstr "Útskýring í dálki"
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, fuzzy, kde-format
-msgid "Goal Seek"
-msgstr "Markmiðaleit"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, fuzzy, kde-format
-msgid "Cell reference is invalid."
-msgstr "Tímasetningin er ekki gild!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, fuzzy, kde-format
-msgid "Target value is invalid."
-msgstr "Tímasetningin er ekki gild!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, fuzzy, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Reiturinn Gögn Y má ekki vera formúla"
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Reiturinn Gögn Y má ekki vera formúla"
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, fuzzy, kde-format
-msgid "Starting..."
-msgstr "Ræsi..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, fuzzy, kde-format
-msgid "Iteration:"
-msgstr "Endurtekning:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, fuzzy, kde-format
-msgid "New value:"
-msgstr "Nýtt gildi:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, fuzzy, kde-format
-msgid "Set cell:"
-msgstr "Strengur"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, fuzzy, kde-format
-msgid "To value:"
-msgstr "Hágildi"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, fuzzy, kde-format
-msgid "By changing cell:"
-msgstr "Strengur"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, fuzzy, kde-format
-msgid "Current value:"
-msgstr "Núviriði"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
@@ -15648,6 +15501,99 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Setja inn dálk(a)"
+
+#, fuzzy
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Raðir..."
+
+#, fuzzy
+#~ msgid "Goal Seek"
+#~ msgstr "Markmiðaleit"
+
+#, fuzzy
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Tímasetningin er ekki gild!"
+
+#, fuzzy
+#~ msgid "Target value is invalid."
+#~ msgstr "Tímasetningin er ekki gild!"
+
+#, fuzzy
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Reiturinn Gögn Y má ekki vera formúla"
+
+#, fuzzy
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Reiturinn Gögn Y má ekki vera formúla"
+
+#, fuzzy
+#~ msgid "Starting..."
+#~ msgstr "Ræsi..."
+
+#, fuzzy
+#~ msgid "Iteration:"
+#~ msgstr "Endurtekning:"
+
+#, fuzzy
+#~ msgid "New value:"
+#~ msgstr "Nýtt gildi:"
+
+#, fuzzy
+#~ msgid "Set cell:"
+#~ msgstr "Strengur"
+
+#, fuzzy
+#~ msgid "To value:"
+#~ msgstr "Hágildi"
+
+#, fuzzy
+#~ msgid "By changing cell:"
+#~ msgstr "Strengur"
+
+#, fuzzy
+#~ msgid "Current value:"
+#~ msgstr "Núviriði"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Skipta út"
+
+#, fuzzy
+#~ msgid "Selection List..."
+#~ msgstr "Vallisti..."
+
+#, fuzzy
+#~ msgid "More Options"
+#~ msgstr "Fleiri valmöguleikar"
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "Lóðréttur texti"
+
+#, fuzzy
+#~ msgid "Search in:"
+#~ msgstr "Leita í:"
+
+#, fuzzy
+#~ msgid "Cell Values"
+#~ msgstr "Gildi"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "Athugasemdir"
+
+#, fuzzy
+#~ msgid "Search direction:"
+#~ msgstr "Lóðréttur texti"
+
+#, fuzzy
+#~ msgid "Down then Across"
+#~ msgstr "Sýna röð(raðir)"
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "Textakostur:"
 
 #, fuzzy
 #~ msgid "Cell Format..."

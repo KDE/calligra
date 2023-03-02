@@ -89,6 +89,7 @@ void TestMathFunctions::initTestCase()
     m_map = new MapBase;
     m_map->addNewSheet("Sheet1");
     m_map->addNewSheet("Sheet2");
+    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
 
     SheetBase* sheet1 = m_map->sheet(0);
     CellBaseStorage* storage1 = sheet1->cellStorage();

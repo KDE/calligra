@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-02-27 01:01+0000\n"
 "PO-Revision-Date: 2022-05-05 10:23+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -928,7 +928,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") = 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Dată"
@@ -13621,133 +13621,112 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Modifică culoare margine"
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:106
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funcție"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:109
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Expresie &matematică..."
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:112
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Dată"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:116
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Dată"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Custom Lists..."
 msgstr "Sortează liste..."
 
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:122
 #, kde-format
 msgid "Create custom lists for sorting or autofill"
 msgstr ""
 
-#: ui/CellToolBase.cpp:158
-#, fuzzy, kde-format
-msgid "&Goal Seek..."
-msgstr "&Serii..."
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:124
 #, kde-format
 msgid "Formula Selection"
 msgstr "Selecție formulă"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:126
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Inserează coloană(e)"
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
 #, kde-format
 msgid "Others..."
 msgstr "Altele..."
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:135
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modifică celula"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:139
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Modifică culoare text"
 
-#: ui/CellToolBase.cpp:181
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Selects all cells in the current sheet"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:147
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:153
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Afișează antet de linie"
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:159
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Parametrii locali"
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:162
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Afișează indicator de comentariu"
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:166
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Precizie"
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:170
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Precizie"
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:171
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:955
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:975
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
-
-#: ui/CellToolBase.cpp:1366
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr "Septembrie"
-
-#: ui/CellToolBase_p.cpp:853
-#, fuzzy, kde-format
-msgid "Selection List..."
-msgstr "Listă selecție..."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14626,51 +14605,6 @@ msgstr "Format timp"
 msgid "Currency format: %1"
 msgstr "Valoare prezentă"
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, fuzzy, kde-format
-msgid "More Options"
-msgstr "Opțiune text"
-
-#: ui/dialogs/FindDialog.cpp:31
-#, fuzzy, kde-format
-msgid "Search entire sheet"
-msgstr "Text vertical"
-
-#: ui/dialogs/FindDialog.cpp:35
-#, fuzzy, kde-format
-msgid "Search in:"
-msgstr "Text vertical"
-
-#: ui/dialogs/FindDialog.cpp:43
-#, fuzzy, kde-format
-msgid "Cell Values"
-msgstr "Valori"
-
-#: ui/dialogs/FindDialog.cpp:44
-#, fuzzy, kde-format
-msgid "Comments"
-msgstr "Comentariu"
-
-#: ui/dialogs/FindDialog.cpp:48
-#, fuzzy, kde-format
-msgid "Search direction:"
-msgstr "A doua condiție"
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:91
-#, fuzzy, kde-format
-msgid "Fewer Options"
-msgstr "Opțiune text"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14842,87 +14776,6 @@ msgstr "Această funcție nu are parametrii."
 #, fuzzy, kde-format
 msgid "Description is not available."
 msgstr "Descriere în coloană"
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, fuzzy, kde-format
-msgid "Goal Seek"
-msgstr "&Serii..."
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, fuzzy, kde-format
-msgid "Cell reference is invalid."
-msgstr "Acesta nu este un timp valid!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, fuzzy, kde-format
-msgid "Target value is invalid."
-msgstr "Acesta nu este un timp valid!"
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, fuzzy, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Celula Data Y nu trebuie să fie o formulă"
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, fuzzy, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Celula Data Y nu trebuie să fie o formulă"
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, fuzzy, kde-format
-msgid "Starting..."
-msgstr "Șir"
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, fuzzy, kde-format
-msgid "Iteration:"
-msgstr "Operație"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, fuzzy, kde-format
-msgid "New value:"
-msgstr "Valoare fațadă"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, fuzzy, kde-format
-msgid "Set cell:"
-msgstr "Șir"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, fuzzy, kde-format
-msgid "To value:"
-msgstr "Valoare prag sus"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, fuzzy, kde-format
-msgid "By changing cell:"
-msgstr "Șir"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, fuzzy, kde-format
-msgid "Current value:"
-msgstr "Valoare prezentă"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
@@ -15602,6 +15455,95 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Inserează coloană(e)"
+
+#, fuzzy
+#~ msgid "&Goal Seek..."
+#~ msgstr "&Serii..."
+
+#, fuzzy
+#~ msgid "Goal Seek"
+#~ msgstr "&Serii..."
+
+#, fuzzy
+#~ msgid "Cell reference is invalid."
+#~ msgstr "Acesta nu este un timp valid!"
+
+#, fuzzy
+#~ msgid "Target value is invalid."
+#~ msgstr "Acesta nu este un timp valid!"
+
+#, fuzzy
+#~ msgid "Source cell must contain a numeric value."
+#~ msgstr "Celula Data Y nu trebuie să fie o formulă"
+
+#, fuzzy
+#~ msgid "Target cell must contain a formula."
+#~ msgstr "Celula Data Y nu trebuie să fie o formulă"
+
+#, fuzzy
+#~ msgid "Starting..."
+#~ msgstr "Șir"
+
+#, fuzzy
+#~ msgid "Iteration:"
+#~ msgstr "Operație"
+
+#, fuzzy
+#~ msgid "New value:"
+#~ msgstr "Valoare fațadă"
+
+#, fuzzy
+#~ msgid "Set cell:"
+#~ msgstr "Șir"
+
+#, fuzzy
+#~ msgid "To value:"
+#~ msgstr "Valoare prag sus"
+
+#, fuzzy
+#~ msgid "By changing cell:"
+#~ msgstr "Șir"
+
+#, fuzzy
+#~ msgid "Current value:"
+#~ msgstr "Valoare prezentă"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Replace"
+#~ msgstr "Septembrie"
+
+#, fuzzy
+#~ msgid "Selection List..."
+#~ msgstr "Listă selecție..."
+
+#, fuzzy
+#~ msgid "More Options"
+#~ msgstr "Opțiune text"
+
+#, fuzzy
+#~ msgid "Search entire sheet"
+#~ msgstr "Text vertical"
+
+#, fuzzy
+#~ msgid "Search in:"
+#~ msgstr "Text vertical"
+
+#, fuzzy
+#~ msgid "Cell Values"
+#~ msgstr "Valori"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "Comentariu"
+
+#, fuzzy
+#~ msgid "Search direction:"
+#~ msgstr "A doua condiție"
+
+#, fuzzy
+#~ msgid "Fewer Options"
+#~ msgstr "Opțiune text"
 
 #, fuzzy
 #~ msgid "Cell Format..."

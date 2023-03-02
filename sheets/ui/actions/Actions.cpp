@@ -21,12 +21,15 @@
 #include "Copy.h"
 #include "CSVActions.h"
 #include "Fill.h"
+#include "FindReplace.h"
 #include "Font.h"
+#include "GoalSeek.h"
 #include "Goto.h"
 #include "Indent.h"
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
 #include "Link.h"
+#include "ListChoose.h"
 #include "Merge.h"
 #include "NamedAreas.h"
 #include "PageBreak.h"
@@ -127,10 +130,17 @@ void Actions::createActions()
     addAction(new Fill(this, FillManipulator::Down));
     addAction(new Fill(this, FillManipulator::Left));
     addAction(new Fill(this, FillManipulator::Right));
+    // FindReplace
+    addAction(new Find(this));
+    addAction(new FindNext(this));
+    addAction(new FindPrevious(this));
+    addAction(new Replace(this));
     // Font
     addAction(new Font(this));
     addAction(new FontSize(this));
     addAction(new FontColor(this));
+    // GoalSeek
+    addAction(new GoalSeek(this));
     // Goto
     addAction(new Goto(this));
     // Indent
@@ -143,6 +153,8 @@ void Actions::createActions()
     // Link
     addAction(new Link(this));
     addAction(new ClearLink(this));
+    // ListChoose
+    addAction(new ListChoose(this));
     // Merge
     addAction(new Merge(this, false, false));
     addAction(new Merge(this, true, false));

@@ -1,11 +1,12 @@
 # Translation of calligra_shape_spreadsheet.pot to esperanto.
 # Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
 # Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: TableShape\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-05-21 00:45+0000\n"
 "PO-Revision-Date: 2023-01-04 22:00+0100\n"
@@ -21,12 +22,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Oliver Kellogg"
+msgstr "Axel Rousseau,Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "okellogg@users.sourceforge.net"
+msgstr "axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
 
 #: SheetsEditor.cpp:57 SheetsEditor.cpp:121
 #, kde-format
@@ -46,7 +47,7 @@ msgstr "Forigi"
 #: SheetsEditor.cpp:121
 #, kde-format
 msgid "Enter Name:"
-msgstr "Enigu Nomon:"
+msgstr "Enigi Nomon:"
 
 #: TableShape.cpp:288
 #, kde-format
@@ -70,7 +71,7 @@ msgstr "Elŝuti"
 #: TableShape.cpp:289
 #, kde-format
 msgid "Skip"
-msgstr ""
+msgstr "Salti"
 
 #: TableShapeFactory.cpp:37
 #, kde-format
@@ -95,7 +96,7 @@ msgstr "Importi"
 #: TableTool.cpp:223
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "Eksporti OpenDocument Spreadsheet File"
 
 #: TableTool.cpp:224
 #, kde-format
@@ -105,7 +106,7 @@ msgstr "Eksporti"
 #: TableTool.cpp:704
 #, kde-format
 msgid "Sheets"
-msgstr ""
+msgstr "Folioj"
 
 #: TableTool.cpp:746
 #, kde-format
@@ -115,17 +116,17 @@ msgstr "Tabelo:"
 #: TableTool.cpp:748
 #, kde-format
 msgid "Selected Sheet"
-msgstr ""
+msgstr "Elektita Folio"
 
 #: TableTool.cpp:763
 #, kde-format
 msgid "View Options"
-msgstr ""
+msgstr "Opcioj de Vidigo"
 
 #: TableToolFactory.cpp:21
 #, kde-format
 msgid "Table editing"
-msgstr ""
+msgstr "Tabelredaktado"
 
 #: ToolHeaders.cpp:286 ToolHeaders.cpp:884
 #, kde-format
