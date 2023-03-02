@@ -45,7 +45,7 @@ msgstr "별명(&N):"
 #: KoRdfFoaFEditWidget.ui:46
 #, kde-format
 msgid "&Phone Number:"
-msgstr "전화 번호(&P):"
+msgstr "전화번호(&P):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: KoRdfFoaFEditWidget.ui:59
