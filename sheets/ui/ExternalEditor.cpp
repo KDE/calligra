@@ -66,6 +66,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
 
 ExternalEditor::~ExternalEditor()
 {
+    disconnect(this, nullptr, nullptr, nullptr);
     delete d->highlighter;
     delete d;
 }

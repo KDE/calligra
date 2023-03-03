@@ -259,6 +259,7 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
 
 CellEditor::~CellEditor()
 {
+    disconnect(this, nullptr, nullptr, nullptr);
     if (selection()){
         selection()->endReferenceSelection();
     }
