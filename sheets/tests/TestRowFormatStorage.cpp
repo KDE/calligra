@@ -18,7 +18,7 @@ using namespace Calligra::Sheets;
 
 void TestRowFormatStorage::initTestCase()
 {
-    KLocalizedString::setApplicationDomain("sheets");
+    KLocalizedString::setApplicationDomain("calligrasheets");
     m_map = new Map();
     m_sheet = dynamic_cast<Sheet *>(m_map->addNewSheet());
 }

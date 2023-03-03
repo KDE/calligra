@@ -16,7 +16,7 @@ using namespace Calligra::Sheets;
 
 void TestRegion::initTestCase()
 {
-    KLocalizedString::setApplicationDomain("sheets");
+    KLocalizedString::setApplicationDomain("calligrasheets");
     m_map = new MapBase;
     SheetBase* sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet1");
