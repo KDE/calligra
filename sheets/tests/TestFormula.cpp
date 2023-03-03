@@ -7,7 +7,6 @@
 #include "TestKspreadCommon.h"
 
 #include "engine/MapBase.h"
-#include "engine/SheetBase.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
 
@@ -107,11 +106,6 @@ void TestFormula::initTestCase()
     CellBase(m_sheet, 1, 2).setCellValue(Value(1.5));
 }
 
-void TestFormula::cleanupTestCase()
-{
-    delete m_sheet->map();
-}
-
 void TestFormula::testTokenizer()
 {
     // simple, single-token formulas
@@ -199,7 +193,6 @@ void TestFormula::testConstant()
     CHECK_EVAL("0", Value(0));
     CHECK_EVAL("1", Value(1));
     CHECK_EVAL("-1", Value(-1));
-    qInfo()<<m_sheet->map()->calculationSettings()->locale();
     CHECK_EVAL("3.14e7", Value(3.14e7));
     CHECK_EVAL("3.14e-7", Value(3.14e-7));
     CHECK_EVAL("10000000000000000", Value(1e16));  // number too big to be represented as int32

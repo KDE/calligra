@@ -20,7 +20,6 @@ class TestFormula: public QObject
 
 private Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
     void testTokenizer();
     void testConstant();
     void testWhitespace();
