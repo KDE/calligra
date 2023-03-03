@@ -20,6 +20,7 @@
 #include "Consolidate.h"
 #include "Copy.h"
 #include "CSVActions.h"
+#include "CustomLists.h"
 #include "Fill.h"
 #include "FindReplace.h"
 #include "Font.h"
@@ -35,6 +36,7 @@
 #include "PageBreak.h"
 #include "Paste.h"
 // #include "Pivot.h"
+#include "SelectAll.h"
 #include "Sort.h"
 #include "SpellCheck.h"
 #include "Style.h"
@@ -125,6 +127,8 @@ void Actions::createActions()
     addAction(new InsertFromFile(this));
     addAction(new InsertFromClipboard(this));
     addAction(new TextToColumns(this));
+    // CustomLists
+    addAction(new ManageCustomLists(this));
     // Fill
     addAction(new Fill(this, FillManipulator::Up));
     addAction(new Fill(this, FillManipulator::Down));
@@ -172,6 +176,8 @@ void Actions::createActions()
     addAction(new PasteWithInsert(this));
     // Pivot
 //    addAction(new Pivot(this));
+    // SelectAll
+    addAction(new SelectAll(this));
     // Sort
     addAction(new Sort(this));
     addAction(new SortInc(this));

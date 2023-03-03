@@ -16,6 +16,7 @@ set (actions_DIR_SRCS
     actions/Consolidate.cpp
     actions/Copy.cpp
     actions/CSVActions.cpp
+    actions/CustomLists.cpp
     actions/Fill.cpp
     actions/FindReplace.cpp
     actions/Font.cpp
@@ -31,6 +32,7 @@ set (actions_DIR_SRCS
     actions/PageBreak.cpp
     actions/Paste.cpp
 #    actions/Pivot.cpp
+    actions/SelectAll.cpp
     actions/Sort.cpp
     actions/SpellCheck.cpp
     actions/Style.cpp
@@ -54,6 +56,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/GotoDialog.cpp
     actions/dialogs/InsertDialog.cpp
     actions/dialogs/LinkDialog.cpp
+    actions/dialogs/ListDialog.cpp
     actions/dialogs/NamedAreaDialog.cpp
     actions/dialogs/PasteInsertDialog.cpp
     actions/dialogs/Resize2Dialog.cpp
@@ -114,7 +117,6 @@ set (dialogs_DIR_SRCS
     dialogs/LayoutPage_Position.cpp
     dialogs/LayoutPage_Protection.cpp
     dialogs/LayoutDialog.cpp
-    dialogs/ListDialog.cpp
     dialogs/ShowDialog.cpp
     )
 

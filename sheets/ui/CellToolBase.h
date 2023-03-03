@@ -151,11 +151,9 @@ protected Q_SLOTS:
     // -- data insert actions --
     void insertFormula();
     void insertFromDatabase();
-    void sortList();
     void formulaSelection(const QString& expression);
     // -- general editing actions --
     void edit();
-    void selectAll();
     // -- misc actions --
     void inspector();
     void qTableView();

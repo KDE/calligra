@@ -45,7 +45,6 @@
 // dialogs
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
-#include "dialogs/ListDialog.h"
 
 // strategies
 #include "strategy/AutoFillStrategy.h"
@@ -64,12 +63,12 @@
 
 // KF5
 #include <kmessagebox.h>
-#include <KSharedConfig>
 #include <kstandardaction.h>
 
 // Qt
 #include <QApplication>
 #include <QPainter>
+#include <QStandardPaths>
 #include <QDomDocument>
 #ifndef QT_NO_SQL
 // #include <QSqlDatabase>
@@ -116,11 +115,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Insert data from a SQL database"));
 #endif
 
-    action = new QAction(i18n("Custom Lists..."), this);
-    addAction("sortList", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::sortList);
-    action->setToolTip(i18n("Create custom lists for sorting or autofill"));
-
     KSelectAction *selectAction = new KSelectAction(i18n("Formula Selection"), this);
     addAction("formulaSelection", selectAction);
     selectAction->setToolTip(i18n("Insert a function"));
@@ -137,10 +131,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(action, &QAction::triggered, this, &CellToolBase::edit);
     action->setToolTip(i18n("Edit the highlighted cell"));
-
-    action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    action->setToolTip(i18n("Selects all cells in the current sheet"));
-    addAction("selectAll", action);
 
     // -- misc actions --
 
@@ -983,26 +973,6 @@ void CellToolBase::insertFromDatabase()
 #endif
 }
 
-void CellToolBase::sortList()
-{
-    QPointer<ListDialog> dialog = new ListDialog(canvas()->canvasWidget());
-    Map *map = selection()->activeSheet()->fullMap();
-    ApplicationSettings *sett = map->applicationSettings();
-    Localization *locale = map->calculationSettings()->locale();
-    dialog->setCustomLists(sett->sortingList(), locale);
-    if (dialog->exec() && dialog->changed()) {
-        QStringList result = dialog->customLists();
-        auto config = KSharedConfig::openConfig();
-        config->group("Parameters").writeEntry("Other list", result);
-
-        // TODO do this better
-        delete(AutoFillCommand::other);
-        AutoFillCommand::other = nullptr;
-    }
-    sett->setSortingList(dialog->customLists());
-    delete dialog;
-}
-
 void CellToolBase::formulaSelection(const QString& expression)
 {
     if (expression == i18n("Others...")) {
@@ -1040,11 +1010,6 @@ void CellToolBase::edit()
 void CellToolBase::deleteSelection()
 {
     d->triggerAction("clearContents");
-}
-
-void CellToolBase::selectAll()
-{
-    selection()->selectAll();
 }
 
 void CellToolBase::inspector()
