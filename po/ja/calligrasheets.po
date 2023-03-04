@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2014-11-09 15:21-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -279,12 +279,12 @@ msgstr "使用例"
 msgid "Related Functions"
 msgstr "関連する関数"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "true"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "false"
@@ -934,7 +934,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") は 99 を返します"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "データベース"
@@ -13977,110 +13977,95 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "境界を変更"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "関数(&F)..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "数式を挿入"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "データベースから(&D)..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL データベースからデータを挿入"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "カスタムリスト..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "ソートまたは自動補完のためのカスタムリストを作成"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "数式の選択"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "関数を挿入"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "その他..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "セルを編集"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "強調表示されているセルを編集"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "現在のシートのすべてのセルを選択"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "インスペクタを実行..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView を表示..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr "文書の設定..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "文書の設定ダイアログを表示"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "保護"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "保護"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "カーソル位置にクリップボードの内容を貼り付け"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15579,70 +15564,6 @@ msgstr "背景色:"
 msgid "No Color"
 msgstr "色なし"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "カスタムリスト"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "リスト:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "エントリ:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "追加"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "キャンセル"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "新規"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "削除"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "変更"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "コピー"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "本当にこのリストを削除しますか？"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "リストを削除"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"入力領域は空ではありません。\n"
-"続けますか？"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15939,6 +15860,11 @@ msgstr "適用"
 msgid "Apply changes"
 msgstr "変更を適用"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "キャンセル"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15990,6 +15916,52 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "リンクを開きますか？"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "カスタムリスト..."
+
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "ソートまたは自動補完のためのカスタムリストを作成"
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "現在のシートのすべてのセルを選択"
+
+#~ msgid "Custom Lists"
+#~ msgstr "カスタムリスト"
+
+#~ msgid "List:"
+#~ msgstr "リスト:"
+
+#~ msgid "Entry:"
+#~ msgstr "エントリ:"
+
+#~ msgid "Add"
+#~ msgstr "追加"
+
+#~ msgid "New"
+#~ msgstr "新規"
+
+#~ msgid "Remove"
+#~ msgstr "削除"
+
+#~ msgid "Modify"
+#~ msgstr "変更"
+
+#~ msgid "Copy"
+#~ msgstr "コピー"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "本当にこのリストを削除しますか？"
+
+#~ msgid "Remove List"
+#~ msgstr "リストを削除"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "入力領域は空ではありません。\n"
+#~ "続けますか？"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "ゴール検索(&G)..."

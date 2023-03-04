@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread_prf\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2023-02-18 08:37+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -284,12 +284,12 @@ msgstr "Przykłady"
 msgid "Related Functions"
 msgstr "Funkcje powiązane"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "prawda"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "fałsz"
@@ -966,7 +966,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") zwraca 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Bazodanowe"
@@ -14335,108 +14335,92 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Zmień obramowanie"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkcja..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "Wstaw wyrażenie matematyczne"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "Z bazy &danych..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Wstaw dane z bazy danych SQL"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Listy użytkownika..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-"Utwórz listy użytkownika dla uszeregowania lub samoczynnego wypełniania."
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Wybór równania"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "Wstaw funkcję"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Inne..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Zmień komórkę"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Edytuj zaznaczoną komórkę"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Zaznacza wszystkie komórki w bieżącym arkuszu"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Uruchom Inspector..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Pokaż arkusz w formie QTable..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr "Ustawienia dokumentu..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Pokaż okno dialogowe ustawień dokumentu"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Zmień utwierdzenie odwołania"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Permute fixation"
 msgstr "Zmień utwierdzenie"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Zmień utwierdzenie odwołania w miejscu kursora tekstu"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Nie można namierzyć działania %1"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15884,70 +15868,6 @@ msgstr "Kolor tła:"
 msgid "No Color"
 msgstr "Brak koloru"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Listy użytkownika"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Lista:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Wpis:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "Dodaj"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "Nowy"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Usuń"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "Zmień"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "Skopiuj"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Czy naprawdę chcesz skasować tę listę?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Usuń listę"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Obszar wejściowy nie jest pusty.\n"
-"Czy chcesz kontynuować?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16233,6 +16153,11 @@ msgstr "Zastosuj"
 msgid "Apply changes"
 msgstr "Zastosuj zmiany"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "Anuluj"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -16284,6 +16209,53 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Czy otworzyć odnośnik?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Listy użytkownika..."
+
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr ""
+#~ "Utwórz listy użytkownika dla uszeregowania lub samoczynnego wypełniania."
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Zaznacza wszystkie komórki w bieżącym arkuszu"
+
+#~ msgid "Custom Lists"
+#~ msgstr "Listy użytkownika"
+
+#~ msgid "List:"
+#~ msgstr "Lista:"
+
+#~ msgid "Entry:"
+#~ msgstr "Wpis:"
+
+#~ msgid "Add"
+#~ msgstr "Dodaj"
+
+#~ msgid "New"
+#~ msgstr "Nowy"
+
+#~ msgid "Remove"
+#~ msgstr "Usuń"
+
+#~ msgid "Modify"
+#~ msgstr "Zmień"
+
+#~ msgid "Copy"
+#~ msgstr "Skopiuj"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Czy naprawdę chcesz skasować tę listę?"
+
+#~ msgid "Remove List"
+#~ msgstr "Usuń listę"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Obszar wejściowy nie jest pusty.\n"
+#~ "Czy chcesz kontynuować?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "&Poszukiwanie celu..."

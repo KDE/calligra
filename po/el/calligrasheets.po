@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2023-01-04 12:01+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -278,12 +278,12 @@ msgstr "Παραδείγματα"
 msgid "Related Functions"
 msgstr "Σχετικές συναρτήσεις"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "αληθές"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "ψευδές"
@@ -969,7 +969,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") επιστρέφει 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Βάση δεδομένων"
@@ -14563,107 +14563,92 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Τροποποίηση περιγράμματος"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Συνάρτηση..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "Εισαγωγή μαθηματικής έκφρασης"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "Από &βάση δεδομένων..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Εισαγωγή δεδομένων από μια βάση δεδομένων SQL"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Προσαρμοσμένες λίστες..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "Δημιουργία προσαρμοσμένων λιστών για ταξινόμηση ή αυτόματη συμπλήρωση"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Επιλογή μαθηματικού τύπου"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "Εισαγωγή μιας συνάρτησης"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Άλλες..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Τροποποίηση κελιού"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Επεξεργασία του τονισμένου κελιού"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Επιλογή όλων των κελιών στο τρέχον φύλλο εργασίας"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Εκτέλεση επιθεωρητή..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Εμφάνιση QTableView..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr "Ρυθμίσεις εγγράφου..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Εμφάνιση διαλόγου ρυθμίσεων εγγράφου"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Μετάθεση σταθερού σημείου αναφοράς"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Permute fixation"
 msgstr "Μετάθεση σταθερού σημείου"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Μετάθεση του σταθερού σημείου αναφοράς στο δρομέα κειμένου"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Αδυναμία εντοπισμού ενέργειας %1"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -16129,70 +16114,6 @@ msgstr "Χρώμα φόντου:"
 msgid "No Color"
 msgstr "Κανένα χρώμα"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Προσαρμοσμένες λίστες"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Λίστα:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Καταχώρηση:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "Προσθήκη"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "Ακύρωση"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "Νέο"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Αφαίρεση"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "Τροποποίηση"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "Αντιγραφή"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Επιθυμείτε πραγματικά την αφαίρεση αυτής της λίστας;"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Αφαίρεση λίστας"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Η περιοχή καταχώρησης δεν είναι άδεια.\n"
-"Επιθυμείτε τη συνέχεια;"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16481,6 +16402,11 @@ msgstr "Εφαρμογή"
 msgid "Apply changes"
 msgstr "Εφαρμογή τροποποιήσεων"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "Ακύρωση"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -16532,6 +16458,53 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Άνοιγμα δεσμού;"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Προσαρμοσμένες λίστες..."
+
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr ""
+#~ "Δημιουργία προσαρμοσμένων λιστών για ταξινόμηση ή αυτόματη συμπλήρωση"
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Επιλογή όλων των κελιών στο τρέχον φύλλο εργασίας"
+
+#~ msgid "Custom Lists"
+#~ msgstr "Προσαρμοσμένες λίστες"
+
+#~ msgid "List:"
+#~ msgstr "Λίστα:"
+
+#~ msgid "Entry:"
+#~ msgstr "Καταχώρηση:"
+
+#~ msgid "Add"
+#~ msgstr "Προσθήκη"
+
+#~ msgid "New"
+#~ msgstr "Νέο"
+
+#~ msgid "Remove"
+#~ msgstr "Αφαίρεση"
+
+#~ msgid "Modify"
+#~ msgstr "Τροποποίηση"
+
+#~ msgid "Copy"
+#~ msgstr "Αντιγραφή"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Επιθυμείτε πραγματικά την αφαίρεση αυτής της λίστας;"
+
+#~ msgid "Remove List"
+#~ msgstr "Αφαίρεση λίστας"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Η περιοχή καταχώρησης δεν είναι άδεια.\n"
+#~ "Επιθυμείτε τη συνέχεια;"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "Αναζήτηση &στόχου..."

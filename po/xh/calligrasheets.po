@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2002-10-10 12:25+0200\n"
 "Last-Translator: Lwandle Mgidlana <lwandle@translate.org.za>\n"
 "Language-Team:  <xh@li.org>\n"
@@ -286,12 +286,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr "<h2>Ngokwesivakalisi</h2><ul>u"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, fuzzy, kde-format
 msgid "true"
 msgstr "Ukuba yinyaniso"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, fuzzy, kde-format
 msgid "false"
 msgstr "Ukuba bubuxoki"
@@ -983,7 +983,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") ibuyisela 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Isiseko sedata"
@@ -14301,108 +14301,93 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Tshintsha Umbala Womda"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Umsebenzi..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Faka uchazo lwe math."
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "Ukusuka &Kwisiseko sedata..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Faka i data esuka kwisiseko sedata ye SQL"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Lungisa ngendlela Uluhlu..."
-
-#: ui/CellToolBase.cpp:122
-#, fuzzy, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "Yenza uluhlu lwesiko lokukhetha okanye ukugcwalisa ngokuzenzekelayo"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Ukhetho Lwefomula"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Faka umsebenzi."
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Ezinye..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Guqula kancinane Iseli"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Hlela iseli ephawulweyo."
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Bala kwakhona ixabiso leseli nganye kwiphepha "
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Bonisa Ikhasi..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Iparameters ze Locale"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Bonisa isalathiso &sogqabazo"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Ugqolo"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Cola umxholo webhodi eqhotyoshwayo kwisalathisi"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15824,73 +15809,6 @@ msgstr "Umbala wesiqalo:"
 msgid "No Color"
 msgstr "Akukho Mbala"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-msgid "Custom Lists"
-msgstr "Lungisa ngendlela Uluhlu..."
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Uluhlu:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Ungeno:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid "&Add"
-msgid "Add"
-msgstr "&Yongeza"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, fuzzy, kde-format
-msgid "Cancel"
-msgstr "France"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "&New"
-msgid "New"
-msgstr "&Entsha"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, fuzzy, kde-format
-msgid "Remove"
-msgstr "Susa Iseli"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, fuzzy, kde-format
-msgid "Modify"
-msgstr "&Dibanisa/Guqula kancinane ugqabazo..."
-
-#: ui/dialogs/ListDialog.cpp:86
-#, fuzzy, kde-format
-#| msgid "Co&py"
-msgid "Copy"
-msgstr "Co&la"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Ufuna okwenene ukususa olu luhlu?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, fuzzy, kde-format
-msgid "Remove List"
-msgstr "Susa Iseli"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"I ariya yongeno inento.\n"
-"Ufuna ukuqhubekeka?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16127,6 +16045,11 @@ msgstr "Apreli"
 msgid "Apply changes"
 msgstr "Uhlobo:"
 
+#: ui/ExternalEditor.cpp:61
+#, fuzzy, kde-format
+msgid "Cancel"
+msgstr "France"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -16177,6 +16100,64 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Vula Ikhonkco?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Lungisa ngendlela Uluhlu..."
+
+#, fuzzy
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "Yenza uluhlu lwesiko lokukhetha okanye ukugcwalisa ngokuzenzekelayo"
+
+#, fuzzy
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Bala kwakhona ixabiso leseli nganye kwiphepha "
+
+#, fuzzy
+#~ msgid "Custom Lists"
+#~ msgstr "Lungisa ngendlela Uluhlu..."
+
+#~ msgid "List:"
+#~ msgstr "Uluhlu:"
+
+#~ msgid "Entry:"
+#~ msgstr "Ungeno:"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgid "Add"
+#~ msgstr "&Yongeza"
+
+#, fuzzy
+#~| msgid "&New"
+#~ msgid "New"
+#~ msgstr "&Entsha"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "Susa Iseli"
+
+#, fuzzy
+#~ msgid "Modify"
+#~ msgstr "&Dibanisa/Guqula kancinane ugqabazo..."
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgid "Copy"
+#~ msgstr "Co&la"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Ufuna okwenene ukususa olu luhlu?"
+
+#, fuzzy
+#~ msgid "Remove List"
+#~ msgstr "Susa Iseli"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "I ariya yongeno inento.\n"
+#~ "Ufuna ukuqhubekeka?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "&Ukhangelo Lwesiphumo..."

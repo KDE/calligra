@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2022-05-11 21:25+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -282,12 +282,12 @@ msgstr "Примеры"
 msgid "Related Functions"
 msgstr "См. также"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "истина"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "ложь"
@@ -967,7 +967,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") возвратит 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "База данных"
@@ -14388,108 +14388,92 @@ msgstr ""
 "Изменить границы\n"
 "изменение границ"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Функция..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "Вставить математическое выражение"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "Из базы &данных..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Вставить данные из базы данных SQL"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Списки пользователя..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-"Управление пользовательскими списками для сортировки или автозаполнения"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Выбор формулы"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "Вставить функцию"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Другие..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Изменить ячейку"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Изменить текущую ячейку"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Выбрать все ячейки в текущей таблице"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Запуск инспектора..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Показать QTableView..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr "Настройка документа..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Показывать диалог настройки документа"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Разрешить фиксацию ссылки"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Permute fixation"
 msgstr "Разрешить фиксацию"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Разрешить фиксацию ссылки на текстовом курсоре"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15987,70 +15971,6 @@ msgstr "Цвет фона:"
 msgid "No Color"
 msgstr "Нет цвета"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Списки пользователя"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Список:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Элемент:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "Добавить"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "Отменить"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "Создать"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Удалить"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "Изменить"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "Скопировать"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Вы действительно хотите удалить этот список?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Удалить список"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Диапазон содержит данные.\n"
-"Хотите продолжить?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16324,6 +16244,11 @@ msgstr "Применить"
 msgid "Apply changes"
 msgstr "Применить изменения"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "Отменить"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -16374,6 +16299,53 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Открыть ссылку?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Списки пользователя..."
+
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr ""
+#~ "Управление пользовательскими списками для сортировки или автозаполнения"
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Выбрать все ячейки в текущей таблице"
+
+#~ msgid "Custom Lists"
+#~ msgstr "Списки пользователя"
+
+#~ msgid "List:"
+#~ msgstr "Список:"
+
+#~ msgid "Entry:"
+#~ msgstr "Элемент:"
+
+#~ msgid "Add"
+#~ msgstr "Добавить"
+
+#~ msgid "New"
+#~ msgstr "Создать"
+
+#~ msgid "Remove"
+#~ msgstr "Удалить"
+
+#~ msgid "Modify"
+#~ msgstr "Изменить"
+
+#~ msgid "Copy"
+#~ msgstr "Скопировать"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Вы действительно хотите удалить этот список?"
+
+#~ msgid "Remove List"
+#~ msgstr "Удалить список"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Диапазон содержит данные.\n"
+#~ "Хотите продолжить?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "&Поиск решения..."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kspread.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -268,12 +268,12 @@ msgstr "Samplaí"
 msgid "Related Functions"
 msgstr "Feidhmeanna Gaolmhara"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "fíor"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "bréagach"
@@ -901,7 +901,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Filleann ARABIC(\"XCIX\") é seo: 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Bunachar Sonraí"
@@ -13278,111 +13278,95 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Athraigh an Imlíne"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Feidhm..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "Ionsáigh slonn matamaiticiúil"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "Ó &Bhunachar Sonraí..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Ionsáigh sonraí ó bhunachar sonraí SQL"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Liostaí Saincheaptha..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Glan Roghnúchán"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "Ionsáigh feidhm"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Eile..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Athraigh Cill"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Cuir an chill aibhsithe in eagar"
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-#| msgid "Insert a blank cell into the spreadsheet"
-msgid "Selects all cells in the current sheet"
-msgstr "Ionsáigh cill bhán isteach sa scarbhileog"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Taispeáin QTableView..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr "Socruithe na Cáipéise..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Taispeáin dialóg socruithe na cáipéise"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Cosaint"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Cosaint"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 #| msgid "Inserts a cell from the clipboard into the spreadsheet"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Ionsáigh cill ón ghearrthaisce isteach sa scarbhileog"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14798,68 +14782,6 @@ msgstr "Dath an chúlra:"
 msgid "No Color"
 msgstr "Gan Dath"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Liostaí Saincheaptha"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Liosta:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Iontráil:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "Cuir Leis"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "Cealaigh"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "Nua"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Bain"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "Athraigh"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "Cóipeáil"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "An bhfuil tú cinnte gur mian leat an liosta seo a bhaint?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Bain Liosta"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15098,6 +15020,11 @@ msgstr "Cuir i bhFeidhm"
 msgid "Apply changes"
 msgstr "Cuir na hathruithe i bhfeidhm"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "Cealaigh"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15146,6 +15073,44 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Oscail an Nasc?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Liostaí Saincheaptha..."
+
+#, fuzzy
+#~| msgid "Insert a blank cell into the spreadsheet"
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Ionsáigh cill bhán isteach sa scarbhileog"
+
+#~ msgid "Custom Lists"
+#~ msgstr "Liostaí Saincheaptha"
+
+#~ msgid "List:"
+#~ msgstr "Liosta:"
+
+#~ msgid "Entry:"
+#~ msgstr "Iontráil:"
+
+#~ msgid "Add"
+#~ msgstr "Cuir Leis"
+
+#~ msgid "New"
+#~ msgstr "Nua"
+
+#~ msgid "Remove"
+#~ msgstr "Bain"
+
+#~ msgid "Modify"
+#~ msgstr "Athraigh"
+
+#~ msgid "Copy"
+#~ msgstr "Cóipeáil"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "An bhfuil tú cinnte gur mian leat an liosta seo a bhaint?"
+
+#~ msgid "Remove List"
+#~ msgstr "Bain Liosta"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "Cuardach i dtreo &Sprice..."

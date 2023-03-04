@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2017-05-16 06:38-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
@@ -275,12 +275,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr "<h2>פונקציות קשורות</h2><ul>"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, fuzzy, kde-format
 msgid "true"
 msgstr "אם True"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, fuzzy, kde-format
 msgid "false"
 msgstr "אם False"
@@ -937,7 +937,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "(\"ARABIC(\"XCIX מחזירה 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "מסד נתונים"
@@ -13791,107 +13791,92 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "שינוי צבע גבול"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&פונקציה..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "הוספת ביטוי מתמטי."
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "מתוך &מסד נתונים..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "הוספת נתונים מתוך מסד נתונים של SQL."
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "רשימות מותאמות אישית..."
-
-#: ui/CellToolBase.cpp:122
-#, fuzzy, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "יצירת רשימות מותאמות אישית למיון או מילוי אוטומטי."
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "בחירת נוסחה"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "הוספת פונקציה."
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "אחר..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "שנה תא"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "עריכת התא הנבחר."
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "חישוב מחדש של הערכים של כל התאים בגיליון העבודה הנוכחי."
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "הרצת הבוחן..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "הצגת גיליון..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "פרמטרים מקומיים"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "הצג &סימון הערות"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "הגנה"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "הגנה"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "הדבקת תוכן לוח העריכה במיקום הסמן."
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15284,70 +15269,6 @@ msgstr "צבע רקע:"
 msgid "No Color"
 msgstr "ללא צבע"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "רשימות מותאמות אישית"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "רשימה:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "ערך:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, fuzzy, kde-format
-msgid "Add"
-msgstr "ה&וסף"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, fuzzy, kde-format
-msgid "Cancel"
-msgstr "צרפת"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, fuzzy, kde-format
-msgid "New"
-msgstr "&חדש"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, fuzzy, kde-format
-msgid "Remove"
-msgstr "הסר הכל"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, fuzzy, kde-format
-msgid "Modify"
-msgstr "&שינוי..."
-
-#: ui/dialogs/ListDialog.cpp:86
-#, fuzzy, kde-format
-msgid "Copy"
-msgstr "הע&תק"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "האם אתה בטוח שברצונך להסיר רשימה זו?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "הסרת רשימה"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"תחום הרשומה אינו ריק.\n"
-"האם ברצונך להמשיך?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15582,6 +15503,11 @@ msgstr "אפריל"
 msgid "Apply changes"
 msgstr "החלת סגנון"
 
+#: ui/ExternalEditor.cpp:61
+#, fuzzy, kde-format
+msgid "Cancel"
+msgstr "צרפת"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15630,6 +15556,59 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "פתיחת קישור"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "רשימות מותאמות אישית..."
+
+#, fuzzy
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "יצירת רשימות מותאמות אישית למיון או מילוי אוטומטי."
+
+#, fuzzy
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "חישוב מחדש של הערכים של כל התאים בגיליון העבודה הנוכחי."
+
+#~ msgid "Custom Lists"
+#~ msgstr "רשימות מותאמות אישית"
+
+#~ msgid "List:"
+#~ msgstr "רשימה:"
+
+#~ msgid "Entry:"
+#~ msgstr "ערך:"
+
+#, fuzzy
+#~ msgid "Add"
+#~ msgstr "ה&וסף"
+
+#, fuzzy
+#~ msgid "New"
+#~ msgstr "&חדש"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "הסר הכל"
+
+#, fuzzy
+#~ msgid "Modify"
+#~ msgstr "&שינוי..."
+
+#, fuzzy
+#~ msgid "Copy"
+#~ msgstr "הע&תק"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "האם אתה בטוח שברצונך להסיר רשימה זו?"
+
+#~ msgid "Remove List"
+#~ msgstr "הסרת רשימה"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "תחום הרשומה אינו ריק.\n"
+#~ "האם ברצונך להמשיך?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "&חתירה למטרה..."

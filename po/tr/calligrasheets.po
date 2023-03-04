@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2023-02-04 11:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -272,12 +272,12 @@ msgstr "Örnekler"
 msgid "Related Functions"
 msgstr "İlgili İşlevler"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "doğru"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "yanlış"
@@ -956,7 +956,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") işlevi, 99 döndürür"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Veritabanı"
@@ -14291,107 +14291,92 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kenarlığı Değiştir"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&İşlev..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "Matematiksel ifade ekle"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "&Veritabanından..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL veritabanından veri ekle"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Özel Listeler..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "Sıralama veya otomatik tamamlama için özel liseler oluştur"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formül Seçimi"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "Bir işlev ekle"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Diğerleri..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Hücreyi Düzenle"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Vurgulanmış hücreyi düzenle"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Geçerli çalışma tablosundaki tüm hücreleri seçer"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Denetleyiciyi Çalıştır..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView Ögesini Göster..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr "Belge Ayarları..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "Belge ayarları penceresini göster"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Permute fixation"
 msgstr "Sabiti değiştir"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Metin imlecindeki başvuru sabitini değiştir"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "%1 eylemi bulunamıyor"
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15835,70 +15820,6 @@ msgstr "Arka plan rengi:"
 msgid "No Color"
 msgstr "Renksiz"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Özel Listeler"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Liste:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Girdi:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "Ekle"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "İptal"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "Yeni"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Kaldır"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "Değiştir"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "Kopyala"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Bu listeyi gerçekten silmek istiyor musunuz?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Listeyi Kaldır"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Girdi alanı boş değil.\n"
-"Sürdürmek istiyor musunuz?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16175,6 +16096,11 @@ msgstr "Uygula"
 msgid "Apply changes"
 msgstr "Değişiklikleri uygula"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "İptal"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -16226,6 +16152,52 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bağlantıyı Aç?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Özel Listeler..."
+
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "Sıralama veya otomatik tamamlama için özel liseler oluştur"
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Geçerli çalışma tablosundaki tüm hücreleri seçer"
+
+#~ msgid "Custom Lists"
+#~ msgstr "Özel Listeler"
+
+#~ msgid "List:"
+#~ msgstr "Liste:"
+
+#~ msgid "Entry:"
+#~ msgstr "Girdi:"
+
+#~ msgid "Add"
+#~ msgstr "Ekle"
+
+#~ msgid "New"
+#~ msgstr "Yeni"
+
+#~ msgid "Remove"
+#~ msgstr "Kaldır"
+
+#~ msgid "Modify"
+#~ msgstr "Değiştir"
+
+#~ msgid "Copy"
+#~ msgstr "Kopyala"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Bu listeyi gerçekten silmek istiyor musunuz?"
+
+#~ msgid "Remove List"
+#~ msgstr "Listeyi Kaldır"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Girdi alanı boş değil.\n"
+#~ "Sürdürmek istiyor musunuz?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "&Hedef Araması..."

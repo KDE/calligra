@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2011-07-25 20:04+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -269,12 +269,12 @@ msgstr "Примери"
 msgid "Related Functions"
 msgstr "Свързани функции"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "вярно"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "невярно"
@@ -935,7 +935,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") връща 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "База данни"
@@ -13994,107 +13994,92 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Промяна на контур"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Функция..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Вмъкване на математически израз."
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "От ба&за данни..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Вмъкване на данни от SQL база данни."
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Потребителски списъци..."
-
-#: ui/CellToolBase.cpp:122
-#, fuzzy, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "Създаване на потребителски списъци за сортиране или автопопълване."
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Избор на формула"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Вмъкване на функция."
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Други..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Модифициране на клетка"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Редактиране на маркираната клетка."
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Преизчисляване стойността на всяка клетка в текущия работен лист."
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Стартиране на инспектор..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Показване на лист..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Локални настройки"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Показване &индикатор на коментар"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Защита"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Защита"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Поставяне на съдържанието на буфера при показалеца."
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15553,70 +15538,6 @@ msgstr "Цвят на фон:"
 msgid "No Color"
 msgstr "Без цвят"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Потребителски списъци"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Списък:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Елемент:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "Добавяне"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "Отказ"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "Нов"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Премахване"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "Промяна"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "Копиране"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Наистина ли искате да изтриете списъка?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Изтриване на списък"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Диапазона съдържа данни.\n"
-"Искате ли да продължите?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15899,6 +15820,11 @@ msgstr "Прилагане на стил"
 msgid "Apply changes"
 msgstr ""
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "Отказ"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15950,6 +15876,54 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Отваряне на връзката?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Потребителски списъци..."
+
+#, fuzzy
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "Създаване на потребителски списъци за сортиране или автопопълване."
+
+#, fuzzy
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Преизчисляване стойността на всяка клетка в текущия работен лист."
+
+#~ msgid "Custom Lists"
+#~ msgstr "Потребителски списъци"
+
+#~ msgid "List:"
+#~ msgstr "Списък:"
+
+#~ msgid "Entry:"
+#~ msgstr "Елемент:"
+
+#~ msgid "Add"
+#~ msgstr "Добавяне"
+
+#~ msgid "New"
+#~ msgstr "Нов"
+
+#~ msgid "Remove"
+#~ msgstr "Премахване"
+
+#~ msgid "Modify"
+#~ msgstr "Промяна"
+
+#~ msgid "Copy"
+#~ msgstr "Копиране"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Наистина ли искате да изтриете списъка?"
+
+#~ msgid "Remove List"
+#~ msgstr "Изтриване на списък"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Диапазона съдържа данни.\n"
+#~ "Искате ли да продължите?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "&Търсене на решение..."

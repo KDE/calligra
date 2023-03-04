@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -278,12 +278,12 @@ msgstr "उदाहरण"
 msgid "Related Functions"
 msgstr "फंक्शन"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "सही"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "गलत"
@@ -950,7 +950,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "मान"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -13934,122 +13934,105 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "पृष्ठ क्रम"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "&Function..."
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "नियमित वर्णन"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "Insert data from a SQL database"
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-#| msgid "Custom..."
-msgid "Custom Lists..."
-msgstr "मनपसिन्न..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, fuzzy, kde-format
 #| msgid "File Options"
 msgid "Formula Selection"
 msgstr "फाइल विकल्प"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Insert a function"
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "श्रृंखला"
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "सुधारू"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-#| msgid "Sheets"
-msgid "Selects all cells in the current sheet"
-msgstr "शीट"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "शीट देखाउ"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 #| msgid "Print settings"
 msgid "Document Settings..."
 msgstr "छपाइ जमावट"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 #| msgid "Formula"
 msgid "Show document settings dialog"
 msgstr "सूत्र"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15506,71 +15489,6 @@ msgstr "पृष्ठभूमि क' रंगः"
 msgid "No Color"
 msgstr "रँग:"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-#| msgid "Custom Styles"
-msgid "Custom Lists"
-msgstr "शैलीसभकेँ पसँदीदा करू"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "List"
-msgid "List:"
-msgstr "सूची"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "प्रविष्टि:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "जोड़ू"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "रद करू"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "नवीन"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "हटाबू"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "सुधारू"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "कापी करू"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:239
-#, fuzzy, kde-format
-#| msgid "Remove Link"
-msgid "Remove List"
-msgstr "लिंक मेटाबू"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15811,6 +15729,11 @@ msgstr "लागू करू"
 msgid "Apply changes"
 msgstr "परिवर्तन लागू करू"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "रद करू"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15863,6 +15786,49 @@ msgstr ""
 #| msgid "Insert Link"
 msgid "Open Link?"
 msgstr "कड़ी डालू"
+
+#, fuzzy
+#~| msgid "Custom..."
+#~ msgid "Custom Lists..."
+#~ msgstr "मनपसिन्न..."
+
+#, fuzzy
+#~| msgid "Sheets"
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "शीट"
+
+#, fuzzy
+#~| msgid "Custom Styles"
+#~ msgid "Custom Lists"
+#~ msgstr "शैलीसभकेँ पसँदीदा करू"
+
+#, fuzzy
+#~| msgid "List"
+#~ msgid "List:"
+#~ msgstr "सूची"
+
+#~ msgid "Entry:"
+#~ msgstr "प्रविष्टि:"
+
+#~ msgid "Add"
+#~ msgstr "जोड़ू"
+
+#~ msgid "New"
+#~ msgstr "नवीन"
+
+#~ msgid "Remove"
+#~ msgstr "हटाबू"
+
+#~ msgid "Modify"
+#~ msgstr "सुधारू"
+
+#~ msgid "Copy"
+#~ msgstr "कापी करू"
+
+#, fuzzy
+#~| msgid "Remove Link"
+#~ msgid "Remove List"
+#~ msgstr "लिंक मेटाबू"
 
 #, fuzzy
 #~| msgid "Goal Seek"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2008-04-17 22:27+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -275,12 +275,12 @@ msgstr "ตัวอย่าง"
 msgid "Related Functions"
 msgstr "ฟังก์ชันที่เกี่ยวข้อง"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, fuzzy, kde-format
 msgid "true"
 msgstr "จริง"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, fuzzy, kde-format
 msgid "false"
 msgstr "เท็จ"
@@ -946,7 +946,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") จะได้ค่า 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "ฐานข้อมูล"
@@ -13776,112 +13776,97 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "เปลี่ยนเส้นขอบ"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&ฟังก์ชัน..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "แทรกนิพจน์คณิตศาสตร์"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "จากฐาน&ข้อมูล..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "แทรกข้อมูลจากฐานข้อมูลแบบ SQL"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "รายการกำหนดเอง..."
-
-#: ui/CellToolBase.cpp:122
-#, fuzzy, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "สร้างรายการกำหนดเองสำหรับการเรียงลำดับหรือเติมเต็มอัตโนมัติ"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "การเลือกสูตร"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "แทรกฟังก์ชัน"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "อื่น ๆ..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "แก้ไขเซลล์"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "แก้ไขการเน้นสีเซลล์"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "เลือกทุกเซลล์ที่อยู่ในแผ่นงานปัจจุบัน"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "แสดงแผ่นงาน..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "รูปแบบภาษาท้องถิ่น"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "แสดงตัวบ่งว่ามี&หมายเหตุ"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "วางเนื้อหาจากคลิปบอร์ดไปยังตำแหน่งเคอร์เซอร์"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15324,70 +15309,6 @@ msgstr "สีพื้นหลัง:"
 msgid "No Color"
 msgstr "ไม่มีสี"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "รายการข้อมูลกำหนดเอง"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "รายการข้อมูล:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "ข้อมูลในรายการ:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "เพิ่ม"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "ยกเลิก"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "สร้างใหม่"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, fuzzy, kde-format
-msgid "Remove"
-msgstr "ลบเซลล์"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "แก้ไข"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "คัดลอก"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "คุณต้องการจะเอารายการนี้ออกจริงหรือไม่ ?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "เอารายการออก"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"พื้นที่ที่เติมไม่ใช่พื้นที่ว่าง\n"
-"คุณต้องการทำต่อไปใช่หรือไม่ ?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15625,6 +15546,11 @@ msgstr "เมษายน"
 msgid "Apply changes"
 msgstr "ปรับใช้รูปแบบ"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "ยกเลิก"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15674,6 +15600,54 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "เปิดที่อยู่เชื่อมโยง ?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "รายการกำหนดเอง..."
+
+#, fuzzy
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "สร้างรายการกำหนดเองสำหรับการเรียงลำดับหรือเติมเต็มอัตโนมัติ"
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "เลือกทุกเซลล์ที่อยู่ในแผ่นงานปัจจุบัน"
+
+#~ msgid "Custom Lists"
+#~ msgstr "รายการข้อมูลกำหนดเอง"
+
+#~ msgid "List:"
+#~ msgstr "รายการข้อมูล:"
+
+#~ msgid "Entry:"
+#~ msgstr "ข้อมูลในรายการ:"
+
+#~ msgid "Add"
+#~ msgstr "เพิ่ม"
+
+#~ msgid "New"
+#~ msgstr "สร้างใหม่"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "ลบเซลล์"
+
+#~ msgid "Modify"
+#~ msgstr "แก้ไข"
+
+#~ msgid "Copy"
+#~ msgstr "คัดลอก"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "คุณต้องการจะเอารายการนี้ออกจริงหรือไม่ ?"
+
+#~ msgid "Remove List"
+#~ msgstr "เอารายการออก"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "พื้นที่ที่เติมไม่ใช่พื้นที่ว่าง\n"
+#~ "คุณต้องการทำต่อไปใช่หรือไม่ ?"
 
 #, fuzzy
 #~ msgid "Cell reference is invalid."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2004-05-25 15:26+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -273,12 +273,12 @@ msgstr "Skouerioù"
 msgid "Related Functions"
 msgstr "Fonksion"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "gwir"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "n'eo ket gwir"
@@ -930,7 +930,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "99 e zistaol ARABIC(\"XCIX\")"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Stlennvon"
@@ -13976,111 +13976,96 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kemmañ ar bevenn"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Fonksion ..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Troienn reolataet"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "Eus ar &stlennvon ..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Enlakaat ar roadoù eus ar stlennvon"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Rolloù diouzoc'h ..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Diuzadenn ar formulenn"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "Enlakaat ur fonksion"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Ar re all ..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Kemmañ al log"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Kemmañ ledander ar vann."
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Enlakaat ur folenn nevez."
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Diskouez ar folenn ..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 #| msgid "Locale Settings"
 msgid "Document Settings..."
 msgstr "Dibarzhoù an broelañ"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Dis&kouez barenn ar formulennoù"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Permute reference fixation"
 msgstr "Gwarez al &log"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Permute fixation"
 msgstr "Gwarez al &log"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Adenvel ar folenn bev."
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15534,78 +15519,6 @@ msgstr "Liv an drekleur :"
 msgid "No Color"
 msgstr "Liv ebet"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Rolloù diouzoc'h"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Listenn :"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Bouetadur :"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid "&Add"
-msgid "Add"
-msgstr "&Ouzhpennañ"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, fuzzy, kde-format
-#| msgid "&Cancel"
-msgid "Cancel"
-msgstr "&Nullañ"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "&New"
-msgid "New"
-msgstr "&Nevez"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Lemel"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, fuzzy, kde-format
-#| msgid "&Modify"
-msgid "Modify"
-msgstr "&Kemmañ"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, fuzzy, kde-format
-#| msgid "Co&py"
-msgid "Copy"
-msgstr "&Eilañ"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "C'hoant ho peus da zilemel ar roll-se ?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Dilemel al listenn"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, fuzzy, kde-format
-#| msgid ""
-#| "You are about to remove the active sheet.\n"
-#| "Do you want to continue?"
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Emaoc'h o vont da zilemel ar folenn red.\n"
-"Fellout a ra deoc'h kenderc'hel ?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15845,6 +15758,12 @@ msgstr "Ebrel"
 msgid "Apply changes"
 msgstr "Arloañ ar c'hizioù"
 
+#: ui/ExternalEditor.cpp:61
+#, fuzzy, kde-format
+#| msgid "&Cancel"
+msgid "Cancel"
+msgstr "&Nullañ"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15896,6 +15815,62 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Digeriñ al liamm ?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Rolloù diouzoc'h ..."
+
+#, fuzzy
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Enlakaat ur folenn nevez."
+
+#~ msgid "Custom Lists"
+#~ msgstr "Rolloù diouzoc'h"
+
+#~ msgid "List:"
+#~ msgstr "Listenn :"
+
+#~ msgid "Entry:"
+#~ msgstr "Bouetadur :"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgid "Add"
+#~ msgstr "&Ouzhpennañ"
+
+#, fuzzy
+#~| msgid "&New"
+#~ msgid "New"
+#~ msgstr "&Nevez"
+
+#~ msgid "Remove"
+#~ msgstr "Lemel"
+
+#, fuzzy
+#~| msgid "&Modify"
+#~ msgid "Modify"
+#~ msgstr "&Kemmañ"
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgid "Copy"
+#~ msgstr "&Eilañ"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "C'hoant ho peus da zilemel ar roll-se ?"
+
+#~ msgid "Remove List"
+#~ msgstr "Dilemel al listenn"
+
+#, fuzzy
+#~| msgid ""
+#~| "You are about to remove the active sheet.\n"
+#~| "Do you want to continue?"
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Emaoc'h o vont da zilemel ar folenn red.\n"
+#~ "Fellout a ra deoc'h kenderc'hel ?"
 
 #~ msgid "Starting..."
 #~ msgstr "Emaon o loc'hañ ..."

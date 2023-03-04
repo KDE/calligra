@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2004-09-09 12:35+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -279,12 +279,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr "<h2>Paramedrau</h2><ul>"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, fuzzy, kde-format
 msgid "true"
 msgstr "Os yn wir"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, fuzzy, kde-format
 msgid "false"
 msgstr "Os yn ffug"
@@ -980,7 +980,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Mae ARABIC(\"XCIX\") yn dychwelyd 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Cronfa Ddata"
@@ -14723,111 +14723,96 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Newid Lliw'r Ffin"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Ffwythiant..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Mewnosod mynegiad mathemateg"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "O Gronfa &Ddata..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Mewnosod data o gronfa ddata SQL."
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Rhestr Addasiedig..."
-
-#: ui/CellToolBase.cpp:122
-#, fuzzy, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "Creu rhestri addasiedig i drefnu neu hunan-lenwi. "
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Dewis Fformiwla"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Mewnosod ffwythiant."
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Eraill..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Addasu Cell"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Golygu'r gell amlygedig."
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Ail-gyfrifo gwerth pob cell yn y weithlen gyfredol."
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Dangos Dalen..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Paramedrau Bro"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 #| msgid "Show c&omment indicator"
 msgid "Show document settings dialog"
 msgstr "D&angos dangosydd sylwad"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -16265,73 +16250,6 @@ msgstr "Lliw cefndir:"
 msgid "No Color"
 msgstr "Dim Lliw"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Rhestrau Addasiedig"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Rhestr:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Cofnod:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid "&Add"
-msgid "Add"
-msgstr "&Ychwanegu"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, fuzzy, kde-format
-msgid "Cancel"
-msgstr "Ffrainc"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "&New"
-msgid "New"
-msgstr "&Newydd"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, fuzzy, kde-format
-msgid "Remove"
-msgstr "Gwaredu Popeth"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, fuzzy, kde-format
-msgid "Modify"
-msgstr "&Addasu..."
-
-#: ui/dialogs/ListDialog.cpp:86
-#, fuzzy, kde-format
-#| msgid "Co&py"
-msgid "Copy"
-msgstr "Co&pïo"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Ydych wir eisiau dileu'r rhestr yma?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Diddymu Rhestr"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Nid yw'r ardal wag yn wag.\n"
-"Ydych am barhau?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -16568,6 +16486,11 @@ msgstr "Ebrill"
 msgid "Apply changes"
 msgstr "Gweithredu Arddull"
 
+#: ui/ExternalEditor.cpp:61
+#, fuzzy, kde-format
+msgid "Cancel"
+msgstr "Ffrainc"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -16619,6 +16542,62 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Agor Cyswllt?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "Rhestr Addasiedig..."
+
+#, fuzzy
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "Creu rhestri addasiedig i drefnu neu hunan-lenwi. "
+
+#, fuzzy
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Ail-gyfrifo gwerth pob cell yn y weithlen gyfredol."
+
+#~ msgid "Custom Lists"
+#~ msgstr "Rhestrau Addasiedig"
+
+#~ msgid "List:"
+#~ msgstr "Rhestr:"
+
+#~ msgid "Entry:"
+#~ msgstr "Cofnod:"
+
+#, fuzzy
+#~| msgid "&Add"
+#~ msgid "Add"
+#~ msgstr "&Ychwanegu"
+
+#, fuzzy
+#~| msgid "&New"
+#~ msgid "New"
+#~ msgstr "&Newydd"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "Gwaredu Popeth"
+
+#, fuzzy
+#~ msgid "Modify"
+#~ msgstr "&Addasu..."
+
+#, fuzzy
+#~| msgid "Co&py"
+#~ msgid "Copy"
+#~ msgstr "Co&pïo"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Ydych wir eisiau dileu'r rhestr yma?"
+
+#~ msgid "Remove List"
+#~ msgstr "Diddymu Rhestr"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Nid yw'r ardal wag yn wag.\n"
+#~ "Ydych am barhau?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "&Ymofyn Cyrchnod..."

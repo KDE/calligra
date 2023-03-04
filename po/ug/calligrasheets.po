@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -269,12 +269,12 @@ msgstr "مىساللار"
 msgid "Related Functions"
 msgstr "فۇنكسىيە"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "راست"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "يالغان"
@@ -942,7 +942,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") نەتىجىسى 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "ساندان"
@@ -14077,122 +14077,106 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "يان رامكا ئۆزگەرت"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "فۇنكسىيە(&F)…"
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "مۇنتىزىم ئىپادە"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "ساندان"
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 #| msgid "Insert Data From Database"
 msgid "Insert data from a SQL database"
 msgstr "سانداندىن سانلىق-مەلۇمات ئىمپورت قىلىش"
 
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-#| msgid "Custom..."
-msgid "Custom Lists..."
-msgstr "ئادەت..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Fill Selection"
 msgid "Formula Selection"
 msgstr "تاللانغان رايوننى تولدۇر"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 #| msgid "Insert function"
 msgid "Insert a function"
 msgstr "قىستۇرۇش فۇنكسىيىسى"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "يۈرۈشلۈك"
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "ئۆزگەرت"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr ""
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "ۋاراق كۆرسەت"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Document Settings..."
 msgstr "پۈتۈك تەڭشىكى"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "پۈتۈك تەڭشىكى"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "قوغدا"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "قوغدا"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15606,69 +15590,6 @@ msgstr "تەگلىك رەڭگى:"
 msgid "No Color"
 msgstr "رەڭ:"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-#| msgid "Custom Styles"
-msgid "Custom Lists"
-msgstr "ئىختىيارىچە ئۇسلۇب"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "تىزىم:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "تۈر:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "قوش"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "ئەمەلدىن قالدۇر"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "يېڭى"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "چىقىرىۋەت"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "ئۆزگەرت"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "كۆچۈر"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "تىزىمنى چىقىرىۋېتىش"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15907,6 +15828,11 @@ msgstr "قوللان"
 msgid "Apply changes"
 msgstr "ئۆزگەرتىش قوللان"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "ئەمەلدىن قالدۇر"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15957,6 +15883,40 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "ئۇلانمىنى ئاچسۇنمۇ؟"
+
+#, fuzzy
+#~| msgid "Custom..."
+#~ msgid "Custom Lists..."
+#~ msgstr "ئادەت..."
+
+#, fuzzy
+#~| msgid "Custom Styles"
+#~ msgid "Custom Lists"
+#~ msgstr "ئىختىيارىچە ئۇسلۇب"
+
+#~ msgid "List:"
+#~ msgstr "تىزىم:"
+
+#~ msgid "Entry:"
+#~ msgstr "تۈر:"
+
+#~ msgid "Add"
+#~ msgstr "قوش"
+
+#~ msgid "New"
+#~ msgstr "يېڭى"
+
+#~ msgid "Remove"
+#~ msgstr "چىقىرىۋەت"
+
+#~ msgid "Modify"
+#~ msgstr "ئۆزگەرت"
+
+#~ msgid "Copy"
+#~ msgstr "كۆچۈر"
+
+#~ msgid "Remove List"
+#~ msgstr "تىزىمنى چىقىرىۋېتىش"
 
 #, fuzzy
 #~| msgid "Goal Seek"

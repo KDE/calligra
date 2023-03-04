@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2013-10-16 08:25+0000\n"
 "Last-Translator: safaalfulaij <safa1996alfulaij@gmail.com>\n"
 "Language-Team: \n"
@@ -273,12 +273,12 @@ msgstr "أمثلة"
 msgid "Related Functions"
 msgstr "الدوال المتعلقة"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "صحيح"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "خاطئ"
@@ -942,7 +942,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "الدالة ARABIC(\"XCIX\") ترجع 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "قاعدة بيانات"
@@ -13998,107 +13998,92 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "غيّر الحد"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&دالة..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "أدرج تعبير رياضي"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "من &قاعدة بيانات..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "أدرج بيانات من قاعدة بيانات SQL"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "قوائم مخصصة..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "أنشئ قوائم مخصصة للفرز أو الملء التلقائي"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "انتقاء صيغة"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "أدرج دالة"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "أخرى..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "عدل الخلية"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "حرر الخلية المميزة"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "ينتقي كل الخلايا في الورقة الحالية"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "شغّل المحقق..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "اعرض الورقة..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "التعيينات المحلية"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "اعرض &مميز التعليقات"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "الحماية"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "الحماية"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "الصق محتويات الحافظة عند المؤشر"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15588,70 +15573,6 @@ msgstr "لون الخلفية:"
 msgid "No Color"
 msgstr " لا لون"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "قوائم مخصصة"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "القائمة:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "المدخل:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "أضف"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "الغ"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "جديد"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "أزل"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "عدِّل"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "انسخ"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "هل تريد فعلا إزالة هذه القائمة؟"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "أزل القائمة"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"مساحة المدخل غير فارغة.\n"
-"هل تريد المتابعة؟"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15924,6 +15845,11 @@ msgstr "أبريل"
 msgid "Apply changes"
 msgstr "طبِّق الأساليب"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "الغ"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15974,6 +15900,52 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "فتح الارتباط؟"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "قوائم مخصصة..."
+
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "أنشئ قوائم مخصصة للفرز أو الملء التلقائي"
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "ينتقي كل الخلايا في الورقة الحالية"
+
+#~ msgid "Custom Lists"
+#~ msgstr "قوائم مخصصة"
+
+#~ msgid "List:"
+#~ msgstr "القائمة:"
+
+#~ msgid "Entry:"
+#~ msgstr "المدخل:"
+
+#~ msgid "Add"
+#~ msgstr "أضف"
+
+#~ msgid "New"
+#~ msgstr "جديد"
+
+#~ msgid "Remove"
+#~ msgstr "أزل"
+
+#~ msgid "Modify"
+#~ msgstr "عدِّل"
+
+#~ msgid "Copy"
+#~ msgstr "انسخ"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "هل تريد فعلا إزالة هذه القائمة؟"
+
+#~ msgid "Remove List"
+#~ msgstr "أزل القائمة"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "مساحة المدخل غير فارغة.\n"
+#~ "هل تريد المتابعة؟"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "الـ&سعي للهدف..."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -267,12 +267,12 @@ msgstr "예제"
 msgid "Related Functions"
 msgstr "관련 함수"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "참"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "거짓"
@@ -932,7 +932,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\")는 99를 반환함"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "데이터베이스"
@@ -13980,108 +13980,93 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "테두리 변경"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "함수(&F)..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr "수식 삽입"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "데이터베이스에서(&D)..."
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL 데이터베이스에서 데이터 삽입"
 
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Custom Lists..."
-msgstr "사용자 정의 목록..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr "정렬 또는 자동 완성에 사용할 사용자 목록 만들기"
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "수식 선택"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "함수 삽입"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "기타..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "셀 수정"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "강조 표시된 셀 편집"
 
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "현재 시트의 모든 셀 선택"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr "요소 검사 실행..."
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView 표시..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr "문서 설정..."
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr "문서 설정 대화 상자 표시"
 
 # https://support.office.com/ko-kr/article/%EC%83%81%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EC%A0%88%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EB%B0%8F-%ED%98%BC%ED%95%A9-%EC%B0%B8%EC%A1%B0-%EA%B0%84-%EC%A0%84%ED%99%98-dfec08cd-ae65-4f56-839e-5f0d8d0baca9
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "참조 형식 전환"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Permute fixation"
 msgstr "참조 형식 전환"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "텍스트 커서의 참조 형식(상대, 절대, 혼합) 전환"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15515,70 +15500,6 @@ msgstr "배경색:"
 msgid "No Color"
 msgstr "색 없음"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "사용자 정의 목록"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "목록:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "항목:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "추가"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "취소"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "새로 만들기"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "삭제"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "수정"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "복사"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "이 목록을 삭제하시겠습니까?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "목록 삭제"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"입력 영역이 비어 있지 않습니다.\n"
-"계속 진행하시겠습니까?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15852,6 +15773,11 @@ msgstr "적용"
 msgid "Apply changes"
 msgstr "변경 사항 적용"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "취소"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15903,6 +15829,52 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "링크를 여시겠습니까?"
+
+#~ msgid "Custom Lists..."
+#~ msgstr "사용자 정의 목록..."
+
+#~ msgid "Create custom lists for sorting or autofill"
+#~ msgstr "정렬 또는 자동 완성에 사용할 사용자 목록 만들기"
+
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "현재 시트의 모든 셀 선택"
+
+#~ msgid "Custom Lists"
+#~ msgstr "사용자 정의 목록"
+
+#~ msgid "List:"
+#~ msgstr "목록:"
+
+#~ msgid "Entry:"
+#~ msgstr "항목:"
+
+#~ msgid "Add"
+#~ msgstr "추가"
+
+#~ msgid "New"
+#~ msgstr "새로 만들기"
+
+#~ msgid "Remove"
+#~ msgstr "삭제"
+
+#~ msgid "Modify"
+#~ msgstr "수정"
+
+#~ msgid "Copy"
+#~ msgstr "복사"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "이 목록을 삭제하시겠습니까?"
+
+#~ msgid "Remove List"
+#~ msgstr "목록 삭제"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "입력 영역이 비어 있지 않습니다.\n"
+#~ "계속 진행하시겠습니까?"
 
 #~ msgid "&Goal Seek..."
 #~ msgstr "목표값 찾기(&G)..."

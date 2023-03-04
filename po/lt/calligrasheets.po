@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -266,12 +266,12 @@ msgstr "Pavyzdžiai"
 msgid "Related Functions"
 msgstr "Susijusios funkcijos"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, fuzzy, kde-format
 msgid "true"
 msgstr "tiesa"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, fuzzy, kde-format
 msgid "false"
 msgstr "netiesa"
@@ -900,7 +900,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Reikšmė"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Duombazė"
@@ -13440,110 +13440,95 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kapo Verdė"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Įprastoji išraiška"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Iš duomenų bazės"
 
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Custom Lists..."
-msgstr "Pasirinktas..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, fuzzy, kde-format
 msgid "Formula Selection"
 msgstr "Pasirinkti šriftą..."
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Įterpti lakštą"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, fuzzy, kde-format
 msgid "Others..."
 msgstr "Kiti"
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Keisti langelį"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Pasirinkti šriftą..."
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rodyti lakštą"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Show document settings dialog"
 msgstr "Dokumento nuostatos"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Apsauga"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Pašalinti sąrašą"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14938,69 +14923,6 @@ msgstr "Fono spalva:"
 msgid "No Color"
 msgstr "Spalva:"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-#| msgid "Custom Styles"
-msgid "Custom Lists"
-msgstr "Saviti stiliai"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Sąrašas:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Įrašas:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "Pridėti"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "Atšaukti"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "Naujas"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "Pašalinti"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "Keisti"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "Kopijuoti"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Pašalinti sąrašą"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15235,6 +15157,11 @@ msgstr "Pritaikyti"
 msgid "Apply changes"
 msgstr "Pritaikyti pakeitimus"
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "Atšaukti"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15283,6 +15210,43 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Atverti nuorodą"
+
+#, fuzzy
+#~ msgid "Custom Lists..."
+#~ msgstr "Pasirinktas..."
+
+#, fuzzy
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Pasirinkti šriftą..."
+
+#, fuzzy
+#~| msgid "Custom Styles"
+#~ msgid "Custom Lists"
+#~ msgstr "Saviti stiliai"
+
+#~ msgid "List:"
+#~ msgstr "Sąrašas:"
+
+#~ msgid "Entry:"
+#~ msgstr "Įrašas:"
+
+#~ msgid "Add"
+#~ msgstr "Pridėti"
+
+#~ msgid "New"
+#~ msgstr "Naujas"
+
+#~ msgid "Remove"
+#~ msgstr "Pašalinti"
+
+#~ msgid "Modify"
+#~ msgstr "Keisti"
+
+#~ msgid "Copy"
+#~ msgstr "Kopijuoti"
+
+#~ msgid "Remove List"
+#~ msgstr "Pašalinti sąrašą"
 
 #, fuzzy
 #~ msgid "&Goal Seek..."

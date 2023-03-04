@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2008-07-04 16:32+0300\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -266,12 +266,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr "<h2>Sintakse</h2><ul>"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, fuzzy, kde-format
 msgid "true"
 msgstr "Ja patiess"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, fuzzy, kde-format
 msgid "false"
 msgstr "Ja Aplams"
@@ -938,7 +938,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") atgriež 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Datums"
@@ -13853,107 +13853,92 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Mainīt apmales krāsu"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funkcija"
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "&Matemātiskā izteiksme..."
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Datums"
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Datums"
 
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Custom Lists..."
-msgstr "Kārtot sarakstus..."
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Forrmulas Iezīmējums"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Iespraust funkciju"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Citi..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Mainīt Rūtiņu"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Mainīt teksta krāsu"
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr "Izņemt komentāru"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Rādīt &Rindas Galveni"
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "Lokāles Parametri"
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "Rādīt komentāra &indikātoru"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Precizitāte"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Precizitāte"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Izņemt komentāru"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15339,71 +15324,6 @@ msgstr "Fona krāsa"
 msgid "No Color"
 msgstr "Nav Krāsu"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, fuzzy, kde-format
-msgid "Custom Lists"
-msgstr "Kārtot sarakstus..."
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Saraksts:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Ieraksts:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, fuzzy, kde-format
-#| msgid "End"
-msgid "Add"
-msgstr "Beigas"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, fuzzy, kde-format
-msgid "Cancel"
-msgstr "mainīgais"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, fuzzy, kde-format
-msgid "New"
-msgstr "Jauns"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, fuzzy, kde-format
-msgid "Remove"
-msgstr "Izmest rūtiņu"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, fuzzy, kde-format
-msgid "Modify"
-msgstr "&Pievienot/mainīt komentāru..."
-
-#: ui/dialogs/ListDialog.cpp:86
-#, fuzzy, kde-format
-msgid "Copy"
-msgstr "Kopē datus"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Vai tiešām vēlaties nodzēst šo sarakstu?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, fuzzy, kde-format
-msgid "Remove List"
-msgstr "Izmest rūtiņu"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Ievada lauks nav tukš.\n"
-"Vai vēlaties turpināt?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15640,6 +15560,11 @@ msgstr "Aprīlis"
 msgid "Apply changes"
 msgstr "Stils:"
 
+#: ui/ExternalEditor.cpp:61
+#, fuzzy, kde-format
+msgid "Cancel"
+msgstr "mainīgais"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15689,6 +15614,59 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Atvērt Norādi?"
+
+#, fuzzy
+#~ msgid "Custom Lists..."
+#~ msgstr "Kārtot sarakstus..."
+
+#, fuzzy
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "Izņemt komentāru"
+
+#, fuzzy
+#~ msgid "Custom Lists"
+#~ msgstr "Kārtot sarakstus..."
+
+#~ msgid "List:"
+#~ msgstr "Saraksts:"
+
+#~ msgid "Entry:"
+#~ msgstr "Ieraksts:"
+
+#, fuzzy
+#~| msgid "End"
+#~ msgid "Add"
+#~ msgstr "Beigas"
+
+#, fuzzy
+#~ msgid "New"
+#~ msgstr "Jauns"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "Izmest rūtiņu"
+
+#, fuzzy
+#~ msgid "Modify"
+#~ msgstr "&Pievienot/mainīt komentāru..."
+
+#, fuzzy
+#~ msgid "Copy"
+#~ msgstr "Kopē datus"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "Vai tiešām vēlaties nodzēst šo sarakstu?"
+
+#, fuzzy
+#~ msgid "Remove List"
+#~ msgstr "Izmest rūtiņu"
+
+#~ msgid ""
+#~ "Entry area is not empty.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Ievada lauks nav tukš.\n"
+#~ "Vai vēlaties turpināt?"
 
 #, fuzzy
 #~ msgid "&Goal Seek..."

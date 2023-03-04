@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-27 01:01+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -268,12 +268,12 @@ msgstr "ഉദാഹരണങ്ങള്‍"
 msgid "Related Functions"
 msgstr "ഗണിത ഫങ്ഷനുകള്‍"
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr "ശരി"
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr "തെറ്റ്"
@@ -919,7 +919,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 99 നല്‍കുന്നു"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:113 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "വിവരസംഭരണി"
@@ -13738,112 +13738,96 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "പ്രൊഫൈല്‍ _മാറ്റുക"
 
-#: ui/CellToolBase.cpp:106
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&ഫങ്ഷന്‍..."
 
-#: ui/CellToolBase.cpp:109
+#: ui/CellToolBase.cpp:108
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "രഹസ്യ രീതിയില്‍ പ്രവര്‍ത്തിപ്പിയ്ക്കുക"
 
-#: ui/CellToolBase.cpp:112
+#: ui/CellToolBase.cpp:111
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "സി.ഡിയില്‍ നിന്നും ഓഡിയോ കംപ്യൂട്ടറിലേയ്ക്കു് പകര്‍ത്തുന്നു"
 
-#: ui/CellToolBase.cpp:116
+#: ui/CellToolBase.cpp:115
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "സി.ഡിയില്‍ നിന്നും ഓഡിയോ കംപ്യൂട്ടറിലേയ്ക്കു് പകര്‍ത്തുന്നു"
 
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Custom Lists..."
-msgstr "പ്രിയ ജാലകം"
-
-#: ui/CellToolBase.cpp:122
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:124
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "ഫോര്‍മുല തെരഞ്ഞെടുക്കല്‍"
 
-#: ui/CellToolBase.cpp:126
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr "ഫങ്ഷന്‍ ചേര്‍ക്കുക"
 
-#: ui/CellToolBase.cpp:127 ui/CellToolBase.cpp:1008
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "മറ്റുള്ളവ..."
 
-#: ui/CellToolBase.cpp:135
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "കളത്തില്‍ മാറ്റം വരുത്തുക"
 
-#: ui/CellToolBase.cpp:139
+#: ui/CellToolBase.cpp:133
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "_വീഡിയോ ഘടിപ്പിയ്ക്കുമ്പോള്‍ എഡിറ്റ് ചെയ്യുക"
 
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-#| msgid "Select all sheets"
-msgid "Selects all cells in the current sheet"
-msgstr "എല്ലാ ഷീറ്റുകളും തെരഞ്ഞെടുക്കുക"
-
-#: ui/CellToolBase.cpp:147
+#: ui/CellToolBase.cpp:137
 #, fuzzy, kde-format
 msgid "Run Inspector..."
 msgstr "ഓട്ടോ-റണ്‍ ഉറപ്പു് വരുത്തുക"
 
-#: ui/CellToolBase.cpp:153
+#: ui/CellToolBase.cpp:143
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "ഷീറ്റ് കാണിക്കുക..."
 
-#: ui/CellToolBase.cpp:159
+#: ui/CellToolBase.cpp:149
 #, fuzzy, kde-format
 msgid "Document Settings..."
 msgstr "സെറ്റ് UI ലോക്കലെ (Set UI Locale): "
 
-#: ui/CellToolBase.cpp:162
+#: ui/CellToolBase.cpp:152
 #, fuzzy, kde-format
 msgid "Show document settings dialog"
 msgstr "വെബ്കാം ഡിവൈസ് സ്ട്രിങ് സൂചകം"
 
-#: ui/CellToolBase.cpp:166
+#: ui/CellToolBase.cpp:156
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "സുരക്ഷിതത്വം"
 
-#: ui/CellToolBase.cpp:170
+#: ui/CellToolBase.cpp:160
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "സുരക്ഷിതത്വം"
 
-#: ui/CellToolBase.cpp:171
+#: ui/CellToolBase.cpp:161
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "ക്ലിപ്ബോര്‍ഡിന്റെ ഉള്ളടക്കങ്ങള്‍ കഴ്സറുള്ളിടത്തു് ഒട്ടിക്കുക"
 
-#: ui/CellToolBase.cpp:955
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:975
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15275,68 +15259,6 @@ msgstr "പശ്ചാത്തലനിറം:"
 msgid "No Color"
 msgstr "നിറമില്ല"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "ഇഷ്ടാനുസൃത പട്ടികകള്‍"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "പട്ടിക:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "എന്‍ട്രി:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr "കൂട്ടിച്ചേര്‍ക്കുക"
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr "വേണ്ട"
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr "പുതിയ"
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr "നീക്കം ചെയ്യുക"
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr "മാറ്റുക"
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr "പകര്‍ത്തുക"
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "ഈ പട്ടിക ശരിക്കും നീക്കം ചെയ്യണോ?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "പട്ടിക നീക്കം ചെയ്യുക"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15573,6 +15495,11 @@ msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത�
 msgid "Apply changes"
 msgstr "വ്യത്യാസങ്ങള്‍ പ്രാബല്യത്തില്‍ വരാന്‍."
 
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
+msgstr "വേണ്ട"
+
 #: ui/ExternalEditor.cpp:62
 #, kde-format
 msgid "Discard changes"
@@ -15622,6 +15549,45 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "കണ്ണി തുറക്കട്ടെ?"
+
+#, fuzzy
+#~ msgid "Custom Lists..."
+#~ msgstr "പ്രിയ ജാലകം"
+
+#, fuzzy
+#~| msgid "Select all sheets"
+#~ msgid "Selects all cells in the current sheet"
+#~ msgstr "എല്ലാ ഷീറ്റുകളും തെരഞ്ഞെടുക്കുക"
+
+#~ msgid "Custom Lists"
+#~ msgstr "ഇഷ്ടാനുസൃത പട്ടികകള്‍"
+
+#~ msgid "List:"
+#~ msgstr "പട്ടിക:"
+
+#~ msgid "Entry:"
+#~ msgstr "എന്‍ട്രി:"
+
+#~ msgid "Add"
+#~ msgstr "കൂട്ടിച്ചേര്‍ക്കുക"
+
+#~ msgid "New"
+#~ msgstr "പുതിയ"
+
+#~ msgid "Remove"
+#~ msgstr "നീക്കം ചെയ്യുക"
+
+#~ msgid "Modify"
+#~ msgstr "മാറ്റുക"
+
+#~ msgid "Copy"
+#~ msgstr "പകര്‍ത്തുക"
+
+#~ msgid "Do you really want to remove this list?"
+#~ msgstr "ഈ പട്ടിക ശരിക്കും നീക്കം ചെയ്യണോ?"
+
+#~ msgid "Remove List"
+#~ msgstr "പട്ടിക നീക്കം ചെയ്യുക"
 
 #, fuzzy
 #~| msgid "Goal Seek"
