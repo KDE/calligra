@@ -337,7 +337,7 @@ QString Localization::formatTime(const QTime &time, bool longFormat) const
 {
     QString fmt = timeFormat(longFormat);
      // Timezone is irrelevant, remove it
-    fmt.replace(QLatin1Char('t'), QLatin1String()).trimmed();
+    fmt = fmt.replace(QLatin1Char('t'), QLatin1String()).trimmed();
     return d->locale.toString(time, fmt);
 }
 
