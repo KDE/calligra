@@ -31,7 +31,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
+class MapBase;
 class CalculationSettings;
 class Localization;
 
@@ -43,7 +43,7 @@ class calcSettings :  public QObject
 {
     Q_OBJECT
 public:
-    calcSettings(Selection* selection, KoVBox *box);
+    calcSettings(MapBase* map, KoVBox *box);
     void apply();
 protected:
     CalculationSettings *m_cs;
@@ -60,7 +60,7 @@ class parameterLocale :  public QObject
 {
     Q_OBJECT
 public:
-    parameterLocale(Selection* selection, KoVBox *box);
+    parameterLocale(MapBase *map, KoVBox *box);
     void apply();
 public Q_SLOTS:
     void updateDefaultSystemConfig();
@@ -72,7 +72,7 @@ protected:
 
     QLabel *m_shortDate, *m_time, *m_money, *m_date, *m_language, *m_number;
     QPushButton *m_updateButton;
-    Selection* m_selection;
+    MapBase *m_map;
     bool m_bUpdateLocale;
 };
 
@@ -85,7 +85,7 @@ class DocumentSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit DocumentSettingsDialog(Selection* selection, QWidget* parent);
+    explicit DocumentSettingsDialog(MapBase *map, QWidget* parent);
     ~DocumentSettingsDialog() override;
 
 public Q_SLOTS:

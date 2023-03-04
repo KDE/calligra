@@ -21,6 +21,7 @@
 #include "Copy.h"
 #include "CSVActions.h"
 #include "CustomLists.h"
+#include "DocumentSettings.h"
 #include "Fill.h"
 #include "FindReplace.h"
 #include "Font.h"
@@ -129,6 +130,8 @@ void Actions::createActions()
     addAction(new TextToColumns(this));
     // CustomLists
     addAction(new ManageCustomLists(this));
+    // DocumentSettings
+    addAction(new DocumentSettings(this));
     // Fill
     addAction(new Fill(this, FillManipulator::Up));
     addAction(new Fill(this, FillManipulator::Down));

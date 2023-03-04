@@ -157,7 +157,6 @@ protected Q_SLOTS:
     // -- misc actions --
     void inspector();
     void qTableView();
-    void documentSettingsDialog();
 
 private:
     Q_DISABLE_COPY(CellToolBase)

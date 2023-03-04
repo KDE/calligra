@@ -33,7 +33,6 @@
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
 #include "core/Sheet.h"
-#include "../Selection.h"
 
 using namespace Calligra::Sheets;
 
@@ -48,7 +47,7 @@ public:
 };
 
 
-DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* parent)
+DocumentSettingsDialog::DocumentSettingsDialog(MapBase *map, QWidget* parent)
         : KPageDialog(parent)
         , d(new Private)
 {
@@ -66,13 +65,13 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
     d->page1 = addPage(p1, i18n("Calculation"));
     d->page1->setHeader(QString(""));
     d->page1->setIcon(koIcon("application-vnd.oasis.opendocument.spreadsheet"));
-    d->calcPage = new calcSettings(selection, p1);
+    d->calcPage = new calcSettings(map, p1);
 
     KoVBox *p2 = new KoVBox();
     d->page2 = addPage(p2, i18n("Locale"));
     d->page2->setHeader(QString(""));
     d->page2->setIcon(koIcon("preferences-desktop-locale"));
-    d->localePage = new parameterLocale(selection, p2);
+    d->localePage = new parameterLocale(map, p2);
 }
 
 DocumentSettingsDialog::~DocumentSettingsDialog()
@@ -95,10 +94,10 @@ void DocumentSettingsDialog::slotReset()
 }
 
 
-calcSettings::calcSettings(Selection* selection, KoVBox *box)
+calcSettings::calcSettings(MapBase *map, KoVBox *box)
         : QObject(box->parent())
 {
-    m_cs = selection->activeSheet()->map()->calculationSettings();
+    m_cs = map->calculationSettings();
 
     m_caseSensitiveCheckbox = new QCheckBox(i18n("Case sensitive"), box);
     m_caseSensitiveCheckbox->setChecked(m_cs->caseSensitiveComparisons() == Qt::CaseSensitive);
@@ -149,13 +148,13 @@ void calcSettings::apply()
     m_cs->setReferenceYear(m_nullYearEdit->value());
 }
 
-parameterLocale::parameterLocale(Selection* selection, KoVBox *box)
+parameterLocale::parameterLocale(MapBase *map, KoVBox *box)
         : QObject(box->parent())
 {
-    m_selection = selection;
+    m_map = map;
     m_bUpdateLocale = false;
 
-    Localization* locale = selection->activeSheet()->map()->calculationSettings()->locale();
+    Localization* locale = map->calculationSettings()->locale();
 
     m_language = new QLabel(box);
     m_number = new QLabel(box);
@@ -175,7 +174,7 @@ parameterLocale::parameterLocale(Selection* selection, KoVBox *box)
 void parameterLocale::apply()
 {
     if (m_bUpdateLocale) {
-        const QList<SheetBase*> sheets = m_selection->activeSheet()->map()->sheetList();
+        const QList<SheetBase*> sheets = m_map->sheetList();
         for(SheetBase* sheet : sheets) {
             Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
             if (fullSheet) fullSheet->updateLocale();
@@ -186,7 +185,7 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale = true;
-    Localization* const locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
+    Localization* const locale = m_map->calculationSettings()->locale();
     static_cast<Localization*>(locale)->setDefaultLocale();
     updateToMatchLocale(locale);
 }

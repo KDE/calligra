@@ -44,7 +44,6 @@
 
 // dialogs
 #include "dialogs/DatabaseDialog.h"
-#include "dialogs/DocumentSettingsDialog.h"
 
 // strategies
 #include "strategy/AutoFillStrategy.h"
@@ -145,11 +144,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(action, &QAction::triggered, this, &CellToolBase::qTableView);
 #endif
-
-    action = new QAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Document Settings..."), this);
-    addAction("documentSettingsDialog", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::documentSettingsDialog);
-    action->setToolTip(i18n("Show document settings dialog"));
 
     // Editor actions:
     // Set up the permutation of the reference fixations action.
@@ -1034,13 +1028,6 @@ void CellToolBase::qTableView()
     delete dialog;
     delete model;
 #endif
-}
-
-void CellToolBase::documentSettingsDialog()
-{
-    QPointer<DocumentSettingsDialog> dialog = new DocumentSettingsDialog(selection(), canvas()->canvasWidget());
-    dialog->exec();
-    delete dialog;
 }
 
 void CellToolBase::setExternalEditor(Calligra::Sheets::ExternalEditor *editor)
