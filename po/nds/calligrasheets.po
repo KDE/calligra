@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2014-07-03 09:19+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -962,7 +962,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") gifft \"99\" torüch"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Datenbank"
@@ -13702,7 +13702,6 @@ msgstr "Na nerrn, eerst Striep"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Keen"
@@ -14672,92 +14671,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Rand ännern"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkschoon..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Mathemaatsch Utdruck infögen."
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "Ut &Datenbank..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Daten ut en SQL-Datenbank infögen."
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Formelköör"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "En Funkschoon infögen."
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Annerswat..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Zell bewerken"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Markeert Zell bewerken"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Inspekter utföhren..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTable-Ansicht wiesen..."
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Dokmentinstellen..."
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "Den Dokment-Instelldialoog wiesen"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Betogbinnen tuschen"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Permute fixation"
 msgstr "Zellbinnen tuschen"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Betogbinnen bi Textblinker tuschen"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15558,104 +15547,6 @@ msgstr "Nauigkeit:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Prefix:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Dokmentinstellen"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
-msgid "Calculation"
-msgstr "Utrekenmetood"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "Case Insensitive"
-msgid "Case sensitive"
-msgstr "Op Groot- un Lüttschrieven kieken"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "Nauigkeit"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "Automaatsch"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "String to compare with"
-msgid "String comparison:"
-msgstr "Tekenkeed, mit de vergleken warrn schall"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Regular expression"
-msgid "Regular Expressions"
-msgstr "Reguleer Utdruck"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "Systeem-Regiooninstellen &bruken"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Spraak: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Tallen-Standardformaat: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Lang Datum-Formaat: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Kort Datum-Formaat: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Tietformaat: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Geldformaat: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16633,6 +16524,68 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Link opmaken?"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Dokmentinstellen..."
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "Den Dokment-Instelldialoog wiesen"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dokmentinstellen"
+
+#, fuzzy
+#~| msgid "Calculation mode"
+#~ msgid "Calculation"
+#~ msgstr "Utrekenmetood"
+
+#, fuzzy
+#~| msgid "Case Insensitive"
+#~ msgid "Case sensitive"
+#~ msgstr "Op Groot- un Lüttschrieven kieken"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "Nauigkeit"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "Automaatsch"
+
+#, fuzzy
+#~| msgid "String to compare with"
+#~ msgid "String comparison:"
+#~ msgstr "Tekenkeed, mit de vergleken warrn schall"
+
+#, fuzzy
+#~| msgid "Regular expression"
+#~ msgid "Regular Expressions"
+#~ msgstr "Reguleer Utdruck"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "Systeem-Regiooninstellen &bruken"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Spraak: %1"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Tallen-Standardformaat: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Lang Datum-Formaat: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Kort Datum-Formaat: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Tietformaat: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Geldformaat: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Egen Listen..."

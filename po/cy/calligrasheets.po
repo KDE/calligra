@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2004-09-09 12:35+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -980,7 +980,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Mae ARABIC(\"XCIX\") yn dychwelyd 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Cronfa Ddata"
@@ -13778,7 +13778,6 @@ msgstr "Mewnosod Colofnau"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Dim"
@@ -14723,96 +14722,85 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Newid Lliw'r Ffin"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Ffwythiant..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Mewnosod mynegiad mathemateg"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "O Gronfa &Ddata..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Mewnosod data o gronfa ddata SQL."
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Dewis Fformiwla"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Mewnosod ffwythiant."
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Eraill..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Addasu Cell"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Golygu'r gell amlygedig."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Dangos Dalen..."
 
-#: ui/CellToolBase.cpp:149
-#, fuzzy, kde-format
-msgid "Document Settings..."
-msgstr "Paramedrau Bro"
-
-#: ui/CellToolBase.cpp:152
-#, fuzzy, kde-format
-#| msgid "Show c&omment indicator"
-msgid "Show document settings dialog"
-msgstr "D&angos dangosydd sylwad"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Gwarchodaeth"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Mewnosod cynnwys y gludfwrdd wrth leoliad cyfredol y cyrchydd."
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15644,104 +15632,6 @@ msgstr "Trachywiredd:"
 msgid "Prefix:"
 msgstr "Rhagddodiad:"
 
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "Paramedrau Bro"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
-msgid "Calculation"
-msgstr "Modd cyfrifo "
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste & Insert"
-msgid "Case sensitive"
-msgstr "Gludo a Mewnosod"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "Trachywiredd"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "Ymysgogol"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "String to compare with"
-msgid "String comparison:"
-msgstr "Llinyn i gymharu"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Regular expression"
-msgid "Regular Expressions"
-msgstr "Mynegiad rheolaidd"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, fuzzy, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "Diweddaru i'r Fro ar y Cysa&wd"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Iaith: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, fuzzy, kde-format
-msgid "Default number format: %1"
-msgstr "Fformat dyddiad"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, fuzzy, kde-format
-msgid "Long date format: %1"
-msgstr "Fformat dyddiad"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Fformat dyddiad byr: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Fformat amser : %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, fuzzy, kde-format
-msgid "Currency format: %1"
-msgstr "Arian:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -16542,6 +16432,76 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Agor Cyswllt?"
+
+#, fuzzy
+#~ msgid "Document Settings..."
+#~ msgstr "Paramedrau Bro"
+
+#, fuzzy
+#~| msgid "Show c&omment indicator"
+#~ msgid "Show document settings dialog"
+#~ msgstr "D&angos dangosydd sylwad"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Paramedrau Bro"
+
+#, fuzzy
+#~| msgid "Calculation mode"
+#~ msgid "Calculation"
+#~ msgstr "Modd cyfrifo "
+
+#, fuzzy
+#~| msgid "Paste & Insert"
+#~ msgid "Case sensitive"
+#~ msgstr "Gludo a Mewnosod"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "Trachywiredd"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "Ymysgogol"
+
+#, fuzzy
+#~| msgid "String to compare with"
+#~ msgid "String comparison:"
+#~ msgstr "Llinyn i gymharu"
+
+#, fuzzy
+#~| msgid "Regular expression"
+#~ msgid "Regular Expressions"
+#~ msgstr "Mynegiad rheolaidd"
+
+#, fuzzy
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "Diweddaru i'r Fro ar y Cysa&wd"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Iaith: %1"
+
+#, fuzzy
+#~ msgid "Default number format: %1"
+#~ msgstr "Fformat dyddiad"
+
+#, fuzzy
+#~ msgid "Long date format: %1"
+#~ msgstr "Fformat dyddiad"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Fformat dyddiad byr: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Fformat amser : %1"
+
+#, fuzzy
+#~ msgid "Currency format: %1"
+#~ msgstr "Arian:"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Rhestr Addasiedig..."

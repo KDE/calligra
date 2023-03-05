@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2013-10-25 11:53+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -958,7 +958,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") értéke 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Adatbázis"
@@ -13269,7 +13269,6 @@ msgstr "Lent, első oszlop"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "nincs"
@@ -14184,95 +14183,85 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Szegély módosítása"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Függvény..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Beszúr egy matematikai kifejezést"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "A&datbázisból..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Adatokat szúr be egy SQL adatbázisból"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Képlet kiválasztás"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "Beszúr egy függvényt"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Egyéb..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Az aktuális cella módosítása"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "A kijelölt cella szerkesztése"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Megfigyelő futtatása..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView megjelenítése..."
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Dokumentumbeállítások..."
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "A dokumentumbeállítások megjelenítése"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Védelem"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Védelem"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Beilleszti a vágólap tartalmát a kurzornál"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15069,104 +15058,6 @@ msgstr "Pontosság:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Előtag:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Dokumentumbeállítások"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
-msgid "Calculation"
-msgstr "Számolási mód"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "Case Insensitive"
-msgid "Case sensitive"
-msgstr "Kis- és nagybetű nincs megkülönböztetve"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "Pontosság"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "Automatikus"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "String to compare with"
-msgid "String comparison:"
-msgstr "Az összehasonlítandó szöveg"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Regular expression"
-msgid "Regular Expressions"
-msgstr "Reguláris kifejezés"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "A &rendszer területi beállításainak használata"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Nyelv: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Alapértelmezett számformátum: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Hosszú dátumformátum: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Rövid dátumformátum: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Időformátum: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Pénznem formátum: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16029,6 +15920,68 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Meg szeretné nyitni a linket?"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Dokumentumbeállítások..."
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "A dokumentumbeállítások megjelenítése"
+
+#~ msgid "Document Settings"
+#~ msgstr "Dokumentumbeállítások"
+
+#, fuzzy
+#~| msgid "Calculation mode"
+#~ msgid "Calculation"
+#~ msgstr "Számolási mód"
+
+#, fuzzy
+#~| msgid "Case Insensitive"
+#~ msgid "Case sensitive"
+#~ msgstr "Kis- és nagybetű nincs megkülönböztetve"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "Pontosság"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "Automatikus"
+
+#, fuzzy
+#~| msgid "String to compare with"
+#~ msgid "String comparison:"
+#~ msgstr "Az összehasonlítandó szöveg"
+
+#, fuzzy
+#~| msgid "Regular expression"
+#~ msgid "Regular Expressions"
+#~ msgstr "Reguláris kifejezés"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "A &rendszer területi beállításainak használata"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Nyelv: %1"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Alapértelmezett számformátum: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Hosszú dátumformátum: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Rövid dátumformátum: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Időformátum: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Pénznem formátum: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Egyéni listák..."

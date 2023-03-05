@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2015-02-24 23:33+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -949,7 +949,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vraća 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Baza podataka"
@@ -13319,7 +13319,6 @@ msgstr "Dolje, prva kolona"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Ništa"
@@ -14272,92 +14271,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Promijeni rub"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkcija..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Umetanje matematičkog izraza"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "Iz &baze podataka..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Ubaci podatak iz SQL baze podataka"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Izbor formule"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "Ubaci funkciju"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Ostalo..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Promijeni ćeliju"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Uredi istaknutu ćeliju"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Pokreni inspektor..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Prikaži QTableView ..."
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Postavke dokumeta..."
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "Prikaži dijalog postavki dokumenta"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permitiraj fiksiranje referenci"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Permute fixation"
 msgstr "Premutiraj fiksiranje"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permutiraj foksiranje reference na tekstualnom kursoru"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15118,98 +15107,6 @@ msgstr "Preciznost:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Prefiks:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Postavke dokumenta"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, kde-format
-msgid "Calculation"
-msgstr "Izračunavanje"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr "Lokalno"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, kde-format
-msgid "Case sensitive"
-msgstr "Razlikuj velika i mala slova"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, kde-format
-msgid "Precision as shown"
-msgstr "Preciznost kao što je prikazano"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr "Kriterij za pretraživanje mora vrijediti za čitavu ćeliju"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, kde-format
-msgid "Automatic find labels"
-msgstr "Automatski traži labele"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, kde-format
-msgid "String comparison:"
-msgstr "Poređenje stringova:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Regular Expressions"
-msgstr "Regularni izraz"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr "Džokeri"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr "NulL godina:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "&Upotreba  Lokalnog postavljanje sistema"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Jezik: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Podrazumijevani format brojeva: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Dugačak format datuma: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Kratak format datuma: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Format vremena: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Format valute: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16131,6 +16028,68 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otvori link?"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Postavke dokumeta..."
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "Prikaži dijalog postavki dokumenta"
+
+#~ msgid "Document Settings"
+#~ msgstr "Postavke dokumenta"
+
+#~ msgid "Calculation"
+#~ msgstr "Izračunavanje"
+
+#~ msgid "Locale"
+#~ msgstr "Lokalno"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Razlikuj velika i mala slova"
+
+#~ msgid "Precision as shown"
+#~ msgstr "Preciznost kao što je prikazano"
+
+#~ msgid "Search criteria must apply to whole cell"
+#~ msgstr "Kriterij za pretraživanje mora vrijediti za čitavu ćeliju"
+
+#~ msgid "Automatic find labels"
+#~ msgstr "Automatski traži labele"
+
+#~ msgid "String comparison:"
+#~ msgstr "Poređenje stringova:"
+
+#~ msgid "Regular Expressions"
+#~ msgstr "Regularni izraz"
+
+#~ msgid "Wildcards"
+#~ msgstr "Džokeri"
+
+#~ msgid "Null Year:"
+#~ msgstr "NulL godina:"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "&Upotreba  Lokalnog postavljanje sistema"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Jezik: %1"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Podrazumijevani format brojeva: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Dugačak format datuma: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Kratak format datuma: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Format vremena: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Format valute: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Posebne liste..."

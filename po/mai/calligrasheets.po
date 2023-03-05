@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -950,7 +950,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "मान"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "डाटाबेस"
@@ -12927,7 +12927,6 @@ msgstr "कोष्ठ जोडू"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "किछु नहि"
@@ -13934,105 +13933,93 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "पृष्ठ क्रम"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "&Function..."
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, fuzzy, kde-format
 #| msgid "Regular expression"
 msgid "Insert math expression"
 msgstr "नियमित वर्णन"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "From &Database..."
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "Insert data from a SQL database"
 msgstr "डाटाबेस"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, fuzzy, kde-format
 #| msgid "File Options"
 msgid "Formula Selection"
 msgstr "फाइल विकल्प"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Insert a function"
 msgstr "फंक्शन"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, fuzzy, kde-format
 #| msgid "Series"
 msgid "Others..."
 msgstr "श्रृंखला"
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, fuzzy, kde-format
 #| msgid "Modify"
 msgid "Modify Cell"
 msgstr "सुधारू"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show QTableView..."
 msgstr "शीट देखाउ"
 
-#: ui/CellToolBase.cpp:149
-#, fuzzy, kde-format
-#| msgid "Print settings"
-msgid "Document Settings..."
-msgstr "छपाइ जमावट"
-
-#: ui/CellToolBase.cpp:152
-#, fuzzy, kde-format
-#| msgid "Formula"
-msgid "Show document settings dialog"
-msgstr "सूत्र"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "सुरक्षा"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14875,107 +14862,6 @@ msgstr "परिशुद्धता"
 msgid "Prefix:"
 msgstr ""
 
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Print settings"
-msgid "Document Settings"
-msgstr "छपाइ जमावट"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Fraction"
-msgid "Calculation"
-msgstr "हिस्सा"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, kde-format
-msgid "Case sensitive"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "परिशुद्धता"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "स्वचालित"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, kde-format
-msgid "String comparison:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Regular expression"
-msgid "Regular Expressions"
-msgstr "नियमित वर्णन"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, kde-format
-msgid "Language: %1 (%2)"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, fuzzy, kde-format
-#| msgid "Number Format"
-msgid "Default number format: %1"
-msgstr "सँख्या प्रारूप"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, fuzzy, kde-format
-#| msgid "Date format"
-msgid "Long date format: %1"
-msgstr "दिनांक प्रारूप"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid "Date format"
-msgid "Short date format: %1"
-msgstr "दिनांक प्रारूप"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, fuzzy, kde-format
-#| msgid "Time Format"
-msgid "Time format: %1"
-msgstr "समय प्रारूप"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, fuzzy, kde-format
-#| msgid "Currency"
-msgid "Currency format: %1"
-msgstr "मुद्रा"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15786,6 +15672,66 @@ msgstr ""
 #| msgid "Insert Link"
 msgid "Open Link?"
 msgstr "कड़ी डालू"
+
+#, fuzzy
+#~| msgid "Print settings"
+#~ msgid "Document Settings..."
+#~ msgstr "छपाइ जमावट"
+
+#, fuzzy
+#~| msgid "Formula"
+#~ msgid "Show document settings dialog"
+#~ msgstr "सूत्र"
+
+#, fuzzy
+#~| msgid "Print settings"
+#~ msgid "Document Settings"
+#~ msgstr "छपाइ जमावट"
+
+#, fuzzy
+#~| msgid "Fraction"
+#~ msgid "Calculation"
+#~ msgstr "हिस्सा"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "परिशुद्धता"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "स्वचालित"
+
+#, fuzzy
+#~| msgid "Regular expression"
+#~ msgid "Regular Expressions"
+#~ msgstr "नियमित वर्णन"
+
+#, fuzzy
+#~| msgid "Number Format"
+#~ msgid "Default number format: %1"
+#~ msgstr "सँख्या प्रारूप"
+
+#, fuzzy
+#~| msgid "Date format"
+#~ msgid "Long date format: %1"
+#~ msgstr "दिनांक प्रारूप"
+
+#, fuzzy
+#~| msgid "Date format"
+#~ msgid "Short date format: %1"
+#~ msgstr "दिनांक प्रारूप"
+
+#, fuzzy
+#~| msgid "Time Format"
+#~ msgid "Time format: %1"
+#~ msgstr "समय प्रारूप"
+
+#, fuzzy
+#~| msgid "Currency"
+#~ msgid "Currency format: %1"
+#~ msgstr "मुद्रा"
 
 #, fuzzy
 #~| msgid "Custom..."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2013-10-17 04:56+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -956,7 +956,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") қайтаратыны 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Деректер қоры"
@@ -13398,7 +13398,6 @@ msgstr "Төмен, бірінші бағанына"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Жоқ"
@@ -14348,92 +14347,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Шегін өзгерту"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Функция..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Математикалық өрнегін ендіру"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "&Деректер қорынан..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL деректер қорынан деректерді ендіру"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Формуланы таңдау"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "Функцияны ендіру"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Басқа..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Ұяшықты өзгерту"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Бояуланған ұяшықты өңдеу"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Инспекторды жегу..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "QTableView-ді көрсету..."
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Құжаттың параметрлері..."
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "Құжаттың параметрлер диалогын шығару"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Сілтеме бекітуін өзгерту"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Permute fixation"
 msgstr "Бекітуін өзгерту"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Мәтін меңзер орналасқан ұяшық сілтемесінің бекітуін өзгерту"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, fuzzy, kde-format
 #| msgid ""
 #| "No database drivers available.  To use this feature you need to install "
@@ -15229,104 +15218,6 @@ msgstr "Дәлділігі:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Префиксі:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Құжат параметрлері"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
-msgid "Calculation"
-msgstr "Есептеу тәсілі"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "Case Insensitive"
-msgid "Case sensitive"
-msgstr "Үлкен-кішілігін ескермей"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "Дәлдігі"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "Авто"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "String to compare with"
-msgid "String comparison:"
-msgstr "Салыстыратын жол"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Regular expression"
-msgid "Regular Expressions"
-msgstr "Үлгі өрнегі"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "&Жалпы жүйелік жергілікті стандарттар қолданылсын"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Тілі: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Санның әдетті пішімі: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Күннің ұзын пішімі: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Күннің қысқа пішімі: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Уақыттың пішімі: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Ақшаның пішімі: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16241,6 +16132,68 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Сілтеме ашылсын ба?"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Құжаттың параметрлері..."
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "Құжаттың параметрлер диалогын шығару"
+
+#~ msgid "Document Settings"
+#~ msgstr "Құжат параметрлері"
+
+#, fuzzy
+#~| msgid "Calculation mode"
+#~ msgid "Calculation"
+#~ msgstr "Есептеу тәсілі"
+
+#, fuzzy
+#~| msgid "Case Insensitive"
+#~ msgid "Case sensitive"
+#~ msgstr "Үлкен-кішілігін ескермей"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "Дәлдігі"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "Авто"
+
+#, fuzzy
+#~| msgid "String to compare with"
+#~ msgid "String comparison:"
+#~ msgstr "Салыстыратын жол"
+
+#, fuzzy
+#~| msgid "Regular expression"
+#~ msgid "Regular Expressions"
+#~ msgstr "Үлгі өрнегі"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "&Жалпы жүйелік жергілікті стандарттар қолданылсын"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Тілі: %1"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Санның әдетті пішімі: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Күннің ұзын пішімі: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Күннің қысқа пішімі: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Уақыттың пішімі: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Ақшаның пішімі: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Өзінің тізімдері..."

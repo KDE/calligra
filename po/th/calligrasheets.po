@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2008-04-17 22:27+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -946,7 +946,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") จะได้ค่า 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "ฐานข้อมูล"
@@ -12836,7 +12836,6 @@ msgstr "แสดงสดมภ์"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "ไม่ใช้"
@@ -13776,97 +13775,86 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "เปลี่ยนเส้นขอบ"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&ฟังก์ชัน..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "แทรกนิพจน์คณิตศาสตร์"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "จากฐาน&ข้อมูล..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "แทรกข้อมูลจากฐานข้อมูลแบบ SQL"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "การเลือกสูตร"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "แทรกฟังก์ชัน"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "อื่น ๆ..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "แก้ไขเซลล์"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "แก้ไขการเน้นสีเซลล์"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "แสดงแผ่นงาน..."
 
-#: ui/CellToolBase.cpp:149
-#, fuzzy, kde-format
-msgid "Document Settings..."
-msgstr "รูปแบบภาษาท้องถิ่น"
-
-#: ui/CellToolBase.cpp:152
-#, fuzzy, kde-format
-#| msgid "Show c&omment indicator"
-msgid "Show document settings dialog"
-msgstr "แสดงตัวบ่งว่ามี&หมายเหตุ"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "การป้องกัน"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "วางเนื้อหาจากคลิปบอร์ดไปยังตำแหน่งเคอร์เซอร์"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14706,103 +14694,6 @@ msgstr "จำนวนทศนิยม:"
 msgid "Prefix:"
 msgstr "นำหน้าด้วย:"
 
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "รูปแบบภาษาท้องถิ่น"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
-msgid "Calculation"
-msgstr "โหมดการคำนวณ"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste & Insert"
-msgid "Case sensitive"
-msgstr "วางและแทรก"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "จำนวนทศนิยม"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "อัตโนมัติ"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "String to compare with"
-msgid "String comparison:"
-msgstr "ข้อความที่จะเปรียบเทียบด้วย"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-msgid "Regular Expressions"
-msgstr "ฟังก์ชัน..."
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, fuzzy, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "&ปรับให้อยู่ในรูปแบบภาษาท้องถิ่นของระบบ"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "ภาษา: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, fuzzy, kde-format
-msgid "Default number format: %1"
-msgstr "รูปแบบตัวเลข"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, fuzzy, kde-format
-msgid "Long date format: %1"
-msgstr "รูปแบบวันที่"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, fuzzy, kde-format
-msgid "Short date format: %1"
-msgstr "วันที่แบบย่อ: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, fuzzy, kde-format
-msgid "Time format: %1"
-msgstr "รูปแบบเวลา"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, fuzzy, kde-format
-msgid "Currency format: %1"
-msgstr "เงินตรา"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15600,6 +15491,77 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "เปิดที่อยู่เชื่อมโยง ?"
+
+#, fuzzy
+#~ msgid "Document Settings..."
+#~ msgstr "รูปแบบภาษาท้องถิ่น"
+
+#, fuzzy
+#~| msgid "Show c&omment indicator"
+#~ msgid "Show document settings dialog"
+#~ msgstr "แสดงตัวบ่งว่ามี&หมายเหตุ"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "รูปแบบภาษาท้องถิ่น"
+
+#, fuzzy
+#~| msgid "Calculation mode"
+#~ msgid "Calculation"
+#~ msgstr "โหมดการคำนวณ"
+
+#, fuzzy
+#~| msgid "Paste & Insert"
+#~ msgid "Case sensitive"
+#~ msgstr "วางและแทรก"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "จำนวนทศนิยม"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "อัตโนมัติ"
+
+#, fuzzy
+#~| msgid "String to compare with"
+#~ msgid "String comparison:"
+#~ msgstr "ข้อความที่จะเปรียบเทียบด้วย"
+
+#, fuzzy
+#~ msgid "Regular Expressions"
+#~ msgstr "ฟังก์ชัน..."
+
+#, fuzzy
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "&ปรับให้อยู่ในรูปแบบภาษาท้องถิ่นของระบบ"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "ภาษา: %1"
+
+#, fuzzy
+#~ msgid "Default number format: %1"
+#~ msgstr "รูปแบบตัวเลข"
+
+#, fuzzy
+#~ msgid "Long date format: %1"
+#~ msgstr "รูปแบบวันที่"
+
+#, fuzzy
+#~ msgid "Short date format: %1"
+#~ msgstr "วันที่แบบย่อ: %1"
+
+#, fuzzy
+#~ msgid "Time format: %1"
+#~ msgstr "รูปแบบเวลา"
+
+#, fuzzy
+#~ msgid "Currency format: %1"
+#~ msgstr "เงินตรา"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "รายการกำหนดเอง..."

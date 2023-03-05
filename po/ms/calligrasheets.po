@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -976,7 +976,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") mengembalikan 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Pangkalan Data"
@@ -13711,7 +13711,6 @@ msgstr "Selitkan Lajur"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Tiada"
@@ -14656,95 +14655,85 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ubah Warna Sempadan"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Fungsi..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Selitkan ungkapan matematik."
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "Dari &Pangkalan Data..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Selitkan data dari pangkalan data SQL."
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Pemilihan Formula"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Selitkan fungsi."
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Lain-lain..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Ubah Suai Sel"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Edit sel yang ditonjolkan."
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Laksanakan Inspektor..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "Papar Helaian..."
 
-#: ui/CellToolBase.cpp:149
-#, fuzzy, kde-format
-msgid "Document Settings..."
-msgstr "Parameter Lokal"
-
-#: ui/CellToolBase.cpp:152
-#, fuzzy, kde-format
-msgid "Show document settings dialog"
-msgstr "Papar &penunjuk komen"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Perlindungan"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Perlindungan"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Tampal kandungan klipbod di kursor. "
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15577,104 +15566,6 @@ msgstr "Kepersisan:"
 msgid "Prefix:"
 msgstr "Awalan:"
 
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "Parameter Lokal"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
-msgid "Calculation"
-msgstr "Mod Pengiraan"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste & Insert"
-msgid "Case sensitive"
-msgstr "Tampal & Selit"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "Kepersisan"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "Automatik"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "String to compare with"
-msgid "String comparison:"
-msgstr "Rentetan hendak dibandingkan dengan "
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Regular expression"
-msgid "Regular Expressions"
-msgstr "Ungkapan biasa"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, fuzzy, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "&Kemas kini ke Sistem Lokal"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Bahasa: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, fuzzy, kde-format
-msgid "Default number format: %1"
-msgstr "Format tarikh"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, fuzzy, kde-format
-msgid "Long date format: %1"
-msgstr "Format tarikh"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, fuzzy, kde-format
-msgid "Short date format: %1"
-msgstr "Tarikh pendek:%1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, fuzzy, kde-format
-msgid "Time format: %1"
-msgstr "Format masa"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, fuzzy, kde-format
-msgid "Currency format: %1"
-msgstr "Mata Wang:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -16475,6 +16366,77 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Buka Pautan?"
+
+#, fuzzy
+#~ msgid "Document Settings..."
+#~ msgstr "Parameter Lokal"
+
+#, fuzzy
+#~ msgid "Show document settings dialog"
+#~ msgstr "Papar &penunjuk komen"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Parameter Lokal"
+
+#, fuzzy
+#~| msgid "Calculation mode"
+#~ msgid "Calculation"
+#~ msgstr "Mod Pengiraan"
+
+#, fuzzy
+#~| msgid "Paste & Insert"
+#~ msgid "Case sensitive"
+#~ msgstr "Tampal & Selit"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "Kepersisan"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "Automatik"
+
+#, fuzzy
+#~| msgid "String to compare with"
+#~ msgid "String comparison:"
+#~ msgstr "Rentetan hendak dibandingkan dengan "
+
+#, fuzzy
+#~| msgid "Regular expression"
+#~ msgid "Regular Expressions"
+#~ msgstr "Ungkapan biasa"
+
+#, fuzzy
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "&Kemas kini ke Sistem Lokal"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Bahasa: %1"
+
+#, fuzzy
+#~ msgid "Default number format: %1"
+#~ msgstr "Format tarikh"
+
+#, fuzzy
+#~ msgid "Long date format: %1"
+#~ msgstr "Format tarikh"
+
+#, fuzzy
+#~ msgid "Short date format: %1"
+#~ msgstr "Tarikh pendek:%1"
+
+#, fuzzy
+#~ msgid "Time format: %1"
+#~ msgstr "Format masa"
+
+#, fuzzy
+#~ msgid "Currency format: %1"
+#~ msgstr "Mata Wang:"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Senarai Biasa..."

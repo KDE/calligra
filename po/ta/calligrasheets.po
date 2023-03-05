@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2004-11-29 01:53-0800\n"
 "Last-Translator: Tamil PC <tamilpc@ambalam.com>\n"
 "Language-Team: Tamil <en@li.org>\n"
@@ -964,7 +964,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 99 திரும்பும்"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "தரவுத்தளம்"
@@ -13500,7 +13500,6 @@ msgstr "நெடுக்கைகளை செருகு"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "எதுவுமில்லை"
@@ -14443,95 +14442,85 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "ஓரம் நிறம் மாற்றுக"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "செயல்கூறு..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "math  தொடரை சொருகு."
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "துவக்கம் &தரவுத்தளம் ..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "SQL தரவுத்தளத்திலிருந்து பொருளை செருகவும்"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "வாய்பாடு தேர்வு"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "செயல்கூற்றை செருகு"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "மற்றவைகள்..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "சிற்றறையை மாற்று"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "முனைப்புறுத்தப்பட்ட அறைகளை திருத்து "
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 #| msgid "Show Sheet..."
 msgid "Show QTableView..."
 msgstr "தாளை காட்டு"
 
-#: ui/CellToolBase.cpp:149
-#, fuzzy, kde-format
-msgid "Document Settings..."
-msgstr "வட்டார அளவுருக்கள்"
-
-#: ui/CellToolBase.cpp:152
-#, fuzzy, kde-format
-msgid "Show document settings dialog"
-msgstr "விளக்க சுட்டியை காட்டு"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "பாதுகாவலர்"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "இடைநிலையின் உள்ளடக்கத்தின் காட்டியில் ஒட்டுக. "
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, fuzzy, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15356,104 +15345,6 @@ msgstr "துல்லியம் :"
 msgid "Prefix:"
 msgstr "முன் இணைப்பு "
 
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "வட்டார அளவுருக்கள்"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-#| msgid "Calculation mode"
-msgid "Calculation"
-msgstr "கணிக்கிடல் வகை"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-#| msgid "Paste & Insert"
-msgid "Case sensitive"
-msgstr "ஒட்டு &செருகு"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Precision"
-msgid "Precision as shown"
-msgstr "துல்லியம்"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "தன்னியக்க"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "String to compare with"
-msgid "String comparison:"
-msgstr "சரத்தை ஒப்பிடு"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-#| msgid "Regular expression"
-msgid "Regular Expressions"
-msgstr "math  தொடரை சொருகு."
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, fuzzy, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "&உள்ளிருப்பு முறைமைக்கு இற்றைப்படுத்தல் "
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "மொழி: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, fuzzy, kde-format
-msgid "Default number format: %1"
-msgstr "தேதி வடிவமைப்பு "
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, fuzzy, kde-format
-msgid "Long date format: %1"
-msgstr "தேதி வடிவமைப்பு "
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, fuzzy, kde-format
-msgid "Short date format: %1"
-msgstr "சிறிய தேதி: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, fuzzy, kde-format
-msgid "Time format: %1"
-msgstr "நேர வடிவமைப்பு"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, fuzzy, kde-format
-msgid "Currency format: %1"
-msgstr "பணம்"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -16254,6 +16145,77 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "இணைப்பை திற"
+
+#, fuzzy
+#~ msgid "Document Settings..."
+#~ msgstr "வட்டார அளவுருக்கள்"
+
+#, fuzzy
+#~ msgid "Show document settings dialog"
+#~ msgstr "விளக்க சுட்டியை காட்டு"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "வட்டார அளவுருக்கள்"
+
+#, fuzzy
+#~| msgid "Calculation mode"
+#~ msgid "Calculation"
+#~ msgstr "கணிக்கிடல் வகை"
+
+#, fuzzy
+#~| msgid "Paste & Insert"
+#~ msgid "Case sensitive"
+#~ msgstr "ஒட்டு &செருகு"
+
+#, fuzzy
+#~| msgid "Precision"
+#~ msgid "Precision as shown"
+#~ msgstr "துல்லியம்"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "தன்னியக்க"
+
+#, fuzzy
+#~| msgid "String to compare with"
+#~ msgid "String comparison:"
+#~ msgstr "சரத்தை ஒப்பிடு"
+
+#, fuzzy
+#~| msgid "Regular expression"
+#~ msgid "Regular Expressions"
+#~ msgstr "math  தொடரை சொருகு."
+
+#, fuzzy
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "&உள்ளிருப்பு முறைமைக்கு இற்றைப்படுத்தல் "
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "மொழி: %1"
+
+#, fuzzy
+#~ msgid "Default number format: %1"
+#~ msgstr "தேதி வடிவமைப்பு "
+
+#, fuzzy
+#~ msgid "Long date format: %1"
+#~ msgstr "தேதி வடிவமைப்பு "
+
+#, fuzzy
+#~ msgid "Short date format: %1"
+#~ msgstr "சிறிய தேதி: %1"
+
+#, fuzzy
+#~ msgid "Time format: %1"
+#~ msgstr "நேர வடிவமைப்பு"
+
+#, fuzzy
+#~ msgid "Currency format: %1"
+#~ msgstr "பணம்"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "தனிப்பயன் பட்டியல்..."

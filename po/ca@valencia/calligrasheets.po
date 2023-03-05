@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2023-02-27 22:35+0100\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -966,7 +966,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") retorna 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Base de dades"
@@ -13461,7 +13461,6 @@ msgstr "Avall, primera columna"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Cap"
@@ -14426,92 +14425,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Canvia les vores"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Funció..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Inserix una expressió matemàtica"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "Des d'una &base de dades..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Inserix dades des d'una base de dades SQL"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Seleccioneu la fórmula"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "Inserix una funció"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Altres..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modifica la cel·la"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Edita la cel·la marcada"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Inspector d'execució..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Mostra la QTableView..."
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Configureu el document..."
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "Mostra el diàleg de configuració del document"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Permuta la fixació de referència"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Permute fixation"
 msgstr "Permuta la fixació"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Permuta la fixació de la referència al cursor de text"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "No s'ha pogut localitzar l'acció %1"
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15291,97 +15280,6 @@ msgstr "Precisió:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Prefix:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Configureu el document"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, kde-format
-msgid "Calculation"
-msgstr "Càlcul"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr "Configuració regional"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, kde-format
-msgid "Case sensitive"
-msgstr "Distingix majúscules/minúscules"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, kde-format
-msgid "Precision as shown"
-msgstr "Precisió visualitzada"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr "El criteri de busca s'ha d'aplicar a tota la cel·la"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, kde-format
-msgid "Automatic find labels"
-msgstr "Busca automàtica d'etiquetes"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, kde-format
-msgid "String comparison:"
-msgstr "Comparació de cadenes:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Regular Expressions"
-msgstr "Expressions regulars"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr "Comodins"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr "Any nul:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "Utilit&za la configuració regional del sistema"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, kde-format
-msgid "Language: %1 (%2)"
-msgstr "Idioma: %1 (%2)"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Format numèric predeterminat: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Format llarg de data: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Format curt de data: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Format de l'hora: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Format de la moneda: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16327,6 +16225,66 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Voleu obrir l'enllaç?"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Configureu el document..."
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "Mostra el diàleg de configuració del document"
+
+#~ msgid "Document Settings"
+#~ msgstr "Configureu el document"
+
+#~ msgid "Calculation"
+#~ msgstr "Càlcul"
+
+#~ msgid "Locale"
+#~ msgstr "Configuració regional"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Distingix majúscules/minúscules"
+
+#~ msgid "Precision as shown"
+#~ msgstr "Precisió visualitzada"
+
+#~ msgid "Search criteria must apply to whole cell"
+#~ msgstr "El criteri de busca s'ha d'aplicar a tota la cel·la"
+
+#~ msgid "Automatic find labels"
+#~ msgstr "Busca automàtica d'etiquetes"
+
+#~ msgid "String comparison:"
+#~ msgstr "Comparació de cadenes:"
+
+#~ msgid "Regular Expressions"
+#~ msgstr "Expressions regulars"
+
+#~ msgid "Wildcards"
+#~ msgstr "Comodins"
+
+#~ msgid "Null Year:"
+#~ msgstr "Any nul:"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "Utilit&za la configuració regional del sistema"
+
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Idioma: %1 (%2)"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Format numèric predeterminat: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Format llarg de data: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Format curt de data: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Format de l'hora: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Format de la moneda: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Llistes personalitzades..."

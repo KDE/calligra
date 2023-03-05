@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2022-05-05 10:23+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -928,7 +928,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "IMABS(\"-i\") = 1"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Dată"
@@ -12703,7 +12703,6 @@ msgstr "Inserează coloană(e)"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Nimic"
@@ -13621,92 +13620,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Modifică culoare margine"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Funcție"
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Expresie &matematică..."
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Dată"
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Dată"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Selecție formulă"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Inserează coloană(e)"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Altele..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Modifică celula"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Modifică culoare text"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Afișează antet de linie"
 
-#: ui/CellToolBase.cpp:149
-#, fuzzy, kde-format
-msgid "Document Settings..."
-msgstr "Parametrii locali"
-
-#: ui/CellToolBase.cpp:152
-#, fuzzy, kde-format
-msgid "Show document settings dialog"
-msgstr "Afișează indicator de comentariu"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Precizie"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Precizie"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Șterge comentariu"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14496,99 +14485,6 @@ msgstr "Precizie"
 #, fuzzy, kde-format
 msgid "Prefix:"
 msgstr "Prefix"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "Parametrii locali"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-msgid "Calculation"
-msgstr "Calculez"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-msgid "Case sensitive"
-msgstr "Lipește și inserează"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-msgid "Precision as shown"
-msgstr "Precizie"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "Automat"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-msgid "String comparison:"
-msgstr "Valori șir"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-msgid "Regular Expressions"
-msgstr "Expresie &matematică..."
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, fuzzy, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "Parametrii locali"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Limbaj : %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, fuzzy, kde-format
-msgid "Default number format: %1"
-msgstr "Format dată"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, fuzzy, kde-format
-msgid "Long date format: %1"
-msgstr "Format dată"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, fuzzy, kde-format
-msgid "Short date format: %1"
-msgstr "Dată scurtă : %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, fuzzy, kde-format
-msgid "Time format: %1"
-msgstr "Format timp"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, fuzzy, kde-format
-msgid "Currency format: %1"
-msgstr "Valoare prezentă"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -15381,6 +15277,72 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Inserează coloană(e)"
+
+#, fuzzy
+#~ msgid "Document Settings..."
+#~ msgstr "Parametrii locali"
+
+#, fuzzy
+#~ msgid "Show document settings dialog"
+#~ msgstr "Afișează indicator de comentariu"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Parametrii locali"
+
+#, fuzzy
+#~ msgid "Calculation"
+#~ msgstr "Calculez"
+
+#, fuzzy
+#~ msgid "Case sensitive"
+#~ msgstr "Lipește și inserează"
+
+#, fuzzy
+#~ msgid "Precision as shown"
+#~ msgstr "Precizie"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "Automat"
+
+#, fuzzy
+#~ msgid "String comparison:"
+#~ msgstr "Valori șir"
+
+#, fuzzy
+#~ msgid "Regular Expressions"
+#~ msgstr "Expresie &matematică..."
+
+#, fuzzy
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "Parametrii locali"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Limbaj : %1"
+
+#, fuzzy
+#~ msgid "Default number format: %1"
+#~ msgstr "Format dată"
+
+#, fuzzy
+#~ msgid "Long date format: %1"
+#~ msgstr "Format dată"
+
+#, fuzzy
+#~ msgid "Short date format: %1"
+#~ msgstr "Dată scurtă : %1"
+
+#, fuzzy
+#~ msgid "Time format: %1"
+#~ msgstr "Format timp"
+
+#, fuzzy
+#~ msgid "Currency format: %1"
+#~ msgstr "Valoare prezentă"
 
 #, fuzzy
 #~ msgid "Custom Lists..."

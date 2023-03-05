@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kcells\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2022-07-29 11:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -964,7 +964,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") palauttaa 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Tietokanta"
@@ -13175,7 +13175,6 @@ msgstr "Alas, ensimmäinen sarake"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Ei mikään"
@@ -14134,95 +14133,85 @@ msgstr ""
 "Muuta reunoja\n"
 "reunojen muuttaminen"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Funktio…"
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Lisää matemaattinen lauseke"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "&Tietokannasta…"
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Lisää tietoja SQL-tietokannasta"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Kaavan valinta"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "Lisää funktio"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Muut…"
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Muokkaa solua"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Muokkaa korostettua solua"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Suorita tarkistus…"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Näytä QTableView…"
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Tiedoston asetukset…"
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "Näytä tiedoston asetusikkuna"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute reference fixation"
 msgstr "Suojaus"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Permute fixation"
 msgstr "Suojaus"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 #| msgid "Paste the contents of the clipboard at the cursor"
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Liitä leikepöydän sisältö kohdistimen kohdalle."
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15063,98 +15052,6 @@ msgstr "Tarkkuus:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Etuliite:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Tiedoston asetukset"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, kde-format
-msgid "Calculation"
-msgstr "Laskenta"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr "Maa-asetus"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, kde-format
-msgid "Case sensitive"
-msgstr "Erota pien- ja suuraakkoset"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, kde-format
-msgid "Precision as shown"
-msgstr "Tarkkuus kuten näkyy"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr "Hakuehtojen on sovittava koko soluun"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Automatic"
-msgid "Automatic find labels"
-msgstr "Automaattinen"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, kde-format
-msgid "String comparison:"
-msgstr "Merkkijonovertailu:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Regular Expressions"
-msgstr "Säännölliset lausekkeet"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr "Jokerimerkit"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr "Tyhjä vuosi:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "Käytä &järjestelmän kotoistusasetuksia"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, kde-format
-msgid "Language: %1 (%2)"
-msgstr "Kieli: %1 (%2)"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Oletuslukumuoto: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Pitkä päivämäärämuoto: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Lyhyt päivämäärämuoto: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Kellonaikamuoto: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Valuuttamuoto: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16074,6 +15971,68 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Avataanko linkki?"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Tiedoston asetukset…"
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "Näytä tiedoston asetusikkuna"
+
+#~ msgid "Document Settings"
+#~ msgstr "Tiedoston asetukset"
+
+#~ msgid "Calculation"
+#~ msgstr "Laskenta"
+
+#~ msgid "Locale"
+#~ msgstr "Maa-asetus"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Erota pien- ja suuraakkoset"
+
+#~ msgid "Precision as shown"
+#~ msgstr "Tarkkuus kuten näkyy"
+
+#~ msgid "Search criteria must apply to whole cell"
+#~ msgstr "Hakuehtojen on sovittava koko soluun"
+
+#, fuzzy
+#~| msgid "Automatic"
+#~ msgid "Automatic find labels"
+#~ msgstr "Automaattinen"
+
+#~ msgid "String comparison:"
+#~ msgstr "Merkkijonovertailu:"
+
+#~ msgid "Regular Expressions"
+#~ msgstr "Säännölliset lausekkeet"
+
+#~ msgid "Wildcards"
+#~ msgstr "Jokerimerkit"
+
+#~ msgid "Null Year:"
+#~ msgstr "Tyhjä vuosi:"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "Käytä &järjestelmän kotoistusasetuksia"
+
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Kieli: %1 (%2)"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Oletuslukumuoto: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Pitkä päivämäärämuoto: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Lyhyt päivämäärämuoto: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Kellonaikamuoto: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Valuuttamuoto: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Omat luettelot…"

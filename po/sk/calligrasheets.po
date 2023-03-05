@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2019-09-29 19:44+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -953,7 +953,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vracia 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Databáza"
@@ -13231,7 +13231,6 @@ msgstr "Dolu, prvý stĺpec"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Žiadne"
@@ -14182,92 +14181,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Zmeniť okraj"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkcia..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Vložiť matematický výraz"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "Z &databázy..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Vložiť dáta z SQL databázy"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Výber vzorca"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "Vložiť funkciu"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Iné..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Upraviť bunku"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Upraviť zvýraznenú bunku"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Spustiť riešiteľa..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Zobraziť QTableView..."
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Nastavenia dokumentu"
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "Zobraziť dialóg vlastností dokumentu"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Zmeniť ochranu odkazu"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Permute fixation"
 msgstr "Zmeniť ochranu"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Zmeniť ochranu odkazu na textovom kurzore"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15030,98 +15019,6 @@ msgstr "Presnosť:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Prefix:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Nastavenia dokumentu"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, kde-format
-msgid "Calculation"
-msgstr "Výpočet"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr "Lokalizácia"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, kde-format
-msgid "Case sensitive"
-msgstr "Rozlišovať veľkosť písmen"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, kde-format
-msgid "Precision as shown"
-msgstr "Presnosť ako uvedená"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr "Kritériá hľadania musia platiť pre celú bunku"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, kde-format
-msgid "Automatic find labels"
-msgstr "Automaticky nájsť popisy"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, kde-format
-msgid "String comparison:"
-msgstr "Porovnanie reťazcov:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Regular Expressions"
-msgstr "Regulárne výrazy"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr "Divoké karty"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr "Nulový rok:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "&Použiť systémové regionálne nastavenia"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-#| msgid "Language: %1"
-msgid "Language: %1 (%2)"
-msgstr "Jazyk: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Štandardný formát čísla: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Dlhý formát dátumu: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Krátky formát dátumu: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Formát času: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Formát meny: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16037,6 +15934,68 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otvoriť odkaz?"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Nastavenia dokumentu"
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "Zobraziť dialóg vlastností dokumentu"
+
+#~ msgid "Document Settings"
+#~ msgstr "Nastavenia dokumentu"
+
+#~ msgid "Calculation"
+#~ msgstr "Výpočet"
+
+#~ msgid "Locale"
+#~ msgstr "Lokalizácia"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Rozlišovať veľkosť písmen"
+
+#~ msgid "Precision as shown"
+#~ msgstr "Presnosť ako uvedená"
+
+#~ msgid "Search criteria must apply to whole cell"
+#~ msgstr "Kritériá hľadania musia platiť pre celú bunku"
+
+#~ msgid "Automatic find labels"
+#~ msgstr "Automaticky nájsť popisy"
+
+#~ msgid "String comparison:"
+#~ msgstr "Porovnanie reťazcov:"
+
+#~ msgid "Regular Expressions"
+#~ msgstr "Regulárne výrazy"
+
+#~ msgid "Wildcards"
+#~ msgstr "Divoké karty"
+
+#~ msgid "Null Year:"
+#~ msgstr "Nulový rok:"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "&Použiť systémové regionálne nastavenia"
+
+#, fuzzy
+#~| msgid "Language: %1"
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Jazyk: %1"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Štandardný formát čísla: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Dlhý formát dátumu: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Krátky formát dátumu: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Formát času: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Formát meny: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Vlastné zoznamy..."

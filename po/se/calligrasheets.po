@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-20 00:57+0000\n"
+"POT-Creation-Date: 2023-03-04 00:47+0000\n"
 "PO-Revision-Date: 2006-05-09 22:19+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -268,12 +268,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr ""
 
-#: engine/Localization.cpp:464
+#: engine/Localization.cpp:571
 #, kde-format
 msgid "true"
 msgstr ""
 
-#: engine/Localization.cpp:465
+#: engine/Localization.cpp:572
 #, kde-format
 msgid "false"
 msgstr ""
@@ -921,7 +921,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") dieđiha 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:147 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Diehtovuođđu"
@@ -13513,132 +13513,97 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr ""
 
-#: ui/CellToolBase.cpp:140
+#: ui/CellToolBase.cpp:105
 #, kde-format
 msgid "&Function..."
 msgstr "&Funkšuvdna …"
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:108
 #, kde-format
 msgid "Insert math expression"
 msgstr ""
 
-#: ui/CellToolBase.cpp:146
+#: ui/CellToolBase.cpp:111
 #, kde-format
 msgid "From &Database..."
 msgstr "&Diehtovuođus …"
 
-#: ui/CellToolBase.cpp:150
+#: ui/CellToolBase.cpp:115
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr ""
 
-#: ui/CellToolBase.cpp:153
-#, kde-format
-msgid "Custom Lists..."
-msgstr "Gárvves listtut …"
-
-#: ui/CellToolBase.cpp:156
-#, kde-format
-msgid "Create custom lists for sorting or autofill"
-msgstr ""
-
-#: ui/CellToolBase.cpp:158
-#, kde-format
-msgid "&Goal Seek..."
-msgstr "&Moala ohcan …"
-
-#: ui/CellToolBase.cpp:161
-#, kde-format
-msgid "Repeating calculation to find a specific value"
-msgstr ""
-
-#: ui/CellToolBase.cpp:163
+#: ui/CellToolBase.cpp:118
 #, kde-format
 msgid "Formula Selection"
 msgstr "Hápmoválljen"
 
-#: ui/CellToolBase.cpp:165
+#: ui/CellToolBase.cpp:120
 #, kde-format
 msgid "Insert a function"
 msgstr ""
 
-#: ui/CellToolBase.cpp:166 ui/CellToolBase.cpp:1068
+#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
 #, kde-format
 msgid "Others..."
 msgstr "Eará …"
 
-#: ui/CellToolBase.cpp:174
+#: ui/CellToolBase.cpp:129
 #, kde-format
 msgid "Modify Cell"
 msgstr "Rievdat sealla"
 
-#: ui/CellToolBase.cpp:178
+#: ui/CellToolBase.cpp:133
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr ""
 
-#: ui/CellToolBase.cpp:181
-#, kde-format
-msgid "Selects all cells in the current sheet"
-msgstr ""
-
-#: ui/CellToolBase.cpp:198
+#: ui/CellToolBase.cpp:137
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:204
+#: ui/CellToolBase.cpp:143
 #, kde-format
 msgid "Show QTableView..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:210
+#: ui/CellToolBase.cpp:149
 #, kde-format
 msgid "Document Settings..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:213
+#: ui/CellToolBase.cpp:152
 #, kde-format
 msgid "Show document settings dialog"
 msgstr ""
 
-#: ui/CellToolBase.cpp:217
+#: ui/CellToolBase.cpp:156
 #, kde-format
 msgid "Permute reference fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:221
+#: ui/CellToolBase.cpp:160
 #, kde-format
 msgid "Permute fixation"
 msgstr ""
 
-#: ui/CellToolBase.cpp:222
+#: ui/CellToolBase.cpp:161
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1007
+#: ui/CellToolBase.cpp:945
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:1027
+#: ui/CellToolBase.cpp:965
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
 "necessary Qt database drivers."
 msgstr ""
-
-#: ui/CellToolBase.cpp:1366
-msgctxt "(qtundo-format)"
-msgid "Replace"
-msgstr ""
-
-#: ui/CellToolBase_p.cpp:853
-#, kde-format
-msgid "Selection List..."
-msgstr "Válljenlistu …"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14484,51 +14449,6 @@ msgstr ""
 msgid "Currency format: %1"
 msgstr ""
 
-#: ui/dialogs/FindDialog.cpp:23 ui/dialogs/FindDialog.cpp:94
-#, kde-format
-msgid "More Options"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:31
-#, kde-format
-msgid "Search entire sheet"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:35
-#, kde-format
-msgid "Search in:"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:43
-#, kde-format
-msgid "Cell Values"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:44
-#, kde-format
-msgid "Comments"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:48
-#, kde-format
-msgid "Search direction:"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:56
-#, kde-format
-msgid "Across then Down"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:57
-#, kde-format
-msgid "Down then Across"
-msgstr ""
-
-#: ui/dialogs/FindDialog.cpp:91
-#, kde-format
-msgid "Fewer Options"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14700,87 +14620,6 @@ msgstr "Dán funkšuvnnas eai leat paramehterat."
 #, kde-format
 msgid "Description is not available."
 msgstr ""
-
-#: ui/dialogs/GoalSeekDialog.cpp:64
-#, kde-format
-msgid "Goal Seek"
-msgstr "Moallaohccan"
-
-#: ui/dialogs/GoalSeekDialog.cpp:120 ui/dialogs/GoalSeekDialog.cpp:130
-#, kde-format
-msgid "Cell reference is invalid."
-msgstr "Seallačujuhus ii gusto."
-
-#: ui/dialogs/GoalSeekDialog.cpp:141
-#, kde-format
-msgid "Target value is invalid."
-msgstr "Moallaárvu ii gusto."
-
-#: ui/dialogs/GoalSeekDialog.cpp:153
-#, kde-format
-msgid "Source cell must contain a numeric value."
-msgstr "Gáldosealla galgá sisttisdoallat nummira."
-
-#: ui/dialogs/GoalSeekDialog.cpp:162
-#, kde-format
-msgid "Target cell must contain a formula."
-msgstr "Moallasealla galgá sisttisdoallat hámu."
-
-#: ui/dialogs/GoalSeekDialog.cpp:206
-#, kde-format
-msgid "Starting..."
-msgstr "Álgimin …"
-
-#: ui/dialogs/GoalSeekDialog.cpp:207
-#, kde-format
-msgid "Iteration:"
-msgstr "Geardduheapmi:"
-
-#. i18n: ectx: property (text), widget (QLabel, label5)
-#: ui/dialogs/GoalSeekDialog.cpp:284 ui/dialogs/GoalSeekWidget.ui:81
-#, kde-format
-msgid "New value:"
-msgstr "Ođđa árvu:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:288
-#, kde-format
-msgid "Goal seeking with cell %1 found a solution:"
-msgstr "Moallaohcan %1 seallain gávnnai čovdosa:"
-
-#: ui/dialogs/GoalSeekDialog.cpp:295
-#, kde-format
-msgid "Goal seeking with cell %1 has found NO solution."
-msgstr "Moallaohcan %1 seallain II gávdnan čovdosa."
-
-#. i18n: ectx: property (text), widget (QLabel, label1)
-#: ui/dialogs/GoalSeekWidget.ui:38
-#, kde-format
-msgid "Set cell:"
-msgstr "Bija sealla:"
-
-#. i18n: ectx: property (text), widget (QLabel, label2)
-#: ui/dialogs/GoalSeekWidget.ui:48
-#, kde-format
-msgid "To value:"
-msgstr "Árvvu rádjái:"
-
-#. i18n: ectx: property (text), widget (QLabel, label3)
-#: ui/dialogs/GoalSeekWidget.ui:58
-#, kde-format
-msgid "By changing cell:"
-msgstr "Sealla rievdadeami bokte:"
-
-#. i18n: ectx: property (text), widget (QLabel, label4)
-#: ui/dialogs/GoalSeekWidget.ui:71
-#, kde-format
-msgid "Goal seeking with cell <cell> found <a | no> solution:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label6)
-#: ui/dialogs/GoalSeekWidget.ui:95
-#, kde-format
-msgid "Current value:"
-msgstr "Dálá árvu:"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15112,70 +14951,6 @@ msgstr "Duogášivdni:"
 msgid "No Color"
 msgstr "Ivnniid haga"
 
-#: ui/dialogs/ListDialog.cpp:46
-#, kde-format
-msgid "Custom Lists"
-msgstr "Iežat listtut"
-
-#: ui/dialogs/ListDialog.cpp:56
-#, kde-format
-msgid "List:"
-msgstr "Listu:"
-
-#: ui/dialogs/ListDialog.cpp:63
-#, kde-format
-msgid "Entry:"
-msgstr "Mearkkuš:"
-
-#: ui/dialogs/ListDialog.cpp:69
-#, kde-format
-msgid "Add"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:73 ui/ExternalEditor.cpp:61
-#, kde-format
-msgid "Cancel"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:77
-#, kde-format
-msgid "New"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:80
-#, kde-format
-msgid "Remove"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:83
-#, kde-format
-msgid "Modify"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:86
-#, kde-format
-msgid "Copy"
-msgstr ""
-
-#: ui/dialogs/ListDialog.cpp:238
-#, kde-format
-msgid "Do you really want to remove this list?"
-msgstr "Hálidatgo duođaid váldit eret dán listtu?"
-
-#: ui/dialogs/ListDialog.cpp:239
-#, kde-format
-msgid "Remove List"
-msgstr "Váldde eret listtu"
-
-#: ui/dialogs/ListDialog.cpp:259
-#, kde-format
-msgid ""
-"Entry area is not empty.\n"
-"Do you want to continue?"
-msgstr ""
-"Mearkkošoassi ii leat guorus.\n"
-"Hálidatgo joatkit?"
-
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, horizontalGroup)
 #: ui/dialogs/PositionWidget.ui:45
 #, kde-format
@@ -15408,6 +15183,11 @@ msgstr ""
 #: ui/ExternalEditor.cpp:57
 #, kde-format
 msgid "Apply changes"
+msgstr ""
+
+#: ui/ExternalEditor.cpp:61
+#, kde-format
+msgid "Cancel"
 msgstr ""
 
 #: ui/ExternalEditor.cpp:62

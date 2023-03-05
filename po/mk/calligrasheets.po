@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2000-06-08 07:00+0100\n"
 "Last-Translator: Dimitar Indovski <dime@gord.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -897,7 +897,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Крајна вредност"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "Датум"
@@ -12274,7 +12274,6 @@ msgstr "Вметни Колона"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, fuzzy, kde-format
 msgid "None"
 msgstr "Папка"
@@ -13195,92 +13194,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Боја на Граница"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, fuzzy, kde-format
 msgid "&Function..."
 msgstr "Функција"
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, fuzzy, kde-format
 msgid "Insert math expression"
 msgstr "Вметни Табела"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, fuzzy, kde-format
 msgid "From &Database..."
 msgstr "Датум"
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, fuzzy, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Датум"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Формула Избор"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, fuzzy, kde-format
 msgid "Insert a function"
 msgstr "Вметни колона"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Останати..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, fuzzy, kde-format
 msgid "Modify Cell"
 msgstr "Уреди Келија"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, fuzzy, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Боја на текст"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr ""
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, fuzzy, kde-format
 msgid "Show QTableView..."
 msgstr "Колона"
 
-#: ui/CellToolBase.cpp:149
-#, fuzzy, kde-format
-msgid "Document Settings..."
-msgstr "Стринг"
-
-#: ui/CellToolBase.cpp:152
-#, fuzzy, kde-format
-msgid "Show document settings dialog"
-msgstr "Формула"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, fuzzy, kde-format
 msgid "Permute reference fixation"
 msgstr "Прецизност"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, fuzzy, kde-format
 msgid "Permute fixation"
 msgstr "Прецизност"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, fuzzy, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Одстрани колона"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -14068,97 +14057,6 @@ msgstr "Прецизност"
 #, fuzzy, kde-format
 msgid "Prefix:"
 msgstr "Префикс"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, fuzzy, kde-format
-msgid "Document Settings"
-msgstr "Стринг"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, fuzzy, kde-format
-msgid "Calculation"
-msgstr "Се пресметува"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, fuzzy, kde-format
-msgid "Case sensitive"
-msgstr "Формат"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, fuzzy, kde-format
-msgid "Precision as shown"
-msgstr "Прецизност"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, fuzzy, kde-format
-msgid "Automatic find labels"
-msgstr "АвтоСума"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, fuzzy, kde-format
-msgid "String comparison:"
-msgstr "Почетна вредност"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, fuzzy, kde-format
-msgid "Regular Expressions"
-msgstr "Вметни Табела"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr ""
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, fuzzy, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "Стринг"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, fuzzy, kde-format
-msgid "Language: %1 (%2)"
-msgstr "средина"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, fuzzy, kde-format
-msgid "Default number format: %1"
-msgstr "Формат"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, fuzzy, kde-format
-msgid "Long date format: %1"
-msgstr "Формат"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, fuzzy, kde-format
-msgid "Short date format: %1"
-msgstr "Податок X"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, fuzzy, kde-format
-msgid "Time format: %1"
-msgstr "Формат на Броеви"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, fuzzy, kde-format
-msgid "Currency format: %1"
-msgstr "Моментално"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -14949,6 +14847,70 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Вметни колона"
+
+#, fuzzy
+#~ msgid "Document Settings..."
+#~ msgstr "Стринг"
+
+#, fuzzy
+#~ msgid "Show document settings dialog"
+#~ msgstr "Формула"
+
+#, fuzzy
+#~ msgid "Document Settings"
+#~ msgstr "Стринг"
+
+#, fuzzy
+#~ msgid "Calculation"
+#~ msgstr "Се пресметува"
+
+#, fuzzy
+#~ msgid "Case sensitive"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Precision as shown"
+#~ msgstr "Прецизност"
+
+#, fuzzy
+#~ msgid "Automatic find labels"
+#~ msgstr "АвтоСума"
+
+#, fuzzy
+#~ msgid "String comparison:"
+#~ msgstr "Почетна вредност"
+
+#, fuzzy
+#~ msgid "Regular Expressions"
+#~ msgstr "Вметни Табела"
+
+#, fuzzy
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "Стринг"
+
+#, fuzzy
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "средина"
+
+#, fuzzy
+#~ msgid "Default number format: %1"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Long date format: %1"
+#~ msgstr "Формат"
+
+#, fuzzy
+#~ msgid "Short date format: %1"
+#~ msgstr "Податок X"
+
+#, fuzzy
+#~ msgid "Time format: %1"
+#~ msgstr "Формат на Броеви"
+
+#, fuzzy
+#~ msgid "Currency format: %1"
+#~ msgstr "Моментално"
 
 #, fuzzy
 #~ msgid "Custom Lists..."

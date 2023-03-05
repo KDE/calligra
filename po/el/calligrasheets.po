@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-04 00:47+0000\n"
+"POT-Creation-Date: 2023-03-05 00:52+0000\n"
 "PO-Revision-Date: 2023-01-04 12:01+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -969,7 +969,7 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") επιστρέφει 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:112 ui/dialogs/DatabaseDialog.cpp:117
+#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Βάση δεδομένων"
@@ -13604,7 +13604,6 @@ msgstr "Κάτω, πρώτη στήλη"
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
 #: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
 #, kde-format
 msgid "None"
 msgstr "Κανένα"
@@ -14563,92 +14562,82 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Τροποποίηση περιγράμματος"
 
-#: ui/CellToolBase.cpp:105
+#: ui/CellToolBase.cpp:104
 #, kde-format
 msgid "&Function..."
 msgstr "&Συνάρτηση..."
 
-#: ui/CellToolBase.cpp:108
+#: ui/CellToolBase.cpp:107
 #, kde-format
 msgid "Insert math expression"
 msgstr "Εισαγωγή μαθηματικής έκφρασης"
 
-#: ui/CellToolBase.cpp:111
+#: ui/CellToolBase.cpp:110
 #, kde-format
 msgid "From &Database..."
 msgstr "Από &βάση δεδομένων..."
 
-#: ui/CellToolBase.cpp:115
+#: ui/CellToolBase.cpp:114
 #, kde-format
 msgid "Insert data from a SQL database"
 msgstr "Εισαγωγή δεδομένων από μια βάση δεδομένων SQL"
 
-#: ui/CellToolBase.cpp:118
+#: ui/CellToolBase.cpp:117
 #, kde-format
 msgid "Formula Selection"
 msgstr "Επιλογή μαθηματικού τύπου"
 
-#: ui/CellToolBase.cpp:120
+#: ui/CellToolBase.cpp:119
 #, kde-format
 msgid "Insert a function"
 msgstr "Εισαγωγή μιας συνάρτησης"
 
-#: ui/CellToolBase.cpp:121 ui/CellToolBase.cpp:978
+#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
 #, kde-format
 msgid "Others..."
 msgstr "Άλλες..."
 
-#: ui/CellToolBase.cpp:129
+#: ui/CellToolBase.cpp:128
 #, kde-format
 msgid "Modify Cell"
 msgstr "Τροποποίηση κελιού"
 
-#: ui/CellToolBase.cpp:133
+#: ui/CellToolBase.cpp:132
 #, kde-format
 msgid "Edit the highlighted cell"
 msgstr "Επεξεργασία του τονισμένου κελιού"
 
-#: ui/CellToolBase.cpp:137
+#: ui/CellToolBase.cpp:136
 #, kde-format
 msgid "Run Inspector..."
 msgstr "Εκτέλεση επιθεωρητή..."
 
-#: ui/CellToolBase.cpp:143
+#: ui/CellToolBase.cpp:142
 #, kde-format
 msgid "Show QTableView..."
 msgstr "Εμφάνιση QTableView..."
 
-#: ui/CellToolBase.cpp:149
-#, kde-format
-msgid "Document Settings..."
-msgstr "Ρυθμίσεις εγγράφου..."
-
-#: ui/CellToolBase.cpp:152
-#, kde-format
-msgid "Show document settings dialog"
-msgstr "Εμφάνιση διαλόγου ρυθμίσεων εγγράφου"
-
-#: ui/CellToolBase.cpp:156
+#: ui/CellToolBase.cpp:150
 #, kde-format
 msgid "Permute reference fixation"
 msgstr "Μετάθεση σταθερού σημείου αναφοράς"
 
-#: ui/CellToolBase.cpp:160
+#: ui/CellToolBase.cpp:154
 #, kde-format
 msgid "Permute fixation"
 msgstr "Μετάθεση σταθερού σημείου"
 
-#: ui/CellToolBase.cpp:161
+#: ui/CellToolBase.cpp:155
 #, kde-format
 msgid "Permute the fixation of the reference at the text cursor"
 msgstr "Μετάθεση του σταθερού σημείου αναφοράς στο δρομέα κειμένου"
 
-#: ui/CellToolBase.cpp:945
+#: ui/CellToolBase.cpp:939
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Αδυναμία εντοπισμού ενέργειας %1"
 
-#: ui/CellToolBase.cpp:965
+#: ui/CellToolBase.cpp:959
 #, kde-format
 msgid ""
 "No database drivers available. To use this feature you need to install the "
@@ -15412,97 +15401,6 @@ msgstr "Ακρίβεια:"
 #, kde-format
 msgid "Prefix:"
 msgstr "Πρόθεμα:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:56
-#, kde-format
-msgid "Document Settings"
-msgstr "Ρυθμίσεις εγγράφου"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:66
-#, kde-format
-msgid "Calculation"
-msgstr "Υπολογισμός"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:72
-#, kde-format
-msgid "Locale"
-msgstr "Εντοπιότητα"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:103
-#, kde-format
-msgid "Case sensitive"
-msgstr "Με διάκριση πεζών/κεφαλαίων"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:106
-#, kde-format
-msgid "Precision as shown"
-msgstr "Ακρίβεια όπως εμφανίζεται"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:109
-#, kde-format
-msgid "Search criteria must apply to whole cell"
-msgstr "Τα κριτήρια αναζήτησης πρέπει να ισχύουν για όλο το κελί"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:112
-#, kde-format
-msgid "Automatic find labels"
-msgstr "Αυτόματη εύρεση ετικετών"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:118
-#, kde-format
-msgid "String comparison:"
-msgstr "Σύγκριση συμβολοσειρών"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Regular Expressions"
-msgstr "Κανονικές εκφράσεις"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:124
-#, kde-format
-msgid "Wildcards"
-msgstr "Σύμβολα υποκατάστασης"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:130
-#, kde-format
-msgid "Null Year:"
-msgstr "Κενό έτος:"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:169
-#, kde-format
-msgid "&Use System's Locale Settings"
-msgstr "&Χρήση ρυθμίσεων εντοπιότητας συστήματος"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:196
-#, kde-format
-msgid "Language: %1 (%2)"
-msgstr "Γλώσσα: %1 (%2)"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:197
-#, kde-format
-msgid "Default number format: %1"
-msgstr "Προκαθορισμένη μορφή ημερομηνίας: %1"
-
-#. i18ncheckarg
-#: ui/dialogs/DocumentSettingsDialog.cpp:198
-#, kde-format
-msgid "Long date format: %1"
-msgstr "Εκτενής μορφή ημερομηνίας: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:199
-#, kde-format
-msgid "Short date format: %1"
-msgstr "Σύντομη μορφή ημερομηνίας: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:200
-#, kde-format
-msgid "Time format: %1"
-msgstr "Μορφή ώρας: %1"
-
-#: ui/dialogs/DocumentSettingsDialog.cpp:201
-#, kde-format
-msgid "Currency format: %1"
-msgstr "Μορφή νομίσματος: %1"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -16458,6 +16356,66 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Άνοιγμα δεσμού;"
+
+#~ msgid "Document Settings..."
+#~ msgstr "Ρυθμίσεις εγγράφου..."
+
+#~ msgid "Show document settings dialog"
+#~ msgstr "Εμφάνιση διαλόγου ρυθμίσεων εγγράφου"
+
+#~ msgid "Document Settings"
+#~ msgstr "Ρυθμίσεις εγγράφου"
+
+#~ msgid "Calculation"
+#~ msgstr "Υπολογισμός"
+
+#~ msgid "Locale"
+#~ msgstr "Εντοπιότητα"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Με διάκριση πεζών/κεφαλαίων"
+
+#~ msgid "Precision as shown"
+#~ msgstr "Ακρίβεια όπως εμφανίζεται"
+
+#~ msgid "Search criteria must apply to whole cell"
+#~ msgstr "Τα κριτήρια αναζήτησης πρέπει να ισχύουν για όλο το κελί"
+
+#~ msgid "Automatic find labels"
+#~ msgstr "Αυτόματη εύρεση ετικετών"
+
+#~ msgid "String comparison:"
+#~ msgstr "Σύγκριση συμβολοσειρών"
+
+#~ msgid "Regular Expressions"
+#~ msgstr "Κανονικές εκφράσεις"
+
+#~ msgid "Wildcards"
+#~ msgstr "Σύμβολα υποκατάστασης"
+
+#~ msgid "Null Year:"
+#~ msgstr "Κενό έτος:"
+
+#~ msgid "&Use System's Locale Settings"
+#~ msgstr "&Χρήση ρυθμίσεων εντοπιότητας συστήματος"
+
+#~ msgid "Language: %1 (%2)"
+#~ msgstr "Γλώσσα: %1 (%2)"
+
+#~ msgid "Default number format: %1"
+#~ msgstr "Προκαθορισμένη μορφή ημερομηνίας: %1"
+
+#~ msgid "Long date format: %1"
+#~ msgstr "Εκτενής μορφή ημερομηνίας: %1"
+
+#~ msgid "Short date format: %1"
+#~ msgstr "Σύντομη μορφή ημερομηνίας: %1"
+
+#~ msgid "Time format: %1"
+#~ msgstr "Μορφή ώρας: %1"
+
+#~ msgid "Currency format: %1"
+#~ msgstr "Μορφή νομίσματος: %1"
 
 #~ msgid "Custom Lists..."
 #~ msgstr "Προσαρμοσμένες λίστες..."
