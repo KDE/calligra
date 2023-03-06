@@ -7,20 +7,20 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2006, 2013, 2014, 2016, 2020, 2022, 2023.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-05 00:52+0000\n"
-"PO-Revision-Date: 2023-02-27 22:35+0100\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2023-03-05 19:50+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 20.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Poedit-Language: Catalan\n"
@@ -16048,8 +16048,8 @@ msgstr ""
 "full.\n"
 "Podeu ocultar el contingut de la cel·la amb Oculta-ho tot, i altra vegada "
 "cal protecció de full.\n"
-"Podeu aprendre més sobre totes aquestes configuracions en el manual "
-"d'usuari, en el capítol Calligra Sheets avançat."
+"Podeu aprendre més sobre tota aquesta configuració en el manual d'usuari, en "
+"el capítol Calligra Sheets avançat."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: ui/dialogs/ProtectionWidget.ui:41
@@ -16217,112 +16217,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Obro l'enllaç?"
-
-#~ msgid "Document Settings..."
-#~ msgstr "Configuració del document..."
-
-#~ msgid "Show document settings dialog"
-#~ msgstr "Mostra el diàleg de configuració del document"
-
-#~ msgid "Document Settings"
-#~ msgstr "Configuració del document"
-
-#~ msgid "Calculation"
-#~ msgstr "Càlcul"
-
-#~ msgid "Locale"
-#~ msgstr "Configuració regional"
-
-#~ msgid "Case sensitive"
-#~ msgstr "Distingeix majúscules/minúscules"
-
-#~ msgid "Precision as shown"
-#~ msgstr "Precisió visualitzada"
-
-#~ msgid "Search criteria must apply to whole cell"
-#~ msgstr "El criteri de cerca s'ha d'aplicar a tota la cel·la"
-
-#~ msgid "Automatic find labels"
-#~ msgstr "Cerca automàtica d'etiquetes"
-
-#~ msgid "String comparison:"
-#~ msgstr "Comparació de cadenes:"
-
-#~ msgid "Regular Expressions"
-#~ msgstr "Expressions regulars"
-
-#~ msgid "Wildcards"
-#~ msgstr "Comodins"
-
-#~ msgid "Null Year:"
-#~ msgstr "Any nul:"
-
-#~ msgid "&Use System's Locale Settings"
-#~ msgstr "&Usa la configuració regional del sistema"
-
-#~ msgid "Language: %1 (%2)"
-#~ msgstr "Idioma: %1 (%2)"
-
-#~ msgid "Default number format: %1"
-#~ msgstr "Format numèric predeterminat: %1"
-
-#~ msgid "Long date format: %1"
-#~ msgstr "Format llarg de data: %1"
-
-#~ msgid "Short date format: %1"
-#~ msgstr "Format curt de data: %1"
-
-#~ msgid "Time format: %1"
-#~ msgstr "Format de l'hora: %1"
-
-#~ msgid "Currency format: %1"
-#~ msgstr "Format de la moneda: %1"
-
-#~ msgid "Custom Lists..."
-#~ msgstr "Llistes personalitzades..."
-
-#~ msgid "Create custom lists for sorting or autofill"
-#~ msgstr ""
-#~ "Crea llistes personalitzades per a les ordenacions o per a l'autocompleció"
-
-#~ msgid "Selects all cells in the current sheet"
-#~ msgstr "Selecciona totes les cel·les del full actual"
-
-#~ msgid "Custom Lists"
-#~ msgstr "Llistes personalitzades"
-
-#~ msgid "List:"
-#~ msgstr "Llista:"
-
-#~ msgid "Entry:"
-#~ msgstr "Entrada:"
-
-# msgid "&Add"
-#~ msgid "Add"
-#~ msgstr "Afegeix"
-
-# msgid "&New"
-#~ msgid "New"
-#~ msgstr "Nou"
-
-#~ msgid "Remove"
-#~ msgstr "Elimina"
-
-#~ msgid "Modify"
-#~ msgstr "Modifica"
-
-#~ msgid "Copy"
-#~ msgstr "Copia"
-
-#~ msgid "Do you really want to remove this list?"
-#~ msgstr "Esteu segur que voleu eliminar aquesta llista?"
-
-#~ msgid "Remove List"
-#~ msgstr "Elimina la llista"
-
-#~ msgid ""
-#~ "Entry area is not empty.\n"
-#~ "Do you want to continue?"
-#~ msgstr ""
-#~ "L'àrea d'entrada no està buida.\n"
-#~ "Voleu continuar?"
