@@ -194,7 +194,7 @@ msgstr "Exportació CSV"
 
 #: scripts/csvexport.py:29
 msgid "Export to CSV File"
-msgstr "Exporta a un fitxer CSV"
+msgstr "Exporta cap a un fitxer CSV"
 
 #: scripts/csvexport.py:29 scripts/htmlexport.py:377 scripts/logger.py:22
 #: scripts/odfpyexport.py:241
@@ -1236,7 +1236,7 @@ msgstr "Exporta el contingut"
 #: scripts/scripts.rc:16
 #, kde-format
 msgid "Export to a Comma-Separated-Value File"
-msgstr "Exporta a un fitxer de valors separats per comes"
+msgstr "Exporta cap a un fitxer de valors separats per comes"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:20
@@ -1248,7 +1248,7 @@ msgstr "Fitxer HTML"
 #: scripts/scripts.rc:20
 #, kde-format
 msgid "Export to a HTML File"
-msgstr "Exporta a un fitxer HTML"
+msgstr "Exporta cap a un fitxer HTML"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:24
@@ -1260,7 +1260,7 @@ msgstr "Fitxer OdfPy"
 #: scripts/scripts.rc:24
 #, kde-format
 msgid "Export to an OpenDocument File"
-msgstr "Exporta a un fitxer OpenDocument"
+msgstr "Exporta cap a un fitxer OpenDocument"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:30
