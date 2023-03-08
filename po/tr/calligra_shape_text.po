@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-19 22:31+0300\n"
+"PO-Revision-Date: 2023-03-07 20:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -1185,7 +1185,7 @@ msgstr "Hızlı arama:"
 #: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
 #, kde-format
 msgid "The URL is invalid"
-msgstr "Adres geçersiz"
+msgstr "URL geçersiz"
 
 #: dialogs/LinkInsertionDialog.cpp:88
 #, kde-format
@@ -1227,9 +1227,9 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
-"Web belgelerine bağlantılar ekleyin. Hem adres hem de bağlantı için etiket "
+"Web belgelerine bağlantılar ekleyin. Hem URL hem de bağlantı için etiket "
 "girebilirsiniz\n"
-" veya yalnızca adresi girip \"URL'den Başlığı Getir\" düğmesine "
+" veya yalnızca URL'yi girip \"URL'den Başlığı Getir\" düğmesine "
 "tıklayabilirsiniz"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
@@ -1251,7 +1251,7 @@ msgid ""
 "Hit this button to get the title from the URL. Redirections are also "
 "handled. "
 msgstr ""
-"Başlığı adresten getirmek için bu düğmeye tıklayın. Yönlendirmeler de "
+"Başlığı URL'den getirmek için bu düğmeye tıklayın. Yönlendirmeler de "
 "işlenecektir. "
 
 #. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
