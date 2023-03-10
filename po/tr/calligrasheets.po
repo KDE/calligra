@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-05 00:52+0000\n"
-"PO-Revision-Date: 2023-02-04 11:35+0300\n"
+"PO-Revision-Date: 2023-03-09 13:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -4912,8 +4912,8 @@ msgid ""
 msgstr ""
 "PV() işlevi, bir yatırımın mevcut döndürür -- faiz oranı veya enflasyon "
 "değeri verildiğinde, gelecekteki paranın toplam değeridir. Örneğin; yeni bir "
-"bilgisayar almak için 1166,40$'a ihtiyacınız varsa ve bunu iki yıl içinde %​8 "
-"faiz kazanarak almak istiyorsanız PV(1166,4;0,08;2) veya $1000'la "
+"bilgisayar almak için $1166,40'a gereksiniminiz varsa ve bunu iki yıl içinde "
+"%​8 faiz kazanarak almak istiyorsanız PV(1166,4;0,08;2) veya $1000'la "
 "başlamalısınız."
 
 #: functions/financial.xml:1119
