@@ -26,6 +26,7 @@ set (actions_DIR_SRCS
     actions/GoalSeek.cpp
     actions/Goto.cpp
     actions/Indent.cpp
+    actions/InsertFromDatabase.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
     actions/Link.cpp
@@ -55,6 +56,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/ConditionalDialog.cpp
     actions/dialogs/ConsolidateDialog.cpp
     actions/dialogs/CSVDialog.cpp
+    actions/dialogs/DatabaseDialog.cpp
     actions/dialogs/DocumentSettingsDialog.cpp
     actions/dialogs/FindDialog.cpp
     actions/dialogs/FormulaDialog.cpp
@@ -111,7 +113,6 @@ set (commands_DIR_SRCS
 
 
 set (dialogs_DIR_SRCS
-    dialogs/DatabaseDialog.cpp
     dialogs/LayoutWidgets.cpp
     dialogs/LayoutPage_Border.cpp
     dialogs/LayoutPage_Float.cpp

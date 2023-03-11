@@ -149,8 +149,6 @@ protected Q_SLOTS:
     void sheetProtectionToggled(bool enable);
     void handleDamages();
 
-    // -- data insert actions --
-    void insertFromDatabase();
     // -- misc actions --
     void inspector();
 

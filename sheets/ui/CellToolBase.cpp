@@ -42,9 +42,6 @@
 #include "commands/AutoFillCommand.h"
 #include "commands/DataManipulators.h"
 
-// dialogs
-#include "dialogs/DatabaseDialog.h"
-
 // strategies
 #include "strategy/AutoFillStrategy.h"
 #include "strategy/DragAndDropStrategy.h"
@@ -69,9 +66,6 @@
 #include <QPainter>
 #include <QStandardPaths>
 #include <QDomDocument>
-#ifndef QT_NO_SQL
-// #include <QSqlDatabase>
-#endif
 
 using namespace Calligra::Sheets;
 
@@ -92,16 +86,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell style actions --
     d->actions = new Actions(this);
-
-    // -- data insert actions --
-
-#ifndef QT_NO_SQL
-    action = new QAction(koIcon("network-server-database"), i18n("From &Database..."), this);
-    action->setIconText(i18n("Database"));
-    addAction("insertFromDatabase", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::insertFromDatabase);
-    action->setToolTip(i18n("Insert data from a SQL database"));
-#endif
 
     // -- misc actions --
 
@@ -872,24 +856,6 @@ void CellToolBase::triggerAction(const QString &name)
         a->trigger();
     else
         KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to locate action %1", name));
-}
-
-void CellToolBase::insertFromDatabase()
-{
-#ifndef QT_NO_SQL
-    selection()->emitCloseEditor(true);
-
-    QStringList str = QSqlDatabase::drivers();
-    if (str.isEmpty()) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("No database drivers available. To use this feature you need "
-                           "to install the necessary Qt database drivers."));
-        return;
-    }
-
-    QPointer<DatabaseDialog> dialog = new DatabaseDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-#endif
 }
 
 void CellToolBase::edit()

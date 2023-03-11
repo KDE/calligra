@@ -30,6 +30,9 @@
 #include "GoalSeek.h"
 #include "Goto.h"
 #include "Indent.h"
+#ifndef QT_NO_SQL
+#include "InsertFromDatabase.h"
+#endif
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
 #include "Link.h"
@@ -164,6 +167,10 @@ void Actions::createActions()
     // Indent
     addAction(new Indent(this, false));
     addAction(new Indent(this, true));
+#ifndef QT_NO_SQL
+    // InsertFromDatabase
+    addAction(new InsertFromDatabase(this));
+#endif
     // InsertSpecialChar
     addAction(new InsertSpecialChar(this));
     // InsertSeries

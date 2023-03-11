@@ -14,9 +14,9 @@
 #include "engine/CellBase.h"
 #include "engine/MapBase.h"
 #include "core/Sheet.h"
-#include "../Selection.h"
+#include "ui/Selection.h"
 
-#include "../commands/DataManipulators.h"
+#include "ui/commands/DataManipulators.h"
 
 #include <KoCanvasBase.h>
 
@@ -58,42 +58,15 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     QFrame * databaseFrame = new QFrame(this);
     QGridLayout * databaseFrameLayout = new QGridLayout(databaseFrame);
 
+    // Row 0 - type
     m_Type = new QLabel(databaseFrame);
     m_Type->setText(i18n("Type:"));
-
     databaseFrameLayout->addWidget(m_Type, 0, 0);
-
-    QLabel * TextLabel4 = new QLabel(databaseFrame);
-    TextLabel4->setText(i18n("User name:\n"
-                             "(if necessary)"));
-    databaseFrameLayout->addWidget(TextLabel4, 4, 0);
-
-    QLabel * TextLabel2 = new QLabel(databaseFrame);
-    TextLabel2->setText(i18n("Host:"));
-    databaseFrameLayout->addWidget(TextLabel2, 2, 0);
 
     m_driver = new KComboBox(databaseFrame);
     databaseFrameLayout->addWidget(m_driver, 0, 1);
 
-    m_username = new KLineEdit(databaseFrame);
-    databaseFrameLayout->addWidget(m_username, 4, 1);
-
-    m_host = new KLineEdit(databaseFrame);
-    m_host->setText("localhost");
-    databaseFrameLayout->addWidget(m_host, 2, 1);
-
-    QLabel * TextLabel3 = new QLabel(databaseFrame);
-    TextLabel3->setText(i18n("Port:\n(if necessary)"));
-    databaseFrameLayout->addWidget(TextLabel3, 3, 0);
-
-    m_password = new KLineEdit(databaseFrame);
-    m_password->setEchoMode(KLineEdit::Password);
-    databaseFrameLayout->addWidget(m_password, 5, 1);
-
-    m_port = new KLineEdit(databaseFrame);
-    m_port->setValidator(new QIntValidator(m_port));
-    databaseFrameLayout->addWidget(m_port, 3, 1);
-
+    // Row 1 - db name
     QLabel * dbName = new QLabel(databaseFrame);
     dbName->setText(i18n("Database name: "));
     databaseFrameLayout->addWidget(dbName, 1, 0);
@@ -101,11 +74,44 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_databaseName = new KLineEdit(databaseFrame);
     databaseFrameLayout->addWidget(m_databaseName, 1, 1);
 
+    // Row 2 - host
+    QLabel * TextLabel2 = new QLabel(databaseFrame);
+    TextLabel2->setText(i18n("Host:"));
+    databaseFrameLayout->addWidget(TextLabel2, 2, 0);
+
+    m_host = new KLineEdit(databaseFrame);
+    m_host->setText("localhost");
+    databaseFrameLayout->addWidget(m_host, 2, 1);
+
+    // Row 3 - port
+    QLabel * TextLabel3 = new QLabel(databaseFrame);
+    TextLabel3->setText(i18n("Port:\n(if necessary)"));
+    databaseFrameLayout->addWidget(TextLabel3, 3, 0);
+
+    m_port = new KLineEdit(databaseFrame);
+    m_port->setValidator(new QIntValidator(m_port));
+    databaseFrameLayout->addWidget(m_port, 3, 1);
+
+    // Row 4 - username
+    QLabel * TextLabel4 = new QLabel(databaseFrame);
+    TextLabel4->setText(i18n("User name:\n"
+                             "(if necessary)"));
+    databaseFrameLayout->addWidget(TextLabel4, 4, 0);
+
+    m_username = new KLineEdit(databaseFrame);
+    databaseFrameLayout->addWidget(m_username, 4, 1);
+
+    // Row 5 - password
     QLabel * TextLabel5 = new QLabel(databaseFrame);
     TextLabel5->setText(i18n("Password:\n"
                              "(if necessary)"));
     databaseFrameLayout->addWidget(TextLabel5, 5, 0);
 
+    m_password = new KLineEdit(databaseFrame);
+    m_password->setEchoMode(KLineEdit::Password);
+    databaseFrameLayout->addWidget(m_password, 5, 1);
+
+    // Row 6 - status
     m_databaseStatus = new QLabel(databaseFrame);
     m_databaseStatus->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     m_databaseStatus->setMaximumSize(QSize(32767, 30));
@@ -139,16 +145,16 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
 //   tablesFrameLayout->addLayout( Layout21, 0, 0 );
 
-    m_tableStatus = new QLabel(tablesFrame);
-    m_tableStatus->setText(" ");
-    tablesFrameLayout->addWidget(m_tableStatus, 3, 0);
-
     m_SelectTableLabel = new QLabel(tablesFrame);
     m_SelectTableLabel->setText(i18n("Select tables:"));
     tablesFrameLayout->addWidget(m_SelectTableLabel, 1, 0);
 
     m_tableView = new QListWidget(tablesFrame);
     tablesFrameLayout->addWidget(m_tableView, 2, 0);
+
+    m_tableStatus = new QLabel(tablesFrame);
+    m_tableStatus->setText(" ");
+    tablesFrameLayout->addWidget(m_tableStatus, 3, 0);
 
     tablesFrameLayout->setRowStretch(4, 1);
 
@@ -303,9 +309,6 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_startingRegion->setText(i18n("Insert in region"));
     Frame12Layout->addWidget(m_startingRegion, 0, 0);
 
-    m_cell = new KLineEdit(Frame12);
-    Frame12Layout->addWidget(m_cell, 1, 1);
-
     m_region = new KLineEdit(Frame12);
     Frame12Layout->addWidget(m_region, 0, 1);
 
@@ -313,6 +316,9 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_startingCell->setText(i18n("Starting in cell"));
     m_startingCell->setChecked(true);
     Frame12Layout->addWidget(m_startingCell, 1, 0);
+
+    m_cell = new KLineEdit(Frame12);
+    Frame12Layout->addWidget(m_cell, 1, 1);
 
     resultFrameLayout->addWidget(Frame12, 2, 0);
 
