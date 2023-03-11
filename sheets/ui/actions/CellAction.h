@@ -47,6 +47,7 @@ public:
     bool shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell);
     virtual bool shouldBeChecked(Selection *, const Cell &) { return false; }
     virtual void updateOnChange(Selection *, const Cell & /*activeCell*/) {}
+    virtual void onEditorDeleted() {}
     virtual void trigger();
     /** For actions that need access to the cell tool, which isn't yet constructed fully in the constructor. */
     virtual void init() {};

@@ -76,17 +76,6 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     }
 }
 
-void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
-{
-    // TODO - this should eventually be removed, all the checks are done in the CellAction classes instead
-    // Enable/disable actions.
-    const QList<QAction*> actions = q->actions().values();
-    for (int i = 0; i < actions.count(); ++i)
-        actions[i]->setEnabled(enable);
-    q->action("insertFormula")->setEnabled(enable);
-    if (externalEditor) externalEditor->setEnabled(enable);
-}
-
 void CellToolBase::Private::processEnterKey(QKeyEvent* event)
 {
 // array is true, if ctrl+alt are pressed
@@ -782,9 +771,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
     Selection *sel = q->selection();
     QList<QAction*> popupActions;
     const Cell cell = Cell(sel->activeSheet(), sel->marker());
-    const bool isProtected = !sel->activeSheet()->fullMap()->isReadWrite() ||
-                             (sel->activeSheet()->isProtected() &&
-                              !(cell.style().notProtected() && sel->isSingular()));
+    const bool isProtected = (!sel->activeSheet()->fullMap()->isReadWrite()) || sel->isProtected();
     if (!isProtected) {
         popupActions.append(actions->action("cellStyle"));
         popupActions.append(popupMenuActions["separator1"]);

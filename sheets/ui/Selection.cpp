@@ -755,6 +755,24 @@ void Selection::fixSubRegionDimension()
     }
 }
 
+bool Selection::isProtected() const
+{
+    if (!d->activeSheet->isProtected()) return false;
+
+    // Unprotected singular cell in a protected sheet?
+    // TODO - also allow multi-cell selections consisting solely of protected cells ...
+
+    if (isSingular()) {
+        const Cell cell = Cell(d->activeSheet, d->cursor);
+        if (!cell.isNull()) {
+            const Style style = cell.style();
+            if (style.notProtected()) return false;
+        }
+    }
+
+    return true;
+}
+
 void Selection::setActiveSubRegion(int start, int length, int active)
 {
     // Set the active sub-region.

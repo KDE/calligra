@@ -18,9 +18,11 @@ set (actions_DIR_SRCS
     actions/CSVActions.cpp
     actions/CustomLists.cpp
     actions/DocumentSettings.cpp
+    actions/Editing.cpp
     actions/Fill.cpp
     actions/FindReplace.cpp
     actions/Font.cpp
+    actions/Formula.cpp
     actions/GoalSeek.cpp
     actions/Goto.cpp
     actions/Indent.cpp
@@ -34,6 +36,7 @@ set (actions_DIR_SRCS
     actions/Paste.cpp
 #    actions/Pivot.cpp
     actions/SelectAll.cpp
+    actions/ShowTableView.cpp
     actions/Sort.cpp
     actions/SpellCheck.cpp
     actions/Style.cpp
@@ -54,6 +57,7 @@ set (action_dialogs_DIR_SRCS
     actions/dialogs/CSVDialog.cpp
     actions/dialogs/DocumentSettingsDialog.cpp
     actions/dialogs/FindDialog.cpp
+    actions/dialogs/FormulaDialog.cpp
     actions/dialogs/GoalSeekDialog.cpp
     actions/dialogs/GotoDialog.cpp
     actions/dialogs/InsertDialog.cpp
@@ -108,7 +112,6 @@ set (commands_DIR_SRCS
 
 set (dialogs_DIR_SRCS
     dialogs/DatabaseDialog.cpp
-    dialogs/FormulaDialog.cpp
     dialogs/LayoutWidgets.cpp
     dialogs/LayoutPage_Border.cpp
     dialogs/LayoutPage_Float.cpp

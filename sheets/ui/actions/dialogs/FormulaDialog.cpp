@@ -22,8 +22,8 @@
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
 #include "core/Sheet.h"
-#include "../CellEditorBase.h"
-#include "../Selection.h"
+#include "ui/CellEditorBase.h"
+#include "ui/Selection.h"
 
 #include <KoIcon.h>
 
@@ -231,7 +231,30 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     qApp->installEventFilter(this);
 
-    // Was a function name passed along with the constructor ? Then activate it.
+    setFormula(formulaName);
+
+    // Add auto completion.
+    searchFunct->setCompletionMode(KCompletion::CompletionAuto);
+    searchFunct->setCompletionObject(&listFunct, true);
+
+    if (functions->currentIndex().isValid())
+        selectFunction->setEnabled(false);
+
+    connect(searchFunct, &QLineEdit::textChanged,
+            this, &FormulaDialog::slotSearchText);
+    connect(searchFunct, &KLineEdit::returnPressed,
+            this, &FormulaDialog::slotPressReturn);
+
+    resize(QSize(660, 520).expandedTo(minimumSizeHint()));
+}
+
+FormulaDialog::~FormulaDialog()
+{
+    debugSheets << "FormulaDialog::~FormulaDialog()";
+}
+
+void FormulaDialog::setFormula (const QString& formulaName)
+{
     if (!formulaName.isEmpty()) {
         debugSheets << "formulaName=" << formulaName;
 #if 0
@@ -253,26 +276,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
         // Set keyboard focus to allow selection of a formula.
         searchFunct->setFocus();
     }
-
-    // Add auto completion.
-    searchFunct->setCompletionMode(KCompletion::CompletionAuto);
-    searchFunct->setCompletionObject(&listFunct, true);
-
-    if (functions->currentIndex().isValid())
-        selectFunction->setEnabled(false);
-
-    connect(searchFunct, &QLineEdit::textChanged,
-            this, &FormulaDialog::slotSearchText);
-    connect(searchFunct, &KLineEdit::returnPressed,
-            this, &FormulaDialog::slotPressReturn);
-
-    resize(QSize(660, 520).expandedTo(minimumSizeHint()));
 }
 
-FormulaDialog::~FormulaDialog()
-{
-    debugSheets << "FormulaDialog::~FormulaDialog()";
-}
 
 void FormulaDialog::slotPressReturn()
 {
@@ -326,7 +331,7 @@ void FormulaDialog::slotOk()
 
     // If there is still an editor then set the text.
     // Usually the editor is always in place.
-    if (m_editor != 0) {
+    if (m_editor) {
         Q_ASSERT(m_editor);
         QString tmp = result->text();
         if (tmp.at(0) != '=')
@@ -339,13 +344,10 @@ void FormulaDialog::slotOk()
 
     m_selection->emitModified();
     accept();
-    deleteLater();
 }
 
 void FormulaDialog::slotClose()
 {
-    deleteLater();
-
     m_selection->endReferenceSelection();
 
     // Revert the marker to its original position
@@ -736,8 +738,4 @@ void FormulaDialog::slotActivated(const QString& category)
     slotSelected(text);
 }
 
-void FormulaDialog::closeEvent(QCloseEvent * e)
-{
-    deleteLater();
-    e->accept();
-}
+

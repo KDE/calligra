@@ -62,20 +62,15 @@
 
 // KF5
 #include <kmessagebox.h>
-#include <kstandardaction.h>
 
 // Qt
+#include <QAction>
 #include <QApplication>
 #include <QPainter>
 #include <QStandardPaths>
 #include <QDomDocument>
 #ifndef QT_NO_SQL
 // #include <QSqlDatabase>
-#endif
-
-#ifndef NDEBUG
-#include <QTableView>
-#include "core/SheetModel.h"
 #endif
 
 using namespace Calligra::Sheets;
@@ -86,7 +81,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 {
     d->cellEditor = 0;
     d->externalEditor = 0;
-    d->formulaDialog = 0;
     d->initialized = false;
     d->lastEditorWithFocus = EmbeddedEditor;
 
@@ -101,11 +95,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- data insert actions --
 
-    action = new QAction(koIcon("insert-math-expression"), i18n("&Function..."), this);
-    addAction("insertFormula", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::insertFormula);
-    action->setToolTip(i18n("Insert math expression"));
-
 #ifndef QT_NO_SQL
     action = new QAction(koIcon("network-server-database"), i18n("From &Database..."), this);
     action->setIconText(i18n("Database"));
@@ -114,23 +103,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Insert data from a SQL database"));
 #endif
 
-    KSelectAction *selectAction = new KSelectAction(i18n("Formula Selection"), this);
-    addAction("formulaSelection", selectAction);
-    selectAction->setToolTip(i18n("Insert a function"));
-    QStringList functionList = {"SUM", "AVERAGE", "IF", "COUNT", "MIN", "MAX", i18n("Others...")};
-    selectAction->setItems(functionList);
-    selectAction->setComboWidth(80);
-    selectAction->setCurrentItem(0);
-    connect(selectAction, QOverload<const QString &>::of(&KSelectAction::triggered), this, &CellToolBase::formulaSelection);
-
-    // -- general editing actions --
-
-    action = new QAction(koIcon("cell_edit"), i18n("Modify Cell"), this);
-    addAction("editCell", action);
-    action->setShortcuts(QList<QKeySequence>() << QKeySequence(Qt::CTRL + Qt::Key_M));
-    connect(action, &QAction::triggered, this, &CellToolBase::edit);
-    action->setToolTip(i18n("Edit the highlighted cell"));
-
     // -- misc actions --
 
     action = new QAction(koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), i18n("Run Inspector..."), this);
@@ -138,29 +110,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
     connect(action, &QAction::triggered, this, &CellToolBase::inspector);
 
-#ifndef NDEBUG
-    action = new QAction(koIcon("table"), i18n("Show QTableView..."), this);
-    addAction("qTableView", action);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
-    connect(action, &QAction::triggered, this, &CellToolBase::qTableView);
-#endif
-
-    // Editor actions:
-    // Set up the permutation of the reference fixations action.
-    action = new QAction(i18n("Permute reference fixation"), this);
-    addAction("permuteFixation", action);
-    action->setShortcut(Qt::Key_F4);
-    // connect on creation of the embedded editor
-    action->setIconText(i18n("Permute fixation"));
-    action->setToolTip(i18n("Permute the fixation of the reference at the text cursor"));
-
     setTextMode(true);
 
 }
 
 CellToolBase::~CellToolBase()
 {
-    delete d->formulaDialog;
     delete d->cellEditor;
     delete d->actions;
     qDeleteAll(d->popupMenuActions);
@@ -603,9 +558,6 @@ void CellToolBase::handleDamages()
 void CellToolBase::selectionChanged(const Region& region)
 {
     Q_UNUSED(region);
-    if (!d->externalEditor) {
-        return;
-    }
     // Update the editor, if the reference selection is enabled.
     if (editor() && selection()->referenceSelectionMode()) {
         // First, update the formula expression. This will send a signal with
@@ -618,22 +570,9 @@ void CellToolBase::selectionChanged(const Region& region)
         return;
     }
 
-    const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
-    if (!cell) {
-        return;
-    }
-
-    if (selection()->activeSheet()->isProtected()) {
-        const Style style = cell.style();
-        if (style.notProtected()) {
-            if (selection()->isSingular()) {
-                d->setProtectedActionsEnabled(true);
-            } else { // more than one cell
-                d->setProtectedActionsEnabled(false);
-            }
-        } else {
-            d->setProtectedActionsEnabled(false);
-        }
+    if (d->externalEditor) {
+        bool enable = selection()->isProtected();
+        d->externalEditor->setEnabled(enable);
     }
 
     updateActions();
@@ -688,14 +627,11 @@ double CellToolBase::canvasWidth() const
 bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
 {
     const Cell cell(selection()->activeSheet(), selection()->marker());
-    if (selection()->activeSheet()->isProtected() && !cell.style().notProtected())
-        return false;
+    if (selection()->isProtected()) return false;
 
     if (!editor()) {
         d->cellEditor = new CellEditor(this, d->wordCollection,canvas()->canvasWidget());
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
-        connect(action("permuteFixation"), &QAction::triggered,
-                d->cellEditor, &CellEditor::permuteFixation);
 
         if(d->externalEditor) {
             connect(d->cellEditor, &CellEditor::textModified,
@@ -813,8 +749,7 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     delete d->cellEditor;
     d->cellEditor = 0;
 
-    delete d->formulaDialog;
-    d->formulaDialog = 0;
+    d->actions->onEditorDeleted();
 
     if (saveChanges) {
         applyUserInput(userInput, expandMatrix);
@@ -910,14 +845,14 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
 {
-    d->setProtectedActionsEnabled(readWrite);
+    if (d->externalEditor) d->externalEditor->setEnabled(readWrite);
 
     updateActions();
 }
 
 void CellToolBase::sheetProtectionToggled(bool protect)
 {
-    d->setProtectedActionsEnabled(!protect);
+    if (d->externalEditor) d->externalEditor->setEnabled(!protect);
 
     updateActions();
 }
@@ -939,16 +874,6 @@ void CellToolBase::triggerAction(const QString &name)
         KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to locate action %1", name));
 }
 
-void CellToolBase::insertFormula()
-{
-    if (! d->formulaDialog) {
-        if (! createEditor())
-            return;
-        d->formulaDialog = new FormulaDialog(canvas()->canvasWidget(), selection(), editor());
-    }
-    d->formulaDialog->show(); // dialog deletes itself later
-}
-
 void CellToolBase::insertFromDatabase()
 {
 #ifndef QT_NO_SQL
@@ -965,18 +890,6 @@ void CellToolBase::insertFromDatabase()
     dialog->exec();
     delete dialog;
 #endif
-}
-
-void CellToolBase::formulaSelection(const QString& expression)
-{
-    if (expression == i18n("Others...")) {
-        insertFormula();
-        return;
-    }
-
-    createEditor();
-    FormulaDialog* dialog = new FormulaDialog(canvas()->canvasWidget(), selection(), editor(), expression);
-    dialog->show(); // dialog deletes itself later
 }
 
 void CellToolBase::edit()
@@ -1013,21 +926,6 @@ void CellToolBase::inspector()
     QPointer<Calligra::Sheets::Inspector> ins = new Calligra::Sheets::Inspector(cell);
     ins->exec();
     delete ins;
-}
-
-void CellToolBase::qTableView()
-{
-#ifndef NDEBUG
-    QPointer<KoDialog> dialog = new KoDialog(canvas()->canvasWidget());
-    QTableView* const view = new QTableView(dialog);
-    SheetModel* const model = new SheetModel(selection()->activeSheet());
-    view->setModel(model);
-    dialog->setCaption("Read{Only,Write}TableModel Test");
-    dialog->setMainWidget(view);
-    dialog->exec();
-    delete dialog;
-    delete model;
-#endif
 }
 
 void CellToolBase::setExternalEditor(Calligra::Sheets::ExternalEditor *editor)

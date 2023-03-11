@@ -22,9 +22,11 @@
 #include "CSVActions.h"
 #include "CustomLists.h"
 #include "DocumentSettings.h"
+#include "Editing.h"
 #include "Fill.h"
 #include "FindReplace.h"
 #include "Font.h"
+#include "Formula.h"
 #include "GoalSeek.h"
 #include "Goto.h"
 #include "Indent.h"
@@ -38,6 +40,9 @@
 #include "Paste.h"
 // #include "Pivot.h"
 #include "SelectAll.h"
+#ifndef NDEBUG
+#include "ShowTableView.h"
+#endif
 #include "Sort.h"
 #include "SpellCheck.h"
 #include "Style.h"
@@ -132,6 +137,9 @@ void Actions::createActions()
     addAction(new ManageCustomLists(this));
     // DocumentSettings
     addAction(new DocumentSettings(this));
+    // Editing
+    addAction(new EditCell(this));
+    addAction(new PermuteFixation(this));
     // Fill
     addAction(new Fill(this, FillManipulator::Up));
     addAction(new Fill(this, FillManipulator::Down));
@@ -146,6 +154,9 @@ void Actions::createActions()
     addAction(new Font(this));
     addAction(new FontSize(this));
     addAction(new FontColor(this));
+    // Formula
+    addAction(new InsertFormula(this));
+    addAction(new FormulaSelection(this));
     // GoalSeek
     addAction(new GoalSeek(this));
     // Goto
@@ -181,6 +192,10 @@ void Actions::createActions()
 //    addAction(new Pivot(this));
     // SelectAll
     addAction(new SelectAll(this));
+#ifndef NDEBUG
+    // ShowTableView
+    addAction(new ShowTableView(this));
+#endif
     // Sort
     addAction(new Sort(this));
     addAction(new SortInc(this));
@@ -263,6 +278,13 @@ void Actions::updateOnChange(bool readWrite, Selection *selection, const Cell &a
         a->blockSignals(blocked);
 
         cellAction->updateOnChange(selection, activeCell);
+    }
+}
+
+void Actions::onEditorDeleted()
+{
+    for (CellAction *cellAction : cellActions) {
+        cellAction->onEditorDeleted();
     }
 }
 

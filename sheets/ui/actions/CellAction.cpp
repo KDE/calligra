@@ -70,17 +70,7 @@ bool CellAction::shouldBeEnabled(bool readWrite, Selection *selection, const Cel
 {
     if ((!readWrite) && (!enabledIfReadOnly())) return false;
 
-    bool prot = false;
-    if (selection->activeSheet()->isProtected()) {
-        prot = true;
-        // Unprotected singular cell in a protected sheet?
-        // TODO - also allow multi-cell selections consisting solely of protected cells ...
-        if (selection->isSingular() && (!activeCell.isNull())) {
-            const Style style = activeCell.style();
-            // TODO if more cells enabled, 
-            if (style.notProtected()) prot = false;
-        }
-    }
+    bool prot = selection->isProtected();
     if (prot && (!enabledIfProtected())) return false;
 
     return enabledForSelection(selection, activeCell);

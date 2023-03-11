@@ -114,6 +114,7 @@ public Q_SLOTS:
      */
     virtual void scrollToCell(const QPoint &location);
 
+    void edit();
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
@@ -149,14 +150,9 @@ protected Q_SLOTS:
     void handleDamages();
 
     // -- data insert actions --
-    void insertFormula();
     void insertFromDatabase();
-    void formulaSelection(const QString& expression);
-    // -- general editing actions --
-    void edit();
     // -- misc actions --
     void inspector();
-    void qTableView();
 
 private:
     Q_DISABLE_COPY(CellToolBase)

@@ -49,6 +49,7 @@ class FormulaDialog : public KoDialog
 public:
     FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& expression = QString());
     ~FormulaDialog() override;
+    void setFormula (const QString& expression);
 private:
     /**
      * Turns the @p text into a parameter that koscript can understand. The type
@@ -124,8 +125,6 @@ public:
      * Find out which widget got focus.
      */
     bool eventFilter(QObject* obj, QEvent* ev) override;
-protected:
-    void closeEvent(QCloseEvent *) override;
 private:
     Selection* m_selection;
     CellEditorBase* m_editor;

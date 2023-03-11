@@ -228,6 +228,10 @@ public:
      */
     void clear() override;
 
+    /**
+     * Is the current selection protected?
+     */
+    bool isProtected() const;
 
     /**
      * \param mode single cell or multiple cell selection

@@ -17,9 +17,6 @@
 // Sheets
 #include "CellToolBase.h"
 
-// dialogs
-#include "dialogs/FormulaDialog.h"
-
 
 class KUndo2Command;
 
@@ -41,8 +38,6 @@ public:
     CellEditor* cellEditor;
     // External editor
     Calligra::Sheets::ExternalEditor* externalEditor;
-    // Insert special character dialog
-    QPointer<FormulaDialog> formulaDialog;
     // Actions with extended names for the popup menu
     QHash<QString, QAction*> popupMenuActions;
     // Initialization flag.
@@ -55,7 +50,6 @@ public:
 
 public:
     void updateEditor(const Cell& cell);
-    void setProtectedActionsEnabled(bool enable);
     /** Directly triggers an action. */
     void triggerAction(const QString &name);
 
