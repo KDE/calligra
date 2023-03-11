@@ -1,12 +1,12 @@
 /* This file is part of the KDE project
-   SPDX-FileCopyrightText: 1998-2022 The Calligra Team <calligra-devel@kde.org>
-   SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
+   SPDX-FileCopyrightText: 1998-2023 The Calligra Team <calligra-devel@kde.org>
+   SPDX-FileCopyrightText: 2023 Tomas Mecir <mecirt@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASAE
-#define CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASAE
+#ifndef CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE
+#define CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE
 
 
 #include "CellAction.h"
@@ -32,4 +32,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASAE
+#endif   // CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE

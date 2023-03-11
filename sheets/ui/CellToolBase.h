@@ -149,9 +149,6 @@ protected Q_SLOTS:
     void sheetProtectionToggled(bool enable);
     void handleDamages();
 
-    // -- misc actions --
-    void inspector();
-
 private:
     Q_DISABLE_COPY(CellToolBase)
 

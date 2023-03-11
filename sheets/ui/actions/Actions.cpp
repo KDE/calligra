@@ -35,6 +35,7 @@
 #endif
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
+#include "Inspector.h"
 #include "Link.h"
 #include "ListChoose.h"
 #include "Merge.h"
@@ -175,6 +176,8 @@ void Actions::createActions()
     addAction(new InsertSpecialChar(this));
     // InsertSeries
     addAction(new InsertSeries(this));
+    // Inspector
+    addAction(new Inspector(this));
     // Link
     addAction(new Link(this));
     addAction(new ClearLink(this));

@@ -33,8 +33,14 @@ void AutoFilter::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
     QRect range = selection->lastRange();
     if ((range.width() == 1) && (range.height() == 1)) {
-        CellBase cell(sheet, range.left(), range.top());
-        range = extendSelectionToRange(cell, false);
+        CellStorage *cs = sheet->fullCellStorage();
+        QVector< QPair<QRectF, Database> > databases = cs->databases(*selection);
+        if (databases.length()) {
+            range = databases[0].first.toRect();
+        } else {
+            CellBase cell(sheet, range.left(), range.top());
+            range = extendSelectionToRange(cell, false);
+        }
         selection->initialize(range, sheet);
         selection->emitModified();
     }
@@ -58,10 +64,26 @@ AutoFilterCommand::~AutoFilterCommand()
 
 bool AutoFilterCommand::performCommands()
 {
+    CellStorage *cs = m_sheet->fullCellStorage();
+    QVector< QPair<QRectF, Database> > databases = cs->databases(*this);
+    // If there is a database that matches exactly, we use that one
+    // The execute() method above has already tried to find one if no range is provided.
+    QRect mine = lastRange();
+    for (auto e : databases) {
+        if (e.first == mine) {
+            // We have a database to use.
+            bool display = e.second.displayFilterButtons();
+            e.second.setDisplayFilterButtons(!display);
+            cs->setDatabase(*this, e.second);
+            return true;
+        }
+    }
+
+    // Nothing matched exactly, make a new one.
     Database database;
     database.setDisplayFilterButtons(true);
     database.setRange(*this);
-    m_sheet->fullCellStorage()->setDatabase(*this, database);
+    cs->setDatabase(*this, database);
     return true;
 }
 

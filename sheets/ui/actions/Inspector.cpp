@@ -1,16 +1,21 @@
-// This file is part of the KDE project
+/* This file is part of the KDE project
+   SPDX-FileCopyrightText: 1998-2023 The Calligra Team <calligra-devel@kde.org>
 // SPDX-FileCopyrightText: 2005 Ariya Hidayat <ariya@kde.org>
-// SPDX-License-Identifier: LGPL-2.0-only
+   SPDX-FileCopyrightText: 2023 Tomas Mecir <mecirt@gmail.com>
 
-#include "inspector.h"
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
-// Qt
+#include "Inspector.h"
+#include "Actions.h"
+
+#include <QAction>
 #include <QFrame>
-// #include <QLayout>
-// #include <QTextStream>
 #include <QTreeWidget>
 #include <QVBoxLayout>
-// #include <QPen>
+
+#include <KLocalizedString>
+#include <KMessageBox>
 
 // Sheets
 #include "engine/DependencyManager.h"
@@ -18,15 +23,47 @@
 #include "engine/Region.h"
 #include "core/Cell.h"
 #include "core/Sheet.h"
-// #include "Style.h"
-// #include "Value.h"
+#include "ui/Selection.h"
+
+
+
+using namespace Calligra::Sheets;
+
+
+Inspector::Inspector(Actions *actions)
+    : CellAction(actions, "inspector", i18n("Run Inspector..."), koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), QString())
+{
+}
+
+Inspector::~Inspector()
+{
+}
+
+QAction *Inspector::createAction() {
+    QAction *res = CellAction::createAction();
+    res->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
+    return res;
+}
+
+void Inspector::execute(Selection *selection, Sheet *sheet, QWidget *)
+{
+    // useful to inspect objects
+    Cell cell(sheet, selection->marker());
+    InspectorDialog *ins = new InspectorDialog(cell);
+    ins->exec();
+    delete ins;
+}
+
+
+
+// * * * DIALOG * * *
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class Inspector::Private
+class InspectorDialog::Private
 {
 public:
     Cell cell;
@@ -47,20 +84,13 @@ public:
 } // namespace Sheets
 } // namespace Calligra
 
-using namespace Calligra::Sheets;
+
 
 static QString boolAsString(bool b)
 {
     if (b) return QString("True");
     else return QString("False");
 }
-
-#if 0
-static QString longAsHexstring(long l)
-{
-    return QString("%1").arg(l, 8, 16);
-}
-#endif
 
 static QString dirAsString(Qt::LayoutDirection dir)
 {
@@ -73,7 +103,7 @@ static QString dirAsString(Qt::LayoutDirection dir)
     return str;
 }
 
-void Inspector::Private::handleCell()
+void InspectorDialog::Private::handleCell()
 {
     QString str;
 
@@ -87,8 +117,6 @@ void Inspector::Private::handleCell()
     new QTreeWidgetItem(cellView, QStringList() << "Default" << boolAsString(cell.isDefault()));
     new QTreeWidgetItem(cellView, QStringList() << "Empty" << boolAsString(cell.isEmpty()));
     new QTreeWidgetItem(cellView, QStringList() << "Formula" << boolAsString(cell.isFormula()));
-//   new QTreeWidgetItem( cellView, QStringList() << "Format Properties" << longAsHexstring( static_cast<long>( cell.style()->propertiesMask() ) ) );
-//   new QTreeWidgetItem( cellView, QStringList() << "Style Properties" << longAsHexstring( static_cast<long>( cell.style()->style()->features() ) ) );
     new QTreeWidgetItem(cellView, QStringList() << "Text" << cell.userInput());
     new QTreeWidgetItem(cellView, QStringList() << "Text (Displayed)" <<
                         cell.displayText().replace(QChar('\n'), "\\n"));
@@ -103,7 +131,7 @@ void Inspector::Private::handleCell()
     new QTreeWidgetItem(cellView, QStringList() << "Height" << QString::number(cell.height()));
 }
 
-void Inspector::Private::handleStyle() // direct style access
+void InspectorDialog::Private::handleStyle() // direct style access
 {
     styleView->clear();
     const Style style = cell.style();
@@ -132,7 +160,7 @@ void Inspector::Private::handleStyle() // direct style access
                         QString::number(style.bottomBorderPen().width()));
 }
 
-void Inspector::Private::handleSheet()
+void InspectorDialog::Private::handleSheet()
 {
     sheetView->clear();
 
@@ -140,7 +168,7 @@ void Inspector::Private::handleSheet()
     new QTreeWidgetItem(sheetView, QStringList() << "Layout Direction" << dirAsString(sheet->layoutDirection()));
 }
 
-void Inspector::Private::handleDep()
+void InspectorDialog::Private::handleDep()
 {
     DependencyManager* manager = sheet->map()->dependencyManager();
     Region deps = manager->consumingRegion(cell);
@@ -161,7 +189,7 @@ void Inspector::Private::handleDep()
 
 }
 
-Inspector::Inspector(const Cell& cell)
+InspectorDialog::InspectorDialog(const Cell& cell)
         : KPageDialog()
         , d(new Private)
 {
@@ -209,7 +237,7 @@ Inspector::Inspector(const Cell& cell)
     resize(350, 400);
 }
 
-Inspector::~Inspector()
+InspectorDialog::~InspectorDialog()
 {
     delete d;
 }

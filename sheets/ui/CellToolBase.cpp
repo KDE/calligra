@@ -31,7 +31,6 @@
 #include "CellView.h"
 #include "ExternalEditor.h"
 #include "FilterPopup.h"
-#include "inspector.h"
 #include "SheetView.h"
 
 // actions
@@ -86,13 +85,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell style actions --
     d->actions = new Actions(this);
-
-    // -- misc actions --
-
-    action = new QAction(koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), i18n("Run Inspector..."), this);
-    addAction("inspector", action);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
-    connect(action, &QAction::triggered, this, &CellToolBase::inspector);
 
     setTextMode(true);
 
@@ -883,15 +875,6 @@ void CellToolBase::edit()
 void CellToolBase::deleteSelection()
 {
     d->triggerAction("clearContents");
-}
-
-void CellToolBase::inspector()
-{
-    // useful to inspect objects
-    Cell cell(selection()->activeSheet(), selection()->marker());
-    QPointer<Calligra::Sheets::Inspector> ins = new Calligra::Sheets::Inspector(cell);
-    ins->exec();
-    delete ins;
 }
 
 void CellToolBase::setExternalEditor(Calligra::Sheets::ExternalEditor *editor)

@@ -29,6 +29,7 @@ set (actions_DIR_SRCS
     actions/InsertFromDatabase.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
+    actions/Inspector.cpp
     actions/Link.cpp
     actions/ListChoose.cpp
     actions/Merge.cpp
@@ -153,7 +154,6 @@ set (calligrasheetsui_LIB_SRCS
     FilterPopup.cpp
     FormulaEditorHighlighter.cpp
     FunctionCompletion.cpp
-    inspector.cpp
     LocationComboBox.cpp
     MapModel.cpp
     MapViewModel.cpp
