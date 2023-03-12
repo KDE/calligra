@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2023-03-09 13:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -172,11 +172,9 @@ msgstr "dk"
 msgid "s"
 msgstr "sn"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Metin"
@@ -247,7 +245,7 @@ msgstr "<p><b>Döndürme türü:</b> %1</p>"
 msgid "Syntax"
 msgstr "Sözdizim"
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "Parametreler"
@@ -878,7 +876,6 @@ msgstr "CARY(12;1,5707) işlevi, 12 döndürür"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12;0) işlevi, 0 döndürür"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -890,16 +887,14 @@ msgstr "CARY(12;0) işlevi, 0 döndürür"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Sayı"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Biçim"
@@ -956,7 +951,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") işlevi, 99 döndürür"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Veritabanı"
@@ -1252,13 +1246,12 @@ msgstr "ÖZETVERİAL(Veritabanı; \"Satış\")"
 msgid "Date & Time"
 msgstr "Tarih ve Saat"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Gün"
@@ -1328,12 +1321,10 @@ msgstr "DAYS360(tarih1; tarih2; yöntem)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE), 59 döndürür"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Zaman"
@@ -4048,9 +4039,8 @@ msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14), 0,2841 döndürür"
 msgid "Fractional Dollar"
 msgstr "Kesir Dolar"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Bölüm"
@@ -4229,8 +4219,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECTIVE(nominal;dönemler)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "Para birimi"
@@ -6113,7 +6102,7 @@ msgstr ""
 msgid "Math"
 msgstr "Mat"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "İşlev"
@@ -8185,7 +8174,6 @@ msgid "Row"
 msgstr "Satır"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "Sütun"
@@ -13337,7 +13325,6 @@ msgstr "Aşağı, İlk Sütun"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "Hiçbiri"
@@ -14290,89 +14277,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kenarlığı Değiştir"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "&İşlev..."
-
-#: ui/CellToolBase.cpp:107
-#, kde-format
-msgid "Insert math expression"
-msgstr "Matematiksel ifade ekle"
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "&Veritabanından..."
-
-#: ui/CellToolBase.cpp:114
-#, kde-format
-msgid "Insert data from a SQL database"
-msgstr "SQL veritabanından veri ekle"
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "Formül Seçimi"
-
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Insert a function"
-msgstr "Bir işlev ekle"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "Diğerleri..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "Hücreyi Düzenle"
-
-#: ui/CellToolBase.cpp:132
-#, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Vurgulanmış hücreyi düzenle"
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr "Denetleyiciyi Çalıştır..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Show QTableView..."
-msgstr "QTableView Ögesini Göster..."
-
-#: ui/CellToolBase.cpp:150
-#, kde-format
-msgid "Permute reference fixation"
-msgstr "Başvuru sabitini değiştir"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Permute fixation"
-msgstr "Sabiti değiştir"
-
-#: ui/CellToolBase.cpp:155
-#, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Metin imlecindeki başvuru sabitini değiştir"
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "%1 eylemi bulunamıyor"
-
-#: ui/CellToolBase.cpp:959
-#, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"Veritabanı sürücüsü bulunamadı. Bu özelliği kullanabilmeniz için Qt "
-"veritabanı sürücülerine gerek duyuluyor."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14801,333 +14709,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Biçemi Değiştir"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "Veriyi Veritabanından Al"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "Tür:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"Kullanıcı adı:\n"
-"(gerekiyorsa)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "Makine:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"Port:\n"
-"(gerekiyorsa)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "Veritabanı adı: "
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"Parola:\n"
-"(gerekiyorsa)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "Tabloları seçin:"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, kde-format
-msgid "Tables"
-msgstr "Tablolar"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "Sütunları seçin:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, kde-format
-msgid "Table"
-msgstr "Tablo"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "Sütunlar"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "Tümünü eşleştir (VE)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "Herhangi birini eşleşir (VEYA)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "eşit"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "eşit değil"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "içinde"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "içinde değil"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "benzer"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "daha büyük"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "daha küçük"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "eşit veya büyük"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "eşit veya küçük"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "Sıralama ölçütü"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "Artan"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "Azalan"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "Ayrı"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "Arama Seçenekleri"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "SQL araması:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "Bölgeye ekle"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "Başlangıç hücresi"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "Sonuç"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr "Burada bir tablo belirtemezsiniz."
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr "Geçerli bir bölge belirtmelisiniz."
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr "Geçerli bir hücre belirtmelisiniz."
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "Veritabanındaki veriyi değiştirme izniniz yok."
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr "Sorgu işletilemedi."
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr "Bu sorguyla hiçbir sonuç alamadınız."
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Veriyi Veritabanından Al"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "Kapı, bir numara olmalıdır"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "Veritabanına bağlantı kuruluyor..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "Bağlantı kuruldu. Tablo bilgisi alınıyor..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "Bu veritabanında hiç tablo yok"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "Sürücü yüklenemedi"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "Tabloların üst verisi alınıyor..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr "En az bir tablo seçmelisiniz."
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr "En az bir sütun seçmelisiniz."
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"'*' ve '?' karakterlerini SQL içinde joker karakter olarak kullanamazsınız. "
-"Bunların doğrusu '%' veya '_' kullanmaktır. Değiştirmek ister misiniz?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "Önizleme"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Para"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Yüzde"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "Genel"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr "Tarih ve Saat"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "Para Birimi:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "Biçim:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "Sonek:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "Kesinlik:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "Önek:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15286,6 +14867,13 @@ msgstr ""
 "Bu kutu kullanılabilir tüm yazıtipi ailelerini listeler. Geçerli hücrede "
 "kulllanmak için birini seçin."
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "Önizleme"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
@@ -15294,32 +14882,6 @@ msgid ""
 msgstr ""
 "Geçerli hücrede kullanmayı seçtiğiniz yazıtipinin ön izlemesini "
 "görebilirsiniz."
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Tümü"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "İşlev ekle"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr "Yardım"
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "Bu işlevde hiç parametre yok."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, kde-format
-msgid "Description is not available."
-msgstr "Açıklama kullanılabilir değil."
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15361,6 +14923,11 @@ msgstr "Desen"
 msgid "Customize"
 msgstr "Özelleştir"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "Genel"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -15385,6 +14952,11 @@ msgstr ""
 "Ülke/Bölge ve Dil -> Sayılar sekmesi altında genel olarak ayarladığınız "
 "gösterimi kullanır. Sayılar öntanımlı olarak sağa hizalanır."
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Yüzde"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -15402,6 +14974,11 @@ msgstr ""
 "sayı %​1,200 olacaktır. Yeniden Genel hücre biçimine dönerseniz sayı yeniden "
 "12 olacaktır.\n"
 "Ayrıca Biçim Araç Çubuğundan Yüzde simgesini de kullanabilirsiniz."
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Para"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -15495,6 +15072,11 @@ msgstr ""
 "Ayarlarında ayarlanan sistem biçimidir. Hücredeki sayı zaman olarak bir "
 "anlam ifade etmediğinde Calligra Çizelgeleri Sistem Ayarlarında genel biçim "
 "olarak ayarladığınız 00:00'ı görüntüler."
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
+msgstr "Tarih ve Saat"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -15599,6 +15181,31 @@ msgid ""
 msgstr ""
 "Pozitif sayıların başlarında + simgesi ile ve negatif sayıların kırmızı "
 "renkte gösterilip gösterilmeyeceğini seçebilirsiniz."
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "Sonek:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "Önek:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "Kesinlik:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "Biçim:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "Para Birimi:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -16004,6 +15611,11 @@ msgstr "İptal"
 msgid "Discard changes"
 msgstr "Değişiklikleri at"
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Tümü"
+
 #: ui/FilterPopup.cpp:58
 #, kde-format
 msgid "Empty"
@@ -16050,6 +15662,229 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Bağlantıyı Aç?"
+
+#~ msgid "&Function..."
+#~ msgstr "&İşlev..."
+
+#~ msgid "Insert math expression"
+#~ msgstr "Matematiksel ifade ekle"
+
+#~ msgid "From &Database..."
+#~ msgstr "&Veritabanından..."
+
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "SQL veritabanından veri ekle"
+
+#~ msgid "Formula Selection"
+#~ msgstr "Formül Seçimi"
+
+#~ msgid "Insert a function"
+#~ msgstr "Bir işlev ekle"
+
+#~ msgid "Others..."
+#~ msgstr "Diğerleri..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "Hücreyi Düzenle"
+
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Vurgulanmış hücreyi düzenle"
+
+#~ msgid "Run Inspector..."
+#~ msgstr "Denetleyiciyi Çalıştır..."
+
+#~ msgid "Show QTableView..."
+#~ msgstr "QTableView Ögesini Göster..."
+
+#~ msgid "Permute reference fixation"
+#~ msgstr "Başvuru sabitini değiştir"
+
+#~ msgid "Permute fixation"
+#~ msgstr "Sabiti değiştir"
+
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Metin imlecindeki başvuru sabitini değiştir"
+
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "Veritabanı sürücüsü bulunamadı. Bu özelliği kullanabilmeniz için Qt "
+#~ "veritabanı sürücülerine gerek duyuluyor."
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "Veriyi Veritabanından Al"
+
+#~ msgid "Type:"
+#~ msgstr "Tür:"
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Kullanıcı adı:\n"
+#~ "(gerekiyorsa)"
+
+#~ msgid "Host:"
+#~ msgstr "Makine:"
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Port:\n"
+#~ "(gerekiyorsa)"
+
+#~ msgid "Database name: "
+#~ msgstr "Veritabanı adı: "
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Parola:\n"
+#~ "(gerekiyorsa)"
+
+#~ msgid "Select tables:"
+#~ msgstr "Tabloları seçin:"
+
+#~ msgid "Tables"
+#~ msgstr "Tablolar"
+
+#~ msgid "Select columns:"
+#~ msgstr "Sütunları seçin:"
+
+#~ msgid "Table"
+#~ msgstr "Tablo"
+
+#~ msgid "Columns"
+#~ msgstr "Sütunlar"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "Tümünü eşleştir (VE)"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "Herhangi birini eşleşir (VEYA)"
+
+#~ msgid "equals"
+#~ msgstr "eşit"
+
+#~ msgid "not equal"
+#~ msgstr "eşit değil"
+
+#~ msgid "in"
+#~ msgstr "içinde"
+
+#~ msgid "not in"
+#~ msgstr "içinde değil"
+
+#~ msgid "like"
+#~ msgstr "benzer"
+
+#~ msgid "greater"
+#~ msgstr "daha büyük"
+
+#~ msgid "lesser"
+#~ msgstr "daha küçük"
+
+#~ msgid "greater or equal"
+#~ msgstr "eşit veya büyük"
+
+#~ msgid "less or equal"
+#~ msgstr "eşit veya küçük"
+
+#~ msgid "Sorted by"
+#~ msgstr "Sıralama ölçütü"
+
+#~ msgid "Ascending"
+#~ msgstr "Artan"
+
+#~ msgid "Descending"
+#~ msgstr "Azalan"
+
+#~ msgid "Distinct"
+#~ msgstr "Ayrı"
+
+#~ msgid "Query Options"
+#~ msgstr "Arama Seçenekleri"
+
+#~ msgid "SQL query:"
+#~ msgstr "SQL araması:"
+
+#~ msgid "Insert in region"
+#~ msgstr "Bölgeye ekle"
+
+#~ msgid "Starting in cell"
+#~ msgstr "Başlangıç hücresi"
+
+#~ msgid "Result"
+#~ msgstr "Sonuç"
+
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Burada bir tablo belirtemezsiniz."
+
+#~ msgid "You have to specify a valid region."
+#~ msgstr "Geçerli bir bölge belirtmelisiniz."
+
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "Geçerli bir hücre belirtmelisiniz."
+
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "Veritabanındaki veriyi değiştirme izniniz yok."
+
+#~ msgid "Executing query failed."
+#~ msgstr "Sorgu işletilemedi."
+
+#~ msgid "You did not get any results with this query."
+#~ msgstr "Bu sorguyla hiçbir sonuç alamadınız."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Veriyi Veritabanından Al"
+
+#~ msgid "The port must be a number"
+#~ msgstr "Kapı, bir numara olmalıdır"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "Veritabanına bağlantı kuruluyor..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "Bağlantı kuruldu. Tablo bilgisi alınıyor..."
+
+#~ msgid "This database contains no tables"
+#~ msgstr "Bu veritabanında hiç tablo yok"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "Sürücü yüklenemedi"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "Tabloların üst verisi alınıyor..."
+
+#~ msgid "You have to select at least one table."
+#~ msgstr "En az bir tablo seçmelisiniz."
+
+#~ msgid "You have to select at least one column."
+#~ msgstr "En az bir sütun seçmelisiniz."
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "'*' ve '?' karakterlerini SQL içinde joker karakter olarak "
+#~ "kullanamazsınız. Bunların doğrusu '%' veya '_' kullanmaktır. Değiştirmek "
+#~ "ister misiniz?"
+
+#~ msgid "Insert function"
+#~ msgstr "İşlev ekle"
+
+#~ msgid "Help"
+#~ msgstr "Yardım"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "Bu işlevde hiç parametre yok."
+
+#~ msgid "Description is not available."
+#~ msgstr "Açıklama kullanılabilir değil."
 
 #~ msgid "Document Settings..."
 #~ msgstr "Belge Ayarları..."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -170,11 +170,9 @@ msgstr "хв"
 msgid "s"
 msgstr "с"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, fuzzy, kde-format
 msgid "Text"
 msgstr "Тэкст"
@@ -245,7 +243,7 @@ msgstr "<p><b>Які вяртаецца тып: </b>"
 msgid "Syntax"
 msgstr ""
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, fuzzy, kde-format
 msgid "Parameters"
 msgstr "Параметры"
@@ -860,7 +858,6 @@ msgstr "CARY(12;1.5707) верне 12"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12;0) верне 0"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -872,16 +869,14 @@ msgstr "CARY(12;0) верне 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, fuzzy, kde-format
 msgid "Number"
 msgstr "Нумар"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, fuzzy, kde-format
 msgid "Format"
 msgstr "Фармат"
@@ -937,7 +932,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") верне 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 msgid "Database"
 msgstr "База дадзеных"
@@ -1230,13 +1224,12 @@ msgstr "GETPIVOTDATA(Database; \"Продажы\")"
 msgid "Date & Time"
 msgstr "Дата і час"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, fuzzy, kde-format
 msgid "Date"
 msgstr "Дата"
@@ -1306,12 +1299,10 @@ msgstr "DAYS360(дата1; дата2; метад)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) верне 59"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, fuzzy, kde-format
 msgid "Time"
 msgstr "Час"
@@ -3975,9 +3966,8 @@ msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) верне 0.2841"
 msgid "Fractional Dollar"
 msgstr "Дробавы даляр"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, fuzzy, kde-format
 msgid "Fraction"
 msgstr "Дробавы"
@@ -4157,8 +4147,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECTIVE(намінальная стаўка;перыядаў)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, fuzzy, kde-format
 msgid "Currency"
 msgstr "Грашовая сума"
@@ -5999,7 +5988,7 @@ msgstr ""
 msgid "Math"
 msgstr "Матэматычныя"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, fuzzy, kde-format
 msgid "Function"
 msgstr "Функцыя"
@@ -8040,7 +8029,6 @@ msgid "Row"
 msgstr "Радок"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, fuzzy, kde-format
 msgid "Column"
 msgstr "Слупок"
@@ -13051,7 +13039,6 @@ msgstr "Уніз, першы слупок"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, fuzzy, kde-format
 msgid "None"
 msgstr "Няма"
@@ -13999,88 +13986,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Змяніць колер меж"
 
-#: ui/CellToolBase.cpp:104
-#, fuzzy, kde-format
-msgid "&Function..."
-msgstr "Функцыя..."
-
-#: ui/CellToolBase.cpp:107
-#, fuzzy, kde-format
-msgid "Insert math expression"
-msgstr "Уставіць матэматычны выраз"
-
-#: ui/CellToolBase.cpp:110
-#, fuzzy, kde-format
-msgid "From &Database..."
-msgstr "З базы дадзеных..."
-
-#: ui/CellToolBase.cpp:114
-#, fuzzy, kde-format
-msgid "Insert data from a SQL database"
-msgstr "Уставіць дадзеныя з базы дадзеных SQL"
-
-#: ui/CellToolBase.cpp:117
-#, fuzzy, kde-format
-msgid "Formula Selection"
-msgstr "Выбар формулы"
-
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Insert a function"
-msgstr "Уставіць функцыю"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, fuzzy, kde-format
-msgid "Others..."
-msgstr "Іншыя..."
-
-#: ui/CellToolBase.cpp:128
-#, fuzzy, kde-format
-msgid "Modify Cell"
-msgstr "Змяніць вочка"
-
-#: ui/CellToolBase.cpp:132
-#, fuzzy, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Змяніць бягучае вочка"
-
-#: ui/CellToolBase.cpp:136
-#, fuzzy, kde-format
-msgid "Run Inspector..."
-msgstr "Запуск інспектара..."
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Show QTableView..."
-msgstr "Паказаць ліст..."
-
-#: ui/CellToolBase.cpp:150
-#, fuzzy, kde-format
-msgid "Permute reference fixation"
-msgstr "Абарона ад змен"
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-msgid "Permute fixation"
-msgstr "Абарона ад змен"
-
-#: ui/CellToolBase.cpp:155
-#, fuzzy, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, fuzzy, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"Драйверы баз дадзеных недаступныя. Перазбярыце Qt з неабходнымі драйверамі."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14545,334 +14454,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Змяніць кут"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, fuzzy, kde-format
-msgid "Insert Data From Database"
-msgstr "Уставіць дадзеныя з базы дадзеных"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, fuzzy, kde-format
-msgid "Type:"
-msgstr "Тып:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, fuzzy, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"Імя карыстача:\n"
-"(калі неабходна)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, fuzzy, kde-format
-msgid "Host:"
-msgstr "Вузел:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, fuzzy, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"Порт:\n"
-"(калі неабходна)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, fuzzy, kde-format
-msgid "Database name: "
-msgstr "Імя базы дадзеных: "
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, fuzzy, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"Пароль:\n"
-"(калі неабходна)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, fuzzy, kde-format
-msgid "Select tables:"
-msgstr "Вылучыце табліцы:"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, fuzzy, kde-format
-msgid "Tables"
-msgstr "Значэнні"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, fuzzy, kde-format
-msgid "Select columns:"
-msgstr "Вылучыце слупкі:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, fuzzy, kde-format
-msgid "Table"
-msgstr "Тала"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, fuzzy, kde-format
-msgid "Columns"
-msgstr "Слупкі"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, fuzzy, kde-format
-msgid "Match all of the following (AND)"
-msgstr "Задавальняе ўсім умовам (І)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, fuzzy, kde-format
-msgid "Match any of the following (OR)"
-msgstr "Задавальняе хоць бы аднаму ўмове (АБО)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, fuzzy, kde-format
-msgid "equals"
-msgstr "роўна"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, fuzzy, kde-format
-msgid "not equal"
-msgstr "не роўна"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, fuzzy, kde-format
-msgid "in"
-msgstr "дзюйм(аў)"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, fuzzy, kde-format
-msgid "not in"
-msgstr "не ўтрымоўвае"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, fuzzy, kde-format
-msgid "like"
-msgstr "супадае"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, fuzzy, kde-format
-msgid "greater"
-msgstr "больш"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, fuzzy, kde-format
-msgid "lesser"
-msgstr "менш"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, fuzzy, kde-format
-msgid "greater or equal"
-msgstr "больш або роўна"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, fuzzy, kde-format
-msgid "less or equal"
-msgstr "менш або роўна"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, fuzzy, kde-format
-msgid "Sorted by"
-msgstr "Сартаваць"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, fuzzy, kde-format
-msgid "Ascending"
-msgstr "У алфавітным парадку"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, fuzzy, kde-format
-msgid "Descending"
-msgstr "У зваротным парадку"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, fuzzy, kde-format
-msgid "Distinct"
-msgstr "Аддзелены"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, fuzzy, kde-format
-msgid "Query Options"
-msgstr "Параметры запыту"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, fuzzy, kde-format
-msgid "SQL query:"
-msgstr "Запыт SQL:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, fuzzy, kde-format
-msgid "Insert in region"
-msgstr "Уставіць у дыяпазон"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, fuzzy, kde-format
-msgid "Starting in cell"
-msgstr "Пачынальна з вочка"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, fuzzy, kde-format
-msgid "Result"
-msgstr "Вынік"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, fuzzy, kde-format
-msgid "You cannot specify a table here."
-msgstr "Тут нельга паказаць табліцу."
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, fuzzy, kde-format
-msgid "You have to specify a valid region."
-msgstr "Неабходна паказаць дапушчальны рэгіён."
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, fuzzy, kde-format
-msgid "You have to specify a valid cell."
-msgstr "Неабходна паказаць дапушчальнае вочка."
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, fuzzy, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "У вас нядосыць мае рацыю для змены дадзеных у гэтай базе."
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, fuzzy, kde-format
-msgid "Executing query failed."
-msgstr "Памылка выканання запыту."
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, fuzzy, kde-format
-msgid "You did not get any results with this query."
-msgstr "Запыт не вярнуў ні аднаго значэнні."
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Уставіць дадзеныя з базы дадзеных"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, fuzzy, kde-format
-msgid "The port must be a number"
-msgstr "Порт павінен быць лікам"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, fuzzy, kde-format
-msgid "Connecting to database..."
-msgstr "Падлучэнне да базы дадзеных..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, fuzzy, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "Падлучана. Атрыманне інфармацыі аб табліцах..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, fuzzy, kde-format
-msgid "This database contains no tables"
-msgstr "База дадзеных не ўтрымоўвае табліц"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, fuzzy, kde-format
-msgid "Driver could not be loaded"
-msgstr "Драйвер не можа быць загружаны"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, fuzzy, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "Атрыманне метададзеных табліц..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, fuzzy, kde-format
-msgid "You have to select at least one table."
-msgstr "Неабходна вылучыць хоць бы адну табліцу."
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, fuzzy, kde-format
-msgid "You have to select at least one column."
-msgstr "Неабходна вылучыць хоць бы адзін слупок."
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, fuzzy, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"'*' або '?' не з'яўляюцца дапушчальнымі шаблонамі SQL. Замест іх "
-"выкарыстоўваюцца '%' or '_'. Замяніць?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, fuzzy, kde-format
-msgid "Preview"
-msgstr "Прагляд"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, fuzzy, kde-format
-msgid "Money"
-msgstr "Грошы"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, fuzzy, kde-format
-msgid "Percent"
-msgstr "Адсоткавы"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, fuzzy, kde-format
-msgid "Generic"
-msgstr "Агульна"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-msgid "Date and Time"
-msgstr "Дата і час"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, fuzzy, kde-format
-msgid "Currency:"
-msgstr "Грашовая сума:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, fuzzy, kde-format
-msgid "Format:"
-msgstr "Фармат:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, fuzzy, kde-format
-msgid "Postfix:"
-msgstr "Суфікс:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, fuzzy, kde-format
-msgid "Precision:"
-msgstr "Дакладнасць:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, fuzzy, kde-format
-msgid "Prefix:"
-msgstr "Прэфікс:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, fuzzy, kde-format
@@ -15029,38 +14610,19 @@ msgid ""
 "it in the current cell."
 msgstr "У спісе паказваецца спіс даступных гарнітур шрыфтоў для тэксту вочак."
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, fuzzy, kde-format
+msgid "Preview"
+msgstr "Прагляд"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, fuzzy, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Тут паказваецца прыклад фарматавання тэксту."
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, fuzzy, kde-format
-msgid "All"
-msgstr "Усе"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, fuzzy, kde-format
-msgid "Insert function"
-msgstr "Уставіць функцыю"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, fuzzy, kde-format
-msgid "Help"
-msgstr "&Дапамога"
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, fuzzy, kde-format
-msgid "This function has no parameters."
-msgstr "У гэтай функцыі няма параметраў."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, fuzzy, kde-format
-msgid "Description is not available."
-msgstr "Апісанне не даступна."
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
@@ -15102,6 +14664,11 @@ msgstr "Шаблон"
 msgid "Customize"
 msgstr "Наладзіць лінію"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, fuzzy, kde-format
+msgid "Generic"
+msgstr "Агульна"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, fuzzy, kde-format
 msgid ""
@@ -15125,6 +14692,11 @@ msgstr ""
 "адмысловыя магчымасці -> Краіна/вобласць і мова -> Лікі. Па змаўчанні для "
 "лікаў выкарыстоўваецца выраўнаванне па правым боку."
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, fuzzy, kde-format
+msgid "Percent"
+msgstr "Адсоткавы"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, fuzzy, kde-format
 msgid ""
@@ -15141,6 +14713,11 @@ msgstr ""
 "пераключэнні на агульны фармат будзе зноў паказана 12.\n"
 "Ужыць адсоткавы фармат вы можаце, націснуўшы кнопку са знакам % на панелі "
 "прылад."
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, fuzzy, kde-format
+msgid "Money"
+msgstr "Грошы"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, fuzzy, kde-format
@@ -15227,6 +14804,11 @@ msgstr ""
 "адмысловыя магчымасці -> Краіна/вобласць і мова -> Час і дата. Вы можаце "
 "вылучыць з спісу на панелі справа прыдатны фармат часу. Калі лік у вочку не "
 "з'яўляецца часам, яно будзе ператворана ў 00:00."
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, fuzzy, kde-format
+msgid "Date and Time"
+msgstr "Дата і час"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, fuzzy, kde-format
@@ -15319,6 +14901,31 @@ msgid ""
 msgstr ""
 "Тут вы можаце вылучыць як будуць паказаныя дадатныя і адмоўныя лікі: знак і "
 "падсвятленне чырвоным."
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, fuzzy, kde-format
+msgid "Postfix:"
+msgstr "Суфікс:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, fuzzy, kde-format
+msgid "Prefix:"
+msgstr "Прэфікс:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, fuzzy, kde-format
+msgid "Precision:"
+msgstr "Дакладнасць:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, fuzzy, kde-format
+msgid "Format:"
+msgstr "Фармат:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, fuzzy, kde-format
+msgid "Currency:"
+msgstr "Грашовая сума:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, fuzzy, kde-format
@@ -15718,6 +15325,11 @@ msgstr "&Скасаваць"
 msgid "Discard changes"
 msgstr ""
 
+#: ui/FilterPopup.cpp:55
+#, fuzzy, kde-format
+msgid "All"
+msgstr "Усе"
+
 #: ui/FilterPopup.cpp:58
 #, fuzzy, kde-format
 msgid "Empty"
@@ -15763,6 +15375,295 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Адкрыць спасылку?"
+
+#, fuzzy
+#~ msgid "&Function..."
+#~ msgstr "Функцыя..."
+
+#, fuzzy
+#~ msgid "Insert math expression"
+#~ msgstr "Уставіць матэматычны выраз"
+
+#, fuzzy
+#~ msgid "From &Database..."
+#~ msgstr "З базы дадзеных..."
+
+#, fuzzy
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "Уставіць дадзеныя з базы дадзеных SQL"
+
+#, fuzzy
+#~ msgid "Formula Selection"
+#~ msgstr "Выбар формулы"
+
+#, fuzzy
+#~ msgid "Insert a function"
+#~ msgstr "Уставіць функцыю"
+
+#, fuzzy
+#~ msgid "Others..."
+#~ msgstr "Іншыя..."
+
+#, fuzzy
+#~ msgid "Modify Cell"
+#~ msgstr "Змяніць вочка"
+
+#, fuzzy
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Змяніць бягучае вочка"
+
+#, fuzzy
+#~ msgid "Run Inspector..."
+#~ msgstr "Запуск інспектара..."
+
+#, fuzzy
+#~ msgid "Show QTableView..."
+#~ msgstr "Паказаць ліст..."
+
+#, fuzzy
+#~ msgid "Permute reference fixation"
+#~ msgstr "Абарона ад змен"
+
+#, fuzzy
+#~ msgid "Permute fixation"
+#~ msgstr "Абарона ад змен"
+
+#, fuzzy
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Уставіць змесціва буфера абмену ў бягучую пазіцыю курсора"
+
+#, fuzzy
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "Драйверы баз дадзеных недаступныя. Перазбярыце Qt з неабходнымі "
+#~ "драйверамі."
+
+#, fuzzy
+#~ msgid "Insert Data From Database"
+#~ msgstr "Уставіць дадзеныя з базы дадзеных"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "Тып:"
+
+#, fuzzy
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Імя карыстача:\n"
+#~ "(калі неабходна)"
+
+#, fuzzy
+#~ msgid "Host:"
+#~ msgstr "Вузел:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Порт:\n"
+#~ "(калі неабходна)"
+
+#, fuzzy
+#~ msgid "Database name: "
+#~ msgstr "Імя базы дадзеных: "
+
+#, fuzzy
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Пароль:\n"
+#~ "(калі неабходна)"
+
+#, fuzzy
+#~ msgid "Select tables:"
+#~ msgstr "Вылучыце табліцы:"
+
+#, fuzzy
+#~ msgid "Tables"
+#~ msgstr "Значэнні"
+
+#, fuzzy
+#~ msgid "Select columns:"
+#~ msgstr "Вылучыце слупкі:"
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "Тала"
+
+#, fuzzy
+#~ msgid "Columns"
+#~ msgstr "Слупкі"
+
+#, fuzzy
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "Задавальняе ўсім умовам (І)"
+
+#, fuzzy
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "Задавальняе хоць бы аднаму ўмове (АБО)"
+
+#, fuzzy
+#~ msgid "equals"
+#~ msgstr "роўна"
+
+#, fuzzy
+#~ msgid "not equal"
+#~ msgstr "не роўна"
+
+#, fuzzy
+#~ msgid "in"
+#~ msgstr "дзюйм(аў)"
+
+#, fuzzy
+#~ msgid "not in"
+#~ msgstr "не ўтрымоўвае"
+
+#, fuzzy
+#~ msgid "like"
+#~ msgstr "супадае"
+
+#, fuzzy
+#~ msgid "greater"
+#~ msgstr "больш"
+
+#, fuzzy
+#~ msgid "lesser"
+#~ msgstr "менш"
+
+#, fuzzy
+#~ msgid "greater or equal"
+#~ msgstr "больш або роўна"
+
+#, fuzzy
+#~ msgid "less or equal"
+#~ msgstr "менш або роўна"
+
+#, fuzzy
+#~ msgid "Sorted by"
+#~ msgstr "Сартаваць"
+
+#, fuzzy
+#~ msgid "Ascending"
+#~ msgstr "У алфавітным парадку"
+
+#, fuzzy
+#~ msgid "Descending"
+#~ msgstr "У зваротным парадку"
+
+#, fuzzy
+#~ msgid "Distinct"
+#~ msgstr "Аддзелены"
+
+#, fuzzy
+#~ msgid "Query Options"
+#~ msgstr "Параметры запыту"
+
+#, fuzzy
+#~ msgid "SQL query:"
+#~ msgstr "Запыт SQL:"
+
+#, fuzzy
+#~ msgid "Insert in region"
+#~ msgstr "Уставіць у дыяпазон"
+
+#, fuzzy
+#~ msgid "Starting in cell"
+#~ msgstr "Пачынальна з вочка"
+
+#, fuzzy
+#~ msgid "Result"
+#~ msgstr "Вынік"
+
+#, fuzzy
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Тут нельга паказаць табліцу."
+
+#, fuzzy
+#~ msgid "You have to specify a valid region."
+#~ msgstr "Неабходна паказаць дапушчальны рэгіён."
+
+#, fuzzy
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "Неабходна паказаць дапушчальнае вочка."
+
+#, fuzzy
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "У вас нядосыць мае рацыю для змены дадзеных у гэтай базе."
+
+#, fuzzy
+#~ msgid "Executing query failed."
+#~ msgstr "Памылка выканання запыту."
+
+#, fuzzy
+#~ msgid "You did not get any results with this query."
+#~ msgstr "Запыт не вярнуў ні аднаго значэнні."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Уставіць дадзеныя з базы дадзеных"
+
+#, fuzzy
+#~ msgid "The port must be a number"
+#~ msgstr "Порт павінен быць лікам"
+
+#, fuzzy
+#~ msgid "Connecting to database..."
+#~ msgstr "Падлучэнне да базы дадзеных..."
+
+#, fuzzy
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "Падлучана. Атрыманне інфармацыі аб табліцах..."
+
+#, fuzzy
+#~ msgid "This database contains no tables"
+#~ msgstr "База дадзеных не ўтрымоўвае табліц"
+
+#, fuzzy
+#~ msgid "Driver could not be loaded"
+#~ msgstr "Драйвер не можа быць загружаны"
+
+#, fuzzy
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "Атрыманне метададзеных табліц..."
+
+#, fuzzy
+#~ msgid "You have to select at least one table."
+#~ msgstr "Неабходна вылучыць хоць бы адну табліцу."
+
+#, fuzzy
+#~ msgid "You have to select at least one column."
+#~ msgstr "Неабходна вылучыць хоць бы адзін слупок."
+
+#, fuzzy
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "'*' або '?' не з'яўляюцца дапушчальнымі шаблонамі SQL. Замест іх "
+#~ "выкарыстоўваюцца '%' or '_'. Замяніць?"
+
+#, fuzzy
+#~ msgid "Insert function"
+#~ msgstr "Уставіць функцыю"
+
+#, fuzzy
+#~ msgid "Help"
+#~ msgstr "&Дапамога"
+
+#, fuzzy
+#~ msgid "This function has no parameters."
+#~ msgstr "У гэтай функцыі няма параметраў."
+
+#, fuzzy
+#~ msgid "Description is not available."
+#~ msgstr "Апісанне не даступна."
 
 #, fuzzy
 #~ msgid "Document Settings..."

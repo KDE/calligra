@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2021-09-05 11:41-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -178,11 +178,9 @@ msgstr "дақ"
 msgid "s"
 msgstr "s"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Матн"
@@ -254,7 +252,7 @@ msgstr "<p><b>Намуди бозгашт: </b>"
 msgid "Syntax"
 msgstr ""
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "Параметрҳо"
@@ -903,7 +901,6 @@ msgstr "CARY(12;1.5707) бозгаштан 12"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12;0) бозгаштан 0"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -915,16 +912,14 @@ msgstr "CARY(12;0) бозгаштан 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Рақам"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Андоза"
@@ -984,7 +979,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") бозгаштҳо 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Асосӣ маълумот"
@@ -1278,13 +1272,12 @@ msgstr "GETPIVOTDATA(Database; \"Фурушҳо\")"
 msgid "Date & Time"
 msgstr "Таърих ва Вақт"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Таърих"
@@ -1354,12 +1347,10 @@ msgstr "DAYS360(таърих1; таърих2; усул)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2/22/2002\", \"4/21/2002\", FALSE) бозгаштан 59"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Вақт"
@@ -4239,9 +4230,8 @@ msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) бозгаштан 0.2841"
 msgid "Fractional Dollar"
 msgstr "Майдаи доллар"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Касрӣ"
@@ -4429,8 +4419,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECT(номиналии миқдори маош;даврҳои)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "Валюта"
@@ -6399,7 +6388,7 @@ msgstr ""
 msgid "Math"
 msgstr "Риёзи"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "Функсия"
@@ -8516,7 +8505,6 @@ msgid "Row"
 msgstr "&Сатр"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "Сутун"
@@ -13812,7 +13800,6 @@ msgstr "Сутунҳо Монед"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "Хеҷ"
@@ -14755,92 +14742,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Нест кардани Ранги Сархад"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "&Функсия..."
-
-#: ui/CellToolBase.cpp:107
-#, fuzzy, kde-format
-msgid "Insert math expression"
-msgstr "Мондани ифодаи математикӣ."
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "Аз &Асосӣ Маълумот..."
-
-#: ui/CellToolBase.cpp:114
-#, fuzzy, kde-format
-msgid "Insert data from a SQL database"
-msgstr "Таърих монед аз асосӣ маълумот SQL."
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "Интихоби формула"
-
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Insert a function"
-msgstr "Мондани функсия."
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "Дигарҳо..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "Дигаргун кардани ячейка"
-
-#: ui/CellToolBase.cpp:132
-#, fuzzy, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Ячейкаи аз таги рафтани дигаргун кардан"
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-#| msgid "Show Sheet..."
-msgid "Show QTableView..."
-msgstr "Намоиши Варақ..."
-
-#: ui/CellToolBase.cpp:150
-#, fuzzy, kde-format
-#| msgid "Protection"
-msgid "Permute reference fixation"
-msgstr "Мудофиа"
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-#| msgid "Protection"
-msgid "Permute fixation"
-msgstr "Мудофиа"
-
-#: ui/CellToolBase.cpp:155
-#, fuzzy, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Мондани оканаи буфери иваз дар вазъияти курсори равон."
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, fuzzy, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"Драйверҳои бонки додаҳо дастрас нестанд! Шумо бояд Qt-ро бо драйверҳои "
-"лозимӣ низ ҷамъ кунед."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15333,338 +15238,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Дигаргун кардани кунҷ"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "Таърих Дароварди Аз Асосӣ Маълумот"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "Намуд:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"Номи истифодакунанда:\n"
-"(агар лозим аст)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "Гиреҳ:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"Бандар:\n"
-"(агар лозим аст)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "Номи асосӣ маълумот: "
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"Номи шаб:\n"
-"(агар лозим аст)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "Интихоб кардани ҷадвалҳо:"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, fuzzy, kde-format
-#| msgid "Values"
-msgid "Tables"
-msgstr "Маъноҳо"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "Интихоб кардани сутунҳо:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, fuzzy, kde-format
-#| msgid "Tala"
-msgid "Table"
-msgstr "Тала"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "Сутунҳо"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "Ҳамаша талаботи иҷро кардан"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "Якуми талабот иҷро кардан"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "баробар"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "баробар нест"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "нигоҳ доштанд"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "нигоҳ надоштанд"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "баробар шудан"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "бештар"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "ҳар чӣ камтар"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "бештар ё баробар"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "ҳар чӣ камтар ё баробар"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "Ба хелҳо ҷудо кардан"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "Ба зиёдшавӣ"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "Ба кам шудани"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "Ҷудогона"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "Параметрҳои талабот"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "Талаботи SQL:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "Мондани дар диапазон"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "Сар кардани аз ячейка"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "Натиҷа"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, fuzzy, kde-format
-msgid "You cannot specify a table here."
-msgstr "Шумо наметавонед ҷадвалро дар ин ҷо муайян кунед!"
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, fuzzy, kde-format
-msgid "You have to specify a valid region."
-msgstr "Шумо бояд доираи дуруст муайян кунед!"
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, fuzzy, kde-format
-msgid "You have to specify a valid cell."
-msgstr "Шумо бояд ячейкаи дуруст муайян кунед!"
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, fuzzy, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "Шумо ҳуқуқи кифояе барои тағйири додаҳоро дар ин бонк надоред!"
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, fuzzy, kde-format
-msgid "Executing query failed."
-msgstr "Хатои иҷрои дархост"
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, fuzzy, kde-format
-msgid "You did not get any results with this query."
-msgstr "Дархости ягон кас маънои нагашта додан"
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-#, fuzzy
-#| msgid "Insert Data From Database"
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Таърих Дароварди Аз Асосӣ Маълумот"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "Порти рақамро мумкин аст"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "Пайвастани ба асоси маълумот..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "Васл кардан. Аҳбороти борои ҷадвал гирифтан"
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "Асоси маълумот нигоҳ надоштани ҷадвалҳо"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "Пур кардани драйвер наметавонист"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "Дар ҳоли гирифтани метадодаҳои ҷадвал..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, fuzzy, kde-format
-msgid "You have to select at least one table."
-msgstr "Шумо бояд як ҷадвалро интихоб кунед!"
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, fuzzy, kde-format
-msgid "You have to select at least one column."
-msgstr "Шумо бояд як сутунро интихоб кунед!"
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"'*' ё '?' қолибҳои дастрасии SQL намебонд. Ба ҷои он '%' ё '_'истифода шуда "
-"истодаанд. Шумо мехоҳед онҳоро иваз кунед?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "Пешнамоиш"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Пул"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Фоиз"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, fuzzy, kde-format
-msgid "Generic"
-msgstr "&Умумӣ"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
-msgid "Date and Time"
-msgstr "Таърих ва Вақт"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "Валюта:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "Андоза:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "Постфикс:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "Анниқӣ:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "Префикс:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15804,38 +15377,19 @@ msgid ""
 "it in the current cell."
 msgstr ""
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "Пешнамоиш"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Ҳама"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "Вазифаро монед"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "Ин функсия параметрҳо надорад."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, fuzzy, kde-format
-msgid "Description is not available."
-msgstr "Тав&сиф дар сутун"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15880,6 +15434,11 @@ msgstr "Тасвир"
 msgid "Customize"
 msgstr "Оддӣ кунед"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, fuzzy, kde-format
+msgid "Generic"
+msgstr "&Умумӣ"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -15897,6 +15456,11 @@ msgid ""
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Фоиз"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -15908,6 +15472,11 @@ msgid ""
 "back to 12.\n"
 "You can also use the Percent icon in the Format Toolbar."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Пул"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -15970,6 +15539,12 @@ msgid ""
 "sense as a time, Calligra Sheets will display 00:00 in the global format you "
 "have in System Settings."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, fuzzy, kde-format
+#| msgid "Date & Time"
+msgid "Date and Time"
+msgstr "Таърих ва Вақт"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -16049,6 +15624,31 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "Постфикс:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "Префикс:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "Анниқӣ:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "Андоза:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "Валюта:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -16421,6 +16021,11 @@ msgstr "Франсия"
 msgid "Discard changes"
 msgstr ""
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Ҳама"
+
 #: ui/FilterPopup.cpp:58
 #, fuzzy, kde-format
 #| msgid "Egypt"
@@ -16467,6 +16072,249 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Оё пайванди шумо боз аст?"
+
+#~ msgid "&Function..."
+#~ msgstr "&Функсия..."
+
+#, fuzzy
+#~ msgid "Insert math expression"
+#~ msgstr "Мондани ифодаи математикӣ."
+
+#~ msgid "From &Database..."
+#~ msgstr "Аз &Асосӣ Маълумот..."
+
+#, fuzzy
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "Таърих монед аз асосӣ маълумот SQL."
+
+#~ msgid "Formula Selection"
+#~ msgstr "Интихоби формула"
+
+#, fuzzy
+#~ msgid "Insert a function"
+#~ msgstr "Мондани функсия."
+
+#~ msgid "Others..."
+#~ msgstr "Дигарҳо..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "Дигаргун кардани ячейка"
+
+#, fuzzy
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Ячейкаи аз таги рафтани дигаргун кардан"
+
+#, fuzzy
+#~| msgid "Show Sheet..."
+#~ msgid "Show QTableView..."
+#~ msgstr "Намоиши Варақ..."
+
+#, fuzzy
+#~| msgid "Protection"
+#~ msgid "Permute reference fixation"
+#~ msgstr "Мудофиа"
+
+#, fuzzy
+#~| msgid "Protection"
+#~ msgid "Permute fixation"
+#~ msgstr "Мудофиа"
+
+#, fuzzy
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Мондани оканаи буфери иваз дар вазъияти курсори равон."
+
+#, fuzzy
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "Драйверҳои бонки додаҳо дастрас нестанд! Шумо бояд Qt-ро бо драйверҳои "
+#~ "лозимӣ низ ҷамъ кунед."
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "Таърих Дароварди Аз Асосӣ Маълумот"
+
+#~ msgid "Type:"
+#~ msgstr "Намуд:"
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Номи истифодакунанда:\n"
+#~ "(агар лозим аст)"
+
+#~ msgid "Host:"
+#~ msgstr "Гиреҳ:"
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Бандар:\n"
+#~ "(агар лозим аст)"
+
+#~ msgid "Database name: "
+#~ msgstr "Номи асосӣ маълумот: "
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Номи шаб:\n"
+#~ "(агар лозим аст)"
+
+#~ msgid "Select tables:"
+#~ msgstr "Интихоб кардани ҷадвалҳо:"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgid "Tables"
+#~ msgstr "Маъноҳо"
+
+#~ msgid "Select columns:"
+#~ msgstr "Интихоб кардани сутунҳо:"
+
+#, fuzzy
+#~| msgid "Tala"
+#~ msgid "Table"
+#~ msgstr "Тала"
+
+#~ msgid "Columns"
+#~ msgstr "Сутунҳо"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "Ҳамаша талаботи иҷро кардан"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "Якуми талабот иҷро кардан"
+
+#~ msgid "equals"
+#~ msgstr "баробар"
+
+#~ msgid "not equal"
+#~ msgstr "баробар нест"
+
+#~ msgid "in"
+#~ msgstr "нигоҳ доштанд"
+
+#~ msgid "not in"
+#~ msgstr "нигоҳ надоштанд"
+
+#~ msgid "like"
+#~ msgstr "баробар шудан"
+
+#~ msgid "greater"
+#~ msgstr "бештар"
+
+#~ msgid "lesser"
+#~ msgstr "ҳар чӣ камтар"
+
+#~ msgid "greater or equal"
+#~ msgstr "бештар ё баробар"
+
+#~ msgid "less or equal"
+#~ msgstr "ҳар чӣ камтар ё баробар"
+
+#~ msgid "Sorted by"
+#~ msgstr "Ба хелҳо ҷудо кардан"
+
+#~ msgid "Ascending"
+#~ msgstr "Ба зиёдшавӣ"
+
+#~ msgid "Descending"
+#~ msgstr "Ба кам шудани"
+
+#~ msgid "Distinct"
+#~ msgstr "Ҷудогона"
+
+#~ msgid "Query Options"
+#~ msgstr "Параметрҳои талабот"
+
+#~ msgid "SQL query:"
+#~ msgstr "Талаботи SQL:"
+
+#~ msgid "Insert in region"
+#~ msgstr "Мондани дар диапазон"
+
+#~ msgid "Starting in cell"
+#~ msgstr "Сар кардани аз ячейка"
+
+#~ msgid "Result"
+#~ msgstr "Натиҷа"
+
+#, fuzzy
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Шумо наметавонед ҷадвалро дар ин ҷо муайян кунед!"
+
+#, fuzzy
+#~ msgid "You have to specify a valid region."
+#~ msgstr "Шумо бояд доираи дуруст муайян кунед!"
+
+#, fuzzy
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "Шумо бояд ячейкаи дуруст муайян кунед!"
+
+#, fuzzy
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "Шумо ҳуқуқи кифояе барои тағйири додаҳоро дар ин бонк надоред!"
+
+#, fuzzy
+#~ msgid "Executing query failed."
+#~ msgstr "Хатои иҷрои дархост"
+
+#, fuzzy
+#~ msgid "You did not get any results with this query."
+#~ msgstr "Дархости ягон кас маънои нагашта додан"
+
+#, fuzzy
+#~| msgid "Insert Data From Database"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Таърих Дароварди Аз Асосӣ Маълумот"
+
+#~ msgid "The port must be a number"
+#~ msgstr "Порти рақамро мумкин аст"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "Пайвастани ба асоси маълумот..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "Васл кардан. Аҳбороти борои ҷадвал гирифтан"
+
+#~ msgid "This database contains no tables"
+#~ msgstr "Асоси маълумот нигоҳ надоштани ҷадвалҳо"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "Пур кардани драйвер наметавонист"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "Дар ҳоли гирифтани метадодаҳои ҷадвал..."
+
+#, fuzzy
+#~ msgid "You have to select at least one table."
+#~ msgstr "Шумо бояд як ҷадвалро интихоб кунед!"
+
+#, fuzzy
+#~ msgid "You have to select at least one column."
+#~ msgstr "Шумо бояд як сутунро интихоб кунед!"
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "'*' ё '?' қолибҳои дастрасии SQL намебонд. Ба ҷои он '%' ё '_'истифода "
+#~ "шуда истодаанд. Шумо мехоҳед онҳоро иваз кунед?"
+
+#~ msgid "Insert function"
+#~ msgstr "Вазифаро монед"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "Ин функсия параметрҳо надорад."
+
+#, fuzzy
+#~ msgid "Description is not available."
+#~ msgstr "Тав&сиф дар сутун"
 
 #, fuzzy
 #~ msgid "Document Settings..."

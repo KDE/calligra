@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2022-11-13 19:53+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -188,11 +188,9 @@ msgstr "min."
 msgid "s"
 msgstr "s"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Texte"
@@ -265,7 +263,7 @@ msgstr "<p><b>Type retourné : </b> %1</p>"
 msgid "Syntax"
 msgstr "Syntaxe"
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "Paramètres"
@@ -905,7 +903,6 @@ msgstr "CARY (12 ; 1.5707) renvoie 12"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY (12 ; 0) renvoie 0"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -917,16 +914,14 @@ msgstr "CARY (12 ; 0) renvoie 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Nombre"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Format"
@@ -983,7 +978,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC (« XCIX ») renvoie 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Base de données"
@@ -1282,13 +1276,12 @@ msgstr "GETPIVOTDATA (base de données ; « Ventes »)"
 msgid "Date & Time"
 msgstr "Date et heure"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Date"
@@ -1358,12 +1351,10 @@ msgstr "DAYS360 (date 1 ; date 2 ; méthode)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360 (« 2/22/2002 », « 4/21/2002 », FAUX) renvoie 59."
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Heure"
@@ -4129,9 +4120,8 @@ msgstr ""
 msgid "Fractional Dollar"
 msgstr "Dollar fractionnel"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Fraction"
@@ -4315,8 +4305,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECTIVE (nominal ; périodes)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "Monnaie"
@@ -6265,7 +6254,7 @@ msgstr ""
 msgid "Math"
 msgstr "Maths"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "Fonction"
@@ -8385,7 +8374,6 @@ msgid "Row"
 msgstr "Ligne"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "Colonne"
@@ -13670,7 +13658,6 @@ msgstr "En bas, première colonne"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "Aucun"
@@ -14631,89 +14618,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Changer la bordure"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "&Fonction..."
-
-#: ui/CellToolBase.cpp:107
-#, kde-format
-msgid "Insert math expression"
-msgstr "Insérer une expression mathématique"
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "D'une &base de données..."
-
-#: ui/CellToolBase.cpp:114
-#, kde-format
-msgid "Insert data from a SQL database"
-msgstr "Insérer des données d'une base de données SQL"
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "Sélection de formule"
-
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Insert a function"
-msgstr "Insérer une fonction"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "Autres..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "Modifier la cellule"
-
-#: ui/CellToolBase.cpp:132
-#, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Modifier la cellule surlignée"
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr "Lancer le contrôleur..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Show QTableView..."
-msgstr "Afficher QTableView..."
-
-#: ui/CellToolBase.cpp:150
-#, kde-format
-msgid "Permute reference fixation"
-msgstr "Permuter la fixation des références"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Permute fixation"
-msgstr "Permuter la fixation"
-
-#: ui/CellToolBase.cpp:155
-#, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Permuter la fixation de la référence au curseur"
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Impossible de trouver un emplacement %1"
-
-#: ui/CellToolBase.cpp:959
-#, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"Aucun pilote de base de données disponible. L'usage de cette fonctionnalité "
-"nécessite l'installation des pilotes de base de données Qt."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15143,334 +15051,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Changer un style"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "Insérer des données venant d'une base de données"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "Type :"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"Nom d'utilisateur :\n"
-" (si nécessaire)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "Hôte :"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"Port :\n"
-" (si nécessaire)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "Nom de la base de données : "
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"Mot de passe :\n"
-" (si nécessaire)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "Sélectionner des tableaux :"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, kde-format
-msgid "Tables"
-msgstr "Tableaux"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "Sélectionner des colonnes :"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, kde-format
-msgid "Table"
-msgstr "Tableau"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "Colonnes"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "Correspond à tous les suivants (AND)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "Correspond à n'importe lequel des suivants (OU)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "est égal"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "différent"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "dans"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "en dehors"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "comme"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "plus grand que"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "plus petit que"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "plus grand ou égal"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "plus petit ou égal"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "Trié par"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "Ascendant"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "Descendant"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "Distinct"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "Options de requête"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "Requête SQL :"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "Insérer dans une région"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "Commencer dans la cellule"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "Résultat"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr "Vous ne pouvez pas spécifier un tableau ici."
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr "Vous devez spécifier une région valable."
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr "Vous devez spécifier une cellule valable."
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr ""
-"Vous n'avez pas le droit de changer des données dans la base de données."
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr "Échec de l'exécution de la requête."
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr "Vous n'avez obtenu aucun résultat avec cette requête."
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Insérer des données provenant d'une base de données"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "Le port doit être un nombre"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "Connexion à la base de données..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "Connecté. Recherche des informations sur les tableaux..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "Cette base de données ne contient pas de tableau"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "Impossible de charger le pilote"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "Recherche des méta données des tableaux..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr "Vous devez sélectionner au moins un tableau."
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr "Vous devez sélectionner au moins une colonne."
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"« * » ou « ? » ne sont pas des caractères jokers valables en SQL. Les "
-"remplaçants convenables sont « % » ou « _ ». Voulez-vous les remplacer ?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "Aperçu"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Monétaire"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Pourcentage"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "Générique"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr "Date et heure"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "Monnaie :"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "Format :"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "Suffixe :"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "Précision :"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "Préfixe :"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15635,6 +15215,13 @@ msgstr ""
 "Cette case affiche la liste de toutes les familles de polices disponibles. "
 "Cliquez sur une des familles pour l'appliquer à la cellule courante."
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "Aperçu"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
@@ -15643,32 +15230,6 @@ msgid ""
 msgstr ""
 "Vous pouvez voir un aperçu de la police que vous avez choisie pour la "
 "cellule courante."
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Toutes"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "Insérer une fonction"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr "Aide"
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "Cette fonction n'a pas de paramètre."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, kde-format
-msgid "Description is not available."
-msgstr "La description est indisponible."
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15710,6 +15271,11 @@ msgstr "Motif"
 msgid "Customize"
 msgstr "Personnaliser"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "Générique"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -15735,6 +15301,11 @@ msgstr ""
 "« Régionalisation et accessibilité / Pays & langue / Nombres. Par défaut, "
 "les nombres sont alignés à droite."
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Pourcentage"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -15752,6 +15323,11 @@ msgstr ""
 "« Pourcentage », le nombre sera alors 1200 %. Si vous retournez au format "
 "générique, le nombre redeviendra 12.\n"
 "Vous pouvez également utiliser l'icône « Pourcentage » de la barre de format."
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Monétaire"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -15850,6 +15426,11 @@ msgstr ""
 "dans le Centre de configuration. S'il est impossible d'interpréter le nombre "
 "de la cellule comme une date, Calligra Sheets affiche 00:00 dans le format "
 "du Centre de configuration."
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
+msgstr "Date et heure"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -15959,6 +15540,31 @@ msgid ""
 msgstr ""
 "Vous pouvez choisir si les valeurs positives doivent être précédées par un "
 "signe « + » et si les valeurs négatives doivent être affichées en rouge."
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "Suffixe :"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "Préfixe :"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "Précision :"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "Format :"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "Monnaie :"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -16380,6 +15986,11 @@ msgstr "Annuler"
 msgid "Discard changes"
 msgstr "Annuler les changements"
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Toutes"
+
 #: ui/FilterPopup.cpp:58
 #, kde-format
 msgid "Empty"
@@ -16426,6 +16037,229 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Ouvrir le lien ?"
+
+#~ msgid "&Function..."
+#~ msgstr "&Fonction..."
+
+#~ msgid "Insert math expression"
+#~ msgstr "Insérer une expression mathématique"
+
+#~ msgid "From &Database..."
+#~ msgstr "D'une &base de données..."
+
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "Insérer des données d'une base de données SQL"
+
+#~ msgid "Formula Selection"
+#~ msgstr "Sélection de formule"
+
+#~ msgid "Insert a function"
+#~ msgstr "Insérer une fonction"
+
+#~ msgid "Others..."
+#~ msgstr "Autres..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "Modifier la cellule"
+
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Modifier la cellule surlignée"
+
+#~ msgid "Run Inspector..."
+#~ msgstr "Lancer le contrôleur..."
+
+#~ msgid "Show QTableView..."
+#~ msgstr "Afficher QTableView..."
+
+#~ msgid "Permute reference fixation"
+#~ msgstr "Permuter la fixation des références"
+
+#~ msgid "Permute fixation"
+#~ msgstr "Permuter la fixation"
+
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Permuter la fixation de la référence au curseur"
+
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "Aucun pilote de base de données disponible. L'usage de cette "
+#~ "fonctionnalité nécessite l'installation des pilotes de base de données Qt."
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "Insérer des données venant d'une base de données"
+
+#~ msgid "Type:"
+#~ msgstr "Type :"
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Nom d'utilisateur :\n"
+#~ " (si nécessaire)"
+
+#~ msgid "Host:"
+#~ msgstr "Hôte :"
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Port :\n"
+#~ " (si nécessaire)"
+
+#~ msgid "Database name: "
+#~ msgstr "Nom de la base de données : "
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Mot de passe :\n"
+#~ " (si nécessaire)"
+
+#~ msgid "Select tables:"
+#~ msgstr "Sélectionner des tableaux :"
+
+#~ msgid "Tables"
+#~ msgstr "Tableaux"
+
+#~ msgid "Select columns:"
+#~ msgstr "Sélectionner des colonnes :"
+
+#~ msgid "Table"
+#~ msgstr "Tableau"
+
+#~ msgid "Columns"
+#~ msgstr "Colonnes"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "Correspond à tous les suivants (AND)"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "Correspond à n'importe lequel des suivants (OU)"
+
+#~ msgid "equals"
+#~ msgstr "est égal"
+
+#~ msgid "not equal"
+#~ msgstr "différent"
+
+#~ msgid "in"
+#~ msgstr "dans"
+
+#~ msgid "not in"
+#~ msgstr "en dehors"
+
+#~ msgid "like"
+#~ msgstr "comme"
+
+#~ msgid "greater"
+#~ msgstr "plus grand que"
+
+#~ msgid "lesser"
+#~ msgstr "plus petit que"
+
+#~ msgid "greater or equal"
+#~ msgstr "plus grand ou égal"
+
+#~ msgid "less or equal"
+#~ msgstr "plus petit ou égal"
+
+#~ msgid "Sorted by"
+#~ msgstr "Trié par"
+
+#~ msgid "Ascending"
+#~ msgstr "Ascendant"
+
+#~ msgid "Descending"
+#~ msgstr "Descendant"
+
+#~ msgid "Distinct"
+#~ msgstr "Distinct"
+
+#~ msgid "Query Options"
+#~ msgstr "Options de requête"
+
+#~ msgid "SQL query:"
+#~ msgstr "Requête SQL :"
+
+#~ msgid "Insert in region"
+#~ msgstr "Insérer dans une région"
+
+#~ msgid "Starting in cell"
+#~ msgstr "Commencer dans la cellule"
+
+#~ msgid "Result"
+#~ msgstr "Résultat"
+
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Vous ne pouvez pas spécifier un tableau ici."
+
+#~ msgid "You have to specify a valid region."
+#~ msgstr "Vous devez spécifier une région valable."
+
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "Vous devez spécifier une cellule valable."
+
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr ""
+#~ "Vous n'avez pas le droit de changer des données dans la base de données."
+
+#~ msgid "Executing query failed."
+#~ msgstr "Échec de l'exécution de la requête."
+
+#~ msgid "You did not get any results with this query."
+#~ msgstr "Vous n'avez obtenu aucun résultat avec cette requête."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Insérer des données provenant d'une base de données"
+
+#~ msgid "The port must be a number"
+#~ msgstr "Le port doit être un nombre"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "Connexion à la base de données..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "Connecté. Recherche des informations sur les tableaux..."
+
+#~ msgid "This database contains no tables"
+#~ msgstr "Cette base de données ne contient pas de tableau"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "Impossible de charger le pilote"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "Recherche des méta données des tableaux..."
+
+#~ msgid "You have to select at least one table."
+#~ msgstr "Vous devez sélectionner au moins un tableau."
+
+#~ msgid "You have to select at least one column."
+#~ msgstr "Vous devez sélectionner au moins une colonne."
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "« * » ou « ? » ne sont pas des caractères jokers valables en SQL. Les "
+#~ "remplaçants convenables sont « % » ou « _ ». Voulez-vous les remplacer ?"
+
+#~ msgid "Insert function"
+#~ msgstr "Insérer une fonction"
+
+#~ msgid "Help"
+#~ msgstr "Aide"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "Cette fonction n'a pas de paramètre."
+
+#~ msgid "Description is not available."
+#~ msgstr "La description est indisponible."
 
 #~ msgid "Document Settings..."
 #~ msgstr "Configuration du document"

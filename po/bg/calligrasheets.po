@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2011-07-25 20:04+0300\n"
 "Last-Translator: Yasen Pramatarov <yasen@lindeas.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -169,11 +169,9 @@ msgstr "мин"
 msgid "s"
 msgstr "сек"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Текст"
@@ -244,7 +242,7 @@ msgstr "<p><p><b>Върнат тип: </b>"
 msgid "Syntax"
 msgstr "Синтаксис"
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "Параметри"
@@ -860,7 +858,6 @@ msgstr "CARY(12;1.5707) връща 12"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12;0) връща 0"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -872,16 +869,14 @@ msgstr "CARY(12;0) връща 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Число"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Формат"
@@ -935,7 +930,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") връща 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "База данни"
@@ -1228,13 +1222,12 @@ msgstr "GETPIVOTDATA(База данни; \"Sales\")"
 msgid "Date & Time"
 msgstr "Дата и Време"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Дата"
@@ -1304,12 +1297,10 @@ msgstr "DAYS360(дата1; дата2; метод)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2/22/2002\", \"4/21/2002\", \"невярно\") връща 59"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Време"
@@ -3971,9 +3962,8 @@ msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) връща 0.2841"
 msgid "Fractional Dollar"
 msgstr "Долар - дроб"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Дроб"
@@ -4148,8 +4138,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECTIVE(номинал;периоди)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "Валута"
@@ -5980,7 +5969,7 @@ msgstr ""
 msgid "Math"
 msgstr "Математически"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "Функция"
@@ -8031,7 +8020,6 @@ msgid "Row"
 msgstr "Ред"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "Колона"
@@ -13037,7 +13025,6 @@ msgstr "Надолу, първата колона"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "Без"
@@ -13993,89 +13980,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Промяна на контур"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "&Функция..."
-
-#: ui/CellToolBase.cpp:107
-#, fuzzy, kde-format
-msgid "Insert math expression"
-msgstr "Вмъкване на математически израз."
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "От ба&за данни..."
-
-#: ui/CellToolBase.cpp:114
-#, fuzzy, kde-format
-msgid "Insert data from a SQL database"
-msgstr "Вмъкване на данни от SQL база данни."
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "Избор на формула"
-
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Insert a function"
-msgstr "Вмъкване на функция."
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "Други..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "Модифициране на клетка"
-
-#: ui/CellToolBase.cpp:132
-#, fuzzy, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Редактиране на маркираната клетка."
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr "Стартиране на инспектор..."
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Show QTableView..."
-msgstr "Показване на лист..."
-
-#: ui/CellToolBase.cpp:150
-#, fuzzy, kde-format
-msgid "Permute reference fixation"
-msgstr "Защита"
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-msgid "Permute fixation"
-msgstr "Защита"
-
-#: ui/CellToolBase.cpp:155
-#, fuzzy, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Поставяне на съдържанието на буфера при показалеца."
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, fuzzy, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"Няма налични драйвери за база данни. За да използвате тази възможност трябва "
-"да инсталирате необходимите Qt 3 драйвери."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14525,334 +14433,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Промяна на ъгъл"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "Вмъкване на данни от база данни"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "Тип:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"Име на потребител:\n"
-"(ако е необходимо)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "Хост:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"Порт:\n"
-"(ако е необходимо)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "Име на база данни: "
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"Парола:\n"
-"(ако е необходима)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "Избор на таблици:"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, fuzzy, kde-format
-msgid "Tables"
-msgstr "Стойности"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "Избор на колони:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, fuzzy, kde-format
-msgid "Table"
-msgstr "Тала"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "Колони"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "Съвпадение на всички условия (AND)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "Съвпадение поне на едно условие (OR)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "е равно"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "не е равно"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "съдържа"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "не съдържа"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "като"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "по-голямо"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "по-малко"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "по-голямо или равно"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "по-малко или равно"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "Сортиран по"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "По нарастване"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "По намаляне"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "Различен"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "Настройки на запитване"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "SQL запитване:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "Вмъкване в област"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "Започвайки с клетка"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "Резултат"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr "Не можете да зададете таблица тук."
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr "Трябва да зададете валидна област."
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr "Трябва да зададете валидна клетка."
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "Нямате права да променяте данни в базата данни."
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr "Запитването беше неуспешно."
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr "Не получихте резултати за това запитване."
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Вмъкване на данни от база данни"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "Порта трябва да бъде число"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "Свързване с базата данни..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "Свързан. Получаване информация за таблица..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "Базата данни няма таблици"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "Драйвера не може да бъде зареден"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "Получаване на мета данни за таблици..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr "Трябва да изберете поне една таблица."
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr "Трябва да изберете поне една колона."
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"\"*\" или \"?\" не са валидни в SQL. Правилните са \"%\" или \"_\". Искате "
-"ли да бъдат сменени?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "Преглед"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Паричен"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Процент"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "Основен"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr "Дата и час"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "Валута:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "Формат:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "Наставка:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "Точност:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "Представка:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, fuzzy, kde-format
@@ -15011,38 +14591,19 @@ msgstr ""
 "Това поле показва показва всички налични семейства шрифтове. Щракнете върху "
 "някое семейство, за да го зададете за текущата клетка."
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "Преглед"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Можете да видите предварителен преглед за избрания за клетката шрифт."
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Всички"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "Вмъкване на функция"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "Функцията няма параметри."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, kde-format
-msgid "Description is not available."
-msgstr "Няма налично описание."
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15087,6 +14648,11 @@ msgstr "Шаблон"
 msgid "Customize"
 msgstr "Потребителски"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "Основен"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, fuzzy, kde-format
 msgid ""
@@ -15110,6 +14676,11 @@ msgstr ""
 "Локализация -> Държава и език - > Числа\". По подразбиране числата се "
 "подравняват вдясно."
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Процент"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -15127,6 +14698,11 @@ msgstr ""
 "бъде 1,200 %. Връщането обратно към основния формат ще възвърне 12.\n"
 "Можете също така да използвате иконата за проценти в лентата с инструменти "
 "за форматиране."
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Паричен"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, fuzzy, kde-format
@@ -15214,6 +14790,11 @@ msgstr ""
 "клетка можете да зададете как да изглежда датата. Форматът по подразбиране "
 "зададения в контролния център. Ако числата в клетката не могат да са дата, "
 "KSpread ще покаже 00:00 в глобалния формат на контролния център."
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
+msgstr "Дата и час"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, fuzzy, kde-format
@@ -15317,6 +14898,31 @@ msgid ""
 msgstr ""
 "Можете да изберете дали положителни стойности да се показват с + отпред, а "
 "също дали отрицателните да се показват в червено."
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "Наставка:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "Представка:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "Точност:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "Формат:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "Валута:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -15728,6 +15334,11 @@ msgstr "Отказ"
 msgid "Discard changes"
 msgstr ""
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Всички"
+
 #: ui/FilterPopup.cpp:58
 #, fuzzy, kde-format
 msgid "Empty"
@@ -15774,6 +15385,237 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Отваряне на връзката?"
+
+#~ msgid "&Function..."
+#~ msgstr "&Функция..."
+
+#, fuzzy
+#~ msgid "Insert math expression"
+#~ msgstr "Вмъкване на математически израз."
+
+#~ msgid "From &Database..."
+#~ msgstr "От ба&за данни..."
+
+#, fuzzy
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "Вмъкване на данни от SQL база данни."
+
+#~ msgid "Formula Selection"
+#~ msgstr "Избор на формула"
+
+#, fuzzy
+#~ msgid "Insert a function"
+#~ msgstr "Вмъкване на функция."
+
+#~ msgid "Others..."
+#~ msgstr "Други..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "Модифициране на клетка"
+
+#, fuzzy
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Редактиране на маркираната клетка."
+
+#~ msgid "Run Inspector..."
+#~ msgstr "Стартиране на инспектор..."
+
+#, fuzzy
+#~ msgid "Show QTableView..."
+#~ msgstr "Показване на лист..."
+
+#, fuzzy
+#~ msgid "Permute reference fixation"
+#~ msgstr "Защита"
+
+#, fuzzy
+#~ msgid "Permute fixation"
+#~ msgstr "Защита"
+
+#, fuzzy
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Поставяне на съдържанието на буфера при показалеца."
+
+#, fuzzy
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "Няма налични драйвери за база данни. За да използвате тази възможност "
+#~ "трябва да инсталирате необходимите Qt 3 драйвери."
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "Вмъкване на данни от база данни"
+
+#~ msgid "Type:"
+#~ msgstr "Тип:"
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Име на потребител:\n"
+#~ "(ако е необходимо)"
+
+#~ msgid "Host:"
+#~ msgstr "Хост:"
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Порт:\n"
+#~ "(ако е необходимо)"
+
+#~ msgid "Database name: "
+#~ msgstr "Име на база данни: "
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Парола:\n"
+#~ "(ако е необходима)"
+
+#~ msgid "Select tables:"
+#~ msgstr "Избор на таблици:"
+
+#, fuzzy
+#~ msgid "Tables"
+#~ msgstr "Стойности"
+
+#~ msgid "Select columns:"
+#~ msgstr "Избор на колони:"
+
+#, fuzzy
+#~ msgid "Table"
+#~ msgstr "Тала"
+
+#~ msgid "Columns"
+#~ msgstr "Колони"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "Съвпадение на всички условия (AND)"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "Съвпадение поне на едно условие (OR)"
+
+#~ msgid "equals"
+#~ msgstr "е равно"
+
+#~ msgid "not equal"
+#~ msgstr "не е равно"
+
+#~ msgid "in"
+#~ msgstr "съдържа"
+
+#~ msgid "not in"
+#~ msgstr "не съдържа"
+
+#~ msgid "like"
+#~ msgstr "като"
+
+#~ msgid "greater"
+#~ msgstr "по-голямо"
+
+#~ msgid "lesser"
+#~ msgstr "по-малко"
+
+#~ msgid "greater or equal"
+#~ msgstr "по-голямо или равно"
+
+#~ msgid "less or equal"
+#~ msgstr "по-малко или равно"
+
+#~ msgid "Sorted by"
+#~ msgstr "Сортиран по"
+
+#~ msgid "Ascending"
+#~ msgstr "По нарастване"
+
+#~ msgid "Descending"
+#~ msgstr "По намаляне"
+
+#~ msgid "Distinct"
+#~ msgstr "Различен"
+
+#~ msgid "Query Options"
+#~ msgstr "Настройки на запитване"
+
+#~ msgid "SQL query:"
+#~ msgstr "SQL запитване:"
+
+#~ msgid "Insert in region"
+#~ msgstr "Вмъкване в област"
+
+#~ msgid "Starting in cell"
+#~ msgstr "Започвайки с клетка"
+
+#~ msgid "Result"
+#~ msgstr "Резултат"
+
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Не можете да зададете таблица тук."
+
+#~ msgid "You have to specify a valid region."
+#~ msgstr "Трябва да зададете валидна област."
+
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "Трябва да зададете валидна клетка."
+
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "Нямате права да променяте данни в базата данни."
+
+#~ msgid "Executing query failed."
+#~ msgstr "Запитването беше неуспешно."
+
+#~ msgid "You did not get any results with this query."
+#~ msgstr "Не получихте резултати за това запитване."
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Вмъкване на данни от база данни"
+
+#~ msgid "The port must be a number"
+#~ msgstr "Порта трябва да бъде число"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "Свързване с базата данни..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "Свързан. Получаване информация за таблица..."
+
+#~ msgid "This database contains no tables"
+#~ msgstr "Базата данни няма таблици"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "Драйвера не може да бъде зареден"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "Получаване на мета данни за таблици..."
+
+#~ msgid "You have to select at least one table."
+#~ msgstr "Трябва да изберете поне една таблица."
+
+#~ msgid "You have to select at least one column."
+#~ msgstr "Трябва да изберете поне една колона."
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "\"*\" или \"?\" не са валидни в SQL. Правилните са \"%\" или \"_\". "
+#~ "Искате ли да бъдат сменени?"
+
+#~ msgid "Insert function"
+#~ msgstr "Вмъкване на функция"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "Функцията няма параметри."
+
+#~ msgid "Description is not available."
+#~ msgstr "Няма налично описание."
 
 #, fuzzy
 #~ msgid "Document Settings..."

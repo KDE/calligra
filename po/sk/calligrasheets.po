@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2019-09-29 19:44+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -177,11 +177,9 @@ msgstr "min"
 msgid "s"
 msgstr "s"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -253,7 +251,7 @@ msgstr "<p><b>Návratový typ:</b> %1</p>"
 msgid "Syntax"
 msgstr "Syntax"
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "Parametre"
@@ -876,7 +874,6 @@ msgstr "CARY(12;1.5707) vracia 12"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12;0) vracia 0"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -888,16 +885,14 @@ msgstr "CARY(12;0) vracia 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Číslo"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Formát"
@@ -953,7 +948,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") vracia 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Databáza"
@@ -1244,13 +1238,12 @@ msgstr "GETPIVOTDATA(databáza; \"Sales\")"
 msgid "Date & Time"
 msgstr "Dátum a čas"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Dátum"
@@ -1319,12 +1312,10 @@ msgstr "DAYS360(dátum1; dátum2; metóda)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) vracia 59"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Čas"
@@ -3996,9 +3987,8 @@ msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) vracia 0.2841"
 msgid "Fractional Dollar"
 msgstr "Zlomkový dolár"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Zlomok"
@@ -4174,8 +4164,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECTIVE(nominálny úrok;obdobia)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "Mena"
@@ -6041,7 +6030,7 @@ msgstr ""
 msgid "Math"
 msgstr "Výpočet"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "Funkcia"
@@ -8110,7 +8099,6 @@ msgid "Row"
 msgstr "Riadok"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "Stĺpec"
@@ -13230,7 +13218,6 @@ msgstr "Dolu, prvý stĺpec"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "Žiadne"
@@ -14181,89 +14168,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Zmeniť okraj"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "&Funkcia..."
-
-#: ui/CellToolBase.cpp:107
-#, kde-format
-msgid "Insert math expression"
-msgstr "Vložiť matematický výraz"
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "Z &databázy..."
-
-#: ui/CellToolBase.cpp:114
-#, kde-format
-msgid "Insert data from a SQL database"
-msgstr "Vložiť dáta z SQL databázy"
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "Výber vzorca"
-
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Insert a function"
-msgstr "Vložiť funkciu"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "Iné..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "Upraviť bunku"
-
-#: ui/CellToolBase.cpp:132
-#, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Upraviť zvýraznenú bunku"
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr "Spustiť riešiteľa..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Show QTableView..."
-msgstr "Zobraziť QTableView..."
-
-#: ui/CellToolBase.cpp:150
-#, kde-format
-msgid "Permute reference fixation"
-msgstr "Zmeniť ochranu odkazu"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Permute fixation"
-msgstr "Zmeniť ochranu"
-
-#: ui/CellToolBase.cpp:155
-#, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Zmeniť ochranu odkazu na textovom kurzore"
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"Nie je dostupný žiadny ovládač databázy. Potrebujete nainštalovať potrebné "
-"Qt databázové ovládače."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14693,333 +14601,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Zmeniť štýl"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "Vložiť dáta z databázy"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "Typ:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"Užívateľské meno:\n"
-"(ak je potrebné)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "Hostiteľ:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"Port:\n"
-"(ak je potrebné)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "Meno databázy:"
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"Heslo:\n"
-"(ak je potrebné)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "Výber tabuľky:"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, kde-format
-msgid "Tables"
-msgstr "Tabuľky"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "Výber stĺpca:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, kde-format
-msgid "Table"
-msgstr "Tabuľka"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "Stĺpce"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "Platné sú všetky údaje (AND)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "Platný je niektorý z údajov (OR)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "rovná sa"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "nerovná sa"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "v"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "nie v"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "podobný"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "väčší"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "menší"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "väčší alebo rovný"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "menší alebo rovný"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "Triediť podľa"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "Vzostupne"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "Zostupne"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "Odlišný"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "Voľby pre dotaz"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "SQL výber:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "Vložiť do oblasti"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "Začať v bunke"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "Výsledok"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr "Tu nie je možné špecifikovať tabuľku."
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr "Je potrebné špecifikovať platnú oblasť."
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr "Je potrebné špecifikovať platnú bunku."
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "Nemáte dovolené meniť dáta v databáze."
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr "Vykonávanie dotazu zlyhalo."
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr "Týmto dotazom ste nezískali žiadne výsledky."
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Vložiť dáta z databázy"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "Port musí byť číslo"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "Pripájanie k databáze..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "Pripojený. Získavanie informácií o tabuľkách..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "Táto databáza neobsahuje žiadne tabuľky"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "Nepodarilo sa zaviesť ovládač"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "Získavanie meta dát tabuliek..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr "Musíte označiť najmenej jednu tabuľku."
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr "Musíte označiť najmenej jeden stĺpec."
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"'*' or '?' nie sú platné znaky v SQL. Správne náhrady sú '%' or '_'. Chcete "
-"ich nahradiť?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "Náhľad"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Mena"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Percentá"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "Všeobecné"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr "Dátum a čas"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "Mena:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "Formát:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "Postfix:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "Presnosť:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "Prefix:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15177,38 +14758,19 @@ msgstr ""
 "Toto políčko obsahuje zoznam všetkých dostupných skupín písiem. Kliknite na "
 "jednu skupinu pre vybranie písma pre aktuálnu bunku."
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "Náhľad"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Tu môžete vidieť náhľad písma, ktoré chcete použiť pre aktuálnu bunku."
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Všetky"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "Vložiť funkciu"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr "Pomoc"
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "Táto funkcia nemá parametre."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, kde-format
-msgid "Description is not available."
-msgstr "Popis nie je dostupný."
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15253,6 +14815,11 @@ msgstr "Vzorka"
 msgid "Customize"
 msgstr "Upraviť"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "Všeobecné"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -15276,6 +14843,11 @@ msgstr ""
 "nastaveniach -> Vzhľad a témy -> Miestne nastavenia -> Krajina/región a "
 "jazyk -> Čísla. Čísla sú predvolene zarovnané vpravo."
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Percentá"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -15292,6 +14864,11 @@ msgstr ""
 "Napríklad ak zadáte 12 a zmeníte formát na percentá, číslo bude potom 1200 "
 "%. Prepnutie naspäť na všeobecný formát vráti naspäť hodnotu 12.\n"
 "Môžete použiť ikonu percentá na lište Formát."
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Mena"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -15383,6 +14960,11 @@ msgstr ""
 "formátu času. Predvolený formát je systémový formát v Systémových "
 "nastaveniach. Ak číslo v bunke nie je rozpoznané ako čas, Sheets zobrazí "
 "00:00 v globálnom formáte, ktorý je v Systémových nastaveniach."
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
+msgstr "Dátum a čas"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -15485,6 +15067,31 @@ msgid ""
 msgstr ""
 "Môžete zvoliť, či sa kladné hodnoty majú zobrazovať so znakom + a či "
 "negatívne hodnoty majú byť zobrazené červenou."
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "Postfix:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "Prefix:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "Presnosť:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "Formát:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "Mena:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -15888,6 +15495,11 @@ msgstr "Zrušiť"
 msgid "Discard changes"
 msgstr "Zahodiť zmeny"
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Všetky"
+
 #: ui/FilterPopup.cpp:58
 #, kde-format
 msgid "Empty"
@@ -15934,6 +15546,228 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otvoriť odkaz?"
+
+#~ msgid "&Function..."
+#~ msgstr "&Funkcia..."
+
+#~ msgid "Insert math expression"
+#~ msgstr "Vložiť matematický výraz"
+
+#~ msgid "From &Database..."
+#~ msgstr "Z &databázy..."
+
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "Vložiť dáta z SQL databázy"
+
+#~ msgid "Formula Selection"
+#~ msgstr "Výber vzorca"
+
+#~ msgid "Insert a function"
+#~ msgstr "Vložiť funkciu"
+
+#~ msgid "Others..."
+#~ msgstr "Iné..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "Upraviť bunku"
+
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Upraviť zvýraznenú bunku"
+
+#~ msgid "Run Inspector..."
+#~ msgstr "Spustiť riešiteľa..."
+
+#~ msgid "Show QTableView..."
+#~ msgstr "Zobraziť QTableView..."
+
+#~ msgid "Permute reference fixation"
+#~ msgstr "Zmeniť ochranu odkazu"
+
+#~ msgid "Permute fixation"
+#~ msgstr "Zmeniť ochranu"
+
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Zmeniť ochranu odkazu na textovom kurzore"
+
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "Nie je dostupný žiadny ovládač databázy. Potrebujete nainštalovať "
+#~ "potrebné Qt databázové ovládače."
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "Vložiť dáta z databázy"
+
+#~ msgid "Type:"
+#~ msgstr "Typ:"
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Užívateľské meno:\n"
+#~ "(ak je potrebné)"
+
+#~ msgid "Host:"
+#~ msgstr "Hostiteľ:"
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Port:\n"
+#~ "(ak je potrebné)"
+
+#~ msgid "Database name: "
+#~ msgstr "Meno databázy:"
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Heslo:\n"
+#~ "(ak je potrebné)"
+
+#~ msgid "Select tables:"
+#~ msgstr "Výber tabuľky:"
+
+#~ msgid "Tables"
+#~ msgstr "Tabuľky"
+
+#~ msgid "Select columns:"
+#~ msgstr "Výber stĺpca:"
+
+#~ msgid "Table"
+#~ msgstr "Tabuľka"
+
+#~ msgid "Columns"
+#~ msgstr "Stĺpce"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "Platné sú všetky údaje (AND)"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "Platný je niektorý z údajov (OR)"
+
+#~ msgid "equals"
+#~ msgstr "rovná sa"
+
+#~ msgid "not equal"
+#~ msgstr "nerovná sa"
+
+#~ msgid "in"
+#~ msgstr "v"
+
+#~ msgid "not in"
+#~ msgstr "nie v"
+
+#~ msgid "like"
+#~ msgstr "podobný"
+
+#~ msgid "greater"
+#~ msgstr "väčší"
+
+#~ msgid "lesser"
+#~ msgstr "menší"
+
+#~ msgid "greater or equal"
+#~ msgstr "väčší alebo rovný"
+
+#~ msgid "less or equal"
+#~ msgstr "menší alebo rovný"
+
+#~ msgid "Sorted by"
+#~ msgstr "Triediť podľa"
+
+#~ msgid "Ascending"
+#~ msgstr "Vzostupne"
+
+#~ msgid "Descending"
+#~ msgstr "Zostupne"
+
+#~ msgid "Distinct"
+#~ msgstr "Odlišný"
+
+#~ msgid "Query Options"
+#~ msgstr "Voľby pre dotaz"
+
+#~ msgid "SQL query:"
+#~ msgstr "SQL výber:"
+
+#~ msgid "Insert in region"
+#~ msgstr "Vložiť do oblasti"
+
+#~ msgid "Starting in cell"
+#~ msgstr "Začať v bunke"
+
+#~ msgid "Result"
+#~ msgstr "Výsledok"
+
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Tu nie je možné špecifikovať tabuľku."
+
+#~ msgid "You have to specify a valid region."
+#~ msgstr "Je potrebné špecifikovať platnú oblasť."
+
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "Je potrebné špecifikovať platnú bunku."
+
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "Nemáte dovolené meniť dáta v databáze."
+
+#~ msgid "Executing query failed."
+#~ msgstr "Vykonávanie dotazu zlyhalo."
+
+#~ msgid "You did not get any results with this query."
+#~ msgstr "Týmto dotazom ste nezískali žiadne výsledky."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Vložiť dáta z databázy"
+
+#~ msgid "The port must be a number"
+#~ msgstr "Port musí byť číslo"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "Pripájanie k databáze..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "Pripojený. Získavanie informácií o tabuľkách..."
+
+#~ msgid "This database contains no tables"
+#~ msgstr "Táto databáza neobsahuje žiadne tabuľky"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "Nepodarilo sa zaviesť ovládač"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "Získavanie meta dát tabuliek..."
+
+#~ msgid "You have to select at least one table."
+#~ msgstr "Musíte označiť najmenej jednu tabuľku."
+
+#~ msgid "You have to select at least one column."
+#~ msgstr "Musíte označiť najmenej jeden stĺpec."
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "'*' or '?' nie sú platné znaky v SQL. Správne náhrady sú '%' or '_'. "
+#~ "Chcete ich nahradiť?"
+
+#~ msgid "Insert function"
+#~ msgstr "Vložiť funkciu"
+
+#~ msgid "Help"
+#~ msgstr "Pomoc"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "Táto funkcia nemá parametre."
+
+#~ msgid "Description is not available."
+#~ msgstr "Popis nie je dostupný."
 
 #~ msgid "Document Settings..."
 #~ msgstr "Nastavenia dokumentu"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -172,11 +172,9 @@ msgstr "minit"
 msgid "s"
 msgstr "saat"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Teks"
@@ -248,7 +246,7 @@ msgstr "<p><b>Jenis kembali: </b>"
 msgid "Syntax"
 msgstr ""
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "Parameter"
@@ -896,7 +894,6 @@ msgstr "CARY(12;1.5707) mengembalikan 12"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12;0) mengembalikan 0"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -908,16 +905,14 @@ msgstr "CARY(12;0) mengembalikan 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Angka"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Format"
@@ -976,7 +971,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") mengembalikan 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Pangkalan Data"
@@ -1274,13 +1268,12 @@ msgstr "GETPIVOTDATA(Pangkalan data; \"Jualan\")"
 msgid "Date & Time"
 msgstr "Tarikh & Masa"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Tarikh"
@@ -1350,12 +1343,10 @@ msgstr "HARI 360(tarikh 1; tarikh 2; kaedah)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2/22/2002\", \"4/21/2002\", FALSE) mengembalikan 59"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Masa"
@@ -4208,9 +4199,8 @@ msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) mengembalikan 0.2841"
 msgid "Fractional Dollar"
 msgstr "Dolar Pecahan"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Pecahan"
@@ -4397,8 +4387,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECT(nominal;tempoh)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "Mata wang"
@@ -6359,7 +6348,7 @@ msgstr ""
 msgid "Math"
 msgstr "Matematik"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "Fungsi"
@@ -8467,7 +8456,6 @@ msgid "Row"
 msgstr "&Baris"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "Lajur"
@@ -13710,7 +13698,6 @@ msgstr "Selitkan Lajur"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "Tiada"
@@ -14655,92 +14642,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ubah Warna Sempadan"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "&Fungsi..."
-
-#: ui/CellToolBase.cpp:107
-#, fuzzy, kde-format
-msgid "Insert math expression"
-msgstr "Selitkan ungkapan matematik."
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "Dari &Pangkalan Data..."
-
-#: ui/CellToolBase.cpp:114
-#, fuzzy, kde-format
-msgid "Insert data from a SQL database"
-msgstr "Selitkan data dari pangkalan data SQL."
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "Pemilihan Formula"
-
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Insert a function"
-msgstr "Selitkan fungsi."
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "Lain-lain..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "Ubah Suai Sel"
-
-#: ui/CellToolBase.cpp:132
-#, fuzzy, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Edit sel yang ditonjolkan."
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr "Laksanakan Inspektor..."
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-#| msgid "Show Sheet..."
-msgid "Show QTableView..."
-msgstr "Papar Helaian..."
-
-#: ui/CellToolBase.cpp:150
-#, fuzzy, kde-format
-#| msgid "Protection"
-msgid "Permute reference fixation"
-msgstr "Perlindungan"
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-#| msgid "Protection"
-msgid "Permute fixation"
-msgstr "Perlindungan"
-
-#: ui/CellToolBase.cpp:155
-#, fuzzy, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Tampal kandungan klipbod di kursor. "
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, fuzzy, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"Tiada pemacu pangkalan data boleh didapatkan; anda perlu mengkompil Qy "
-"dengan pemacu yang sesuai."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -15234,338 +15139,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Ubah Sudut"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "Selitkan Data Dari Pangkalan Data"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "Jenis:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"Nama pengguna:\n"
-"(jika perlu)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "Hos:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"Port:\n"
-"(jika perlu)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "Nama pangkalan data:"
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"Kata laluan:\n"
-"(jika perlu)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "Pilih jadual:"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, fuzzy, kde-format
-#| msgid "Values"
-msgid "Tables"
-msgstr "Nilai"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "Pilih lajur:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, fuzzy, kde-format
-#| msgid "Tala"
-msgid "Table"
-msgstr "Tala"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "Lajur"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "Padankan semua yang berikut (AND)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "Padankan mana-mana satu yang berikut (OR)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "sama"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "tidak sama"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "dalam "
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "bukan dalam"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "seperti"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "lebih besar"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "lebih kecil"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "lebih besar atau sama"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "lebih kecil atau sama"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "Diisih oleh"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "Menaik"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "Menurun"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "Berbeza"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "Pilihan Pertanyaan"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "Pertanyaan SQL:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "Selitkan dalam kawasan"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "Memulakan dalam sel"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "Hasil"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr "Anda tidak boleh tetapkan jadual di sini."
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr "Anda hendaklah menetapkan kawasan yang sah."
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr "Anda hendaklah menetapkan sel yang sah."
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "Anda tidak dibenarkan mengubah data dalam pangkalan data."
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr "Melaksanakan pertanyaan gagal."
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr "Anda tidak dapat apa-apa hasil dari pertanyaan ini."
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-#, fuzzy
-#| msgid "Insert Data From Database"
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Selitkan Data Dari Pangkalan Data"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "Port mestilah satu nombor"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "Sedang disambungkan ke pangkalan data..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "Telah disambung. Mengesan maklumat jadual..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "Pangkalan data ini tidak mengandungi jadual"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "Pemacu tidak dapat dimuatkan"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "Mengesan meta data jadual..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr "Anda perlu pilih sekurang-kurangnya satu jadual."
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr "Anda perlu pilih sekurang-kurangnya satu lajur."
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"'*' or '?' bukan kad liar dalam SQL. Penggantian yang betul ialah  '%' atau "
-"'_'. Anda mahu gantikannya?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "Prapapar"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Wang"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Peratus"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "Generik"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
-msgid "Date and Time"
-msgstr "Tarikh & Masa"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "Mata Wang:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "Format:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "Akhiran:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "Kepersisan:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "Awalan:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -15705,38 +15278,19 @@ msgid ""
 "it in the current cell."
 msgstr ""
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "Prapapar"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Semua"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "Fungsi selit"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "Fungsi ini tiada parameter."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, fuzzy, kde-format
-msgid "Description is not available."
-msgstr "&Huraian dalam lajur"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15781,6 +15335,11 @@ msgstr "Corak"
 msgid "Customize"
 msgstr "Suaikan"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "Generik"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -15798,6 +15357,11 @@ msgid ""
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Peratus"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -15809,6 +15373,11 @@ msgid ""
 "back to 12.\n"
 "You can also use the Percent icon in the Format Toolbar."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Wang"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -15871,6 +15440,12 @@ msgid ""
 "sense as a time, Calligra Sheets will display 00:00 in the global format you "
 "have in System Settings."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, fuzzy, kde-format
+#| msgid "Date & Time"
+msgid "Date and Time"
+msgstr "Tarikh & Masa"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -15950,6 +15525,31 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "Akhiran:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "Awalan:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "Kepersisan:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "Format:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "Mata Wang:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -16320,6 +15920,11 @@ msgstr "France"
 msgid "Discard changes"
 msgstr ""
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Semua"
+
 #: ui/FilterPopup.cpp:58
 #, fuzzy, kde-format
 #| msgid "Egypt"
@@ -16366,6 +15971,244 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Buka Pautan?"
+
+#~ msgid "&Function..."
+#~ msgstr "&Fungsi..."
+
+#, fuzzy
+#~ msgid "Insert math expression"
+#~ msgstr "Selitkan ungkapan matematik."
+
+#~ msgid "From &Database..."
+#~ msgstr "Dari &Pangkalan Data..."
+
+#, fuzzy
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "Selitkan data dari pangkalan data SQL."
+
+#~ msgid "Formula Selection"
+#~ msgstr "Pemilihan Formula"
+
+#, fuzzy
+#~ msgid "Insert a function"
+#~ msgstr "Selitkan fungsi."
+
+#~ msgid "Others..."
+#~ msgstr "Lain-lain..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "Ubah Suai Sel"
+
+#, fuzzy
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Edit sel yang ditonjolkan."
+
+#~ msgid "Run Inspector..."
+#~ msgstr "Laksanakan Inspektor..."
+
+#, fuzzy
+#~| msgid "Show Sheet..."
+#~ msgid "Show QTableView..."
+#~ msgstr "Papar Helaian..."
+
+#, fuzzy
+#~| msgid "Protection"
+#~ msgid "Permute reference fixation"
+#~ msgstr "Perlindungan"
+
+#, fuzzy
+#~| msgid "Protection"
+#~ msgid "Permute fixation"
+#~ msgstr "Perlindungan"
+
+#, fuzzy
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Tampal kandungan klipbod di kursor. "
+
+#, fuzzy
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "Tiada pemacu pangkalan data boleh didapatkan; anda perlu mengkompil Qy "
+#~ "dengan pemacu yang sesuai."
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "Selitkan Data Dari Pangkalan Data"
+
+#~ msgid "Type:"
+#~ msgstr "Jenis:"
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Nama pengguna:\n"
+#~ "(jika perlu)"
+
+#~ msgid "Host:"
+#~ msgstr "Hos:"
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Port:\n"
+#~ "(jika perlu)"
+
+#~ msgid "Database name: "
+#~ msgstr "Nama pangkalan data:"
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "Kata laluan:\n"
+#~ "(jika perlu)"
+
+#~ msgid "Select tables:"
+#~ msgstr "Pilih jadual:"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgid "Tables"
+#~ msgstr "Nilai"
+
+#~ msgid "Select columns:"
+#~ msgstr "Pilih lajur:"
+
+#, fuzzy
+#~| msgid "Tala"
+#~ msgid "Table"
+#~ msgstr "Tala"
+
+#~ msgid "Columns"
+#~ msgstr "Lajur"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "Padankan semua yang berikut (AND)"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "Padankan mana-mana satu yang berikut (OR)"
+
+#~ msgid "equals"
+#~ msgstr "sama"
+
+#~ msgid "not equal"
+#~ msgstr "tidak sama"
+
+#~ msgid "in"
+#~ msgstr "dalam "
+
+#~ msgid "not in"
+#~ msgstr "bukan dalam"
+
+#~ msgid "like"
+#~ msgstr "seperti"
+
+#~ msgid "greater"
+#~ msgstr "lebih besar"
+
+#~ msgid "lesser"
+#~ msgstr "lebih kecil"
+
+#~ msgid "greater or equal"
+#~ msgstr "lebih besar atau sama"
+
+#~ msgid "less or equal"
+#~ msgstr "lebih kecil atau sama"
+
+#~ msgid "Sorted by"
+#~ msgstr "Diisih oleh"
+
+#~ msgid "Ascending"
+#~ msgstr "Menaik"
+
+#~ msgid "Descending"
+#~ msgstr "Menurun"
+
+#~ msgid "Distinct"
+#~ msgstr "Berbeza"
+
+#~ msgid "Query Options"
+#~ msgstr "Pilihan Pertanyaan"
+
+#~ msgid "SQL query:"
+#~ msgstr "Pertanyaan SQL:"
+
+#~ msgid "Insert in region"
+#~ msgstr "Selitkan dalam kawasan"
+
+#~ msgid "Starting in cell"
+#~ msgstr "Memulakan dalam sel"
+
+#~ msgid "Result"
+#~ msgstr "Hasil"
+
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Anda tidak boleh tetapkan jadual di sini."
+
+#~ msgid "You have to specify a valid region."
+#~ msgstr "Anda hendaklah menetapkan kawasan yang sah."
+
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "Anda hendaklah menetapkan sel yang sah."
+
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "Anda tidak dibenarkan mengubah data dalam pangkalan data."
+
+#~ msgid "Executing query failed."
+#~ msgstr "Melaksanakan pertanyaan gagal."
+
+#~ msgid "You did not get any results with this query."
+#~ msgstr "Anda tidak dapat apa-apa hasil dari pertanyaan ini."
+
+#, fuzzy
+#~| msgid "Insert Data From Database"
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Selitkan Data Dari Pangkalan Data"
+
+#~ msgid "The port must be a number"
+#~ msgstr "Port mestilah satu nombor"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "Sedang disambungkan ke pangkalan data..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "Telah disambung. Mengesan maklumat jadual..."
+
+#~ msgid "This database contains no tables"
+#~ msgstr "Pangkalan data ini tidak mengandungi jadual"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "Pemacu tidak dapat dimuatkan"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "Mengesan meta data jadual..."
+
+#~ msgid "You have to select at least one table."
+#~ msgstr "Anda perlu pilih sekurang-kurangnya satu jadual."
+
+#~ msgid "You have to select at least one column."
+#~ msgstr "Anda perlu pilih sekurang-kurangnya satu lajur."
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "'*' or '?' bukan kad liar dalam SQL. Penggantian yang betul ialah  '%' "
+#~ "atau '_'. Anda mahu gantikannya?"
+
+#~ msgid "Insert function"
+#~ msgstr "Fungsi selit"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "Fungsi ini tiada parameter."
+
+#, fuzzy
+#~ msgid "Description is not available."
+#~ msgstr "&Huraian dalam lajur"
 
 #, fuzzy
 #~ msgid "Document Settings..."

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2019-01-19 19:46+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -175,11 +175,9 @@ msgstr "分鐘"
 msgid "s"
 msgstr "秒"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "文字"
@@ -250,7 +248,7 @@ msgstr "<p><b>傳回類型：</b>%1</p>"
 msgid "Syntax"
 msgstr "語法"
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "參數"
@@ -851,7 +849,6 @@ msgstr "CARY(12;1.5707) 傳回 12"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12;0) 傳回 0"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -863,16 +860,14 @@ msgstr "CARY(12;0) 傳回 0"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "數字"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "格式"
@@ -928,7 +923,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\") 傳回 99"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "資料庫"
@@ -1201,13 +1195,12 @@ msgstr "GETPIVOTDATA(Database; \"Sales\")"
 msgid "Date & Time"
 msgstr "日期與時間"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "日期"
@@ -1275,12 +1268,10 @@ msgstr "DAYS360(date1; date2; method)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) 傳回 59"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "時間"
@@ -3909,9 +3900,8 @@ msgstr "DISC(\"2/28/2001\"; \"8/31/2001\"; 12; 14) 傳回 0.2841"
 msgid "Fractional Dollar"
 msgstr "分數美元"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "分數"
@@ -4085,8 +4075,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECTIVE(nominal;periods)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "貨幣"
@@ -5892,7 +5881,7 @@ msgstr ""
 msgid "Math"
 msgstr "數學"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "函數"
@@ -7907,7 +7896,6 @@ msgid "Row"
 msgstr "列"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "欄"
@@ -12861,7 +12849,6 @@ msgstr "下，第一欄"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "無"
@@ -13794,90 +13781,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "變更框線"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "函數(&F)..."
-
-#: ui/CellToolBase.cpp:107
-#, kde-format
-msgid "Insert math expression"
-msgstr "插入數學表示式"
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "從資料庫(&D)..."
-
-#: ui/CellToolBase.cpp:114
-#, kde-format
-msgid "Insert data from a SQL database"
-msgstr "插入 SQL 資料庫的資料"
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "公式選擇區"
-
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Insert a function"
-msgstr "插入函數"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "其它..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "修改儲存格"
-
-#: ui/CellToolBase.cpp:132
-#, kde-format
-msgid "Edit the highlighted cell"
-msgstr "編輯突顯的儲存格"
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr "執行檢查員..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Show QTableView..."
-msgstr "顯示 QTableView..."
-
-#: ui/CellToolBase.cpp:150
-#, kde-format
-msgid "Permute reference fixation"
-msgstr "排列參考定位"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Permute fixation"
-msgstr "排列定位"
-
-#: ui/CellToolBase.cpp:155
-#, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "在游標處排列參考定位"
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, fuzzy, kde-format
-#| msgid ""
-#| "No database drivers available.  To use this feature you need to install "
-#| "the necessary Qt 3 database drivers."
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr "沒有可用的資料庫驅動程式。您必須以必要的驅動程式編譯 Qt。"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14309,333 +14216,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "變更樣式"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "從資料庫插入資料"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "類型："
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"使用者名稱：\n"
-"（如果需要）"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "主機："
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"埠號：\n"
-"（如果需要）"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "資料庫名稱："
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"密碼：\n"
-"（如果需要）"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "選擇表格："
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, kde-format
-msgid "Tables"
-msgstr "表格"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "選擇欄："
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, kde-format
-msgid "Table"
-msgstr "表格"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "欄"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "符合下列所有條件(AND)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "符合下列任一條件(OR)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "等於"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "不等於"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "包含於"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "不包含於"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "類似"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "大於"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "小於"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "大於或等於"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "小於或等於"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "排序依"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "遞增"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "遞減"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "不同"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "查詢選項"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "SQL 查詢："
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "在範圍中插入"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "開始於儲存格"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "結果"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr "您不能在這裡指定表格。"
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr "您必須指定一個合法的範圍。"
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr "您必須指定合法的儲存格。"
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "您並不被允許改變資料庫中的資料。"
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr "執行查詢失敗。"
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr "這次查詢沒有查到任何結果。"
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "從資料庫插入資料"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "埠號必須是數字"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "連接資料庫..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "已連線。取回表格資訊..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "這個資料庫中沒有表格"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "無法載入驅動程式"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "取回表格的共同資料(meta data)..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr "您必須選擇至少一個表格。"
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr "您必須選擇至少一欄。"
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"'*' 或 '?' 在 SQL 中不是合法的萬用字元。正確的替代品是 '%' 和 '_'。 您是否要"
-"更換它們？"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "預覽"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "金錢"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "百分比"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "一般"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr "日期與時間"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "貨幣："
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "格式："
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "後置文字："
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "精確度："
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "前置文字："
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14787,38 +14367,19 @@ msgid ""
 "it in the current cell."
 msgstr "這裡列出所有可用的字型家族。您可以點選其中一個以設定目前的儲存格。"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "預覽"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "您可以看到目前儲存格的設定預覽。"
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "全部"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "插入函數"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr "說明"
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "這個函數沒有參數。"
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, kde-format
-msgid "Description is not available."
-msgstr "沒有可用的描述。"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -14863,6 +14424,11 @@ msgstr "圖案"
 msgid "Customize"
 msgstr "自訂"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "一般"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -14884,6 +14450,11 @@ msgstr ""
 "數字表示法會使用 KDE 系統設定裡的「通用外觀與行為」中的「地域」─「國家/地區與"
 "語言」─「數字」分頁裡定義的方式，並且預設會置右。"
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "百分比"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -14900,6 +14471,11 @@ msgstr ""
 "例如，如果您輸入 12，然後將儲存格格式設為百分比，則數值會變成 1,200%。切換回"
 "一般格式則數值會變回 12。\n"
 "您也可以用格式工具列中的百分比圖示。"
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "金錢"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -14980,6 +14556,11 @@ msgstr ""
 "「儲存格格式」對話框中您可以設定時間要怎麼顯示。預設為 KDE 系統設定中所設定的"
 "格式。若儲存格內容中的數值不像是時間，Calligra Sheets 會以 KDE 系統設定中設定"
 "的格式來顯示 00:00。"
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
+msgstr "日期與時間"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -15068,6 +14649,31 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr "您可以選擇是否要在正數前面加一個 + 符號，或是負數要以紅字顯示。"
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "後置文字："
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "前置文字："
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "精確度："
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "格式："
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "貨幣："
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -15458,6 +15064,11 @@ msgstr "取消"
 msgid "Discard changes"
 msgstr "丟棄變更"
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "全部"
+
 #: ui/FilterPopup.cpp:58
 #, kde-format
 msgid "Empty"
@@ -15503,6 +15114,230 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "開啟連結？"
+
+#~ msgid "&Function..."
+#~ msgstr "函數(&F)..."
+
+#~ msgid "Insert math expression"
+#~ msgstr "插入數學表示式"
+
+#~ msgid "From &Database..."
+#~ msgstr "從資料庫(&D)..."
+
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "插入 SQL 資料庫的資料"
+
+#~ msgid "Formula Selection"
+#~ msgstr "公式選擇區"
+
+#~ msgid "Insert a function"
+#~ msgstr "插入函數"
+
+#~ msgid "Others..."
+#~ msgstr "其它..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "修改儲存格"
+
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "編輯突顯的儲存格"
+
+#~ msgid "Run Inspector..."
+#~ msgstr "執行檢查員..."
+
+#~ msgid "Show QTableView..."
+#~ msgstr "顯示 QTableView..."
+
+#~ msgid "Permute reference fixation"
+#~ msgstr "排列參考定位"
+
+#~ msgid "Permute fixation"
+#~ msgstr "排列定位"
+
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "在游標處排列參考定位"
+
+#, fuzzy
+#~| msgid ""
+#~| "No database drivers available.  To use this feature you need to install "
+#~| "the necessary Qt 3 database drivers."
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr "沒有可用的資料庫驅動程式。您必須以必要的驅動程式編譯 Qt。"
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "從資料庫插入資料"
+
+#~ msgid "Type:"
+#~ msgstr "類型："
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "使用者名稱：\n"
+#~ "（如果需要）"
+
+#~ msgid "Host:"
+#~ msgstr "主機："
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "埠號：\n"
+#~ "（如果需要）"
+
+#~ msgid "Database name: "
+#~ msgstr "資料庫名稱："
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "密碼：\n"
+#~ "（如果需要）"
+
+#~ msgid "Select tables:"
+#~ msgstr "選擇表格："
+
+#~ msgid "Tables"
+#~ msgstr "表格"
+
+#~ msgid "Select columns:"
+#~ msgstr "選擇欄："
+
+#~ msgid "Table"
+#~ msgstr "表格"
+
+#~ msgid "Columns"
+#~ msgstr "欄"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "符合下列所有條件(AND)"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "符合下列任一條件(OR)"
+
+#~ msgid "equals"
+#~ msgstr "等於"
+
+#~ msgid "not equal"
+#~ msgstr "不等於"
+
+#~ msgid "in"
+#~ msgstr "包含於"
+
+#~ msgid "not in"
+#~ msgstr "不包含於"
+
+#~ msgid "like"
+#~ msgstr "類似"
+
+#~ msgid "greater"
+#~ msgstr "大於"
+
+#~ msgid "lesser"
+#~ msgstr "小於"
+
+#~ msgid "greater or equal"
+#~ msgstr "大於或等於"
+
+#~ msgid "less or equal"
+#~ msgstr "小於或等於"
+
+#~ msgid "Sorted by"
+#~ msgstr "排序依"
+
+#~ msgid "Ascending"
+#~ msgstr "遞增"
+
+#~ msgid "Descending"
+#~ msgstr "遞減"
+
+#~ msgid "Distinct"
+#~ msgstr "不同"
+
+#~ msgid "Query Options"
+#~ msgstr "查詢選項"
+
+#~ msgid "SQL query:"
+#~ msgstr "SQL 查詢："
+
+#~ msgid "Insert in region"
+#~ msgstr "在範圍中插入"
+
+#~ msgid "Starting in cell"
+#~ msgstr "開始於儲存格"
+
+#~ msgid "Result"
+#~ msgstr "結果"
+
+#~ msgid "You cannot specify a table here."
+#~ msgstr "您不能在這裡指定表格。"
+
+#~ msgid "You have to specify a valid region."
+#~ msgstr "您必須指定一個合法的範圍。"
+
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "您必須指定合法的儲存格。"
+
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "您並不被允許改變資料庫中的資料。"
+
+#~ msgid "Executing query failed."
+#~ msgstr "執行查詢失敗。"
+
+#~ msgid "You did not get any results with this query."
+#~ msgstr "這次查詢沒有查到任何結果。"
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "從資料庫插入資料"
+
+#~ msgid "The port must be a number"
+#~ msgstr "埠號必須是數字"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "連接資料庫..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "已連線。取回表格資訊..."
+
+#~ msgid "This database contains no tables"
+#~ msgstr "這個資料庫中沒有表格"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "無法載入驅動程式"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "取回表格的共同資料(meta data)..."
+
+#~ msgid "You have to select at least one table."
+#~ msgstr "您必須選擇至少一個表格。"
+
+#~ msgid "You have to select at least one column."
+#~ msgstr "您必須選擇至少一欄。"
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "'*' 或 '?' 在 SQL 中不是合法的萬用字元。正確的替代品是 '%' 和 '_'。 您是否"
+#~ "要更換它們？"
+
+#~ msgid "Insert function"
+#~ msgstr "插入函數"
+
+#~ msgid "Help"
+#~ msgstr "說明"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "這個函數沒有參數。"
+
+#~ msgid "Description is not available."
+#~ msgstr "沒有可用的描述。"
 
 #~ msgid "Document Settings..."
 #~ msgstr "文件設定..."

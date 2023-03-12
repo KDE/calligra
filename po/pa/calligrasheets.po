@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2010-12-26 09:50+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -170,11 +170,9 @@ msgstr "ਲਿੰਕ"
 msgid "s"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, fuzzy, kde-format
 #| msgid "Wrap Text"
 msgid "Text"
@@ -248,7 +246,7 @@ msgstr ""
 msgid "Syntax"
 msgstr ""
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr ""
@@ -838,7 +836,6 @@ msgstr ""
 msgid "CARY(12;0) returns 0"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -850,17 +847,15 @@ msgstr ""
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, fuzzy, kde-format
 #| msgid "Number:"
 msgid "Number"
 msgstr "ਨੰਬਰ:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, fuzzy, kde-format
 #| msgid "Auto-Format..."
 msgid "Format"
@@ -918,7 +913,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr ""
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, fuzzy, kde-format
 #| msgid "Enter name:"
 msgid "Database"
@@ -1188,13 +1182,12 @@ msgstr ""
 msgid "Date & Time"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr ""
@@ -1257,12 +1250,10 @@ msgstr ""
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr ""
@@ -3812,9 +3803,8 @@ msgstr ""
 msgid "Fractional Dollar"
 msgstr "ਡਾਲਰ"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, fuzzy, kde-format
 #| msgid "Action:"
 msgid "Fraction"
@@ -3985,8 +3975,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, fuzzy, kde-format
 #| msgid "Currency Format"
 msgid "Currency"
@@ -5709,7 +5698,7 @@ msgstr ""
 msgid "Math"
 msgstr ""
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, fuzzy, kde-format
 #| msgid "Action:"
 msgid "Function"
@@ -7676,7 +7665,6 @@ msgid "Row"
 msgstr "ਕਤਾਰਾਂ"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, fuzzy, kde-format
 #| msgid "Column: %1"
 msgid "Column"
@@ -12555,7 +12543,6 @@ msgstr "ਹੇਠਾਂ, ਪਹਿਲਾਂ ਕਾਲਮ"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr ""
@@ -13554,93 +13541,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ ਬਦਲੋ"
 
-#: ui/CellToolBase.cpp:104
-#, fuzzy, kde-format
-#| msgid "Action:"
-msgid "&Function..."
-msgstr "ਐਕਸ਼ਨ:"
-
-#: ui/CellToolBase.cpp:107
-#, fuzzy, kde-format
-#| msgid "Insert Link"
-msgid "Insert math expression"
-msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
-
-#: ui/CellToolBase.cpp:110
-#, fuzzy, kde-format
-#| msgid "Text File"
-msgid "From &Database..."
-msgstr "ਟੈਕਸਟ ਫਾਇਲ"
-
-#: ui/CellToolBase.cpp:114
-#, kde-format
-msgid "Insert data from a SQL database"
-msgstr ""
-
-#: ui/CellToolBase.cpp:117
-#, fuzzy, kde-format
-#| msgid "Clear Text"
-msgid "Formula Selection"
-msgstr "ਟੈਕਸਟ ਸਾਫ਼ ਕਰੋ"
-
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-#| msgid "Action:"
-msgid "Insert a function"
-msgstr "ਐਕਸ਼ਨ:"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "ਹੋਰ..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "ਸੈੱਲ ਸੋਧੋ"
-
-#: ui/CellToolBase.cpp:132
-#, kde-format
-msgid "Edit the highlighted cell"
-msgstr ""
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-#| msgid "Show Rows..."
-msgid "Show QTableView..."
-msgstr "ਕਤਾਰਾਂ ਵੇਖੋ..."
-
-#: ui/CellToolBase.cpp:150
-#, kde-format
-msgid "Permute reference fixation"
-msgstr ""
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-#| msgid "Action:"
-msgid "Permute fixation"
-msgstr "ਐਕਸ਼ਨ:"
-
-#: ui/CellToolBase.cpp:155
-#, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr ""
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
 msgstr ""
 
 #. i18n: tag optionWidget attribute name
@@ -14147,337 +14050,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "ਕੋਣ ਬਦਲੋ..."
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "Type"
-msgid "Type:"
-msgstr "ਕਿਸਮ"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Enter name:"
-msgid "Database name: "
-msgstr "ਨਾਂ ਦਿਓ:"
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, fuzzy, kde-format
-#| msgid "Select Multiple Cells"
-msgid "Select tables:"
-msgstr "ਕਈ ਸੈੱਲ ਚੁਣੋ"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, kde-format
-msgid "Tables"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, fuzzy, kde-format
-#| msgid "Delete Columns"
-msgid "Select columns:"
-msgstr "ਕਾਲਮ ਹਟਾਓ"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, kde-format
-msgid "Table"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, fuzzy, kde-format
-#| msgid "Column: %1"
-msgid "Columns"
-msgstr "ਕਾਲਮ: %1"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, fuzzy, kde-format
-#| msgid "Link"
-msgid "in"
-msgstr "ਲਿੰਕ"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, fuzzy, kde-format
-#| msgid "Status Bar"
-msgid "Sorted by"
-msgstr "ਹਾਲਤ ਪੱਟੀ"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, fuzzy, kde-format
-#| msgid "File to open"
-msgid "Query Options"
-msgstr "ਖੋਲ੍ਹਣ ਲਈ ਫਾਇਲ"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, fuzzy, kde-format
-#| msgid "Insert Link"
-msgid "Insert in region"
-msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, fuzzy, kde-format
-#| msgid "Formula"
-msgid "Percent"
-msgstr "ਫਾਰਮੂਲਾ"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, fuzzy, kde-format
-#| msgid "Currency Format"
-msgid "Currency:"
-msgstr "ਮੁਦਰਾ ਫਾਰਮੈਟ"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, fuzzy, kde-format
-#| msgid "Auto-Format..."
-msgid "Format:"
-msgstr "ਆਟੋ-ਫਾਰਮੈਟ..."
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr ""
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14622,38 +14194,18 @@ msgid ""
 "it in the current cell."
 msgstr ""
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr ""
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, fuzzy, kde-format
-#| msgid "Action:"
-msgid "Insert function"
-msgstr "ਐਕਸ਼ਨ:"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, kde-format
-msgid "Description is not available."
 msgstr ""
 
 #: ui/dialogs/LayoutDialog.cpp:114
@@ -14701,6 +14253,11 @@ msgstr ""
 msgid "Customize"
 msgstr ""
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr ""
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -14718,6 +14275,12 @@ msgid ""
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, fuzzy, kde-format
+#| msgid "Formula"
+msgid "Percent"
+msgstr "ਫਾਰਮੂਲਾ"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -14728,6 +14291,11 @@ msgid ""
 "will then be 1,200 %. Switching back to Generic cell format will bring it "
 "back to 12.\n"
 "You can also use the Percent icon in the Format Toolbar."
+msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
@@ -14791,6 +14359,11 @@ msgid ""
 "format set in System Settings. When the number in the cell does not make "
 "sense as a time, Calligra Sheets will display 00:00 in the global format you "
 "have in System Settings."
+msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
@@ -14872,6 +14445,33 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, fuzzy, kde-format
+#| msgid "Auto-Format..."
+msgid "Format:"
+msgstr "ਆਟੋ-ਫਾਰਮੈਟ..."
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, fuzzy, kde-format
+#| msgid "Currency Format"
+msgid "Currency:"
+msgstr "ਮੁਦਰਾ ਫਾਰਮੈਟ"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -15248,6 +14848,11 @@ msgstr "ਰੱਦ ਕਰੋ"
 msgid "Discard changes"
 msgstr "ਬਦਲਾਅ ਅਣਡਿੱਠੇ"
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr ""
+
 #: ui/FilterPopup.cpp:58
 #, kde-format
 msgid "Empty"
@@ -15291,6 +14896,97 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "ਲਿੰਕ ਖੋਲ੍ਹਣਾ?"
+
+#, fuzzy
+#~| msgid "Action:"
+#~ msgid "&Function..."
+#~ msgstr "ਐਕਸ਼ਨ:"
+
+#, fuzzy
+#~| msgid "Insert Link"
+#~ msgid "Insert math expression"
+#~ msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
+
+#, fuzzy
+#~| msgid "Text File"
+#~ msgid "From &Database..."
+#~ msgstr "ਟੈਕਸਟ ਫਾਇਲ"
+
+#, fuzzy
+#~| msgid "Clear Text"
+#~ msgid "Formula Selection"
+#~ msgstr "ਟੈਕਸਟ ਸਾਫ਼ ਕਰੋ"
+
+#, fuzzy
+#~| msgid "Action:"
+#~ msgid "Insert a function"
+#~ msgstr "ਐਕਸ਼ਨ:"
+
+#~ msgid "Others..."
+#~ msgstr "ਹੋਰ..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "ਸੈੱਲ ਸੋਧੋ"
+
+#, fuzzy
+#~| msgid "Show Rows..."
+#~ msgid "Show QTableView..."
+#~ msgstr "ਕਤਾਰਾਂ ਵੇਖੋ..."
+
+#, fuzzy
+#~| msgid "Action:"
+#~ msgid "Permute fixation"
+#~ msgstr "ਐਕਸ਼ਨ:"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Type:"
+#~ msgstr "ਕਿਸਮ"
+
+#, fuzzy
+#~| msgid "Enter name:"
+#~ msgid "Database name: "
+#~ msgstr "ਨਾਂ ਦਿਓ:"
+
+#, fuzzy
+#~| msgid "Select Multiple Cells"
+#~ msgid "Select tables:"
+#~ msgstr "ਕਈ ਸੈੱਲ ਚੁਣੋ"
+
+#, fuzzy
+#~| msgid "Delete Columns"
+#~ msgid "Select columns:"
+#~ msgstr "ਕਾਲਮ ਹਟਾਓ"
+
+#, fuzzy
+#~| msgid "Column: %1"
+#~ msgid "Columns"
+#~ msgstr "ਕਾਲਮ: %1"
+
+#, fuzzy
+#~| msgid "Link"
+#~ msgid "in"
+#~ msgstr "ਲਿੰਕ"
+
+#, fuzzy
+#~| msgid "Status Bar"
+#~ msgid "Sorted by"
+#~ msgstr "ਹਾਲਤ ਪੱਟੀ"
+
+#, fuzzy
+#~| msgid "File to open"
+#~ msgid "Query Options"
+#~ msgstr "ਖੋਲ੍ਹਣ ਲਈ ਫਾਇਲ"
+
+#, fuzzy
+#~| msgid "Insert Link"
+#~ msgid "Insert in region"
+#~ msgstr "ਲਿੰਕ ਸ਼ਾਮਲ"
+
+#, fuzzy
+#~| msgid "Action:"
+#~ msgid "Insert function"
+#~ msgstr "ਐਕਸ਼ਨ:"
 
 #, fuzzy
 #~| msgid "Formula"

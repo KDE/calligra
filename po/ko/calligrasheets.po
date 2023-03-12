@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2022-05-15 22:14+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -167,11 +167,9 @@ msgstr "분"
 msgid "s"
 msgstr "초"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "텍스트"
@@ -242,7 +240,7 @@ msgstr "<p> <b>반환값 형식:</b> %1 </p>"
 msgid "Syntax"
 msgstr "문법"
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "인자"
@@ -855,7 +853,6 @@ msgstr "CARY(12; 1.5707)은 12를 반환함"
 msgid "CARY(12;0) returns 0"
 msgstr "CARY(12; 0)은 0을 반환함"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -867,16 +864,14 @@ msgstr "CARY(12; 0)은 0을 반환함"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "숫자"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "서식"
@@ -932,7 +927,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "ARABIC(\"XCIX\")는 99를 반환함"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "데이터베이스"
@@ -1216,13 +1210,12 @@ msgstr "GETPIVOTDATA(데이터베이스; \"판매\")"
 msgid "Date & Time"
 msgstr "날짜와 시간"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "날짜"
@@ -1291,12 +1284,10 @@ msgstr "DAYS360(날짜1; 날짜2; 방법)"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr "DAYS360(\"2002/02/22\"; \"2002/04/21\"; FALSE)는 59를 반환함"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "시간"
@@ -3927,9 +3918,8 @@ msgstr "DISC(\"2001/02/28\"; \"2001/08/31\"; 12; 14)는 0.2841을 반환함"
 msgid "Fractional Dollar"
 msgstr "분수 달러"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "분수"
@@ -4104,8 +4094,7 @@ msgstr ""
 msgid "EFFECTIVE(nominal;periods)"
 msgstr "EFFECTIVE(명목이자율;기한)"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "통화"
@@ -5963,7 +5952,7 @@ msgstr ""
 msgid "Math"
 msgstr "수학"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "함수"
@@ -7996,7 +7985,6 @@ msgid "Row"
 msgstr "줄"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "열"
@@ -13035,7 +13023,6 @@ msgstr "아래, 첫 번째 열"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "없음"
@@ -13979,90 +13966,10 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "테두리 변경"
 
-#: ui/CellToolBase.cpp:104
-#, kde-format
-msgid "&Function..."
-msgstr "함수(&F)..."
-
-#: ui/CellToolBase.cpp:107
-#, kde-format
-msgid "Insert math expression"
-msgstr "수식 삽입"
-
-#: ui/CellToolBase.cpp:110
-#, kde-format
-msgid "From &Database..."
-msgstr "데이터베이스에서(&D)..."
-
-#: ui/CellToolBase.cpp:114
-#, kde-format
-msgid "Insert data from a SQL database"
-msgstr "SQL 데이터베이스에서 데이터 삽입"
-
-#: ui/CellToolBase.cpp:117
-#, kde-format
-msgid "Formula Selection"
-msgstr "수식 선택"
-
-#: ui/CellToolBase.cpp:119
-#, kde-format
-msgid "Insert a function"
-msgstr "함수 삽입"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, kde-format
-msgid "Others..."
-msgstr "기타..."
-
-#: ui/CellToolBase.cpp:128
-#, kde-format
-msgid "Modify Cell"
-msgstr "셀 수정"
-
-#: ui/CellToolBase.cpp:132
-#, kde-format
-msgid "Edit the highlighted cell"
-msgstr "강조 표시된 셀 편집"
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr "요소 검사 실행..."
-
-#: ui/CellToolBase.cpp:142
-#, kde-format
-msgid "Show QTableView..."
-msgstr "QTableView 표시..."
-
-# https://support.office.com/ko-kr/article/%EC%83%81%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EC%A0%88%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EB%B0%8F-%ED%98%BC%ED%95%A9-%EC%B0%B8%EC%A1%B0-%EA%B0%84-%EC%A0%84%ED%99%98-dfec08cd-ae65-4f56-839e-5f0d8d0baca9
-#: ui/CellToolBase.cpp:150
-#, kde-format
-msgid "Permute reference fixation"
-msgstr "참조 형식 전환"
-
-#: ui/CellToolBase.cpp:154
-#, kde-format
-msgid "Permute fixation"
-msgstr "참조 형식 전환"
-
-#: ui/CellToolBase.cpp:155
-#, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "텍스트 커서의 참조 형식(상대, 절대, 혼합) 전환"
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
-msgstr ""
-"사용 가능한 데이터베이스 드라이버가 없습니다. 이 기능을 사용하려면 필요한 Qt "
-"데이터베이스 드라이버를 설치해야 합니다."
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14490,333 +14397,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "스타일 변경"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, kde-format
-msgid "Insert Data From Database"
-msgstr "데이터베이스에서 데이터 삽입"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "서식:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-"사용자 이름:\n"
-"(필요한 경우)"
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "호스트:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-"포트:\n"
-"(필요한 경우)"
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "데이터베이스 이름:"
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-"암호:\n"
-"(필요한 경우)"
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, kde-format
-msgid "Select tables:"
-msgstr "테이블 선택:"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, kde-format
-msgid "Tables"
-msgstr "테이블"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "열 선택:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, kde-format
-msgid "Table"
-msgstr "테이블"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "열"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr "다음과 모두 일치(AND)"
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr "다음 중 하나와 일치(OR)"
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "같음"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "같지 않음"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "있음"
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "없음"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "유사함"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "보다 큼"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr "보다 작음"
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, kde-format
-msgid "greater or equal"
-msgstr "크거나 같음"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, kde-format
-msgid "less or equal"
-msgstr "작거나 같음"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, kde-format
-msgid "Sorted by"
-msgstr "정렬 순서"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "오름차순"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "내림차순"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "고유 값"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, kde-format
-msgid "Query Options"
-msgstr "쿼리 옵션"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "SQL 쿼리:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, kde-format
-msgid "Insert in region"
-msgstr "영역에 삽입"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr "셀에서 시작"
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "결과"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, kde-format
-msgid "You cannot specify a table here."
-msgstr "여기에 테이블을 지정할 수 없습니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr "올바른 영역을 지정해야 합니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr "올바른 셀을 지정해야 합니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr "데이터베이스에서 데이터를 변경할 수 없습니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr "쿼리 실행이 실패했습니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr "쿼리 실행 결과가 없습니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "데이터베이스에서 데이터 삽입"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr "포트는 숫자여야 함"
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr "데이터베이스에 연결하는 중..."
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr "연결되었습니다. 테이블 정보 가져오는 중..."
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr "이 데이터베이스에는 테이블이 없음"
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr "드라이버를 불러올 수 없음"
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr "테이블의 메타데이터 가져오는 중..."
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr "하나 이상의 테이블을 선택해야 합니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr "하나 이상의 열을 선택해야 합니다."
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-"'*' 및 '?' 문자는 올바른 SQL 와일드카드가 아닙니다. 대신 '%' 및 '_' 문자를 사"
-"용해야 합니다. 바꾸시겠습니까?"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "미리 보기"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "돈"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "백분율"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "일반"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr "날짜와 시간"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "통화:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "서식:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, kde-format
-msgid "Postfix:"
-msgstr "접미사:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "소수점 아래 자릿수:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "접두사:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14973,38 +14553,19 @@ msgstr ""
 "이 목록에는 사용 가능한 모든 글꼴 종류가 표시됩니다. 현재 셀에 적용할 글꼴 종"
 "류를 선택하십시오."
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "미리 보기"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "현재 셀에 선택한 글꼴을 미리 볼 수 있습니다."
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "모두"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "함수 입력"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr "도움말"
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr "이 함수에는 인자가 없습니다."
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, kde-format
-msgid "Description is not available."
-msgstr "설명이 없습니다."
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, kde-format
@@ -15049,6 +14610,11 @@ msgstr "패턴"
 msgid "Customize"
 msgstr "사용자 정의"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "일반"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -15072,6 +14638,11 @@ msgstr ""
 "시스템 설정 -> 지역 설정 -> 서식 -> 숫자 탭에서 전역 설정한 숫자 표기법을 사"
 "용합니다. 숫자는 기본적으로 오른쪽 정렬합니다."
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "백분율"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -15088,6 +14659,11 @@ msgstr ""
 "예를 들어, 12를 입력하고 셀 서식을 백분율로 설정하면 숫자는 1,200%가 됩니다. "
 "일반 셀 서식으로 다시 전환하면 12로 되돌아갑니다.\n"
 "서식 도구 모음에서 백분율 아이콘을 사용할 수도 있습니다."
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "돈"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -15175,6 +14751,11 @@ msgstr ""
 "을 설정할 수 있습니다. 기본 서식은 시스템 설정에서 설정한 시스템 서식입니다. "
 "셀의 숫자를 시간으로 처리할 수 없으면 Calligra Sheet에서는 시스템 설정에 지정"
 "한 전역 서식으로 00:00을 표시합니다."
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
+msgstr "날짜와 시간"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -15277,6 +14858,31 @@ msgid ""
 msgstr ""
 "양수 값 앞에 + 기호를 표시할지 여부와 음수 값을 빨간색으로 표시할지 여부를 선"
 "택할 수 있습니다."
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, kde-format
+msgid "Postfix:"
+msgstr "접미사:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "접두사:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "소수점 아래 자릿수:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "서식:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "통화:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -15680,6 +15286,11 @@ msgstr "취소"
 msgid "Discard changes"
 msgstr "변경 사항 취소"
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "모두"
+
 #: ui/FilterPopup.cpp:58
 #, kde-format
 msgid "Empty"
@@ -15726,6 +15337,229 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "링크를 여시겠습니까?"
+
+#~ msgid "&Function..."
+#~ msgstr "함수(&F)..."
+
+#~ msgid "Insert math expression"
+#~ msgstr "수식 삽입"
+
+#~ msgid "From &Database..."
+#~ msgstr "데이터베이스에서(&D)..."
+
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "SQL 데이터베이스에서 데이터 삽입"
+
+#~ msgid "Formula Selection"
+#~ msgstr "수식 선택"
+
+#~ msgid "Insert a function"
+#~ msgstr "함수 삽입"
+
+#~ msgid "Others..."
+#~ msgstr "기타..."
+
+#~ msgid "Modify Cell"
+#~ msgstr "셀 수정"
+
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "강조 표시된 셀 편집"
+
+#~ msgid "Run Inspector..."
+#~ msgstr "요소 검사 실행..."
+
+#~ msgid "Show QTableView..."
+#~ msgstr "QTableView 표시..."
+
+# https://support.office.com/ko-kr/article/%EC%83%81%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EC%A0%88%EB%8C%80-%EC%B0%B8%EC%A1%B0-%EB%B0%8F-%ED%98%BC%ED%95%A9-%EC%B0%B8%EC%A1%B0-%EA%B0%84-%EC%A0%84%ED%99%98-dfec08cd-ae65-4f56-839e-5f0d8d0baca9
+#~ msgid "Permute reference fixation"
+#~ msgstr "참조 형식 전환"
+
+#~ msgid "Permute fixation"
+#~ msgstr "참조 형식 전환"
+
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "텍스트 커서의 참조 형식(상대, 절대, 혼합) 전환"
+
+#~ msgid ""
+#~ "No database drivers available. To use this feature you need to install "
+#~ "the necessary Qt database drivers."
+#~ msgstr ""
+#~ "사용 가능한 데이터베이스 드라이버가 없습니다. 이 기능을 사용하려면 필요한 "
+#~ "Qt 데이터베이스 드라이버를 설치해야 합니다."
+
+#~ msgid "Insert Data From Database"
+#~ msgstr "데이터베이스에서 데이터 삽입"
+
+#~ msgid "Type:"
+#~ msgstr "서식:"
+
+#~ msgid ""
+#~ "User name:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "사용자 이름:\n"
+#~ "(필요한 경우)"
+
+#~ msgid "Host:"
+#~ msgstr "호스트:"
+
+#~ msgid ""
+#~ "Port:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "포트:\n"
+#~ "(필요한 경우)"
+
+#~ msgid "Database name: "
+#~ msgstr "데이터베이스 이름:"
+
+#~ msgid ""
+#~ "Password:\n"
+#~ "(if necessary)"
+#~ msgstr ""
+#~ "암호:\n"
+#~ "(필요한 경우)"
+
+#~ msgid "Select tables:"
+#~ msgstr "테이블 선택:"
+
+#~ msgid "Tables"
+#~ msgstr "테이블"
+
+#~ msgid "Select columns:"
+#~ msgstr "열 선택:"
+
+#~ msgid "Table"
+#~ msgstr "테이블"
+
+#~ msgid "Columns"
+#~ msgstr "열"
+
+#~ msgid "Match all of the following (AND)"
+#~ msgstr "다음과 모두 일치(AND)"
+
+#~ msgid "Match any of the following (OR)"
+#~ msgstr "다음 중 하나와 일치(OR)"
+
+#~ msgid "equals"
+#~ msgstr "같음"
+
+#~ msgid "not equal"
+#~ msgstr "같지 않음"
+
+#~ msgid "in"
+#~ msgstr "있음"
+
+#~ msgid "not in"
+#~ msgstr "없음"
+
+#~ msgid "like"
+#~ msgstr "유사함"
+
+#~ msgid "greater"
+#~ msgstr "보다 큼"
+
+#~ msgid "lesser"
+#~ msgstr "보다 작음"
+
+#~ msgid "greater or equal"
+#~ msgstr "크거나 같음"
+
+#~ msgid "less or equal"
+#~ msgstr "작거나 같음"
+
+#~ msgid "Sorted by"
+#~ msgstr "정렬 순서"
+
+#~ msgid "Ascending"
+#~ msgstr "오름차순"
+
+#~ msgid "Descending"
+#~ msgstr "내림차순"
+
+#~ msgid "Distinct"
+#~ msgstr "고유 값"
+
+#~ msgid "Query Options"
+#~ msgstr "쿼리 옵션"
+
+#~ msgid "SQL query:"
+#~ msgstr "SQL 쿼리:"
+
+#~ msgid "Insert in region"
+#~ msgstr "영역에 삽입"
+
+#~ msgid "Starting in cell"
+#~ msgstr "셀에서 시작"
+
+#~ msgid "Result"
+#~ msgstr "결과"
+
+#~ msgid "You cannot specify a table here."
+#~ msgstr "여기에 테이블을 지정할 수 없습니다."
+
+#~ msgid "You have to specify a valid region."
+#~ msgstr "올바른 영역을 지정해야 합니다."
+
+#~ msgid "You have to specify a valid cell."
+#~ msgstr "올바른 셀을 지정해야 합니다."
+
+#~ msgid "You are not allowed to change data in the database."
+#~ msgstr "데이터베이스에서 데이터를 변경할 수 없습니다."
+
+#~ msgid "Executing query failed."
+#~ msgstr "쿼리 실행이 실패했습니다."
+
+#~ msgid "You did not get any results with this query."
+#~ msgstr "쿼리 실행 결과가 없습니다."
+
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "데이터베이스에서 데이터 삽입"
+
+#~ msgid "The port must be a number"
+#~ msgstr "포트는 숫자여야 함"
+
+#~ msgid "Connecting to database..."
+#~ msgstr "데이터베이스에 연결하는 중..."
+
+#~ msgid "Connected. Retrieving table information..."
+#~ msgstr "연결되었습니다. 테이블 정보 가져오는 중..."
+
+#~ msgid "This database contains no tables"
+#~ msgstr "이 데이터베이스에는 테이블이 없음"
+
+#~ msgid "Driver could not be loaded"
+#~ msgstr "드라이버를 불러올 수 없음"
+
+#~ msgid "Retrieving meta data of tables..."
+#~ msgstr "테이블의 메타데이터 가져오는 중..."
+
+#~ msgid "You have to select at least one table."
+#~ msgstr "하나 이상의 테이블을 선택해야 합니다."
+
+#~ msgid "You have to select at least one column."
+#~ msgstr "하나 이상의 열을 선택해야 합니다."
+
+#~ msgid ""
+#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
+#~ "'%' or '_'. Do you want to replace them?"
+#~ msgstr ""
+#~ "'*' 및 '?' 문자는 올바른 SQL 와일드카드가 아닙니다. 대신 '%' 및 '_' 문자"
+#~ "를 사용해야 합니다. 바꾸시겠습니까?"
+
+#~ msgid "Insert function"
+#~ msgstr "함수 입력"
+
+#~ msgid "Help"
+#~ msgstr "도움말"
+
+#~ msgid "This function has no parameters."
+#~ msgstr "이 함수에는 인자가 없습니다."
+
+#~ msgid "Description is not available."
+#~ msgstr "설명이 없습니다."
 
 #~ msgid "Document Settings..."
 #~ msgstr "문서 설정..."

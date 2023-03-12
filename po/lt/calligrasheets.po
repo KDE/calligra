@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-05 00:52+0000\n"
+"POT-Creation-Date: 2023-03-12 00:47+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -166,11 +166,9 @@ msgstr "min"
 msgid "s"
 msgstr "s"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_9)
 #: engine/FunctionDescription.cpp:37 functions/text.xml:5
 #: functions/text.xml:586 functions/text.xml:698 functions/text.xml:713
-#: functions/text.xml:778 ui/dialogs/DataFormatWidget.ui:60
-#: ui/dialogs/LayoutPage_Float.cpp:94
+#: functions/text.xml:778 ui/dialogs/LayoutPage_Float.cpp:94
 #, kde-format
 msgid "Text"
 msgstr "Tekstas"
@@ -241,7 +239,7 @@ msgstr "savaitės pradžia"
 msgid "Syntax"
 msgstr "Sintaksė"
 
-#: engine/FunctionDescription.cpp:177 ui/dialogs/FormulaDialog.cpp:170
+#: engine/FunctionDescription.cpp:177
 #, kde-format
 msgid "Parameters"
 msgstr "Parametrai"
@@ -825,7 +823,6 @@ msgstr "Nuorodos"
 msgid "CARY(12;0) returns 0"
 msgstr "Nuorodos"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_2)
 #: functions/conversion.xml:247 functions/engineering.xml:11
 #: functions/engineering.xml:117 functions/financial.xml:532
 #: functions/statistical.xml:91 functions/statistical.xml:127
@@ -837,16 +834,14 @@ msgstr "Nuorodos"
 #: functions/statistical.xml:899 functions/statistical.xml:1003
 #: functions/statistical.xml:1392 functions/statistical.xml:1675
 #: functions/statistical.xml:1823 functions/text.xml:11 functions/text.xml:30
-#: functions/text.xml:838 ui/dialogs/DataFormatWidget.ui:116
-#: ui/dialogs/LayoutPage_Float.cpp:62
+#: functions/text.xml:838 ui/dialogs/LayoutPage_Float.cpp:62
 #, kde-format
 msgid "Number"
 msgstr "Skaičius"
 
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: ToolBar (formatToolBar)
 #: functions/conversion.xml:251 part/calligrasheets.rc:235
-#: ui/dialogs/DataFormatWidget.ui:35 ui/dialogs/LayoutPage_Float.cpp:52
+#: ui/dialogs/LayoutPage_Float.cpp:52
 #, kde-format
 msgid "Format"
 msgstr "Formatas"
@@ -900,7 +895,6 @@ msgid "ARABIC(\"XCIX\") returns 99"
 msgstr "Reikšmė"
 
 #: functions/database.xml:5 part/chart/ChartDatabaseSelectorFactory.cpp:26
-#: ui/CellToolBase.cpp:111 ui/dialogs/DatabaseDialog.cpp:117
 #, kde-format
 msgid "Database"
 msgstr "Duombazė"
@@ -1169,13 +1163,12 @@ msgstr ""
 msgid "Date & Time"
 msgstr "Data ir laikas"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_7)
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
 #: functions/datetime.xml:129 functions/datetime.xml:146
 #: functions/datetime.xml:163 functions/datetime.xml:588
 #: functions/datetime.xml:603 functions/datetime.xml:716
-#: ui/dialogs/DataFormatWidget.ui:74 ui/dialogs/LayoutPage_Float.cpp:82
+#: ui/dialogs/LayoutPage_Float.cpp:82
 #, kde-format
 msgid "Date"
 msgstr "Data"
@@ -1237,12 +1230,10 @@ msgstr "Data"
 msgid "DAYS360(\"2/22/2002\"; \"4/21/2002\"; FALSE) returns 59"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_8)
 #: functions/datetime.xml:56 functions/datetime.xml:180
 #: functions/datetime.xml:197 functions/datetime.xml:214
 #: functions/datetime.xml:387 functions/datetime.xml:461
-#: functions/datetime.xml:475 ui/dialogs/DataFormatWidget.ui:67
-#: ui/dialogs/LayoutPage_Float.cpp:86
+#: functions/datetime.xml:475 ui/dialogs/LayoutPage_Float.cpp:86
 #, kde-format
 msgid "Time"
 msgstr "Laikas"
@@ -3766,9 +3757,8 @@ msgstr ""
 msgid "Fractional Dollar"
 msgstr "skaičius"
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_6)
 #: functions/financial.xml:384 functions/financial.xml:404
-#: ui/dialogs/DataFormatWidget.ui:81 ui/dialogs/LayoutPage_Float.cpp:78
+#: ui/dialogs/LayoutPage_Float.cpp:78
 #, kde-format
 msgid "Fraction"
 msgstr "Dalis"
@@ -3934,8 +3924,7 @@ msgstr "Standartinis nuokrypis"
 msgid "EFFECTIVE(nominal;periods)"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_5)
-#: functions/financial.xml:517 ui/dialogs/DataFormatWidget.ui:88
+#: functions/financial.xml:517
 #, kde-format
 msgid "Currency"
 msgstr "Valiuta"
@@ -5647,7 +5636,7 @@ msgstr ""
 msgid "Math"
 msgstr "Matematika"
 
-#: functions/math.xml:11 ui/dialogs/FormulaDialog.cpp:52
+#: functions/math.xml:11
 #, kde-format
 msgid "Function"
 msgstr "Funkcija"
@@ -7662,7 +7651,6 @@ msgid "Row"
 msgstr "Eilutė"
 
 #: functions/reference.xml:141 functions/reference.xml:292
-#: ui/dialogs/DatabaseDialog.cpp:169
 #, kde-format
 msgid "Column"
 msgstr "Stulpelis"
@@ -12512,7 +12500,6 @@ msgstr "Įterpti stulpelius"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
 #: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
-#: ui/dialogs/DatabaseDialog.cpp:711 ui/dialogs/DatabaseDialog.cpp:712
 #, kde-format
 msgid "None"
 msgstr "Nieko"
@@ -13439,88 +13426,9 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kapo Verdė"
 
-#: ui/CellToolBase.cpp:104
-#, fuzzy, kde-format
-msgid "&Function..."
-msgstr "Funkcija"
-
-#: ui/CellToolBase.cpp:107
-#, fuzzy, kde-format
-msgid "Insert math expression"
-msgstr "Įprastoji išraiška"
-
-#: ui/CellToolBase.cpp:110
-#, fuzzy, kde-format
-msgid "From &Database..."
-msgstr "Iš duomenų bazės"
-
-#: ui/CellToolBase.cpp:114
-#, fuzzy, kde-format
-msgid "Insert data from a SQL database"
-msgstr "Iš duomenų bazės"
-
-#: ui/CellToolBase.cpp:117
-#, fuzzy, kde-format
-msgid "Formula Selection"
-msgstr "Pasirinkti šriftą..."
-
-#: ui/CellToolBase.cpp:119
-#, fuzzy, kde-format
-msgid "Insert a function"
-msgstr "Įterpti lakštą"
-
-#: ui/CellToolBase.cpp:120 ui/CellToolBase.cpp:972
-#, fuzzy, kde-format
-msgid "Others..."
-msgstr "Kiti"
-
-#: ui/CellToolBase.cpp:128
-#, fuzzy, kde-format
-msgid "Modify Cell"
-msgstr "Keisti langelį"
-
-#: ui/CellToolBase.cpp:132
-#, fuzzy, kde-format
-msgid "Edit the highlighted cell"
-msgstr "Pašalinti sąrašą"
-
-#: ui/CellToolBase.cpp:136
-#, kde-format
-msgid "Run Inspector..."
-msgstr ""
-
-#: ui/CellToolBase.cpp:142
-#, fuzzy, kde-format
-msgid "Show QTableView..."
-msgstr "Rodyti lakštą"
-
-#: ui/CellToolBase.cpp:150
-#, fuzzy, kde-format
-#| msgid "Protection"
-msgid "Permute reference fixation"
-msgstr "Apsauga"
-
-#: ui/CellToolBase.cpp:154
-#, fuzzy, kde-format
-#| msgid "Protection"
-msgid "Permute fixation"
-msgstr "Apsauga"
-
-#: ui/CellToolBase.cpp:155
-#, fuzzy, kde-format
-msgid "Permute the fixation of the reference at the text cursor"
-msgstr "Pašalinti sąrašą"
-
-#: ui/CellToolBase.cpp:939
+#: ui/CellToolBase.cpp:850
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
-
-#: ui/CellToolBase.cpp:959
-#, kde-format
-msgid ""
-"No database drivers available. To use this feature you need to install the "
-"necessary Qt database drivers."
 msgstr ""
 
 #. i18n: tag optionWidget attribute name
@@ -13985,331 +13893,6 @@ msgctxt "(qtundo-format)"
 msgid "Change Style"
 msgstr "Keisti stilių: $1"
 
-#: ui/dialogs/DatabaseDialog.cpp:54
-#, fuzzy, kde-format
-msgid "Insert Data From Database"
-msgstr "Iš duomenų bazės"
-
-#: ui/dialogs/DatabaseDialog.cpp:62
-#, kde-format
-msgid "Type:"
-msgstr "Tipas:"
-
-#: ui/dialogs/DatabaseDialog.cpp:67
-#, kde-format
-msgid ""
-"User name:\n"
-"(if necessary)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:72
-#, kde-format
-msgid "Host:"
-msgstr "Mazgas:"
-
-#: ui/dialogs/DatabaseDialog.cpp:86
-#, kde-format
-msgid ""
-"Port:\n"
-"(if necessary)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:98
-#, kde-format
-msgid "Database name: "
-msgstr "Duomenų bazės pavadinimas: "
-
-#: ui/dialogs/DatabaseDialog.cpp:105
-#, kde-format
-msgid ""
-"Password:\n"
-"(if necessary)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:147
-#, fuzzy, kde-format
-msgid "Select tables:"
-msgstr "Pažymėti visus lakštus"
-
-#: ui/dialogs/DatabaseDialog.cpp:155
-#, kde-format
-msgid "Tables"
-msgstr "Lentelės"
-
-#: ui/dialogs/DatabaseDialog.cpp:164
-#, kde-format
-msgid "Select columns:"
-msgstr "Pažymėti stulpelius:"
-
-#: ui/dialogs/DatabaseDialog.cpp:169
-#, kde-format
-msgid "Table"
-msgstr "Lentelė"
-
-#: ui/dialogs/DatabaseDialog.cpp:179
-#, kde-format
-msgid "Columns"
-msgstr "Stulpeliai"
-
-#: ui/dialogs/DatabaseDialog.cpp:188
-#, kde-format
-msgid "Match all of the following (AND)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:193
-#, kde-format
-msgid "Match any of the following (OR)"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:200 ui/dialogs/DatabaseDialog.cpp:219
-#: ui/dialogs/DatabaseDialog.cpp:235
-#, kde-format
-msgid "equals"
-msgstr "sutampa"
-
-#: ui/dialogs/DatabaseDialog.cpp:201 ui/dialogs/DatabaseDialog.cpp:220
-#: ui/dialogs/DatabaseDialog.cpp:236
-#, kde-format
-msgid "not equal"
-msgstr "nelygu"
-
-#: ui/dialogs/DatabaseDialog.cpp:202 ui/dialogs/DatabaseDialog.cpp:221
-#: ui/dialogs/DatabaseDialog.cpp:237
-#, kde-format
-msgid "in"
-msgstr "col."
-
-#: ui/dialogs/DatabaseDialog.cpp:203 ui/dialogs/DatabaseDialog.cpp:222
-#: ui/dialogs/DatabaseDialog.cpp:238
-#, kde-format
-msgid "not in"
-msgstr "ne laikotarpiu"
-
-#: ui/dialogs/DatabaseDialog.cpp:204 ui/dialogs/DatabaseDialog.cpp:223
-#: ui/dialogs/DatabaseDialog.cpp:239
-#, kde-format
-msgid "like"
-msgstr "panašu"
-
-#: ui/dialogs/DatabaseDialog.cpp:205 ui/dialogs/DatabaseDialog.cpp:224
-#: ui/dialogs/DatabaseDialog.cpp:240
-#, kde-format
-msgid "greater"
-msgstr "daugiau nei"
-
-#: ui/dialogs/DatabaseDialog.cpp:206 ui/dialogs/DatabaseDialog.cpp:225
-#: ui/dialogs/DatabaseDialog.cpp:241
-#, kde-format
-msgid "lesser"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:207
-#, fuzzy, kde-format
-#| msgid "greater than"
-msgid "greater or equal"
-msgstr "didesnis už"
-
-#: ui/dialogs/DatabaseDialog.cpp:208
-#, fuzzy, kde-format
-#| msgid "not equal"
-msgid "less or equal"
-msgstr "nelygu"
-
-#: ui/dialogs/DatabaseDialog.cpp:248 ui/dialogs/DatabaseDialog.cpp:260
-#, fuzzy, kde-format
-#| msgid "Sort"
-msgid "Sorted by"
-msgstr "Rikiuoti"
-
-#: ui/dialogs/DatabaseDialog.cpp:255 ui/dialogs/DatabaseDialog.cpp:267
-#, kde-format
-msgid "Ascending"
-msgstr "Didėjančiai"
-
-#: ui/dialogs/DatabaseDialog.cpp:256 ui/dialogs/DatabaseDialog.cpp:268
-#, kde-format
-msgid "Descending"
-msgstr "Mažėjančiai"
-
-#: ui/dialogs/DatabaseDialog.cpp:277
-#, kde-format
-msgid "Distinct"
-msgstr "Atstumas"
-
-#: ui/dialogs/DatabaseDialog.cpp:282
-#, fuzzy, kde-format
-#| msgid "Fewer Options"
-msgid "Query Options"
-msgstr "Mažiau pasirinkčių"
-
-#: ui/dialogs/DatabaseDialog.cpp:291
-#, kde-format
-msgid "SQL query:"
-msgstr "SQL užklausa:"
-
-#: ui/dialogs/DatabaseDialog.cpp:303
-#, fuzzy, kde-format
-#| msgid "Insert function"
-msgid "Insert in region"
-msgstr "Įterpti funkciją"
-
-#: ui/dialogs/DatabaseDialog.cpp:313
-#, kde-format
-msgid "Starting in cell"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:321
-#, kde-format
-msgid "Result"
-msgstr "Rezultatas"
-
-#: ui/dialogs/DatabaseDialog.cpp:441 ui/dialogs/DatabaseDialog.cpp:461
-#, fuzzy, kde-format
-msgid "You cannot specify a table here."
-msgstr "Pašalinti sąrašą"
-
-#: ui/dialogs/DatabaseDialog.cpp:448
-#, kde-format
-msgid "You have to specify a valid region."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:468
-#, kde-format
-msgid "You have to specify a valid cell."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:499
-#, kde-format
-msgid "You are not allowed to change data in the database."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:505
-#, kde-format
-msgid "Executing query failed."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:511
-#, kde-format
-msgid "You did not get any results with this query."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:535
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Insert Data From Database"
-msgstr "Iš duomenų bazės"
-
-#: ui/dialogs/DatabaseDialog.cpp:592
-#, kde-format
-msgid "The port must be a number"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:598
-#, kde-format
-msgid "Connecting to database..."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:600
-#, kde-format
-msgid "Connected. Retrieving table information..."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:604
-#, kde-format
-msgid "This database contains no tables"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:639
-#, kde-format
-msgid "Driver could not be loaded"
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:650
-#, kde-format
-msgid "Retrieving meta data of tables..."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:663
-#, kde-format
-msgid "You have to select at least one table."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:699
-#, kde-format
-msgid "You have to select at least one column."
-msgstr ""
-
-#: ui/dialogs/DatabaseDialog.cpp:822 ui/dialogs/DatabaseDialog.cpp:834
-#: ui/dialogs/DatabaseDialog.cpp:846
-#, no-c-format, kde-format
-msgid ""
-"'*' or '?' are not valid wildcards in SQL. The proper replacements are '%' "
-"or '_'. Do you want to replace them?"
-msgstr ""
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
-#: ui/dialogs/DataFormatWidget.ui:41 ui/dialogs/FontWidget.ui:187
-#: ui/dialogs/LayoutPage_Border.cpp:359 ui/dialogs/LayoutPage_Float.cpp:103
-#: ui/dialogs/LayoutPage_Pattern.cpp:147
-#, kde-format
-msgid "Preview"
-msgstr "Peržiūra"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_4)
-#: ui/dialogs/DataFormatWidget.ui:95 ui/dialogs/LayoutPage_Float.cpp:70
-#, kde-format
-msgid "Money"
-msgstr "Pinigai"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_3)
-#: ui/dialogs/DataFormatWidget.ui:102 ui/dialogs/LayoutPage_Float.cpp:66
-#, kde-format
-msgid "Percent"
-msgstr "Procentas"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton)
-#: ui/dialogs/DataFormatWidget.ui:109 ui/dialogs/LayoutPage_Float.cpp:58
-#, kde-format
-msgid "Generic"
-msgstr "Bendra"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioButton_10)
-#: ui/dialogs/DataFormatWidget.ui:123 ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
-msgstr "Data ir laikas"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: ui/dialogs/DataFormatWidget.ui:159 ui/dialogs/LayoutPage_Float.cpp:176
-#, kde-format
-msgid "Currency:"
-msgstr "Valiuta:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: ui/dialogs/DataFormatWidget.ui:166 ui/dialogs/LayoutPage_Float.cpp:172
-#, kde-format
-msgid "Format:"
-msgstr "Formatas:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: ui/dialogs/DataFormatWidget.ui:173 ui/dialogs/LayoutPage_Float.cpp:147
-#, fuzzy, kde-format
-msgid "Postfix:"
-msgstr "Plėtinys"
-
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: ui/dialogs/DataFormatWidget.ui:210 ui/dialogs/LayoutPage_Float.cpp:155
-#, kde-format
-msgid "Precision:"
-msgstr "Tikslumas:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: ui/dialogs/DataFormatWidget.ui:217 ui/dialogs/LayoutPage_Float.cpp:151
-#, kde-format
-msgid "Prefix:"
-msgstr "Priešdėlis:"
-
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
 #, kde-format
@@ -14449,38 +14032,19 @@ msgid ""
 "it in the current cell."
 msgstr ""
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
+#: ui/dialogs/LayoutPage_Float.cpp:103 ui/dialogs/LayoutPage_Pattern.cpp:147
+#, kde-format
+msgid "Preview"
+msgstr "Peržiūra"
+
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, example_label)
 #: ui/dialogs/FontWidget.ui:199
 #, kde-format
 msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:84 ui/dialogs/FormulaDialog.cpp:190
-#: ui/dialogs/FormulaDialog.cpp:722 ui/FilterPopup.cpp:55
-#, kde-format
-msgid "All"
-msgstr "Visi"
-
-#: ui/dialogs/FormulaDialog.cpp:115
-#, kde-format
-msgid "Insert function"
-msgstr "Įterpti funkciją"
-
-#: ui/dialogs/FormulaDialog.cpp:130
-#, kde-format
-msgid "Help"
-msgstr "Pagalba"
-
-#: ui/dialogs/FormulaDialog.cpp:633
-#, kde-format
-msgid "This function has no parameters."
-msgstr ""
-
-#: ui/dialogs/FormulaDialog.cpp:659
-#, fuzzy, kde-format
-msgid "Description is not available."
-msgstr "Funkcija"
 
 #: ui/dialogs/LayoutDialog.cpp:114
 #, fuzzy, kde-format
@@ -14525,6 +14089,11 @@ msgstr "Šablonas"
 msgid "Customize"
 msgstr "Prisitaikyti"
 
+#: ui/dialogs/LayoutPage_Float.cpp:58
+#, kde-format
+msgid "Generic"
+msgstr "Bendra"
+
 #: ui/dialogs/LayoutPage_Float.cpp:59
 #, kde-format
 msgid ""
@@ -14542,6 +14111,11 @@ msgid ""
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
 
+#: ui/dialogs/LayoutPage_Float.cpp:66
+#, kde-format
+msgid "Percent"
+msgstr "Procentas"
+
 #: ui/dialogs/LayoutPage_Float.cpp:67
 #, kde-format
 msgid ""
@@ -14553,6 +14127,11 @@ msgid ""
 "back to 12.\n"
 "You can also use the Percent icon in the Format Toolbar."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:70
+#, kde-format
+msgid "Money"
+msgstr "Pinigai"
 
 #: ui/dialogs/LayoutPage_Float.cpp:71
 #, kde-format
@@ -14615,6 +14194,11 @@ msgid ""
 "sense as a time, Calligra Sheets will display 00:00 in the global format you "
 "have in System Settings."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:90
+#, kde-format
+msgid "Date and Time"
+msgstr "Data ir laikas"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -14694,6 +14278,31 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr ""
+
+#: ui/dialogs/LayoutPage_Float.cpp:147
+#, fuzzy, kde-format
+msgid "Postfix:"
+msgstr "Plėtinys"
+
+#: ui/dialogs/LayoutPage_Float.cpp:151
+#, kde-format
+msgid "Prefix:"
+msgstr "Priešdėlis:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:155
+#, kde-format
+msgid "Precision:"
+msgstr "Tikslumas:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:172
+#, kde-format
+msgid "Format:"
+msgstr "Formatas:"
+
+#: ui/dialogs/LayoutPage_Float.cpp:176
+#, kde-format
+msgid "Currency:"
+msgstr "Valiuta:"
 
 #: ui/dialogs/LayoutPage_Float.cpp:283
 #, kde-format
@@ -15059,6 +14668,11 @@ msgstr "Atšaukti"
 msgid "Discard changes"
 msgstr "Atmesti pakeitimus"
 
+#: ui/FilterPopup.cpp:55
+#, kde-format
+msgid "All"
+msgstr "Visi"
+
 #: ui/FilterPopup.cpp:58
 #, fuzzy, kde-format
 msgid "Empty"
@@ -15102,6 +14716,166 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Open Link?"
 msgstr "Atverti nuorodą"
+
+#, fuzzy
+#~ msgid "&Function..."
+#~ msgstr "Funkcija"
+
+#, fuzzy
+#~ msgid "Insert math expression"
+#~ msgstr "Įprastoji išraiška"
+
+#, fuzzy
+#~ msgid "From &Database..."
+#~ msgstr "Iš duomenų bazės"
+
+#, fuzzy
+#~ msgid "Insert data from a SQL database"
+#~ msgstr "Iš duomenų bazės"
+
+#, fuzzy
+#~ msgid "Formula Selection"
+#~ msgstr "Pasirinkti šriftą..."
+
+#, fuzzy
+#~ msgid "Insert a function"
+#~ msgstr "Įterpti lakštą"
+
+#, fuzzy
+#~ msgid "Others..."
+#~ msgstr "Kiti"
+
+#, fuzzy
+#~ msgid "Modify Cell"
+#~ msgstr "Keisti langelį"
+
+#, fuzzy
+#~ msgid "Edit the highlighted cell"
+#~ msgstr "Pašalinti sąrašą"
+
+#, fuzzy
+#~ msgid "Show QTableView..."
+#~ msgstr "Rodyti lakštą"
+
+#, fuzzy
+#~| msgid "Protection"
+#~ msgid "Permute reference fixation"
+#~ msgstr "Apsauga"
+
+#, fuzzy
+#~| msgid "Protection"
+#~ msgid "Permute fixation"
+#~ msgstr "Apsauga"
+
+#, fuzzy
+#~ msgid "Permute the fixation of the reference at the text cursor"
+#~ msgstr "Pašalinti sąrašą"
+
+#, fuzzy
+#~ msgid "Insert Data From Database"
+#~ msgstr "Iš duomenų bazės"
+
+#~ msgid "Type:"
+#~ msgstr "Tipas:"
+
+#~ msgid "Host:"
+#~ msgstr "Mazgas:"
+
+#~ msgid "Database name: "
+#~ msgstr "Duomenų bazės pavadinimas: "
+
+#, fuzzy
+#~ msgid "Select tables:"
+#~ msgstr "Pažymėti visus lakštus"
+
+#~ msgid "Tables"
+#~ msgstr "Lentelės"
+
+#~ msgid "Select columns:"
+#~ msgstr "Pažymėti stulpelius:"
+
+#~ msgid "Table"
+#~ msgstr "Lentelė"
+
+#~ msgid "Columns"
+#~ msgstr "Stulpeliai"
+
+#~ msgid "equals"
+#~ msgstr "sutampa"
+
+#~ msgid "not equal"
+#~ msgstr "nelygu"
+
+#~ msgid "in"
+#~ msgstr "col."
+
+#~ msgid "not in"
+#~ msgstr "ne laikotarpiu"
+
+#~ msgid "like"
+#~ msgstr "panašu"
+
+#~ msgid "greater"
+#~ msgstr "daugiau nei"
+
+#, fuzzy
+#~| msgid "greater than"
+#~ msgid "greater or equal"
+#~ msgstr "didesnis už"
+
+#, fuzzy
+#~| msgid "not equal"
+#~ msgid "less or equal"
+#~ msgstr "nelygu"
+
+#, fuzzy
+#~| msgid "Sort"
+#~ msgid "Sorted by"
+#~ msgstr "Rikiuoti"
+
+#~ msgid "Ascending"
+#~ msgstr "Didėjančiai"
+
+#~ msgid "Descending"
+#~ msgstr "Mažėjančiai"
+
+#~ msgid "Distinct"
+#~ msgstr "Atstumas"
+
+#, fuzzy
+#~| msgid "Fewer Options"
+#~ msgid "Query Options"
+#~ msgstr "Mažiau pasirinkčių"
+
+#~ msgid "SQL query:"
+#~ msgstr "SQL užklausa:"
+
+#, fuzzy
+#~| msgid "Insert function"
+#~ msgid "Insert in region"
+#~ msgstr "Įterpti funkciją"
+
+#~ msgid "Result"
+#~ msgstr "Rezultatas"
+
+#, fuzzy
+#~ msgid "You cannot specify a table here."
+#~ msgstr "Pašalinti sąrašą"
+
+#, fuzzy
+#~ msgctxt "(qtundo-format)"
+#~ msgid "Insert Data From Database"
+#~ msgstr "Iš duomenų bazės"
+
+#~ msgid "Insert function"
+#~ msgstr "Įterpti funkciją"
+
+#~ msgid "Help"
+#~ msgstr "Pagalba"
+
+#, fuzzy
+#~ msgid "Description is not available."
+#~ msgstr "Funkcija"
 
 #, fuzzy
 #~ msgid "Document Settings..."
