@@ -57,7 +57,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
         qWarning(lcCsvImport) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
-    if ((from != "text/csv" && from != "text/plain") || to != "application/vnd.oasis.opendocument.spreadsheet") {
+    if ((from != "text/csv" && from != "text/tab-separated-values" && from != "text/plain") || to != "application/vnd.oasis.opendocument.spreadsheet") {
         qWarning(lcCsvImport) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }

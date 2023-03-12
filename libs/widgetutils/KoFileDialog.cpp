@@ -450,6 +450,9 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
         }
     }
 
+    // All files
+    ret << i18n("All files") + " ( * )";
+
     if (withAllSupportedEntry) {
         ret[0] = i18n("All supported formats") + " ( " + ret[0] + (")");
     }
