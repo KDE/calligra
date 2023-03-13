@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2022-03-14 15:24+0300\n"
 "Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -5747,6 +5747,12 @@ msgid "Zoom to All"
 msgstr "Вместить весь сигнал в окно"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "All Presets"
+msgid "All files"
+msgstr "Все профили"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr "Все поддерживаемые форматы"
@@ -10389,9 +10395,6 @@ msgstr "%1"
 #, fuzzy
 #~ msgid "Invalid identifier"
 #~ msgstr "Идентификатор"
-
-#~ msgid "All Presets"
-#~ msgstr "Все профили"
 
 #~ msgid "Tag:"
 #~ msgstr "Метка:"

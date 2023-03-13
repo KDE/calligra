@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2023-01-04 11:52+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -5464,6 +5464,12 @@ msgid "Zoom to All"
 msgstr "Εστίαση όλων"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "All Presets"
+msgid "All files"
+msgstr "Όλα τα προκαθορισμένα"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr "Όλοι οι υποστηριζόμενοι τύποι"
@@ -11993,9 +11999,6 @@ msgstr "%1"
 #~| msgid "Allanon"
 #~ msgid "All"
 #~ msgstr "Allanon"
-
-#~ msgid "All Presets"
-#~ msgstr "Όλα τα προκαθορισμένα"
 
 #, fuzzy
 #~| msgid "Collection"

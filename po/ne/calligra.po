@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2007-08-08 15:46+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -5980,6 +5980,11 @@ msgid "Zoom to All"
 msgstr "जुम उपकरण"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, kde-format
+msgid "All files"
+msgstr ""
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr ""

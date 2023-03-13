@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1643586 2023-01-31 01:46:47Z scripty $
+# $Id: calligra.po 1646898 2023-03-13 01:32:15Z scripty $
 # $Source$
 #
 #
@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2022-12-22 07:33+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -5474,6 +5474,11 @@ msgid "Zoom to All"
 msgstr "Povečaj vse"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, kde-format
+msgid "All files"
+msgstr ""
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr "Vsi podprti formati"

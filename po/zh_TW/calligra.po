@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2015-09-21 15:03+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -5419,6 +5419,11 @@ msgid "Zoom to All"
 msgstr "縮放到全部"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, kde-format
+msgid "All files"
+msgstr ""
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr ""

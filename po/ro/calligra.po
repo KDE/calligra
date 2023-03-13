@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2022-03-14 12:28+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -5719,6 +5719,12 @@ msgid "Zoom to All"
 msgstr "Apropie tot"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "Key Press"
+msgid "All files"
+msgstr "Apăsare buton"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr ""
@@ -11538,11 +11544,6 @@ msgstr "%1%"
 #~| msgid "Allanon"
 #~ msgid "All"
 #~ msgstr "Allanon"
-
-#, fuzzy
-#~| msgid "Key Press"
-#~ msgid "All Presets"
-#~ msgstr "Apăsare buton"
 
 #, fuzzy
 #~ msgid "Section"

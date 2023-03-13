@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2013-10-24 03:22+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -5563,6 +5563,12 @@ msgid "Zoom to All"
 msgstr "Барлығын ұғайту"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "All Presets"
+msgid "All files"
+msgstr "Бүкіл дайындары"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr "Бүкіл танитын пішімдер"
@@ -12076,9 +12082,6 @@ msgstr "%1"
 #~| msgid "Allanon"
 #~ msgid "All"
 #~ msgstr "Алланон"
-
-#~ msgid "All Presets"
-#~ msgstr "Бүкіл дайындары"
 
 #, fuzzy
 #~| msgid "Collection"

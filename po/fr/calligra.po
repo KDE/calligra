@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2022-12-22 18:48+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -5467,6 +5467,12 @@ msgid "Zoom to All"
 msgstr "Zoomer tout"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "All Presets"
+msgid "All files"
+msgstr "Tous les préréglages"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr "Tous les formats pris en charge"
@@ -12100,9 +12106,6 @@ msgstr "%1"
 #~| msgid "Allanon"
 #~ msgid "All"
 #~ msgstr "Allanon"
-
-#~ msgid "All Presets"
-#~ msgstr "Tous les préréglages"
 
 #, fuzzy
 #~| msgid "Collection"

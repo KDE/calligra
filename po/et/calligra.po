@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2020-01-17 19:00+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -5452,6 +5452,12 @@ msgid "Zoom to All"
 msgstr "Suurenda kõike"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "All Presets"
+msgid "All files"
+msgstr "Kõik valmiskogumid"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr "Kõik toetatud vormingud"
@@ -11942,9 +11948,6 @@ msgstr "%1"
 #~| msgid "Allanon"
 #~ msgid "All"
 #~ msgstr "Allanon"
-
-#~ msgid "All Presets"
-#~ msgstr "Kõik valmiskogumid"
 
 #, fuzzy
 #~| msgid "Collection"

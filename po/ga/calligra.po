@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/koffice.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -5558,6 +5558,12 @@ msgid "Zoom to All"
 msgstr "Uirlis Súmála"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "Key Press"
+msgid "All files"
+msgstr "Eochairbhrú"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr ""
@@ -9966,11 +9972,6 @@ msgstr "%1%"
 
 #~ msgid "Invalid integer number"
 #~ msgstr "Slánuimhir neamhbhailí"
-
-#, fuzzy
-#~| msgid "Key Press"
-#~ msgid "All Presets"
-#~ msgstr "Eochairbhrú"
 
 #, fuzzy
 #~| msgid "Actions"

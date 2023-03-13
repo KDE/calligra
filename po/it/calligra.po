@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-31 00:58+0000\n"
+"POT-Creation-Date: 2023-03-13 00:49+0000\n"
 "PO-Revision-Date: 2022-12-21 22:59+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -5454,6 +5454,12 @@ msgid "Zoom to All"
 msgstr "Ingrandisci a tutto"
 
 #: widgetutils/KoFileDialog.cpp:454
+#, fuzzy, kde-format
+#| msgid "All Presets"
+msgid "All files"
+msgstr "Tutte le preimpostazioni"
+
+#: widgetutils/KoFileDialog.cpp:457
 #, kde-format
 msgid "All supported formats"
 msgstr "Tutti i formati supportati"
@@ -10264,9 +10270,6 @@ msgstr "%1"
 
 #~ msgid "All"
 #~ msgstr "Tutti"
-
-#~ msgid "All Presets"
-#~ msgstr "Tutte le preimpostazioni"
 
 #~ msgid "Tag:"
 #~ msgstr "Etichetta:"
