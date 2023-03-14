@@ -89,11 +89,11 @@
 >Fórmules</title>
 <sect2 id="builtin">
 <title
->Funcions incloses</title>
+>Funcions integrades</title>
 <para
 >&sheets; té un enorme abast de <link linkend="functions"
 >funcions</link
-> matemàtiques internes i altres que es poden usar en una cel·la de fórmula. Es poden veure i accedir seleccionant una cel·la i després escollint <guimenuitem
+> matemàtiques integrades i altres que es poden usar en una cel·la de fórmula. Es poden veure i accedir seleccionant una cel·la i després escollint <guimenuitem
 >Funció...</guimenuitem
 > des del menú <guimenu
 >Insereix</guimenu

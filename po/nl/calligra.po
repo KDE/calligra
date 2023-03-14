@@ -19,20 +19,20 @@
 # Natalie Koning <nat@switch.demon.nl>, 2006.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2008, 2009, 2010, 2011, 2012.
 # Hannie Dumoleyn <hannie@kde.nl>, 2010.
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016, 2017, 2019, 2021, 2022.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016, 2017, 2019, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-13 00:49+0000\n"
-"PO-Revision-Date: 2022-12-21 16:35+0100\n"
+"PO-Revision-Date: 2023-03-13 10:59+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -40,7 +40,7 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 "Niels Reedijk,Rinse de Vries,Karel van der Zande,Maarten Rütten,Sander "
-"Koning, Bram Schoenmakers,Natalie Koning,Freek de Kruijf - t/m 2022"
+"Koning, Bram Schoenmakers,Natalie Koning,Freek de Kruijf - t/m 2023"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -5468,10 +5468,9 @@ msgid "Zoom to All"
 msgstr "Inzoomen tot alles"
 
 #: widgetutils/KoFileDialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "All Presets"
+#, kde-format
 msgid "All files"
-msgstr "Alle voorinstellingen"
+msgstr "Alle bestanden"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format
