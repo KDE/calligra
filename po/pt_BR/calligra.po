@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-13 00:49+0000\n"
-"PO-Revision-Date: 2023-01-16 22:59-0300\n"
+"PO-Revision-Date: 2023-03-15 16:12-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -5462,7 +5462,7 @@ msgstr "Ampliar para tudo"
 #: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All files"
-msgstr ""
+msgstr "Todos os arquivos"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format
