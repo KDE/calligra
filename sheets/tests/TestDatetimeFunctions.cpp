@@ -28,7 +28,7 @@ void TestDatetimeFunctions::initTestCase()
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     setlocale(LC_ALL, "C.UTF-8");
-    m_map->calculationSettings()->locale()->setLanguage("C.UTF-8");
+    const_cast<Localization*>(m_map->calculationSettings()->locale())->setLanguage("C.UTF-8");
 }
 
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
@@ -471,7 +471,7 @@ void TestDatetimeFunctions::testHOUR()
     QFETCH(Value, expected);
     QFETCH(QString, fail);
 
-    m_map->converter()->settings()->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_map->converter()->settings()->locale())->setLanguage(locale); // FIXME
 
     if (fail.isEmpty()) {
         CHECK_EVAL(value, expected);
@@ -583,7 +583,7 @@ void TestDatetimeFunctions::testTIMEVALUE()
 {
     // Hacky way to test for 12h clock
     Localization locale;
-    bool twelveHourClock = locale.timeFormat(true).contains("%I");
+    bool twelveHourClock = locale.timeFormat(Format::LongTime).contains("%I");
 
     CHECK_EVAL("TIMEVALUE(\"06:05\")   =TIME(6;5;0)", Value(true));
 

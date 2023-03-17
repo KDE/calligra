@@ -25,7 +25,7 @@ void TestNumberStyle::initTestCase()
 
 void TestNumberStyle::testEmpty()
 {
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     QCOMPARE(f.formatStr, QString());
     QCOMPARE(f.prefix, QString());
     QCOMPARE(f.suffix, QString());
@@ -38,7 +38,7 @@ void TestNumberStyle::testEmpty()
 
 void TestNumberStyle::testText()
 {
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     f.type = KoOdfNumberStyles::Text;
     QCOMPARE(KoOdfNumberStyles::format("Some text", f), QString("Some text"));
 }
@@ -48,7 +48,7 @@ void TestNumberStyle::testNumber()
     QCOMPARE(KoOdfNumberStyles::formatNumber(23, "0."), QString("23"));
     QCOMPARE(KoOdfNumberStyles::formatNumber(0, "0."), QString("0"));
 
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     f.type = KoOdfNumberStyles::Number;
     f.precision = 3;
     f.thousandsSep = true;
@@ -71,7 +71,7 @@ void TestNumberStyle::testTime()
     QCOMPARE(KoOdfNumberStyles::formatTime(0.524259259259, "hh:mm"), QString("12:34"));
     QCOMPARE(KoOdfNumberStyles::formatTime(0, "hh:mm:ss"), QString("00:00:00"));
 
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     f.type = KoOdfNumberStyles::Time;
     f.formatStr = "hh:mm:ss";
     QCOMPARE(KoOdfNumberStyles::format("0.524259259259", f), QString("12:34:56"));
@@ -86,7 +86,7 @@ void TestNumberStyle::testBoolean()
     QCOMPARE(KoOdfNumberStyles::formatBoolean("234", ""), QString("TRUE"));
     QCOMPARE(KoOdfNumberStyles::formatBoolean("0", ""), QString("FALSE"));
 
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     f.type = KoOdfNumberStyles::Boolean;
     QCOMPARE(KoOdfNumberStyles::format("0", f), QString("FALSE"));
     QCOMPARE(KoOdfNumberStyles::format("1", f), QString("TRUE"));
@@ -101,7 +101,7 @@ void TestNumberStyle::testPercent()
     QCOMPARE(KoOdfNumberStyles::formatPercent("23.456789", "0.0000%", 4), QString("2345.6789%"));
     QCOMPARE(KoOdfNumberStyles::formatPercent("0", ""), QString("0"));
 
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     f.type = KoOdfNumberStyles::Percentage;
     f.precision = 2;
     f.formatStr = "0%";
@@ -117,7 +117,7 @@ void TestNumberStyle::testScientific()
 {
     QCOMPARE(escapeLocals(KoOdfNumberStyles::formatScientific(345678, "0.00E+000")), QString("3.456780E+05"));
 
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     f.type = KoOdfNumberStyles::Scientific;
     f.precision = 3;
     QCOMPARE(escapeLocals(KoOdfNumberStyles::format("0.2", f)), QString("2.000E-01"));
@@ -141,7 +141,7 @@ void TestNumberStyle::testCurrency()
     QCOMPARE(KoOdfNumberStyles::formatCurrency(34.56789, "-#,###0.00 EUR", QString(), 2), QString("34.57 EUR"));
     QCOMPARE(KoOdfNumberStyles::formatCurrency(34.5, "-#,###0.00 EUR", QString(), 2), QString("34.50 EUR"));
 
-    KoOdfNumberStyles::NumericStyleFormat f;
+    KoOdfNumberStyles::NumericStyleData f;
     f.type = KoOdfNumberStyles::Currency;
     f.currencySymbol = "";
     f.precision = 2;

@@ -68,7 +68,7 @@ protected:
     /**
      * Updates the GUI widgets to match the specified locale.
      */
-    void updateToMatchLocale(Localization* locale);
+    void updateToMatchLocale(const Localization *locale);
 
     QLabel *m_shortDate, *m_time, *m_money, *m_date, *m_language, *m_number;
     QPushButton *m_updateButton;

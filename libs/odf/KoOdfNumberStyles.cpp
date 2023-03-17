@@ -36,7 +36,7 @@ namespace KoOdfNumberStyles
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
 
-QString format(const QString &value, const NumericStyleFormat &format)
+QString format(const QString &value, const NumericStyleData &format)
 {
     switch (format.type) {
         case Number: {
@@ -335,9 +335,9 @@ QString formatPercent(const QString &value, const QString &/*format*/, int preci
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
 // OpenCalcImport::loadFormat has similar code, but slower, intermixed with other stuff,
 // lacking long-textual forms.
-QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent)
+QPair<QString, NumericStyleData> loadOdfNumericStyle(const KoXmlElement &parent)
 {
-    NumericStyleFormat dataStyle;
+    NumericStyleData dataStyle;
 
     const QString localName = parent.localName();
     if (localName == "number-style")
@@ -354,6 +354,16 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
         dataStyle.type = Date;
     else if (localName == "time-style")
         dataStyle.type = Time;
+
+    if (parent.hasAttributeNS(KoXmlNS::number, "language")) {
+        dataStyle.language = parent.attribute("language");
+    }
+    if (parent.hasAttributeNS(KoXmlNS::number, "country")) {
+        dataStyle.country = parent.attribute("country");
+    }
+    if (parent.hasAttributeNS(KoXmlNS::number, "script")) {
+        dataStyle.script = parent.attribute("script");
+    }
 
     QString format;
     int precision = -1;
@@ -602,41 +612,41 @@ debugOdf<<"99 ******************************************************************
     dataStyle.precision = precision;
     dataStyle.thousandsSep = thousandsSep;
     debugOdf << " finish insert format :" << format << " prefix :" << prefix << " suffix :" << suffix;
-    return QPair<QString, NumericStyleFormat>(styleName, dataStyle);
+    return QPair<QString, NumericStyleData>(styleName, dataStyle);
 }
 
-QString saveOdfNumberStyle(KoGenStyles &mainStyles, const NumericStyleFormat &format)
+QString saveOdfNumericStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
     QString styleName;
-    switch (format.type) {
+    switch (data.type) {
         case KoOdfNumberStyles::Number: {
-            styleName = KoOdfNumberStyles::saveOdfNumberStyle(mainStyles, format.formatStr, format.prefix, format.suffix, format.thousandsSep);
+            styleName = KoOdfNumberStyles::saveOdfNumberStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Boolean: {
-            styleName = KoOdfNumberStyles::saveOdfBooleanStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+            styleName = KoOdfNumberStyles::saveOdfBooleanStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Date: {
-            bool localeFormat = format.formatStr.isEmpty();
-            styleName = KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format.formatStr, localeFormat, format.prefix, format.suffix);
+            const_cast<NumericStyleData&>(data).localeFormat = data.formatStr.isEmpty(); // FIXME why neccessary?
+            styleName = KoOdfNumberStyles::saveOdfDateStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Time: {
-            bool localeFormat = format.formatStr.isEmpty();
-            styleName = KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format.formatStr, localeFormat, format.prefix, format.suffix);
+            const_cast<NumericStyleData&>(data).localeFormat = data.formatStr.isEmpty();
+            styleName = KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Percentage: {
-            styleName = KoOdfNumberStyles::saveOdfPercentageStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+            styleName = KoOdfNumberStyles::saveOdfPercentageStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Currency: {
-            styleName = KoOdfNumberStyles::saveOdfCurrencyStyle(mainStyles, format.formatStr, format.currencySymbol, format.prefix, format.suffix);
+            styleName = KoOdfNumberStyles::saveOdfCurrencyStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Scientific: {
-            styleName = KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+            styleName = KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Fraction: {
-            styleName = KoOdfNumberStyles::saveOdfFractionStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+            styleName = KoOdfNumberStyles::saveOdfFractionStyle(mainStyles, data);
         } break;
         case KoOdfNumberStyles::Text: {
-            styleName = KoOdfNumberStyles::saveOdfTextStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+            styleName = KoOdfNumberStyles::saveOdfTextStyle(mainStyles, data);
         } break;
     }
     return styleName;
@@ -764,19 +774,28 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
     return changed;
 }
 
-QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool localeFormat,
-        const QString &_prefix, const QString &_suffix)
+QString saveOdfTimeStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
-    Q_UNUSED(_prefix);
-    Q_UNUSED(_suffix);
     //debugOdf << "QString KoOdfNumberStyles::saveOdfTimeStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
+    QString format(data.formatStr);
     KoGenStyle currentStyle(KoGenStyle::NumericTimeStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     QString text;
-    if (localeFormat) {
+
+    // Note: rng2cpp does not handle locale properties
+    if (!data.language.isEmpty()) {
+        currentStyle.addAttribute("number:language", data.language);
+    }
+    if (!data.country.isEmpty()) {
+        currentStyle.addAttribute("number:country", data.country);
+    }
+    if (!data.script.isEmpty()) {
+        currentStyle.addAttribute("number:script", data.script);
+    }
+
+    if (data.localeFormat) {
         parseOdfTimelocale(elementWriter, format, text);
     } else {
         bool antislash = false;
@@ -875,22 +894,32 @@ void parseOdfDatelocale(KoXmlWriter &elementWriter, QString &format, QString &te
     addTextNumber(text, elementWriter);
 }
 
-QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool localeFormat,
-        const QString &_prefix, const QString &_suffix)
+QString saveOdfDateStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
-    Q_UNUSED(_prefix);
-    Q_UNUSED(_suffix);
     //debugOdf << _format;
-    QString format(_format);
+    QString format(data.formatStr);
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
 
     KoGenStyle currentStyle(KoGenStyle::NumericDateStyle);
+
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     QString text;
-    if (localeFormat) {
+
+    // Note: rng2cpp does not handle locale properties
+    if (!data.language.isEmpty()) {
+        currentStyle.addAttribute("number:language", data.language);
+    }
+    if (!data.country.isEmpty()) {
+        currentStyle.addAttribute("number:country", data.country);
+    }
+    if (!data.script.isEmpty()) {
+        currentStyle.addAttribute("number:script", data.script);
+    }
+
+    if (data.localeFormat) {
         parseOdfDatelocale(elementWriter, format, text);
     } else {
         bool antislash = false;
@@ -1004,11 +1033,10 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool l
 }
 
 
-QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
-        const QString &_prefix, const QString &_suffix)
+QString saveOdfFractionStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
     //debugOdf << "QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
+    QString format(data.formatStr);
 
     KoGenStyle currentStyle(KoGenStyle::NumericFractionStyle);
     QBuffer buffer;
@@ -1041,7 +1069,7 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
         format.remove(0, 1);
     } while (format.length() > 0);
 
-    text = _prefix;
+    text = data.prefix;
     addTextNumber(text, elementWriter);
 
     number_fraction fraction(&elementWriter);
@@ -1053,9 +1081,9 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
     }
     fraction.end();
 
-    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, data.suffix, data.prefix);
 
-    text = _suffix;
+    text = data.suffix;
     addTextNumber(text, elementWriter);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
@@ -1064,17 +1092,28 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
 }
 
 
-QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
-        const QString &_prefix, const QString &_suffix, bool thousandsSep)
+QString saveOdfNumberStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
     //debugOdf << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
+    QString format(data.formatStr);
 
     KoGenStyle currentStyle(KoGenStyle::NumericNumberStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     QString text;
+
+    // Note: rng2cpp does not handle locale properties
+    if (!data.language.isEmpty()) {
+        currentStyle.addAttribute("number:language", data.language);
+    }
+    if (!data.country.isEmpty()) {
+        currentStyle.addAttribute("number:country", data.country);
+    }
+    if (!data.script.isEmpty()) {
+        currentStyle.addAttribute("number:script", data.script);
+    }
+
     int decimalplaces = 0;
     int integerdigits = 0;
     bool beforeSeparator = true;
@@ -1089,7 +1128,7 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
             debugOdf << " error format 0";
         format.remove(0, 1);
     } while (format.length() > 0);
-    text = _prefix ;
+    text = data.prefix ;
     addTextNumber(text, elementWriter);
     number_number number(&elementWriter);
     //debugOdf << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
@@ -1097,33 +1136,31 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
         number.set_number_decimal_places(decimalplaces);
     }
     number.set_number_min_integer_digits(integerdigits);
-    if (thousandsSep) {
+    if (data.thousandsSep) {
         number.set_number_grouping(true);
     }
     number.end();
 
-    text = _suffix ;
+    text = data.suffix ;
     addTextNumber(text, elementWriter);
-    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, data.suffix, data.prefix);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
     return mainStyles.insert(currentStyle, "N");
 }
 
-QString saveOdfBooleanStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix, const QString &suffix)
+QString saveOdfBooleanStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
-    Q_UNUSED(format);
-
     KoGenStyle currentStyle(KoGenStyle::NumericBooleanStyle);
 
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
-    QString text = prefix;
+    QString text = data.prefix;
     addTextNumber(text, elementWriter);
     number_boolean(&elementWriter).end();
-    text = suffix;
+    text = data.suffix;
     addTextNumber(text, elementWriter);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
@@ -1131,8 +1168,7 @@ QString saveOdfBooleanStyle(KoGenStyles &mainStyles, const QString &format, cons
     return mainStyles.insert(currentStyle, "N");
 }
 
-QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
-        const QString &_prefix, const QString &_suffix)
+QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
     //<number:percentage-style style:name="N11">
     //<number:number number:decimal-places="2" number:min-integer-digits="1"/>
@@ -1140,7 +1176,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
     //</number:percentage-style>
 
     //debugOdf << "QString saveOdfPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
+    QString format(data.formatStr);
 
     KoGenStyle currentStyle(KoGenStyle::NumericPercentageStyle);
     QBuffer buffer;
@@ -1161,7 +1197,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
             debugOdf << " error format 0";
         format.remove(0, 1);
     } while (format.length() > 0);
-    text = _prefix ;
+    text = data.prefix ;
     addTextNumber(text, elementWriter);
     number_number number(&elementWriter);
     if (!beforeSeparator) {
@@ -1173,9 +1209,9 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
     QString percent(QChar('%'));
     addTextNumber(percent, elementWriter);
 
-    text = _suffix ;
+    text = data.suffix ;
     addTextNumber(text, elementWriter);
-    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, data.suffix, data.prefix);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -1183,8 +1219,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
 
 }
 
-QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
-        const QString &_prefix, const QString &_suffix, bool thousandsSep)
+QString saveOdfScientificStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
     //<number:number-style style:name="N60">
     //<number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -1192,7 +1227,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
 
     //example 000,000e+0000
     //debugOdf << "QString saveOdfScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
+    QString format(data.formatStr);
 
     KoGenStyle currentStyle(KoGenStyle::NumericScientificStyle);
     QBuffer buffer;
@@ -1233,7 +1268,7 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
         }
         format.remove(0, 1);
     } while (format.length() > 0);
-    text =  _prefix ;
+    text = data.prefix ;
     addTextNumber(text, elementWriter);
 
     number_scientific_number number(&elementWriter);
@@ -1243,23 +1278,21 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
     }
     number.set_number_min_integer_digits(integerdigits);
     number.set_number_min_exponent_digits(exponentdigits);
-    if (thousandsSep) {
+    if (data.thousandsSep) {
         number.set_number_grouping(true);
     }
     number.end();
 
-    text = _suffix;
+    text = data.suffix;
     addTextNumber(text, elementWriter);
-    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, data.suffix, data.prefix);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
     return mainStyles.insert(currentStyle, "N");
 }
 
-QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
-        const QString &_format, const QString &symbol,
-        const QString &_prefix, const QString &_suffix)
+QString saveOdfCurrencyStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
 
     //<number:currency-style style:name="N107P0" style:volatile="true">
@@ -1269,7 +1302,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     //</number:currency-style>
 
     //debugOdf << "QString saveOdfCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
+    QString format(data.formatStr);
 
     KoGenStyle currentStyle(KoGenStyle::NumericCurrencyStyle);
     QBuffer buffer;
@@ -1291,7 +1324,7 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
         format.remove(0, 1);
     } while (format.length() > 0);
 
-    text =  _prefix ;
+    text = data.prefix ;
     addTextNumber(text, elementWriter);
 
     number_number number(&elementWriter);
@@ -1302,13 +1335,22 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     number.set_number_min_integer_digits(integerdigits);
     number.end();
 
-    text =  _suffix ;
+    text = data.suffix ;
     addTextNumber(text, elementWriter);
-    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, data.suffix, data.prefix);
 
     number_currency_symbol sym(&elementWriter);
     //debugOdf << " currency-symbol:" << symbol;
-    sym.addTextNode(symbol.toUtf8());
+    if (!data.language.isEmpty()) {
+        sym.set_number_language(data.language);
+    }
+    if (!data.country.isEmpty()) {
+        sym.set_number_country(data.country);
+    }
+    if (!data.script.isEmpty()) {
+        sym.set_number_script(data.script);
+    }
+    sym.addTextNode(data.currencySymbol.toUtf8());
     sym.end();
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
@@ -1316,10 +1358,8 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     return mainStyles.insert(currentStyle, "N");
 }
 
-QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const QString &_prefix, const QString &_suffix)
+QString saveOdfTextStyle(KoGenStyles &mainStyles, const NumericStyleData &data)
 {
-    Q_UNUSED(_format);
-
     //<number:text-style style:name="N100">
     //<number:text-content/>
     ///</number:text-style>
@@ -1330,14 +1370,14 @@ QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const 
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
-    QString text =  _prefix ;
+    QString text = data.prefix ;
     addTextNumber(text, elementWriter);
 
     number_text_content(&elementWriter).end();
 
-    text =  _suffix ;
+    text = data.suffix ;
     addTextNumber(text, elementWriter);
-    addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
+    addCalligraNumericStyleExtension(elementWriter, data.suffix, data.prefix);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -1359,4 +1399,31 @@ void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString 
         elementWriter.endElement();
     }
 }
+}
+
+QDebug operator<<(QDebug dbg, const KoOdfNumberStyles::NumericStyleData &data)
+{
+    dbg.noquote().nospace()<<"KoOdfNumberStyles::NumericStyleData(";
+    switch(data.type) {
+        case KoOdfNumberStyles::Format::Number: dbg<<"Number"; break;
+        case KoOdfNumberStyles::Format::Scientific: dbg<<"Scientific"; break;
+        case KoOdfNumberStyles::Format::Fraction: dbg<<"Fraction"; break;
+        case KoOdfNumberStyles::Format::Currency: dbg<<"Currency"; break;
+        case KoOdfNumberStyles::Format::Percentage: dbg<<"Percentage"; break;
+        case KoOdfNumberStyles::Format::Date: dbg<<"Date"; break;
+        case KoOdfNumberStyles::Format::Time: dbg<<"Time"; break;
+        case KoOdfNumberStyles::Format::Boolean: dbg<<"Boolean"; break;
+        case KoOdfNumberStyles::Format::Text: dbg<<"Text"; break;
+        default: dbg<<"Unknown"; break;
+    }
+    if (!data.formatStr.isEmpty()) dbg<<" format:"<<data.formatStr;
+    if (!data.currencySymbol.isEmpty()) dbg<<" symbol:"<<data.currencySymbol;
+    if (!data.prefix.isEmpty()) dbg<<" prefix:"<<data.prefix;
+    if (!data.suffix.isEmpty()) dbg<<" prefix:"<<data.suffix;
+    QString s = data.language;
+    if (!data.script.isEmpty()) s.append('-').append(data.script);
+    if (!data.country.isEmpty()) s.append('-').append(data.country);
+    if (!s.isEmpty()) dbg<<" Locale:"<<s;
+    dbg<<')';
+    return dbg.quote().space();
 }

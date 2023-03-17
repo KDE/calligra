@@ -139,7 +139,7 @@ public:
     KChart::CartesianCoordinatePlane *kdPlane;
     KChart::PolarCoordinatePlane     *kdPolarPlane;
     KChart::RadarCoordinatePlane     *kdRadarPlane;
-    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
+    KoOdfNumberStyles::NumericStyleData *numericStyleFormat;
 
     QList<QPointer<KChart::AbstractCartesianDiagram> > diagrams;
 
@@ -197,7 +197,7 @@ public:
     CartesianAxis(KoChart::Axis *_axis) : KChart::CartesianAxis(), axis(_axis) {}
     virtual ~CartesianAxis() {}
     const QString customizedLabel(const QString& label) const override {
-        if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())
+        if (KoOdfNumberStyles::NumericStyleData *n = axis->numericStyleFormat())
             return KoOdfNumberStyles::format(label, *n);
         return label;
     }
@@ -1282,7 +1282,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             const QString dataStyleName = stylElement->attributeNS(KoXmlNS::style, "data-style-name", QString());
             if (!dataStyleName.isEmpty() && stylesReader.dataFormats().contains(dataStyleName)) {
                 delete d->numericStyleFormat;
-                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleFormat(stylesReader.dataFormats()[dataStyleName].first);
+                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleData(stylesReader.dataFormats()[dataStyleName].first);
             }
         }
 
@@ -2158,12 +2158,12 @@ void Axis::setVisible(bool visible)
     }
 }
 
-KoOdfNumberStyles::NumericStyleFormat *Axis::numericStyleFormat() const
+KoOdfNumberStyles::NumericStyleData *Axis::numericStyleFormat() const
 {
     return d->numericStyleFormat;
 }
 
-void Axis::SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const
+void Axis::SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleData *numericStyleFormat) const
 {
     delete d->numericStyleFormat;
     d->numericStyleFormat = numericStyleFormat;

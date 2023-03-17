@@ -31,6 +31,7 @@ class QLabel;
 class QListWidget;
 class QRadioButton;
 class QSpinBox;
+class QComboBox;
 
 
 namespace Calligra
@@ -51,7 +52,9 @@ class LayoutPageFloat : public QWidget
 {
     Q_OBJECT
 public:
-    LayoutPageFloat(QWidget *parent, Localization *locale, ValueFormatter *formatter);
+    LayoutPageFloat(QWidget *parent, const Localization *locale, ValueFormatter *formatter);
+    ~LayoutPageFloat();
+
     void apply(Style * style, bool partial);
     void loadFrom(const Style &style, bool partial);
 
@@ -59,12 +62,17 @@ public Q_SLOTS:
     void slotChangeState();
     void makeformat();
     void updateFormatType();
-    void init();
+    void dateInit();
     void datetimeInit();
     void slotChangeValue(int);
     void formatChanged(int);
     void currencyChanged(const QString &);
 protected:
+    void loadLanguages();
+    static QString localeToString(const QLocale &locale, bool includeScript = false);
+    void updateCurrentLocale(const QLocale &locale);
+    static bool hasMultipleScripts(const QLocale &locale);
+    const Localization *currentLocale() const;
 
     /**
      * Draws a pixmap showing a text consisting of two parts, @p _string1 and @p _string2 .
@@ -93,9 +101,16 @@ protected:
     QListWidget  *listFormat;
     KLineEdit* customFormatEdit;
     QLabel *exampleLabel;
+    QComboBox *m_languageBox;
     Format::Type cellFormatType, newFormatType;
     int cellFormatColor;
-    Localization *m_locale;
+    const Localization *m_defaultLocale;
+    QString m_language;
+    QString m_country;
+    QString m_script;
+    int m_defaultIndex = -1;
+    int m_originalIndex = -1;
+    int m_currentIndex = -1;
     ValueFormatter *m_formatter;
 
     int m_precision;

@@ -69,10 +69,7 @@ private:
                  QDomElement & parent);
 
     void createDefaultStyles();
-    QString convertFormula(QString const & formula) const;
-private:
-    /// Pointer to the Calligra::Sheets locale
-    Calligra::Sheets::Localization* m_locale;
+    QString convertFormula(QString const & formula, const Calligra::Sheets::Localization *locale) const;
 };
 
 #endif

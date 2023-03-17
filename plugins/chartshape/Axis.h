@@ -19,7 +19,7 @@
 #include <KChartCartesianAxis.h>
 
 namespace KoOdfNumberStyles {
-    struct NumericStyleFormat;
+    struct NumericStyleData;
 }
 
 namespace KoChart {
@@ -115,8 +115,8 @@ public:
     void setVisible(bool visible);
     void setShowRuler(bool show);
 
-    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat() const;
-    void SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const;
+    KoOdfNumberStyles::NumericStyleData *numericStyleFormat() const;
+    void SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleData *numericStyleFormat) const;
 
     bool loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &context);
     bool loadOdfChartSubtypeProperties(const KoXmlElement &axisElement,

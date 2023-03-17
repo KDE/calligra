@@ -39,7 +39,8 @@
 #include "Value.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
-
+#include "Localization.h"
+#include "CalculationSettings.h"
 
 using namespace Calligra::Sheets;
 
@@ -197,7 +198,7 @@ void CellBase::setCellValue(const Value &value)
     // remove an existing formula
     setFormula(Formula::empty());
     setValue(value);
-    QString str = sheet()->map()->converter()->asString(value).asString();
+    QString str = sheet()->map()->converter()->asString(value, locale()).asString();
     sheet()->cellStorage()->setUserInput(column(), row(), str);
 }
 
@@ -230,7 +231,7 @@ void CellBase::setUserInput(const QString& string)
 Value CellBase::parsedUserInput(const QString& text)
 {
     // Parses the text and return the appropriate value.
-    Value value = sheet()->map()->parser()->parse(text);
+    Value value = sheet()->map()->parser()->parse(text, locale());
 
     // convert first letter to uppercase ?
     if (sheet()->getFirstLetterUpper() && value.isString() && !text.isEmpty()) {
@@ -518,7 +519,14 @@ QString CellBase::decodeFormula(const QString &_text) const
     return erg;
 }
 
-
+const Localization * CellBase::locale() const
+{
+    const auto locale = sheet()->cellStorage()->locale(column(), row());
+    if (locale) {
+        return locale;
+    }
+    return sheet()->map()->converter()->settings()->locale();
+}
 
 
 

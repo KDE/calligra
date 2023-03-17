@@ -262,7 +262,7 @@ void TestValueFormatter::testCreateNumberFormat()
     QFETCH(bool, thousandsSep);
     QFETCH(QString, expected);
 
-    m_calcsettings->locale()->setLanguage("en_US");
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage("en_US"); // FIXME
 
     Number num(value);
     PublicValueFormatter fmt(m_converter);

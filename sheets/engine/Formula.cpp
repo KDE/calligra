@@ -459,7 +459,8 @@ void Formula::clear()
     d->codes.clear();
 }
 
-Localization *Formula::locale() const {
+const Localization *Formula::locale() const
+{
     SheetBase *sheet = d->sheet;
     if ((!sheet) && (!d->cell.isNull())) sheet = d->cell.sheet();
     return sheet ? sheet->map()->calculationSettings()->locale() : nullptr;

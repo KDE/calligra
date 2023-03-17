@@ -486,14 +486,14 @@ void Odf::loadSheetInsertStyles(Sheet *sheet, const Styles& autoStyles,
         if (hasConditions)
             outConditionalStyles.append(qMakePair(styleRegion, conditionalStyles[styleNames[i]]));
         if (autoStyles.contains(styleNames[i])) {
-            //debugSheetsODF << "\tautomatic:" << styleNames[i] << " at" << styleRegion.rectCount() << "rects";
+            debugSheetsODF << "\tautomatic:" << styleNames[i] << " at" << styleRegion.rects();
             Style style;
             style.setDefault(); // "overwrite" existing style
             style.merge(autoStyles[styleNames[i]]);
             outStyleRegions.append(qMakePair(styleRegion, style));
         } else {
             const CustomStyle* namedStyle = manager->style(styleNames[i]);
-            //debugSheetsODF << "\tcustom:" << namedStyle->name() << " at" << styleRegion.rectCount() << "rects";
+            debugSheetsODF << "\tcustom:" << namedStyle->name() << " at" << styleRegion.rects();
             Style style;
             style.setDefault(); // "overwrite" existing style
             style.merge(*namedStyle);
@@ -1102,7 +1102,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
     maxRows = qMin(KS_rowMax, qMax(1, maxRows));
     maxMaxRows = maxMaxRows;
     debugSheetsODF << "\t Sheet dimension:" << maxCols << " x" << maxRows;
-    Localization *locale = sheet->map()->calculationSettings()->locale();
+    const Localization *locale = sheet->map()->calculationSettings()->locale();
 
     // saving the columns
     //

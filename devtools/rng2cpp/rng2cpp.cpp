@@ -192,6 +192,18 @@ public:
     bool operator==(const RNGItem& a) const;
 };
 
+QDebug operator<<(QDebug dbg, const RNGItem &item) {
+    dbg<<"RNGItem("<<item.name()<<item.allowedItems<<')';
+    return dbg;
+}
+QDebug operator<<(QDebug dbg, const RNGItem *item) {
+    if (item) {
+        return operator<<(dbg, *item);
+    }
+    dbg << "RNGItem("<<(void*)item<<')';
+    return dbg;
+}
+
 /**
  * Specialization of RNGItem that is an element.
  */

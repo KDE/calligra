@@ -64,12 +64,12 @@ void UserVariable::setName(const QString &name)
     valueChanged();
 }
 
-KoOdfNumberStyles::NumericStyleFormat UserVariable::numberstyle() const
+KoOdfNumberStyles::NumericStyleData UserVariable::numberstyle() const
 {
     return m_numberstyle;
 }
 
-void UserVariable::setNumberStyle(KoOdfNumberStyles::NumericStyleFormat numberstyle)
+void UserVariable::setNumberStyle(KoOdfNumberStyles::NumericStyleData numberstyle)
 {
     m_numberstyle = numberstyle;
     valueChanged();
@@ -120,7 +120,7 @@ void UserVariable::saveOdf(KoShapeSavingContext &context)
     if (!m_name.isEmpty())
         writer->addAttribute("text:name", m_name);
 
-    QString styleName = KoOdfNumberStyles::saveOdfNumberStyle(context.mainStyles(), m_numberstyle);
+    QString styleName = KoOdfNumberStyles::saveOdfNumericStyle(context.mainStyles(), m_numberstyle);
     if (!styleName.isEmpty())
         writer->addAttribute("style:data-style-name", styleName);
 
@@ -144,7 +144,7 @@ bool UserVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     if (!dataStyle.isEmpty() && context.odfLoadingContext().stylesReader().dataFormats().contains(dataStyle)) {
         m_numberstyle = context.odfLoadingContext().stylesReader().dataFormats().value(dataStyle).first;
     } else {
-        m_numberstyle = KoOdfNumberStyles::NumericStyleFormat();
+        m_numberstyle = KoOdfNumberStyles::NumericStyleData();
     }
 
     return true;

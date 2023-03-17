@@ -92,7 +92,7 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell, ApplicationSettings
         m_value = Value(cell.encodeFormula());
         m_type = FORMULA;
     } else if (cell.isDate()) {
-        m_value = cell.sheet()->map()->converter()->asDate(cell.value());
+        m_value = cell.sheet()->map()->converter()->asDate(cell.value(), nullptr); // FIXME locale
         m_type = VALUE;
     } else if (cell.isTime() || cell.value().format() == Value::fmt_DateTime) {
         m_value = cell.sheet()->map()->converter()->asDateTime(cell.value());
@@ -630,7 +630,7 @@ static void fillSequence(const QList<Cell>& _srcList,
             const Value timeValue = cell.sheet()->map()->converter()->asTime(value);
             cell.setCellValue(timeValue);
         } else if (value.format() == Value::fmt_Date) {
-            const Value dateValue = cell.sheet()->map()->converter()->asDate(value);
+            const Value dateValue = cell.sheet()->map()->converter()->asDate(value, cell.locale());
             cell.setCellValue(dateValue);
         } else if (value.type() == Value::Boolean ||
                    value.type() == Value::Complex ||

@@ -245,9 +245,9 @@ Value ValueConverter::asNumeric(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asString(const Value &value) const
+Value ValueConverter::asString(const Value &value, const Localization *_locale) const
 {
-    Localization *locale = m_parser->settings()->locale();
+    const Localization *locale = _locale ? _locale : m_parser->settings()->locale();
     Value val;
     QString s;
     Value::Format fmt = value.format();
@@ -373,7 +373,7 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asDate(const Value &value, bool* ok) const
+Value ValueConverter::asDate(const Value &value, const Localization *locale, bool* ok) const
 {
     Value val;
 
@@ -396,14 +396,14 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
         val.setFormat(Value::fmt_Date);
         break;
     case Value::String:
-        val = m_parser->tryParseDate(value.asString(), &okay);
+        val = m_parser->tryParseDate(value.asString(), locale, &okay);
         if (!okay)
             val = Value::errorVALUE();
         if (ok)
             *ok = okay;
         break;
     case Value::Array:
-        val = asDate(value.element(0, 0));
+        val = asDate(value.element(0, 0), locale);
         break;
     case Value::CellRange:
         /* NOTHING */
@@ -487,9 +487,9 @@ QDateTime ValueConverter::toDateTime(const Value& value) const
     return asDateTime(value).asDateTime(settings());
 }
 
-QDate ValueConverter::toDate(const Value& value) const
+QDate ValueConverter::toDate(const Value& value, const Localization *locale) const
 {
-    return asDate(value).asDate(settings());
+    return asDate(value, locale).asDate(settings());
 }
 
 QTime ValueConverter::toTime(const Value& value) const

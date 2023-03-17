@@ -20,6 +20,7 @@ namespace Sheets
 {
 class CalculationSettings;
 class Value;
+class Localization;
 
 /**
  * \ingroup Value
@@ -43,7 +44,7 @@ public:
      * Parses the user input text \p str and tries to determine the correct
      * value type for it.
      */
-    Value parse(const QString& str) const;
+    Value parse(const QString& str, const Localization *locale = nullptr) const;
 
     /**
      * Tries for boolean type. If \p str can be interpreted as this
@@ -71,7 +72,7 @@ public:
      * type, \p ok is set to \c true and the corresponding value will
      * be returned.
      */
-    Value tryParseDate(const QString& str, bool *ok = 0) const;
+    Value tryParseDate(const QString& str, const Localization *_locale, bool *ok = 0) const;
 
     /**
      * Tries for time type. If \p str can be interpreted as this

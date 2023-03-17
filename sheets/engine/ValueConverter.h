@@ -11,6 +11,8 @@
 
 #include "sheets_engine_export.h"
 
+#include "Localization.h"
+
 namespace Calligra
 {
 namespace Sheets
@@ -65,7 +67,7 @@ public:
     /**
      * Converts \p value to a Value of string type.
      */
-    Value asString(const Value& value) const;
+    Value asString(const Value& value, const Localization *_locale = nullptr) const;
 
     /**
      * Converts \p value to a Value of date/time type.
@@ -75,7 +77,7 @@ public:
     /**
      * Converts \p value to a Value of date type.
      */
-    Value asDate(const Value& value, bool *ok = 0) const;
+    Value asDate(const Value& value, const Localization *locale, bool *ok = 0) const;
 
     /**
      * Converts \p value to a Value of time type.
@@ -89,7 +91,7 @@ public:
     complex<Number> toComplex(const Value& value) const;
     QString toString(const Value& value) const;
     QDateTime toDateTime(const Value& value) const;
-    QDate toDate(const Value& value) const;
+    QDate toDate(const Value& value, const Localization *locale) const;
     QTime toTime(const Value& value) const;
 
 private:

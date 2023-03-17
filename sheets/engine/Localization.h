@@ -18,6 +18,8 @@
 
 #include "sheets_engine_export.h"
 
+#include "FormatEnum.h"
+
 namespace Calligra
 {
 namespace Sheets
@@ -49,8 +51,12 @@ public:
     double readNumber(const QString &str, bool *ok) const;
     QDateTime readDateTime(const QString &str, bool *ok) const;
     QDateTime readDateTime(const QString &str, const QString &format, bool *ok) const;
+    /// Converts the date in @p str into a QDate.
+    /// Tries all formats defined by @ref setLocale().
     QDate readDate(const QString &str, bool *ok) const;
     QDate readDate(const QString &str, const QString &format, bool *ok) const;
+    /// Converts the time in @p str into a QTime.
+    /// Tries all formats defined by @ref setLocale().
     QTime readTime(const QString &str, bool *ok) const;
     QTime readTime(const QString &str, const QString &format, bool *ok) const;
 
@@ -79,10 +85,11 @@ public:
      * ap/a = lowercase am/pm
      * t = timezone
      */
-    QString dateTimeFormat(bool longFormat) const;
-    QString dateFormat(bool longFormat) const;
-    QString timeFormat(bool longFormat) const;
-    QString dateFormat(int type) const;
+    QString dateTimeFormat(bool longFormat) const; // TODO
+    /// Time formats that user can select to format time
+    QString timeFormat(Format::Type type) const;
+    /// Date formats that user can select to format dates
+    QString dateFormat(Format::Type type) const;
 
     QString currencySymbol() const;
 
@@ -114,6 +121,16 @@ public:
     QString toLower(const QString &str) const;
 
     QString languageName(bool full) const;
+
+    bool operator==(const Localization &other) const;
+    bool operator!=(const Localization &other) const;
+
+    QLocale qLocale() const;
+
+    /// \returns a locale from @p language, @p country and @p script
+    /// \returns Localization with QLocale::System() if language is empty
+    static const Localization *getLocale(const QString &language = QString(), const QString &country = QString(), const QString &script = QString());
+
 private:
     class Private;
 #ifndef Q_OS_WIN

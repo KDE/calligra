@@ -42,8 +42,8 @@ public:
     const QString& name() const;
     void setName(const QString &name);
 
-    KoOdfNumberStyles::NumericStyleFormat numberstyle() const;
-    void setNumberStyle(KoOdfNumberStyles::NumericStyleFormat numberstyle);
+    KoOdfNumberStyles::NumericStyleData numberstyle() const;
+    void setNumberStyle(KoOdfNumberStyles::NumericStyleData numberstyle);
 
 private Q_SLOTS:
     void valueChanged();
@@ -54,7 +54,7 @@ private:
     KoVariableManager *m_variableManager;
     int m_property;
     QString m_name;
-    KoOdfNumberStyles::NumericStyleFormat m_numberstyle;
+    KoOdfNumberStyles::NumericStyleData m_numberstyle;
 };
 
 #endif

@@ -28,7 +28,7 @@ public:
     explicit ListDialog(QWidget *parent);
     ~ListDialog() override;
 
-    void setCustomLists(const QStringList &list, Localization *locale);
+    void setCustomLists(const QStringList &list, const Localization *locale);
     QStringList customLists();
     bool changed();
 

@@ -101,9 +101,9 @@ namespace Odf {
                              QHash<QString, Conditions>& conditionalStyles,
                              const Localization *locale);
     void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReader, MapBase* map = 0);
-    void saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localization *locale);
+    void saveStyles(StyleManager *manager, KoGenStyles &mainStyles, const Localization *locale);
     QString saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& mainStyles,
-                       const StyleManager* manager, Localization *locale);
+                       const StyleManager* manager, const Localization *locale);
     void loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                              Conditions& conditions, const StyleManager* styleManager,
                              const Localization *locale);

@@ -20,7 +20,8 @@ void TestTextFunctions::initTestCase()
     SheetBase* sheet = m_map->sheet(0);
     sheet->setSheetName("Sheet1");
 
-    m_map->calculationSettings()->locale()->setLanguage("en_US");  // needed for decimals
+    // FIXME
+    const_cast<Localization*>(m_map->calculationSettings()->locale())->setLanguage("en_US");  // needed for decimals
 }
 
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
@@ -116,7 +117,7 @@ void TestTextFunctions::testFIND()
 void TestTextFunctions::testFIXED()
 {
     // localize the expected value
-    Localization *loc = m_map->calculationSettings()->locale();
+    const Localization *loc = m_map->calculationSettings()->locale();
     Value expected("12" + loc->thousandsSeparator() + "345" + loc->decimalSymbol() + "000");
 
     CHECK_EVAL2("FIXED(12345;3)", Value("12,345.000"), expected);

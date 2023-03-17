@@ -122,7 +122,7 @@ void TestStatisticalFunctions::initTestCase()
     m_map->addNewSheet();
     SheetBase* sheet = m_map->sheet(0);
     CellBaseStorage* storage = sheet->cellStorage();
-    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
+    const_cast<Localization*>(m_map->calculationSettings()->locale())->setLanguage(QLocale::C); // FIXME
 
     //
     // Test case data set

@@ -134,7 +134,7 @@ void TestValueConverter::testAsBoolean()
     QFETCH(bool, expectedOk);
     QFETCH(bool, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
     Value result = m_converter->asBoolean(value, &ok);
@@ -199,7 +199,7 @@ void TestValueConverter::testAsInteger()
     QFETCH(bool, expectedOk);
     QFETCH(int, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
     Value result = m_converter->asInteger(value, &ok);
@@ -264,7 +264,7 @@ void TestValueConverter::testAsFloat()
     QFETCH(bool, expectedOk);
     QFETCH(double, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
     Value result = m_converter->asFloat(value, &ok);
@@ -362,7 +362,7 @@ void TestValueConverter::testAsComplex()
     QFETCH(bool, expectedOk);
     QFETCH(complex<Number>, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
     Value result = m_converter->asComplex(value, &ok);
@@ -433,7 +433,7 @@ void TestValueConverter::testAsNumeric()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
     Value result = m_converter->asNumeric(value, &ok);
@@ -590,7 +590,7 @@ void TestValueConverter::testAsString()
     QFETCH(Value, value);
     QFETCH(QString, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     Value result = m_converter->asString(value);
     QCOMPARE(result, Value(expected));
@@ -648,7 +648,7 @@ void TestValueConverter::testAsDateTime()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
     Value result = m_converter->asDateTime(value, &ok);
@@ -717,10 +717,10 @@ void TestValueConverter::testAsDate()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
-    Value result = m_converter->asDate(value, &ok);
+    Value result = m_converter->asDate(value, m_calcsettings->locale(), &ok);
     QCOMPARE(ok, expectedOk);
     QCOMPARE(result, expected);
     QCOMPARE(result.format(), expected.format());
@@ -777,7 +777,7 @@ void TestValueConverter::testAsTime()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
 
     bool ok;
     Value result = m_converter->asTime(value, &ok);

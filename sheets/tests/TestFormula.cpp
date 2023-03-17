@@ -101,7 +101,7 @@ void TestFormula::initTestCase()
 
     MapBase *map = new MapBase();
     m_sheet = map->addNewSheet();
-    map->calculationSettings()->locale()->setLanguage(QLocale::C);
+    const_cast<Localization*>(map->calculationSettings()->locale())->setLanguage(QLocale::C); // FIXME
     CellBase(m_sheet, 1, 1).setCellValue(Value(6));
     CellBase(m_sheet, 1, 2).setCellValue(Value(1.5));
 }

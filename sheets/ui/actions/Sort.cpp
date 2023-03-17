@@ -70,7 +70,7 @@ void Sort::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
     }
 
     ApplicationSettings *sett = sheet->fullMap()->applicationSettings();
-    Localization *locale = sheet->map()->calculationSettings()->locale();
+    const Localization *locale = sheet->map()->calculationSettings()->locale();
     m_dlg = new SortDialog(canvasWidget, range, firstRow, firstCol);
     m_dlg->setCustomLists(sett->sortingList(), locale);
 

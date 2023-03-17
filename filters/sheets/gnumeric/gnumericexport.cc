@@ -703,39 +703,9 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
     case Format::Scientific:
         stringFormat = "0.00E+00";
         break;
-    case Format::ShortDate:
-        stringFormat = cell.locale()->dateFormat(false);
-        break;
-    case Format::TextDate:
-        stringFormat = cell.locale()->dateFormat(true);
-        break;
-    case Format::Date1:
-        stringFormat = cell.locale()->dateFormat(1);
-        break;
-    case Format::Date2:
-        stringFormat = cell.locale()->dateFormat(2);
-        break;
-    case Format::Date3:
-        stringFormat = cell.locale()->dateFormat(3);
-        break;
-    case Format::Date4:
-        stringFormat = cell.locale()->dateFormat(4);
-        break;
-    case Format::Date5:
-        stringFormat = cell.locale()->dateFormat(5);
-        break;
-    case Format::Date6:
-        stringFormat = cell.locale()->dateFormat(6);
-        break;
-    case Format::Date7:
-        stringFormat = cell.locale()->dateFormat(7);
-        break;
-    case Format::Date8:
-        stringFormat = cell.locale()->dateFormat(8);
-        break;
-    case Format::Time:
-    case Format::SecondeTime:
-        stringFormat = cell.locale()->timeFormat(true);
+    case Format::ShortTime:
+    case Format::LongTime:
+        stringFormat = cell.locale()->timeFormat(Format::LongTime);
         break;
     case Format::Time1:
         stringFormat = "h:mm AM/PM";
@@ -792,9 +762,14 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
         stringFormat = style.customFormat();
         break;
     default:
-        // This is a required parameter, so let's write a sane default
-        qWarning() << "Unhandled Format value, setting 'General' as default: " << style.formatType();
-        stringFormat = "General";
+        if (Format::isDate(style.formatType())) {
+            stringFormat = cell.locale()->dateFormat(style.formatType());
+        }
+        if (stringFormat.isEmpty()) {
+            // This is a required parameter, so let's write a sane default
+            qWarning() << "Unhandled Format value, setting 'General' as default: " << style.formatType();
+            stringFormat = "General";
+        }
         break;
     }
     cell_style.setAttribute("Format", stringFormat);

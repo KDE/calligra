@@ -366,7 +366,8 @@ void SortDialog::init()
     slotButtonClicked(Reset);
 }
 
-void SortDialog::setCustomLists(const QStringList &lsts, Localization *locale) {
+void SortDialog::setCustomLists(const QStringList &lsts, const Localization *locale)
+{
     QStringList lst;
     QString e;
     for (int month = 1; month <= 12; ++month) {

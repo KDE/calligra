@@ -498,12 +498,12 @@ void ValidityDialog::done(int r) {
             return;
         }
     } else  if (idx == 4) {
-        mindate = m_parser->tryParseDate(val_min->text(), &ok).asDate(m_settings);
+        mindate = m_parser->tryParseDate(val_min->text(), nullptr, &ok).asDate(m_settings); // FIXME locale
         if (!ok) {
             KMessageBox::error(this , i18n("This is not a valid date."), i18n("Error"));
             return;
         }
-        maxdate = m_parser->tryParseDate(val_max->text(), &ok).asDate(m_settings);
+        maxdate = m_parser->tryParseDate(val_max->text(), nullptr, &ok).asDate(m_settings); // FIXME locale
         if ((!ok) && choose->currentIndex()  >= 5) {
             KMessageBox::error(this , i18n("This is not a valid date."), i18n("Error"));
             return;

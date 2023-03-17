@@ -81,7 +81,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
 
     const QPoint marker = this->selection()->lastRange().topLeft();
     Sheet* const sheet = this->selection()->activeSheet();
-    Localization *locale = sheet->map()->calculationSettings()->locale();
+    const Localization *locale = sheet->map()->calculationSettings()->locale();
 
     //now let's check if the area is really empty...
     //we use two columns per day and one column for the week number

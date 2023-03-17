@@ -38,7 +38,7 @@ public:
     SortDialog(QWidget* parent, QRect rect, const QVector<Value> &firstRow, const QVector<Value> &firstCol);
     ~SortDialog() override;
 
-    void setCustomLists(const QStringList &lsts, Localization *locale);
+    void setCustomLists(const QStringList &lsts, const Localization *locale);
 
     bool sortRows() const;
     bool skipFirst() const;

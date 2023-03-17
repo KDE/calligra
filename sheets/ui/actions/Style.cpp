@@ -467,7 +467,7 @@ void TimeFormat::executeToggled(bool selected, Selection *selection, Sheet *shee
     command->setSheet(sheet);
     command->setText(kundo2_i18n("Format Time"));
     Style s;
-    s.setFormatType(selected ? Format::SecondeTime : Format::Generic);
+    s.setFormatType(selected ? Format::LongTime : Format::Generic);
     command->setStyle(s);
     command->add(*selection);
     command->execute(selection->canvas());

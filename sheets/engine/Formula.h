@@ -370,7 +370,7 @@ public:
     Tokens scan(const QString& expr, const Localization* locale = 0) const;
 
     // Locale belonging to the current cell/sheet, if any.
-    Localization *locale() const;
+    const Localization *locale() const;
 
     /**
      * Assignment operator.

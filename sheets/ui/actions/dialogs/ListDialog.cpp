@@ -118,7 +118,8 @@ void ListDialog::slotCurrentRowChanged(int row)
     d->textEdit->clear();
 }
 
-void ListDialog::setCustomLists(const QStringList &list, Localization *locale) {
+void ListDialog::setCustomLists(const QStringList &list, const Localization *locale)
+{
     QStringList lst;
 
     QString e;

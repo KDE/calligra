@@ -48,7 +48,7 @@ public:
      * A document could use a different localization as the KDE default.
      * @return the locale associated with this document
      */
-    Localization *locale() const;
+    const Localization *locale() const;
 
     /**
      * Sets the reference year.

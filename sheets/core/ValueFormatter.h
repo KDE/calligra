@@ -22,6 +22,7 @@ namespace Sheets
 class CalculationSettings;
 class Value;
 class ValueConverter;
+class Localization;
 
 /**
  * \ingroup Value
@@ -60,7 +61,7 @@ public:
                      const QString& postfix = QString(),
                      const QString& currencySymbol = QString(),
                      const QString& formatString = QString(),
-                     bool thousandsSep = true);
+                     bool thousandsSep = true, const Localization *locale = nullptr);
 
     /**
      * Creates a date format.
@@ -68,7 +69,7 @@ public:
      * \param formatType the value format, e.g. number, date
      * \param formatString the Qt format string
      */
-    QString dateFormat(const QDate& date, Format::Type formatType, const QString& formatString = QString() );
+    QString dateFormat(const QDate& date, Format::Type formatType, const QString& formatString = QString() , const Localization *_locale = nullptr);
 
     /**
      * Creates a time format.

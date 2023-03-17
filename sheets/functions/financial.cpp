@@ -655,13 +655,13 @@ static double xirrResult(valVector& args, ValueCalc *calc, double& rate)
 {
     QDate date;
 
-    QDate date0 = calc->conv()->asDate(args[1].element(0)).asDate(calc->settings());
+    QDate date0 = calc->conv()->asDate(args[1].element(0), nullptr).asDate(calc->settings()); // FIXME locale
 
     double r = rate + 1.0;
     double res = calc->conv()->asFloat(args[0].element(0)).asFloat();
 
     for (int i = 1, count = args[0].count(); i < count; ++i) {
-        date = calc->conv()->asDate(args[1].element(i)).asDate(calc->settings());
+        date = calc->conv()->asDate(args[1].element(i), nullptr).asDate(calc->settings()); // FIXME locale
         double e_i = (date0.daysTo(date)) / 365.0;
         double val = calc->conv()->asFloat(args[0].element(i)).asFloat();
 
@@ -682,13 +682,13 @@ static double xirrResultDerive(valVector& args, ValueCalc *calc, double& rate)
 {
     QDate date;
 
-    QDate date0 = calc->conv()->asDate(args[1].element(0)).asDate(calc->settings());
+    QDate date0 = calc->conv()->asDate(args[1].element(0), nullptr).asDate(calc->settings()); // FIXME locale
 
     double r = rate + 1.0;
     double res = 0.0;
 
     for (int i = 1, count = args[0].count(); i < count; ++i) {
-        date = calc->conv()->asDate(args[1].element(i)).asDate(calc->settings());
+        date = calc->conv()->asDate(args[1].element(i), nullptr).asDate(calc->settings()); // FIXME locale
         double e_i = (date0.daysTo(date)) / 365.0;
         double val = calc->conv()->asFloat(args[0].element(i)).asFloat();
 
@@ -707,8 +707,8 @@ static double xirrResultDerive(valVector& args, ValueCalc *calc, double& rate)
 //
 Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate maturity = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate settlement = calc->conv()->asDate(args[2]).asDate(calc->settings());
+    QDate maturity = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate settlement = calc->conv()->asDate(args[2], nullptr).asDate(calc->settings()); // FIXME locale
 
     Value rate = args[3];
     Value par = args[4];
@@ -746,8 +746,8 @@ Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_accrintm(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate issue = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate issue = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     Value rate = args[2];
 
     Value par = Value(1000);
@@ -777,8 +777,8 @@ Value func_accrintm(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
 {
     double cost = calc->conv()->asFloat(args[0]).asFloat();
-    QDate purchaseDate = calc->conv()->asDate(args[1]).asDate(calc->settings());
-    QDate firstPeriodEndDate = calc->conv()->asDate(args[2]).asDate(calc->settings());
+    QDate purchaseDate = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate firstPeriodEndDate = calc->conv()->asDate(args[2], nullptr).asDate(calc->settings()); // FIXME locale
     double salvage = calc->conv()->asFloat(args[3]).asFloat();
     int period = calc->conv()->asInteger(args[4]).asInteger();
     double rate = calc->conv()->asFloat(args[5]).asFloat();
@@ -834,8 +834,8 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *)
 {
     double cost = calc->conv()->asFloat(args[0]).asFloat();
-    QDate purchaseDate = calc->conv()->asDate(args[1]).asDate(calc->settings());
-    QDate firstPeriodEndDate = calc->conv()->asDate(args[2]).asDate(calc->settings());
+    QDate purchaseDate = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate firstPeriodEndDate = calc->conv()->asDate(args[2], nullptr).asDate(calc->settings()); // FIXME locale
     double salvage = calc->conv()->asFloat(args[3]).asFloat();
     int period = calc->conv()->asInteger(args[4]).asInteger();
     double rate = calc->conv()->asFloat(args[5]).asFloat();
@@ -917,8 +917,8 @@ struct CoupSettings {
 
 static Value coup_checkparams(valVector args, ValueCalc *calc, QDate& settlement, QDate& maturity, CoupSettings& conf)
 {
-    settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     conf.frequency = calc->conv()->asInteger(args[2]).asInteger();
 
     conf.basis = BASIS_MSRB_30_360;
@@ -1146,8 +1146,8 @@ Value func_coupncd(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // dates and integers only - don't need high-precision for this
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     int   frequency = calc->conv()->asInteger(args[2]).asInteger();
 
     // defaults
@@ -1371,8 +1371,8 @@ Value func_ddb(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_disc(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
 
 // TODO sascha fix error value checking
 //   // check dates
@@ -1519,8 +1519,8 @@ Value func_duration(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
 
     double coup = numToDouble(calc->conv()->toFloat(args[2]));
     double yield = numToDouble(calc->conv()->toFloat(args[3]));
@@ -1686,8 +1686,8 @@ Value func_fv_annuity(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_intrate(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
 
     Value invest = args[2];
     Value redemption = args[3];
@@ -1799,8 +1799,8 @@ Value func_ispmt(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
 
     double coup = numToDouble(calc->conv()->toFloat(args[2]));
     double yield = numToDouble(calc->conv()->toFloat(args[3]));
@@ -1990,9 +1990,9 @@ static double date_ratio(const QDate& d1, const QDate& d2, const QDate& d3, cons
 //
 Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
-    QDate last = calc->conv()->asDate(args[2]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate last = calc->conv()->asDate(args[2], nullptr).asDate(calc->settings()); // FIXME locale
     double rate = calc->conv()->asFloat(args[3]).asFloat();
     double yield = calc->conv()->asFloat(args[4]).asFloat();
     double redemp = calc->conv()->asFloat(args[5]).asFloat();
@@ -2035,9 +2035,9 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
-    QDate last = calc->conv()->asDate(args[2]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate last = calc->conv()->asDate(args[2], nullptr).asDate(calc->settings()); // FIXME locale
     double rate = calc->conv()->asFloat(args[3]).asFloat();
     double price = calc->conv()->asFloat(args[4]).asFloat();
     double redemp = calc->conv()->asFloat(args[5]).asFloat();
@@ -2137,9 +2137,9 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_pricemat(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
-    QDate issue = calc->conv()->asDate(args[2]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate issue = calc->conv()->asDate(args[2], nullptr).asDate(calc->settings()); // FIXME locale
     double rate = calc->conv()->asFloat(args[3]).asFloat();
     double yield = calc->conv()->asFloat(args[4]).asFloat();
 
@@ -2311,8 +2311,8 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_received(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
 
     Value investment = args[2];
     Value discount = args[3];
@@ -2408,8 +2408,8 @@ Value func_syd(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_tbilleq(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     double discount = calc->conv()->asFloat(args[2]).asFloat();
 
     maturity = maturity.addDays(1);
@@ -2429,8 +2429,8 @@ Value func_tbilleq(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_tbillprice(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     Value discount = args[2];
 
     Value fraction = calc->yearFrac(settlement, maturity.addDays(1), 0); // basis: USA 30/360
@@ -2453,8 +2453,8 @@ Value func_tbillprice(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_tbillyield(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     double price = calc->conv()->asFloat(args[2]).asFloat();
 
     double days = calc->days360(settlement, maturity, false);  // false -> US
@@ -2612,13 +2612,13 @@ Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *)
     if (rate < -1.0)
         return Value::errorNUM();
 
-    QDate date0 = calc->conv()->asDate(args[2].element(0)).asDate(calc->settings());
+    QDate date0 = calc->conv()->asDate(args[2].element(0), nullptr).asDate(calc->settings()); // FIXME locale
     double val;
     QDate date;
 
     for (int i = 0; i < numValues; ++i) {
         val  = calc->conv()->asFloat(args[1].element(i)).asFloat();
-        Value tmpDate(calc->conv()->asDate(args[2].element(i)));
+        Value tmpDate(calc->conv()->asDate(args[2].element(i), nullptr)); // FIXME locale
 
         if (tmpDate.isError()) return tmpDate;
         date = tmpDate.asDate(calc->settings());
@@ -2641,8 +2641,8 @@ Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_yielddisc(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     double price = calc->conv()->asFloat(args[2]).asFloat();
     double redemp = calc->conv()->asFloat(args[3]).asFloat();
 
@@ -2666,9 +2666,9 @@ Value func_yielddisc(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
-    QDate issue = calc->conv()->asDate(args[2]).asDate(calc->settings());
+    QDate settlement = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate maturity = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate issue = calc->conv()->asDate(args[2], nullptr).asDate(calc->settings()); // FIXME locale
     long double rate = calc->conv()->asFloat(args[3]).asFloat();
     long double price = calc->conv()->asFloat(args[4]).asFloat();
 

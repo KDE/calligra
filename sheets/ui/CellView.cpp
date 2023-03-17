@@ -1519,7 +1519,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         if (!cell.isEmpty())
             tmpIndent = style().indentation();
 
-        Localization* locale = cell.sheet()->map()->calculationSettings()->locale();
+        const Localization* locale = cell.locale();
 
         // Estimate worst case length to reduce the number of iterations.
         int start = qRound((len - 4.0 - 1.0 - tmpIndent) / fm.width('.'));

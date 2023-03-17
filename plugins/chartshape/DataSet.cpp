@@ -236,7 +236,7 @@ public:
 
     int loadedDimensions;
 
-    KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat;
+    KoOdfNumberStyles::NumericStyleData *numericStyleFormat;
 };
 
 DataSet::Private::Private(DataSet *parent, int dataSetNr) :
@@ -1479,9 +1479,9 @@ bool DataSet::loadOdf(const KoXmlElement &n,
         const QString dataStyleName = stylElement->attributeNS(KoXmlNS::style, "data-style-name", QString());
         if (!dataStyleName.isEmpty()) {
             if (stylesReader.dataFormats().contains(dataStyleName)) {
-                QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[dataStyleName];
+                QPair<KoOdfNumberStyles::NumericStyleData, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[dataStyleName];
                 delete d->numericStyleFormat;
-                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleFormat(dataStylePair.first);
+                d->numericStyleFormat = new KoOdfNumberStyles::NumericStyleData(dataStylePair.first);
             }
         }
     }

@@ -59,7 +59,7 @@ K_PLUGIN_FACTORY_WITH_JSON(OpenCalcExportFactory, "calligra_filter_sheets2openca
     } while(0)
 
 OpenCalcExport::OpenCalcExport(QObject* parent, const QVariantList &)
-        : KoFilter(parent), m_locale(0)
+        : KoFilter(parent)
 {
 }
 
@@ -102,7 +102,6 @@ KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray & from,
         return KoFilter::NotImplemented;
     }
 
-    m_locale = static_cast<DocBase*>(document)->map()->calculationSettings()->locale();
     if (!writeFile(ksdoc))
         return KoFilter::CreationError;
 
@@ -597,7 +596,7 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
         if (cell.isFormula()) {
             qDebug() << "Formula found";
 
-            QString formula(convertFormula(cell.userInput()));
+            QString formula(convertFormula(cell.userInput(), cell.locale()));
             cellElem.setAttribute("table:formula", formula);
         } else if (!cell.link().isEmpty()) {
             QDomElement link = doc.createElement("text:p");
@@ -719,7 +718,7 @@ void OpenCalcExport::exportDefaultCellStyle(QDomDocument & doc, QDomElement & of
     KoDocument * document = m_chain->inputDocument();
     DocBase * ksdoc    = static_cast<DocBase *>(document);
 
-    Localization *locale = ksdoc->map()->calculationSettings()->locale();
+    const Localization *locale = ksdoc->map()->calculationSettings()->locale();
 
     QString language = locale->languageName(false);
     QFont font(ksdoc->map()->styleManager()->defaultStyle()->font());
@@ -1004,12 +1003,12 @@ void OpenCalcExport::convertPart(QString const & part, QDomDocument & doc,
     }
 }
 
-QString OpenCalcExport::convertFormula(QString const & formula) const
+QString OpenCalcExport::convertFormula(QString const & formula, const Localization *locale) const
 {
     // TODO Stefan: Check if Oasis::encodeFormula could be used instead
     QChar decimalSymbol('.');
-    if (m_locale) {
-        const QString decimal(m_locale->decimalSymbol());
+    if (locale) {
+        const QString decimal(locale->decimalSymbol());
         if (!decimal.isEmpty()) {
             decimalSymbol = decimal.at(0);
         }

@@ -136,7 +136,7 @@ void StyleStorageLoaderJob::run()
             StoredSubStyleList::ConstIterator end(storedSubStyles.end());
             for (StoredSubStyleList::ConstIterator it(storedSubStyles.begin()); it != end; ++it) {
                 if (Style::compare(subStyle.data(), (*it).data())) {
-        //             debugSheetsStyle <<"[REUSING EXISTING SUBSTYLE]";
+                    debugSheetsStyle <<"[REUSING EXISTING SUBSTYLE]";
                     subStyles.append(qMakePair(reg, *it));
                     foundShared = true;
                     break;
@@ -144,7 +144,7 @@ void StyleStorageLoaderJob::run()
             }
             if (!foundShared) {
                 // insert substyle and add to the used substyle list
-                //if (reg.contains(QPoint(1,1))) {debugSheetsStyle<<"load:"<<reg<<':'; subStyle.data()->dump();}
+                if (reg.contains(QPoint(1,1))) {debugSheetsStyle<<"load:"<<reg<<':'; subStyle.data()->dump();}
                 subStyles.append(qMakePair(reg, subStyle));
             }
         }
@@ -833,7 +833,7 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
     d->ensureLoaded();
 
     if (subStyles.isEmpty()) {
-//         debugSheetsStyle <<"StyleStorage:" << "nothing to merge, return the default style";
+         debugSheetsStyle <<"StyleStorage:" << "nothing to merge, return the default style";
         return *styleManager()->defaultStyle();
     }
     // From OpenDocument-v1.2-os-part1 16.2<style:style>

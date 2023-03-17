@@ -42,7 +42,7 @@ void ManageCustomLists::execute(Selection *, Sheet *sheet, QWidget *canvasWidget
     if (!m_dlg) m_dlg = new ListDialog(canvasWidget);
     Map *map = sheet->fullMap();
     ApplicationSettings *sett = map->applicationSettings();
-    Localization *locale = map->calculationSettings()->locale();
+    const Localization *locale = map->calculationSettings()->locale();
     m_dlg->setCustomLists(sett->sortingList(), locale);
     if (m_dlg->exec() && m_dlg->changed()) {
         QStringList result = m_dlg->customLists();

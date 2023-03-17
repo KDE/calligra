@@ -135,7 +135,7 @@ public:
     /**
      * Returns the locale setting of this cell.
      */
-    Localization* locale() const;
+    const Localization *locale() const;
 
     /**
      * Returns true, if this is a default cell, i.e. if the cell has no value, formula, link and

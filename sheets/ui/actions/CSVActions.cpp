@@ -73,7 +73,7 @@ void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvas
 
     m_dlg = new CSVDialog(canvasWidget);
     m_dlg->setWindowTitle(i18n("Inserting Text File"));
-    Localization *locale = sheet->map()->calculationSettings()->locale();
+    const Localization *locale = sheet->map()->calculationSettings()->locale();
     m_dlg->setDecimalSymbol(locale->decimalSymbol());
     m_dlg->setThousandsSeparator(locale->thousandsSeparator());
 
@@ -147,7 +147,7 @@ void InsertFromClipboard::execute(Selection *selection, Sheet *sheet, QWidget *c
     m_dlg = new CSVDialog(canvasWidget);
     m_dlg->setWindowTitle(i18n("Inserting From Clipboard"));
 
-    Localization *locale = sheet->map()->calculationSettings()->locale();
+    const Localization *locale = sheet->map()->calculationSettings()->locale();
     m_dlg->setDecimalSymbol(locale->decimalSymbol());
     m_dlg->setThousandsSeparator(locale->thousandsSeparator());
     QString oldDelimiter = m_dlg->delimiter();
@@ -233,7 +233,7 @@ void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
     m_dlg->setWindowTitle(i18n("Text to Columns"));
     m_dlg->setDataWidgetEnabled(false);
 
-    Localization *locale = sheet->map()->calculationSettings()->locale();
+    const Localization *locale = sheet->map()->calculationSettings()->locale();
     m_dlg->setDecimalSymbol(locale->decimalSymbol());
     m_dlg->setThousandsSeparator(locale->thousandsSeparator());
 
@@ -334,7 +334,7 @@ Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, 
     case KoCsvImportDialog::Text:
         break;
     case KoCsvImportDialog::Date:
-        value = m_sheet->map()->converter()->asDate(value);
+        value = m_sheet->map()->converter()->asDate(value, nullptr); // FIXME locale
         break;
     case KoCsvImportDialog::Currency:
         value = m_sheet->map()->converter()->asFloat(value);

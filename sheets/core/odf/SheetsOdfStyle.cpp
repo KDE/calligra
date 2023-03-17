@@ -51,9 +51,9 @@ namespace Odf {
 
     // Single style saving
     void saveStyle(const Style *style, const QSet<Style::Key>& subStyles, KoGenStyle &xmlstyle,
-                      KoGenStyles &mainStyles, const StyleManager* manager, Localization *locale);
+                      KoGenStyles &mainStyles, const StyleManager* manager, const Localization *locale);
     QString saveCustomStyle(CustomStyle *style, KoGenStyle& genstyle, KoGenStyles &mainStyles,
-                             const StyleManager* manager, Localization *locale);
+                             const StyleManager* manager, const Localization *locale);
 
     void loadParagraphProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack);
     void loadTableCellProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack);
@@ -64,26 +64,33 @@ namespace Odf {
      * boolean, text)
      */
     QString saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
-                                       const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol,
-                                       bool thousandsSep, Localization *locale);
-    QString saveStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style, const QString& _prefix, const QString& _postfix, Localization *locale);
-    QString saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix);
+                                        const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol,
+                                        bool thousandsSep,
+                                        const QString &language, const QString &country, const QString &script,
+                                        const Localization *locale);
+    QString saveStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style, const QString& _prefix, const QString& _postfix,
+                                 const QString &language, const QString &country, const QString &script, const Localization *locale);
+    QString saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style, const QString &_prefix, const QString &_suffix,
+                                     const QString &language, const QString &country, const QString &script);
     QString saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
-                                           const QString &_prefix, const QString &_suffix);
+                                        const QString &_prefix, const QString &_suffix,
+                                        const QString &language, const QString &country, const QString &script);
     QString saveStyleNumericCustom(KoGenStyles&mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix);
+                                        const QString &_prefix, const QString &_suffix,
+                                        const QString &language, const QString &country, const QString &script);
     QString saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep);
+                                        const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep,
+                                        const QString &language, const QString &country, const QString &script);
     QString saveStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type _style, int _precision,
-            const QString &_prefix, const QString &_suffix);
+            const QString &_prefix, const QString &_suffix, const QString &language, const QString &country, const QString &script);
     QString saveStyleNumericMoney(KoGenStyles&mainStyles, Format::Type _style,
                                             const QString& symbol, int _precision,
-                                            const QString &_prefix, const QString &_suffix);
+                                            const QString &_prefix, const QString &_suffix,
+                                            const QString &language, const QString &country, const QString &script);
     QString saveStyleNumericText(KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                            const QString &_prefix, const QString &_suffix);
     QString saveStyleNumericNumber(KoGenStyles&mainStyles, Format::Type _style, int _precision,
-            const QString &_prefix, const QString &_suffix, bool thousandsSep);
+            const QString &_prefix, const QString &_suffix, bool thousandsSep, const QString &language, const QString &country, const QString &script);
     QString saveBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
     // Helpers
@@ -222,7 +229,7 @@ Styles Odf::loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader
     return autoStyles;
 }
 
-void Odf::saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localization *locale)
+void Odf::saveStyles(StyleManager *manager, KoGenStyles &mainStyles, const Localization *locale)
 {
     debugSheetsODF << "StyleManager: Saving default cell style";
     KoGenStyle defStyle = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
@@ -298,11 +305,13 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoX
 
 void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const Localization *locale)
 {
-    if (!stylesReader.dataFormats().contains(styleName)) return;
+    if (!stylesReader.dataFormats().contains(styleName)) {
+        warnSheetsODF<<"\t Data style"<<styleName<<"has not been loaded";
+        return;
+    }
 
-    QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[styleName];
-
-    const KoOdfNumberStyles::NumericStyleFormat& dataStyle = dataStylePair.first;
+    QPair<KoOdfNumberStyles::NumericStyleData, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[styleName];
+    const KoOdfNumberStyles::NumericStyleData& dataStyle = dataStylePair.first;
     const QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
     bool useNewStyle = (styleMaps.count() > 0);
     if (useNewStyle) {
@@ -321,6 +330,29 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
     styleStack.push(*dataStylePair.second);
     styleStack.setTypeProperties("text");
     loadTextProperties(style, stylesReader, styleStack);
+
+    debugSheetsODF<<"\t load data style:"<<styleName;
+    if (!dataStyle.language.isEmpty()) {
+        style->setLanguage(dataStyle.language);
+        debugSheetsODF<<"\t\t Language:"<<style->language();
+    }
+    if (!dataStyle.country.isEmpty()) {
+        style->setCountry(dataStyle.country);
+        debugSheetsODF<<"\t\t Country:"<<style->country();
+    }
+    if (!dataStyle.script.isEmpty()) {
+        style->setScript(dataStyle.script);
+        debugSheetsODF<<"\t\t Script:"<<style->script();
+    }
+    Localization loc;
+    if (dataStyle.language.isEmpty()) {
+        loc.setLanguage(locale->languageName(true));
+    } else {
+        auto l = dataStyle.language;
+        if (dataStyle.script.isEmpty()) l.append('-').append(dataStyle.script);
+        if (dataStyle.country.isEmpty()) l.append('-').append(dataStyle.country);
+        loc.setLanguage(l);
+    }
 
     QString tmp = dataStyle.prefix;
     if (!tmp.isEmpty()) {
@@ -365,7 +397,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
         // formatting string
         tmp = dataStyle.formatStr;
         if (!tmp.isEmpty()) {
-            style->setFormatType(dateType(tmp, locale));
+            style->setFormatType(dateType(tmp, &loc));
         }
         break;
     case KoOdfNumberStyles::Time:
@@ -403,6 +435,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
         conditions.setDefaultStyle(*style);
         delete style;
     }
+    debugSheetsODF << "\t\t Loaded data style:" << styleName << dataStylePair.first;
 }
 
 void Odf::loadParagraphProperties(Style *style, KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack)
@@ -642,7 +675,7 @@ void Odf::loadTextProperties(Style *style, KoOdfStylesReader& stylesReader, cons
 // Single style saving
 
 void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoGenStyle &xmlstyle,
-                  KoGenStyles &mainStyles, const StyleManager* manager, Localization *locale)
+                  KoGenStyles &mainStyles, const StyleManager* manager, const Localization *locale)
 {
 #ifndef NDEBUG
     //if (type() == BUILTIN )
@@ -871,13 +904,15 @@ void Odf::saveStyle(const Style *style, const QSet<Style::Key>& keysToStore, KoG
 
     QString numericStyle = saveStyleNumeric(xmlstyle, mainStyles, style->formatType(),
                            _prefix, _postfix, _precision,
-                           currencyCode, _thousandsSep, locale);
+                           currencyCode, _thousandsSep,
+                           style->language(), style->country(), style->script(), locale);
+
     if (!numericStyle.isEmpty())
         xmlstyle.addAttribute("style:data-style-name", numericStyle);
 }
 
 QString Odf::saveCustomStyle(CustomStyle *style, KoGenStyle& genstyle, KoGenStyles &mainStyles,
-                             const StyleManager* manager, Localization *locale)
+                             const StyleManager* manager, const Localization *locale)
 {
     Q_ASSERT(!style->name().isEmpty());
     // default style does not need display name
@@ -899,7 +934,7 @@ QString Odf::saveCustomStyle(CustomStyle *style, KoGenStyle& genstyle, KoGenStyl
 }
 
 QString Odf::saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& mainStyles,
-                       const StyleManager* manager, Localization *locale)
+                       const StyleManager* manager, const Localization *locale)
 {
     // list of substyles to store
     QSet<Style::Key> keysToStore = style->definedKeys(manager);
@@ -945,14 +980,16 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
                                    Format::Type _style,
                                    const QString &_prefix, const QString &_postfix,
                                    int _precision, const QString& symbol,
-                                   bool thousandsSep, Localization *locale)
+                                   bool thousandsSep,
+                                   const QString &language, const QString &country, const QString &script,
+                                   const Localization *locale)
 {
 //  debugSheetsODF ;
     QString styleName;
     QString valueType;
     switch (_style) {
     case Format::Number:
-        styleName = saveStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix, thousandsSep);
+        styleName = saveStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix, thousandsSep, language, country, script);
         valueType = "float";
         break;
     case Format::Text:
@@ -960,24 +997,19 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
         valueType = "string";
         break;
     case Format::Money:
-        styleName = saveStyleNumericMoney(mainStyles, _style, symbol, _precision, _prefix, _postfix);
+        styleName = saveStyleNumericMoney(mainStyles, _style, symbol, _precision, _prefix, _postfix, language, country, script);
         valueType = "currency";
         break;
     case Format::Percentage:
-        styleName = saveStyleNumericPercentage(mainStyles, _style, _precision, _prefix, _postfix);
+        styleName = saveStyleNumericPercentage(mainStyles, _style, _precision, _prefix, _postfix, language, country, script);
         valueType = "percentage";
         break;
     case Format::Scientific:
-        styleName = saveStyleNumericScientific(mainStyles, _style, _prefix, _postfix, _precision, thousandsSep);
+        styleName = saveStyleNumericScientific(mainStyles, _style, _prefix, _postfix, _precision, thousandsSep, language, country, script);
         valueType = "float";
         break;
-    case Format::ShortDate:
-    case Format::TextDate:
-        styleName = saveStyleNumericDate(mainStyles, _style, _prefix, _postfix, locale);
-        valueType = "date";
-        break;
-    case Format::Time:
-    case Format::SecondeTime:
+    case Format::ShortTime:
+    case Format::LongTime:
     case Format::Time1:
     case Format::Time2:
     case Format::Time3:
@@ -986,7 +1018,7 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
     case Format::Time6:
     case Format::Time7:
     case Format::Time8:
-        styleName = saveStyleNumericTime(mainStyles, _style, _prefix, _postfix);
+        styleName = saveStyleNumericTime(mainStyles, _style, _prefix, _postfix, language, country, script);
         valueType = "time";
         break;
     case Format::fraction_half:
@@ -998,9 +1030,11 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
     case Format::fraction_one_digit:
     case Format::fraction_two_digits:
     case Format::fraction_three_digits:
-        styleName = saveStyleNumericFraction(mainStyles, _style, _prefix, _postfix);
+        styleName = saveStyleNumericFraction(mainStyles, _style, _prefix, _postfix, language, country, script);
         valueType = "float";
         break;
+    case Format::ShortDate:
+    case Format::TextDate:
     case Format::Date1:
     case Format::Date2:
     case Format::Date3:
@@ -1009,16 +1043,16 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
     case Format::Date6:
     case Format::Date7:
     case Format::Date8:
-        styleName = saveStyleNumericDate(mainStyles, _style, _prefix, _postfix, locale);
+        styleName = saveStyleNumericDate(mainStyles, _style, _prefix, _postfix, language, country, script, locale);
         valueType = "date";
         break;
     case Format::Custom:
-        styleName = saveStyleNumericCustom(mainStyles, _style, _prefix, _postfix);
+        styleName = saveStyleNumericCustom(mainStyles, _style, _prefix, _postfix, language, country, script);
         break;
     case Format::Generic:
     case Format::None:
         if (_precision > -1 || !_prefix.isEmpty() || !_postfix.isEmpty()) {
-            styleName = saveStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix, thousandsSep);
+            styleName = saveStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix, thousandsSep, language, country, script);
             valueType = "float";
         }
         break;
@@ -1033,7 +1067,8 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
 }
 
 QString Odf::saveStyleNumericNumber(KoGenStyles& mainStyles, Format::Type /*_style*/, int _precision,
-        const QString& _prefix, const QString& _postfix, bool thousandsSep)
+        const QString& _prefix, const QString& _postfix, bool thousandsSep,
+        const QString &language, const QString &country, const QString &script)
 {
     QString format;
     if (_precision == -1)
@@ -1045,7 +1080,15 @@ QString Odf::saveStyleNumericNumber(KoGenStyles& mainStyles, Format::Type /*_sty
         }
         format = "0." + tmp;
     }
-    return KoOdfNumberStyles::saveOdfNumberStyle(mainStyles, format, _prefix, _postfix, thousandsSep);
+    KoOdfNumberStyles::NumericStyleData data;
+    data.formatStr = format;
+    data.prefix = _prefix;
+    data.suffix = _postfix;
+    data.thousandsSep = thousandsSep;
+    data.language = language;
+    data.country = country;
+    data.script = script;
+    return KoOdfNumberStyles::saveOdfNumericStyle(mainStyles, data);
 }
 
 QString Odf::saveStyleNumericText(KoGenStyles& /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/,
@@ -1056,7 +1099,8 @@ QString Odf::saveStyleNumericText(KoGenStyles& /*mainStyles*/, Format::Type /*_s
 
 QString Odf::saveStyleNumericMoney(KoGenStyles& mainStyles, Format::Type /*_style*/,
                                         const QString& symbol, int _precision,
-                                        const QString& _prefix, const QString& _postfix)
+                                        const QString& _prefix, const QString& _postfix,
+                                        const QString &language, const QString &country, const QString &script)
 {
     QString format;
     if (_precision == -1)
@@ -1068,11 +1112,20 @@ QString Odf::saveStyleNumericMoney(KoGenStyles& mainStyles, Format::Type /*_styl
         }
         format = "0." + tmp;
     }
-    return KoOdfNumberStyles::saveOdfCurrencyStyle(mainStyles, format, symbol, _prefix, _postfix);
+    KoOdfNumberStyles::NumericStyleData data;
+    data.formatStr = format;
+    data.currencySymbol = symbol;
+    data.prefix = _prefix;
+    data.suffix = _postfix;
+    data.language = language;
+    data.country = country;
+    data.script = script;
+    return KoOdfNumberStyles::saveOdfCurrencyStyle(mainStyles, data);
 }
 
 QString Odf::saveStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type /*_style*/, int _precision,
-        const QString& _prefix, const QString& _postfix)
+        const QString& _prefix, const QString& _postfix,
+        const QString &language, const QString &country, const QString &script)
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
@@ -1089,12 +1142,20 @@ QString Odf::saveStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type /*_
         }
         format = "0." + tmp;
     }
-    return KoOdfNumberStyles::saveOdfPercentageStyle(mainStyles, format, _prefix, _postfix);
+    KoOdfNumberStyles::NumericStyleData data;
+    data.formatStr = format;
+    data.prefix = _prefix;
+    data.suffix = _postfix;
+    data.language = language;
+    data.country = country;
+    data.script = script;
+    return KoOdfNumberStyles::saveOdfPercentageStyle(mainStyles, data);
 }
 
 
 QString Odf::saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type /*_style*/,
-        const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep)
+        const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep,
+        const QString &language, const QString &country, const QString &script)
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -1109,54 +1170,39 @@ QString Odf::saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type /*_
         }
         format = "0." + tmp + "E+00";
     }
-    return KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, format, _prefix, _suffix, thousandsSep);
+    KoOdfNumberStyles::NumericStyleData data;
+    data.formatStr = format;
+    data.prefix = _prefix;
+    data.suffix = _suffix;
+    data.thousandsSep = thousandsSep;
+    data.language = language;
+    data.country = country;
+    data.script = script;
+    return KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, data);
 }
 
 QString Odf::saveStyleNumericDate(KoGenStyles&mainStyles, Format::Type _style,
-                                       const QString& _prefix, const QString& _postfix, Localization *locale)
+                                  const QString& _prefix, const QString& _postfix,
+                                  const QString &language, const QString &country, const QString &script,
+                                  const Localization *locale)
 {
-    QString format;
-    switch (_style) {
-        //TODO fixme use locale of Calligra Sheets and not kglobal
-    case Format::ShortDate:
-        format = locale->dateFormat(false);
-        break;
-    case Format::TextDate:
-        format = locale->dateFormat(true);
-        break;
-    case Format::Date1:
-        format = locale->dateFormat(1);
-        break;
-    case Format::Date2:
-        format = locale->dateFormat(2);
-        break;
-    case Format::Date3:
-        format = locale->dateFormat(3);
-        break;
-    case Format::Date4:
-        format = locale->dateFormat(4);
-        break;
-    case Format::Date5:
-        format = locale->dateFormat(5);
-        break;
-    case Format::Date6:
-        format = locale->dateFormat(6);
-        break;
-    case Format::Date7:
-        format = locale->dateFormat(7);
-        break;
-    case Format::Date8:
-        format = locale->dateFormat(8);
-        break;
-    default:
-        debugSheetsODF << "this date format is not defined ! :" << _style;
-        break;
+    QString format = locale->dateFormat(_style);
+    if (format.isEmpty()) {
+        errorSheetsODF << "this date format is not defined ! :" << _style;
     }
-    return KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format, false, _prefix, _postfix);
+    KoOdfNumberStyles::NumericStyleData data;
+    data.type = KoOdfNumberStyles::Date;
+    data.formatStr = format;
+    data.prefix = _prefix;
+    data.suffix = _postfix;
+    data.language = language;
+    data.country = country;
+    data.script = script;
+    return KoOdfNumberStyles::saveOdfDateStyle(mainStyles, data);
 }
 
 QString Odf::saveStyleNumericCustom(KoGenStyles& /*mainStyles*/, Format::Type /*_style*/,
-        const QString& /*_prefix*/, const QString& /*_postfix*/)
+        const QString& /*_prefix*/, const QString& /*_postfix*/, const QString& /*language*/, const QString& /*country*/, const QString& /*script*/)
 {
     //TODO
     //<number:date-style style:name="N50" style:family="data-style" number:automatic-order="true" number:format-source="language">
@@ -1176,7 +1222,8 @@ QString Odf::saveStyleNumericCustom(KoGenStyles& /*mainStyles*/, Format::Type /*
 }
 
 QString Odf::saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
-                                       const QString& _prefix, const QString& _postfix)
+                                       const QString& _prefix, const QString& _postfix,
+                                       const QString& language, const QString& country, const QString& script)
 {
     //<number:time-style style:name="N42" style:family="data-style">
     //<number:hours number:style="long"/>
@@ -1187,13 +1234,12 @@ QString Odf::saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
     //</number:time-style>
 
     QString format;
-    bool locale = false;
     //TODO use format
     switch (_style) {
-    case Format::Time: //TODO FIXME
+    case Format::ShortTime: //TODO FIXME
         format = "hh:mm:ss";
         break;
-    case Format::SecondeTime: //TODO FIXME
+    case Format::LongTime: //TODO FIXME
         format = "hh:mm";
         break;
     case Format::Time1:
@@ -1224,11 +1270,20 @@ QString Odf::saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
         debugSheetsODF << "time format not defined :" << _style;
         break;
     }
-    return KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format, locale, _prefix, _postfix);
+    KoOdfNumberStyles::NumericStyleData data;
+    data.type = KoOdfNumberStyles::Time;
+    data.formatStr = format;
+    data.prefix = _prefix;
+    data.suffix = _postfix;
+    data.language = language;
+    data.country = country;
+    data.script = script;
+    return KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, data);
 }
 
 QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type formatType,
-        const QString &_prefix, const QString &_suffix)
+        const QString &_prefix, const QString &_suffix,
+        const QString &language, const QString &country, const QString &script)
 {
     //<number:number-style style:name="N71" style:family="data-style">
     //<number:fraction number:min-integer-digits="0" number:min-numerator-digits="2" number:min-denominator-digits="2"/>
@@ -1266,8 +1321,14 @@ QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type form
         debugSheetsODF << " fraction format not defined :" << formatType;
         break;
     }
-
-    return KoOdfNumberStyles::saveOdfFractionStyle(mainStyles, format, _prefix, _suffix);
+    KoOdfNumberStyles::NumericStyleData data;
+    data.formatStr = format;
+    data.prefix = _prefix;
+    data.suffix = _suffix;
+    data.language = language;
+    data.country = country;
+    data.script = script;
+    return KoOdfNumberStyles::saveOdfFractionStyle(mainStyles, data);
 }
 
 
@@ -1275,17 +1336,11 @@ QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type form
 
 Format::Type Odf::dateType(const QString &f, const Localization *locale)
 {
-    if (f == locale->dateFormat(false)) return Format::ShortDate;
-    if (f == locale->dateFormat(true)) return Format::TextDate;
-
-    if (f == locale->dateFormat(1)) return Format::Date1;
-    if (f == locale->dateFormat(2)) return Format::Date2;
-    if (f == locale->dateFormat(3)) return Format::Date3;
-    if (f == locale->dateFormat(4)) return Format::Date4;
-    if (f == locale->dateFormat(5)) return Format::Date5;
-    if (f == locale->dateFormat(6)) return Format::Date6;
-    if (f == locale->dateFormat(7)) return Format::Date7;
-    if (f == locale->dateFormat(8)) return Format::Date8;
+    for (int type = Format::DatesBegin; type <= Format::DatesEnd; ++type) {
+        if (f == locale->dateFormat(static_cast<Format::Type>(type))) {
+            return static_cast<Format::Type>(type);
+        }
+    }
     return Format::ShortDate;
 }
 
@@ -1308,7 +1363,7 @@ Format::Type Odf::timeType(const QString &_format)
     else if (_format == "h:mm")
         return Format::Time8;
     else
-        return Format::Time;
+        return Format::ShortTime;
 }
 
 Currency Odf::numberCurrency(const QString &_format)

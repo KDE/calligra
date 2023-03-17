@@ -25,7 +25,6 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN CalculationSettings::Private
 {
 public:
-    Localization* locale;
     bool caseSensitiveComparisons : 1;
     bool precisionAsShown         : 1;
     bool wholeCellSearchCriteria  : 1;
@@ -50,7 +49,6 @@ public:
 CalculationSettings::CalculationSettings()
         : d(new Private)
 {
-    d->locale = new Localization();
     d->caseSensitiveComparisons = true;
     d->precisionAsShown         = false;
     d->wholeCellSearchCriteria  = true;
@@ -65,13 +63,12 @@ CalculationSettings::CalculationSettings()
 
 CalculationSettings::~CalculationSettings()
 {
-    delete d->locale;
     delete d;
 }
 
-Localization* CalculationSettings::locale() const
+const Localization* CalculationSettings::locale() const
 {
-    return d->locale;
+    return Localization::getLocale();
 }
 
 void CalculationSettings::setReferenceYear(int year)

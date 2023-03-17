@@ -101,7 +101,7 @@ void TestValueParser::testTryParseBool()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
     QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
@@ -151,7 +151,7 @@ void TestValueParser::testTryParseNumber()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
     QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
@@ -313,11 +313,11 @@ void TestValueParser::testTryParseDate()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
     QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
-    Value result = m_parser->tryParseDate(str, &ok);
+    Value result = m_parser->tryParseDate(str, m_calcsettings->locale(), &ok);
     QCOMPARE(ok, expectedOk);
     QCOMPARE(result, expected);
 }
@@ -422,7 +422,7 @@ void TestValueParser::testTryParseTime()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
     QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
@@ -457,7 +457,7 @@ void TestValueParser::testParse() {
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    m_calcsettings->locale()->setLanguage(locale);
+    const_cast<Localization*>(m_calcsettings->locale())->setLanguage(locale); // FIXME
     QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     Value result = m_parser->parse(str);

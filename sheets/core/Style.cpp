@@ -99,6 +99,9 @@ QString SubStyle::name(Style::Key key)
     case Style::NotProtected:           name = "Not protected"; break;
     case Style::HideAll:                name = "Hide all"; break;
     case Style::HideFormula:            name = "Hide formula"; break;
+    case Style::Language:               name = "Language"; break;
+    case Style::Country:                name = "Country"; break;
+    case Style::Script:                 name = "Script"; break;
     }
     return name;
 }
@@ -294,6 +297,27 @@ QString Style::fontFamily() const
     if (!d->subStyles.contains(FontFamily))
         return KoGlobal::defaultFont().family(); // SubStyleOne<FontFamily, QString>().value1;
     return static_cast<const SubStyleOne<QString>*>(d->subStyles[FontFamily].data())->value1;
+}
+
+QString Style::language() const
+{
+    if (!d->subStyles.contains(Language))
+        return QString();
+    return static_cast<const SubStyleOne<QString>*>(d->subStyles[Language].data())->value1;
+}
+
+QString Style::country() const
+{
+    if (!d->subStyles.contains(Country))
+        return QString();
+    return static_cast<const SubStyleOne<QString>*>(d->subStyles[Country].data())->value1;
+}
+
+QString Style::script() const
+{
+    if (!d->subStyles.contains(Script))
+        return QString();
+    return static_cast<const SubStyleOne<QString>*>(d->subStyles[Script].data())->value1;
 }
 
 Style::HAlign Style::halign() const
@@ -505,6 +529,10 @@ bool Style::compare(const SubStyle* one, const SubStyle* two)
     case HideAll:
     case HideFormula:
         return static_cast<const SubStyleOne<bool>*>(one)->value1 == static_cast<const SubStyleOne<bool>*>(two)->value1;
+    case Language:
+    case Country:
+    case Script:
+        return static_cast<const SubStyleOne<QString>*>(one)->value1 == static_cast<const SubStyleOne<QString>*>(two)->value1;
     default:
         return false;
     }
@@ -550,9 +578,9 @@ Style Style::operator-(const Style& other) const
 void Style::merge(const Style& style)
 {
     const QList<SharedSubStyle> subStyles(style.subStyles());
-//     debugSheetsStyle <<"merging" << subStyles.count() <<" attributes.";
+     debugSheetsStyle <<"merging" << subStyles.count() <<" attributes.";
     for (int i = 0; i < subStyles.count(); ++i) {
-//         debugSheetsStyle << subStyles[i]->debugData();
+         debugSheetsStyle << subStyles[i]->debugData();
         insertSubStyle(subStyles[i]);
     }
 }
@@ -683,6 +711,11 @@ SharedSubStyle Style::createSubStyle(Key key, const QVariant& value)
     case BackgroundColor:
     case FontColor:
         newSubStyle = new SubStyleOne<QColor>(key, value.value<QColor>());
+        break;
+    case Language:
+    case Country:
+    case Script:
+        newSubStyle = new SubStyleOne<QString>(key, value.value<QString>());
         break;
     }
     return newSubStyle;

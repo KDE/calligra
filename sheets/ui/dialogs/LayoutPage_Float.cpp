@@ -40,11 +40,12 @@
 using namespace Calligra::Sheets;
 
 
-LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFormatter *formatter)
+LayoutPageFloat::LayoutPageFloat(QWidget* parent, const Localization *locale, ValueFormatter *formatter)
         : QWidget(parent)
-        , m_locale(locale)
+        , m_defaultLocale(locale)
         , m_formatter(formatter)
 {
+
     m_bFormatColorChanged = false;
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -107,19 +108,23 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     exampleLabel->setWhatsThis(i18n("This will display a preview of your choice so you can know what it does before clicking the OK button to validate it."));
     grid3->addWidget(exampleLabel, 0, 1);
 
-    grid->addWidget(box2, 9, 1, 3, 1);
+    grid->addWidget(box2, 8, 2, 3, 1);
 
     customFormatEdit = new KLineEdit(grp);
-    grid->addWidget(customFormatEdit, 0, 1);
+    grid->addWidget(customFormatEdit, 11, 1, 1, 2);
 
     listFormat = new QListWidget(grp);
-    grid->addWidget(listFormat, 1, 1, 8, 1);
+    grid->addWidget(listFormat, 1, 1, 10, 1);
     listFormat->setWhatsThis(i18n("Displays choices of format for the fraction, date or time formats."));
     layout->addWidget(grp);
 
+    m_languageBox = new QComboBox(grp);
+    grid->addWidget(m_languageBox, 1, 2, 1, 1);
+    loadLanguages();
+
     /* *** */
 
-    QGroupBox *box = new QGroupBox(this);
+    auto box = new QGroupBox(this);
 
     grid = new QGridLayout(box);
 
@@ -182,7 +187,7 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     int index = 0;
     // fill the currency combo box
     currency->insertItem(0, i18n("Automatic"));
-    for (QString curr : m_currencies) {
+    for (const QString &curr : qAsConst(m_currencies)) {
         Currency c(curr);
         QString symbol = c.symbol();
         QString text = curr;
@@ -213,8 +218,13 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     connect(currency, QOverload<const QString &>::of(&KComboBox::activated), this, &LayoutPageFloat::currencyChanged);
     connect(format, QOverload<int>::of(&KComboBox::activated), this, &LayoutPageFloat::formatChanged);
     connect(format, QOverload<int>::of(&KComboBox::activated), this, &LayoutPageFloat::makeformat);
+    connect(m_languageBox, QOverload<int>::of(&QComboBox::activated), this, &LayoutPageFloat::slotChangeState);
     slotChangeState();
     this->resize(400, 400);
+}
+
+LayoutPageFloat::~LayoutPageFloat()
+{
 }
 
 QPixmap LayoutPageFloat::paintFormatPixmap(const char * _string1, const QColor & _color1,
@@ -234,6 +244,61 @@ QPixmap LayoutPageFloat::paintFormatPixmap(const char * _string1, const QColor &
     return pixmap;
 }
 
+QString LayoutPageFloat::localeToString(const QLocale &locale, bool includeScript)
+{
+    auto languages = locale.uiLanguages();
+    languages = languages.first().split('-');
+    QString lang = locale.languageToString(locale.language());
+    if (includeScript) {
+        lang += ' ' + locale.scriptToString(locale.script());
+    }
+    lang += " (" + locale.countryToString(locale.country()) + ')';
+    return lang;
+}
+
+void LayoutPageFloat::updateCurrentLocale(const QLocale &locale)
+{
+    auto languages = locale.uiLanguages();
+    auto langs = languages.last().split('-');
+    Q_ASSERT(langs.count() == 3);
+    m_language = langs.value(0);
+    m_script = langs.value(1);
+    m_country = langs.value(2);
+}
+
+bool LayoutPageFloat::hasMultipleScripts(const QLocale &locale)
+{
+    return QLocale::matchingLocales(locale.language(), QLocale::AnyScript, locale.country()).count() > 1;
+}
+
+void LayoutPageFloat::loadLanguages()
+{
+    if (m_languageBox->count()) return;   // already loaded - do nothing
+
+    QString currentText;
+    QMap<std::pair<QString, QString>, QLocale> sorted;
+    // sort by <language/country, language/script/country>
+    const QList<QLocale> allLocales = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry);
+    for (const auto &locale : allLocales) {
+        auto key = std::pair<QString, QString>(localeToString(locale), localeToString(locale, hasMultipleScripts(locale)));
+        sorted.insert(key, locale);
+    }
+    for (QMap<std::pair<QString, QString>, QLocale>::const_iterator it = sorted.constBegin(); it != sorted.constEnd(); ++it) {
+        m_languageBox->addItem(it.key().second, it.value());
+        Localization loc;
+        loc.setLanguage(it.value().language(), it.value().script(), it.value().country());
+        if (currentLocale()->languageName(true) == loc.languageName(true)) {
+            currentText = it.key().second;
+        }
+    }
+    m_languageBox->setCurrentText(currentText);
+    m_defaultIndex = m_languageBox->currentIndex();
+    m_originalIndex = m_defaultIndex;
+    m_currentIndex = m_defaultIndex;
+    updateCurrentLocale(m_languageBox->currentData().value<QLocale>());
+}
+
+
 void LayoutPageFloat::formatChanged(int)
 {
     m_bFormatColorChanged = true;
@@ -249,12 +314,19 @@ void LayoutPageFloat::slotChangeState()
     listFormat->clear();
     currency->hide();
     currencyLabel->hide();
+    if (m_currentIndex != m_languageBox->currentIndex()) {
+        m_currentIndex = m_languageBox->currentIndex();
+        updateCurrentLocale(m_languageBox->currentData().value<QLocale>());
+    }
+    const auto locale = currentLocale();
 
+    customFormatEdit->setEnabled(false);
     // start with enabled, they get disabled when inappropriate further down
     precision->setEnabled(true);
     prefix->setEnabled(true);
     postfix->setEnabled(true);
     format->setEnabled(true);
+    listFormat->setEnabled(true);
     if (generic->isChecked() || number->isChecked() || percent->isChecked() ||
             scientific->isChecked() || textFormat->isChecked())
         listFormat->setEnabled(false);
@@ -269,7 +341,7 @@ void LayoutPageFloat::slotChangeState()
         prefix->setEnabled(false);
         postfix->setEnabled(false);
         listFormat->setEnabled(true);
-        init();
+        dateInit();
     } else if (datetime->isChecked()) {
         format->setEnabled(false);
         precision->setEnabled(false);
@@ -317,105 +389,90 @@ void LayoutPageFloat::slotChangeState()
         format->setEnabled(false);
         listFormat->setEnabled(true);
 
-
-        list += i18n("System: ") + m_locale->formatTime(QTime::currentTime(), false);
-        list += i18n("System: ") + m_locale->formatTime(QTime::currentTime(), true);
-        QDateTime tmpTime(QDate(1, 1, 1900), QTime(10, 35, 25), Qt::UTC);
-
-
-        list += m_formatter->timeFormat(tmpTime, Format::Time1);
-        list += m_formatter->timeFormat(tmpTime, Format::Time2);
-        list += m_formatter->timeFormat(tmpTime, Format::Time3);
-        list += m_formatter->timeFormat(tmpTime, Format::Time4);
-        list += m_formatter->timeFormat(tmpTime, Format::Time5);
-        list += (m_formatter->timeFormat(tmpTime, Format::Time6) + i18n(" (=[mm]:ss)"));
-        list += (m_formatter->timeFormat(tmpTime, Format::Time7) + i18n(" (=[hh]:mm:ss)"));
-        list += (m_formatter->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]:mm)"));
+        QStringList list;
+        const QTime tmpTime(14, 3, 45, 235);
+        for (int type = Format::TimesBegin; type <= Format::TimesEnd; ++type) {
+            const auto format = locale->timeFormat(static_cast<Format::Type>(type));
+            list += locale->formatTime(tmpTime, format);
+        }
         listFormat->addItems(list);
+        int row = cellFormatType - Format::TimesBegin;
+        if (row >= 0) {
+            listFormat->setCurrentRow(row);
+        }
 
-        if (cellFormatType == Format::Time)
-            listFormat->setCurrentRow(0);
-        else if (cellFormatType == Format::SecondeTime)
-            listFormat->setCurrentRow(1);
-        else if (cellFormatType == Format::Time1)
-            listFormat->setCurrentRow(2);
-        else if (cellFormatType == Format::Time2)
-            listFormat->setCurrentRow(3);
-        else if (cellFormatType == Format::Time3)
-            listFormat->setCurrentRow(4);
-        else if (cellFormatType == Format::Time4)
-            listFormat->setCurrentRow(5);
-        else if (cellFormatType == Format::Time5)
-            listFormat->setCurrentRow(6);
-        else if (cellFormatType == Format::Time6)
-            listFormat->setCurrentRow(7);
-        else if (cellFormatType == Format::Time7)
-            listFormat->setCurrentRow(8);
-        else if (cellFormatType == Format::Time8)
-            listFormat->setCurrentRow(9);
-        else
-            listFormat->setCurrentRow(0);
+//        list += m_locale->formatTime(QTime::currentTime(), false);
+//        list += m_locale->formatTime(QTime::currentTime(), true);
+//        QDateTime tmpTime(QDate(1, 1, 1900), QTime(10, 35, 25), Qt::UTC);
+
+
+//        list += m_formatter->timeFormat(tmpTime, Format::Time1);
+//        list += m_formatter->timeFormat(tmpTime, Format::Time2);
+//        list += m_formatter->timeFormat(tmpTime, Format::Time3);
+//        list += m_formatter->timeFormat(tmpTime, Format::Time4);
+//        list += m_formatter->timeFormat(tmpTime, Format::Time5);
+//        list += (m_formatter->timeFormat(tmpTime, Format::Time6) + i18n(" (=[mm]:ss)"));
+//        list += (m_formatter->timeFormat(tmpTime, Format::Time7) + i18n(" (=[hh]:mm:ss)"));
+//        list += (m_formatter->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]:mm)"));
+//        listFormat->addItems(list);
+
+//        if (cellFormatType == Format::Time)
+//            listFormat->setCurrentRow(0);
+//        else if (cellFormatType == Format::SecondeTime)
+//            listFormat->setCurrentRow(1);
+//        else if (cellFormatType == Format::Time1)
+//            listFormat->setCurrentRow(2);
+//        else if (cellFormatType == Format::Time2)
+//            listFormat->setCurrentRow(3);
+//        else if (cellFormatType == Format::Time3)
+//            listFormat->setCurrentRow(4);
+//        else if (cellFormatType == Format::Time4)
+//            listFormat->setCurrentRow(5);
+//        else if (cellFormatType == Format::Time5)
+//            listFormat->setCurrentRow(6);
+//        else if (cellFormatType == Format::Time6)
+//            listFormat->setCurrentRow(7);
+//        else if (cellFormatType == Format::Time7)
+//            listFormat->setCurrentRow(8);
+//        else if (cellFormatType == Format::Time8)
+//            listFormat->setCurrentRow(9);
+//        else
+//            listFormat->setCurrentRow(0);
     }
 
     if (customFormat->isChecked()) {
-        customFormatEdit->setHidden(false);
+        customFormatEdit->setEnabled(true);
         precision->setEnabled(false);
         prefix->setEnabled(false);
         postfix->setEnabled(false);
         format->setEnabled(false);
-        listFormat->setEnabled(true);
-    } else
-        customFormatEdit->setHidden(true);
+        listFormat->setEnabled(false);
+    }
 
     makeformat();
 }
 
-void LayoutPageFloat::init()
+void LayoutPageFloat::dateInit()
 {
+    const auto locale = currentLocale();
     QStringList list;
-    QDate tmpDate(2000, 2, 18);
-    list += i18n("System: ") + m_locale->formatDate(QDate::currentDate(), false);
-    list += i18n("System: ") + m_locale->formatDate(QDate::currentDate(), true);
-
-    list += m_formatter->dateFormat(tmpDate, Format::Date1);
-    list += m_formatter->dateFormat(tmpDate, Format::Date2);
-    list += m_formatter->dateFormat(tmpDate, Format::Date3);
-    list += m_formatter->dateFormat(tmpDate, Format::Date4);
-    list += m_formatter->dateFormat(tmpDate, Format::Date5);
-    list += m_formatter->dateFormat(tmpDate, Format::Date6);
-    list += m_formatter->dateFormat(tmpDate, Format::Date7);
-    list += m_formatter->dateFormat(tmpDate, Format::Date8);
-
+    const QDate tmpDate(2000, 12, 25);
+    for (int type = Format::DatesBegin; type <= Format::DatesEnd; ++type) {
+        const auto format = locale->dateFormat(static_cast<Format::Type>(type));
+        list += locale->formatDate(tmpDate, format);
+    }
     listFormat->addItems(list);
-    if (cellFormatType == Format::ShortDate)
-        listFormat->setCurrentRow(0);
-    else if (cellFormatType == Format::TextDate)
-        listFormat->setCurrentRow(1);
-    else if (cellFormatType == Format::Date1)
-        listFormat->setCurrentRow(2);
-    else if (cellFormatType == Format::Date2)
-        listFormat->setCurrentRow(3);
-    else if (cellFormatType == Format::Date3)
-        listFormat->setCurrentRow(4);
-    else if (cellFormatType == Format::Date4)
-        listFormat->setCurrentRow(5);
-    else if (cellFormatType == Format::Date5)
-        listFormat->setCurrentRow(6);
-    else if (cellFormatType == Format::Date6)
-        listFormat->setCurrentRow(7);
-    else if (cellFormatType == Format::Date7)
-        listFormat->setCurrentRow(8);
-    else if (cellFormatType == Format::Date8)
-        listFormat->setCurrentRow(9);
-    else
-        listFormat->setCurrentRow(0);
+    int row = cellFormatType - Format::DatesBegin;
+    if (row >= 0) {
+        listFormat->setCurrentRow(row);
+    }
 }
 
 void LayoutPageFloat::datetimeInit()
 {
     QStringList list;
-    list += i18n("System: ") + m_locale->formatDateTime(QDateTime::currentDateTime(), false);
-    list += i18n("System: ") + m_locale->formatDateTime(QDateTime::currentDateTime(), true);
+    list += currentLocale()->formatDateTime(QDateTime::currentDateTime(), false);
+    list += currentLocale()->formatDateTime(QDateTime::currentDateTime(), true);
     listFormat->addItems(list);
 }
 
@@ -439,19 +496,12 @@ void LayoutPageFloat::updateFormatType()
     else if (percent->isChecked())
         newFormatType = Format::Percentage;
     else if (date->isChecked()) {
-        newFormatType = Format::ShortDate;
-        switch (listFormat->currentRow()) {
-        case 0: newFormatType = Format::ShortDate; break;
-        case 1: newFormatType = Format::TextDate; break;
-        case 2: newFormatType = Format::Date1; break;
-        case 3: newFormatType = Format::Date2; break;
-        case 4: newFormatType = Format::Date3; break;
-        case 5: newFormatType = Format::Date4; break;
-        case 6: newFormatType = Format::Date5; break;
-        case 7: newFormatType = Format::Date6; break;
-        case 8: newFormatType = Format::Date7; break;
-        case 9: newFormatType = Format::Date8; break;
+        Q_ASSERT(listFormat->count() > 0);
+        if (listFormat->currentRow() < 0) {
+            listFormat->setCurrentRow(0);
         }
+        newFormatType = static_cast<Format::Type>(Format::DatesBegin + listFormat->currentRow());
+        Q_ASSERT(Format::isDate(newFormatType));
     } else if (money->isChecked())
         newFormatType = Format::Money;
     else if (scientific->isChecked())
@@ -470,10 +520,10 @@ void LayoutPageFloat::updateFormatType()
         case 8: newFormatType = Format::fraction_three_digits; break;
         }
     } else if (time->isChecked()) {
-        newFormatType = Format::Time;
+        newFormatType = Format::ShortTime;
         switch (listFormat->currentRow()) {
-        case 0: newFormatType = Format::Time; break;
-        case 1: newFormatType = Format::SecondeTime; break;
+        case 0: newFormatType = Format::ShortTime; break;
+        case 1: newFormatType = Format::LongTime; break;
         case 2: newFormatType = Format::Time1; break;
         case 3: newFormatType = Format::Time2; break;
         case 4: newFormatType = Format::Time3; break;
@@ -597,6 +647,12 @@ void LayoutPageFloat::apply(Style *style, bool partial)
             style->setCustomFormat(QString());
         }
     }
+    int currentIndex = m_languageBox->currentIndex();
+    if (shouldApplyLayoutChange(m_defaultIndex == currentIndex, true, partial)) {
+        style->setLanguage(m_language);
+        style->setCountry(m_country);
+        style->setScript(m_script);
+    }
 }
 
 void LayoutPageFloat::loadFrom(const Style &style, bool /*partial*/)
@@ -605,6 +661,22 @@ void LayoutPageFloat::loadFrom(const Style &style, bool /*partial*/)
     m_prefix = style.prefix();
     m_precision = style.precision();
 
+    m_language = style.language();
+    m_country = style.country();
+    m_script = style.script();
+    if (!m_language.isEmpty()) {
+        QString s = m_language;
+        if (!m_script.isEmpty()) s += '-' + m_script;
+        if (!m_country.isEmpty()) s += '-' + m_country;
+        QLocale l(s);
+        const QString text = localeToString(l, QLocale::matchingLocales(l.language(), QLocale::AnyScript, l.country()).count() > 1);
+        m_languageBox->blockSignals(true);
+        m_languageBox->setCurrentText(text);
+        m_languageBox->blockSignals(false);
+        m_currentIndex = m_languageBox->currentIndex();
+        m_originalIndex = m_currentIndex;
+        Q_ASSERT(l == m_languageBox->currentData().value<QLocale>());
+    }
     precision->setValue(m_precision);
     postfix->setText(m_postfix);
     prefix->setText(m_prefix);
@@ -659,6 +731,7 @@ void LayoutPageFloat::loadFrom(const Style &style, bool /*partial*/)
     slotChangeState();
 }
 
-
-
-
+const Localization *LayoutPageFloat::currentLocale() const
+{
+    return Localization::getLocale(m_language, m_country, m_script);
+}

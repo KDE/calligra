@@ -34,6 +34,7 @@ class Value;
 class ValueStorage;
 class Validity;
 class ValidityStorage;
+class Localization;
 
 typedef RectStorage<QString> NamedAreaStorage;
 
@@ -127,6 +128,11 @@ public:
     QVector< QPair<QRectF, QString> > namedAreas(const Region& region) const;
     void setNamedArea(const Region& region, const QString& namedArea);
     void removeNamedArea(const Region& region, const QString& namedArea);
+
+    /** Re-implement to return the Localization associated with the Cell at \p column , \p row. */
+    virtual const Localization *locale(int column, int row) const  { Q_UNUSED(column) Q_UNUSED(row) return nullptr; };
+    /** Re-implement to return the Localization associated with \rect. */
+    virtual const Localization *locale(const QRect& rect) const { Q_UNUSED(rect) return nullptr; };
 
     /**
      * \return \c true, if the cell's value is a matrix and obscures other cells

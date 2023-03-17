@@ -126,6 +126,11 @@ public:
 
     void emitInsertNamedArea(const Region &region, const QString &namedArea);
 
+    /** \return the Style associated with the Cell at \p column , \p row. */
+    const Localization *locale(int column, int row) const override;
+    /** \return the Style associated with \p rect. */
+    const Localization *locale(const QRect& rect) const override;
+
     /**
      * \return the Style associated with the Cell at \p column , \p row .
      */

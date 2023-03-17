@@ -281,7 +281,7 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
                    || localName == "text-style"
                    || localName == "date-style"
                    || localName == "time-style")) {
-        QPair<QString, KoOdfNumberStyles::NumericStyleFormat> numberStyle = KoOdfNumberStyles::loadOdfNumberStyle(e);
+        QPair<QString, KoOdfNumberStyles::NumericStyleData> numberStyle = KoOdfNumberStyles::loadOdfNumericStyle(e);
         d->dataFormats.insert(numberStyle.first, qMakePair(numberStyle.second, new KoXmlElement(e)));
     } else if (ns == KoXmlNS::text && localName == "notes-configuration") {
         if (e.attributeNS(KoXmlNS::text, "note-class", "footnote") == "footnote") {

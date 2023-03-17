@@ -122,7 +122,7 @@ void LayoutDialog::init(bool isStyle)
         addPage(generalPage, i18n("General"));
     }
 
-    Localization *locale = m_sheet->map()->calculationSettings()->locale();
+    const Localization *locale = m_sheet->map()->calculationSettings()->locale();
     floatPage = new LayoutPageFloat(this, locale, m_sheet->fullMap()->formatter());
     addPage(floatPage, i18n("Data Format"));
 

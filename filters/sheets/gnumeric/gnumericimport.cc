@@ -1373,8 +1373,8 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                 case 4:
                                     kspread_validity.setRestriction(Validity::Date);
                                     if (validation_element.hasAttribute("Operator")) {
-                                        const Value value1 = parser->tryParseDate(expression0.toElement().text());
-                                        const Value value2 = parser->tryParseDate(expression1.toElement().text());
+                                        const Value value1 = parser->tryParseDate(expression0.toElement().text(), nullptr); // FIXME locale
+                                        const Value value2 = parser->tryParseDate(expression1.toElement().text(), nullptr); // FIXME locale
                                         int value = validation_element.attribute("Operator").toInt();
                                         switch (value) {
                                         case 0:

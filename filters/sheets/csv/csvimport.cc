@@ -84,7 +84,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     QByteArray inputFile(in.readAll());
     in.close();
 
-    Localization *locale = ksdoc->map()->calculationSettings()->locale();
+    const Localization *locale = ksdoc->map()->calculationSettings()->locale();
     ValueConverter *conv = ksdoc->map()->converter();
 
     QString decimal = locale->decimalSymbol();
@@ -161,7 +161,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
             }
             case KoCsvImportDialog::Date: {
                 Value value(text);
-                cell.setCellValue(conv->asDate(value));
+                cell.setCellValue(conv->asDate(value, cell.locale()));
                 break;
             }
             case KoCsvImportDialog::Currency: {

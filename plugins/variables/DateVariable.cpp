@@ -18,6 +18,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfWorkaround.h>
+#include <KoOdfNumberStyles.h>
 
 DateVariable::DateVariable(DateType type)
         : KoVariable()
@@ -47,7 +48,10 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
     }
 
     if (!m_definition.isEmpty()) {
-        QString styleName = KoOdfNumberStyles::saveOdfDateStyle(context.mainStyles(), m_definition, false);
+        KoOdfNumberStyles::NumericStyleData data;
+        data.type = KoOdfNumberStyles::Date;
+        data.formatStr = m_definition;
+        QString styleName = KoOdfNumberStyles::saveOdfDateStyle(context.mainStyles(), data);
         writer->addAttribute("style:data-style-name", styleName);
     }
 
@@ -79,7 +83,7 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     QString dataStyle = element.attributeNS(KoXmlNS::style, "data-style-name");
     if (!dataStyle.isEmpty()) {
         if (context.odfLoadingContext().stylesReader().dataFormats().contains(dataStyle)) {
-            KoOdfNumberStyles::NumericStyleFormat dataFormat = context.odfLoadingContext().stylesReader().dataFormats().value(dataStyle).first;
+            KoOdfNumberStyles::NumericStyleData dataFormat = context.odfLoadingContext().stylesReader().dataFormats().value(dataStyle).first;
             dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
         }
     }

@@ -109,7 +109,10 @@ bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
                     writer.addTextNode(data["fixed value"].toString());
                 }
                 else {
-                    QString styleName = KoOdfNumberStyles::saveOdfDateStyle(paContext.mainStyles(), format, false);
+                    KoOdfNumberStyles::NumericStyleData data;
+                    data.type = KoOdfNumberStyles::Date;
+                    data.formatStr = format;
+                    QString styleName = KoOdfNumberStyles::saveOdfDateStyle(paContext.mainStyles(), data);
                     writer.addAttribute("style:data-style-name", styleName);
                 }
             }

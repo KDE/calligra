@@ -22,6 +22,8 @@
 #include "StyleStorage.h"
 #include "ValidityStorage.h"
 #include "DatabaseStorage.h"
+#include "CalculationSettings.h"
+#include "Localization.h"
 
 // Sheets - rest
 #include "engine/Damages.h"
@@ -261,6 +263,24 @@ void CellStorage::setLink(int column, int row, const QString& link)
 void CellStorage::emitInsertNamedArea(const Region &region, const QString &namedArea)
 {
     emit insertNamedArea(region, namedArea);
+}
+
+const Localization *CellStorage::locale(int column, int row) const
+{
+    const auto style = d->styleStorage->contains(QPoint(column, row));
+    QString lang = style.language();
+    if (!style.script().isEmpty()) lang.append('-').append(style.script());
+    if (!style.country().isEmpty()) lang.append('-').append(style.country());
+    return Localization::getLocale(lang);
+}
+
+const Localization *CellStorage::locale(const QRect& rect) const
+{
+    const auto style = d->styleStorage->contains(rect);
+    QString lang = style.language();
+    if (!style.script().isEmpty()) lang.append('-').append(style.script());
+    if (!style.country().isEmpty()) lang.append('-').append(style.country());
+    return Localization::getLocale(lang);
 }
 
 Style CellStorage::style(int column, int row) const

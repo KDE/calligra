@@ -307,7 +307,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
         }
 
         if (newStyleLoading) {
-            Localization* locale = sett->locale();
+            const Localization* locale = sett->locale();
             // boolean ?
             if (dataType == "Bool")
                 cell->setValue(Value(t.toLower() == "true"));

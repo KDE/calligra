@@ -18,7 +18,7 @@ void TestLogicFunctions::init()
     m_map = new MapBase;
     m_map->addNewSheet();
     m_sheet = m_map->sheet(0);
-    m_map->calculationSettings()->locale()->setLanguage(QLocale::C);
+    const_cast<Localization*>(m_map->calculationSettings()->locale())->setLanguage(QLocale::C); // FIXME
 }
 
 void TestLogicFunctions::cleanup()

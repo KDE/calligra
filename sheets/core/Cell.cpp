@@ -44,7 +44,7 @@
 #include "Sheet.h"
 #include "ValueFormatter.h"
 #include "StyleStorage.h"
-
+#include "Localization.h"
 
 using namespace Calligra::Sheets;
 
@@ -89,8 +89,11 @@ Sheet* Cell::fullSheet() const
     return dynamic_cast<Sheet *>(sheet());
 }
 
-Localization* Cell::locale() const
+const Localization* Cell::locale() const
 {
+    if (cs) {
+        return cs->locale(column(), row());
+    }
     return sheet()->map()->calculationSettings()->locale();
 }
 
@@ -220,14 +223,16 @@ QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
         if (showFormula)
             *showFormula = true;
     } else if (!isEmpty()) {
+        auto locale = Localization::getLocale(s.language(), s.country(), s.script());
         Value theValue = fullSheet()->fullMap()->formatter()->formatText(value(), style.formatType(), style.precision(),
                  style.floatFormat(), style.prefix(),
                  style.postfix(), style.currency().symbol(),
-                 style.customFormat(), style.thousandsSep());
+                 style.customFormat(), style.thousandsSep(), locale);
         if (v) *v = theValue;
         string = theValue.asString();
-        if (showFormula)
+        if (showFormula) {
             *showFormula = false;
+        }
     }
     return string;
 }

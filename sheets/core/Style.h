@@ -151,7 +151,11 @@ public:
         DontPrintText,
         NotProtected,
         HideAll,
-        HideFormula
+        HideFormula,
+        // locale
+        Language,
+        Country,
+        Script
     };
 
     Style();
@@ -220,6 +224,10 @@ public:
 
     bool getBoolValue(Key key) const;
 
+    QString language() const;
+    QString country() const;
+    QString script() const;
+
 public:
     void setFont(QFont const & font);
     void setFontFamily(QString const & fam);
@@ -258,6 +266,9 @@ public:
     void setVerticalText(bool enable) { insertSubStyle(VerticalText, enable); }
     void setShrinkToFit(bool enable) {  insertSubStyle(ShrinkToFit, enable); }
     void setBackgroundColor(QColor const & color) { insertSubStyle(BackgroundColor, color); }
+    void setLanguage(const QString &language) { insertSubStyle(Language, language); }
+    void setCountry(const QString &country) { insertSubStyle(Country, country); }
+    void setScript(const QString &script) { insertSubStyle(Script, script); }
 
     void setDefault();
     void clear();

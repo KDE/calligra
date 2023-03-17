@@ -72,7 +72,7 @@ void GoalSeek::calculate()
     }
 
     bool ok = false;
-    Localization *locale = sheet->map()->calculationSettings()->locale();
+    const Localization *locale = sheet->map()->calculationSettings()->locale();
     double goal = locale->readNumber(m_dlg->selectorValue(2), &ok);
     if (!ok) {
         KMessageBox::error(m_canvasWidget, i18n("Target value is invalid."));

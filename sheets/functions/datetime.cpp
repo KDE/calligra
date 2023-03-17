@@ -211,7 +211,7 @@ QString DateTimeModule::descriptionFileName() const
 // Function: EDATE
 Value func_edate(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate date = calc->conv()->asDate(args[0]).asDate(calc->settings());
+    QDate date = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
     int months = calc->conv()->asInteger(args[1]).asInteger();
 
     date = date.addMonths(months);
@@ -288,8 +288,8 @@ static int func_days360_helper(const QDate& _date1, const QDate& _date2, bool eu
 // algorithm adapted from gnumeric
 Value func_days360(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate date1 = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate date2 = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate date1 = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate date2 = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     bool european = false;
     if (args.count() == 3)
         european = calc->conv()->asBoolean(args[2]).asBoolean();
@@ -300,7 +300,7 @@ Value func_days360(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: YEAR
 Value func_year(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v = calc->conv()->asDate(args[0]);
+    Value v = calc->conv()->asDate(args[0], nullptr); // FIXME locale
     if (v.isError()) return v;
     QDate date = v.asDate(calc->settings());
     return Value(date.year());
@@ -309,7 +309,7 @@ Value func_year(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: MONTH
 Value func_month(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v = calc->conv()->asDate(args[0]);
+    Value v = calc->conv()->asDate(args[0], nullptr); // FIXME locale
     if (v.isError()) return v;
     QDate date = v.asDate(calc->settings());
     return Value(date.month());
@@ -318,7 +318,7 @@ Value func_month(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DAY
 Value func_day(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v = calc->conv()->asDate(args[0]);
+    Value v = calc->conv()->asDate(args[0], nullptr); // FIXME locale
     if (v.isError()) return v;
     QDate date = v.asDate(calc->settings());
     return Value(date.day());
@@ -366,7 +366,7 @@ Value func_second(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: WEEKDAY
 Value func_weekday(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v(calc->conv()->asDate(args[0]));
+    Value v(calc->conv()->asDate(args[0], nullptr)); // FIXME locale
     if (v.isError()) return v;
     QDate date = v.asDate(calc->settings());
     int method = 1;
@@ -393,7 +393,7 @@ Value func_weekday(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_datevalue(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args[0].isString()) {
-        Value v = calc->conv()->asDate(args[0]);
+        Value v = calc->conv()->asDate(args[0], nullptr); // FIXME locale
         if (! v.isError())
             return calc->conv()->asFloat(v);
     }
@@ -415,8 +415,8 @@ Value func_timevalue(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: YEARS
 Value func_years(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate date1 = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate date2 = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate date1 = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate date2 = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     if (!date1.isValid() || !date2.isValid())
         return Value::errorVALUE();
 
@@ -448,8 +448,8 @@ Value func_years(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: MONTHS
 Value func_months(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate date1 = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate date2 = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate date1 = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate date2 = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     if (!date1.isValid() || !date2.isValid())
         return Value::errorVALUE();
 
@@ -482,8 +482,8 @@ Value func_months(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: WEEKS
 Value func_weeks(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate date1 = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate date2 = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate date1 = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate date2 = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     if (!date1.isValid() || !date2.isValid())
         return Value::errorVALUE();
 
@@ -508,8 +508,8 @@ Value func_weeks(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DAYS
 Value func_days(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate date1 = calc->conv()->asDate(args[0]).asDate(calc->settings());
-    QDate date2 = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    QDate date1 = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
+    QDate date2 = calc->conv()->asDate(args[1], nullptr).asDate(calc->settings()); // FIXME locale
     if (!date1.isValid() || !date2.isValid())
         return Value::errorVALUE();
 
@@ -673,7 +673,7 @@ Value func_easterSunday(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_isoWeekNum(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QDate date = calc->conv()->asDate(args[0]).asDate(calc->settings());
+    QDate date = calc->conv()->asDate(args[0], nullptr).asDate(calc->settings()); // FIXME locale
     if (!date.isValid())
         return Value::errorVALUE();
 
@@ -734,7 +734,7 @@ Value func_isoWeekNum(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v(calc->conv()->asDate(args[0]));
+    Value v(calc->conv()->asDate(args[0], nullptr)); // FIXME locale
     if (v.isError()) return v;
     QDate date = v.asDate(calc->settings());
 
@@ -778,14 +778,14 @@ Value func_weekNum(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_dateDif(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v1(calc->conv()->asDate(args[0]));
+    Value v1(calc->conv()->asDate(args[0], nullptr)); // FIXME locale
     if (v1.isError()) return v1;
     QDate date1 = v1.asDate(calc->settings());
 
     if (!date1.isValid())
         return Value::errorVALUE();
 
-    Value v2(calc->conv()->asDate(args[1]));
+    Value v2(calc->conv()->asDate(args[1], nullptr)); // FIXME locale
     if (v2.isError()) return v2;
     QDate date2 = v2.asDate(calc->settings());
 
@@ -881,14 +881,14 @@ Value func_dateDif(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v1(calc->conv()->asDate(args[0]));
+    Value v1(calc->conv()->asDate(args[0], nullptr)); // FIXME locale
     if (v1.isError()) return v1;
     QDate date1 = v1.asDate(calc->settings());
 
     if (!date1.isValid())
         return Value::errorVALUE();
 
-    Value v2(calc->conv()->asDate(args[1]));
+    Value v2(calc->conv()->asDate(args[1], nullptr)); // FIXME locale
     if (v2.isError()) return v2;
     QDate date2 = v2.asDate(calc->settings());
 
@@ -912,7 +912,7 @@ Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
 {
-    Value v(calc->conv()->asDate(args[0]));
+    Value v(calc->conv()->asDate(args[0], nullptr)); // FIXME locale
 
     if (v.isError()) return v;
     QDate startdate = v.asDate(calc->settings());
@@ -954,7 +954,7 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
                 for (unsigned c = 0; c < cols; ++c) {
                     // only append if element is a valid date
                     if (!holiargs.element(c + col1, r + row1).isEmpty()) {
-                        Value v(calc->conv()->asDate(holiargs.element(c + col1, r + row1)));
+                        Value v(calc->conv()->asDate(holiargs.element(c + col1, r + row1), nullptr)); // FIXME locale
                         if (v.isError())
                             return Value::errorVALUE();
 
@@ -967,7 +967,7 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
             // no array parameter
             if (args[2].isString()) {
                 // isString
-                Value v(calc->conv()->asDate(args[2]));
+                Value v(calc->conv()->asDate(args[2], nullptr)); // FIXME locale
                 if (v.isError())
                     return Value::errorVALUE();
 
@@ -1005,12 +1005,12 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
 //
 Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
 {
-    Value v1(calc->conv()->asDate(args[0]));
+    Value v1(calc->conv()->asDate(args[0], nullptr)); // FIXME locale
 
     if (v1.isError()) return v1;
     QDate startdate = v1.asDate(calc->settings());
 
-    Value v2(calc->conv()->asDate(args[1]));
+    Value v2(calc->conv()->asDate(args[1], nullptr)); // FIXME locale
 
     if (v2.isError()) return v2;
     QDate enddate = v2.asDate(calc->settings());
@@ -1047,7 +1047,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
                 for (unsigned c = 0; c < cols; ++c) {
                     // only append if element is a valid date
                     if (!holiargs.element(c + col1, r + row1).isEmpty()) {
-                        Value v(calc->conv()->asDate(holiargs.element(c + col1, r + row1)));
+                        Value v(calc->conv()->asDate(holiargs.element(c + col1, r + row1), nullptr)); // FIXME locale
                         if (v.isError())
                             return Value::errorVALUE();
 
@@ -1059,7 +1059,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
         } else {
             // no array parameter
             if (args[2].isString()) {
-                Value v(calc->conv()->asDate(args[2]));
+                Value v(calc->conv()->asDate(args[2], nullptr)); // FIXME locale
                 if (v.isError())
                     return Value::errorVALUE();
 

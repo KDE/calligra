@@ -126,7 +126,7 @@ public:
      */
     QHash<QString, KoXmlElement*> autoStyles(const QString& family, bool stylesDotXml = false) const;
 
-    typedef QHash<QString, QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> > DataFormatsMap;
+    typedef QHash<QString, QPair<KoOdfNumberStyles::NumericStyleData, KoXmlElement*> > DataFormatsMap;
     /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
     DataFormatsMap dataFormats() const;

@@ -879,7 +879,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
 
     int styleId = convertStyle(&ic->format(), formula);
 
-    Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
+    const Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
     Value value = ic->value();
     if (value.isBoolean()) {
         oc.setValue(Calligra::Sheets::Value(value.asBoolean()));
@@ -1403,7 +1403,7 @@ void ExcelImport::Private::processNumberFormats()
     KoOdfStylesReader odfStyles;
     odfStyles.createStyleMap(stylesDoc, false);
 
-    Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
+    const Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
     for (int i = 0; i < workbook->formatCount(); i++) {
         Format* f = workbook->format(i);
         const QString& styleName = dataStyleMap[f->valueFormat()];

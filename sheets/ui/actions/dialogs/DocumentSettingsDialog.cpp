@@ -154,7 +154,7 @@ parameterLocale::parameterLocale(MapBase *map, KoVBox *box)
     m_map = map;
     m_bUpdateLocale = false;
 
-    Localization* locale = map->calculationSettings()->locale();
+    const Localization* locale = map->calculationSettings()->locale();
 
     m_language = new QLabel(box);
     m_number = new QLabel(box);
@@ -163,7 +163,7 @@ parameterLocale::parameterLocale(MapBase *map, KoVBox *box)
     m_time = new QLabel(box);
     m_money = new QLabel(box);
 
-    updateToMatchLocale(locale);
+    updateToMatchLocale(const_cast<Localization*>(locale));
 
     m_updateButton = new QPushButton(i18n("&Use System's Locale Settings"), box);
     connect(m_updateButton, &QAbstractButton::clicked, this, &parameterLocale::updateDefaultSystemConfig);
@@ -185,12 +185,13 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale = true;
-    Localization* const locale = m_map->calculationSettings()->locale();
-    static_cast<Localization*>(locale)->setDefaultLocale();
+// FIXME
+    const Localization* locale = m_map->calculationSettings()->locale();
+    const_cast<Localization*>(locale)->setDefaultLocale();
     updateToMatchLocale(locale);
 }
 
-void parameterLocale::updateToMatchLocale(Localization* locale)
+void parameterLocale::updateToMatchLocale(const Localization* locale)
 {
     m_language->setText(i18n("Language: %1 (%2)", locale->languageName(true), locale->languageName(false)));
     m_number->setText(i18n("Default number format: %1", locale->formatNumber(12.55)));   // krazy:exclude=i18ncheckarg

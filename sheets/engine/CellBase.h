@@ -26,6 +26,7 @@ class Formula;
 class SheetBase;
 class Value;
 class Validity;
+class Localization;
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT CellBase
 {
@@ -222,7 +223,8 @@ public:
     QString decodeFormula(const QString& text) const;
 
 
-
+    /** returns the locale assosiated with this cell. */
+    const Localization *locale() const;
 
 
     /**

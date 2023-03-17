@@ -48,7 +48,8 @@ void TestInformationFunctions::initTestCase()
     sheet->setSheetName("Sheet1");
     CellBaseStorage* storage = sheet->cellStorage();
 
-    m_map->calculationSettings()->locale()->setLanguage("en_US");  // needed for decimals
+    // FIXME
+    const_cast<Localization*>(m_map->calculationSettings()->locale())->setLanguage("en_US");  // needed for decimals
 
     //
     // Test case data set

@@ -30,7 +30,7 @@ const CalculationSettings* ValueFormatter::settings() const
 Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int precision,
                                  Style::FloatFormat floatFormat, const QString &prefix,
                                  const QString &postfix, const QString &currencySymbol,
-                                 const QString &formatString, bool thousandsSep)
+                                 const QString &formatString, bool thousandsSep, const Localization *locale)
 {
     if (value.isError())
         return Value(value.errorMessage());
@@ -61,7 +61,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     }
 
     //datetime
-    else if (fmtType == Format::DateTime || (Format::isDate(fmtType) && !formatString.isEmpty()) ) {
+    else if (fmtType == Format::DateTime /*TODO Why? || (Format::isDate(fmtType) && !formatString.isEmpty())*/ ) {
         Value dateValue = m_converter->asDateTime(value, &ok);
         if (ok) {
             result = Value(dateTimeFormat(dateValue.asDateTime(settings()), fmtType, formatString));
@@ -71,9 +71,9 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
 
     //
     else if (Format::isDate(fmtType)) {
-        Value dateValue = m_converter->asDate(value, &ok);
+        Value dateValue = m_converter->asDate(value, locale, &ok);
         if (ok) {
-            result = Value(dateFormat(dateValue.asDate(settings()), fmtType, formatString));
+            result = Value(dateFormat(dateValue.asDate(settings()), fmtType, formatString, locale));
             result.setFormat(Value::fmt_Date);
         }
     }
@@ -119,7 +119,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
 
     // Only string values can fail. If so, keep the string.
     if (!ok) {
-        QString str = m_converter->asString(value).asString();
+        QString str = m_converter->asString(value, locale).asString();
         if (!str.isEmpty() && str[0] == '\'')
             str = str.mid(1);
         result = Value(str);
@@ -499,9 +499,9 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
 
     const QDateTime dt(_dt.toUTC());
     QString result;
-    if (fmtType == Format::Time)
+    if (fmtType == Format::ShortTime)
         result = m_converter->settings()->locale()->formatTime(dt.time(), false);
-    else if (fmtType == Format::SecondeTime)
+    else if (fmtType == Format::LongTime)
         result = m_converter->settings()->locale()->formatTime(dt.time(), true);
     else {
         const int d = settings()->referenceDate().daysTo(dt.date());
@@ -590,35 +590,15 @@ QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtTyp
     return result;
 }
 
-QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, const QString& formatString )
+QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, const QString& formatString, const Localization *_locale)
 {
-    Localization *locale = m_converter->settings()->locale();
-    if (!formatString.isEmpty())
+    const Localization *locale = _locale ? _locale : m_converter->settings()->locale();
+    if (!formatString.isEmpty()) {
         return locale->formatDate(date, formatString);
-
-    if (fmtType == Format::ShortDate)
-        return locale->formatDate(date, false);
-
-    if (fmtType == Format::TextDate)
-        return locale->formatDate(date, true);
-
-    int ftype = 0;
-    if (fmtType == Format::Date1) ftype = 1;
-    if (fmtType == Format::Date2) ftype = 2;
-    if (fmtType == Format::Date3) ftype = 3;
-    if (fmtType == Format::Date4) ftype = 4;
-    if (fmtType == Format::Date5) ftype = 5;
-    if (fmtType == Format::Date6) ftype = 6;
-    if (fmtType == Format::Date7) ftype = 7;
-    if (fmtType == Format::Date8) ftype = 8;
-    if (ftype) {
-        QString format = locale->dateFormat(ftype);
-        return locale->formatDate(date, format);
     }
-
-    // default format
-    QString res = locale->formatDate(date, false);
-    return res;
+    QString format = locale->dateFormat(fmtType);
+    Q_ASSERT(!format.isEmpty());
+    return locale->formatDate(date, format);
 }
 
 QString ValueFormatter::complexFormat(const Value& value, int precision,
