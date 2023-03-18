@@ -1,6 +1,7 @@
 
 set (actions_DIR_SRCS
     actions/CellAction.cpp
+    actions/DialogCellAction.cpp
     actions/Actions.cpp
     actions/AdjustRowCol.cpp
     actions/Align.cpp
