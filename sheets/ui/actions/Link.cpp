@@ -38,9 +38,7 @@ Link::~Link()
 void Link::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
-
-    QPoint marker(selection->marker());
-    Cell cell(sheet, marker);
+    Cell cell(sheet, selection->marker());
     
     const NamedAreaManager *manager = sheet->map()->namedAreaManager();
     QList<QString> items = manager->areaNames();

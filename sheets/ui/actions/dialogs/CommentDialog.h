@@ -11,9 +11,8 @@
 #ifndef CALLIGRA_SHEETS_COMMENT_DIALOG
 #define CALLIGRA_SHEETS_COMMENT_DIALOG
 
-#include <KoDialog.h>
-
-class KTextEdit;
+#include "ActionDialog.h"
+#include <KTextEdit>
 
 namespace Calligra
 {
@@ -24,7 +23,7 @@ namespace Sheets
  * \ingroup UI
  * Dialog to add a comment.
  */
-class CommentDialog : public KoDialog
+class CommentDialog : public ActionDialog
 {
     Q_OBJECT
 public:
@@ -32,10 +31,11 @@ public:
 
     void setComment(const QString &comment);
     QString comment() const;
-public Q_SLOTS:
-    void slotOk();
-    void slotTextChanged();
+Q_SIGNALS:
+    void changeComment(const QString &comment);
 protected:
+    virtual void onApply() override;
+    virtual QWidget *defaultWidget() override { return multiLine; }
 
     KTextEdit *multiLine;
 };

@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_COMMENT
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
 
@@ -18,19 +18,19 @@ namespace Calligra
 {
 namespace Sheets
 {
-class CommentDialog;
-
-class Comment : public CellAction {
+class Comment : public DialogCellAction {
 Q_OBJECT
 public:
     Comment(Actions *actions);
     virtual ~Comment();
 
+protected Q_SLOTS:
+    void changeComment(const QString &comment);
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual void onSelectionChanged() override;
 
-    CommentDialog *m_dlg;
-    Selection *m_selection;
+protected:
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
 class ClearComment : public CellAction {

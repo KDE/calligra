@@ -19,11 +19,9 @@
 using namespace Calligra::Sheets;
 
 CommentDialog::CommentDialog(QWidget* parent)
-        : KoDialog(parent)
+        : ActionDialog(parent)
 {
     setCaption(i18n("Cell Comment"));
-    setModal(true);
-    setButtons(Ok | Cancel);
 
     QWidget *page = new QWidget();
     setMainWidget(page);
@@ -34,10 +32,6 @@ CommentDialog::CommentDialog(QWidget* parent)
 
     multiLine->setFocus();
 
-    connect(this, &KoDialog::okClicked, this, &CommentDialog::slotOk);
-    connect(multiLine, &QTextEdit::textChanged, this, &CommentDialog::slotTextChanged);
-
-    slotTextChanged();
     resize(400, height());
 }
 
@@ -51,13 +45,8 @@ QString CommentDialog::comment() const
     return multiLine->toPlainText().trimmed();
 }
 
-void CommentDialog::slotTextChanged()
+void CommentDialog::onApply()
 {
-    enableButtonOk(!multiLine->toPlainText().isEmpty());
-}
-
-void CommentDialog::slotOk()
-{
-    accept();
+    emit changeComment(comment());
 }
 

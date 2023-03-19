@@ -16,6 +16,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class Selection;
 
 /**
  * Base class for non-modal action dialogs.
@@ -29,6 +30,9 @@ public:
     ActionDialog(QWidget *parent);
 
     ~ActionDialog() override;
+
+    /** Called if selection changes. */
+    virtual void onSelectionChanged(Selection *) {}
 
 protected:
     virtual void onApply() = 0;

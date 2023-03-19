@@ -20,36 +20,37 @@ using namespace Calligra::Sheets;
 
 
 Comment::Comment(Actions *actions)
-    : CellAction(actions, "comment", i18n("Comment..."), koIcon("edit-comment"), i18n("Edit a comment for this cell"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "comment", i18n("Comment..."), koIcon("edit-comment"), i18n("Edit a comment for this cell"))
 {
     m_closeEditor = true;
 }
 
 Comment::~Comment()
 {
-    if (m_dlg) delete m_dlg;
 }
 
 
-void Comment::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *Comment::createDialog(QWidget *canvasWidget)
 {
-    m_selection = selection;
+    CommentDialog *dlg = new CommentDialog(canvasWidget);
+    connect(dlg, &CommentDialog::changeComment, this, &Comment::changeComment);
+    return dlg;
+}
 
-    m_dlg = new CommentDialog(canvasWidget);
-    const QString comment = Cell(sheet, selection->marker()).comment();
-    m_dlg->setComment(comment);
+void Comment::onSelectionChanged()
+{
+    CommentDialog *dlg = dynamic_cast<CommentDialog *>(m_dlg);
+    const QString comment = activeCell().comment();
+    dlg->setComment(comment);
+}
 
-    if (m_dlg->exec() == QDialog::Accepted) {
-        CommentCommand* command = new CommentCommand();
-        command->setSheet(sheet);
-        command->setComment(m_dlg->comment());
-        command->add(*selection);
-        command->execute(selection->canvas());
-    }
-
-    delete m_dlg;
-    m_dlg = nullptr;
+void Comment::changeComment(const QString &comment)
+{
+    CommentCommand* command = new CommentCommand();
+    command->setSheet(m_selection->activeSheet());
+    command->setComment(comment);
+    command->add(*m_selection);
+    command->execute(m_selection->canvas());
 }
 
 

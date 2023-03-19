@@ -30,10 +30,17 @@ public:
 
 protected Q_SLOTS:
     void onDialogClosed();
+    void activeSheetChanged(Sheet* sheet);
+    void selectionChanged(const Region& region);
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+
     virtual ActionDialog *createDialog(QWidget *canvasWidget) = 0;
+    /** Called when the selection changes. Also called when opening the dialog, to simplify the logic. */
+    virtual void onSelectionChanged() {}
+
+    Cell activeCell() const;
 
     ActionDialog *m_dlg;
     Selection *m_selection;

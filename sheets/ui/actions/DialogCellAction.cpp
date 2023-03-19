@@ -8,14 +8,17 @@
 #include "DialogCellAction.h"
 #include "dialogs/ActionDialog.h"
 
+#include "core/Sheet.h"
+#include "ui/Selection.h"
+
 
 using namespace Calligra::Sheets;
 
 DialogCellAction::DialogCellAction(Actions *actions, const QString &actionName, const QString &caption, const QIcon &icon, const QString &tooltip)
     : CellAction(actions, actionName, caption, icon, tooltip)
     , m_dlg(nullptr)
+    , m_selection(nullptr)
 {
-
 }
 
 DialogCellAction::~DialogCellAction()
@@ -26,7 +29,11 @@ DialogCellAction::~DialogCellAction()
 
 void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
 {
-    m_selection = selection;
+    if (!m_selection) {
+        m_selection = selection;
+        connect(m_selection, &Selection::activeSheetChanged, this, &DialogCellAction::activeSheetChanged);
+        connect(m_selection, &Selection::changed, this, &DialogCellAction::selectionChanged);
+    }
 
     if (!m_dlg) {
         m_dlg = createDialog(canvasWidget);
@@ -35,7 +42,29 @@ void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWid
     m_dlg->show();
     m_dlg->raise();
     m_dlg->activateWindow();
+
+    // Update everything necessary.
+    onSelectionChanged();
+    m_dlg->onSelectionChanged(m_selection);
 }
+
+Cell DialogCellAction::activeCell() const
+{
+    return Cell(m_selection->activeSheet(), m_selection->marker());
+}
+
+void DialogCellAction::activeSheetChanged(Sheet *)
+{
+    onSelectionChanged();
+    if (m_dlg) m_dlg->onSelectionChanged(m_selection);
+}
+
+void DialogCellAction::selectionChanged(const Region&) {
+    if (!m_dlg) return;   // Only if the dialog is active.
+    onSelectionChanged();
+    m_dlg->onSelectionChanged(m_selection);
+}
+
 
 void DialogCellAction::onDialogClosed()
 {
