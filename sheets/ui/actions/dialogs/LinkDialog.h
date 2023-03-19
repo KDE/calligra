@@ -12,7 +12,7 @@
 #ifndef LINK_DIALOG
 #define LINK_DIALOG
 
-#include <kpagedialog.h>
+#include "ActionDialog.h"
 
 namespace Calligra
 {
@@ -23,18 +23,25 @@ namespace Sheets
  * \ingroup UI
  * Dialog to insert a hyperlink.
  */
-class LinkDialog : public KPageDialog
+class LinkDialog : public ActionDialog
 {
     Q_OBJECT
 public:
     explicit LinkDialog(QWidget* parent, const QList<QString> &links);
     ~LinkDialog() override;
+
     QString text() const;
     QString link() const;
+
+Q_SIGNALS:
+    void applyLink(const QString& text, const QString& link);
 
 public Q_SLOTS:
     void setText(const QString& text);
     void setLink(const QString& link);
+
+protected:
+    virtual void onApply() override;
 
 private:
     Q_DISABLE_COPY(LinkDialog)

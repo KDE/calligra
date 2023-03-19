@@ -23,50 +23,46 @@ using namespace Calligra::Sheets;
 
 
 Link::Link(Actions *actions)
-    : CellAction(actions, "insertHyperlink", i18n("&Link..."), koIcon("insert-link"), i18n("Insert an Internet hyperlink"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "insertHyperlink", i18n("&Link..."), koIcon("insert-link"), i18n("Insert an Internet hyperlink"))
 {
     m_closeEditor = true;
 }
 
 Link::~Link()
 {
-    if (m_dlg) delete m_dlg;
 }
 
 
-void Link::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *Link::createDialog(QWidget *canvasWidget)
 {
-    m_selection = selection;
-    Cell cell(sheet, selection->marker());
-    
-    const NamedAreaManager *manager = sheet->map()->namedAreaManager();
+    const NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
     QList<QString> items = manager->areaNames();
-    items.append(cell.fullName());
+    LinkDialog *dlg = new LinkDialog(canvasWidget, items);
+    connect(dlg, &LinkDialog::applyLink, this, &Link::setLink);
+    return dlg;
+}
 
-    m_dlg = new LinkDialog(canvasWidget, items);
-    m_dlg->setWindowTitle(i18n("Insert Link"));
+void Link::setLink(const QString &text, const QString &link)
+{
+    QString txt = text;
+    if (txt.isEmpty()) txt = link;
+    LinkCommand* command = new LinkCommand(txt, link);
+    command->setSheet(m_selection->activeSheet());
+    command->add(*m_selection);
+    command->execute(m_selection->canvas());
+}
 
-    if (!cell.isNull()) {
-        m_dlg->setText(cell.userInput());
-        if (!cell.link().isEmpty()) {
-            m_dlg->setWindowTitle(i18n("Edit Link"));
-            m_dlg->setLink(cell.link());
-        }
+void Link::onSelectionChanged()
+{
+    LinkDialog *dlg = dynamic_cast<LinkDialog *>(m_dlg);
+    Cell cell = activeCell();
+    if (cell.isNull()) {
+        dlg->setText(QString());
+        dlg->setLink(QString());
+    } else {
+        dlg->setText(cell.userInput());
+        dlg->setLink(cell.link());
     }
-
-    if (m_dlg->exec() == QDialog::Accepted) {
-        QString text = m_dlg->text();
-        QString link = m_dlg->link();
-        if (text.isEmpty()) text = link;
-        LinkCommand* command = new LinkCommand(m_dlg->text(), m_dlg->link());
-        command->setSheet(sheet);
-        command->add(*selection);
-        command->execute(selection->canvas());
-    }
-
-    delete m_dlg;
-    m_dlg = nullptr;
 }
 
 

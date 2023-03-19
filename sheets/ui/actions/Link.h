@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_LINK
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
 
@@ -20,17 +20,18 @@ namespace Sheets
 {
 class LinkDialog;
 
-class Link : public CellAction {
+class Link : public DialogCellAction {
 Q_OBJECT
 public:
     Link(Actions *actions);
     virtual ~Link();
 
-protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+protected Q_SLOTS:
+    void setLink(const QString &text, const QString &link);
 
-    LinkDialog *m_dlg;
-    Selection *m_selection;
+protected:
+    ActionDialog *createDialog(QWidget *canvasWidget) override;
+    virtual void onSelectionChanged() override;
 };
 
 class ClearLink : public CellAction {
