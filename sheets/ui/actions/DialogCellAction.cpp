@@ -6,7 +6,7 @@
 */
 
 #include "DialogCellAction.h"
-#include "KoDialog.h"
+#include "dialogs/ActionDialog.h"
 
 
 using namespace Calligra::Sheets;
@@ -31,7 +31,7 @@ void DialogCellAction::execute(Selection *selection, Sheet *sheet, QWidget *canv
 
     if (!m_dlg) {
         m_dlg = createDialog(canvasWidget);
-        connect(m_dlg, &KoDialog::finished, this, &DialogCellAction::onDialogClosed);
+        connect(m_dlg, &ActionDialog::finished, this, &DialogCellAction::onDialogClosed);
     }
     m_dlg->show();
     m_dlg->raise();
@@ -41,7 +41,7 @@ void DialogCellAction::execute(Selection *selection, Sheet *sheet, QWidget *canv
 void DialogCellAction::onDialogClosed()
 {
     if (!m_dlg) return;
-    disconnect(m_dlg, &KoDialog::finished, this, &DialogCellAction::onDialogClosed);
+    disconnect(m_dlg, &ActionDialog::finished, this, &DialogCellAction::onDialogClosed);
     m_dlg->deleteLater();
     m_dlg = nullptr;
 }

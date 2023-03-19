@@ -50,6 +50,7 @@ set (actions_DIR_SRCS
     )
 
 set (action_dialogs_DIR_SRCS
+    actions/dialogs/ActionDialog.cpp
     actions/dialogs/AddNamedAreaDialog.cpp
     actions/dialogs/AngleDialog.cpp
     actions/dialogs/AutoFormatDialog.cpp

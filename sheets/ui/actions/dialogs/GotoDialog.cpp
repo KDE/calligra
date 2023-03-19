@@ -14,6 +14,7 @@
 
 #include <QComboBox>
 #include <QLabel>
+#include <QLineEdit>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
@@ -22,11 +23,10 @@
 using namespace Calligra::Sheets;
 
 GotoDialog::GotoDialog(QWidget* parent, const QList<QString> &choices)
-        : KoDialog(parent)
+        : ActionDialog(parent)
 {
     setCaption(i18n("Goto Cell"));
     setObjectName(QLatin1String("GotoDialog"));
-    setButtons(Apply | Close);
     setButtonText(Apply, i18n("Goto Cell"));
 
     QWidget *page = new QWidget();
@@ -42,10 +42,7 @@ GotoDialog::GotoDialog(QWidget* parent, const QList<QString> &choices)
     m_nameCell->addItems(choices);
     m_nameCell->setCurrentText(QString());
     m_nameCell->setEditable(true);
-    m_nameCell->setFocus();
 
-    connect(this, &KoDialog::closeClicked, this, &GotoDialog::slotClose);
-    connect(this, &KoDialog::applyClicked, this, &GotoDialog::slotApply);
     connect(m_nameCell, &QComboBox::editTextChanged,
             this, &GotoDialog::textChanged);
 
@@ -57,12 +54,14 @@ void GotoDialog::textChanged(const QString &_text)
     enableButtonApply(!_text.isEmpty());
 }
 
-void GotoDialog::slotClose() {
-    accept();
+QWidget *GotoDialog::defaultWidget() {
+    return m_nameCell;
 }
 
-void GotoDialog::slotApply()
-{
+void GotoDialog::onApply() {
     QString region = m_nameCell->currentText();
     emit gotoCell(region);
+    m_nameCell->lineEdit()->selectAll();
+    m_nameCell->setFocus();
 }
+

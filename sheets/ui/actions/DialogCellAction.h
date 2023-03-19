@@ -10,12 +10,13 @@
 
 
 #include "CellAction.h"
-class KoDialog;
 
 namespace Calligra
 {
 namespace Sheets
 {
+
+class ActionDialog;
 
 /**
  * Subclass of CellAction and a base class of all the actions that use a non-modal dialog.
@@ -32,9 +33,9 @@ protected Q_SLOTS:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-    virtual KoDialog *createDialog(QWidget *canvasWidget) = 0;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) = 0;
 
-    KoDialog *m_dlg;
+    ActionDialog *m_dlg;
     Selection *m_selection;
     Sheet *m_sheet;
 };

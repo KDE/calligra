@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_GOTO
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 
 
@@ -17,9 +17,8 @@ namespace Calligra
 {
 namespace Sheets
 {
-class GotoDialog;
 
-class Goto : public CellAction {
+class Goto : public DialogCellAction {
 Q_OBJECT
 public:
     Goto(Actions *actions);
@@ -27,18 +26,15 @@ public:
 
 protected Q_SLOTS:
     void gotoCell(const QString &name);
-    void dialogFinished();
 
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
     QAction *createAction() override;
 
     virtual bool enabledIfReadOnly() const override { return true; }
     virtual bool enabledIfProtected() const override { return true; }
 
-    Selection *m_selection;
     QWidget *m_canvasWidget;
-    GotoDialog *m_dlg;
 };
 
 

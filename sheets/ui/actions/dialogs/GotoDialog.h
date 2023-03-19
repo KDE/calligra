@@ -12,7 +12,7 @@
 #ifndef CALLIGRA_SHEETS_GOTO_DIALOG
 #define CALLIGRA_SHEETS_GOTO_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 class QComboBox;
 
@@ -25,7 +25,7 @@ namespace Sheets
  * \ingroup UI
  * Dialog to go to a specific cell location.
  */
-class GotoDialog : public KoDialog
+class GotoDialog : public ActionDialog
 {
     Q_OBJECT
 public:
@@ -34,8 +34,8 @@ public:
 Q_SIGNALS:
     void gotoCell(const QString &);
 public Q_SLOTS:
-    void slotClose();
-    void slotApply();
+    virtual QWidget *defaultWidget() override;
+    virtual void onApply() override;
     void textChanged(const QString &_text);
 
 

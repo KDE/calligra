@@ -35,12 +35,11 @@ InsertSpecialChar::~InsertSpecialChar()
 {
 }
 
-KoDialog *InsertSpecialChar::createDialog(QWidget *canvasWidget)
+ActionDialog *InsertSpecialChar::createDialog(QWidget *canvasWidget)
 {
     QString fontFamily = Cell(m_sheet, m_selection->marker()).style().fontFamily();
-    QChar c = ' ';
 
-    CharacterSelectDialog *dlg = new CharacterSelectDialog(canvasWidget, "SpecialCharDialog", fontFamily, c, false);
+    CharacterSelectDialog *dlg = new CharacterSelectDialog(canvasWidget, fontFamily);
     connect(dlg, &CharacterSelectDialog::insertChar, this, &InsertSpecialChar::specialChar);
     return dlg;
 }

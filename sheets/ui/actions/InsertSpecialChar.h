@@ -25,7 +25,7 @@ protected Q_SLOTS:
     void specialChar(QChar character, const QString& fontName);
 
 protected:
-    virtual KoDialog *createDialog(QWidget *canvasWidget) override;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
 

@@ -25,14 +25,12 @@ using namespace Calligra::Sheets;
 
 
 Goto::Goto(Actions *actions)
-    : CellAction(actions, "gotoCell", i18n("Goto Cell..."), koIcon("go-jump"), i18n("Move to a particular cell"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "gotoCell", i18n("Goto Cell..."), koIcon("go-jump"), i18n("Move to a particular cell"))
 {
 }
 
 Goto::~Goto()
 {
-    if (m_dlg) delete m_dlg;
 }
 
 QAction *Goto::createAction() {
@@ -58,29 +56,14 @@ void Goto::gotoCell(const QString &name)
     m_actions->tool()->scrollToCell(m_selection->cursor());
 }
 
-
-void Goto::dialogFinished()
+ActionDialog *Goto::createDialog(QWidget *canvasWidget)
 {
-    if (!m_dlg) return;
-    disconnect(m_dlg, &QDialog::finished, this, &Goto::dialogFinished);
-    m_dlg->deleteLater();
-    m_dlg = nullptr;
-}
-
-
-void Goto::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
-{
-    m_selection = selection;
     m_canvasWidget = canvasWidget;
-    if (!m_dlg) {
-        NamedAreaManager *manager = sheet->map()->namedAreaManager();
-        m_dlg = new GotoDialog(canvasWidget, manager->areaNames());
-        connect(m_dlg, &QDialog::finished, this, &Goto::dialogFinished);
-        connect(m_dlg, &GotoDialog::gotoCell, this, &Goto::gotoCell);
-    }
-    m_dlg->show();
+    NamedAreaManager *manager = m_sheet->map()->namedAreaManager();
+    GotoDialog *dlg = new GotoDialog(canvasWidget, manager->areaNames());
+    connect(dlg, &GotoDialog::gotoCell, this, &Goto::gotoCell);
+    return dlg;
 }
-
 
 
 
