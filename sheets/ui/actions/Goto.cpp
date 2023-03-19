@@ -59,7 +59,7 @@ void Goto::gotoCell(const QString &name)
 ActionDialog *Goto::createDialog(QWidget *canvasWidget)
 {
     m_canvasWidget = canvasWidget;
-    NamedAreaManager *manager = m_sheet->map()->namedAreaManager();
+    NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
     GotoDialog *dlg = new GotoDialog(canvasWidget, manager->areaNames());
     connect(dlg, &GotoDialog::gotoCell, this, &Goto::gotoCell);
     return dlg;

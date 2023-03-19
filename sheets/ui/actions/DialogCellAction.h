@@ -37,7 +37,6 @@ protected:
 
     ActionDialog *m_dlg;
     Selection *m_selection;
-    Sheet *m_sheet;
 };
 
 

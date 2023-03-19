@@ -13,8 +13,6 @@
 
 #include "SeriesDialog.h"
 
-#include "ui/Selection.h"
-
 #include <kmessagebox.h>
 #include <KLocalizedString>
 
@@ -26,14 +24,12 @@
 
 using namespace Calligra::Sheets;
 
-SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
-        : KoDialog(parent)
+SeriesDialog::SeriesDialog(QWidget* parent)
+        : ActionDialog(parent)
 {
     setCaption(i18n("Series"));
-    setButtons(Ok | Cancel);
-    setModal(false);
-
-    m_selection = selection;
+    setObjectName(QLatin1String("SeriesDialog"));
+    setButtonText(Apply, i18n("Insert Series"));
 
     QWidget *page = new QWidget();
     setMainWidget(page);
@@ -105,13 +101,8 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
     start->setFocus();
 }
 
-void SeriesDialog::slotButtonClicked(int button)
+void SeriesDialog::onApply()
 {
-    if (button != KoDialog::Ok) {
-        KoDialog::slotButtonClicked(button);
-        return;
-    }
-
     bool isLinear = linear->isChecked();
 
     m_dstart = start->value();
@@ -160,5 +151,6 @@ void SeriesDialog::slotButtonClicked(int button)
         }
     }
 
-    accept();
+    emit insertSeries(m_dstart, m_dend, m_dstep, column->isChecked(), isLinear);
 }
+

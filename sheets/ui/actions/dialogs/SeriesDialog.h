@@ -13,7 +13,7 @@
 #ifndef CALLIGRA_SHEETS_SERIES_DIALOG
 #define CALLIGRA_SHEETS_SERIES_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 #include <QRadioButton>
 
 class QDoubleSpinBox;
@@ -22,21 +22,17 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
-class Sheet;
 
 /**
  * \ingroup UI
  * Dialog to insert a value series.
  */
-class SeriesDialog : public KoDialog
+class SeriesDialog : public ActionDialog
 {
     Q_OBJECT
 public:
 
-    SeriesDialog(QWidget* parent, Selection* selection);
-
-    Sheet* sheet;
+    SeriesDialog(QWidget* parent);
 
     double dstep() const { return m_dstep; }
     double dstart() const { return m_dstart; }
@@ -45,11 +41,12 @@ public:
     bool isColumn() const { return column->isChecked(); }
     bool isLinear() const { return linear->isChecked(); }
 
-public Q_SLOTS:
-    void slotButtonClicked(int button) override;
+Q_SIGNALS:
+    void insertSeries(double start, double end, double step, bool isColumn, bool isLinear);
 
 protected:
-    Selection* m_selection;
+    virtual void onApply() override;
+
     QDoubleSpinBox* start;
     QDoubleSpinBox* end;
     QDoubleSpinBox* step;

@@ -24,10 +24,9 @@ DialogCellAction::~DialogCellAction()
 }
 
 
-void DialogCellAction::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
 {
     m_selection = selection;
-    m_sheet = sheet;
 
     if (!m_dlg) {
         m_dlg = createDialog(canvasWidget);

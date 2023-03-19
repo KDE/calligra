@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_INSERT_SERIES
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 #include "ui/sheets_ui_export.h"
 #include "ui/commands/DataManipulators.h"
 
@@ -19,20 +19,17 @@ namespace Sheets
 {
 class SeriesDialog;
 
-class InsertSeries : public CellAction {
+class InsertSeries : public DialogCellAction {
 Q_OBJECT
 public:
     InsertSeries(Actions *actions);
     virtual ~InsertSeries();
 
 protected Q_SLOTS:
-    void dialogFinished(int result);
+    void insertSeries(double start, double end, double step, bool isColumn, bool isLinear);
 
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-    
-    SeriesDialog *m_dlg;
-    Selection *m_selection;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
 /**

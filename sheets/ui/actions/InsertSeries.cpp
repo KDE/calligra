@@ -24,47 +24,33 @@
 using namespace Calligra::Sheets;
 
 InsertSeries::InsertSeries(Actions *actions)
-    : CellAction(actions, "insertSeries", i18n("&Series..."), koIcon("series"), i18n("Insert a series"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "insertSeries", i18n("&Series..."), koIcon("series"), i18n("Insert a series"))
 {
     m_closeEditor = true;
 }
 
 InsertSeries::~InsertSeries()
 {
-    if (m_dlg) delete m_dlg;
+}
+
+ActionDialog *InsertSeries::createDialog(QWidget *canvasWidget)
+{
+    SeriesDialog *dlg = new SeriesDialog(canvasWidget);
+    connect(dlg, &SeriesDialog::insertSeries, this, &InsertSeries::insertSeries);
+    return dlg;
 }
 
 
-void InsertSeries::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
+void InsertSeries::insertSeries(double start, double end, double step, bool isColumn, bool isLinear)
 {
-    m_selection = selection;
-    if (m_dlg) {
-        m_dlg->show();
-        return;
-    }
-
-    m_dlg = new SeriesDialog(canvasWidget, selection);
-    connect(m_dlg, &QDialog::finished, this, &InsertSeries::dialogFinished);
-    m_dlg->show();
-}
-
-void InsertSeries::dialogFinished(int result)
-{
-    if (result != QDialog::Accepted) return;
-
     SeriesManipulator *manipulator = new SeriesManipulator;
     manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setupSeries(m_selection->marker(), m_dlg->dstart(), m_dlg->dend(), m_dlg->dstep(),
-                             m_dlg->isColumn() ? SeriesManipulator::Column : SeriesManipulator::Row,
-                             m_dlg->isLinear() ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
+    manipulator->setupSeries(m_selection->marker(), start, end, step,
+                             isColumn ? SeriesManipulator::Column : SeriesManipulator::Row,
+                             isLinear ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
 
     // setupSeries also called add(), so we can call execute directly
     manipulator->execute(m_selection->canvas());
-
-
-    delete m_dlg;
-    m_dlg = nullptr;
 }
 
 
