@@ -5330,7 +5330,7 @@ msgstr "Zvětšit na vše"
 #: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All files"
-msgstr ""
+msgstr "Všechny soubory"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format

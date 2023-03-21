@@ -5478,7 +5478,7 @@ msgstr "Ampliar para Tudo"
 #: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All files"
-msgstr ""
+msgstr "Todos os ficheiros"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format
