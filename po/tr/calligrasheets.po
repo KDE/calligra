@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-12 00:47+0000\n"
-"PO-Revision-Date: 2023-03-09 13:29+0300\n"
+"PO-Revision-Date: 2023-03-23 14:17+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1244,7 +1244,7 @@ msgstr "ÖZETVERİAL(Veritabanı; \"Satış\")"
 #: functions/datetime.xml:5
 #, kde-format
 msgid "Date & Time"
-msgstr "Tarih ve Saat"
+msgstr "Tarih ve Zaman"
 
 #: functions/datetime.xml:11 functions/datetime.xml:71
 #: functions/datetime.xml:86 functions/datetime.xml:107
@@ -1503,7 +1503,7 @@ msgid ""
 "The HOUR functions returns the hour of a time. If no parameter is specified "
 "the current hour gets returned."
 msgstr ""
-"HOUR işlevi, verilen tarihin saat bölümünü döndürür. Eğer herhangi bir "
+"HOUR işlevi, verilen zamanın saat bölümünü döndürür. Eğer herhangi bir "
 "parametre girilmezse o anki saat, geçerli saat kabul edilir."
 
 #: functions/datetime.xml:185
@@ -1772,7 +1772,7 @@ msgstr "DATE(2000,5,5), 'Cuma 05 Mayıs 2000' döndürür"
 #: functions/datetime.xml:375
 #, kde-format
 msgid "The TIME() function returns the time formatted with local parameters."
-msgstr "TIME() işlevi, saati yerel ayarlar ile biçimlendirip döndürür."
+msgstr "TIME() işlevi, zamanı yerel ayarlar ile biçimlendirip döndürür."
 
 #: functions/datetime.xml:376
 #, kde-format
@@ -1990,7 +1990,7 @@ msgid ""
 "The NOW() function returns the current date and time. It is identical with "
 "CURRENTDATETIME and provided for compatibility with other applications."
 msgstr ""
-"NOW() işlevi, geçerli tarih ve saati döndürür. CURRENTDATETIME ile aynı "
+"NOW() işlevi, geçerli tarih ve zamanı döndürür. CURRENTDATETIME ile aynı "
 "işlevi görür ve diğer uygulamaların uyumluluğunu sağlamak için "
 "bulundurulmaktadır."
 
@@ -2007,7 +2007,7 @@ msgstr "NOW(), \"13 Nisan 2002 Cumartesi 19:12:01\""
 #: functions/datetime.xml:554
 #, kde-format
 msgid "The CURRENTDATETIME() function returns the current date and time."
-msgstr "CURRENTDATETIME() işlevi, geçerli gün ve saati döndürür."
+msgstr "CURRENTDATETIME() işlevi, geçerli gün ve zamanı döndürür."
 
 #: functions/datetime.xml:555
 #, kde-format
@@ -15076,7 +15076,7 @@ msgstr ""
 #: ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
 msgid "Date and Time"
-msgstr "Tarih ve Saat"
+msgstr "Tarih ve Zaman"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
