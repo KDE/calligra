@@ -15,7 +15,7 @@
 #ifndef CALLIGRA_SHEETS_NAMED_AREA_DIALOG
 #define CALLIGRA_SHEETS_NAMED_AREA_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 class KComboBox;
 class QLabel;
@@ -29,31 +29,34 @@ namespace Sheets
 {
 class Region;
 class Selection;
+class Sheet;
 
 /**
  * \ingroup UI
  * Dialog to manage named areas.
  */
-class NamedAreaDialog : public KoDialog
+class NamedAreaDialog : public ActionDialog
 {
     Q_OBJECT
 
 public:
     NamedAreaDialog(QWidget* parent, Selection* selection);
 
+    virtual void onSelectionChanged(Selection *) override;
 Q_SIGNALS:
+    void requestSelection(const Region &region, Sheet *sheet);
 
+protected:
+    virtual void onApply() override {}
 protected Q_SLOTS:
     void slotActivated();
-    void slotClose();
     void slotRemove();
     void slotSave();
-    void selectionModified(const Region& region);
 
 private:
     void fillData();
 
-    Selection*   m_selection;
+    Selection *m_selection;
     QListWidget* m_list;
     QLabel*      m_rangeName;
     QPushButton* m_removeButton;

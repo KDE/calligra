@@ -58,7 +58,7 @@ bool Ksp::loadValidity(Validity *v, ValueParser *parser, const KoXmlElement& val
             v->setAllowEmptyCell ((bool)param.attribute("allowemptycell").toInt());
         }
         if (param.hasAttribute("listvalidity")) {
-            v->setValidityList (param.attribute("listvalidity").split(';', QString::SkipEmptyParts));
+            v->setValidityList (param.attribute("listvalidity").split(';', Qt::SkipEmptyParts));
         }
     }
     KoXmlElement inputTitle = validityElement.namedItem("inputtitle").toElement();

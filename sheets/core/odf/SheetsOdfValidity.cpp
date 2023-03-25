@@ -62,7 +62,7 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
             valExpression.remove("oooc:cell-content-text-length-is-between(");
             debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
-            QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
+            QStringList listVal = valExpression.split(',', Qt::SkipEmptyParts);
             loadValidationValue(validity, listVal, cs);
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             validity->setRestriction(Validity::TextLength);
@@ -71,14 +71,14 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
             debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
             debugSheetsODF << " valExpression :" << valExpression;
-            QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
+            QStringList listVal = valExpression.split(',', Qt::SkipEmptyParts);
             loadValidationValue(validity, listVal, cs);
         } else if (valExpression.contains("cell-content-is-in-list(")) {
             validity->setRestriction(Validity::List);
             valExpression.remove("oooc:cell-content-is-in-list(");
             debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
-            validity->setValidityList(valExpression.split(';',  QString::SkipEmptyParts));
+            validity->setValidityList(valExpression.split(';',  Qt::SkipEmptyParts));
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         else {
@@ -106,14 +106,14 @@ void Odf::loadValidation(Validity *validity, CellBase* const cell, const QString
             if (valExpression.contains("cell-content-is-between(")) {
                 valExpression.remove("cell-content-is-between(");
                 valExpression.remove(')');
-                QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
+                QStringList listVal = valExpression.split(',', Qt::SkipEmptyParts);
                 loadValidationValue(validity, listVal, cs);
                 validity->setCondition(Validity::Between);
             }
             if (valExpression.contains("cell-content-is-not-between(")) {
                 valExpression.remove("cell-content-is-not-between(");
                 valExpression.remove(')');
-                QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
+                QStringList listVal = valExpression.split(',', Qt::SkipEmptyParts);
                 loadValidationValue(validity, listVal, cs);
                 validity->setCondition(Validity::Different);
             }

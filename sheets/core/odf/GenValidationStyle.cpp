@@ -68,7 +68,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
             writer.addAttribute("table:title", it.key().title);
             writer.addAttribute("table:display", it.key().displayValidationInformation);
 
-            const QStringList helpLines = it.key().messageInfo.split('\n', QString::SkipEmptyParts);
+            const QStringList helpLines = it.key().messageInfo.split('\n', Qt::SkipEmptyParts);
             for (const QString& helpLine : helpLines) {
                 writer.startElement("text:p");
                 writer.addTextNode(helpLine);
@@ -82,7 +82,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
             writer.addAttribute("table:title", it.key().titleInfo);
             writer.addAttribute("table:display", it.key().displayMessage);
 
-            const QStringList errorLines = it.key().message.split('\n', QString::SkipEmptyParts);
+            const QStringList errorLines = it.key().message.split('\n', Qt::SkipEmptyParts);
             for (const QString& errorLine : errorLines) {
                 writer.startElement("text:p");
                 writer.addTextNode(errorLine);

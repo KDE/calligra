@@ -9,7 +9,7 @@
 #ifndef CALLIGRA_SHEETS_LIST_DIALOG
 #define CALLIGRA_SHEETS_LIST_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 namespace Calligra
 {
@@ -21,7 +21,7 @@ class Localization;
  * \ingroup UI
  * Dialog to edit custom value lists.
  */
-class ListDialog: public KoDialog
+class ListDialog: public ActionDialog
 {
     Q_OBJECT
 public:
@@ -32,8 +32,10 @@ public:
     QStringList customLists();
     bool changed();
 
+Q_SIGNALS:
+    void saveChanges(const QStringList &list);
+
 public Q_SLOTS:
-    virtual void slotOk();
     void slotDoubleClicked();
     void slotCurrentRowChanged(int row);
     void slotAdd();
@@ -42,6 +44,9 @@ public Q_SLOTS:
     void slotRemove();
     void slotModify();
     void slotCopy();
+
+protected:
+    virtual void onApply() override;
 
 private:
     class Private;

@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_NAMED_AREAS
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 
 namespace Calligra
@@ -17,35 +17,31 @@ namespace Calligra
 namespace Sheets
 {
 
-class AddNamedAreaDialog;
-class NamedAreaDialog;
-
-class AddNamedArea : public CellAction {
+class AddNamedArea : public DialogCellAction {
 Q_OBJECT
 public:
     AddNamedArea(Actions *actions);
     virtual ~AddNamedArea();
 
-protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+protected Q_SLOTS:
+    void addArea(const QString &name);
 
-    AddNamedAreaDialog *m_dlg;
-    Selection *m_selection;
+protected:
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
-class ManageNamedAreas : public CellAction {
+class ManageNamedAreas : public DialogCellAction {
 Q_OBJECT
 public:
     ManageNamedAreas(Actions *actions);
     virtual ~ManageNamedAreas();
 
 protected Q_SLOTS:
-    void dialogClosed();
+    void updateSelection(const Region &region, Sheet *sheet);
+
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
     virtual QAction *createAction() override;
-    
-    NamedAreaDialog *m_dlg;
 };
 
 

@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_CUSTOM_LISTS
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 
 namespace Calligra
@@ -17,18 +17,16 @@ namespace Calligra
 namespace Sheets
 {
 
-class ListDialog;
-
-class ManageCustomLists : public CellAction {
+class ManageCustomLists : public DialogCellAction {
 Q_OBJECT
 public:
     ManageCustomLists(Actions *actions);
     virtual ~ManageCustomLists();
 
+protected Q_SLOTS:
+    void saveChanges(const QStringList &list);
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-    
-    ListDialog *m_dlg;
+    ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
 

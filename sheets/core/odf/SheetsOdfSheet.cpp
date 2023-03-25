@@ -218,7 +218,7 @@ bool Odf::loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingCo
                             //}
                             if( element.hasAttribute("style:position") ) {
                                 const QString positionAttribute = element.attribute("style:position","");
-                                const QStringList positionList = positionAttribute.split(' ', QString::SkipEmptyParts);
+                                const QStringList positionList = positionAttribute.split(' ', Qt::SkipEmptyParts);
                                 if( positionList.size() == 1) {
                                     const QString position = positionList.at(0);
                                     if( position == "left" ) {

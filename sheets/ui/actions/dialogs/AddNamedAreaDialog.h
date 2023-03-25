@@ -11,7 +11,7 @@
 #ifndef CALLIGRA_SHEETS_ADD_NAMED_AREA_DIALOG
 #define CALLIGRA_SHEETS_ADD_NAMED_AREA_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 class QLineEdit;
 
@@ -19,13 +19,12 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
  * Dialog to add a named area.
  */
-class AddNamedAreaDialog : public KoDialog
+class AddNamedAreaDialog : public ActionDialog
 {
     Q_OBJECT
 
@@ -34,10 +33,15 @@ public:
 
     QString areaName() const;
 
+Q_SIGNALS:
+    void addArea(const QString &);
+
 public Q_SLOTS:
     void slotAreaNameChanged(const QString& name);
 
 protected:
+    virtual void onApply() override;
+
     QLineEdit*  m_areaName;
 };
 

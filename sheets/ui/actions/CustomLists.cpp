@@ -26,36 +26,38 @@ using namespace Calligra::Sheets;
 
 
 ManageCustomLists::ManageCustomLists(Actions *actions)
-    : CellAction(actions, "sortList", i18n("Custom Lists..."), QIcon(), i18n("Create custom lists for sorting or autofill"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "sortList", i18n("Custom Lists..."), QIcon(), i18n("Create custom lists for sorting or autofill"))
 {
 }
 
 ManageCustomLists::~ManageCustomLists()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-void ManageCustomLists::execute(Selection *, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *ManageCustomLists::createDialog(QWidget *canvasWidget)
 {
-    // TODO - make this non-modal, save on each change
-    if (!m_dlg) m_dlg = new ListDialog(canvasWidget);
-    Map *map = sheet->fullMap();
+    ListDialog *dlg = new ListDialog(canvasWidget);
+
+    Map *map = m_selection->activeSheet()->fullMap();
     ApplicationSettings *sett = map->applicationSettings();
     Localization *locale = map->calculationSettings()->locale();
-    m_dlg->setCustomLists(sett->sortingList(), locale);
-    if (m_dlg->exec() && m_dlg->changed()) {
-        QStringList result = m_dlg->customLists();
-        sett->setSortingList(result);
-        auto config = KSharedConfig::openConfig();
-        config->group("Parameters").writeEntry("Other list", result);
+    dlg->setCustomLists(sett->sortingList(), locale);
+    return dlg;
+}
 
-        // TODO do this better
-        delete(AutoFillCommand::other);
-        AutoFillCommand::other = nullptr;
-    }
-    delete m_dlg;
-    m_dlg = nullptr;
+
+void ManageCustomLists::saveChanges(const QStringList &list)
+{
+    Map *map = m_selection->activeSheet()->fullMap();
+    ApplicationSettings *sett = map->applicationSettings();
+    sett->setSortingList(list);
+    auto config = KSharedConfig::openConfig();
+    config->group("Parameters").writeEntry("Other list", list);
+
+    // TODO do this better
+    delete(AutoFillCommand::other);
+    AutoFillCommand::other = nullptr;
+
 }
 
 

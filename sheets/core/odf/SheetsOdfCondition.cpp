@@ -145,13 +145,13 @@ void Odf::loadConditionValue(const QString &styleCondition, Conditional &newCond
     if (val.contains("cell-content-is-between(")) {
         val.remove("cell-content-is-between(");
         val.remove(')');
-        QStringList listVal = val.split(',', QString::SkipEmptyParts);
+        QStringList listVal = val.split(',', Qt::SkipEmptyParts);
         loadValidationValue(listVal, newCondition);
         newCondition.cond = Validity::Between;
     } else if (val.contains("cell-content-is-not-between(")) {
         val.remove("cell-content-is-not-between(");
         val.remove(')');
-        QStringList listVal = val.split(',', QString::SkipEmptyParts);
+        QStringList listVal = val.split(',', Qt::SkipEmptyParts);
         loadValidationValue(listVal, newCondition);
         newCondition.cond = Validity::Different;
     } else if (val.startsWith(QLatin1String("is-true-formula("))) {

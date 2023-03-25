@@ -604,11 +604,11 @@ void AbstractAtom::removeChild(QExplicitlySharedDataPointer<AbstractAtom> node) 
 }
 
 QList<AbstractNode*> AbstractAtom::fetchAxis(Context* context, const QString& _axis, const QString &_ptType, const QString& _start, const QString& _count, const QString& _step) const {
-    const QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
-    const QStringList typeList = _ptType.split(' ', QString::SkipEmptyParts);
-    const QStringList startList = _start.split(' ', QString::SkipEmptyParts);
-    const QStringList countList = _count.split(' ', QString::SkipEmptyParts);
-    const QStringList stepList = _step.split(' ', QString::SkipEmptyParts);
+    const QStringList axisList = _axis.split(' ', Qt::SkipEmptyParts);
+    const QStringList typeList = _ptType.split(' ', Qt::SkipEmptyParts);
+    const QStringList startList = _start.split(' ', Qt::SkipEmptyParts);
+    const QStringList countList = _count.split(' ', Qt::SkipEmptyParts);
+    const QStringList stepList = _step.split(' ', Qt::SkipEmptyParts);
     QList<AbstractNode*> result;
     Q_ASSERT(context->currentNode());
     result << context->currentNode();

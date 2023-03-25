@@ -21,11 +21,10 @@
 using namespace Calligra::Sheets;
 
 AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent)
-        : KoDialog(parent)
+        : ActionDialog(parent)
 {
-    setButtons(Ok | Cancel);
+    setButtonText(Apply, i18n("Add Named Area"));
     setCaption(i18n("Add Named Area"));
-    setModal(true);
     setObjectName(QLatin1String("AddNamedAreaDialog"));
 
     QWidget* widget = new QWidget();
@@ -55,6 +54,12 @@ void AddNamedAreaDialog::slotAreaNameChanged(const QString& name)
 QString AddNamedAreaDialog::areaName() const
 {
     return m_areaName->text();
+}
+
+void AddNamedAreaDialog::onApply()
+{
+    emit addArea(areaName());
+
 }
 
 

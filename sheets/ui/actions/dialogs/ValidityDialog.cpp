@@ -579,7 +579,7 @@ Validity ValidityDialog::getValidity() {
                 }
             }
         } else if (idx == 7) {
-            validity.setValidityList(validityList->toPlainText().split('\n', QString::SkipEmptyParts));
+            validity.setValidityList(validityList->toPlainText().split('\n', Qt::SkipEmptyParts));
         }
     }
     validity.setDisplayMessage(displayMessage->isChecked());

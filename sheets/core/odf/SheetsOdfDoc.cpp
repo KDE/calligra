@@ -148,7 +148,7 @@ void Odf::loadDocIgnoreList(DocBase *doc, const KoOasisSettings& settings)
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
         //debugSheets<<" ignorelist :"<<ignorelist;
-        doc->setSpellListIgnoreAll (ignorelist.split(',', QString::SkipEmptyParts));
+        doc->setSpellListIgnoreAll (ignorelist.split(',', Qt::SkipEmptyParts));
     }
 }
 

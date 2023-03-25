@@ -43,13 +43,11 @@
 using namespace Calligra::Sheets;
 
 NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
-        : KoDialog(parent, Qt::Dialog)
+        : ActionDialog(parent)
         , m_selection(selection)
 {
-    setButtons(KoDialog::Close);
-    setButtonText(KoDialog::Ok, i18n("&Select"));
+    setButtons(Close);
     setCaption(i18n("Named Areas"));
-    setModal(false);
 
     // *** SPLITTER ***
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
@@ -110,11 +108,9 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
 
     gridLayout->setRowStretch(4, 1);
 
-    connect(this, &KoDialog::cancelClicked, this, &NamedAreaDialog::slotClose);
     connect(m_removeButton, &QAbstractButton::clicked, this, &NamedAreaDialog::slotRemove);
     connect(m_saveButton, &QAbstractButton::clicked, this, &NamedAreaDialog::slotSave);
     connect(m_list, &QListWidget::itemActivated, this, &NamedAreaDialog::slotActivated);
-    connect(m_selection, &Selection::changed, this, &NamedAreaDialog::selectionModified);
 
     m_list->setFocus();
 
@@ -126,8 +122,9 @@ void NamedAreaDialog::fillData()
     QListWidgetItem* item = m_list->currentItem();
     QString cur = item ? item->text() : QString();
 
+    MapBase *map = m_selection->activeSheet()->map();
     m_list->clear();
-    QList<QString> namedAreas = m_selection->activeSheet()->map()->namedAreaManager()->areaNames();
+    QList<QString> namedAreas = map->namedAreaManager()->areaNames();
     namedAreas.sort();
     for (int i = 0; i < namedAreas.count(); ++i)
         m_list->addItem(namedAreas[i]);
@@ -144,7 +141,7 @@ void NamedAreaDialog::fillData()
     }
 
     m_sheets->clear();
-    const QList<SheetBase*> sheetList = m_selection->activeSheet()->map()->sheetList();
+    const QList<SheetBase*> sheetList = map->sheetList();
     for (int i = 0; i < sheetList.count(); ++i) {
         SheetBase* sheet = sheetList.at(i);
         if (!sheet)
@@ -179,20 +176,12 @@ void NamedAreaDialog::slotActivated()
     m_sheets->setCurrentIndex(m_sheets->findText(sheet->sheetName()));
     m_cellRange->setText(region.name(sheet));
 
-    if (fullSheet && fullSheet != m_selection->activeSheet())
-        m_selection->emitVisibleSheetRequested(fullSheet);
-    m_selection->initialize(region);
-    m_selection->emitModified();
+    emit requestSelection(region, fullSheet);
 }
 
-void NamedAreaDialog::selectionModified(const Region&)
+void NamedAreaDialog::onSelectionChanged(Selection *) 
 {
     m_cellRange->setText(m_selection->name(m_selection->activeSheet()));
-}
-
-void NamedAreaDialog::slotClose()
-{
-    accept();
 }
 
 void NamedAreaDialog::slotRemove()

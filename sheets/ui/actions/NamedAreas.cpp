@@ -27,58 +27,56 @@ using namespace Calligra::Sheets;
 
 
 AddNamedArea::AddNamedArea(Actions *actions)
-    : CellAction(actions, "setAreaName", i18n("Area Name..."), QIcon(), i18n("Set a name for a region of the spreadsheet"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "setAreaName", i18n("Area Name..."), QIcon(), i18n("Set a name for a region of the spreadsheet"))
 {
 }
 
 AddNamedArea::~AddNamedArea()
 {
-    if (m_dlg) delete m_dlg;
 }
 
 
-void AddNamedArea::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+void AddNamedArea::addArea(const QString &name)
 {
-    m_selection = selection;
+    if (name.isEmpty())
+        return;
 
-    m_dlg = new AddNamedAreaDialog(canvasWidget);
-    if (m_dlg->exec()) {
-
-        const QString name = m_dlg->areaName();
-        if (name.isEmpty())
-            return;
-
-        NamedAreaManager *manager = sheet->map()->namedAreaManager();
-        const Region region(selection->lastRange(), sheet);
-        if (manager->namedArea(name) == region)
-            return; // nothing to do
-
-        NamedAreaCommand* command = 0;
-        bool okay = true;
-        bool replace = false;
-
-        if (manager->contains(name)) {
-            replace = true;
-            const QString question = i18n("The named area '%1' already exists.\n"
-                                          "Do you want to replace it?", name);
-            int result = KMessageBox::warningContinueCancel(canvasWidget, question, i18n("Replace Named Area"),
-                         KStandardGuiItem::overwrite());
-            if (result == KMessageBox::Cancel) okay = false;
-        }
-
-        if (okay) {
-            command = new NamedAreaCommand();
-            command->setSheet(sheet);
-            if (replace) command->setText(kundo2_i18n("Replace Named Area"));
-            command->setAreaName(name);
-            command->add(region);
-            command->execute(selection->canvas());
-        }
+    NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
+    const Region region(m_selection->lastRange(), m_selection->activeSheet());
+    if (manager->namedArea(name) == region) {
+        m_dlg->close();
+        return; // nothing to do
     }
 
-    delete m_dlg;
-    m_dlg = nullptr;
+    NamedAreaCommand* command = 0;
+    bool okay = true;
+    bool replace = false;
+
+    if (manager->contains(name)) {
+        replace = true;
+        const QString question = i18n("The named area '%1' already exists.\n"
+                                      "Do you want to replace it?", name);
+        int result = KMessageBox::warningContinueCancel(m_dlg, question, i18n("Replace Named Area"),
+                     KStandardGuiItem::overwrite());
+        if (result == KMessageBox::Cancel) okay = false;
+    }
+
+    if (okay) {
+        command = new NamedAreaCommand();
+        command->setSheet(m_selection->activeSheet());
+        if (replace) command->setText(kundo2_i18n("Replace Named Area"));
+        command->setAreaName(name);
+        command->add(region);
+        command->execute(m_selection->canvas());
+        m_dlg->close();
+    }
+}
+
+ActionDialog *AddNamedArea::createDialog(QWidget *canvasWidget)
+{
+    AddNamedAreaDialog *dlg = new AddNamedAreaDialog(canvasWidget);
+    connect (dlg, &AddNamedAreaDialog::addArea, this, &AddNamedArea::addArea);
+    return dlg;
 }
 
 
@@ -86,8 +84,7 @@ void AddNamedArea::execute(Selection *selection, Sheet *sheet, QWidget *canvasWi
 
 
 ManageNamedAreas::ManageNamedAreas(Actions *actions)
-    : CellAction(actions, "namedAreaDialog", i18n("Named Areas..."), koIcon("bookmarks"), i18n("Edit or select named areas"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "namedAreaDialog", i18n("Named Areas..."), koIcon("bookmarks"), i18n("Edit or select named areas"))
 {
 }
 
@@ -102,22 +99,19 @@ QAction *ManageNamedAreas::createAction() {
     return res;
 }
 
-void ManageNamedAreas::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
+ActionDialog *ManageNamedAreas::createDialog(QWidget *canvasWidget)
 {
-    if (!m_dlg) {
-        m_dlg = new NamedAreaDialog(canvasWidget, selection);
-        connect(m_dlg, &QDialog::finished, this, &ManageNamedAreas::dialogClosed);
-    }
-    m_dlg->show();
-    m_dlg->raise();
-    m_dlg->activateWindow();
+    NamedAreaDialog *dlg = new NamedAreaDialog(canvasWidget, m_selection);
+    connect(dlg, &NamedAreaDialog::requestSelection, this, &ManageNamedAreas::updateSelection);
+    return dlg;
 }
 
-void ManageNamedAreas::dialogClosed()
+void ManageNamedAreas::updateSelection(const Region &region, Sheet *sheet)
 {
-    delete m_dlg;
-    m_dlg = nullptr;
+    if (sheet && sheet != m_selection->activeSheet())
+        m_selection->emitVisibleSheetRequested(sheet);
+    m_selection->initialize(region);
+    m_selection->emitModified();
 }
-
 
 

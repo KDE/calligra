@@ -40,12 +40,11 @@ public:
 static const int numBuiltinLists = 4;
 
 ListDialog::ListDialog(QWidget* parent)
-        : KoDialog(parent)
+        : ActionDialog(parent)
         , d(new Private)
 {
     setCaption(i18n("Custom Lists"));
-    setButtons(Ok | Cancel);
-    setModal(true);
+    setButtonText(Apply, i18n("Save Changes"));
 
     QWidget* page = new QWidget(this);
     setMainWidget(page);
@@ -94,7 +93,6 @@ ListDialog::ListDialog(QWidget* parent)
     connect(d->copyButton, &QAbstractButton::clicked, this, &ListDialog::slotCopy);
     connect(d->list, &QListWidget::itemDoubleClicked, this, &ListDialog::slotDoubleClicked);
     connect(d->list, &QListWidget::currentRowChanged, this, &ListDialog::slotCurrentRowChanged);
-    connect(this, &KoDialog::okClicked, this, &ListDialog::slotOk);
 
     d->textEdit->setEnabled(false);
     d->modifyButton->setEnabled(false);
@@ -166,7 +164,7 @@ QStringList ListDialog::customLists() {
 
     //don't save the first built-in lines
     for (int i = numBuiltinLists - 1; i < d->list->count(); ++i) {
-        QStringList tmp = d->list->item(i)->text().split(", ", QString::SkipEmptyParts);
+        QStringList tmp = d->list->item(i)->text().split(", ", Qt::SkipEmptyParts);
         if (!tmp.isEmpty()) {
             result += tmp;
             result += "\\";
@@ -181,7 +179,7 @@ void ListDialog::slotDoubleClicked()
     if (d->list->currentRow() < numBuiltinLists) {
         return;
     }
-    const QStringList result = d->list->currentItem()->text().split(", ", QString::SkipEmptyParts);
+    const QStringList result = d->list->currentItem()->text().split(", ", Qt::SkipEmptyParts);
     d->textEdit->setText(result.join(QChar('\n')));
     d->textEdit->setEnabled(true);
     d->modifyButton->setEnabled(true);
@@ -193,7 +191,7 @@ void ListDialog::slotAdd()
     d->cancelButton->setEnabled(false);
     d->newButton->setEnabled(true);
     d->list->setEnabled(true);
-    const QStringList tmp = d->textEdit->toPlainText().split(QChar('\n'), QString::SkipEmptyParts);
+    const QStringList tmp = d->textEdit->toPlainText().split(QChar('\n'), Qt::SkipEmptyParts);
     if (!tmp.isEmpty()) {
         d->list->addItem(tmp.join(", "));
     }
@@ -253,22 +251,21 @@ bool ListDialog::changed() {
     return d->changed;
 }
 
-void ListDialog::slotOk()
+void ListDialog::onApply()
 {
     if (!d->textEdit->toPlainText().isEmpty()) {
         int ret = KMessageBox::warningYesNo(this, i18n("Entry area is not empty.\nDo you want to continue?"));
-        if (ret == 4) { // response = No
-            return;
-        }
+        if (ret == KMessageBox::No) return;
     }
-    accept();
+
+    emit saveChanges(customLists());
 }
 
 void ListDialog::slotModify()
 {
     //you can modify list but not the first built-in items
     if (d->list->currentRow() >= numBuiltinLists && !d->textEdit->toPlainText().isEmpty()) {
-        const QString tmp = d->textEdit->toPlainText().split(QChar('\n'), QString::SkipEmptyParts).join(", ");
+        const QString tmp = d->textEdit->toPlainText().split(QChar('\n'), Qt::SkipEmptyParts).join(", ");
         d->list->insertItem(d->list->currentRow(), tmp);
         delete d->list->takeItem(d->list->currentRow());
 
