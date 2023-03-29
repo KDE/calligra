@@ -200,7 +200,6 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     JobWidgets
     KCMUtils
     KIO
-    Kross
     Notifications
     NotifyConfig
     Parts
@@ -221,6 +220,8 @@ set_package_properties(KF5Activities PROPERTIES
 if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
+
+find_package(KF5Kross ${REQUIRED_KF5_VERSION})
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
@@ -889,6 +890,10 @@ endif()
 
 calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
+    )
+
+calligra_drop_product_on_bad_condition( FEATURE_SCRIPTING
+    KF5Kross_FOUND "KF5Kross not found"
     )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS
