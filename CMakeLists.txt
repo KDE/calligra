@@ -995,7 +995,7 @@ calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
     Qt5OpenGL_FOUND "Qt OpenGL not found"
     )
 
-if (${Qt5QuickWidgets_VERSION_STRING} VERSION_LESS "5.15.0")
+if (Qt5QuickWidgets_FOUND AND Qt5QuickWidgets_VERSION_STRING VERSION_LESS "5.15.0")
   calligra_disable_product(GEMINI "Gemini depends on Qt 5.15")
 endif ()
 
