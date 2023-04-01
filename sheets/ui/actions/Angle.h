@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_ANGLE
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 
 
@@ -17,21 +17,23 @@ namespace Calligra
 {
 namespace Sheets
 {
-class AngleDialog;
 
-class Angle : public CellAction {
+class Angle : public DialogCellAction {
 Q_OBJECT
 public:
     Angle(Actions *actions);
     virtual ~Angle();
 
+protected Q_SLOTS:
+    void adjustAngle(int angle);
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     QAction *createAction() override;
 
-    AngleDialog *m_dlg;
-};
+    ActionDialog *createDialog(QWidget *canvasWidget) override;
+    void onSelectionChanged() override;
 
+
+};
 
 } // namespace Sheets
 } // namespace Calligra

@@ -13,12 +13,12 @@ using namespace Calligra::Sheets;
 /* class CharacterSelectDialog                                           */
 /******************************************************************/
 
-ActionDialog::ActionDialog(QWidget *parent)
+ActionDialog::ActionDialog(QWidget *parent, ButtonCodes extraButtons)
         : KoDialog(parent)
 {
     setModal(false);
     ButtonCodes buttons = Apply | Close;
-    buttons |= extraButtons();
+    buttons |= extraButtons;
     setButtons(buttons);
     setDefaultButton(Apply);
 

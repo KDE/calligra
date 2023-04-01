@@ -14,7 +14,7 @@
 #ifndef CALLIGRA_SHEETS_AUTO_FORMAT_DIALOG
 #define CALLIGRA_SHEETS_AUTO_FORMAT_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 namespace Calligra
 {
@@ -25,7 +25,7 @@ namespace Sheets
  * \ingroup UI
  * Dialog for the "Auto-Format..." action.
  */
-class AutoFormatDialog : public KoDialog
+class AutoFormatDialog : public ActionDialog
 {
     Q_OBJECT
 public:
@@ -34,10 +34,13 @@ public:
 
     void setList(const QMap<QString, QPixmap> &list);
     QString selectedOption();
+Q_SIGNALS:
+    void applyFormat(const QString &format);
 private Q_SLOTS:
     void slotActivated(int index);
-    void slotOk();
 
+protected:
+    virtual void onApply() override;
 private:
     class Private;
     Private * const d;

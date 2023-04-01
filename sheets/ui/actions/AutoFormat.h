@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_AUTOFORMAT
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
 
@@ -53,16 +53,20 @@ private:
 
 class AutoFormatDialog;
 
-class AutoFormat : public CellAction {
+class AutoFormat : public DialogCellAction {
 Q_OBJECT
 public:
     AutoFormat(Actions *actions);
     virtual ~AutoFormat();
+protected Q_SLOTS:
+    void applyFormat(const QString &format);
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    ActionDialog *createDialog(QWidget *canvasWidget) override;
     QList<Style> parseXML(const KoXmlDocument& doc, bool *ok);
     bool enabledForSelection(Selection *selection, const Cell &) override;
-    AutoFormatDialog *m_dlg;
+
+    QMap<QString, QString> m_xmls;
+    QWidget *m_canvasWidget;
 };
 
 

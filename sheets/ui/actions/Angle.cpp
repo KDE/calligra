@@ -25,14 +25,12 @@ using namespace Calligra::Sheets;
 
 
 Angle::Angle(Actions *actions)
-    : CellAction(actions, "changeAngle", i18n("Change Angle..."), QIcon(), i18n("Change the angle that cell contents are printed"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "changeAngle", i18n("Change Angle..."), QIcon(), i18n("Change the angle that cell contents are printed"))
 {
 }
 
 Angle::~Angle()
 {
-    if (m_dlg) delete m_dlg;
 }
 
 QAction *Angle::createAction() {
@@ -42,39 +40,40 @@ QAction *Angle::createAction() {
 }
 
 
-
-void Angle::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *Angle::createDialog(QWidget *canvasWidget)
 {
-    QPoint marker(selection->marker());
-    Cell cell(sheet, marker);
-    int angle = -1 * cell.style().angle();
-    m_dlg = new AngleDialog(canvasWidget, angle);
-
-    if (m_dlg->exec() == QDialog::Accepted) {
-        int angle = m_dlg->angle();
-
-        KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Change Angle"));
-
-        StyleCommand* manipulator = new StyleCommand(macroCommand);
-        manipulator->setSheet(sheet);
-        Style s;
-        s.setAngle(-1 * angle);
-        manipulator->setStyle(s);
-        manipulator->add(*selection);
-
-        AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator(macroCommand);
-        manipulator2->setSheet(sheet);
-        manipulator2->setAdjustColumn(true);
-        manipulator2->setAdjustRow(true);
-        manipulator2->add(*selection);
-
-        selection->canvas()->addCommand (macroCommand);
-    }    
-
-    delete m_dlg;
-    m_dlg = nullptr;
+    AngleDialog *dlg = new AngleDialog(canvasWidget, 0);
+    connect(dlg, &AngleDialog::adjustAngle, this, &Angle::adjustAngle);
+    return dlg;
 }
 
+void Angle::onSelectionChanged()
+{
+    Cell cell(m_selection->activeSheet(), m_selection->marker());
+    int angle = -1 * cell.style().angle();
+    AngleDialog *dlg = dynamic_cast<AngleDialog *>(m_dlg);
+    dlg->setAngle(angle);
+}
 
+void Angle::adjustAngle(int angle)
+{
+    Sheet *sheet = m_selection->activeSheet();
+    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Change Angle"));
+
+    StyleCommand* manipulator = new StyleCommand(macroCommand);
+    manipulator->setSheet(sheet);
+    Style s;
+    s.setAngle(-1 * angle);
+    manipulator->setStyle(s);
+    manipulator->add(*m_selection);
+
+    AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator(macroCommand);
+    manipulator2->setSheet(sheet);
+    manipulator2->setAdjustColumn(true);
+    manipulator2->setAdjustRow(true);
+    manipulator2->add(*m_selection);
+
+    m_selection->canvas()->addCommand (macroCommand);
+}
 
 

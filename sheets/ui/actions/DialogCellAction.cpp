@@ -8,6 +8,8 @@
 #include "DialogCellAction.h"
 #include "dialogs/ActionDialog.h"
 
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
 #include "core/Sheet.h"
 #include "ui/Selection.h"
 
@@ -33,6 +35,7 @@ void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWid
         m_selection = selection;
         connect(m_selection, &Selection::activeSheetChanged, this, &DialogCellAction::activeSheetChanged);
         connect(m_selection, &Selection::changed, this, &DialogCellAction::selectionChanged);
+        connect(m_selection->activeSheet()->map(), &MapBase::damagesFlushed, this, &DialogCellAction::handleDamages);
     }
 
     if (!m_dlg) {
@@ -57,6 +60,13 @@ void DialogCellAction::activeSheetChanged(Sheet *)
 {
     onSelectionChanged();
     if (m_dlg) m_dlg->onSelectionChanged(m_selection);
+}
+
+/** This ensures that the UI updates when we change cell content. */
+void DialogCellAction::handleDamages() {
+    if (!m_dlg) return;   // Only if the dialog is active.
+    onSelectionChanged();
+    m_dlg->onSelectionChanged(m_selection);
 }
 
 void DialogCellAction::selectionChanged(const Region&) {

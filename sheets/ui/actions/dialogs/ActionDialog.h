@@ -27,7 +27,7 @@ class ActionDialog : public KoDialog
 
 public:
     // constructor
-    ActionDialog(QWidget *parent);
+    ActionDialog(QWidget *parent, ButtonCodes extraButtons = None);
 
     ~ActionDialog() override;
 
@@ -36,7 +36,6 @@ public:
 
 protected:
     virtual void onApply() = 0;
-    virtual ButtonCodes extraButtons() { return None; };
     /** Widget with the default focus. */
     virtual QWidget *defaultWidget() { return nullptr; }
 

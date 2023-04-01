@@ -35,13 +35,11 @@ public:
 };
 
 AutoFormatDialog::AutoFormatDialog(QWidget* parent)
-        : KoDialog(parent)
+        : ActionDialog(parent)
         , d(new Private())
 {
     setCaption(i18n("Automatic Format"));
     setObjectName(QLatin1String("AutoFormatDialog"));
-    setModal(true);
-    setButtons(Ok | Cancel);
 
     QWidget *page = mainWidget();
 
@@ -55,7 +53,6 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent)
     vbox->addWidget(d->combo);
     vbox->addWidget(d->label, 1);
 
-    connect(this, &KoDialog::okClicked, this, &AutoFormatDialog::slotOk);
     connect(d->combo, QOverload<int>::of(&QComboBox::activated), this, &AutoFormatDialog::slotActivated);
 }
 
@@ -95,9 +92,11 @@ void AutoFormatDialog::slotActivated(int index)
     d->label->setPixmap(d->pixmaps[name]);
 }
 
-void AutoFormatDialog::slotOk()
+void AutoFormatDialog::onApply()
 {
-    accept();
+    int idx = d->combo->currentIndex();
+    if (idx < 0) return;
+    emit applyFormat(selectedOption());
 }
 
 

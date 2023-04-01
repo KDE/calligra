@@ -20,11 +20,10 @@
 using namespace Calligra::Sheets;
 
 AngleDialog::AngleDialog(QWidget* parent, int angle)
-        : KoDialog(parent)
+        : ActionDialog(parent, Default)
 {
     setCaption(i18n("Change Angle"));
-    setModal(true);
-    setButtons(Ok | Cancel | Default);
+    setButtonText(Apply, i18n("Change Angle"));
 
     QWidget *page = new QWidget();
     setMainWidget(page);
@@ -44,16 +43,18 @@ AngleDialog::AngleDialog(QWidget* parent, int angle)
     spacer->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
     lay->addWidget(spacer);
 
-    m_pAngle->setFocus();
+    setAngle(angle);
 
-    connect(this, &KoDialog::okClicked, this, &AngleDialog::slotOk);
     connect(this, &KoDialog::defaultClicked, this, &AngleDialog::slotDefault);
-    m_pAngle->setValue(angle);
 }
 
-void AngleDialog::slotOk()
+QWidget *AngleDialog::defaultWidget() {
+    return m_pAngle;
+}
+
+void AngleDialog::setAngle(int angle)
 {
-    accept();
+    m_pAngle->setValue(angle);
 }
 
 int AngleDialog::angle()
@@ -63,5 +64,11 @@ int AngleDialog::angle()
 
 void AngleDialog::slotDefault()
 {
-    m_pAngle->setValue(0);
+    setAngle(0);
 }
+
+void AngleDialog::onApply() {
+    emit adjustAngle(angle());
+    m_pAngle->setFocus();
+}
+

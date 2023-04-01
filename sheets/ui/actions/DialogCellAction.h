@@ -32,6 +32,7 @@ protected Q_SLOTS:
     void onDialogClosed();
     void activeSheetChanged(Sheet* sheet);
     void selectionChanged(const Region& region);
+    void handleDamages();
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;

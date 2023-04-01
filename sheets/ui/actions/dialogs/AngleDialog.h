@@ -11,7 +11,7 @@
 #ifndef CALLIGRA_SHEETS_ANGLE_DIALOG
 #define CALLIGRA_SHEETS_ANGLE_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 class QSpinBox;
 
@@ -25,15 +25,21 @@ class Selection;
  * \ingroup UI
  * Dialog to rotate the cell contents.
  */
-class AngleDialog : public KoDialog
+class AngleDialog : public ActionDialog
 {
     Q_OBJECT
 public:
     AngleDialog(QWidget* parent, int angle);
 
+    void setAngle(int angle);
     int angle();
+
+    virtual QWidget *defaultWidget() override;
+
+Q_SIGNALS:
+    void adjustAngle(int);
 public Q_SLOTS:
-    void slotOk();
+    virtual void onApply() override;
     void slotDefault();
 protected:
     QSpinBox *m_pAngle;

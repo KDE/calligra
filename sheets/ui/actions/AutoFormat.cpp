@@ -29,23 +29,24 @@ using namespace Calligra::Sheets;
 
 
 AutoFormat::AutoFormat(Actions *actions)
-    : CellAction(actions, "autoFormat", i18n("Auto-Format..."), QIcon(), i18n("Apply pre-defined formatting to a range of cells."))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "autoFormat", i18n("Auto-Format..."), QIcon(), i18n("Apply pre-defined formatting to a range of cells."))
+    , m_canvasWidget(nullptr)
 {
 }
 
 AutoFormat::~AutoFormat()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-void AutoFormat::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *AutoFormat::createDialog(QWidget *canvasWidget)
 {
-    m_dlg = new AutoFormatDialog(canvasWidget);
+    m_canvasWidget = canvasWidget;
+    AutoFormatDialog *dlg = new AutoFormatDialog(canvasWidget);
+    connect(dlg, &AutoFormatDialog::applyFormat, this, &AutoFormat::applyFormat);
+    m_xmls.clear();
 
     const QStringList lst = KoResourcePaths::findAllResources("sheet-styles", "*.ksts", KoResourcePaths::Recursive);
     QMap<QString, QPixmap> pixmaps;
-    QMap<QString, QString> xmls;
 
     for (const QString &fname : lst) {
         KConfig config(fname, KConfig::SimpleConfig);
@@ -59,46 +60,43 @@ void AutoFormat::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidg
         QPixmap pixmap(imageName);
         if (pixmap.isNull()) continue;
 
-        xmls[name] = xml;
+        m_xmls[name] = xml;
         pixmaps[name] = pixmap;
     }
-    m_dlg->setList(pixmaps);
+    dlg->setList(pixmaps);
 
-    if (m_dlg->exec()) {
-        QString name = m_dlg->selectedOption();
-        delete m_dlg;
-        m_dlg = nullptr;
-        if (xmls.contains(name)) {
-            QString xml = xmls[name];
-            QString xmlname = KoResourcePaths::findResource("sheet-styles", xml);
-            if (xmlname.isEmpty()) {
-                KMessageBox::error(canvasWidget, i18n("Could not find sheet-style XML file '%1'.", xmlname));
-                return;
-            }
+    return dlg;
+}
 
-            QFile file(xmlname);
-            file.open(QIODevice::ReadOnly);
-            KoXmlDocument doc;
-            doc.setContent(&file);
-            file.close();
+void AutoFormat::applyFormat(const QString &name)
+{
+    if (!m_xmls.contains(name)) return;
 
-            bool ok;
-            QList<Style> styles = parseXML(doc, &ok);
-            if (!ok) {
-                KMessageBox::error(canvasWidget, i18n("Parsing error in sheet-style XML file %1.", xmlname));
-                return;
-            }
-
-            AutoFormatCommand* command = new AutoFormatCommand();
-            command->setSheet(sheet);
-            command->setStyles(styles);
-            command->add(*selection);
-            command->execute(selection->canvas());
-        }
+    QString xml = m_xmls[name];
+    QString xmlname = KoResourcePaths::findResource("sheet-styles", xml);
+    if (xmlname.isEmpty()) {
+        KMessageBox::error(m_canvasWidget, i18n("Could not find sheet-style XML file '%1'.", xmlname));
+        return;
     }
 
-    delete m_dlg;
-    m_dlg = nullptr;
+    QFile file(xmlname);
+    file.open(QIODevice::ReadOnly);
+    KoXmlDocument doc;
+    doc.setContent(&file);
+    file.close();
+
+    bool ok;
+    QList<Style> styles = parseXML(doc, &ok);
+    if (!ok) {
+        KMessageBox::error(m_canvasWidget, i18n("Parsing error in sheet-style XML file %1.", xmlname));
+        return;
+    }
+
+    AutoFormatCommand* command = new AutoFormatCommand();
+    command->setSheet(m_selection->activeSheet());
+    command->setStyles(styles);
+    command->add(*m_selection);
+    command->execute(m_selection->canvas());
 }
 
 QList<Style> AutoFormat::parseXML(const KoXmlDocument& doc, bool *ok)
