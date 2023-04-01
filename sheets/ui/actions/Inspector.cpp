@@ -16,6 +16,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KPageWidget>
 
 // Sheets
 #include "engine/DependencyManager.h"
@@ -31,7 +32,7 @@ using namespace Calligra::Sheets;
 
 
 Inspector::Inspector(Actions *actions)
-    : CellAction(actions, "inspector", i18n("Run Inspector..."), koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), QString())
+    : DialogCellAction(actions, "inspector", i18n("Run Inspector..."), koIconWanted("not used in UI, but devs might do, so nice to have", "inspector"), QString())
 {
 }
 
@@ -45,13 +46,16 @@ QAction *Inspector::createAction() {
     return res;
 }
 
-void Inspector::execute(Selection *selection, Sheet *sheet, QWidget *)
+ActionDialog *Inspector::createDialog(QWidget *canvasWidget)
 {
-    // useful to inspect objects
-    Cell cell(sheet, selection->marker());
-    InspectorDialog *ins = new InspectorDialog(cell);
-    ins->exec();
-    delete ins;
+    return new InspectorDialog(canvasWidget);
+}
+
+void Inspector::onSelectionChanged()
+{
+    InspectorDialog *dlg = dynamic_cast<InspectorDialog *>(m_dlg);
+    Cell cell(m_selection->activeSheet(), m_selection->marker());
+    dlg->setCell(cell);
 }
 
 
@@ -189,55 +193,62 @@ void InspectorDialog::Private::handleDep()
 
 }
 
-InspectorDialog::InspectorDialog(const Cell& cell)
-        : KPageDialog()
+InspectorDialog::InspectorDialog(QWidget *parent)
+        : ActionDialog(parent)
         , d(new Private)
 {
-    setFaceType(Tabbed);
     setWindowTitle("Inspector");
-    setStandardButtons(QDialogButtonBox::Close);
+    setButtons(Close);
 
-    d->cell = cell;
-    d->style = cell.style();
-    d->sheet = cell.fullSheet();
+    KPageWidget *main = new KPageWidget();
+    setMainWidget(main);
+    main->setFaceType(KPageWidget::List);
 
     QFrame* cellPage = new QFrame();
-    addPage(cellPage, QString("Cell"));
+    main->addPage(cellPage, QString("Cell"));
     QVBoxLayout* cellLayout = new QVBoxLayout(cellPage);
     d->cellView = new QTreeWidget(cellPage);
     cellLayout->addWidget(d->cellView);
     d->cellView->setHeaderLabels(QStringList() << "Key" << "Value");
 
     QFrame* stylePage = new QFrame();
-    addPage(stylePage, QString("Style"));
+    main->addPage(stylePage, QString("Style"));
     QVBoxLayout* styleLayout = new QVBoxLayout(stylePage);
     d->styleView = new QTreeWidget(stylePage);
     styleLayout->addWidget(d->styleView);
     d->styleView->setHeaderLabels(QStringList() << "Key" << "Value");
 
     QFrame* sheetPage = new QFrame();
-    addPage(sheetPage,  QString("Sheet"));
+    main->addPage(sheetPage,  QString("Sheet"));
     QVBoxLayout* sheetLayout = new QVBoxLayout(sheetPage);
     d->sheetView = new QTreeWidget(sheetPage);
     sheetLayout->addWidget(d->sheetView);
     d->sheetView->setHeaderLabels(QStringList() << "Key" << "Value");
 
     QFrame* depPage = new QFrame();
-    addPage(depPage,  QString("Dependencies"));
+    main->addPage(depPage,  QString("Dependencies"));
     QVBoxLayout* depLayout = new QVBoxLayout(depPage);
     d->depView = new QTreeWidget(depPage);
     depLayout->addWidget(d->depView);
     d->depView->setHeaderLabels(QStringList() << "Cell" << "Content");
 
-    d->handleCell();
-    d->handleSheet();
-    d->handleStyle();
-    d->handleDep();
-
-    resize(350, 400);
+    resize(800, 500);
 }
 
 InspectorDialog::~InspectorDialog()
 {
     delete d;
 }
+
+void InspectorDialog::setCell(const Cell &cell)
+{
+    d->cell = cell;
+    d->style = cell.style();
+    d->sheet = cell.fullSheet();
+
+    d->handleCell();
+    d->handleSheet();
+    d->handleStyle();
+    d->handleDep();
+}
+

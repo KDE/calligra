@@ -10,8 +10,8 @@
 #define CALLIGRA_SHEETS_ACTION_INSPECTOR
 
 
-#include "CellAction.h"
-#include <kpagedialog.h>
+#include "DialogCellAction.h"
+#include "dialogs/ActionDialog.h"
 
 
 namespace Calligra
@@ -19,25 +19,31 @@ namespace Calligra
 namespace Sheets
 {
 
-class Inspector : public CellAction {
+class Inspector : public DialogCellAction {
 Q_OBJECT
 public:
     Inspector(Actions *actions);
     virtual ~Inspector();
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
+    virtual void onSelectionChanged() override;
+
     virtual QAction *createAction() override;
 };
 
 class Cell;
 
-class InspectorDialog : public KPageDialog
+class InspectorDialog : public ActionDialog
 {
     Q_OBJECT
 public:
-    InspectorDialog(const Cell& cell);
+    InspectorDialog(QWidget *parent);
     ~InspectorDialog() override;
 
+    void setCell(const Cell &cell);
+
+protected:
+    virtual void onApply() override {}
 private:
     Q_DISABLE_COPY(InspectorDialog)
 
