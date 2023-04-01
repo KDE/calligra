@@ -14,7 +14,7 @@
 #ifndef CALLIGRA_SHEETS_DOCUMENT_SETTINGS_DIALOG
 #define CALLIGRA_SHEETS_DOCUMENT_SETTINGS_DIALOG
 
-#include <kpagedialog.h>
+#include "ActionDialog.h"
 
 class KoVBox;
 class QCheckBox;
@@ -81,17 +81,18 @@ protected:
  * \ingroup UI
  * Dialog to alter document settings.
  */
-class DocumentSettingsDialog : public KPageDialog
+class DocumentSettingsDialog : public ActionDialog
 {
     Q_OBJECT
 public:
     explicit DocumentSettingsDialog(MapBase *map, QWidget* parent);
     ~DocumentSettingsDialog() override;
 
-public Q_SLOTS:
-    void slotApply();
-    void slotDefault();
-    void slotReset();
+Q_SIGNALS:
+    void saveSettings();
+
+protected:
+    virtual void onApply() override;
 
 private:
     class Private;

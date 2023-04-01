@@ -17,12 +17,12 @@
 
 #include <QCheckBox>
 #include <QHBoxLayout>
-// #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
-// #include <QScrollBar>
 #include <QComboBox>
 #include <QSpinBox>
+
+#include <KPageWidget>
 
 #include <KoIcon.h>
 #include <KoVBox.h>
@@ -39,6 +39,7 @@ using namespace Calligra::Sheets;
 class DocumentSettingsDialog::Private
 {
 public:
+    KPageWidget *pages;
     KPageWidgetItem *page1, *page2;
     // Calculation Settings
     calcSettings* calcPage;
@@ -48,27 +49,24 @@ public:
 
 
 DocumentSettingsDialog::DocumentSettingsDialog(MapBase *map, QWidget* parent)
-        : KPageDialog(parent)
+        : ActionDialog(parent)
         , d(new Private)
 {
     setObjectName(QLatin1String("DocumentSettingsDialog"));
     setWindowTitle(i18n("Document Settings"));
-//     setFaceType(List);
-    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel/* | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Reset*/);
-    button(QDialogButtonBox::Ok)->setDefault(true);
 
-    connect(this, &QDialog::accepted, this, &DocumentSettingsDialog::slotApply);
-//     connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
-//     connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
+    d->pages = new KPageWidget();
+    setMainWidget(d->pages);
+    d->pages->setFaceType(KPageWidget::List);
 
     KoVBox *p1 = new KoVBox();
-    d->page1 = addPage(p1, i18n("Calculation"));
+    d->page1 = d->pages->addPage(p1, i18n("Calculation"));
     d->page1->setHeader(QString(""));
     d->page1->setIcon(koIcon("application-vnd.oasis.opendocument.spreadsheet"));
     d->calcPage = new calcSettings(map, p1);
 
     KoVBox *p2 = new KoVBox();
-    d->page2 = addPage(p2, i18n("Locale"));
+    d->page2 = d->pages->addPage(p2, i18n("Locale"));
     d->page2->setHeader(QString(""));
     d->page2->setIcon(koIcon("preferences-desktop-locale"));
     d->localePage = new parameterLocale(map, p2);
@@ -79,18 +77,10 @@ DocumentSettingsDialog::~DocumentSettingsDialog()
     delete d;
 }
 
-void DocumentSettingsDialog::slotApply()
+void DocumentSettingsDialog::onApply()
 {
     d->calcPage->apply();
     d->localePage->apply();
-}
-
-void DocumentSettingsDialog::slotDefault()
-{
-}
-
-void DocumentSettingsDialog::slotReset()
-{
 }
 
 

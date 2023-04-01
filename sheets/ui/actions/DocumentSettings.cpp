@@ -20,23 +20,17 @@ using namespace Calligra::Sheets;
 
 
 DocumentSettings::DocumentSettings(Actions *actions)
-    : CellAction(actions, "documentSettingsDialog", i18n("Document Settings..."), koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Show document settings dialog"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "documentSettingsDialog", i18n("Document Settings..."), koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Show document settings dialog"))
 {
 }
 
 DocumentSettings::~DocumentSettings()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-void DocumentSettings::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *DocumentSettings::createDialog(QWidget *canvasWidget)
 {
-    // TODO - make this non-modal, save on each change
-    m_dlg = new DocumentSettingsDialog(sheet->map(), canvasWidget);
-    m_dlg->exec();
-    delete m_dlg;
-    m_dlg = nullptr;
+    return new DocumentSettingsDialog(m_selection->activeSheet()->map(), canvasWidget);
 }
 
 
