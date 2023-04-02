@@ -20,6 +20,7 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
+#include <KPageWidget>
 #include <ktextedit.h>
 
 #include "engine/CalculationSettings.h"
@@ -33,20 +34,19 @@ Q_DECLARE_METATYPE(Validity::Action)
 Q_DECLARE_METATYPE(Validity::Restriction)
 
 ValidityDialog::ValidityDialog(QWidget* parent, CalculationSettings *settings, ValueParser *parser)
-        : KPageDialog(parent)
-
+        : ActionDialog(parent,Default)
 {
     m_settings = settings;
     m_parser = parser;
-
-    setFaceType(Tabbed);
     setWindowTitle(i18n("Validity"));
-    setModal(true);
+    setButtonText(Default, i18n("Clear &All"));
 
-    QPushButton *clearAllButton = buttonBox()->addButton(i18n("Clear &All"), QDialogButtonBox::ActionRole);
+    KPageWidget *main = new KPageWidget();
+    setMainWidget(main);
+    main->setFaceType(KPageWidget::List);
 
     QFrame *page1 = new QFrame();
-    addPage(page1, i18n("&Criteria"));
+    main->addPage(page1, i18n("Criteria"));
 
     QGridLayout* tmpGridLayout = new QGridLayout(page1);
 
@@ -133,7 +133,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, CalculationSettings *settings, V
     tmpGridLayout->setRowStretch(5, 1);
 
     QFrame *page2 = new QFrame();
-    addPage(page2, i18n("&Error Alert"));
+    main->addPage(page2, i18n("Error Alert"));
 
     tmpGridLayout = new QGridLayout(page2);
 
@@ -167,7 +167,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, CalculationSettings *settings, V
     tmpGridLayout->addWidget(message, 3, 1);
 
     QFrame *page3 = new QFrame();
-    addPage(page3, i18n("Input Help"));
+    main->addPage(page3, i18n("Input Help"));
 
     tmpGridLayout = new QGridLayout(page3);
 
@@ -191,7 +191,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, CalculationSettings *settings, V
 
     connect(choose, QOverload<int>::of(&KComboBox::activated), this, &ValidityDialog::changeIndexCond);
     connect(chooseType, QOverload<int>::of(&KComboBox::activated), this, &ValidityDialog::changeIndexType);
-    connect(clearAllButton, &QAbstractButton::clicked, this, &ValidityDialog::clearAllPressed);
+    connect(this, &KoDialog::defaultClicked, this, &ValidityDialog::clearAllPressed);
 
     changeIndexType(chooseType->currentIndex()) ;
     changeIndexCond(choose->currentIndex()) ;
@@ -368,69 +368,68 @@ void ValidityDialog::setValidity(Validity validity)
 {
     const Localization* locale = m_settings->locale();
 
-    if (!validity.isEmpty()) {
-        message->setPlainText(validity.message());
-        title->setText(validity.title());
-        QString tmp;
-        switch (validity.restriction()) {
-        case Validity::NoRestriction:
-            chooseType->setCurrentIndex(0);
-            break;
-        case Validity::Number:
-            chooseType->setCurrentIndex(1);
-            if (validity.condition() >= 5)
-                val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
-            val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
-            break;
-        case Validity::Integer:
-            chooseType->setCurrentIndex(2);
-            if (validity.condition() >= 5)
-                val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
-            val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
-            break;
-        case Validity::TextLength:
-            chooseType->setCurrentIndex(6);
-            if (validity.condition() >= 5)
-                val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
-            val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
-            break;
-        case Validity::Text:
-            chooseType->setCurrentIndex(3);
-            break;
-        case Validity::Date:
-            chooseType->setCurrentIndex(4);
-            val_min->setText(locale->formatDate(validity.minimumValue().asDate(m_settings), false));
-            if (validity.condition() >= 5)
-                val_max->setText(locale->formatDate(validity.maximumValue().asDate(m_settings), false));
-            break;
-        case Validity::Time:
-            chooseType->setCurrentIndex(5);
-            val_min->setText(locale->formatTime(validity.minimumValue().asTime(), true));
-            if (validity.condition() >= 5)
-                val_max->setText(locale->formatTime(validity.maximumValue().asTime(), true));
-            break;
-        case Validity::List: {
-            chooseType->setCurrentIndex(7);
-            const QStringList lst = validity.validityList();
-            QString tmp;
-            for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it) {
-                tmp += (*it) + '\n';
-            }
-            validityList->setText(tmp);
-        }
+    message->setPlainText(validity.message());
+    title->setText(validity.title());
+    QString tmp;
+    switch (validity.restriction()) {
+    case Validity::NoRestriction:
+        chooseType->setCurrentIndex(0);
         break;
-        default :
-            chooseType->setCurrentIndex(0);
-            break;
+    case Validity::Number:
+        chooseType->setCurrentIndex(1);
+        if (validity.condition() >= 5)
+            val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
+        val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
+        break;
+    case Validity::Integer:
+        chooseType->setCurrentIndex(2);
+        if (validity.condition() >= 5)
+            val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
+        val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
+        break;
+    case Validity::TextLength:
+        chooseType->setCurrentIndex(6);
+        if (validity.condition() >= 5)
+            val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
+        val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
+        break;
+    case Validity::Text:
+        chooseType->setCurrentIndex(3);
+        break;
+    case Validity::Date:
+        chooseType->setCurrentIndex(4);
+        val_min->setText(locale->formatDate(validity.minimumValue().asDate(m_settings), false));
+        if (validity.condition() >= 5)
+            val_max->setText(locale->formatDate(validity.maximumValue().asDate(m_settings), false));
+        break;
+    case Validity::Time:
+        chooseType->setCurrentIndex(5);
+        val_min->setText(locale->formatTime(validity.minimumValue().asTime(), true));
+        if (validity.condition() >= 5)
+            val_max->setText(locale->formatTime(validity.maximumValue().asTime(), true));
+        break;
+    case Validity::List: {
+        chooseType->setCurrentIndex(7);
+        const QStringList lst = validity.validityList();
+        QString tmp;
+        for (QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it) {
+            tmp += (*it) + '\n';
         }
-        chooseAction->setCurrentIndex(chooseAction->findData(QVariant::fromValue(validity.action())));
-        choose->setCurrentIndex(choose->findData(QVariant::fromValue(validity.condition())));
-        displayMessage->setChecked(validity.displayMessage());
-        allowEmptyCell->setChecked(validity.allowEmptyCell());
-        titleHelp->setText(validity.titleInfo());
-        messageHelp->setPlainText(validity.messageInfo());
-        displayHelp->setChecked(validity.displayValidationInformation());
+        validityList->setText(tmp);
     }
+    break;
+    default :
+        chooseType->setCurrentIndex(0);
+        break;
+    }
+    chooseAction->setCurrentIndex(chooseAction->findData(QVariant::fromValue(validity.action())));
+    choose->setCurrentIndex(choose->findData(QVariant::fromValue(validity.condition())));
+    displayMessage->setChecked(validity.displayMessage());
+    allowEmptyCell->setChecked(validity.allowEmptyCell());
+    titleHelp->setText(validity.titleInfo());
+    messageHelp->setPlainText(validity.messageInfo());
+    displayHelp->setChecked(validity.displayValidationInformation());
+
     changeIndexType(chooseType->currentIndex()) ;
     changeIndexCond(choose->currentIndex()) ;
 }
@@ -454,13 +453,8 @@ void ValidityDialog::clearAllPressed()
     displayHelp->setChecked(false);
 }
 
-
-void ValidityDialog::done(int r) {
-    if (r != QDialog::Accepted) {
-        KPageDialog::done(r);
-        return;
-    }
-
+void ValidityDialog::onApply()
+{
     // Validate the data.
     int idx = chooseType->currentIndex();
     bool ok = false;
@@ -512,8 +506,10 @@ void ValidityDialog::done(int r) {
         //Nothing
     }
 
-    KPageDialog::done(r);
+    Validity validity = getValidity();
+    emit applyValidity(validity);
 }
+
 
 Validity ValidityDialog::getValidity() {
     Validity validity;

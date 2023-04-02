@@ -11,8 +11,7 @@
 #ifndef CALLIGRA_SHEETS_VALIDITY_DIALOG
 #define CALLIGRA_SHEETS_VALIDITY_DIALOG
 
-#include <kpagedialog.h>
-
+#include "ActionDialog.h"
 #include "engine/Validity.h"
 
 class QLabel;
@@ -31,7 +30,7 @@ class CalculationSettings;
  * \ingroup UI
  * Dialog for setting cell validations.
  */
-class ValidityDialog : public KPageDialog
+class ValidityDialog : public ActionDialog
 {
     Q_OBJECT
 
@@ -40,13 +39,17 @@ public:
     Validity getValidity();
     void setValidity(Validity validity);
 
+Q_SIGNALS:
+    void applyValidity(const Validity &validity);
+
 public Q_SLOTS:
-    virtual void done(int r) override;
     void clearAllPressed();
     void changeIndexCond(int);
     void changeIndexType(int);
 
 protected:
+    virtual void onApply() override;
+
     void displayOrNotListOfValidity(bool _displayList);
 
     CalculationSettings *m_settings;

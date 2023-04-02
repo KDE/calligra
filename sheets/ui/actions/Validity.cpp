@@ -19,40 +19,38 @@
 using namespace Calligra::Sheets;
 
 SetValidity::SetValidity(Actions *actions)
-    : CellAction(actions, "validity", i18n("Validity..."), QIcon(), i18n("Set tests to confirm cell data is valid"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "validity", i18n("Validity..."), QIcon(), i18n("Set tests to confirm cell data is valid"))
 {
 
 }
 
 SetValidity::~SetValidity()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-
-void SetValidity::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *SetValidity::createDialog(QWidget *canvasWidget)
 {
-    m_selection = selection;
-    CalculationSettings *settings = sheet->map()->calculationSettings();
-    ValueParser *parser = sheet->map()->parser();
-    m_dlg = new ValidityDialog(canvasWidget, settings, parser);
+    MapBase *map = m_selection->activeSheet()->map();
+    CalculationSettings *settings = map->calculationSettings();
+    ValueParser *parser = map->parser();
+    auto dlg = new ValidityDialog(canvasWidget, settings, parser);
+    connect(dlg, &ValidityDialog::applyValidity, this, &SetValidity::applyValidity);
+    return dlg;
+}
 
-    Validity validity = Cell(sheet, selection->marker()).validity();
-    m_dlg->setValidity(validity);
+void SetValidity::onSelectionChanged() {
+    ValidityDialog *dlg = dynamic_cast<ValidityDialog *>(m_dlg);
+    Cell cell = activeCell();
+    dlg->setValidity(cell.validity());
+}
 
-    if (m_dlg->exec()) {
-        validity = m_dlg->getValidity();
-
-        ValidityCommand* manipulator = new ValidityCommand();
-        manipulator->setSheet(sheet);
-        manipulator->setValidity(validity);
-        manipulator->add(*selection);
-        manipulator->execute(selection->canvas());
-    }
-
-    delete m_dlg;
-    m_dlg = nullptr;
+void SetValidity::applyValidity(const Validity &validity)
+{
+    ValidityCommand* manipulator = new ValidityCommand();
+    manipulator->setSheet(m_selection->activeSheet());
+    manipulator->setValidity(validity);
+    manipulator->add(*m_selection);
+    manipulator->execute(m_selection->canvas());
 }
 
 

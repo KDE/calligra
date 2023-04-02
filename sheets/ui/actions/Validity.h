@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_VALIDITY
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
 #include "engine/Validity.h"
@@ -21,17 +21,18 @@ namespace Sheets
 {
 class ValidityDialog;
 
-class SetValidity : public CellAction {
+class SetValidity : public DialogCellAction {
 Q_OBJECT
 public:
     SetValidity(Actions *actions);
     virtual ~SetValidity();
 
-protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+protected Q_SLOTS:
+    void applyValidity(const Validity &validity);
 
-    ValidityDialog *m_dlg;
-    Selection *m_selection;
+protected:
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
+    virtual void onSelectionChanged() override;
 };
 
 class ClearValidity : public CellAction {

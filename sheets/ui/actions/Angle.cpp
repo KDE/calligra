@@ -49,7 +49,7 @@ ActionDialog *Angle::createDialog(QWidget *canvasWidget)
 
 void Angle::onSelectionChanged()
 {
-    Cell cell(m_selection->activeSheet(), m_selection->marker());
+    Cell cell= activeCell();
     int angle = -1 * cell.style().angle();
     AngleDialog *dlg = dynamic_cast<AngleDialog *>(m_dlg);
     dlg->setAngle(angle);
