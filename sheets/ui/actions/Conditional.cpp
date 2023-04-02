@@ -27,60 +27,68 @@ using namespace Calligra::Sheets;
 
 
 SetCondition::SetCondition(Actions *actions)
-    : CellAction(actions, "conditional", i18n("Conditional Styles..."), QIcon(), i18n("Set cell style based on certain conditions"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "conditional", i18n("Conditional Styles..."), QIcon(), i18n("Set cell style based on certain conditions"))
 {
 }
 
 SetCondition::~SetCondition()
 {
-    if (m_dlg) delete m_dlg;
 }
 
 
-void SetCondition::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *SetCondition::createDialog(QWidget *canvasWidget)
 {
-    m_dlg = new ConditionalDialog(canvasWidget);
-    
-    QStringList styles(sheet->fullMap()->styleManager()->styleNames());
-    m_dlg->setStyleNames(styles);
+    auto dlg = new ConditionalDialog(canvasWidget);
+    connect(dlg, &ConditionalDialog::applyCondition, this, &SetCondition::applyCondition);
+    return dlg;
+}
 
-    QLinkedList<Conditional> conditionList = Cell(sheet, selection->marker()).conditions().conditionList();
+void SetCondition::onSelectionChanged()
+{
+    ConditionalDialog *dlg = dynamic_cast<ConditionalDialog *>(m_dlg);
 
-    ValueConverter *converter = sheet->map()->converter();
+    Map *map = m_selection->activeSheet()->fullMap();
+
+    QStringList styles(map->styleManager()->styleNames());
+    dlg->setStyleNames(styles);
+
+    QLinkedList<Conditional> conditionList = activeCell().conditions().conditionList();
+
+    dlg->clear();
+    ValueConverter *converter = map->converter();
     int numCondition = 0;
     for (Conditional &c : conditionList) {
         ++numCondition;
         QString val1 = converter->asString(c.value1).asString();
         QString val2 = converter->asString(c.value2).asString();
-        m_dlg->setValueRow(numCondition, c.cond, val1, val2, c.styleName);
+        dlg->setValueRow(numCondition, c.cond, val1, val2, c.styleName);
     }
-
-    if (m_dlg->exec()) {
-        ValueParser *parser = sheet->map()->parser();
-        QLinkedList<Conditional> newList;
-        int id = 1;
-        while (m_dlg->getType(id) != Validity::None) {
-            Conditional newCondition;
-            newCondition.cond = m_dlg->getType(id);
-            newCondition.value1 = parser->parse(m_dlg->getValue1(id));
-            newCondition.value2 = parser->parse(m_dlg->getValue1(id));
-            newCondition.styleName = m_dlg->getStyleName(id);
-            newList.append(newCondition);
-            ++id;
-        }
-
-        ConditionCommand* manipulator = new ConditionCommand();
-        manipulator->setSheet(sheet);
-        manipulator->setConditionList(newList);
-        manipulator->add(*selection);
-        manipulator->execute(selection->canvas());
-    }
-
-    delete m_dlg;
-    m_dlg = nullptr;
 }
 
+void SetCondition::applyCondition()
+{
+    ConditionalDialog *dlg = dynamic_cast<ConditionalDialog *>(m_dlg);
+    Map *map = m_selection->activeSheet()->fullMap();
+
+    ValueParser *parser = map->parser();
+    QLinkedList<Conditional> newList;
+    int id = 1;
+    while (dlg->getType(id) != Validity::None) {
+        Conditional newCondition;
+        newCondition.cond = dlg->getType(id);
+        newCondition.value1 = parser->parse(dlg->getValue1(id));
+        newCondition.value2 = parser->parse(dlg->getValue1(id));
+        newCondition.styleName = dlg->getStyleName(id);
+        newList.append(newCondition);
+        ++id;
+    }
+
+    ConditionCommand* manipulator = new ConditionCommand();
+    manipulator->setSheet(m_selection->activeSheet());
+    manipulator->setConditionList(newList);
+    manipulator->add(*m_selection);
+    manipulator->execute(m_selection->canvas());
+}
 
 
 // this is inside a Clear submenu, hence 'Conditional'

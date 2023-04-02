@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_CONDITIONAL
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 #include "core/Condition.h"
 #include "ui/commands/AbstractRegionCommand.h"
@@ -21,16 +21,18 @@ namespace Sheets
 {
 class ConditionalDialog;
 
-class SetCondition : public CellAction {
+class SetCondition : public DialogCellAction {
 Q_OBJECT
 public:
     SetCondition(Actions *actions);
     virtual ~SetCondition();
 
-protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+protected Q_SLOTS:
+    void applyCondition();
 
-    ConditionalDialog *m_dlg;
+protected:
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
+    virtual void onSelectionChanged() override;
 };
 
 class ClearCondition : public CellAction {

@@ -224,15 +224,12 @@ void ConditionalWidget::slotTextChanged3(const QString & text)
  * Sets conditional cell formattings.
  */
 ConditionalDialog::ConditionalDialog(QWidget* parent)
-        : KoDialog(parent),
+        : ActionDialog(parent),
         m_dlg(new ConditionalWidget(this))
 {
-    setButtons(KoDialog::Ok | KoDialog::Cancel);
     setCaption(i18n("Conditional Styles"));
 
     setMainWidget(m_dlg);
-
-    connect(this, &KoDialog::okClicked, this, &ConditionalDialog::slotOk);
 
     init();
 }
@@ -255,6 +252,13 @@ void ConditionalDialog::init()
     m_dlg->m_style_1->setEnabled(false);
     m_dlg->m_style_2->setEnabled(false);
     m_dlg->m_style_3->setEnabled(false);
+}
+
+void ConditionalDialog::clear()
+{
+    init();
+    for (int i = 1; i <= 3; ++i)
+        setValueRow(i, Validity::None, QString(), QString(), QString());
 }
 
 void ConditionalDialog::setValueRow(int id, Validity::Type type, const QString &val1, const QString &val2, const QString &style)
@@ -295,6 +299,7 @@ void ConditionalDialog::setValueRow(int id, Validity::Type type, const QString &
     switch (type) {
     case Validity::None :
     case Validity::IsTrueFormula: // was unhandled
+        cb->setCurrentIndex(0);
         break;
 
     case Validity::Equal :
@@ -424,9 +429,10 @@ QString ConditionalDialog::getStyleName(int id) {
 }
 
 
-void ConditionalDialog::slotOk()
+void ConditionalDialog::onApply()
 {
     if (!checkInputData())
         return;
-    accept();
+
+    emit applyCondition();
 }

@@ -10,7 +10,7 @@
 #ifndef CALLIGRA_SHEETS_CONDITIONAL_DIALOG
 #define CALLIGRA_SHEETS_CONDITIONAL_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 #include "core/Condition.h"
 
@@ -60,7 +60,7 @@ public Q_SLOTS:
  * \ingroup UI
  * Dialog to set conditional cell styles.
  */
-class ConditionalDialog : public KoDialog
+class ConditionalDialog : public ActionDialog
 {
     Q_OBJECT
 public:
@@ -68,6 +68,7 @@ public:
 
     void init();
 
+    void clear();
     void setStyleNames(const QStringList &list);
     void setValueRow(int id, Validity::Type type, const QString &val1, const QString &val2, const QString &style);
 
@@ -76,10 +77,12 @@ public:
     QString getValue2(int id);
     QString getStyleName(int id);
 
-public Q_SLOTS:
-    void slotOk();
+Q_SIGNALS:
+    void applyCondition();
 
 protected:
+    virtual void onApply() override;
+
     ConditionalWidget * m_dlg;
     Validity::Type   m_result;
 
