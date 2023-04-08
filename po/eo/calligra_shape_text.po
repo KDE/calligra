@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2023-02-27 22:53+0100\n"
+"PO-Revision-Date: 2023-04-07 10:09+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1307,7 +1307,7 @@ msgstr " Nomo:"
 #: dialogs/ParagraphIndentSpacing.ui:97
 #, kde-format
 msgid "<p><ul><li><b>Single</b>: The normal linespacing</li></ul></p> "
-msgstr "<p> <ekz> <b>Ununura</b>: La normala interspaco</ekz></ekz>."
+msgstr "<p><ul><li>b>Ununura</b>: La normala interspaco</li></ul></p>."
 
 #. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
 #: dialogs/ListLevelWidget.ui:47
