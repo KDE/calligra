@@ -11,12 +11,8 @@
 
 #ifndef QT_NO_SQL
 
-// #include <QRect>
-// #include <QFrame>
-// #include <QLabel>
-
 #include <QSqlDatabase>
-#include <kassistantdialog.h>
+#include "ActionDialog.h"
 
 class QCheckBox;
 class QFrame;
@@ -30,6 +26,7 @@ class QPushButton;
 class KLineEdit;
 class KComboBox;
 class KTextEdit;
+class KPageWidget;
 class KPageWidgetItem;
 
 namespace Calligra
@@ -42,7 +39,7 @@ class Selection;
  * \ingroup UI
  * Dialog to import data from a database.
  */
-class DatabaseDialog : public KAssistantDialog
+class DatabaseDialog : public ActionDialog
 {
     Q_OBJECT
 
@@ -51,6 +48,8 @@ public:
 
     DatabaseDialog(QWidget* parent, Selection* selection);
     ~DatabaseDialog() override;
+
+    virtual void onSelectionChanged(Selection *sel) override;
 
 private Q_SLOTS:
     void orBox_clicked();
@@ -61,20 +60,23 @@ private Q_SLOTS:
     void databaseNameChanged(const QString & s);
     void databaseHostChanged(const QString & s);
     void databaseDriverChanged(int);
-    //void popupTableViewMenu( QListWidgetItem *, const QPoint &, int );
-    void tableViewClicked(QListWidgetItem *);
-    void accept() override;
+    void onNext();
+    void onBack();
 
 protected:
-    void next() override;
-    void back() override;
+    virtual void onApply() override;
+    void enableButtons();
+    void setTargetRect(const QRect &rect);
+
 
 private:
     int            m_currentPage;
     Selection    * m_selection;
     QRect          m_targetRect;
     QSqlDatabase   m_dbConnection;
+    QString        m_queryString;
 
+    KPageWidget *main;
     KPageWidgetItem * m_database;
     QLabel       * m_databaseStatus;
     KLineEdit    * m_username;

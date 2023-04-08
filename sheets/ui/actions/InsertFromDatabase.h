@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_INSERT_FROM_DATABASE
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 
 namespace Calligra
@@ -17,12 +17,13 @@ namespace Calligra
 namespace Sheets
 {
 
-class InsertFromDatabase : public CellAction {
+class InsertFromDatabase : public DialogCellAction {
 Q_OBJECT
 public:
     InsertFromDatabase(Actions *actions);
     virtual ~InsertFromDatabase();
 protected:
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     virtual QAction *createAction() override;
 };

@@ -14,16 +14,12 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#ifndef QT_NO_SQL
-// #include <QSqlDatabase>
-#endif
-
 
 using namespace Calligra::Sheets;
 
 
 InsertFromDatabase::InsertFromDatabase(Actions *actions)
-    : CellAction(actions, "insertFromDatabase", i18n("From &Database..."), koIcon("network-server-database"), i18n("Insert data from a SQL database"))
+    : DialogCellAction(actions, "insertFromDatabase", i18n("From &Database..."), koIcon("network-server-database"), i18n("Insert data from a SQL database"))
 {
     m_closeEditor = true;
 }
@@ -38,7 +34,12 @@ QAction *InsertFromDatabase::createAction() {
     return res;
 }
 
-void InsertFromDatabase::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
+ActionDialog *InsertFromDatabase::createDialog(QWidget *canvasWidget)
+{
+    return new DatabaseDialog(canvasWidget, m_selection);
+}
+
+void InsertFromDatabase::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
 #ifndef QT_NO_SQL
     QStringList str = QSqlDatabase::drivers();
@@ -48,9 +49,7 @@ void InsertFromDatabase::execute(Selection *selection, Sheet *, QWidget *canvasW
         return;
     }
 
-    DatabaseDialog *dialog = new DatabaseDialog(canvasWidget, selection);
-    dialog->exec();
-    delete dialog;
+    DialogCellAction::execute(selection, sheet, canvasWidget);
 #endif
 }
 
