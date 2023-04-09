@@ -93,27 +93,20 @@ bool StyleFromCell::enabledForSelection(Selection *selection, const Cell &)
 
 
 ShowStyleManager::ShowStyleManager(Actions *actions)
-    : CellAction(actions, "styleDialog", i18n("Style Manager..."), QIcon(), i18n("Edit and organize cell styles"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "styleDialog", i18n("Style Manager..."), QIcon(), i18n("Edit and organize cell styles"))
 {
 }
 
 ShowStyleManager::~ShowStyleManager()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-void ShowStyleManager::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *ShowStyleManager::createDialog(QWidget *canvasWidget)
 {
-    if (!m_dlg) {
-        StyleManager* const styleManager = sheet->fullMap()->styleManager();
-        m_dlg = new StyleManagerDialog(canvasWidget, selection, styleManager);
-        connect(m_dlg, &StyleManagerDialog::finished,
-                   this, &ShowStyleManager::styleDialogClosed);
-        connect(m_dlg, &StyleManagerDialog::setStyle,
-                   this, &ShowStyleManager::setStyle);
-    }
-    m_dlg->show();
+    StyleManager* const styleManager = m_selection->activeSheet()->fullMap()->styleManager();
+    StyleManagerDialog *dlg = new StyleManagerDialog(canvasWidget, m_selection, styleManager);
+    connect(dlg, &StyleManagerDialog::setStyle, this, &ShowStyleManager::setStyle);
+    return dlg;
 }
 
 void ShowStyleManager::setStyle(const QString &name)
@@ -134,18 +127,6 @@ void ShowStyleManager::setStyle(const QString &name)
     command->setStyle(s);
     command->add(*sel);
     command->execute(sel->canvas());
-}
-
-void ShowStyleManager::styleDialogClosed()
-{
-    if (m_dlg) {
-        disconnect(m_dlg, &StyleManagerDialog::finished,
-                   this, &ShowStyleManager::styleDialogClosed);
-        disconnect(m_dlg, &StyleManagerDialog::setStyle,
-                   this, &ShowStyleManager::setStyle);
-        m_dlg->deleteLater();
-        m_dlg = nullptr;
-    }
 }
 
 

@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_STYLES
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 class KSelectAction;
 
@@ -32,22 +32,17 @@ protected:
 };
 
 
-class StyleManagerDialog;
-
-class ShowStyleManager : public CellAction {
+class ShowStyleManager : public DialogCellAction {
 Q_OBJECT
 public:
     ShowStyleManager(Actions *actions);
     virtual ~ShowStyleManager();
 
 protected Q_SLOTS:
-    void styleDialogClosed();
     void setStyle(const QString &style);
 
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-
-    StyleManagerDialog *m_dlg;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
 

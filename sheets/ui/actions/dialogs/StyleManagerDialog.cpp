@@ -25,11 +25,10 @@
 using namespace Calligra::Sheets;
 
 StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
-        : KoDialog(parent)
+        : ActionDialog(parent)
         , m_selection(selection)
         , m_styleManager(manager)
 {
-    setButtons(Apply | Close);
     setCaption(i18n("Style Manager"));
 
     QWidget* widget = new QWidget(this);
@@ -72,8 +71,6 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
 
     connect(m_displayBox, QOverload<int>::of(&KComboBox::activated),
             this, &StyleManagerDialog::slotDisplayMode);
-    connect(this, &KoDialog::applyClicked,
-            this, &StyleManagerDialog::slotApply);
     connect(m_newButton, &QAbstractButton::clicked,
             this, &StyleManagerDialog::slotNew);
     connect(m_modifyButton, &QAbstractButton::clicked,
@@ -151,10 +148,9 @@ void StyleManagerDialog::slotDisplayMode(int mode)
     }
 }
 
-void StyleManagerDialog::slotApply()
+void StyleManagerDialog::onApply()
 {
     QTreeWidgetItem* item = m_styleList->currentItem();
-
     if (!item) return;
 
     QString name(item->text(0));

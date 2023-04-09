@@ -9,7 +9,7 @@
 #ifndef CALLIGRA_SHEETS_STYLE_MANAGER_DIALOG
 #define CALLIGRA_SHEETS_STYLE_MANAGER_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 class QPushButton;
 class QTreeWidget;
@@ -28,7 +28,7 @@ class StyleManager;
  * \ingroup UI
  * Dialog to manage names cell styles.
  */
-class StyleManagerDialog : public KoDialog
+class StyleManagerDialog : public ActionDialog
 {
     Q_OBJECT
 
@@ -39,8 +39,9 @@ public:
 Q_SIGNALS:
     void setStyle(const QString &name);
 
+protected:
+    virtual void onApply() override;
 protected Q_SLOTS:
-    void slotApply();
     void slotNew();
     void slotEdit();
     void slotRemove();
