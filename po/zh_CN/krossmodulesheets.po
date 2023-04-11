@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-03-27 12:01\n"
+"PO-Revision-Date: 2023-04-10 14:12\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -248,11 +248,11 @@ msgstr "没有当前工作表。"
 
 #: scripts/csvimport.py:76 scripts/vcardimport.py:70
 msgid "Invalid sheet \"%1\" defined."
-msgstr ""
+msgstr "指定的工作表 \"%1\" 无效。"
 
 #: scripts/csvimport.py:80
 msgid "Invalid cell \"%1\" defined."
-msgstr ""
+msgstr "指定的单元格 \"%1\" 无效。"
 
 #: scripts/csvimport.py:84 scripts/vcardimport.py:56
 msgid "File '%1' not found."
@@ -308,21 +308,23 @@ msgstr "严格"
 
 #: scripts/htmlexport.py:221
 msgid "No such file \"%1\" to read from."
-msgstr ""
+msgstr "没有可读取的文件 \"%1\"。"
 
 #: scripts/htmlexport.py:230
 msgid "Failed to open the file \"%1\"."
-msgstr ""
+msgstr "无法打开文件“%1”。"
 
 #: scripts/htmlexport.py:236
 msgid "No sheets which could be exported to HTML."
-msgstr ""
+msgstr "没有可导出为 HTML 的工作表。"
 
 #: scripts/htmlexport.py:309
 msgid ""
 "Failed to create HTML file \"%1\":\n"
 "%2"
 msgstr ""
+"无法创建 HTML 文件 \"%1:\n"
+"%2"
 
 #: scripts/htmlexport.py:366
 msgid "HTML Export"
@@ -330,11 +332,11 @@ msgstr "HTML 导出"
 
 #: scripts/htmlexport.py:371
 msgid "Read from OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "导入 OpenDocument 工作表文件"
 
 #: scripts/htmlexport.py:374
 msgid "OpenDocument Spreadsheet Files"
-msgstr ""
+msgstr "OpenDocument 表格"
 
 #: scripts/htmlexport.py:377
 msgid "Save to HTML File"
@@ -354,7 +356,7 @@ msgstr "信息"
 
 #: scripts/htmlexport.py:388
 msgid "Style of the HTML Document"
-msgstr ""
+msgstr "HTML 文档的样式"
 
 #: scripts/htmlexport.py:388
 msgid "Styles"
@@ -366,7 +368,7 @@ msgstr "覆盖文件?"
 
 #: scripts/htmlexport.py:426 scripts/logger.py:30
 msgid "The file \"%1\" does already exist. Overwrite the file?"
-msgstr ""
+msgstr "文件 \"%1\" 已经存在。要覆盖这个文件吗？"
 
 #: scripts/htmlexport.py:428
 msgid "Export aborted."
@@ -439,18 +441,20 @@ msgid ""
 "Failed to write Log File \"%1\":\n"
 "%2"
 msgstr ""
+"写入日志文件失败\"%1\":\n"
+"%2"
 
 #: scripts/logger.py:50
 msgid "Failed to create listener for sheetname '%1' and range '%2'"
-msgstr ""
+msgstr "未能为工作表名%1和范围%2 创建监听器"
 
 #: scripts/myorca.py:86
 msgid "Failed to create listener"
-msgstr ""
+msgstr "创建监听器失败"
 
 #: scripts/myorca.py:96
 msgid "Sheet name changed"
-msgstr ""
+msgstr "工作表名称已更改"
 
 #: scripts/myorca.py:100
 msgid "Show sheet %1"
@@ -478,23 +482,23 @@ msgstr "工作表名称"
 
 #: scripts/myorca.py:154
 msgid "Cell Name if selection changed"
-msgstr ""
+msgstr "更改选区单元格名称"
 
 #: scripts/myorca.py:159
 msgid "Cell Value if selection changed"
-msgstr ""
+msgstr "更改选区时单元格值"
 
 #: scripts/myorca.py:164
 msgid "Sheet Name if sheet changed"
-msgstr ""
+msgstr "更改选区工作表名称"
 
 #: scripts/myorca.py:188
 msgid "Calligra Spreadsheet"
-msgstr ""
+msgstr "Calligra 表格"
 
 #: scripts/myorca.py:198
 msgid "Failed to connect with the Orca HTTP-Server."
-msgstr ""
+msgstr "无法连接到 Orca HTTP 服务器。"
 
 #: scripts/myorca.py:201
 msgid "Url:"
@@ -507,18 +511,21 @@ msgid ""
 "\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module."
 "</qt>"
 msgstr ""
+"<qt>无法导入ODFPY Python模块。<br><br>要使用odfpyexport.py Python脚本导出到"
+"OpenDocument，您需要安装<a href=\"http://opendocumentfellowship.org/projects/"
+"odfpy\">ODFPY</a> Python模块。</qt>"
 
 #: scripts/odfpyexport.py:74
 msgid ""
 "Invalid range for sheet \"%1\" cause left column value \"%2\" is bigger than "
 "right column value \"%3\"."
-msgstr ""
+msgstr "工作表“%1”的范围无效，因为左列值“%2”大于右列值“%3”。"
 
 #: scripts/odfpyexport.py:76
 msgid ""
 "Invalid range for sheet \"%1\" cause top row value \"%2\" is bigger than "
 "bottom row value \"%3\"."
-msgstr ""
+msgstr "工作表“%1”的范围无效，因为顶行值“%2”大于底行值“%3”。"
 
 #: scripts/odfpyexport.py:83
 msgid "OpenDocument Text"
@@ -526,19 +533,19 @@ msgstr "OpenDocument Text"
 
 #: scripts/odfpyexport.py:140
 msgid "OpenDocument Spreadsheet"
-msgstr ""
+msgstr "OpenDocument 表格"
 
 #: scripts/odfpyexport.py:222
 msgid "No OpenDocument Spreadsheet file to read from defined."
-msgstr ""
+msgstr "未定义要读取的OpenDocument电子表格文件。"
 
 #: scripts/odfpyexport.py:236
 msgid "OdfPy Export"
-msgstr ""
+msgstr "OdfPy 导出"
 
 #: scripts/odfpyexport.py:241
 msgid "Save to OpenDocument File"
-msgstr ""
+msgstr "保存到 OpenDocument 文件"
 
 #: scripts/odfpyexport.py:249
 msgid "All Supported Files"
@@ -546,7 +553,7 @@ msgstr "支持的所有文件"
 
 #: scripts/odfpyexport.py:254
 msgid "Export Sheets"
-msgstr ""
+msgstr "导出工作表"
 
 #: scripts/odfpyexport.py:254
 msgid "Sheets"
@@ -554,71 +561,71 @@ msgstr "工作表"
 
 #: scripts/odfpyexport.py:280
 msgid "No OpenDocument file to write defined."
-msgstr ""
+msgstr "没有要写入的 OpenDocument 文件。"
 
 #: scripts/pyregexp.py:10
 msgid ""
 "The PYREGEXP() function replaces substring in the input string with a given "
 "string using regular expression."
-msgstr ""
+msgstr "PYREGEXP() 函数用正则表达式替换输入字符串中的子字符串。"
 
 #: scripts/pyregexp.py:11
 msgid "PYREGEXP(string)"
-msgstr ""
+msgstr "PYREGEXP(字符串)"
 
 #: scripts/pyregexp.py:12
 msgid "The input string."
-msgstr ""
+msgstr "输入字符串。"
 
 #: scripts/pyregexp.py:13
 msgid "The regular expression."
-msgstr ""
+msgstr "正则表达式."
 
 #: scripts/pyregexp.py:14
 msgid "Replace with."
-msgstr ""
+msgstr "替换为："
 
 #: scripts/pyregexp.py:15
 msgid "PYREGEXP(\"Some String\",\"(S|m)\",\"A\")"
-msgstr ""
+msgstr "PYREXP(\"一些字符串\",\"(S|m)\",\"A\")"
 
 #: scripts/pyregexp.py:25
 msgid "Invalid regexp"
-msgstr ""
+msgstr "正则表达式无效"
 
 #: scripts/pytime.py:10
 msgid "The PYTIME() function displays the current datetime."
-msgstr ""
+msgstr "PYTIME() 函数显示当前日期时间。"
 
 #: scripts/pytime.py:11
 msgid "PYTIME(string)"
-msgstr ""
+msgstr "PYTIME(字符串)"
 
 #: scripts/pytime.py:12
 msgid "The datetime format string."
-msgstr ""
+msgstr "日期时间格式字符串。"
 
 #: scripts/pytime.py:13
 msgid "PYTIME()"
-msgstr ""
+msgstr "PYTIME()"
 
 #: scripts/pytime.py:14
 msgid "PYTIME(\"%H:%M.%S\")"
-msgstr ""
+msgstr "PYTIME(\"%H:%M.%S\")"
 
 #: scripts/pytime.py:15
 msgid "PYTIME(\"%Y-%M-%d\")"
-msgstr ""
+msgstr "PYTIME(\"%Y-%M-%d\")"
 
 #: scripts/pytime.py:21
 msgid "Invalid format"
-msgstr ""
+msgstr "格式无效"
 
 #: scripts/rpyfunctions.py:116
 msgid ""
 "This function returns the probability density function of the normal "
 "distribution."
-msgstr ""
+msgstr "此函数返回正态分布的概率密度函数。"
 
 #: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:124
 #: scripts/rpyfunctions.py:131 scripts/rpyfunctions.py:138
@@ -631,7 +638,7 @@ msgstr ""
 msgid ""
 "If true, log of the result will be returned instead. This is useful if the "
 "result would otherwise underflow to 0. Defaults to false."
-msgstr ""
+msgstr "如果为 true，则返回结果的日志。如果结果低于0则会有用。默认值为false。"
 
 #: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
 #: scripts/rpyfunctions.py:121
@@ -656,7 +663,7 @@ msgstr "分布的均值"
 #: scripts/rpyfunctions.py:210 scripts/rpyfunctions.py:215
 #: scripts/rpyfunctions.py:217
 msgid "observation"
-msgstr ""
+msgstr "观察记录"
 
 #: scripts/rpyfunctions.py:117 scripts/rpyfunctions.py:119
 #: scripts/rpyfunctions.py:121
@@ -667,7 +674,7 @@ msgstr "分布的标准差"
 msgid ""
 "This function returns the cumulative distribution function of the normal "
 "distribution."
-msgstr ""
+msgstr "此函数返回正态分布的累积分布函数。"
 
 #: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
 #: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
@@ -686,7 +693,7 @@ msgstr ""
 #: scripts/rpyfunctions.py:217 scripts/rpyfunctions.py:219
 msgid ""
 "If true (the default), the lower tail of the distribution is considered."
-msgstr ""
+msgstr "如果为true（默认值），则考虑分布的尾部。"
 
 #: scripts/rpyfunctions.py:119 scripts/rpyfunctions.py:121
 #: scripts/rpyfunctions.py:126 scripts/rpyfunctions.py:128
@@ -706,13 +713,13 @@ msgstr ""
 msgid ""
 "If true, log of the probability is used. This is useful if the probability "
 "would otherwise underflow to 0. Defaults to false."
-msgstr ""
+msgstr "如果为true，则使用概率对数。如果概率会低于0则会有用。默认为false。"
 
 #: scripts/rpyfunctions.py:120
 msgid ""
 "This function returns the probability quantile function, i.e., the inverse "
 "of the cumulative distribution function, of the normal distribution."
-msgstr ""
+msgstr "此函数返回概率定量函数，即正常分布的累积分配函数。"
 
 #: scripts/rpyfunctions.py:121 scripts/rpyfunctions.py:135
 #: scripts/rpyfunctions.py:142 scripts/rpyfunctions.py:149
@@ -727,7 +734,7 @@ msgstr "概率"
 msgid ""
 "This function returns the probability density function of the log-normal "
 "distribution."
-msgstr ""
+msgstr "此函数返回正态分布的概率密度函数。"
 
 #: scripts/rpyfunctions.py:124 scripts/rpyfunctions.py:126
 #: scripts/rpyfunctions.py:128
@@ -1028,42 +1035,42 @@ msgstr ""
 msgid ""
 "This function returns the probability density function of the geometric "
 "distribution."
-msgstr ""
+msgstr "此函数返回几何分布的概率密度函数。"
 
 #: scripts/rpyfunctions.py:209
 msgid ""
 "This function returns the cumulative distribution function of the geometric "
 "distribution."
-msgstr ""
+msgstr "此函数返回几何分布的累积分布函数。"
 
 #: scripts/rpyfunctions.py:211
 msgid ""
 "This function returns the probability quantile function, i.e., the inverse "
 "of the cumulative distribution function, of the geometric distribution."
-msgstr ""
+msgstr "这个函数返回概率量化功能，即几何分布的累积分布函数。"
 
 #: scripts/rpyfunctions.py:214
 msgid ""
 "This function returns the probability density function of the Cauchy "
 "distribution."
-msgstr ""
+msgstr "此函数返回正态分布的概率密度函数。"
 
 #: scripts/rpyfunctions.py:215 scripts/rpyfunctions.py:217
 #: scripts/rpyfunctions.py:219
 msgid "the center of the distribution"
-msgstr ""
+msgstr "分布的中心"
 
 #: scripts/rpyfunctions.py:216
 msgid ""
 "This function returns the cumulative distribution function of the Cauchy "
 "distribution."
-msgstr ""
+msgstr "此函数返回正态分布的概率密度函数。"
 
 #: scripts/rpyfunctions.py:218
 msgid ""
 "This function returns the probability quantile function, i.e., the inverse "
 "of the cumulative distribution function, of the Cauchy distribution."
-msgstr ""
+msgstr "此函数返回概率量化函数，即累积分布函数。"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:4
@@ -1304,27 +1311,27 @@ msgstr "导入 vCard"
 
 #: scripts/vcardimport.py:45
 msgid "vCard Files"
-msgstr ""
+msgstr "vCard 文件"
 
 #: scripts/xmlviewer.py:30
 msgid "Open OpenDocument File"
-msgstr ""
+msgstr "打开 OpenDocument 文件"
 
 #: scripts/xmlviewer.py:32
 msgid "OpenDocument Files"
-msgstr ""
+msgstr "OpenDocument 文件"
 
 #: scripts/xmlviewer.py:57
 msgid "Failed to read the manifest"
-msgstr ""
+msgstr "读取清单失败"
 
 #: scripts/xmlviewer.py:168 scripts/xmlviewer.py:265
 msgid "Failed to extract \"%1\" to \"%2\""
-msgstr ""
+msgstr "提取“%1”到“%2”失败"
 
 #: scripts/xmlviewer.py:175
 msgid "<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>"
-msgstr ""
+msgstr "<qt>执行程序失败：<br><br>%1 \"%2\"</qt>"
 
 #: scripts/xmlviewer.py:187
 msgid "Open with..."
@@ -1336,7 +1343,7 @@ msgstr "滤镜"
 
 #: scripts/xmlviewer.py:199
 msgid "No program defined."
-msgstr ""
+msgstr "未定义程序"
 
 #: scripts/xmlviewer.py:214
 msgid "Compare..."
@@ -1344,19 +1351,19 @@ msgstr "比较..."
 
 #: scripts/xmlviewer.py:225
 msgid "Compare with OpenDocument file:"
-msgstr ""
+msgstr "与 OpenDocument 文件比较："
 
 #: scripts/xmlviewer.py:238
 msgid "No OpenDocument file to compare with selected."
-msgstr ""
+msgstr "没有要与选中的 OpenDocument 文件进行比较。"
 
 #: scripts/xmlviewer.py:242
 msgid "No command selected."
-msgstr ""
+msgstr "未选择命令。"
 
 #: scripts/xmlviewer.py:253
 msgid "The OpenDocument file does not contain any file named \"%1\""
-msgstr ""
+msgstr "OpenDocument 文件不包含任何名为%1 的文件"
 
 #: scripts/xmlviewer.py:283
 msgid "<qt>%1</qt>"
@@ -1366,35 +1373,35 @@ msgstr "<qt>%1</qt>"
 msgid ""
 "The YFINANCE() function uses the Yahoo! Finance Web Service to display stock "
 "values of a defined ticker symbol."
-msgstr ""
+msgstr "YFINANCE()函数使用Yahoo! Finance Web服务来显示已定义股票代码的股票值。"
 
 #: scripts/yfinance.py:41
 msgid "YFINANCE(string,string,string)"
-msgstr ""
+msgstr "YFINANCE(string,string,string)"
 
 #: scripts/yfinance.py:42
 msgid "The ticker symbol."
-msgstr ""
+msgstr "股票代号"
 
 #: scripts/yfinance.py:43
 msgid "The date."
-msgstr ""
+msgstr "日期。"
 
 #: scripts/yfinance.py:44
 msgid "The type: Date, Open, High, Low, Close, Volume or AdjClose."
-msgstr ""
+msgstr "类型：日期、开盘价、最高价、最低价、收盘价、成交量或调整后收盘价。"
 
 #: scripts/yfinance.py:45
 msgid "YFINANCE(\"YHOO\";\"20060119\";\"Open\")"
-msgstr ""
+msgstr "YFINANCE(\"YHOO\";\"200660119\";\"Open\")"
 
 #: scripts/yfinance.py:46
 msgid "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
-msgstr ""
+msgstr "YFINANCE(\"=C14\";\"=C15\";\"=C16\")"
 
 #: scripts/yfinance.py:65
 msgid "Invalid symbol"
-msgstr ""
+msgstr "无效的符号"
 
 #: scripts/yfinance.py:69
 msgid "Invalid date"
@@ -1406,41 +1413,42 @@ msgstr "无效的类型"
 
 #: scripts/yfinance.py:99 scripts/yweather.py:68
 msgid "Web services request failed"
-msgstr ""
+msgstr "网络服务请求失败"
 
 #: scripts/yfinance.py:110
 msgid "No stock"
-msgstr ""
+msgstr "无库存"
 
 #: scripts/yfinance.py:113
 msgid "Invalid stock"
-msgstr ""
+msgstr "无效的状态"
 
 #: scripts/yweather.py:39
 msgid ""
 "The YWEATHER() function uses the Yahoo! Weather Web Service to display the "
 "weather of a location."
 msgstr ""
+"YWEATHER() 函数使用 Yahoo! Weather Weather 网络服务来显示位置的天气信息。"
 
 #: scripts/yweather.py:41
 msgid "YWEATHER(string;string)"
-msgstr ""
+msgstr "YWEATHER(string;string)"
 
 #: scripts/yweather.py:42
 msgid "The US zip code, Location ID or cell that contains them."
-msgstr ""
+msgstr "美国邮政编码、位置ID或包含它们的单元格。"
 
 #: scripts/yweather.py:43
 msgid "Units for temperature. f=Fahrenheit and c=Celsius"
-msgstr ""
+msgstr "温度单位。f=华氏度，c=摄氏度"
 
 #: scripts/yweather.py:44
 msgid "YWEATHER(\"=A1\")"
-msgstr ""
+msgstr "YWEATHER(\"=A1\")"
 
 #: scripts/yweather.py:45
 msgid "YWEATHER(\"GMXX0151\";\"c\")"
-msgstr ""
+msgstr "YWEATHER(\"GMXX0151\";\"c\")"
 
 #: scripts/yweather.py:55
 msgid "Invalid location"
@@ -1448,4 +1456,4 @@ msgstr "无效位置"
 
 #: scripts/yweather.py:83
 msgid "Invalid condition"
-msgstr ""
+msgstr "条件无效"
