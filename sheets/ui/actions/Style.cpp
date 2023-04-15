@@ -28,34 +28,44 @@ using namespace Calligra::Sheets;
 
 
 CellStyle::CellStyle(Actions *actions)
-    : CellAction(actions, "cellStyle", i18n("Cell Format..."), koIcon("cell_layout"), i18n("Set the cell formatting"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "cellStyle", i18n("Cell Format..."), koIcon("cell_layout"), i18n("Set the cell formatting"))
 {
 }
 
 CellStyle::~CellStyle()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-void CellStyle::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *CellStyle::createDialog(QWidget *canvasWidget)
 {
-    m_dlg = new LayoutDialog(canvasWidget, sheet, nullptr, false);
-    QRect range = selection->firstRange();
-    CellStorage *cs = sheet->fullCellStorage();
+    LayoutDialog *dlg = new LayoutDialog(canvasWidget, m_selection->activeSheet(), nullptr, false);
+    connect(dlg, &LayoutDialog::applyStyle, this, &CellStyle::applyStyle);
+    return dlg;
+}
+
+void CellStyle::onSelectionChanged()
+{
+    LayoutDialog *dlg = dynamic_cast<LayoutDialog *>(m_dlg);
+    QRect range = m_selection->firstRange();
+    CellStorage *cs = m_selection->activeSheet()->fullCellStorage();
     Style style = cs->style(range);
     bool multicell = ((range.width() > 1) || (range.height() > 1));
-    m_dlg->setStyle(style, multicell);
-    if (m_dlg->exec()) {
-        Style style = m_dlg->style(multicell);
-        StyleCommand* command = new StyleCommand();
-        command->setSheet(sheet);
-        command->add(*selection);
-        command->setStyle(style);
-        command->execute(selection->canvas());
-    }
-    delete m_dlg;
-    m_dlg = nullptr;
+    dlg->setStyle(style, multicell);
+}
+
+void CellStyle::applyStyle()
+{
+    LayoutDialog *dlg = dynamic_cast<LayoutDialog *>(m_dlg);
+
+    QRect range = m_selection->firstRange();
+    bool multicell = ((range.width() > 1) || (range.height() > 1));
+
+    Style style = dlg->style(multicell);
+    StyleCommand* command = new StyleCommand();
+    command->setSheet(m_selection->activeSheet());
+    command->add(range);
+    command->setStyle(style);
+    command->execute(m_selection->canvas());
 }
 
 QAction *CellStyle::createAction() {

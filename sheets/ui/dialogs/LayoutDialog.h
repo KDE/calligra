@@ -19,7 +19,7 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_DIALOG
 #define CALLIGRA_SHEETS_LAYOUT_DIALOG
 
-#include <kpagedialog.h>
+#include "ui/actions/dialogs/ActionDialog.h"
 
 #include "core/Style.h"
 
@@ -48,7 +48,7 @@ class LayoutPageProtection;
  * \ingroup UI
  * Dialog to set the cell style.
  */
-class LayoutDialog : public KPageDialog
+class LayoutDialog : public ActionDialog
 {
     Q_OBJECT
 public:
@@ -74,11 +74,15 @@ public:
 
     Localization *locale() const;
 
+Q_SIGNALS:
+    void applyStyle();
+
 public Q_SLOTS:
     void setOkButtonEnabled(bool enabled);
 protected:
 
     void init(bool isStyle);
+    virtual void onApply() override;
 
     LayoutPageGeneral * generalPage;
     LayoutPageFloat *floatPage;

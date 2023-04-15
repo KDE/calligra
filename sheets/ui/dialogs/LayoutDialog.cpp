@@ -33,6 +33,8 @@
 #include "core/Sheet.h"
 
 
+#include <KPageWidget>
+
 
 using namespace Calligra::Sheets;
 
@@ -44,7 +46,7 @@ using namespace Calligra::Sheets;
  ***************************************************************************/
 
 LayoutDialog::LayoutDialog(QWidget* parent, Sheet *sheet, StyleManager* manager, bool isStyle)
-        : KPageDialog(parent)
+        : ActionDialog(parent)
         , m_sheet(sheet)
         , m_styleManager(manager)
 {
@@ -105,42 +107,50 @@ void LayoutDialog::setCustomStyle(const CustomStyle &style)
 
 void LayoutDialog::setOkButtonEnabled(bool enabled)
 {
-    buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(enabled);
+    enableButtonApply(enabled);
 }
 
+void LayoutDialog::onApply() {
+    emit applyStyle();
+    accept();
+}
 
 void LayoutDialog::init(bool isStyle)
 {
     setWindowTitle(i18n("Cell Format"));
-    setFaceType(KPageDialog::List);
     setMinimumWidth(800);
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    setButtonText(Apply, i18n("Set Cell Format"));
+
+    KPageWidget *main = new KPageWidget;
+    setMainWidget(main);
+    main->setFaceType(KPageWidget::List);
 
     if (isStyle) {
         generalPage = new LayoutPageGeneral(this, m_styleManager);
         connect(generalPage, &LayoutPageGeneral::validDataChanged, this, &LayoutDialog::setOkButtonEnabled);
-        addPage(generalPage, i18n("General"));
+        main->addPage(generalPage, i18n("General"));
     }
 
     Localization *locale = m_sheet->map()->calculationSettings()->locale();
     floatPage = new LayoutPageFloat(this, locale, m_sheet->fullMap()->formatter());
-    addPage(floatPage, i18n("Data Format"));
+    main->addPage(floatPage, i18n("Data Format"));
 
     fontPage = new LayoutPageFont(this);
-    addPage(fontPage, i18n("Font"));
+    main->addPage(fontPage, i18n("Font"));
 
     KoUnit unit = m_sheet->doc()->unit();
     positionPage = new LayoutPagePosition(this, unit);
-    addPage(positionPage, i18n("Position"));
+    main->addPage(positionPage, i18n("Position"));
 
     borderPage = new LayoutPageBorder(this);
-    addPage(borderPage, i18n("Border"));
+    main->addPage(borderPage, i18n("Border"));
 
     patternPage = new LayoutPagePattern(this);
-    addPage(patternPage, i18n("Background"));
+    main->addPage(patternPage, i18n("Background"));
 
     protectPage = new LayoutPageProtection(this);
-    addPage(protectPage, i18n("Cell Protection"));
+    main->addPage(protectPage, i18n("Cell Protection"));
 }
 
 

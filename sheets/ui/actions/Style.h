@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_STYLE
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 #include "ui/commands/AbstractRegionCommand.h"
 
@@ -23,18 +23,20 @@ namespace Calligra
 namespace Sheets
 {
 
-class LayoutDialog;
-
-class CellStyle : public CellAction {
+class CellStyle : public DialogCellAction {
 Q_OBJECT
 public:
     CellStyle(Actions *actions);
     virtual ~CellStyle();
 
+protected Q_SLOTS:
+    virtual void applyStyle();
+
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
+    virtual void onSelectionChanged() override;
+
     virtual QAction *createAction() override;
-    LayoutDialog *m_dlg;
 };
 
 
