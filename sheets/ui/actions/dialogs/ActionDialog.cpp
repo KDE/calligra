@@ -37,6 +37,7 @@ void ActionDialog::slotApply()
 
 void ActionDialog::slotClose()
 {
+    onClose();
     accept();
 }
 

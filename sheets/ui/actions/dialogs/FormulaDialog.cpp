@@ -47,11 +47,10 @@
 using namespace Calligra::Sheets;
 
 FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
-        : KoDialog(parent)
+        : ActionDialog(parent)
 {
     setCaption(i18n("Function"));
-    setButtons(Ok | Cancel);
-    //setWFlags( Qt::WDestructiveClose );
+    setButtonText(Apply, i18n("Set Function"));
 
     m_selection = selection;
     m_editor = editor;
@@ -174,8 +173,6 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     refresh_result = true;
 
-    connect(this, &KoDialog::cancelClicked, this, &FormulaDialog::slotClose);
-    connect(this, &KoDialog::okClicked, this, &FormulaDialog::slotOk);
     connect(typeFunction, QOverload<const QString &>::of(&KComboBox::activated),
             this, &FormulaDialog::slotActivated);
     /*
@@ -318,7 +315,7 @@ bool FormulaDialog::eventFilter(QObject* obj, QEvent* ev)
     return false;
 }
 
-void FormulaDialog::slotOk()
+void FormulaDialog::onApply()
 {
     // Pretend none of the text edits have focus; otherwise the next line will change the
     // value of whatever parameter has focus to the name of the cell we're editing
@@ -346,7 +343,7 @@ void FormulaDialog::slotOk()
     accept();
 }
 
-void FormulaDialog::slotClose()
+void FormulaDialog::onClose()
 {
     m_selection->endReferenceSelection();
 
@@ -362,7 +359,6 @@ void FormulaDialog::slotClose()
     }
 
     m_selection->emitModified();
-    reject();
 }
 
 void FormulaDialog::slotSelectButton()

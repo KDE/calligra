@@ -21,44 +21,33 @@ using namespace Calligra::Sheets;
 
 
 InsertFormula::InsertFormula(Actions *actions)
-    : CellAction(actions, "insertFormula", i18n("&Function..."), koIcon("insert-math-expression"), i18n("Insert math expression"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "insertFormula", i18n("&Function..."), koIcon("insert-math-expression"), i18n("Insert math expression"))
 {
 }
 
 InsertFormula::~InsertFormula()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-void InsertFormula::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
+ActionDialog *InsertFormula::createDialog(QWidget *canvasWidget)
 {
-    if (! m_dlg) {
-        CellToolBase *tool = m_actions->tool();
-        if (! tool->createEditor())
-            return;
-        m_dlg = new FormulaDialog(canvasWidget, selection, tool->editor());
-        connect(m_dlg, &QDialog::finished, this, &InsertFormula::dialogClosed);
-    }
-    if (m_function.length()) m_dlg->setFormula(m_function);
+    CellToolBase *tool = m_actions->tool();
+    if (!tool->createEditor()) return nullptr;   // Nothing if we don't have the editor.
 
-    m_dlg->show(); // dialog deletes itself later TODO - need to do this better!
-}
-
-void InsertFormula::dialogClosed() {
-    if (m_dlg) m_dlg->deleteLater();
-    m_dlg = nullptr;
+    return new FormulaDialog(canvasWidget, m_selection, tool->editor());
 }
 
 void InsertFormula::onEditorDeleted() {
-    if (m_dlg) m_dlg->deleteLater();
-    m_dlg = nullptr;
+    onDialogClosed();
 }
 
 void InsertFormula::setFunction (const QString &function)
 {
     m_function = function;
-    if (m_dlg) m_dlg->setFormula(function);
+    if (m_dlg) {
+        FormulaDialog *dlg = dynamic_cast<FormulaDialog *>(m_dlg);
+        dlg->setFormula(function);
+    }
 }
 
 

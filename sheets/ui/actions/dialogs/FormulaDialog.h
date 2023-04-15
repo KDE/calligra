@@ -15,7 +15,7 @@
 #define CALLIGRA_SHEETS_FORMULA_DIALOG
 
 #include <kcompletion.h>
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 #include <QModelIndex>
 
@@ -43,13 +43,16 @@ class Selection;
  * \ingroup UI
  * Dialog to compose a formula.
  */
-class FormulaDialog : public KoDialog
+class FormulaDialog : public ActionDialog
 {
     Q_OBJECT
 public:
     FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& expression = QString());
     ~FormulaDialog() override;
     void setFormula (const QString& expression);
+protected:
+    virtual void onApply() override;
+    virtual void onClose() override;
 private:
     /**
      * Turns the @p text into a parameter that koscript can understand. The type
@@ -63,14 +66,6 @@ private:
     QString createFormula();
 
 private Q_SLOTS:
-    /**
-     * Called by the Ok button.
-     */
-    void slotOk();
-    /**
-     * Called by the Close button.
-     */
-    void slotClose();
     /**
      * Called if a function name was selected but not double clicked.
      * This will just show the help page for the function.

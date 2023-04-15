@@ -36,6 +36,7 @@ public:
 
 protected:
     virtual void onApply() = 0;
+    virtual void onClose() {}
     /** Widget with the default focus. */
     virtual QWidget *defaultWidget() { return nullptr; }
 

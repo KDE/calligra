@@ -10,7 +10,7 @@
 
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 
 
@@ -21,7 +21,7 @@ namespace Sheets
 
 class FormulaDialog;
 
-class InsertFormula : public CellAction {
+class InsertFormula : public DialogCellAction {
 Q_OBJECT
 public:
     InsertFormula(Actions *actions);
@@ -30,12 +30,9 @@ public:
     virtual void onEditorDeleted() override;
 
     void setFunction (const QString &function);
-protected Q_SLOTS:
-    void dialogClosed();
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 
-    FormulaDialog *m_dlg;
     QString m_function;
 };
 

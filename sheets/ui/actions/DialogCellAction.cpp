@@ -40,8 +40,10 @@ void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWid
 
     if (!m_dlg) {
         m_dlg = createDialog(canvasWidget);
+        if (!m_dlg) return;  // No dialog? Nothing to do.
         connect(m_dlg, &ActionDialog::finished, this, &DialogCellAction::onDialogClosed);
     }
+
     m_dlg->show();
     m_dlg->raise();
     m_dlg->activateWindow();
