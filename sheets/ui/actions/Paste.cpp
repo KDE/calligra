@@ -95,58 +95,60 @@ void PasteRegular::execute(Selection *selection, Sheet *sheet, QWidget *)
 
 
 PasteSpecial::PasteSpecial(Actions *actions)
-    : CellAction(actions, "specialPaste", i18n("Special Paste..."), koIcon("special_paste"), i18n("Paste the contents of the clipboard with special options"))
-    , m_dlg(nullptr)
+    : DialogCellAction(actions, "specialPaste", i18n("Special Paste..."), koIcon("special_paste"), i18n("Paste the contents of the clipboard with special options"))
 {
 }
 
 PasteSpecial::~PasteSpecial()
 {
-    if (m_dlg) delete m_dlg;
 }
 
-void PasteSpecial::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+ActionDialog *PasteSpecial::createDialog(QWidget *canvasWidget)
 {
-    if (!m_dlg) m_dlg = new SpecialPasteDialog(canvasWidget);
-    if (m_dlg->exec()) {
-        Paste::Mode sp = Paste::Normal;
-        Paste::Operation op = Paste::OverWrite;
+    SpecialPasteDialog *dlg = new SpecialPasteDialog(canvasWidget);
+    connect(dlg, &SpecialPasteDialog::paste, this, &PasteSpecial::paste);
+    return dlg;
+}
 
-        if (m_dlg->wantEverything())
-            sp = Paste::Normal;
-        else if (m_dlg->wantText())
-            sp = Paste::Text;
-        else if (m_dlg->wantFormat())
-            sp = Paste::Format;
-        else if (m_dlg->wantNoBorder())
-            sp = Paste::NoBorder;
-        else if (m_dlg->wantComment())
-            sp = Paste::Comment;
-        else if (m_dlg->wantResult())
-            sp = Paste::Result;
+void PasteSpecial::paste()
+{
+    SpecialPasteDialog *dlg = dynamic_cast<SpecialPasteDialog *>(m_dlg);
 
-        if (m_dlg->opOverwrite())
-            op = Paste::OverWrite;
-        if (m_dlg->opAdd())
-            op = Paste::Add;
-        if (m_dlg->opSub())
-            op = Paste::Sub;
-        if (m_dlg->opMul())
-            op = Paste::Mul;
-        if (m_dlg->opDiv())
-            op = Paste::Div;
+    Paste::Mode sp = Paste::Normal;
+    Paste::Operation op = Paste::OverWrite;
 
-        QClipboard *clipboard = QApplication::clipboard();
-        PasteCommand *const command = new PasteCommand();
-        command->setSheet(sheet);
-        command->add(*selection);
-        command->setMimeData(clipboard->mimeData(), clipboard->ownsClipboard());
-        command->setMode(sp);
-        command->setOperation(op);
-        command->execute(selection->canvas());
-    }
-    delete m_dlg;
-    m_dlg = nullptr;
+    if (dlg->wantEverything())
+        sp = Paste::Normal;
+    else if (dlg->wantText())
+        sp = Paste::Text;
+    else if (dlg->wantFormat())
+        sp = Paste::Format;
+    else if (dlg->wantNoBorder())
+        sp = Paste::NoBorder;
+    else if (dlg->wantComment())
+        sp = Paste::Comment;
+    else if (dlg->wantResult())
+        sp = Paste::Result;
+
+    if (dlg->opOverwrite())
+        op = Paste::OverWrite;
+    if (dlg->opAdd())
+        op = Paste::Add;
+    if (dlg->opSub())
+        op = Paste::Sub;
+    if (dlg->opMul())
+        op = Paste::Mul;
+    if (dlg->opDiv())
+        op = Paste::Div;
+
+    QClipboard *clipboard = QApplication::clipboard();
+    PasteCommand *const command = new PasteCommand();
+    command->setSheet(m_selection->activeSheet());
+    command->add(*m_selection);
+    command->setMimeData(clipboard->mimeData(), clipboard->ownsClipboard());
+    command->setMode(sp);
+    command->setOperation(op);
+    command->execute(m_selection->canvas());
 }
 
 

@@ -14,24 +14,24 @@
 using namespace Calligra::Sheets;
 
 SpecialPasteDialog::SpecialPasteDialog(QWidget* parent)
-        : KoDialog(parent)
+        : ActionDialog(parent)
 {
-    setButtons(Ok | Cancel);
     setCaption(i18n("Special Paste"));
+    setButtonText(Apply, i18n("Paste"));
+
     QWidget* widget = new QWidget(this);
     setupUi(widget);
     setMainWidget(widget);
 
-    connect(this, &KoDialog::okClicked,
-            this, &SpecialPasteDialog::slotOk);
     connect(formatButton, &QAbstractButton::toggled,
             this, &SpecialPasteDialog::slotToggled);
     connect(commentButton, &QAbstractButton::toggled,
             this, &SpecialPasteDialog::slotToggled);
 }
 
-void SpecialPasteDialog::slotOk()
+void SpecialPasteDialog::onApply()
 {
+    emit paste();
     accept();
 }
 

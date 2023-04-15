@@ -12,7 +12,7 @@
 #ifndef CALLIGRA_SHEETS_SPECIAL_PASTE_DIALOG
 #define CALLIGRA_SHEETS_SPECIAL_PASTE_DIALOG
 
-#include <KoDialog.h>
+#include "ActionDialog.h"
 
 #include "ui_SpecialPasteWidget.h"
 
@@ -25,7 +25,7 @@ namespace Sheets
  * \ingroup UI
  * Dialog for the special paste action.
  */
-class SpecialPasteDialog : public KoDialog, public Ui::SpecialPasteWidget
+class SpecialPasteDialog : public ActionDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:
@@ -43,10 +43,14 @@ public:
     bool opMul() const;
     bool opDiv() const;
 
+Q_SIGNALS:
+    void paste();
+
 public Q_SLOTS:
-    void slotOk();
     void slotToggled(bool);
 
+protected:
+    virtual void onApply() override;
 };
 
 } // namespace Sheets

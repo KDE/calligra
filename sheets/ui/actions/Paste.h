@@ -9,7 +9,7 @@
 #define CALLIGRA_SHEETS_ACTION_PASTE
 
 
-#include "CellAction.h"
+#include "DialogCellAction.h"
 
 
 
@@ -29,17 +29,17 @@ protected:
     QAction *createAction() override;
 };
 
-class SpecialPasteDialog;
-
-class PasteSpecial : public CellAction {
+class PasteSpecial : public DialogCellAction {
 Q_OBJECT
 public:
     PasteSpecial(Actions *actions);
     virtual ~PasteSpecial();
 
+protected Q_SLOTS:
+    void paste();
+
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
-    SpecialPasteDialog *m_dlg;
+    virtual ActionDialog *createDialog(QWidget *canvasWidget) override;
 };
 
 class PasteInsertDialog;
