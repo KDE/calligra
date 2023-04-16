@@ -135,12 +135,12 @@ QPoint CellToolBase::Private::destinationForKey(QKeyEvent *event) {
                 return moveBy(QPoint(1, cursor.y()), 0, 1);  // using moveBy in case we're on the bottom-most row
         }
 
-        if (key == Qt::Key_Down) return moveBy(cursor, 0, 1);
-        if (key == Qt::Key_Up) return moveBy(cursor, 0, -1);
-        if (key == Qt::Key_Left) return moveBy(cursor, -1, 0);
-        if (key == Qt::Key_Right) return moveBy(cursor, 1, 0);
-        if (key == Qt::Key_Tab) return moveBy(cursor, 1, 0);
-        if (key == Qt::Key_Backtab) return moveBy(cursor, -1, 0);
+        if (key == Qt::Key_Down) return visibleCellInDirection(cursor, sheet, Bottom);
+        if (key == Qt::Key_Up) return visibleCellInDirection(cursor, sheet, Top);
+        if (key == Qt::Key_Left) return visibleCellInDirection(cursor, sheet, Left);
+        if (key == Qt::Key_Right) return visibleCellInDirection(cursor, sheet, Right);
+        if (key == Qt::Key_Tab) return visibleCellInDirection(cursor, sheet, Right);
+        if (key == Qt::Key_Backtab) return visibleCellInDirection(cursor, sheet, Left);
     }
 
     // Home + End
