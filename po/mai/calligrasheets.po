@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:47+0000\n"
+"POT-Creation-Date: 2023-04-16 00:48+0000\n"
 "PO-Revision-Date: 2009-04-22 00:19+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -10993,7 +10993,7 @@ msgstr "नमाइ"
 msgid "Source string"
 msgstr "छाँटनाइ"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "स्थिति"
@@ -12428,7 +12428,7 @@ msgstr "नाम बदलू शीट"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:130
+#: ui/dialogs/LayoutDialog.cpp:140
 #, kde-format
 msgid "Font"
 msgstr "फोन्ट"
@@ -12507,7 +12507,7 @@ msgid "First column as label"
 msgstr "पहिल ब्याज"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 #| msgid "Date Format"
 msgid "Data Format"
@@ -14582,30 +14582,36 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:114
+#: ui/dialogs/LayoutDialog.cpp:120
 #, fuzzy, kde-format
 #| msgid "Cell range"
 msgid "Cell Format"
 msgstr "सेल परिसर"
 
-#: ui/dialogs/LayoutDialog.cpp:122
+#: ui/dialogs/LayoutDialog.cpp:123
+#, fuzzy, kde-format
+#| msgid "Cell range"
+msgid "Set Cell Format"
+msgstr "सेल परिसर"
+
+#: ui/dialogs/LayoutDialog.cpp:132
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "सामान्य (&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
 msgid "Border"
 msgstr "किनार"
 
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Background"
 msgstr "पृष्ठभूमि रँग"
 
-#: ui/dialogs/LayoutDialog.cpp:143
+#: ui/dialogs/LayoutDialog.cpp:153
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Cell Protection"

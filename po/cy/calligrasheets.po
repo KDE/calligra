@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:47+0000\n"
+"POT-Creation-Date: 2023-04-16 00:48+0000\n"
 "PO-Revision-Date: 2004-09-09 12:35+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -11775,7 +11775,7 @@ msgstr "FIND(testun_canfod; testun_cwmpas; rhif_cychwyn)"
 msgid "Source string"
 msgstr "Llinyn tarddiad"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "Lleoliad"
@@ -13269,7 +13269,7 @@ msgstr "Cuddio Dalen"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:130
+#: ui/dialogs/LayoutDialog.cpp:140
 #, fuzzy, kde-format
 #| msgid "&Font"
 msgid "Font"
@@ -13347,7 +13347,7 @@ msgid "First column as label"
 msgstr "Mae'r rhes &gyntaf yn cynnwys pennawd"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 #| msgid "&Data Format"
 msgid "Data Format"
@@ -15358,29 +15358,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:114
+#: ui/dialogs/LayoutDialog.cpp:120
 #, kde-format
 msgid "Cell Format"
 msgstr "Fformatio Cell"
 
-#: ui/dialogs/LayoutDialog.cpp:122
+#: ui/dialogs/LayoutDialog.cpp:123
+#, fuzzy, kde-format
+#| msgid "Cell Format"
+msgid "Set Cell Format"
+msgstr "Fformatio Cell"
+
+#: ui/dialogs/LayoutDialog.cpp:132
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "&Cyffredin"
 
-#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, fuzzy, kde-format
 msgid "Border"
 msgstr "&Ffin"
 
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "Cef&ndir"
 
-#: ui/dialogs/LayoutDialog.cpp:143
+#: ui/dialogs/LayoutDialog.cpp:153
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"

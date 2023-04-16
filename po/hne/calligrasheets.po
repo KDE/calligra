@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:47+0000\n"
+"POT-Creation-Date: 2023-04-16 00:48+0000\n"
 "PO-Revision-Date: 2009-03-03 11:45+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -10903,7 +10903,7 @@ msgstr "FIND(पाठ_खोजव;पाठ_में;सुरू_संख�
 msgid "Source string"
 msgstr "स्रोत वाक्यांस"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "स्थिति"
@@ -12335,7 +12335,7 @@ msgstr "सक्रिय सीट"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:130
+#: ui/dialogs/LayoutDialog.cpp:140
 #, kde-format
 msgid "Font"
 msgstr "फोंट"
@@ -12409,7 +12409,7 @@ msgid "First column as label"
 msgstr "पहिली खंभा मं लेबल"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Data Format"
 msgstr "डाटा फारमेट"
@@ -14405,29 +14405,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "अभी हाल के कक्छ बर जऊन फोंट आप मन चुन रहे हेओखर प्रिव्यू आप मन देख सकथो ."
 
-#: ui/dialogs/LayoutDialog.cpp:114
+#: ui/dialogs/LayoutDialog.cpp:120
 #, kde-format
 msgid "Cell Format"
 msgstr "कक्छ फारमेट"
 
-#: ui/dialogs/LayoutDialog.cpp:122
+#: ui/dialogs/LayoutDialog.cpp:123
+#, fuzzy, kde-format
+#| msgid "Cell Format"
+msgid "Set Cell Format"
+msgstr "कक्छ फारमेट"
+
+#: ui/dialogs/LayoutDialog.cpp:132
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "सामान्य (&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
 msgid "Border"
 msgstr "किनारा"
 
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "पिछोत अंगना (&g)"
 
-#: ui/dialogs/LayoutDialog.cpp:143
+#: ui/dialogs/LayoutDialog.cpp:153
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:47+0000\n"
+"POT-Creation-Date: 2023-04-16 00:48+0000\n"
 "PO-Revision-Date: 2023-02-24 11:07+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -10712,7 +10712,7 @@ msgstr ""
 msgid "Source string"
 msgstr "Zdrojový řetězec"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "Pozice"
@@ -12101,7 +12101,7 @@ msgstr "Aktivovat"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:130
+#: ui/dialogs/LayoutDialog.cpp:140
 #, kde-format
 msgid "Font"
 msgstr "Písmo"
@@ -12173,7 +12173,7 @@ msgid "First column as label"
 msgstr "První sloupec jako popisek"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Data Format"
 msgstr "Formát dat"
@@ -14064,27 +14064,33 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Můžete vidět náhled písma, které vybíráte pro aktuální buňku."
 
-#: ui/dialogs/LayoutDialog.cpp:114
+#: ui/dialogs/LayoutDialog.cpp:120
 #, kde-format
 msgid "Cell Format"
 msgstr "Formát buňky"
 
-#: ui/dialogs/LayoutDialog.cpp:122
+#: ui/dialogs/LayoutDialog.cpp:123
+#, fuzzy, kde-format
+#| msgid "Cell Format"
+msgid "Set Cell Format"
+msgstr "Formát buňky"
+
+#: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format
 msgid "General"
 msgstr "Obecné"
 
-#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
 msgid "Border"
 msgstr "Okraj"
 
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:150
 #, kde-format
 msgid "Background"
 msgstr "Pozadí"
 
-#: ui/dialogs/LayoutDialog.cpp:143
+#: ui/dialogs/LayoutDialog.cpp:153
 #, kde-format
 msgid "Cell Protection"
 msgstr "Ochrana buňky"

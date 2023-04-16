@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:47+0000\n"
+"POT-Creation-Date: 2023-04-16 00:48+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -11158,7 +11158,7 @@ msgstr ""
 msgid "Source string"
 msgstr "مەنبە پۇل"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "ئورنى"
@@ -12598,7 +12598,7 @@ msgstr "ئاكتىپلا"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:130
+#: ui/dialogs/LayoutDialog.cpp:140
 #, kde-format
 msgid "Font"
 msgstr "خەت نۇسخا"
@@ -12675,7 +12675,7 @@ msgid "First column as label"
 msgstr "بىرىنچى ئىستوننى بەلگە قىل"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Data Format"
 msgstr "سانلىق-مەلۇمات پىچىمى"
@@ -14687,31 +14687,38 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr ""
 
-#: ui/dialogs/LayoutDialog.cpp:114
+#: ui/dialogs/LayoutDialog.cpp:120
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Time Format"
 msgid "Cell Format"
 msgstr "ۋاقىت ئىپادىلىنىشى"
 
-#: ui/dialogs/LayoutDialog.cpp:122
+#: ui/dialogs/LayoutDialog.cpp:123
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Time Format"
+msgid "Set Cell Format"
+msgstr "ۋاقىت ئىپادىلىنىشى"
+
+#: ui/dialogs/LayoutDialog.cpp:132
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "ئادەتتىكى(&G)"
 
-#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
 msgid "Border"
 msgstr "گىرۋەك"
 
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "تەگلىك"
 
-#: ui/dialogs/LayoutDialog.cpp:143
+#: ui/dialogs/LayoutDialog.cpp:153
 #, fuzzy, kde-format
 #| msgid "Protection"
 msgid "Cell Protection"

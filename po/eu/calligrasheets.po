@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:47+0000\n"
+"POT-Creation-Date: 2023-04-16 00:48+0000\n"
 "PO-Revision-Date: 2023-02-15 06:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -11638,7 +11638,7 @@ msgstr "FINDB(bilatu_testua;testu_honetan;byte_pos)"
 msgid "Source string"
 msgstr "Iturburu-katea"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, kde-format
 msgid "Position"
 msgstr "Posizioa"
@@ -13084,7 +13084,7 @@ msgstr "Aktibatu"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:130
+#: ui/dialogs/LayoutDialog.cpp:140
 #, kde-format
 msgid "Font"
 msgstr "Letra-tipoa"
@@ -13156,7 +13156,7 @@ msgid "First column as label"
 msgstr "Lehen zutabea etiketa gisa"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, kde-format
 msgid "Data Format"
 msgstr "Datu-formatua"
@@ -15163,29 +15163,35 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Uneko gelaxkarako hautatutako letra-tipoaren aurrebista ikus daiteke."
 
-#: ui/dialogs/LayoutDialog.cpp:114
+#: ui/dialogs/LayoutDialog.cpp:120
 #, kde-format
 msgid "Cell Format"
 msgstr "Gelaxka-formatua"
 
-#: ui/dialogs/LayoutDialog.cpp:122
+#: ui/dialogs/LayoutDialog.cpp:123
+#, fuzzy, kde-format
+#| msgid "Cell Format"
+msgid "Set Cell Format"
+msgstr "Gelaxka-formatua"
+
+#: ui/dialogs/LayoutDialog.cpp:132
 #, fuzzy, kde-format
 #| msgid "&General"
 msgid "General"
 msgstr "&Orokorra"
 
-#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
 msgid "Border"
 msgstr "Ertza"
 
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "Back&ground"
 msgid "Background"
 msgstr "&Atzeko planoa"
 
-#: ui/dialogs/LayoutDialog.cpp:143
+#: ui/dialogs/LayoutDialog.cpp:153
 #, fuzzy, kde-format
 #| msgid "&Cell Protection"
 msgid "Cell Protection"

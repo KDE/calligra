@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-12 00:47+0000\n"
+"POT-Creation-Date: 2023-04-16 00:48+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -11155,7 +11155,7 @@ msgstr "FIND(find_text;within_text;start_num)"
 msgid "Source string"
 msgstr "Радок"
 
-#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:134
+#: functions/text.xml:352 ui/dialogs/LayoutDialog.cpp:144
 #, fuzzy, kde-format
 msgid "Position"
 msgstr "Пазіцыя"
@@ -12564,7 +12564,7 @@ msgstr "Схаваць ліст"
 #. i18n: tag optionWidget attribute name
 #. i18n: ectx: ToolBar (fontPropertyToolBar)
 #: part/calligrasheets.rc:231 ui/CellToolOptionWidgets.xml:3
-#: ui/dialogs/LayoutDialog.cpp:130
+#: ui/dialogs/LayoutDialog.cpp:140
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "&Шрыфт"
@@ -12636,7 +12636,7 @@ msgid "First column as label"
 msgstr "Першы слупок утрымоўвае загалоўкі"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_formatBox)
-#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:127
+#: part/chart/ChartDatabaseSelector.ui:58 ui/dialogs/LayoutDialog.cpp:137
 #, fuzzy, kde-format
 msgid "Data Format"
 msgstr "Фармат дадзеных"
@@ -14624,27 +14624,32 @@ msgid ""
 "You can see a preview of the font you are choosing for the current cell."
 msgstr "Тут паказваецца прыклад фарматавання тэксту."
 
-#: ui/dialogs/LayoutDialog.cpp:114
+#: ui/dialogs/LayoutDialog.cpp:120
 #, fuzzy, kde-format
 msgid "Cell Format"
 msgstr "Фармат вочак"
 
-#: ui/dialogs/LayoutDialog.cpp:122
+#: ui/dialogs/LayoutDialog.cpp:123
+#, fuzzy, kde-format
+msgid "Set Cell Format"
+msgstr "Фармат вочак"
+
+#: ui/dialogs/LayoutDialog.cpp:132
 #, fuzzy, kde-format
 msgid "General"
 msgstr "&Агульныя"
 
-#: ui/dialogs/LayoutDialog.cpp:137 ui/dialogs/LayoutPage_Border.cpp:246
+#: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, fuzzy, kde-format
 msgid "Border"
 msgstr "Поле"
 
-#: ui/dialogs/LayoutDialog.cpp:140
+#: ui/dialogs/LayoutDialog.cpp:150
 #, fuzzy, kde-format
 msgid "Background"
 msgstr "Фон"
 
-#: ui/dialogs/LayoutDialog.cpp:143
+#: ui/dialogs/LayoutDialog.cpp:153
 #, fuzzy, kde-format
 msgid "Cell Protection"
 msgstr "Абарона"
