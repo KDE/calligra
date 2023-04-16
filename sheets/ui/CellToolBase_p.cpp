@@ -76,258 +76,134 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     }
 }
 
-void CellToolBase::Private::processEnterKey(QKeyEvent* event)
-{
-// array is true, if ctrl+alt are pressed
-    bool array = (event->modifiers() & Qt::AltModifier) &&
-                 (event->modifiers() & Qt::ControlModifier);
+QPoint CellToolBase::Private::moveBy(const QPoint &point, int dx, int dy) {
+    int newx = point.x() + dx;
+    int newy = point.y() + dy;
+    if (newx < 1) newx = 1;
+    if (newy < 1) newy = 1;
+    if (newx > KS_colMax) newx = KS_colMax;
+    if (newy > KS_rowMax) newy = KS_rowMax;
+    return QPoint(newx, newy);
+}
 
-    /* save changes to the current editor */
-    q->deleteEditor(true, array);
+QPoint CellToolBase::Private::destinationForKey(QKeyEvent *event) {
+    int key = event->key();
+    bool ctrl = (event->modifiers() & Qt::ControlModifier);
 
-    /* use the configuration setting to see which direction we're supposed to move
-        when enter is pressed.
-    */
-    Calligra::Sheets::MoveTo direction = q->selection()->activeSheet()->fullMap()->applicationSettings()->moveToValue();
+    Selection *sel = q->selection();
+    Sheet *sheet = sel->activeSheet();
+    if (!sheet) return QPoint(0, 0);   // This shouldn't happen ...
 
-//if shift Button clicked inverse move direction
-    if (event->modifiers() & Qt::ShiftModifier) {
-        switch (direction) {
-        case Bottom:
-            direction = Top;
-            break;
-        case Top:
-            direction = Bottom;
-            break;
-        case Left:
-            direction = Right;
-            break;
-        case Right:
-            direction = Left;
-            break;
-        case BottomFirst:
-            direction = BottomFirst;
-            break;
-        case NoMovement:
-            direction = NoMovement;
-            break;
+    QPoint cursor = sel->cursor();
+    Cell cell = Cell(sheet, cursor.x(), cursor.y());
+
+    // Cursor keys + Tab + Enter
+    if (sheet->layoutDirection() == Qt::RightToLeft) {
+        if (key == Qt::Key_Left) key = Qt::Key_Right;
+        else if (key == Qt::Key_Right) key = Qt::Key_Left;
+    }
+
+    if (ctrl) {
+        if ((key == Qt::Key_Return) || (key == Qt::Key_Enter)) return QPoint(0, 0);
+        if ((key == Qt::Key_Tab) || (key == Qt::Key_Backtab)) return QPoint(0, 0);
+
+        if (key == Qt::Key_Down) return nextMarginCellInDirection(cell, Bottom).cellPosition();
+        if (key == Qt::Key_Up) return nextMarginCellInDirection(cell, Top).cellPosition();
+        if (key == Qt::Key_Left) return nextMarginCellInDirection(cell, Left).cellPosition();
+        if (key == Qt::Key_Right) return nextMarginCellInDirection(cell, Right).cellPosition();
+    } else {
+        if ((key == Qt::Key_Return) || (key == Qt::Key_Enter))
+        {
+            Calligra::Sheets::MoveTo direction = q->selection()->activeSheet()->fullMap()->applicationSettings()->moveToValue();
+            // If Shift is pressed, reverse move direction
+            if (event->modifiers() & Qt::ShiftModifier) {
+                switch (direction) {
+                case Bottom: direction = Top; break;
+                case Top:    direction = Bottom; break;
+                case Left:   direction = Right; break;
+                case Right:  direction = Left; break;
+                default: break;
+                }
+            }
+            if (direction == Top) key = Qt::Key_Up;
+            else if (direction == Bottom) key = Qt::Key_Down;
+            else if (direction == Left) key = Qt::Key_Left;
+            else if (direction == Right) key = Qt::Key_Right;
+
+            if (direction == NoMovement) return cursor;   // Nothing to do.
+            if (direction == BottomFirst)
+                return moveBy(QPoint(1, cursor.y()), 0, 1);  // using moveBy in case we're on the bottom-most row
         }
+
+        if (key == Qt::Key_Down) return moveBy(cursor, 0, 1);
+        if (key == Qt::Key_Up) return moveBy(cursor, 0, -1);
+        if (key == Qt::Key_Left) return moveBy(cursor, -1, 0);
+        if (key == Qt::Key_Right) return moveBy(cursor, 1, 0);
+        if (key == Qt::Key_Tab) return moveBy(cursor, 1, 0);
+        if (key == Qt::Key_Backtab) return moveBy(cursor, -1, 0);
     }
 
-    /* never extend a selection with the enter key -- the shift key reverses
-        direction, not extends the selection
-    */
-    moveDirection(direction, false);
-    event->accept(); // QKeyEvent
+    // Home + End
+    if (key == Qt::Key_Home) {
+        // ctrl + Home will always just send us to location (1,1)
+        return QPoint(1, ctrl ? 1 : cursor.y());
+    }
+    if (key == Qt::Key_End) {
+        QRect used = sheet->usedArea();
+        if (!used.right()) return QPoint(1, 1);
+        // ctrl + Home will always just send us to the last used cell
+        return QPoint(used.right(), ctrl ? used.bottom() : cursor.y());
+    }
+    if (key == Qt::Key_PageUp) {
+        // TODO - actually determine this length
+        return moveBy(cursor, 0, -25);
+    }
+    if (key == Qt::Key_PageDown) {
+        // TODO - actually determine this length
+        return moveBy(cursor, 0, 25);
+    }
+    
+    return QPoint(0, 0);
 }
 
-Calligra::Sheets::MoveTo CellToolBase::Private::directionForKey(int key) {
-    Sheet * const sheet = q->selection()->activeSheet();
-    if (key == Qt::Key_Down) return Bottom;
-    if (key == Qt::Key_Up) return Top;
-    if (key == Qt::Key_Left) {
-        if (sheet->layoutDirection() == Qt::RightToLeft)
-            return Right;
-        return Left;
-    }
-    if (key == Qt::Key_Right) {
-        if (sheet->layoutDirection() == Qt::RightToLeft)
-            return Left;
-        return Right;
-    }
-    if (key == Qt::Key_Tab) return Right;
-    //Shift+Tab moves to the left
-    if (key == Qt::Key_Backtab) return Left;
-    Q_ASSERT(false);
-    return NoMovement;
+void CellToolBase::Private::moveToDestination(QPoint destination, bool extendSelection) {
+    Selection *sel = q->selection();
+    Sheet *sheet = sel->activeSheet();
+
+    if (extendSelection)
+        sel->update(destination);
+    else
+        sel->initialize(destination, sheet);
+
+    q->scrollToCell(destination);
+    updateEditor(Cell(sheet, destination));
 }
 
-void CellToolBase::Private::processArrowKey(QKeyEvent *event)
-{
-    /* NOTE:  hitting the tab key also calls this function.  Don't forget
-        to account for it
-    */
-    Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
-        return;
+bool CellToolBase::Private::handleMovementKeys(QKeyEvent *event) {
+    QPoint target = destinationForKey(event);
+    if (target.x() <= 0) return false;   // Not a movement key.
 
-    /* If we are not editing a formula, close the current editor. Otherwise we want to fill in the cell coordinates. */
-    if (!q->selection()->referenceSelectionMode())
-      q->selection()->emitCloseEditor(true);
+    Selection *sel = q->selection();
+    // If we are not editing a formula, close the current editor. Otherwise we want to fill in the cell coordinates.
+    if (!sel->referenceSelectionMode())
+      sel->emitCloseEditor(true);
 
-    Calligra::Sheets::MoveTo direction = directionForKey(event->key());
+    QPoint cursor = sel->cursor();
+    // If the cursor already is where it should (e.g. pressing Up while on the top row), there is nothing more to do.
+    if (cursor == target) {
+        event->accept();
+        return true;
+    }
+
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
     if (event->key() == Qt::Key_Backtab) makingSelection = false;
 
-    moveDirection(direction, makingSelection);
-    event->accept(); // QKeyEvent
-}
+    moveToDestination(target, makingSelection);
 
-void CellToolBase::Private::processEscapeKey(QKeyEvent * event)
-{
-    q->selection()->emitCloseEditor(false); // discard changes
-    event->accept(); // QKeyEvent
-}
-
-bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
-{
-     Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
-        return false;
-
-    bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-
-    if (q->editor()) {
-        // We are in edit mode -> go beginning of line
-        QApplication::sendEvent(q->editor()->widget(), event);
-        return false;
-    } else {
-        QPoint destination;
-        /* start at the first used cell in the row and cycle through the right until
-            we find a cell that has some output text.  But don't look past the current
-            marker.
-            The end result we want is to move to the left to the first cell with text,
-            or just to the first column if there is no more text to the left.
-
-            But why?  In excel, home key sends you to the first column always.
-            We might want to change to that behavior.
-        */
-
-        if (event->modifiers() & Qt::ControlModifier) {
-            /* ctrl + Home will always just send us to location (1,1) */
-            destination = QPoint(1, 1);
-        } else {
-            QPoint marker = q->selection()->marker();
-
-            Cell cell = sheet->fullCellStorage()->firstInRow(marker.y(), CellStorage::VisitContent);
-            while (!cell.isNull() && cell.column() < marker.x() && cell.isEmpty()) {
-                cell = sheet->fullCellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
-            }
-
-            int col = (!cell.isNull() ? cell.column() : 1);
-            if (col == marker.x())
-                col = 1;
-            destination = QPoint(col, marker.y());
-        }
-
-        if (q->selection()->marker() == destination)
-            return false;
-
-        if (makingSelection) {
-            q->selection()->update(destination);
-        } else {
-            q->selection()->initialize(destination, sheet);
-        }
-        q->scrollToCell(destination);
-        event->accept(); // QKeyEvent
-    }
+    event->accept();
     return true;
 }
 
-bool CellToolBase::Private::processEndKey(QKeyEvent *event)
-{
-    Selection *sel = q->selection();
-    Sheet * const sheet = sel->activeSheet();
-    if (!sheet)
-        return false;
-
-    bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-    Cell cell;
-    QPoint marker = sel->marker();
-
-    if (q->editor()) {
-        // We are in edit mode -> go end of line
-        QApplication::sendEvent(q->editor()->widget(), event);
-        return false;
-    } else {
-        // move to the last used cell in the row
-        int col = 1;
-
-        CellStorage *cells = sheet->fullCellStorage();
-        cell = cells->lastInRow(marker.y(), CellStorage::VisitContent);
-        while (!cell.isNull() && cell.column() > sel->marker().x() && cell.isEmpty()) {
-            cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
-        }
-
-        col = (cell.isNull()) ? q->maxCol() : cell.column();
-
-        QPoint destination(col, marker.y());
-        if (destination == marker)
-            return false;
-
-        if (makingSelection) {
-            sel->update(destination);
-        } else {
-            sel->initialize(destination, sheet);
-        }
-        q->scrollToCell(destination);
-        event->accept(); // QKeyEvent
-    }
-    return true;
-}
-
-bool CellToolBase::Private::processPriorKey(QKeyEvent *event)
-{
-    Selection *sel = q->selection();
-    bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-    sel->emitCloseEditor(true); // save changes
-
-    QPoint marker = sel->marker();
-
-    QPoint destination(marker.x(), qMax(1, marker.y() - 10));
-    if (destination == marker)
-        return false;
-
-    if (makingSelection) {
-        sel->update(destination);
-    } else {
-        sel->initialize(destination, sel->activeSheet());
-    }
-    q->scrollToCell(destination);
-    event->accept(); // QKeyEvent
-    return true;
-}
-
-bool CellToolBase::Private::processNextKey(QKeyEvent *event)
-{
-    Selection *sel = q->selection();
-    bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-
-    sel->emitCloseEditor(true); // save changes
-
-    QPoint marker = sel->marker();
-    QPoint destination(marker.x(), qMax(1, marker.y() + 10));
-
-    if (marker == destination)
-        return false;
-
-    if (makingSelection) {
-        sel->update(destination);
-    } else {
-        sel->initialize(destination, sel->activeSheet());
-    }
-    q->scrollToCell(destination);
-    event->accept(); // QKeyEvent
-    return true;
-}
-
-void CellToolBase::Private::processOtherKey(QKeyEvent *event)
-{
-     Sheet * const sheet = q->selection()->activeSheet();
-
-    // No null character ...
-    if (event->text().isEmpty() || !q->selection()->activeSheet()->fullMap()->isReadWrite() ||
-            !sheet || sheet->isProtected()) {
-        event->accept(); // QKeyEvent
-    } else {
-        if (!q->editor()) {
-            // Switch to editing mode
-            q->createEditor();
-        }
-        // Send it to the embedded editor.
-        QApplication::sendEvent(q->editor()->widget(), event);
-    }
-}
 
 // Helper for control-movement. Returns the next cell.
 Cell CellToolBase::Private::nextMarginCellInDirection(const Cell &cell, Calligra::Sheets::MoveTo direction)
@@ -393,32 +269,6 @@ Cell CellToolBase::Private::nextMarginCellInDirection(const Cell &cell, Calligra
         nextCell = Cell(sheet, next);
     }
     return nextCell;
-}
-
-bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
-{
-    Selection *sel = q->selection();
-    Sheet * const sheet = sel->activeSheet();
-    if (!sheet)
-        return false;
-
-    Calligra::Sheets::MoveTo direction = directionForKey(event->key());
-    bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-
-    QPoint marker = sel->marker();
-    Cell cell = Cell(sheet, marker.x(), marker.y());
-
-    Cell tgcell = nextMarginCellInDirection(cell, direction);
-    QPoint destination = tgcell.cellPosition();
-    if (destination == marker) return false;
-
-    if (makingSelection) {
-        sel->update(destination);
-    } else {
-        sel->initialize(destination, sheet);
-    }
-    q->scrollToCell(destination);
-    return true;
 }
 
 void CellToolBase::Private::triggerAction(const QString &name)
@@ -491,29 +341,6 @@ QPoint CellToolBase::Private::visibleCellInDirection(QPoint point, Sheet *sheet,
     }
     if ((row < 1) || (col < 1) || (row > q->maxRow()) || (col > q->maxCol())) return point;
     return QPoint(col, row);
-}
-
-QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, bool extendSelection)
-{
-    debugSheetsUI << "Canvas::moveDirection";
-
-    Selection *sel = q->selection();
-    Sheet * const sheet = sel->activeSheet();
-    if (!sheet)
-        return QRect();
-
-    QPoint cursor = sel->cursor();
-    QPoint destination = CellToolBase::Private::visibleCellInDirection(cursor, sheet, direction);
-
-    if (extendSelection) {
-        sel->update(destination);
-    } else {
-        sel->initialize(destination, sheet);
-    }
-    q->scrollToCell(destination);
-    updateEditor(Cell(sel->activeSheet(), sel->cursor()));
-
-    return QRect(cursor, destination);
 }
 
 void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &viewRect)

@@ -80,14 +80,10 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     // Create the extra and ones with extended names for the context menu.
     d->createPopupMenuActions();
     
-    // Create the actions.
-    QAction* action = nullptr;
-
     // -- cell style actions --
     d->actions = new Actions(this);
 
     setTextMode(true);
-
 }
 
 CellToolBase::~CellToolBase()
@@ -221,103 +217,67 @@ void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
 
 void CellToolBase::keyPressEvent(QKeyEvent* event)
 {
-     Sheet * const sheet = selection()->activeSheet();
-    if (!sheet) {
-        return;
-    }
+    Sheet * const sheet = selection()->activeSheet();
+    if (!sheet) return;
 
     // Check for formatting key combination CTRL + ...
     // Qt::Key_Exclam, Qt::Key_At, Qt::Key_Ampersand, Qt::Key_Dollar
     // Qt::Key_Percent, Qt::Key_AsciiCircum, Qt::Key_NumberSign
-    if (d->formatKeyPress(event)) {
-        return;
-    }
+    if (d->formatKeyPress(event)) return;
 
-    // Don't handle the remaining special keys.
-    if (event->modifiers() & (Qt::AltModifier | Qt::ControlModifier) &&
-            (event->key() != Qt::Key_Down) &&
-            (event->key() != Qt::Key_Up) &&
-            (event->key() != Qt::Key_Right) &&
-            (event->key() != Qt::Key_Left) &&
-            (event->key() != Qt::Key_Home) &&
-            (event->key() != Qt::Key_Enter) &&
-            (event->key() != Qt::Key_Return)) {
-        event->ignore(); // QKeyEvent
-        return;
-    }
-
-#if 0
-    // TODO move this to the contextMenuEvent of the view.
-    // keyPressEvent() is not called with the contextMenuKey,
-    // it's handled separately by Qt.
-    if (event->key() == KGlobalSettings::contextMenuKey()) {
-        int row = d->canvas->selection()->marker().y();
-        int col = d->canvas->selection()->marker().x();
-        QPointF p(sheet->columnPosition(col), sheet->rowPosition(row));
-        d->canvas->view()->openPopupMenu(d->canvas->mapToGlobal(p.toPoint()));
-    }
-#endif
-    switch (event->key()) {
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-        d->processEnterKey(event);
-        return;
-        break;
-    case Qt::Key_Down:
-    case Qt::Key_Up:
-    case Qt::Key_Left:
-    case Qt::Key_Right:
-    case Qt::Key_Tab: /* a tab behaves just like a right/left arrow */
-    case Qt::Key_Backtab:  /* and so does Shift+Tab */
-        if (event->modifiers() & Qt::ControlModifier) {
-            if (!d->processControlArrowKey(event))
-                return;
-        } else {
-            d->processArrowKey(event);
+    int key = event->key();
+    if ((key == Qt::Key_Home) || (key == Qt::Key_End)) {
+        // Forward these to the editor.
+        if (editor()) {
+            // We are in edit mode -> go end of line
+            QApplication::sendEvent(editor()->widget(), event);
             return;
         }
-        break;
+    }
+    if ((key == Qt::Key_Return) || (key == Qt::Key_Enter)) {
+        // Close the editor on Enter. Do not end, we want to move too.
+        // Ctrl+Alt enable array mode.
+        bool array = (event->modifiers() & Qt::AltModifier) &&
+                     (event->modifiers() & Qt::ControlModifier);
 
-    case Qt::Key_Escape:
-        d->processEscapeKey(event);
+        /* save changes to the current editor */
+        deleteEditor(true, array);
+    }
+
+    if (d->handleMovementKeys(event)) return;
+
+    // Don't handle the remaining special keys.
+    if (event->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
+        event->ignore();
         return;
-        break;
+    }
 
-    case Qt::Key_Home:
-        if (!d->processHomeKey(event))
-            return;
-        break;
+    if (key == Qt::Key_Escape) {
+        selection()->emitCloseEditor(false); // discard changes
+        event->accept(); // QKeyEvent
+        return;
+    }
 
-    case Qt::Key_End:
-        if (!d->processEndKey(event))
-            return;
-        break;
-
-    case Qt::Key_PageUp:  /* Page Up */
-        if (!d->processPriorKey(event))
-            return;
-        break;
-
-    case Qt::Key_PageDown:   /* Page Down */
-        if (!d->processNextKey(event))
-            return;
-        break;
-
-    case Qt::Key_Backspace:
-    case Qt::Key_Delete:
+    if ((key == Qt::Key_Backspace) || (key == Qt::Key_Delete)) {
         d->triggerAction("clearContents");
         event->accept();
-    	break;
-
-    case Qt::Key_F2:
-	edit();
-	break;
-	
-    default:
-        d->processOtherKey(event);
-        return;
-        break;
+    	return;
     }
+
+    if (key == Qt::Key_F2) {
+    	edit();
+        return;
+    }
+	
+    // No null character ...
+    if (event->text().isEmpty() || (!sheet) || sheet->isProtected() || (!sheet->fullMap()->isReadWrite())) {
+        event->accept();
+        return;
+    }
+
+    // Send it to the embedded editor.
+    if (!editor()) createEditor();
+    QApplication::sendEvent(editor()->widget(), event);
 }
 
 void CellToolBase::inputMethodEvent(QInputMethodEvent * event)

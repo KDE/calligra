@@ -53,27 +53,16 @@ public:
     /** Directly triggers an action. */
     void triggerAction(const QString &name);
 
-    Calligra::Sheets::MoveTo directionForKey(int key);
+    QPoint moveBy(const QPoint &point, int dx, int dy);
+    QPoint destinationForKey(QKeyEvent *event);
+    void moveToDestination(QPoint destination, bool extendSelection);
+    bool handleMovementKeys(QKeyEvent *event);
 
-    void processEnterKey(QKeyEvent *event);
-    void processArrowKey(QKeyEvent *event);
-    void processEscapeKey(QKeyEvent *event);
-    bool processHomeKey(QKeyEvent *event);
-    bool processEndKey(QKeyEvent *event);
-    bool processPriorKey(QKeyEvent *event);
-    bool processNextKey(QKeyEvent *event);
-    void processOtherKey(QKeyEvent *event);
-    bool processControlArrowKey(QKeyEvent *event);
     bool formatKeyPress(QKeyEvent *event);
 
     /** Which cell to move to when moving in this direction? */
     QPoint visibleCellInDirection(QPoint point, Sheet *sheet, Calligra::Sheets::MoveTo direction);
     Cell nextMarginCellInDirection(const Cell &cell, Calligra::Sheets::MoveTo direction);
-
-    /**
-     * returns the rect that needs to be redrawn
-     */
-    QRect moveDirection(Calligra::Sheets::MoveTo direction, bool extendSelection);
 
     void paintSelection(QPainter &painter, const QRectF &viewRect);
 
