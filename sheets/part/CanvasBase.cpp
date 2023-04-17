@@ -167,7 +167,7 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
     case QEvent::InputMethod: {
         //QIMEvent * imev = static_cast<QIMEvent *>(e);
         //processIMEvent( imev );
-        //break;
+        break;
     }
     case QEvent::ToolTip: {
         QHelpEvent* helpEvent = static_cast<QHelpEvent*>(e);
