@@ -265,6 +265,6 @@ private:
 };
 
 } // Namespace Components
-} // Namepsace Calligra
+} // Namespace Calligra
 
 #endif // CALLIGRA_COMPONENTS_VIEWCONTROLLER_H

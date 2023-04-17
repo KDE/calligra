@@ -278,7 +278,7 @@ void FormulaDialog::setFormula (const QString& formulaName)
 
 void FormulaDialog::slotPressReturn()
 {
-    //laurent 2001-07-07 desactivate this code
+    //laurent 2001-07-07 deactivate this code
     //because Calligra Sheets crash.
     //TODO fix it
     /*

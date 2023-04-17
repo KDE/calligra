@@ -1943,7 +1943,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         /* CELL handling STOP */
 
         /* STYLE handling START */
-        //Laurent - 2001-12-07  desactivate this code : otherwise we
+        //Laurent - 2001-12-07  deactivate this code : otherwise we
         //create 65535*255 cells (Styleregion is define for a area and
         //not for cell, so gnumeric define a style as : col start=0 col end=255
         //rowstart=0 rowend=255 => we create 255*255 cells

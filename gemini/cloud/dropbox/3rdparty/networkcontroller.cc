@@ -108,7 +108,7 @@ void NetworkController::finished(QNetworkReply *networkreply){
         qDebug() << "readAll() body = " << networkreply->readAll();
 
 
-        QString errorstr("Unknow error!");
+        QString errorstr("Unknown error!");
 
         if (m_state == NetworkController::FILES_FOLDERS ||  m_state == NetworkController::REQUEST_TOKEN){
             if (networkreply->error() == QNetworkReply::AuthenticationRequiredError)

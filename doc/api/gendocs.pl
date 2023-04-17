@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
 # this script generates dox based on the availability of a Mainpage.dox file.
-# whereever there is one, doxygen is started.
+# wherever there is one, doxygen is started.
 
 #set basedir relative to ours.
 $rootdir=`pwd`;
@@ -12,7 +12,7 @@ if(! -d $basedir) {
     exit 1;
 }
 
-# used in the tag decleration
+# used in the tag declaration
 $remoteDocs_kdelibs="$rootdir/../kdelibs/doc/api";
 $remoteDocs_qt="$rootdir/../qt-copy/doc/api";
 
@@ -27,7 +27,7 @@ if($#ARGV >= 0) {
             $ok=1;
         }
         elsif($ARGV[$i] eq "--remote") {
-            print "Using remote url for browing\n";
+            print "Using remote url for browsing\n";
             $remoteDocs_kdelibs="http://www.calligra.org/developer/kdelibs-api/";
             $remoteDocs_qt="http://www.calligra.org/developer/qt-api/";
             $ok=1;

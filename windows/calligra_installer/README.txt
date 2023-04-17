@@ -18,7 +18,7 @@ parent
 +-deps        (stores 3rd party dependencies - Visual C++ runtime components for the installer)
   +-vcredist
     +-DLLs
-	+-MergeModules    (stores .msm files distrubuted with Visual Studio)
+	+-MergeModules    (stores .msm files distributed with Visual Studio)
 +-wix36       (install wix 3.6 here)
 
 You will require the latest copy of the Wix toolset, 3.6 beta.
@@ -50,7 +50,7 @@ You will need to run the following within a working KDE for Windows environment.
 From the c2winstaller directory, call:
 env
 
-This sets most of the required environment variables, using defaults unless you have overriden these previously.
+This sets most of the required environment variables, using defaults unless you have overridden these previously.
 You will need to set CALLIGRA_INST if you intend to package
 
 Now you can run:

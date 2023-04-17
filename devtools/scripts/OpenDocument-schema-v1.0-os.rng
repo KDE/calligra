@@ -12289,7 +12289,7 @@
         <attribute name="text:number-position" a:defaultValue="left">
             <choice>
                 <value>left</value>
-                <value>rigth</value>
+                <value>right</value>
                 <value>inner</value>
                 <value>outer</value>
             </choice>
@@ -14009,7 +14009,7 @@
 <define name="shadowType">
     <choice>
         <value>none</value>
-        <!-- The follwing string must match an XSL shadow decl -->
+        <!-- The following string must match an XSL shadow decl -->
         <ref name="string"/>
     </choice>
 </define>
@@ -16412,7 +16412,7 @@
         <attribute name="dr3d:texture-kind">
             <choice>
                 <value>luminance</value>
-                <value>intesity</value>
+                <value>intensity</value>
                 <value>color</value>
             </choice>
         </attribute>

@@ -34,7 +34,7 @@ public:
     WebShape();
     ~WebShape();
 
-    // absolutly necessary:
+    // absolutely necessary:
     void paint(QPainter &painter,
                const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual void saveOdf(KoShapeSavingContext & context) const;

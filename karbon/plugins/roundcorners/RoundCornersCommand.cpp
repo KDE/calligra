@@ -253,7 +253,7 @@ void RoundCornersCommand::roundPath()
                 qreal prevSplit = prevLength > m_radius ? prevSeg.paramAtLength(prevLength - m_radius) : 0.5;
                 QPair<KoPathSegment, KoPathSegment> prevParts = prevSeg.splitAt(prevSplit);
 
-                // add the remaining part up to the split point of the pervious segment
+                // add the remaining part up to the split point of the previous segment
                 lastPoint = addSegment(m_path, prevParts.first);
 
                 // split the next segment at radius

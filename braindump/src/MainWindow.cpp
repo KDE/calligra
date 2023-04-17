@@ -193,7 +193,7 @@ DockerManager* MainWindow::dockerManager()
 void MainWindow::activateView(View* view)
 {
     Q_ASSERT(factory());
-    // Desactivate previous view
+    // Deactivate previous view
     if(m_activeView) {
         factory()->removeClient(m_activeView);
         foreach(StatusBarItem * item, m_statusBarItems[m_activeView]) {

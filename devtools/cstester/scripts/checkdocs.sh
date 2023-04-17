@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # script to check all documents in the current directory and create log of the failed ones .
-# the logile will be written to LOG="../error-out.log" where out is replaced with the basename of the used out directory
+# the logfile will be written to LOG="../error-out.log" where out is replaced with the basename of the used out directory
 LOG="../error-out.log"
 
 if [ -z "$1" ]

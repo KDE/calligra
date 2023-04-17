@@ -690,7 +690,7 @@ To manage styles use <menuchoice>
 <guimenu>Format</guimenu>
 <guimenuitem>AutoFormat...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Autoformat the selected cells: a dialog let you choose betwen two proposed formats.</action>
+<listitem><para><action>Autoformat the selected cells: a dialog let you choose between two proposed formats.</action>
 </para></listitem>
 </varlistentry>
 

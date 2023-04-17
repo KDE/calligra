@@ -143,7 +143,7 @@ macro(calligra_set_productset _productset_string)
   set(_productset_list "")
   # _product_id could be a product, feature or product set (predefined or from file)
   foreach(_product_id ${_productset_ids})
-    # be gracefull and compare the productset id case insensitive
+    # be graceful and compare the productset id case insensitive
     string(TOUPPER "${_product_id}" _uppercase_product_id)
 
     if(_uppercase_product_id STREQUAL "ALL")

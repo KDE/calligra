@@ -175,7 +175,7 @@ Item {
     }
     QtControls.Label {
         anchors.fill: parent;
-        text: "No Documents\n\nPlease add some documents to your reporitory.\n(%1)".arg(docList.model.documentsFolder);
+        text: "No Documents\n\nPlease add some documents to your repository.\n(%1)".arg(docList.model.documentsFolder);
         horizontalAlignment: Text.AlignHCenter;
         verticalAlignment: Text.AlignVCenter;
         visible: docList.count === 0;

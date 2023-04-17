@@ -17,7 +17,7 @@
 	<String Id="ApplicationNameStage">Calligra Stage [C2WINSTALL_VERSIONSTRING]</String>
 	<String Id="ApplicationNameKarbon">Karbon [C2WINSTALL_VERSIONSTRING]</String>
 	
-	<!-- Filetype assocations -->
+	<!-- Filetype associations -->
 	<String Id="ExplorerMenuOpen">Open</String>
 	
 	<String Id="OdtFileDescription">ODF Text Document</String>

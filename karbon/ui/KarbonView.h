@@ -124,7 +124,7 @@ protected Q_SLOTS:
     void applyPaletteColor(const KoColor &color);
 
 protected:
-    /// Use own configuaration dialog
+    /// Use own configuration dialog
     void openConfiguration() override;
 
     void updateReadWrite(bool readwrite) override;

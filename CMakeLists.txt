@@ -17,7 +17,7 @@ endif()
 # ensure out-of-source build
 string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" isBuildInSource)
 if(isBuildInSource)
-    message(FATAL_ERROR "Compiling Calligra inside the source folder is not possible.\nPlease refer to the build instruction: https://community.kde.org/Calligra/Building/3\nYou need to clean up the source folder from all build artifacts just created, otherwise further building attempts will fail again: With a git repo, you can use \"git clean -df\" in the toplevel source folder (attention! will remove also uncommited changes to the source code). With sources from a file bundle (like a zip file), delete the source folder and unbundle the sources again.")
+    message(FATAL_ERROR "Compiling Calligra inside the source folder is not possible.\nPlease refer to the build instruction: https://community.kde.org/Calligra/Building/3\nYou need to clean up the source folder from all build artifacts just created, otherwise further building attempts will fail again: With a git repo, you can use \"git clean -df\" in the toplevel source folder (attention! will remove also uncommitted changes to the source code). With sources from a file bundle (like a zip file), delete the source folder and unbundle the sources again.")
 endif()
 
 ######################
@@ -459,7 +459,7 @@ endif()
 ##
 ## Test for marble
 ##
-# Temporary fix to avoid looking for Marble unneccessary
+# Temporary fix to avoid looking for Marble unnecessarily
 # Its only used in RDF so until soprano is ported there is no use for Marble
 if (Soprano_FOUND)
     macro_optional_find_package(Marble CONFIG)
@@ -594,7 +594,7 @@ endif()
 
 
 ##
-## Test endianess
+## Test endianness
 ##
 include (TestBigEndian)
 test_big_endian(CMAKE_WORDS_BIGENDIAN)
@@ -1016,7 +1016,7 @@ calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
 ####      Temporarily broken products    ####
 #############################################
 
-# If a product does not build due to some temporary brokeness disable it here,
+# If a product does not build due to some temporary brokenness disable it here,
 # by calling calligra_disable_product with the product id and the reason,
 # e.g.:
 # calligra_disable_product(APP_FOO "isn't buildable at the moment")

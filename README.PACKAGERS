@@ -70,7 +70,7 @@ be packaged separately.
 If Calligra is build with support for RDF enabled, it is STRONGLY RECOMMENDED to
 separate the semantic item plugins coming from "plugins/semanticitems" into
 their own package. That package should not be an automatic dependency on any
-other Calligra package, but only installed explicitely by the user. Reason are
+other Calligra package, but only installed explicitly by the user. Reason are
 the external dependencies with these plugins, especially kdepimlibs.
 
 So if e.g. a user just installs the Braindump package, this should not pull in all
@@ -104,9 +104,9 @@ kowidgets
 4. IMPORTANT On using CPU vector capabilities in Calligra Libs
 ========================================================================
 
-IN BRIEF: 1) Intall Vc library [1] and don't forget to activate
+IN BRIEF: 1) Install Vc library [1] and don't forget to activate
              PACKAGERS_BUILD=ON option when building a package.
-          2) Vc libary should be present on the building system only,
+          2) Vc library should be present on the building system only,
              it need not be installed on all the client systems.
 
 Pigment can make use of the vector capabilities of the
@@ -189,7 +189,7 @@ runtime dependency on the respective filters.
 6. Adding unmaintained applications/modules
 ===========================================
 
-A few applications and modules do not have maintainers. So there is noone
+A few applications and modules do not have maintainers. So there is no one
 to handle bugs experienced by users or discuss new features/improvements.
 
 Still those applications & modules are usable for certain needs. If you want

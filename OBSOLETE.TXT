@@ -103,7 +103,7 @@ Filters:
          parts of KDE.
        googledocs -- worked for a while, but then bitrotted when the switch from KPart
          to KoPart was done, as this plugin was based on KPart::Plugin architecture, and
-         noone cared for more than a year [D]
+         no one cared for more than a year [D]
 
     Tools:
 

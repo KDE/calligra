@@ -114,7 +114,7 @@ XAMLExport::visitVDocument(KarbonDocument& document)
     // TODO: schemas
     // http://schemas.microsoft.com/winfx/avalon/2005
     // http://schemas.microsoft.com/2003/xaml
-    // need to mention defs too Defenitions namespace xmlns:def="Definition"
+    // need to mention defs too Definitions namespace xmlns:def="Definition"
     *m_defs <<
     "<!-- Generator: Calligra Karbon WVG XAML Graphics export filter  $VERSION/$DATE.  -->" << endl;
     *m_defs <<

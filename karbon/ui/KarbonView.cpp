@@ -200,7 +200,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     connect(d->smallPreview, &KarbonSmallStylePreview::fillApplied, this, &KarbonView::applyFillToSelection);
     connect(d->smallPreview, &KarbonSmallStylePreview::strokeApplied, this, &KarbonView::applyStrokeToSelection);
     addStatusBarItem(d->smallPreview, 0);
-    // FIXME: This was not neccessary before refactoring to pageapp, why now?
+    // FIXME: This was not necessary before refactoring to pageapp, why now?
     // Also, changing colors of a shape does not update preview
     connect(shapeManager(), &KoShapeManager::selectionChanged, d->smallPreview, &KarbonSmallStylePreview::selectionChanged);
 

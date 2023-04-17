@@ -1,7 +1,7 @@
 #! /usr/bin/perl -w
 use strict;
 
-# This script runs a commnand on a list of input arguments that are supplied on
+# This script runs a command on a list of input arguments that are supplied on
 # the standard input.
 # Graphical output is handled in a Xephyr window.
 # Output of the command is given in a file results.txt

@@ -1397,7 +1397,7 @@ choosing a color/gradient.</para>
 <title><guimenu>Text</guimenu> Menu</title>
 
 <para>This menu modifies selected text and provides a few tools familiar from
-word processing applications for your convienience for when you are making
+word processing applications for your convenience for when you are making
 presentations with large amounts
 of text in them. The <guimenu>Text</guimenu> menu will only effect selected or
 highlighted text.</para>
@@ -1795,7 +1795,7 @@ including whether to show the duration on screen, which of the slides
 in a presentation to include, and several other global settings.</para>
 </listitem>
 </varlistentry>
-<!--FIXME Configure Presenter Wiew item mising-->
+<!--FIXME Configure Presenter View item missing-->
 <!--
 <varlistentry>
 <term>
