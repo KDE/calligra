@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:48+0000\n"
-"PO-Revision-Date: 2023-03-23 14:17+0300\n"
+"POT-Creation-Date: 2023-04-17 00:48+0000\n"
+"PO-Revision-Date: 2023-04-16 10:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -14277,7 +14277,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kenarlığı Değiştir"
 
-#: ui/CellToolBase.cpp:850
+#: ui/CellToolBase.cpp:810
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "%1 eylemi bulunamıyor"
@@ -14889,10 +14889,9 @@ msgid "Cell Format"
 msgstr "Hücre Biçimi"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Hücre Biçimi"
+msgstr "Hücre Biçimini Ayarla"
 
 #: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format

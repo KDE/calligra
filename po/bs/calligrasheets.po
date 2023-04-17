@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:48+0000\n"
+"POT-Creation-Date: 2023-04-17 00:48+0000\n"
 "PO-Revision-Date: 2015-02-24 23:33+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -14258,7 +14258,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Promijeni rub"
 
-#: ui/CellToolBase.cpp:850
+#: ui/CellToolBase.cpp:810
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

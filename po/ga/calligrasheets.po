@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kspread.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:48+0000\n"
+"POT-Creation-Date: 2023-04-17 00:48+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -13264,7 +13264,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Athraigh an Imlíne"
 
-#: ui/CellToolBase.cpp:850
+#: ui/CellToolBase.cpp:810
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:48+0000\n"
+"POT-Creation-Date: 2023-04-17 00:48+0000\n"
 "PO-Revision-Date: 2022-05-11 21:25+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -14374,7 +14374,7 @@ msgstr ""
 "Изменить границы\n"
 "изменение границ"
 
-#: ui/CellToolBase.cpp:850
+#: ui/CellToolBase.cpp:810
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:48+0000\n"
+"POT-Creation-Date: 2023-04-17 00:48+0000\n"
 "PO-Revision-Date: 2013-03-28 17:12+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -13548,7 +13548,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "पान किनार :"
 
-#: ui/CellToolBase.cpp:850
+#: ui/CellToolBase.cpp:810
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

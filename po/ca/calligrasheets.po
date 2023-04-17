@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:48+0000\n"
-"PO-Revision-Date: 2023-03-05 19:50+0100\n"
+"POT-Creation-Date: 2023-04-17 00:48+0000\n"
+"PO-Revision-Date: 2023-04-16 10:41+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -14406,7 +14406,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Canvia les vores"
 
-#: ui/CellToolBase.cpp:850
+#: ui/CellToolBase.cpp:810
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "No s'ha pogut localitzar l'acció %1"
@@ -15036,10 +15036,9 @@ msgid "Cell Format"
 msgstr "Format de la cel·la"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Format de la cel·la"
+msgstr "Estableix el format de la cel·la"
 
 #: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format
@@ -15832,228 +15831,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Obro l'enllaç?"
-
-#~ msgid "&Function..."
-#~ msgstr "&Funció..."
-
-#~ msgid "Insert math expression"
-#~ msgstr "Insereix una expressió matemàtica"
-
-#~ msgid "From &Database..."
-#~ msgstr "Des d'una &base de dades..."
-
-#~ msgid "Insert data from a SQL database"
-#~ msgstr "Insereix dades des d'una base de dades SQL"
-
-#~ msgid "Formula Selection"
-#~ msgstr "Selecció de fórmula"
-
-#~ msgid "Insert a function"
-#~ msgstr "Insereix una funció"
-
-#~ msgid "Others..."
-#~ msgstr "Altres..."
-
-#~ msgid "Modify Cell"
-#~ msgstr "Modifica la cel·la"
-
-#~ msgid "Edit the highlighted cell"
-#~ msgstr "Edita la cel·la marcada"
-
-#~ msgid "Run Inspector..."
-#~ msgstr "Inspector d'execució..."
-
-#~ msgid "Show QTableView..."
-#~ msgstr "Mostra la QTableView..."
-
-#~ msgid "Permute reference fixation"
-#~ msgstr "Permuta la fixació de referència"
-
-#~ msgid "Permute fixation"
-#~ msgstr "Permuta la fixació"
-
-#~ msgid "Permute the fixation of the reference at the text cursor"
-#~ msgstr "Permuta la fixació de la referència al cursor de text"
-
-#~ msgid ""
-#~ "No database drivers available. To use this feature you need to install "
-#~ "the necessary Qt database drivers."
-#~ msgstr ""
-#~ "No hi ha controladors de base de dades disponibles. Per a usar aquesta "
-#~ "característica, heu d'instal·lar els controladors Qt necessaris per a "
-#~ "bases de dades."
-
-#~ msgid "Insert Data From Database"
-#~ msgstr "Insereix dades des d'una base de dades"
-
-#~ msgid "Type:"
-#~ msgstr "Tipus:"
-
-#~ msgid ""
-#~ "User name:\n"
-#~ "(if necessary)"
-#~ msgstr ""
-#~ "Nom d'usuari:\n"
-#~ "(si és necessari)"
-
-#~ msgid "Host:"
-#~ msgstr "Host:"
-
-#~ msgid ""
-#~ "Port:\n"
-#~ "(if necessary)"
-#~ msgstr ""
-#~ "Port:\n"
-#~ "(si és necessari)"
-
-#~ msgid "Database name: "
-#~ msgstr "Nom de la base de dades: "
-
-#~ msgid ""
-#~ "Password:\n"
-#~ "(if necessary)"
-#~ msgstr ""
-#~ "Contrasenya:\n"
-#~ "(si és necessària)"
-
-#~ msgid "Select tables:"
-#~ msgstr "Seleccioneu les taules:"
-
-# msgid "&Values"
-#~ msgid "Tables"
-#~ msgstr "Taules"
-
-#~ msgid "Select columns:"
-#~ msgstr "Seleccioneu les columnes:"
-
-# msgid "Tala"
-#~ msgid "Table"
-#~ msgstr "Taula"
-
-#~ msgid "Columns"
-#~ msgstr "Columnes"
-
-#~ msgid "Match all of the following (AND)"
-#~ msgstr "Compleix totes les condicions (AND)"
-
-#~ msgid "Match any of the following (OR)"
-#~ msgstr "Compleix qualsevol de les condicions (OR)"
-
-#~ msgid "equals"
-#~ msgstr "igual que"
-
-#~ msgid "not equal"
-#~ msgstr "diferent"
-
-#~ msgid "in"
-#~ msgstr "a dins"
-
-#~ msgid "not in"
-#~ msgstr "no a dins"
-
-#~ msgid "like"
-#~ msgstr "com a"
-
-#~ msgid "greater"
-#~ msgstr "més gran"
-
-#~ msgid "lesser"
-#~ msgstr "més petit"
-
-#~ msgid "greater or equal"
-#~ msgstr "més gran o igual que"
-
-#~ msgid "less or equal"
-#~ msgstr "més petit o igual que"
-
-#~ msgid "Sorted by"
-#~ msgstr "Ordenat per"
-
-#~ msgid "Ascending"
-#~ msgstr "Ascendent"
-
-#~ msgid "Descending"
-#~ msgstr "Descendent"
-
-#~ msgid "Distinct"
-#~ msgstr "Diferent"
-
-#~ msgid "Query Options"
-#~ msgstr "Opcions de la consulta"
-
-#~ msgid "SQL query:"
-#~ msgstr "Consulta SQL:"
-
-#~ msgid "Insert in region"
-#~ msgstr "Insereix a la regió"
-
-#~ msgid "Starting in cell"
-#~ msgstr "Començant a la cel·la"
-
-#~ msgid "Result"
-#~ msgstr "Resultat"
-
-#~ msgid "You cannot specify a table here."
-#~ msgstr "No podeu especificar una taula aquí."
-
-#~ msgid "You have to specify a valid region."
-#~ msgstr "Heu d'especificar una regió vàlida."
-
-#~ msgid "You have to specify a valid cell."
-#~ msgstr "Heu d'especificar una cel·la vàlida."
-
-#~ msgid "You are not allowed to change data in the database."
-#~ msgstr "No teniu permís per a canviar dades de la base de dades."
-
-#~ msgid "Executing query failed."
-#~ msgstr "L'execució de la petició ha fallat."
-
-#~ msgid "You did not get any results with this query."
-#~ msgstr "No s'ha obtingut cap resultat amb aquesta consulta."
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert Data From Database"
-#~ msgstr "Insereix dades des d'una base de dades"
-
-#~ msgid "The port must be a number"
-#~ msgstr "El port ha de ser un número"
-
-#~ msgid "Connecting to database..."
-#~ msgstr "S'està connectant amb la base de dades..."
-
-#~ msgid "Connected. Retrieving table information..."
-#~ msgstr "Connectat. S'està recuperant la informació de les taules..."
-
-#~ msgid "This database contains no tables"
-#~ msgstr "Aquesta base de dades no té cap taula"
-
-#~ msgid "Driver could not be loaded"
-#~ msgstr "El controlador no s'ha pogut carregar"
-
-#~ msgid "Retrieving meta data of tables..."
-#~ msgstr "S'estan recuperant les metadades de les taules..."
-
-#~ msgid "You have to select at least one table."
-#~ msgstr "Heu d'escollir una taula com a mínim."
-
-#~ msgid "You have to select at least one column."
-#~ msgstr "Heu d'escollir una columna com a mínim."
-
-#~ msgid ""
-#~ "'*' or '?' are not valid wildcards in SQL. The proper replacements are "
-#~ "'%' or '_'. Do you want to replace them?"
-#~ msgstr ""
-#~ "«*» i «?» no són comodins vàlids en SQL. Els comodins correctes són «%» i "
-#~ "«_». Voleu substituir-los?"
-
-#~ msgid "Insert function"
-#~ msgstr "Insereix una funció"
-
-#~ msgid "Help"
-#~ msgstr "Ajuda"
-
-#~ msgid "This function has no parameters."
-#~ msgstr "Aquesta funció no té paràmetres."
-
-#~ msgid "Description is not available."
-#~ msgstr "Descripció no disponible."
