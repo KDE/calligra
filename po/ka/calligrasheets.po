@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-17 00:48+0000\n"
-"PO-Revision-Date: 2023-02-03 15:51+0100\n"
+"PO-Revision-Date: 2023-04-17 06:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -260,7 +260,7 @@ msgstr "მაგალითები"
 #: engine/FunctionDescription.cpp:196
 #, kde-format
 msgid "Related Functions"
-msgstr ""
+msgstr "მსგავსი ფუნქციები"
 
 #: engine/Localization.cpp:571
 #, kde-format
@@ -458,7 +458,7 @@ msgstr "გადაყვანა"
 #: functions/conversion.xml:11 functions/conversion.xml:44
 #, kde-format
 msgid "Bool value to convert"
-msgstr ""
+msgstr "გადასაყვანი ლოგიკური მნიშვნელობა"
 
 #: functions/conversion.xml:15
 #, kde-format
@@ -490,7 +490,7 @@ msgstr ""
 #: functions/conversion.xml:27
 #, kde-format
 msgid "Integer value to convert"
-msgstr ""
+msgstr "მთელი რიცხვის გადასაყვანი მნიშვნელობა"
 
 #: functions/conversion.xml:31
 #, kde-format
@@ -547,7 +547,7 @@ msgstr "BOOL2INT(False) 0-ს აბრუნებს"
 #: functions/conversion.xml:60 functions/conversion.xml:77
 #, kde-format
 msgid "Number to convert into string"
-msgstr ""
+msgstr "სტრიქონად გადასაქცევი რიცხვი"
 
 #: functions/conversion.xml:64
 #, kde-format
@@ -13749,10 +13749,9 @@ msgid "Cell Format"
 msgstr "უჯრედის ფორმატი"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "უჯრედის ფორმატი"
+msgstr "უჯრედის ფორმატის დაყენება"
 
 #: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format
