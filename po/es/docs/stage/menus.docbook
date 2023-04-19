@@ -1912,7 +1912,7 @@ choosing a color/gradient.</para>
 
 <para
 >This menu modifies selected text and provides a few tools familiar from
-word processing applications for your convienience for when you are making
+word processing applications for your convenience for when you are making
 presentations with large amounts
 of text in them. The <guimenu
 >Text</guimenu
@@ -2503,7 +2503,7 @@ it would be autocorrected to <userinput
 >Puede configurar las propiedades de toda la presentación aquí, incluyendo si mostrar la duración en pantalla, qué diapositivas incluir en la presentación y otras preferencias globales.</para>
 </listitem>
 </varlistentry>
-<!--FIXME Configure Presenter Wiew item mising-->
+<!--FIXME Configure Presenter View item missing-->
 <!--
 <varlistentry>
 <term>
