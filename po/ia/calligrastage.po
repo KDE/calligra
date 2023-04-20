@@ -749,7 +749,7 @@ msgstr "Fixa disposition"
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, kde-format
 msgid "Automatic animation preview"
-msgstr "Vista preliminari de animation automatic"
+msgstr "Vista preliminar de animation automatic"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:312
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:320
@@ -1105,7 +1105,7 @@ msgstr "Titulo"
 #: part/ui/KPrHtmlExport.ui:117
 #, kde-format
 msgid "Output preview"
-msgstr "Vista preliminari de exito"
+msgstr "Vista preliminar de exito"
 
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_previous)
 #. i18n: ectx: property (text), widget (QToolButton, toolButton_next)
