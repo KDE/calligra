@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-17 00:48+0000\n"
-"PO-Revision-Date: 2023-04-01 12:50+0100\n"
+"PO-Revision-Date: 2023-04-20 23:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -14129,7 +14129,7 @@ msgstr "Montri la vertikalan rulobreton"
 #: part/View.cpp:377
 #, kde-format
 msgid "Status Bar"
-msgstr "Statusa Trinkejo"
+msgstr "Statusbreto"
 
 #: part/View.cpp:378
 #, kde-format
@@ -14324,7 +14324,7 @@ msgstr "Ŝanĝi fonkoloron"
 #: part/ViewAdaptor.cpp:206 part/ViewAdaptor.cpp:218 part/ViewAdaptor.cpp:235
 msgctxt "(qtundo-format)"
 msgid "Change Border"
-msgstr "Ŝanĝi marĝenon"
+msgstr "Ŝanĝi borderon"
 
 #: ui/CellToolBase.cpp:810
 #, kde-format
@@ -14939,15 +14939,14 @@ msgid "Cell Format"
 msgstr "Ĉeloformato"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Ĉeloformato"
+msgstr "Meti Ĉelformaton"
 
 #: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format
 msgid "General"
-msgstr "Generalo"
+msgstr "Ĝeneralo"
 
 #: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -15004,7 +15003,7 @@ msgid ""
 "-> Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
 "Numbers tab. Numbers are right justified by default."
 msgstr ""
-"La nombronotacio uzas la notacion, kiun vi tutmonde elektas en Sistemaj "
+"La nombronotacio uzas la notacion, kiun vi tutamplekse elektas en Sistemaj "
 "Agordoj -> Komuna Aspekto kaj Konduto -> Loko -> Lando/Regiono & Lingvo -> "
 "Ciferoj langeto. Nombroj estas pravigitaj defaŭlte."
 
@@ -15049,8 +15048,8 @@ msgstr ""
 "tutmonde fiksitajn en Sistemaj Agordoj -> Komuna Aspekto kaj Konduto -> Loko "
 "-> Lando/Regiono & Lingvo -> Mono. La valutsimbolo estos montrata kaj la "
 "precizeco estos tiu agordita en Sistemaj Agordoj.\n"
-"Vi ankaŭ povas uzi la Monero-ikonon en la Formata Ilobreto por agordi la "
-"ĉelan formatadon kiel vian nunan valuton."
+"Vi ankaŭ povas uzi la Monero-piktogramon en la Formata Ilobreto por agordi "
+"la ĉelan formatadon kiel vian nunan valuton."
 
 #: ui/dialogs/LayoutPage_Float.cpp:74
 #, kde-format
@@ -15126,8 +15125,8 @@ msgstr ""
 "dialogujo de Ĉela Formato vi povas agordi kiel la tempo estu montrata "
 "elektante unu el la disponeblaj tempoformataj opcioj. La defaŭlta formato "
 "estas la sistemformato agordita en Sistemaj Agordoj. Kiam la nombro en la "
-"ĉelo ne havas sencon kiel tempo, Calligra Sheets montros 00:00 en la "
-"tutmonda formato, kiun vi havas en Sistemaj Agordoj."
+"ĉelo ne havas sencon kiel tempo, Calligra Sheets montros 00:00 en la ĉiea "
+"formato, kiun vi havas en Sistemaj Agordoj."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
@@ -15153,7 +15152,7 @@ msgstr ""
 "montrata elektante unu el la disponeblaj opcioj pri data formato. La "
 "defaŭlta formato estas la sistemformato agordita en Sistemaj Agordoj. Kiam "
 "la nombro en la ĉelo ne havas sencon kiel dato kaj horo, Calligra Sheets "
-"montros 00:00 en la tutmonda formato, kiun vi havas en Sistemaj Agordoj."
+"montros 00:00 en la ĉiea formato, kiun vi havas en Sistemaj Agordoj."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
