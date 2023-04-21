@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-01-18 22:12+0300\n"
+"PO-Revision-Date: 2023-04-20 14:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
 msgctxt "(qtundo-format)"
@@ -116,7 +116,7 @@ msgstr "Hizalama"
 #: data/karbon.rc:178
 #, kde-format
 msgid "Effects"
-msgstr "Etkiler"
+msgstr "Efektler"
 
 #. i18n: ectx: ToolBar (view_toolbar)
 #: data/karbon_readonly.rc:25
@@ -197,17 +197,17 @@ msgstr "Yarıçap:"
 #: plugins/whirlpinch/KarbonWhirlPinchCommand.cpp:95
 msgctxt "(qtundo-format)"
 msgid "Whirl & pinch"
-msgstr "Bur ve tut"
+msgstr "Bur ve Kıstır"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:55
 #, kde-format
 msgid "&Whirl/Pinch..."
-msgstr "&Burgaç Etkisi..."
+msgstr "&Bur/Kıstır..."
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:97
 #, kde-format
 msgid "Whirl Pinch"
-msgstr "Burgaç Etkisi"
+msgstr "Burup Kıstırma"
 
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:105
 #, kde-format
@@ -231,7 +231,7 @@ msgstr "Dönme Açısı:"
 #: plugins/whirlpinch/WhirlPinchPlugin.cpp:125
 #, kde-format
 msgid "Pinch:"
-msgstr "Etki Miktarı:"
+msgstr "Kıstır:"
 
 #: ui/commands/KarbonLayerReorderCommand.cpp:24
 #: ui/commands/KarbonLayerReorderCommand.cpp:33
