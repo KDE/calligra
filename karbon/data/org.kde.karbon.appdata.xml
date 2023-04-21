@@ -458,7 +458,7 @@
       <li xml:lang="sk">Komplexné cestné operácie a efekty ako logické operácie, splošťovanie cesty, zaobľovanie a zjemňovanie ako aj efekty vírov.</li>
       <li xml:lang="sl">Kompleksne operacije poti in učinki, kot so logične operacije, sploščevanje poti, zaokroževanje in rafiniranje, kot tudi učinki vrtinčenja in ščipanja</li>
       <li xml:lang="sv">Komplexa konturoperationer och effekter som Booleska mängdoperationer, konturutplattning, rundning och förfining samt virvla- och klämeffekter</li>
-      <li xml:lang="tr">Boole küme işlemleri, yol düzleştirme, yuvarlama ve iyileştirme gibi karmaşık yol işlemleri ve efektleri ile girdap/kıstırma efektleri</li>
+      <li xml:lang="tr">Boole küme işlemleri, yol düzleştirme, yuvarlama ve iyileştirme gibi karmaşık yol işlemleri ve efektleri ile burma/kıstırma efektleri</li>
       <li xml:lang="uk">Складні дії над контурами та ефекти, зокрема набір булівських операцій, спрощення контуру, заокруглення та покращення, ефекти вихору та втягування</li>
       <li xml:lang="x-test">xxComplex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effectsxx</li>
       <li xml:lang="zh-CN">复杂路径操作和特效，例如布尔运算、路径扁平化、简化和优化，以及旋转和揉捏特效等</li>
