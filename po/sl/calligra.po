@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1647182 2023-03-17 02:29:11Z scripty $
+# $Id: calligra.po 1649859 2023-04-21 09:54:17Z matjazjeran $
 # $Source$
 #
 #
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-13 00:49+0000\n"
-"PO-Revision-Date: 2023-03-16 11:46+0100\n"
+"PO-Revision-Date: 2023-04-21 11:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2767,7 +2767,7 @@ msgstr "Alfa želiš potemniti"
 #: pigment/KoCompositeOpRegistry.cpp:69
 #, kde-format
 msgid "Behind"
-msgstr "Odzadaj"
+msgstr "Od zadaj"
 
 #: pigment/compositeops/KoCompositeOpDissolve.h:48
 #: pigment/KoCompositeOpRegistry.cpp:83
