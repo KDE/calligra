@@ -177,16 +177,6 @@ protected:
 
     /**
      * \ingroup Layout
-     * Determines the dimension of this cell including any merged cells.
-     * Does NOT consider space, which is available from empty neighbours,
-     * and would be able to be obscured.
-     *
-     * \internal Called from makeLayout().
-     */
-    void calculateCellDimension(const Cell& cell);
-
-    /**
-     * \ingroup Layout
      * Checks, whether horizontal neighbours could be obscured
      * and does so, if necessary.
      *

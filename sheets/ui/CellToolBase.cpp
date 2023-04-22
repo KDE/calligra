@@ -151,7 +151,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     // Diagonal cursor, if the selection handle was hit.
     if (SelectionStrategy::hitTestReferenceSizeGrip(canvas(), selection(), position) ||
         SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
-        if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
             useCursor(Qt::SizeBDiagCursor);
         } else {
             useCursor(Qt::SizeFDiagCursor);
@@ -174,18 +174,18 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     // In which cell did the user click?
     qreal xpos;
     qreal ypos;
-    const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
-    const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
+    const int col = sheet->leftColumn(position.x(), xpos);
+    const int row = sheet->topRow(position.y(), ypos);
     // Check boundaries.
     if (col < 1 || row < 1 || col > maxCol() || row > maxRow()) {
         debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
-        const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
-        SheetView* const sheetView = this->sheetView(selection()->activeSheet());
+        const Cell cell = Cell(sheet, col, row).masterCell();
+        SheetView* const sheetView = this->sheetView(sheet);
 
         QString url;
         const CellView& cellView = sheetView->cellView(col, row);
-        if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
             url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
         } else {
             url = cellView.testAnchor(sheetView, cell, position.x() - xpos, position.y() - ypos);
@@ -207,9 +207,8 @@ void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
     scrollToCell(selection()->cursor());
 }
 
-void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
+void CellToolBase::mouseDoubleClickEvent(KoPointerEvent*)
 {
-    Q_UNUSED(event)
     cancelCurrentStrategy();
     scrollToCell(selection()->cursor());
     createEditor(false /* keep content */, true, true /*full editing*/);
@@ -288,11 +287,8 @@ void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
     }
 }
 
-void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void CellToolBase::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    Q_UNUSED(toolActivation);
-    Q_UNUSED(shapes);
-
     if (!d->initialized) {
         init();
         d->initialized = true;
@@ -460,7 +456,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             // Hyperlink hit.
             QString url;
             const CellView& cellView = sheetView->cellView(col, row);
-            if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+            if (sheet->layoutDirection() == Qt::RightToLeft) {
                 url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
             } else {
                 url = cellView.testAnchor(sheetView, cell, position.x() - xpos, position.y() - ypos);
