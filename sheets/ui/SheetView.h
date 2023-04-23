@@ -122,7 +122,7 @@ public:
     void setHighlightColor(const QColor& color);
     void setActiveHighlightColor(const QColor& color);
 public Q_SLOTS:
-    void updateAccessedCellRange(const QPoint& location = QPoint(), bool noOverflow = false);
+    void updateAccessedCellRange(const QPoint& location = QPoint());
 
 Q_SIGNALS:
     void visibleSizeChanged(const QSizeF&);

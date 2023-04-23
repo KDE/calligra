@@ -643,22 +643,20 @@ const CellView& SheetView::defaultCellView() const
     return *d->defaultCellView;
 }
 
-void SheetView::updateAccessedCellRange(const QPoint& location, bool noOverflow)
+void SheetView::updateAccessedCellRange(const QPoint& location)
 {
     QPoint loc = location.isNull() ? QPoint(1, 1) : location;
 
     int col = loc.x();
     int row = loc.y();
-    if (!noOverflow) {
-        QRect area = sheet()->usedArea();
-        col = area.width() + 20;
-        row = area.height() + 60;
-        col = qMax(loc.x() + 10, col);
-        row = qMax(loc.y() + 40, row);
-        // make sure that we have at least 128x26
-        col = qMax(26, col);
-        row = qMax(128, row);
-    }
+    QRect area = sheet()->usedArea();
+    col = area.width() + 20;
+    row = area.height() + 60;
+    col = qMax(loc.x() + 10, col);
+    row = qMax(loc.y() + 40, row);
+    // make sure that we have at least 128x26
+    col = qMax(26, col);
+    row = qMax(128, row);
 
     QSize cellRange = QSize(col, row);
     if (d->accessedCellRange == cellRange) return;
