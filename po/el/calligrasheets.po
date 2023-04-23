@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-17 00:48+0000\n"
+"POT-Creation-Date: 2023-04-23 00:49+0000\n"
 "PO-Revision-Date: 2023-01-04 12:01+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -14549,7 +14549,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Τροποποίηση περιγράμματος"
 
-#: ui/CellToolBase.cpp:810
+#: ui/CellToolBase.cpp:806
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Αδυναμία εντοπισμού ενέργειας %1"

@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1649577 2023-04-17 01:32:19Z scripty $
+# $Id: calligrasheets.po 1650133 2023-04-23 01:33:57Z scripty $
 # $Source$
 #
 #
@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-17 00:48+0000\n"
+"POT-Creation-Date: 2023-04-23 00:49+0000\n"
 "PO-Revision-Date: 2023-04-16 08:36+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -14206,7 +14206,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Spremeni obrobo"
 
-#: ui/CellToolBase.cpp:810
+#: ui/CellToolBase.cpp:806
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Ni mogoče locirati dejavnosti %1"

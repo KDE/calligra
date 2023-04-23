@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-17 00:48+0000\n"
+"POT-Creation-Date: 2023-04-23 00:49+0000\n"
 "PO-Revision-Date: 2017-05-16 06:38-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
@@ -13777,7 +13777,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "שינוי צבע גבול"
 
-#: ui/CellToolBase.cpp:810
+#: ui/CellToolBase.cpp:806
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

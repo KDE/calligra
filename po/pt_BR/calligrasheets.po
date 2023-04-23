@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-17 00:48+0000\n"
+"POT-Creation-Date: 2023-04-23 00:49+0000\n"
 "PO-Revision-Date: 2022-12-15 11:38-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -14372,7 +14372,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Mudar borda"
 
-#: ui/CellToolBase.cpp:810
+#: ui/CellToolBase.cpp:806
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Não foi possível localizar a ação: %1"

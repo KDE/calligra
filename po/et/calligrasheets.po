@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-17 00:48+0000\n"
+"POT-Creation-Date: 2023-04-23 00:49+0000\n"
 "PO-Revision-Date: 2019-12-18 21:55+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -14203,7 +14203,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Piirde muutmine"
 
-#: ui/CellToolBase.cpp:810
+#: ui/CellToolBase.cpp:806
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
