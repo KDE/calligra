@@ -636,6 +636,7 @@ QByteArray KoDocument::mimeType() const
 
 void KoDocument::setMimeType(const QByteArray & mimeType)
 {
+    qInfo()<<Q_FUNC_INFO<<mimeType;
     d->mimeType = mimeType;
 }
 
@@ -1640,6 +1641,8 @@ KoProgressProxy* KoDocument::progressProxy() const
 // shared between openFile and koMainWindow's "create new empty document" code
 void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
 {
+    qInfo()<<Q_FUNC_INFO<<mimeType;
+
     d->mimeType = mimeType.toLatin1();
 
     d->outputMimeType = d->mimeType;

@@ -37,6 +37,7 @@
 #include "engine/calligra_sheets_limits.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
+#include "engine/CS_Time.h"
 
 #include "Cell.h"
 #include "Condition.h"
@@ -221,7 +222,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
                     pos1  = t.indexOf(':', pos + 1);
                     minutes = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
                     second  = t.rightRef(t.length() - pos1 - 1).toInt();
-                    QTime time(hours, minutes, second);
+                    Time time(hours, minutes, second);
                     if (time.isValid())
                         res.setValue(Value(time));
                 }
@@ -369,7 +370,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 pos1 = t.indexOf(':', pos + 1);
                 minutes = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
                 second = t.rightRef(t.length() - pos1 - 1).toInt();
-                cell->setValue(Value(QTime(hours, minutes, second)));
+                cell->setValue(Value(Time(hours, minutes, second)));
                 if (cell->value().asTime().isValid())    // Should always be the case for new docs
                     cell->setUserInput(locale->formatTime(cell->value().asTime(), true));
                 else { // This happens with old docs, when format is set wrongly to time

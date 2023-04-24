@@ -561,7 +561,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
                 if (ok) {
                     // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
                     // cell.setValue( kval );
-                    cell.setValue(Value(QTime(hours % 24, minutes, seconds)));
+                    cell.setValue(Value(Time(hours % 24, minutes, seconds)));
                     style.setFormatType(Format::Custom);
                 }
             }

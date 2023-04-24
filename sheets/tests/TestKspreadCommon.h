@@ -18,14 +18,29 @@ using namespace Calligra::Sheets;
 
 namespace QTest
 {
-template<>
-char *toString(const Value& value)
-{
-    QString message;
-    QTextStream ts(&message, QIODevice::WriteOnly);
-    ts << value;
-    return qstrdup(message.toLatin1());
-}
-}
+    template<>
+    char *toString(const Calligra::Sheets::Value &v)
+    {
+        static QStringList formats {"fmt_None","fmt_Boolean","fmt_Number",
+                                    "fmt_Percent","fmt_Money","fmt_DateTime",
+                                    "fmt_Date","fmt_Time","fmt_String"};
 
+        QString s = "Value[";
+        s += formats.value(v.format());
+        switch (v.type()) {
+            case Calligra::Sheets::Value::Empty: s += ":Empty"; break;
+            case Calligra::Sheets::Value::Boolean: s += ':' + QString(v.asBoolean() ? "true" : "false"); break;
+            case Calligra::Sheets::Value::Integer: s += ':' + QString::number(v.asInteger()); break;
+            case Calligra::Sheets::Value::Float: s += ':' + QString::number((double)v.asFloat());  break; // FIXME
+            case Calligra::Sheets::Value::Complex: s += ':' + QStringLiteral("Complex"); break; //TODO
+            case Calligra::Sheets::Value::String: s += ':' + v.asString(); break;
+            case Calligra::Sheets::Value::Array: s += ':' + QStringLiteral("Array"); break; //TODO
+            case Calligra::Sheets::Value::CellRange: s += ':' + QStringLiteral("CellRange"); break;
+            case Calligra::Sheets::Value::Error: s += ':' + v.errorMessage(); break;
+            default: s += QStringLiteral("Unknown");
+        }
+        s += ']';
+        return toString(s);
+    }
+}
 

@@ -646,13 +646,14 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 date = kspread_cell.value().asDate(kspread_cell.sheet()->map()->calculationSettings());
 
             Format::Type type;
+
             switch (i) {
             case 0:  type = Format::ShortDate;  break;
             case 1:  type = Format::TextDate;  break;
             case 2:  type = Format::Date1;  break;
             case 3:  type = Format::Date2;  break;
             case 10: type = Format::Date7; break;
-            case 11: type = Format::Date8; break;
+//            case 11: type = Format::Date8; break;
             default:
                 type = Format::ShortDate;
                 break;
@@ -687,7 +688,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 
                 time = GnumericDate::getTime(content);
             } else
-                time = kspread_cell.value().asTime();
+                time = kspread_cell.value().asTime().toQTime();
 
             Format::Type type;
             switch (i) {
@@ -695,15 +696,15 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
             case 1: type = Format::Time2; break;
             case 2: type = Format::Time4; break;
             case 3: type = Format::Time5; break;
-            case 5: type = Format::Time6; break;
-            case 6: type = Format::Time6; break;
+            case 8: type = Format::DurationHourShort; break;
+            case 9: type = Format::DurationMinute; break;
             default:
                 type = Format::Time1; break;
             }
 
             qDebug() << "i:" << i << ", Type:" << type;
             Cell cell(kspread_cell);
-            cell.setValue(Value(time));
+            cell.setValue(Value(Time(time)));
             Style style;
             style.setFormatType(type);
             cell.setStyle(style);
@@ -1635,7 +1636,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     if (!document)
         return KoFilter::StupidError;
 
-    qDebug() << "here we go..." << document->metaObject()->className();
+    qDebug() << "here we go..." << document->metaObject()->className() << "mimetype:" << document->mimeType();
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {    // it's safer that way :)
         qDebug() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
@@ -1651,7 +1652,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     // No need for a dynamic cast here, since we use Qt's moc magic
     Doc * ksdoc = (Doc *) document;
 
-    if (ksdoc->mimeType() != "application/x-kspread") {
+    if (ksdoc->mimeType() != "application/x-gnumeric") {
         qDebug() << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }

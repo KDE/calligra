@@ -12,6 +12,7 @@
 #include "engine/CellBase.h"
 #include "engine/MapBase.h"
 #include "engine/SheetBase.h"
+#include "engine/CS_Time.h"
 
 #include <KoXmlNS.h>
 
@@ -179,8 +180,8 @@ void Odf::loadValidationValue(Validity *validity, const QStringList &listVal, Ca
         validity->setMinimumValue(Value(QDate::fromString(listVal[0], Qt::ISODate), cs));
         validity->setMaximumValue(Value(QDate::fromString(listVal[1], Qt::ISODate), cs));
     } else if (validity->restriction() == Validity::Time) {
-        validity->setMinimumValue(Value(QTime::fromString(listVal[0], Qt::ISODate)));
-        validity->setMaximumValue(Value(QTime::fromString(listVal[1], Qt::ISODate)));
+        validity->setMinimumValue(Value(Time(QTime::fromString(listVal[0], Qt::ISODate))));
+        validity->setMaximumValue(Value(Time(QTime::fromString(listVal[1], Qt::ISODate))));
     } else {
         validity->setMinimumValue(Value(listVal[0].toDouble(&ok)));
         if (!ok) {
@@ -236,7 +237,7 @@ void Odf::loadValidationCondition(Validity *validity, QString &valExpression, Ca
     if (validity->restriction() == Validity::Date) {
         validity->setMinimumValue(Value(QDate::fromString(value, Qt::ISODate), cs));
     } else if (validity->restriction() == Validity::Time) {
-        validity->setMinimumValue(Value(QTime::fromString(value, Qt::ISODate)));
+        validity->setMinimumValue(Value(Time(QTime::fromString(value, Qt::ISODate))));
     } else {
         bool ok = false;
         validity->setMinimumValue(Value(value.toDouble(&ok)));

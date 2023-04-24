@@ -143,29 +143,41 @@ void TestValue::testTime()
 
     // time value
     v1 = new Value();
-    *v1 = Value(Value(QTime(0, 0, 0)));
+    *v1 = Value(Value(Time(0, 0, 0)));
     QCOMPARE(v1->type(), Value::Float);
     for (unsigned h = 0; h < 24; ++h)
         for (unsigned m = 0; m < 60; ++m)
             for (unsigned s = 0; s < 60; ++s) {
-                QTime t1 = QTime(h, m, s);
+                auto t1 = Time(h, m, s, 0);
                 *v1 = Value(Value(t1));
-                QTime t2 = v1->asTime();
+                auto t2 = v1->asTime();
+                QCOMPARE(t1.duration(), t2.duration());
                 QCOMPARE(t1.hour(), t2.hour());
+                if (t1.minute() != t2.minute()) {
+                    qInfo()<<t1<<t2;
+                    qInfo()<<t1.minutes()<<QString("%1").arg(t1.duration(), 0, 'g', 20);
+                    qInfo()<<t2.minutes()<<QString("%1").arg(t2.duration(), 0, 'g', 20);
+                }
                 QCOMPARE(t1.minute(), t2.minute());
                 QCOMPARE(t1.second(), t2.second());
+                if (t1.msec() != t2.msec()) {
+                    qInfo()<<222<<t1<<t2;
+                    qInfo()<<t1.msec()<<QString("%1").arg(t1.duration(), 0, 'g', 20)<<QString("%1").arg(t1.seconds(), 0, 'g', 20);
+                    qInfo()<<t2.msec()<<QString("%1").arg(t2.duration(), 0, 'g', 20)<<QString("%1").arg(t2.seconds(), 0, 'g', 20);
+                }
                 QCOMPARE(t1.msec(), t2.msec());
             }
     delete v1;
 
     // time value (msec)
     v1 = new Value();
-    *v1 = Value(Value(QTime(0, 0, 0)));
+    *v1 = Value(Value(Time(0, 0, 0)));
     QCOMPARE(v1->type(), Value::Float);
     for (unsigned ms = 0; ms < 1000; ++ms) {
-        QTime t1 = QTime(1, 14, 2, ms);
+        auto t1 = Time(1, 14, 2, ms);
         *v1 = Value(Value(t1));
-        QTime t2 = v1->asTime();
+        auto t2 = v1->asTime();
+        qInfo()<<t1<<t2;
         QCOMPARE(t1.hour(), t2.hour());
         QCOMPARE(t1.minute(), t2.minute());
         QCOMPARE(t1.second(), t2.second());

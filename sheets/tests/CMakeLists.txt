@@ -15,6 +15,13 @@ endmacro()
 
 ########### Core Functionality ###############
 
+sheets_add_unit_test(TestTime
+    TestTime.cpp
+    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+)
+
+########### next target ###############
+
 sheets_add_unit_test(Cell
     TestCell.cpp
     LINK_LIBRARIES calligrasheetscore Qt5::Test

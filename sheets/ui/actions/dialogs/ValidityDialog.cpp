@@ -481,12 +481,12 @@ void ValidityDialog::onApply()
             return;
         }
     } else if (idx == 5) {
-        mintime = m_parser->tryParseTime(val_min->text(), &ok).asTime();
+        mintime = m_parser->tryParseTime(val_min->text(), &ok).asTime().toQTime(); // FIXME Time or QTime?
         if (!ok) {
             KMessageBox::error(this , i18n("This is not a valid time."), i18n("Error"));
             return;
         }
-        maxtime = m_parser->tryParseTime(val_max->text(), &ok).asTime();
+        maxtime = m_parser->tryParseTime(val_max->text(), &ok).asTime().toQTime(); // FIXME Time or QTime?
         if ((!ok) && choose->currentIndex()  >= 5) {
             KMessageBox::error(this , i18n("This is not a valid time."), i18n("Error"));
             return;
@@ -561,8 +561,8 @@ Validity ValidityDialog::getValidity() {
                 }
             }
         } else  if (idx == 5) {
-            Value minTime = Value(mintime);
-            Value maxTime = Value(maxtime);
+            Value minTime = Value(Time(mintime));
+            Value maxTime = Value(Time(maxtime));
             if (choose->currentIndex()  < 5) {
                 validity.setMinimumValue(minTime);
             } else {

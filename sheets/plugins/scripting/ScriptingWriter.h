@@ -10,6 +10,7 @@
 #include "ScriptingModule.h"
 
 #include <engine/Region.h>
+#include <engine/CS_Time.h>
 #include <core/Cell.h>
 #include <core/Sheet.h>
 #include <core/Map.h>
@@ -194,7 +195,7 @@ public Q_SLOTS:
             case QVariant::Double:      v = Calligra::Sheets::Value(value.toDouble()); break;
             case QVariant::String:      v = Calligra::Sheets::Value(value.toString()); break;
             case QVariant::Date:        v = Calligra::Sheets::Value(value.toDate(), settings); break;
-            case QVariant::Time:        v = Calligra::Sheets::Value(value.toTime()); break;
+            case QVariant::Time:        v = Calligra::Sheets::Value(Calligra::Sheets::Time(value.toTime())); break;
             case QVariant::DateTime:    v = Calligra::Sheets::Value(value.toDateTime(), settings); break;
             default: return false;
             }

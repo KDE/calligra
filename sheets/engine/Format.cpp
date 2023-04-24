@@ -9,15 +9,19 @@
 
 using namespace Calligra::Sheets;
 
+bool Format::isDateTime(Type fmt)
+{
+    return ((fmt >= Format::DateTimesBegin) && (fmt < DateTimesEnd));
+}
+
 bool Format::isDate(Type fmt)
 {
-    return ((fmt == Format::ShortDate) || (fmt == Format::TextDate) ||
-            ((fmt >= Format::DatesBegin) && (fmt <= DatesEnd)));
+    return ((fmt >= Format::DatesBegin) && (fmt < DatesEnd));
 }
 
 bool Format::isTime(Type fmt)
 {
-    return ((fmt >= TimesBegin) && (fmt <= TimesEnd));
+    return ((fmt >= TimesBegin) && (fmt < TimesEnd));
 }
 
 bool Format::isFraction(Type fmt)

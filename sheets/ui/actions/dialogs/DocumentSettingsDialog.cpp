@@ -33,6 +33,7 @@
 #include "engine/Localization.h"
 #include "engine/MapBase.h"
 #include "core/Sheet.h"
+#include "engine/CS_Time.h"
 
 using namespace Calligra::Sheets;
 
@@ -186,6 +187,6 @@ void parameterLocale::updateToMatchLocale(Localization* locale)
     m_number->setText(i18n("Default number format: %1", locale->formatNumber(12.55)));   // krazy:exclude=i18ncheckarg
     m_date->setText(i18n("Long date format: %1", locale->formatDate(QDate::currentDate())));
     m_shortDate->setText(i18n("Short date format: %1", locale->formatDate(QDate::currentDate(), false)));
-    m_time->setText(i18n("Time format: %1", locale->formatTime(QTime::currentTime())));
+    m_time->setText(i18n("Time format: %1", locale->formatTime(Time::currentTime())));
     m_money->setText(i18n("Currency format: %1", locale->formatCurrency(12.55, locale->currencySymbol())));
 }

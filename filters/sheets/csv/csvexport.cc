@@ -15,6 +15,8 @@
 #include <KoFilterManager.h>
 #include <KoPart.h>
 
+#include <sheets/engine/Localization.h>
+#include <sheets/engine/CalculationSettings.h>
 #include <sheets/core/CellStorage.h>
 #include <sheets/core/Map.h>
 #include <sheets/core/Sheet.h>
@@ -69,7 +71,7 @@ QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet *sheet,
         else if (!cell.link().isEmpty())
             text = cell.userInput(); // untested
         else if (cell.isTime())
-            text = cell.value().asTime().toString("hh:mm:ss");
+            text = sheet->map()->calculationSettings()->locale()->formatTime(cell.value().asTime(), "hh:mm:ss"); // FIXME duration?
         else if (cell.isDate())
             text = cell.value().asDate(sheet->map()->calculationSettings()).toString("yyyy-MM-dd");
         else

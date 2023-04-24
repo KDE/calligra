@@ -8,7 +8,7 @@
 #ifndef OpenCalc_IMPORT_H__
 #define OpenCalc_IMPORT_H__
 
-#include "sheets/core/Format.h"
+#include "sheets/engine/Format.h"
 
 #include <KoFilter.h>
 

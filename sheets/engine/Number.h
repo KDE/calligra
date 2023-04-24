@@ -7,6 +7,8 @@
 
 #include "sheets_engine_export.h"
 
+#include <QDebug>
+
 // #define CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 
 #ifndef CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
@@ -221,5 +223,7 @@ Number atgh(const Number &n);
 } // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
+
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug dbg, const Number &n);
 
 #endif // CALLIGRA_SHEETS_NUMBER_H

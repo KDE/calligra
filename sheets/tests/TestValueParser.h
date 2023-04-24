@@ -30,6 +30,8 @@ private Q_SLOTS:
     void testTryParseDate();
     void testTryParseTime_data(bool addCol = true);
     void testTryParseTime();
+    void testTryParseDateTime_data();
+    void testTryParseDateTime();
     void testParse_data();
     void testParse();
 

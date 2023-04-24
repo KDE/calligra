@@ -35,7 +35,7 @@
 
 #include <KComboBox>
 #include <KLineEdit>
-
+#include <QListWidgetItem>
 
 using namespace Calligra::Sheets;
 
@@ -87,8 +87,8 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     time->setWhatsThis(i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Date & Time. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a time, Calligra Sheets will display 00:00 in the global format you have in System Settings."));
     grid->addWidget(time, 8, 0);
 
-    datetime = new QRadioButton(i18n("Date and Time"), grp);
-    datetime->setWhatsThis(i18n("This formats your cell content as date and time. To enter a date and a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available date format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a date and time, Calligra Sheets will display 00:00 in the global format you have in System Settings."));
+    datetime = new QRadioButton(i18n("Datetime"), grp);
+    datetime->setWhatsThis(i18n("To enter a datetime, you should enter it in one of the formats set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you can also drag down dates and the next cells will also get datetimes."));
     grid->addWidget(datetime, 9, 0);
 
     textFormat = new QRadioButton(i18n("Text"), grp);
@@ -197,8 +197,8 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     connect(generic, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
     connect(fraction, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
     connect(money, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
-    connect(date, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
     connect(datetime, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
+    connect(date, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
     connect(scientific, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
     connect(number, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
     connect(percent, &QAbstractButton::clicked, this, &LayoutPageFloat::slotChangeState);
@@ -263,20 +263,20 @@ void LayoutPageFloat::slotChangeState()
         precision->setValue(2);
         currency->show();
         currencyLabel->show();
-    } else if (date->isChecked()) {
-        format->setEnabled(false);
-        precision->setEnabled(false);
-        prefix->setEnabled(false);
-        postfix->setEnabled(false);
-        listFormat->setEnabled(true);
-        init();
     } else if (datetime->isChecked()) {
         format->setEnabled(false);
         precision->setEnabled(false);
         prefix->setEnabled(false);
         postfix->setEnabled(false);
         listFormat->setEnabled(true);
-        datetimeInit();
+        initDatetime();
+    } else if (date->isChecked()) {
+        format->setEnabled(false);
+        precision->setEnabled(false);
+        prefix->setEnabled(false);
+        postfix->setEnabled(false);
+        listFormat->setEnabled(true);
+        initDate();
     } else if (fraction->isChecked()) {
         precision->setEnabled(false);
         listFormat->setEnabled(true);
@@ -316,45 +316,7 @@ void LayoutPageFloat::slotChangeState()
         postfix->setEnabled(false);
         format->setEnabled(false);
         listFormat->setEnabled(true);
-
-
-        list += i18n("System: ") + m_locale->formatTime(QTime::currentTime(), false);
-        list += i18n("System: ") + m_locale->formatTime(QTime::currentTime(), true);
-        QDateTime tmpTime(QDate(1, 1, 1900), QTime(10, 35, 25), Qt::UTC);
-
-
-        list += m_formatter->timeFormat(tmpTime, Format::Time1);
-        list += m_formatter->timeFormat(tmpTime, Format::Time2);
-        list += m_formatter->timeFormat(tmpTime, Format::Time3);
-        list += m_formatter->timeFormat(tmpTime, Format::Time4);
-        list += m_formatter->timeFormat(tmpTime, Format::Time5);
-        list += (m_formatter->timeFormat(tmpTime, Format::Time6) + i18n(" (=[mm]:ss)"));
-        list += (m_formatter->timeFormat(tmpTime, Format::Time7) + i18n(" (=[hh]:mm:ss)"));
-        list += (m_formatter->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]:mm)"));
-        listFormat->addItems(list);
-
-        if (cellFormatType == Format::Time)
-            listFormat->setCurrentRow(0);
-        else if (cellFormatType == Format::SecondeTime)
-            listFormat->setCurrentRow(1);
-        else if (cellFormatType == Format::Time1)
-            listFormat->setCurrentRow(2);
-        else if (cellFormatType == Format::Time2)
-            listFormat->setCurrentRow(3);
-        else if (cellFormatType == Format::Time3)
-            listFormat->setCurrentRow(4);
-        else if (cellFormatType == Format::Time4)
-            listFormat->setCurrentRow(5);
-        else if (cellFormatType == Format::Time5)
-            listFormat->setCurrentRow(6);
-        else if (cellFormatType == Format::Time6)
-            listFormat->setCurrentRow(7);
-        else if (cellFormatType == Format::Time7)
-            listFormat->setCurrentRow(8);
-        else if (cellFormatType == Format::Time8)
-            listFormat->setCurrentRow(9);
-        else
-            listFormat->setCurrentRow(0);
+        initTime();
     }
 
     if (customFormat->isChecked()) {
@@ -370,53 +332,62 @@ void LayoutPageFloat::slotChangeState()
     makeformat();
 }
 
-void LayoutPageFloat::init()
+void LayoutPageFloat::initDate()
 {
-    QStringList list;
-    QDate tmpDate(2000, 2, 18);
-    list += i18n("System: ") + m_locale->formatDate(QDate::currentDate(), false);
-    list += i18n("System: ") + m_locale->formatDate(QDate::currentDate(), true);
-
-    list += m_formatter->dateFormat(tmpDate, Format::Date1);
-    list += m_formatter->dateFormat(tmpDate, Format::Date2);
-    list += m_formatter->dateFormat(tmpDate, Format::Date3);
-    list += m_formatter->dateFormat(tmpDate, Format::Date4);
-    list += m_formatter->dateFormat(tmpDate, Format::Date5);
-    list += m_formatter->dateFormat(tmpDate, Format::Date6);
-    list += m_formatter->dateFormat(tmpDate, Format::Date7);
-    list += m_formatter->dateFormat(tmpDate, Format::Date8);
-
-    listFormat->addItems(list);
-    if (cellFormatType == Format::ShortDate)
-        listFormat->setCurrentRow(0);
-    else if (cellFormatType == Format::TextDate)
-        listFormat->setCurrentRow(1);
-    else if (cellFormatType == Format::Date1)
-        listFormat->setCurrentRow(2);
-    else if (cellFormatType == Format::Date2)
-        listFormat->setCurrentRow(3);
-    else if (cellFormatType == Format::Date3)
-        listFormat->setCurrentRow(4);
-    else if (cellFormatType == Format::Date4)
-        listFormat->setCurrentRow(5);
-    else if (cellFormatType == Format::Date5)
-        listFormat->setCurrentRow(6);
-    else if (cellFormatType == Format::Date6)
-        listFormat->setCurrentRow(7);
-    else if (cellFormatType == Format::Date7)
-        listFormat->setCurrentRow(8);
-    else if (cellFormatType == Format::Date8)
-        listFormat->setCurrentRow(9);
-    else
-        listFormat->setCurrentRow(0);
+    const QDate tmpDate(QDate(2000, 2, 9));
+    QListWidgetItem *currentItem = nullptr;
+    for (int i = Format::DatesBegin; i < Format::DatesEnd; ++i) {
+        auto s = m_formatter->dateFormat(tmpDate, (Format::Type)i);
+        if (s.isEmpty()) {
+            continue;
+        }
+        auto item = new QListWidgetItem(s);
+        item->setData(Qt::UserRole, i);
+        listFormat->addItem(item);
+        if (i == cellFormatType) {
+            currentItem = item;
+        }
+    }
+    currentItem ? listFormat->setCurrentItem(currentItem) : listFormat->setCurrentRow(0);
 }
 
-void LayoutPageFloat::datetimeInit()
+void LayoutPageFloat::initTime()
 {
-    QStringList list;
-    list += i18n("System: ") + m_locale->formatDateTime(QDateTime::currentDateTime(), false);
-    list += i18n("System: ") + m_locale->formatDateTime(QDateTime::currentDateTime(), true);
-    listFormat->addItems(list);
+    QDateTime tmpTime(QDate(1900, 1, 1), QTime(8, 5, 6, 35), Qt::UTC);
+
+    QListWidgetItem *currentItem = nullptr;
+    for (int i = Format::TimesBegin; i < Format::TimesEnd; ++i) {
+        auto s = m_formatter->timeFormat(tmpTime, (Format::Type)i);
+        if (s.isEmpty()) {
+            continue;
+        }
+        auto item = new QListWidgetItem(s);
+        item->setData(Qt::UserRole, i);
+        listFormat->addItem(item);
+        if (i == cellFormatType) {
+            currentItem = item;
+        }
+    }
+    currentItem ? listFormat->setCurrentItem(currentItem) : listFormat->setCurrentRow(0);
+}
+
+void LayoutPageFloat::initDatetime()
+{
+    const QDateTime tmpDate(QDate(2000, 2, 9), QTime(6, 7, 8), Qt::UTC);
+    QListWidgetItem *currentItem = nullptr;
+    for (int i = Format::DateTimesBegin; i < Format::DateTimesEnd; ++i) {
+        auto s = m_formatter->dateTimeFormat(tmpDate, (Format::Type)i);
+        if (s.isEmpty()) {
+            continue;
+        }
+        auto item = new QListWidgetItem(s);
+        item->setData(Qt::UserRole, i);
+        listFormat->addItem(item);
+        if (i == cellFormatType) {
+            currentItem = item;
+        }
+    }
+    currentItem ? listFormat->setCurrentItem(currentItem) : listFormat->setCurrentRow(0);
 }
 
 void LayoutPageFloat::currencyChanged(const QString &)
@@ -432,31 +403,17 @@ void LayoutPageFloat::currencyChanged(const QString &)
 
 void LayoutPageFloat::updateFormatType()
 {
-    if (generic->isChecked())
+    if (generic->isChecked()) {
         newFormatType = Format::Generic;
-    else if (number->isChecked())
+    } else if (number->isChecked()) {
         newFormatType = Format::Number;
-    else if (percent->isChecked())
+    } else if (percent->isChecked()) {
         newFormatType = Format::Percentage;
-    else if (date->isChecked()) {
-        newFormatType = Format::ShortDate;
-        switch (listFormat->currentRow()) {
-        case 0: newFormatType = Format::ShortDate; break;
-        case 1: newFormatType = Format::TextDate; break;
-        case 2: newFormatType = Format::Date1; break;
-        case 3: newFormatType = Format::Date2; break;
-        case 4: newFormatType = Format::Date3; break;
-        case 5: newFormatType = Format::Date4; break;
-        case 6: newFormatType = Format::Date5; break;
-        case 7: newFormatType = Format::Date6; break;
-        case 8: newFormatType = Format::Date7; break;
-        case 9: newFormatType = Format::Date8; break;
-        }
-    } else if (money->isChecked())
+    } else if (money->isChecked()) {
         newFormatType = Format::Money;
-    else if (scientific->isChecked())
+    } else if (scientific->isChecked()) {
         newFormatType = Format::Scientific;
-    else if (fraction->isChecked()) {
+    } else if (fraction->isChecked()) {
         newFormatType = Format::fraction_half;
         switch (listFormat->currentRow()) {
         case 0: newFormatType = Format::fraction_half; break;
@@ -469,24 +426,20 @@ void LayoutPageFloat::updateFormatType()
         case 7: newFormatType = Format::fraction_two_digits; break;
         case 8: newFormatType = Format::fraction_three_digits; break;
         }
+    } else if (datetime->isChecked()) {
+        const auto item = listFormat->currentItem();
+        newFormatType = item ? (Format::Type)(item->data(Qt::UserRole).toInt()) : Format::DateTimesBegin;
+    } else if (date->isChecked()) {
+        const auto item = listFormat->currentItem();
+        newFormatType = item ? (Format::Type)(item->data(Qt::UserRole).toInt()) : Format::DatesBegin;
     } else if (time->isChecked()) {
-        newFormatType = Format::Time;
-        switch (listFormat->currentRow()) {
-        case 0: newFormatType = Format::Time; break;
-        case 1: newFormatType = Format::SecondeTime; break;
-        case 2: newFormatType = Format::Time1; break;
-        case 3: newFormatType = Format::Time2; break;
-        case 4: newFormatType = Format::Time3; break;
-        case 5: newFormatType = Format::Time4; break;
-        case 6: newFormatType = Format::Time5; break;
-        case 7: newFormatType = Format::Time6; break;
-        case 8: newFormatType = Format::Time7; break;
-        case 9: newFormatType = Format::Time8; break;
-        }
-    } else if (textFormat->isChecked())
+        const auto item = listFormat->currentItem();
+        newFormatType = item ? (Format::Type)(item->data(Qt::UserRole).toInt()) : Format::TimesBegin;
+    } else if (textFormat->isChecked()) {
         newFormatType = Format::Text;
-    else if (customFormat->isChecked())
+    } else if (customFormat->isChecked()) {
         newFormatType = Format::Custom;
+    }
 }
 
 void LayoutPageFloat::makeformat()
@@ -521,6 +474,9 @@ void LayoutPageFloat::makeformat()
 
     // TODO Use the value from the selected cell? This only works if not editing a style.
     Value val = Value(-12.3456);
+    if (Format::isDate(newFormatType) || Format::isTime(newFormatType) || Format::isDateTime(newFormatType)) {
+        val = Value(4.1234);
+    }
     if (!format->isEnabled()) color = Qt::black;
 
     tmp = m_formatter->formatText(val, newFormatType, precision->value(),
@@ -643,6 +599,8 @@ void LayoutPageFloat::loadFrom(const Style &style, bool /*partial*/)
                 currency->setCurrentIndex(0);
         } else if (cellFormatType == Format::Scientific)
             scientific->setChecked(true);
+        else if (Format::isDateTime(cellFormatType))
+            datetime->setChecked(true);
         else if (Format::isDate(cellFormatType))
             date->setChecked(true);
         else if (Format::isTime(cellFormatType))

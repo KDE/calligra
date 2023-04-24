@@ -16,6 +16,7 @@
 #include "AutoFillCommand.h"
 
 #include "engine/ValueConverter.h"
+#include "engine/CS_Time.h"
 #include "core/ApplicationSettings.h"
 #include "core/Cell.h"
 #include "core/Map.h"
@@ -798,7 +799,7 @@ void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
         const Cell cell = _srcList.value(0);
         if (cell.isTime() || cell.value().format() == Value::fmt_DateTime) {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append(Value(QTime(1, 0)));
+            deltaSequence.append(Value(Time(1, 0)));
         } else if (cell.isDate()) {
             // TODO Stefan: delta depending on minimum unit of format
             Value value(1);

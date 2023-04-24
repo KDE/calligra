@@ -13,6 +13,7 @@
 #include "engine/Localization.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
+#include "engine/CS_Time.h"
 
 // #include <kcalendarsystem.h>
 
@@ -327,39 +328,39 @@ Value func_day(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: HOUR
 Value func_hour(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QTime time;
+    Time time;
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
         time = v.asTime();
     } else
-        time = QTime::currentTime();
-    return Value(time.hour());
+        time = Time::currentTime();
+    return Value(time.hours() % 24); // FIXME: Review: this is the old QTime behaviour, is that correct?
 }
 
 // Function: MINUTE
 Value func_minute(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QTime time;
+    Time time;
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
         time = v.asTime();
     } else
-        time = QTime::currentTime();
+        time = Time::currentTime();
     return Value(time.minute());
 }
 
 // Function: SECOND
 Value func_second(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QTime time;
+    Time time;
     if (args.count() == 1) {
         Value v = calc->conv()->asTime(args[0]);
         if (v.isError()) return v;
         time = v.asTime();
     } else
-        time = QTime::currentTime();
+        time = Time::currentTime();
     return Value(time.second() + qRound(time.msec() * 0.001));
 }
 
@@ -562,13 +563,9 @@ Value func_time(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int h = calc->conv()->asInteger(args[0]).asInteger();
     int m = calc->conv()->asInteger(args[1]).asInteger();
-    int s = calc->conv()->asInteger(args[2]).asInteger();
+    int s = calc->conv()->asFloat(args[2]).asFloat();
 
-    QTime res(0, 0);
-    res = res.addSecs(60 * 60 * h);
-    res = res.addSecs(60 * m);
-    res = res.addSecs(s);
-
+    Time res(h, m, s);
     return Value(res);
 }
 
@@ -582,7 +579,7 @@ Value func_currentDate(valVector, ValueCalc * calc, FuncExtra *)
 Value func_currentTime(valVector, ValueCalc * calc, FuncExtra *)
 {
     Q_UNUSED(calc);
-    return Value(QTime::currentTime());
+    return Value(Time::currentTime());
 }
 
 // Function: CURRENTDATETIME

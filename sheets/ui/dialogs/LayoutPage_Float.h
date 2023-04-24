@@ -22,8 +22,8 @@
 #include <QWidget>
 
 #include "engine/Value.h"
+#include "engine/Format.h"
 #include "core/Currency.h"
-#include "core/Format.h"
 
 class KComboBox;
 class KLineEdit;
@@ -59,8 +59,9 @@ public Q_SLOTS:
     void slotChangeState();
     void makeformat();
     void updateFormatType();
-    void init();
-    void datetimeInit();
+    void initDate();
+    void initTime();
+    void initDatetime();
     void slotChangeValue(int);
     void formatChanged(int);
     void currencyChanged(const QString &);

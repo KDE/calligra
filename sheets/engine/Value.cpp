@@ -308,21 +308,22 @@ Value::Value(const QDateTime& dt, const CalculationSettings* settings)
         : d(Private::null())
 {
     const QDate refDate(settings->referenceDate());
-    const QTime refTime(0, 0);    // reference time is midnight
+    const Time refTime(0, 0);    // reference time is midnight
     d->type = Float;
     d->f = Number(refDate.daysTo(dt.date()));
-    d->f += static_cast<double>(refTime.msecsTo(dt.time())) / 86400000.0;     // 24*60*60*1000
+    const Time time(dt.time());
+    d->f += static_cast<double>(refTime.duration() + time.duration() / 24.);
     d->format = fmt_DateTime;
 }
 
 // create a floating-point value from time
-Value::Value(const QTime& time)
+Value::Value(const Time &time)
         : d(Private::null())
 {
-    const QTime refTime(0, 0);    // reference time is midnight
+    const Time refTime(0, 0);    // reference time is midnight
 
     d->type = Float;
-    d->f = Number(static_cast<double>(refTime.msecsTo(time)) / 86400000.0);      // 24*60*60*1000
+    d->f = (refTime + time).duration() / 24.0;
     d->format = fmt_Time;
 }
 
@@ -513,14 +514,10 @@ QDate Value::asDate(const CalculationSettings* settings) const
 }
 
 // get the value as time
-QTime Value::asTime() const
+Time Value::asTime() const
 {
-    QTime dt(0, 0, 0, 0);
-
-    const int days = asInteger();
-    const int msecs = ::round(numToDouble(asFloat() - double(days)) * 86400000.0);      // 24*60*60*1000
-    dt = dt.addMSecs(msecs);
-
+    Time dt;
+    dt.setDuration(asFloat() * 24);
     return dt;
 }
 
@@ -979,13 +976,23 @@ uint qHash(const Value& value)
   QDebug support
 ****************************************************************************/
 
-QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v)
+QDebug operator<<(QDebug dbg, const Calligra::Sheets::Value& v)
 {
-    QString string;
-    QTextStream stream(&string);
-    stream << v;
-    str << string;
-    return str;
+    dbg.nospace().noquote() << "Calligra::Sheets::Value(";
+    dbg << v.format();
+    switch (v.type()) {
+        case Calligra::Sheets::Value::Empty: dbg << ":Empty"; break;
+        case Calligra::Sheets::Value::Boolean:dbg << ":" << (v.asBoolean() ? "true" : "false"); break;
+        case Calligra::Sheets::Value::Integer: dbg << ":" << v.asInteger(); break;
+        case Calligra::Sheets::Value::Float: dbg << ":" << numToDouble(v.asFloat());  break; // FIXME
+        case Calligra::Sheets::Value::Complex: dbg << ":" << "Complex"; break; //TODO
+        case Calligra::Sheets::Value::String: dbg << ":" << v.asString(); break;
+        case Calligra::Sheets::Value::Array: dbg << ":" << "Array"; break; //TODO
+        case Calligra::Sheets::Value::CellRange: dbg << ":" << "CellRange"; break;
+        default: dbg << ":" << v.errorMessage(); break;
+    }
+    dbg << ')';
+    return dbg.space().quote();
 }
 
 QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format& f)
@@ -996,7 +1003,7 @@ QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format& f)
     case Calligra::Sheets::Value::fmt_Number:   stream << "Number";   break;
     case Calligra::Sheets::Value::fmt_Percent:  stream << "Percent";  break;
     case Calligra::Sheets::Value::fmt_Money:    stream << "Money";    break;
-    case Calligra::Sheets::Value::fmt_DateTime: stream << "DateTime"; break;
+    case Calligra::Sheets::Value::fmt_DateTime: stream << "DateTime";     break;
     case Calligra::Sheets::Value::fmt_Date:     stream << "Date";     break;
     case Calligra::Sheets::Value::fmt_Time:     stream << "Time";     break;
     case Calligra::Sheets::Value::fmt_String:   stream << "String";   break;

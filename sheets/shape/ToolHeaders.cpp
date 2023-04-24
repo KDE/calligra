@@ -129,7 +129,6 @@ qreal Tool::RowHeader::height() const
 qreal Tool::RowHeader::resizeAreaSize() const
 {
     qreal pix = m_pCanvas->viewConverter()->documentToViewY(2.0);
-    qInfo()<<Q_FUNC_INFO<<pix;
     return pix;
 }
 
@@ -353,7 +352,6 @@ void Tool::RowHeader::mouseMove(KoPointerEvent* _ev)
 
     // The button is pressed and we are resizing ?
     if (m_bResize) {
-        qInfo()<<Q_FUNC_INFO<<m_iResizedRow<<ev_PosY<<':'<<scrollOffset()<<height();
         if (ev_PosY < scrollOffset()) {
             m_VScrollBar->setValue(m_VScrollBar->value() - m_VScrollBar->singleStep());
         } else if (ev_PosY > bottom) {
@@ -450,7 +448,6 @@ void Tool::RowHeader::paintSizeIndicator(KoPointerEvent *event)
     pos -= QPoint(0, m_lSize->height());
     m_lSize->move(m_pCanvas->canvasWidget()->mapToGlobal(pos).x(), m_pCanvas->canvasWidget()->mapToGlobal(pos).y());
     m_lSize->show();
-    qInfo()<<Q_FUNC_INFO<<m_geometry<<"rowTop-vpy+h"<<rowTop<<scrollOffset()<<height()<<'='<<yPos<<':'<<pos<<';'<<m_lSize->geometry();
 }
 
 void Tool::RowHeader::removeSizeIndicator()
@@ -650,7 +647,6 @@ void Tool::ColumnHeader::setScrollBars(QScrollBar *hbar, QScrollBar *vbar)
 qreal Tool::ColumnHeader::resizeAreaSize() const
 {
     qreal pix = m_pCanvas->viewConverter()->documentToViewX(2.0);
-    qInfo()<<Q_FUNC_INFO<<pix;
     return pix;
 }
 
@@ -953,7 +949,6 @@ void Tool::ColumnHeader::mouseMove(KoPointerEvent* _ev)
     }
     // The button is pressed and we are resizing ?
     if (m_bResize) {
-        qInfo()<<Q_FUNC_INFO<<m_iResizedColumn<<ev_PosX<<':'<<scrollOffset()<<width();
         if (ev_PosX < scrollOffset()) {
             m_HScrollBar->setValue(m_HScrollBar->value() - m_HScrollBar->singleStep());
         } else if (ev_PosX > right) {
@@ -1053,7 +1048,6 @@ void Tool::ColumnHeader::paintSizeIndicator(KoPointerEvent *event)
     }
     int xPos = viewConverter->documentToViewX(m_geometry.left() - scrollOffset() + (hideColumn ? columnLeft : m_iResizePos));
     m_rubberband->move(xPos, m_rubberband->geometry().top());
-    qInfo()<<Q_FUNC_INFO<<m_geometry<<m_iResizePos<<m_rubberband->geometry();
     QString tip;
     if (hideColumn) {
         tip = i18n("Hide Column");

@@ -864,7 +864,6 @@ int Sheet::canvasOffsetY() const
 
 void Sheet::setCanvasOffsetY(int value)
 {
-//    qInfo()<<Q_FUNC_INFO<<sheetName()<<d->canvasOffsetY<<':'<<value;
     d->canvasOffsetY = value;
 }
 

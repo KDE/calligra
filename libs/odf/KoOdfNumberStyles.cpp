@@ -411,7 +411,24 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
         } else if (localName == "am-pm") {
             format += "ap";
         } else if (localName == "text") {   // literal
-            format += e.text();
+            if (dataStyle.type == Date || dataStyle.type == Time) {
+                static QRegularExpression reg("[dMyhHmszA]"); // maybe only [hHmsz] for Time?
+                auto txt = e.text();
+                const auto match = reg.match(txt);
+                if (match.hasMatch()) {
+                    // add quote, but after space if txt starts with space
+                    int pos = 0;
+                    while (txt.at(pos) == ' ') ++pos;
+                    txt.insert(pos, '\'');
+                    // add quote, but before space if txt ends with space
+                    pos = txt.length()-1;
+                    while (txt.at(pos) == ' ') --pos;
+                    txt.insert(pos+1, '\'');
+                }
+                format += txt;
+            } else {
+                format += e.text();
+            }
         } else if (localName == "suffix") {
             suffix = e.text();
             debugOdf << " suffix :" << suffix;
@@ -881,6 +898,11 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool l
     Q_UNUSED(_prefix);
     Q_UNUSED(_suffix);
     //debugOdf << _format;
+    if (_format.isEmpty()) {
+        errorOdf<<Q_FUNC_INFO<<"Failed to save style, format is empty";
+        Q_ASSERT(!_format.isEmpty());
+        return QString();
+    }
     QString format(_format);
 
     // Not supported into Qt: "era" "week-of-year" "quarter"
@@ -898,6 +920,15 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool l
             if (antislash) {
                 text += format[0];
                 format.remove(0, 1);
+            } else if (format.at(0) == '\'') {
+                format.remove(0, 1);
+                do {
+                    text += format[0];
+                    format.remove(0, 1);
+                } while (format.length() > 0 && format.at(0) != '\'');
+                if (format.at(0) == '\'') {
+                    format.remove(0, 1);
+                }
             }
             //TODO implement loading ! What is it ?
             else if (format.startsWith("MMMMM")) {        // MMMMM is extra-short month name (only 1st character)

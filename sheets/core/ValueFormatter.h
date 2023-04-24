@@ -14,6 +14,7 @@
 #include "Style.h"
 
 #include "engine/Number.h"
+#include "engine/Format.h"
 
 namespace Calligra
 {
@@ -62,29 +63,24 @@ public:
                      const QString& formatString = QString(),
                      bool thousandsSep = true);
 
+//NOTE: All dates must be formatted using dateTimeFormat
     /**
-     * Creates a date format.
-     * \param date the date
-     * \param formatType the value format, e.g. number, date
-     * \param formatString the Qt format string
+     * Format @p date in accordance with @p formatString.
+     * If @p formatString is empty, the date is formatted using @p formatType
      */
     QString dateFormat(const QDate& date, Format::Type formatType, const QString& formatString = QString() );
 
     /**
-     * Creates a time format.
-     * \param time the time
-     * \param formatType the value format, e.g. number, date
-     * \param formatString the Qt format string
+     * Format @p time in accordance with @p formatString.
+     * If @p formatString is empty, the time is formatted using @p formatType
      */
     QString timeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
 
     /**
-     * Creates a date and time format.
-     * \param time the time
-     * \param formatType the value format, e.g. number, date
-     * \param formatString the Qt format string
+     * Format the dattime @p time in accordance with @p formatString.
+     * If @p formatString is empty, the time is formatted using @p formatType
      */
-    QString dateTimeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString() );
+    QString dateTimeFormat(const QDateTime& time, Format::Type formatType, const QString& formatString = QString());
 
     /**
      * Determines the formatting type that should be used to format this value

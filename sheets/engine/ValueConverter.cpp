@@ -350,15 +350,15 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
     case Value::Float:
     case Value::Complex:
         val = Value(value.asFloat());
-        val.setFormat(Value::fmt_DateTime);
+        val.setFormat(Value::fmt_Date);
         break;
     case Value::String:
-        val = m_parser->tryParseDateTime(value.asString(), &okay);
+        val = m_parser->tryParseDate(value.asString(), &okay);
         if (!okay)
             val = Value::errorVALUE();
         if (ok)
             *ok = okay;
-        val.setFormat(Value::fmt_DateTime);
+        val.setFormat(Value::fmt_Date);
         break;
     case Value::Array:
         val = asDateTime(value.element(0, 0));
@@ -425,11 +425,11 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
 
     switch (value.type()) {
     case Value::Empty:
-        val = Value(QTime::currentTime());
+        val = Value(Time::currentTime());
         break;
     case Value::Boolean:
         //ignore the bool value... any better idea? ;)
-        val = Value(QTime::currentTime());
+        val = Value(Time::currentTime());
         break;
     case Value::Integer:
     case Value::Float:
@@ -453,7 +453,6 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
     case Value::Error:
         break;
     };
-
     return val;
 }
 
@@ -492,7 +491,7 @@ QDate ValueConverter::toDate(const Value& value) const
     return asDate(value).asDate(settings());
 }
 
-QTime ValueConverter::toTime(const Value& value) const
+Time ValueConverter::toTime(const Value& value) const
 {
     return asTime(value).asTime();
 }

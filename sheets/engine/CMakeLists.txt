@@ -2,6 +2,8 @@
 
 set (calligrasheetsengine_LIB_SRCS
     SheetsDebug.cpp
+    CS_Time.cpp
+    Format.cpp
     Number.cpp
     Util.cpp
     CalculationSettings.cpp

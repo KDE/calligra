@@ -8,7 +8,7 @@
 
 #include "AbstractRegionCommand.h"
 #include "engine/Value.h"
-#include "core/Format.h"
+#include "engine/Format.h"
 
 namespace Calligra
 {

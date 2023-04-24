@@ -51,9 +51,9 @@ Value ValueParser::parse(const QString& str) const
     if (ok)
         return val;
 
-// Then as bool
-// Note - I swapped the order of these two to try parsing as a number
-// first because that will probably be the most common case
+    // Then as bool
+    // Note - I swapped the order of these two to try parsing as a number
+    // first because that will probably be the most common case
     val = tryParseBool(strStripped, &ok);
     if (ok)
         return val;
@@ -314,11 +314,12 @@ bool ValueParser::containsDateTimeSeparator(const QString &str) const
 Value ValueParser::tryParseDateTime(const QString& str, bool *ok) const
 {
     *ok = false;
-    if (!containsDateTimeSeparator(str)) return Value();
+    if (!containsDateTimeSeparator(str)) {
+        return Value(QDateTime(), m_settings);
+    }
 
     Localization *locale = m_settings->locale();
     QDateTime datetime = locale->readDateTime(str, ok);
-
     // Try without the year
     if (!(*ok)) {
         QString fmt = locale->dateTimeFormat(true);
@@ -338,13 +339,17 @@ Value ValueParser::tryParseDateTime(const QString& str, bool *ok) const
             datetime.setDate(QDate(year, datetime.date().month(), datetime.date().day()));
         }
     }
-
+#if 0
+    // TODO review this
+    // This returns a valid datetime even if time component is missing
+    // which means we get a fmt_DateTime Value instead of the expected fmt_Date
     if (!(*ok)) {
         // Still not valid - try to use the standard Qt date parsing, using ISO 8601 format
         datetime = QDateTime::fromString(str, Qt::ISODate);
         if (datetime.isValid())
             *ok = true;
     }
+#endif
 
     if (*ok) {
         // repair two-digit years
@@ -354,17 +359,19 @@ Value ValueParser::tryParseDateTime(const QString& str, bool *ok) const
             datetime.setDate(QDate(year, datetime.date().month(), datetime.date().day()));
     }
 
-    return Value(datetime, m_settings);
+    Value v(datetime, m_settings);
+    return v;
 }
 
 Value ValueParser::tryParseDate(const QString& str, bool *ok) const
 {
     *ok = false;
-    if (!containsDateTimeSeparator(str)) return Value();
+    if (!containsDateTimeSeparator(str)) {
+        return Value(QDate(), m_settings);
+    }
 
     Localization *locale = m_settings->locale();
     QDate date = locale->readDate(str, ok);
-
     // Try without the year
     if (!(*ok)) {
         QString fmt = locale->dateFormat(true);
@@ -397,26 +404,19 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
         if (year != date.year())
             date.setDate(year, date.month(), date.day());
     }
-
-    return Value(date, m_settings);
+    Value v(date, m_settings);
+    return v;
 }
 
 Value ValueParser::tryParseTime(const QString& str, bool *ok) const
 {
-    *ok = false;
-    if (!containsDateTimeSeparator(str)) return Value();
-
-    Localization *locale = m_settings->locale();
-    QTime time = locale->readTime(str, ok);
-
-    if (!(*ok)) {
-        // Try to use the standard Qt time parsing, using ISO 8601 format
-        time = QTime::fromString(str, Qt::ISODate);
-        if (time.isValid())
-            *ok = true;
+    if (ok) *ok = false;
+    if (!containsDateTimeSeparator(str)) {
+        return Value(); // Should an invalid fmt_Time be returned?
     }
 
-    return Value(time);
+    const Localization *locale = m_settings->locale();
+    Time time = locale->readTime(str, ok);
+    Value v(time);
+    return v;
 }
-
-

@@ -25,7 +25,6 @@ set (ksp_DIR_SRCS
 
 set (calligrasheetscore_LIB_SRCS
     Currency.cpp
-    Format.cpp
     ValueFormatter.cpp
     Cell.cpp
     Map.cpp

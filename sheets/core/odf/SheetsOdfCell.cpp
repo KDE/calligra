@@ -206,9 +206,9 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
             }
         } else if (valuetype == sDate) {
             QString value = element.attributeNS(KoXmlNS::office, sDateValue, QString());
-
-            // "1980-10-15" or "2001-01-01T19:27:41"
-            int year = 0, month = 0, day = 0, hours = 0, minutes = 0, seconds = 0;
+            // "1980-10-15" or "2001-01-01T19:27:41.123456"
+            int year = 0, month = 0, day = 0, hours = 0, minutes = 0;
+            Number seconds = 0.0; // seconds may have fractions
             bool hasTime = false;
             bool ok = false;
 
@@ -230,8 +230,9 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
                                 if (ok) {
                                     int p5 = value.indexOf(':', ++p4);
                                     minutes = value.midRef(p4, p5 - p4).toInt(&ok);
-                                    if (ok)
-                                        seconds = value.rightRef(value.length() - p5 - 1).toInt(&ok);
+                                    if (ok) {
+                                        seconds = value.rightRef(value.length() - p5 - 1).toDouble(&ok);
+                                    }
                                 }
                             }
                         } else {
@@ -242,10 +243,18 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
             }
 
             if (ok) {
-                if (hasTime)
-                    cell->setValue(Value(QDateTime(QDate(year, month, day), QTime(hours, minutes, seconds)), cell->sheet()->map()->calculationSettings()));
-                else
-                    cell->setValue(Value(QDate(year, month, day), cell->sheet()->map()->calculationSettings()));
+                const auto settings = cell->sheet()->map()->calculationSettings();
+                if (hasTime) {
+                    const QDateTime ref(settings->referenceDate(), QTime(), Qt::UTC);
+                    // handle fractions of seconds so not to loose precision
+                    const QDateTime dt(QDate(year, month, day), QTime(hours, minutes, 0), Qt::UTC);
+                    Number v = (Number(ref.msecsTo(dt)) / (24*60*60*1000)) + (seconds / (24*60*60));
+                    Value value(v);
+                    value.setFormat(Value::fmt_Date);
+                    cell->setValue(value);
+                } else {
+                    cell->setValue(Value(QDate(year, month, day), settings));
+                }
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 //Sebsauer: Fixed now. Value::Format handles it correct.
 #if 0
@@ -254,27 +263,30 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
                 setStyle(s);
 #endif
                 // debugSheetsODF << "cell:" << cell->name() << "Type: date, value:" << value << "Date:" << year << " -" << month << " -" << day;
+            } else {
+                warnSheetsODF<<"Could not parse date:"<<value;
             }
         } else if (valuetype == sTime) {
             QString value = element.attributeNS(KoXmlNS::office, sTimeValue, QString());
 
-            // "PT15H10M12S"
-            int hours = 0, minutes = 0, seconds = 0;
+            // "[-]PT98H10M12.245678S"
+            Number number = 0.0; // resulting duration in days
             int l = value.length();
             QString num;
             bool ok = false;
             for (int i = 0; i < l; ++i) {
-                if (value[i].isNumber()) {
+                if (value[i].isNumber() || value[i] == '.') {
                     num += value[i];
                     continue;
-                } else if (value[i] == 'H')
-                    hours   = num.toInt(&ok);
-                else if (value[i] == 'M')
-                    minutes = num.toInt(&ok);
-                else if (value[i] == 'S')
-                    seconds = num.toInt(&ok);
-                else
+                } else if (value[i] == 'H') {
+                    number = num.toDouble(&ok) / 24;
+                } else if (value[i] == 'M') {
+                    number += num.toDouble(&ok) / (24*60);
+                } else if (value[i] == 'S') {
+                    number += num.toDouble(&ok) / (24*60*60);
+                } else {
                     continue;
+                }
                 //debugSheetsODF << "Num:" << num;
                 num.clear();
                 if (!ok)
@@ -282,9 +294,11 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
             }
 
             if (ok) {
-                // Value kval( timeToNum( hours, minutes, seconds ) );
-                // cell->setValue( kval );
-                cell->setValue(Value(QTime(hours % 24, minutes, seconds)));
+                // handle negative durations
+                number = value.startsWith('-') ? -number : number;
+                Value v(number);
+                v.setFormat(Value::fmt_Time);
+                cell->setValue(v);
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 #if 0
                 Style style;
@@ -893,11 +907,33 @@ QString Odf::toSaveString(const Value &value, const Value::Format format, Calcul
         return QString::number((double) numToDouble(value.asFloat()));
     case Value::fmt_Money:
         return QString::number((double) numToDouble(value.asFloat()));
-    case Value::fmt_DateTime: return QString();  //NOTHING HERE
-    case Value::fmt_Date:
-        return value.asDate(cs).toString(Qt::ISODate);
-    case Value::fmt_Time:
-        return value.asTime().toString("'PT'hh'H'mm'M'ss'S'");
+    case Value::fmt_DateTime:
+    case Value::fmt_Date: {
+        auto dt = value.asDateTime(cs);
+        auto s = dt.toString(Qt::ISODateWithMs);
+        // remove possible timespec info
+        if (s.contains('Z')) {
+            s.remove(s.indexOf('Z'), 1);
+        }
+        return s;
+    }
+    case Value::fmt_Time: {
+        // handle negative durations, hours > 24 and seconds precision
+        QString format("PT%1H%2M%3S");
+        Number v = value.asFloat() * 24; // value in hours
+        if (v < 0) {
+            format.prepend('-');
+            v = -v;
+        }
+        const int hours = (int)v;
+        v = (v - hours) * 60;
+        const int mins = (int)v;
+        const double secs = (v - mins) * 60;
+
+        const auto res = format.arg(QString::number(hours), 2, '0').arg(QString::number(mins), 2, '0').arg(QString::number(secs, 'g'), 2, '0');
+        //debugSheetsODF<<value<<res;
+        return res;
+    }
     case Value::fmt_String:
         return value.asString();
     default:
@@ -920,7 +956,7 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
         saveFormat = Value::fmt_Boolean;
     else if (valueFormat == Value::fmt_String)  // if it's a text, it needs to be stored as a text
         saveFormat = Value::fmt_String;
-    else if (Format::isDate(shownFormat))
+    else if (Format::isDate(shownFormat) || Format::isDateTime(shownFormat))
         saveFormat = Value::fmt_Date;
     else if (Format::isTime(shownFormat))
         saveFormat = Value::fmt_Time;
@@ -963,7 +999,6 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
         xmlWriter.addAttribute("office:value", saveString);
         break;
     }
-    case Value::fmt_DateTime: break;  //NOTHING HERE
     case Value::fmt_Date: {
         xmlWriter.addAttribute("office:value-type", "date");
         xmlWriter.addAttribute("office:date-value", saveString);

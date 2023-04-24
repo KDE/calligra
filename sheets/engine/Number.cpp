@@ -423,3 +423,9 @@ Number atgh(const Number &n)
 } // namespace Calligra
 
 #endif // CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
+
+QDebug operator<<(QDebug dbg, const Number &n)
+{
+    dbg.noquote() << QString("Number(%1)").arg((double)numToDouble(n), 0, 'g', 10);
+    return dbg;
+}

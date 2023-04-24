@@ -16,13 +16,15 @@
 #include <QSharedDataPointer>
 #endif
 
+#include "Format.h"
+
 #include "sheets_engine_export.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
-
+class Time;
 /**
  * This is a wrapper around QLocale. Matches the old KLocale API.
  * Eventually we'll want to have support for per-document locales, but for now we just use the system one.
@@ -51,8 +53,8 @@ public:
     QDateTime readDateTime(const QString &str, const QString &format, bool *ok) const;
     QDate readDate(const QString &str, bool *ok) const;
     QDate readDate(const QString &str, const QString &format, bool *ok) const;
-    QTime readTime(const QString &str, bool *ok) const;
-    QTime readTime(const QString &str, const QString &format, bool *ok) const;
+    Time readTime(const QString &str, bool *ok) const;
+    Time readTime(const QString &str, const QString &format, bool *ok) const;
 
     /**
      * Uses these date/time formats:
@@ -82,7 +84,9 @@ public:
     QString dateTimeFormat(bool longFormat) const;
     QString dateFormat(bool longFormat) const;
     QString timeFormat(bool longFormat) const;
-    QString dateFormat(int type) const;
+    QString dateTimeFormat(Format::Type type) const;
+    QString dateFormat(Format::Type type) const;
+    QString timeFormat(Format::Type type) const;
 
     QString currencySymbol() const;
 
@@ -105,8 +109,8 @@ public:
     QString formatDateTime(const QDateTime &datetime, const QString &format) const;
     QString formatDate(const QDate &date, bool longFormat = true) const;
     QString formatDate(const QDate &date, const QString &format) const;
-    QString formatTime(const QTime &time, bool longFormat = true) const;
-    QString formatTime(const QTime &time, const QString &format) const;
+    QString formatTime(const Time &time, bool longFormat = true) const;
+    QString formatTime(const Time &time, const QString &format) const;
 
     QString translateString(KLocalizedString str) const;
 
@@ -114,6 +118,7 @@ public:
     QString toLower(const QString &str) const;
 
     QString languageName(bool full) const;
+
 private:
     class Private;
 #ifndef Q_OS_WIN
@@ -123,7 +128,11 @@ private:
     class PrivateData;
     PrivateData *d = nullptr;
 #endif
+    void updateDateTimeFormats();
+    void updateDateFormats();
+    void updateTimeFormats();
     void setLocale(const QLocale &l);
+    QString timeToRegExp(const QString &format, bool neg = false) const;
 };
 
 } // namespace Sheets

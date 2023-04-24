@@ -39,6 +39,7 @@
 #include "sheets/engine/Region.h"
 #include "sheets/engine/Validity.h"
 #include <sheets/engine/ValueConverter.h>
+#include <sheets/engine/CS_Time.h>
 #include <sheets/core/CellStorage.h>
 #include <sheets/core/ColFormatStorage.h>
 #include <sheets/core/Condition.h>
@@ -903,7 +904,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
                 }
             }
         } else if (Calligra::Sheets::Format::isTime(styleList[styleId].formatType())) {
-            QTime time = convertTime(value.asFloat());
+            auto time = Calligra::Sheets::Time(convertTime(value.asFloat()));
             oc.setValue(Calligra::Sheets::Value(time));
             if (!isFormula)
                 oc.setRawUserInput(locale->formatTime(time, true));

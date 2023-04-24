@@ -8,6 +8,7 @@
 #define CALLIGRA_SHEETS_VALUE_CONVERTER
 
 #include "Value.h"
+#include "CS_Time.h"
 
 #include "sheets_engine_export.h"
 
@@ -90,7 +91,7 @@ public:
     QString toString(const Value& value) const;
     QDateTime toDateTime(const Value& value) const;
     QDate toDate(const Value& value) const;
-    QTime toTime(const Value& value) const;
+    Time toTime(const Value& value) const;
 
 private:
     const ValueParser* m_parser;

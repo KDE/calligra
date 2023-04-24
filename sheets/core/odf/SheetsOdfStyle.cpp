@@ -70,7 +70,7 @@ namespace Odf {
     QString saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style,
             const QString &_prefix, const QString &_suffix);
     QString saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
-                                           const QString &_prefix, const QString &_suffix);
+                                           const QString &_prefix, const QString &_suffix, const Localization *locale);
     QString saveStyleNumericCustom(KoGenStyles&mainStyles, Format::Type _style,
             const QString &_prefix, const QString &_suffix);
     QString saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type _style,
@@ -88,7 +88,7 @@ namespace Odf {
 
     // Helpers
     Format::Type dateType(const QString&, const Localization *locale);
-    Format::Type timeType(const QString&);
+    Format::Type timeType(const QString&, const Localization *locale);
     Format::Type fractionType(const QString&);
     Format::Type numberType(const QString&);
     Currency numberCurrency(const QString&);
@@ -373,7 +373,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
         // formatting string
         tmp = dataStyle.formatStr;
         if (!tmp.isEmpty()) {
-            style->setFormatType(timeType(tmp));
+            style->setFormatType(timeType(tmp, locale));
         }
         break;
     case KoOdfNumberStyles::Boolean:
@@ -971,24 +971,6 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
         styleName = saveStyleNumericScientific(mainStyles, _style, _prefix, _postfix, _precision, thousandsSep);
         valueType = "float";
         break;
-    case Format::ShortDate:
-    case Format::TextDate:
-        styleName = saveStyleNumericDate(mainStyles, _style, _prefix, _postfix, locale);
-        valueType = "date";
-        break;
-    case Format::Time:
-    case Format::SecondeTime:
-    case Format::Time1:
-    case Format::Time2:
-    case Format::Time3:
-    case Format::Time4:
-    case Format::Time5:
-    case Format::Time6:
-    case Format::Time7:
-    case Format::Time8:
-        styleName = saveStyleNumericTime(mainStyles, _style, _prefix, _postfix);
-        valueType = "time";
-        break;
     case Format::fraction_half:
     case Format::fraction_quarter:
     case Format::fraction_eighth:
@@ -1001,17 +983,6 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
         styleName = saveStyleNumericFraction(mainStyles, _style, _prefix, _postfix);
         valueType = "float";
         break;
-    case Format::Date1:
-    case Format::Date2:
-    case Format::Date3:
-    case Format::Date4:
-    case Format::Date5:
-    case Format::Date6:
-    case Format::Date7:
-    case Format::Date8:
-        styleName = saveStyleNumericDate(mainStyles, _style, _prefix, _postfix, locale);
-        valueType = "date";
-        break;
     case Format::Custom:
         styleName = saveStyleNumericCustom(mainStyles, _style, _prefix, _postfix);
         break;
@@ -1022,9 +993,15 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
             valueType = "float";
         }
         break;
-    case Format::DateTime:
     default:
-        ;
+        if (Format::isDate(_style) || Format::isDateTime(_style)) {
+            styleName = saveStyleNumericDate(mainStyles, _style, _prefix, _postfix, locale);
+            valueType = "date";
+        } else if (Format::isTime(_style)) {
+            styleName = saveStyleNumericTime(mainStyles, _style, _prefix, _postfix, locale);
+            valueType = "time";
+        }
+        break;
     }
     if (!styleName.isEmpty()) {
         style.addAttribute("style:data-style-name", styleName);
@@ -1116,41 +1093,12 @@ QString Odf::saveStyleNumericDate(KoGenStyles&mainStyles, Format::Type _style,
                                        const QString& _prefix, const QString& _postfix, Localization *locale)
 {
     QString format;
-    switch (_style) {
-        //TODO fixme use locale of Calligra Sheets and not kglobal
-    case Format::ShortDate:
-        format = locale->dateFormat(false);
-        break;
-    case Format::TextDate:
-        format = locale->dateFormat(true);
-        break;
-    case Format::Date1:
-        format = locale->dateFormat(1);
-        break;
-    case Format::Date2:
-        format = locale->dateFormat(2);
-        break;
-    case Format::Date3:
-        format = locale->dateFormat(3);
-        break;
-    case Format::Date4:
-        format = locale->dateFormat(4);
-        break;
-    case Format::Date5:
-        format = locale->dateFormat(5);
-        break;
-    case Format::Date6:
-        format = locale->dateFormat(6);
-        break;
-    case Format::Date7:
-        format = locale->dateFormat(7);
-        break;
-    case Format::Date8:
-        format = locale->dateFormat(8);
-        break;
-    default:
-        debugSheetsODF << "this date format is not defined ! :" << _style;
-        break;
+    if (Format::isDate(_style)) {
+        format = locale->dateFormat(_style);
+    } else if (Format::isDateTime(_style)) {
+        format = locale->dateTimeFormat(_style);
+    } else {
+        warnSheetsODF << "this date format is not defined ! :" << _style;
     }
     return KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format, false, _prefix, _postfix);
 }
@@ -1176,7 +1124,7 @@ QString Odf::saveStyleNumericCustom(KoGenStyles& /*mainStyles*/, Format::Type /*
 }
 
 QString Odf::saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
-                                       const QString& _prefix, const QString& _postfix)
+                                       const QString& _prefix, const QString& _postfix, const Localization *locale)
 {
     //<number:time-style style:name="N42" style:family="data-style">
     //<number:hours number:style="long"/>
@@ -1187,44 +1135,12 @@ QString Odf::saveStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
     //</number:time-style>
 
     QString format;
-    bool locale = false;
-    //TODO use format
-    switch (_style) {
-    case Format::Time: //TODO FIXME
-        format = "hh:mm:ss";
-        break;
-    case Format::SecondeTime: //TODO FIXME
-        format = "hh:mm";
-        break;
-    case Format::Time1:
-        format = "h:mm AP";
-        break;
-    case Format::Time2:
-        format = "h:mm:ss AP";
-        break;
-    case Format::Time3: // 9 h 01 min 28 s
-        format = "hh \\h mm \\m\\i\\n ss \\s";
-        break;
-    case Format::Time4:
-        format = "hh:mm";
-        break;
-    case Format::Time5:
-        format = "hh:mm:ss";
-        break;
-    case Format::Time6:
-        format = "m:ss";
-        break;
-    case Format::Time7:
-        format = "h:mm:ss";
-        break;
-    case Format::Time8:
-        format = "h:mm";
-        break;
-    default:
+    if (Format::isTime(_style)) {
+        format = locale->timeFormat(_style);
+    } else {
         debugSheetsODF << "time format not defined :" << _style;
-        break;
     }
-    return KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format, locale, _prefix, _postfix);
+    return KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format, false, _prefix, _postfix);
 }
 
 QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type formatType,
@@ -1275,40 +1191,28 @@ QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type form
 
 Format::Type Odf::dateType(const QString &f, const Localization *locale)
 {
-    if (f == locale->dateFormat(false)) return Format::ShortDate;
-    if (f == locale->dateFormat(true)) return Format::TextDate;
-
-    if (f == locale->dateFormat(1)) return Format::Date1;
-    if (f == locale->dateFormat(2)) return Format::Date2;
-    if (f == locale->dateFormat(3)) return Format::Date3;
-    if (f == locale->dateFormat(4)) return Format::Date4;
-    if (f == locale->dateFormat(5)) return Format::Date5;
-    if (f == locale->dateFormat(6)) return Format::Date6;
-    if (f == locale->dateFormat(7)) return Format::Date7;
-    if (f == locale->dateFormat(8)) return Format::Date8;
+    for (int i = Format::DatesBegin; i < Format::DatesEnd; ++i) {
+        if (f == locale->dateFormat((Format::Type)i)) {
+            return (Format::Type(i));
+        }
+    }
+    for (int i = Format::DateTimesBegin; i < Format::DateTimesEnd; ++i) {
+        if (f == locale->dateTimeFormat((Format::Type)i)) {
+            return (Format::Type(i));
+        }
+    }
+    warnSheetsODF<<Q_FUNC_INFO<<"Unknown date or datetime format:"<<f;
     return Format::ShortDate;
 }
 
-Format::Type Odf::timeType(const QString &_format)
+Format::Type Odf::timeType(const QString &_format, const Localization *locale)
 {
-    if (_format == "h:mm AP")
-        return Format::Time1;
-    else if (_format == "h:mm:ss AP")
-        return Format::Time2;
-    else if (_format == "hh \\h mm \\m\\i\\n ss \\s")
-        return Format::Time3;
-    else if (_format == "hh:mm")
-        return Format::Time4;
-    else if (_format == "hh:mm:ss")
-        return Format::Time5;
-    else if (_format == "m:ss")
-        return Format::Time6;
-    else if (_format == "h:mm:ss")
-        return Format::Time7;
-    else if (_format == "h:mm")
-        return Format::Time8;
-    else
-        return Format::Time;
+    for (int i = Format::TimesBegin; i < Format::TimesEnd; ++i) {
+        if (_format == locale->timeFormat((Format::Type)i)) {
+            return (Format::Type)i;
+        }
+    }
+    return Format::Time;
 }
 
 Currency Odf::numberCurrency(const QString &_format)

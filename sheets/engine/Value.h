@@ -15,6 +15,7 @@
 
 #include "sheets_engine_export.h"
 #include "Number.h"
+#include "CS_Time.h"
 
 using namespace std;
 
@@ -154,7 +155,7 @@ public:
      * Creates a floating-point value from time.
      * See also note above.
      */
-    explicit Value(const QTime& time);
+    explicit Value(const Time& time);
 
     /**
      * Creates a floating-point value from date.
@@ -316,7 +317,7 @@ public:
     /**
      * Returns the time representation of this value.
      */
-    QTime asTime() const;
+    Time asTime() const;
 
     /**
      * Returns an element in the array value.

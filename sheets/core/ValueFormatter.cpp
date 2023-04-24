@@ -44,7 +44,6 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
 
     //step 1: determine formatting that will be used
     fmtType = determineFormatting(value, fmtType);
-
     //step 2: format the value !
     bool ok = false;
 
@@ -61,7 +60,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     }
 
     //datetime
-    else if (fmtType == Format::DateTime || (Format::isDate(fmtType) && !formatString.isEmpty()) ) {
+    else if (Format::isDateTime(fmtType)) {
         Value dateValue = m_converter->asDateTime(value, &ok);
         if (ok) {
             result = Value(dateTimeFormat(dateValue.asDateTime(settings()), fmtType, formatString));
@@ -69,7 +68,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         }
     }
 
-    //
+    //date
     else if (Format::isDate(fmtType)) {
         Value dateValue = m_converter->asDate(value, &ok);
         if (ok) {
@@ -164,13 +163,13 @@ Format::Type ValueFormatter::determineFormatting(const Value &value,
             fmtType = Format::Money;
             break;
         case Value::fmt_DateTime:
-            fmtType = Format::DateTime;
+            fmtType = Format::DateTimeShort;
             break;
         case Value::fmt_Date:
             fmtType = Format::ShortDate;
             break;
         case Value::fmt_Time:
-            fmtType = Format::Time8; // [h]:mm
+            fmtType = Format::DurationHourShort; // meant to be [hh]:mm
             break;
         case Value::fmt_String:
             //this should never happen
@@ -493,12 +492,30 @@ QString ValueFormatter::fractionFormat(Number value, Format::Type fmtType)
 
 QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, const QString& formatString)
 {
-    if (!formatString.isEmpty()) {
-        return _dt.toString( formatString );
+    const auto locale = m_converter->settings()->locale();
+    auto format = formatString;
+    if (format.isEmpty()) {
+        format = locale->timeFormat(fmtType);
     }
-
-    const QDateTime dt(_dt.toUTC());
-    QString result;
+    if (format.contains("[h]")) {
+        format.replace("[h]", "%1");
+        auto res = locale->formatDateTime(_dt, format);
+        QDateTime ref(settings()->referenceDate(), QTime(), Qt::UTC);
+        auto msecs = ref.msecsTo(_dt);
+        auto hours = msecs / 3600000;
+        return res.arg(hours);
+    }
+    if (format.contains("[mm]")) {
+        format.replace("[mm]", "%1");
+        auto res = locale->formatDateTime(_dt, format);
+        QDateTime ref(settings()->referenceDate(), QTime(), Qt::UTC);
+        auto msecs = ref.msecsTo(_dt);
+        auto mins = msecs / 60000;
+        return res.arg(mins);
+    }
+    return locale->formatDateTime(_dt, format);
+#if 0
+    // review this
     if (fmtType == Format::Time)
         result = m_converter->settings()->locale()->formatTime(dt.time(), false);
     else if (fmtType == Format::SecondeTime)
@@ -506,7 +523,7 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
     else {
         const int d = settings()->referenceDate().daysTo(dt.date());
         int h, m, s;
-        if (fmtType != Format::Time6 && fmtType != Format::Time7 && fmtType != Format::Time8) { // time
+        if (fmtType != Format::DurationMinute /*&& fmtType != Format::Time7 && fmtType != Format::Time8*/) { // time FIXME
             h = dt.time().hour();
             m = dt.time().minute();
             s = dt.time().second();
@@ -550,75 +567,72 @@ QString ValueFormatter::timeFormat(const QDateTime &_dt, Format::Type fmtType, c
                      .arg(QString::number(h), 1)
                      .arg(QString::number(m), 2, '0')
                      .arg(QString::number(s), 2, '0');
-        } else if (fmtType == Format::Time6) { // [mm]:ss
+        } else if (fmtType == Format::DurationMinute) { // [mm]:ss
             result = sign + QString("%1:%2")
                      .arg(QString::number(m + h * 60), 2, '0')
                      .arg(QString::number(s), 2, '0');
-        } else if (fmtType == Format::Time7) { // [h]:mm:ss
-            result = sign + QString("%1:%2:%3")
-                     .arg(QString::number(h), 1)
-                     .arg(QString::number(m), 2, '0')
-                     .arg(QString::number(s), 2, '0');
-        } else if (fmtType == Format::Time8) { // [h]:mm
-            result = sign + QString("%1:%2")
-                     .arg(QString::number(h), 1)
-                     .arg(QString::number(m), 2, '0');
+// FIXME        } else if (fmtType == Format::Time7) { // [h]:mm:ss
+//            result = sign + QString("%1:%2:%3")
+//                     .arg(QString::number(h), 1)
+//                     .arg(QString::number(m), 2, '0')
+//                     .arg(QString::number(s), 2, '0');
+//        } else if (fmtType == Format::Time8) { // [h]:mm
+//            result = sign + QString("%1:%2")
+//                     .arg(QString::number(h), 1)
+//                     .arg(QString::number(m), 2, '0');
         }
     }
     return result;
+#endif
 }
 
 QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtType, const QString& formatString )
 {
     if( !formatString.isEmpty() ) {
-        if (formatString.contains('X')) {               // if we have the special extra-short month in the format string
-            int monthPos = formatString.indexOf('X');
-            QString before = formatString.left(monthPos);                               // get string before and after the extra-short month sign
-            QString after = formatString.right(formatString.size() - monthPos - 1);
+        if (formatString.contains("MMMMM")) {               // if we have the special extra-short month in the format string
+            auto fmt = formatString;
+            fmt.replace("MMMMM", "X");
+            int monthPos = fmt.indexOf('X');
+            QString before = fmt.left(monthPos);                               // get string before and after the extra-short month sign
+            QString after = fmt.right(fmt.size() - monthPos - 1);
             QString monthShort = _dt.toString("MMM").left(1);                           // format the month as extra-short (only 1st letter)
-            return _dt.toString( before ) + monthShort + _dt.toString( after );         // and construct the final date
+            return _dt.toString(before) + monthShort + _dt.toString(after);         // and construct the final date
         }
-
-        return _dt.toString( formatString );
+        Localization *locale = m_converter->settings()->locale();
+        return locale->formatDateTime(_dt, formatString);
     }
-
-    Q_UNUSED(fmtType);
-    QString result;
-    // pretty lame, just assuming something for the format
-    // TODO: locale-aware formatting
-    result += dateFormat(_dt.date(), Format::ShortDate) + ' ' + timeFormat(_dt, Format::Time1);
-    return result;
+    Localization *locale = m_converter->settings()->locale();
+    QString format = locale->dateTimeFormat(fmtType);
+    if (format.isEmpty()) {
+        // just in case...
+        warnSheets<<Q_FUNC_INFO<<"WARN: Unknown format"<<_dt<<"fmtType:"<<fmtType;
+        format = locale->dateTimeFormat(Format::DateTimeShort); // use a sane default
+        Q_ASSERT(!format.isEmpty());
+    }
+    return dateTimeFormat(_dt, fmtType, format);
 }
 
 QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, const QString& formatString )
 {
-    Localization *locale = m_converter->settings()->locale();
-    if (!formatString.isEmpty())
+    if( !formatString.isEmpty() ) {
+        if (formatString.contains("MMMMM")) {               // if we have the special extra-short month in the format string
+            auto fmt = formatString;
+            fmt.replace("MMMMM", "X");
+            int monthPos = fmt.indexOf('X');
+            QString before = fmt.left(monthPos);                               // get string before and after the extra-short month sign
+            QString after = fmt.right(formatString.size() - monthPos - 1);
+            QString monthShort = date.toString("MMM").left(1);                           // format the month as extra-short (only 1st letter)
+            return date.toString(before) + monthShort + date.toString(after);         // and construct the final date
+        }
+        Localization *locale = m_converter->settings()->locale();
         return locale->formatDate(date, formatString);
-
-    if (fmtType == Format::ShortDate)
-        return locale->formatDate(date, false);
-
-    if (fmtType == Format::TextDate)
-        return locale->formatDate(date, true);
-
-    int ftype = 0;
-    if (fmtType == Format::Date1) ftype = 1;
-    if (fmtType == Format::Date2) ftype = 2;
-    if (fmtType == Format::Date3) ftype = 3;
-    if (fmtType == Format::Date4) ftype = 4;
-    if (fmtType == Format::Date5) ftype = 5;
-    if (fmtType == Format::Date6) ftype = 6;
-    if (fmtType == Format::Date7) ftype = 7;
-    if (fmtType == Format::Date8) ftype = 8;
-    if (ftype) {
-        QString format = locale->dateFormat(ftype);
-        return locale->formatDate(date, format);
     }
-
-    // default format
-    QString res = locale->formatDate(date, false);
-    return res;
+    Localization *locale = m_converter->settings()->locale();
+    QString format = locale->dateFormat(fmtType);
+    if (format.isEmpty()) {
+        return locale->formatDate(date, false); // default format
+    }
+    return dateFormat(date, fmtType, format);
 }
 
 QString ValueFormatter::complexFormat(const Value& value, int precision,
