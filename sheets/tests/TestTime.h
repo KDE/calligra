@@ -22,6 +22,7 @@ class TestTime : public QObject
 private Q_SLOTS:
     void positiveDuration();
     void positiveConstructors();
+    void casting();
     void operators();
     void qtime();
     void negativeDuration();

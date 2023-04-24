@@ -127,7 +127,10 @@ void TestTime::positiveConstructors()
     QCOMPARE(time.minute(), 0);
     QCOMPARE(time.seconds(), 0.001);
     QCOMPARE(time.msec(), 1);
+}
 
+void TestTime::casting()
+{
     // look for casting problems
     for (int h = 0; h < 30; ++h) {
         for (int m = 0; m < 60; ++m) {
