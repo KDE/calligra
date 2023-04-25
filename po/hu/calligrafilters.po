@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2013-08-12 07:47+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -232,7 +232,7 @@ msgstr "„%1” bejegyzés nem nyitható meg íráshoz."
 msgid "Could not write block"
 msgstr "A blokk nem írható"
 
-#: sheets/csv/csvexport.cc:266
+#: sheets/csv/csvexport.cc:268
 #, kde-format
 msgid "<SHEETNAME>"
 msgstr "<MUNKALAPNÉV>"

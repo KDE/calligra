@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TableShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2022-01-03 17:04+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -132,27 +132,27 @@ msgstr "Možnosti pogleda"
 msgid "Table editing"
 msgstr "Urejanje tabel"
 
-#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
 #, kde-format
 msgid "Area is too large."
 msgstr "Področje je preveliko."
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Hide Row"
 msgstr "Skrij vrstico"
 
-#: ToolHeaders.cpp:431
+#: ToolHeaders.cpp:429
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Višina: %1 %2"
 
-#: ToolHeaders.cpp:1059
+#: ToolHeaders.cpp:1053
 #, kde-format
 msgid "Hide Column"
 msgstr "Skrij stolpec"
 
-#: ToolHeaders.cpp:1061
+#: ToolHeaders.cpp:1055
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Širina: %1 %2"

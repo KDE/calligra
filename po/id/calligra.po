@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2022-09-27 17:54+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -1043,7 +1043,7 @@ msgstr ""
 msgid "Document <i>%1</i> saved"
 msgstr "Dokumen <i>%1</i> disimpan"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1052,38 +1052,38 @@ msgstr ""
 "Kata-sandinya dokumen terenkripsi ini tidak dikenal. Autosimpan digugurkan! "
 "Mohon simpan pekerjaanmu secara manual."
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:715
 #, kde-format
 msgid "Autosaving..."
 msgstr "Mengautosimpan..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:727
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Error selagi autosimpan! Apakah partisinya penuh?"
 
-#: main/KoDocument.cpp:819
+#: main/KoDocument.cpp:820
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Tidak bisa menciptakan file untuk penyimpanan"
 
-#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
-#: main/KoDocument.cpp:950
+#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
+#: main/KoDocument.cpp:951
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Tidak bisa menulis '%1'. Apakah partisinya penuh?"
 
-#: main/KoDocument.cpp:870
+#: main/KoDocument.cpp:871
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Tidak bisa menulis metadata RDF. Apakah partisinya penuh?"
 
-#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Error ketika mencoba menulis '%1'. Apakah partisinya penuh?"
 
-#: main/KoDocument.cpp:1204
+#: main/KoDocument.cpp:1205
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1092,7 +1092,7 @@ msgstr ""
 "URL berformat buruk\n"
 "%1"
 
-#: main/KoDocument.cpp:1220
+#: main/KoDocument.cpp:1221
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1101,102 +1101,102 @@ msgstr ""
 "Sebuah file autosimpan sudah ada untuk dokumen ini.\n"
 "Apakah kamu ingin membukanya?"
 
-#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "File %1 tidak ada."
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1464
 #, kde-format
 msgid "Opening Document"
 msgstr "Pembukaan Dokumen"
 
-#: main/KoDocument.cpp:1478
+#: main/KoDocument.cpp:1479
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Tidak bisa menciptakan plugin filter"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1482
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Tidak bisa menciptakan dokumen output"
 
-#: main/KoDocument.cpp:1484
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "File not found"
 msgstr "File tidak ditemukan"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1488
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Tidak bisa menciptakan penyimpanan"
 
-#: main/KoDocument.cpp:1490
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Tipe MIME buruk"
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Error di dokumen tertanam"
 
-#: main/KoDocument.cpp:1496
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Format not recognized"
 msgstr "Format tidak diakui"
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Not implemented"
 msgstr "Tidak diimplementasikan"
 
-#: main/KoDocument.cpp:1502
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Parsing error"
 msgstr "Error penguraian"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Document is password protected"
 msgstr "Dokumen telah diproteksi sandi"
 
-#: main/KoDocument.cpp:1508
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Invalid file format"
 msgstr "Format file tak absah"
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1516
 #, kde-format
 msgid "Internal error"
 msgstr "Error internal"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Out of memory"
 msgstr "Kehabisan memori"
 
-#: main/KoDocument.cpp:1521
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Plugin Filter Kosong"
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Mencoba memuat ke dalam jenis dokumen yang salah"
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Gagal mengunduh file jarak jauh"
 
-#: main/KoDocument.cpp:1534
+#: main/KoDocument.cpp:1535
 #, kde-format
 msgid "Unknown error"
 msgstr "Error tak diketahui"
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1539
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1207,17 +1207,17 @@ msgstr ""
 "Alasan: %1.\n"
 "%3"
 
-#: main/KoDocument.cpp:1596
+#: main/KoDocument.cpp:1597
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Dokumen <i>%1</i> dimuat"
 
-#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Tidak bisa menemukan %1"
 
-#: main/KoDocument.cpp:1671
+#: main/KoDocument.cpp:1674
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1226,22 +1226,22 @@ msgstr ""
 "Error penguraian dalam %1 di garis %2, kolom %3\n"
 "Pesan error: %4"
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1695
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 bukanlah sebuah file."
 
-#: main/KoDocument.cpp:1707
+#: main/KoDocument.cpp:1710
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Tidak bisa membuka file untuk pembacaan (periksalah perizinan baca)."
 
-#: main/KoDocument.cpp:1718
+#: main/KoDocument.cpp:1721
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Tidak bisa membaca bagian awal si file."
 
-#: main/KoDocument.cpp:1748
+#: main/KoDocument.cpp:1751
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1250,17 +1250,17 @@ msgstr ""
 "error penguraian di dalam dokumen utama di garis %1, kolom %2\n"
 "Pesan error: %3"
 
-#: main/KoDocument.cpp:1769
+#: main/KoDocument.cpp:1772
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Bukan sebuah file Calligra yang absah: %1"
 
-#: main/KoDocument.cpp:1854
+#: main/KoDocument.cpp:1857
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Dokumen tak absah: tidak ada file  'maindoc.xml'."
 
-#: main/KoDocument.cpp:1878
+#: main/KoDocument.cpp:1881
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1269,13 +1269,13 @@ msgstr ""
 "Dokumen <i>%1</i>  berisi berbagai versi. Menuju ke File->Versi untuk "
 "membuka sebuah versi lawas."
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Tak berjudul"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1284,12 +1284,12 @@ msgstr ""
 "<p>Dokumen <b>'%1'</b> telah dimodifikasi.</p><p>Apakah kamu ingin "
 "menyimpannya?</p>"
 
-#: main/KoDocument.cpp:2165
+#: main/KoDocument.cpp:2168
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Error internal: saveXML belum diimplementasikan"
 
-#: main/KoDocument.cpp:2202
+#: main/KoDocument.cpp:2205
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1298,7 +1298,7 @@ msgstr ""
 "Tidak bisa membuka\n"
 "%1"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2208
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1307,32 +1307,32 @@ msgstr ""
 "Tidak bisa membuka %1\n"
 "Alasan: %2"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a word processing"
 msgstr "sebuah pemrosesan kata"
 
-#: main/KoDocument.cpp:2263
+#: main/KoDocument.cpp:2266
 #, kde-format
 msgid "a spreadsheet"
 msgstr "sebuah lembar-kerja"
 
-#: main/KoDocument.cpp:2264
+#: main/KoDocument.cpp:2267
 #, kde-format
 msgid "a presentation"
 msgstr "sebuah presentasi"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2268
 #, kde-format
 msgid "a chart"
 msgstr "sebuah bagan"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2269
 #, kde-format
 msgid "a drawing"
 msgstr "sebuah gambaran"
 
-#: main/KoDocument.cpp:2581
+#: main/KoDocument.cpp:2584
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1341,7 +1341,7 @@ msgstr ""
 "Dokumen \"%1\" telah dimodifikasi.\n"
 "Apakah kamu ingin menyimpan perubahanmu atau membuangnya?"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2586
 #, kde-format
 msgid "Close Document"
 msgstr "Tutup Dokumen"

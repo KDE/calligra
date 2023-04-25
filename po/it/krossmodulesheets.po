@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krossmoduletables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2020-04-11 21:54+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -90,7 +90,7 @@ msgstr "Cella"
 msgid "Range"
 msgstr "Intervallo"
 
-#: ScriptingWriter.h:226
+#: ScriptingWriter.h:227
 msgctxt "(qtundo-format)"
 msgid "Set Values"
 msgstr "Imposta valori"

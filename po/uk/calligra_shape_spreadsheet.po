@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_spreadsheet\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2020-10-28 08:56+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -129,27 +129,27 @@ msgstr "Параметри перегляду"
 msgid "Table editing"
 msgstr "Редагування таблиць"
 
-#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
 #, kde-format
 msgid "Area is too large."
 msgstr "Ділянка занадто велика."
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Hide Row"
 msgstr "Сховати рядок"
 
-#: ToolHeaders.cpp:431
+#: ToolHeaders.cpp:429
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Висота: %1 %2"
 
-#: ToolHeaders.cpp:1059
+#: ToolHeaders.cpp:1053
 #, kde-format
 msgid "Hide Column"
 msgstr "Сховати стовпчик"
 
-#: ToolHeaders.cpp:1061
+#: ToolHeaders.cpp:1055
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Ширина: %1 %2"

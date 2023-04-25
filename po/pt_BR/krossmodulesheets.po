@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krossmodulesheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2023-01-16 23:21-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -93,7 +93,7 @@ msgstr "Célula"
 msgid "Range"
 msgstr "Intervalo"
 
-#: ScriptingWriter.h:226
+#: ScriptingWriter.h:227
 msgctxt "(qtundo-format)"
 msgid "Set Values"
 msgstr "Configurar valores"

@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2012-01-09 00:52+0700\n"
 "Last-Translator: Lê Hoàng Phương <herophuong93@gmail.com>\n"
 "Language-Team: Vietnamese <kde-i18n-vi@kde.org>\n"
@@ -314,7 +314,7 @@ msgstr ""
 msgid "Could not write block"
 msgstr "Không thể đọc từ tệp."
 
-#: sheets/csv/csvexport.cc:266
+#: sheets/csv/csvexport.cc:268
 #, kde-format
 msgid "<SHEETNAME>"
 msgstr "<TÊNTỜ>"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2020-10-28 10:13+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -129,27 +129,27 @@ msgstr "Opcions de visualització"
 msgid "Table editing"
 msgstr "Edició de taules"
 
-#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
 #, kde-format
 msgid "Area is too large."
 msgstr "L'àrea és massa gran."
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Hide Row"
 msgstr "Oculta la fila"
 
-#: ToolHeaders.cpp:431
+#: ToolHeaders.cpp:429
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Alçària: %1 %2"
 
-#: ToolHeaders.cpp:1059
+#: ToolHeaders.cpp:1053
 #, kde-format
 msgid "Hide Column"
 msgstr "Oculta la columna"
 
-#: ToolHeaders.cpp:1061
+#: ToolHeaders.cpp:1055
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Amplària: %1 %2"

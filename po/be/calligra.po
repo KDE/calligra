@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2008-01-01 23:07+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -1082,45 +1082,45 @@ msgstr ""
 msgid "Document <i>%1</i> saved"
 msgstr "Назоў дакумента"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:715
 #, fuzzy, kde-format
 msgid "Autosaving..."
 msgstr "Аўтазахаванне..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:727
 #, fuzzy, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Адбылася памылка пры аўтазахаванні. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:819
+#: main/KoDocument.cpp:820
 #, fuzzy, kde-format
 msgid "Could not create the file for saving"
 msgstr "Не атрымоўваецца адкрыць файл для запісу"
 
-#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
-#: main/KoDocument.cpp:950
+#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
+#: main/KoDocument.cpp:951
 #, fuzzy, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "Не атрымоўваецца захаваць '%1'. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:870
+#: main/KoDocument.cpp:871
 #, fuzzy, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Не атрымоўваецца захаваць '%1'. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
 #, fuzzy, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Не атрымоўваецца захаваць '%1'. Магчыма, дыск перапоўнены."
 
-#: main/KoDocument.cpp:1204
+#: main/KoDocument.cpp:1205
 #, fuzzy, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1129,7 +1129,7 @@ msgstr ""
 "Некарэктны URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1220
+#: main/KoDocument.cpp:1221
 #, fuzzy, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1138,102 +1138,102 @@ msgstr ""
 "Існуе аўтазахаванне гэтага дакумента.\n"
 "Адкрыць аўтазахаванне?"
 
-#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не існуе."
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1464
 #, fuzzy, kde-format
 msgid "Opening Document"
 msgstr "Адкрыць дакумент"
 
-#: main/KoDocument.cpp:1478
+#: main/KoDocument.cpp:1479
 #, fuzzy, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Не атрымоўваецца адкрыць файл для запісу"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1482
 #, fuzzy, kde-format
 msgid "Could not create the output document"
 msgstr "Не атрымоўваецца адкрыць файл для запісу"
 
-#: main/KoDocument.cpp:1484
+#: main/KoDocument.cpp:1485
 #, fuzzy, kde-format
 msgid "File not found"
 msgstr "Файл не знойдзены"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1488
 #, fuzzy, kde-format
 msgid "Cannot create storage"
 msgstr "Немагчыма захаваць дадзеныя"
 
-#: main/KoDocument.cpp:1490
+#: main/KoDocument.cpp:1491
 #, fuzzy, kde-format
 msgid "Bad MIME type"
 msgstr "Няправільны тып MIME"
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1494
 #, fuzzy, kde-format
 msgid "Error in embedded document"
 msgstr "Памылка ва ўкаранёным дакуменце"
 
-#: main/KoDocument.cpp:1496
+#: main/KoDocument.cpp:1497
 #, fuzzy, kde-format
 msgid "Format not recognized"
 msgstr "Недапушчальны фармат"
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1500
 #, fuzzy, kde-format
 msgid "Not implemented"
 msgstr "Не рэалізавана"
 
-#: main/KoDocument.cpp:1502
+#: main/KoDocument.cpp:1503
 #, fuzzy, kde-format
 msgid "Parsing error"
 msgstr "Памылка разбору"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1506
 #, fuzzy, kde-format
 msgid "Document is password protected"
 msgstr "Дакумент абаронены паролем"
 
-#: main/KoDocument.cpp:1508
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Invalid file format"
 msgstr ""
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1516
 #, fuzzy, kde-format
 msgid "Internal error"
 msgstr "Унутраная памылка"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1519
 #, fuzzy, kde-format
 msgid "Out of memory"
 msgstr "Бракуе памяці"
 
-#: main/KoDocument.cpp:1521
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Failed to download remote file"
 msgstr ""
 
-#: main/KoDocument.cpp:1534
+#: main/KoDocument.cpp:1535
 #, fuzzy, kde-format
 msgid "Unknown error"
 msgstr "Невядомая памылка"
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1539
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1244,17 +1244,17 @@ msgstr ""
 "%1\n"
 "Чыннік: %2"
 
-#: main/KoDocument.cpp:1596
+#: main/KoDocument.cpp:1597
 #, fuzzy, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Назоў дакумента"
 
-#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Не атрымалася знайсці %1"
 
-#: main/KoDocument.cpp:1671
+#: main/KoDocument.cpp:1674
 #, fuzzy, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1263,22 +1263,22 @@ msgstr ""
 "Памылка апрацоўкі файла %1 у радку %2, пазіцыі %3\n"
 "Паведамленне аб памылцы: %4"
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1695
 #, fuzzy, kde-format
 msgid "%1 is not a file."
 msgstr "%1 не з'яўляецца файлам."
 
-#: main/KoDocument.cpp:1707
+#: main/KoDocument.cpp:1710
 #, fuzzy, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Не атрымоўваецца адкрыць файл для чытання (праверце правы на чытанне)."
 
-#: main/KoDocument.cpp:1718
+#: main/KoDocument.cpp:1721
 #, fuzzy, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Не атрымоўваецца прачытаць загаловак файла."
 
-#: main/KoDocument.cpp:1748
+#: main/KoDocument.cpp:1751
 #, fuzzy, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1287,30 +1287,30 @@ msgstr ""
 "Памылка апрацоўкі дадзеных файла ў радку %1, калонцы %2\n"
 "Паведамленне аб памылцы: %3"
 
-#: main/KoDocument.cpp:1769
+#: main/KoDocument.cpp:1772
 #, fuzzy, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Няслушны фармат файла KOffice. %1"
 
-#: main/KoDocument.cpp:1854
+#: main/KoDocument.cpp:1857
 #, fuzzy, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Няслушны фармат дакумента: няма файла 'maindoc.xml'."
 
-#: main/KoDocument.cpp:1878
+#: main/KoDocument.cpp:1881
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "Безназоўны"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
 #, fuzzy, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1318,12 +1318,12 @@ msgid ""
 msgstr ""
 "<p>Дакумент <b>'%1'</b> быў зменены.</p><p>Вы жадаеце захаваць яго?</p>"
 
-#: main/KoDocument.cpp:2165
+#: main/KoDocument.cpp:2168
 #, fuzzy, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Унутраная памылка: не рэалізаваны метад saveXML"
 
-#: main/KoDocument.cpp:2202
+#: main/KoDocument.cpp:2205
 #, fuzzy, kde-format
 msgid ""
 "Could not open\n"
@@ -1332,7 +1332,7 @@ msgstr ""
 "Не атрымоўваецца адкрыць\n"
 "%1"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2208
 #, fuzzy, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1341,32 +1341,32 @@ msgstr ""
 "Не атрымоўваецца адкрыць файл %1\n"
 "Чыннік: %2"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2265
 #, fuzzy, kde-format
 msgid "a word processing"
 msgstr "дакумент"
 
-#: main/KoDocument.cpp:2263
+#: main/KoDocument.cpp:2266
 #, fuzzy, kde-format
 msgid "a spreadsheet"
 msgstr "электронная табліца"
 
-#: main/KoDocument.cpp:2264
+#: main/KoDocument.cpp:2267
 #, fuzzy, kde-format
 msgid "a presentation"
 msgstr "прэзентацыя"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2268
 #, fuzzy, kde-format
 msgid "a chart"
 msgstr "дыяграма"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2269
 #, fuzzy, kde-format
 msgid "a drawing"
 msgstr "малюнак"
 
-#: main/KoDocument.cpp:2581
+#: main/KoDocument.cpp:2584
 #, fuzzy, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1374,7 +1374,7 @@ msgid ""
 msgstr ""
 "<p>Дакумент <b>'%1'</b> быў зменены.</p><p>Вы жадаеце захаваць яго?</p>"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2586
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "Іншы дакумент"

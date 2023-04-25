@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krossmodulekspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2016-11-20 12:48+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -96,7 +96,7 @@ msgstr "Célula"
 msgid "Range"
 msgstr "Intervalo"
 
-#: ScriptingWriter.h:226
+#: ScriptingWriter.h:227
 msgctxt "(qtundo-format)"
 msgid "Set Values"
 msgstr "Definir os Valores"

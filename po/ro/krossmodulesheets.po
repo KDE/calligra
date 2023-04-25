@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krossmodulekspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2012-12-22 11:54+0200\n"
 "Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -90,7 +90,7 @@ msgstr "Celulă"
 msgid "Range"
 msgstr "Domeniu"
 
-#: ScriptingWriter.h:226
+#: ScriptingWriter.h:227
 #, fuzzy
 #| msgid "Set Values"
 msgctxt "(qtundo-format)"

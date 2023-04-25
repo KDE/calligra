@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2004-07-06 13:25-0400\n"
 "Last-Translator: Victor Ibragimov <youth_opportunities@tajik.net>\n"
 "Language-Team: Tajik\n"
@@ -245,7 +245,7 @@ msgstr ""
 msgid "Could not write block"
 msgstr "Аз файл хонда натавонист."
 
-#: sheets/csv/csvexport.cc:266
+#: sheets/csv/csvexport.cc:268
 #, fuzzy, kde-format
 msgid "<SHEETNAME>"
 msgstr "<TABLENAME>"

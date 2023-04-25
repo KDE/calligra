@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2021-05-10 06:53+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -237,7 +237,7 @@ msgstr "Der Eintrag „%1“ lässt sich nicht zum Schreiben öffnen."
 msgid "Could not write block"
 msgstr "Der Block kann nicht geschrieben werden"
 
-#: sheets/csv/csvexport.cc:266
+#: sheets/csv/csvexport.cc:268
 #, kde-format
 msgid "<SHEETNAME>"
 msgstr "<TABELLENNAME>"

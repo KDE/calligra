@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2013-08-11 22:54+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -90,7 +90,7 @@ msgstr "Cella"
 msgid "Range"
 msgstr "Tartomány"
 
-#: ScriptingWriter.h:226
+#: ScriptingWriter.h:227
 #, fuzzy
 #| msgid "Set Values"
 msgctxt "(qtundo-format)"

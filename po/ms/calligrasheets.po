@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-23 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -147,27 +147,27 @@ msgstr "Pengepala1"
 msgid "Default"
 msgstr "Hasil"
 
-#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
+#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
 #, kde-format
 msgid "AM"
 msgstr "AM"
 
-#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
+#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
 #, kde-format
 msgid "PM"
 msgstr "PM"
 
-#: core/ValueFormatter.cpp:539
+#: core/ValueFormatter.cpp:556
 #, kde-format
 msgid "h"
 msgstr "jam"
 
-#: core/ValueFormatter.cpp:541
+#: core/ValueFormatter.cpp:558
 #, kde-format
 msgid "min"
 msgstr "minit"
 
-#: core/ValueFormatter.cpp:543
+#: core/ValueFormatter.cpp:560
 #, kde-format
 msgid "s"
 msgstr "saat"
@@ -274,12 +274,12 @@ msgstr ""
 msgid "Related Functions"
 msgstr "<h2>Fungsi Berkaitan</h2><ul>"
 
-#: engine/Localization.cpp:571
+#: engine/Localization.cpp:748
 #, fuzzy, kde-format
 msgid "true"
 msgstr "Jika benar"
 
-#: engine/Localization.cpp:572
+#: engine/Localization.cpp:749
 #, fuzzy, kde-format
 msgid "false"
 msgstr "Jika salah"
@@ -289,61 +289,61 @@ msgstr "Jika salah"
 msgid "Dependency"
 msgstr "Bersandaran"
 
-#: engine/Value.cpp:597
+#: engine/Value.cpp:594
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr ""
 
-#: engine/Value.cpp:605
+#: engine/Value.cpp:602
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr ""
 
-#: engine/Value.cpp:613
+#: engine/Value.cpp:610
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr ""
 
-#: engine/Value.cpp:621
+#: engine/Value.cpp:618
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr ""
 
-#: engine/Value.cpp:629
+#: engine/Value.cpp:626
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr ""
 
-#: engine/Value.cpp:637
+#: engine/Value.cpp:634
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr ""
 
-#: engine/Value.cpp:645
+#: engine/Value.cpp:642
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr ""
 
-#: engine/Value.cpp:653
+#: engine/Value.cpp:650
 #, fuzzy, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "ARS"
 
-#: engine/Value.cpp:661
+#: engine/Value.cpp:658
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr ""
 
-#: engine/Value.cpp:669
+#: engine/Value.cpp:666
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -14691,198 +14691,198 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Guna Gaya"
 
-#: ui/commands/AutoFillCommand.cpp:109
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "January"
 msgstr "Januari"
 
-#: ui/commands/AutoFillCommand.cpp:110
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "February"
 msgstr "Februari"
 
-#: ui/commands/AutoFillCommand.cpp:111
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "March"
 msgstr "Mac"
 
-#: ui/commands/AutoFillCommand.cpp:112
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "April"
 msgstr "April"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "May"
 msgstr "Mei"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "June"
 msgstr "Jun"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "July"
 msgstr "Julai"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "August"
 msgstr "Ogos"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "September"
 msgstr "September"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "October"
 msgstr "Oktober"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "November"
 msgstr "November"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "December"
 msgstr "Disember"
 
-#: ui/commands/AutoFillCommand.cpp:125
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Jan"
 msgstr "Jan"
 
-#: ui/commands/AutoFillCommand.cpp:126
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "Feb"
 msgstr "Feb"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "Mar"
 msgstr "Mac"
 
-#: ui/commands/AutoFillCommand.cpp:128
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "Apr"
 msgstr "Apr"
 
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "Mei"
 
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Jun"
 msgstr "Jun"
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Jul"
 msgstr "Jul"
 
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Aug"
 msgstr "Ogos"
 
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Sep"
 msgstr "Sep"
 
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Oct"
 msgstr "Okt"
 
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Nov"
 msgstr "Nov"
 
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Dec"
 msgstr "Dis"
 
-#: ui/commands/AutoFillCommand.cpp:141
+#: ui/commands/AutoFillCommand.cpp:142
 #, fuzzy, kde-format
 msgid "Monday"
 msgstr "Wang"
 
-#: ui/commands/AutoFillCommand.cpp:142
+#: ui/commands/AutoFillCommand.cpp:143
 #, fuzzy, kde-format
 msgid "Tuesday"
 msgstr "Turkey"
 
-#: ui/commands/AutoFillCommand.cpp:143
+#: ui/commands/AutoFillCommand.cpp:144
 #, fuzzy, kde-format
 msgid "Wednesday"
 msgstr "Turkey"
 
-#: ui/commands/AutoFillCommand.cpp:144
+#: ui/commands/AutoFillCommand.cpp:145
 #, fuzzy, kde-format
 msgid "Thursday"
 msgstr "Turkey"
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:146
 #, fuzzy, kde-format
 msgid "Friday"
 msgstr "Jumaat"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:147
 #, fuzzy, kde-format
 msgid "Saturday"
 msgstr "Kematangan"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:148
 #, fuzzy, kde-format
 msgid "Sunday"
 msgstr "Sudan"
 
-#: ui/commands/AutoFillCommand.cpp:152
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Mon"
 msgstr "Isnin"
 
-#: ui/commands/AutoFillCommand.cpp:153
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Tue"
 msgstr "Selasa"
 
-#: ui/commands/AutoFillCommand.cpp:154
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Wed"
 msgstr "Rabu"
 
-#: ui/commands/AutoFillCommand.cpp:155
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Thu"
 msgstr "Khamis"
 
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Fri"
 msgstr "Jumaat"
 
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sat"
 msgstr "Sabtu"
 
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:159
 #, kde-format
 msgid "Sun"
 msgstr "Ahad"
 
-#: ui/commands/AutoFillCommand.cpp:678
+#: ui/commands/AutoFillCommand.cpp:679
 #, fuzzy
 #| msgid "Autofill"
 msgctxt "(qtundo-format)"
@@ -15450,20 +15450,18 @@ msgstr ""
 #: ui/dialogs/LayoutPage_Float.cpp:90
 #, fuzzy, kde-format
 #| msgid "Date & Time"
-msgid "Date and Time"
+msgid "Datetime"
 msgstr "Tarikh & Masa"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
 msgid ""
-"This formats your cell content as date and time. To enter a date and a time, "
-"you should enter it in the Time format set in System Settings -> Common "
-"Appearance and Behavior -> Locale -> Country/Region & Language -> Time & "
-"Dates. In the Cell Format dialog box you can set how the time should be "
-"displayed by choosing one of the available date format options. The default "
-"format is the system format set in System Settings. When the number in the "
-"cell does not make sense as a date and time, Calligra Sheets will display "
-"00:00 in the global format you have in System Settings."
+"To enter a datetime, you should enter it in one of the formats set in System "
+"Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
+"Language -> Time & Dates. There are two formats set here: the date format "
+"and the short date format.\n"
+"Just like you can drag down numbers you can also drag down dates and the "
+"next cells will also get datetimes."
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
@@ -15601,31 +15599,6 @@ msgstr "Dua digit 15/22"
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "Tiga digit 153/652"
-
-#: ui/dialogs/LayoutPage_Float.cpp:321 ui/dialogs/LayoutPage_Float.cpp:322
-#: ui/dialogs/LayoutPage_Float.cpp:377 ui/dialogs/LayoutPage_Float.cpp:378
-#: ui/dialogs/LayoutPage_Float.cpp:417 ui/dialogs/LayoutPage_Float.cpp:418
-#, kde-format
-msgid "System: "
-msgstr "Sistem:"
-
-#: ui/dialogs/LayoutPage_Float.cpp:331
-#, fuzzy, kde-format
-#| msgid " (=[mm]::ss)"
-msgid " (=[mm]:ss)"
-msgstr " (=[mm]::ss)"
-
-#: ui/dialogs/LayoutPage_Float.cpp:332
-#, fuzzy, kde-format
-#| msgid " (=[hh]::mm::ss)"
-msgid " (=[hh]:mm:ss)"
-msgstr " (=[hh]::mm::ss)"
-
-#: ui/dialogs/LayoutPage_Float.cpp:333
-#, fuzzy, kde-format
-#| msgid " (=[hh]::mm)"
-msgid " (=[hh]:mm)"
-msgstr " (=[hh]::mm)"
 
 #: ui/dialogs/LayoutPage_Font.cpp:53
 #, kde-format
@@ -15977,6 +15950,29 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Buka Pautan?"
+
+#, fuzzy
+#~| msgid "Date & Time"
+#~ msgid "Date and Time"
+#~ msgstr "Tarikh & Masa"
+
+#~ msgid "System: "
+#~ msgstr "Sistem:"
+
+#, fuzzy
+#~| msgid " (=[mm]::ss)"
+#~ msgid " (=[mm]:ss)"
+#~ msgstr " (=[mm]::ss)"
+
+#, fuzzy
+#~| msgid " (=[hh]::mm::ss)"
+#~ msgid " (=[hh]:mm:ss)"
+#~ msgstr " (=[hh]::mm::ss)"
+
+#, fuzzy
+#~| msgid " (=[hh]::mm)"
+#~ msgid " (=[hh]:mm)"
+#~ msgstr " (=[hh]::mm)"
 
 #~ msgid "&Function..."
 #~ msgstr "&Fungsi..."

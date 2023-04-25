@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2023-01-04 22:00+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -128,27 +128,27 @@ msgstr "Opcioj de Vidigo"
 msgid "Table editing"
 msgstr "Tabelredaktado"
 
-#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
 #, kde-format
 msgid "Area is too large."
 msgstr "Areo estas tro granda."
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Hide Row"
 msgstr "Kaŝi Vicon"
 
-#: ToolHeaders.cpp:431
+#: ToolHeaders.cpp:429
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Alteco: %1 %2"
 
-#: ToolHeaders.cpp:1059
+#: ToolHeaders.cpp:1053
 #, kde-format
 msgid "Hide Column"
 msgstr "Kaŝi Kolumnon"
 
-#: ToolHeaders.cpp:1061
+#: ToolHeaders.cpp:1055
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Larĝeco: %1 %2"

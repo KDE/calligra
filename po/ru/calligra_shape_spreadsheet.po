@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2022-03-14 15:23+0300\n"
 "Last-Translator: Мария Шикунова <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -132,27 +132,27 @@ msgstr "Параметры просмотра"
 msgid "Table editing"
 msgstr "Редактирование таблицы"
 
-#: ToolHeaders.cpp:286 ToolHeaders.cpp:884
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
 #, kde-format
 msgid "Area is too large."
 msgstr "Диапазон слишком велик"
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Hide Row"
 msgstr "Скрыть строку"
 
-#: ToolHeaders.cpp:431
+#: ToolHeaders.cpp:429
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Высота: %1 %2"
 
-#: ToolHeaders.cpp:1059
+#: ToolHeaders.cpp:1053
 #, kde-format
 msgid "Hide Column"
 msgstr "Скрыть столбец"
 
-#: ToolHeaders.cpp:1061
+#: ToolHeaders.cpp:1055
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Ширина: %1 %2"

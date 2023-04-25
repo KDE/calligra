@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2008-05-07 17:08+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -1181,7 +1181,7 @@ msgstr ""
 msgid "Document <i>%1</i> saved"
 msgstr "Dokumint <i>%1</i> bewarre"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1190,39 +1190,39 @@ msgstr ""
 "It wachtwurd foar dit fersifere dokumint is net bekend. Auto-bewarjen is "
 "ôfbrútsen! Jo kinne jo wurk no sels bewarje."
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:715
 #, kde-format
 msgid "Autosaving..."
 msgstr "Dwaande mei automatysk bewarjen..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:727
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Flater by it automatysk bewarjen. Is de skiif fol?"
 
-#: main/KoDocument.cpp:819
+#: main/KoDocument.cpp:820
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "De triem koe net opslein wurde"
 
-#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
-#: main/KoDocument.cpp:950
+#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
+#: main/KoDocument.cpp:951
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "'%1' koe net opslein wurde. Is de skiif fol?"
 
-#: main/KoDocument.cpp:870
+#: main/KoDocument.cpp:871
 #, fuzzy, kde-format
 #| msgid "Not able to write '%1'. Partition full?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "'%1' koe net opslein wurde. Is de skiif fol?"
 
-#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Flater by it bewarjen fan '%1'. Is de skiif fol?"
 
-#: main/KoDocument.cpp:1204
+#: main/KoDocument.cpp:1205
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1231,7 +1231,7 @@ msgstr ""
 "Ferkeard foarme URL-adres:\n"
 "%1"
 
-#: main/KoDocument.cpp:1220
+#: main/KoDocument.cpp:1221
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1240,105 +1240,105 @@ msgstr ""
 "Der is noch in automatysk opsleine triem foar dit dokumint oanwêzich.\n"
 "Wolle jo dit faaks iepenje?"
 
-#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "De triem %1 bestiet net."
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1464
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "Dokumint iepenje"
 
-#: main/KoDocument.cpp:1478
+#: main/KoDocument.cpp:1479
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "De triem koe net opslein wurde"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1482
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "De triem koe net opslein wurde"
 
-#: main/KoDocument.cpp:1484
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "File not found"
 msgstr "Triem net fûn"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1488
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Kin opslach net oanmeitsje"
 
-#: main/KoDocument.cpp:1490
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Ferkeard MIME-type"
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Flater yn ynbêde dokumint"
 
-#: main/KoDocument.cpp:1496
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Format not recognized"
 msgstr "Formaat net werkend"
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Not implemented"
 msgstr "Net ymplemintearre"
 
-#: main/KoDocument.cpp:1502
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Parsing error"
 msgstr "Parseflater"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Document is password protected"
 msgstr "Dokumint is befeilige mei in wachtwurd"
 
-#: main/KoDocument.cpp:1508
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Invalid file format"
 msgstr ""
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1516
 #, kde-format
 msgid "Internal error"
 msgstr "Ynterne flater"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Out of memory"
 msgstr "Gjin ûnthâld beskikber"
 
-#: main/KoDocument.cpp:1521
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Failed to download remote file"
 msgstr ""
 
-#: main/KoDocument.cpp:1534
+#: main/KoDocument.cpp:1535
 #, kde-format
 msgid "Unknown error"
 msgstr "Unbekende flater"
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1539
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1352,17 +1352,17 @@ msgstr ""
 "Koe %2 net iepenje.\n"
 "Reden: %1"
 
-#: main/KoDocument.cpp:1596
+#: main/KoDocument.cpp:1597
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "Dokumint <i>%1</i> laden"
 
-#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 is net fûn"
 
-#: main/KoDocument.cpp:1671
+#: main/KoDocument.cpp:1674
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1371,22 +1371,22 @@ msgstr ""
 "Untleedflater yn %1, op regel %2, kolom %3\n"
 "Flatermelding: %4"
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1695
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 is net in triem."
 
-#: main/KoDocument.cpp:1707
+#: main/KoDocument.cpp:1710
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "De triem koe net iepene wurde (kontrolearje de tagongsrjochten)."
 
-#: main/KoDocument.cpp:1718
+#: main/KoDocument.cpp:1721
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Begjin fan de triem koe net lêzen wurde."
 
-#: main/KoDocument.cpp:1748
+#: main/KoDocument.cpp:1751
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1395,18 +1395,18 @@ msgstr ""
 "Untleedflater yn it haaddokumint op regel %1, kolom %2\n"
 "Flatermelding: %3"
 
-#: main/KoDocument.cpp:1769
+#: main/KoDocument.cpp:1772
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "Gjin jildich KOffice-triem: %1"
 
-#: main/KoDocument.cpp:1854
+#: main/KoDocument.cpp:1857
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Unjildich dokumint: gjin triem 'maindoc.xml' oanwêzich."
 
-#: main/KoDocument.cpp:1878
+#: main/KoDocument.cpp:1881
 #, fuzzy, kde-format
 #| msgid ""
 #| "This document contains several versions. Go to File->Versions to open an "
@@ -1418,25 +1418,25 @@ msgstr ""
 "Dit dokumint befettet meardere ferzjes. Gean nei triem->Ferzjes om in âlde "
 "te iepenjen."
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Nammeleas"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>It dokumint <b>'%1'</b> is wizige.</p><p>Wolle jo it bewarje?</p>"
 
-#: main/KoDocument.cpp:2165
+#: main/KoDocument.cpp:2168
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Ynterne flater: saveXML is net ynprogrammearre."
 
-#: main/KoDocument.cpp:2202
+#: main/KoDocument.cpp:2205
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1445,7 +1445,7 @@ msgstr ""
 "Flater by it iepenjen fan\n"
 "%1."
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2208
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1454,32 +1454,32 @@ msgstr ""
 "Koe %1 net iepenje.\n"
 "Reden: %2"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a word processing"
 msgstr "in tekstferwurkings-"
 
-#: main/KoDocument.cpp:2263
+#: main/KoDocument.cpp:2266
 #, kde-format
 msgid "a spreadsheet"
 msgstr "in spreadsheet"
 
-#: main/KoDocument.cpp:2264
+#: main/KoDocument.cpp:2267
 #, kde-format
 msgid "a presentation"
 msgstr "in presintaasje"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2268
 #, kde-format
 msgid "a chart"
 msgstr "in grafyk"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2269
 #, kde-format
 msgid "a drawing"
 msgstr "in tekening"
 
-#: main/KoDocument.cpp:2581
+#: main/KoDocument.cpp:2584
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1489,7 +1489,7 @@ msgid ""
 "Do you want to save your changes or discard them?"
 msgstr "<p>It dokumint <b>'%1'</b> is wizige.</p><p>Wolle jo it bewarje?</p>"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2586
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgid "Close Document"

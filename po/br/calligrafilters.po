@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kofficefilters.pot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: br <LL@li.org>\n"
@@ -242,7 +242,7 @@ msgstr ""
 msgid "Could not write block"
 msgstr "Ne m'eus ket gallet lenn eus ar restr."
 
-#: sheets/csv/csvexport.cc:266
+#: sheets/csv/csvexport.cc:268
 #, kde-format
 msgid "<SHEETNAME>"
 msgstr "<ANVFOLENN>"

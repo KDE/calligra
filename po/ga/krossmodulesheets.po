@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krossmodulekspread.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2007-07-30 09:16-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -86,7 +86,7 @@ msgstr "Cill"
 msgid "Range"
 msgstr "Raon"
 
-#: ScriptingWriter.h:226
+#: ScriptingWriter.h:227
 #, fuzzy
 #| msgid "Set Values"
 msgctxt "(qtundo-format)"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2015-09-21 15:03+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -1049,45 +1049,45 @@ msgstr ""
 msgid "Document <i>%1</i> saved"
 msgstr "文件 <i>%1</i> 已儲存"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr "此加密文件的密碼未知。自動儲存將中止！請手動儲存您的工作。"
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:715
 #, kde-format
 msgid "Autosaving..."
 msgstr "自動儲存中..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:727
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "自動儲存時發生錯誤。硬碟分割區滿了嗎？"
 
-#: main/KoDocument.cpp:819
+#: main/KoDocument.cpp:820
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "無法建立檔案以儲存"
 
-#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
-#: main/KoDocument.cpp:950
+#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
+#: main/KoDocument.cpp:951
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "無法寫入 %1。磁碟分割區滿了嗎？"
 
-#: main/KoDocument.cpp:870
+#: main/KoDocument.cpp:871
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "無法寫入 RDF 中繼資料。磁碟分割區滿了嗎？"
 
-#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "寫入 %1 時發生錯誤。磁碟分割區滿了嗎？"
 
-#: main/KoDocument.cpp:1204
+#: main/KoDocument.cpp:1205
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1096,7 +1096,7 @@ msgstr ""
 "錯誤的網址\n"
 "%1"
 
-#: main/KoDocument.cpp:1220
+#: main/KoDocument.cpp:1221
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1105,102 +1105,102 @@ msgstr ""
 "此文件中含有自動儲存的檔案。\n"
 "您要開啟它來取代這個文件嗎？"
 
-#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "檔案 %1 不存在。"
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1464
 #, fuzzy, kde-format
 msgid "Opening Document"
 msgstr "開啟文件"
 
-#: main/KoDocument.cpp:1478
+#: main/KoDocument.cpp:1479
 #, fuzzy, kde-format
 msgid "Could not create the filter plugin"
 msgstr "無法建立檔案以儲存"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1482
 #, fuzzy, kde-format
 msgid "Could not create the output document"
 msgstr "無法建立檔案以儲存"
 
-#: main/KoDocument.cpp:1484
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "File not found"
 msgstr "找不到檔案"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1488
 #, kde-format
 msgid "Cannot create storage"
 msgstr "無法建立儲存"
 
-#: main/KoDocument.cpp:1490
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Bad MIME type"
 msgstr "錯誤的 MIME 型態"
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Error in embedded document"
 msgstr "嵌入式文件錯誤"
 
-#: main/KoDocument.cpp:1496
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Format not recognized"
 msgstr "格式無法辨認"
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Not implemented"
 msgstr "尚未實作"
 
-#: main/KoDocument.cpp:1502
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Parsing error"
 msgstr "剖析錯誤"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Document is password protected"
 msgstr "文件以密碼保護"
 
-#: main/KoDocument.cpp:1508
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Invalid file format"
 msgstr "無效的檔案格式"
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1516
 #, kde-format
 msgid "Internal error"
 msgstr "內部錯誤"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Out of memory"
 msgstr "記憶體不足"
 
-#: main/KoDocument.cpp:1521
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Failed to download remote file"
 msgstr ""
 
-#: main/KoDocument.cpp:1534
+#: main/KoDocument.cpp:1535
 #, kde-format
 msgid "Unknown error"
 msgstr "未知的錯誤"
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1539
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1210,17 +1210,17 @@ msgstr ""
 "無法開啟 %2。\n"
 "原因：%1"
 
-#: main/KoDocument.cpp:1596
+#: main/KoDocument.cpp:1597
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "文件 <i>%1</i> 已載入"
 
-#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "找不到 %1"
 
-#: main/KoDocument.cpp:1671
+#: main/KoDocument.cpp:1674
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1229,22 +1229,22 @@ msgstr ""
 "剖析錯誤於 %1 中的第 %2 行，第 %3 個位置\n"
 "錯誤訊息：%4"
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1695
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 不是檔案"
 
-#: main/KoDocument.cpp:1707
+#: main/KoDocument.cpp:1710
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "無法開啟檔案以讀取（請檢查讀取權限）。"
 
-#: main/KoDocument.cpp:1718
+#: main/KoDocument.cpp:1721
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "無法讀取檔案的開頭。"
 
-#: main/KoDocument.cpp:1748
+#: main/KoDocument.cpp:1751
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1253,42 +1253,42 @@ msgstr ""
 "剖析錯誤於主文件第 %1 行，第 %2 個位置。\n"
 "錯誤訊息：%3"
 
-#: main/KoDocument.cpp:1769
+#: main/KoDocument.cpp:1772
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "不是合法的 Calligra 檔案：%1"
 
-#: main/KoDocument.cpp:1854
+#: main/KoDocument.cpp:1857
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "不合法的文件：沒有檔案 maindoc.xml。"
 
-#: main/KoDocument.cpp:1878
+#: main/KoDocument.cpp:1881
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr "文件 <i>%1</i> 包含了幾個版本。請到「檔案」─「版本」中去開啟舊的版本。"
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "未命名"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>文件 <b>%1</b> 已被修改。</p><p>您是否要儲存？</p>"
 
-#: main/KoDocument.cpp:2165
+#: main/KoDocument.cpp:2168
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "內部錯誤：沒有實作 saveXML"
 
-#: main/KoDocument.cpp:2202
+#: main/KoDocument.cpp:2205
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1297,7 +1297,7 @@ msgstr ""
 "無法開啟\n"
 "%1"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2208
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1306,39 +1306,39 @@ msgstr ""
 "無法開啟 %1\n"
 "原因： %2"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a word processing"
 msgstr "文字處理"
 
-#: main/KoDocument.cpp:2263
+#: main/KoDocument.cpp:2266
 #, kde-format
 msgid "a spreadsheet"
 msgstr "試算表"
 
-#: main/KoDocument.cpp:2264
+#: main/KoDocument.cpp:2267
 #, kde-format
 msgid "a presentation"
 msgstr "簡報文件"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2268
 #, kde-format
 msgid "a chart"
 msgstr "流程圖"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2269
 #, kde-format
 msgid "a drawing"
 msgstr "繪圖"
 
-#: main/KoDocument.cpp:2581
+#: main/KoDocument.cpp:2584
 #, fuzzy, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
 "Do you want to save your changes or discard them?"
 msgstr "<p>文件 <b>%1</b> 已被修改。</p><p>您是否要儲存？</p>"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2586
 #, fuzzy, kde-format
 msgid "Close Document"
 msgstr "自訂文件"

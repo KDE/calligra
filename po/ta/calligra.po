@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2021-01-18 19:22+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -1116,46 +1116,46 @@ msgstr ""
 msgid "Document <i>%1</i> saved"
 msgstr "ஆவண தலைப்பு"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
 "Please save your work manually."
 msgstr ""
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:715
 #, kde-format
 msgid "Autosaving..."
 msgstr "தானாக சேமித்தல்..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:727
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "தானாக சேமித்தலின்போது பிழை! பிரிவினை முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:819
+#: main/KoDocument.cpp:820
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
-#: main/KoDocument.cpp:950
+#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
+#: main/KoDocument.cpp:951
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "'%1'க்கு எழுத இயலவில்லை.பகுதியாக்கம் முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:870
+#: main/KoDocument.cpp:871
 #, fuzzy, kde-format
 #| msgid "Not able to write '%1'. Partition full?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "'%1'க்கு எழுத இயலவில்லை.பகுதியாக்கம் முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1' க்கு எழுத இயலவில்லை. பகுதியாக்கம் முழுமையாகிவிட்டதா?"
 
-#: main/KoDocument.cpp:1204
+#: main/KoDocument.cpp:1205
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1164,7 +1164,7 @@ msgstr ""
 "தவறான URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1220
+#: main/KoDocument.cpp:1221
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1173,106 +1173,106 @@ msgstr ""
 "இந்த ஆவணத்திற்கு தன்னியக்கமாக சேமிக்கபட்ட கோப்பு ஒன்று உள்ளது.\n"
 "பதிலாக அதை திறக்க வேண்டுமா ?"
 
-#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "கோப்பு %1 இல்லை."
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1464
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "ஆவணத்தை திற "
 
-#: main/KoDocument.cpp:1478
+#: main/KoDocument.cpp:1479
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1482
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "சேமிப்பதற்கு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1484
+#: main/KoDocument.cpp:1485
 #, fuzzy, kde-format
 msgid "File not found"
 msgstr "கோப்பின் இடம்"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1488
 #, fuzzy, kde-format
 msgid "Cannot create storage"
 msgstr "வார்ப்புருவை உருவாக்கு"
 
-#: main/KoDocument.cpp:1490
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Bad MIME type"
 msgstr ""
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1494
 #, fuzzy, kde-format
 msgid "Error in embedded document"
 msgstr "உள்ளக ஆவணங்களை சேமிப்பதில் தவறு"
 
-#: main/KoDocument.cpp:1496
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Format not recognized"
 msgstr ""
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Not implemented"
 msgstr ""
 
-#: main/KoDocument.cpp:1502
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Parsing error"
 msgstr ""
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Document is password protected"
 msgstr ""
 
-#: main/KoDocument.cpp:1508
+#: main/KoDocument.cpp:1509
 #, fuzzy, kde-format
 #| msgid "Locale format"
 msgid "Invalid file format"
 msgstr "பக்க வடிவம்"
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1516
 #, fuzzy, kde-format
 msgid "Internal error"
 msgstr "இணையம்"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Out of memory"
 msgstr ""
 
-#: main/KoDocument.cpp:1521
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1528
 #, fuzzy, kde-format
 msgid "Failed to download remote file"
 msgstr "%1 கோப்பினை திறக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1534
+#: main/KoDocument.cpp:1535
 #, kde-format
 msgid "Unknown error"
 msgstr ""
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1539
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1282,18 +1282,18 @@ msgstr ""
 "%1 கோப்பினை திறக்க முடியவில்லை\n"
 "காரணம்: %2"
 
-#: main/KoDocument.cpp:1596
+#: main/KoDocument.cpp:1597
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> loaded"
 msgstr "ஆவண தலைப்பு"
 
-#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 கண்டுபிடிக்க இயலவில்லை"
 
-#: main/KoDocument.cpp:1671
+#: main/KoDocument.cpp:1674
 #, fuzzy, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1302,22 +1302,22 @@ msgstr ""
 "%1 பாகுபடுத்தல் தவறு முக்கிய ஆவணத்தின் வரி, %2ல் கிடக்கை ஏற்பட்டுள்ளது\n"
 "பிழை தகவல்கள்: %3"
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1695
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 ஒரு கோப்பு அல்ல."
 
-#: main/KoDocument.cpp:1707
+#: main/KoDocument.cpp:1710
 #, fuzzy, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "வாசிப்பதற்கு கோப்பினை திறக்க முடியவில்லை (படிக்கும் அனுமதிகளை பரிசோதிக்கவும்)"
 
-#: main/KoDocument.cpp:1718
+#: main/KoDocument.cpp:1721
 #, fuzzy, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "கோப்பின் தொடக்கத்தை படிக்க முடியவில்லை"
 
-#: main/KoDocument.cpp:1748
+#: main/KoDocument.cpp:1751
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1326,31 +1326,31 @@ msgstr ""
 "பாகுபடுத்தல் தவறு முக்கிய ஆவணத்தின் வரி %1ல்,கிடக்கை %2ல் ஏற்பட்டுள்ளது\n"
 "பிழை தகவல்கள்: %3"
 
-#: main/KoDocument.cpp:1769
+#: main/KoDocument.cpp:1772
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "செல்லாத KOffice கோப்பு: %1"
 
-#: main/KoDocument.cpp:1854
+#: main/KoDocument.cpp:1857
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "செல்லாத ஆவணம்: 'maindoc.xml' எண்ற கோப்பு இல்லை"
 
-#: main/KoDocument.cpp:1878
+#: main/KoDocument.cpp:1881
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "தலைப்பில்லாதது"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1359,12 +1359,12 @@ msgstr ""
 "<p>ஆவணம் <b>'%1'</b> மாற்றியமைக்கப்பட்டுள்ளது.</p><p>நீங்கள் இதை சேமிக்க "
 "விரும்புகிறீர்களா?</p>"
 
-#: main/KoDocument.cpp:2165
+#: main/KoDocument.cpp:2168
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "உள்ளகத் தவறு: saveXML இன்னும் இயற்றபடவில்லை"
 
-#: main/KoDocument.cpp:2202
+#: main/KoDocument.cpp:2205
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1373,7 +1373,7 @@ msgstr ""
 "திறக்க முடியவில்லை\n"
 "%1"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2208
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1382,33 +1382,33 @@ msgstr ""
 "%1 கோப்பினை திறக்க முடியவில்லை\n"
 "காரணம்: %2"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a word processing"
 msgstr ""
 
-#: main/KoDocument.cpp:2263
+#: main/KoDocument.cpp:2266
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "a spreadsheet"
 msgstr "பக்க வெள்ளோட்டம்"
 
-#: main/KoDocument.cpp:2264
+#: main/KoDocument.cpp:2267
 #, fuzzy, kde-format
 msgid "a presentation"
 msgstr "இரட்டிப்பான திசைத்தன்மை"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2268
 #, fuzzy, kde-format
 msgid "a chart"
 msgstr "சார்ட்ரியுஸ்"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2269
 #, fuzzy, kde-format
 msgid "a drawing"
 msgstr "கரும் ஆரஞ்சு"
 
-#: main/KoDocument.cpp:2581
+#: main/KoDocument.cpp:2584
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1420,7 +1420,7 @@ msgstr ""
 "<p>ஆவணம் <b>'%1'</b> மாற்றியமைக்கப்பட்டுள்ளது.</p><p>நீங்கள் இதை சேமிக்க "
 "விரும்புகிறீர்களா?</p>"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2586
 #, fuzzy, kde-format
 #| msgid "Create Document"
 msgid "Close Document"

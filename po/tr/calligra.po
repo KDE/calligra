@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2023-03-31 21:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1051,7 +1051,7 @@ msgstr ""
 msgid "Document <i>%1</i> saved"
 msgstr "<i>%1</i> belgesi kaydedildi"
 
-#: main/KoDocument.cpp:711
+#: main/KoDocument.cpp:712
 #, kde-format
 msgid ""
 "The password of this encrypted document is not known. Autosave aborted! "
@@ -1060,38 +1060,38 @@ msgstr ""
 "Bu şifrelenmiş belgenin parolası bilinmiyor. Otomatik kaydetme iptal edildi! "
 "Lütfen elle kaydedin."
 
-#: main/KoDocument.cpp:714
+#: main/KoDocument.cpp:715
 #, kde-format
 msgid "Autosaving..."
 msgstr "Otomatik kaydediliyor..."
 
-#: main/KoDocument.cpp:726
+#: main/KoDocument.cpp:727
 #, kde-format
 msgid "Error during autosave! Partition full?"
 msgstr "Otomatik kaydetme sırasında hata! Bölüntü dolu olabilir mi?"
 
-#: main/KoDocument.cpp:819
+#: main/KoDocument.cpp:820
 #, kde-format
 msgid "Could not create the file for saving"
 msgstr "Dosya kaydetmek için oluşturulamadı"
 
-#: main/KoDocument.cpp:863 main/KoDocument.cpp:885 main/KoDocument.cpp:916
-#: main/KoDocument.cpp:950
+#: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
+#: main/KoDocument.cpp:951
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
 msgstr "'%1' yazılamadı. Bölüntü dolu olabilir mi?"
 
-#: main/KoDocument.cpp:870
+#: main/KoDocument.cpp:871
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "RDF verisi yazılamaz. Bölüntü dolu olabilir mi?"
 
-#: main/KoDocument.cpp:878 main/KoDocument.cpp:925 main/KoDocument.cpp:1992
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1' yazılırken hata oluştu. Bölüntü dolu olabilir mi?"
 
-#: main/KoDocument.cpp:1204
+#: main/KoDocument.cpp:1205
 #, kde-format
 msgid ""
 "Malformed URL\n"
@@ -1100,7 +1100,7 @@ msgstr ""
 "Bozuk URL\n"
 "%1"
 
-#: main/KoDocument.cpp:1220
+#: main/KoDocument.cpp:1221
 #, kde-format
 msgid ""
 "An autosaved file exists for this document.\n"
@@ -1109,102 +1109,102 @@ msgstr ""
 "Bu belge için otomatik olarak kaydedilen bir dosya var.\n"
 "Diğer bir seçenek olarak bunu açmak ister misiniz?"
 
-#: main/KoDocument.cpp:1337 main/KoDocument.cpp:1685 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "%1 dosyası bulunamadı."
 
-#: main/KoDocument.cpp:1463
+#: main/KoDocument.cpp:1464
 #, kde-format
 msgid "Opening Document"
 msgstr "Belge Açılıyor"
 
-#: main/KoDocument.cpp:1478
+#: main/KoDocument.cpp:1479
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "Süzgeç eklentisi oluşturulamadı"
 
-#: main/KoDocument.cpp:1481
+#: main/KoDocument.cpp:1482
 #, kde-format
 msgid "Could not create the output document"
 msgstr "Çıktı belgesi oluşturulamadı"
 
-#: main/KoDocument.cpp:1484
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "File not found"
 msgstr "Dosya bulunamadı"
 
-#: main/KoDocument.cpp:1487
+#: main/KoDocument.cpp:1488
 #, kde-format
 msgid "Cannot create storage"
 msgstr "Depolama oluşturulamadı"
 
-#: main/KoDocument.cpp:1490
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Bad MIME type"
 msgstr "Kötü MIME türü"
 
-#: main/KoDocument.cpp:1493
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Error in embedded document"
 msgstr "Gömülü belge içerisinde hata"
 
-#: main/KoDocument.cpp:1496
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Format not recognized"
 msgstr "Biçim tanınamadı"
 
-#: main/KoDocument.cpp:1499
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Not implemented"
 msgstr "Özellik henüz eklenmedi"
 
-#: main/KoDocument.cpp:1502
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Parsing error"
 msgstr "Ayrıştırma hatası"
 
-#: main/KoDocument.cpp:1505
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Document is password protected"
 msgstr "Belge parola korumalı"
 
-#: main/KoDocument.cpp:1508
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Invalid file format"
 msgstr "Geçersiz dosya biçimi"
 
-#: main/KoDocument.cpp:1515
+#: main/KoDocument.cpp:1516
 #, kde-format
 msgid "Internal error"
 msgstr "İç hata"
 
-#: main/KoDocument.cpp:1518
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Out of memory"
 msgstr "Yetersiz bellek"
 
-#: main/KoDocument.cpp:1521
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "Boş Süzgeç Eklentisi"
 
-#: main/KoDocument.cpp:1524
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "Yanlış türde belgeye yükleme yapılmaya çalışılıyor"
 
-#: main/KoDocument.cpp:1527
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "Uzak dosya indirilemedi"
 
-#: main/KoDocument.cpp:1534
+#: main/KoDocument.cpp:1535
 #, kde-format
 msgid "Unknown error"
 msgstr "Bilinmeyen hata"
 
-#: main/KoDocument.cpp:1538
+#: main/KoDocument.cpp:1539
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1215,17 +1215,17 @@ msgstr ""
 "Neden: %1.\n"
 "%3"
 
-#: main/KoDocument.cpp:1596
+#: main/KoDocument.cpp:1597
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "<i>%1</i> belgesi yüklendi"
 
-#: main/KoDocument.cpp:1659 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 bulunamıyor"
 
-#: main/KoDocument.cpp:1671
+#: main/KoDocument.cpp:1674
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1234,22 +1234,22 @@ msgstr ""
 "%1 dosyasında %2. satır, %3. sütunda ayrıştırma hatası\n"
 "Hata İletisi: %4"
 
-#: main/KoDocument.cpp:1692
+#: main/KoDocument.cpp:1695
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1, geçerli bir dosya değil."
 
-#: main/KoDocument.cpp:1707
+#: main/KoDocument.cpp:1710
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Dosya okumak için açılamadı (okuma izinlerini kontrol edin)."
 
-#: main/KoDocument.cpp:1718
+#: main/KoDocument.cpp:1721
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Dosyanın başlangıcı okunamadı."
 
-#: main/KoDocument.cpp:1748
+#: main/KoDocument.cpp:1751
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1258,17 +1258,17 @@ msgstr ""
 "Dosyadaki %1. satır, %2. sütunda ayrıştırma hatası\n"
 "Hata Mesajı: %3"
 
-#: main/KoDocument.cpp:1769
+#: main/KoDocument.cpp:1772
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Geçerli bir Calligra dosyası değil: %1"
 
-#: main/KoDocument.cpp:1854
+#: main/KoDocument.cpp:1857
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Geçersiz belge: 'maindoc.xml' dosyası yok."
 
-#: main/KoDocument.cpp:1878
+#: main/KoDocument.cpp:1881
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1277,13 +1277,13 @@ msgstr ""
 "<i>%1</i> belgesi birkaç sürüm içeriyor. Eski sürümleri açmak için Dosya-> "
 "Sürümler menüsüne gidin."
 
-#: main/KoDocument.cpp:2079 main/KoDocument.cpp:2548 main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Başlıksız"
 
-#: main/KoDocument.cpp:2082 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1291,12 +1291,12 @@ msgid ""
 msgstr ""
 "<p><b>'%1'</b> adlı belge değiştirildi.</p><p>Kaydetmek istiyor musunuz?</p>"
 
-#: main/KoDocument.cpp:2165
+#: main/KoDocument.cpp:2168
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "İç hata: saveXML desteklenmiyor"
 
-#: main/KoDocument.cpp:2202
+#: main/KoDocument.cpp:2205
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1305,7 +1305,7 @@ msgstr ""
 "Açılamıyor:\n"
 "%1"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2208
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1314,32 +1314,32 @@ msgstr ""
 "%1 dosyası açılamıyor\n"
 "Neden: %2"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a word processing"
 msgstr "bir sözcük işleme belgesi"
 
-#: main/KoDocument.cpp:2263
+#: main/KoDocument.cpp:2266
 #, kde-format
 msgid "a spreadsheet"
 msgstr "bir hesap tablosu"
 
-#: main/KoDocument.cpp:2264
+#: main/KoDocument.cpp:2267
 #, kde-format
 msgid "a presentation"
 msgstr "bir sunum"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2268
 #, kde-format
 msgid "a chart"
 msgstr "bir çizelge"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2269
 #, kde-format
 msgid "a drawing"
 msgstr "bir çizim"
 
-#: main/KoDocument.cpp:2581
+#: main/KoDocument.cpp:2584
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1348,7 +1348,7 @@ msgstr ""
 "\"%1\" dosyası değiştirildi.\n"
 "Kaydetmek mi yoksa değişiklikleri silmek mi istiyorsunuz?"
 
-#: main/KoDocument.cpp:2583
+#: main/KoDocument.cpp:2586
 #, kde-format
 msgid "Close Document"
 msgstr "Belgeyi Kapat"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-23 00:49+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2019-12-18 21:55+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -148,27 +148,27 @@ msgstr "Päis1"
 msgid "Default"
 msgstr "Vaikimisi"
 
-#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
+#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
 #, kde-format
 msgid "AM"
 msgstr "p.l."
 
-#: core/ValueFormatter.cpp:529 core/ValueFormatter.cpp:535
+#: core/ValueFormatter.cpp:546 core/ValueFormatter.cpp:552
 #, kde-format
 msgid "PM"
 msgstr "e.l."
 
-#: core/ValueFormatter.cpp:539
+#: core/ValueFormatter.cpp:556
 #, kde-format
 msgid "h"
 msgstr "t"
 
-#: core/ValueFormatter.cpp:541
+#: core/ValueFormatter.cpp:558
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: core/ValueFormatter.cpp:543
+#: core/ValueFormatter.cpp:560
 #, kde-format
 msgid "s"
 msgstr "sek"
@@ -271,12 +271,12 @@ msgstr "Näited"
 msgid "Related Functions"
 msgstr "Seotud funktsioonid"
 
-#: engine/Localization.cpp:571
+#: engine/Localization.cpp:748
 #, kde-format
 msgid "true"
 msgstr "tõene"
 
-#: engine/Localization.cpp:572
+#: engine/Localization.cpp:749
 #, kde-format
 msgid "false"
 msgstr "väär"
@@ -286,61 +286,61 @@ msgstr "väär"
 msgid "Dependency"
 msgstr "Sõltuvus"
 
-#: engine/Value.cpp:597
+#: engine/Value.cpp:594
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#RING!"
 
-#: engine/Value.cpp:605
+#: engine/Value.cpp:602
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#SÕLTUVUS!"
 
-#: engine/Value.cpp:613
+#: engine/Value.cpp:610
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:621
+#: engine/Value.cpp:618
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#N/A"
 
-#: engine/Value.cpp:629
+#: engine/Value.cpp:626
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NIMI?"
 
-#: engine/Value.cpp:637
+#: engine/Value.cpp:634
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NUM!"
 
-#: engine/Value.cpp:645
+#: engine/Value.cpp:642
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NULL!"
 
-#: engine/Value.cpp:653
+#: engine/Value.cpp:650
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#PARS!"
 
-#: engine/Value.cpp:661
+#: engine/Value.cpp:658
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#VIIDE!"
 
-#: engine/Value.cpp:669
+#: engine/Value.cpp:666
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"
@@ -14251,198 +14251,198 @@ msgctxt "(qtundo-format)"
 msgid "Apply Filter"
 msgstr "Rakenda filter"
 
-#: ui/commands/AutoFillCommand.cpp:109
+#: ui/commands/AutoFillCommand.cpp:110
 #, kde-format
 msgid "January"
 msgstr "Jaanuar"
 
-#: ui/commands/AutoFillCommand.cpp:110
+#: ui/commands/AutoFillCommand.cpp:111
 #, kde-format
 msgid "February"
 msgstr "Veebruar"
 
-#: ui/commands/AutoFillCommand.cpp:111
+#: ui/commands/AutoFillCommand.cpp:112
 #, kde-format
 msgid "March"
 msgstr "Märts"
 
-#: ui/commands/AutoFillCommand.cpp:112
+#: ui/commands/AutoFillCommand.cpp:113
 #, kde-format
 msgid "April"
 msgstr "Aprill"
 
-#: ui/commands/AutoFillCommand.cpp:113
+#: ui/commands/AutoFillCommand.cpp:114
 #, kde-format
 msgid "May"
 msgstr "Mai"
 
-#: ui/commands/AutoFillCommand.cpp:114
+#: ui/commands/AutoFillCommand.cpp:115
 #, kde-format
 msgid "June"
 msgstr "Juuni"
 
-#: ui/commands/AutoFillCommand.cpp:115
+#: ui/commands/AutoFillCommand.cpp:116
 #, kde-format
 msgid "July"
 msgstr "Juuli"
 
-#: ui/commands/AutoFillCommand.cpp:116
+#: ui/commands/AutoFillCommand.cpp:117
 #, kde-format
 msgid "August"
 msgstr "August"
 
-#: ui/commands/AutoFillCommand.cpp:117
+#: ui/commands/AutoFillCommand.cpp:118
 #, kde-format
 msgid "September"
 msgstr "September"
 
-#: ui/commands/AutoFillCommand.cpp:118
+#: ui/commands/AutoFillCommand.cpp:119
 #, kde-format
 msgid "October"
 msgstr "Oktoober"
 
-#: ui/commands/AutoFillCommand.cpp:119
+#: ui/commands/AutoFillCommand.cpp:120
 #, kde-format
 msgid "November"
 msgstr "November"
 
-#: ui/commands/AutoFillCommand.cpp:120
+#: ui/commands/AutoFillCommand.cpp:121
 #, kde-format
 msgid "December"
 msgstr "Detsember"
 
-#: ui/commands/AutoFillCommand.cpp:125
+#: ui/commands/AutoFillCommand.cpp:126
 #, kde-format
 msgid "Jan"
 msgstr "Jaan"
 
-#: ui/commands/AutoFillCommand.cpp:126
+#: ui/commands/AutoFillCommand.cpp:127
 #, kde-format
 msgid "Feb"
 msgstr "Veebr"
 
-#: ui/commands/AutoFillCommand.cpp:127
+#: ui/commands/AutoFillCommand.cpp:128
 #, kde-format
 msgid "Mar"
 msgstr "Märts"
 
-#: ui/commands/AutoFillCommand.cpp:128
+#: ui/commands/AutoFillCommand.cpp:129
 #, kde-format
 msgid "Apr"
 msgstr "Apr"
 
-#: ui/commands/AutoFillCommand.cpp:129
+#: ui/commands/AutoFillCommand.cpp:130
 #, kde-format
 msgctxt "May short"
 msgid "May"
 msgstr "Mai"
 
-#: ui/commands/AutoFillCommand.cpp:130
+#: ui/commands/AutoFillCommand.cpp:131
 #, kde-format
 msgid "Jun"
 msgstr "Juuni"
 
-#: ui/commands/AutoFillCommand.cpp:131
+#: ui/commands/AutoFillCommand.cpp:132
 #, kde-format
 msgid "Jul"
 msgstr "Juuli"
 
-#: ui/commands/AutoFillCommand.cpp:132
+#: ui/commands/AutoFillCommand.cpp:133
 #, kde-format
 msgid "Aug"
 msgstr "Aug"
 
-#: ui/commands/AutoFillCommand.cpp:133
+#: ui/commands/AutoFillCommand.cpp:134
 #, kde-format
 msgid "Sep"
 msgstr "Sept"
 
-#: ui/commands/AutoFillCommand.cpp:134
+#: ui/commands/AutoFillCommand.cpp:135
 #, kde-format
 msgid "Oct"
 msgstr "Okt"
 
-#: ui/commands/AutoFillCommand.cpp:135
+#: ui/commands/AutoFillCommand.cpp:136
 #, kde-format
 msgid "Nov"
 msgstr "Nov"
 
-#: ui/commands/AutoFillCommand.cpp:136
+#: ui/commands/AutoFillCommand.cpp:137
 #, kde-format
 msgid "Dec"
 msgstr "Dets"
 
-#: ui/commands/AutoFillCommand.cpp:141
+#: ui/commands/AutoFillCommand.cpp:142
 #, kde-format
 msgid "Monday"
 msgstr "Esmaspäev"
 
-#: ui/commands/AutoFillCommand.cpp:142
+#: ui/commands/AutoFillCommand.cpp:143
 #, kde-format
 msgid "Tuesday"
 msgstr "Teisipäev"
 
-#: ui/commands/AutoFillCommand.cpp:143
+#: ui/commands/AutoFillCommand.cpp:144
 #, kde-format
 msgid "Wednesday"
 msgstr "Kolmapäev"
 
-#: ui/commands/AutoFillCommand.cpp:144
+#: ui/commands/AutoFillCommand.cpp:145
 #, kde-format
 msgid "Thursday"
 msgstr "Neljapäev"
 
-#: ui/commands/AutoFillCommand.cpp:145
+#: ui/commands/AutoFillCommand.cpp:146
 #, kde-format
 msgid "Friday"
 msgstr "Reede"
 
-#: ui/commands/AutoFillCommand.cpp:146
+#: ui/commands/AutoFillCommand.cpp:147
 #, kde-format
 msgid "Saturday"
 msgstr "Laupäev"
 
-#: ui/commands/AutoFillCommand.cpp:147
+#: ui/commands/AutoFillCommand.cpp:148
 #, kde-format
 msgid "Sunday"
 msgstr "Pühapäev"
 
-#: ui/commands/AutoFillCommand.cpp:152
+#: ui/commands/AutoFillCommand.cpp:153
 #, kde-format
 msgid "Mon"
 msgstr "E"
 
-#: ui/commands/AutoFillCommand.cpp:153
+#: ui/commands/AutoFillCommand.cpp:154
 #, kde-format
 msgid "Tue"
 msgstr "T"
 
-#: ui/commands/AutoFillCommand.cpp:154
+#: ui/commands/AutoFillCommand.cpp:155
 #, kde-format
 msgid "Wed"
 msgstr "K"
 
-#: ui/commands/AutoFillCommand.cpp:155
+#: ui/commands/AutoFillCommand.cpp:156
 #, kde-format
 msgid "Thu"
 msgstr "N"
 
-#: ui/commands/AutoFillCommand.cpp:156
+#: ui/commands/AutoFillCommand.cpp:157
 #, kde-format
 msgid "Fri"
 msgstr "R"
 
-#: ui/commands/AutoFillCommand.cpp:157
+#: ui/commands/AutoFillCommand.cpp:158
 #, kde-format
 msgid "Sat"
 msgstr "L"
 
-#: ui/commands/AutoFillCommand.cpp:158
+#: ui/commands/AutoFillCommand.cpp:159
 #, kde-format
 msgid "Sun"
 msgstr "P"
 
-#: ui/commands/AutoFillCommand.cpp:678
+#: ui/commands/AutoFillCommand.cpp:679
 msgctxt "(qtundo-format)"
 msgid "Autofill"
 msgstr "Automaattäitumine"
@@ -15004,30 +15004,34 @@ msgstr ""
 "Süsteemi seadistustes."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, kde-format
-msgid "Date and Time"
+#, fuzzy, kde-format
+#| msgid "Date & Time"
+msgid "Datetime"
 msgstr "Kuupäev ja kellaaeg"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "To enter a date, you should enter it in one of the formats set in System "
+#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
+#| "Language -> Time & Dates. There are two formats set here: the date format "
+#| "and the short date format.\n"
+#| "Just like you can drag down numbers you can also drag down dates and the "
+#| "next cells will also get dates."
 msgid ""
-"This formats your cell content as date and time. To enter a date and a time, "
-"you should enter it in the Time format set in System Settings -> Common "
-"Appearance and Behavior -> Locale -> Country/Region & Language -> Time & "
-"Dates. In the Cell Format dialog box you can set how the time should be "
-"displayed by choosing one of the available date format options. The default "
-"format is the system format set in System Settings. When the number in the "
-"cell does not make sense as a date and time, Calligra Sheets will display "
-"00:00 in the global format you have in System Settings."
+"To enter a datetime, you should enter it in one of the formats set in System "
+"Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
+"Language -> Time & Dates. There are two formats set here: the date format "
+"and the short date format.\n"
+"Just like you can drag down numbers you can also drag down dates and the "
+"next cells will also get datetimes."
 msgstr ""
-"See vormindab lahtri sisu kuupäeva ja kellaajana. Kuuepäeva ja kellaaja "
-"sisestamiseks tuleb see sisestada vormingus, mis on määratud kindlaks "
-"Süsteemi seadistustes (Üldine välimus ja käitumine->Lokaat->Riik ja keel-"
-">Kuupäev ja kellaaeg). Lahtri vormingu dialoogis saab määrata, kuidas aega "
-"näidatakse, valides mõne saadaolevatest vormingutest. Vaikimisi kasutatakse "
-"Süsteemi seadistustes määratud süsteemset vormingut. Kui lahtris olevat arvu "
-"ei saa kuupäeva ja kellaajana tõlgendada, näitab Calligra Sheets 00:00 "
-"vormingus, mis on kindlaks määratud Süsteemi seadistustes."
+"Kuupäeva sisestamiseks tuleb see sisestada vormingus, mis on määratud "
+"kindlaks Süsteemi seadistustes (Üldine välimus ja käitumine->Lokaat->Riik ja "
+"keel->Kuupäev ja kellaaeg). Seal määratakse kindlaks kaks vormingut: kuupäev "
+"ja lühike kuupäev.\n"
+"Nagu saab sisestada lohistades arve, saab ka kuupäevi lisada lahtreid "
+"lohistades."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
@@ -15179,28 +15183,6 @@ msgstr "Kahekohaline 15/22"
 #, kde-format
 msgid "Three digits 153/652"
 msgstr "Kolmekohaline 153/652"
-
-#: ui/dialogs/LayoutPage_Float.cpp:321 ui/dialogs/LayoutPage_Float.cpp:322
-#: ui/dialogs/LayoutPage_Float.cpp:377 ui/dialogs/LayoutPage_Float.cpp:378
-#: ui/dialogs/LayoutPage_Float.cpp:417 ui/dialogs/LayoutPage_Float.cpp:418
-#, kde-format
-msgid "System: "
-msgstr "Süsteemne: "
-
-#: ui/dialogs/LayoutPage_Float.cpp:331
-#, kde-format
-msgid " (=[mm]:ss)"
-msgstr " (=[mm]:ss)"
-
-#: ui/dialogs/LayoutPage_Float.cpp:332
-#, kde-format
-msgid " (=[hh]:mm:ss)"
-msgstr " (=[hh]:mm:ss)"
-
-#: ui/dialogs/LayoutPage_Float.cpp:333
-#, kde-format
-msgid " (=[hh]:mm)"
-msgstr " (=[hh]:mm)"
 
 #: ui/dialogs/LayoutPage_Font.cpp:53
 #, kde-format
@@ -15589,6 +15571,42 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Kas avada link?"
+
+#~ msgid "Date and Time"
+#~ msgstr "Kuupäev ja kellaaeg"
+
+#~ msgid ""
+#~ "This formats your cell content as date and time. To enter a date and a "
+#~ "time, you should enter it in the Time format set in System Settings -> "
+#~ "Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
+#~ "Time & Dates. In the Cell Format dialog box you can set how the time "
+#~ "should be displayed by choosing one of the available date format options. "
+#~ "The default format is the system format set in System Settings. When the "
+#~ "number in the cell does not make sense as a date and time, Calligra "
+#~ "Sheets will display 00:00 in the global format you have in System "
+#~ "Settings."
+#~ msgstr ""
+#~ "See vormindab lahtri sisu kuupäeva ja kellaajana. Kuuepäeva ja kellaaja "
+#~ "sisestamiseks tuleb see sisestada vormingus, mis on määratud kindlaks "
+#~ "Süsteemi seadistustes (Üldine välimus ja käitumine->Lokaat->Riik ja keel-"
+#~ ">Kuupäev ja kellaaeg). Lahtri vormingu dialoogis saab määrata, kuidas "
+#~ "aega näidatakse, valides mõne saadaolevatest vormingutest. Vaikimisi "
+#~ "kasutatakse Süsteemi seadistustes määratud süsteemset vormingut. Kui "
+#~ "lahtris olevat arvu ei saa kuupäeva ja kellaajana tõlgendada, näitab "
+#~ "Calligra Sheets 00:00 vormingus, mis on kindlaks määratud Süsteemi "
+#~ "seadistustes."
+
+#~ msgid "System: "
+#~ msgstr "Süsteemne: "
+
+#~ msgid " (=[mm]:ss)"
+#~ msgstr " (=[mm]:ss)"
+
+#~ msgid " (=[hh]:mm:ss)"
+#~ msgstr " (=[hh]:mm:ss)"
+
+#~ msgid " (=[hh]:mm)"
+#~ msgstr " (=[hh]:mm)"
 
 #~ msgid "&Function..."
 #~ msgstr "&Funktsioon..."
