@@ -57,7 +57,9 @@ void TestValueConverter::initTestCase()
         qDebug()<<"Set locale:"<<l<<"->"<<setlocale(LC_MESSAGES, 0);
     }
 #endif
-
+#ifdef Q_OS_WIN
+    QEXPECT_FAIL("", "FIXME: Testing translations on windows does not work", Continue);
+#endif
     // check that translation ok, else lot of tests will fail later
     QString s = ki18n("true").toString(QStringList()<<QLatin1String(USE_LANGUAGE)<<QLatin1String(USE_LOCALE));
     QVERIFY2(s == QStringLiteral("sann"), "Translation failed, check that calligrasheets is translated to the selected language");
@@ -107,6 +109,7 @@ void TestValueConverter::testAsBoolean_data()
     QTest::newRow("string en fAlSe") << "en_US" << Value("fAlSe") << true << false;
     QTest::newRow("string en sann") << "en_US" << Value("sann") << false << false;
 
+#ifndef Q_OS_WIN
     QTest::newRow("string xx true") << USE_LOCALE << Value("true") << true << true;
     QTest::newRow("string xx false") << USE_LOCALE << Value("false") << true << false;
     QTest::newRow("string xx foobar") << USE_LOCALE << Value("foobar") << false << false;
@@ -116,7 +119,7 @@ void TestValueConverter::testAsBoolean_data()
     QTest::newRow("string xx sAnn") << USE_LOCALE << Value("sAnn") << true << true;
     QTest::newRow("string xx usann") << USE_LOCALE << Value("usann") << true << false;
     QTest::newRow("string xx usAnn") << USE_LOCALE << Value("usAnn") << true << false;
-
+#endif
 
     ValueStorage array;
     QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << false;
