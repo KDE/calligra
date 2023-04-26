@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2016, 2020, 2021, 2022.
+# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2016, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2022-12-14 12:28+0100\n"
+"PO-Revision-Date: 2023-04-25 22:30+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -13750,10 +13750,9 @@ msgid "Cell Format"
 msgstr "Formato de cella"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Formato de cella"
+msgstr "Fixa Formato de cella"
 
 #: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format
@@ -13897,10 +13896,9 @@ msgid ""
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "Data & Tempore"
+msgstr "Tempore de Data"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-16 10:55+0300\n"
+"PO-Revision-Date: 2023-04-25 11:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15079,20 +15079,12 @@ msgstr ""
 "olarak ayarladığınız 00:00'ı görüntüler."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
 msgstr "Tarih ve Zaman"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15101,10 +15093,10 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Bir tarih girebilmek için Sistem Ayarları -> Yaygın Görünüş ve Davranış -> "
-"Yerel -> Ülke/Bölge ve Dil -> Tarih ve Zaman sekmesi altında ayarladığınız "
-"biçimlerden birini girmelisiniz. Burada iki biçim bulunur: tarih biçimi ve "
-"kısa tarih biçimi.\n"
+"Tarih ve zaman girebilmek için Sistem Ayarları -> Yaygın Görünüş ve Davranış "
+"-> Yerel -> Ülke/Bölge ve Dil -> Tarih ve Zaman sekmesi altında "
+"ayarladığınız biçimlerden birini girmelisiniz. Burada iki biçim bulunur: "
+"tarih biçimi ve kısa tarih biçimi.\n"
 "Sayıları aşağı doğru sürükleyebildiğiniz gibi tarihleri de aynı şekilde "
 "sürükleyebilir ve sürdürebilirsiniz."
 

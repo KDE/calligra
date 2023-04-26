@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-16 15:41+0200\n"
+"PO-Revision-Date: 2023-04-25 10:04+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15490,20 +15490,12 @@ msgstr ""
 "de globaal ingestelde opmaak in Systeeminstellingen."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "Datum & tijd"
+msgstr "Datum-tijd"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15512,13 +15504,13 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Om een datum in te voeren moet u het invoeren in een van de opmaken die in "
-"Systeeminstellingen -> Gemeenschappelijk uiterlijk en gedrag -> Taalregio -> "
-"Land/regio en taal -> Tijd &amp; datum zijn ingesteld. Er kunnen daar twee "
-"opmaken worden ingesteld: de opmaak voor de datum en de ingekorte opmaak "
-"voor de datum.\n"
-"Net als getallen kunt u ook data (datums) naar volgende cellen verslepen, "
-"die dan ook data bevatten."
+"Om een datum-tijd in te voeren moet u het invoeren in een van de opmaken die "
+"in Systeeminstellingen -> Gemeenschappelijk uiterlijk en gedrag -> Taalregio "
+"-> Land/regio en taal -> Tijd &amp; datum zijn ingesteld. Er kunnen daar "
+"twee typen opmaak worden ingesteld: de opmaak voor de datum en de ingekorte "
+"opmaak voor de datum.\n"
+"Net als getallen kunt u ook datums naar volgende cellen verslepen, die dan "
+"ook datum-tijd bevatten."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format

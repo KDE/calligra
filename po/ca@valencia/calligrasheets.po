@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-16 10:41+0200\n"
+"PO-Revision-Date: 2023-04-25 10:11+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -15212,7 +15212,7 @@ msgstr ""
 "regional -> País/regió i idioma -> Data i hora». Ací hi ha dos formats "
 "establits: el format de la data i el format curt de la data.\n"
 "Així com podeu fer córrer els números, també podeu arrossegar dates cap a "
-"baix i les següents cel·les també tindran dates."
+"baix i les cel·les següents també tindran dates."
 
 #: ui/dialogs/LayoutPage_Float.cpp:87
 #, kde-format
@@ -15236,20 +15236,12 @@ msgstr ""
 "format global que teniu a Configuració del sistema."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
 msgstr "Data i hora"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15258,12 +15250,12 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Per a introduir una data, ho heu de fer en un dels formats establits a "
-"«Configuració del sistema -> Aparença i comportament usual -> Configuració "
+"Per a introduir una data i hora, ho heu de fer en un dels formats establits "
+"a «Configuració del sistema -> Aparença i comportament usual -> Configuració "
 "regional -> País/regió i idioma -> Data i hora». Ací hi ha dos formats "
 "establits: el format de la data i el format curt de la data.\n"
 "Així com podeu fer córrer els números, també podeu arrossegar dates cap a "
-"baix i les següents cel·les també tindran dates."
+"baix i les cel·les següents també tindran dates i hores."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
@@ -15817,42 +15809,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Voleu obrir l'enllaç?"
-
-#~ msgid "Date and Time"
-#~ msgstr "Data i hora"
-
-#~ msgid ""
-#~ "This formats your cell content as date and time. To enter a date and a "
-#~ "time, you should enter it in the Time format set in System Settings -> "
-#~ "Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
-#~ "Time & Dates. In the Cell Format dialog box you can set how the time "
-#~ "should be displayed by choosing one of the available date format options. "
-#~ "The default format is the system format set in System Settings. When the "
-#~ "number in the cell does not make sense as a date and time, Calligra "
-#~ "Sheets will display 00:00 in the global format you have in System "
-#~ "Settings."
-#~ msgstr ""
-#~ "Açò dona format al contingut de la cel·la com a data i hora. Per a "
-#~ "introduir una data i hora, ho heu de fer en el «Format de l'hora» "
-#~ "establit a «Configuració del sistema -> Aparença i comportament usual -> "
-#~ "Configuració regional -> País/regió i idioma -> Data i hora». En el "
-#~ "diàleg del format de cel·la, podeu establir com es mostrarà l'hora, "
-#~ "escollint entre les opcions disponibles. El format predeterminat és "
-#~ "l'establit a Configuració del sistema. Quan el nombre de la cel·la no "
-#~ "tinga sentit com a data i hora, Sheets el mostrarà com a 00:00 en el "
-#~ "format global que teniu a Configuració del sistema."
-
-#~ msgid "System: "
-#~ msgstr "Sistema: "
-
-# msgid " (=[mm]::ss)"
-#~ msgid " (=[mm]:ss)"
-#~ msgstr " (=[mm]::ss)"
-
-# msgid " (=[hh]::mm::ss)"
-#~ msgid " (=[hh]:mm:ss)"
-#~ msgstr " (=[hh]::mm::ss)"
-
-# msgid " (=[hh]::mm)"
-#~ msgid " (=[hh]:mm)"
-#~ msgstr " (=[hh]::mm)"

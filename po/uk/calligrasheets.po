@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-16 08:57+0300\n"
+"PO-Revision-Date: 2023-04-25 19:35+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -15307,20 +15307,12 @@ msgstr ""
 "форматі, визначеному у Системних параметрах."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
 msgstr "Дата і час"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15329,13 +15321,13 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Щоб ввести дату, вам слід вибрати один з форматів її представлення за "
+"Щоб ввести дату і час, вам слід вибрати один з форматів її представлення за "
 "допомогою параметрів встановлених у Системних параметрах → Загальний вигляд "
 "і поведінка → Локаль → Країна/Регіон та мова → Час та дата. Ви можете "
 "вибрати зі списку на панелі праворуч відповідний формат: короткий або "
 "повний.\n"
-"Ви можете використовувати автозаповнення для дат, так само як це робиться "
-"для чисел."
+"Ви можете використовувати автозаповнення для дат і часу, так само як це "
+"робиться для чисел."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format

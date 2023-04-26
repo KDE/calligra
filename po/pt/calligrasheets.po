@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-17 14:37+0100\n"
+"PO-Revision-Date: 2023-04-25 21:15+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -15353,20 +15353,12 @@ msgstr ""
 "formato global que tem na Configuração do Sistema."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "Data & Hora"
+msgstr "Data/Hora"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15375,12 +15367,12 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Para introduzir uma data, deverá indicá-la num dos formatos definidos na "
-"Configuração do Sistema -> Aparência e Comportamento Comuns -> Localização -"
-"> País/Região & Língua / Datas & Horas. Existem dois formatos aqui "
-"definidos: o das datas e o das datas abreviadas.\n"
+"Para introduzir uma data/hora, deverá indicá-la num dos formatos definidos "
+"na Configuração do Sistema -> Aparência e Comportamento Comuns -> "
+"Localização -> País/Região & Língua / Datas & Horas. Existem dois formatos "
+"aqui definidos: o das datas e o das datas abreviadas.\n"
 "Assim como poderá arrastar os números, poderá também arrastar as datas, para "
-"que as próximas células também aceitem datas."
+"que as próximas células também aceitem datas/horas."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format
@@ -15936,39 +15928,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Abrir a Ligação?"
-
-#~ msgid "Date and Time"
-#~ msgstr "Data e Hora"
-
-#~ msgid ""
-#~ "This formats your cell content as date and time. To enter a date and a "
-#~ "time, you should enter it in the Time format set in System Settings -> "
-#~ "Common Appearance and Behavior -> Locale -> Country/Region & Language -> "
-#~ "Time & Dates. In the Cell Format dialog box you can set how the time "
-#~ "should be displayed by choosing one of the available date format options. "
-#~ "The default format is the system format set in System Settings. When the "
-#~ "number in the cell does not make sense as a date and time, Calligra "
-#~ "Sheets will display 00:00 in the global format you have in System "
-#~ "Settings."
-#~ msgstr ""
-#~ "Isto formata o conteúdo da sua célula como uma hora. Para indicar uma "
-#~ "hora, devê-la-á indicar com o Formato da hora definido na Configuração do "
-#~ "Sistema -> Aparência e Comportamento Comuns -> Localização -> País/Região "
-#~ "& Língua -> Datas & Horas. Na janela do Formato da Célula, poderá definir "
-#~ "como é que a hora será mostrada, com base numa das opções de horas "
-#~ "disponíveis. O formato por omissão é o definido na Configuração do "
-#~ "Sistema. Quando o número da célula não fizer sentido como uma hora, o "
-#~ "Sheets irá mostrar 00:00 no formato global que tem na Configuração do "
-#~ "Sistema."
-
-#~ msgid "System: "
-#~ msgstr "Sistema: "
-
-#~ msgid " (=[mm]:ss)"
-#~ msgstr " (=[mm]:ss)"
-
-#~ msgid " (=[hh]:mm:ss)"
-#~ msgstr " (=[hh]:mm:ss)"
-
-#~ msgid " (=[hh]:mm)"
-#~ msgstr " (=[hh]:mm)"
