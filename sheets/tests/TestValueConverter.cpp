@@ -100,13 +100,13 @@ void TestValueConverter::testAsBoolean_data()
     QTest::newRow("complex  0 1i") << "C" << Value(complex<Number>(0, 1)) << true << false;
     QTest::newRow("complex +1 1i") << "C" << Value(complex<Number>(1, 1)) << true << true;
 
-    QTest::newRow("string en true") << "C" << Value("true") << true << true;
-    QTest::newRow("string en false") << "C" << Value("false") << true << false;
-    QTest::newRow("string en foobar") << "C" << Value("foobar") << false << false;
-    QTest::newRow("string en TruE") << "C" << Value("TruE") << true << true;
-    QTest::newRow("string en fAlSe") << "C" << Value("fAlSe") << true << false;
+    QTest::newRow("string en true") << "en_US" << Value("true") << true << true;
+    QTest::newRow("string en false") << "en_US" << Value("false") << true << false;
+    QTest::newRow("string en foobar") << "en_US" << Value("foobar") << false << false;
+    QTest::newRow("string en TruE") << "en_US" << Value("TruE") << true << true;
+    QTest::newRow("string en fAlSe") << "en_US" << Value("fAlSe") << true << false;
+    QTest::newRow("string en sann") << "en_US" << Value("sann") << false << false;
 
-    QTest::newRow("string en sann") << "C" << Value("sann") << false << false;
     QTest::newRow("string xx true") << USE_LOCALE << Value("true") << true << true;
     QTest::newRow("string xx false") << USE_LOCALE << Value("false") << true << false;
     QTest::newRow("string xx foobar") << USE_LOCALE << Value("foobar") << false << false;
