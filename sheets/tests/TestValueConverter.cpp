@@ -59,7 +59,7 @@ void TestValueConverter::initTestCase()
 #endif
 
     // check that translation ok, else lot of tests will fail later
-    QString s = ki18n("true").toString(QStringList()<<QLatin1String(USE_LANGUAGE));
+    QString s = ki18n("true").toString(QStringList()<<QLatin1String(USE_LANGUAGE)<<QLatin1String(USE_LOCALE));
     QVERIFY2(s == QStringLiteral("sann"), "Translation failed, check that calligrasheets is translated to the selected language");
 }
 
