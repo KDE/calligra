@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-17 06:16+0200\n"
+"PO-Revision-Date: 2023-04-26 06:35+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2151,7 +2151,7 @@ msgstr ""
 #: functions/engineering.xml:24
 #, kde-format
 msgid "BASE(number;base;prec)"
-msgstr ""
+msgstr "BASE(რიცხვი;ბაზა;სიზუსტე)"
 
 #: functions/engineering.xml:25
 #, kde-format
@@ -2168,7 +2168,7 @@ msgstr ""
 #: functions/engineering.xml:79 functions/engineering.xml:100
 #, kde-format
 msgid "Order of the function"
-msgstr ""
+msgstr "ფუნქციის თანმიმდევრობა"
 
 #: functions/engineering.xml:41
 #, kde-format
@@ -2691,7 +2691,7 @@ msgstr ""
 #: functions/engineering.xml:408
 #, kde-format
 msgid "COMPLEX(real;imag)"
-msgstr ""
+msgstr "COMPLEX(რეალ;წარმოსახვ)"
 
 #: functions/engineering.xml:409
 #, kde-format
@@ -3582,7 +3582,7 @@ msgstr "სიხშირე"
 #: functions/financial.xml:216 functions/financial.xml:253
 #, kde-format
 msgid "periods"
-msgstr ""
+msgstr "პერიოდები"
 
 #: functions/financial.xml:220 functions/financial.xml:257
 #, kde-format
@@ -13520,7 +13520,7 @@ msgstr "სვეტების ჩასმა"
 #: ui/commands/RowColumnManipulators.cpp:575
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
-msgstr ""
+msgstr "სვეტების წაშლა"
 
 #: ui/commands/RowColumnManipulators.cpp:632
 #: ui/commands/RowColumnManipulators.cpp:650
@@ -13620,7 +13620,7 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:152
 #, kde-format
 msgid "Varying (No Change)"
-msgstr ""
+msgstr "ცვალებადი (ცვლილების გარეშე)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:53
@@ -13895,10 +13895,9 @@ msgid ""
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "თარიღი & დრო"
+msgstr "თარიღი და დრო"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
