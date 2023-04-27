@@ -440,7 +440,7 @@ void DependencyManager::Private::generateDepths(CellBase cell, QSet<CellBase>& c
 
     //prevent infinite recursion (circular dependencies)
     if (processedCells.contains(cell) || cell.value() == Value::errorCIRCLE()) {
-        debugSheetsFormula << "Circular dependency at" << cell.fullName();
+        debugSheetsFormula << "generateDepths:" << "Circular dependency at" << cell.fullName();
         cell.setValue(Value::errorCIRCLE());
         depths.insert(cell, 0);
         return;
@@ -480,7 +480,7 @@ int DependencyManager::Private::computeDepth(CellBase cell) const
 
     //prevent infinite recursion (circular dependencies)
     if (processedCells.contains(cell) || cell.value() == Value::errorCIRCLE()) {
-        debugSheetsFormula << "Circular dependency at" << cell.fullName();
+        debugSheetsFormula <<"computeDepth:" << "Circular dependency at" << cell.fullName();
         cell.setValue(Value::errorCIRCLE());
         return 0;
     }

@@ -25,7 +25,7 @@ class Q_DECL_HIDDEN Localization::PrivateData : public QSharedData
  public:
     QLocale locale;
     QString timeSep, dateSepShort, dateSepLong;
-    QStringList dateTimeFormats, dateFormats, timeFormats;
+    QMap<Format::Type, QString> dateTimeFormats, dateFormats, timeFormats;
     bool includesAMPM;
     QString trueString, falseString;
  };
