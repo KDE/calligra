@@ -50,16 +50,16 @@ public:
     };
 
     // create empty data
-    Private() : type(Value::Empty), format(Value::fmt_None), ps(0) {}
+    Private() : type(Value::Empty), format(Value::fmt_None), ps(nullptr) {}
 
     Private(const Private& o)
-            : QSharedData(o)
-            , type(o.type)
-            , format(o.format) {
+        : QSharedData(o)
+        , type(o.type)
+        , format(o.format) {
         switch (type) {
         case Value::Empty:
         default:
-            ps = 0;
+            ps = nullptr;
             break;
         case Value::Boolean:
             b = o.b;
@@ -85,14 +85,16 @@ public:
 
     // destroys data
     ~Private() {
-        if (this == s_null)
+        if (this == s_null) {
             s_null = 0;
+        }
         clear();
     }
 
     // static empty data to be shared
     static Private* null() {
-        if (!s_null) s_null = new Private;
+        if (!s_null) { s_null = new Private;
+        }
         return s_null;
     }
 
@@ -108,7 +110,7 @@ public:
         if (type == Value::Error)   delete ps;
         if (type == Value::String)  delete ps;
         type = Value::Empty;
-        b = 0;
+        ps = nullptr;
     }
 
     /** set most probable formatting based on the type */
@@ -181,6 +183,9 @@ Value::~Value()
 Value::Value(Value::Type _type)
         : d(Private::null())
 {
+    if (d->type != _type) {
+        d = new Private;
+    }
     d->type = _type;
     d->setFormatByType();
 }
@@ -221,7 +226,7 @@ bool Value::operator==(const Value& o) const
 
 // create a boolean value
 Value::Value(bool b)
-        : d(Private::null())
+        : d(new Private)
 {
     d->type = Boolean;
     d->b = b;
@@ -230,7 +235,7 @@ Value::Value(bool b)
 
 // create an integer value
 Value::Value(int64_t i)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = Integer;
     d->i = i;
@@ -239,7 +244,7 @@ Value::Value(int64_t i)
 
 // create an integer value
 Value::Value(int i)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = Integer;
     d->i = static_cast<int64_t>(i);
@@ -248,7 +253,7 @@ Value::Value(int i)
 
 // create a floating-point value
 Value::Value(double f)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = Float;
     d->f = Number(f);
@@ -257,7 +262,7 @@ Value::Value(double f)
 
 // create a floating-point value
 Value::Value(long double f)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = Float;
     d->f = Number(f);
@@ -268,7 +273,7 @@ Value::Value(long double f)
 #ifdef CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 // create a floating-point value
 Value::Value(Number f)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = Float;
     d->f = f;
@@ -278,7 +283,7 @@ Value::Value(Number f)
 
 // create a complex number value
 Value::Value(const complex<Number>& c)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = Complex;
     d->pc = new complex<Number>(c);
@@ -287,7 +292,7 @@ Value::Value(const complex<Number>& c)
 
 // create a string value
 Value::Value(const QString& s)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = String;
     d->ps = new QString(s);
@@ -296,7 +301,7 @@ Value::Value(const QString& s)
 
 // create a string value
 Value::Value(const char *s)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = String;
     d->ps = new QString(s);
@@ -305,7 +310,7 @@ Value::Value(const char *s)
 
 // create a floating-point value from date/time
 Value::Value(const QDateTime& dt, const CalculationSettings* settings)
-        : d(Private::null())
+    : d(new Private)
 {
     const QDate refDate(settings->referenceDate());
     const Time refTime(0, 0);    // reference time is midnight
@@ -318,7 +323,7 @@ Value::Value(const QDateTime& dt, const CalculationSettings* settings)
 
 // create a floating-point value from time
 Value::Value(const Time &time)
-        : d(Private::null())
+    : d(new Private)
 {
     const Time refTime(0, 0);    // reference time is midnight
 
@@ -329,7 +334,7 @@ Value::Value(const Time &time)
 
 // create a floating-point value from date
 Value::Value(const QDate& date, const CalculationSettings* settings)
-        : d(Private::null())
+    : d(new Private)
 {
     const QDate refDate(settings->referenceDate());
 
@@ -340,7 +345,7 @@ Value::Value(const QDate& date, const CalculationSettings* settings)
 
 // create an array value
 Value::Value(const ValueStorage& array, const QSize& size)
-        : d(Private::null())
+    : d(new Private)
 {
     d->type = Array;
     d->pa = new ValueArray(array, size);
