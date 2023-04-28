@@ -153,6 +153,7 @@ void Value::Private::setFormatByType()
 Value::Private* Value::Private::s_null = 0;
 
 // static things
+#ifndef Q_OS_WIN
 Value ks_value_empty;
 Value ks_value_null;
 Value ks_error_circle;
@@ -165,6 +166,22 @@ Value ks_error_num;
 Value ks_error_parse;
 Value ks_error_ref;
 Value ks_error_value;
+#else
+// MSVC seems to need these values to be allocated on the heap
+// in order to be able to modify them.
+Value *ks_value_empty = nullptr;
+Value *ks_value_null = nullptr;
+Value *ks_error_circle = nullptr;
+Value *ks_error_depend = nullptr;
+Value *ks_error_div0 = nullptr;
+Value *ks_error_na = nullptr;
+Value *ks_error_name = nullptr;
+Value *ks_error_null = nullptr;
+Value *ks_error_num = nullptr;
+Value *ks_error_parse = nullptr;
+Value *ks_error_ref = nullptr;
+Value *ks_error_value = nullptr;
+#endif
 
 // create an empty value
 Value::Value()
@@ -576,95 +593,190 @@ unsigned Value::count() const
 // reference to empty value
 const Value& Value::empty()
 {
+#ifndef Q_OS_WIN
     return ks_value_empty;
+#else
+    if (!ks_value_empty) {
+        ks_value_empty = new Value(Empty);
+    }
+    return *ks_value_empty;
+#endif
 }
 
 // reference to null value
 const Value& Value::null()
 {
+#ifndef Q_OS_WIN
     if (!ks_value_null.isNull())
         ks_value_null.d->b = true;
     return ks_value_null;
+#else
+    if (!ks_value_null) {
+        ks_value_null = new Value(Empty);
+        ks_value_null->d->b = true;
+    }
+    return *ks_value_null;
+#endif
 }
 
 // reference to #CIRCLE! error
 const Value& Value::errorCIRCLE()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_circle.isError())
         ks_error_circle.setError(i18nc("Error: circular formula dependency", "#CIRCLE!"));
     return ks_error_circle;
+#else
+    if (!ks_error_circle) {
+        ks_error_circle = new Value(Error);
+        ks_error_circle->setError(i18nc("Error: circular formula dependency", "#CIRCLE!"));
+    }
+    return *ks_error_circle;
+#endif
 }
 
 // reference to #DEPEND! error
 const Value& Value::errorDEPEND()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_depend.isError())
         ks_error_depend.setError(i18nc("Error: broken cell reference", "#DEPEND!"));
     return ks_error_depend;
+#else
+    if (!ks_error_depend) {
+        ks_error_depend = new Value(Error);
+        ks_error_depend->setError(i18nc("Error: broken cell reference", "#DEPEND!"));
+    }
+    return *ks_error_depend;
+#endif
 }
 
 // reference to #DIV/0! error
 const Value& Value::errorDIV0()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_div0.isError())
         ks_error_div0.setError(i18nc("Error: division by zero", "#DIV/0!"));
     return ks_error_div0;
+#else
+    if (!ks_error_div0) {
+        ks_error_div0 = new Value(Error);
+        ks_error_div0->setError(i18nc("Error: division by zero", "#DIV/0!"));
+    }
+    return *ks_error_div0;
+#endif
 }
 
 // reference to #N/A error
 const Value& Value::errorNA()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_na.isError())
         ks_error_na.setError(i18nc("Error: not available", "#N/A"));
     return ks_error_na;
+#else
+    if (!ks_error_na) {
+        ks_error_na = new Value(Error);
+        ks_error_na->setError(i18nc("Error: not available", "#N/A"));
+    }
+    return *ks_error_na;
+#endif
 }
 
 // reference to #NAME? error
 const Value& Value::errorNAME()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_name.isError())
         ks_error_name.setError(i18nc("Error: unknown function name", "#NAME?"));
     return ks_error_name;
+#else
+    if (!ks_error_name) {
+        ks_error_name = new Value(Error);
+        ks_error_name->setError(i18nc("Error: unknown function name", "#NAME?"));
+    }
+    return *ks_error_name;
+#endif
 }
 
 // reference to #NUM! error
 const Value& Value::errorNUM()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_num.isError())
         ks_error_num.setError(i18nc("Error: number out of range", "#NUM!"));
     return ks_error_num;
+#else
+    if (!ks_error_num) {
+        ks_error_num = new Value(Error);
+        ks_error_num->setError(i18nc("Error: number out of range", "#NUM!"));
+    }
+    return *ks_error_num;
+#endif
 }
 
 // reference to #NULL! error
 const Value& Value::errorNULL()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_null.isError())
         ks_error_null.setError(i18nc("Error: empty intersecting area", "#NULL!"));
     return ks_error_null;
+#else
+    if (!ks_error_null) {
+        ks_error_null = new Value(Error);
+        ks_error_null->setError(i18nc("Error: empty intersecting area", "#NULL!"));
+    }
+    return *ks_error_null;
+#endif
 }
 
 // reference to #PARSE! error
 const Value& Value::errorPARSE()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_parse.isError())
         ks_error_parse.setError(i18nc("Error: formula not parseable", "#PARSE!"));
     return ks_error_parse;
+#else
+    if (!ks_error_parse) {
+        ks_error_parse = new Value(Error);
+        ks_error_parse->setError(i18nc("Error: formula not parseable", "#PARSE!"));
+    }
+    return *ks_error_parse;
+#endif
 }
 
 // reference to #REF! error
 const Value& Value::errorREF()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_ref.isError())
         ks_error_ref.setError(i18nc("Error: invalid cell/array reference", "#REF!"));
     return ks_error_ref;
+#else
+    if (!ks_error_ref) {
+        ks_error_ref = new Value(Error);
+        ks_error_ref->setError(i18nc("Error: invalid cell/array reference", "#REF!"));
+    }
+    return *ks_error_ref;
+#endif
 }
 
 // reference to #VALUE! error
 const Value& Value::errorVALUE()
 {
+#ifndef Q_OS_WIN
     if (!ks_error_value.isError())
         ks_error_value.setError(i18nc("Error: wrong (number of) function argument(s)", "#VALUE!"));
     return ks_error_value;
+#else
+    if (!ks_error_value) {
+        ks_error_value = new Value(Error);
+        ks_error_value->setError(i18nc("Error: wrong (number of) function argument(s)", "#VALUE!"));
+    }
+    return *ks_error_value;
+#endif
 }
 
 int Value::compare(Number v1, Number v2)
