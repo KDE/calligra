@@ -172,18 +172,6 @@ void TestRTree::testInsertColumns()
     QCOMPARE(pairs[0].first, QRectF(1, 1, 2, 1));
     QCOMPARE(pairs[1].first, QRectF(1, 2, 6, 1));
     QCOMPARE(undo.count(), 0);
-
-    // RTree::InsertMode = RTree::CopyNone
-    tree.clear();
-    tree.insert(QRect(1, 1, 2, 1), QString("1"));
-    tree.insert(QRect(1, 2, 3, 1), QString("2"));
-    undo = tree.insertColumns(3, 3, RTree<QString>::CopyNone);
-    pairs = tree.intersectingPairs(QRect(1, 1, 10, 10));
-    QCOMPARE(pairs.count(), 3);
-    QCOMPARE(pairs[0].first, QRectF(1, 1, 2, 1));
-    QCOMPARE(pairs[1].first, QRectF(1, 2, 2, 1));
-    QCOMPARE(pairs[2].first, QRectF(6, 2, 1, 1));
-    QCOMPARE(undo.count(), 0);
 #endif
 }
 

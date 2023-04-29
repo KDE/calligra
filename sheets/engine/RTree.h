@@ -59,11 +59,6 @@ public:
          * column/row.
          */
         CopyCurrent,
-        /**
-         * Splits the rectangles at the insertion column/row position.
-         * Thus, the inserted columns/rows do not carry any data.
-         */
-        CopyNone
     };
 
     /**
@@ -584,13 +579,11 @@ QVector< QPair<QRectF, T> > RTree<T>::insertShiftRight(const QRect& r, InsertMod
     // insert default data at the bounding rectangle
     insert(boundingRect, T());
     // fill the inserted rectangle
-    if (mode != CopyNone) {
-        const int offset = (mode == CopyPrevious) ? 1 : 0;
-        const QRect copyRect = QRect(rect.left() - offset, rect.top(), 1, rect.height());
-        const QVector< QPair<QRectF, T> > copyPairs = intersectingPairs(copyRect).values().toVector();
-        for (int i = 0; i < copyPairs.count(); ++i) {
-            insert((copyPairs[i].first.toRect() & copyRect).adjusted(offset, 0, rect.width() + offset - 1, 0), copyPairs[i].second);
-        }
+    const int offset = (mode == CopyPrevious) ? 1 : 0;
+    const QRect copyRect = QRect(rect.left() - offset, rect.top(), 1, rect.height());
+    const QVector< QPair<QRectF, T> > copyPairs = intersectingPairs(copyRect).values().toVector();
+    for (int i = 0; i < copyPairs.count(); ++i) {
+        insert((copyPairs[i].first.toRect() & copyRect).adjusted(offset, 0, rect.width() + offset - 1, 0), copyPairs[i].second);
     }
     // insert the data at the shifted rectangles
     for (int i = 0; i < oldPairs.count(); ++i) {
@@ -614,13 +607,11 @@ QVector< QPair<QRectF, T> > RTree<T>::insertShiftDown(const QRect& r, InsertMode
     // insert default data at the bounding rectangle
     insert(boundingRect, T());
     // fill the inserted rectangle
-    if (mode != CopyNone) {
-        const int offset = (mode == CopyPrevious) ? 1 : 0;
-        const QRect copyRect = QRect(rect.left(), rect.top() - offset, rect.width(), 1);
-        const QVector< QPair<QRectF, T> > copyPairs = intersectingPairs(copyRect).values().toVector();
-        for (int i = 0; i < copyPairs.count(); ++i) {
-            insert((copyPairs[i].first.toRect() & copyRect).adjusted(0, offset, 0, rect.height() + offset - 1), copyPairs[i].second);
-        }
+    const int offset = (mode == CopyPrevious) ? 1 : 0;
+    const QRect copyRect = QRect(rect.left(), rect.top() - offset, rect.width(), 1);
+    const QVector< QPair<QRectF, T> > copyPairs = intersectingPairs(copyRect).values().toVector();
+    for (int i = 0; i < copyPairs.count(); ++i) {
+        insert((copyPairs[i].first.toRect() & copyRect).adjusted(0, offset, 0, rect.height() + offset - 1), copyPairs[i].second);
     }
     // insert the data at the shifted rectangles
     for (int i = 0; i < oldPairs.count(); ++i) {
@@ -735,9 +726,7 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int n
     int shift = 0, endShift = number;
     // Don't process complete columns.
     if (this->m_boundingBox.top() != 1 || this->m_boundingBox.bottom() != KS_rowMax) {
-        if (mode == CopyNone)
-            shift = 0;
-        else if (position < this->m_boundingBox.top())
+        if (position < this->m_boundingBox.top())
             shift = number;
         if (position < this->m_boundingBox.toRect().bottom())
             endShift = number;
@@ -751,9 +740,7 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int n
         if (this->m_childBoundingBox[i].top() == 1 && this->m_childBoundingBox[i].bottom() == KS_rowMax)
             continue;
 
-        if (mode == CopyNone)
-            shift = 0;
-        else if (position < this->m_childBoundingBox[i].top())
+        if (position < this->m_childBoundingBox[i].top())
             shift = number;
         else
             shift = 0;
@@ -781,9 +768,7 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertColumns(int position, in
     int shift = 0;
     // Don't process complete rows.
     if (this->m_boundingBox.left() != 1 || this->m_boundingBox.right() != KS_colMax) {
-        if (mode == CopyNone)
-            shift = 0;
-        else if (position < this->m_boundingBox.left())
+        if (position < this->m_boundingBox.left())
             shift = number;
         this->m_boundingBox.adjust(shift, 0, number, 0);
     }
@@ -793,9 +778,7 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertColumns(int position, in
         if (this->m_childBoundingBox[i].left() == 1 && this->m_childBoundingBox[i].right() == KS_rowMax)
             continue;
 
-        if (mode == CopyNone)
-            shift = 0;
-        else if (position < this->m_childBoundingBox[i].left())
+        if (position < this->m_childBoundingBox[i].left())
             shift = number;
         else
             shift = 0;
