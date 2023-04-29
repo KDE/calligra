@@ -350,7 +350,6 @@ void RectStorage<T>::insertRows(int position, int number)
     invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), T());
     undoData << m_tree.insertRows(position, number, RTree<T>::CopyCurrent);
     if (m_storingUndo) m_undoData << undoData;
 }
@@ -364,7 +363,6 @@ void RectStorage<T>::insertColumns(int position, int number)
     invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), T());
     undoData << m_tree.insertColumns(position, number, RTree<T>::CopyCurrent);
     if (m_storingUndo) m_undoData << undoData;
 }
@@ -378,7 +376,6 @@ void RectStorage<T>::removeRows(int position, int number)
     invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(1, position, KS_colMax, number), T());
     undoData << m_tree.removeRows(position, number);
     if (m_storingUndo) m_undoData << undoData;
 }
@@ -392,7 +389,6 @@ void RectStorage<T>::removeColumns(int position, int number)
     invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(position, 1, number, KS_rowMax), T());
     undoData << m_tree.removeColumns(position, number);
     if (m_storingUndo) m_undoData << undoData;
 }
@@ -403,7 +399,6 @@ void RectStorage<T>::insertShiftRight(const QRect& rect)
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.insertShiftRight(rect);
     regionChanged(invalidRect);
     if (m_storingUndo) m_undoData << undoData;
@@ -415,7 +410,6 @@ void RectStorage<T>::insertShiftDown(const QRect& rect)
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.insertShiftDown(rect);
     if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
@@ -427,7 +421,6 @@ void RectStorage<T>::removeShiftLeft(const QRect& rect)
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.removeShiftLeft(rect);
     if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
@@ -439,7 +432,6 @@ void RectStorage<T>::removeShiftUp(const QRect& rect)
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
     QVector< QPair<QRectF, T> > undoData;
-    undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.removeShiftUp(rect);
     if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);

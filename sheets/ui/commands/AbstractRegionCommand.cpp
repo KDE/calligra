@@ -125,8 +125,6 @@ void AbstractRegionCommand::redo()
 
 void AbstractRegionCommand::undo()
 {
-    KUndo2Command::undo();   // undo child commands as well
-
     Q_ASSERT(m_sheet);
     if (!m_sheet) { m_success = false; return; }
 

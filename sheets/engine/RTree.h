@@ -725,7 +725,9 @@ void RTree<T>::LeafNode::intersectingPairs(const QRectF& rect, QMap<int, QPair<Q
 template<typename T>
 QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int number, InsertMode mode)
 {
-    if (position - (mode == CopyPrevious ? 1 : 0) > this->m_boundingBox.bottom())
+    if (mode == CopyPrevious) position--;
+
+    if (position > this->m_boundingBox.bottom())
         return QMap< int, QPair<QRectF, T> >();
 
     QMap< int, QPair<QRectF, T> > result;
@@ -735,9 +737,9 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int n
     if (this->m_boundingBox.top() != 1 || this->m_boundingBox.bottom() != KS_rowMax) {
         if (mode == CopyNone)
             shift = 0;
-        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.top())
+        else if (position < this->m_boundingBox.top())
             shift = number;
-        if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.toRect().bottom())
+        if (position < this->m_boundingBox.toRect().bottom())
             endShift = number;
         else
             endShift = 0;
@@ -751,12 +753,12 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int n
 
         if (mode == CopyNone)
             shift = 0;
-        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].top())
+        else if (position < this->m_childBoundingBox[i].top())
             shift = number;
         else
             shift = 0;
 
-        if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].toRect().bottom())
+        if (position < this->m_childBoundingBox[i].toRect().bottom())
             endShift = number;
         else
             endShift = 0;
@@ -769,7 +771,9 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int n
 template<typename T>
 QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertColumns(int position, int number, InsertMode mode)
 {
-    if (position - (mode == CopyPrevious ? 1 : 0) > this->m_boundingBox.right())
+    if (mode == CopyPrevious) position--;
+
+    if (position > this->m_boundingBox.right())
         return QMap< int, QPair<QRectF, T> >();
 
     QMap< int, QPair<QRectF, T> > result;
@@ -779,7 +783,7 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertColumns(int position, in
     if (this->m_boundingBox.left() != 1 || this->m_boundingBox.right() != KS_colMax) {
         if (mode == CopyNone)
             shift = 0;
-        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.left())
+        else if (position < this->m_boundingBox.left())
             shift = number;
         this->m_boundingBox.adjust(shift, 0, number, 0);
     }
@@ -791,7 +795,7 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertColumns(int position, in
 
         if (mode == CopyNone)
             shift = 0;
-        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].left())
+        else if (position < this->m_childBoundingBox[i].left())
             shift = number;
         else
             shift = 0;
