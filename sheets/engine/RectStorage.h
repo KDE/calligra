@@ -350,7 +350,7 @@ void RectStorage<T>::insertRows(int position, int number)
     invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, T> > undoData;
-    undoData << m_tree.insertRows(position, number, RTree<T>::CopyCurrent);
+    undoData << m_tree.insertRows(position, number);
     if (m_storingUndo) m_undoData << undoData;
 }
 
@@ -363,7 +363,7 @@ void RectStorage<T>::insertColumns(int position, int number)
     invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, T> > undoData;
-    undoData << m_tree.insertColumns(position, number, RTree<T>::CopyCurrent);
+    undoData << m_tree.insertColumns(position, number);
     if (m_storingUndo) m_undoData << undoData;
 }
 

@@ -86,20 +86,6 @@ public:
    void saveCreateDefaultStyles(int& maxCols, int& maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const;
 
     /**
-     * Returns the index of the next column-wide cell style after \p column or zero
-     * if there's none.
-     * \return the index of the next styled column
-     */
-    int nextColumnStyleIndex(int column) const;
-
-    /**
-     * Returns the index of the next row-wide cell style after \p row or zero
-     * if there's none.
-     * \return the index of the next styled row
-     */
-    int nextRowStyleIndex(int row) const;
-
-    /**
      * Returns the index of the first cell style in \p row or zero
      * if there's none.
      * \return the index of the next styled column

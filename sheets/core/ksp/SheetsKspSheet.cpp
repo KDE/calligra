@@ -469,51 +469,41 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     }
 
     // Save all RowFormat objects.
-    int styleIndex = obj->styleStorage()->nextRowStyleIndex(0);
     int rowFormatRow = 0, lastRowFormatRow = obj->rowFormats()->lastNonDefaultRow();
-    while (styleIndex || rowFormatRow <= lastRowFormatRow) {
+    while (rowFormatRow <= lastRowFormatRow) {
         int lastRow;
         bool isDefault = obj->rowFormats()->isDefaultRow(rowFormatRow, &lastRow);
-        if (isDefault && styleIndex <= lastRow) {
-            QDomElement e = saveRowFormat (styleIndex, dd, obj);
+        if (isDefault) {
+            QDomElement e = saveRowFormat (rowFormatRow, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
-            styleIndex = obj->styleStorage()->nextRowStyleIndex(styleIndex);
         } else if (!isDefault) {
             QDomElement e = saveRowFormat (rowFormatRow, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
-            if (styleIndex == rowFormatRow)
-                styleIndex = obj->styleStorage()->nextRowStyleIndex(styleIndex);
         }
-        if (isDefault) rowFormatRow = qMin(lastRow+1, styleIndex == 0 ? KS_rowMax : styleIndex);
-        else rowFormatRow++;
+        rowFormatRow++;
     }
 
     // Save all ColumnFormat objects.
-    styleIndex = obj->styleStorage()->nextColumnStyleIndex(0);
     int colFormatCol = 0, lastColFormatCol = obj->columnFormats()->lastNonDefaultCol();
-    while (styleIndex || colFormatCol <= lastColFormatCol) {
+    while (colFormatCol <= lastColFormatCol) {
         int lastCol;
         bool isDefault = obj->columnFormats()->isDefaultCol(colFormatCol, &lastCol);
-        if (isDefault && styleIndex <= lastCol) {
-            QDomElement e = saveColFormat (styleIndex, dd, obj);
+        if (isDefault) {
+            QDomElement e = saveColFormat (colFormatCol, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
-            styleIndex = obj->styleStorage()->nextColumnStyleIndex(styleIndex);
         } else if (!isDefault) {
             QDomElement e = saveColFormat (colFormatCol, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
-            if (styleIndex == colFormatCol)
-                styleIndex = obj->styleStorage()->nextColumnStyleIndex(styleIndex);
         }
-        if (isDefault) colFormatCol = qMin(lastCol+1, styleIndex == 0 ? KS_colMax : styleIndex);
-        else colFormatCol++;
+        colFormatCol++;
     }
 
     return sheet;
