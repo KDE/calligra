@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2014-10-04 21:13+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -236,7 +236,7 @@ msgstr "Kunne ikke åpne oppføringen «%1» for skriving."
 msgid "Could not write block"
 msgstr "Klarte ikke å skrive blokk"
 
-#: sheets/csv/csvexport.cc:266
+#: sheets/csv/csvexport.cc:268
 #, kde-format
 msgid "<SHEETNAME>"
 msgstr "<ARKNAVN>"

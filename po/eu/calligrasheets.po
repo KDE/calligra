@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-04-30 00:48+0000\n"
 "PO-Revision-Date: 2023-02-15 06:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -14553,7 +14553,7 @@ msgstr "Zenbaki-formatua"
 msgid "Merge"
 msgstr "Batu"
 
-#: ui/commands/AbstractRegionCommand.cpp:174
+#: ui/commands/AbstractRegionCommand.cpp:172
 #, kde-format
 msgid ""
 "Processing is not possible, because some cells are locked as elements of a "
@@ -14562,7 +14562,7 @@ msgstr ""
 "Ezin da prozesatu, gelaxka batzuk matrize bateko elementu gisa blokeatuta "
 "daudelako."
 
-#: ui/commands/AbstractRegionCommand.cpp:187
+#: ui/commands/AbstractRegionCommand.cpp:185
 #, kde-format
 msgid "Processing is not possible, because some cells are protected."
 msgstr "Ezin da prozesatu, gelaxka batzuk babestuta daudelako."

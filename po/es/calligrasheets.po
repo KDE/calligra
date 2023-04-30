@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-04-30 00:48+0000\n"
 "PO-Revision-Date: 2023-04-28 00:10+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -14488,7 +14488,7 @@ msgstr "Formato numérico"
 msgid "Merge"
 msgstr "Fusionar"
 
-#: ui/commands/AbstractRegionCommand.cpp:174
+#: ui/commands/AbstractRegionCommand.cpp:172
 #, kde-format
 msgid ""
 "Processing is not possible, because some cells are locked as elements of a "
@@ -14497,7 +14497,7 @@ msgstr ""
 "El procesamiento no es posible, porque algunas celdas están bloqueadas como "
 "elementos de una matriz."
 
-#: ui/commands/AbstractRegionCommand.cpp:187
+#: ui/commands/AbstractRegionCommand.cpp:185
 #, kde-format
 msgid "Processing is not possible, because some cells are protected."
 msgstr ""

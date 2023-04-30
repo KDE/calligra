@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-04-30 00:48+0000\n"
 "PO-Revision-Date: 2014-11-09 15:21-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -13992,14 +13992,14 @@ msgstr "数値書式"
 msgid "Merge"
 msgstr "結合"
 
-#: ui/commands/AbstractRegionCommand.cpp:174
+#: ui/commands/AbstractRegionCommand.cpp:172
 #, kde-format
 msgid ""
 "Processing is not possible, because some cells are locked as elements of a "
 "matrix."
 msgstr "いくつかのセルが行列の要素としてロックされているため、処理できません。"
 
-#: ui/commands/AbstractRegionCommand.cpp:187
+#: ui/commands/AbstractRegionCommand.cpp:185
 #, kde-format
 msgid "Processing is not possible, because some cells are protected."
 msgstr "いくつかのセルが保護されているため、処理できません。"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-16 12:31\n"
+"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"PO-Revision-Date: 2023-04-29 08:33\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -13525,14 +13525,14 @@ msgstr ""
 msgid "Merge"
 msgstr "合并"
 
-#: ui/commands/AbstractRegionCommand.cpp:174
+#: ui/commands/AbstractRegionCommand.cpp:172
 #, kde-format
 msgid ""
 "Processing is not possible, because some cells are locked as elements of a "
 "matrix."
 msgstr "无法处理，因为某些单元格已锁定为矩阵的元素。"
 
-#: ui/commands/AbstractRegionCommand.cpp:187
+#: ui/commands/AbstractRegionCommand.cpp:185
 #, kde-format
 msgid "Processing is not possible, because some cells are protected."
 msgstr "无法处理，因为某些单元格是受保护的。"
@@ -14089,10 +14089,9 @@ msgid "Cell Format"
 msgstr "单元格格式"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "单元格格式"
+msgstr ""
 
 #: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format
@@ -14236,10 +14235,9 @@ msgid ""
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "日期和时间"
+msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -14733,18 +14731,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "打开链接？"
-
-#~ msgid "Date and Time"
-#~ msgstr "日期和时间"
-
-#~ msgid "System: "
-#~ msgstr "系统："
-
-#~ msgid " (=[mm]:ss)"
-#~ msgstr " (=[mm]:ss)"
-
-#~ msgid " (=[hh]:mm:ss)"
-#~ msgstr " (=[hh]:mm:ss)"
-
-#~ msgid " (=[hh]:mm)"
-#~ msgstr " (=[hh]:mm)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-04-30 00:48+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -13873,7 +13873,7 @@ msgstr "संख्या फ़ॉर्मेट:"
 msgid "Merge"
 msgstr "कक्षों को मिलाएँ"
 
-#: ui/commands/AbstractRegionCommand.cpp:174
+#: ui/commands/AbstractRegionCommand.cpp:172
 #, fuzzy, kde-format
 #| msgid "Processing is not possible, because some cells are protected."
 msgid ""
@@ -13881,7 +13881,7 @@ msgid ""
 "matrix."
 msgstr "प्रोसेसिंग संभव नहीं है क्योंकि कुछ कक्ष संरक्षित हैं."
 
-#: ui/commands/AbstractRegionCommand.cpp:187
+#: ui/commands/AbstractRegionCommand.cpp:185
 #, kde-format
 msgid "Processing is not possible, because some cells are protected."
 msgstr "प्रोसेसिंग संभव नहीं है क्योंकि कुछ कक्ष संरक्षित हैं."

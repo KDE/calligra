@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread_prf\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-23 12:28+0200\n"
+"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"PO-Revision-Date: 2023-04-29 11:14+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -14350,7 +14350,7 @@ msgstr "Format liczb"
 msgid "Merge"
 msgstr "Scal"
 
-#: ui/commands/AbstractRegionCommand.cpp:174
+#: ui/commands/AbstractRegionCommand.cpp:172
 #, kde-format
 msgid ""
 "Processing is not possible, because some cells are locked as elements of a "
@@ -14359,7 +14359,7 @@ msgstr ""
 "Przetwarzanie jest niemożliwe, ponieważ niektóre komórki, będące elementami "
 "macierzy, są zablokowane "
 
-#: ui/commands/AbstractRegionCommand.cpp:187
+#: ui/commands/AbstractRegionCommand.cpp:185
 #, kde-format
 msgid "Processing is not possible, because some cells are protected."
 msgstr "Przetwarzanie niemożliwe, bo niektóre komórki są zabezpieczone."
@@ -15124,20 +15124,12 @@ msgstr ""
 "formacie ustawionym w Ustawieniach systemowych."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
 msgstr "Data i czas"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15146,12 +15138,12 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Aby podać datę, należy zrobić to zgodnie z jednym z formatów ustawionych w "
-"Ustawieniach systemowych -> Wspólny wygląd i zachowanie -> Regionalne -> "
-"Kraj/region i język -> Data i czas.Są tu ustawione dwa formaty: format daty "
-"i skrócony format daty.\n"
+"Aby podać datę i czas, należy zrobić to zgodnie z jednym z formatów "
+"ustawionych w Ustawieniach systemowych -> Wspólny wygląd i zachowanie -> "
+"Regionalne -> Kraj/region i język -> Data i czas.Są tu ustawione dwa "
+"formaty: format daty i skrócony format daty.\n"
 "Podobnie do przeciągania w dół liczb, także i tutaj możesz przeciągać daty, "
-"tak aby następne komórki także wypełniły się datami."
+"tak aby następne komórki także wypełniły się datą i czasami."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format

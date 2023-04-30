@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krossmodulekspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-05-21 00:45+0000\n"
+"POT-Creation-Date: 2023-04-25 00:51+0000\n"
 "PO-Revision-Date: 2020-05-09 23:31+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -90,7 +90,7 @@ msgstr "Celle"
 msgid "Range"
 msgstr "Område"
 
-#: ScriptingWriter.h:226
+#: ScriptingWriter.h:227
 msgctxt "(qtundo-format)"
 msgid "Set Values"
 msgstr ""
@@ -507,9 +507,9 @@ msgstr "Adresse:"
 #: scripts/odfpyexport.py:43
 msgid ""
 "<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport."
-"py python script to export to OpenDocument you need to install the <a href="
-"\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module."
-"</qt>"
+"py python script to export to OpenDocument you need to install the <a "
+"href=\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python "
+"module.</qt>"
 msgstr ""
 
 #: scripts/odfpyexport.py:74
