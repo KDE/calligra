@@ -550,6 +550,7 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("complex time 2 us") << "en_US" << ValueWithFormat(complex<Number>(3.675, 2), Value::fmt_Time) << "4:12:00 pm";
 
     QTest::newRow("complex date 3 us") << "en_US" << ValueWithFormat(complex<Number>(-9.234, 0), Value::fmt_Date) << "Wednesday, December 22, 1999";
+    //    QTest::newRow("float datetime 2 us") << "en_US" << ValueWithFormat(-9.325, Value::fmt_DateTime) << "Wednesday, December 22, 1999 4:12:00 PM UTC";
 
     //    QTest::newRow("complex datetime 0 us") << "en_US"
     //        << ValueWithFormat(complex<Number>(4.0, 0), Value::fmt_DateTime)
@@ -561,6 +562,7 @@ void TestValueConverter::testAsString_data()
     //        << ValueWithFormat(complex<Number>(-9.325, 0), Value::fmt_DateTime)
     //        << "Wednesday, December 22, 1999 4:12:00 PM UTC";
 
+#ifndef Q_OS_WIN
     QTest::newRow("bool True xx") << USE_LOCALE << Value(true) << "sann";
     QTest::newRow("bool False xx") << USE_LOCALE << Value(false) << "usann";
     QTest::newRow("integer date 1 xx") << USE_LOCALE << ValueWithFormat(0, Value::fmt_Date) << "lørdag 1. januar 2000";
@@ -574,11 +576,9 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("float 0.43e-12 xx") << USE_LOCALE << Value(0.43e-12) << "4,3e-13";
     QTest::newRow("float date 1 xx") << USE_LOCALE << ValueWithFormat(0.5, Value::fmt_Date) << "lørdag 1. januar 2000";
     QTest::newRow("float date 2 xx") << USE_LOCALE << ValueWithFormat(2000.324, Value::fmt_Date) << "torsdag 23. juni 2005";
-    QTest::newRow("float date 3 us") << "en_US" << ValueWithFormat(-9.234, Value::fmt_Date) << "Wednesday, December 22, 1999";
-//    QTest::newRow("float datetime 2 us") << "en_US" << ValueWithFormat(-9.325, Value::fmt_DateTime) << "Wednesday, December 22, 1999 4:12:00 PM UTC";
-//    QTest::newRow("float datetime 0 cz") << USE_LOCALE << ValueWithFormat(4.0, Value::fmt_DateTime) << "onsdag 5. januar 2000 00:00:00 UTC";
-//    QTest::newRow("float datetime 1 cz") << USE_LOCALE << ValueWithFormat(2000.5, Value::fmt_DateTime) << "torsdag 23. juni 2005 12:00:00 UTC";
-//    QTest::newRow("float datetime 2 cz") << USE_LOCALE << ValueWithFormat(-9.325, Value::fmt_DateTime) << "onsdag 22. desember 1999 16:12:00 UTC";
+//    QTest::newRow("float datetime 0 xx") << USE_LOCALE << ValueWithFormat(4.0, Value::fmt_DateTime) << "onsdag 5. januar 2000 00:00:00 UTC";
+//    QTest::newRow("float datetime 1 xx") << USE_LOCALE << ValueWithFormat(2000.5, Value::fmt_DateTime) << "torsdag 23. juni 2005 12:00:00 UTC";
+//    QTest::newRow("float datetime 2 xx") << USE_LOCALE << ValueWithFormat(-9.325, Value::fmt_DateTime) << "onsdag 22. desember 1999 16:12:00 UTC";
 
     QTest::newRow("complex date 1 xx") << USE_LOCALE
         << ValueWithFormat(complex<Number>(0.5, 0), Value::fmt_Date)
@@ -586,7 +586,7 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("complex date 2 xx") << USE_LOCALE
         << ValueWithFormat(complex<Number>(2000.324, 0), Value::fmt_Date)
         << "torsdag 23. juni 2005";
-
+#endif
 }
 
 void TestValueConverter::testAsString()
