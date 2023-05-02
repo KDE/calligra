@@ -214,12 +214,7 @@ void TestStorage::storage2()
 
     QDir dirTest(testFile);
     if (dirTest.exists()) {
-#ifdef Q_OS_UNIX
-        QByteArray ba = QByteArray("rm -rf ") + QFile::encodeName(testFile);
-        system(ba.constData());       // QDir::rmdir isn't recursive!
-#else
-        QFAIL("build dir not empty");
-#endif
+        dirTest.removeRecursively();
     }
 
     KoStore* store = KoStore::createStore(testFile, KoStore::Write, "", backend);
