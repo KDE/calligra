@@ -151,12 +151,12 @@ void TestValue::testTime()
                 auto t1 = Time(h, m, s, 0);
                 *v1 = Value(Value(t1));
                 auto t2 = v1->asTime();
-                if (t1.duration() != t2.duration()) {
+                if (t1 != t2) {
                     qInfo()<<t1<<t2;
                     qInfo()<<QString("%1").arg(t1.duration(), 0, 'g', 20);
                     qInfo()<<QString("%1").arg(t2.duration(), 0, 'g', 20);
                 }
-                QCOMPARE(t1.duration(), t2.duration());
+                QCOMPARE(t1, t2);
                 QCOMPARE(t1.hour(), t2.hour());
                 if (t1.minute() != t2.minute()) {
                     qInfo()<<t1<<t2;
