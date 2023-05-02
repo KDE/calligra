@@ -25,8 +25,8 @@ class TestStruct
 {
 public:
     bool attr: 1;
-    TestEnum type: 3;
     unsigned int number: 28;
+    TestEnum type;
     QString string;
 };
 
