@@ -5,6 +5,8 @@
 #include <engine/Formula.h>
 #include <engine/FunctionModuleRegistry.h>
 #include <engine/Value.h>
+#include <engine/CS_Time.h>
+#include <engine/Number.h>
 
 #include <QTest>
 
@@ -40,6 +42,14 @@ namespace QTest
             default: s += QStringLiteral("Unknown");
         }
         s += ']';
+        return toString(s);
+    }
+
+    template<>
+    char *toString(const Calligra::Sheets::Time &t)
+    {
+        QString s = "Time[%1]";
+        s = s.arg(QString::number(numToDouble(t.duration()), 'g', 20));
         return toString(s);
     }
 }
