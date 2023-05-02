@@ -93,9 +93,9 @@ public:
     /// Set this duration to @p other duration.
     Time &operator=(const Time &other);
     /// @return true if this duration equals @p other duration.
-    bool operator==(const Time &other);
+    bool operator==(const Time &other) const;
     /// @return true if this duration does not equal @p other duration.
-    bool operator!=(const Time &other);
+    bool operator!=(const Time &other) const;
 
     /// @return the current time
     static Time currentTime() {

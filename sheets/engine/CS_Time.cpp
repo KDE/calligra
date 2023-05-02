@@ -154,12 +154,12 @@ Time &Time::operator=(const Time &other)
     return *this;
 }
 
-bool Time::operator==(const Time &other)
+bool Time::operator==(const Time &other) const
 {
     return m_valid == other.m_valid && m_duration == other.m_duration;
 }
 
-bool Time::operator!=(const Time &other)
+bool Time::operator!=(const Time &other) const
 {
     return m_valid != other.m_valid || m_duration != other.m_duration;
 }
