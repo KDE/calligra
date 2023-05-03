@@ -1,33 +1,35 @@
 # translation of TableShape.po to
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Miguel Branco <mgl.branco@gmail.com>, 2008.
 # Miguel Branco <mgl.branco@gmail.com>, 2009, 2012.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: TableShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2015-05-30 10:20+0200\n"
-"Last-Translator: Adrián Chaves Fernández <adriyetichaves@gmail.com>\n"
-"Language-Team: Galician <proxecto@trasno.net>\n"
+"PO-Revision-Date: 2023-05-02 21:52+0200\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Adrian Chaves (Gallaecio)"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "adrian@chaves.io"
 
 #: SheetsEditor.cpp:57 SheetsEditor.cpp:121
 #, kde-format
@@ -55,21 +57,23 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"Este documento contén unha ligazón a un documento externo\n"
+"%1"
 
 #: TableShape.cpp:289
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "Precísase confirmación"
 
 #: TableShape.cpp:289
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "Descargar"
 
 #: TableShape.cpp:289
 #, kde-format
 msgid "Skip"
-msgstr ""
+msgstr "Omitir"
 
 #: TableShapeFactory.cpp:37
 #, kde-format
@@ -117,10 +121,9 @@ msgid "Selected Sheet"
 msgstr "Folla seleccionada"
 
 #: TableTool.cpp:763
-#, fuzzy, kde-format
-#| msgid "Table Options"
+#, kde-format
 msgid "View Options"
-msgstr "Opcións da táboa"
+msgstr "Opcións da vista"
 
 #: TableToolFactory.cpp:21
 #, kde-format
@@ -130,28 +133,27 @@ msgstr "Edición de táboas"
 #: ToolHeaders.cpp:285 ToolHeaders.cpp:880
 #, kde-format
 msgid "Area is too large."
-msgstr ""
+msgstr "A área é grande de máis."
 
 #: ToolHeaders.cpp:427
 #, kde-format
 msgid "Hide Row"
-msgstr ""
+msgstr "Agochar a fila"
 
 #: ToolHeaders.cpp:429
 #, kde-format
 msgid "Height: %1 %2"
-msgstr ""
+msgstr "Altura: %1 %2"
 
 #: ToolHeaders.cpp:1053
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Hide Column"
-msgstr "Columnas:"
+msgstr "Agochar a columna"
 
 #: ToolHeaders.cpp:1055
 #, kde-format
 msgid "Width: %1 %2"
-msgstr ""
+msgstr "Anchura: %1 %2"
 
 #~ msgid "Number of columns"
 #~ msgstr "Número de columnas"

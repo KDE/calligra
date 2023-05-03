@@ -10,13 +10,13 @@
 # Marce Villarino <mvillarino@gmail.com>, 2009, 2010, 2012.
 # Marce Villarino <mvillarino@kde-espana.es>, 2012, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-30 00:48+0000\n"
-"PO-Revision-Date: 2020-01-12 12:50+0100\n"
+"PO-Revision-Date: 2023-05-02 21:52+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -14375,7 +14375,7 @@ msgstr "Cambiar o bordo"
 #: ui/CellToolBase.cpp:806
 #, kde-format
 msgid "Unable to locate action %1"
-msgstr ""
+msgstr "Non se pode atopar a acción %1"
 
 #. i18n: tag optionWidget attribute name
 #: ui/CellToolOptionWidgets.xml:21
@@ -14954,7 +14954,7 @@ msgstr "Tachar"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "Escoller o tamaño da fonte."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -14986,16 +14986,14 @@ msgid "Cell Format"
 msgstr "Formato de cela"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Formato de cela"
+msgstr "Definir o formato de cela"
 
 #: ui/dialogs/LayoutDialog.cpp:132
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "&Xeral"
+msgstr "Xeral"
 
 #: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -15003,16 +15001,14 @@ msgid "Border"
 msgstr "Bordo"
 
 #: ui/dialogs/LayoutDialog.cpp:150
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "&Fondo"
+msgstr "Fondo"
 
 #: ui/dialogs/LayoutDialog.cpp:153
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "Protección da &cela"
+msgstr "Protección da cela"
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format
@@ -15182,20 +15178,12 @@ msgstr ""
 "ten a Configuración do sistema."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
 msgstr "Data e hora"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15204,12 +15192,12 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Para inserir unha data deberás indicala nun dos formatos definidos na "
-"Configuración do Sistema -> Aparencia e comportamentos comúns -> "
+"Para inserir unha data con hora deberás indicala nun dos formatos definidos "
+"na Configuración do Sistema -> Aparencia e comportamentos comúns -> "
 "Configuración rexional -> País/Rexión e idioma -> Data e hora. Existen dous "
 "formatos aquí definidos: o das datas e o das datas abreviadas.\n"
 "Igual que podes arrastrar números tamén podes arrastrar datas e as celas han "
-"conter datas."
+"conter datas con horas."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format

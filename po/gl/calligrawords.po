@@ -1,7 +1,6 @@
 # translation of kword.po to Galician
 # translation of kword.po to
 # Copyright (C) 2004, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
-#
 # Xabi García <xabigf@gmx.net>, 2004.
 # Xabier García Feal <xabigf@gmx.net>, 2004.
 # Xabi G. Feal <xabigf@gmx.net>, 2006, 2007.
@@ -11,13 +10,14 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2012, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2019-10-27 08:05+0100\n"
+"PO-Revision-Date: 2023-05-02 21:50+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.11.70\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -78,10 +78,9 @@ msgstr "Corrección ortográfica"
 
 #. i18n: ectx: Menu (AutoCorrection)
 #: part/calligrawords.rc:83
-#, fuzzy, kde-format
-#| msgid "Author's section"
+#, kde-format
 msgid "AutoCorrection"
-msgstr "Sección de Author"
+msgstr "Corrección automática"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:94
@@ -1426,8 +1425,7 @@ msgstr ""
 "cunha aplicación axeitada."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
-#| msgid "Standard"
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
 msgstr "Estándar"
@@ -1480,9 +1478,7 @@ msgid "Line Number"
 msgstr "Número de liña"
 
 #: part/KWStatusBar.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Page Style"
+#, kde-format
 msgid "Change the page style"
 msgstr "Cambiar o estilo de páxina"
 

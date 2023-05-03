@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-03-13 09:35+0100\n"
+"PO-Revision-Date: 2023-05-02 19:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2527,7 +2527,7 @@ msgstr "Configura..."
 #: pageapp/KoPAView.cpp:521
 #, kde-format
 msgid "Import Slideshow"
-msgstr "Importa la presentació"
+msgstr "Importa la presentació de diapositives"
 
 #: pageapp/KoPAView.cpp:549 pageapp/KoPAView.cpp:553
 #, kde-format

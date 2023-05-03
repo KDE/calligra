@@ -8,13 +8,13 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2008, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2010, 2013, 2014.
 # Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2012, 2015, 2016, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2020-01-12 12:50+0100\n"
+"PO-Revision-Date: 2023-05-02 21:51+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -217,10 +217,6 @@ msgid "Create shape"
 msgstr "Crear unha forma"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:43
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete shape"
-#| msgid_plural "Delete shapes"
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
 msgstr "Eliminar a forma"
@@ -2123,19 +2119,11 @@ msgid "Hide master shapes"
 msgstr "Agochar as formas mestras"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete slide"
-#| msgid_plural "Delete slides"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
 msgstr "Eliminar a diapositiva"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:29
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete page"
-#| msgid_plural "Delete pages"
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
 msgstr "Eliminar a páxina"
@@ -4723,18 +4711,13 @@ msgid "Save Document"
 msgstr "Gardar o documento"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>O documento cambiouse despois de que se abrira. Para que se poida "
-"completar o descifrado fai falta que o documento se garde<p>Quere gardar o "
-"documento agora?<qt/>"
+"<qt>Para que se poida completar o descifrado fai falta que o documento se "
+"garde<p>Quere gardar o documento agora?<qt/>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
@@ -5468,10 +5451,9 @@ msgid "Zoom to All"
 msgstr "Ampliar a Todo"
 
 #: widgetutils/KoFileDialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "Key Press"
+#, kde-format
 msgid "All files"
-msgstr "Pulsación de tecla"
+msgstr "Todos os ficheiros"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format
