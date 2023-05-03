@@ -1209,7 +1209,7 @@ before or after the currently selected page.
 ><guimenu
 >Insereix</guimenu
 > <guimenuitem
->Importa la presentació...</guimenuitem
+>Importa la presentació de diapositives...</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
@@ -2344,7 +2344,7 @@ it would be autocorrected to <userinput
 </term>
 <listitem>
 <para
->Va enrere a la diapositiva anterior del passi de diapositives.</para>
+>Va enrere a la diapositiva anterior de la presentació de diapositives.</para>
 </listitem>
 </varlistentry>
 
@@ -2363,7 +2363,7 @@ it would be autocorrected to <userinput
 </term>
 <listitem>
 <para
->Va a la següent diapositiva del passi de diapositives.</para>
+>Va a la següent diapositiva de la presentació de diapositives.</para>
 </listitem>
 </varlistentry>
 
@@ -2384,7 +2384,7 @@ it would be autocorrected to <userinput
 </term>
 <listitem>
 <para
->Va directament a la primera diapositiva al passi de diapositives.</para>
+>Va directament a la primera diapositiva de la presentació de diapositives.</para>
 </listitem>
 </varlistentry>
 
@@ -2405,7 +2405,7 @@ it would be autocorrected to <userinput
 </term>
 <listitem>
 <para
->Va immediatament a l'última diapositiva del passi de diapositives.</para>
+>Va immediatament a l'última diapositiva de la presentació de diapositives.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -2436,7 +2436,7 @@ it would be autocorrected to <userinput
 </term>
 <listitem>
 <para
->Comença el passi de diapositives des de la diapositiva actual.</para>
+>Comença la presentació de diapositives des de la diapositiva actual.</para>
 </listitem>
 </varlistentry>
 
@@ -2457,7 +2457,7 @@ it would be autocorrected to <userinput
 </term>
 <listitem>
 <para
->Comença el passi de diapositives des de la primera diapositiva.</para>
+>Comença la presentació de diapositives des de la primera diapositiva.</para>
 </listitem>
 </varlistentry>
 
@@ -2467,12 +2467,12 @@ it would be autocorrected to <userinput
 ><guimenu
 >Presentació</guimenu
 > <guimenuitem
->Configura el passi de diapositives...</guimenuitem
+>Configura la presentació de diapositives...</guimenuitem
 > </menuchoice>
 </term>
 <listitem>
 <para
->Podeu arranjar les propietats del passi de diapositives aquí, incloent-hi mostrar la durada en pantalla, quines diapositives s'hi ha d'incloure i molts altres arranjaments globals.</para>
+>Podeu arranjar les propietats de la presentació de diapositives aquí, incloent-hi mostrar la durada en pantalla, quines diapositives s'hi ha d'incloure i molts altres arranjaments globals.</para>
 </listitem>
 </varlistentry>
 <!--FIXME Configure Presenter Wiew item mising-->

@@ -73,7 +73,7 @@
 
 <sect1 id="html-wizard">
 <title
->Crear una presentació &HTML;</title>
+>Crear una presentació de diapositives &HTML;</title>
 
 <para
 >Exporta una presentació existent en pàgines en &HTML; estàndard amb ajudes de navegació.</para>
@@ -89,14 +89,14 @@
 
 <screenshot>
 <screeninfo
->Ompliu amb els details per a la vostra presentació en &HTML;</screeninfo>
+>Ompliu amb els details per a la vostra presentació de diapositives en &HTML;</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow3.png" format="PNG"/>
 </imageobject>
 <textobject
 ><phrase
->Ompliu amb els details per a la vostra presentació en &HTML;</phrase
+>Ompliu amb els details per a la vostra presentació de diapositives en &HTML;</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
@@ -134,14 +134,14 @@
 
 <screenshot>
 <screeninfo
->Les noves carpetes de presentació en &HTML;</screeninfo>
+>Les noves carpetes de presentació de diapositives en &HTML;</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow9.png" format="PNG"/>
 </imageobject>
 <textobject
 ><phrase
->Les noves carpetes de presentació en &HTML;</phrase
+>Les noves carpetes de presentació de diapositives en &HTML;</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
@@ -149,15 +149,15 @@
 <para
 >També hi ha un fitxer <filename
 >index.html</filename
-> per a engegar la vostra presentació web.</para>
+> per a engegar la vostra presentació de diapositives web.</para>
 
 <para
 >Podeu veure com treballa usant el vostre gestor de fitxers o navegador per a obrir el fitxer <filename
 >index.html</filename
->. Cliqueu on marca i es mostrarà la primera diapositiva de la vostra presentació. Es comportarà com una presentació del &stage;.</para>
+>. Cliqueu on marca i es mostrarà la primera diapositiva de la vostra presentació. Es comportarà com una presentació de diapositives del &stage;.</para>
 
 <para
->Cada clic de la fletxa us porta a la diapositiva següent o prèvia. Per a anar enrere a l'inici de la presentació, cliqueu la icona de presentació.</para>
+>Cada clic de la fletxa us porta a la diapositiva següent o prèvia. Per a anar enrere a l'inici de la presentació de diapositives, cliqueu la icona de diapositiva.</para>
 
 <tip
 ><para

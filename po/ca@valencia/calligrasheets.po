@@ -5411,7 +5411,7 @@ msgstr ""
 "regional -> País/regió i idioma -> Data i hora». Ací hi ha dos formats "
 "establits: el format de la data i el format curt de la data.\n"
 "Així com podeu fer córrer els números, també podeu arrossegar dates cap a "
-"baix i les següents cel·les també tindran dates."
+"baix i les cel·les següents també tindran dates."
 
 #: dialogs/LayoutDialog.cpp:908
 #, kde-format

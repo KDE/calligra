@@ -1,9 +1,9 @@
 # Translation of calligrastage.po to Catalan
-# Copyright (C) 2000-2021 This_file_is_part_of_KDE
+# Copyright (C) 2000-2023 This_file_is_part_of_KDE
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
-# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2020, 2021.
+# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2016, 2020, 2021, 2023.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2010.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2013, 2015, 2021.
 msgid ""
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2021-11-06 19:49+0100\n"
+"PO-Revision-Date: 2023-05-02 16:55+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -495,7 +495,7 @@ msgstr "Mostra les diapositives mestres"
 #: part/KPrView.cpp:79
 #, kde-format
 msgid "Import Slideshow..."
-msgstr "Importa presentació..."
+msgstr "Importa una presentació de diapositives..."
 
 #: part/KPrView.cpp:80
 #, kde-format
@@ -697,7 +697,7 @@ msgstr "Duplica la diapositiva"
 #: part/KPrViewModeSlidesSorter.cpp:175
 #, kde-format
 msgid "Start Slideshow"
-msgstr "Inicia el passi de diapositives"
+msgstr "Inicia la presentació de diapositives"
 
 #: part/KPrViewModeSlidesSorter.cpp:532
 #, kde-format
@@ -749,7 +749,8 @@ msgstr "Error"
 #: part/KPrViewModeSlidesSorter.cpp:686
 #, kde-format
 msgid "There cannot be two slideshows with the same name."
-msgstr "No hi poden haver dues presentacions amb el mateix nom."
+msgstr ""
+"No hi poden haver dues presentacions de diapositives amb el mateix nom."
 
 #: part/pagelayout/KPrPlaceholders.cpp:46
 #: part/pagelayout/KPrPlaceholders.cpp:47
