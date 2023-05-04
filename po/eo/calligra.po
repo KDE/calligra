@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"PO-Revision-Date: 2023-05-03 06:40+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1138,7 +1138,7 @@ msgstr "Dosiero ne trovita"
 #: main/KoDocument.cpp:1488
 #, kde-format
 msgid "Cannot create storage"
-msgstr "Ne povas krei stokadon"
+msgstr "Ne povas krei konservejon"
 
 #: main/KoDocument.cpp:1491
 #, kde-format
@@ -3693,7 +3693,7 @@ msgstr "DataType"
 #: rdf/KoSopranoTableModel.cpp:131
 #, kde-format
 msgid "Stored In"
-msgstr "Stokita En"
+msgstr "Konservita En"
 
 #: store/KoEncryptedStore.cpp:228
 #, kde-format
@@ -3784,14 +3784,14 @@ msgstr "La dosieruja moduso ne subtenatas por deforaj lokoj."
 #: store/KoStore.cpp:169
 #, kde-format
 msgid "Calligra Storage"
-msgstr "Calligra Stokado"
+msgstr "Calligra Konservo"
 
 #: text/commands/ChangeListCommand.cpp:28
 #: text/commands/ChangeListCommand.cpp:76
 #: text/commands/ChangeListCommand.cpp:89
 msgctxt "(qtundo-format)"
 msgid "Change List"
-msgstr "Ŝanĝi Listo"
+msgstr "Ŝanĝi Liston"
 
 #: text/commands/ChangeStylesMacroCommand.cpp:24
 msgctxt "(qtundo-format)"
