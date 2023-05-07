@@ -24,7 +24,6 @@ using namespace Calligra::Sheets;
 
 // TODO
 // - Allow resizing of all ranges in a normal selection; not just the last one.
-// - Get rid of anchor. They are the corners of the active element.
 
 
 /***************************************************************************

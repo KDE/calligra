@@ -503,7 +503,7 @@ void CellToolBase::selectionChanged(const Region& region)
     }
 
     if (d->externalEditor) {
-        bool enable = selection()->isProtected();
+        bool enable = !selection()->isProtected();
         d->externalEditor->setEnabled(enable);
     }
 
