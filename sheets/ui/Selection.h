@@ -132,19 +132,9 @@ public:
     Element* eor(const QPoint& point, SheetBase* sheet = 0) override;
 
     /**
-     * The anchor is the starting point of a range. For points marker and anchor are the same
-     */
-    const QPoint& anchor() const;
-
-    /**
      * The cursor represents the cursor position. This is needed for merged cells
      */
     const QPoint& cursor() const;
-
-    /**
-     * The marker is the end point of a range. For points marker and anchor are the same
-     */
-    const QPoint& marker() const;
 
     /**
      * Checks whether the region consists only of one point
@@ -243,7 +233,13 @@ public:
      * completely.
      * \return the extended area
      */
-    QRect extendToMergedAreas(const QRect& area) const;
+    QRect extendToMergedAreas(const QRect& area, Sheet *sheet) const;
+    /**
+     * Extends \p regioin to include the merged cells, that are not fully covered,
+     * completely.
+     * \return the extended region
+     */
+    Region extendRegionToMergedAreas(const Region& region) const;
 
     const QList<QColor>& colors() const;
 

@@ -37,7 +37,7 @@ InsertSpecialChar::~InsertSpecialChar()
 
 ActionDialog *InsertSpecialChar::createDialog(QWidget *canvasWidget)
 {
-    QString fontFamily = Cell(m_selection->activeSheet(), m_selection->marker()).style().fontFamily();
+    QString fontFamily = Cell(m_selection->activeSheet(), m_selection->cursor()).style().fontFamily();
 
     CharacterSelectDialog *dlg = new CharacterSelectDialog(canvasWidget, fontFamily);
     connect(dlg, &CharacterSelectDialog::insertChar, this, &InsertSpecialChar::specialChar);
@@ -47,11 +47,11 @@ ActionDialog *InsertSpecialChar::createDialog(QWidget *canvasWidget)
 void InsertSpecialChar::specialChar(QChar character, const QString& fontName)
 {
     Sheet *sheet = m_selection->activeSheet();
-    const Style style = Cell(sheet, m_selection->marker()).style();
+    const Style style = Cell(sheet, m_selection->cursor()).style();
     if (style.fontFamily() != fontName) {
         Style newStyle;
         newStyle.setFontFamily(fontName);
-        sheet->fullCellStorage()->setStyle(Region(m_selection->marker()), newStyle);
+        sheet->fullCellStorage()->setStyle(Region(m_selection->cursor()), newStyle);
     }
     QKeyEvent keyEvent(QEvent::KeyPress, 0, Qt::NoModifier, QString(character));
     CellToolBase *tool = m_actions->tool();

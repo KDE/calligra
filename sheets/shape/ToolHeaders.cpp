@@ -367,11 +367,9 @@ void Tool::RowHeader::mouseMove(KoPointerEvent* _ev)
         if (row > KS_rowMax || row <= 0)
             return;
 
-        QPoint newAnchor = m_selection->anchor();
-        QPoint newMarker = m_selection->marker();
-        newMarker.setY(row);
-        newAnchor.setY(m_iSelectionAnchor);
-        m_selection->update(newMarker);
+        QPoint newCursor = m_selection->cursor();
+        newCursor.setY(row);
+        m_selection->update(newCursor);
 
         if (_ev->point.y() < scrollOffset()) {
             if (row > 1) {
@@ -965,11 +963,9 @@ void Tool::ColumnHeader::mouseMove(KoPointerEvent* _ev)
         if (col > KS_colMax || col <= 0) {
             return;
         }
-        QPoint newMarker = m_selection->marker();
-        QPoint newAnchor = m_selection->anchor();
-        newMarker.setX(col);
-        newAnchor.setX(m_iSelectionAnchor);
-        m_selection->update(newMarker);
+        QPoint newCursor = m_selection->cursor();
+        newCursor.setX(col);
+        m_selection->update(newCursor);
 
         if (sheet->layoutDirection() == Qt::RightToLeft) {
 //             if (_ev->pos().x() < width() - m_pCanvas->width()) {

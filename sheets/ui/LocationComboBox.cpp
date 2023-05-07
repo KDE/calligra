@@ -88,9 +88,7 @@ void LocationComboBox::updateAddress()
     if (sheet) {
         const QVector< QPair<QRectF, QString> > names = sheet->cellStorage()->namedAreas(*selection);
         {
-            QRect range;
-            if (selection->isSingular()) range = QRect(selection->marker(), QSize(1, 1));
-            else range = selection->lastRange();
+            QRect range = selection->lastRange();
             for (int i = 0; i < names.size(); i++) {
                 if (names[i].first.toRect() == range) {
                     address = names[i].second;
@@ -99,11 +97,11 @@ void LocationComboBox::updateAddress()
         }
     }
     if (sheet && sheet->getLcMode()) {
+        const QRect lastRange = selection->lastRange();
         if (selection->isSingular()) {
-            address = 'L' + QString::number(selection->marker().y()) +
-            'C' + QString::number(selection->marker().x());
+            address = 'L' + QString::number(lastRange.y()) +
+            'C' + QString::number(lastRange.x());
         } else {
-            const QRect lastRange = selection->lastRange();
             address = QString::number(lastRange.height()) + "Lx";
             address += QString::number(lastRange.width()) + 'C';
         }

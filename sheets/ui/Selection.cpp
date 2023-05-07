@@ -144,8 +144,7 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
         }
     }
 
-    Region changedRegion(*this);
-    changedRegion.add(extendToMergedAreas(QRect(d->anchor, d->marker)));
+    Region changedRegion = extendRegionToMergedAreas(*this);
 
     // for the case of a merged cell
     QPoint topLeft(point);
@@ -211,8 +210,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
         }
     }
 
-    Region changedRegion(*this);
-    changedRegion.add(extendToMergedAreas(QRect(d->anchor, d->marker)));
+    Region changedRegion = extendRegionToMergedAreas(*this);
 
     // for the case of a merged cell
     QPoint topLeft(range.topLeft());
@@ -230,6 +228,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
         bottomRight = QPoint(cell.column(), cell.row());
     }
 
+    QPoint origCursor = d->cursor;
     d->anchor = topLeft;
     d->cursor = bottomRight;
     d->marker = bottomRight;
@@ -256,9 +255,9 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
         range->setColor(d->colors[cells().size() % d->colors.size()]);
     }
 
-    if (changedRegion == *this) {
+    if ((changedRegion == *this) && (origCursor == d->cursor))
         return;
-    }
+
     changedRegion.add(QRect(topLeft, bottomRight), sheet);
 
     emitChanged(changedRegion);
@@ -283,8 +282,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
         }
     }
 
-    Region changedRegion(*this);
-    changedRegion.add(extendToMergedAreas(QRect(d->anchor, d->marker)));
+    Region changedRegion = extendRegionToMergedAreas(*this);
 
     // TODO Stefan: handle subregion insertion
     // TODO Stefan: handle obscured cells correctly
@@ -314,6 +312,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
         bottomRight = QPoint(cell.column(), cell.row());
     }
 
+    QPoint origCursor = d->cursor;
     d->anchor = topLeft;
     d->cursor = topLeft;
     d->marker = bottomRight;
@@ -322,9 +321,9 @@ void Selection::initialize(const Region& region, Sheet* sheet)
     d->activeSubRegionStart = 0;
     d->activeSubRegionLength = cells().count();
 
-    if (changedRegion == *this) {
+    if ((changedRegion == *this) && (origCursor == d->cursor))
         return;
-    }
+
     changedRegion.add(region);
 
     emitChanged(changedRegion);
@@ -385,12 +384,8 @@ void Selection::update(const QPoint& point)
         topLeft = QPoint(cell.column(), cell.row());
     }
 
-    if (topLeft == d->marker) {
-        return;
-    }
-
     QRect area1 = cells()[d->activeElement]->rect();
-    QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft));
+    QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft), d->activeSheet);
 
     // If the updated range is bigger, it may cover already existing ranges.
     // These get removed, if multiple occurrences are not allowed. Store the old
@@ -465,6 +460,8 @@ void Selection::update(const QPoint& point)
                                 QPoint(innerRight, farBottom)));
     }
 
+    if (point != d->cursor) changedRegion.add(QRect(point, d->cursor));
+
     d->marker = topLeft;
     d->cursor = point;
 
@@ -491,7 +488,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
         }
     }
 
-    Region changedRegion = Region(extendToMergedAreas(QRect(d->marker, d->marker)));
+    Region changedRegion = extendRegionToMergedAreas(*this);
 
     // for the case of a merged cell
     QPoint topLeft(point);
@@ -523,7 +520,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
         d->anchor = cells()[d->activeElement]->rect().topLeft();
         d->marker = cells()[d->activeElement]->rect().bottomRight();
     }
-    d->cursor = d->marker;
+    d->cursor = point; //d->marker;
 
     changedRegion.add(topLeft, sheet);
     changedRegion.add(*this);
@@ -549,23 +546,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
         }
     }
 
-    // for the case of a merged cell
-    QPoint topLeft(range.topLeft());
-    Cell cell(d->activeSheet, topLeft);
-    if (cell.isPartOfMerged()) {
-        cell = cell.masterCell();
-        topLeft = QPoint(cell.column(), cell.row());
-    }
-
-    // for the case of a merged cell
-    QPoint bottomRight(range.bottomRight());
-    cell = Cell(d->activeSheet, bottomRight);
-    if (cell.isPartOfMerged()) {
-        cell = cell.masterCell();
-        bottomRight = QPoint(cell.column(), cell.row());
-    }
-
-    const QRect newRange = extendToMergedAreas(QRect(topLeft, bottomRight));
+    const QRect newRange = extendToMergedAreas(range, sheet);
 
     Element* element = 0;
     if (d->multipleOccurences) {
@@ -633,19 +614,9 @@ Selection::Element* Selection::eor(const QPoint& point, SheetBase* sheet)
     return Region::eor(point, sheet);
 }
 
-const QPoint& Selection::anchor() const
-{
-    return d->anchor;
-}
-
 const QPoint& Selection::cursor() const
 {
     return d->cursor;
-}
-
-const QPoint& Selection::marker() const
-{
-    return d->marker;
 }
 
 bool Selection::isSingular() const
@@ -921,13 +892,13 @@ void Selection::emitRequestFocusEditor()
     emit requestFocusEditor();
 }
 
-QRect Selection::extendToMergedAreas(const QRect& _area) const
+QRect Selection::extendToMergedAreas(const QRect& _area, Sheet *sheet) const
 {
-    if (!d->activeSheet)
+    if (!sheet)
         return _area;
 
     QRect area = normalized(_area);
-    Cell cell(d->activeSheet, area.left(), area.top());
+    Cell cell(sheet, area.left(), area.top());
 
     if (Region::Range(area).isColumn() || Region::Range(area).isRow()) {
         return area;
@@ -946,9 +917,10 @@ QRect Selection::extendToMergedAreas(const QRect& _area) const
         int left = area.left();
         int bottom = area.bottom();
         int right = area.right();
+        // TODO - we only need to check the borders, not inside cells!
         for (int x = area.left(); x <= area.right(); x++)
             for (int y = area.top(); y <= area.bottom(); y++) {
-                cell = Cell(d->activeSheet, x, y);
+                cell = Cell(sheet, x, y);
                 if (cell.doesMergeCells()) {
                     right = qMax(right, cell.mergedXCells() + x);
                     bottom = qMax(bottom, cell.mergedYCells() + y);
@@ -965,6 +937,21 @@ QRect Selection::extendToMergedAreas(const QRect& _area) const
     }
     return area;
 }
+
+Region Selection::extendRegionToMergedAreas(const Region& region) const
+{
+    Region res;
+    ConstIterator end(region.constEnd());
+    for (ConstIterator it = region.constBegin(); it != end; ++it) {
+        Element *element = *it;
+        if (!element) continue;
+        Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
+        const QRect rect = extendToMergedAreas(element->rect(), sheet);
+        res.add(rect, element->sheet());
+    }
+    return res;
+}
+
 
 Calligra::Sheets::Region::Point* Selection::createPoint(const QPoint& point, bool /*fixedColumn*/, bool /*fixedRow*/) const
 {

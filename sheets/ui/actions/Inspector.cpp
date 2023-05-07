@@ -54,7 +54,7 @@ ActionDialog *Inspector::createDialog(QWidget *canvasWidget)
 void Inspector::onSelectionChanged()
 {
     InspectorDialog *dlg = dynamic_cast<InspectorDialog *>(m_dlg);
-    Cell cell(m_selection->activeSheet(), m_selection->marker());
+    Cell cell(m_selection->activeSheet(), m_selection->cursor());
     dlg->setCell(cell);
 }
 

@@ -144,18 +144,6 @@ QDomDocument Ksp::saveDoc(DocBase *document)
     }
 
     QDomElement e = saveMap (document->map(), doc);
-
-/*FIXME
-        // Save visual info for the first view, such as active sheet and active cell
-        // It looks like a hack, but reopening a document creates only one view anyway (David)
-        View *const view = static_cast<View*>(document->views().first());
-        Canvas *const canvas = view->canvasWidget();
-        e.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
-        e.setAttribute("markerColumn", QString::number(view->selection()->marker().x()));
-        e.setAttribute("markerRow",    QString::number(view->selection()->marker().y()));
-        e.setAttribute("xOffset",      QString::number(canvas->xOffset()));
-        e.setAttribute("yOffset",      QString::number(canvas->yOffset()));
-*/
     spread.appendChild(e);
 
     document->setModified(false);

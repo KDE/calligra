@@ -45,7 +45,7 @@ void InsertSeries::insertSeries(double start, double end, double step, bool isCo
 {
     SeriesManipulator *manipulator = new SeriesManipulator;
     manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setupSeries(m_selection->marker(), start, end, step,
+    manipulator->setupSeries(m_selection->cursor(), start, end, step,
                              isColumn ? SeriesManipulator::Column : SeriesManipulator::Row,
                              isLinear ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
 

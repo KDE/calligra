@@ -129,16 +129,6 @@ void Find::executeReplace(Selection *selection, Sheet *sheet, QWidget *canvasWid
 
     findNext();
     delete dialog;
-
-#if 0
-    // Refresh the editWidget
-    // TODO - after a replacement only?
-    Cell cell = Cell(activeSheet(), selection->marker());
-    if (cell.userInput() != 0)
-        d->editWidget->setText(cell.userInput());
-    else
-        d->editWidget->setText("");
-#endif
 }
 
 
@@ -171,7 +161,7 @@ void Find::initFindReplace()
     m_findBottomRow = region.bottom();
 
     m_findStart = QPoint(colStart, rowStart);
-    m_findPos = (m_findOptions & KFind::FromCursor) ? m_selection->marker() : m_findStart;
+    m_findPos = (m_findOptions & KFind::FromCursor) ? m_selection->cursor() : m_findStart;
     m_findEnd = QPoint(colEnd, rowEnd);
     //debugSheets << m_findPos <<" to" << m_findEnd;
     //debugSheets <<"leftcol=" << m_findLeftColumn <<" rightcol=" << m_findRightColumn;

@@ -109,10 +109,9 @@ void Canvas::validateSelection()
      Sheet * const sheet = activeSheet();
     if (!sheet)
         return;
-//#if 0
-//XXX TODO
+
     if (selection()->isSingular()) {
-        const Cell cell = Cell(sheet, selection()->marker()).masterCell();
+        const Cell cell = Cell(sheet, selection()->cursor()).masterCell();
         Validity validity = cell.validity();
         if (validity.displayValidationInformation()) {
             const QString title = validity.titleInfo();
@@ -140,7 +139,6 @@ void Canvas::validateSelection()
     } else {
         QToolTip::hideText();
     }
-//#endif
 }
 
 

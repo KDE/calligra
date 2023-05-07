@@ -100,10 +100,8 @@ void TableTool::Private::setTools()
 
     const Sheet *sheet = tableShape->sheet();
     const QRect used = sheet->usedArea();
-    int maxColumn = used.width();
-    if (q->selection()->marker().x() > maxColumn) {
-        maxColumn = q->selection()->marker().x();
-    }
+    const QRect selected = q->selection()->boundingRect();
+    int maxColumn = qMax(used.width(), selected.right());
     horizontalScrollRect = QRectF(shapeRect.left(), shapeRect.bottom(), shapeRect.width(), margins.bottom());
     horizontalScrollBar->setFocusPolicy(Qt::StrongFocus);
     horizontalScrollBar->setInvertedControls(false);
@@ -114,10 +112,7 @@ void TableTool::Private::setTools()
     horizontalScrollBar->show();
     connect(horizontalScrollBar, &QAbstractSlider::valueChanged, q, &TableTool::slotHorizontalScrollBarValueChanged);
 
-    int maxRow = used.height();
-    if (q->selection()->marker().y() > maxRow) {
-        maxRow = q->selection()->marker().y();
-    }
+    int maxRow = qMax(used.height(), selected.bottom());
     verticalScrollRect = QRectF(shapeRect.right(), shapeRect.top(), margins.right(), shapeRect.height());
     verticalScrollBar->setFocusPolicy(Qt::StrongFocus);
     verticalScrollBar->setMaximum(std::max(tableShape->size().height()*10, sheet->rowPosition(maxRow)));
@@ -550,7 +545,7 @@ Selection* TableTool::selection()
 
 void TableTool::slotSelectionChanged(const Region&)
 {
-    scrollToCell(selection()->marker());
+    scrollToCell(selection()->cursor());
     canvas()->updateCanvas(d->toolRect);
 }
 

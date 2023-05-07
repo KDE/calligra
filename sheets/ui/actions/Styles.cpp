@@ -49,7 +49,7 @@ QAction *StyleFromCell::createAction() {
 
 void StyleFromCell::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
-    Cell cell = Cell(sheet, selection->marker());
+    Cell cell = Cell(sheet, selection->cursor());
 
     bool ok = false;
     QString styleName;

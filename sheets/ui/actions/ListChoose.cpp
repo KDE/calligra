@@ -52,13 +52,13 @@ void ListChoose::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidg
     for (QString &item : itemList)
         popupListChoose->addAction(item);
 
-    QPoint marker = selection->marker();
-    double tx = sheet->columnPosition(marker.x());
-    double ty = sheet->rowPosition(marker.y());
+    QPoint cursor = selection->cursor();
+    double tx = sheet->columnPosition(cursor.x());
+    double ty = sheet->rowPosition(cursor.y());
     double h = cursorCell.height();
     CellToolBase *tool = m_actions->tool();
-    if (tool->sheetView(sheet)->obscuresCells(marker)) {
-        const CellView& cellView = tool->sheetView(sheet)->cellView(marker.x(), marker.y());
+    if (tool->sheetView(sheet)->obscuresCells(cursor)) {
+        const CellView& cellView = tool->sheetView(sheet)->cellView(cursor.x(), cursor.y());
         h = cellView.cellHeight();
     }
     ty += h;
@@ -130,7 +130,7 @@ bool ListChoose::enabledForSelection(Selection *selection, const Cell &cursorCel
 
 void ListChoose::itemSelected(QAction* action)
 {
-    const Cell cell(m_selection->activeSheet(), m_selection->marker());
+    const Cell cell(m_selection->activeSheet(), m_selection->cursor());
 
     DataManipulator *command = new DataManipulator;
     command->setSheet(m_selection->activeSheet());

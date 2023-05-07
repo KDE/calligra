@@ -140,14 +140,15 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
         if (!m_pCanvas->selection()->contains(QPoint(1, hit_row)) ||
                 !(_ev->button() == Qt::RightButton) ||
                 !m_pCanvas->selection()->isRowSelected()) {
-            QPoint newMarker(1, hit_row);
-            QPoint newAnchor(KS_colMax, hit_row);
+            QPoint rowStart(1, hit_row);
+            QPoint rowEnd(KS_colMax, hit_row);
+            QRect fullRow(rowStart, rowEnd);
             if (_ev->modifiers() == Qt::ControlModifier) {
-                m_pCanvas->selection()->extend(QRect(newAnchor, newMarker));
+                m_pCanvas->selection()->extend(fullRow);
             } else if (_ev->modifiers() == Qt::ShiftModifier) {
-                m_pCanvas->selection()->update(newMarker);
+                m_pCanvas->selection()->update(rowEnd);
             } else {
-                m_pCanvas->selection()->initialize(QRect(newAnchor, newMarker));
+                m_pCanvas->selection()->initialize(fullRow);
             }
         }
 
@@ -311,11 +312,9 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
         if (row > KS_rowMax || row <= 0)
             return;
 
-        QPoint newAnchor = m_pCanvas->selection()->anchor();
-        QPoint newMarker = m_pCanvas->selection()->marker();
-        newMarker.setY(row);
-        newAnchor.setY(m_iSelectionAnchor);
-        m_pCanvas->selection()->update(newMarker);
+        QPoint newCursor = m_pCanvas->selection()->cursor();
+        newCursor.setY(row);
+        m_pCanvas->selection()->update(newCursor);
 
         if (_ev->pos().y() < 0)
             m_pCanvas->setVertScrollBarPos(qMax<qreal>(0, ev_PosY));
@@ -631,14 +630,15 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
         if (!m_pCanvas->selection()->contains(QPoint(hit_col, 1)) ||
                 !(_ev->button() == Qt::RightButton) ||
                 !m_pCanvas->selection()->isColumnSelected()) {
-            QPoint newMarker(hit_col, 1);
-            QPoint newAnchor(hit_col, KS_rowMax);
+            QPoint colStart(hit_col, 1);
+            QPoint colEnd(hit_col, KS_rowMax);
+            QRect fullColumn(colStart, colEnd);
             if (_ev->modifiers() == Qt::ControlModifier) {
-                m_pCanvas->selection()->extend(QRect(newAnchor, newMarker));
+                m_pCanvas->selection()->extend(fullColumn);
             } else if (_ev->modifiers() == Qt::ShiftModifier) {
-                m_pCanvas->selection()->update(newMarker);
+                m_pCanvas->selection()->update(colEnd);
             } else {
-                m_pCanvas->selection()->initialize(QRect(newAnchor, newMarker));
+                m_pCanvas->selection()->initialize(fullColumn);
             }
         }
 
@@ -814,11 +814,9 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
         if (col > KS_colMax || col <= 0)
             return;
 
-        QPoint newMarker = m_pCanvas->selection()->marker();
-        QPoint newAnchor = m_pCanvas->selection()->anchor();
-        newMarker.setX(col);
-        newAnchor.setX(m_iSelectionAnchor);
-        m_pCanvas->selection()->update(newMarker);
+        QPoint newCursor = m_pCanvas->selection()->cursor();
+        newCursor.setX(col);
+        m_pCanvas->selection()->update(newCursor);
 
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             if (_ev->pos().x() < width() - m_pCanvas->width()) {

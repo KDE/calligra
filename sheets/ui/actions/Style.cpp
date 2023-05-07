@@ -103,7 +103,7 @@ void Bold::executeToggled(bool selected, Selection *selection, Sheet *sheet, QWi
     command->add(*selection);
     command->execute(selection->canvas());
     if (m_actions->tool()->editor()) {
-        const Cell cell = Cell(sheet, selection->marker());
+        const Cell cell = Cell(sheet, selection->cursor());
         m_actions->tool()->editor()->setEditorFont(cell.style().font(), true, selection->canvas()->viewConverter());
     }
 }
@@ -140,7 +140,7 @@ void Italic::executeToggled(bool selected, Selection *selection, Sheet *sheet, Q
     command->add(*selection);
     command->execute(selection->canvas());
     if (m_actions->tool()->editor()) {
-        const Cell cell = Cell(sheet, selection->marker());
+        const Cell cell = Cell(sheet, selection->cursor());
         m_actions->tool()->editor()->setEditorFont(cell.style().font(), true, selection->canvas()->viewConverter());
     }
 }
@@ -177,7 +177,7 @@ void Underline::executeToggled(bool selected, Selection *selection, Sheet *sheet
     command->add(*selection);
     command->execute(selection->canvas());
     if (m_actions->tool()->editor()) {
-        const Cell cell = Cell(sheet, selection->marker());
+        const Cell cell = Cell(sheet, selection->cursor());
         m_actions->tool()->editor()->setEditorFont(cell.style().font(), true, selection->canvas()->viewConverter());
     }
 }
@@ -208,7 +208,7 @@ void Strikeout::executeToggled(bool selected, Selection *selection, Sheet *sheet
     command->add(*selection);
     command->execute(selection->canvas());
     if (m_actions->tool()->editor()) {
-        const Cell cell = Cell(sheet, selection->marker());
+        const Cell cell = Cell(sheet, selection->cursor());
         m_actions->tool()->editor()->setEditorFont(cell.style().font(), true, selection->canvas()->viewConverter());
     }
 }
@@ -503,7 +503,7 @@ IncreaseFontSize::~IncreaseFontSize()
 
 void IncreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    const Style style = Cell(sheet, selection->marker()).style();
+    const Style style = Cell(sheet, selection->cursor()).style();
     const int size = style.fontSize();
     if (size >= 300) return;
 
@@ -528,7 +528,7 @@ DecreaseFontSize::~DecreaseFontSize()
 
 void DecreaseFontSize::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
-    const Style style = Cell(sheet, selection->marker()).style();
+    const Style style = Cell(sheet, selection->cursor()).style();
     const int size = style.fontSize();
     if (size <= 1) return;
 

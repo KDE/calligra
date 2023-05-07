@@ -348,7 +348,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
     if (q->selection()->referenceSelection() || q->editor()) {
         return;
     }
-    Sheet *const sheet = q->selection()->activeSheet();
+    Sheet *sheet = q->selection()->activeSheet();
 
     // save the painter state
     painter.save();
@@ -363,13 +363,17 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
     painter.setPen(pen);
 
     const Calligra::Sheets::Selection* selection = q->selection();
-    const QRect currentRange = selection->extendToMergedAreas(QRect(selection->anchor(), selection->marker()));
+    QRect selected {selection->lastRange()};
+
     Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
-        const QRect range = (*it)->isAll() ? (*it)->rect() : selection->extendToMergedAreas((*it)->rect());
-
+        Sheet *esheet = dynamic_cast<Sheet *>((*it)->sheet());
+        if (sheet != esheet) continue;
+        QRect range = (*it)->rect();
         // Only the active element (the one with the anchor) will be drawn with a border
-        const bool current = (currentRange == range);
+        const bool current = (range == selected);
+
+        range = selection->extendToMergedAreas(range, esheet);
 
         double positions[4];
         bool paintSides[4];
@@ -410,7 +414,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
             const QRegion clipRegion = painter.clipRegion();
             // clip out the cursor region
             const QRect cursor = QRect(selection->cursor(), selection->cursor());
-            const QRect extCursor = selection->extendToMergedAreas(cursor);
+            const QRect extCursor = selection->extendToMergedAreas(cursor, selection->activeSheet());
             QRectF cursorRect = sheet->cellCoordinatesToDocument(extCursor);
             if (sheet->layoutDirection() == Qt::RightToLeft) {
                 // See comment above.
@@ -522,7 +526,7 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
         }
         alreadyFoundRegions.insert((*it)->name());
 
-        const QRect range = q->selection()->extendToMergedAreas((*it)->rect());
+        const QRect range = q->selection()->extendToMergedAreas((*it)->rect(), sheet);
         QRectF area = sheet->cellCoordinatesToDocument(range);
 
         // Convert region from sheet coordinates to canvas coordinates for use with the painter
@@ -597,7 +601,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
 {
     Selection *sel = q->selection();
     QList<QAction*> popupActions;
-    const Cell cell = Cell(sel->activeSheet(), sel->marker());
+    const Cell cell = Cell(sel->activeSheet(), sel->cursor());
     const bool isProtected = (!sel->activeSheet()->fullMap()->isReadWrite()) || sel->isProtected();
     if (!isProtected) {
         popupActions.append(actions->action("cellStyle"));

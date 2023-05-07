@@ -65,7 +65,7 @@ void Font::triggeredFont(const QString &name) {
     command->execute(canvas);
     // Don't leave the focus in the toolbars combo box ...
     if (tool->editor()) {
-        const Style style = Cell(sheet, selection->marker()).style();
+        const Style style = Cell(sheet, selection->cursor()).style();
         tool->editor()->setEditorFont(style.font(), true, canvas->viewConverter());
         selection->emitRequestFocusEditor();
     } else {
@@ -113,7 +113,7 @@ void FontSize::triggeredSize(int size) {
 
     // Don't leave the focus in the toolbars combo box ...
     if (tool->editor()) {
-        const Cell cell(sheet, selection->marker());
+        const Cell cell(sheet, selection->cursor());
         tool->editor()->setEditorFont(cell.style().font(), true, canvas->viewConverter());
         selection->emitRequestFocusEditor();
     } else {

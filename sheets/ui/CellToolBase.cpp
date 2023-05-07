@@ -558,7 +558,8 @@ double CellToolBase::canvasWidth() const
 
 bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
 {
-    const Cell cell(selection()->activeSheet(), selection()->marker());
+    Sheet *sheet = selection()->activeSheet();
+    const Cell cell(sheet, selection()->cursor());
     if (selection()->isProtected()) return false;
 
     if (!editor()) {
@@ -581,9 +582,9 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
         double min_w = cell.width();
         double min_h = cell.height();
 
-        double xpos = selection()->activeSheet()->columnPosition(selection()->marker().x());
+        double xpos = sheet->columnPosition(cell.column());
         xpos += canvasOffsetX();
-        Qt::LayoutDirection sheetDir = selection()->activeSheet()->layoutDirection();
+        Qt::LayoutDirection sheetDir = sheet->layoutDirection();
         bool rtlText = cell.displayText().isRightToLeft();
 
         // if sheet and cell direction don't match, then the editor's location
@@ -598,7 +599,7 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
             double w2 = qMax(w, min_w);
             xpos = dwidth - w2 - xpos;
         }
-        double ypos = selection()->activeSheet()->rowPosition(selection()->marker().y());
+        double ypos = sheet->rowPosition(cell.row());
         ypos += canvasOffsetY();
 
         // Setup the editor's palette.

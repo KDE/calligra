@@ -101,8 +101,8 @@ bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
 
     int column, row;
     if (selection->isColumnOrRowSelected()) {
-        // complete rows/columns are selected, use the marker.
-        const QPoint marker = selection->marker();
+        // complete rows/columns are selected, use the cursor.
+        const QPoint marker = selection->cursor();
         column = marker.x();
         row = marker.y();
     } else {

@@ -57,7 +57,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     m_focus = 0;
     m_desc = 0;
 
-    CellBase cell(m_selection->activeSheet(), m_selection->marker());
+    CellBase cell(m_selection->activeSheet(), m_selection->cursor());
     m_oldText = cell.userInput();
     // Make sure that there is a cell editor running.
     if (cell.userInput().isEmpty())
@@ -211,8 +211,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     // Save the cells current text.
     QString tmp_oldText = m_editor->toPlainText();
     // Position of the cell.
-    m_column = m_selection->marker().x();
-    m_row = m_selection->marker().y();
+    m_column = m_selection->cursor().x();
+    m_row = m_selection->cursor().y();
 
     if (tmp_oldText.isEmpty())
         result->setText("=");

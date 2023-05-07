@@ -239,7 +239,7 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     d->functionCompletion = new FunctionCompletion(this);
     d->functionCompletionTimer = new QTimer(this);
 
-    const Cell cell(d->selection->activeSheet(), d->selection->marker());
+    const Cell cell(d->selection->activeSheet(), d->selection->cursor());
     const bool wrapText = cell.style().wrapText();
     d->textEdit->setWordWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::NoWrap);
 
@@ -293,7 +293,7 @@ QAbstractItemModel *CellEditor::model()
   //ValueConverter *conv;
   QList<QString> words;
   QList<QString> wordlist;
-  const Cell cell(d->selection->activeSheet(), d->selection->marker());
+  const Cell cell(d->selection->activeSheet(), d->selection->cursor());
   int col = cell.column();
   words = d->wordCollection->values(col);
   for (int i = 0; i < 3 && (!words.isEmpty()) ; i++) {
@@ -463,7 +463,7 @@ void CellEditor::slotTextChanged()
     // the user input is still indicating a percent value. If the digit gets
     // deleted while editing the percent char also stays. Disabling for now.
 #if 0 // CALLIGRA_SHEETS_WIP_EDITOR_OVERHAUL
-    const Cell cell(d->selection->activeSheet(), d->selection->marker());
+    const Cell cell(d->selection->activeSheet(), d->selection->cursor());
     if ((cell.style().formatType()) == Format::Percentage) {
         if ((text.length() == 1) && text[0].isDigit()) {
             setPlainText(text + " %");
@@ -580,7 +580,7 @@ void CellEditor::selectionChanged()
 
 void CellEditor::keyPressEvent(QKeyEvent *event)
  { 
-    const Cell cell_temp(d->selection->activeSheet(), d->selection->marker()); 
+    int column {Cell(d->selection->activeSheet(), d->selection->cursor()).column()}; 
    
     switch (event->key()) {
     case Qt::Key_Left:
@@ -603,21 +603,19 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // editing mode. To insert literal tabs you can always use the external
         // editor.
 
-        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
-	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
-	}
-	event->ignore();
-	return;
+        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(column).contains(textUnderCursor()))
+            d->wordCollection->insertMulti(column, textUnderCursor());
+        event->ignore();
+        return;
     case Qt::Key_Return:
     case Qt::Key_Enter:
         // Shift + Return: manual line wrap
         if (event->modifiers() & Qt::ShiftModifier) {
             break; // pass to TextEdit
         }
-        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
-	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
-	}
-	event->ignore(); // pass to parent
+        if (!textUnderCursor().isEmpty() && !d->wordCollection->values(column).contains(textUnderCursor()))
+            d->wordCollection->insertMulti(column, textUnderCursor());
+        event->ignore(); // pass to parent
         return;
     }
     

@@ -147,8 +147,7 @@ public:
 
     // selection/marker
     Selection* selection;
-    QMap<SheetBase*, QPoint> savedAnchors;
-    QMap<SheetBase*, QPoint> savedMarkers;
+    QMap<SheetBase*, QRect> selections;
     QMap<SheetBase*, QPointF> savedOffsets;
 
     void initActions();
@@ -1114,8 +1113,12 @@ void View::initialPosition()
     // Set the initial X and Y offsets for the view (OpenDocument loading)
     const LoadingInfo* loadingInfo = doc()->map()->loadingInfo();
     if (loadingInfo->fileFormat() == LoadingInfo::OpenDocument) {
-        d->savedAnchors = loadingInfo->cursorPositions();
-        d->savedMarkers = loadingInfo->cursorPositions();
+        d->selections.clear();
+        QMap<SheetBase*, QPoint> positions = loadingInfo->cursorPositions();
+        for (auto e : positions.keys()) {
+            QPoint p = positions.value(e);
+            d->selections[e] = QRect(p, p);
+        }
         d->savedOffsets = loadingInfo->scrollingOffsets();
     }
 
@@ -1293,18 +1296,15 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     /* see if there was a previous selection on this other sheet */
-    QMap<SheetBase*, QPoint>::ConstIterator it = d->savedAnchors.constFind(d->activeSheet);
-    QMap<SheetBase*, QPoint>::ConstIterator it2 = d->savedMarkers.constFind(d->activeSheet);
+    QMap<SheetBase*, QRect>::ConstIterator it = d->selections.constFind(d->activeSheet);
 
     // restore the old anchor and marker
-    const QPoint newAnchor = (it == d->savedAnchors.constEnd()) ? QPoint(1, 1) : *it;
-    const QPoint newMarker = (it2 == d->savedMarkers.constEnd()) ? QPoint(1, 1) : *it2;
+    const QRect newSelection = (it == d->selections.constEnd()) ? QRect(1, 1, 1, 1) : *it;
 
     d->selection->clear();
     d->selection->setActiveSheet(d->activeSheet);
     d->selection->setOriginSheet(d->activeSheet);
-    d->selection->initialize(newAnchor);
-    d->selection->update(newMarker);
+    d->selection->initialize(newSelection, d->activeSheet);
 
     d->actions->showPageOutline->blockSignals(true);
     d->actions->showPageOutline->setChecked(d->activeSheet->isShowPageOutline());
@@ -2122,32 +2122,26 @@ void View::updateShowSheetMenu()
 
 QPoint View::markerFromSheet(SheetBase* sheet) const
 {
-    QMap<SheetBase*, QPoint>::ConstIterator it = d->savedMarkers.constFind(sheet);
-    QPoint newMarker = (it == d->savedMarkers.constEnd()) ? QPoint(1, 1) : *it;
-    return newMarker;
+    if (!d->selections.contains(sheet)) return QPoint(1, 1);
+    return d->selections.value(sheet).bottomRight();
 }
 
 QPointF View::offsetFromSheet(SheetBase* sheet) const
 {
-    QMap<SheetBase*, QPointF>::ConstIterator it = d->savedOffsets.constFind(sheet);
-    QPointF offset = (it == d->savedOffsets.constEnd()) ? QPointF() : *it;
-    return offset;
+    if (!d->savedOffsets.contains(sheet)) return QPointF();
+    return d->savedOffsets.value(sheet);
 }
 
 void View::saveCurrentSheetSelection()
 {
     /* save the current selection on this sheet */
-    if (d->activeSheet != 0) {
-        d->savedAnchors.remove(d->activeSheet);
-        d->savedAnchors.insert(d->activeSheet, d->selection->anchor());
-        debugSheetsUI << " Current scrollbar vert value:" << d->vertScrollBar->value();
-        debugSheetsUI << "Saving marker pos:" << d->selection->marker();
-        d->savedMarkers.remove(d->activeSheet);
-        d->savedMarkers.insert(d->activeSheet, d->selection->marker());
-        d->savedOffsets.remove(d->activeSheet);
-        d->savedOffsets.insert(d->activeSheet, QPointF(d->canvas->xOffset(),
-                               d->canvas->yOffset()));
-    }
+    if (!d->activeSheet) return;
+
+    d->selections.remove(d->activeSheet);
+    d->selections.insert(d->activeSheet, d->selection->lastRange());
+    d->savedOffsets.remove(d->activeSheet);
+    d->savedOffsets.insert(d->activeSheet, QPointF(d->canvas->xOffset(),
+                           d->canvas->yOffset()));
 }
 
 void View::handleDamages(const QList<Damage*>& damages)

@@ -55,7 +55,7 @@ void DialogCellAction::execute(Selection *selection, Sheet *, QWidget *canvasWid
 
 Cell DialogCellAction::activeCell() const
 {
-    return Cell(m_selection->activeSheet(), m_selection->marker());
+    return Cell(m_selection->activeSheet(), m_selection->cursor());
 }
 
 void DialogCellAction::activeSheetChanged(Sheet *)
