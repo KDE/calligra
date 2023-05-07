@@ -24,7 +24,7 @@ using namespace Calligra::Sheets;
 
 // TODO
 // - Allow resizing of all ranges in a normal selection; not just the last one.
-// - Get rid of anchor and marker. They are the corners of the active element.
+// - Get rid of anchor. They are the corners of the active element.
 
 
 /***************************************************************************
@@ -39,7 +39,6 @@ public:
         originSheet = 0;
         anchor = QPoint(1, 1);
         cursor = QPoint(1, 1);
-        marker = QPoint(1, 1);
 
         colors.push_back(Qt::red);
         colors.push_back(Qt::blue);
@@ -65,7 +64,6 @@ public:
     Sheet* originSheet;
     QPoint anchor;
     QPoint cursor;
-    QPoint marker;
     QList<QColor> colors;
 
     bool multipleOccurences : 1;
@@ -156,7 +154,6 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
 
     d->anchor = topLeft;
     d->cursor = point;
-    d->marker = topLeft;
 
     fixSubRegionDimension(); // TODO remove this sanity check
     int index = d->activeSubRegionStart + d->activeSubRegionLength;
@@ -231,7 +228,6 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     QPoint origCursor = d->cursor;
     d->anchor = topLeft;
     d->cursor = bottomRight;
-    d->marker = bottomRight;
 
     fixSubRegionDimension(); // TODO remove this sanity check
     int index = d->activeSubRegionStart + d->activeSubRegionLength;
@@ -315,7 +311,6 @@ void Selection::initialize(const Region& region, Sheet* sheet)
     QPoint origCursor = d->cursor;
     d->anchor = topLeft;
     d->cursor = topLeft;
-    d->marker = bottomRight;
 
     d->activeElement = cells().count();
     d->activeSubRegionStart = 0;
@@ -403,7 +398,7 @@ void Selection::update(const QPoint& point)
         d->activeElement += delta;
     }
 
-    QRect area2 = newRange;
+    QRect area2 = newRange; 
     Region changedRegion;
 
     bool newLeft   = area1.left() != area2.left();
@@ -462,7 +457,6 @@ void Selection::update(const QPoint& point)
 
     if (point != d->cursor) changedRegion.add(QRect(point, d->cursor));
 
-    d->marker = topLeft;
     d->cursor = point;
 
     emitChanged(changedRegion);
@@ -508,7 +502,6 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
         ++d->activeSubRegionLength;
         ++d->activeElement;
         d->anchor = topLeft;
-        d->marker = topLeft;
     } else {
         // TODO Replace for normal selection and resizing of any range.
         // The new point may split an existing range. Anyway, the new
@@ -518,9 +511,8 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
         d->activeSubRegionLength += cells().count() - count;
         d->activeElement = cells().count() - 1;
         d->anchor = cells()[d->activeElement]->rect().topLeft();
-        d->marker = cells()[d->activeElement]->rect().bottomRight();
     }
-    d->cursor = point; //d->marker;
+    d->cursor = point;
 
     changedRegion.add(topLeft, sheet);
     changedRegion.add(*this);
@@ -559,16 +551,15 @@ void Selection::extend(const QRect& range, Sheet* sheet)
         ++d->activeSubRegionLength;
         ++d->activeElement;
         d->anchor = newRange.topLeft();
-        d->marker = newRange.bottomRight();
+        d->cursor = newRange.bottomRight();
     } else {
         const int count = cells().count();
         element = add(newRange, sheet);
         d->activeSubRegionLength += cells().count() - count;
         d->activeElement = cells().count() - 1;
         d->anchor = cells()[d->activeElement]->rect().topLeft();
-        d->marker = cells()[d->activeElement]->rect().bottomRight();
+        d->cursor = cells()[d->activeElement]->rect().bottomRight();
     }
-    d->cursor = d->marker;
 
     if (element && element->type() == Element::Point) {
         Point* point = static_cast<Point*>(element);
@@ -664,7 +655,6 @@ int Selection::setActiveElement(const Cell &cell)
         if (range.topLeft() == point || range.bottomRight() == point) {
             d->anchor = range.topLeft();
             d->cursor = range.bottomRight();
-            d->marker = range.bottomRight();
             d->activeElement = index;
             // Only adjust the sub-region, if index is out of bounds.
             if (index < d->activeSubRegionStart) {
@@ -757,14 +747,13 @@ void Selection::setActiveSubRegion(int start, int length, int active)
         return;
     }
 
-    // Set the anchor, marker and cursor according to the active element.
+    // Set the cursor according to the active element.
     const int subRegionEnd = d->activeSubRegionStart + d->activeSubRegionLength;
     const bool atEnd = d->activeElement == subRegionEnd;
     const int index = qBound(0, d->activeElement - (atEnd ? 1 : 0), cells().count() - 1);
     const QRect range = cells()[index]->rect();
     d->anchor = range.topLeft();
-    d->marker = range.bottomRight();
-    d->cursor = d->marker;
+    d->cursor = range.bottomRight();
 }
 
 QString Selection::activeSubRegionName() const
