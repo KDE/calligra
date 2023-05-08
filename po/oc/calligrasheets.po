@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -12697,7 +12697,7 @@ msgid "Clear"
 msgstr "Netejar"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:449
+#: part/calligrasheets.rc:44 part/View.cpp:448
 #, kde-format
 msgid "Delete"
 msgstr "Suprimir"
@@ -13116,7 +13116,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Mai bas"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:234 part/View.cpp:245
+#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
 #, kde-format
 msgid "Sheet"
 msgstr "Fuèlha"
@@ -13325,37 +13325,37 @@ msgid "Down, First Column"
 msgstr "Inserir de colomnas"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
 #, kde-format
 msgid "None"
 msgstr "Pas cap"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
 #, kde-format
 msgid "Sum"
 msgstr "Soma"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
+#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
 #, kde-format
 msgid "Max"
 msgstr "Max"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
+#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
 #, kde-format
 msgid "Average"
 msgstr "Mejana"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
+#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
 #, kde-format
 msgid "Count"
 msgstr "Comptar"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
 #, fuzzy, kde-format
 #| msgid "Count"
 msgid "CountA"
@@ -13372,7 +13372,7 @@ msgstr ""
 msgid "Function Modules"
 msgstr "Foncion"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:750
+#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
 #, fuzzy, kde-format
 #| msgid "&Tools"
 msgid "Tools"
@@ -13790,7 +13790,7 @@ msgstr "Largor :"
 msgid "Hide Column"
 msgstr "Colomnas"
 
-#: part/Headers.cpp:232 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:732
 #, kde-format
 msgid "Area is too large."
 msgstr ""
@@ -13805,381 +13805,381 @@ msgstr ""
 msgid "Nothing to print for sheet(s) %1."
 msgstr ""
 
-#: part/View.cpp:229
+#: part/View.cpp:228
 #, fuzzy, kde-format
 #| msgid "Change Font"
 msgid "Sheet Properties..."
 msgstr "Modificar la poliça"
 
-#: part/View.cpp:232
+#: part/View.cpp:231
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:235 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2035
 #, fuzzy, kde-format
 #| msgid "Insert Series"
 msgid "Insert Sheet"
 msgstr "Inserir una seria de donadas"
 
-#: part/View.cpp:236
+#: part/View.cpp:235
 #, fuzzy, kde-format
 #| msgid "Insert Rows"
 msgid "Insert a new sheet"
 msgstr "Inserir de linhas"
 
-#: part/View.cpp:240
+#: part/View.cpp:239
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Duplicate Sheet"
 msgstr "Recalcular"
 
-#: part/View.cpp:241
+#: part/View.cpp:240
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Duplicate the selected sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Remove Sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Remove the active sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:251
+#: part/View.cpp:250
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Rename Sheet..."
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:254
+#: part/View.cpp:253
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Rename the active sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:256
+#: part/View.cpp:255
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show Sheet..."
 msgstr "Mostrar la fuèlha"
 
-#: part/View.cpp:259
+#: part/View.cpp:258
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show a hidden sheet"
 msgstr "Mostrar la fuèlha"
 
-#: part/View.cpp:261
+#: part/View.cpp:260
 #, fuzzy, kde-format
 #| msgid "Sheet"
 msgid "Hide Sheet"
 msgstr "Fuèlha"
 
-#: part/View.cpp:264
+#: part/View.cpp:263
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Hide the active sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:266
+#: part/View.cpp:265
 #, fuzzy, kde-format
 #| msgid "Layout"
 msgid "Page Layout..."
 msgstr "Presentacion"
 
-#: part/View.cpp:269
+#: part/View.cpp:268
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr ""
 
-#: part/View.cpp:271
+#: part/View.cpp:270
 #, fuzzy, kde-format
 #| msgid "Printing"
 msgid "Reset Print Range"
 msgstr "Estampatge"
 
-#: part/View.cpp:274
+#: part/View.cpp:273
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr ""
 
-#: part/View.cpp:276
+#: part/View.cpp:275
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgid "Page Outline"
 msgstr "Contorn"
 
-#: part/View.cpp:277
+#: part/View.cpp:276
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr ""
 
-#: part/View.cpp:281
+#: part/View.cpp:280
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Recalculate Sheet"
 msgstr "Recalcular"
 
-#: part/View.cpp:283 part/View.cpp:291
+#: part/View.cpp:282 part/View.cpp:290
 #, kde-format
 msgid "Recalculate"
 msgstr "Recalcular"
 
-#: part/View.cpp:287
+#: part/View.cpp:286
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr ""
 
-#: part/View.cpp:289
+#: part/View.cpp:288
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Recalculate Document"
 msgstr "Recalcular"
 
-#: part/View.cpp:295
+#: part/View.cpp:294
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr ""
 
-#: part/View.cpp:297
+#: part/View.cpp:296
 #, fuzzy, kde-format
 #| msgid "Protect Sheet"
 msgid "Protect &Sheet..."
 msgstr "Protegir la fuèlha"
 
-#: part/View.cpp:299
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr ""
 
-#: part/View.cpp:303
+#: part/View.cpp:302
 #, fuzzy, kde-format
 #| msgid "Protect Document"
 msgid "Protect &Document..."
 msgstr "Protegir lo document"
 
-#: part/View.cpp:305
+#: part/View.cpp:304
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr ""
 
-#: part/View.cpp:310
+#: part/View.cpp:309
 #, fuzzy, kde-format
 #| msgid "Insert Columns"
 msgid "&Create Template From Document..."
 msgstr "Suprimir de colomnas"
 
-#: part/View.cpp:314
+#: part/View.cpp:313
 #, fuzzy, kde-format
 #| msgid "Andorra"
 msgid "Anchor"
 msgstr "Ancora"
 
-#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Cellula"
 
-#: part/View.cpp:316 part/View.cpp:1085
+#: part/View.cpp:315 part/View.cpp:1084
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "Page"
 msgstr "Pagina"
 
-#: part/View.cpp:318
+#: part/View.cpp:317
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:325
+#: part/View.cpp:324
 #, fuzzy, kde-format
 #| msgid "Sheet"
 msgid "Next Sheet"
 msgstr "Fuèlha"
 
-#: part/View.cpp:326
+#: part/View.cpp:325
 #, kde-format
 msgid "Next"
 msgstr "Seguent"
 
-#: part/View.cpp:327
+#: part/View.cpp:326
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Move to the next sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:332
+#: part/View.cpp:331
 #, fuzzy, kde-format
 #| msgid "Previous"
 msgid "Previous Sheet"
 msgstr "Precedent"
 
-#: part/View.cpp:333
+#: part/View.cpp:332
 #, kde-format
 msgid "Previous"
 msgstr "Precedent"
 
-#: part/View.cpp:334
+#: part/View.cpp:333
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Move to the previous sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:339
+#: part/View.cpp:338
 #, fuzzy, kde-format
 #| msgid "Start date"
 msgid "First Sheet"
 msgstr "Data de debuta"
 
-#: part/View.cpp:340
+#: part/View.cpp:339
 #, kde-format
 msgid "First"
 msgstr "Primièr"
 
-#: part/View.cpp:341
+#: part/View.cpp:340
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Move to the first sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:345
+#: part/View.cpp:344
 #, fuzzy, kde-format
 #| msgid "Sheet"
 msgid "Last Sheet"
 msgstr "Fuèlha"
 
-#: part/View.cpp:346
+#: part/View.cpp:345
 #, fuzzy, kde-format
 #| msgid "Last"
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Darrièr"
 
-#: part/View.cpp:347
+#: part/View.cpp:346
 #, fuzzy, kde-format
 #| msgid "Rename Sheet"
 msgid "Move to the last sheet"
 msgstr "Tornar nomenar lo fuèlh"
 
-#: part/View.cpp:353
+#: part/View.cpp:352
 #, fuzzy, kde-format
 #| msgid "Columns"
 msgid "Column Header"
 msgstr "Entèsta de colomna"
 
-#: part/View.cpp:354
+#: part/View.cpp:353
 #, fuzzy, kde-format
 #| msgid "Columns"
 msgid "Show the column header"
 msgstr "Entèsta de colomna"
 
-#: part/View.cpp:359
+#: part/View.cpp:358
 #, fuzzy, kde-format
 #| msgid "Header"
 msgid "Row Header"
 msgstr "Encap"
 
-#: part/View.cpp:360
+#: part/View.cpp:359
 #, fuzzy, kde-format
 #| msgid "Columns"
 msgid "Show the row header"
 msgstr "Entèsta de colomna"
 
-#: part/View.cpp:365
+#: part/View.cpp:364
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgid "Horizontal Scrollbar"
 msgstr "Orizontal"
 
-#: part/View.cpp:366
+#: part/View.cpp:365
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgid "Show the horizontal scrollbar"
 msgstr "Orizontal"
 
-#: part/View.cpp:371
+#: part/View.cpp:370
 #, fuzzy, kde-format
 #| msgid "Vertical"
 msgid "Vertical Scrollbar"
 msgstr "Vertical"
 
-#: part/View.cpp:372
+#: part/View.cpp:371
 #, fuzzy, kde-format
 #| msgid "Vertical"
 msgid "Show the vertical scrollbar"
 msgstr "Vertical"
 
-#: part/View.cpp:377
+#: part/View.cpp:376
 #, kde-format
 msgid "Status Bar"
 msgstr "Barra d'estat"
 
-#: part/View.cpp:378
+#: part/View.cpp:377
 #, fuzzy, kde-format
 #| msgid "Status Bar"
 msgid "Show the status bar"
 msgstr "Barra d'estat"
 
-#: part/View.cpp:383
+#: part/View.cpp:382
 #, kde-format
 msgid "Tab Bar"
 msgstr ""
 
-#: part/View.cpp:384
+#: part/View.cpp:383
 #, fuzzy, kde-format
 #| msgid "Show Sheet"
 msgid "Show the tab bar"
 msgstr "Mostrar la fuèlha"
 
-#: part/View.cpp:390
+#: part/View.cpp:389
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr ""
 
-#: part/View.cpp:403
+#: part/View.cpp:402
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "No calculation"
 msgstr "Recalcular"
 
-#: part/View.cpp:410
+#: part/View.cpp:409
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate using sum"
 msgstr "Recalcular"
 
-#: part/View.cpp:417
+#: part/View.cpp:416
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate using minimum"
 msgstr "Recalcular"
 
-#: part/View.cpp:424
+#: part/View.cpp:423
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate using maximum"
 msgstr "Recalcular"
 
-#: part/View.cpp:431
+#: part/View.cpp:430
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate using average"
 msgstr "Recalcular"
 
-#: part/View.cpp:438
+#: part/View.cpp:437
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate using the count"
 msgstr "Recalcular"
 
-#: part/View.cpp:445
+#: part/View.cpp:444
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate using the countA"
@@ -14339,7 +14339,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Bordadura"
 
-#: ui/CellToolBase.cpp:806
+#: ui/CellToolBase.cpp:807
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

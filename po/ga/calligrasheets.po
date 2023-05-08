@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/kspread.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -11725,7 +11725,7 @@ msgid "Clear"
 msgstr "Glan"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:449
+#: part/calligrasheets.rc:44 part/View.cpp:448
 #, kde-format
 msgid "Delete"
 msgstr "Scrios"
@@ -12117,7 +12117,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Gan Teorainn"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:234 part/View.cpp:245
+#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
 #, kde-format
 msgid "Sheet"
 msgstr "Bileog"
@@ -12311,37 +12311,37 @@ msgid "Down, First Column"
 msgstr "Síos, An Chéad Cholún"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
 #, kde-format
 msgid "None"
 msgstr "Neamhní"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
 #, kde-format
 msgid "Sum"
 msgstr "Suim"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
 #, kde-format
 msgid "Min"
 msgstr "Íos"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
+#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
 #, kde-format
 msgid "Max"
 msgstr "Uas"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
+#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
 #, kde-format
 msgid "Average"
 msgstr "Meán"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
+#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
 #, kde-format
 msgid "Count"
 msgstr "Líon"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
 #, kde-format
 msgid "CountA"
 msgstr "LíonA"
@@ -12357,7 +12357,7 @@ msgstr "Oscail/Sábháil"
 msgid "Function Modules"
 msgstr "Feidhm"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:750
+#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
 #, kde-format
 msgid "Tools"
 msgstr "Uirlisí"
@@ -12748,7 +12748,7 @@ msgstr "Leithead: %1 %2"
 msgid "Hide Column"
 msgstr "Folaigh Colún"
 
-#: part/Headers.cpp:232 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:732
 #, fuzzy, kde-format
 #| msgid ""
 #| "The range\n"
@@ -12770,347 +12770,347 @@ msgstr ""
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Níl faic le priontáil ó bhileog(a) %1."
 
-#: part/View.cpp:229
+#: part/View.cpp:228
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "Airíonna na Bileoige..."
 
-#: part/View.cpp:232
+#: part/View.cpp:231
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Athraigh airíonna na bileoige reatha"
 
-#: part/View.cpp:235 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Ionsáigh Bileog"
 
-#: part/View.cpp:236
+#: part/View.cpp:235
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Ionsáigh bileog nua"
 
-#: part/View.cpp:240
+#: part/View.cpp:239
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "Cóipeáil an Bhileog"
 
-#: part/View.cpp:241
+#: part/View.cpp:240
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Cóipeáil an bhileog roghnaithe"
 
-#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Bain Bileog"
 
-#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Bain an bhileog reatha"
 
-#: part/View.cpp:251
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Athainmnigh Bileog..."
 
-#: part/View.cpp:254
+#: part/View.cpp:253
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "Athainmnigh an bhileog reatha"
 
-#: part/View.cpp:256
+#: part/View.cpp:255
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Taispeáin Bileog..."
 
-#: part/View.cpp:259
+#: part/View.cpp:258
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "Taispeáin bileog fholaithe"
 
-#: part/View.cpp:261
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Folaigh Bileog"
 
-#: part/View.cpp:264
+#: part/View.cpp:263
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "Folaigh an bhileog reatha"
 
-#: part/View.cpp:266
+#: part/View.cpp:265
 #, kde-format
 msgid "Page Layout..."
 msgstr "Leagan Amach Leathanaigh..."
 
-#: part/View.cpp:269
+#: part/View.cpp:268
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Sonraigh leagan amach na scarbhileoige le haghaidh priontála"
 
-#: part/View.cpp:271
+#: part/View.cpp:270
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Athshocraigh Raon Priontála"
 
-#: part/View.cpp:274
+#: part/View.cpp:273
 #, fuzzy, kde-format
 #| msgid "Insert a blank cell into the spreadsheet"
 msgid "Reset the print range in the current sheet"
 msgstr "Ionsáigh cill bhán isteach sa scarbhileog"
 
-#: part/View.cpp:276
+#: part/View.cpp:275
 #, fuzzy, kde-format
 #| msgid "Outline"
 msgid "Page Outline"
 msgstr "Imlíne"
 
-#: part/View.cpp:277
+#: part/View.cpp:276
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr ""
 
-#: part/View.cpp:281
+#: part/View.cpp:280
 #, fuzzy, kde-format
 msgid "Recalculate Sheet"
 msgstr "Athainmnigh Bileog"
 
-#: part/View.cpp:283 part/View.cpp:291
+#: part/View.cpp:282 part/View.cpp:290
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "Recalculate"
 msgstr "Mód áirimh"
 
-#: part/View.cpp:287
+#: part/View.cpp:286
 #, fuzzy, kde-format
 #| msgid "Insert a blank cell into the spreadsheet"
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Ionsáigh cill bhán isteach sa scarbhileog"
 
-#: part/View.cpp:289
+#: part/View.cpp:288
 #, fuzzy, kde-format
 #| msgid "Protect Document"
 msgid "Recalculate Document"
 msgstr "Cosain an Cháipéis"
 
-#: part/View.cpp:295
+#: part/View.cpp:294
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr ""
 
-#: part/View.cpp:297
+#: part/View.cpp:296
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "Cosain &Bileog..."
 
-#: part/View.cpp:299
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr ""
 
-#: part/View.cpp:303
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect &Document..."
 msgstr "Cosain an &Cháipéis..."
 
-#: part/View.cpp:305
+#: part/View.cpp:304
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr ""
 
-#: part/View.cpp:310
+#: part/View.cpp:309
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "&Cruthaigh Teimpléad Ó Cháipéis..."
 
-#: part/View.cpp:314
+#: part/View.cpp:313
 #, kde-format
 msgid "Anchor"
 msgstr "Ancaire"
 
-#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Cill"
 
-#: part/View.cpp:316 part/View.cpp:1085
+#: part/View.cpp:315 part/View.cpp:1084
 #, kde-format
 msgid "Page"
 msgstr "Leathanach"
 
-#: part/View.cpp:318
+#: part/View.cpp:317
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:325
+#: part/View.cpp:324
 #, kde-format
 msgid "Next Sheet"
 msgstr "An Chéad Bhileog Eile"
 
-#: part/View.cpp:326
+#: part/View.cpp:325
 #, kde-format
 msgid "Next"
 msgstr "Ar Aghaidh"
 
-#: part/View.cpp:327
+#: part/View.cpp:326
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "Téigh go dtí an chéad bhileog eile"
 
-#: part/View.cpp:332
+#: part/View.cpp:331
 #, kde-format
 msgid "Previous Sheet"
 msgstr "An Bhileog Roimhe Seo"
 
-#: part/View.cpp:333
+#: part/View.cpp:332
 #, kde-format
 msgid "Previous"
 msgstr "Roimhe Seo"
 
-#: part/View.cpp:334
+#: part/View.cpp:333
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "Téigh go dtí an bhileog roimhe seo"
 
-#: part/View.cpp:339
+#: part/View.cpp:338
 #, kde-format
 msgid "First Sheet"
 msgstr "An Chéad Bhileog"
 
-#: part/View.cpp:340
+#: part/View.cpp:339
 #, kde-format
 msgid "First"
 msgstr "An Chéad Bhileog"
 
-#: part/View.cpp:341
+#: part/View.cpp:340
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "Téigh go dtí an chéad bhileog"
 
-#: part/View.cpp:345
+#: part/View.cpp:344
 #, kde-format
 msgid "Last Sheet"
 msgstr "An Bhileog Dheiridh"
 
-#: part/View.cpp:346
+#: part/View.cpp:345
 #, fuzzy, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Roimhe Seo"
 
-#: part/View.cpp:347
+#: part/View.cpp:346
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "Téigh go dtí an bhileog dheiridh"
 
-#: part/View.cpp:353
+#: part/View.cpp:352
 #, kde-format
 msgid "Column Header"
 msgstr "Ceanntásc an Cholúin"
 
-#: part/View.cpp:354
+#: part/View.cpp:353
 #, kde-format
 msgid "Show the column header"
 msgstr "Taispeáin ceanntásc an cholúin"
 
-#: part/View.cpp:359
+#: part/View.cpp:358
 #, kde-format
 msgid "Row Header"
 msgstr "Ceanntásc an Ró"
 
-#: part/View.cpp:360
+#: part/View.cpp:359
 #, kde-format
 msgid "Show the row header"
 msgstr "Taispeáin ceanntásc an ró"
 
-#: part/View.cpp:365
+#: part/View.cpp:364
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Scrollbharra Cothrománach"
 
-#: part/View.cpp:366
+#: part/View.cpp:365
 #, fuzzy, kde-format
 #| msgid "Horizontal Scrollbar"
 msgid "Show the horizontal scrollbar"
 msgstr "Scrollbharra Cothrománach"
 
-#: part/View.cpp:371
+#: part/View.cpp:370
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Scrollbharra Ingearach"
 
-#: part/View.cpp:372
+#: part/View.cpp:371
 #, fuzzy, kde-format
 #| msgid "Vertical Scrollbar"
 msgid "Show the vertical scrollbar"
 msgstr "Scrollbharra Ingearach"
 
-#: part/View.cpp:377
+#: part/View.cpp:376
 #, kde-format
 msgid "Status Bar"
 msgstr "Barra Stádais"
 
-#: part/View.cpp:378
+#: part/View.cpp:377
 #, kde-format
 msgid "Show the status bar"
 msgstr "Taispeáin an barra stádais"
 
-#: part/View.cpp:383
+#: part/View.cpp:382
 #, kde-format
 msgid "Tab Bar"
 msgstr "Barra na gCluaisíní"
 
-#: part/View.cpp:384
+#: part/View.cpp:383
 #, fuzzy, kde-format
 #| msgid "Show the status bar"
 msgid "Show the tab bar"
 msgstr "Taispeáin an barra stádais"
 
-#: part/View.cpp:390
+#: part/View.cpp:389
 #, fuzzy, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Socraigh roghanna éagsúla KSpread"
 
-#: part/View.cpp:403
+#: part/View.cpp:402
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "No calculation"
 msgstr "Mód áirimh"
 
-#: part/View.cpp:410
+#: part/View.cpp:409
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "Calculate using sum"
 msgstr "Mód áirimh"
 
-#: part/View.cpp:417
+#: part/View.cpp:416
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "Calculate using minimum"
 msgstr "Mód áirimh"
 
-#: part/View.cpp:424
+#: part/View.cpp:423
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "Calculate using maximum"
 msgstr "Mód áirimh"
 
-#: part/View.cpp:431
+#: part/View.cpp:430
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "Calculate using average"
 msgstr "Mód áirimh"
 
-#: part/View.cpp:438
+#: part/View.cpp:437
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "Calculate using the count"
 msgstr "Mód áirimh"
 
-#: part/View.cpp:445
+#: part/View.cpp:444
 #, fuzzy, kde-format
 #| msgid "Calculation mode"
 msgid "Calculate using the countA"
@@ -13264,7 +13264,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Athraigh an Imlíne"
 
-#: ui/CellToolBase.cpp:806
+#: ui/CellToolBase.cpp:807
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

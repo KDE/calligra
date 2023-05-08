@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TableShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2011-01-13 07:29+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -80,42 +80,42 @@ msgstr "Tabellenutreken"
 msgid "Spreadsheet Shape"
 msgstr "Form \"Tabellenutreken\""
 
-#: TableTool.cpp:218
+#: TableTool.cpp:213
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "OpenDocument-Tabellendatei importeren"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:214
 #, kde-format
 msgid "Import"
 msgstr "Importeren"
 
-#: TableTool.cpp:223
+#: TableTool.cpp:218
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "OpenDocument-Tabellendatei exporteren"
 
-#: TableTool.cpp:224
+#: TableTool.cpp:219
 #, kde-format
 msgid "Export"
 msgstr "Exporteren"
 
-#: TableTool.cpp:704
+#: TableTool.cpp:699
 #, kde-format
 msgid "Sheets"
 msgstr "Tabellen"
 
-#: TableTool.cpp:746
+#: TableTool.cpp:741
 #, kde-format
 msgid "Sheet:"
 msgstr "Tabell:"
 
-#: TableTool.cpp:748
+#: TableTool.cpp:743
 #, kde-format
 msgid "Selected Sheet"
 msgstr "Köört Tabell"
 
-#: TableTool.cpp:763
+#: TableTool.cpp:758
 #, fuzzy, kde-format
 #| msgid "Table Options"
 msgid "View Options"
@@ -127,28 +127,28 @@ msgstr "Tabellenoptschonen"
 msgid "Table editing"
 msgstr "Tabellbewerken"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
 #, kde-format
 msgid "Area is too large."
 msgstr ""
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:425
 #, kde-format
 msgid "Hide Row"
 msgstr ""
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Height: %1 %2"
 msgstr ""
 
-#: ToolHeaders.cpp:1053
+#: ToolHeaders.cpp:1049
 #, fuzzy, kde-format
 #| msgid "Columns:"
 msgid "Hide Column"
 msgstr "Striepen:"
 
-#: ToolHeaders.cpp:1055
+#: ToolHeaders.cpp:1051
 #, kde-format
 msgid "Width: %1 %2"
 msgstr ""

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2023-04-29 08:33\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -81,42 +81,42 @@ msgstr "电子表格"
 msgid "Spreadsheet Shape"
 msgstr "电子表格形状"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:213
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "导入 OpenDocument 工作表文件"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:214
 #, kde-format
 msgid "Import"
 msgstr "导入"
 
-#: TableTool.cpp:223
+#: TableTool.cpp:218
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "导出 OpenDocument 工作表文件"
 
-#: TableTool.cpp:224
+#: TableTool.cpp:219
 #, kde-format
 msgid "Export"
 msgstr "导出"
 
-#: TableTool.cpp:704
+#: TableTool.cpp:699
 #, kde-format
 msgid "Sheets"
 msgstr "工作表"
 
-#: TableTool.cpp:746
+#: TableTool.cpp:741
 #, kde-format
 msgid "Sheet:"
 msgstr "工作表："
 
-#: TableTool.cpp:748
+#: TableTool.cpp:743
 #, kde-format
 msgid "Selected Sheet"
 msgstr "选中的工作表"
 
-#: TableTool.cpp:763
+#: TableTool.cpp:758
 #, kde-format
 msgid "View Options"
 msgstr "查看选项"
@@ -126,27 +126,27 @@ msgstr "查看选项"
 msgid "Table editing"
 msgstr "表格编辑"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
 #, kde-format
 msgid "Area is too large."
 msgstr "区域过大。"
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:425
 #, kde-format
 msgid "Hide Row"
 msgstr "隐藏行"
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "高度：%1 %2"
 
-#: ToolHeaders.cpp:1053
+#: ToolHeaders.cpp:1049
 #, kde-format
 msgid "Hide Column"
 msgstr "隐藏列"
 
-#: ToolHeaders.cpp:1055
+#: ToolHeaders.cpp:1051
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "宽度：%1 %2"

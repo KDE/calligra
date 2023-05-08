@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra_shape_spreadsheet\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2020-10-28 08:56+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -84,42 +84,42 @@ msgstr "Електронна таблиця"
 msgid "Spreadsheet Shape"
 msgstr "Форма електронної таблиці"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:213
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "Імпортувати файл електронної таблиці OpenDocument"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:214
 #, kde-format
 msgid "Import"
 msgstr "Імпортувати"
 
-#: TableTool.cpp:223
+#: TableTool.cpp:218
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "Експортувати файл електронної таблиці OpenDocument"
 
-#: TableTool.cpp:224
+#: TableTool.cpp:219
 #, kde-format
 msgid "Export"
 msgstr "Експортувати"
 
-#: TableTool.cpp:704
+#: TableTool.cpp:699
 #, kde-format
 msgid "Sheets"
 msgstr "Аркуші"
 
-#: TableTool.cpp:746
+#: TableTool.cpp:741
 #, kde-format
 msgid "Sheet:"
 msgstr "Аркуш:"
 
-#: TableTool.cpp:748
+#: TableTool.cpp:743
 #, kde-format
 msgid "Selected Sheet"
 msgstr "Обраний аркуш"
 
-#: TableTool.cpp:763
+#: TableTool.cpp:758
 #, kde-format
 msgid "View Options"
 msgstr "Параметри перегляду"
@@ -129,27 +129,27 @@ msgstr "Параметри перегляду"
 msgid "Table editing"
 msgstr "Редагування таблиць"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
 #, kde-format
 msgid "Area is too large."
 msgstr "Ділянка занадто велика."
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:425
 #, kde-format
 msgid "Hide Row"
 msgstr "Сховати рядок"
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Висота: %1 %2"
 
-#: ToolHeaders.cpp:1053
+#: ToolHeaders.cpp:1049
 #, kde-format
 msgid "Hide Column"
 msgstr "Сховати стовпчик"
 
-#: ToolHeaders.cpp:1055
+#: ToolHeaders.cpp:1051
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Ширина: %1 %2"

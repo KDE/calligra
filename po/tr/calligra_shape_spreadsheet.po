@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2022-08-11 12:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -85,42 +85,42 @@ msgstr "Hesap Tablosu"
 msgid "Spreadsheet Shape"
 msgstr "Hesap Tablosu Şekli"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:213
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "OpenDocument Hesap Tablosu Dosyası İçe Aktar"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:214
 #, kde-format
 msgid "Import"
 msgstr "İçe Aktar"
 
-#: TableTool.cpp:223
+#: TableTool.cpp:218
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "OpenDocument Hesap Tablosu Dosyası Dışa Aktar"
 
-#: TableTool.cpp:224
+#: TableTool.cpp:219
 #, kde-format
 msgid "Export"
 msgstr "Dışa Aktar"
 
-#: TableTool.cpp:704
+#: TableTool.cpp:699
 #, kde-format
 msgid "Sheets"
 msgstr "Sayfalar"
 
-#: TableTool.cpp:746
+#: TableTool.cpp:741
 #, kde-format
 msgid "Sheet:"
 msgstr "Sayfa:"
 
-#: TableTool.cpp:748
+#: TableTool.cpp:743
 #, kde-format
 msgid "Selected Sheet"
 msgstr "Seçili Sayfa"
 
-#: TableTool.cpp:763
+#: TableTool.cpp:758
 #, kde-format
 msgid "View Options"
 msgstr "Görünüm Seçenekleri"
@@ -130,27 +130,27 @@ msgstr "Görünüm Seçenekleri"
 msgid "Table editing"
 msgstr "Tablo düzenleme"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
 #, kde-format
 msgid "Area is too large."
 msgstr "Alan pek büyük."
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:425
 #, kde-format
 msgid "Hide Row"
 msgstr "Satırı Gizle"
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Yükseklik: %1 %2"
 
-#: ToolHeaders.cpp:1053
+#: ToolHeaders.cpp:1049
 #, kde-format
 msgid "Hide Column"
 msgstr "Sütunu Gizle"
 
-#: ToolHeaders.cpp:1055
+#: ToolHeaders.cpp:1051
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Genişlik: %1 %2"

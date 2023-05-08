@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TableShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2023-05-02 21:52+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -85,42 +85,42 @@ msgstr "Folla de cálculo"
 msgid "Spreadsheet Shape"
 msgstr "Obxecto de folla de cálculo"
 
-#: TableTool.cpp:218
+#: TableTool.cpp:213
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr "Importar o ficheiro de folla de cálculo de OpenDocument"
 
-#: TableTool.cpp:219
+#: TableTool.cpp:214
 #, kde-format
 msgid "Import"
 msgstr "Importar"
 
-#: TableTool.cpp:223
+#: TableTool.cpp:218
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr "Exportar o ficheiro de folla de cálculo de OpenDocument"
 
-#: TableTool.cpp:224
+#: TableTool.cpp:219
 #, kde-format
 msgid "Export"
 msgstr "Exportar"
 
-#: TableTool.cpp:704
+#: TableTool.cpp:699
 #, kde-format
 msgid "Sheets"
 msgstr "Follas"
 
-#: TableTool.cpp:746
+#: TableTool.cpp:741
 #, kde-format
 msgid "Sheet:"
 msgstr "Folla:"
 
-#: TableTool.cpp:748
+#: TableTool.cpp:743
 #, kde-format
 msgid "Selected Sheet"
 msgstr "Folla seleccionada"
 
-#: TableTool.cpp:763
+#: TableTool.cpp:758
 #, kde-format
 msgid "View Options"
 msgstr "Opcións da vista"
@@ -130,27 +130,27 @@ msgstr "Opcións da vista"
 msgid "Table editing"
 msgstr "Edición de táboas"
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
 #, kde-format
 msgid "Area is too large."
 msgstr "A área é grande de máis."
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:425
 #, kde-format
 msgid "Hide Row"
 msgstr "Agochar a fila"
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Height: %1 %2"
 msgstr "Altura: %1 %2"
 
-#: ToolHeaders.cpp:1053
+#: ToolHeaders.cpp:1049
 #, kde-format
 msgid "Hide Column"
 msgstr "Agochar a columna"
 
-#: ToolHeaders.cpp:1055
+#: ToolHeaders.cpp:1051
 #, kde-format
 msgid "Width: %1 %2"
 msgstr "Anchura: %1 %2"

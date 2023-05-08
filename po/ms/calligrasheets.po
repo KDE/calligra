@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2006-10-05 19:47+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -13086,7 +13086,7 @@ msgid "Clear"
 msgstr "Tahun"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:449
+#: part/calligrasheets.rc:44 part/View.cpp:448
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Hapuskan Baris"
@@ -13491,7 +13491,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Tiada Had"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:234 part/View.cpp:245
+#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
 #, kde-format
 msgid "Sheet"
 msgstr "Helaian"
@@ -13697,37 +13697,37 @@ msgid "Down, First Column"
 msgstr "Selitkan Lajur"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
 #, kde-format
 msgid "None"
 msgstr "Tiada"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
 #, kde-format
 msgid "Sum"
 msgstr "Hasil Tambah"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
 #, kde-format
 msgid "Min"
 msgstr "Minimum"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
+#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
 #, kde-format
 msgid "Max"
 msgstr "Maksimum"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
+#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
 #, kde-format
 msgid "Average"
 msgstr "Purata"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
+#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
 #, kde-format
 msgid "Count"
 msgstr "Hitung "
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
 #, kde-format
 msgid "CountA"
 msgstr "Hitung "
@@ -13743,7 +13743,7 @@ msgstr ""
 msgid "Function Modules"
 msgstr "Fungsi"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:750
+#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
 #, fuzzy, kde-format
 msgid "Tools"
 msgstr "Togo"
@@ -14131,7 +14131,7 @@ msgstr "Lebar: %1%2"
 msgid "Hide Column"
 msgstr "Sembunyikan Lajur"
 
-#: part/Headers.cpp:232 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:732
 #, kde-format
 msgid "Area is too large."
 msgstr "Kawasan terlalu besar."
@@ -14146,353 +14146,353 @@ msgstr ""
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Tiada bahan hendak dicetak."
 
-#: part/View.cpp:229
+#: part/View.cpp:228
 #, fuzzy, kde-format
 #| msgid "Sheet Properties"
 msgid "Sheet Properties..."
 msgstr "Ciri Helaian"
 
-#: part/View.cpp:232
+#: part/View.cpp:231
 #, fuzzy, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Ubah suai ciri helaian semasa."
 
-#: part/View.cpp:235 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Selitkan Helaian"
 
-#: part/View.cpp:236
+#: part/View.cpp:235
 #, fuzzy, kde-format
 msgid "Insert a new sheet"
 msgstr "Selitkan helaian baru."
 
-#: part/View.cpp:240
+#: part/View.cpp:239
 #, fuzzy, kde-format
 #| msgid "Recalculate Sheet"
 msgid "Duplicate Sheet"
 msgstr "Kira Semula Helaian"
 
-#: part/View.cpp:241
+#: part/View.cpp:240
 #, fuzzy, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Sembunyikan helaian aktif."
 
-#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Alih Keluar Helaian"
 
-#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Alih keluar helaian aktif."
 
-#: part/View.cpp:251
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Namakan Semula Helaian..."
 
-#: part/View.cpp:254
+#: part/View.cpp:253
 #, fuzzy, kde-format
 msgid "Rename the active sheet"
 msgstr "Namakan semula helaian aktif."
 
-#: part/View.cpp:256
+#: part/View.cpp:255
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Papar Helaian..."
 
-#: part/View.cpp:259
+#: part/View.cpp:258
 #, fuzzy, kde-format
 msgid "Show a hidden sheet"
 msgstr "Papar helaian tersembunyi."
 
-#: part/View.cpp:261
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Sembunyikan Helaian"
 
-#: part/View.cpp:264
+#: part/View.cpp:263
 #, fuzzy, kde-format
 msgid "Hide the active sheet"
 msgstr "Sembunyikan helaian aktif."
 
-#: part/View.cpp:266
+#: part/View.cpp:265
 #, kde-format
 msgid "Page Layout..."
 msgstr "Bentangan Halaman..."
 
-#: part/View.cpp:269
+#: part/View.cpp:268
 #, fuzzy, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Tetapkan bentangan lembaran hamparan untuk cetakan."
 
-#: part/View.cpp:271
+#: part/View.cpp:270
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Set Semula Julat Cetak"
 
-#: part/View.cpp:274
+#: part/View.cpp:273
 #, fuzzy, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Tentukan julat cetak dalam helaian semasa."
 
-#: part/View.cpp:276
+#: part/View.cpp:275
 #, fuzzy, kde-format
 #| msgid "Border Outline"
 msgid "Page Outline"
 msgstr "Sempadan Garis Luar"
 
-#: part/View.cpp:277
+#: part/View.cpp:276
 #, fuzzy, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Papar pada lembaran hamparan di mana sempadan halaman berada. "
 
-#: part/View.cpp:281
+#: part/View.cpp:280
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Kira Semula Helaian"
 
-#: part/View.cpp:283 part/View.cpp:291
+#: part/View.cpp:282 part/View.cpp:290
 #, fuzzy, kde-format
 #| msgid "Recalculate Sheet"
 msgid "Recalculate"
 msgstr "Kira Semula Helaian"
 
-#: part/View.cpp:287
+#: part/View.cpp:286
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Kira semula nilai setiap sel dalam helaian kerja semasa."
 
-#: part/View.cpp:289
+#: part/View.cpp:288
 #, fuzzy, kde-format
 msgid "Recalculate Document"
 msgstr "Kira Semula Helaian"
 
-#: part/View.cpp:295
+#: part/View.cpp:294
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Kira semula nilai setiap sel dalam helaian kerja."
 
-#: part/View.cpp:297
+#: part/View.cpp:296
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "Lindungi &Helaian..."
 
-#: part/View.cpp:299
+#: part/View.cpp:298
 #, fuzzy, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Lindungi helaian daripada diubah suai."
 
-#: part/View.cpp:303
+#: part/View.cpp:302
 #, fuzzy, kde-format
 msgid "Protect &Document..."
 msgstr "Lindungi Dokumen"
 
-#: part/View.cpp:305
+#: part/View.cpp:304
 #, fuzzy, kde-format
 msgid "Protect the document from being modified"
 msgstr "Lindungi dokumen daripada diubah suai."
 
-#: part/View.cpp:310
+#: part/View.cpp:309
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "&Cipta Templat Dari Dokumen..."
 
-#: part/View.cpp:314
+#: part/View.cpp:313
 #, fuzzy, kde-format
 #| msgid "Andorra"
 msgid "Anchor"
 msgstr "Andorra"
 
-#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Sel"
 
-#: part/View.cpp:316 part/View.cpp:1085
+#: part/View.cpp:315 part/View.cpp:1084
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "Page"
 msgstr "halaman"
 
-#: part/View.cpp:318
+#: part/View.cpp:317
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:325
+#: part/View.cpp:324
 #, kde-format
 msgid "Next Sheet"
 msgstr "Helaian Berikutnya"
 
-#: part/View.cpp:326
+#: part/View.cpp:325
 #, fuzzy, kde-format
 #| msgid "Text"
 msgid "Next"
 msgstr "Teks"
 
-#: part/View.cpp:327
+#: part/View.cpp:326
 #, fuzzy, kde-format
 msgid "Move to the next sheet"
 msgstr "Beralih ke helaian berikutnya."
 
-#: part/View.cpp:332
+#: part/View.cpp:331
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Helaian Sebelumnya"
 
-#: part/View.cpp:333
+#: part/View.cpp:332
 #, fuzzy, kde-format
 #| msgid "Previous Sheet"
 msgid "Previous"
 msgstr "Helaian Sebelumnya"
 
-#: part/View.cpp:334
+#: part/View.cpp:333
 #, fuzzy, kde-format
 msgid "Move to the previous sheet"
 msgstr "Beralih ke helaian sebelumnya."
 
-#: part/View.cpp:339
+#: part/View.cpp:338
 #, kde-format
 msgid "First Sheet"
 msgstr "Halaman Pertama"
 
-#: part/View.cpp:340
+#: part/View.cpp:339
 #, fuzzy, kde-format
 #| msgid "First Key"
 msgid "First"
 msgstr "Kekunci Pertama"
 
-#: part/View.cpp:341
+#: part/View.cpp:340
 #, fuzzy, kde-format
 msgid "Move to the first sheet"
 msgstr "Beralih ke helaian pertama."
 
-#: part/View.cpp:345
+#: part/View.cpp:344
 #, kde-format
 msgid "Last Sheet"
 msgstr "Helaian Terakhir"
 
-#: part/View.cpp:346
+#: part/View.cpp:345
 #, fuzzy, kde-format
 #| msgid "List"
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Senarai"
 
-#: part/View.cpp:347
+#: part/View.cpp:346
 #, fuzzy, kde-format
 msgid "Move to the last sheet"
 msgstr "Beralih ke helaian terakhir."
 
-#: part/View.cpp:353
+#: part/View.cpp:352
 #, fuzzy, kde-format
 #| msgid "Column number"
 msgid "Column Header"
 msgstr "Bilangan lajur"
 
-#: part/View.cpp:354
+#: part/View.cpp:353
 #, fuzzy, kde-format
 #| msgid "Show c&olumn header"
 msgid "Show the column header"
 msgstr "Papar pengepala &lajur"
 
-#: part/View.cpp:359
+#: part/View.cpp:358
 #, fuzzy, kde-format
 #| msgid "Header"
 msgid "Row Header"
 msgstr "Pengepala"
 
-#: part/View.cpp:360
+#: part/View.cpp:359
 #, fuzzy, kde-format
 #| msgid "Show &row header"
 msgid "Show the row header"
 msgstr "Papar pengepala &baris"
 
-#: part/View.cpp:365
+#: part/View.cpp:364
 #, fuzzy, kde-format
 #| msgid "Show &horizontal scrollbar"
 msgid "Horizontal Scrollbar"
 msgstr "Papar bar skrol &mendatar"
 
-#: part/View.cpp:366
+#: part/View.cpp:365
 #, fuzzy, kde-format
 #| msgid "Show &horizontal scrollbar"
 msgid "Show the horizontal scrollbar"
 msgstr "Papar bar skrol &mendatar"
 
-#: part/View.cpp:371
+#: part/View.cpp:370
 #, fuzzy, kde-format
 #| msgid "Show &vertical scrollbar"
 msgid "Vertical Scrollbar"
 msgstr "Papar bar skrol &menegak"
 
-#: part/View.cpp:372
+#: part/View.cpp:371
 #, fuzzy, kde-format
 #| msgid "Show &vertical scrollbar"
 msgid "Show the vertical scrollbar"
 msgstr "Papar bar skrol &menegak"
 
-#: part/View.cpp:377
+#: part/View.cpp:376
 #, fuzzy, kde-format
 #| msgid "Show Status Bar"
 msgid "Status Bar"
 msgstr "Papar Bar Status"
 
-#: part/View.cpp:378
+#: part/View.cpp:377
 #, fuzzy, kde-format
 msgid "Show the status bar"
 msgstr "Papar bar status."
 
-#: part/View.cpp:383
+#: part/View.cpp:382
 #, fuzzy, kde-format
 #| msgid "Show Tab Bar"
 msgid "Tab Bar"
 msgstr "Papar Bar Tab"
 
-#: part/View.cpp:384
+#: part/View.cpp:383
 #, fuzzy, kde-format
 msgid "Show the tab bar"
 msgstr "Papar bar tab."
 
-#: part/View.cpp:390
+#: part/View.cpp:389
 #, fuzzy, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Setkan pelbagai pilihan KSpread."
 
-#: part/View.cpp:403
+#: part/View.cpp:402
 #, kde-format
 msgid "No calculation"
 msgstr "Tiada pengiraan"
 
-#: part/View.cpp:410
+#: part/View.cpp:409
 #, fuzzy, kde-format
 msgid "Calculate using sum"
 msgstr "Kira menggunakan hasil tambah."
 
-#: part/View.cpp:417
+#: part/View.cpp:416
 #, fuzzy, kde-format
 msgid "Calculate using minimum"
 msgstr "Kira menggunakan minimum."
 
-#: part/View.cpp:424
+#: part/View.cpp:423
 #, fuzzy, kde-format
 msgid "Calculate using maximum"
 msgstr "Kira menggunakan maksimum."
 
-#: part/View.cpp:431
+#: part/View.cpp:430
 #, fuzzy, kde-format
 msgid "Calculate using average"
 msgstr "Kira menggunakan purata."
 
-#: part/View.cpp:438
+#: part/View.cpp:437
 #, fuzzy, kde-format
 msgid "Calculate using the count"
 msgstr "Kira menggunakan hitung."
 
-#: part/View.cpp:445
+#: part/View.cpp:444
 #, fuzzy, kde-format
 msgid "Calculate using the countA"
 msgstr "Kira menggunakan hitung A."
@@ -14642,7 +14642,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Ubah Warna Sempadan"
 
-#: ui/CellToolBase.cpp:806
+#: ui/CellToolBase.cpp:807
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

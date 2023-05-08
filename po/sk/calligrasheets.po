@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2019-09-29 19:44+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -12627,7 +12627,7 @@ msgid "Clear"
 msgstr "Vyčistiť"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:449
+#: part/calligrasheets.rc:44 part/View.cpp:448
 #, kde-format
 msgid "Delete"
 msgstr "Odstrániť"
@@ -13025,7 +13025,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Bez obmedzenia"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:234 part/View.cpp:245
+#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
 #, kde-format
 msgid "Sheet"
 msgstr "List"
@@ -13217,37 +13217,37 @@ msgid "Down, First Column"
 msgstr "Dolu, prvý stĺpec"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
 #, kde-format
 msgid "None"
 msgstr "Žiadne"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
 #, kde-format
 msgid "Sum"
 msgstr "Suma"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
 #, kde-format
 msgid "Min"
 msgstr "Minimum"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
+#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
 #, kde-format
 msgid "Max"
 msgstr "Maximum"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
+#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
 #, kde-format
 msgid "Average"
 msgstr "Priemer"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
+#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
 #, kde-format
 msgid "Count"
 msgstr "Počet"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
 #, kde-format
 msgid "CountA"
 msgstr "PočetA"
@@ -13262,7 +13262,7 @@ msgstr "Otvoriť/Uložiť"
 msgid "Function Modules"
 msgstr "Moduly funkcie"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:750
+#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
 #, kde-format
 msgid "Tools"
 msgstr "Nástroje"
@@ -13682,7 +13682,7 @@ msgstr "Šírka: %1 %2"
 msgid "Hide Column"
 msgstr "Skryť stĺpec"
 
-#: part/Headers.cpp:232 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:732
 #, kde-format
 msgid "Area is too large."
 msgstr "Príliš veľká oblasť."
@@ -13697,333 +13697,333 @@ msgstr "List %1 pre tlač sa nepodarilo nájsť"
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Nie je čo tlačiť pre list(y) %1."
 
-#: part/View.cpp:229
+#: part/View.cpp:228
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "Vlastnosti listu..."
 
-#: part/View.cpp:232
+#: part/View.cpp:231
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Zmeniť vlastnosti aktuálneho listu"
 
-#: part/View.cpp:235 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Vložiť list"
 
-#: part/View.cpp:236
+#: part/View.cpp:235
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Vložiť nový list"
 
-#: part/View.cpp:240
+#: part/View.cpp:239
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "Duplikovať list"
 
-#: part/View.cpp:241
+#: part/View.cpp:240
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Duplikovať aktívny list"
 
-#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Odstrániť list"
 
-#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Odstrániť aktívny list"
 
-#: part/View.cpp:251
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Premenovať list..."
 
-#: part/View.cpp:254
+#: part/View.cpp:253
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "Premenovať aktívny list"
 
-#: part/View.cpp:256
+#: part/View.cpp:255
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Zobraziť list..."
 
-#: part/View.cpp:259
+#: part/View.cpp:258
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "Zobraziť skrytý list"
 
-#: part/View.cpp:261
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Skryť list"
 
-#: part/View.cpp:264
+#: part/View.cpp:263
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "Skryť aktívny list"
 
-#: part/View.cpp:266
+#: part/View.cpp:265
 #, kde-format
 msgid "Page Layout..."
 msgstr "Rozloženie stránkypapiera..."
 
-#: part/View.cpp:269
+#: part/View.cpp:268
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Špecifikovať vzhľad tabuľky pre tlač"
 
-#: part/View.cpp:271
+#: part/View.cpp:270
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Vrátiť pôvodný rozsah tlače"
 
-#: part/View.cpp:274
+#: part/View.cpp:273
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Vynulovať rozsah tlače v aktuálnom liste"
 
-#: part/View.cpp:276
+#: part/View.cpp:275
 #, kde-format
 msgid "Page Outline"
 msgstr "Obrys strany"
 
-#: part/View.cpp:277
+#: part/View.cpp:276
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Zobraziť v tabuľke kde budú okraje stránok"
 
-#: part/View.cpp:281
+#: part/View.cpp:280
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Prepočítať list"
 
-#: part/View.cpp:283 part/View.cpp:291
+#: part/View.cpp:282 part/View.cpp:290
 #, kde-format
 msgid "Recalculate"
 msgstr "Prepočítať"
 
-#: part/View.cpp:287
+#: part/View.cpp:286
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Prepočítať hodnotu každej bunky v aktuálnom pracovnom liste"
 
-#: part/View.cpp:289
+#: part/View.cpp:288
 #, kde-format
 msgid "Recalculate Document"
 msgstr "Prepočítať dokument"
 
-#: part/View.cpp:295
+#: part/View.cpp:294
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Prepočítať hodnotu každej bunky vo všetkých pracovných listoch"
 
-#: part/View.cpp:297
+#: part/View.cpp:296
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "Ochrániť &list..."
 
-#: part/View.cpp:299
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Chrániť list pred zmenami"
 
-#: part/View.cpp:303
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect &Document..."
 msgstr "Chrániť &dokument..."
 
-#: part/View.cpp:305
+#: part/View.cpp:304
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "Chrániť dokument pred zmenami"
 
-#: part/View.cpp:310
+#: part/View.cpp:309
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "Vytvoriť ša&blónu z dokumentu..."
 
-#: part/View.cpp:314
+#: part/View.cpp:313
 #, kde-format
 msgid "Anchor"
 msgstr "Zakotviť"
 
-#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Bunka"
 
-#: part/View.cpp:316 part/View.cpp:1085
+#: part/View.cpp:315 part/View.cpp:1084
 #, kde-format
 msgid "Page"
 msgstr "Strana"
 
-#: part/View.cpp:318
+#: part/View.cpp:317
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "Prepnúť ukotvovanie tvarov"
 
-#: part/View.cpp:325
+#: part/View.cpp:324
 #, kde-format
 msgid "Next Sheet"
 msgstr "Nasledujúci list"
 
-#: part/View.cpp:326
+#: part/View.cpp:325
 #, kde-format
 msgid "Next"
 msgstr "Ďalší"
 
-#: part/View.cpp:327
+#: part/View.cpp:326
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "Presunúť do nasledujúceho listu"
 
-#: part/View.cpp:332
+#: part/View.cpp:331
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Predchádzajúci list"
 
-#: part/View.cpp:333
+#: part/View.cpp:332
 #, kde-format
 msgid "Previous"
 msgstr "Predchádzajúci"
 
-#: part/View.cpp:334
+#: part/View.cpp:333
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "Presunúť do predchádzajúceho listu"
 
-#: part/View.cpp:339
+#: part/View.cpp:338
 #, kde-format
 msgid "First Sheet"
 msgstr "Prvý list"
 
-#: part/View.cpp:340
+#: part/View.cpp:339
 #, kde-format
 msgid "First"
 msgstr "Prvý"
 
-#: part/View.cpp:341
+#: part/View.cpp:340
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "Presunúť do prvého listu"
 
-#: part/View.cpp:345
+#: part/View.cpp:344
 #, kde-format
 msgid "Last Sheet"
 msgstr "Posledný list"
 
-#: part/View.cpp:346
+#: part/View.cpp:345
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Posledný"
 
-#: part/View.cpp:347
+#: part/View.cpp:346
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "Presunúť do posledného listu"
 
-#: part/View.cpp:353
+#: part/View.cpp:352
 #, kde-format
 msgid "Column Header"
 msgstr "Hlavička stĺpca"
 
-#: part/View.cpp:354
+#: part/View.cpp:353
 #, kde-format
 msgid "Show the column header"
 msgstr "Zobraziť hlavičku stĺpca"
 
-#: part/View.cpp:359
+#: part/View.cpp:358
 #, kde-format
 msgid "Row Header"
 msgstr "Hlavička riadku"
 
-#: part/View.cpp:360
+#: part/View.cpp:359
 #, kde-format
 msgid "Show the row header"
 msgstr "Zobraziť hlavičku riadku"
 
-#: part/View.cpp:365
+#: part/View.cpp:364
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Horizontálny posuvník"
 
-#: part/View.cpp:366
+#: part/View.cpp:365
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Zobraziť horizontálny posuvník"
 
-#: part/View.cpp:371
+#: part/View.cpp:370
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Vertikálny posuvník"
 
-#: part/View.cpp:372
+#: part/View.cpp:371
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Zobraziť vertikálny posuvník"
 
-#: part/View.cpp:377
+#: part/View.cpp:376
 #, kde-format
 msgid "Status Bar"
 msgstr "Stavový riadok"
 
-#: part/View.cpp:378
+#: part/View.cpp:377
 #, kde-format
 msgid "Show the status bar"
 msgstr "Zobraziť stavový riadok"
 
-#: part/View.cpp:383
+#: part/View.cpp:382
 #, kde-format
 msgid "Tab Bar"
 msgstr "Panel tabuliek"
 
-#: part/View.cpp:384
+#: part/View.cpp:383
 #, kde-format
 msgid "Show the tab bar"
 msgstr "Zobraziť panel tabuliek"
 
-#: part/View.cpp:390
+#: part/View.cpp:389
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Nastaviť rôzne možnosti Calligra Sheets"
 
-#: part/View.cpp:403
+#: part/View.cpp:402
 #, kde-format
 msgid "No calculation"
 msgstr "Žiadny výpočet"
 
-#: part/View.cpp:410
+#: part/View.cpp:409
 #, kde-format
 msgid "Calculate using sum"
 msgstr "Výpočet s použitím súčtu"
 
-#: part/View.cpp:417
+#: part/View.cpp:416
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "Výpočet s použitím minima"
 
-#: part/View.cpp:424
+#: part/View.cpp:423
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "Výpočet s použitím maxima"
 
-#: part/View.cpp:431
+#: part/View.cpp:430
 #, kde-format
 msgid "Calculate using average"
 msgstr "Výpočet s použitím priemernej hodnoty"
 
-#: part/View.cpp:438
+#: part/View.cpp:437
 #, kde-format
 msgid "Calculate using the count"
 msgstr "Výpočet s použitím sčítania"
 
-#: part/View.cpp:445
+#: part/View.cpp:444
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "Výpočet s použitím sčítaniaA"
@@ -14168,7 +14168,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Zmeniť okraj"
 
-#: ui/CellToolBase.cpp:806
+#: ui/CellToolBase.cpp:807
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""

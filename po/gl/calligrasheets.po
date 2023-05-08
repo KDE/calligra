@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2023-05-02 21:52+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -12822,7 +12822,7 @@ msgid "Clear"
 msgstr "Limpar"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:449
+#: part/calligrasheets.rc:44 part/View.cpp:448
 #, kde-format
 msgid "Delete"
 msgstr "Eliminar"
@@ -13226,7 +13226,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Sen limite"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:234 part/View.cpp:245
+#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
 #, kde-format
 msgid "Sheet"
 msgstr "Folla de cálculo"
@@ -13418,37 +13418,37 @@ msgid "Down, First Column"
 msgstr "Abaixo, primeira columna"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
 #, kde-format
 msgid "None"
 msgstr "Ningunha"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
 #, kde-format
 msgid "Sum"
 msgstr "Suma"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
 #, kde-format
 msgid "Min"
 msgstr "Mín"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
+#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
 #, kde-format
 msgid "Max"
 msgstr "Máx"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
+#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
 #, kde-format
 msgid "Average"
 msgstr "Media"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
+#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
 #, kde-format
 msgid "Count"
 msgstr "Contar"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
 #, kde-format
 msgid "CountA"
 msgstr "ContarA"
@@ -13463,7 +13463,7 @@ msgstr "Abrir/Gardar"
 msgid "Function Modules"
 msgstr "Módulos de funcións"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:750
+#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
 #, kde-format
 msgid "Tools"
 msgstr "Ferramentas"
@@ -13886,7 +13886,7 @@ msgstr "Anchura: %1 %2"
 msgid "Hide Column"
 msgstr "Agochar a columna"
 
-#: part/Headers.cpp:232 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:732
 #, kde-format
 msgid "Area is too large."
 msgstr "A área é grande de máis."
@@ -13901,333 +13901,333 @@ msgstr "Non se puido atopar a folla %1 para ser impresa"
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Nada para imprimir na folla(s) %1."
 
-#: part/View.cpp:229
+#: part/View.cpp:228
 #, kde-format
 msgid "Sheet Properties..."
 msgstr "Propiedades da folla…"
 
-#: part/View.cpp:232
+#: part/View.cpp:231
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr "Modifica as propiedades da folla actual"
 
-#: part/View.cpp:235 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Inserir unha folla"
 
-#: part/View.cpp:236
+#: part/View.cpp:235
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Insire unha folla nova"
 
-#: part/View.cpp:240
+#: part/View.cpp:239
 #, kde-format
 msgid "Duplicate Sheet"
 msgstr "Duplicar a folla de cálculo"
 
-#: part/View.cpp:241
+#: part/View.cpp:240
 #, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Duplicar a folla seleccionada"
 
-#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Retirar a folla"
 
-#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Retira a folla activa"
 
-#: part/View.cpp:251
+#: part/View.cpp:250
 #, kde-format
 msgid "Rename Sheet..."
 msgstr "Renomear a folla…"
 
-#: part/View.cpp:254
+#: part/View.cpp:253
 #, kde-format
 msgid "Rename the active sheet"
 msgstr "Renomear a folla activa"
 
-#: part/View.cpp:256
+#: part/View.cpp:255
 #, kde-format
 msgid "Show Sheet..."
 msgstr "Mostrar a folla…"
 
-#: part/View.cpp:259
+#: part/View.cpp:258
 #, kde-format
 msgid "Show a hidden sheet"
 msgstr "Mostra unha folla agochada"
 
-#: part/View.cpp:261
+#: part/View.cpp:260
 #, kde-format
 msgid "Hide Sheet"
 msgstr "Agochar a Folla"
 
-#: part/View.cpp:264
+#: part/View.cpp:263
 #, kde-format
 msgid "Hide the active sheet"
 msgstr "Agocha a folla activa"
 
-#: part/View.cpp:266
+#: part/View.cpp:265
 #, kde-format
 msgid "Page Layout..."
 msgstr "Disposición da páxina…"
 
-#: part/View.cpp:269
+#: part/View.cpp:268
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr "Indica o formato da folla de cálculo á hora de imprimir"
 
-#: part/View.cpp:271
+#: part/View.cpp:270
 #, kde-format
 msgid "Reset Print Range"
 msgstr "Anular o intervalo de impresión"
 
-#: part/View.cpp:274
+#: part/View.cpp:273
 #, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Define o intervalo para imprimir da folla actual"
 
-#: part/View.cpp:276
+#: part/View.cpp:275
 #, kde-format
 msgid "Page Outline"
 msgstr "Contorno da páxina"
 
-#: part/View.cpp:277
+#: part/View.cpp:276
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr "Mostra na folla de cálculo onde están as marxes da folla"
 
-#: part/View.cpp:281
+#: part/View.cpp:280
 #, kde-format
 msgid "Recalculate Sheet"
 msgstr "Recalcular a folla de cálculo"
 
-#: part/View.cpp:283 part/View.cpp:291
+#: part/View.cpp:282 part/View.cpp:290
 #, kde-format
 msgid "Recalculate"
 msgstr "Recalcular"
 
-#: part/View.cpp:287
+#: part/View.cpp:286
 #, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Recalcula o valor de cada cela na folla de cálculo actual"
 
-#: part/View.cpp:289
+#: part/View.cpp:288
 #, kde-format
 msgid "Recalculate Document"
 msgstr "Recalcular o documento"
 
-#: part/View.cpp:295
+#: part/View.cpp:294
 #, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Recalcula o valor de cada cela en todas as follas de cálculo"
 
-#: part/View.cpp:297
+#: part/View.cpp:296
 #, kde-format
 msgid "Protect &Sheet..."
 msgstr "&Protexer a folla…"
 
-#: part/View.cpp:299
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr "Protexe a folla contra modificacións"
 
-#: part/View.cpp:303
+#: part/View.cpp:302
 #, kde-format
 msgid "Protect &Document..."
 msgstr "Protexer o &documento…"
 
-#: part/View.cpp:305
+#: part/View.cpp:304
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr "Protexe o documento contra modificacións"
 
-#: part/View.cpp:310
+#: part/View.cpp:309
 #, kde-format
 msgid "&Create Template From Document..."
 msgstr "&Crear un Modelo a partir do Documento…"
 
-#: part/View.cpp:314
+#: part/View.cpp:313
 #, kde-format
 msgid "Anchor"
 msgstr "Áncora"
 
-#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Cela"
 
-#: part/View.cpp:316 part/View.cpp:1085
+#: part/View.cpp:315 part/View.cpp:1084
 #, kde-format
 msgid "Page"
 msgstr "Páxina"
 
-#: part/View.cpp:318
+#: part/View.cpp:317
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr "Cambiar o ancorado da forma"
 
-#: part/View.cpp:325
+#: part/View.cpp:324
 #, kde-format
 msgid "Next Sheet"
 msgstr "Seguinte folla"
 
-#: part/View.cpp:326
+#: part/View.cpp:325
 #, kde-format
 msgid "Next"
 msgstr "Seguinte"
 
-#: part/View.cpp:327
+#: part/View.cpp:326
 #, kde-format
 msgid "Move to the next sheet"
 msgstr "Pasar á seguinte folla"
 
-#: part/View.cpp:332
+#: part/View.cpp:331
 #, kde-format
 msgid "Previous Sheet"
 msgstr "Folla anterior"
 
-#: part/View.cpp:333
+#: part/View.cpp:332
 #, kde-format
 msgid "Previous"
 msgstr "Anterior"
 
-#: part/View.cpp:334
+#: part/View.cpp:333
 #, kde-format
 msgid "Move to the previous sheet"
 msgstr "Pasar á folla anterior"
 
-#: part/View.cpp:339
+#: part/View.cpp:338
 #, kde-format
 msgid "First Sheet"
 msgstr "Primeira folla"
 
-#: part/View.cpp:340
+#: part/View.cpp:339
 #, kde-format
 msgid "First"
 msgstr "Primeira"
 
-#: part/View.cpp:341
+#: part/View.cpp:340
 #, kde-format
 msgid "Move to the first sheet"
 msgstr "Pasa á primeira folla"
 
-#: part/View.cpp:345
+#: part/View.cpp:344
 #, kde-format
 msgid "Last Sheet"
 msgstr "Última folla"
 
-#: part/View.cpp:346
+#: part/View.cpp:345
 #, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Última"
 
-#: part/View.cpp:347
+#: part/View.cpp:346
 #, kde-format
 msgid "Move to the last sheet"
 msgstr "Pasa á última folla"
 
-#: part/View.cpp:353
+#: part/View.cpp:352
 #, kde-format
 msgid "Column Header"
 msgstr "Cabeceiro de columna"
 
-#: part/View.cpp:354
+#: part/View.cpp:353
 #, kde-format
 msgid "Show the column header"
 msgstr "Mostrar a cabeceira da columna"
 
-#: part/View.cpp:359
+#: part/View.cpp:358
 #, kde-format
 msgid "Row Header"
 msgstr "Cabeceira da fila"
 
-#: part/View.cpp:360
+#: part/View.cpp:359
 #, kde-format
 msgid "Show the row header"
 msgstr "Mostrar a cabeceira da fila"
 
-#: part/View.cpp:365
+#: part/View.cpp:364
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Barra de desprazamento horizontal"
 
-#: part/View.cpp:366
+#: part/View.cpp:365
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Mostrar a barra de desprazamento horizontal"
 
-#: part/View.cpp:371
+#: part/View.cpp:370
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Barra de desprazamento vertical"
 
-#: part/View.cpp:372
+#: part/View.cpp:371
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Mostrar a barra de desprazamento vertical"
 
-#: part/View.cpp:377
+#: part/View.cpp:376
 #, kde-format
 msgid "Status Bar"
 msgstr "Barra de estado"
 
-#: part/View.cpp:378
+#: part/View.cpp:377
 #, kde-format
 msgid "Show the status bar"
 msgstr "Mostrar a barra de estado"
 
-#: part/View.cpp:383
+#: part/View.cpp:382
 #, kde-format
 msgid "Tab Bar"
 msgstr "Barra de separadores"
 
-#: part/View.cpp:384
+#: part/View.cpp:383
 #, kde-format
 msgid "Show the tab bar"
 msgstr "Mostrar a barra de separadores"
 
-#: part/View.cpp:390
+#: part/View.cpp:389
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr "Axustar as opcións de Calligra Sheets"
 
-#: part/View.cpp:403
+#: part/View.cpp:402
 #, kde-format
 msgid "No calculation"
 msgstr "Sen cálculo"
 
-#: part/View.cpp:410
+#: part/View.cpp:409
 #, kde-format
 msgid "Calculate using sum"
 msgstr "Calcular usando o sumatorio"
 
-#: part/View.cpp:417
+#: part/View.cpp:416
 #, kde-format
 msgid "Calculate using minimum"
 msgstr "Calcular usando o mínimo"
 
-#: part/View.cpp:424
+#: part/View.cpp:423
 #, kde-format
 msgid "Calculate using maximum"
 msgstr "Calcular usando o máximo"
 
-#: part/View.cpp:431
+#: part/View.cpp:430
 #, kde-format
 msgid "Calculate using average"
 msgstr "Calcular usando a media"
 
-#: part/View.cpp:438
+#: part/View.cpp:437
 #, kde-format
 msgid "Calculate using the count"
 msgstr "Calcular usando o reconto"
 
-#: part/View.cpp:445
+#: part/View.cpp:444
 #, kde-format
 msgid "Calculate using the countA"
 msgstr "Calcular usando contarA"
@@ -14372,7 +14372,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Cambiar o bordo"
 
-#: ui/CellToolBase.cpp:806
+#: ui/CellToolBase.cpp:807
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr "Non se pode atopar a acción %1"

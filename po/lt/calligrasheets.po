@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-30 00:48+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2015-12-29 21:19+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -11916,7 +11916,7 @@ msgid "Clear"
 msgstr "Išvalyti"
 
 #. i18n: ectx: Menu (Delete)
-#: part/calligrasheets.rc:44 part/View.cpp:449
+#: part/calligrasheets.rc:44 part/View.cpp:448
 #, fuzzy, kde-format
 msgid "Delete"
 msgstr "Trinti"
@@ -12305,7 +12305,7 @@ msgstr "%1%"
 msgid "No Limit"
 msgstr "Be apribojimų"
 
-#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:234 part/View.cpp:245
+#: part/dialogs/PageLayoutDialog.cpp:132 part/View.cpp:233 part/View.cpp:244
 #, kde-format
 msgid "Sheet"
 msgstr "Lapas"
@@ -12499,37 +12499,37 @@ msgid "Down, First Column"
 msgstr "Įterpti stulpelius"
 
 #: part/dialogs/PreferenceDialog.cpp:304 part/dialogs/PreferenceDialog.cpp:312
-#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:399
+#: part/dialogs/PreferenceDialog.cpp:439 part/View.cpp:398
 #, kde-format
 msgid "None"
 msgstr "Nieko"
 
-#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:406
+#: part/dialogs/PreferenceDialog.cpp:306 part/View.cpp:405
 #, kde-format
 msgid "Sum"
 msgstr "Suma"
 
-#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:413
+#: part/dialogs/PreferenceDialog.cpp:307 part/View.cpp:412
 #, kde-format
 msgid "Min"
 msgstr "Min"
 
-#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:420
+#: part/dialogs/PreferenceDialog.cpp:308 part/View.cpp:419
 #, kde-format
 msgid "Max"
 msgstr "Maks"
 
-#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:427
+#: part/dialogs/PreferenceDialog.cpp:309 part/View.cpp:426
 #, kde-format
 msgid "Average"
 msgstr "Vidutinis"
 
-#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:434
+#: part/dialogs/PreferenceDialog.cpp:310 part/View.cpp:433
 #, kde-format
 msgid "Count"
 msgstr "Kiekis"
 
-#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:441
+#: part/dialogs/PreferenceDialog.cpp:311 part/View.cpp:440
 #, kde-format
 msgid "CountA"
 msgstr "Skaičius A"
@@ -12544,7 +12544,7 @@ msgstr "Atverti-įrašyti"
 msgid "Function Modules"
 msgstr "Funkcija"
 
-#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:750
+#: part/dialogs/PreferenceDialog.cpp:341 part/View.cpp:749
 #, kde-format
 msgid "Tools"
 msgstr "Įrankiai"
@@ -12931,7 +12931,7 @@ msgstr "Plotis:"
 msgid "Hide Column"
 msgstr "Paslėpti stulpelį"
 
-#: part/Headers.cpp:232 part/Headers.cpp:732
+#: part/Headers.cpp:233 part/Headers.cpp:732
 #, kde-format
 msgid "Area is too large."
 msgstr ""
@@ -12946,339 +12946,339 @@ msgstr ""
 msgid "Nothing to print for sheet(s) %1."
 msgstr "Nėra ką spausdinti."
 
-#: part/View.cpp:229
+#: part/View.cpp:228
 #, fuzzy, kde-format
 #| msgid "Select Font..."
 msgid "Sheet Properties..."
 msgstr "Pasirinkti šriftą..."
 
-#: part/View.cpp:232
+#: part/View.cpp:231
 #, kde-format
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:235 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2035
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Įterpti lakštą"
 
-#: part/View.cpp:236
+#: part/View.cpp:235
 #, kde-format
 msgid "Insert a new sheet"
 msgstr "Įterpti naują lakštą"
 
-#: part/View.cpp:240
+#: part/View.cpp:239
 #, fuzzy, kde-format
 msgid "Duplicate Sheet"
 msgstr "Apsaugoti lakštą"
 
-#: part/View.cpp:241
+#: part/View.cpp:240
 #, fuzzy, kde-format
 msgid "Duplicate the selected sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:246 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
 #, fuzzy, kde-format
 msgid "Remove Sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:247 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:251
+#: part/View.cpp:250
 #, fuzzy, kde-format
 msgid "Rename Sheet..."
 msgstr "Pervadinti lakštą"
 
-#: part/View.cpp:254
+#: part/View.cpp:253
 #, fuzzy, kde-format
 msgid "Rename the active sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:256
+#: part/View.cpp:255
 #, fuzzy, kde-format
 msgid "Show Sheet..."
 msgstr "Rodyti lakštą"
 
-#: part/View.cpp:259
+#: part/View.cpp:258
 #, fuzzy, kde-format
 msgid "Show a hidden sheet"
 msgstr "Paslėpti stulpelį"
 
-#: part/View.cpp:261
+#: part/View.cpp:260
 #, fuzzy, kde-format
 msgid "Hide Sheet"
 msgstr "Slėpti lakštą"
 
-#: part/View.cpp:264
+#: part/View.cpp:263
 #, fuzzy, kde-format
 msgid "Hide the active sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:266
+#: part/View.cpp:265
 #, kde-format
 msgid "Page Layout..."
 msgstr "Puslapio išdėstymas..."
 
-#: part/View.cpp:269
+#: part/View.cpp:268
 #, kde-format
 msgid "Specify the layout of the spreadsheet for a printout"
 msgstr ""
 
-#: part/View.cpp:271
+#: part/View.cpp:270
 #, fuzzy, kde-format
 #| msgid "Printing"
 msgid "Reset Print Range"
 msgstr "Spausdinu"
 
-#: part/View.cpp:274
+#: part/View.cpp:273
 #, fuzzy, kde-format
 msgid "Reset the print range in the current sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:276
+#: part/View.cpp:275
 #, fuzzy, kde-format
 msgid "Page Outline"
 msgstr "Kontūras"
 
-#: part/View.cpp:277
+#: part/View.cpp:276
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
 msgstr ""
 
-#: part/View.cpp:281
+#: part/View.cpp:280
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Recalculate Sheet"
 msgstr "Perskaičiuoti"
 
-#: part/View.cpp:283 part/View.cpp:291
+#: part/View.cpp:282 part/View.cpp:290
 #, kde-format
 msgid "Recalculate"
 msgstr "Perskaičiuoti"
 
-#: part/View.cpp:287
+#: part/View.cpp:286
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in the current worksheet"
 msgstr "Pasirinkti šriftą..."
 
-#: part/View.cpp:289
+#: part/View.cpp:288
 #, fuzzy, kde-format
 msgid "Recalculate Document"
 msgstr "Apsaugoti dokumentą"
 
-#: part/View.cpp:295
+#: part/View.cpp:294
 #, fuzzy, kde-format
 msgid "Recalculate the value of every cell in all worksheets"
 msgstr "Pasirinkti šriftą..."
 
-#: part/View.cpp:297
+#: part/View.cpp:296
 #, fuzzy, kde-format
 msgid "Protect &Sheet..."
 msgstr "Apsaugoti lakštą"
 
-#: part/View.cpp:299
+#: part/View.cpp:298
 #, kde-format
 msgid "Protect the sheet from being modified"
 msgstr ""
 
-#: part/View.cpp:303
+#: part/View.cpp:302
 #, fuzzy, kde-format
 msgid "Protect &Document..."
 msgstr "Apsaugoti dokumentą"
 
-#: part/View.cpp:305
+#: part/View.cpp:304
 #, kde-format
 msgid "Protect the document from being modified"
 msgstr ""
 
-#: part/View.cpp:310
+#: part/View.cpp:309
 #, fuzzy, kde-format
 msgid "&Create Template From Document..."
 msgstr "Sukurti šabloną iš dokumento..."
 
-#: part/View.cpp:314
+#: part/View.cpp:313
 #, kde-format
 msgid "Anchor"
 msgstr "Prieraišas"
 
-#: part/View.cpp:315 part/View.cpp:1085 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
 #, kde-format
 msgid "Cell"
 msgstr "Laukelis"
 
-#: part/View.cpp:316 part/View.cpp:1085
+#: part/View.cpp:315 part/View.cpp:1084
 #, kde-format
 msgid "Page"
 msgstr "Puslapis"
 
-#: part/View.cpp:318
+#: part/View.cpp:317
 #, kde-format
 msgid "Switch shape anchoring"
 msgstr ""
 
-#: part/View.cpp:325
+#: part/View.cpp:324
 #, fuzzy, kde-format
 #| msgid "Insert Sheet"
 msgid "Next Sheet"
 msgstr "Įterpti lakštą"
 
-#: part/View.cpp:326
+#: part/View.cpp:325
 #, fuzzy, kde-format
 msgid "Next"
 msgstr "Kitas"
 
-#: part/View.cpp:327
+#: part/View.cpp:326
 #, fuzzy, kde-format
 msgid "Move to the next sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:332
+#: part/View.cpp:331
 #, fuzzy, kde-format
 msgid "Previous Sheet"
 msgstr "Ankstesnis"
 
-#: part/View.cpp:333
+#: part/View.cpp:332
 #, fuzzy, kde-format
 msgid "Previous"
 msgstr "Ankstesnis"
 
-#: part/View.cpp:334
+#: part/View.cpp:333
 #, fuzzy, kde-format
 msgid "Move to the previous sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:339
+#: part/View.cpp:338
 #, fuzzy, kde-format
 #| msgid "First interest"
 msgid "First Sheet"
 msgstr "pirmosios palūkanos"
 
-#: part/View.cpp:340
+#: part/View.cpp:339
 #, fuzzy, kde-format
 msgid "First"
 msgstr "Pirmas"
 
-#: part/View.cpp:341
+#: part/View.cpp:340
 #, fuzzy, kde-format
 msgid "Move to the first sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:345
+#: part/View.cpp:344
 #, fuzzy, kde-format
 #| msgid "Insert Sheet"
 msgid "Last Sheet"
 msgstr "Įterpti lakštą"
 
-#: part/View.cpp:346
+#: part/View.cpp:345
 #, fuzzy, kde-format
 msgctxt "Move to the last sheet"
 msgid "Last"
 msgstr "Paskutinis"
 
-#: part/View.cpp:347
+#: part/View.cpp:346
 #, fuzzy, kde-format
 msgid "Move to the last sheet"
 msgstr "Pašalinti sąrašą"
 
-#: part/View.cpp:353
+#: part/View.cpp:352
 #, kde-format
 msgid "Column Header"
 msgstr "Stulpelio puslapinė antraštė"
 
-#: part/View.cpp:354
+#: part/View.cpp:353
 #, fuzzy, kde-format
 msgid "Show the column header"
 msgstr "Paslėpti stulpelį"
 
-#: part/View.cpp:359
+#: part/View.cpp:358
 #, fuzzy, kde-format
 msgid "Row Header"
 msgstr "eilutės antraštė"
 
-#: part/View.cpp:360
+#: part/View.cpp:359
 #, fuzzy, kde-format
 msgid "Show the row header"
 msgstr "Paslėpti stulpelį"
 
-#: part/View.cpp:365
+#: part/View.cpp:364
 #, kde-format
 msgid "Horizontal Scrollbar"
 msgstr "Horizontalus slankiklis"
 
-#: part/View.cpp:366
+#: part/View.cpp:365
 #, kde-format
 msgid "Show the horizontal scrollbar"
 msgstr "Rodyti horizontalią slankjuostę"
 
-#: part/View.cpp:371
+#: part/View.cpp:370
 #, kde-format
 msgid "Vertical Scrollbar"
 msgstr "Vertikalus slankiklis"
 
-#: part/View.cpp:372
+#: part/View.cpp:371
 #, kde-format
 msgid "Show the vertical scrollbar"
 msgstr "Rodyti vertikalią slankjuostę"
 
-#: part/View.cpp:377
+#: part/View.cpp:376
 #, kde-format
 msgid "Status Bar"
 msgstr "Būsenos juosta"
 
-#: part/View.cpp:378
+#: part/View.cpp:377
 #, kde-format
 msgid "Show the status bar"
 msgstr "Rodyti būsenos juostą"
 
-#: part/View.cpp:383
+#: part/View.cpp:382
 #, kde-format
 msgid "Tab Bar"
 msgstr "Kortelių juosta"
 
-#: part/View.cpp:384
+#: part/View.cpp:383
 #, kde-format
 msgid "Show the tab bar"
 msgstr "Rodyti kortelių juosta"
 
-#: part/View.cpp:390
+#: part/View.cpp:389
 #, kde-format
 msgid "Set various Calligra Sheets options"
 msgstr ""
 
-#: part/View.cpp:403
+#: part/View.cpp:402
 #, fuzzy, kde-format
 msgid "No calculation"
 msgstr "Skaičiavimo veiksena:"
 
-#: part/View.cpp:410
+#: part/View.cpp:409
 #, fuzzy, kde-format
 msgid "Calculate using sum"
 msgstr "Skaičiavimo veiksena:"
 
-#: part/View.cpp:417
+#: part/View.cpp:416
 #, fuzzy, kde-format
 msgid "Calculate using minimum"
 msgstr "Skaičiavimo veiksena:"
 
-#: part/View.cpp:424
+#: part/View.cpp:423
 #, fuzzy, kde-format
 msgid "Calculate using maximum"
 msgstr "Skaičiavimo veiksena:"
 
-#: part/View.cpp:431
+#: part/View.cpp:430
 #, fuzzy, kde-format
 msgid "Calculate using average"
 msgstr "Skaičiavimo veiksena:"
 
-#: part/View.cpp:438
+#: part/View.cpp:437
 #, fuzzy, kde-format
 msgid "Calculate using the count"
 msgstr "Skaičiavimo veiksena:"
 
-#: part/View.cpp:445
+#: part/View.cpp:444
 #, fuzzy, kde-format
 msgid "Calculate using the countA"
 msgstr "Skaičiavimo veiksena:"
@@ -13426,7 +13426,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Border"
 msgstr "Kapo Verdė"
 
-#: ui/CellToolBase.cpp:806
+#: ui/CellToolBase.cpp:807
 #, kde-format
 msgid "Unable to locate action %1"
 msgstr ""
