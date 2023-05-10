@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-25 00:51+0000\n"
+"POT-Creation-Date: 2023-05-08 00:46+0000\n"
 "PO-Revision-Date: 2010-02-07 21:38+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -81,42 +81,42 @@ msgstr ""
 msgid "Spreadsheet Shape"
 msgstr ""
 
-#: TableTool.cpp:218
+#: TableTool.cpp:213
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
 msgstr ""
 
-#: TableTool.cpp:219
+#: TableTool.cpp:214
 #, kde-format
 msgid "Import"
 msgstr ""
 
-#: TableTool.cpp:223
+#: TableTool.cpp:218
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
 msgstr ""
 
-#: TableTool.cpp:224
+#: TableTool.cpp:219
 #, kde-format
 msgid "Export"
 msgstr ""
 
-#: TableTool.cpp:704
+#: TableTool.cpp:699
 #, kde-format
 msgid "Sheets"
 msgstr ""
 
-#: TableTool.cpp:746
+#: TableTool.cpp:741
 #, kde-format
 msgid "Sheet:"
 msgstr ""
 
-#: TableTool.cpp:748
+#: TableTool.cpp:743
 #, kde-format
 msgid "Selected Sheet"
 msgstr ""
 
-#: TableTool.cpp:763
+#: TableTool.cpp:758
 #, kde-format
 msgid "View Options"
 msgstr ""
@@ -126,27 +126,27 @@ msgstr ""
 msgid "Table editing"
 msgstr ""
 
-#: ToolHeaders.cpp:285 ToolHeaders.cpp:880
+#: ToolHeaders.cpp:285 ToolHeaders.cpp:878
 #, kde-format
 msgid "Area is too large."
 msgstr ""
 
-#: ToolHeaders.cpp:427
+#: ToolHeaders.cpp:425
 #, kde-format
 msgid "Hide Row"
 msgstr ""
 
-#: ToolHeaders.cpp:429
+#: ToolHeaders.cpp:427
 #, kde-format
 msgid "Height: %1 %2"
 msgstr ""
 
-#: ToolHeaders.cpp:1053
+#: ToolHeaders.cpp:1049
 #, kde-format
 msgid "Hide Column"
 msgstr ""
 
-#: ToolHeaders.cpp:1055
+#: ToolHeaders.cpp:1051
 #, kde-format
 msgid "Width: %1 %2"
 msgstr ""
