@@ -21,6 +21,9 @@ void RichTextEditWithAutoCorrectionTest::shouldNotAutocorrectWhenDisabled()
     entries.insert(originalWord, replaceWord);
     richtext.autocorrection()->setAutocorrectEntries(entries);
     richtext.show();
+#ifdef Q_OS_WIN
+    QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
+#endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
     QTest::keyClicks(&richtext, originalWord);
     QTest::keyClick(&richtext, ' ');
@@ -38,6 +41,9 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWordWhenExactText()
     richtext.autocorrection()->setEnabledAutoCorrection(true);
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
+#ifdef Q_OS_WIN
+    QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
+#endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
     QTest::keyClicks(&richtext, originalWord);
     QTest::keyClick(&richtext, ' ');
@@ -56,6 +62,9 @@ void RichTextEditWithAutoCorrectionTest::shouldNotReplaceWordWhenInexactText()
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
     const QString nonExactText = QStringLiteral("BLIBLI");
+#ifdef Q_OS_WIN
+    QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
+#endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
     QTest::keyClicks(&richtext, nonExactText);
     QTest::keyClick(&richtext, ' ');
@@ -73,6 +82,9 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWhenPressEnter()
     richtext.autocorrection()->setEnabledAutoCorrection(true);
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
+#ifdef Q_OS_WIN
+    QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
+#endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
     QTest::keyClicks(&richtext, originalWord);
     QTest::keyPress(&richtext, Qt::Key_Enter);
@@ -90,6 +102,9 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWhenPressReturn()
     richtext.autocorrection()->setEnabledAutoCorrection(true);
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
+#ifdef Q_OS_WIN
+    QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
+#endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
     QTest::keyClicks(&richtext, originalWord);
     QTest::keyPress(&richtext, Qt::Key_Return);
