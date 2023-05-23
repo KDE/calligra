@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-04-29 08:33\n"
+"PO-Revision-Date: 2023-05-22 14:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2630,7 +2630,7 @@ msgstr "在 Alpha 色彩空间的未定义操作"
 #: pigment/colorspaces/KoLabColorSpace.h:63
 #, kde-format
 msgid "L*a*b* (16-bit integer/channel, unmanaged)"
-msgstr "L*a*b* (16-位整型/通道，未管理)"
+msgstr "L*a*b* (16 位整数/通道，无色彩管理)"
 
 #: pigment/colorspaces/KoLabColorSpace.cpp:31
 #: pigment/compositeops/KoCompositeOps.h:196
@@ -2655,13 +2655,13 @@ msgstr "b*"
 #: pigment/colorspaces/KoRgbU16ColorSpace.h:51
 #, kde-format
 msgid "RGB (16-bit integer/channel, unmanaged)"
-msgstr "RGB (16-位整型/通道，未管理)"
+msgstr "RGB (16 位整数/通道，无色彩管理)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:28
 #: pigment/colorspaces/KoRgbU8ColorSpace.h:52
 #, kde-format
 msgid "RGB (8-bit integer/channel, unmanaged)"
-msgstr "RGB (8-位整型/通道，未管理)"
+msgstr "RGB (8 位整数/通道，无色彩管理)"
 
 #: pigment/colorspaces/KoRgbU8ColorSpace.cpp:33
 #, kde-format

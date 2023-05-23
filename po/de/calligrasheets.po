@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-08 00:46+0000\n"
-"PO-Revision-Date: 2023-04-18 22:57+0200\n"
+"PO-Revision-Date: 2023-05-23 00:26+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.07.70\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -2640,8 +2640,8 @@ msgid ""
 "acre, ha (hectare)."
 msgstr ""
 "Unterstützte Flächeneinheiten: m2 (Quadratmeter), mi2 (Quadratmeile), Nmi2 "
-"(Quadrat-Nautische-Meile), in2 (Quadratzoll), ft2 (Quadratfuss), yd2 "
-"(Quadrat-Yard), acre, ha (Hektar)."
+"(Quadrat-Nautische-Meile), in2 (Quadratzoll), ft2 (Quadratfuß), yd2 (Quadrat-"
+"Yard), acre, ha (Hektar)."
 
 #: functions/engineering.xml:140
 #, kde-format
