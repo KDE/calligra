@@ -6,7 +6,7 @@
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2006.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2014, 2018, 2019.
+# Tommi Nieminen <translator@legisign.org>, 2014, 2018, 2019, 2023.
 # KDE Finnish translation sprint participants:
 # Author: Artnay
 # Author: Lliehu
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2019-05-10 15:59+0200\n"
+"PO-Revision-Date: 2023-05-18 11:50+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2013-01-13 22:09:45+0000\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -239,15 +239,9 @@ msgstr ""
 "muodon luonti"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:43
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete shape"
-#| msgid_plural "Delete shapes"
 msgctxt "(qtundo-format) Delete one shape"
 msgid "Delete shape"
-msgstr ""
-"Poista muoto\n"
-"muodon poisto"
+msgstr "Poista muoto"
 
 #: flake/commands/KoShapeDeleteCommand.cpp:56
 msgctxt "(qtundo-format)"
@@ -641,7 +635,7 @@ msgstr "Polun muokkaus"
 #: widgets/KoZoomWidget.cpp:52
 #, kde-format
 msgid "Zoom"
-msgstr "Zoomaus"
+msgstr "Lähennys"
 
 #. i18n: ectx: property (text), widget (QRadioButton, zoomInButton)
 #: flake/tools/KoZoomToolWidget.ui:20
@@ -2174,26 +2168,14 @@ msgid "Hide master shapes"
 msgstr "Piilota pohjamuodot"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete slide"
-#| msgid_plural "Delete slides"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr ""
-"Poista dia\n"
-"dian poisto"
+msgstr "Poista dia"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:29
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete page"
-#| msgid_plural "Delete pages"
 msgctxt "(qtundo-format) Delete one page"
 msgid "Delete page"
-msgstr ""
-"Poista sivu\n"
-"sivun poisto"
+msgstr "Poista sivu"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:50
 msgctxt "(qtundo-format)"
@@ -2552,16 +2534,14 @@ msgid "Show/hide the view's rulers"
 msgstr "Näytä tai piilota viivaimet"
 
 #: pageapp/KoPAView.cpp:381
-#, fuzzy, kde-format
-#| msgid "Show Master Pages"
+#, kde-format
 msgid "Show Page Margins"
-msgstr "Näytä pohjasivut"
+msgstr "Näytä sivun reunukset"
 
 #: pageapp/KoPAView.cpp:383
-#, fuzzy, kde-format
-#| msgid "Show/hide the view's rulers"
+#, kde-format
 msgid "Show/hide the page margins"
-msgstr "Näytä tai piilota viivaimet"
+msgstr "Näytä tai piilota sivun reunukset"
 
 #: pageapp/KoPAView.cpp:387
 #, kde-format
@@ -2871,10 +2851,9 @@ msgstr "Pyyhi"
 
 #: pigment/compositeops/KoCompositeOpGreater.h:40
 #: pigment/KoCompositeOpRegistry.cpp:70
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Greater"
-msgstr "Luotu:"
+msgstr "Suurempi"
 
 #: pigment/compositeops/KoCompositeOpOver.h:49
 #: pigment/compositeops/KoOptimizedCompositeOpOver128.h:238
@@ -3485,13 +3464,15 @@ msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
 msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
 msgstr[0] ""
+"<qt>Muokkaukset menetetään.<p>Jäljellä on %1 virheellinen komento.</qt>"
 msgstr[1] ""
+"<qt>Muokkaukset menetetään.<p>Jäljellä on %1 virheellistä komentoa.</qt>"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
 msgctxt "statement is an Rdf related term"
 msgid "Discard invalid statements?"
-msgstr ""
+msgstr "Hylätäänkö virheelliset komennot?"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:341
 #, kde-format
@@ -3888,7 +3869,7 @@ msgstr "Tiedosto ”%1” ei ole luettavissa"
 #: store/KoNetAccess.cpp:390
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
-msgstr ""
+msgstr "VIRHE: Tuntematon yhteyskäytäntö ”%1”"
 
 #: store/KoStore.cpp:168
 #, kde-format
@@ -4904,18 +4885,13 @@ msgid "Save Document"
 msgstr "Tallenna tiedosto"
 
 #: widgets/KoDocumentInfoDlg.cpp:373
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>The document has been changed since it was opened. To complete the "
-#| "decryption the document needs to be saved.<p>Do you want to save the "
-#| "document now?</qt>"
+#, kde-format
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
 msgstr ""
-"<qt>Tiedostoa on muutettu avaamisen jälkeen. Se on tallennettava, jotta "
-"salauksen poisto olisi saatettu loppuun.<p>Haluatko tallentaa tiedoston nyt?"
-"</qt>"
+"<p>Salauksen purkamisen viimeistelemiseksi tiedosto pitää tallentaa."
+"<p>Haluatko tallentaa tiedoston nyt?</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
@@ -5626,10 +5602,9 @@ msgid "Zoom to All"
 msgstr "Sovita kaikki näkymään"
 
 #: widgetutils/KoFileDialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "All Presets"
+#, kde-format
 msgid "All files"
-msgstr "Kaikki esiasetukset"
+msgstr "Kaikki tiedostot"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format
