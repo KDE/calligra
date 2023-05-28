@@ -507,9 +507,9 @@ msgstr "Adresse:"
 #: scripts/odfpyexport.py:43
 msgid ""
 "<qt>Failed to import the ODFPY python module.<br><br>To use this odfpyexport."
-"py python script to export to OpenDocument you need to install the <a href="
-"\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python module."
-"</qt>"
+"py python script to export to OpenDocument you need to install the <a "
+"href=\"http://opendocumentfellowship.org/projects/odfpy\">ODFPY</a> python "
+"module.</qt>"
 msgstr ""
 
 #: scripts/odfpyexport.py:74

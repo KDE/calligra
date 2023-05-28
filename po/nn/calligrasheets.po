@@ -9140,9 +9140,9 @@ msgid ""
 "1E-02), m (milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p (pico, "
 "1E-12), f (femto, 1E-15), a (atto, 1E-18)."
 msgstr ""
-"For metriske einingar kan desse prefiksa brukast: E (exa, 1E+18), P (peta, 1E"
-"+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, 1E+06), k (kilo, 1E+03), h "
-"(hecto, 1E+02), e (dekao, 1E+01), d (deci, 1E-01), c (centi, 1E-02), m "
+"For metriske einingar kan desse prefiksa brukast: E (exa, 1E+18), P (peta, "
+"1E+15), T (tera, 1E+12), G (giga, 1E+09), M (mega, 1E+06), k (kilo, 1E+03), "
+"h (hecto, 1E+02), e (dekao, 1E+01), d (deci, 1E-01), c (centi, 1E-02), m "
 "(milli, 1E-03), u (micro, 1E-06), n (nano, 1E-09), p (pico, 1E-12), f "
 "(femto, 1E-15), a (atto, 1E-18)."
 
@@ -9944,8 +9944,8 @@ msgstr "IMDIV(\"12+i\";\"12-i\") gjev \"0,986207+0,16551i\""
 msgid ""
 "The IMSUB() returns the difference of several complex numbers of form x+yi."
 msgstr ""
-"IMSUB()-funksjonen gjev differansen mellom fleire komplekse tal på forma x"
-"+yi."
+"IMSUB()-funksjonen gjev differansen mellom fleire komplekse tal på forma "
+"x+yi."
 
 #: functions/engineering.xml:785
 #, kde-format
@@ -9990,8 +9990,8 @@ msgid ""
 "The IMCONJUGATE(complex number) returns the conjugate of a complex number of "
 "form x+yi."
 msgstr ""
-"IMCONJUGATE()-funksjonen gjev konjugasjonen av eit komplekst tal på forma x"
-"+yi."
+"IMCONJUGATE()-funksjonen gjev konjugasjonen av eit komplekst tal på forma "
+"x+yi."
 
 #: functions/engineering.xml:831
 #, kde-format
@@ -11786,9 +11786,9 @@ msgid ""
 "return. It is one of the following: \"directory\" returns the path of the "
 "current directory, \"numfile\" returns the number of active documents, "
 "\"release\" returns the version of Calligra Sheets as text, \"recalc\" "
-"returns the current recalculation mode: \"Automatic\" or \"Manual\", \"system"
-"\" returns the name of the operating environment, \"osversion\" returns the "
-"current operating system."
+"returns the current recalculation mode: \"Automatic\" or \"Manual\", "
+"\"system\" returns the name of the operating environment, \"osversion\" "
+"returns the current operating system."
 msgstr ""
 
 #: functions/information.xml:60

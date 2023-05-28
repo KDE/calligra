@@ -11709,9 +11709,9 @@ msgid ""
 "return. It is one of the following: \"directory\" returns the path of the "
 "current directory, \"numfile\" returns the number of active documents, "
 "\"release\" returns the version of Calligra Sheets as text, \"recalc\" "
-"returns the current recalculation mode: \"Automatic\" or \"Manual\", \"system"
-"\" returns the name of the operating environment, \"osversion\" returns the "
-"current operating system."
+"returns the current recalculation mode: \"Automatic\" or \"Manual\", "
+"\"system\" returns the name of the operating environment, \"osversion\" "
+"returns the current operating system."
 msgstr ""
 
 #: functions/information.xml:60
