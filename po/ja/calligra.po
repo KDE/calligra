@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.5\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
@@ -227,7 +227,6 @@ msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
 msgstr[0] "シェイプを削除"
-msgstr[1] "シェイプを削除"
 
 #: flake/commands/KoShapeDistributeCommand.cpp:117
 msgctxt "(qtundo-format)"
@@ -2145,14 +2144,12 @@ msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
 msgstr[0] "スライドを削除"
-msgstr[1] "スライドを削除"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:53
 msgctxt "(qtundo-format)"
 msgid "Delete page"
 msgid_plural "Delete pages"
 msgstr[0] "ページを削除"
-msgstr[1] "ページを削除"
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -2169,14 +2166,12 @@ msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
 msgstr[0] "スライドを移動"
-msgstr[1] "スライドを移動"
 
 #: pageapp/commands/KoPAPageMoveCommand.cpp:48
 msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
 msgstr[0] "ページを移動"
-msgstr[1] "ページを移動"
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, kde-format
@@ -2425,14 +2420,12 @@ msgctxt "(qtundo-format)"
 msgid "Paste Slide"
 msgid_plural "Paste Slides"
 msgstr[0] "スライドを貼り付け"
-msgstr[1] "スライドを貼り付け"
 
 #: pageapp/KoPAPastePage.cpp:121
 msgctxt "(qtundo-format)"
 msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "ページを貼り付け"
-msgstr[1] "ページを貼り付け"
 
 #: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
@@ -3395,8 +3388,6 @@ msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
 msgstr[0] ""
 "<qt>編集内容は失われます。<p>%1 個の無効なステートメントが残っています。</qt>"
-msgstr[1] ""
-"<qt>編集内容は失われます。<p>%1 個の無効なステートメントが残っています。</qt>"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
@@ -3901,8 +3892,7 @@ msgstr "参照する見出しを選択"
 #, kde-format
 msgid "Found 1 match"
 msgid_plural "Found %1 matches"
-msgstr[0] "1 件マッチしました"
-msgstr[1] "%1 件マッチしました"
+msgstr[0] "%1 件マッチしました"
 
 #: text/KoFindStrategy.cpp:51
 #, kde-format
@@ -3924,8 +3914,7 @@ msgstr ""
 #, kde-format
 msgid "1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "1 件置換しました"
-msgstr[1] "%1 件置換しました"
+msgstr[0] "%1 件置換しました"
 
 #: text/KoReplaceStrategy.cpp:59
 #, kde-format

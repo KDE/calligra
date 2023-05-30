@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-05-15 22:42+0300\n"
+"PO-Revision-Date: 2023-05-29 12:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #. i18n: ectx: Menu (file)
 #: calligrasheets.rc:5
@@ -19796,7 +19796,7 @@ msgstr "Özel..."
 #: part/dialogs/InterfaceOptionsWidget.ui:198
 #, kde-format
 msgid "Page Out&line:"
-msgstr "Sayfa Ana &Hatı:"
+msgstr "Sayfa Ana &Hattı:"
 
 #. i18n: ectx: property (whatsThis), widget (KColorCombo, m_pageOutlineColor)
 #: part/dialogs/InterfaceOptionsWidget.ui:208
@@ -20143,7 +20143,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:133
 #, kde-format
 msgid "Show page outline"
-msgstr "Sayfa ana hatını göster"
+msgstr "Sayfa ana hattını göster"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:140
@@ -20559,7 +20559,7 @@ msgstr "Geçerli sayfa için yazdırma aralığını tanımla"
 #: part/View.cpp:311
 #, kde-format
 msgid "Page Outline"
-msgstr "Sayfa Ana Hatı"
+msgstr "Sayfa Ana Hattı"
 
 #: part/View.cpp:312
 #, kde-format
