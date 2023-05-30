@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrafilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-03-20 22:31+0100\n"
+"PO-Revision-Date: 2023-05-29 21:25+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -881,7 +881,7 @@ msgstr "Platteksta Importfiltrilo de Words"
 #: words/ascii/ImportDialogUI.ui:16
 #, kde-format
 msgid "Plain Text Import Dialog"
-msgstr ""
+msgstr "Dialogo de Platteksta Importo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroupParagraph)
 #: words/ascii/ImportDialogUI.ui:65

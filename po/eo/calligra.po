@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-05-03 06:40+0100\n"
+"PO-Revision-Date: 2023-05-29 21:25+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3371,7 +3371,9 @@ msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
 msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
 msgstr[0] ""
+"<qt>Redaktaĵoj estos perditaj.<p>Restas %1 nevalida instrukcio.</qt>"
 msgstr[1] ""
+"<qt>Redaktaĵoj estos perditaj.<p>Restas %1 nevalidaj instrukcioj.</qt>"
 
 #: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
@@ -5449,7 +5451,7 @@ msgstr "Zomi al Ĉiuj"
 #: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All files"
-msgstr ""
+msgstr "Ĉiuj dosieroj"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format
