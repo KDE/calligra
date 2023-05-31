@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.5\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
@@ -1844,7 +1844,6 @@ msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
 msgstr[0] ""
-msgstr[1] ""
 
 #: part/widgets/KoFindToolbar.cpp:210
 #, kde-format
