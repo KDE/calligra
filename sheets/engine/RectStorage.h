@@ -328,11 +328,10 @@ template<typename T>
 void RectStorage<T>::remove(const Region& region, const T& data)
 {
     ensureLoaded();
+
+    if (!m_storedData.contains(data)) return;
     if (m_storingUndo) m_undoData << currentData(region);
 
-    if (!m_storedData.contains(data)) {
-        return;
-    }
     const Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         // remove data

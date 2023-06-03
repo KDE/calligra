@@ -5,8 +5,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KSPREAD_RTREE
-#define KSPREAD_RTREE
+#ifndef __SHEETS_RTREE__
+#define __SHEETS_RTREE__
 
 #include <KoRTree.h>
 
@@ -21,6 +21,8 @@ namespace Calligra
 {
 namespace Sheets
 {
+
+// Note that the 'this->' prefixes are needed to access members from a template base class.
 
 /**
  * \class RTree
@@ -109,6 +111,7 @@ public:
     /**
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
+     * Implemented using insertShiftDown.
      * \return the removed rectangle/data pairs
      */
     virtual QVector< QPair<QRectF, T> > insertRows(int position, int number);
@@ -116,6 +119,7 @@ public:
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
+     * Implemented using insertShiftRight.
      * \return the removed rectangle/data pairs
      */
     virtual QVector< QPair<QRectF, T> > insertColumns(int position, int number);
@@ -123,6 +127,7 @@ public:
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
+     * Implemented using removeShiftUp.
      * \return the removed rectangle/data pairs
      */
     virtual QVector< QPair<QRectF, T> > removeRows(int position, int number);
@@ -130,6 +135,7 @@ public:
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
+     * Implemented using removeShiftLeft.
      * \return the removed rectangle/data pairs
      */
     virtual QVector< QPair<QRectF, T> > removeColumns(int position, int number);
@@ -163,6 +169,21 @@ public:
     virtual QVector< QPair<QRectF, T> > removeShiftUp(const QRect& rect);
 
     /**
+     * Splits the stored data so that any rectangles crossing over the col-1..col boundary are split in two. Used by shifting operations.
+     */
+    void splitBeforeColumn(int col);
+
+    /**
+     * Splits the stored data so that any rectangles crossing over the row-1..row boundary are split in two. Used by shifting operations.
+     */
+    void splitBeforeRow(int row);
+
+    /**
+     * Checks if the tree is valid. Used in testing.
+     */
+    bool validate();
+
+    /**
      * Assignment.
      */
     void operator=(const RTree& other);
@@ -170,7 +191,7 @@ public:
     /**
      * Returns the bounding box for the entire tree.
      */
-    QRectF boundingBox() const { return KoRTree<T>::m_root->boundingBox(); }
+    QRectF boundingBox() const { return this->m_root->boundingBox(); }
 
     void clear() override {
         KoRTree<T>::clear();
@@ -248,10 +269,15 @@ public:
     void contains(const QPointF & point, QMap<int, T> & result) const override = 0;
     virtual void contains(const QRectF& rect, QMap<int, T>& result) const = 0;
     virtual void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const = 0;
-    virtual QMap< int, QPair<QRectF, T> > insertRows(int position, int number) = 0;
-    virtual QMap< int, QPair<QRectF, T> > insertColumns(int position, int number) = 0;
-    virtual QMap< int, QPair<QRectF, T> > removeRows(int position, int number) = 0;
-    virtual QMap< int, QPair<QRectF, T> > removeColumns(int position, int number) = 0;
+    virtual void insertShiftRight(const QRect &rect, QVector< QPair<QRectF, T> > &res) = 0;
+    virtual void insertShiftDown(const QRect &rect, QVector< QPair<QRectF, T> > &res) = 0;
+    virtual void removeShiftLeft(const QRect &rect, QVector< QPair<QRectF, T> > &res) = 0;
+    virtual void removeShiftUp(const QRect &rect, QVector< QPair<QRectF, T> > &res) = 0;
+    // helper for splitBeforeColumn, returns the cut-off data
+    virtual void cutBeforeColumn(int col, QVector< QPair<QRectF, T> > &res) = 0;
+    // helper for splitBeforeRow, returns the cut-off data
+    virtual void cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res) = 0;
+    virtual bool validate() = 0;
     const QRectF& childBoundingBox(int index) const override {
         return KoRTree<T>::Node::childBoundingBox(index);
     }
@@ -261,6 +287,7 @@ public:
 private:
     // disable copy constructor
     Node(const Node& other);
+    friend class NonLeafNode;
 };
 
 /**
@@ -288,10 +315,15 @@ public:
     }
     void contains(const QRectF& rect, QMap<int, T>& result) const override;
     void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const override;
-    QMap< int, QPair<QRectF, T> > insertRows(int position, int number) override;
-    QMap< int, QPair<QRectF, T> > insertColumns(int position, int number) override;
-    QMap< int, QPair<QRectF, T> > removeRows(int position, int number) override;
-    QMap< int, QPair<QRectF, T> > removeColumns(int position, int number) override;
+    virtual void insertShiftRight(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    virtual void insertShiftDown(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    virtual void removeShiftLeft(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    virtual void removeShiftUp(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    // helper for splitBeforeColumn
+    virtual void cutBeforeColumn(int col, QVector< QPair<QRectF, T> > &res) override;
+    // helper for splitBeforeRow
+    virtual void cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res) override;
+    virtual bool validate() override;
     virtual void operator=(const LeafNode& other);
 private:
     // disable copy constructor
@@ -320,11 +352,16 @@ public:
     }
     void contains(const QRectF& rect, QMap<int, T>& result) const override;
     void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const override;
-    QMap< int, QPair<QRectF, T> > insertRows(int position, int number) override;
-    QMap< int, QPair<QRectF, T> > insertColumns(int position, int number) override;
-    QMap< int, QPair<QRectF, T> > removeRows(int position, int number) override;
-    QMap< int, QPair<QRectF, T> > removeColumns(int position, int number) override;
+    virtual void insertShiftRight(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    virtual void insertShiftDown(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    virtual void removeShiftLeft(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    virtual void removeShiftUp(const QRect &rect, QVector< QPair<QRectF, T> > &res) override;
+    // helper for splitBeforeColumn
+    virtual void cutBeforeColumn(int row, QVector< QPair<QRectF, T> > &res) override;
+    // helper for splitBeforeRow
+    virtual void cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res) override;
     virtual void operator=(const NonLeafNode& other);
+    virtual bool validate() override;
 private:
     // disable copy constructor
     NonLeafNode(const NonLeafNode& other);
@@ -388,9 +425,9 @@ void RTree<T>::load(const QList<QPair<Region, T> >& data)
 
     QList<QPair<Node*, qreal> > nodes;
     // create LeafNodes
-    for (int i = 0; i < indices.size(); i += KoRTree<T>::m_capacity) {
-        LeafNode* n = createLeafNode(KoRTree<T>::m_capacity + 1, 0, 0);
-        for (int j = 0; j < KoRTree<T>::m_capacity && i+j < indices.size(); j++) {
+    for (int i = 0; i < indices.size(); i += this->m_capacity) {
+        LeafNode* n = createLeafNode(this->m_capacity + 1, 0, 0);
+        for (int j = 0; j < this->m_capacity && i+j < indices.size(); j++) {
             const LoadData& d = rectData[indices[i+j]];
             n->insert(QRectF(d.rect).normalized().adjusted(0, 0, -0.1, -0.1), *d.data, LeafNode::dataIdCounter + indices[i+j]);
         }
@@ -407,9 +444,9 @@ void RTree<T>::load(const QList<QPair<Region, T> >& data)
 
         QList<QPair<Node*, qreal> > newNodes;
 
-        for (int i = 0; i < indices.size(); i += KoRTree<T>::m_capacity) {
-            NonLeafNode* n = createNonLeafNode(KoRTree<T>::m_capacity + 1, 0, 0);
-            for (int j = 0; j < KoRTree<T>::m_capacity && i+j < indices.size(); j++) {
+        for (int i = 0; i < indices.size(); i += this->m_capacity) {
+            NonLeafNode* n = createNonLeafNode(this->m_capacity + 1, 0, 0);
+            for (int j = 0; j < this->m_capacity && i+j < indices.size(); j++) {
                 Node* oldNode = nodes[indices[i+j]].first;
                 n->insert(oldNode->boundingBox(), oldNode);
             }
@@ -421,8 +458,8 @@ void RTree<T>::load(const QList<QPair<Region, T> >& data)
 
     if (!nodes.isEmpty()) {
         // set root node
-        delete KoRTree<T>::m_root;
-        KoRTree<T>::m_root = nodes.first().first;
+        delete this->m_root;
+        this->m_root = nodes.first().first;
         m_castRoot = dynamic_cast<Node*>(this->m_root);
     }
 }
@@ -494,13 +531,10 @@ QVector< QPair<QRectF, T> > RTree<T>::insertRows(int position, int number)
 {
     Q_ASSERT(position >= 1);
     Q_ASSERT(position <= KS_rowMax);
+    QVector< QPair<QRectF, T> > res;
     if (position < 1 || position > KS_rowMax)
-        return QVector< QPair<QRectF, T> >();
-#ifdef DYNAMIC_CAST
-    return dynamic_cast<Node*>(this->m_root)->insertRows(position, number).values().toVector();
-#else
-    return m_castRoot->insertRows(position, number).values().toVector();
-#endif
+        return res;
+    return insertShiftDown(QRect(1, position, KS_colMax, number));
 }
 
 template<typename T>
@@ -508,13 +542,9 @@ QVector< QPair<QRectF, T> > RTree<T>::insertColumns(int position, int number)
 {
     Q_ASSERT(position >= 1);
     Q_ASSERT(position <= KS_colMax);
-    if (position < 1 || position > KS_colMax)
-        return QVector< QPair<QRectF, T> >();
-#ifdef DYNAMIC_CAST
-    return dynamic_cast<Node*>(this->m_root)->insertColumns(position, number).values().toVector();
-#else
-    return m_castRoot->insertColumns(position, number).values().toVector();
-#endif
+    QVector< QPair<QRectF, T> > res;
+    if (position < 1 || position > KS_colMax) return res;
+    return insertShiftRight(QRect(position, 1, number, KS_rowMax));
 }
 
 template<typename T>
@@ -522,13 +552,9 @@ QVector< QPair<QRectF, T> > RTree<T>::removeRows(int position, int number)
 {
     Q_ASSERT(position >= 1);
     Q_ASSERT(position <= KS_rowMax);
-    if (position < 1 || position > KS_rowMax)
-        return QVector< QPair<QRectF, T> >();
-#ifdef DYNAMIC_CAST
-    return dynamic_cast<Node*>(this->m_root)->removeRows(position, number).values().toVector();
-#else
-    return m_castRoot->removeRows(position, number).values().toVector();
-#endif
+    QVector< QPair<QRectF, T> > res;
+    if (position < 1 || position > KS_rowMax) return res;
+    return removeShiftUp(QRect(1, position, KS_colMax, number));
 }
 
 template<typename T>
@@ -536,105 +562,145 @@ QVector< QPair<QRectF, T> > RTree<T>::removeColumns(int position, int number)
 {
     Q_ASSERT(position >= 1);
     Q_ASSERT(position <= KS_colMax);
-    if (position < 1 || position > KS_colMax)
-        return QVector< QPair<QRectF, T> >();
-#ifdef DYNAMIC_CAST
-    return dynamic_cast<Node*>(this->m_root)->removeColumns(position, number).values().toVector();
-#else
-    return m_castRoot->removeColumns(position, number).values().toVector();
-#endif
+    QVector< QPair<QRectF, T> > res;
+    if (position < 1 || position > KS_colMax) return res;
+    return removeShiftLeft(QRect(position, 1, number, KS_rowMax));
 }
 
 template<typename T>
 QVector< QPair<QRectF, T> > RTree<T>::insertShiftRight(const QRect& r)
 {
     const QRect rect(r.normalized());
-    if (rect.left() < 1 || rect.left() > KS_colMax)
-        return QVector< QPair<QRectF, T> >();
-    const QRect boundingRect = QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    const QVector< QPair<QRectF, T> > oldPairs = intersectingPairs(boundingRect).values().toVector();
-    if (oldPairs.isEmpty())
-        return QVector< QPair<QRectF, T> >();
-    // insert default data at the bounding rectangle
-    insert(boundingRect, T());
-    // fill the inserted rectangle
-    const QRect copyRect = QRect(rect.left(), rect.top(), 1, rect.height());
-    const QVector< QPair<QRectF, T> > copyPairs = intersectingPairs(copyRect).values().toVector();
-    for (int i = 0; i < copyPairs.count(); ++i) {
-        insert((copyPairs[i].first.toRect() & copyRect).adjusted(0, 0, rect.width() - 1, 0), copyPairs[i].second);
-    }
-    // insert the data at the shifted rectangles
-    for (int i = 0; i < oldPairs.count(); ++i) {
-        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted(rect.width(), 0, rect.width(), 0);
-        insert(shiftedRect & boundingRect, oldPairs[i].second);
-    }
-    return oldPairs;
+    QVector< QPair<QRectF, T> > res;
+    if (rect.right() < 1 || rect.left() > KS_colMax)
+        return res;
+
+    // Split the data along the left column and both rows
+    splitBeforeColumn(r.left());
+    splitBeforeRow(r.top());
+    splitBeforeRow(r.bottom() + 1);
+
+    // Go over all the data, increasing anything that's >= the left column by the width
+    // Return excess data that was cut off
+#ifdef DYNAMIC_CAST
+    dynamic_cast<Node*>(this->m_root)->insertShiftRight(r, res);
+#else
+    m_castRoot->insertShiftRight(r, res);
+#endif
+    return res;
 }
 
 template<typename T>
 QVector< QPair<QRectF, T> > RTree<T>::insertShiftDown(const QRect& r)
 {
     const QRect rect(r.normalized());
+    QVector< QPair<QRectF, T> > res;
     if (rect.top() < 1 || rect.top() > KS_rowMax)
         return QVector< QPair<QRectF, T> >();
-    const QRect boundingRect = QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    const QVector< QPair<QRectF, T> > oldPairs = intersectingPairs(boundingRect).values().toVector();
-    if (oldPairs.isEmpty())
-        return QVector< QPair<QRectF, T> >();
-    // insert default data at the bounding rectangle
-    insert(boundingRect, T());
-    // fill the inserted rectangle
-    const QRect copyRect = QRect(rect.left(), rect.top(), rect.width(), 1);
-    const QVector< QPair<QRectF, T> > copyPairs = intersectingPairs(copyRect).values().toVector();
-    for (int i = 0; i < copyPairs.count(); ++i) {
-        insert((copyPairs[i].first.toRect() & copyRect).adjusted(0, 0, 0, rect.height() - 1), copyPairs[i].second);
-    }
-    // insert the data at the shifted rectangles
-    for (int i = 0; i < oldPairs.count(); ++i) {
-        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted(0, rect.height(), 0, rect.height());
-        insert(shiftedRect & boundingRect, oldPairs[i].second);
-    }
-    return oldPairs;
+
+    // Split the data along the top row and both columns
+    splitBeforeRow(r.top());
+    splitBeforeColumn(r.left());
+    splitBeforeColumn(r.right() + 1);
+
+    // Go over all the data, increasing anything that's >= the top row by the height
+    // Return excess data that was cut off
+#ifdef DYNAMIC_CAST
+    dynamic_cast<Node*>(this->m_root)->insertShiftDown(r, res);
+#else
+    m_castRoot->insertShiftDown(r, res);
+#endif
+    return res;
 }
 
 template<typename T>
 QVector< QPair<QRectF, T> > RTree<T>::removeShiftLeft(const QRect& r)
 {
     const QRect rect(r.normalized());
+    QVector< QPair<QRectF, T> > res;
     if (rect.left() < 1 || rect.left() > KS_colMax)
         return QVector< QPair<QRectF, T> >();
-    const QRect boundingRect = QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    const QVector< QPair<QRectF, T> > oldPairs = intersectingPairs(boundingRect).values().toVector();
-    if (oldPairs.isEmpty())
-        return QVector< QPair<QRectF, T> >();
-    // insert default data at the bounding rectangle
-    insert(boundingRect, T());
-    // insert the data at the shifted rectangles
-    for (int i = 0; i < oldPairs.count(); ++i) {
-        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted(-rect.width(), 0, -rect.width(), 0);
-        insert(shiftedRect & boundingRect, oldPairs[i].second);
-    }
-    return oldPairs;
+
+    // Split the data along the left column and both rows
+    splitBeforeColumn(r.left());
+    splitBeforeRow(r.top());
+    splitBeforeRow(r.bottom() + 1);
+
+    // Go over all the data, decreasing anything that's >= the left column by the width
+    // Return excess data that was cut off
+#ifdef DYNAMIC_CAST
+    dynamic_cast<Node*>(this->m_root)->removeShiftLeft(r, res);
+#else
+    m_castRoot->removeShiftLeft(r, res);
+#endif
+    return res;
 }
 
 template<typename T>
 QVector< QPair<QRectF, T> > RTree<T>::removeShiftUp(const QRect& r)
 {
     const QRect rect(r.normalized());
+    QVector< QPair<QRectF, T> > res;
     if (rect.top() < 1 || rect.top() > KS_rowMax)
         return QVector< QPair<QRectF, T> >();
-    const QRect boundingRect = QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    const QVector< QPair<QRectF, T> > oldPairs = intersectingPairs(boundingRect).values().toVector();
-    if (oldPairs.isEmpty())
-        return QVector< QPair<QRectF, T> >();
-    // insert default data at the bounding rectangle
-    insert(boundingRect, T());
-    // insert the data at the shifted rectangles
-    for (int i = 0; i < oldPairs.count(); ++i) {
-        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted(0, -rect.height(), 0, -rect.height());
-        insert(shiftedRect & boundingRect, oldPairs[i].second);
+
+    // Split the data along the top row and both columns
+    splitBeforeRow(r.top());
+    splitBeforeColumn(r.left());
+    splitBeforeColumn(r.right() + 1);
+
+    // Go over all the data, decreasing anything that's >= the top row by the height
+    // Return excess data that was cut off
+#ifdef DYNAMIC_CAST
+    dynamic_cast<Node*>(this->m_root)->removeShiftUp(r, res);
+#else
+    m_castRoot->removeShiftUp(r, res);
+#endif
+    return res;
+}
+
+template<typename T>
+void RTree<T>::splitBeforeColumn(int col)
+{
+    QVector< QPair<QRectF, T> > cutData;
+
+#ifdef DYNAMIC_CAST
+    dynamic_cast<Node*>(this->m_root)->cutBeforeColumn(col, cutData);
+#else
+    m_castRoot->cutBeforeColumn(col, cutData);
+#endif
+
+    // and insert the cut data
+    for (int i = 0; i < cutData.count(); ++i) {
+        insert(cutData[i].first, cutData[i].second);
     }
-    return oldPairs;
+}
+
+template<typename T>
+void RTree<T>::splitBeforeRow(int row)
+{
+    QVector< QPair<QRectF, T> > cutData;
+
+#ifdef DYNAMIC_CAST
+    dynamic_cast<Node*>(this->m_root)->cutBeforeRow(row, cutData);
+#else
+    m_castRoot->cutBeforeRow(row, cutData);
+#endif
+
+    // and insert the cut data
+    for (int i = 0; i < cutData.count(); ++i) {
+        insert(cutData[i].first, cutData[i].second);
+    }
+}
+
+template<typename T>
+bool RTree<T>::validate()
+{
+#ifdef DYNAMIC_CAST
+    return dynamic_cast<Node*>(this->m_root)->validate();
+#else
+    return m_castRoot->validate();
+#endif
 }
 
 template<typename T>
@@ -690,169 +756,235 @@ void RTree<T>::LeafNode::intersectingPairs(const QRectF& rect, QMap<int, QPair<Q
 }
 
 template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int number)
+void RTree<T>::LeafNode::insertShiftRight(const QRect &rect, QVector< QPair<QRectF, T> > &res)
 {
-    if (position > this->m_boundingBox.bottom())
-        return QMap< int, QPair<QRectF, T> >();
+    double x1 = this->m_boundingBox.left();
+    double x2 = this->m_boundingBox.right();
+    double y1 = this->m_boundingBox.top();
+    double y2 = this->m_boundingBox.bottom();
+    int w = ((int) rect.width());
 
-    QMap< int, QPair<QRectF, T> > result;
+    if (rect.left() > x2) return;
+    if (rect.top() > y2) return;
+    if (rect.bottom() < y1) return;
 
-    int shift = 0, endShift = number;
-    // Don't process complete columns.
-    if (this->m_boundingBox.top() != 1 || this->m_boundingBox.bottom() != KS_rowMax) {
-        if (position < this->m_boundingBox.top())
-            shift = number;
-        if (position < this->m_boundingBox.toRect().bottom())
-            endShift = number;
-        else
-            endShift = 0;
-        this->m_boundingBox.adjust(0, shift, 0, endShift);
-    }
+    double bound1 = -1, bound2 = -1;
 
     for (int i = 0; i < this->childCount(); ++i) {
-        // Don't process complete columns.
-        if (this->m_childBoundingBox[i].top() == 1 && this->m_childBoundingBox[i].bottom() == KS_rowMax)
-            continue;
+        x1 = this->m_childBoundingBox[i].left();
+        x2 = this->m_childBoundingBox[i].right();
+        y1 = this->m_childBoundingBox[i].top();
+        y2 = this->m_childBoundingBox[i].bottom();
+        if ((bound1 == -1) || (bound1 > x1)) bound1 = x1;
+        if ((bound2 == -1) || (bound2 < x2)) bound2 = x2;
+        
+        if (rect.left() > x2) continue;
+        if (rect.top() > y2) continue;
+        if (rect.bottom() < y1) continue;
 
-        if (position < this->m_childBoundingBox[i].top())
-            shift = number;
-        else
-            shift = 0;
+        double newx1 = x1 + w;
+        double newx2 = x2 + w;
 
-        if (position < this->m_childBoundingBox[i].toRect().bottom())
-            endShift = number;
-        else
-            endShift = 0;
-        this->m_childBoundingBox[i].adjust(0, shift, 0, endShift);
-    }
-
-    return QMap< int, QPair<QRectF, T> >(); // FIXME
-}
-
-template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertColumns(int position, int number)
-{
-    if (position > this->m_boundingBox.right())
-        return QMap< int, QPair<QRectF, T> >();
-
-    QMap< int, QPair<QRectF, T> > result;
-
-    int shift = 0;
-    // Don't process complete rows.
-    if (this->m_boundingBox.left() != 1 || this->m_boundingBox.right() != KS_colMax) {
-        if (position < this->m_boundingBox.left())
-            shift = number;
-        this->m_boundingBox.adjust(shift, 0, number, 0);
-    }
-
-    for (int i = 0; i < this->childCount(); ++i) {
-        // Don't process complete rows.
-        if (this->m_childBoundingBox[i].left() == 1 && this->m_childBoundingBox[i].right() == KS_rowMax)
-            continue;
-
-        if (position < this->m_childBoundingBox[i].left())
-            shift = number;
-        else
-            shift = 0;
-        this->m_childBoundingBox[i].adjust(shift, 0, number, 0);
-    }
-
-    return QMap< int, QPair<QRectF, T> >(); // FIXME
-}
-
-template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::removeRows(int position, int number)
-{
-    if (position > this->m_boundingBox.bottom())
-        return QMap< int, QPair<QRectF, T> >();
-
-    QMap< int, QPair<QRectF, T> > removedPairs;
-
-    QRect rect = this->m_boundingBox.toRect();
-    int shift = 0;
-    int cut = 0;
-    // Don't process complete columns.
-    if (this->m_boundingBox.top() != 1 || this->m_boundingBox.bottom() != KS_rowMax) {
-        if (position < rect.top()) {
-            shift = qMin(rect.top() - position, number);
-            cut = qMax(0, position + number - rect.top());
-        } else {
-            shift = 0;
-            cut = qMin(number, rect.bottom() - position + 1);
-        }
-        this->m_boundingBox.adjust(0, -shift, 0, -shift - cut);
-    }
-
-    for (int i = 0; i < this->childCount(); ++i) {
-        // Don't process complete columns.
-        if (this->m_childBoundingBox[i].top() == 1 && this->m_childBoundingBox[i].bottom() == KS_rowMax)
-            continue;
-
-        const QRectF oldRect(this->m_childBoundingBox[ i ]);
-        rect = this->m_childBoundingBox[i].toRect();
-        if (position < rect.top()) {
-            shift = qMin(rect.top() - position, number);
-            cut = qMax(0, position + number - rect.top());
-        } else {
-            shift = 0;
-            cut = qMin(number, rect.bottom() - position + 1);
-        }
-        this->m_childBoundingBox[i].adjust(0, -shift, 0, -shift - cut);
-
-        if (this->m_childBoundingBox[ i ].isEmpty()) {
-            removedPairs.insert(this->m_dataIds[i], qMakePair(oldRect, this->m_data[i]));
+        if (newx1 > KS_colMax) {  // We're cutting the whole range.
+            res.append(qMakePair(this->m_childBoundingBox[i], this->m_data[i]));
             KoRTree<T>::LeafNode::remove(i--);
+            continue;
         }
+
+        if (newx2 > KS_colMax - 0.1) {  // We're cutting a portion of this range.
+            newx2 = KS_colMax - 0.1;
+            // Let's just add the whole range to avoid too much fragmentation.
+            res.append(qMakePair(this->m_childBoundingBox[i], this->m_data[i]));
+        }
+
+        this->m_childBoundingBox[i].setLeft(newx1);
+        this->m_childBoundingBox[i].setRight(newx2);
+
+        if ((bound1 == -1) || (bound1 > newx1)) bound1 = newx1;
+        if ((bound2 == -1) || (bound2 < newx2)) bound2 = newx2;
     }
-    return removedPairs;
+    if (bound1 > -1) {
+        this->m_boundingBox.setLeft(bound1);
+        this->m_boundingBox.setRight(bound2);
+    }
 }
 
 template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::removeColumns(int position, int number)
+void RTree<T>::LeafNode::insertShiftDown(const QRect &rect, QVector< QPair<QRectF, T> > &res)
 {
-    if (position > this->m_boundingBox.right())
-        return QMap< int, QPair<QRectF, T> >();
+    double x1 = this->m_boundingBox.left();
+    double x2 = this->m_boundingBox.right();
+    double y1 = this->m_boundingBox.top();
+    double y2 = this->m_boundingBox.bottom();
+    int h = ((int) rect.height());
 
-    QMap< int, QPair<QRectF, T> > removedPairs;
+    if (rect.top() > y2) return;
+    if (rect.left() > x2) return;
+    if (rect.right() < x1) return;
 
-    QRect rect = this->m_boundingBox.toRect();
-    int shift = 0;
-    int cut = 0;
-    // Don't process complete rows.
-    if (this->m_boundingBox.left() != 1 || this->m_boundingBox.right() != KS_colMax) {
-        if (position < rect.left()) {
-            shift = qMin(rect.left() - position, number);
-            cut = qMax(0, position + number - rect.left());
-        } else {
-            shift = 0;
-            cut = qMin(number, rect.right() - position + 1);
-        }
-        this->m_boundingBox.adjust(-shift, 0, -shift - cut, 0);
-    }
+    double bound1 = -1, bound2 = -1;
 
     for (int i = 0; i < this->childCount(); ++i) {
-        // Don't process complete rows.
-        if (this->m_childBoundingBox[i].left() == 1 && this->m_childBoundingBox[i].right() == KS_rowMax)
-            continue;
+        x1 = this->m_childBoundingBox[i].left();
+        x2 = this->m_childBoundingBox[i].right();
+        y1 = this->m_childBoundingBox[i].top();
+        y2 = this->m_childBoundingBox[i].bottom();
+        if ((bound1 == -1) || (bound1 > y1)) bound1 = y1;
+        if ((bound2 == -1) || (bound2 < y2)) bound2 = y2;
 
-        const QRectF oldRect(this->m_childBoundingBox[ i ]);
-        rect = this->m_childBoundingBox[i].toRect();
-        if (position < rect.left()) {
-            shift = qMin(rect.left() - position, number);
-            cut = qMax(0, position + number - rect.left());
-        } else {
-            shift = 0;
-            cut = qMin(number, rect.right() - position + 1);
+        if (rect.top() > y2) continue;
+        if (rect.left() > x2) continue;
+        if (rect.right() < x1) continue;
+
+        double newy1 = y1 + h;
+        double newy2 = y2 + h;
+
+        if (newy1 > KS_rowMax) {  // We're cutting the whole range.
+            res.append(qMakePair(this->m_childBoundingBox[i], this->m_data[i]));
+            KoRTree<T>::LeafNode::remove(i--);
+            continue;
         }
+
+        if (newy2 > KS_rowMax - 0.1) {  // We're cutting a portion of this range.
+            newy2 = KS_rowMax - 0.1;
+            // Let's just add the whole range to avoid too much fragmentation.
+            res.append(qMakePair(this->m_childBoundingBox[i], this->m_data[i]));
+        }
+
+        this->m_childBoundingBox[i].setTop(newy1);
+        this->m_childBoundingBox[i].setBottom(newy2);
+
+        if ((bound1 == -1) || (bound1 > newy1)) bound1 = newy1;
+        if ((bound2 == -1) || (bound2 < newy2)) bound2 = newy2;
+    }
+
+    if (bound1 > -1) {
+        this->m_boundingBox.setTop(bound1);
+        this->m_boundingBox.setBottom(bound2);
+    }
+}
+
+template<typename T>
+void RTree<T>::LeafNode::removeShiftLeft(const QRect &rect, QVector< QPair<QRectF, T> > &res)
+{
+    double x1 = this->m_boundingBox.left();
+    double x2 = this->m_boundingBox.right();
+    double y1 = this->m_boundingBox.top();
+    double y2 = this->m_boundingBox.bottom();
+    int w = ((int) rect.width());
+
+    if (rect.left() > x2) return;
+    if (rect.top() > y2) return;
+    if (rect.bottom() < y1) return;
+
+    double bound1 = -1, bound2 = -1;
+
+    for (int i = 0; i < this->childCount(); ++i) {
+        x1 = this->m_childBoundingBox[i].left();
+        x2 = this->m_childBoundingBox[i].right();
+        y1 = this->m_childBoundingBox[i].top();
+        y2 = this->m_childBoundingBox[i].bottom();
+        if ((bound1 == -1) || (bound1 > x1)) bound1 = x1;
+        if ((bound2 == -1) || (bound2 < x2)) bound2 = x2;
+
+        if (rect.left() > x2) continue;
+        if (rect.top() > y2) continue;
+        if (rect.bottom() < y1) continue;
+
+        // This inserts the entire region instead of the cut off portion only, but that's okay and we avoid too much fragmentation.
+        const QRectF oldRect(this->m_childBoundingBox[ i ]);
+        QRect mrect = this->m_childBoundingBox[i].toRect();
+        int shift = qMin(mrect.left() - rect.left(), w);
+        int cut = qMax(0, rect.left() + w - mrect.left());
         this->m_childBoundingBox[i].adjust(-shift, 0, -shift - cut, 0);
+        res.append(qMakePair(oldRect, this->m_data[i]));
 
         if (this->m_childBoundingBox[ i ].isEmpty()) {
-            removedPairs.insert(this->m_dataIds[i], qMakePair(oldRect, this->m_data[i]));
             KoRTree<T>::LeafNode::remove(i--);
+            continue;
         }
+
+        double newx1 = this->m_childBoundingBox[ i ].left();
+        double newx2 = this->m_childBoundingBox[ i ].right();
+        if ((bound1 == -1) || (bound1 > newx1)) bound1 = newx1;
+        if ((bound2 == -1) || (bound2 < newx2)) bound2 = newx2;
     }
-    return removedPairs;
+
+    if (bound1 > -1) {
+        this->m_boundingBox.setLeft(bound1);
+        this->m_boundingBox.setRight(bound2);
+    }
 }
+
+template<typename T>
+void RTree<T>::LeafNode::removeShiftUp(const QRect &rect, QVector< QPair<QRectF, T> > &res)
+{
+    double x1 = this->m_boundingBox.left();
+    double x2 = this->m_boundingBox.right();
+    double y2 = this->m_boundingBox.bottom();
+    int h = ((int) rect.height());
+
+    if (rect.top() > y2) return;
+    if (rect.left() > x2) return;
+    if (rect.right() < x1) return;
+
+    double bound1 = -1, bound2 = -1;
+
+    for (int i = 0; i < this->childCount(); ++i) {
+        x1 = this->m_childBoundingBox[i].left();
+        x2 = this->m_childBoundingBox[i].right();
+        double y1 = this->m_childBoundingBox[i].top();
+        y2 = this->m_childBoundingBox[i].bottom();
+        if ((bound1 == -1) || (bound1 > y1)) bound1 = y1;
+        if ((bound2 == -1) || (bound2 < y2)) bound2 = y2;
+
+        if (rect.top() > y2) continue;
+        if (rect.left() > x2) continue;
+        if (rect.right() < x1) continue;
+
+        // This inserts the entire region instead of the cut off portion only, but that's okay and we avoid too much fragmentation.
+        const QRectF oldRect(this->m_childBoundingBox[ i ]);
+        QRect mrect = this->m_childBoundingBox[i].toRect();
+        int shift = qMin(mrect.top() - rect.top(), h);
+        int cut = qMax(0, rect.top() + h - mrect.top());
+        this->m_childBoundingBox[i].adjust(0, -shift, 0, -shift - cut);
+        res.append(qMakePair(oldRect, this->m_data[i]));
+
+        if (this->m_childBoundingBox[ i ].isEmpty()) {
+            KoRTree<T>::LeafNode::remove(i--);
+            continue;
+        }
+
+        double newy1 = this->m_childBoundingBox[ i ].top();
+        double newy2 = this->m_childBoundingBox[ i ].bottom();
+        if ((bound1 == -1) || (bound1 > newy1)) bound1 = newy1;
+        if ((bound2 == -1) || (bound2 < newy2)) bound2 = newy2;
+    }
+
+    if (bound1 > -1) {
+        this->m_boundingBox.setTop(bound1);
+        this->m_boundingBox.setBottom(bound2);
+    }
+}
+
+template<typename T>
+bool RTree<T>::LeafNode::validate()
+{
+    double x1 = this->m_boundingBox.left();
+    double x2 = this->m_boundingBox.right();
+    double y1 = this->m_boundingBox.top();
+    double y2 = this->m_boundingBox.bottom();
+
+    // All the childs must be within the boundaries
+    for (int i = 0; i < this->childCount(); ++i) {
+        if (this->m_childBoundingBox[i].top() < y1) return false;
+        if (this->m_childBoundingBox[i].bottom() > y2) return false;
+        if (this->m_childBoundingBox[i].left() < x1) return false;
+        if (this->m_childBoundingBox[i].right() > x2) return false;
+    }
+    return true;
+}
+
 
 template<typename T>
 void RTree<T>::LeafNode::operator=(const LeafNode& other)
@@ -903,121 +1035,127 @@ void RTree<T>::NonLeafNode::intersectingPairs(const QRectF& rect, QMap<int, QPai
     }
 }
 
-template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::NonLeafNode::insertRows(int position, int number)
-{
-    if (position > this->m_boundingBox.bottom())
-        return QMap< int, QPair<QRectF, T> >();
 
-    QMap< int, QPair<QRectF, T> > result;
+template<typename T>
+void RTree<T>::NonLeafNode::insertShiftRight(const QRect &rect, QVector< QPair<QRectF, T> > &res)
+{
+    if (rect.left() > this->m_boundingBox.right()) return;
+    if (rect.top() > this->m_boundingBox.bottom()) return;
+    if (rect.bottom() < this->m_boundingBox.top()) return;
+
+    double bound1 = -1, bound2 = -1;
 
     for (int i = 0; i < this->childCount(); ++i) {
-        this->m_childBoundingBox[i].adjust(0, (position < this->m_childBoundingBox[i].top()) ? number : 0, 0, number);
-        result.unite(dynamic_cast<Node*>(this->m_childs[i])->insertRows(position, number));
+        Node *node = dynamic_cast<Node*>(this->m_childs[i]);
+        node->insertShiftRight(rect, res);
+        this->m_childBoundingBox[i] = node->m_boundingBox;
+        double x1 = this->m_childBoundingBox[i].left();
+        double x2 = this->m_childBoundingBox[i].right();
+        if ((bound1 == -1) || (bound1 > x1)) bound1 = x1;
+        if ((bound2 == -1) || (bound2 < x2)) bound2 = x2;
     }
 
-    // position < m_rect.top() ? shift : extend
-    this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? number : 0, 0, number);
-    return QMap< int, QPair<QRectF, T> >(); // FIXME
+    if (bound1 > -1) {
+        this->m_boundingBox.setLeft(bound1);
+        this->m_boundingBox.setRight(bound2);
+    }
 }
 
 template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::NonLeafNode::insertColumns(int position, int number)
+void RTree<T>::NonLeafNode::insertShiftDown(const QRect &rect, QVector< QPair<QRectF, T> > &res)
 {
-    if (position > this->m_boundingBox.right())
-        return QMap< int, QPair<QRectF, T> >();
+    if (rect.top() > this->m_boundingBox.bottom()) return;
+    if (rect.left() > this->m_boundingBox.right()) return;
+    if (rect.right() < this->m_boundingBox.left()) return;
 
-    QMap< int, QPair<QRectF, T> > result;
+    double bound1 = -1, bound2 = -1;
 
     for (int i = 0; i < this->childCount(); ++i) {
-        this->m_childBoundingBox[i].adjust((position < this->m_childBoundingBox[i].left()) ? number : 0, 0, number, 0);
-        result.unite(dynamic_cast<Node*>(this->m_childs[i])->insertColumns(position, number));
+        Node *node = dynamic_cast<Node*>(this->m_childs[i]);
+        node->insertShiftDown(rect, res);
+        this->m_childBoundingBox[i] = node->m_boundingBox;
+        double y1 = this->m_childBoundingBox[i].top();
+        double y2 = this->m_childBoundingBox[i].bottom();
+        if ((bound1 == -1) || (bound1 > y1)) bound1 = y1;
+        if ((bound2 == -1) || (bound2 < y2)) bound2 = y2;
     }
 
-    // position < m_rect.left() ? shift : extend
-    this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? number : 0, 0, number, 0);
-    return QMap< int, QPair<QRectF, T> >(); // FIXME
+    if (bound1 > -1) {
+        this->m_boundingBox.setTop(bound1);
+        this->m_boundingBox.setBottom(bound2);
+    }
 }
 
 template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::NonLeafNode::removeRows(int position, int number)
+void RTree<T>::NonLeafNode::removeShiftLeft(const QRect &rect, QVector< QPair<QRectF, T> > &res)
 {
-    if (position > this->m_boundingBox.bottom())
-        return QMap< int, QPair<QRectF, T> >();
+    if (rect.left() > this->m_boundingBox.right()) return;
+    if (rect.top() > this->m_boundingBox.bottom()) return;
+    if (rect.bottom() < this->m_boundingBox.top()) return;
 
-    QMap< int, QPair<QRectF, T> > removedPairs;
-
-    QRect rect = this->m_boundingBox.toRect();
-    int shift = 0;
-    int cut = 0;
-    if (position < rect.top()) {
-        shift = qMin(rect.top() - position, number);
-        cut = qMax(0, position + number - rect.top());
-    } else {
-        shift = 0;
-        cut = qMin(number, rect.bottom() - position + 1);
-    }
-    this->m_boundingBox.adjust(0, -shift, 0, -shift - cut);
+    double bound1 = -1, bound2 = -1;
 
     for (int i = 0; i < this->childCount(); ++i) {
-        rect = this->m_childBoundingBox[i].toRect();
-        if (position < rect.top()) {
-            shift = qMin(rect.top() - position, number);
-            cut = qMax(0, position + number - rect.top());
-        } else {
-            shift = 0;
-            cut = qMin(number, rect.bottom() - position + 1);
-        }
-        this->m_childBoundingBox[i].adjust(0, -shift, 0, -shift - cut);
-
-        removedPairs.unite(dynamic_cast<Node*>(this->m_childs[i])->removeRows(position, number));
-        if (this->m_childBoundingBox[ i ].isEmpty()) {
-            delete this->m_childs[i];
-            KoRTree<T>::NonLeafNode::remove(i--);
-        }
+        Node *node = dynamic_cast<Node*>(this->m_childs[i]);
+        node->removeShiftLeft(rect, res);
+        this->m_childBoundingBox[i] = node->m_boundingBox;
+        double x1 = this->m_childBoundingBox[i].left();
+        double x2 = this->m_childBoundingBox[i].right();
+        if ((bound1 == -1) || (bound1 > x1)) bound1 = x1;
+        if ((bound2 == -1) || (bound2 < x2)) bound2 = x2;
     }
-    return removedPairs;
+
+    if (bound1 > -1) {
+        this->m_boundingBox.setLeft(bound1);
+        this->m_boundingBox.setRight(bound2);
+    }
 }
 
 template<typename T>
-QMap< int, QPair<QRectF, T> > RTree<T>::NonLeafNode::removeColumns(int position, int number)
+void RTree<T>::NonLeafNode::removeShiftUp(const QRect &rect, QVector< QPair<QRectF, T> > &res)
 {
-    if (position > this->m_boundingBox.right())
-        return QMap< int, QPair<QRectF, T> >();
+    if (rect.top() > this->m_boundingBox.bottom()) return;
+    if (rect.left() > this->m_boundingBox.right()) return;
+    if (rect.right() < this->m_boundingBox.left()) return;
 
-    QMap< int, QPair<QRectF, T> > removedPairs;
-
-    QRect rect = this->m_boundingBox.toRect();
-    int shift = 0;
-    int cut = 0;
-    if (position < rect.left()) {
-        shift = qMin(rect.left() - position, number);
-        cut = qMax(0, position + number - rect.left());
-    } else {
-        shift = 0;
-        cut = qMin(number, rect.right() - position + 1);
-    }
-    this->m_boundingBox.adjust(-shift, 0, -shift - cut, 0);
+    double bound1 = -1, bound2 = -1;
 
     for (int i = 0; i < this->childCount(); ++i) {
-        rect = this->m_childBoundingBox[i].toRect();
-        if (position < rect.left()) {
-            shift = qMin(rect.left() - position, number);
-            cut = qMax(0, position + number - rect.left());
-        } else {
-            shift = 0;
-            cut = qMin(number, rect.right() - position + 1);
-        }
-        this->m_childBoundingBox[i].adjust(-shift, 0, -shift - cut, 0);
-
-        removedPairs.unite(dynamic_cast<Node*>(this->m_childs[i])->removeColumns(position, number));
-        if (this->m_childBoundingBox[ i ].isEmpty()) {
-            delete this->m_childs[i];
-            KoRTree<T>::NonLeafNode::remove(i--);
-        }
+        Node *node = dynamic_cast<Node*>(this->m_childs[i]);
+        node->removeShiftUp(rect, res);
+        this->m_childBoundingBox[i] = node->m_boundingBox;
+        double y1 = this->m_childBoundingBox[i].top();
+        double y2 = this->m_childBoundingBox[i].bottom();
+        if ((bound1 == -1) || (bound1 > y1)) bound1 = y1;
+        if ((bound2 == -1) || (bound2 < y2)) bound2 = y2;
     }
-    return removedPairs;
+
+    if (bound1 > -1) {
+        this->m_boundingBox.setTop(bound1);
+        this->m_boundingBox.setBottom(bound2);
+    }
 }
+
+template<typename T>
+bool RTree<T>::NonLeafNode::validate()
+{
+    double x1 = this->m_boundingBox.left();
+    double x2 = this->m_boundingBox.right();
+    double y1 = this->m_boundingBox.top();
+    double y2 = this->m_boundingBox.bottom();
+
+    // All the childs must be within the boundaries
+    for (int i = 0; i < this->childCount(); ++i) {
+        if (this->m_childBoundingBox[i].top() < y1) return false;
+        if (this->m_childBoundingBox[i].bottom() > y2) return false;
+        if (this->m_childBoundingBox[i].left() < x1) return false;
+        if (this->m_childBoundingBox[i].right() > x2) return false;
+        if (!dynamic_cast<Node*>(this->m_childs[i])->validate()) return false;
+    }
+    return true;
+}
+
+
 
 template<typename T>
 void RTree<T>::NonLeafNode::operator=(const NonLeafNode& other)
@@ -1044,7 +1182,66 @@ void RTree<T>::NonLeafNode::operator=(const NonLeafNode& other)
     }
 }
 
+template<typename T>
+void RTree<T>::NonLeafNode::cutBeforeColumn(int col, QVector< QPair<QRectF, T> > &res)
+{
+    // Not intersecting - nothing to do
+    if ((col > this->m_boundingBox.right()) || (col < this->m_boundingBox.left()))
+        return;
+
+    for (int i = 0; i < this->childCount(); ++i) {
+        QRectF rect = this->m_childBoundingBox[i];
+        if ((col > rect.right()) || (col < rect.left())) continue;
+        this->m_childBoundingBox[i].setRight(col - 0.1);
+        dynamic_cast<Node*>(this->m_childs[i])->cutBeforeColumn(col, res);
+    }
+}
+
+template<typename T>
+void RTree<T>::NonLeafNode::cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res)
+{
+    // Not intersecting - nothing to do
+    if ((row > this->m_boundingBox.bottom()) || (row < this->m_boundingBox.top()))
+        return;
+
+    for (int i = 0; i < this->childCount(); ++i) {
+        QRectF rect = this->m_childBoundingBox[i];
+        if ((row > rect.bottom()) || (row < rect.top())) continue;
+        this->m_childBoundingBox[i].setBottom(row - 0.1);
+        dynamic_cast<Node*>(this->m_childs[i])->cutBeforeRow(row, res);
+    }
+}
+
+template<typename T>
+void RTree<T>::LeafNode::cutBeforeColumn(int col, QVector< QPair<QRectF, T> > &res)
+{
+    for (int i = 0; i < this->m_counter; ++i) {
+        QRectF rect = this->m_childBoundingBox[i];
+        if ((rect.left() >= col) || (rect.right() <= col)) continue;
+
+        this->m_childBoundingBox[i].setRight(col - 0.1);
+        QRectF cutRect = QRectF(QPointF(col, rect.top()), QPointF(rect.right() + 0.1, rect.bottom() + 0.1));
+        res.append(qMakePair(cutRect, this->m_data[i]));
+    }
+}
+
+template<typename T>
+void RTree<T>::LeafNode::cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res)
+{
+    for (int i = 0; i < this->m_counter; ++i) {
+        QRectF rect = this->m_childBoundingBox[i];
+        if ((rect.top() >= row) || (rect.bottom() <= row)) continue;
+
+        this->m_childBoundingBox[i].setBottom(row - 0.1);
+        QRectF cutRect = QRectF(QPointF(rect.left(), row), QPointF(rect.right() + 0.1, rect.bottom() + 0.1));
+        res.append(qMakePair(cutRect, this->m_data[i]));
+    }
+}
+
+
+
+
 } // namespace Sheets
 } // namespace Calligra
 
-#endif // KSPREAD_RTREE
+#endif // __SHEETS_RTREE__

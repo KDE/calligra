@@ -13,6 +13,7 @@ class TestRTree: public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testIntersectingPairs();
+    void testSplit();
     void testInsertShiftRight();
     void testInsertShiftDown();
     void testRemoveShiftLeft();
