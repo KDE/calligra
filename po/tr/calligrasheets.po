@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-05-29 12:33+0300\n"
+"PO-Revision-Date: 2023-06-04 01:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #. i18n: ectx: Menu (file)
 #: calligrasheets.rc:5
@@ -19672,7 +19672,7 @@ msgid ""
 msgstr ""
 "Buradan otomatik kaydetmeler arasındaki zamanı seçebilir veya \"Otomatik "
 "Kaydet Devre dışı\"' seçeneğini seçerek bu özelliği devre dışı "
-"bırakabilirsiniz (minimum değeri seçerek)."
+"bırakabilirsiniz (en düşük değeri seçerek)."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:49
