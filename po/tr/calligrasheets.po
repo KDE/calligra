@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-08 00:46+0000\n"
-"PO-Revision-Date: 2023-05-29 12:33+0300\n"
+"PO-Revision-Date: 2023-06-04 01:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -7865,7 +7865,7 @@ msgid ""
 "just Enter) to display the array elements in separate cells."
 msgstr ""
 "Sonuç bir dizilim olduğu için, dizilim ögelerini ayrı hücrelerde göstermek "
-"için Ctrl+Alt+Enter (yalnızca Enter yerine) kullanmanız gerekiyor."
+"için Kontrol+Seçenek+Giriş (yalnızca Giriş yerine) kullanmanız gerekiyor."
 
 #: functions/math.xml:1240
 #, kde-format
@@ -9191,9 +9191,9 @@ msgid ""
 "array, use Ctrl+Alt+Enter (instead of just Enter) to display the array "
 "elements in separate cells. "
 msgstr ""
-"Verinin sütunlarda olması gerektiğini ve sonuç sütun dizilimi olduğu için, "
-"dizi öeelerini ayrı hücrelerde görüntülemek için Ctrl+Alt+Enter (yalnızca "
-"Enter yerine) düğmelerini kullanın. "
+"Verinin sütunlarda olması gerektiğini ve sonuç sütun dizilimi olduğu için "
+"dizi öeelerini ayrı hücrelerde görüntülemek için Kontrol+Seçenek+Giriş "
+"(yalnızca Giriş yerine) düğmelerini kullanın. "
 
 #: functions/statistical.xml:422
 #, kde-format
@@ -10399,8 +10399,8 @@ msgid ""
 "Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to "
 "display the values in separate cells."
 msgstr ""
-"Sonuç bir diziyse, değerleri ayrı bir hücrede göstermek için Ctrl+Alt+Enter "
-"(yalnızca Enter yerine) düğme kombinasyonunu kullanın."
+"Sonuç bir dizilişse değerleri ayrı bir hücrede göstermek için Kontrol+Seçenek"
+"+Giriş (yalnızca Giriş yerine) düğme kombinasyonunu kullanın."
 
 #: functions/statistical.xml:1437
 #, kde-format
@@ -12983,7 +12983,7 @@ msgid ""
 msgstr ""
 "Buradan otomatik kaydetmeler arasındaki zamanı seçebilir veya \"Otomatik "
 "Kaydet Devre dışı\"' seçeneğini seçerek bu özelliği devre dışı "
-"bırakabilirsiniz (minimum değeri seçerek)."
+"bırakabilirsiniz (en düşük değeri seçerek)."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_autoSaveDelay)
 #: part/dialogs/FileOptionsWidget.ui:49
@@ -13018,7 +13018,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:17
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
-msgstr "Enter düğmesine bastıktan sonra imlecin hareketi:"
+msgstr "Giriş düğmesine bastıktan sonra imlecin hareketi:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
 #: part/dialogs/InterfaceOptionsWidget.ui:27
@@ -13027,7 +13027,7 @@ msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
 "cursor one cell left, right, up or down, as determined by this setting."
 msgstr ""
-"Bir hücreyi seçtiğinizde, bu ayar ile belirlendiği gibi Enter düğmesine "
+"Bir hücreyi seçtiğinizde, bu ayar ile belirlendiği gibi Giriş düğmesine "
 "basmak hücreyi bir hücre sola, sağa, yukarı veya aşağı kaydıracaktır."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
