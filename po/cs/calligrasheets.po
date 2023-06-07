@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-08 00:46+0000\n"
-"PO-Revision-Date: 2023-02-24 11:07+0100\n"
+"PO-Revision-Date: 2023-04-26 09:51+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -14070,10 +14070,9 @@ msgid "Cell Format"
 msgstr "Formát buňky"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Formát buňky"
+msgstr "Nastavit formát buňky"
 
 #: ui/dialogs/LayoutDialog.cpp:132
 #, kde-format
@@ -14217,10 +14216,9 @@ msgid ""
 msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "Datum a čas"
+msgstr ""
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
 #, kde-format
@@ -14715,18 +14713,3 @@ msgstr ""
 #, kde-format
 msgid "Open Link?"
 msgstr "Otevřít odkaz?"
-
-#~ msgid "Date and Time"
-#~ msgstr "Datum a čas"
-
-#~ msgid "System: "
-#~ msgstr "Systém: "
-
-#~ msgid " (=[mm]:ss)"
-#~ msgstr " (=[mm]:ss)"
-
-#~ msgid " (=[hh]:mm:ss)"
-#~ msgstr " (=[hh]:mm:ss)"
-
-#~ msgid " (=[hh]:mm)"
-#~ msgstr " (=[hh]:mm)"
