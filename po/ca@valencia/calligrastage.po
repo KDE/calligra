@@ -921,12 +921,12 @@ msgstr "Ordre: "
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:115
 #, kde-format
 msgid "Move animation up"
-msgstr "Mou amunt l'animació"
+msgstr "Mou cap amunt l'animació"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:120
 #, kde-format
 msgid "Move animation down"
-msgstr "Mou avall l'animació"
+msgstr "Mou cap avall l'animació"
 
 #: part/tools/animationtool/KPrShapeAnimationDocker.cpp:511
 #, kde-format
