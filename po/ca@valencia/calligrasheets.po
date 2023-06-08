@@ -6730,7 +6730,7 @@ msgstr "Distingix entre majúscules i minúscules"
 #: dialogs/SortWidget.ui:49
 #, kde-format
 msgid "Move Up"
-msgstr "Mou amunt"
+msgstr "Mou cap amunt"
 
 #. i18n: ectx: property (text), widget (QTableWidget, m_tableWidget)
 #: dialogs/SortWidget.ui:90
@@ -6754,7 +6754,7 @@ msgstr "Distinció entre majúscules i minúscules"
 #: dialogs/SortWidget.ui:108
 #, kde-format
 msgid "Move Down"
-msgstr "Mou avall"
+msgstr "Mou cap avall"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_useHeader)
 #: dialogs/SortWidget.ui:115
