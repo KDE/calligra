@@ -4,13 +4,13 @@
 # Translators:
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2022-10-12 14:26+0300\n"
+"PO-Revision-Date: 2023-06-08 12:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #. i18n: ectx: property (text), widget (QCheckBox, toggleEditMode)
 #: connectionTool/ConnectionPointWidget.ui:30
@@ -411,17 +411,18 @@ msgstr "Y:"
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
-msgstr "x- veya y- konumunu tutmak için ALT'a basın."
+msgstr "x- veya y- konumunu tutmak için Seçenek düğmesine basın."
 
 #: defaulttool/ShapeResizeStrategy.cpp:92
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr "Merkezden başlayarak yeniden boyutlandırmak için CTRL düğmesine basın."
+msgstr ""
+"Merkezden başlayarak yeniden boyutlandırmak için Kontrol düğmesine basın."
 
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr "45 derecelik çentiklerle döndürmek için ALT düğmesine basın."
+msgstr "45 derecelik çentiklerle döndürmek için Seçenek düğmesine basın."
 
 #: defaulttool/ShapeShearStrategy.cpp:169
 msgctxt "(qtundo-format)"
