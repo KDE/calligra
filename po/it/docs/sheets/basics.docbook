@@ -69,13 +69,13 @@
 <para
 >La prima cosa da fare è avviare &sheets;. Puoi farlo premendo il pulsante <mousebutton
 >sinistro</mousebutton
-> del mouse sull'icona di &sheets;, se è presente sul tuo desktop o sul pannello. Altrimenti, puoi selezionare dal &kmenu; <menuchoice
+> del mouse sull'icona di &sheets;, se è presente sul tuo desktop o sul pannello. Altrimenti, puoi selezionare <menuchoice
 ><guimenu
 >Ufficio</guimenu
 ><guimenuitem
 >&sheets;</guimenuitem
 > </menuchoice
->.</para>
+> dall'avviatore di applicazioni.</para>
 
 <para>
 <mediaobject>
