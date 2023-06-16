@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-08 00:46+0000\n"
-"PO-Revision-Date: 2023-05-08 19:55+0100\n"
+"PO-Revision-Date: 2023-06-15 21:48+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -11084,7 +11084,7 @@ msgid ""
 "assumed to be 1. SEARCH does not distinguish between uppercase and lowercase "
 "letters."
 msgstr ""
-"Parametro start_num specifas la karakteron ĉe kiu komenci la serĉon. La unua "
+"Parametro start_num specifas la signon ĉe kiu komenci la serĉon. La unua "
 "signo estas signonumero 1. Se start_num estas preterlasita, oni supozas, ke "
 "ĝi estas 1. SEARCH ne distingas inter majuskloj kaj minusklaj literoj."
 
@@ -11373,7 +11373,7 @@ msgid ""
 "The first character is character number 1. If start_num is omitted, it is "
 "assumed to be 1."
 msgstr ""
-"Parametro start_num specifas la karakteron ĉe kiu komenci la serĉon. La unua "
+"Parametro start_num specifas la signon ĉe kiu komenci la serĉon. La unua "
 "signo estas signo numero 1. Se start_num estas ellasita, ĝi estas supozita "
 "esti 1."
 
@@ -11859,7 +11859,7 @@ msgstr "LOWER(\"SALUTON\") redonas \"saluton\""
 #: functions/text.xml:683 functions/text.xml:794
 #, kde-format
 msgid "Character code"
-msgstr "Karaktera kodo"
+msgstr "Signa kodo"
 
 #: functions/text.xml:687
 #, kde-format
