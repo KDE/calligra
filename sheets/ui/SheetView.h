@@ -121,6 +121,8 @@ public:
     void setHighlightMaskColor(const QColor& color);
     void setHighlightColor(const QColor& color);
     void setActiveHighlightColor(const QColor& color);
+
+    void setViewSize(const QSize &size);
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
 

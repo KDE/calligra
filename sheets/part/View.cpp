@@ -913,7 +913,7 @@ void View::sheetDestroyed(QObject* obj)
     }
 }
 
-SheetView* View::sheetView(Sheet* sheet) const
+SheetView* View::sheetView(Sheet* sheet)
 {
     SheetView *sheetView = d->sheetViews.value(sheet);
     if (!sheetView) {
@@ -933,6 +933,7 @@ SheetView* View::sheetView(Sheet* sheet) const
                 });
         connect(sheet, &QObject::destroyed,
                 this, &View::sheetDestroyed);
+        sendSizeToSheetViews();
     }
     return sheetView;
 }
@@ -1650,6 +1651,7 @@ void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
     Q_ASSERT(mode == KoZoomMode::ZOOM_CONSTANT);
     selection()->emitCloseEditor(true); // save changes
     setHeaderMinima();
+    sendSizeToSheetViews();
     d->canvas->update();
     d->columnHeader->update();
     d->rowHeader->update();
@@ -1775,6 +1777,20 @@ void View::keyPressEvent(QKeyEvent *event)
     }
 #endif
     QWidget::keyPressEvent(event);
+}
+
+void View::sendSizeToSheetViews() {
+    QList< QPointer<SheetView> > sheetViews = d->sheetViews.values();
+
+    QSize sz = zoomHandler()->viewToDocument(QSizeF(size())).toSize();
+    for (SheetView *sheetView : sheetViews)
+        sheetView->setViewSize(sz);
+}
+
+void View::resizeEvent(QResizeEvent *event)
+{
+    sendSizeToSheetViews();
+    QWidget::resizeEvent(event);
 }
 
 int View::leftBorder() const

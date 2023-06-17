@@ -558,7 +558,6 @@ QRect CanvasBase::viewToCellCoordinates(const QRectF& viewRect) const
     const int right = sheet->rightColumn(rect.right());
     const int top = sheet->topRow(rect.top(), tmp);
     const int bottom = sheet->bottomRow(rect.bottom());
-
     return QRect(left, top, right - left + 1, bottom - top + 1);
 }
 

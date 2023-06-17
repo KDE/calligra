@@ -57,8 +57,9 @@ public:
 #endif
     QRegion cachedArea;
     CellView* defaultCellView;
+    QSize viewSize;
     // The maximum accessed cell range used for the scrollbar ranges.
-    QSize accessedCellRange;
+    QSizeF reportedSize;
     FusionStorage* obscuredInfo;
     QSize obscuredRange; // size of the bounding box of obscuredInfo
 #ifdef CALLIGRA_SHEETS_MT
@@ -170,9 +171,10 @@ SheetView::SheetView(Sheet* sheet)
     d->sheet = sheet;
     d->viewConverter = 0;
     d->visibleRect = QRect(1, 1, 0, 0);
+    d->viewSize = QSize(100, 100);
     d->cache.setMaxCost(10000);
     d->defaultCellView = createDefaultCellView();
-    d->accessedCellRange = QSize(1,1);
+    d->reportedSize = QSize(1,1);
     d->obscuredInfo = new FusionStorage(sheet->map());
     d->obscuredRange = QSize(0, 0);
     d->highlightMaskColor = QColor(0, 0, 0, 128);
@@ -250,6 +252,12 @@ void SheetView::setPaintCellRange(const QRect& rect)
 QRect SheetView::paintCellRange() const
 {
     return d->visibleRect;
+}
+
+void SheetView::setViewSize(const QSize &size)
+{
+    d->viewSize = size;
+    updateAccessedCellRange();
 }
 
 void SheetView::invalidateRegion(const Region& region)
@@ -658,13 +666,15 @@ void SheetView::updateAccessedCellRange(const QPoint& location)
     col = qMax(26, col);
     row = qMax(128, row);
 
-    QSize cellRange = QSize(col, row);
-    if (d->accessedCellRange == cellRange) return;
-
-    d->accessedCellRange = cellRange;
-    const double width = sheet()->columnPosition(col) + sheet()->columnFormats()->visibleWidth(col);
-    const double height = sheet()->rowPosition(row) + sheet()->rowFormats()->visibleHeight(row);
-    emit visibleSizeChanged(QSizeF(width, height));
+    double width = sheet()->columnPosition(col) + sheet()->columnFormats()->visibleWidth(col);
+    double height = sheet()->rowPosition(row) + sheet()->rowFormats()->visibleHeight(row);
+    // Make sure that we fill the entire view.
+    width = qMax(width, d->viewSize.width() + 200.0);
+    height = qMax(height, d->viewSize.height() + 200.0);
+    QSizeF newSize = QSizeF(width, height);
+    if (d->reportedSize == newSize) return;
+    d->reportedSize = newSize;
+    emit visibleSizeChanged(newSize);
 }
 
 CellView* SheetView::createDefaultCellView()

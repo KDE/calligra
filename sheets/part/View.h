@@ -111,7 +111,7 @@ public:
     /**
      * \return the SheetView for \p sheet
      */
-    SheetView* sheetView(Sheet* sheet) const;
+    SheetView* sheetView(Sheet* sheet);
 
     /** Loads the view settings. */
     void initConfig();
@@ -368,12 +368,16 @@ public:
     void disableAutoScroll();
 
 
-protected: // reimplementations
+protected:
     // QWidget interface
     void keyPressEvent(QKeyEvent * _ev) override;
+    virtual void resizeEvent(QResizeEvent *event) override;
     // KoView interface
     void updateReadWrite(bool readwrite) override;
     KoPrintJob * createPrintJob() override;
+
+    /** Informs the sheet views about this view's siize. This is necessary to ensure that they always are big enough to fill in the entire view. */
+    void sendSizeToSheetViews();
 public:
     KoZoomController *zoomController() const override;
 
