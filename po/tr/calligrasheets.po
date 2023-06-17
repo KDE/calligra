@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-04 01:37+0300\n"
+"PO-Revision-Date: 2023-06-16 12:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20940,7 +20940,7 @@ msgstr "Başık1"
 #: ui/CellEditorDocker.cpp:47
 #, kde-format
 msgid "Cell Editor"
-msgstr "Hücre Düzenleyici"
+msgstr "Hücre Düzenleyicisi"
 
 #: ui/CellEditorDocker.cpp:58
 #, kde-format

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-08 12:13+0300\n"
+"PO-Revision-Date: 2023-06-16 12:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -444,7 +444,7 @@ msgstr ""
 #: guidestool/GuidesTool.cpp:374
 #, kde-format
 msgid "Guides Editor"
-msgstr "Kılavuz Düzenleyici"
+msgstr "Kılavuz Düzenleyicisi"
 
 #: guidestool/GuidesTool.cpp:382
 #, kde-format
