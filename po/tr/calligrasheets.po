@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-16 12:11+0300\n"
+"PO-Revision-Date: 2023-06-17 21:47+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9110,7 +9110,7 @@ msgid ""
 "or an array of dates."
 msgstr ""
 "Tatiller şunlardan biri olmalıdır: Sayı = eklenecek gün, tek bir gün veya "
-"bir tarih dizisi."
+"bir tarih dizilişi."
 
 #: functions/datetime.xml:683
 #, kde-format
@@ -11545,7 +11545,7 @@ msgstr "NPER(0,06; 0; -10000; 20000 ;0), 11,906 döndürür"
 #: functions/financial.xml:877
 #, kde-format
 msgid "Values (array)"
-msgstr "Değerler (dizi)"
+msgstr "Değerler (diziliş)"
 
 #: functions/financial.xml:881
 #, kde-format
@@ -12622,7 +12622,7 @@ msgid ""
 "get its return type."
 msgstr ""
 "TYPE() işlevi, sonucunda 1 sayı, 2 metin, 4 mantıksal değer, 16 hata değeri, "
-"64 ise bir diziye karşılık gelir. Eğer incelenen hücrede bir formül var ise "
+"64 ise bir dizilişe karşılık gelir. Eğer incelenen hücrede bir formül varsa "
 "o hücredeki sonucun dönüş türünü alırsınız."
 
 #: functions/information.xml:327
@@ -15016,8 +15016,8 @@ msgid ""
 "If a range is given, returns value stored in a given row/column. If one cell "
 "is given, which contains an array, then one element of the array is returned."
 msgstr ""
-"Eğer bir aralık verilirse, verilen satır/sütundaki değeri döndürür. Eğer bir "
-"dizi içeren, bir hücre verilirse, dizinin bir elemanı döndürülür."
+"Eğer bir aralık verilirse verilen satır/sütundaki değeri döndürür. Eğer bir "
+"diziliş içeren bir hücre verilirse dizilişnin bir ögesi döndürülür."
 
 #: functions/reference.xml:146
 #, kde-format
@@ -15040,7 +15040,7 @@ msgid ""
 "INDEX(A1;2;2), if A1 is a result of array calculation, returns its (2,2) "
 "element."
 msgstr ""
-"INDEX(A1;2;2), eğer A1 bir dizi hesaplaması sonucu ise onun (2,2) elamanını "
+"INDEX(A1;2;2); eğer A1 bir diziliş hesaplaması sonucu ise onun (2,2) ögesini "
 "döndürür."
 
 #: functions/reference.xml:164
@@ -16009,11 +16009,11 @@ msgid ""
 msgstr ""
 "İkinci paramtredeki değerler aralıkların üst sınırlarını belirlerler.\n"
 "                Aralıklar üst sınırları da içerir.\n"
-"               Dönen dizi bir sütun vektörüdür ve ikinci parametreden bir "
-"fazla elemana sahiptir;\n"
+"               Döndürülen diziliş bir sütun vektörüdür ve ikinci "
+"parametreden bir fazla ögeye sahiptir;\n"
 "                son eleman ikinci parametredeki son değerden daha büyük olan "
-"bütün elemanların sayısını gösterir.\n"
-"                   Eğer ikinci parametre boş ise ilk parametredeki bütün "
+"bütün ögelerin sayısını gösterir.\n"
+"                   Eğer ikinci parametre boşsa ilk parametredeki bütün "
 "sayılar sayılır."
 
 #: functions/statistical.xml:421
@@ -16209,13 +16209,13 @@ msgstr "HYPGEOMDIST(2; 5; 6; 20), 0.3522 döndürür"
 #: functions/statistical.xml:1313
 #, kde-format
 msgid "y values (array)"
-msgstr "y değerleri (dizilim)"
+msgstr "y değerleri (diziliş)"
 
 #: functions/statistical.xml:591 functions/statistical.xml:1131
 #: functions/statistical.xml:1317
 #, kde-format
 msgid "x values (array)"
-msgstr "x değerleri (dizilim)"
+msgstr "x değerleri (diziliş)"
 
 #: functions/statistical.xml:595
 #, kde-format
@@ -16761,7 +16761,7 @@ msgstr "POISSON(60;50;1) eşittir 0,927840"
 #: functions/statistical.xml:1032
 #, kde-format
 msgid "Data (array)"
-msgstr "Veri (dizilim)"
+msgstr "Veri (diziliş)"
 
 #: functions/statistical.xml:1036
 #, kde-format
@@ -16801,12 +16801,12 @@ msgstr "RANK (2;{1;2;3}) eşittir 2"
 #: functions/statistical.xml:1053
 #, kde-format
 msgid "known Y (array)"
-msgstr "bilinen Y (dizilim)"
+msgstr "bilinen Y (diziliş)"
 
 #: functions/statistical.xml:1057
 #, kde-format
 msgid "known X (array)"
-msgstr "bilinen X (dizilim)"
+msgstr "bilinen X (diziliş)"
 
 #: functions/statistical.xml:1061
 #, kde-format
@@ -16823,8 +16823,8 @@ msgid ""
 "If \"arrayY\" and \"arrayX\" are empty or have a different number of data "
 "points, then #N/A is returned."
 msgstr ""
-"Eğer \"diziY\" ve \"diziX\" boş veya farklı sayıda veri noktasına sahipse #N/"
-"A değeri döndürülür."
+"Eğer \"dizilişY\" ve \"dizilişX\" boş veya farklı sayıda veri noktasına "
+"sahipse #N/A değeri döndürülür."
 
 #: functions/statistical.xml:1063
 #, kde-format
@@ -17051,7 +17051,7 @@ msgstr "STEYX(y;x)"
 #: functions/statistical.xml:1783 functions/statistical.xml:1787
 #, kde-format
 msgid "Value (array)"
-msgstr "Value (dizilim)"
+msgstr "Value (diziliş)"
 
 #: functions/statistical.xml:1346
 #, kde-format
@@ -17061,13 +17061,13 @@ msgid ""
 "this function returns Err."
 msgstr ""
 "SUMPRODUCT() işlevi, (SUM(X*Y)) verilen değerlerin çarpımının toplamını "
-"döndürür. İki dizilimdeki değerlerin sayısı eşit olmalıdır. Diğer durumlarda "
+"döndürür. İki dizilişteki değerlerin sayısı eşit olmalıdır. Diğer durumlarda "
 "bu işlev Err sonucunu döndürür."
 
 #: functions/statistical.xml:1347
 #, kde-format
 msgid "SUMPRODUCT(array1;array2)"
-msgstr "SUMPRODUCT(dizilim1;dizilim2)"
+msgstr "SUMPRODUCT(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1348
 #, kde-format
@@ -17083,13 +17083,13 @@ msgid ""
 "Otherwise this function returns Err."
 msgstr ""
 "SUMX2PY2() işlevi veya (SUM(X^2+Y^2)), verilen değerlerin karelerinin "
-"toplamını hesaplar. İki dizilimdeki değerlerin toplamı eşit olmalıdır. Diğer "
+"toplamını hesaplar. İki dizilişteki değerlerin toplamı eşit olmalıdır. Diğer "
 "durumlarda Err döndürülür."
 
 #: functions/statistical.xml:1365
 #, kde-format
 msgid "SUMX2PY2(array1;array2)"
-msgstr "SUMX2PY2(dizilim1;dizilim2)"
+msgstr "SUMX2PY2(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1366
 #, kde-format
@@ -17105,13 +17105,13 @@ msgid ""
 "Otherwise this function returns Err."
 msgstr ""
 "SUMX2MY2() işlevi veya (SUM(X^2-Y^2)), verilen değerlerin karelerinin "
-"farkını hesaplar. Dizilimlerdeki değerlerin sayısı aynı olmalıdır. Diğer "
+"farkını hesaplar. Dizilişlerdeki değerlerin sayısı aynı olmalıdır. Diğer "
 "durumlarda Err döndürülür."
 
 #: functions/statistical.xml:1383
 #, kde-format
 msgid "SUMX2MY2(array1;array2)"
-msgstr "SUMX2MY2(dizilim1;dizilim2)"
+msgstr "SUMX2MY2(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1384
 #, kde-format
@@ -17274,12 +17274,12 @@ msgstr "TRIMMEAN(veriKümesi; kesmeBölümü)"
 #: functions/statistical.xml:1468
 #, kde-format
 msgid "x (array) The set of observed data for the first condition."
-msgstr "x (dizilim) İlk durum için gözlenen veri kümesi."
+msgstr "x (diziliş) İlk durum için gözlenen veri kümesi."
 
 #: functions/statistical.xml:1472
 #, kde-format
 msgid "y (array) The set of observed data for the second condition."
-msgstr "y (dizilim) İkinci durum için gözlenen veri kümesi."
+msgstr "y (diziliş) İkinci durum için gözlenen veri kümesi."
 
 #: functions/statistical.xml:1476
 #, kde-format
@@ -17567,7 +17567,7 @@ msgstr "WEIBULL(2;1;1;1), 0,864665 döndürür"
 #: functions/statistical.xml:1704
 #, kde-format
 msgid "x (array)"
-msgstr "x (dizilim)"
+msgstr "x (diziliş)"
 
 #: functions/statistical.xml:1708
 #, kde-format
@@ -17644,13 +17644,13 @@ msgid ""
 "Otherwise this function returns Err."
 msgstr ""
 "SUMXMY2 () işlevi, (SUM ((X-Y) ^ 2)), bu değerlerin farklarının karesini "
-"döndürür. İki dizideki değerlerin sayısı eşit olmalıdır. Aksi takdirde bu "
+"döndürür. İki dizilişteki değerlerin sayısı eşit olmalıdır. Aksi takdirde bu "
 "işlev Err döndürür."
 
 #: functions/statistical.xml:1792
 #, kde-format
 msgid "SUMXMY2(array1;array2)"
-msgstr "SUMXMY2(dizilim1;dizilim2)"
+msgstr "SUMXMY2(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1793
 #, kde-format
