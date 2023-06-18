@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2023-01-04 12:01+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -13123,7 +13123,7 @@ msgstr "Γραμματοσειρά"
 msgid "Color/Border"
 msgstr "Χρώμα/περίγραμμα"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "Σχόλιο:"
@@ -14088,7 +14088,7 @@ msgstr "Ιδιότητες φύλλου..."
 msgid "Modify current sheet's properties"
 msgstr "Τροποποίηση των ιδιοτήτων του τρέχοντος φύλλου"
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Εισαγωγή φύλλου"
@@ -14108,12 +14108,12 @@ msgstr "Αντίγραφο φύλλου"
 msgid "Duplicate the selected sheet"
 msgstr "Αντίγραφο του επιλεγμένου φύλλου"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Αφαίρεση φύλλου"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Αφαίρεση του ενεργού φύλλου"
@@ -14233,12 +14233,12 @@ msgstr "&Δημιουργία προτύπου από έγγραφο..."
 msgid "Anchor"
 msgstr "Αγκύρωση"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "Κελί"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, kde-format
 msgid "Page"
 msgstr "Σελίδα"
@@ -14409,62 +14409,62 @@ msgstr "Υπολογισμός με χρήση αριθμού"
 msgid "Calculate using the countA"
 msgstr "Υπολογισμός με χρήση πλήθους"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Δεν μπορείτε να τροποποιήσετε ένα προστατευμένο φύλλο."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Δεν μπορείτε να αποκρύψετε το τελευταίο ορατό φύλλο."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, kde-format
 msgid "Enter a password."
 msgstr "Εισαγωγή ενός κωδικού πρόσβασης."
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, kde-format
 msgid "Enter the password."
 msgstr "Εισαγωγή του κωδικού πρόσβασης."
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr "Ο κωδικός πρόσβασης είναι εσφαλμένος."
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, kde-format
 msgid "Protect Document"
 msgstr "Προστασία εγγράφου"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Αναίρεση προστασίας εγγράφου"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Προστασία φύλλου"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Αναίρεση προστασίας φύλλου"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Επαναφορά εύρους εκτύπωσης"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Δεν μπορείτε να διαγράψετε το μοναδικό φύλλο."
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14473,62 +14473,62 @@ msgstr ""
 "Πρόκειται να αφαιρέσετε το ενεργό φύλλο.\n"
 "Επιθυμείτε να συνεχίσετε;"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Enter name:"
 msgstr "Εισάγετε όνομα:"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Μετονομασία φύλλου"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Τροποποίηση ονόματος φύλλου"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Το όνομα του φύλλου δεν μπορεί να είναι κενό."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr "Αυτό το όνομα χρησιμοποιείται ήδη."
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, kde-format
 msgid "Sum: "
 msgstr "Άθροισμα: "
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, kde-format
 msgid "Average: "
 msgstr "Μέσος όρος: "
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, kde-format
 msgid "Min: "
 msgstr "Ελάχιστο: "
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, kde-format
 msgid "Max: "
 msgstr "Μέγιστο: "
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, kde-format
 msgid "Count: "
 msgstr "Αριθμός: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, kde-format
 msgid "CountA: "
 msgstr "Πλήθος: "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

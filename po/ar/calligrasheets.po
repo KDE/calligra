@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2013-10-16 08:25+0000\n"
 "Last-Translator: safaalfulaij <safa1996alfulaij@gmail.com>\n"
 "Language-Team: \n"
@@ -12573,7 +12573,7 @@ msgstr "الخط"
 msgid "Color/Border"
 msgstr "لون/حد"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "التعليق:"
@@ -13519,7 +13519,7 @@ msgstr "خصائص الورقة"
 msgid "Modify current sheet's properties"
 msgstr "عدّل خصائص الورقة الحالية"
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, kde-format
 msgid "Insert Sheet"
 msgstr "أدرج ورقة"
@@ -13539,12 +13539,12 @@ msgstr "كرر الورقة"
 msgid "Duplicate the selected sheet"
 msgstr "كرر الورقة المنتقاة"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, kde-format
 msgid "Remove Sheet"
 msgstr "أزل الورقة"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "أزل الورقة النشطة"
@@ -13664,12 +13664,12 @@ msgstr "أنـ&شئ قالبا من مستند..."
 msgid "Anchor"
 msgstr "أندورا"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "خلية"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "صفحة"
@@ -13840,63 +13840,63 @@ msgstr "احسب باستخدام التعداد"
 msgid "Calculate using the countA"
 msgstr "احسب باستخدام countA"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "لا يمكنك تغيير ورقة محمية."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "لا يمكنك إخفاء آخر الأوراق الظاهرة."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, kde-format
 msgid "Enter a password."
 msgstr "أدخل كلمة مرور."
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, kde-format
 msgid "Enter the password."
 msgstr "أدخل كلمة المرور."
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr "كلمة المرور غير صحيحة."
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, kde-format
 msgid "Protect Document"
 msgstr "احم المستند"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, kde-format
 msgid "Unprotect Document"
 msgstr "الغ حماية المستند"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, kde-format
 msgid "Protect Sheet"
 msgstr "احم الورقة"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "الغ حماية الورقة"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "استعادة نطاق الطباعة"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "لا يمكنك حذف الورقة الوحيدة."
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13905,62 +13905,62 @@ msgstr ""
 "أنت بصدد إزالة الورقة النشطة.\n"
 "هل تريد المتابعة؟"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Enter name:"
 msgstr "أدخل الاسم:"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Rename Sheet"
 msgstr "أعد تسمية الورقة"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "غيِّر اسم الورقة"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "اسم الورقة لا يمكن إفراغه."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr "هذا الاسم مستخدم من قبل."
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, kde-format
 msgid "Sum: "
 msgstr "المجموع:"
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, kde-format
 msgid "Average: "
 msgstr "المتوسط:"
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, kde-format
 msgid "Min: "
 msgstr "الأدنى:"
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, kde-format
 msgid "Max: "
 msgstr "الأقصى:"
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, kde-format
 msgid "Count: "
 msgstr "تعداد: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, kde-format
 msgid "CountA: "
 msgstr "CountA: "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr ""

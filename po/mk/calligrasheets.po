@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2000-06-08 07:00+0100\n"
 "Last-Translator: Dimitar Indovski <dime@gord.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -11805,7 +11805,7 @@ msgstr "Формат"
 msgid "Color/Border"
 msgstr "Граница"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, fuzzy, kde-format
 msgid "Comment:"
 msgstr "Централно"
@@ -12714,7 +12714,7 @@ msgstr "Стил на Табела..."
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, fuzzy, kde-format
 msgid "Insert Sheet"
 msgstr "Вметни табела"
@@ -12734,12 +12734,12 @@ msgstr "Преизбери"
 msgid "Duplicate the selected sheet"
 msgstr "Одстрани колона"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, fuzzy, kde-format
 msgid "Remove Sheet"
 msgstr "Одстрани келија"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Одстрани колона"
@@ -12860,12 +12860,12 @@ msgstr "Одстрани келија"
 msgid "Anchor"
 msgstr "обичен"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "Келија"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "Преименувај"
@@ -13037,63 +13037,63 @@ msgstr "Се пресметува"
 msgid "Calculate using the countA"
 msgstr "Се пресметува"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Не смеете да ја избришете единствената табела на мапата."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Не смеете да ја скриете последната видлива табела."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Инт"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Инт"
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr ""
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, fuzzy, kde-format
 msgid "Protect Document"
 msgstr "Прецизност"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, fuzzy, kde-format
 msgid "Unprotect Document"
 msgstr "Прецизност"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, fuzzy, kde-format
 msgid "Protect Sheet"
 msgstr "Преизбери"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, fuzzy, kde-format
 msgid "Unprotect Sheet"
 msgstr "Преизбери"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Стринг"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, fuzzy, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Не смеете да ја избришете единствената табела на мапата."
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, fuzzy, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13102,62 +13102,62 @@ msgstr ""
 "Ќе ја одстраните активната табела.\n"
 "Дали сакате да продолжите?"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Инт"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, fuzzy, kde-format
 msgid "Rename Sheet"
 msgstr "Одстрани Табела"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, fuzzy, kde-format
 msgid "Change Sheet Name"
 msgstr "Смени Име на Табела"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, fuzzy, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Името на табела не смее да биде празно."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, fuzzy, kde-format
 msgid "This name is already used."
 msgstr "Датотеката веќе постои"
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr "Ноември"
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "средина"
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, fuzzy, kde-format
 msgid "Min: "
 msgstr "Папка"
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, fuzzy, kde-format
 msgid "Max: "
 msgstr "Податок X"
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, fuzzy, kde-format
 msgid "Count: "
 msgstr "Колона "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, fuzzy, kde-format
 msgid "CountA: "
 msgstr "Колона "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2004-05-25 15:26+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -12516,7 +12516,7 @@ msgstr "&Nodrezh"
 msgid "Color/Border"
 msgstr "Liv/Bevenn"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "Askelenn :"
@@ -13470,7 +13470,7 @@ msgstr "Dibarzhoù ar folenn"
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Enlakaat ur folenn"
@@ -13492,12 +13492,12 @@ msgstr "Adjediñ ar folenn"
 msgid "Duplicate the selected sheet"
 msgstr "Kuzhat ar folenn bev"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Lemel ar folenn"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Adenvel ar folenn bev."
@@ -13621,12 +13621,12 @@ msgstr "&Krouiñ ur patrom eus an teul ..."
 msgid "Anchor"
 msgstr "Andora"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "Log"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "Page"
@@ -13812,66 +13812,66 @@ msgstr "Mod jeladenn"
 msgid "Calculate using the countA"
 msgstr "Mod jeladenn"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Kuzhat ar folenn bev."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Kuzhat ar folenn bev."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Roit anv ar gorread :"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Roit anv ar gorread :"
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr "N'eo ket mat an tremenger."
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, kde-format
 msgid "Protect Document"
 msgstr "Gwareziñ an teul"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, fuzzy, kde-format
 #| msgid "Protect Document"
 msgid "Unprotect Document"
 msgstr "Gwareziñ an teul"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Gwareziñ ar folenn"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, fuzzy, kde-format
 #| msgid "Protect Sheet"
 msgid "Unprotect Sheet"
 msgstr "Gwareziñ ar folenn"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 #, fuzzy
 #| msgid "&Print Range"
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Skeul &moulañ"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, fuzzy, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Kuzhat ar folenn bev."
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13880,62 +13880,62 @@ msgstr ""
 "Emaoc'h o vont da zilemel ar folenn red.\n"
 "Fellout a ra deoc'h kenderc'hel ?"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Enter name:"
 msgstr "Roit an anv :"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Adenvel ar folenn"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Kemmañ anv ar folenn"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "N'hell ket bezañ goullo anv ar folenn."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr "Implijet eo an anv-se c'hoazh."
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr "Reizhiad : "
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, kde-format
 msgid "Average: "
 msgstr "Etread : "
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, kde-format
 msgid "Min: "
 msgstr "Mun : "
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, kde-format
 msgid "Max: "
 msgstr "Uhelañ : "
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, kde-format
 msgid "Count: "
 msgstr "Kont : "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, kde-format
 msgid "CountA: "
 msgstr "KontA : "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr ""

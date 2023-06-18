@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2023-04-27 01:07+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -13067,7 +13067,7 @@ msgstr "Caratteri"
 msgid "Color/Border"
 msgstr "Colore/bordo"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "Commento:"
@@ -14028,7 +14028,7 @@ msgstr "Proprietà del foglio..."
 msgid "Modify current sheet's properties"
 msgstr "Modifica le attuali proprietà del foglio"
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Inserisci foglio"
@@ -14048,12 +14048,12 @@ msgstr "Duplica foglio"
 msgid "Duplicate the selected sheet"
 msgstr "Duplica il foglio attivo"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Rimuovi foglio"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Rimuovi foglio attivo"
@@ -14173,12 +14173,12 @@ msgstr "&Creazione modello dal documento..."
 msgid "Anchor"
 msgstr "Ancora"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "Cella"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, kde-format
 msgid "Page"
 msgstr "Pagina"
@@ -14349,62 +14349,62 @@ msgstr "Calcola utilizzando il conteggio"
 msgid "Calculate using the countA"
 msgstr "Calcola utilizzando countA"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Non è possibile modificare un foglio protetto."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Non puoi nascondere l'ultimo foglio visibile."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, kde-format
 msgid "Enter a password."
 msgstr "Inserisci una password"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, kde-format
 msgid "Enter the password."
 msgstr "Inserisci la password."
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr "La password è errata."
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, kde-format
 msgid "Protect Document"
 msgstr "Proteggi documento"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Togli protezione documento"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Proteggi foglio"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Togli protezione foglio"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Ripristina intervallo di stampa"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Non è possibile eliminare l'unico foglio."
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14413,62 +14413,62 @@ msgstr ""
 "Stai per rimuovere il foglio attivo.\n"
 "Vuoi continuare?"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Enter name:"
 msgstr "Inserisci nome:"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Rinomina foglio"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Cambia nome del foglio"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Il nome del foglio non può essere vuoto."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr "Questo nome è già utilizzato."
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, kde-format
 msgid "Sum: "
 msgstr "Somma: "
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, kde-format
 msgid "Average: "
 msgstr "Media: "
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, kde-format
 msgid "Min: "
 msgstr "Minimo: "
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, kde-format
 msgid "Max: "
 msgstr "Massimo: "
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, kde-format
 msgid "Count: "
 msgstr "Conteggio: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, kde-format
 msgid "CountA: "
 msgstr "CountA: "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-05-22 14:00\n"
+"PO-Revision-Date: 2023-06-17 04:10\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -167,12 +167,12 @@ msgstr "找不到属性“%1”"
 #: libmsooxml/MsooXmlReader.cpp:176
 #, kde-format
 msgid "Unexpected value \"%1\" of attribute \"%2\""
-msgstr "未预期的属性“%2”的值“%1”"
+msgstr "属性“%2”的值“%1”是意外值"
 
 #: libmsooxml/MsooXmlReader.cpp:181
 #, kde-format
 msgid "Unexpected second occurrence of \"%1\" element"
-msgstr "未预期的“%1”元素的第二次出现"
+msgstr "第二次意外出现“%1”元素"
 
 #: libmsooxml/MsooXmlReader.cpp:198 libmsooxml/MsooXmlReader.cpp:249
 #, kde-format

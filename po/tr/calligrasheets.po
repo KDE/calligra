@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
-"PO-Revision-Date: 2023-06-16 12:11+0300\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"PO-Revision-Date: 2023-06-17 21:47+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2220,7 +2220,7 @@ msgid ""
 "or an array of dates."
 msgstr ""
 "Tatiller şunlardan biri olmalıdır: Sayı = eklenecek gün, tek bir gün veya "
-"bir tarih dizisi."
+"bir tarih dizilişi."
 
 #: functions/datetime.xml:683
 #, kde-format
@@ -4678,7 +4678,7 @@ msgstr "NPER(0,06; 0; -10000; 20000 ;0), 11,906 döndürür"
 #: functions/financial.xml:877
 #, kde-format
 msgid "Values (array)"
-msgstr "Değerler (dizi)"
+msgstr "Değerler (diziliş)"
 
 #: functions/financial.xml:881
 #, kde-format
@@ -5776,7 +5776,7 @@ msgid ""
 "get its return type."
 msgstr ""
 "TYPE() işlevi, sonucunda 1 sayı, 2 metin, 4 mantıksal değer, 16 hata değeri, "
-"64 ise bir diziye karşılık gelir. Eğer incelenen hücrede bir formül var ise "
+"64 ise bir dizilişe karşılık gelir. Eğer incelenen hücrede bir formül varsa "
 "o hücredeki sonucun dönüş türünü alırsınız."
 
 #: functions/information.xml:327
@@ -7864,7 +7864,7 @@ msgid ""
 "Since the result is an array, you need to use Ctrl+Alt+Enter (instead of "
 "just Enter) to display the array elements in separate cells."
 msgstr ""
-"Sonuç bir dizilim olduğu için, dizilim ögelerini ayrı hücrelerde göstermek "
+"Sonuç bir diziliş olduğu için diziliş ögelerini ayrı hücrelerde göstermek "
 "için Kontrol+Seçenek+Giriş (yalnızca Giriş yerine) kullanmanız gerekiyor."
 
 #: functions/math.xml:1240
@@ -8184,8 +8184,8 @@ msgid ""
 "If a range is given, returns value stored in a given row/column. If one cell "
 "is given, which contains an array, then one element of the array is returned."
 msgstr ""
-"Eğer bir aralık verilirse, verilen satır/sütundaki değeri döndürür. Eğer bir "
-"dizi içeren, bir hücre verilirse, dizinin bir elemanı döndürülür."
+"Eğer bir aralık verilirse verilen satır/sütundaki değeri döndürür. Eğer bir "
+"diziliş içeren bir hücre verilirse dizilişnin bir ögesi döndürülür."
 
 #: functions/reference.xml:146
 #, kde-format
@@ -8208,7 +8208,7 @@ msgid ""
 "INDEX(A1;2;2), if A1 is a result of array calculation, returns its (2,2) "
 "element."
 msgstr ""
-"INDEX(A1;2;2), eğer A1 bir dizi hesaplaması sonucu ise onun (2,2) elamanını "
+"INDEX(A1;2;2); eğer A1 bir diziliş hesaplaması sonucu ise onun (2,2) ögesini "
 "döndürür."
 
 #: functions/reference.xml:164
@@ -9177,11 +9177,11 @@ msgid ""
 msgstr ""
 "İkinci paramtredeki değerler aralıkların üst sınırlarını belirlerler.\n"
 "                Aralıklar üst sınırları da içerir.\n"
-"               Dönen dizi bir sütun vektörüdür ve ikinci parametreden bir "
-"fazla elemana sahiptir;\n"
+"               Döndürülen diziliş bir sütun vektörüdür ve ikinci "
+"parametreden bir fazla ögeye sahiptir;\n"
 "                son eleman ikinci parametredeki son değerden daha büyük olan "
-"bütün elemanların sayısını gösterir.\n"
-"                   Eğer ikinci parametre boş ise ilk parametredeki bütün "
+"bütün ögelerin sayısını gösterir.\n"
+"                   Eğer ikinci parametre boşsa ilk parametredeki bütün "
 "sayılar sayılır."
 
 #: functions/statistical.xml:421
@@ -9191,8 +9191,8 @@ msgid ""
 "array, use Ctrl+Alt+Enter (instead of just Enter) to display the array "
 "elements in separate cells. "
 msgstr ""
-"Verinin sütunlarda olması gerektiğini ve sonuç sütun dizilimi olduğu için "
-"dizi öeelerini ayrı hücrelerde görüntülemek için Kontrol+Seçenek+Giriş "
+"Verinin sütunlarda olması gerektiğini ve sonuç sütun dizilişi olduğu için "
+"dizi ögelerini ayrı hücrelerde görüntülemek için Kontrol+Seçenek+Giriş "
 "(yalnızca Giriş yerine) düğmelerini kullanın. "
 
 #: functions/statistical.xml:422
@@ -9377,13 +9377,13 @@ msgstr "HYPGEOMDIST(2; 5; 6; 20), 0.3522 döndürür"
 #: functions/statistical.xml:1313
 #, kde-format
 msgid "y values (array)"
-msgstr "y değerleri (dizilim)"
+msgstr "y değerleri (diziliş)"
 
 #: functions/statistical.xml:591 functions/statistical.xml:1131
 #: functions/statistical.xml:1317
 #, kde-format
 msgid "x values (array)"
-msgstr "x değerleri (dizilim)"
+msgstr "x değerleri (diziliş)"
 
 #: functions/statistical.xml:595
 #, kde-format
@@ -9929,7 +9929,7 @@ msgstr "POISSON(60;50;1) eşittir 0,927840"
 #: functions/statistical.xml:1032
 #, kde-format
 msgid "Data (array)"
-msgstr "Veri (dizilim)"
+msgstr "Veri (diziliş)"
 
 #: functions/statistical.xml:1036
 #, kde-format
@@ -9969,12 +9969,12 @@ msgstr "RANK (2;{1;2;3}) eşittir 2"
 #: functions/statistical.xml:1053
 #, kde-format
 msgid "known Y (array)"
-msgstr "bilinen Y (dizilim)"
+msgstr "bilinen Y (diziliş)"
 
 #: functions/statistical.xml:1057
 #, kde-format
 msgid "known X (array)"
-msgstr "bilinen X (dizilim)"
+msgstr "bilinen X (diziliş)"
 
 #: functions/statistical.xml:1061
 #, kde-format
@@ -9991,8 +9991,8 @@ msgid ""
 "If \"arrayY\" and \"arrayX\" are empty or have a different number of data "
 "points, then #N/A is returned."
 msgstr ""
-"Eğer \"diziY\" ve \"diziX\" boş veya farklı sayıda veri noktasına sahipse #N/"
-"A değeri döndürülür."
+"Eğer \"dizilişY\" ve \"dizilişX\" boş veya farklı sayıda veri noktasına "
+"sahipse #N/A değeri döndürülür."
 
 #: functions/statistical.xml:1063
 #, kde-format
@@ -10219,7 +10219,7 @@ msgstr "STEYX(y;x)"
 #: functions/statistical.xml:1783 functions/statistical.xml:1787
 #, kde-format
 msgid "Value (array)"
-msgstr "Value (dizilim)"
+msgstr "Value (diziliş)"
 
 #: functions/statistical.xml:1346
 #, kde-format
@@ -10229,13 +10229,13 @@ msgid ""
 "this function returns Err."
 msgstr ""
 "SUMPRODUCT() işlevi, (SUM(X*Y)) verilen değerlerin çarpımının toplamını "
-"döndürür. İki dizilimdeki değerlerin sayısı eşit olmalıdır. Diğer durumlarda "
+"döndürür. İki dizilişteki değerlerin sayısı eşit olmalıdır. Diğer durumlarda "
 "bu işlev Err sonucunu döndürür."
 
 #: functions/statistical.xml:1347
 #, kde-format
 msgid "SUMPRODUCT(array1;array2)"
-msgstr "SUMPRODUCT(dizilim1;dizilim2)"
+msgstr "SUMPRODUCT(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1348
 #, kde-format
@@ -10251,13 +10251,13 @@ msgid ""
 "Otherwise this function returns Err."
 msgstr ""
 "SUMX2PY2() işlevi veya (SUM(X^2+Y^2)), verilen değerlerin karelerinin "
-"toplamını hesaplar. İki dizilimdeki değerlerin toplamı eşit olmalıdır. Diğer "
+"toplamını hesaplar. İki dizilişteki değerlerin toplamı eşit olmalıdır. Diğer "
 "durumlarda Err döndürülür."
 
 #: functions/statistical.xml:1365
 #, kde-format
 msgid "SUMX2PY2(array1;array2)"
-msgstr "SUMX2PY2(dizilim1;dizilim2)"
+msgstr "SUMX2PY2(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1366
 #, kde-format
@@ -10273,13 +10273,13 @@ msgid ""
 "Otherwise this function returns Err."
 msgstr ""
 "SUMX2MY2() işlevi veya (SUM(X^2-Y^2)), verilen değerlerin karelerinin "
-"farkını hesaplar. Dizilimlerdeki değerlerin sayısı aynı olmalıdır. Diğer "
+"farkını hesaplar. Dizilişlerdeki değerlerin sayısı aynı olmalıdır. Diğer "
 "durumlarda Err döndürülür."
 
 #: functions/statistical.xml:1383
 #, kde-format
 msgid "SUMX2MY2(array1;array2)"
-msgstr "SUMX2MY2(dizilim1;dizilim2)"
+msgstr "SUMX2MY2(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1384
 #, kde-format
@@ -10442,12 +10442,12 @@ msgstr "TRIMMEAN(veriKümesi; kesmeBölümü)"
 #: functions/statistical.xml:1468
 #, kde-format
 msgid "x (array) The set of observed data for the first condition."
-msgstr "x (dizilim) İlk durum için gözlenen veri kümesi."
+msgstr "x (diziliş) İlk durum için gözlenen veri kümesi."
 
 #: functions/statistical.xml:1472
 #, kde-format
 msgid "y (array) The set of observed data for the second condition."
-msgstr "y (dizilim) İkinci durum için gözlenen veri kümesi."
+msgstr "y (diziliş) İkinci durum için gözlenen veri kümesi."
 
 #: functions/statistical.xml:1476
 #, kde-format
@@ -10735,7 +10735,7 @@ msgstr "WEIBULL(2;1;1;1), 0,864665 döndürür"
 #: functions/statistical.xml:1704
 #, kde-format
 msgid "x (array)"
-msgstr "x (dizilim)"
+msgstr "x (diziliş)"
 
 #: functions/statistical.xml:1708
 #, kde-format
@@ -10812,13 +10812,13 @@ msgid ""
 "Otherwise this function returns Err."
 msgstr ""
 "SUMXMY2 () işlevi, (SUM ((X-Y) ^ 2)), bu değerlerin farklarının karesini "
-"döndürür. İki dizideki değerlerin sayısı eşit olmalıdır. Aksi takdirde bu "
+"döndürür. İki dizilişteki değerlerin sayısı eşit olmalıdır. Aksi takdirde bu "
 "işlev Err döndürür."
 
 #: functions/statistical.xml:1792
 #, kde-format
 msgid "SUMXMY2(array1;array2)"
-msgstr "SUMXMY2(dizilim1;dizilim2)"
+msgstr "SUMXMY2(diziliş1;diziliş2)"
 
 #: functions/statistical.xml:1793
 #, kde-format
@@ -12858,7 +12858,7 @@ msgstr "Yazıtipi"
 msgid "Color/Border"
 msgstr "Renk/Çerçeve"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "Açıklama:"
@@ -13815,7 +13815,7 @@ msgstr "Sayfa Özellikleri..."
 msgid "Modify current sheet's properties"
 msgstr "Geçerli sayfanın özelliklerini düzenle"
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Araya Sayfa Ekle"
@@ -13835,12 +13835,12 @@ msgstr "Sayfanın Kopyasını Oluştur"
 msgid "Duplicate the selected sheet"
 msgstr "Seçilen sayfayı çoğalt"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Sayfayı Kaldır"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, kde-format
 msgid "Remove the active sheet"
 msgstr "Etkin sayfayı kaldır"
@@ -13961,12 +13961,12 @@ msgstr "&Belgeden Şablon Oluştur..."
 msgid "Anchor"
 msgstr "Çapa"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "Hücre"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, kde-format
 msgid "Page"
 msgstr "Sayfa"
@@ -14137,62 +14137,62 @@ msgstr "Sayımı kullanarak hesapla"
 msgid "Calculate using the countA"
 msgstr "SayımA kullanarak hesapla"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Korumalı bir sayfayı değiştiremezsiniz."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Son görünür sayfayı saklayamazsınız."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, kde-format
 msgid "Enter a password."
 msgstr "Bir parola girin."
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, kde-format
 msgid "Enter the password."
 msgstr "Parolayı girin."
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr "Parola yanlış."
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, kde-format
 msgid "Protect Document"
 msgstr "Belgeyi Koru"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Belgenin Korumasını Kaldır"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Sayfayı Koru"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Sayfanın Korumasını Kaldır"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Yazdırma Aralığını Sıfırla"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Tek var olan sayfayı silemezsiniz."
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -14201,62 +14201,62 @@ msgstr ""
 "Etkin tablo kaldırılacak.\n"
 "Sürdürmek istiyor musunuz?"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Enter name:"
 msgstr "Ad girin:"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Sayfayı Yeniden Adlandır"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Sayfa Adını Değiştir"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Sayfa adı boş olamaz."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr "Bu ad daha önce kullanıldı."
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, kde-format
 msgid "Sum: "
 msgstr "Toplam: "
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, kde-format
 msgid "Average: "
 msgstr "Ortalama: "
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, kde-format
 msgid "Min: "
 msgstr "En az: "
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, kde-format
 msgid "Max: "
 msgstr "En fazla: "
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, kde-format
 msgid "Count: "
 msgstr "Hesapla: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, kde-format
 msgid "CountA: "
 msgstr "HesaplaA: "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"

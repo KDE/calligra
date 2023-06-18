@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2013-03-28 17:12+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -12065,7 +12065,7 @@ msgstr "फॉन्ट"
 msgid "Color/Border"
 msgstr "किनार"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "टीप :"
@@ -13024,7 +13024,7 @@ msgstr "शैली बदला"
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rename Sheet"
@@ -13051,14 +13051,14 @@ msgstr "शीटचे नाव बदला"
 msgid "Duplicate the selected sheet"
 msgstr "शीटचे नाव बदला"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rename Sheet"
 msgid "Remove Sheet"
 msgstr "शीटचे नाव बदला"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rename Sheet"
@@ -13194,13 +13194,13 @@ msgstr "दस्तऐवजा वरून नमूना बनवा (&C).
 msgid "Anchor"
 msgstr ""
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, fuzzy, kde-format
 #| msgid "Goto"
 msgid "Cell"
 msgstr "जा"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, kde-format
 msgid "Page"
 msgstr "पान"
@@ -13394,134 +13394,134 @@ msgstr "निवड काढून टाका"
 msgid "Calculate using the countA"
 msgstr "निवड काढून टाका"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr ""
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr ""
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, kde-format
 msgid "Enter a password."
 msgstr ""
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, fuzzy, kde-format
 #| msgid "Enter name:"
 msgid "Enter the password."
 msgstr "नाव दाखल करा :"
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr ""
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, fuzzy, kde-format
 #| msgid "&Protected"
 msgid "Protect Document"
 msgstr "सुरक्षित (&P)"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, fuzzy, kde-format
 #| msgid "&Protected"
 msgid "Unprotect Document"
 msgstr "सुरक्षित (&P)"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, fuzzy, kde-format
 #| msgid "&Protected"
 msgid "Protect Sheet"
 msgstr "सुरक्षित (&P)"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, fuzzy, kde-format
 #| msgid "&Protected"
 msgid "Unprotect Sheet"
 msgstr "सुरक्षित (&P)"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 #, fuzzy
 #| msgid "&Print Range"
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "छपाई सीमा (&P)"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr ""
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr ""
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Enter name:"
 msgstr "नाव दाखल करा :"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Rename Sheet"
 msgstr "शीटचे नाव बदला"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Style"
 msgid "Change Sheet Name"
 msgstr "शैली बदला"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr ""
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr ""
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, kde-format
 msgid "Sum: "
 msgstr "बेरीज : "
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, kde-format
 msgid "Average: "
 msgstr "सरासरी : "
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, kde-format
 msgid "Min: "
 msgstr "किमान : "
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, kde-format
 msgid "Max: "
 msgstr "कमाल : "
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, kde-format
 msgid "Count: "
 msgstr "मोजणी : "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, fuzzy, kde-format
 #| msgid "Count: "
 msgid "CountA: "
 msgstr "मोजणी : "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr ""

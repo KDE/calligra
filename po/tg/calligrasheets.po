@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2021-09-05 11:41-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -13318,7 +13318,7 @@ msgstr "Форинт"
 msgid "Color/Border"
 msgstr "Ранг/Ҳудуд"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "Мулоҳиза:"
@@ -14259,7 +14259,7 @@ msgstr "Ҳосиятҳои варақ"
 msgid "Modify current sheet's properties"
 msgstr "Танзими ҳосиятҳои варақи равон."
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, kde-format
 msgid "Insert Sheet"
 msgstr "Варақ Монед"
@@ -14280,12 +14280,12 @@ msgstr "Ҳисоб кардани варақ"
 msgid "Duplicate the selected sheet"
 msgstr "Пинҳон кардани варақи равон."
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, kde-format
 msgid "Remove Sheet"
 msgstr "Нест кардани Варақ"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Нест кардани варақи равон."
@@ -14408,12 +14408,12 @@ msgstr "&Сохтани намуна аз ҳуҷҷат..."
 msgid "Anchor"
 msgstr "Андорра"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "Ячейка"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, fuzzy, kde-format
 #| msgid "page"
 msgid "Page"
@@ -14599,126 +14599,126 @@ msgstr "Ҳисоб кардани бо истифодабарии миқдор."
 msgid "Calculate using the countA"
 msgstr "Ҳисоб кардани бо истифодабарии миқдор."
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Шумо муҳаррирӣ кардани варақи ҳимоя кардани наметавонед."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Шумо пинҳои кардан варақи намоёни охирин наметавонед."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Номи диапазон:"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Номи диапазон:"
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr "Гузарвожаи нодуруст"
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, kde-format
 msgid "Protect Document"
 msgstr "Ҳимоя кардани ҳуҷҷат"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, kde-format
 msgid "Unprotect Document"
 msgstr "Ҳимоя накардани ҳуҷҷат"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, kde-format
 msgid "Protect Sheet"
 msgstr "Ҳимоя кардани варақ"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, kde-format
 msgid "Unprotect Sheet"
 msgstr "Ҳимоя накардани варақ"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 #, fuzzy
 #| msgid "Reset Print Range"
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "Бардоштан"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Шумо наметони оҳири рақам дуртар кардан"
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
 "Do you want to continue?"
 msgstr "Варақа равонро ҳузф кунам?"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Enter name:"
 msgstr "Даровардани ном:"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, kde-format
 msgid "Rename Sheet"
 msgstr "Варақи Номи Дигар кунед"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, kde-format
 msgid "Change Sheet Name"
 msgstr "Номи варақ дигаргун кунед"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Номи варақ холӣ наметавонист."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr "Ин ном аллакай мавҷуд аст."
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, kde-format
 msgid "Sum: "
 msgstr "Ҷамъ: "
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "Миёна: %1"
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, kde-format
 msgid "Min: "
 msgstr "Мин: "
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, kde-format
 msgid "Max: "
 msgstr "Макс: "
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, kde-format
 msgid "Count: "
 msgstr "Ҳисоб: "
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, kde-format
 msgid "CountA: "
 msgstr "ҲисобиА: "
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr ""

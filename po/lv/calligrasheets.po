@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-08 00:46+0000\n"
+"POT-Creation-Date: 2023-06-18 00:54+0000\n"
 "PO-Revision-Date: 2008-07-04 16:32+0300\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -12452,7 +12452,7 @@ msgstr "Formāts"
 msgid "Color/Border"
 msgstr "Krāsa/Rāmis"
 
-#: part/CanvasBase.cpp:680
+#: part/CanvasBase.cpp:679
 #, kde-format
 msgid "Comment:"
 msgstr "Komentārs:"
@@ -13368,7 +13368,7 @@ msgstr "Tabulas Stils..."
 msgid "Modify current sheet's properties"
 msgstr ""
 
-#: part/View.cpp:234 part/View.cpp:2035
+#: part/View.cpp:234 part/View.cpp:2051
 #, fuzzy, kde-format
 msgid "Insert Sheet"
 msgstr "Noslēpt tabulu"
@@ -13388,12 +13388,12 @@ msgstr "Pārēķināt Darbalapu"
 msgid "Duplicate the selected sheet"
 msgstr "Izņemt komentāru"
 
-#: part/View.cpp:245 part/View.cpp:1845 part/View.cpp:1849 part/View.cpp:2040
+#: part/View.cpp:245 part/View.cpp:1861 part/View.cpp:1865 part/View.cpp:2056
 #, fuzzy, kde-format
 msgid "Remove Sheet"
 msgstr "Izmest rūtiņu"
 
-#: part/View.cpp:246 part/View.cpp:2036 part/View.cpp:2041
+#: part/View.cpp:246 part/View.cpp:2052 part/View.cpp:2057
 #, fuzzy, kde-format
 msgid "Remove the active sheet"
 msgstr "Izņemt komentāru"
@@ -13514,12 +13514,12 @@ msgstr "Rūtiņas stils"
 msgid "Anchor"
 msgstr "normāls"
 
-#: part/View.cpp:314 part/View.cpp:1084 part/View.cpp:1545
+#: part/View.cpp:314 part/View.cpp:1085 part/View.cpp:1546
 #, kde-format
 msgid "Cell"
 msgstr "Šūna"
 
-#: part/View.cpp:315 part/View.cpp:1084
+#: part/View.cpp:315 part/View.cpp:1085
 #, fuzzy, kde-format
 msgid "Page"
 msgstr "Likme"
@@ -13695,63 +13695,63 @@ msgstr "Rēķinu"
 msgid "Calculate using the countA"
 msgstr "Rēķinu"
 
-#: part/View.cpp:1434 part/View.cpp:1453 part/View.cpp:1867
+#: part/View.cpp:1435 part/View.cpp:1454 part/View.cpp:1883
 #, fuzzy, kde-format
 msgid "You cannot change a protected sheet."
 msgstr "Jūs nevarat dzēst vienīgo kartes tabulu."
 
-#: part/View.cpp:1473
+#: part/View.cpp:1474
 #, fuzzy, kde-format
 msgid "You cannot hide the last visible sheet."
 msgstr "Jūs nevarat noslēpt pēdējo redzamo tabulu."
 
-#: part/View.cpp:1553
+#: part/View.cpp:1554
 #, fuzzy, kde-format
 msgid "Enter a password."
 msgstr "Internets"
 
-#: part/View.cpp:1565
+#: part/View.cpp:1566
 #, fuzzy, kde-format
 msgid "Enter the password."
 msgstr "Internets"
 
-#: part/View.cpp:1573
+#: part/View.cpp:1574
 #, kde-format
 msgid "Password is incorrect."
 msgstr ""
 
-#: part/View.cpp:1591
+#: part/View.cpp:1592
 #, fuzzy, kde-format
 msgid "Protect Document"
 msgstr "Precizitāte"
 
-#: part/View.cpp:1594
+#: part/View.cpp:1595
 #, fuzzy, kde-format
 msgid "Unprotect Document"
 msgstr "Precizitāte"
 
-#: part/View.cpp:1614
+#: part/View.cpp:1615
 #, fuzzy, kde-format
 msgid "Protect Sheet"
 msgstr "Pirms iezīmēt"
 
-#: part/View.cpp:1617
+#: part/View.cpp:1618
 #, fuzzy, kde-format
 msgid "Unprotect Sheet"
 msgstr "Pirms iezīmēt"
 
-#: part/View.cpp:1836
+#: part/View.cpp:1852
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Print Range"
 msgstr "RInda"
 
-#: part/View.cpp:1845
+#: part/View.cpp:1861
 #, fuzzy, kde-format
 msgid "You cannot delete the only sheet."
 msgstr "Jūs nevarat dzēst vienīgo kartes tabulu."
 
-#: part/View.cpp:1848
+#: part/View.cpp:1864
 #, fuzzy, kde-format
 msgid ""
 "You are about to remove the active sheet.\n"
@@ -13760,62 +13760,62 @@ msgstr ""
 "Jūs taisaties dzēst aktīvo tabulu.\n"
 "Vai vēlaties turpināt?"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, fuzzy, kde-format
 msgid "Enter name:"
 msgstr "Internets"
 
-#: part/View.cpp:1873
+#: part/View.cpp:1889
 #, fuzzy, kde-format
 msgid "Rename Sheet"
 msgstr "Pārēķināt Darbalapu"
 
-#: part/View.cpp:1878 part/View.cpp:1884
+#: part/View.cpp:1894 part/View.cpp:1900
 #, fuzzy, kde-format
 msgid "Change Sheet Name"
 msgstr "Mainīt tabulas nosaukumu"
 
-#: part/View.cpp:1878
+#: part/View.cpp:1894
 #, fuzzy, kde-format
 msgid "Sheet name cannot be empty."
 msgstr "Tabulas nosaukums nevar palikt tukš."
 
-#: part/View.cpp:1884
+#: part/View.cpp:1900
 #, kde-format
 msgid "This name is already used."
 msgstr "Šis vārds jau ir izmantots."
 
-#: part/View.cpp:1952
+#: part/View.cpp:1968
 #, fuzzy, kde-format
 msgid "Sum: "
 msgstr " Sum: %1"
 
-#: part/View.cpp:1956
+#: part/View.cpp:1972
 #, fuzzy, kde-format
 msgid "Average: "
 msgstr "Vidējais: %1"
 
-#: part/View.cpp:1960
+#: part/View.cpp:1976
 #, fuzzy, kde-format
 msgid "Min: "
 msgstr "Min: %1"
 
-#: part/View.cpp:1964
+#: part/View.cpp:1980
 #, fuzzy, kde-format
 msgid "Max: "
 msgstr "Maks: %1"
 
-#: part/View.cpp:1968
+#: part/View.cpp:1984
 #, fuzzy, kde-format
 msgid "Count: "
 msgstr "Skaits: %1"
 
-#: part/View.cpp:1972
+#: part/View.cpp:1988
 #, fuzzy, kde-format
 msgid "CountA: "
 msgstr "Skaits: %1"
 
-#: part/View.cpp:1979
+#: part/View.cpp:1995
 #, kde-format
 msgid "%1x%2"
 msgstr ""
