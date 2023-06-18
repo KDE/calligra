@@ -483,7 +483,7 @@ QString Localization::formatDate(const QDate &date, const QString &format) const
 QString Localization::formatTime(const Time &time, bool longFormat) const
 {
     QString fmt = timeFormat(longFormat);
-    return time.toQTime().toString(fmt);
+    return d->locale.toString(time.toQTime(), fmt);
 }
 
 QString Localization::formatTime(const Time &time, const QString &format) const

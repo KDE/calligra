@@ -38,10 +38,11 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex, cons
 void TestInformationFunctions::initTestCase()
 {
     KLocalizedString::setApplicationDomain("calligrasheets");
+    // the INFO test otherwise fails
+    KLocalizedString::setLanguages(QStringList()<<"C.UTF-8");
+
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new MapBase;
-    // some tests are sensitive to locale, so use C for all tests
-//    *(m_map->calculationSettings()->locale()) = KLocale("C", "C");
 
     m_map->addNewSheet();
     SheetBase* sheet = m_map->sheet(0);
