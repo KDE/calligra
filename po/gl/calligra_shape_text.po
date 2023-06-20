@@ -5,14 +5,14 @@
 # Miguel Branco <mgl.branco@gmail.com>, 2007-2009, 2012.
 # Marce Villarino <mvillarino@kde-espana.es>, 2008, 2010, 2013-2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2020-01-12 12:50+0100\n"
+"PO-Revision-Date: 2023-06-19 13:18+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -30,7 +30,7 @@ msgstr "Anotación"
 #: AnnotationTextShapeFactory.cpp:33
 #, kde-format
 msgid "Annotation shape to show annotation content"
-msgstr "A forma de anotación para mostrar contido de notas"
+msgstr "A forma de anotación para amosar contido de notas"
 
 #: AnnotationTextShapeFactory.cpp:41
 #, kde-format
@@ -85,7 +85,7 @@ msgstr "Rexeitar os cambios"
 #: commands/ShowChangesCommand.cpp:40
 msgctxt "(qtundo-format)"
 msgid "Show Changes"
-msgstr "Mostrar os cambios"
+msgstr "Amosar os cambios"
 
 #: commands/ShowChangesCommand.cpp:42
 msgctxt "(qtundo-format)"
@@ -483,13 +483,13 @@ msgstr "Xestor da configuración"
 #: dialogs/ChangeTrackingOptionsWidget.ui:175
 #, kde-format
 msgid "Record Changes"
-msgstr "Mostrar os cambios"
+msgstr "Amosar os cambios"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showChangesCheckBox)
 #: dialogs/ChangeTrackingOptionsWidget.ui:182
 #, kde-format
 msgid "Show Changes"
-msgstr "Mostrar os cambios"
+msgstr "Amosar os cambios"
 
 #: dialogs/CharacterGeneral.cpp:59 dialogs/FormattingPreview.cpp:38
 #, kde-format
@@ -998,12 +998,12 @@ msgstr "Do documento:"
 #: dialogs/DockerStylesComboModel.cpp:61
 #, kde-format
 msgid "Used Styles"
-msgstr "Estilos empregados"
+msgstr "Estilos usados"
 
 #: dialogs/DockerStylesComboModel.cpp:64
 #, kde-format
 msgid "Unused Styles"
-msgstr "Estilos sen empregar"
+msgstr "Estilos sen usar"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/FontDecorations.ui:17
@@ -1268,7 +1268,7 @@ msgstr "Obter o título do URL"
 #: dialogs/LinkInsertionDialog.ui:81 dialogs/LinkInsertionDialog.ui:165
 #, kde-format
 msgid "The text that will be displayed for your link"
-msgstr "O texto que se mostrará para a ligazón."
+msgstr "O texto que se amosará para a ligazón."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
@@ -1413,7 +1413,7 @@ msgstr "Formato:"
 #: dialogs/ListLevelWidget.ui:429
 #, kde-format
 msgid "Display levels above:"
-msgstr "Mostrar os niveis superiores:"
+msgstr "Amosar os niveis superiores:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, synchro)
 #: dialogs/ListLevelWidget.ui:436
@@ -1674,7 +1674,7 @@ msgstr "Profundidade:"
 #: dialogs/ParagraphBulletsNumbers.ui:128
 #, kde-format
 msgid "Display Levels:"
-msgstr "Mostrar Niveis:"
+msgstr "Amosar Niveis:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: dialogs/ParagraphBulletsNumbers.ui:148
@@ -2258,7 +2258,7 @@ msgstr ""
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"> Ao aplicar un cambio de "
 "estilo reformatease todo o texto ao que se lle dera un nome de estilo "
-"definido. Empregue o docker de texto para aplicar os estilos de texto.</p></"
+"definido. Use o docker de texto para aplicar os estilos de texto.</p></"
 "body></html>"
 
 #: dialogs/StylesComboPreview.cpp:68
@@ -2337,12 +2337,12 @@ msgstr "Título da táboa"
 #: dialogs/TableOfContentsConfigure.cpp:65
 #, kde-format
 msgid "Use outline"
-msgstr "Empregar os contornos"
+msgstr "Usar os contornos"
 
 #: dialogs/TableOfContentsConfigure.cpp:66
 #, kde-format
 msgid "Use styles"
-msgstr "Empregar estilos"
+msgstr "Usar estilos"
 
 #: dialogs/TableOfContentsConfigure.cpp:67 ReferencesTool.cpp:170
 #, kde-format
@@ -2551,7 +2551,7 @@ msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
 msgstr ""
-"Mostrar unha xanela emerxente que contén as opcións para engadir un novo "
+"Amosar un diálogo emerxente que contén as opcións para engadir un novo "
 "marcador ou xestionar os marcadores existentes."
 
 #: ReferencesTool.cpp:195
@@ -2962,7 +2962,7 @@ msgid ""
 "be changed using the dialog box.</p>"
 msgstr ""
 "<p>Cambia os estilos de tipo de letra e dos atributos dos parágrafos.</"
-"p><p>Pódense cambiar múltiples estilos empregando as caixa de diálogo.</p>"
+"p><p>Pódense cambiar múltiples estilos usando as caixa de diálogo.</p>"
 
 #: TextTool.cpp:475
 #, kde-format
@@ -3073,7 +3073,7 @@ msgid ""
 "Malicious programs can harm your computer. Are you sure that you want to run "
 "this program?"
 msgstr ""
-"Este enlace apunta ao programa ou script %1.\n"
+"Este enlace apunta ao programa ou guión %1.\n"
 "Hai programas maliciosos que poden danar o computador. Está seguro de que "
 "quere executar este programa?"
 

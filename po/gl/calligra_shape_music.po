@@ -251,7 +251,7 @@ msgstr "Engadir punto"
 #: commands/AddNoteCommand.cpp:29
 msgctxt "(qtundo-format)"
 msgid "Set chord duration"
-msgstr "Estabelecer duración do acorde"
+msgstr "Definir duración do acorde"
 
 #: commands/AddNoteCommand.cpp:31
 msgctxt "(qtundo-format)"
@@ -326,7 +326,7 @@ msgstr "Retirar elemento do pentagrama"
 #: commands/SetAccidentalsCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Set accidentals"
-msgstr "Estabelecer alteracións"
+msgstr "Definir alteracións"
 
 #: commands/SetClefCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -352,7 +352,7 @@ msgstr "Conmutar a ligadura da nota"
 #: dialogs/KeySignatureDialog.cpp:15
 #, kde-format
 msgid "Set key signature"
-msgstr "Estabelecer armadura da clave"
+msgstr "Definir armadura da clave"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/KeySignatureDialog.ui:63

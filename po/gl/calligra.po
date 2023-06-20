@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-05-02 21:51+0200\n"
+"PO-Revision-Date: 2023-06-19 13:17+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -166,7 +166,7 @@ msgstr "Retirar os puntos"
 #: flake/commands/KoPathPointTypeCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Set point type"
-msgstr "Estabelecer o tipo de punto"
+msgstr "Definir o tipo de punto"
 
 #: flake/commands/KoPathReverseCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -279,7 +279,7 @@ msgstr "Cambiar a circulación da forma"
 #: flake/commands/KoShapeShadowCommand.cpp:82
 msgctxt "(qtundo-format)"
 msgid "Set Shadow"
-msgstr "Estabelecer a sombra"
+msgstr "Definir a sombra"
 
 #: flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -367,12 +367,12 @@ msgstr "Unha conexión entre outras dúas formas"
 #: flake/KoGridData.cpp:210
 #, kde-format
 msgid "Show Grid"
-msgstr "Mostrar a grade"
+msgstr "Amosar a grade"
 
 #: flake/KoGridData.cpp:211
 #, kde-format
 msgid "Shows or hides grid"
-msgstr "Mostra ou agocha a grade"
+msgstr "Amosa ou agocha a grade"
 
 #: flake/KoPathShapeFactory.cpp:22
 #, kde-format
@@ -650,27 +650,27 @@ msgstr "Converter nunha ruta"
 #: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
 #, kde-format
 msgid "Scripts"
-msgstr "Scripts"
+msgstr "Guións"
 
 #: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
 #, kde-format
 msgid "Script Manager"
-msgstr "Xestor de scripts"
+msgstr "Xestor de guións"
 
 #: kross/KoScriptingPart.cpp:78
 #, kde-format
 msgid "Execute Script File..."
-msgstr "Executar un ficheiro de script…"
+msgstr "Executar un ficheiro de guión…"
 
 #: kross/KoScriptingPart.cpp:86
 #, kde-format
 msgid "Script Manager..."
-msgstr "Xestor de scripts…"
+msgstr "Xestor de guións…"
 
 #: kross/KoScriptingPart.cpp:160
 #, kde-format
 msgid "Execute Script File"
-msgstr "Executar un ficheiro de script"
+msgstr "Executar un ficheiro de guión"
 
 #: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
 #, kde-format
@@ -683,12 +683,13 @@ msgid ""
 "<qt>This wizard will guide you through the process of adding a new resource "
 "to your scripts.</qt>"
 msgstr ""
-"<qt>Este panel guiarao para engadir novos recursos aos seus scripts.</qt>"
+"<qt>Este panel serviralle de guía para engadir novos recursos aos seus "
+"guións.</qt>"
 
 #: kross/KoScriptManagerAdd.cpp:59
 #, kde-format
 msgid "Add script file"
-msgstr "Engadir ficheiro de script"
+msgstr "Engadir un ficheiro de guión"
 
 #: kross/KoScriptManagerAdd.cpp:64
 #, kde-format
@@ -698,12 +699,12 @@ msgstr "Engadir cartafol de colección"
 #: kross/KoScriptManagerAdd.cpp:67
 #, kde-format
 msgid "Install script package file"
-msgstr "Instalar o ficheiro de paquete de scripts"
+msgstr "Instalar o ficheiro de paquete de guións"
 
 #: kross/KoScriptManagerAdd.cpp:71
 #, kde-format
 msgid "Install online script package"
-msgstr "Instalar o paquete de scripts de Internet"
+msgstr "Instalar o paquete de guións de Internet"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, add)
 #: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
@@ -715,12 +716,12 @@ msgstr "Engadir"
 #: kross/KoScriptManagerAdd.cpp:281
 #, kde-format
 msgid "Script File"
-msgstr "Ficheiro de script"
+msgstr "Ficheiro de guión"
 
 #: kross/KoScriptManagerAdd.cpp:284
 #, kde-format
 msgid "Script"
-msgstr "Script"
+msgstr "Guión"
 
 #: kross/KoScriptManagerAdd.cpp:287
 #, kde-format
@@ -811,7 +812,7 @@ msgstr "Intervalo de garda automática:"
 #: main/config/KoConfigDocumentPage.cpp:69
 #, kde-format
 msgid "Create backup file:"
-msgstr "Crear un ficheiro de copia de seguranza:"
+msgstr "Crear un ficheiro de copia de seguridade:"
 
 #: main/config/KoConfigGridPage.cpp:55
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:38
@@ -823,7 +824,7 @@ msgstr "Grade"
 #: main/config/KoConfigGridPage.cpp:63
 #, kde-format
 msgid "Show grid:"
-msgstr "Mostrar a grade:"
+msgstr "Amosar a grade:"
 
 #: main/config/KoConfigGridPage.cpp:64
 #, kde-format
@@ -925,7 +926,7 @@ msgstr "só cargar o ficheiro e logo saír"
 #: main/KoApplication.cpp:206
 #, kde-format
 msgid "load the file, show the window and progressbar and then exit"
-msgstr "cargar o ficheiro, mostrar a xanela e a barra de progreso e saír"
+msgstr "cargar o ficheiro, amosar a xanela e a barra de progreso e saír"
 
 #: main/KoApplication.cpp:207
 #, kde-format
@@ -1485,13 +1486,13 @@ msgstr "Modo en Pantalla Completa"
 #: main/KoMainWindow.cpp:343
 #, kde-format
 msgid "Show Dockers"
-msgstr "Mostrar os Dockers"
+msgstr "Amosar os Dockers"
 
 #: main/KoMainWindow.cpp:348
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
-msgstr "Mostrar as barras de título da doca"
+msgstr "Amosar as barras de título da doca"
 
 #: main/KoMainWindow.cpp:355
 #, kde-format
@@ -1598,7 +1599,7 @@ msgstr "Advertencia"
 #: main/KoMainWindow.cpp:2067
 #, kde-format
 msgid "Show %1 Toolbar"
-msgstr "Mostrar a barra de ferramentas %1"
+msgstr "Amosar a barra de ferramentas %1"
 
 #: main/KoMainWindow.cpp:2069
 #, kde-format
@@ -1666,12 +1667,12 @@ msgstr "<tr><td><b>Accedido:</b></td><td>%1</td></tr>"
 #: main/KoStandardAction.cpp:19
 #, kde-format
 msgid "Show Guides"
-msgstr "Mostrar as Guías"
+msgstr "Amosar as Guías"
 
 #: main/KoStandardAction.cpp:20
 #, kde-format
 msgid "Shows or hides guides"
-msgstr "Mostra ou agocha as guías"
+msgstr "Amosa ou agocha as guías"
 
 #: main/KoTemplateCreateDia.cpp:104
 #, kde-format
@@ -2091,27 +2092,27 @@ msgstr "Cambiar a páxina mestra"
 #: pageapp/commands/KoPAChangePageLayoutCommand.cpp:19
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
-msgstr "Configurar o deseño da páxina"
+msgstr "Definir o deseño da páxina"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Display master background"
-msgstr "Mostrar o fondo da páxina mestra"
+msgstr "Amosar o fondo da páxina mestra"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Display slide background"
-msgstr "Mostrar o fondo da diapositiva"
+msgstr "Amosar o fondo da diapositiva"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Display page background"
-msgstr "Mostrar o fondo da páxina"
+msgstr "Amosar o fondo da páxina"
 
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Show master shapes"
-msgstr "Mostrar as formas mestras"
+msgstr "Amosar as formas mestras"
 
 #: pageapp/commands/KoPADisplayMasterShapesCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -2439,27 +2440,27 @@ msgstr "Axustar á grade"
 #: pageapp/KoPAView.cpp:371
 #, kde-format
 msgid "Show Master Pages"
-msgstr "Mostrar as páxinas mestre"
+msgstr "Amosar as páxinas mestre"
 
 #: pageapp/KoPAView.cpp:375
 #, kde-format
 msgid "Show Rulers"
-msgstr "Mostrar as regras"
+msgstr "Amosar as regras"
 
 #: pageapp/KoPAView.cpp:377
 #, kde-format
 msgid "Show/hide the view's rulers"
-msgstr "Mostrar/agochar as regras"
+msgstr "Amosar/agochar as regras"
 
 #: pageapp/KoPAView.cpp:381
 #, kde-format
 msgid "Show Page Margins"
-msgstr "Mostrar as marxes da páxina"
+msgstr "Amosar as marxes da páxina"
 
 #: pageapp/KoPAView.cpp:383
 #, kde-format
 msgid "Show/hide the page margins"
-msgstr "Mostrar ou agochar os marxes das páxinas"
+msgstr "Amosar ou agochar os marxes das páxinas"
 
 #: pageapp/KoPAView.cpp:387
 #, kde-format
@@ -2566,7 +2567,7 @@ msgstr "Deseño da diapositiva"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
 #, kde-format
 msgid "Use background of master page"
-msgstr "Empregar o fondo da páxina mestre"
+msgstr "Usar o fondo da páxina mestre"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
 #, kde-format
@@ -2576,12 +2577,12 @@ msgstr "Escoller a imaxe de fondo da presentación mestre"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
 #, kde-format
 msgid "Display shapes of master page"
-msgstr "Mostrar as formas da páxina mestre"
+msgstr "Amosar as formas da páxina mestre"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
 #, kde-format
 msgid "Display shapes of master slide"
-msgstr "Mostrar as formas da páxina mestre"
+msgstr "Amosar as formas da páxina mestre"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
 msgctxt "(qtundo-format)"
@@ -3513,7 +3514,7 @@ msgstr ""
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 "family:'Verdana'; font-size:13pt;\"># Insire a consulta SPARQL aquí<br /># "
-"Os resultados móstranse abaixo.</span></p>\n"
+"Os resultados amósanse abaixo.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
 "family:'Verdana'; font-size:13pt;\"></p>\n"
@@ -3580,15 +3581,15 @@ msgid ""
 "stylesheet as well."
 msgstr ""
 "Definir o formato de estilo predeterminado para os obxectos semánticos neste "
-"documento. Os novos obxectos RDF empregaran este ficheiro de estilo de "
-"automaticamente. Os botóns permitiranche ademais que estabelezas as follas "
-"de estilo para todos os obxectos semánticos existentes do novo ficheiro de "
+"documento. Os novos obxectos RDF usarán este ficheiro de estilo "
+"automaticamente. Os botóns permitiranche ademais que definas as follas de "
+"estilo para todos os obxectos semánticos existentes do novo ficheiro de "
 "estilo."
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:101
 #, kde-format
 msgid "Apply Stylesheet"
-msgstr "Empregar folla de estilos"
+msgstr "Usar folla de estilos"
 
 #: rdf/KoRdfSemanticTreeWidgetItem.cpp:103
 #: rdf/KoSemanticStylesheetsEditor.cpp:107
@@ -3702,8 +3703,8 @@ msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
-"O documento conten unha suma de comprobación descoñecida. Cando lle dea un "
-"contrasinal poida que non se verifique."
+"O documento contén unha suma de comprobación descoñecida. Cando lle dea un "
+"contrasinal pode que non se verifique."
 
 #: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
 #, kde-format
@@ -3711,7 +3712,7 @@ msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
-"O documento contén un modo de cifrado descoñecido. Poida que algunhas partes "
+"O documento contén un modo de cifrado descoñecido. Pode que algunhas partes "
 "sexan ilexíbeis."
 
 #: store/KoEncryptedStore.cpp:286
@@ -3720,8 +3721,8 @@ msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
-"Este documento contén información de cifrado incompleta. Algunhas parte "
-"poida que sexan ilexíbeis."
+"Este documento contén información de cifrado incompleta. Algunhas parte pode "
+"que sexan ilexíbeis."
 
 #: store/KoEncryptedStore.cpp:300
 #, kde-format
@@ -3729,7 +3730,7 @@ msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
 "not be opened."
 msgstr ""
-"QCA non é compatíbel actualmente con SHA1 ou PBKDF2 empregando SHA1. Este "
+"QCA non é compatíbel actualmente con SHA1 ou PBKDF2 usando SHA1. Este "
 "documento non se pode abrir."
 
 #: store/KoEncryptedStore.cpp:330
@@ -3761,7 +3762,7 @@ msgstr "Insira o contrasinal para abrir este ficheiro."
 #: store/KoEncryptedStore.cpp:724
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
-msgstr "Insira o contrasinal co que descifrar este documento."
+msgstr "Escriba o contrasinal co que cifrar o documento."
 
 #: store/KoEncryptedStore.cpp:738
 #, kde-format
@@ -3886,7 +3887,7 @@ msgstr "Axustar a anchura das columnas"
 #: text/commands/ResizeTableCommand.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Adjust Row Height"
-msgstr "Axustar a altura da fila:"
+msgstr "Axustar a altura da fila"
 
 #: text/commands/SplitSectionsCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -4100,7 +4101,7 @@ msgstr "Cambiar o aliñamento"
 #: text/KoTextEditor_format.cpp:150
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Alignment"
-msgstr "Estabelecer o aliñamento vertical"
+msgstr "Definir o aliñamento vertical"
 
 #: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
 msgctxt "(qtundo-format)"
@@ -4135,17 +4136,17 @@ msgstr "Definir o tamaño de tipo de letra"
 #: text/KoTextEditor_format.cpp:308
 msgctxt "(qtundo-format)"
 msgid "Set Background Color"
-msgstr "Estabelecer a cor do fondo"
+msgstr "Definir a cor do fondo"
 
 #: text/KoTextEditor_format.cpp:321
 msgctxt "(qtundo-format)"
 msgid "Set Text Color"
-msgstr "Estabelecer a cor do texto"
+msgstr "Definir a cor do texto"
 
 #: text/KoTextEditor_format.cpp:349 text/KoTextEditor_format.cpp:388
 msgctxt "(qtundo-format)"
 msgid "Set Character Style"
-msgstr "Estabelecer estilo de carácter"
+msgstr "Definir estilo de carácter"
 
 #: text/KoTextEditor_format.cpp:455
 msgctxt "(qtundo-format)"
@@ -4338,8 +4339,8 @@ msgid ""
 "Please check the ranges you specified. The start value must be lower than "
 "the end value."
 msgstr ""
-"Marque os intervalos especificados. O valor do comezo debe de ser máis baixo "
-"que o valor final."
+"Marque os intervalos indicados. O valor do comezo debe de ser máis baixo que "
+"o valor final."
 
 #: widgets/KoCsvImportDialog.cpp:758
 #, kde-format
@@ -4515,25 +4516,25 @@ msgstr "Obter axuda…"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Float Docker"
-msgstr "Facer a doca flotante"
+msgstr "Facer a doca flotante."
 
 #: widgets/KoDockWidgetTitleBar.cpp:59
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Close Docker"
-msgstr "Pechar a doca"
+msgstr "Pechar a doca."
 
 #: widgets/KoDockWidgetTitleBar.cpp:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Collapse Docker"
-msgstr "Pregar a doca"
+msgstr "Pregar a doca."
 
 #: widgets/KoDockWidgetTitleBar.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Lock Docker"
-msgstr "Bloquear a doca"
+msgstr "Bloquear a doca."
 
 #. i18n: ectx: property (text), widget (QPushButton, pbEncrypt)
 #: widgets/koDocumentInfoAboutWidget.ui:23 widgets/KoDocumentInfoDlg.cpp:235
@@ -4634,7 +4635,7 @@ msgstr "Gardado de último por"
 #: widgets/KoDocumentInfoDlg.cpp:189
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr "Empregue ';' (Exemplo: Office; KDE, Calligra)"
+msgstr "Use ';' (Exemplo: Office; KDE, Calligra)"
 
 #: widgets/KoDocumentInfoDlg.cpp:219 widgets/KoDocumentInfoDlg.cpp:315
 #, kde-format
@@ -4796,7 +4797,7 @@ msgstr "Paleta de cores de Gimp (*.gpl)"
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
 msgstr ""
-"Non se pode escribir no ficheiro de paleta %1. Poida que só sexa de lectura."
+"Non se pode escribir no ficheiro de paleta %1. Pode que só sexa de lectura."
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
@@ -5118,13 +5119,13 @@ msgstr "Fondo:"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
-msgstr "Importar un recurso"
+msgstr "Importar un recurso."
 
 #: widgets/KoResourceItemChooser.cpp:144
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
-msgstr "Eliminar o recurso"
+msgstr "Eliminar o recurso."
 
 #: widgets/KoResourceItemChooser.cpp:192
 #, kde-format
@@ -5252,7 +5253,7 @@ msgstr "Espesura:"
 #: widgets/KoStrokeConfigWidget.cpp:213
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr "Estabelecer a anchura de liña da selección actual"
+msgstr "Definir a anchura de liña da selección actual"
 
 #: widgets/KoStrokeConfigWidget.cpp:229
 #, kde-format
@@ -5334,7 +5335,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr "<qt>Mostrar as opcións da caixa de etiquetas.</qt>"
+msgstr "<qt>Amosar as opcións da caixa de etiquetas.</qt>"
 
 #: widgets/KoTagToolButton.cpp:60
 #, kde-format
@@ -5382,7 +5383,7 @@ msgstr "%1"
 #, kde-format
 msgctxt "@info:tooltip %2 is shortcut"
 msgid "%1 (%2)"
-msgstr "%1 (%2)"
+msgstr "%1 (%2)."
 
 #: widgets/KoToolBoxDocker.cpp:20
 #, kde-format

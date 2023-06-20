@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-18 00:54+0000\n"
-"PO-Revision-Date: 2023-05-02 21:52+0200\n"
+"PO-Revision-Date: 2023-06-19 14:15+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -407,8 +407,8 @@ msgid ""
 "right shift. "
 msgstr ""
 "A función BITRSHIFT() realiza unha operación bit-wise de desprazamento á "
-"esquerda para o primeiro parámetro. O número de bits polos que se despraza é "
-"especificado no segundo parámetro. Nótese que un valor negativo de bits á "
+"esquerda para o primeiro parámetro. O número de bits polos que se despraza "
+"indícase no segundo parámetro. Nótese que un valor negativo de bits á "
 "esquerda supoñen un desprazamento á esquerda."
 
 #: functions/bitops.xml:40
@@ -430,8 +430,8 @@ msgid ""
 "left shift. "
 msgstr ""
 "A función BITRSHIFT() realiza unha operación bit-wise de desprazamento á "
-"dereita para o primeiro parámetro. O número de bits polos que se despraza é "
-"especificado no segundo parámetro. Nótese que un valor negativo de bits á "
+"dereita para o primeiro parámetro. O número de bits polos que se despraza "
+"indícase no segundo parámetro. Nótese que un valor negativo de bits á "
 "dereita supoñen un desprazamento á esquerda."
 
 #: functions/bitops.xml:58
@@ -914,8 +914,8 @@ msgid ""
 "of conciseness, and defaults to 0."
 msgstr ""
 "A función ROMAN() devolve o número en formato romano. Só se poden converter "
-"números enteiros positivos. O argumento opcional de formato especifica o "
-"nivel de concisión, e de maneira predeterminada é 0."
+"números enteiros positivos. O argumento opcional de formato indica o nivel "
+"de concisión, e de maneira predeterminada é 0."
 
 #: functions/conversion.xml:256
 #, kde-format
@@ -998,8 +998,8 @@ msgid ""
 "Sums up the numbers in a column of a database specified by a set of "
 "conditions."
 msgstr ""
-"Suma os número dunha columna dunha base da datos especificada por unha serie "
-"de condicións."
+"Suma os número dunha columna dunha base da datos indicada por unha serie de "
+"condicións."
 
 #: functions/database.xml:24
 #, kde-format
@@ -1017,8 +1017,8 @@ msgid ""
 "Calculates the average in a column of a database specified by a set of "
 "conditions for values that are numbers"
 msgstr ""
-"Calcula a media dunha columna dunha date de bases especificada por unha "
-"serie de condicións para valores numéricos"
+"Calcula a media dunha columna dunha base de datos indicada por unha serie de "
+"condicións para valores numéricos"
 
 #: functions/database.xml:46
 #, kde-format
@@ -1037,7 +1037,7 @@ msgid ""
 "specified by a set of conditions."
 msgstr ""
 "Conta as celas que conteñen valores numéricos nunha columna dunha base de "
-"datos especificada por unha serie de condicións."
+"datos indicada por unha serie de condicións."
 
 #: functions/database.xml:68
 #, kde-format
@@ -1056,7 +1056,7 @@ msgid ""
 "database specified by a set of conditions."
 msgstr ""
 "Conta as celas quen conteñen valores numéricos ou alfanuméricos nunha "
-"columna dunha base de datos especificada por unha serie de condicións."
+"columna dunha base de datos indicada por unha serie de condicións."
 
 #: functions/database.xml:91
 #, kde-format
@@ -1075,9 +1075,9 @@ msgid ""
 "conditions. This function returns an error if no value or more than one "
 "value exist."
 msgstr ""
-"Devolve un valor único a partir dunha columna dunha base de datos "
-"especificada por unha serie de condicións. Esta función devolve un erro se "
-"non hai mai dun valor ou se non existe ningún."
+"Devolve un valor único a partir dunha columna dunha base de datos indicada "
+"por unha serie de condicións. Esta función devolve un erro se non hai mai "
+"dun valor ou se non existe ningún."
 
 #: functions/database.xml:114
 #, kde-format
@@ -1095,7 +1095,7 @@ msgid ""
 "Returns the largest value in a column of a database specified by a set of "
 "conditions."
 msgstr ""
-"Devolve o maior valor nunha columna dunha base de datos especificada por un "
+"Devolve o maior valor nunha columna dunha base de datos indicada por un "
 "grupo de condicións."
 
 #: functions/database.xml:136
@@ -1114,7 +1114,7 @@ msgid ""
 "Returns the smallest values in a column of a database specified by a set of "
 "conditions."
 msgstr ""
-"Devolve o menor valor dunha columna dunha base de datos especificada por un "
+"Devolve o menor valor dunha columna dunha base de datos indicada por un "
 "grupo de condicións."
 
 #: functions/database.xml:159
@@ -1134,7 +1134,7 @@ msgid ""
 "specified by a set of conditions."
 msgstr ""
 "Devolve o produto de todos os valores numéricos dunha columna dunha base de "
-"datos especificada por un grupo de condicións."
+"datos indicada por un grupo de condicións."
 
 #: functions/database.xml:182
 #, kde-format
@@ -1154,8 +1154,8 @@ msgid ""
 "of conditions."
 msgstr ""
 "Devolve a estimación da desviación estándar para unha poboación baseada na "
-"mostra e empregando todos os valores numéricos na columna da base de datos "
-"especificados polo grupo de condicións."
+"mostra e usando todos os valores numéricos na columna da base de datos "
+"indicados polo grupo de condicións."
 
 #: functions/database.xml:204
 #, kde-format
@@ -1175,8 +1175,8 @@ msgid ""
 "set of conditions."
 msgstr ""
 "Devolve a desviación estándar para unha poboación baseada en toda a "
-"poboación e empregando todos os valores numéricos na columna da base de "
-"datos especificados polo grupo de condicións."
+"poboación e usando todos os valores numéricos na columna da base de datos "
+"indicados polo grupo de condicións."
 
 #: functions/database.xml:227
 #, kde-format
@@ -1195,9 +1195,9 @@ msgid ""
 "all numeric values in a column of a database specified by a set of "
 "conditions."
 msgstr ""
-"Devolve a estimación da varianza dunha poboación baseada na mostra e "
-"empregando todos os valores numéricos na columna da base de datos "
-"especificada por un grupo de condicións."
+"Devolve a estimación da varianza dunha poboación baseada na mostra e usando "
+"todos os valores numéricos na columna da base de datos indicada por un grupo "
+"de condicións."
 
 #: functions/database.xml:250
 #, kde-format
@@ -1216,9 +1216,9 @@ msgid ""
 "all numeric values in a column of a database specified by a set of "
 "conditions."
 msgstr ""
-"Devolve a varianza da poboación para unha poboación baseada na mostra e "
-"empregando todos os valores numéricos na columna da base de datos "
-"especificados polo grupo de condicións."
+"Devolve a varianza da poboación baseada na poboación total e usando todos os "
+"valores numéricos na columna da base de datos indicados polo grupo de "
+"condicións."
 
 #: functions/database.xml:273
 #, kde-format
@@ -1315,10 +1315,10 @@ msgid ""
 "a 360-day calendar in which all months are assumed to have 30 days. If "
 "method is false (default) the US method will be used, the European otherwise."
 msgstr ""
-"A función DAYS360() devolve o número de días desde a data1 á data2 "
-"empregando o calendario de 360 días no que se asume que todos os meses teñen "
-"30 días. Se o método é falso (predefinido) o método empregado é o Americano, "
-"doutra maneira o Europeo."
+"A función DAYS360() devolve o número de días desde a data1 á data2 usando o "
+"calendario de 360 días no que se asume que todos os meses teñen 30 días. Se "
+"o método é falso (predefinido) o método usado é o dos EUA, doutra maneira o "
+"europeo."
 
 #: functions/datetime.xml:43
 #, kde-format
@@ -1387,8 +1387,8 @@ msgid ""
 "The EDATE functions returns the date that is specified by a given date and a "
 "number of months before or after that date."
 msgstr ""
-"A función EDATE devolve a data que é especificada por unha determinada data "
-"e un número de meses antes ou despois desa data."
+"A función EDATE devolve a data indicada por unha determinada data e un "
+"número de meses antes ou despois desa data."
 
 #: functions/datetime.xml:95
 #, kde-format
@@ -1411,8 +1411,8 @@ msgid ""
 "The EOMONTH functions returns the last day in the month specified by a date "
 "and the number of months from that date."
 msgstr ""
-"A función EOMONTH devolve o último día dun mes especificado por unha data e "
-"o número de meses desde esa data."
+"A función EOMONTH devolve o último día dun mes indicado por unha data e o "
+"número de meses desde esa data."
 
 #: functions/datetime.xml:116
 #, kde-format
@@ -1536,8 +1536,8 @@ msgid ""
 "The MINUTE functions returns the minutes of a time. If no parameter is "
 "specified the current minute is returned."
 msgstr ""
-"A función MINUTE devolve os minutos dunha determinada hora. De non se "
-"estabelecer parámetro ningún especifícase os minutos da hora na que se estea."
+"A función MINUTE devolve os minutos dunha determinada hora. Se non indica "
+"ningún parámetro devolveranse os minutos da hora na actual."
 
 #: functions/datetime.xml:202
 #, kde-format
@@ -1560,9 +1560,8 @@ msgid ""
 "The SECOND functions returns the seconds of a time. If no parameter is "
 "specified the current second is returned."
 msgstr ""
-"A función SECONDS devolve os segundos dunha determinada hora. De non se "
-"estabelecer parámetro ningún especifícase os segundos da hora na que se "
-"estea."
+"A función SECONDS devolve os segundos dunha determinada hora. Se non indica "
+"ningún parámetro devólvense os segundos da hora actual."
 
 #: functions/datetime.xml:219
 #, kde-format
@@ -1873,7 +1872,7 @@ msgid ""
 "The function WEEKSINYEAR() returns the number of weeks in the given year."
 msgstr ""
 "A función WEEKSINYEAR() devolve o número de días dunha semana no ano "
-"especificado."
+"indicado."
 
 #: functions/datetime.xml:452
 #, kde-format
@@ -3677,10 +3676,9 @@ msgid ""
 "days/365 or 4: European 30/360."
 msgstr ""
 "A función ACCRINTM devolve o xuro acumulado dun valor que paga os xuros ao "
-"vencemento. As frecuencias permitidas son 1 - anual, 2 - semianual ou 4 - "
-"trimestral. A base é o tipo de conta de días que pretendes usar: 0: EUA "
-"30/360 (predeterminado), 1: días reais, 2: días reais/360, 3: días reais/365 "
-"ou 4: Europa 30/365."
+"vencemento. A base é o tipo de conta de días que queira usar: 0: 30/360 dos "
+"EUA (predeterminado), 1: días reais, 2: días reais/360, 3: días reais/365 ou "
+"4: 30/360 europeo."
 
 #: functions/financial.xml:71
 #, kde-format
@@ -4874,12 +4872,12 @@ msgstr " 1       Número real de días no ano e número de días do mes real"
 #: functions/financial.xml:1092
 #, kde-format
 msgid "  2       360 days in a year, actual number of days in months"
-msgstr " 2        360 días nun ano, contando todos os días do mes segundo son"
+msgstr " 2        360 días nun ano, contando todos os días do mes"
 
 #: functions/financial.xml:1093
 #, kde-format
 msgid "  4       365 days in a year,  actual number of days in months"
-msgstr " 4       365 días nun ano, número de días dos meses segundo son"
+msgstr " 4       365 días nun ano, número real de días dos meses"
 
 #: functions/financial.xml:1094
 #, kde-format
@@ -5160,7 +5158,7 @@ msgid ""
 msgstr ""
 "VDB calcula a permisividade de depreciación dun activo cun valor inicial, "
 "cunha vida útil esperada e un valor final de amortización para o período "
-"especificado, usando o método do balance minguante de taxa variábel."
+"indicado, usando o método do balance minguante de taxa variábel."
 
 #: functions/financial.xml:1386
 #, kde-format
@@ -5412,9 +5410,9 @@ msgid ""
 "\" returns the name of the operating environment, \"osversion\" returns the "
 "current operating system."
 msgstr ""
-"INFO() devolve informacións sobre o ambiente operativo actual. O tipo de "
-"parámetro especifica o tipo de información que quere devolver. Pode ser un "
-"dos seguintes: «directory» devolve a ruta do directorio actual, «numfile» "
+"INFO() devolve informacións sobre o contorno operativo actual. O tipo de "
+"parámetro indica o tipo de información que quere devolver. Pode ser un dos "
+"seguintes: «directory» devolve a ruta do directorio actual, «numfile» "
 "devolve o número de documentos activos e «release» devolve a versión de "
 "Calligra Sheets como texto, «recalc» devolve o modo de novo cálculo actual: "
 "«Automático» ou «Manual», «system» devolve o nome do ambiente de operación e "
@@ -6199,6 +6197,7 @@ msgstr "N é a potencia inicial a cal se eleva X"
 msgid "M the increment by which to increase N for each term in the series"
 msgstr "M é o incremento que se aplica a N para cada valor da serie"
 
+# skip-rule: trasno-11.0-gl-son
 #: functions/math.xml:56
 #, kde-format
 msgid ""
@@ -6322,7 +6321,7 @@ msgstr ""
 #: functions/math.xml:121
 #, kde-format
 msgid "EPS() is so small that Calligra Sheets displays 1+eps() as 1"
-msgstr "EPS() é tan pequeno que Calligra Sheets mostra o 1+eps() como 1"
+msgstr "EPS() é tan pequeno que Calligra Sheets amosa o 1+eps() como 1"
 
 #: functions/math.xml:122
 #, kde-format
@@ -6792,8 +6791,7 @@ msgstr "SUMIF(intervalodecomprobación;criterio;intervalodesuma)"
 #: functions/math.xml:443
 #, kde-format
 msgid "SUMIF(A1:A4;\">1\") sums all values in range A1:A4 which match >1"
-msgstr ""
-"SUMIF(A1:A4;\">1\") suma todos os valores no intervalo A1:A4 que son >1"
+msgstr "SUMIF(A1:A4;\">1\") suma todos os valores >1 no intervalo A1:A4"
 
 #: functions/math.xml:444
 #, kde-format
@@ -7045,8 +7043,8 @@ msgid ""
 "like MULTIPLY(12;5;12.5). It's equivalent to PRODUCT."
 msgstr ""
 "A función MULTIPLY() multiplica todos os valores dados nos parámetros. Pode "
-"multiplicar os valores especificados por un intervalo (MULTIPLY(A1:B5)) ou "
-"por unha lista de valores MULTIPLY(12;5;12,5). É equivalente a PRODUCT."
+"multiplicar os valores indicados por un intervalo (MULTIPLY(A1:B5)) ou por "
+"unha lista de valores MULTIPLY(12;5;12,5). É equivalente a PRODUCT."
 
 #: functions/math.xml:626
 #, kde-format
@@ -7670,8 +7668,8 @@ msgid ""
 "The MROUND() function returns the value rounded to the specified multiple. "
 "The value and the multiple must have the same sign"
 msgstr ""
-"A función MROUND devolve o valor aproximado ao múltiplo especificado. O "
-"valor e o múltiplo deben ter o mesmo signo"
+"A función MROUND devolve o valor aproximado ao múltiplo indicado. O valor e "
+"o múltiplo deben ter o mesmo signo"
 
 #: functions/math.xml:1099
 #, kde-format
@@ -7916,7 +7914,7 @@ msgid ""
 "just Enter) to display the array elements in separate cells."
 msgstr ""
 "Dado que o resultado é unha lista, ten que usar Ctrl+Alt+Intro (en vez de "
-"simplemente Intro) para mostrar a lista de elementos en celas separadas."
+"simplemente Intro) para amosar a lista de elementos en celas separadas."
 
 #: functions/math.xml:1240
 #, kde-format
@@ -8183,8 +8181,8 @@ msgid ""
 "The COLUMN function returns the column of given cell reference. If no "
 "parameter is specified the column of the current cell gets returned."
 msgstr ""
-"A función COLUMN devolve a columna da cela indicada. Se non fose "
-"especificado ningún parámetro devólvese a columna da cela actual."
+"A función COLUMN devolve a columna da cela indicada. Se non se indica ningún "
+"parámetro devólvese a columna da cela actual."
 
 #: functions/reference.xml:105
 #, kde-format
@@ -8521,8 +8519,8 @@ msgstr ""
 "FormulaCell e todas as expresións de fórmulas das que dependa ao tempo que "
 "se substitúen a RowCell con referencias a RowReplacement respectivamente e "
 "todas as referencias a ColumnCell con referencias a ColumnReplacement. A "
-"función pódese empregar para crear facilmente táboas de expresións que "
-"dependan en parámetros de dúas entradas."
+"función pódese usar para crear facilmente táboas de expresións que dependan "
+"en parámetros de dúas entradas."
 
 #: functions/reference.xml:331
 #, kde-format
@@ -9262,7 +9260,7 @@ msgid ""
 msgstr ""
 "Teña en conta que os datos deben estar en columnas e dado que o resultado é "
 "unha lista de columnas, use Ctrl+Alt+Intro (en vez de simplemente Intro) "
-"para mostrar a lista de elementos en celas separadas. "
+"para amosar a lista de elementos en celas separadas. "
 
 #: functions/statistical.xml:422
 #, kde-format
@@ -9667,7 +9665,7 @@ msgid ""
 "set."
 msgstr ""
 "A función MODE() devolve a moda dos datos, é dicir, o valor que aparece con "
-"máis frecuencia."
+"máis frecuencia no conxunto de datos."
 
 #: functions/statistical.xml:800
 #, kde-format
@@ -10022,7 +10020,7 @@ msgstr ""
 #: functions/statistical.xml:1041
 #, kde-format
 msgid "Order specifies how to rank the numbers:"
-msgstr "A orde especifica cal é o intervalo dos números:"
+msgstr "A orde indica cal é o intervalo dos números:"
 
 #: functions/statistical.xml:1042
 #, kde-format
@@ -10465,8 +10463,8 @@ msgid ""
 "rows, rather than columns."
 msgstr ""
 "Teña en conta que dado que o resultado da función é unha fila de valores de "
-"Y calculados, será máis fácil mostrar os datos nun gráfico se os valores de "
-"X e de Y tamén están en filas, en vez de en columnas."
+"Y calculados, será máis fácil amosar os datos nun gráfico se os valores de X "
+"e de Y tamén están en filas, en vez de en columnas."
 
 #: functions/statistical.xml:1435
 #, kde-format
@@ -10480,7 +10478,7 @@ msgid ""
 "display the values in separate cells."
 msgstr ""
 "Dado que o resultado é unha lista, use Ctrl+Alt+Intro (en vez de simplemente "
-"Intro) para mostrar os valores en celas separadas."
+"Intro) para amosar os valores en celas separadas."
 
 #: functions/statistical.xml:1437
 #, kde-format
@@ -10565,8 +10563,8 @@ msgid ""
 "can run, a t-test can tell you how likely it is that any speed difference "
 "between the two groups of people is due to their height."
 msgstr ""
-"Un test t compara dous conxuntos de datos e estabelece a probabilidade de "
-"que calquera diferenza entre eles se deba a que algunha variábel teña algún "
+"Un test t compara dous conxuntos de datos e define a probabilidade de que "
+"calquera diferenza entre eles se deba a que algunha variábel teña algún "
 "efecto. Por exemplo, dados dous conxuntos de datos, un coa velocidade á que "
 "poden correr 30 persoas altas e o outro coa velocidade á que poden correr 30 "
 "baixas, un test t pode dicirlle o probábel que é que as diferenzas de "
@@ -10852,8 +10850,7 @@ msgstr ""
 "dunha variábel aleatoria normalmente distribuída con media e desciación "
 "estándar. Unha saída con valor 1 indica que se rexeita a hipótese nula, p."
 "ex. a mostra non pertence a unha poboación distribuída baixo a función "
-"normal. Cando se omita sigma hanse estimar a partir da mostra empregando "
-"STDEV."
+"normal. Cando se omita sigma hanse estimar a partir da mostra usando STDEV."
 
 #: functions/statistical.xml:1719
 #, kde-format
@@ -10970,7 +10967,7 @@ msgid ""
 "this function will do the conversion according to the current locale."
 msgstr ""
 "A función DOLLAR() converte un número en texto usando o formato monetario, "
-"coa parte fraccionaria arredondada ás cifras especificado. Aínda que o nome "
+"coa parte fraccionaria arredondada á posición indicada. Aínda que o nome "
 "sexa DOLLAR, esta función fará a conversión de acordo co formato rexional."
 
 #: functions/text.xml:20
@@ -11002,12 +10999,12 @@ msgid ""
 "If you omit decimals, it is assumed to be 2. If optional parameter no_commas "
 "is True, thousand separators will not show up."
 msgstr ""
-"A función FIXED() arredonda un número ao número de cifras decimais "
-"especificado, formata o número con formato decimal, e devolve o resultado "
-"como texto. Se o número de cifras fose negativo, o número é arredondado á "
-"esquerda da coma. Se omite o número de cifras decimais, asúmese como 2. Se o "
-"parámetro opcional sen_espazos fose verdadeiro, os separadores de millares "
-"non aparecerán."
+"A función FIXED() arredonda un número ao número de cifras decimais indicado, "
+"formata o número con formato decimal, e devolve o resultado como texto. Se o "
+"número de cifras fose negativo, o número é arredondado á esquerda da coma. "
+"Se omite o número de cifras decimais, asúmese como 2. Se o parámetro "
+"opcional sen_espazos fose verdadeiro, os separadores de millares non "
+"aparecerán."
 
 #: functions/text.xml:43
 #, kde-format
@@ -11059,11 +11056,10 @@ msgid ""
 "to replace any text that occurs in a specific location."
 msgstr ""
 "SUBSTITUTE() substitúe novo_texto por texto_antigo nunha cadea de texto. Se "
-"num_instancia é especificado, só esa instancia de texto_antigo é "
-"substituída. En caso contrario, todas as aparicións de texto_antigo "
-"cambiaranse por novo_texto. Utilice SUBSTITUTE cando queira substituír texto "
-"específico, e REPLACE cando queira substituír todo o texto que ocorra nunha "
-"localización dada."
+"indica num_instancia, só se substitúe esa instancia de texto_antigo. En caso "
+"contrario, todas as aparicións de texto_antigo cambiaranse por novo_texto. "
+"Utilice SUBSTITUTE cando queira substituír texto específico, e REPLACE cando "
+"queira substituír todo o texto que ocorra nunha localización dada."
 
 #: functions/text.xml:71
 #, kde-format
@@ -11159,7 +11155,7 @@ msgstr "SEARCH(\"beneficios\";\"Marxe de Beneficios\") devolve 8"
 #: functions/text.xml:122
 #, kde-format
 msgid "Specified byte position to start the search"
-msgstr "Byte especificado onde iniciar a busca"
+msgstr "Byte indicado onde iniciar a busca"
 
 #: functions/text.xml:126
 #, kde-format
@@ -11347,7 +11343,7 @@ msgstr "Número de caracteres a substituír"
 #: functions/text.xml:241 functions/text.xml:272
 #, kde-format
 msgid "The text that will replace characters in old text"
-msgstr "O texto a empregar para substituír os caracteres do texto anterior"
+msgstr "O texto a usar para substituír os caracteres do texto anterior"
 
 #: functions/text.xml:245
 #, kde-format
@@ -11405,7 +11401,7 @@ msgstr "REPLACEB(cadea;posiciónByte;tamañoByte;novo_texto)"
 #: functions/text.xml:297
 #, kde-format
 msgid "Specifies index to start the search"
-msgstr "Especifica o índice onde iniciar a busca"
+msgstr "Indica o índice onde iniciar a busca"
 
 #: functions/text.xml:301
 #, kde-format
@@ -11425,8 +11421,8 @@ msgid ""
 "The first character is character number 1. If start_num is omitted, it is "
 "assumed to be 1."
 msgstr ""
-"O parámetro num_inicío especifica o carácter onde comezar a busca. Se "
-"num_inicío é omitido, o primeiro carácter corresponde ao número 1."
+"O parámetro num_inicio indica o carácter onde comezar a busca. Se num_inicio "
+"é omitido, o primeiro carácter corresponde ao número 1."
 
 # skip-rule: trasno-find
 # skip-rule: trasno-search
@@ -11465,7 +11461,7 @@ msgstr "FIND(\"a\";\"Follas en Calligra\";4) dá 12"
 #: functions/text.xml:328
 #, kde-format
 msgid "Specifies byte position to start the search"
-msgstr "Especifica a posición byte onde comezar a busca"
+msgstr "Indica a posición byte onde comezar a busca"
 
 #: functions/text.xml:332
 #, kde-format
@@ -11486,8 +11482,8 @@ msgid ""
 "The first character is character number 2. If start_num is omitted, it is "
 "assumed to be 2."
 msgstr ""
-"O parámetro posiciónByte especifica o carácter onde comezar a busca. O "
-"primeiro carácter é o número 2. Se num_inicío se omite o primeiro carácter "
+"O parámetro posiciónByte indica o carácter onde comezar a busca. O primeiro "
+"carácter é o número 2. Se num_inicio se omite o primeiro carácter "
 "corresponde ao número 2."
 
 #: functions/text.xml:335
@@ -11559,7 +11555,7 @@ msgid ""
 "the string, starting at 'position' index using byte positions."
 msgstr ""
 "A función MIDB() devolve unha subcadea que contén «tamaño» caracteres desta "
-"cadea de texto a contar desde »posición» empregando as posicións byte."
+"cadea de texto a contar desde »posición» usando as posicións byte."
 
 #: functions/text.xml:390
 #, kde-format
@@ -11596,8 +11592,8 @@ msgstr "LEN(\"KSpread\") devolve 7"
 msgid ""
 "The LENB() function returns the length of the string using byte positions."
 msgstr ""
-"A función LENB() devolve a lonxitude ou tamaño da cadea de texto empregando "
-"as posicións de bytes."
+"A función LENB() devolve a lonxitude ou tamaño da cadea de texto usando as "
+"posicións de bytes."
 
 #: functions/text.xml:425
 #, kde-format
@@ -11733,9 +11729,9 @@ msgid ""
 "of characters to be less than 0."
 msgstr ""
 "A función LEFTB() devolve unha subcadea que contén a lonxitude dos "
-"caracteres máis á esquerda da cadea empregando as posicións byte. Dáse a "
-"cadea enteira se a «tamaño» excede a lonxitude da cadea. Dáse un erro cando "
-"o número de caracteres é menor que 0."
+"caracteres máis á esquerda da cadea usando as posicións byte. Dáse a cadea "
+"enteira se a «tamaño» excede a lonxitude da cadea. Dáse un erro cando o "
+"número de caracteres é menor que 0."
 
 #: functions/text.xml:555
 #, kde-format
@@ -11849,6 +11845,7 @@ msgstr "A función CLEAN() retira todos os caracteres non imprimíbeis do texto"
 msgid "CLEAN(text)"
 msgstr "CLEAN(texto)"
 
+# skip-rule: trasno-11.0-en-clean
 #: functions/text.xml:626
 #, kde-format
 msgid "CLEAN(AsciiToChar(7) + \"HELLO\") returns \"HELLO\""
@@ -11917,7 +11914,7 @@ msgstr "Código do carácter"
 #: functions/text.xml:687
 #, kde-format
 msgid "The CHAR() function returns the character specified by a number."
-msgstr "A función CHAR() devolve o carácter especificado por un número."
+msgstr "A función CHAR() devolve o carácter indicado por un número."
 
 #: functions/text.xml:688
 #, kde-format
@@ -12077,7 +12074,7 @@ msgid ""
 "The UNICHAR() function returns the character specified by a unicode code "
 "point."
 msgstr ""
-"A función UNICHAR() devolve o carácter especificado para un punto do código "
+"A función UNICHAR() devolve o carácter indicado para un punto do código "
 "unicoide."
 
 #: functions/text.xml:799
@@ -12382,7 +12379,7 @@ msgid ""
 msgstr ""
 "A función ACOSH() calcula o coseno hiperbólico inverso de x, é dicir, o "
 "valor cuxo coseno hiperbólico é x. Se x fose menor que 1.0, acosh() devolve "
-"un erro Non-é-un-Número (NaN) e o errno é alterado."
+"un erro Non-é-un-Número (NaN) e define errno."
 
 #: functions/trig.xml:177
 #, kde-format
@@ -12644,7 +12641,7 @@ msgstr "Marijn Kruisselbrink"
 #: part/AboutData.h:42
 #, kde-format
 msgid "ODS and Excel, functions, scripting"
-msgstr "ODS e EXCEL, funcións, scripting"
+msgstr "ODS e EXCEL, funcións, guionización"
 
 #: part/AboutData.h:42
 #, kde-format
@@ -13036,7 +13033,7 @@ msgstr "Definir o intervalo de impresión"
 #: part/commands/PageLayoutCommand.cpp:22 part/dialogs/PageLayoutDialog.cpp:210
 msgctxt "(qtundo-format)"
 msgid "Set Page Layout"
-msgstr "Configurar a disposición da páxina"
+msgstr "Definir a disposición da páxina"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, FileOptionsWidget)
 #: part/dialogs/FileOptionsWidget.ui:13
@@ -13048,7 +13045,7 @@ msgstr "Opcións de ficheiro"
 #: part/dialogs/FileOptionsWidget.ui:19
 #, kde-format
 msgid "Number of entries in Recent Files list:"
-msgstr "Número de ficheiros a mostrar na lista de ficheiros recentes:"
+msgstr "Número de ficheiros a amosar na lista de ficheiros recentes:"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_recentFilesEntries)
 #: part/dialogs/FileOptionsWidget.ui:26
@@ -13057,7 +13054,7 @@ msgid ""
 "Controls the maximum number of filenames that are shown when you select File-"
 "> Open Recent."
 msgstr ""
-"Controla o número máximo de ficheiros que se mostran cando se escolle "
+"Controla o número máximo de ficheiros que se amosan cando se escolle "
 "Ficheiro-> Abrir un recente."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -13094,7 +13091,7 @@ msgstr " min"
 #: part/dialogs/FileOptionsWidget.ui:65
 #, kde-format
 msgid "Create backup file:"
-msgstr "Crear ficheiro de seguranza:"
+msgstr "Crear ficheiro de seguridade:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_createBackupFile)
 #: part/dialogs/FileOptionsWidget.ui:72
@@ -13103,7 +13100,7 @@ msgid ""
 "Check this box if you want some backup files created. This is checked per "
 "default."
 msgstr ""
-"Marca esta opción se queres crear ficheiros de copia de seguranza. Esta "
+"Marca esta opción se queres crear ficheiros de copia de seguridade. Esta "
 "opción está marcada de maneira predeterminada."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -13127,7 +13124,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:34
 #, kde-format
 msgid "Func&tion shown in status bar:"
-msgstr "Función mostrada na barra de es&tado:"
+msgstr "Función amosada na barra de es&tado:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_statusBarFunction)
 #: part/dialogs/InterfaceOptionsWidget.ui:44
@@ -13149,8 +13146,7 @@ msgstr "&Unidade:"
 #: part/dialogs/InterfaceOptionsWidget.ui:61
 #, kde-format
 msgid "Choose the default unit that will be used in your sheets."
-msgstr ""
-"Escolle a unidade predeterminada para empregar nas túas follas de cálculo."
+msgstr "Escolle a unidade predeterminada para usar nas túas follas de cálculo."
 
 #. i18n: ectx: property (text), widget (QLabel, m_indentationLabel)
 #: part/dialogs/InterfaceOptionsWidget.ui:68
@@ -13211,8 +13207,8 @@ msgid ""
 "displayed. Click here to choose another color for the borders than the "
 "default red."
 msgstr ""
-"Os bordos das páxinas móstranse cando se marca o elemento de menú «Ver → "
-"Mostrar o bordo da páxina». Premer aquí para escoller outra cor para os "
+"Os bordos das páxinas amósanse cando se marca o elemento de menú «Ver → "
+"Amosar o bordo da páxina». Premer aquí para escoller outra cor para os "
 "bordos distintos do vermello que se estabelece de maneira predeterminada."
 
 #: part/dialogs/PageLayoutDialog.cpp:90 part/dialogs/PageLayoutDialog.cpp:93
@@ -13511,7 +13507,7 @@ msgstr ""
 #: part/dialogs/PreferenceDialog.cpp:441
 #, kde-format
 msgid "Popup"
-msgstr "Xanela emerxente"
+msgstr "Diálogo emerxente"
 
 #: part/dialogs/PreferenceDialog.cpp:443
 #, kde-format
@@ -13575,7 +13571,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:113
 #, kde-format
 msgid "Show c&omment indicator"
-msgstr "Mostrar o &indicador de comentarios"
+msgstr "Amosar o &indicador de comentarios"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, useLCModeCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:120
@@ -13585,7 +13581,7 @@ msgid ""
 "Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its "
 "normal form B3. This does not seem to be of much use at the moment."
 msgstr ""
-"Se marca esta opción, a referencia da cela mostrada á esquerda da barra de "
+"Se marca esta opción, a referencia da cela amosada á esquerda da barra de "
 "fórmulas aparecerá no modo LC (i.e., L3C2), no canto do seu formato normal "
 "(i.e., B3). Isto non parece ser moi útil polo de agora."
 
@@ -13603,15 +13599,15 @@ msgid ""
 "sheet. Per default the page borders are not displayed. It is useful to see "
 "the page borders if you want to print your sheet."
 msgstr ""
-"Se marca esta opción, os bordos da páxina han mostrarse na folla actual. De "
-"maneira predeterminada, os bordos da páxina non se mostrar. É útil para ver "
+"Se marca esta opción, os bordos da páxina han amosarse na folla actual. De "
+"maneira predeterminada, os bordos da páxina non se amosar. É útil para ver "
 "os bordos da páxina, se quere imprimir a folla."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
 #, kde-format
 msgid "Show page outline"
-msgstr "Mostrar o contorno da páxina"
+msgstr "Amosar o contorno da páxina"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:140
@@ -13651,14 +13647,14 @@ msgid ""
 "If this box is checked Calligra Sheets will display the actual formulae in "
 "cells rather than the results."
 msgstr ""
-"Se marcas esta opción Calligra Sheets mostrarache as fórmulas das celas en "
-"vez dos resultados."
+"Se marca esta opción Calligra Sheets amosarache as fórmulas das celas en vez "
+"dos resultados."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:163
 #, kde-format
 msgid "Show &formula"
-msgstr "Mostrar a &fórmula"
+msgstr "Amosar a &fórmula"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showColumnAsNumbersCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:170
@@ -13674,7 +13670,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:173
 #, kde-format
 msgid "Show column as &numbers"
-msgstr "Mostrar as columnas como &números"
+msgstr "Amosar as columnas como &números"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showFormulaIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:180
@@ -13684,15 +13680,15 @@ msgid ""
 "the bottom left corner of cells containing formulae. This is useful if you "
 "want to protect cells with formulae."
 msgstr ""
-"Se marcas esta opción Calligra Sheets mostrarache un pequeno triángulo azul "
-"no canto inferior esquerdo das celas que conteñen fórmulas. Isto é hache ser "
+"Se marca esta opción Calligra Sheets amosarache un pequeno triángulo azul no "
+"canto inferior esquerdo das celas que conteñen fórmulas. Isto é hache ser "
 "útil cando queiras protexer as celas con fórmulas."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:183
 #, kde-format
 msgid "Show formula &indicator"
-msgstr "Mostrar o &indicador de fórmula"
+msgstr "Amosar o &indicador de fórmula"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:190
@@ -13701,14 +13697,14 @@ msgid ""
 "If checked, the grid (the cell limits) will be shown. This is the default. "
 "If unchecked, the grid will be hidden."
 msgstr ""
-"Se marcas esta opción as reixas (os limites das celas) serán visíbeis. Esta "
-"é a opción predeterminada. Se a desactivas a grade quedará agochada."
+"Se marca esta opción as reixas (os limites das celas) serán visíbeis. Esta é "
+"a opción predeterminada. Se a desmarcas a grade quedará agochada."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:193
 #, kde-format
 msgid "Show &grid"
-msgstr "Mostrar a &grade"
+msgstr "Amosar a &grade"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, autoCalcCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:200
@@ -13954,12 +13950,12 @@ msgstr "Renomear a folla activa"
 #: part/View.cpp:255
 #, kde-format
 msgid "Show Sheet..."
-msgstr "Mostrar a folla…"
+msgstr "Amosar a folla…"
 
 #: part/View.cpp:258
 #, kde-format
 msgid "Show a hidden sheet"
-msgstr "Mostra unha folla agochada"
+msgstr "Amosa unha folla agochada"
 
 #: part/View.cpp:260
 #, kde-format
@@ -13999,7 +13995,7 @@ msgstr "Contorno da páxina"
 #: part/View.cpp:276
 #, kde-format
 msgid "Show on the spreadsheet where the page boundary will be"
-msgstr "Mostra na folla de cálculo onde están as marxes da folla"
+msgstr "Amosa na folla de cálculo onde están as marxes da folla"
 
 #: part/View.cpp:280
 #, kde-format
@@ -14140,7 +14136,7 @@ msgstr "Cabeceiro de columna"
 #: part/View.cpp:353
 #, kde-format
 msgid "Show the column header"
-msgstr "Mostrar a cabeceira da columna"
+msgstr "Amosar a cabeceira da columna"
 
 #: part/View.cpp:358
 #, kde-format
@@ -14150,7 +14146,7 @@ msgstr "Cabeceira da fila"
 #: part/View.cpp:359
 #, kde-format
 msgid "Show the row header"
-msgstr "Mostrar a cabeceira da fila"
+msgstr "Amosar a cabeceira da fila"
 
 #: part/View.cpp:364
 #, kde-format
@@ -14160,7 +14156,7 @@ msgstr "Barra de desprazamento horizontal"
 #: part/View.cpp:365
 #, kde-format
 msgid "Show the horizontal scrollbar"
-msgstr "Mostrar a barra de desprazamento horizontal"
+msgstr "Amosar a barra de desprazamento horizontal"
 
 #: part/View.cpp:370
 #, kde-format
@@ -14170,7 +14166,7 @@ msgstr "Barra de desprazamento vertical"
 #: part/View.cpp:371
 #, kde-format
 msgid "Show the vertical scrollbar"
-msgstr "Mostrar a barra de desprazamento vertical"
+msgstr "Amosar a barra de desprazamento vertical"
 
 #: part/View.cpp:376
 #, kde-format
@@ -14180,7 +14176,7 @@ msgstr "Barra de estado"
 #: part/View.cpp:377
 #, kde-format
 msgid "Show the status bar"
-msgstr "Mostrar a barra de estado"
+msgstr "Amosar a barra de estado"
 
 #: part/View.cpp:382
 #, kde-format
@@ -14190,12 +14186,12 @@ msgstr "Barra de separadores"
 #: part/View.cpp:383
 #, kde-format
 msgid "Show the tab bar"
-msgstr "Mostrar a barra de separadores"
+msgstr "Amosar a barra de separadores"
 
 #: part/View.cpp:389
 #, kde-format
 msgid "Set various Calligra Sheets options"
-msgstr "Axustar as opcións de Calligra Sheets"
+msgstr "Definir opcións de Calligra Sheets"
 
 #: part/View.cpp:402
 #, kde-format
@@ -14699,17 +14695,17 @@ msgstr "Agochar as filas"
 #: ui/commands/RowColumnManipulators.cpp:284
 msgctxt "(qtundo-format)"
 msgid "Show Rows/Columns"
-msgstr "Mostrar as filas e columnas"
+msgstr "Amosar as filas e columnas"
 
 #: ui/commands/RowColumnManipulators.cpp:286
 msgctxt "(qtundo-format)"
 msgid "Show Columns"
-msgstr "Mostrar as columnas"
+msgstr "Amosar as columnas"
 
 #: ui/commands/RowColumnManipulators.cpp:288
 msgctxt "(qtundo-format)"
 msgid "Show Rows"
-msgstr "Mostrar as filas"
+msgstr "Amosar as filas"
 
 #: ui/commands/RowColumnManipulators.cpp:538
 msgctxt "(qtundo-format)"
@@ -14768,12 +14764,12 @@ msgstr "Agochar a Folla"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Show Sheet %1"
-msgstr "Mostrar a folla %1"
+msgstr "Amosar a folla %1"
 
 #: ui/commands/SheetCommands.cpp:74 ui/dialogs/ShowDialog.cpp:71
 msgctxt "(qtundo-format)"
 msgid "Show Sheet"
-msgstr "Mostrar a folla"
+msgstr "Amosar a folla"
 
 #: ui/commands/SheetCommands.cpp:98
 msgctxt "(qtundo-format)"
@@ -14816,9 +14812,9 @@ msgid ""
 "The default font is set for all cells in the Format -> Style Manager menu "
 "with the currently used style."
 msgstr ""
-"Poderás escoller aquí o estilo, tamaño e cor do tipo de letra, incluíndo "
+"Pode escoller aquí o estilo, tamaño e cor do tipo de letra, incluíndo "
 "algunhas opcións adicionais como texto subliñado ou tachado, do texto da "
-"cela actual. A parte inferior da páxina mostra unha previsualización do "
+"cela actual. A parte inferior da páxina amosa unha previsualización do "
 "formato de texto escollido.\n"
 "O tipo de letra predeterminado está definido para todas as celas no menú "
 "Formato -> Xestor de Estilos co estilo actual."
@@ -14834,7 +14830,7 @@ msgid ""
 "selected cells style text to Roman."
 msgstr ""
 "Escolle o estilo de tipo de letra para as celas que ten escollidas. Cando "
-"escolla varias celas con estilos distintos, o estilo mostrado ponse como "
+"escolla varias celas con estilos distintos, o estilo amosado ponse como "
 "variante (sen cambios) e se o deixa desta forma manterase a configuración "
 "actual para cada cela. Se o cambia á Roman, por exemplo, cambiarase o estilo "
 "de todas as celas para a Roman."
@@ -14872,7 +14868,7 @@ msgid ""
 "the selected cells font weight to Bold."
 msgstr ""
 "Escolla o grosor da letra para as celas que ten escollidas. Se escolle "
-"varias celas con grosores distintos, o estilo mostrado porase como variante "
+"varias celas con grosores distintos, o estilo amosado porase como variante "
 "(sen cambios) e se o deixa desta forma manterá a configuración actual para "
 "cada cela. Se o cambia a letra grosa, por exemplo, porase o estilo de todas "
 "as celas en letra grosa."
@@ -14935,8 +14931,8 @@ msgid ""
 "choose the new color."
 msgstr ""
 "Escolle a cor para o texto da cela actual. Se premes a barra de cores, "
-"mostrarase o diálogo de escolla de cores normal de KDE, onde poderás "
-"escoller a nova cor."
+"amosarase o diálogo de escolla de cores normal de KDE, onde poderás escoller "
+"a nova cor."
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:139
@@ -14963,8 +14959,8 @@ msgid ""
 "This box lists all your available font families. Click on one family to set "
 "it in the current cell."
 msgstr ""
-"Esta lista mostra todas as familias de tipos de letra dispoñíbeis. Prema "
-"unha familia de tipo de letra para aplicarlla á cela actual."
+"Esta lista amosa todas as familias de tipos de letra dispoñíbeis. Prema unha "
+"familia de tipo de letra para definila na cela actual."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ui/dialogs/FontWidget.ui:187 ui/dialogs/LayoutPage_Border.cpp:359
@@ -15096,10 +15092,10 @@ msgstr ""
 "O formato Moeda converte o teu número a notación monetaria usando a "
 "configuración definida en Configuración do Sistema -> Aparencia e "
 "comportamentos comúns -> Configuración rexional -> País/Rexión e idioma -> "
-"Moeda. Mostrarase o símbolo monetario e a precisión será a definida na "
+"Moeda. Amosarase o símbolo monetario e a precisión será a definida na "
 "Configuración do sistema .\n"
 "Tamén podes usar a icona Monetario na barra de formato para definir que o "
-"formato da cela empregue a moeda a empregar."
+"formato da cela use a moeda a usar."
 
 #: ui/dialogs/LayoutPage_Float.cpp:74
 #, kde-format
@@ -15114,8 +15110,8 @@ msgid ""
 "format will display 0.0012 again."
 msgstr ""
 "O formato científico cambia o seu número usando a notación científica. Por "
-"exemplo, o 0,0012 mostrarase como 1,2E-03. Ao volver ao formato de cela "
-"xenérico, volverá mostrar 0,0012."
+"exemplo, o 0,0012 amosarase como 1,2E-03. Ao volver ao formato de cela "
+"xenérico, volverá amosar 0,0012."
 
 #: ui/dialogs/LayoutPage_Float.cpp:79
 #, kde-format
@@ -15136,7 +15132,7 @@ msgstr ""
 "fracción escollido escollerase a máis próxima.\n"
 "Por exemplo se tivera 1,5 como número se escollera Fracción e 16-avos 1/16, "
 "obter \"1 8/16\", que é unha fracción exacta. Se tivera 1,4 como número na "
-"súa cela, e escolle a Fracción e os 16-avos 1/16, entón a cela mostrará \"1 "
+"súa cela, e escolle a Fracción e os 16-avos 1/16, entón a cela amosará \"1 "
 "6/16\", que é a fracción máis próxima a 16-avos."
 
 #: ui/dialogs/LayoutPage_Float.cpp:83
@@ -15172,9 +15168,9 @@ msgstr ""
 "deberala inserir no formato de tempo definido Configuración do Sistema -> "
 "Aparencia e comportamentos comúns -> Configuración rexional -> País/Rexión e "
 "idioma -> Data e hora. Na diálogo do formato da cela, poderás definir como "
-"mostrar a hora escollendo nas opcións dispoñíbeis. O formato predeterminado "
-"é o definido na Configuración do sistema. Cando o número da cela non teña "
-"sentido como unha hora, Calligra Sheets mostrará 00:00 no formato global que "
+"amosar a hora escollendo nas opcións dispoñíbeis. O formato predeterminado é "
+"o definido na Configuración do sistema. Cando o número da cela non teña "
+"sentido como unha hora, Calligra Sheets amosará 00:00 no formato global que "
 "ten a Configuración do sistema."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
@@ -15231,13 +15227,13 @@ msgid ""
 "This will display a preview of your choice so you can know what it does "
 "before clicking the OK button to validate it."
 msgstr ""
-"Isto mostrará unha vista previa da escolla, para que poida saber o que fai "
+"Isto amosará unha vista previa da escolla, para que poida saber o que fai "
 "antes de premer o botón de Aceptar para aplicalo."
 
 #: ui/dialogs/LayoutPage_Float.cpp:117
 #, kde-format
 msgid "Displays choices of format for the fraction, date or time formats."
-msgstr "Mostra as opcións de para os formatos fracción, data e hora."
+msgstr "Amosa as opcións de para os formatos fracción, data e hora."
 
 #: ui/dialogs/LayoutPage_Float.cpp:127
 #, kde-format
@@ -15260,7 +15256,7 @@ msgid ""
 "numeric values. This can also be changed using the Increase precision or "
 "Decrease precision icons in the Format toolbar. "
 msgstr ""
-"Pode controlar cantos díxitos mostrar despois da coma decimal nos valores "
+"Pode controlar cantos díxitos amosar despois da coma decimal nos valores "
 "numéricos. Isto tamén pode cambiarse coas iconas de aumentar a precisión e "
 "diminuír a precisión da barra de formato. "
 
@@ -15279,8 +15275,8 @@ msgid ""
 "You can choose whether positive values are displayed with a leading + sign "
 "and whether negative values are shown in red."
 msgstr ""
-"Podes escoller se os valores positivos son mostrados cun + inicial ese os "
-"valores negativos son mostrados en vermello."
+"Podes escoller se os valores positivos son amosados cun + inicial ese os "
+"valores negativos son amosados en vermello."
 
 #: ui/dialogs/LayoutPage_Float.cpp:147
 #, kde-format
@@ -15417,9 +15413,9 @@ msgid ""
 msgstr ""
 "<qt>Define a posición horizontal do contido na cela.\n"
 "<b>Normal</b> é o valor predefinido e basease no formato que escollas.\n"
-"<b>Esquerda</b> significa que o contido móstrase á esquerda na cela\n"
-"<b>Centro</b> significa que o contido móstrase no centro na cela.\n"
-"<b>Dereita</b> significa que o contido móstrase á dereita na cela.</qt>"
+"<b>Esquerda</b> significa que o contido amósase á esquerda na cela\n"
+"<b>Centro</b> significa que o contido amósase no centro na cela.\n"
+"<b>Dereita</b> significa que o contido amósase á dereita na cela.</qt>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, standard)
 #: ui/dialogs/PositionWidget.ui:54
@@ -15467,9 +15463,9 @@ msgid ""
 "of the cell.</qt>"
 msgstr ""
 "<qt>Define a posición vertical do contido da cela.\n"
-"<b>Enriba</b> significa que o contido mostrarase na parte superior da cela.\n"
-"<b>Medio</b> significa que o contido mostrarase verticalmente na cela.\n"
-"<b>Fondo</b> significa que o contido mostrarase no fondo da cela.</qt>"
+"<b>Enriba</b> significa que o contido amosarase na parte superior da cela.\n"
+"<b>Medio</b> significa que o contido amosarase verticalmente na cela.\n"
+"<b>Fondo</b> significa que o contido amosarase no fondo da cela.</qt>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, top)
 #: ui/dialogs/PositionWidget.ui:141
@@ -15496,8 +15492,8 @@ msgid ""
 "Set the amount of indent that will be used in the cell when you choose the "
 "Increase Indent or Decrease Indent actions."
 msgstr ""
-"Permite definir a cantidade de sangría a empregar na cela cando se escolles "
-"as accións de aumentar a indentación ou diminuír a indentación."
+"Permite definir a cantidade de sangría a usar na cela cando se escolles as "
+"accións de aumentar a indentación ou diminuír a indentación."
 
 #. i18n: ectx: property (title), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:168
@@ -15560,7 +15556,7 @@ msgid ""
 "You can learn more about all these settings in the User Manual in the "
 "Advanced Calligra Sheets chapter."
 msgstr ""
-"Este separador permite configurar a protección da cela. Todas as celas están "
+"Este separador permite definir a protección da cela. Todas as celas están "
 "protexidas de maneira predeterminada (o que significa que o contido da cela "
 "non pode cambiarse) e, para que a protección da cela estea activa, tamén ha "
 "ter que protexer a folla, coa opción do menú Ferramentas -> Protexer o "
@@ -15629,7 +15625,7 @@ msgid ""
 "is protected, its content cannot be changed."
 msgstr ""
 "Se marca esta opción o contido da cela protexerase. Este é o comportamento "
-"predeterminado. Terás que protexer toda a folla empregando Ferramentas-> "
+"predeterminado. Terás que protexer toda a folla usando Ferramentas-> "
 "Protexer o documento -> Protexer a folla… para que funcione. Consulta o "
 "manual para saber máis detalles disto no capítulo Avanzado de Calligra "
 "Sheets. Cando unha cela está protexida o seu contido non pode cambiarse."
@@ -15663,12 +15659,12 @@ msgstr "Agoc&har a fórmula"
 #: ui/dialogs/ShowDialog.cpp:35
 #, kde-format
 msgid "Show Sheet"
-msgstr "Mostrar a folla"
+msgstr "Amosar a folla"
 
 #: ui/dialogs/ShowDialog.cpp:45
 #, kde-format
 msgid "Select hidden sheets to show:"
-msgstr "Indica as follas agochadas a mostrar:"
+msgstr "Indica as follas agochadas a amosar:"
 
 #: ui/ExternalEditor.cpp:56
 #, kde-format
@@ -15733,7 +15729,7 @@ msgid ""
 "Malicious programs can harm your computer. Are you sure that you want to run "
 "this program?"
 msgstr ""
-"Esta ligazón apunta ao programa ou script «%1».\n"
+"Esta ligazón apunta ao programa ou guión «%1».\n"
 "Os programas maliciosos poden afectar ao teu computador. Estás seguro de que "
 "quere executar este programa?"
 

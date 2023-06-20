@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Miguel Branco <mgl.branco@gmail.com>, 2008, 2012.
 # Marce Villarino <mvillarino@kde-espana.org>, 2013.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: krossmodulekword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-05-20 02:41+0200\n"
-"PO-Revision-Date: 2019-11-03 13:37+0100\n"
+"PO-Revision-Date: 2023-06-19 14:23+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.11.70\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: ectx: Menu (tools)
 #: scripting.rc:4
@@ -48,7 +48,7 @@ msgstr "Ficheiro HTML ou texto"
 #: scripts/scripts.rc:8
 #, kde-format
 msgid "Python script to import content from a text or html file"
-msgstr "Script en Python para importar contido dun ficheiro de texto ou html"
+msgstr "Guión en Python para importar contido dun ficheiro de texto ou html"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:12
@@ -61,7 +61,7 @@ msgstr "Doxygen XML"
 #, kde-format
 msgid "Python script to import content from a combined doxygen XML file"
 msgstr ""
-"Script en Python para importar contido dun ficheiro combinado doxygen XML"
+"Guión en Python para importar contido dun ficheiro combinado doxygen XML"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:16
@@ -73,7 +73,7 @@ msgstr "OpenOffice.org UNO"
 #: scripts/scripts.rc:16
 #, kde-format
 msgid "Python script to import content using OpenOffice.org PyUNO"
-msgstr "Script en Python para importar contido usando OpenOffice.org PyUNO"
+msgstr "Guión en Python para importar contido usando OpenOffice.org PyUNO"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:25
@@ -91,7 +91,7 @@ msgstr "Exportar contido"
 #: scripts/scripts.rc:26
 #, kde-format
 msgid "Python script to export content to a text or html file"
-msgstr "Script en Python para exportar contido a un ficheiro de texto ou html"
+msgstr "Guión en Python para exportar contido a un ficheiro de texto ou html"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:30
@@ -104,7 +104,7 @@ msgstr "ReportLab.org PDF"
 #, kde-format
 msgid "Python script to export content to a PDF file using ReportLab.org"
 msgstr ""
-"Script en Python para exportar contido a un ficheiro PDF usando ReportLab.org"
+"Guión en Python para exportar contido a un ficheiro PDF usando ReportLab.org"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:40
@@ -116,7 +116,7 @@ msgstr "Ferramentas"
 #: scripts/scripts.rc:40
 #, kde-format
 msgid "Miscellaneous scripts"
-msgstr "Scripts varios"
+msgstr "Guións varios"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:41
@@ -131,7 +131,7 @@ msgid ""
 "Python script to view the OpenDocument XML representation of the current "
 "document"
 msgstr ""
-"Script en Python para ver unha representación do documento actual en "
+"Guión en Python para ver unha representación do documento actual en "
 "OpenDocument XML"
 
 #. i18n: tag script attribute text
@@ -145,7 +145,7 @@ msgstr "Diagrama do documento"
 #, kde-format
 msgid "QtRuby script that displays the document structure within a treeview"
 msgstr ""
-"Script en QtRuby que mostra a estrutura do documento nun diagrama de árbore"
+"Guión en QtRuby que amosa a estrutura do documento nun diagrama de árbore"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:49
@@ -160,8 +160,8 @@ msgid ""
 "Python script that uses the KHTML Part to display the Words Scripting online "
 "help"
 msgstr ""
-"Script en Python que emprega KHTML Part para mostrar a axuda de Words "
-"Scripting en Internet"
+"Guión en Python que usa KHTML Part para amosar a axuda de guionización de "
+"Words en Internet"
 
 #. i18n: tag collection attribute text
 #. i18n: tag script attribute text
@@ -174,7 +174,7 @@ msgstr "Variábeis"
 #: scripts/scripts.rc:60
 #, kde-format
 msgid "Scripting variables for Words"
-msgstr "Variábeis de scripts para Word"
+msgstr "Variábeis de guionización para Words"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:62
@@ -186,7 +186,7 @@ msgstr "Ler desde o ficheiro…"
 #: scripts/scripts.rc:62
 #, kde-format
 msgid "Python script to read a variable from a file"
-msgstr "Scripts en Python para ler a variábel desde un ficheiro"
+msgstr "Guión en Python para ler a variábel desde un ficheiro"
 
 #. i18n: tag collection attribute text
 #: scripts/scripts.rc:80
@@ -198,7 +198,7 @@ msgstr "Mostras"
 #: scripts/scripts.rc:80
 #, kde-format
 msgid "Samples to demonstrate scripting with Words"
-msgstr "Exemplos para demostrar como facer scripts con Words"
+msgstr "Exemplos para demostrar guionización con Words"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:81
@@ -210,7 +210,7 @@ msgstr "Inserir unha forma…"
 #: scripts/scripts.rc:81
 #, kde-format
 msgid "Python script to insert a shape"
-msgstr "Scripts en Python para inserir unha forma"
+msgstr "Guión en Python para inserir unha forma"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:85
@@ -222,7 +222,7 @@ msgstr "Control do cursor…"
 #: scripts/scripts.rc:85
 #, kde-format
 msgid "Ruby script that demonstrates how to control the cursor"
-msgstr "Script en Ruby que mostra como controlar o punteiro"
+msgstr "Guión en Ruby que amosa como controlar o punteiro"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:89
@@ -234,7 +234,7 @@ msgstr "Executar a acción…"
 #: scripts/scripts.rc:89
 #, kde-format
 msgid "Python script that demonstrates usage of actions"
-msgstr "Script en Python para demostrar o uso de accións"
+msgstr "Guión en Python para demostrar o uso de accións"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:93
@@ -246,7 +246,7 @@ msgstr "Ferramentas de acción…"
 #: scripts/scripts.rc:93
 #, kde-format
 msgid "Python script that demonstrates usage of tool actions"
-msgstr "Script en Python que demostra o uso de ferramentas de acción"
+msgstr "Guión en Python que demostra o uso de ferramentas de acción"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:97
@@ -258,7 +258,7 @@ msgstr "Barra de progreso"
 #: scripts/scripts.rc:97
 #, kde-format
 msgid "Python script that demonstrates how to use the progressbar"
-msgstr "Script en Python que demostra como usar a barra de progreso"
+msgstr "Guión en Python que demostra como usar a barra de progreso"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:101
@@ -270,7 +270,7 @@ msgstr "Texto"
 #: scripts/scripts.rc:101
 #, kde-format
 msgid "Python script that demonstrates usage of the text engine"
-msgstr "Script en Python que demostra o uso do motor de texto"
+msgstr "Guión en Python que demostra o uso do motor de texto"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:105
@@ -282,7 +282,7 @@ msgstr "Listas con HTML"
 #: scripts/scripts.rc:105
 #, kde-format
 msgid "Python script that demonstrates how to create lists with HTML"
-msgstr "Script en Python que demostra como crear listas con HTML"
+msgstr "Guión en Python que demostra como crear listas con HTML"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:110
@@ -294,7 +294,7 @@ msgstr "Listas co cursor"
 #: scripts/scripts.rc:110
 #, kde-format
 msgid "Python script that demonstrates how to create lists with a cursor"
-msgstr "Script en Python que demostra como crear listas cun cursor"
+msgstr "Guión en Python que demostra como crear listas cun cursor"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:114
@@ -306,13 +306,13 @@ msgstr "Táboas"
 #: scripts/scripts.rc:114
 #, kde-format
 msgid "Python script that demonstrates how to deal with tables"
-msgstr "Script en Python que demostra como traballar con táboas"
+msgstr "Guión en Python que demostra como traballar con táboas"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:118
 #, kde-format
 msgid "Python script that demonstrates how to handle variables"
-msgstr "Script en Python que demostra como xestionar as variábeis"
+msgstr "Guión en Python que demostra como xestionar as variábeis"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:122
@@ -324,7 +324,7 @@ msgstr "Todas as formas"
 #: scripts/scripts.rc:122
 #, kde-format
 msgid "Python script adds all shapes"
-msgstr "Script en Python que engade todas as formas"
+msgstr "Guión en Python que engade todas as formas"
 
 #, fuzzy
 #~| msgid "&Tools"

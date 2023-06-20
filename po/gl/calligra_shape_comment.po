@@ -21,7 +21,7 @@ msgstr ""
 #, kde-format
 msgid "The plugin needed for displaying comments is not present."
 msgstr ""
-"Non se dispón do complemento que se precisa para mostrar os comentarios."
+"Non se dispón do complemento que se precisa para amosar os comentarios."
 
 #: CommentShape.cpp:48
 #, kde-format
@@ -34,7 +34,7 @@ msgid ""
 "The plugin needed for displaying the comment is not compatible with the "
 "current version of the comment shape."
 msgstr ""
-"Este complemento que se precisa para mostrar os comentarios non é compatíbel "
+"Este complemento que se precisa para amosar os comentarios non é compatíbel "
 "coa versión actual dos comentarios."
 
 #: CommentShape.cpp:52

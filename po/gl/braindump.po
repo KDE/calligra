@@ -252,7 +252,7 @@ msgstr "Opcións da ferramenta"
 #: src/import/ToolDocker.cpp:70
 #, kde-format
 msgid "Toggles showing a title bar"
-msgstr "Acoplamento mostrando a de título"
+msgstr "Acoplamento amosando a de título"
 
 #: src/import/ToolDocker.cpp:78
 #, kde-format

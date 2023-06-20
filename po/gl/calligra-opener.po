@@ -83,7 +83,7 @@ msgstr "Jarosław Staniek"
 #: main.cpp:169
 #, kde-format
 msgid "Lists names of all available Calligra applications"
-msgstr "Mostrar o nome de todas as aplicacións de Calligra dispoñíbeis"
+msgstr "Amosar o nome de todas as aplicacións de Calligra dispoñíbeis"
 
 #: main.cpp:170
 #, kde-format

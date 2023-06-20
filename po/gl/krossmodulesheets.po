@@ -1,25 +1,26 @@
 # translation of krossmodulekspread.po to Galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Miguel Branco <mgl.branco@gmail.com>, 2007.
 # Miguel Branco <mgl.branco@gmail.com>, 2008, 2009, 2012.
 # Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2013, 2015, 2017.
 # Marce Villarino <mvillarino@kde-espana.es>, 2013.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: krossmodulekspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2019-02-17 20:26+0100\n"
+"PO-Revision-Date: 2023-06-19 14:21+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: ectx: Menu (tools)
 #: scripting.rc:4
@@ -30,12 +31,12 @@ msgstr "&Ferramentas"
 #: ScriptingFunction.cpp:36
 #, kde-format
 msgid "No such script."
-msgstr "Non hai tal script."
+msgstr "Non hai tal guión."
 
 #: ScriptingFunction.cpp:82
 #, kde-format
 msgid "No such script function."
-msgstr "Non hai tal función no script."
+msgstr "Non hai tal función no guión."
 
 #: ScriptingFunction.cpp:96
 #, kde-format
@@ -46,12 +47,12 @@ msgstr "Sen valor de retorno."
 #: ScriptingFunction.cpp:142
 #, kde-format
 msgid "Scripts"
-msgstr "Scripts"
+msgstr "Guións"
 
 #: ScriptingPart.cpp:51
 #, kde-format
 msgid "Scriptfile \"%1\" does not exist."
-msgstr "Non existe o ficheiro de script «%1»."
+msgstr "Non existe o ficheiro de guión «%1»."
 
 #: ScriptingPart.cpp:55
 #, kde-format
@@ -59,24 +60,24 @@ msgid ""
 "Scriptfile \"%1\" is not executable. Please set the executable-attribute on "
 "that file."
 msgstr ""
-"O ficheiro de script «%1» non é executábel. Defina o atributo de executábel "
+"O ficheiro de guión «%1» non é executábel. Defina o atributo de executábel "
 "no ficheiro."
 
 #: ScriptingPart.cpp:72
 #, kde-format
 msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
 msgstr ""
-"O ficheiro de script «%1» está nun directorio temporal. Denégase a execución."
+"O ficheiro de guión «%1» está nun directorio temporal. Denégase a execución."
 
 #: ScriptingPart.cpp:77
 #, kde-format
 msgid "Failed to execute scriptfile \"%1\""
-msgstr "Non se puido executar o ficheiro do script «%1»"
+msgstr "Non se puido executar o ficheiro do guión «%1»"
 
 #: ScriptingPart.cpp:80
 #, kde-format
 msgid "Errors on execution of scripts."
-msgstr "Houbo erros ao executar os scripts."
+msgstr "Houbo erros ao executar os guións."
 
 #: ScriptingWidgets.cpp:67
 #, kde-format
@@ -96,7 +97,7 @@ msgstr "Intervalo"
 #: ScriptingWriter.h:227
 msgctxt "(qtundo-format)"
 msgid "Set Values"
-msgstr "Estabelecer os valores"
+msgstr "Definir os valores"
 
 #: scripts/consoledocker.py:63
 msgctxt "Menu"
@@ -467,7 +468,7 @@ msgstr "Cambiou o nome da folla."
 
 #: scripts/myorca.py:100
 msgid "Show sheet %1"
-msgstr "Mostrar a folla %1"
+msgstr "Amosar a folla %1"
 
 #: scripts/myorca.py:104
 msgid "Hide sheet %1"
@@ -521,9 +522,9 @@ msgid ""
 "</qt>"
 msgstr ""
 "<qt>Non se puido importar o módulo ODFPY de Python.<br> <br> Para exportar a "
-"OpenDocument emprégase o script «odfpyexport.py», que á súa vez necesita o "
-"módulo ODFPY de Python. Terá que instalar <a href=\"http://"
-"opendocumentfellowship.org/projects/odfpy\">ODFPY</a>.</qt>"
+"OpenDocument úsase o guión «odfpyexport.py», que á súa vez necesita o módulo "
+"ODFPY de Python. Terá que instalar <a href=\"http://opendocumentfellowship."
+"org/projects/odfpy\">ODFPY</a>.</qt>"
 
 #: scripts/odfpyexport.py:74
 msgid ""
@@ -613,7 +614,7 @@ msgstr "Expresión regular incorrecta."
 
 #: scripts/pytime.py:10
 msgid "The PYTIME() function displays the current datetime."
-msgstr "A función PYTIME() mostra a data e hora actuais."
+msgstr "A función PYTIME() amosa a data e hora actuais."
 
 #: scripts/pytime.py:11
 msgid "PYTIME(string)"
@@ -1276,7 +1277,7 @@ msgstr "Funcións"
 #: scripts/scripts.rc:30
 #, kde-format
 msgid "Scripting formula functions"
-msgstr "Scripts de funcións de fórmula"
+msgstr "Guións de funcións de fórmula"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:31
@@ -1290,7 +1291,7 @@ msgstr "R-Project"
 msgid ""
 "Functions for the R programming environment for data analysis and graphics"
 msgstr ""
-"Funcións para o ambiente de programación R para análise de datos e gráficos"
+"Funcións para o contorno de programación R para análise de datos e gráficos"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:35
@@ -1350,7 +1351,7 @@ msgstr "Ferramentas"
 #: scripts/scripts.rc:55
 #, kde-format
 msgid "Miscellaneous scripts"
-msgstr "Scripts variados"
+msgstr "Guións variados"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:56
@@ -1365,7 +1366,7 @@ msgid ""
 "Python script to view the OpenDocument XML representation of the current "
 "document"
 msgstr ""
-"Script en Python para ver unha representación XML do documento actual de "
+"Guión en Python para ver unha representación XML do documento actual de "
 "OpenDocument"
 
 #. i18n: tag script attribute text
@@ -1402,7 +1403,7 @@ msgstr "Docker"
 #: scripts/scripts.rc:70
 #, kde-format
 msgid "Scripting Docker Widgets"
-msgstr "Trebellos de doca de scripting"
+msgstr "Trebellos de doca de guionización"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:71
@@ -1494,8 +1495,8 @@ msgid ""
 "The YFINANCE() function uses the Yahoo! Finance Web Service to display stock "
 "values of a defined ticker symbol."
 msgstr ""
-"A función YFINANCE() emprega o servizo web Yahoo! Finance para mostrar "
-"valores de mercado da barra de cotización do símbolo indicado."
+"A función YFINANCE() usa o servizo web Yahoo! Finance para amosar valores de "
+"mercado da barra de cotización do símbolo indicado."
 
 #: scripts/yfinance.py:41
 msgid "YFINANCE(string,string,string)"
@@ -1550,7 +1551,7 @@ msgid ""
 "The YWEATHER() function uses the Yahoo! Weather Web Service to display the "
 "weather of a location."
 msgstr ""
-"A función YWEATHER() emprega o servizo web Yahoo! Weather para mostrar a "
+"A función YWEATHER() usa o servizo web Yahoo! Weather para amosar a "
 "información meteorolóxica dun lugar."
 
 #: scripts/yweather.py:41

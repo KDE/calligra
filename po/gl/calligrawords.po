@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kword\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2023-05-02 21:50+0200\n"
+"PO-Revision-Date: 2023-06-19 14:18+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: ectx: Menu (file)
 #: part/calligrawords.rc:4 part/calligrawords_readonly.rc:4
@@ -1530,7 +1530,7 @@ msgstr "Crear un modelo a partir do documento…"
 #: part/KWView.cpp:272
 #, kde-format
 msgid "Save this document and use it later as a template"
-msgstr "Gardar este documento e empregalo máis tarde como un modelo"
+msgstr "Gardar este documento e usalo máis tarde como un modelo"
 
 #: part/KWView.cpp:273
 #, kde-format
@@ -1539,12 +1539,12 @@ msgid ""
 "template as a starting point for another document."
 msgstr ""
 "Podes gardar este documento como un modelo.<br><br>Ese novo modelo poderase "
-"empregar para comezar a realizar novos documentos con esa edición previa."
+"usar como punto de partida para outro documento."
 
 #: part/KWView.cpp:292
 #, kde-format
 msgid "Show Formatting Characters"
-msgstr "Mostrar o formato de caracteres"
+msgstr "Amosar o formato de caracteres"
 
 #: part/KWView.cpp:298
 #, kde-format
@@ -1559,18 +1559,18 @@ msgid ""
 "printing characters."
 msgstr ""
 "Conmutar os caracteres non imprimíbeis.<br/><br/>Se activa esta opción, "
-"Words mostra as tabulacións, espazos, retornos de carro e outros caracteres "
+"Words amosa as tabulacións, espazos, retornos de carro e outros caracteres "
 "que non se imprimen."
 
 #: part/KWView.cpp:301
 #, kde-format
 msgid "Show Field Shadings"
-msgstr "Mostrar as sombras dos campos"
+msgstr "Amosar as sombras dos campos"
 
 #: part/KWView.cpp:307
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr "Activar ou desactivar as sobras no fondo dos campos."
+msgstr "Conmutar as sobras no fondo dos campos."
 
 #: part/KWView.cpp:308
 #, kde-format
@@ -1578,13 +1578,13 @@ msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
-"Activar ou desactivar a visualización de campos (variábeis e outros) "
-"debuxando o seu fondo cunha cor que faga contraste."
+"Conmutar a visualización de campos (variábeis e outros) debuxando o seu "
+"fondo cunha cor que faga contraste."
 
 #: part/KWView.cpp:310
 #, kde-format
 msgid "Show Text Shape Borders"
-msgstr "Mostrar os bordos da forma de texto"
+msgstr "Amosar os bordos da forma de texto"
 
 #: part/KWView.cpp:311
 #, kde-format
@@ -1610,7 +1610,7 @@ msgstr "Configurar o bordo das táboas"
 #: part/KWView.cpp:325
 #, kde-format
 msgid "Toggle the display of table borders"
-msgstr "Trocar que se mostren os bordos das táboas"
+msgstr "Trocar que se amosen os bordos das táboas"
 
 #: part/KWView.cpp:326
 #, kde-format
@@ -1618,13 +1618,13 @@ msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
-"Conmutar os bordos das táboas.<br/><br/>Se activa esta opción Words mostra "
-"os bordos no visíbeis das táboas cunha liña gris."
+"Conmutar os bordos das táboas.<br/><br/>Se activa esta opción Words amosa os "
+"bordos no visíbeis das táboas cunha liña gris."
 
 #: part/KWView.cpp:328
 #, kde-format
 msgid "Show Section Bounds"
-msgstr "Mostrar os límites da sección"
+msgstr "Amosar os límites da sección"
 
 #: part/KWView.cpp:334
 #, kde-format
@@ -1643,12 +1643,12 @@ msgstr ""
 #: part/KWView.cpp:337
 #, kde-format
 msgid "Show Rulers"
-msgstr "Mostrar as regras"
+msgstr "Amosar as regras"
 
 #: part/KWView.cpp:339
 #, kde-format
 msgid "Shows or hides rulers"
-msgstr "Mostra ou agocha as regras"
+msgstr "Amosa ou agocha as regras"
 
 #: part/KWView.cpp:340
 #, kde-format
@@ -1659,9 +1659,9 @@ msgid ""
 "being displayed.</p>"
 msgstr ""
 "As regras son marcos regrados que aparecen enriba e á esquerda do texto e "
-"que serven de medida. As guías mostran a posición e a anchura das páxinas e "
-"das molduras coa cal poden empregarse para colocar os tabuladores, entre "
-"outras cousas.<p>Desmarque isto para desactivar as regras.</p>"
+"que serven de medida. As guías amosan a posición e a anchura das páxinas e "
+"das molduras coa cal poden usarse para colocar os tabuladores, entre outras "
+"cousas.<p>Desmarque isto para desactivar as regras.</p>"
 
 #: part/KWView.cpp:351
 #, kde-format
@@ -1671,12 +1671,12 @@ msgstr "Axustar á grade"
 #: part/KWView.cpp:359
 #, kde-format
 msgid "Show Status Bar"
-msgstr "Mostrar a barra de estado"
+msgstr "Amosar a barra de estado"
 
 #: part/KWView.cpp:360
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr "Mostrar ou agochar a barra de estado"
+msgstr "Amosar ou agochar a barra de estado"
 
 #: part/KWView.cpp:366
 #, kde-format
@@ -1704,7 +1704,7 @@ msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
-"As follas de estilo empréganse para formatar a visualización da información "
+"As follas de estilo úsanse para formatar a visualización da información "
 "almacenada en RDF."
 
 #: part/KWView.cpp:392
@@ -1745,12 +1745,12 @@ msgstr "Crear un rodapé"
 #: part/KWView.cpp:420
 #, kde-format
 msgid "Show Comments"
-msgstr "Mostrar os comentarios"
+msgstr "Amosar os comentarios"
 
 #: part/KWView.cpp:421
 #, kde-format
 msgid "Shows comments in the document"
-msgstr "Mostrar os comentarios no documento"
+msgstr "Amosar os comentarios no documento"
 
 #: part/KWView.cpp:427
 #, kde-format
@@ -1760,7 +1760,7 @@ msgstr "Cantidade de palabras"
 #: part/KWView.cpp:428
 #, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr "Mostrar ou agocha o reconto de palabras na barra de estado"
+msgstr "Amosar ou agocha o reconto de palabras na barra de estado"
 
 #: part/pagetool/KWPageTool.cpp:85
 #, kde-format

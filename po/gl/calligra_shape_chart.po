@@ -1,23 +1,24 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Miguel Branco <mgl.branco@gmail.com>, 2008, 2009, 2012.
 # Marce Villarino <mvillarino@kde-espana.org>, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2019-01-01 13:36+0100\n"
+"PO-Revision-Date: 2023-06-19 13:18+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -61,7 +62,7 @@ msgstr "Título do eixo"
 #: AxesConfigWidget.ui:45
 #, kde-format
 msgid "Show Axis"
-msgstr "Mostrar o eixo"
+msgstr "Amosar o eixo"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
@@ -73,7 +74,7 @@ msgstr "Escala"
 #: AxesConfigWidget.ui:65
 #, kde-format
 msgid "Show Labels"
-msgstr "Mostrar as lendas"
+msgstr "Amosar as lendas"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
@@ -85,13 +86,13 @@ msgstr "Fonte"
 #: AxesConfigWidget.ui:81
 #, kde-format
 msgid "Show Major Grid"
-msgstr "Mostrar a grade maior"
+msgstr "Amosar a grade maior"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
 #, kde-format
 msgid "Show Minor Grid"
-msgstr "Mostrar a grade menor"
+msgstr "Amosar a grade menor"
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
@@ -144,7 +145,7 @@ msgstr "Espazo entre as barras"
 #: AxesConfigWidget.ui:193
 #, kde-format
 msgid "Show Title"
-msgstr "Mostrar o título"
+msgstr "Amosar o título"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:201
@@ -177,7 +178,7 @@ msgstr "Eixe Y secundario"
 msgid ""
 "The plugin needed for displaying text labels in a chart is not available."
 msgstr ""
-"Non está dispoñíbel o complemento que se necesita para mostrar as etiquetas "
+"Non está dispoñíbel o complemento que se necesita para amosar as etiquetas "
 "de texto."
 
 #: ChartShape.cpp:312
@@ -191,7 +192,7 @@ msgid ""
 "The plugin needed for displaying text labels is not compatible with the "
 "current version of the chart Flake shape."
 msgstr ""
-"O complemento que fai falta para mostrar as etiquetas de texto non é "
+"O complemento que fai falta para amosar as etiquetas de texto non é "
 "compatíbel coa versión actual da forma Flake de gráficas."
 
 #: ChartShape.cpp:317
@@ -545,7 +546,7 @@ msgstr "Gráfico de área"
 #: ChartTool.cpp:1142
 msgctxt "(qtundo-format)"
 msgid "Show Legend"
-msgstr "Mostrar a lenda"
+msgstr "Amosar a lenda"
 
 #: ChartTool.cpp:1144
 msgctxt "(qtundo-format)"
@@ -570,7 +571,7 @@ msgstr "Retirar o eixo"
 #: commands/AxisCommand.cpp:120
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
-msgstr "Mostrar o título do eixo"
+msgstr "Amosar o título do eixo"
 
 #: commands/AxisCommand.cpp:122
 msgctxt "(qtundo-format)"
@@ -580,7 +581,7 @@ msgstr "Agochar o título do eixo"
 #: commands/AxisCommand.cpp:147
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr "Mostrar o eixo"
+msgstr "Amosar o eixo"
 
 #: commands/AxisCommand.cpp:149
 msgctxt "(qtundo-format)"
@@ -590,7 +591,7 @@ msgstr "Agochar o eixo"
 #: commands/AxisCommand.cpp:158
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr "Mostrar as lendas do eixo"
+msgstr "Amosar as lendas do eixo"
 
 #: commands/AxisCommand.cpp:160
 msgctxt "(qtundo-format)"
@@ -600,7 +601,7 @@ msgstr "Agochar as lendas dos eixos"
 #: commands/AxisCommand.cpp:169
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr "Mostrar as liñas maiores da grade"
+msgstr "Amosar as liñas maiores da grade"
 
 #: commands/AxisCommand.cpp:171
 msgctxt "(qtundo-format)"
@@ -610,7 +611,7 @@ msgstr "Agochar as liñas maiores da grade"
 #: commands/AxisCommand.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr "Mostrar as liñas menores da grade"
+msgstr "Amosar as liñas menores da grade"
 
 #: commands/AxisCommand.cpp:182
 msgctxt "(qtundo-format)"
@@ -640,12 +641,12 @@ msgstr "Definir a anchura dos subintervalos do eixo"
 #: commands/AxisCommand.cpp:216
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr "Usar unha anchura automática para os intervalos"
+msgstr "Definir unha anchura automática para os intervalos"
 
 #: commands/AxisCommand.cpp:218
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr "Usar unha anchura manual para os intervalos"
+msgstr "Definir unha anchura manual para os intervalos"
 
 #: commands/AxisCommand.cpp:227
 msgctxt "(qtundo-format)"
@@ -675,7 +676,7 @@ msgstr "Definir a posición das etiquetas do eixe"
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Show Text Shape"
-msgstr "Mostrar a forma de texto"
+msgstr "Amosar a forma de texto"
 
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -780,7 +781,7 @@ msgstr "Definir o tipo de gráfica do conxunto de datos"
 #: commands/DatasetCommand.cpp:152
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr "Mostrar a categoría do conxunto de datos"
+msgstr "Amosar a categoría do conxunto de datos"
 
 #: commands/DatasetCommand.cpp:154
 msgctxt "(qtundo-format)"
@@ -790,7 +791,7 @@ msgstr "Agochar a categoría do conxunto de datos"
 #: commands/DatasetCommand.cpp:163
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr "Mostrar o número do conxunto de datos"
+msgstr "Amosar o número do conxunto de datos"
 
 #: commands/DatasetCommand.cpp:165
 msgctxt "(qtundo-format)"
@@ -800,7 +801,7 @@ msgstr "Agochar o número do conxunto de datos"
 #: commands/DatasetCommand.cpp:174
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr "Mostrar a porcentaxe do conxunto de datos"
+msgstr "Amosar a porcentaxe do conxunto de datos"
 
 #: commands/DatasetCommand.cpp:176
 msgctxt "(qtundo-format)"
@@ -810,7 +811,7 @@ msgstr "Agochar a porcentaxe do conxunto de datos"
 #: commands/DatasetCommand.cpp:185
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr "Mostrar o símbolo do conxunto de datos"
+msgstr "Amosar o símbolo do conxunto de datos"
 
 #: commands/DatasetCommand.cpp:187
 msgctxt "(qtundo-format)"
@@ -835,7 +836,7 @@ msgstr "Agochar o marcador do conxunto de datos"
 #: commands/DatasetCommand.cpp:213
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr "Mostrar o símbolo do marcador do conxunto de datos"
+msgstr "Amosar o símbolo do marcador do conxunto de datos"
 
 #: commands/DatasetCommand.cpp:221
 msgctxt "(qtundo-format)"
@@ -845,12 +846,12 @@ msgstr "Definir os eixos do conxunto de datos"
 #: commands/GapCommand.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Bars"
-msgstr "Estabelecer o espazo entre as barras"
+msgstr "Definir o espazo entre as barras"
 
 #: commands/GapCommand.cpp:68
 msgctxt "(qtundo-format)"
 msgid "Set Gap Between Sets"
-msgstr "Estabelecer o espazo entre os conxuntos"
+msgstr "Definir o espazo entre os conxuntos"
 
 #: commands/LegendCommand.cpp:78
 msgctxt "(qtundo-format)"
@@ -1277,7 +1278,7 @@ msgstr "Rexión de celas do valor de X: %1"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr "Valores predeterminados usados"
+msgstr "Valores predeterminados usados."
 
 #: dialogs/BubbleDataSetTableModel.cpp:160
 #: dialogs/ScatterDataSetTableModel.cpp:156
@@ -1683,7 +1684,7 @@ msgstr "Posición"
 #: LegendConfigWidget.ui:107
 #, kde-format
 msgid "Show Legend"
-msgstr "Mostrar a lenda"
+msgstr "Amosar a lenda"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: LegendConfigWidget.ui:130
@@ -1838,7 +1839,7 @@ msgstr "Límite do xunte"
 #: widgets/StrokeConfigWidget.cpp:197
 #, kde-format
 msgid "Set line width of actual selection"
-msgstr "Estabelecer a anchura de liña da selección actual"
+msgstr "Definir a anchura de liña da selección actual"
 
 #: widgets/StrokeConfigWidget.cpp:211
 #, kde-format

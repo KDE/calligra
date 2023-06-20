@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2023-05-02 21:50+0200\n"
+"PO-Revision-Date: 2023-06-19 14:15+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -79,7 +79,7 @@ msgstr "Crear unha animación de obxecto"
 #: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
-msgstr "Editar o evento de activación da animación"
+msgstr "Editar o evento detonante da animación"
 
 #: part/commands/KPrAnimationRemoveCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -491,7 +491,7 @@ msgstr "Normal"
 #: part/KPrView.cpp:78
 #, kde-format
 msgid "Show Master Slides"
-msgstr "Mostrar as diapositivas mestres"
+msgstr "Amosar as diapositivas mestres"
 
 #: part/KPrView.cpp:79
 #, kde-format
@@ -616,7 +616,7 @@ msgstr "Deter a presentación"
 #: part/KPrView.cpp:286
 #, kde-format
 msgid "Show Status Bar"
-msgstr "Mostrar a barra de estado"
+msgstr "Amosar a barra de estado"
 
 #: part/KPrView.cpp:287
 #, kde-format
@@ -626,7 +626,7 @@ msgstr "Agochar a barra de estado"
 #: part/KPrView.cpp:288
 #, kde-format
 msgid "Shows or hides the status bar"
-msgstr "Mostra ou agocha a barra de estado"
+msgstr "Amosa ou agocha a barra de estado."
 
 #: part/KPrView.cpp:297
 #, kde-format
@@ -754,7 +754,7 @@ msgstr "Non pode haber dúas presentacións co mesmo nome."
 #: part/pagelayout/KPrPlaceholders.cpp:47
 msgctxt "(qtundo-format)"
 msgid "Set Layout"
-msgstr "Estabelecer a disposición"
+msgstr "Definir a disposición"
 
 #: part/tools/animationtool/KPrAnimationSelectorWidget.cpp:54
 #, kde-format
@@ -1390,7 +1390,7 @@ msgstr "Abrir horizontal e invertidamente cara a dentro"
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Double Sweep"
-msgstr "Limpacristais dobre"
+msgstr "Dúas pasadas"
 
 #: plugins/pageeffects/clockwipe/doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp:37
 #, kde-format
@@ -1588,7 +1588,7 @@ msgstr "Á cima"
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:16
 #, kde-format
 msgid "Single Sweep"
-msgstr "Limpacristais"
+msgstr "Unha pasada"
 
 #: plugins/pageeffects/clockwipe/singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp:57
 #, kde-format
