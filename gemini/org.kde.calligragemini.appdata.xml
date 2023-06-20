@@ -48,7 +48,7 @@
   <summary xml:lang="eu">Bulegorako suitea</summary>
   <summary xml:lang="fi">Toimisto-ohjelmisto</summary>
   <summary xml:lang="fr">Suite bureautique</summary>
-  <summary xml:lang="gl">Suite de oficina</summary>
+  <summary xml:lang="gl">Suite de oficina.</summary>
   <summary xml:lang="ia">Suite de Office</summary>
   <summary xml:lang="id">Suite Perkantoran</summary>
   <summary xml:lang="it">Office Suite</summary>
@@ -385,7 +385,7 @@
       <caption xml:lang="eu">Zuzenean DropBox-etik zamatutako aurkezpen bat, «Editzatzeko» moduan</caption>
       <caption xml:lang="fi">DropBoxista suoraan muokkaustilaan ladattu esitys</caption>
       <caption xml:lang="fr">Une présentation téléchargée directement à partir de DropBox en mode « Modification »</caption>
-      <caption xml:lang="gl">Unha presentación cargada directamente de DropBox, en modo de edición</caption>
+      <caption xml:lang="gl">Unha presentación cargada directamente de DropBox, en modo de edición.</caption>
       <caption xml:lang="id">Presentasi dimuat langsung dari DropBox, dalam mode Edit</caption>
       <caption xml:lang="it">Una presentazione caricata direttamente da DropBox, in modalità Modifica</caption>
       <caption xml:lang="ko">DropBox에서 프레젠테이션 직접 불러오기(편집 모드)</caption>
@@ -415,7 +415,7 @@
       <caption xml:lang="eu">Testu dokumentu bat mahaigaineko erabiltzaile-interfaze estilo tradizionalean («Sortzeko» modua)</caption>
       <caption xml:lang="fi">Tekstiasiakirja perinteisessä työpöytäkäyttöliittymässä (luontitila)</caption>
       <caption xml:lang="fr">Un document de texte avec une interface utilisateur d'un bureau traditionnel (Mode « Création »)</caption>
-      <caption xml:lang="gl">Un documento de texto na interface de usuario tradicional de escritorio (modo de creación)</caption>
+      <caption xml:lang="gl">Un documento de texto na interface de usuario tradicional de escritorio (modo de creación).</caption>
       <caption xml:lang="id">Dokumen teks dalam UI gaya desktop tradisional (mode Ciptakan)</caption>
       <caption xml:lang="it">Un documento di testo nell'interfaccia in stile desktop tradizionale (modalità Crea)</caption>
       <caption xml:lang="ko">기존 데스크톱 스타일 UI의 텍스트 문서(작성 모드)</caption>
@@ -445,7 +445,7 @@
       <caption xml:lang="eu">Testu dokumentu bat «Sortzeko» moduan, oharren panela ikusten dela</caption>
       <caption xml:lang="fi">Tekstiasiakirja luontitilassa muistiinpanopaneeli näkyvillä</caption>
       <caption xml:lang="fr">Un document de texte en mode « Création » avec l'affichage d'un panneau de notes</caption>
-      <caption xml:lang="gl">Un documento de texto no modo de creación co panel de notas visíbel</caption>
+      <caption xml:lang="gl">Un documento de texto no modo de creación co panel de notas visíbel.</caption>
       <caption xml:lang="id">Dokumen teks dalam mode Ciptakan dengan panel catatan yang ditampilkan</caption>
       <caption xml:lang="it">Un documento di testo in modalità Crea con il pannello delle note visibile</caption>
       <caption xml:lang="ko">노트 패널이 표시된 작성 모드의 텍스트 문서</caption>
