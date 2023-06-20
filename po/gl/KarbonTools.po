@@ -49,7 +49,7 @@ msgstr "&Seguir a ruta escollida"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:72
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr "Empregar &presión da táboa"
+msgstr "Usar &presión da táboa"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:75
 #, kde-format
@@ -64,7 +64,7 @@ msgstr "Estreitamento:"
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:92
 #, kde-format
 msgid "Use tablet &angle"
-msgstr "Empregar o á&ngulo da táboa"
+msgstr "Usar o á&ngulo da táboa"
 
 #: CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:95
 #, kde-format
@@ -251,7 +251,7 @@ msgstr "Retirar o efecto de filtro"
 #: filterEffectTool/FilterStackSetCommand.cpp:23
 msgctxt "(qtundo-format)"
 msgid "Set filter stack"
-msgstr "Estabelecer o grupo de efectos"
+msgstr "Definir o grupo de efectos"
 
 #: filterEffectTool/KarbonFilterEffectsTool.cpp:433
 #, kde-format

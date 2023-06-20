@@ -7,13 +7,13 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2010, 2013, 2014.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2019-11-26 22:50+0100\n"
+"PO-Revision-Date: 2023-06-19 13:21+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: karbon/image/ImageExport.cpp:90
 #, kde-format
@@ -65,7 +65,7 @@ msgstr "Altura da imaxe:"
 #: karbon/image/ImageExportOptionsWidget.ui:69
 #, kde-format
 msgid "Size in Units"
-msgstr "Tamaño en unidades:"
+msgstr "Tamaño en unidades"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: karbon/image/ImageExportOptionsWidget.ui:98
@@ -138,15 +138,13 @@ msgstr "Insira o contrasinal"
 #: libmsooxml/MsooXmlImport.cpp:344 libmsooxml/MsooXmlImport.cpp:457
 #, kde-format
 msgid "This document is encrypted, please enter the password to decrypt it:"
-msgstr ""
-"Este documento está encriptado así que precisa inserir o contrasinal para "
-"desencriptalo:"
+msgstr "Este documento está cifrado, escriba o contrasinal para descifralo:"
 
 #: libmsooxml/MsooXmlImport.cpp:345 libmsooxml/MsooXmlImport.cpp:458
 #, kde-format
 msgid "Incorrect password, please enter the password to decrypt this document:"
 msgstr ""
-"O contrasinal é incorrecto. Insira de novo o contrasinal para desencriptar o "
+"O contrasinal é incorrecto. Escriba de novo o contrasinal para descifrar o "
 "documento:"
 
 #: libmsooxml/MsooXmlImport.cpp:633
@@ -273,8 +271,8 @@ msgstr "Non se pode atopar a codificación: %1"
 #, kde-format
 msgid "CSV filter cannot open input file - please report."
 msgstr ""
-"O filtro de CSV non pode abrir o ficheiro de entrada - informe aos "
-"desenvolvedores."
+"O filtro de CSV non pode abrir o ficheiro de entrada. Infórmenos da "
+"incidencia."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #. i18n: ectx: attribute (title), widget (QWidget, encodingPage)
@@ -396,7 +394,7 @@ msgstr "Outro:"
 #: sheets/csv/exportdialogui.ui:309
 #, kde-format
 msgid "Quotes:"
-msgstr "Aspas:"
+msgstr "Comiñas:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: sheets/csv/exportdialogui.ui:329
@@ -650,7 +648,7 @@ msgstr "Documento independente"
 #: sheets/latex/export/latexexportwidget.ui:80
 #, kde-format
 msgid "Do not generate either the latex header or the document environment"
-msgstr "Non xerar a cabeceira de Latex ou o ambiente do documento"
+msgstr "Non xerar a cabeceira de Latex ou o contorno do documento"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:83
@@ -805,7 +803,7 @@ msgid ""
 msgstr ""
 "Este documento creouse con OpenOffice.org versión %1. Este filtro foi "
 "escrito para a versión 1.0. Se le este ficheiro poden ocorrer comportamentos "
-"estraños, quebras ou mostrarse mal datos. Quere continuar a conversión deste "
+"estraños, quebras ou amosarse mal datos. Quere continuar a conversión deste "
 "documento?"
 
 #: sheets/opencalc/opencalcimport.cc:1929
@@ -817,8 +815,8 @@ msgstr "Versión do documento non permitida"
 #, kde-format
 msgid "QPRO filter cannot open input file - please report."
 msgstr ""
-"O filtro de QPRO non pode abrir o ficheiro de entrada - informe aos "
-"desenvolvedores."
+"O filtro de QPRO non pode abrir o ficheiro de entrada. Infórmenos da "
+"incidencia."
 
 #: sheets/qpro/qproimport.cc:226
 #, kde-format

@@ -10,13 +10,13 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2012.
 # Marce Villarino <mvillarino@kde-espana.es>, 2012, 2013, 2014.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2019-11-26 22:49+0100\n"
+"PO-Revision-Date: 2023-06-19 14:19+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
 msgctxt "(qtundo-format)"
@@ -507,12 +507,12 @@ msgstr "Distribuír os bordos superiores"
 #: ui/KarbonView.cpp:907
 #, kde-format
 msgid "Show Color Palette"
-msgstr "Mostrar a paleta de cores"
+msgstr "Amosar a paleta de cores"
 
 #: ui/KarbonView.cpp:909
 #, kde-format
 msgid "Show or hide color palette"
-msgstr "Mostra ou agocha a paleta de cores"
+msgstr "Amosa ou agocha a paleta de cores"
 
 #: ui/KarbonView.cpp:913
 #, kde-format
@@ -597,7 +597,7 @@ msgstr "Ampliación"
 #: ui/widgets/KarbonConfigInterfacePage.cpp:58
 #, kde-format
 msgid "Show status bar:"
-msgstr "Mostrar a barra de estado:"
+msgstr "Amosar a barra de estado:"
 
 #: ui/widgets/KarbonConfigInterfacePage.cpp:64
 #, kde-format

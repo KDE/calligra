@@ -211,7 +211,7 @@ msgstr " días"
 #: FixedDateFormat.ui:53
 #, kde-format
 msgid "Select the way the date should be displayed:"
-msgstr "Seleccione o xeito de mostrar a data:"
+msgstr "Seleccione o xeito de amosar a data:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, custom)
 #: FixedDateFormat.ui:60

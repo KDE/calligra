@@ -31,8 +31,7 @@ msgstr "Modelo de forma"
 #, kde-format
 msgid "Simple shape that is used as a template for developing other shapes."
 msgstr ""
-"Forma sinxela que se pode empregar como modelo para desenvolver outras "
-"formas."
+"Forma sinxela que se pode usar como modelo para desenvolver outras formas."
 
 #: TemplateTool.cpp:77
 #, kde-format
