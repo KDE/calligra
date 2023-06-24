@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-19 14:15+0200\n"
+"PO-Revision-Date: 2023-06-23 22:07+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -7845,7 +7845,7 @@ msgid ""
 "Sums up the numbers in a column of a database specified by a set of "
 "conditions."
 msgstr ""
-"Suma os número dunha columna dunha base da datos indicada por unha serie de "
+"Suma os número dunha columna dunha base de datos indicada por unha serie de "
 "condicións."
 
 #: functions/database.xml:24
@@ -8049,7 +8049,7 @@ msgstr ""
 #: functions/database.xml:250
 #, kde-format
 msgid "DVAR(Database; \"Header\"; Conditions)"
-msgstr "DVAR(Database; \"Cabeceiro\"; Condicións)"
+msgstr "DVAR(base de datos; \"Cabeceira\"; condicións)"
 
 #: functions/database.xml:251
 #, kde-format
@@ -8070,7 +8070,7 @@ msgstr ""
 #: functions/database.xml:273
 #, kde-format
 msgid "DVARP(Database; \"Header\"; Conditions)"
-msgstr "DVARP(Database; \"Cabeceiro\"; Condicións)"
+msgstr "DVARP(base de datos; \"Cabeceira\"; condicións)"
 
 #: functions/database.xml:274
 #, kde-format
@@ -12197,9 +12197,9 @@ msgid ""
 msgstr ""
 "INFO() devolve informacións sobre o contorno operativo actual. O tipo de "
 "parámetro indica o tipo de información que quere devolver. Pode ser un dos "
-"seguintes: «directory» devolve a ruta do directorio actual, «numfile» "
-"devolve o número de documentos activos e «release» devolve a versión de "
-"Calligra Sheets como texto, «recalc» devolve o modo de novo cálculo actual: "
+"seguintes: «directory» devolve a ruta do cartafol actual, «numfile» devolve "
+"o número de documentos activos e «release» devolve a versión de Calligra "
+"Sheets como texto, «recalc» devolve o modo de novo cálculo actual: "
 "«Automático» ou «Manual», «system» devolve o nome do ambiente de operación e "
 "«osversion» devolve o sistema operativo actual."
 
@@ -17878,7 +17878,7 @@ msgid ""
 "find_text, from the leftmost character of within_text."
 msgstr ""
 "A función SEARCH() atopa unha cadea de texto (atopar_texto) dentro doutra "
-"cadea (en_texto) e devolve o número do punto inicial de atopar_texto, "
+"cadea (en_texto) e devolve o número do punto de partida de atopar_texto, "
 "contando desde o carácter máis á esquerda de en_texto."
 
 #: functions/text.xml:99 functions/text.xml:127
@@ -17935,7 +17935,7 @@ msgid ""
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
 "A función SEARCHB() atopa unha cadea de texto (atopar_texto) dentro doutra "
-"cadea (en_texto) e devolve o número do punto inicial de atopar_texto, "
+"cadea (en_texto) e devolve o número do punto de partida de atopar_texto, "
 "contando desde o carácter máis á esquerda de en_texto usando as posicións "
 "byte."
 
@@ -18181,7 +18181,7 @@ msgid ""
 "find_text, from the leftmost character of within_text."
 msgstr ""
 "A función FIND() atopa unha cadea de texto (atopar_texto) dentro doutra "
-"cadea de caracteres (en_texto) e devolve o número do punto inicial de "
+"cadea de caracteres (en_texto) e devolve o número do punto de partida de "
 "atopar_texto, a partir do carácter máis á esquerda de en_texto."
 
 #: functions/text.xml:302
@@ -18241,7 +18241,7 @@ msgid ""
 "find_text, from the leftmost character of within_text using byte positions."
 msgstr ""
 "A función FINDB() atopa unha cadea de texto (atopar_texto) dentro doutra "
-"cadea (en_texto) e devolve o número do punto inicial de atopar_texto, "
+"cadea (en_texto) e devolve o número do punto de partida de atopar_texto, "
 "contando desde o carácter máis á esquerda de en_texto usando as posicións "
 "byte."
 
@@ -19834,9 +19834,9 @@ msgid ""
 "displayed. Click here to choose another color for the borders than the "
 "default red."
 msgstr ""
-"Os bordos das páxinas amósanse cando se marca o elemento de menú «Ver → "
+"Os bordos das páxinas amósanse cando se marca a entrada de menú «Ver → "
 "Amosar o bordo da páxina». Premer aquí para escoller outra cor para os "
-"bordos distintos do vermello que se estabelece de maneira predeterminada."
+"bordos distinta da vermella que se usa de maneira predeterminada."
 
 #: part/dialogs/PageLayoutDialog.cpp:93 part/dialogs/PageLayoutDialog.cpp:96
 #: part/dialogs/PageLayoutDialog.cpp:100
@@ -20884,7 +20884,7 @@ msgstr "Renomear a folla"
 #: part/View.cpp:1779 part/View.cpp:1785
 #, kde-format
 msgid "Change Sheet Name"
-msgstr "Cambiar o nome da folla"
+msgstr "Renomear a folla"
 
 #: part/View.cpp:1779
 #, kde-format

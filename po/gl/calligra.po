@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-19 13:17+0200\n"
+"PO-Revision-Date: 2023-06-23 23:36+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -906,7 +906,7 @@ msgstr "Abrir un novo documento baseado no ficheiro de modelo indicado."
 #: main/KoApplication.cpp:201
 #, kde-format
 msgid "Override display DPI"
-msgstr "Sobrescribir os DPI do pantalla"
+msgstr "Sobrepoñer os DPI da pantalla"
 
 #: main/KoApplication.cpp:202
 #, kde-format
@@ -1466,7 +1466,7 @@ msgstr "&Cifrar o documento"
 #: main/KoMainWindow.cpp:297
 #, kde-format
 msgid "&Uncompress to Directory"
-msgstr "&Descomprimir nun directorio"
+msgstr "&Descomprimir nun cartafol"
 
 #: main/KoMainWindow.cpp:302
 #, kde-format
@@ -1849,7 +1849,7 @@ msgstr "Descoñecido"
 #: odf/KoOdfReadStore.cpp:91
 #, kde-format
 msgid "No store backend"
-msgstr "Non hai ningunha infraestrutura de almacén"
+msgstr "Non hai ningún motor de almacén"
 
 #: odf/KoOdfReadStore.cpp:126
 #, kde-format
@@ -3782,7 +3782,7 @@ msgstr "ERRO: Protocolo descoñecido «%1»"
 #: store/KoStore.cpp:168
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
-msgstr "O modo de directorio non se permite para localizacións remotas."
+msgstr "O modo de cartafol non se permite para localizacións remotas."
 
 #: store/KoStore.cpp:169
 #, kde-format
@@ -5400,7 +5400,7 @@ msgstr "Opcións da ferramenta"
 #: widgets/KoToolDocker.cpp:216
 #, kde-format
 msgid "Toggles organizing the options in tabs or not"
-msgstr "Alternar organizar ou non as opcións en separadores"
+msgstr "Conmuta organizar ou non as opcións en separadores."
 
 #: widgets/KoViewItemContextBar.cpp:183
 #, kde-format

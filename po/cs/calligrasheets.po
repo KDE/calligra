@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-02-24 11:07+0100\n"
+"PO-Revision-Date: 2023-06-23 11:37+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: ectx: Menu (file)
 #: calligrasheets.rc:5
@@ -3478,7 +3478,7 @@ msgstr "TJS"
 #: Currency.cpp:306
 #, kde-format
 msgid "Tajikistan"
-msgstr "Tadžikistán"
+msgstr "Tádžikistán"
 
 #: Currency.cpp:307
 #, kde-format
@@ -9047,7 +9047,7 @@ msgid ""
 "The CONVERT() function returns a conversion from one measurement system to "
 "another."
 msgstr ""
-"FunkceCONVERT()  vrací číslo převedené z jednoho jednotkového systému do "
+"Funkce CONVERT()  vrací číslo převedené z jednoho jednotkového systému do "
 "jiného."
 
 #: functions/engineering.xml:130
@@ -15741,7 +15741,7 @@ msgstr ""
 #: functions/statistical.xml:823
 #, kde-format
 msgid "NEGBINOMDIST(failures; success; prob_of_success)"
-msgstr "NEGBINOMDIS(pokusy; úspěchy; pravděpodobnost_úspěchů)"
+msgstr "NEGBINOMDIS(pokusy; úspěchy; pravděpodobnost_úspěchu)"
 
 #: functions/statistical.xml:824
 #, kde-format
@@ -16780,7 +16780,7 @@ msgstr ""
 #: functions/statistical.xml:1774
 #, kde-format
 msgid "BINO(trials;success;prob_of_success)"
-msgstr "BINO(pokusy; úspěchy; pravděpodobnost_úspěchů)"
+msgstr "BINO(pokusy; úspěchy; pravděpodobnost_úspěchu)"
 
 #: functions/statistical.xml:1775
 #, kde-format
@@ -18171,8 +18171,8 @@ msgid ""
 "the value whose hyperbolic cosine is x. If x is less than 1.0, acosh() "
 "returns not-a-number (NaN) and errno is set."
 msgstr ""
-"Funkce ACOSH() počítá inverzní hyperbolický kosínus x; což je hodnota, jejíž "
-"hyperbolický kosínus je x. Je-li x menší než 1,0 - acosh() vrací chybu NaN "
+"Funkce ACOSH() počítá inverzní hyperbolický kosinus x; což je hodnota, jejíž "
+"hyperbolický kosinus je x. Je-li x menší než 1,0 - acosh() vrací chybu NaN "
 "(not a number) - není číslo."
 
 #: functions/trig.xml:177
@@ -19376,7 +19376,7 @@ msgstr "Vyčistit výběr"
 #: part/dialogs/SheetSelectWidget.ui:245
 #, kde-format
 msgid "Move selected sheet to the bottom"
-msgstr "Přesunout vybraný list do spodu"
+msgstr "Přesunout vybraný list dospodu"
 
 #: part/Doc.cpp:277
 #, kde-format
