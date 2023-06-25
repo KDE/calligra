@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2023-06-19 13:18+0200\n"
+"PO-Revision-Date: 2023-06-24 11:14+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -771,7 +771,7 @@ msgstr "Gráfico de superficie"
 #: commands/ChartTypeCommand.cpp:147
 msgctxt "(qtundo-format)"
 msgid "Gantt Chart"
-msgstr "Gráfico Gantt"
+msgstr "Diagrama de Gantt"
 
 #: commands/DatasetCommand.cpp:144
 msgctxt "(qtundo-format)"
@@ -996,7 +996,7 @@ msgstr "Conxunto de datos %1"
 #: DataSetConfigWidget.ui:23 widgets/RadarDataSetConfigWidget.ui:21
 #, kde-format
 msgid "Select a data set"
-msgstr "Escolla un conxunto de datos"
+msgstr "Escolla un conxunto de datos."
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataSetHasChartType)
 #: DataSetConfigWidget.ui:33
@@ -1135,7 +1135,7 @@ msgstr "Editor de burbullas"
 #: dialogs/ScatterDataEditor.ui:39
 #, kde-format
 msgid "Insert data column before selected column"
-msgstr "Inserir unha columna de datos antes da columna seleccionada"
+msgstr "Inserir unha columna de datos antes da columna seleccionada."
 
 #. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
@@ -1166,14 +1166,14 @@ msgstr "…"
 #: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
 #, kde-format
 msgid "Insert data row below selected row"
-msgstr "Inserir unha fila de datos debaixo da fila seleccionada"
+msgstr "Inserir unha fila de datos debaixo da fila seleccionada."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
 #: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
 #: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
 #, kde-format
 msgid "Insert data row above selected row"
-msgstr "Inserir unha fila de datos enriba da fila seleccionada"
+msgstr "Inserir unha fila de datos enriba da fila seleccionada."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
@@ -1181,20 +1181,20 @@ msgstr "Inserir unha fila de datos enriba da fila seleccionada"
 #: dialogs/ScatterDataEditor.ui:99
 #, kde-format
 msgid "Insert data column after selected column"
-msgstr "Inserir unha columna de datos despois da columna seleccionada"
+msgstr "Inserir unha columna de datos despois da columna seleccionada."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
 #: dialogs/ScatterDataEditor.ui:119
 #, kde-format
 msgid "Delete selection"
-msgstr "Eliminar a selección"
+msgstr "Eliminar a selección."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr "Control manual dos conxuntos de datos"
+msgstr "Control manual dos conxuntos de datos."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1216,7 +1216,7 @@ msgstr "Manual"
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
 #, kde-format
 msgid "Remove data set"
-msgstr "Retirar o conxunto de datos"
+msgstr "Retirar o conxunto de datos."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1224,7 +1224,8 @@ msgstr "Retirar o conxunto de datos"
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr "Engadir un conxunto de datos despois do conxunto de datos seleccionado"
+msgstr ""
+"Engadir un conxunto de datos despois do conxunto de datos seleccionado."
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
@@ -1571,7 +1572,7 @@ msgstr "Eliminar a fila"
 #: dialogs/StockDataEditor.ui:77
 #, kde-format
 msgid "Delete row"
-msgstr "Eliminar a fila"
+msgstr "Eliminar a fila."
 
 #: dialogs/TableEditorDialog.cpp:58
 #, kde-format
@@ -1717,7 +1718,7 @@ msgstr "Gráfico de superficie"
 #: PlotAreaConfigWidget.cpp:283
 #, kde-format
 msgid "Gantt Chart"
-msgstr "Gráfico Gantt"
+msgstr "Diagrama de Gantt"
 
 #. i18n: ectx: property (text), widget (QCheckBox, threeDLook)
 #: PlotAreaConfigWidget.ui:61

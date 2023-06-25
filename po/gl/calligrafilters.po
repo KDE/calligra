@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-06-19 13:21+0200\n"
+"PO-Revision-Date: 2023-06-24 11:53+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -128,7 +128,7 @@ msgstr "Non se puido ler o ficheiro requirido %1."
 #: libmsooxml/MsooXmlImport.cpp:125
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
-msgstr "Non se puido ler o directorio ZIP do ficheiro %1 requirido"
+msgstr "Non se puido ler o cartafol ZIP do ficheiro %1 requirido"
 
 #: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
 #, kde-format
@@ -624,7 +624,7 @@ msgstr "Tipo de documento"
 #: sheets/latex/export/latexexportwidget.ui:64
 #, kde-format
 msgid "The document will be able to be compiled alone"
-msgstr "O documento poderá ser compilado só"
+msgstr "O documento poderá ser compilado só."
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, fullDocButton)
 #: sheets/latex/export/latexexportwidget.ui:67
@@ -648,7 +648,7 @@ msgstr "Documento independente"
 #: sheets/latex/export/latexexportwidget.ui:80
 #, kde-format
 msgid "Do not generate either the latex header or the document environment"
-msgstr "Non xerar a cabeceira de Latex ou o contorno do documento"
+msgstr "Non xerar a cabeceira de Latex ou o contorno do documento."
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, embededButton)
 #: sheets/latex/export/latexexportwidget.ui:83
@@ -714,7 +714,7 @@ msgstr "Converter as imaxes:"
 #: sheets/latex/export/latexexportwidget.ui:199
 #, kde-format
 msgid "Pictures directory:"
-msgstr "Directorio das imaxes:"
+msgstr "Cartafol das imaxes:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
@@ -746,7 +746,7 @@ msgstr "Contidos"
 #: sheets/latex/export/latexexportwidget.ui:301
 #, kde-format
 msgid "Export information about author:"
-msgstr "Exportar información sobre o autor:"
+msgstr "Exportar información sobre a persoa autora:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: sheets/latex/export/latexexportwidget.ui:321

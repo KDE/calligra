@@ -3,14 +3,14 @@
 # Miguel Branco <mgl.branco@gmail.com>, 2012.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2012, 2015.
 # Marce Villarino <mvillarino@kde-espana.es>, 2013.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2020-01-12 12:51+0100\n"
+"PO-Revision-Date: 2023-06-24 11:05+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #. i18n: ectx: Menu (Shapes)
 #: data/braindumpui.rc:8
@@ -207,13 +207,13 @@ msgstr "Disposición:"
 #: src/forms/wdgsectionsbox.ui:50
 #, kde-format
 msgid "Create a new whiteboard"
-msgstr "Crear un novo encerado"
+msgstr "Crear un novo encerado."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: src/forms/wdgsectionsbox.ui:78
 #, kde-format
 msgid "Duplicate whiteboard"
-msgstr "Duplicar o encerado"
+msgstr "Duplicar o encerado."
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, bnDuplicate)
 #: src/forms/wdgsectionsbox.ui:81
@@ -225,19 +225,19 @@ msgstr "Duplicar o encerado que está seleccionado"
 #: src/forms/wdgsectionsbox.ui:106
 #, kde-format
 msgid "Move whiteboard down"
-msgstr "Mover o encerado cara a abaixo"
+msgstr "Mover o encerado cara a abaixo."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: src/forms/wdgsectionsbox.ui:131
 #, kde-format
 msgid "Move whiteboard up"
-msgstr "Mover o encerado cara a arriba"
+msgstr "Mover o encerado cara a arriba."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: src/forms/wdgsectionsbox.ui:172
 #, kde-format
 msgid "Delete the whiteboard"
-msgstr "Eliminar o encerado"
+msgstr "Eliminar o encerado."
 
 #: src/import/DockerManager_p.h:51
 #, kde-format
@@ -252,12 +252,12 @@ msgstr "Opcións da ferramenta"
 #: src/import/ToolDocker.cpp:70
 #, kde-format
 msgid "Toggles showing a title bar"
-msgstr "Acoplamento amosando a de título"
+msgstr "Conmuta amosar a barra de título"
 
 #: src/import/ToolDocker.cpp:78
 #, kde-format
 msgid "Toggles organising the options in tabs or not"
-msgstr "Acoplamento organizando as opcións en separadores"
+msgstr "Conmuta a organización das opcións en separadores"
 
 #: src/layouts/ColumnLayout.cpp:125
 #, kde-format

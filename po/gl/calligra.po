@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-06-23 23:36+0200\n"
+"PO-Revision-Date: 2023-06-24 11:13+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -410,25 +410,25 @@ msgstr "Pegar unha imaxe"
 #: flake/SnapGuideConfigWidget.ui:30
 #, kde-format
 msgid "Nodes"
-msgstr "Nós"
+msgstr "Nodos."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, extensionSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:43
 #, kde-format
 msgid "Extension of lines"
-msgstr "Extensión das liñas"
+msgstr "Extensión das liñas."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, boundingBoxSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:56
 #, kde-format
 msgid "Bounding box of shape"
-msgstr "Limites da forma de caixa"
+msgstr "Limites da forma de caixa."
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:72
 #, kde-format
 msgid "Proximity distance where snapping happens"
-msgstr "Distancia a que se aplica a partición"
+msgstr "Distancia a que se aplica a partición."
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, snapDistance)
 #: flake/SnapGuideConfigWidget.ui:75
@@ -440,19 +440,19 @@ msgstr "px"
 #: flake/SnapGuideConfigWidget.ui:85
 #, kde-format
 msgid "Orthogonal"
-msgstr "Ortogonal"
+msgstr "Ortogonal."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, intersectionSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:98
 #, kde-format
 msgid "Intersection of lines"
-msgstr "Intersección das liñas"
+msgstr "Intersección das liñas."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lineGuideSnapGuide)
 #: flake/SnapGuideConfigWidget.ui:111
 #, kde-format
 msgid "Guide lines"
-msgstr "Liñas de guía"
+msgstr "Liñas de guía."
 
 #: flake/svg/SvgShapeFactory.cpp:23
 #, kde-format
@@ -711,7 +711,7 @@ msgstr "Instalar o paquete de guións de Internet"
 #: widgets/KoEditColorSet.ui:45
 #, kde-format
 msgid "Add"
-msgstr "Engadir"
+msgstr "Engadir."
 
 #: kross/KoScriptManagerAdd.cpp:281
 #, kde-format
@@ -906,7 +906,7 @@ msgstr "Abrir un novo documento baseado no ficheiro de modelo indicado."
 #: main/KoApplication.cpp:202
 #, kde-format
 msgid "Override display DPI"
-msgstr "Sobrepoñer os DPI da pantalla"
+msgstr "Sobredefinir os DPI da pantalla"
 
 #: main/KoApplication.cpp:203
 #, kde-format
@@ -4528,7 +4528,7 @@ msgstr "Pechar a doca."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Collapse Docker"
-msgstr "Pregar a doca."
+msgstr "Recoller a doca."
 
 #: widgets/KoDockWidgetTitleBar.cpp:76
 #, kde-format
@@ -4764,19 +4764,19 @@ msgstr ""
 #: widgets/KoEditColorSet.ui:55
 #, kde-format
 msgid "Remove"
-msgstr "Retirar"
+msgstr "Retirar."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, open)
 #: widgets/KoEditColorSet.ui:65
 #, kde-format
 msgid "Open palette"
-msgstr "Abrir a paleta"
+msgstr "Abrir a paleta."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, save)
 #: widgets/KoEditColorSet.ui:75
 #, kde-format
 msgid "Save palette"
-msgstr "Gardar a paleta"
+msgstr "Gardar a paleta."
 
 #: widgets/KoEditColorSetDialog.cpp:146
 #, kde-format

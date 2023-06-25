@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2023-06-19 13:18+0200\n"
+"PO-Revision-Date: 2023-06-24 11:15+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -160,7 +160,7 @@ msgstr "Descendente"
 #: dialogs/SimpleCitationBibliographyWidget.ui:52
 #, kde-format
 msgid "Configure bibliography"
-msgstr "Configurar a bibliografía"
+msgstr "Configurar a bibliografía."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: dialogs/BibliographyConfigureDialog.ui:20
@@ -1239,7 +1239,7 @@ msgstr ""
 #: dialogs/LinkInsertionDialog.ui:42
 #, kde-format
 msgid "The address of your document (Uniform Resource Locator)"
-msgstr "O enderezo do documento (URL)"
+msgstr "O enderezo do documento (URL)."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:45
@@ -2090,7 +2090,7 @@ msgstr "Nota de rodapé"
 #: dialogs/SimpleInsertWidget.ui:20
 #, kde-format
 msgid "Other insertions from \"References\"  below and in \"Add Shape\" docker"
-msgstr "Outras entradas de «Referencias» debaixo e no docker «Engadir forma»"
+msgstr "Outras entradas de «Referencias» debaixo e no docker «Engadir forma»."
 
 #. i18n: ectx: property (text), widget (QToolButton, insertLink)
 #: dialogs/SimpleLinksWidget.ui:34
