@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-19 14:15+0200\n"
+"PO-Revision-Date: 2023-06-24 11:17+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -962,7 +962,7 @@ msgstr "&Anchura:"
 #: part/tools/animationtool/wdg_tool_crop.ui:63
 #, kde-format
 msgid "Will keep the width of the crop constant"
-msgstr "Manterá constante a anchura do recorte"
+msgstr "Manterá constante a anchura do recorte."
 
 #. i18n: ectx: property (text), widget (QCheckBox, boolHeight)
 #: part/tools/animationtool/wdg_tool_crop.ui:84
@@ -974,7 +974,7 @@ msgstr "&Altura:"
 #: part/tools/animationtool/wdg_tool_crop.ui:87
 #, kde-format
 msgid "Will keep the height of the crop constant"
-msgstr "Manterá a altura do recorte constante"
+msgstr "Manterá a altura do recorte constante."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: part/tools/animationtool/wdg_tool_crop.ui:94
@@ -992,7 +992,7 @@ msgstr "Ra&tio:"
 #: part/tools/animationtool/wdg_tool_crop.ui:114
 #, kde-format
 msgid "Will keep the ratio constant"
-msgstr "Manterá as proporcións constantes"
+msgstr "Manterá as proporcións constantes."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: part/tools/animationtool/wdg_tool_crop.ui:132

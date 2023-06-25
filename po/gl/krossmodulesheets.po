@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: krossmodulekspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-19 14:21+0200\n"
+"PO-Revision-Date: 2023-06-24 11:18+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -67,7 +67,7 @@ msgstr ""
 #, kde-format
 msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
 msgstr ""
-"O ficheiro de guión «%1» está nun directorio temporal. Denégase a execución."
+"O ficheiro de guión «%1» está nun cartafol temporal. Denégase a execución."
 
 #: ScriptingPart.cpp:73
 #, kde-format
@@ -1277,7 +1277,7 @@ msgstr "Funcións"
 #: scripts/scripts.rc:30
 #, kde-format
 msgid "Scripting formula functions"
-msgstr "Guións de funcións de fórmula"
+msgstr "Funcións de fórmula de guionización"
 
 #. i18n: tag script attribute text
 #: scripts/scripts.rc:31
