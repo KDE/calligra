@@ -1253,7 +1253,7 @@ to insert a picture.
 <listitem
 ><para
 ><action
->Dona format automàticament a les cel·les seleccionades: Un diàleg us permet escollir entre els dos formats proposats.</action>
+>Autoformat the selected cells: a dialog let you choose between two proposed formats.</action>
 </para
 ></listitem>
 </varlistentry>

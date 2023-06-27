@@ -1,5 +1,5 @@
 # Translation of calligrasheets.po to Catalan
-# Copyright (C) 2000-2022 This_file_is_part_of_KDE
+# Copyright (C) 2000-2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kspread package.
 #
 # Sebastià Pla <sastia@retemail.es>, 2000, 2001.

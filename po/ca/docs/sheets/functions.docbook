@@ -8,7 +8,7 @@ all changes will be overwritten on the next script run
 <title
 >Funcions</title>
 <para
->&sheets; té una àmplia gamma de funcions matemàtiques i altres funcions que es poden utilitzar en una cel·la amb fórmula.</para>
+>&sheets; té una àmplia gamma de funcions integrades matemàtiques i altres que es poden utilitzar en una cel·la amb fórmula.</para>
 <sect1 id="supported-functions">
 <title
 >Funcions suportades</title>
