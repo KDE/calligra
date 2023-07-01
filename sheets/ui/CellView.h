@@ -276,7 +276,7 @@ protected:
     void paintFilterButton(QPainter& painter, const QPointF& coordinate,
                            const Cell& cell, SheetView* sheetView) const;
 
-    void drawText(QPainter& painter, const QPointF& location, const QStringList& textLines,
+    void drawText(QPainter& painter, const QStringList& textLines,
                   const Cell& cell, qreal lineSpacing = 0) const;
 
     /**

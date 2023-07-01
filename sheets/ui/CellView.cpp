@@ -1155,11 +1155,11 @@ void CellView::paintText(QPainter& painter,
 
         const QPointF position(indent + coordinate.x() - offsetCellTooShort,
                                coordinate.y() + d->textY - fontOffset);
-        drawText(painter, position, d->displayText.split('\n'), cell);
+        painter.translate(position);
+        drawText(painter, d->displayText.split('\n'), cell);
     } else if (tmpAngle != 0) {
         // Case 2: an angle.
 
-        painter.rotate(tmpAngle);
         qreal x;
 
         if (tmpAngle > 0)
@@ -1177,14 +1177,16 @@ void CellView::paintText(QPainter& painter,
         }
         const QPointF position(x * ::cos(tmpAngle * M_PI / 180) + y * ::sin(tmpAngle * M_PI / 180),
                                -x * ::sin(tmpAngle * M_PI / 180) + y * ::cos(tmpAngle * M_PI / 180));
-        drawText(painter, position, d->displayText.split('\n'), cell);
-        painter.rotate(-tmpAngle);
+        painter.rotate(tmpAngle);
+        painter.translate(position);
+        drawText(painter, d->displayText.split('\n'), cell);
     } else if (tmpMultiRow && !tmpVerticalText && !tmpRichText) {
         // Case 3: Multiple rows, but horizontal.
         const QPointF position(indent + coordinate.x(), coordinate.y() + d->textY);
         const qreal space = d->height - d->textHeight;
         const qreal lineSpacing = tmpVDistributed && space > 0 ? space / (d->textLinesCount - 1) : 0;
-        drawText(painter, position, d->displayText.split('\n'), cell, lineSpacing);
+        painter.translate(position);
+        drawText(painter, d->displayText.split('\n'), cell, lineSpacing);
     } else if (tmpVerticalText && !d->displayText.isEmpty()) {
         // Case 4: Vertical text.
         QStringList textLines = d->displayText.split('\n');
@@ -1210,7 +1212,10 @@ void CellView::paintText(QPainter& painter,
                 textColumn << QString(textLines[i][j]);
 
             const QPointF position(indent + coordinate.x() + dx, coordinate.y() + d->textY);
-            drawText(painter, position, textColumn, cell);
+            painter.save();
+            painter.translate(position);
+            drawText(painter, textColumn, cell);
+            painter.restore();
             dx += fontMetrics.maxWidth();
         }
     } else if (tmpRichText) {
@@ -1971,7 +1976,7 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
     }
 }
 
-void CellView::drawText(QPainter& painter, const QPointF& location, const QStringList& textLines,
+void CellView::drawText(QPainter& painter, const QStringList& textLines,
                         const Cell& cell, qreal lineSpacing) const
 {
     Q_UNUSED(cell)
@@ -2015,7 +2020,7 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
         }
         textLayout.endLayout();
 
-        textLayout.draw(&painter, QPointF(location.x(), (location.y() + offset)));
+        textLayout.draw(&painter, QPointF(0.0, offset));
         offset += height;
     }
 }
