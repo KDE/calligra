@@ -38,8 +38,16 @@ void CellStorageTest::testMergedCellsInsertRowBug()
     storage->setValue(2, 4, Value(6));
     storage->setValue(1, 5, Value(7));
     storage->setValue(2, 5, Value(8));
-    storage->mergeCells(1, 2, 2, 1);
-    storage->mergeCells(1, 3, 1, 2);
+    storage->mergeCells(1, 2, 1, 0);
+    storage->mergeCells(1, 3, 0, 1);
+    QCOMPARE(storage->isPartOfMerged(2, 2), true);
+    QCOMPARE(storage->isPartOfMerged(3, 2), false);
+    QCOMPARE(storage->isPartOfMerged(1, 4), true);
+    QCOMPARE(storage->isPartOfMerged(1, 5), false);
+    QCOMPARE(storage->mergedXCells(1, 2), 1);
+    QCOMPARE(storage->mergedYCells(1, 2), 0);
+    QCOMPARE(storage->mergedXCells(1, 3), 0);
+    QCOMPARE(storage->mergedYCells(1, 3), 1);
 
     // insert a row
     storage->insertRows(5, 1);
@@ -53,10 +61,14 @@ void CellStorageTest::testMergedCellsInsertRowBug()
     QCOMPARE(storage->value(2, 4), Value(6));
     QCOMPARE(storage->value(1, 6), Value(7));
     QCOMPARE(storage->value(2, 6), Value(8));
-    QCOMPARE(storage->mergedXCells(1, 2), 2);
-    QCOMPARE(storage->mergedYCells(1, 2), 1);
-    QCOMPARE(storage->mergedXCells(1, 3), 1);
-    QCOMPARE(storage->mergedYCells(1, 3), 2);
+    QCOMPARE(storage->isPartOfMerged(2, 2), true);
+    QCOMPARE(storage->isPartOfMerged(3, 2), false);
+    QCOMPARE(storage->isPartOfMerged(1, 4), true);
+    QCOMPARE(storage->isPartOfMerged(1, 5), false);
+    QCOMPARE(storage->mergedXCells(1, 2), 1);
+    QCOMPARE(storage->mergedYCells(1, 2), 0);
+    QCOMPARE(storage->mergedXCells(1, 3), 0);
+    QCOMPARE(storage->mergedYCells(1, 3), 1);
 }
 
 QTEST_MAIN(CellStorageTest)

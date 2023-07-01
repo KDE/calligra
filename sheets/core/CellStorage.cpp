@@ -346,6 +346,7 @@ bool CellStorage::isPartOfMerged(int column, int row) const
     return true;
 }
 
+// numXCells and numYCells are the *extra* cells, not including the initial one. So if numX is 7 and numY is 4, it's a 8x5 region
 void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells, bool dissociate)
 {
 #ifdef CALLIGRA_SHEETS_MT

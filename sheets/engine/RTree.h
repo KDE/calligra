@@ -672,6 +672,7 @@ void RTree<T>::splitBeforeColumn(int col)
 
     // and insert the cut data
     for (int i = 0; i < cutData.count(); ++i) {
+        qDebug()<<"cut data for column split was"<<cutData[i].first;
         insert(cutData[i].first, cutData[i].second);
     }
 }
@@ -689,6 +690,7 @@ void RTree<T>::splitBeforeRow(int row)
 
     // and insert the cut data
     for (int i = 0; i < cutData.count(); ++i) {
+        qDebug()<<"cut data for row split was"<<cutData[i].first;
         insert(cutData[i].first, cutData[i].second);
     }
 }
@@ -1192,6 +1194,7 @@ void RTree<T>::NonLeafNode::cutBeforeColumn(int col, QVector< QPair<QRectF, T> >
     for (int i = 0; i < this->childCount(); ++i) {
         QRectF rect = this->m_childBoundingBox[i];
         if ((col > rect.right()) || (col < rect.left())) continue;
+        qDebug()<<"column cut at"<<col<<": "<<rect;
         this->m_childBoundingBox[i].setRight(col - 0.1);
         dynamic_cast<Node*>(this->m_childs[i])->cutBeforeColumn(col, res);
     }
@@ -1207,6 +1210,7 @@ void RTree<T>::NonLeafNode::cutBeforeRow(int row, QVector< QPair<QRectF, T> > &r
     for (int i = 0; i < this->childCount(); ++i) {
         QRectF rect = this->m_childBoundingBox[i];
         if ((row > rect.bottom()) || (row < rect.top())) continue;
+        qDebug()<<"row cut at"<<row<<": "<<rect;
         this->m_childBoundingBox[i].setBottom(row - 0.1);
         dynamic_cast<Node*>(this->m_childs[i])->cutBeforeRow(row, res);
     }
@@ -1219,6 +1223,7 @@ void RTree<T>::LeafNode::cutBeforeColumn(int col, QVector< QPair<QRectF, T> > &r
         QRectF rect = this->m_childBoundingBox[i];
         if ((rect.left() >= col) || (rect.right() <= col)) continue;
 
+        qDebug()<<"leaf node: column cut at"<<col<<": "<<rect;
         this->m_childBoundingBox[i].setRight(col - 0.1);
         QRectF cutRect = QRectF(QPointF(col, rect.top()), QPointF(rect.right() + 0.1, rect.bottom() + 0.1));
         res.append(qMakePair(cutRect, this->m_data[i]));
@@ -1231,6 +1236,7 @@ void RTree<T>::LeafNode::cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res)
     for (int i = 0; i < this->m_counter; ++i) {
         QRectF rect = this->m_childBoundingBox[i];
         if ((rect.top() >= row) || (rect.bottom() <= row)) continue;
+        qDebug()<<"leaf node: row cut at"<<row<<": "<<rect;
 
         this->m_childBoundingBox[i].setBottom(row - 0.1);
         QRectF cutRect = QRectF(QPointF(rect.left(), row), QPointF(rect.right() + 0.1, rect.bottom() + 0.1));
