@@ -11,7 +11,7 @@
 #include <QDateTime>
 #include <QRegularExpression>
 
-#ifdef Q_OS_WIN
+#ifdef _MSC_VER
 // HACK to get this to compile on msvc
 #include <QSharedDataPointer>
 
@@ -45,6 +45,7 @@ Localization::Localization()
     d = pd->data;
     setDefaultLocale();
 }
+
 Localization::Localization(const Localization &other)
 {
     delete pd->data;
@@ -52,7 +53,6 @@ Localization::Localization(const Localization &other)
     d = pd->data;
 }
 
-// This must be defined or we get errors.
 Localization::~Localization()
 {
     delete d;

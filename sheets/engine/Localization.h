@@ -33,7 +33,7 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Localization
 {
 public:
     Localization();
-#ifdef Q_OS_WIN
+#ifdef _MS_VER
     Localization(const Localization &other);
 #endif
     ~Localization();
@@ -121,9 +121,10 @@ public:
 
 private:
     class Private;
-#ifndef Q_OS_WIN
+#ifndef _MSC_VER
     QSharedDataPointer<Private> d;
 #else
+    // HACK to get this to compile on msvc
     Private *pd;
     class PrivateData;
     PrivateData *d = nullptr;
