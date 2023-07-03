@@ -12,10 +12,11 @@ macro(KOMAIN_ADD_UNIT_TEST _TEST_NAME)
 endmacro()
 
 ########### next target ###############
-
-set(priorityqueue_test_SRCS priorityqueue_test.cpp ../MainDebug.cpp)
-komain_add_unit_test(priorityQueueTest ${priorityqueue_test_SRCS}  LINK_LIBRARIES KF5::I18n Qt5::Test)
-
+if (NOT WIN32)
+  # This does not link on windows, due to the ../MainDebug.cpp
+  set(priorityqueue_test_SRCS priorityqueue_test.cpp ../MainDebug.cpp)
+  komain_add_unit_test(priorityQueueTest ${priorityqueue_test_SRCS}  LINK_LIBRARIES KF5::I18n Qt5::Test)
+endif()
 ########### next target ###############
 
 komain_add_unit_test(filterchainTest filterchain_test.cpp  LINK_LIBRARIES komain)
