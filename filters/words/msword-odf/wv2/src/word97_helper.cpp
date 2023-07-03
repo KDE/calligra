@@ -30,7 +30,7 @@
 
 #include <string.h> // memcpy
 #include <algorithm>
-#include <functional> // std::bind2nd for gcc 2.9x
+#include <functional>
 #include <cstdlib>
 
 #include "wvlog.h"
@@ -921,7 +921,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             std::vector<TabDescriptor>::iterator newEnd = rgdxaTab.end();
             for ( U8 i = 0; i < itbdDelMax; ++i ) {
                 newEnd = std::remove_if ( rgdxaTab.begin(), newEnd,
-                                          std::bind2nd( InZone(), Zone( myPtr, i, itbdDelMax ) ) );
+                                          std::bind( InZone(), std::placeholders::_1, Zone( myPtr, i, itbdDelMax ) ) );
             }
             rgdxaTab.erase( newEnd, rgdxaTab.end() ); // really get rid of them
             myPtr += itbdDelMax * 4;
@@ -2092,7 +2092,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 
 //         const S16 dxaNew = readS16( ptr ) - ( rgdxaCenter[ 0 ] + dxaGapHalf );
 //         std::transform( rgdxaCenter.begin(), rgdxaCenter.end(), rgdxaCenter.begin(), 
-//                         std::bind1st( std::plus<S16>(), dxaNew ) );
+//                         std::bind( std::plus<S16>(), dxaNew, std::placeholders::_1 ) );
 
         dxaLeft = readS16( ptr );
 #ifdef WV2_DEBUG_SPRMS
@@ -2343,7 +2343,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             // Adjust all successive items (+= ctc * dxaCol)
             std::transform( rgdxaCenter.begin() + itcFirst + ctc, rgdxaCenter.end(),
                             rgdxaCenter.begin() + itcFirst + ctc, 
-                            std::bind1st( std::plus<S16>(), ctc * dxaCol ) );
+                            std::bind( std::plus<S16>(), ctc * dxaCol, std::placeholders::_1 ) );
         }
         break;
     }
@@ -2382,7 +2382,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         ++itcFirst;
         std::transform( rgdxaCenter.begin() + itcFirst, rgdxaCenter.end(),
                         rgdxaCenter.begin() + itcFirst, 
-                        std::bind2nd( std::minus<S16>(), shift ) );
+                        std::bind( std::minus<S16>(), std::placeholders::_1, shift ) );
         break;
     }
     case SPRM::sprmTMerge:
