@@ -33,7 +33,7 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Localization
 {
 public:
     Localization();
-#ifdef _MS_VER
+#ifdef _MSC_VER
     Localization(const Localization &other);
 #endif
     ~Localization();
