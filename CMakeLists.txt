@@ -325,7 +325,7 @@ find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
+find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)
     message(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets.")
 endif ()
