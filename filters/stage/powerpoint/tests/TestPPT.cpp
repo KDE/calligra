@@ -72,7 +72,9 @@ TestRun::compareFiles(KoStore* input, const QString& path) {
         QVERIFY(oldLine == newLine);
     }
     QVERIFY(b.atEnd());
-    QVERIFY(reference.size() == created.size());
+    // Skip this test, as long as all lines are identical it is ok
+    // On windows the sizes may differ due to \r\n newlines
+    //QVERIFY(reference.size() == created.size());
 }
 
 void
