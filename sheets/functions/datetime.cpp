@@ -514,7 +514,7 @@ Value func_days(valVector args, ValueCalc *calc, FuncExtra *)
     if (!date1.isValid() || !date2.isValid())
         return Value::errorVALUE();
 
-    return Value((long)date2.daysTo(date1));
+    return Value((int64_t)date2.daysTo(date1));
 }
 
 // Function: DATE
@@ -988,7 +988,7 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
         // exclude weekends and holidays
         do {
             enddate = enddate.addDays(1 * sign);
-        } while (enddate.dayOfWeek() > 5 || holidays.contains(Value((long)date0.daysTo(enddate))));
+        } while (enddate.dayOfWeek() > 5 || holidays.contains(Value((int64_t)date0.daysTo(enddate))));
 
         days--;
     }
@@ -1078,7 +1078,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
     // count days
     //
     while (startdate != enddate) {
-        if (startdate.dayOfWeek() > 5 || holidays.contains(Value((long) date0.daysTo(startdate)))) {
+        if (startdate.dayOfWeek() > 5 || holidays.contains(Value((int64_t) date0.daysTo(startdate)))) {
             startdate = startdate.addDays(1 * sign);
             continue;
         }
