@@ -136,7 +136,7 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "#-#-#-#-#  kwordpdfimport.po (kwordpdfimport)  #-#-#-#-#\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: karbon/image/ImageExport.cpp:90
 #, fuzzy, kde-format

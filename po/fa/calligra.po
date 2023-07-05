@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #, fuzzy, kde-format
 #| msgid "Color name:"
@@ -279,6 +279,7 @@ msgctxt "(qtundo-format)"
 msgid "Delete shape"
 msgid_plural "Delete shapes"
 msgstr[0] "حذف شکل"
+msgstr[1] ""
 
 #: flake/commands/KoShapeDistributeCommand.cpp:117
 #, fuzzy
@@ -2325,6 +2326,7 @@ msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
 msgstr[0] "حذف شکل"
+msgstr[1] ""
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:53
 #, fuzzy
@@ -2333,6 +2335,7 @@ msgctxt "(qtundo-format)"
 msgid "Delete page"
 msgid_plural "Delete pages"
 msgstr[0] "حذف صفحه"
+msgstr[1] ""
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:24
 #, fuzzy
@@ -2355,6 +2358,7 @@ msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
 msgstr[0] "چسباندن متن"
+msgstr[1] ""
 
 #: pageapp/commands/KoPAPageMoveCommand.cpp:48
 #, fuzzy
@@ -2363,6 +2367,7 @@ msgctxt "(qtundo-format)"
 msgid "Move page"
 msgid_plural "Move pages"
 msgstr[0] "حرکت صفحه"
+msgstr[1] ""
 
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:28
 #, fuzzy, kde-format
@@ -2654,6 +2659,7 @@ msgctxt "(qtundo-format)"
 msgid "Paste Slide"
 msgid_plural "Paste Slides"
 msgstr[0] "چسباندن متن"
+msgstr[1] ""
 
 #: pageapp/KoPAPastePage.cpp:121
 #, fuzzy
@@ -2662,6 +2668,7 @@ msgctxt "(qtundo-format)"
 msgid "Paste Page"
 msgid_plural "Paste Pages"
 msgstr[0] "چسباندن متن"
+msgstr[1] ""
 
 #: pageapp/KoPAView.cpp:307 widgets/KoToolBoxDocker.cpp:30
 #, kde-format
@@ -3713,6 +3720,7 @@ msgid "<qt>Edits will be lost.<p>There is %1 invalid statement left.</qt>"
 msgid_plural ""
 "<qt>Edits will be lost.<p>There are %1 invalid statements left.</qt>"
 msgstr[0] ""
+msgstr[1] ""
 
 #: rdf/KoDocumentRdfEditWidget.cpp:300
 #, kde-format
@@ -4265,6 +4273,7 @@ msgstr ""
 msgid "Found 1 match"
 msgid_plural "Found %1 matches"
 msgstr[0] ""
+msgstr[1] ""
 
 #: text/KoFindStrategy.cpp:51
 #, kde-format
@@ -4284,6 +4293,7 @@ msgstr ""
 msgid "1 replacement made"
 msgid_plural "%1 replacements made"
 msgstr[0] ""
+msgstr[1] ""
 
 #: text/KoReplaceStrategy.cpp:59
 #, fuzzy, kde-format
