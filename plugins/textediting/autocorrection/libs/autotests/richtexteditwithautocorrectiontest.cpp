@@ -21,7 +21,7 @@ void RichTextEditWithAutoCorrectionTest::shouldNotAutocorrectWhenDisabled()
     entries.insert(originalWord, replaceWord);
     richtext.autocorrection()->setAutocorrectEntries(entries);
     richtext.show();
-#ifdef Q_OS_WIN
+#ifdef _MSC_VER
     QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
 #endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
@@ -41,7 +41,7 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWordWhenExactText()
     richtext.autocorrection()->setEnabledAutoCorrection(true);
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
-#ifdef Q_OS_WIN
+#ifdef _MSC_VER
     QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
 #endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
@@ -62,7 +62,7 @@ void RichTextEditWithAutoCorrectionTest::shouldNotReplaceWordWhenInexactText()
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
     const QString nonExactText = QStringLiteral("BLIBLI");
-#ifdef Q_OS_WIN
+#ifdef _MSC_VER
     QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
 #endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
@@ -82,7 +82,7 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWhenPressEnter()
     richtext.autocorrection()->setEnabledAutoCorrection(true);
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
-#ifdef Q_OS_WIN
+#ifdef _MSC_VER
     QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
 #endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
@@ -102,7 +102,7 @@ void RichTextEditWithAutoCorrectionTest::shouldReplaceWhenPressReturn()
     richtext.autocorrection()->setEnabledAutoCorrection(true);
     richtext.autocorrection()->setAdvancedAutocorrect(true);
     richtext.show();
-#ifdef Q_OS_WIN
+#ifdef _MSC_VER
     QEXPECT_FAIL("", "qWaitForWindowExposed does not work on msvc", Continue);
 #endif
     QVERIFY(QTest::qWaitForWindowExposed(&richtext));
