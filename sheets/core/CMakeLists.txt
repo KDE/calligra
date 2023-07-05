@@ -1,4 +1,5 @@
-
+# needed by flat_segement_tree
+kde_enable_exceptions()
 
 set (odf_DIR_SRCS
     odf/SheetsOdfDoc.cpp
