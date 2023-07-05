@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.2\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -120,6 +120,7 @@ msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
 msgstr[0] "درج اسلاید"
+msgstr[1] ""
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
 #, fuzzy
