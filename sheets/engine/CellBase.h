@@ -296,6 +296,9 @@ inline uint qHash(const CellBase& cell)
 
 inline QDebug operator<<(QDebug str, const Calligra::Sheets::CellBase& cell)
 {
+    if (!cell) {
+        return str << qPrintable(QStringLiteral("CellBase::isNull"));
+    }
     return str << qPrintable(QString("%1%2").arg(Calligra::Sheets::CellBase::columnName(cell.column())).arg(QString::number(cell.row())));
 }
 

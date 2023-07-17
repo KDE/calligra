@@ -403,7 +403,11 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
     }
 #endif
     // NOTE save the value before the style as long as the Formatter does not work correctly
-    if (cell->link().isEmpty())
+
+    // Do not save cell values for empty cells.
+    // If we do, a 0 value will be displayed when the file is loaded again.
+    // And we will be compatible with LO.
+    if (!cell->displayText().isEmpty() && cell->link().isEmpty())
         saveCellValue(cell, xmlwriter);
 
     const Style cellStyle = cell->style();
