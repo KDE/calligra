@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-07-03 11:38\n"
+"PO-Revision-Date: 2023-07-18 11:10\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2094,7 +2094,7 @@ msgstr "隐藏母版形状"
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr ""
+msgstr "删除幻灯片"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:29
 msgctxt "(qtundo-format) Delete one page"
@@ -4659,7 +4659,7 @@ msgstr "保存文档"
 msgid ""
 "<qt>To complete the decryption the document needs to be saved.<p>Do you want "
 "to save the document now?</qt>"
-msgstr ""
+msgstr "<qt>要完成解密，必须先保存文档。<p>您想现在保存文档吗？</qt>"
 
 #: widgets/KoDocumentInfoDlg.cpp:393
 #, kde-format
@@ -5383,7 +5383,7 @@ msgstr "缩放到全部"
 #: widgetutils/KoFileDialog.cpp:454
 #, kde-format
 msgid "All files"
-msgstr ""
+msgstr "全部文件"
 
 #: widgetutils/KoFileDialog.cpp:457
 #, kde-format

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2023-07-03 11:38\n"
+"PO-Revision-Date: 2023-07-18 11:10\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1463,7 +1463,7 @@ msgstr "行数"
 #: part/KWStatusBar.cpp:149
 #, kde-format
 msgid "Change the page style"
-msgstr ""
+msgstr "更改页面样式"
 
 #: part/KWStatusBar.cpp:155
 #, kde-format
@@ -1493,7 +1493,7 @@ msgstr "缩放控制器"
 #: part/KWView.cpp:183
 #, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr ""
+msgstr "退出全屏模式"
 
 #: part/KWView.cpp:260
 #, kde-format
@@ -1657,7 +1657,7 @@ msgstr "显示或隐藏状态栏"
 #: part/KWView.cpp:366
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "全屏模式"
 
 #: part/KWView.cpp:367
 #, kde-format
