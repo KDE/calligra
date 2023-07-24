@@ -297,7 +297,7 @@ msgstr "자세히 보기"
 #: src/SectionsBoxDock.cpp:58
 #, kde-format
 msgid "Thumbnail View"
-msgstr "축소판 보기"
+msgstr "섬네일 보기"
 
 #: src/SectionsBoxDock.cpp:69
 #, kde-format

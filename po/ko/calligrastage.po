@@ -1166,7 +1166,7 @@ msgstr "템플릿 삭제"
 #: part/ui/KPrHtmlExportDialog.cpp:300
 #, kde-format
 msgid "You may not remove the templates provided with the application"
-msgstr "프로그램과 같이 제공된 템플릿을 삭제할 수 없음"
+msgstr "앱과 같이 제공된 템플릿을 삭제할 수 없음"
 
 #: part/ui/KPrHtmlExportDialog.cpp:308
 #, kde-format

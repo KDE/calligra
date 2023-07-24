@@ -48,14 +48,14 @@ msgid ""
 "filename>.<nl/>Do you want to open the file using default application "
 "<application>%2</application>?"
 msgstr ""
-"<filename>%1</filename>을(를) 열 때 필요한 Calligra 프로그램이 없습니다.<nl/"
-"> 기본 프로그램 <application>%2</application>(으)로 여시겠습니까?"
+"<filename>%1</filename>을(를) 열 때 필요한 Calligra 앱이 없습니다.<nl/> 기본 "
+"앱 <application>%2</application>(으)로 여시겠습니까?"
 
 #: main.cpp:135
 #, kde-format
 msgctxt "@title:window"
 msgid "Calligra Application Not Found"
-msgstr "Calligra 프로그램 찾을 수 없음"
+msgstr "Calligra 앱 찾을 수 없음"
 
 #: main.cpp:165
 #, kde-format
@@ -80,7 +80,7 @@ msgstr "Jarosław Staniek"
 #: main.cpp:177
 #, kde-format
 msgid "Lists names of all available Calligra applications"
-msgstr "사용 가능한 모든 Calligra 프로그램의 목록"
+msgstr "사용 가능한 모든 Calligra 앱의 목록"
 
 #: main.cpp:178
 #, kde-format
