@@ -1945,7 +1945,7 @@ msgid ""
 "CURRENTDATETIME and provided for compatibility with other applications."
 msgstr ""
 "NOW() 함수는 현재 날짜와 시간을 반환합니다. CURRENTDATETIME 함수와 동일하며, "
-"다른 프로그램과의 호환성 때문에 제공됩니다."
+"다른 앱과의 호환성 때문에 제공됩니다."
 
 #: functions/datetime.xml:543
 #, kde-format
@@ -12226,7 +12226,7 @@ msgstr "Calligra Sheets"
 #: part/AboutData.h:30
 #, kde-format
 msgid "Spreadsheet Application"
-msgstr "스프레드시트 프로그램"
+msgstr "스프레드시트 앱"
 
 #: part/AboutData.h:32
 #, kde-format

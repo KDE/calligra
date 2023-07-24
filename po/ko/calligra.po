@@ -958,7 +958,7 @@ msgid ""
 "This might be an installation issue.\n"
 "Try restarting or reinstalling."
 msgstr ""
-"필수 프로그램 구성 요소를 찾을 수 없습니다.\n"
+"필수 앱 구성 요소를 찾을 수 없습니다.\n"
 "설치 문제일 수 있습니다.\n"
 "다시 시작하거나 다시 설치해 보십시오."
 
@@ -1002,7 +1002,7 @@ msgstr "다음 자동 저장된 파일을 복구할 수 있습니다:"
 #: main/KoDetailsPaneBase.ui:94
 #, kde-format
 msgid "Always use this template at application start up"
-msgstr "프로그램을 시작할 때 항상 이 서식 사용"
+msgstr "앱을 시작할 때 항상 이 서식 사용"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_alwaysUseCheckBox)
 #: main/KoDetailsPaneBase.ui:97
@@ -2320,7 +2320,7 @@ msgstr "상세 보기"
 #: pageapp/KoPADocumentStructureDocker.cpp:134
 #, kde-format
 msgid "Thumbnail View"
-msgstr "축소판 보기"
+msgstr "섬네일 보기"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:144
 #, kde-format

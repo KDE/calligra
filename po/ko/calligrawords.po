@@ -1413,8 +1413,8 @@ msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
 "the appropriate application."
 msgstr ""
-"이것은 워드 프로세서 문서가 아닌 %1인 것 같습니다. 적당한 프로그램으로 열어 "
-"보십시오."
+"이것은 워드 프로세서 문서가 아닌 %1인 것 같습니다. 적당한 앱으로 열어 보십시"
+"오."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
 #, kde-format

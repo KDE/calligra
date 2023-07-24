@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2020-03-30 01:21+0200\n"
+"PO-Revision-Date: 2020-04-05 00:53+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -293,7 +293,7 @@ msgstr "Karbon"
 #: ui/KarbonAboutData.h:24
 #, kde-format
 msgid "A Vector Graphics Drawing Application."
-msgstr "벡터 그래픽 편집 프로그램입니다."
+msgstr "벡터 그래픽 편집 앱입니다."
 
 #: ui/KarbonAboutData.h:26
 #, kde-format
