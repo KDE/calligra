@@ -558,23 +558,35 @@ void CellView::paintCellBackground(QPainter& painter, const QRegion &clipRegion,
     if (!clipRegion.intersects(cellRect.toRect()))
         return;
 
-    QBrush bgbrush = d->style.backgroundBrush();
-
-    if (d->style.backgroundColor().isValid() &&
-            d->style.backgroundColor() != QApplication::palette().base().color()) {
-        // optimization to not draw the background-color if the background-brush would overwrite it.
-        if (bgbrush.style() != Qt::SolidPattern || bgbrush.color().alphaF() < 1.) {
-            // disable antialiasing
-            painter.setRenderHint(QPainter::Antialiasing, false);
-            // Simply fill the cell with its background color,
-            painter.fillRect(cellRect, d->style.backgroundColor());
-            // restore antialiasing
-            painter.setRenderHint(QPainter::Antialiasing, true);
-        }
+    bool paintBG = false, paintBrush = false;
+    // Background color
+    QColor bgcolor;
+    if (d->style.hasAttribute(Style::BackgroundColor)) {
+        paintBG = true;
+        bgcolor = d->style.backgroundColor();
+        // Check if we actually need to paint.
+        if ((!bgcolor.isValid()) || (bgcolor == QApplication::palette().base().color())) paintBG = false;
     }
 
-    if (bgbrush.style() != Qt::NoBrush) {
-        // Draw the background pattern.
+    // Background brush
+    QBrush bgbrush;
+    if (d->style.hasAttribute(Style::BackgroundBrush)) {
+        paintBrush = true;
+        bgbrush = d->style.backgroundBrush();
+        if (bgbrush.style() == Qt::NoBrush) paintBrush = false;
+        // If the brush would override the background color, no need to paint that.
+        if ((bgbrush.style() == Qt::SolidPattern) && (bgbrush.color().alphaF() == 1.0)) paintBG = false;
+    }
+
+    // And now actually paint
+    if (paintBG) {
+        // We disable antialiasing while painting, restore afterwards
+        painter.setRenderHint(QPainter::Antialiasing, false);
+        painter.fillRect(cellRect, bgcolor);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+    }
+
+    if (paintBrush) {
         painter.fillRect(cellRect, bgbrush);
     }
 }

@@ -712,6 +712,13 @@ bool Style::releaseSubStyle(Key key)
     return true;
 }
 
+QString Style::debugData() const
+{
+    QString s;
+    for (SharedSubStyle &st : subStyles())
+        s += st->debugData() + "; ";
+    return s;
+}
 /////////////////////////////////////////////////////////////////////////////
 //
 // CustomStyle::Private
@@ -815,6 +822,8 @@ QDebug operator<<(QDebug dbg, const Calligra::Sheets::Style *s)
 QDebug operator<<(QDebug dbg, const Calligra::Sheets::Style &s)
 {
     static const char *types[] = {"Builtin", "Custom", "Auto", "Tentative"};
-    dbg << "Style["<<types[s.type()]<<"]";
+    dbg << "Style["<<types[s.type()];
+    dbg<<s.debugData();
+    dbg << "]";
     return dbg;
 }

@@ -284,6 +284,7 @@ public:
     QSet<Key> difference(const Style& other) const;
 
     void dump() const;
+    QString debugData() const;
 
     /**
      * Return the properties of this style that can be represented as a QTextCharFormat
