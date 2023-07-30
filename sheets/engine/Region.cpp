@@ -183,28 +183,28 @@ QString Region::name(SheetBase* originSheet) const
     return names.isEmpty() ? "" : names.join(";");
 }
 
-Region::Element* Region::add(const QPoint& point, SheetBase* sheet, bool fixedColumn, bool fixedRow)
+Region::Element* Region::add(const QPoint& point, SheetBase* sheet, bool fixedColumn, bool fixedRow, bool allowMulti)
 {
-    return insert(d->cells.count(), point, sheet, false, fixedColumn, fixedRow);
+    return insert(d->cells.count(), point, sheet, allowMulti, fixedColumn, fixedRow);
 }
 
-Region::Element* Region::add(const QRect& range, SheetBase* sheet, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight)
+Region::Element* Region::add(const QRect& range, SheetBase* sheet, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight, bool allowMulti)
 {
     const QRect normalizedRange = normalized(range);
     if (normalizedRange.width() == 0 || normalizedRange.height() == 0) {
         return 0;
     }
     if (normalizedRange.size() == QSize(1, 1)) {
-        return add(normalizedRange.topLeft(), sheet, fixedTop, fixedLeft);
+        return add(normalizedRange.topLeft(), sheet, fixedTop, fixedLeft, allowMulti);
     }
-    return insert(d->cells.count(), normalizedRange, sheet, false, fixedTop, fixedLeft, fixedBottom, fixedRight);
+    return insert(d->cells.count(), normalizedRange, sheet, allowMulti, fixedTop, fixedLeft, fixedBottom, fixedRight);
 }
 
-Region::Element* Region::add(const Region& region, SheetBase* sheet)
+Region::Element* Region::add(const Region& region, SheetBase* sheet, bool allowMulti)
 {
     ConstIterator endOfList(region.d->cells.constEnd());
     for (ConstIterator it = region.d->cells.constBegin(); it != endOfList; ++it) {
-        add((*it)->rect(), (*it)->sheet() ? (*it)->sheet() : sheet, (*it)->isTopFixed(), (*it)->isLeftFixed(), (*it)->isBottomFixed(), (*it)->isRightFixed());
+        add((*it)->rect(), (*it)->sheet() ? (*it)->sheet() : sheet, (*it)->isTopFixed(), (*it)->isLeftFixed(), (*it)->isBottomFixed(), (*it)->isRightFixed(), allowMulti);
     }
     return d->cells.isEmpty() ? 0 : d->cells.last();
 }
@@ -262,22 +262,23 @@ Region Region::intersected(const Region& region) const
   Region result;
   QVector<QRect> rects = region.rects();
   if (rects.size() == 1) {
-    QRect rect = rects[0];
-    SheetBase *s = region.cells()[0]->sheet();
-    // intersect each element with the rectangle
-    for (Element *element : d->cells) {
-      if (element->sheet() != s) continue;
-      if (element->type() == Element::Point) {
-        Point* point = static_cast<Point*>(element);
-        if (rect.contains (point->pos()))
-          result.add (point->pos(), s);
-      } else {
-        QRect rect2 = element->rect();
-        if (rect2.intersects (rect))
-          result.add (rect2.intersected (rect), s);
+      QRect rect = rects[0];
+      SheetBase *s = region.cells()[0]->sheet();
+      // intersect each element with the rectangle
+      for (Element *element : d->cells) {
+          if (element->sheet() != s) continue;
+          if (element->type() == Element::Point) {
+              Point* point = static_cast<Point*>(element);
+              if (rect.contains (point->pos()))
+                  // Can't use add as we need to skip duplicity checks.
+                  result.insert(d->cells.count(), point->pos(), s, true, false, false);
+          } else {
+              QRect rect2 = element->rect();
+              if (rect2.intersects (rect))
+                  result.insert(d->cells.count(), rect2.intersected (rect), s, true, false, false, false, false);
+          }
       }
-    }
-    return result;
+      return result;
   }
 
     // Generic case. TODO: optimize this better - generating a ton of single-cell regions is slow
@@ -287,13 +288,15 @@ Region Region::intersected(const Region& region) const
         if (element->type() == Element::Point) {
             Point* point = static_cast<Point*>(element);
             if(contains(point->pos(), element->sheet()))
-                result.add(point->pos(), element->sheet());
+                // Can't use add as we need to skip duplicity checks.
+                result.insert(d->cells.count(), point->pos(), element->sheet(), true, false, false);
         } else {
             QRect rect = element->rect();
             for(int c = rect.top(); c <= rect.bottom(); ++c) {
                 for(int r = rect.left(); r <= rect.right(); ++r) {
                     QPoint p(r,c);
                     if(contains(p, element->sheet()))
+                        result.insert(d->cells.count(), p, element->sheet(), true, false, false);
                         result.add(p, element->sheet());
                 }
             }

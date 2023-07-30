@@ -875,7 +875,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
     if (row.hasAttributeNS(KoXmlNS::table, sDefaultCellStyleName)) {
         rowCellStyleName = row.attributeNS(KoXmlNS::table, sDefaultCellStyleName, QString());
         if (!rowCellStyleName.isEmpty()) {
-            rowStyleRegions[rowCellStyleName].add(QRect(1, rowIndex, KS_colMax, number));
+            rowStyleRegions[rowCellStyleName].add(QRect(1, rowIndex, KS_colMax, number), nullptr, false, false, false, false, true);
         }
     }
 
@@ -943,7 +943,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
         // Styles are inserted at the end of the loading process, so check the XML directly here.
         const QString styleName = cellElement.attributeNS(KoXmlNS::table , sStyleName, QString());
         if (!styleName.isEmpty())
-            cellStyleRegions[styleName].add(QRect(columnIndex, rowIndex, numberColumns, number));
+            cellStyleRegions[styleName].add(QRect(columnIndex, rowIndex, numberColumns, number), nullptr, false, false, false, false, true);
 
         // figure out exact cell style for loading of cell content
         QString cellStyleName = styleName;

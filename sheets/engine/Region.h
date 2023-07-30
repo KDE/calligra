@@ -200,21 +200,21 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    Element* add(const QPoint& point, SheetBase* sheet = 0, bool fixedColumn = false, bool fixedRow = false);
+    Element* add(const QPoint& point, SheetBase* sheet = 0, bool fixedColumn = false, bool fixedRow = false, bool allowMulti = false);
 
     /**
      * Adds the range @p range to this region.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    Element* add(const QRect& range, SheetBase* sheet = 0, bool fixedTop = false, bool fixedLeft = false, bool fixedBottom = false, bool fixedRight = false);
+    Element* add(const QRect& range, SheetBase* sheet = 0, bool fixedTop = false, bool fixedLeft = false, bool fixedBottom = false, bool fixedRight = false, bool allowMulti = false);
 
     /**
      * Adds the region @p region to this region.
      * @param region the region to be added
      * @param sheet the fallback sheet used, if an element has no sheet set
      */
-    Element* add(const Region& region, SheetBase* sheet = 0);
+    Element* add(const Region& region, SheetBase* sheet = 0, bool allowMulti = false);
 
     /**
      * Removes all rectangles that intersect with the point.

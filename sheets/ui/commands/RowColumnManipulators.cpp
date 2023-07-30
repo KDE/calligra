@@ -414,30 +414,8 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
     DummyWidget dummyWiget;
     const QFontMetricsF fontMetrics(style.font(), &dummyWiget);
 
-    // Set size to correct values according to
-    // if the text is horizontal, vertical or rotated.
-    if (!style.verticalText() && !style.angle()) {
-        // Horizontal text.
-
-        size = fontMetrics.size(0, text);
-        double offsetFont = 0.0;
-        if ((style.valign() == Style::Bottom) && style.underline())
-            offsetFont = fontMetrics.underlinePos() + 1;
-
-        size.setHeight((fontMetrics.ascent() + fontMetrics.descent() + offsetFont)
-                       *(text.count('\n') + 1));
-    } else if (style.angle() != 0) {
-        // Rotated text.
-
-        const double height = fontMetrics.ascent() + fontMetrics.descent();
-        const double width  = fontMetrics.width(text);
-        size.setHeight(height * ::cos(style.angle() * M_PI / 180)
-                       + qAbs(width * ::sin(style.angle() * M_PI / 180)));
-        size.setWidth(qAbs(height * ::sin(style.angle() * M_PI / 180))
-                      + width * ::cos(style.angle() * M_PI / 180));
-    } else {
+    if (style.verticalText()) {
         // Vertical text.
-
         qreal width = 0.0;
         for (int i = 0; i < text.length(); i++)
             width = qMax(width, fontMetrics.width(text.at(i)));
@@ -445,7 +423,26 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
         size.setWidth(width);
         size.setHeight((fontMetrics.ascent() + fontMetrics.descent())
                        * text.length());
+
+        return size;
     }
+
+    size = fontMetrics.size(0, text);
+
+    if ((style.valign() == Style::Bottom) && style.underline()) {
+        double offsetFont = fontMetrics.underlinePos() + 1;
+        size.setHeight(size.height() + offsetFont);
+    }
+
+    if (style.angle()) {
+        double angle_rad = style.angle() * M_PI / 180;
+        // Rotated text.
+        size.setHeight(size.height() * ::cos(angle_rad)
+                       + qAbs(size.width() * ::sin(angle_rad)));
+        size.setWidth(qAbs(size.height() * ::sin(angle_rad))
+                      + size.width() * ::cos(angle_rad));
+    }
+
     return size;
 }
 
