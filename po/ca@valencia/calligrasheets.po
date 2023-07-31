@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-06-19 11:41+0200\n"
+"PO-Revision-Date: 2023-07-28 19:26+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -5093,7 +5093,7 @@ msgstr "Iteració:"
 #: dialogs/GoalSeekDialog.cpp:291 dialogs/GoalSeekWidget.ui:81
 #, kde-format
 msgid "New value:"
-msgstr "Nou valor:"
+msgstr "Valor nou:"
 
 #: dialogs/GoalSeekDialog.cpp:295
 #, kde-format
