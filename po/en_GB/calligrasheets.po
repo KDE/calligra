@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2023-04-29 12:31+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -14689,39 +14689,39 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Show Rows"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Adjust Columns/Rows"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Adjust Columns"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Adjust Rows"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Insert Columns"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Remove Columns"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Insert Rows"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "Remove Rows"

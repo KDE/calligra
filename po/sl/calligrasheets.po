@@ -1,7 +1,7 @@
 # translation of kspread.po to Slovenian
 # Translation of kspread.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligrasheets.po 1654056 2023-06-18 01:39:40Z scripty $
+# $Id: calligrasheets.po 1657150 2023-07-31 01:27:33Z scripty $
 # $Source$
 #
 #
@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2023-04-26 08:09+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -14544,39 +14544,39 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Prikaži vrstice"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Prilagodi stolpce/vrstice"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Prilagodi stolpce"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Prilagodi vrstice"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Vstavi stolpce"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Odstrani stolpce"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Vstavi vrstice"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "Odstrani vrstice"

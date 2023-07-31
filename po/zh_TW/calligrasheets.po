@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2019-01-19 19:46+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -14122,39 +14122,39 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "顯示列"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "調整欄/列"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "調整欄"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "調整列"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "插入欄"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "移除欄"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "插入列"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "移除列"

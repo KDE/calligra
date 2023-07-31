@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2008-05-05 23:52+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -15336,51 +15336,51 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Rigen toane"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 #, fuzzy
 #| msgid "Adjust Columns/Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Kolommen/Rigen oanpasse"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 #, fuzzy
 #| msgid "Adjust Columns"
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Kolommen oanpasse"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 #, fuzzy
 #| msgid "Adjust Rows"
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Rigen oanpasse"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 #, fuzzy
 #| msgid "Insert Columns"
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Kolommen ynfoegje"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 #, fuzzy
 #| msgid "Remove Columns"
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Kolommen wiskje"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 #, fuzzy
 #| msgid "Insert Rows"
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Rigen ynfoegje"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 #, fuzzy
 #| msgid "Remove Rows"
 msgctxt "(qtundo-format)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2023-06-23 11:37+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -13812,39 +13812,39 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Zobrazit řádky"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Upravit řádky/sloupce"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Upravit sloupce"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Upravit řádky"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Vložit sloupce"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Odstranit sloupce"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Vložit řádky"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "Odstranit řádky"

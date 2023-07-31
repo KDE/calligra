@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2004-09-09 12:35+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -15083,48 +15083,48 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Dangos Rhesi"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Addasu Colofn"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Addasu Colofn"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Addasu Rhes"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 #, fuzzy
 #| msgid "Insert Columns"
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Mewnosod Colofnau"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 #, fuzzy
 #| msgid "Remove Columns"
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Gwaredu Colofnau"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 #, fuzzy
 #| msgid "Insert Rows"
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Mewnosod Rhesi"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 #, fuzzy
 #| msgid "Remove Rows"
 msgctxt "(qtundo-format)"

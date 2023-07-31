@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2021-03-01 07:21+0100\n"
+"PO-Revision-Date: 2021-11-21 12:46+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -2077,7 +2077,7 @@ msgstr "Enhet som inte stöds"
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change master slide"
-msgstr "Ändra förlagssida"
+msgstr "Ändra förlagsbild"
 
 #: pageapp/commands/KoPAChangeMasterPageCommand.cpp:24
 msgctxt "(qtundo-format)"
@@ -2097,7 +2097,7 @@ msgstr "Visa förlagssidans bakgrund"
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:22
 msgctxt "(qtundo-format)"
 msgid "Display slide background"
-msgstr "Visa sidans bakgrund"
+msgstr "Visa bildens bakgrund"
 
 #: pageapp/commands/KoPADisplayMasterBackgroundCommand.cpp:25
 msgctxt "(qtundo-format)"
@@ -2117,7 +2117,7 @@ msgstr "Dölj förlagssidans former"
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:26
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
-msgstr "Ta bort sida"
+msgstr "Ta bort bild"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:29
 msgctxt "(qtundo-format) Delete one page"
@@ -2128,8 +2128,8 @@ msgstr "Ta bort sida"
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] "Ta bort sida"
-msgstr[1] "Ta bort sidor"
+msgstr[0] "Ta bort bild"
+msgstr[1] "Ta bort bilder"
 
 #: pageapp/commands/KoPAPageDeleteCommand.cpp:53
 msgctxt "(qtundo-format)"
@@ -2141,7 +2141,7 @@ msgstr[1] "Ta bort sidor"
 #: pageapp/commands/KoPAPageInsertCommand.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Insert slide"
-msgstr "Infoga sida"
+msgstr "Infoga bild"
 
 #: pageapp/commands/KoPAPageInsertCommand.cpp:27
 msgctxt "(qtundo-format)"
@@ -2152,8 +2152,8 @@ msgstr "Infoga sida"
 msgctxt "(qtundo-format)"
 msgid "Move slide"
 msgid_plural "Move slides"
-msgstr[0] "Flytta sida"
-msgstr[1] "Flytta sidor"
+msgstr[0] "Flytta bild"
+msgstr[1] "Flytta bilder"
 
 #: pageapp/commands/KoPAPageMoveCommand.cpp:48
 msgctxt "(qtundo-format)"
@@ -2192,7 +2192,7 @@ msgstr "Välj design av förlagssida:"
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:28
 #, kde-format
 msgid "Master Slide"
-msgstr "Förlagssida"
+msgstr "Förlagsbild"
 
 #: pageapp/dialogs/KoPAMasterPageDialog.cpp:30
 #, kde-format
@@ -2208,7 +2208,7 @@ msgstr "Förlagssida"
 #: pageapp/KoPADocumentModel.cpp:172 pageapp/KoPAPageThumbnailModel.cpp:54
 #, kde-format
 msgid "Slide %1"
-msgstr "Sida %1"
+msgstr "Bild %1"
 
 #: pageapp/KoPADocumentModel.cpp:174
 #, kde-format
@@ -2234,7 +2234,7 @@ msgstr "Form"
 #: pageapp/KoPADocumentModel.cpp:272
 msgctxt "(qtundo-format)"
 msgid "Rename Slide"
-msgstr "Byt namn på sida"
+msgstr "Byt namn på bild"
 
 #: pageapp/KoPADocumentModel.cpp:274
 msgctxt "(qtundo-format)"
@@ -2250,7 +2250,7 @@ msgstr "Byt namn på lager"
 #: pageapp/KoPADocumentStructureDocker.cpp:100
 #, kde-format
 msgid "Slide"
-msgstr "Sida"
+msgstr "Bild"
 
 #: pageapp/KoPADocumentModel.cpp:317
 #, kde-format
@@ -2285,7 +2285,7 @@ msgstr "&Avbryt"
 #: pageapp/KoPADocumentStructureDocker.cpp:89
 #, kde-format
 msgid "Add a new slide or layer"
-msgstr "Lägg till en ny sida eller ett nytt lager"
+msgstr "Lägg till en ny bild eller ett nytt lager"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:92
 #, kde-format
@@ -2372,7 +2372,7 @@ msgstr "Fel vid borttagning av lager"
 #: pageapp/KoPADocumentStructureDocker.cpp:611
 #, kde-format
 msgid "Add a new slide"
-msgstr "Lägg till en ny sida"
+msgstr "Lägg till en ny bild"
 
 #: pageapp/KoPADocumentStructureDocker.cpp:614
 #, kde-format
@@ -2406,8 +2406,8 @@ msgstr "Sida %1"
 msgctxt "(qtundo-format)"
 msgid "Paste Slide"
 msgid_plural "Paste Slides"
-msgstr[0] "Klistra in sida"
-msgstr[1] "Klistra in sidor"
+msgstr[0] "Klistra in bild"
+msgstr[1] "Klistra in bilder"
 
 #: pageapp/KoPAPastePage.cpp:121
 msgctxt "(qtundo-format)"
@@ -2556,7 +2556,7 @@ msgstr "Sidkonstruktion"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolFactory.cpp:39
 #, kde-format
 msgid "Slide Design"
-msgstr "Sidkonstruktion"
+msgstr "Bildkonstruktion"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
 #, kde-format
@@ -2566,7 +2566,7 @@ msgstr "Använd förlagssidans bakgrund"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:41
 #, kde-format
 msgid "Use background of master slide"
-msgstr "Använd förlagssidans bakgrund"
+msgstr "Använd förlagsbildens bakgrund"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
 #, kde-format
@@ -2576,12 +2576,12 @@ msgstr "Visa förlagssidans former"
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:44
 #, kde-format
 msgid "Display shapes of master slide"
-msgstr "Visa förlagssidans former"
+msgstr "Visa förlagsbildens former"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:102
 msgctxt "(qtundo-format)"
 msgid "Change slide background image"
-msgstr "Ändra sidans bakgrundsbild"
+msgstr "Ändra bildens bakgrundsbild"
 
 #: pageapp/tools/backgroundTool/KoPABackgroundToolWidget.cpp:103
 msgctxt "(qtundo-format)"
@@ -2591,12 +2591,12 @@ msgstr "Ändra sidans bakgrundsbild"
 #: pageapp/widgets/KoPageNavigator.cpp:55
 #, kde-format
 msgid "Master Slide %1/%2"
-msgstr "Förlagssida %1/%2"
+msgstr "Förlagsbild %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:56
 #, kde-format
 msgid "Slide %1/%2"
-msgstr "Sida %1/%2"
+msgstr "Bild %1/%2"
 
 #: pageapp/widgets/KoPageNavigator.cpp:57
 #, kde-format
@@ -5465,9 +5465,6 @@ msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
 
-#~ msgid "Key Press"
-#~ msgstr "Tangentnedtryckning"
-
 #~ msgid "Install Script Package"
 #~ msgstr "Installera skriptpaket"
 
@@ -5514,6 +5511,9 @@ msgstr "%1"
 #~ msgstr ""
 #~ "Kunde inte avinstallera skriptpaketet \"%1\". Du kanske inte har "
 #~ "tillräckliga rättigheter för att ta bort katalogen \"%1\"."
+
+#~ msgid "Key Press"
+#~ msgstr "Tangentnedtryckning"
 
 #~ msgctxt "@info:tooltip"
 #~ msgid "Download resource"

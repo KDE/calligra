@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2008-12-29 20:21-0500\n"
 "Last-Translator: Manu S Madhav <manusmad@gmail.com>\n"
 "Language-Team: SMC <smc.org.in>\n"
@@ -14099,48 +14099,48 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "വരികള്‍ കാണിക്കുക"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "അപരിചിതമായ നിര %d-ല്‍ മാറ്റം വരുത്തിയിരിക്കുന്നു"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "അപരിചിതമായ നിര %d-ല്‍ മാറ്റം വരുത്തിയിരിക്കുന്നു"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "അപരിചിതമായ നിര %d-ല്‍ മാറ്റം വരുത്തിയിരിക്കുന്നു"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 #, fuzzy
 #| msgid "Insert Columns"
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "നിരകള്‍ ചേര്‍ക്കുക"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 #, fuzzy
 #| msgid "Remove Columns"
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "നിരകള്‍ നീക്കം ചെയ്യുക"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 #, fuzzy
 #| msgid "Insert Rows"
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "വരികള്‍ ചേര്‍ക്കുക"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 #, fuzzy
 #| msgid "Remove Rows"
 msgctxt "(qtundo-format)"

@@ -4,13 +4,13 @@
 # Per Lindström <per.lindstrom@osd.privataccess.nu>, 2000.
 # Mattias Newzella <newzella@linux.nu>, 2000, 2001, 2002, 2003.
 # Stefan Asserhäll <stefan.asserhall@bredband.net>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
-# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2022.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
-"PO-Revision-Date: 2022-09-24 14:59+0200\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
+"PO-Revision-Date: 2023-07-30 11:53+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -14676,39 +14676,39 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Visa rader"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Justera kolumner och rader"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Justera kolumner"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Justera rader"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Infoga kolumner"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Ta bort kolumner"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Infoga rader"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
 msgstr "Ta bort rader"
@@ -14917,7 +14917,7 @@ msgstr "Stryk över"
 #: ui/dialogs/FontWidget.ui:149
 #, kde-format
 msgid "Choose the font size."
-msgstr ""
+msgstr "Välj teckenstorlek."
 
 #. i18n: ectx: property (whatsThis), widget (QListWidget, family_combo)
 #: ui/dialogs/FontWidget.ui:180
@@ -14950,16 +14950,14 @@ msgid "Cell Format"
 msgstr "Cellformat"
 
 #: ui/dialogs/LayoutDialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Cell Format"
+#, kde-format
 msgid "Set Cell Format"
-msgstr "Cellformat"
+msgstr "Ställ in cellformat"
 
 #: ui/dialogs/LayoutDialog.cpp:132
-#, fuzzy, kde-format
-#| msgid "&General"
+#, kde-format
 msgid "General"
-msgstr "A&llmänt"
+msgstr "Allmänt"
 
 #: ui/dialogs/LayoutDialog.cpp:147 ui/dialogs/LayoutPage_Border.cpp:246
 #, kde-format
@@ -14967,16 +14965,14 @@ msgid "Border"
 msgstr "Kant"
 
 #: ui/dialogs/LayoutDialog.cpp:150
-#, fuzzy, kde-format
-#| msgid "Back&ground"
+#, kde-format
 msgid "Background"
-msgstr "Bak&grund"
+msgstr "Bakgrund"
 
 #: ui/dialogs/LayoutDialog.cpp:153
-#, fuzzy, kde-format
-#| msgid "&Cell Protection"
+#, kde-format
 msgid "Cell Protection"
-msgstr "&Cellskydd"
+msgstr "Cellskydd"
 
 #: ui/dialogs/LayoutPage_Border.cpp:273
 #, kde-format
@@ -15143,20 +15139,12 @@ msgstr ""
 "systeminställningarna."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
-#, fuzzy, kde-format
-#| msgid "Date & Time"
+#, kde-format
 msgid "Datetime"
-msgstr "Datum och tid"
+msgstr "Datumtid"
 
 #: ui/dialogs/LayoutPage_Float.cpp:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "To enter a date, you should enter it in one of the formats set in System "
-#| "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
-#| "Language -> Time & Dates. There are two formats set here: the date format "
-#| "and the short date format.\n"
-#| "Just like you can drag down numbers you can also drag down dates and the "
-#| "next cells will also get dates."
+#, kde-format
 msgid ""
 "To enter a datetime, you should enter it in one of the formats set in System "
 "Settings -> Common Appearance and Behavior -> Locale -> Country/Region & "
@@ -15165,12 +15153,12 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"När du skriver in ett datum ska du använda ett av formaten som ställs in i "
+"När du skriver in en datumtid ska du använda ett av formaten som ställs in i "
 "systeminställningarna -> Gemensamt utseende och beteende -> Plats -> Land/"
 "region och språk -> Tid och datum. Det finns två format som ställs in där: "
 "datumformatet och det korta datumformatet.\n"
 "Precis som du kan dra nummer neråt, kan du också dra datum neråt så får "
-"följande celler också datum."
+"följande celler också datumtider."
 
 #: ui/dialogs/LayoutPage_Float.cpp:95
 #, kde-format

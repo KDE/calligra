@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-18 00:54+0000\n"
+"POT-Creation-Date: 2023-07-31 00:47+0000\n"
 "PO-Revision-Date: 2011-07-07 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -14012,45 +14012,45 @@ msgctxt "(qtundo-format)"
 msgid "Show Rows"
 msgstr "Sýna röð(raðir)"
 
-#: ui/commands/RowColumnManipulators.cpp:538
+#: ui/commands/RowColumnManipulators.cpp:535
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns/Rows"
 msgstr "Stilla reit"
 
-#: ui/commands/RowColumnManipulators.cpp:540
+#: ui/commands/RowColumnManipulators.cpp:537
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Columns"
 msgstr "Stilla reit"
 
-#: ui/commands/RowColumnManipulators.cpp:542
+#: ui/commands/RowColumnManipulators.cpp:539
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Adjust Rows"
 msgstr "Stilla röð"
 
-#: ui/commands/RowColumnManipulators.cpp:555
-#: ui/commands/RowColumnManipulators.cpp:573
+#: ui/commands/RowColumnManipulators.cpp:552
+#: ui/commands/RowColumnManipulators.cpp:570
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Columns"
 msgstr "Setja inn dálka"
 
-#: ui/commands/RowColumnManipulators.cpp:575
+#: ui/commands/RowColumnManipulators.cpp:572
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Columns"
 msgstr "Fjarlægja dálka"
 
-#: ui/commands/RowColumnManipulators.cpp:632
-#: ui/commands/RowColumnManipulators.cpp:650
+#: ui/commands/RowColumnManipulators.cpp:629
+#: ui/commands/RowColumnManipulators.cpp:647
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert Rows"
 msgstr "Setja inn línur"
 
-#: ui/commands/RowColumnManipulators.cpp:652
+#: ui/commands/RowColumnManipulators.cpp:649
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Rows"
