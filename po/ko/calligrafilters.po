@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Shinjo Park <kde@peremen.name>, 2013, 2015, 2020, 2022.
+# Shinjo Park <kde@peremen.name>, 2013, 2015, 2020, 2022, 2023.
 # Jung Hee Lee <daemul72@gmail.com>, 2019.
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2022-04-16 21:50+0200\n"
+"PO-Revision-Date: 2023-08-07 23:25+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 21.08.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: karbon/image/ImageExport.cpp:90
 #, kde-format
@@ -658,13 +658,13 @@ msgstr "포함할 문서"
 #: sheets/latex/export/latexexportwidget.ui:98
 #, kde-format
 msgid "Document class:"
-msgstr "문서 클래스 :"
+msgstr "문서 클래스:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: sheets/latex/export/latexexportwidget.ui:111
 #, kde-format
 msgid "Quality:"
-msgstr "품질 :"
+msgstr "품질:"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, qualityComboBox)
 #: sheets/latex/export/latexexportwidget.ui:122
@@ -694,7 +694,7 @@ msgstr "그림"
 #: sheets/latex/export/latexexportwidget.ui:182
 #, kde-format
 msgid "Convert the pictures:"
-msgstr "그림 변환 :"
+msgstr "그림 변환:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
 #: sheets/latex/export/latexexportwidget.ui:199
@@ -738,7 +738,7 @@ msgstr "저자 정보 내보내기 :"
 #: sheets/latex/export/latexexportwidget.ui:321
 #, kde-format
 msgid "Add a table of content:"
-msgstr "목차 추가 :"
+msgstr "목차 추가:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: sheets/latex/export/latexexportwidget.ui:340
