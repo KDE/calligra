@@ -3,13 +3,13 @@
 #
 # Translators:
 # Volkan Gezer <volkangezer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2022-08-11 11:56+0300\n"
+"PO-Revision-Date: 2023-08-11 13:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.04.3\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #: KoLocationSemanticItemFactory.cpp:34
 #, kde-format
@@ -47,7 +47,7 @@ msgstr "Dünya"
 #: KoRdfLocationEditWidgetMarble.ui:33 KoRdfLocationViewWidgetMarble.ui:34
 #, kde-format
 msgid "The Marble widget displays a virtual globe."
-msgstr "Marble araç takımı, sanal bir dünya görüntüler."
+msgstr "Bilye araç takımı, sanal bir dünya görüntüler."
 
 #. i18n: ectx: property (toolTip), widget (Marble::MarbleNavigator, zoomer)
 #: KoRdfLocationEditWidgetMarble.ui:40
