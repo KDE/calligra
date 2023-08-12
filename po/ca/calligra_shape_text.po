@@ -1,5 +1,5 @@
 # Translation of calligra_shape_text.po to Catalan
-# Copyright (C) 2008-2022 This_file_is_part_of_KDE
+# Copyright (C) 2008-2023 This_file_is_part_of_KDE
 # This file is distributed under the same license as the TextShape package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008, 2010.
