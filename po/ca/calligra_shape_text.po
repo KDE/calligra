@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-10 00:46+0000\n"
-"PO-Revision-Date: 2023-08-08 17:53+0200\n"
+"PO-Revision-Date: 2023-08-16 10:39+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -524,7 +524,7 @@ msgstr "Estil del pare:"
 #: dialogs/CharacterGeneral.ui:78
 #, kde-format
 msgid "Include in table of contents"
-msgstr "Inclou a la taula de continguts"
+msgstr "Inclou a la taula de contingut"
 
 #: dialogs/CharacterHighlighting.cpp:260 dialogs/CharacterHighlighting.cpp:271
 #, kde-format
@@ -2316,7 +2316,7 @@ msgstr "Columnes d'amplada fixa:"
 #: dialogs/TableDialog.ui:125
 #, kde-format
 msgid "Fit to contents"
-msgstr "Ajusta als continguts"
+msgstr "Ajusta al contingut"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFitAvail)
 #: dialogs/TableDialog.ui:138
@@ -2327,7 +2327,7 @@ msgstr "Ajusta a la disponibilitat dels voltants"
 #: dialogs/TableOfContentsConfigure.cpp:62
 #, kde-format
 msgid "Table of Contents - Configure"
-msgstr "Taula de continguts - Configura"
+msgstr "Taula de contingut - Configura"
 
 #: dialogs/TableOfContentsConfigure.cpp:64
 #, kde-format
@@ -2412,7 +2412,7 @@ msgstr "Estil"
 #: dialogs/TableOfContentsStyleConfigure.cpp:26
 #, kde-format
 msgid "Table of Contents - Configure Styles"
-msgstr "Taula de continguts - Configura els estils"
+msgstr "Taula de contingut - Configura els estils"
 
 #: dialogs/TableOfContentsStyleConfigure.cpp:30
 #, kde-format
@@ -2434,12 +2434,12 @@ msgstr "Desactivat"
 #: dialogs/TableOfContentsTemplate.cpp:27
 #, kde-format
 msgid "Table Of Contents"
-msgstr "Taula de continguts"
+msgstr "Taula de contingut"
 
 #: ReferencesTool.cpp:116
 #, kde-format
 msgid "Insert a Table of Contents into the document."
-msgstr "Insereix una taula de continguts en el document."
+msgstr "Insereix una taula de contingut en el document."
 
 #: ReferencesTool.cpp:118 TextTool.cpp:410
 #, kde-format
@@ -2449,7 +2449,7 @@ msgstr "Insereix una personalització..."
 #: ReferencesTool.cpp:120
 #, kde-format
 msgid "Insert a custom Table of Contents into the document."
-msgstr "Insereix una taula de continguts personalitzada en el document."
+msgstr "Insereix una taula de contingut personalitzada en el document."
 
 #: ReferencesTool.cpp:122
 #, kde-format
@@ -2459,7 +2459,7 @@ msgstr "Configura..."
 #: ReferencesTool.cpp:124
 #, kde-format
 msgid "Configure the Table of Contents"
-msgstr "Configura la taula de continguts"
+msgstr "Configura la taula de contingut"
 
 #: ReferencesTool.cpp:127
 #, kde-format
