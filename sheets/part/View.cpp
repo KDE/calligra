@@ -1964,27 +1964,27 @@ void View::calcStatusBarOp()
         Value range = sheet->cellStorage()->valueRegion(*d->selection);
         switch (tmpMethod) {
         case SumOfNumber:
-            val = calc->sum(range);
+            val = calc->sum(range, false);
             prefix = i18n("Sum: ");
             break;
         case Average:
-            val = calc->avg(range);
+            val = calc->avg(range, false);
             prefix = i18n("Average: ");
             break;
         case Min:
-            val = calc->min(range);
+            val = calc->min(range, false);
             prefix = i18n("Min: ");
             break;
         case Max:
-            val = calc->max(range);
+            val = calc->max(range, false);
             prefix = i18n("Max: ");
             break;
         case CountA:
-            val = Value(calc->count(range));
+            val = Value(calc->count(range, false));
             prefix = i18n("Count: ");
             break;
         case Count:
-            val = Value(calc->count(range, false));
+            val = Value(calc->count(range, true));
             prefix = i18n("CountA: ");
         case NoneCalc:
             break;

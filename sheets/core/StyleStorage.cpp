@@ -486,6 +486,9 @@ void StyleStorage::garbageCollection()
     if (d->possibleGarbage.isEmpty())
         return;
 
+/* DISABLE THIS FOR NOW
+ * This gadbage collection seems to be slowing things down a lot, without really doing much. Disabling it for now, but we'll need to adjust the entire style storage, likely by storing each substyle separately.
+
     const int currentZIndex = d->possibleGarbage.constBegin().key();
     const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.take(currentZIndex);
 
@@ -493,6 +496,9 @@ void StyleStorage::garbageCollection()
     if (currentPair.second->type() == Style::NamedStyleKey &&
             !styleManager()->style(static_cast<const NamedStyle*>(currentPair.second.data())->name)) {
         debugSheetsStyle << "removing" << currentPair.second->debugData()
+        << "at" << Region(currentPair.first.toRect()).name()
+        << "used" << currentPair.second->ref << "times" << endl;
+        qDebug() << "removing" << currentPair.second->debugData()
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
@@ -514,6 +520,9 @@ void StyleStorage::garbageCollection()
             pair.second->type() == Style::DefaultStyleKey &&
             pair.first == currentPair.first) {
         debugSheetsStyle << "removing default style"
+        << "at" << Region(currentPair.first.toRect()).name()
+        << "used" << currentPair.second->ref << "times" << endl;
+        qDebug() << "removing default style"
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
@@ -550,6 +559,9 @@ void StyleStorage::garbageCollection()
             debugSheetsStyle << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
             << "used" << currentPair.second->ref << "times" << endl;
+            qDebug() << "removing" << currentPair.second->debugData()
+            << "at" << Region(currentPair.first.toRect()).name()
+            << "used" << currentPair.second->ref << "times" << endl;
             d->tree.remove(currentPair.first.toRect(), currentPair.second, currentZIndex);
 #if 0
             debugSheetsStyle << "StyleStorage: usage of" << currentPair.second->debugData() << " is" << currentPair.second->ref;
@@ -569,6 +581,8 @@ void StyleStorage::garbageCollection()
         }
     }
     QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
+
+*/
 }
 
 void StyleStorage::regionChanged(const QRect& rect)
@@ -581,8 +595,10 @@ void StyleStorage::regionChanged(const QRect& rect)
     // mark the possible garbage
     // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
     // has to be inserted most recently, because it should be accessed first.
+/* DISABLING GARBAGE FOR NOW
     d->possibleGarbage = d->tree.intersectingPairs(rect).unite(d->possibleGarbage);
     QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
+*/
     // invalidate cache
     invalidateCache(rect);
 }
