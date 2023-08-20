@@ -172,7 +172,6 @@ private:
     RTree<T> m_tree;
     Region m_usedArea;
     QMap<int, QPair<QRectF, T> > m_possibleGarbage;
-    QList<T> m_storedData;
     mutable QCache<QPoint, T> m_cache;
 #ifdef CALLIGRA_SHEETS_MT
     mutable QMutex m_mutex;
@@ -209,7 +208,6 @@ template<typename T>
 RectStorage<T>::RectStorage(const RectStorage& other)
         : m_map(other.m_map)
         , m_usedArea(other.m_usedArea)
-        , m_storedData(other.m_storedData)
         , m_loader(0)
 {
     m_tree = other.m_tree;
@@ -306,20 +304,10 @@ void RectStorage<T>::insert(const Region& region, const T& _data)
 
     if (m_storingUndo) m_undoData << currentData(region);
 
-    T data;
-    // lookup already used data
-    int index = m_storedData.indexOf(_data);
-    if (index != -1)
-        data = m_storedData[index];
-    else {
-        data = _data;
-        m_storedData.append(_data);
-    }
-
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         // insert data
-        m_tree.insert((*it)->rect(), data);
+        m_tree.insert((*it)->rect(), _data);
         regionChanged((*it)->rect());
     }
 }
@@ -329,7 +317,6 @@ void RectStorage<T>::remove(const Region& region, const T& data)
 {
     ensureLoaded();
 
-    if (!m_storedData.contains(data)) return;
     if (m_storingUndo) m_undoData << currentData(region);
 
     const Region::ConstIterator end(region.constEnd());
@@ -577,16 +564,7 @@ void RectStorageLoader<T>::run()
     QList<QPair<Region, T> > treeData;
     typedef QPair<Region, T> TRegion;
     for (const TRegion& tr : m_data) {
-        const Region& reg = tr.first;
-        const T& d = tr.second;
-
-        int index = m_storage->m_storedData.indexOf(d);
-        if (index != -1) {
-            treeData.append(qMakePair(reg, m_storage->m_storedData[index]));
-        } else {
-            treeData.append(tr);
-            m_storage->m_storedData.append(d);
-        }
+        treeData.append(tr);
     }
 
     m_storage->m_tree.load(treeData);
