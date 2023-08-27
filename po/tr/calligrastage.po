@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: calligra-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-04-25 00:18+0000\n"
-"PO-Revision-Date: 2023-02-13 15:30+0300\n"
+"PO-Revision-Date: 2023-08-26 12:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -632,7 +632,7 @@ msgstr "Slayt Gösterisini Yapılandır..."
 #: part/KPrView.cpp:301
 #, kde-format
 msgid "Configure Presenter View..."
-msgstr "Slayt Göstericinin Görünümünü Yapılandır..."
+msgstr "Sunum Görünümünü Yapılandır..."
 
 #: part/KPrView.cpp:305
 #, kde-format
@@ -1044,7 +1044,7 @@ msgstr "Monitör %1"
 #: part/ui/KPrConfigurePresenterViewDialog.cpp:38
 #, kde-format
 msgid "Configure Presenter View"
-msgstr "Slayt Göstericiyi Yapılandır"
+msgstr "Sunum Görünümünü Yapılandır"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrConfigureSlideShow)
 #: part/ui/KPrConfigureSlideShow.ui:13
