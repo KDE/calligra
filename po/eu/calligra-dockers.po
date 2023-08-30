@@ -1,0 +1,103 @@
+# POT_PART_NORMAL only
+# Translation for calligra-dockers.po to Euskara/Basque (eu).
+# Copyright (C) 2023 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
+#
+# Translators:
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2023-08-29 15:28+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 23.04.3\n"
+
+#: shapecollection/OdfCollectionLoader.cpp:63
+#, kde-format
+msgid "Found no shapes in the collection! %1"
+msgstr "Bilduman ez du formarik aurkitu! %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:132
+#, kde-format
+msgid "Not a valid Calligra file: %1"
+msgstr "Ez da balio duen Calligra fitxategi bat: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:157
+#, kde-format
+msgid "No body tag found in file: %1"
+msgstr "Fitxategian ez da 'body' etiketarik aurkitu: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:165
+#, kde-format
+msgid "No office:drawing tag found in file: %1"
+msgstr "Fitxategian ez da 'office:drawing' etiketarik aurkitu: %1"
+
+#: shapecollection/OdfCollectionLoader.cpp:173
+#: shapecollection/OdfCollectionLoader.cpp:181
+#, kde-format
+msgid "No shapes found in file: %1"
+msgstr "Fitxategian ez da formarik aurkitu: %1"
+
+#: shapecollection/ShapeCollectionDocker.cpp:111
+#, kde-format
+msgid "Add Shape"
+msgstr "Gehitu Forma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:146
+#, kde-format
+msgid "More"
+msgstr "Gehiago"
+
+#: shapecollection/ShapeCollectionDocker.cpp:176
+#, kde-format
+msgid "Open Shape Collection"
+msgstr "Ireki formen bilduma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:184
+#, kde-format
+msgid "Remove Shape Collection"
+msgstr "Kendu formen bilduma"
+
+#: shapecollection/ShapeCollectionDocker.cpp:330
+#, kde-format
+msgid "Default"
+msgstr "Lehenetsia"
+
+#: shapecollection/ShapeCollectionDocker.cpp:334
+#, kde-format
+msgid "Geometrics"
+msgstr "Geometrikoak"
+
+#: shapecollection/ShapeCollectionDocker.cpp:345
+#, kde-format
+msgid "Arrows"
+msgstr "Geziak"
+
+#: shapecollection/ShapeCollectionDocker.cpp:349
+#, kde-format
+msgid "Funny"
+msgstr "Dibertigarria"
+
+#: shapecollection/ShapeCollectionDocker.cpp:522
+#, kde-format
+msgid "Collection Error"
+msgstr "Bilduma errorea"
+
+#: shapeproperties/ShapePropertiesDocker.cpp:35
+#, kde-format
+msgid "Shape Properties"
+msgstr "Formaren propietateak"
+
+#: snapguidedocker/SnapGuideDocker.cpp:39
+#, kde-format
+msgid "Snap Settings"
+msgstr "Atxikitze ezarpenak"

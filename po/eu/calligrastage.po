@@ -1,23 +1,27 @@
-# translation of stage.po to Euskera/Basque (eu).
+# Translation for calligrastage.po to Euskera/Basque (eu).
+# Copyright (C) 2005-2023 This file is copyright:
+# This file is distributed under the same license as the calligra package.
+# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
 #
+# Translators:
 # Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
 # Marcos  <marcos@euskalgnu.org>, 2005.
 # Hizkuntza Politika Sailburuordetza <hizpol@ej-gv.es>, 2013.
-# Iñigo Salvador Azurmendi <xalba@euskalnet.net>, 2013.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2013, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: stage\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2013-12-23 18:01+0100\n"
-"Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
-"Language-Team: Basque <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-08-29 15:50+0200\n"
+"Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
+"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #. i18n: ectx: Menu (edit)
 #: part/calligrastage.rc:10
@@ -29,7 +33,7 @@ msgstr "&Editatu"
 #: part/calligrastage.rc:29
 #, kde-format
 msgid "&View"
-msgstr "&Ikusi"
+msgstr "&Ikuspegia"
 
 #. i18n: ectx: Menu (insert)
 #: part/calligrastage.rc:49
@@ -53,7 +57,7 @@ msgstr "&Diapositiba"
 #: part/calligrastage.rc:74
 #, kde-format
 msgid "Sli&de Show"
-msgstr "Dia&porama"
+msgstr "Dia&positiba emanaldia"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrastage.rc:81
@@ -62,11 +66,9 @@ msgid "&Settings"
 msgstr "E&zarpenak"
 
 #: part/commands/KPrAddCustomSlideShowCommand.cpp:19
-#, fuzzy
-#| msgid "Add custom slide show"
 msgctxt "(qtundo-format)"
 msgid "Add custom slide show"
-msgstr "Gehitu diaporama pertsonalizatu bat"
+msgstr "Gehitu neurrira egindako diapositiba emanaldia"
 
 #: part/commands/KPrAnimationCreateCommand.cpp:32
 msgctxt "(qtundo-format)"
@@ -84,17 +86,11 @@ msgid "Remove shape animation"
 msgstr "Kendu forma-animazioa"
 
 #: part/commands/KPrDelCustomSlideShowCommand.cpp:20
-#, fuzzy
-#| msgid "Delete custom slide show"
 msgctxt "(qtundo-format)"
 msgid "Delete custom slide show"
-msgstr "Ezabatu diaporama pertsonalizatua"
+msgstr "Ezabatu neurrira egindako diapositiba emanaldia"
 
 #: part/commands/KPrDeleteSlidesCommand.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Delete slide"
-#| msgid_plural "Delete slides"
 msgctxt "(qtundo-format) Delete one slide"
 msgid "Delete slide"
 msgstr "Ezabatu diapositiba"
@@ -112,11 +108,9 @@ msgid "Edit animation delay/duration"
 msgstr "Editatu animazioaren atzerapena/iraupena"
 
 #: part/commands/KPrEditCustomSlideShowsCommand.cpp:19
-#, fuzzy
-#| msgid "Edit custom slide show"
 msgctxt "(qtundo-format)"
 msgid "Edit custom slide show"
-msgstr "Editatu diaporama pertsonalizatua"
+msgstr "Editatu neurrira egindako diapositiba emanaldia"
 
 #: part/commands/KPrPageEffectSetCommand.cpp:38
 msgctxt "(qtundo-format)"
@@ -134,18 +128,14 @@ msgid "Delete Slide Effect"
 msgstr "Ezabatu diapositiba-efektua"
 
 #: part/commands/KPrPageTransitionSetCommand.cpp:32
-#, fuzzy
-#| msgid "Slide Transitions"
 msgctxt "(qtundo-format)"
 msgid "Modify Slide Transition"
-msgstr "Diapositiba-trantsizioa"
+msgstr "Aldatu diapositiba-trantsizioa"
 
 #: part/commands/KPrRenameCustomSlideShowCommand.cpp:20
-#, fuzzy
-#| msgid "Rename custom slide show"
 msgctxt "(qtundo-format)"
 msgid "Rename custom slide show"
-msgstr "Izena aldatu diaporama pertsonalizatuari"
+msgstr "Berrizendatu neurrira egindako diapositiba emanaldia"
 
 #: part/commands/KPrReorderAnimationCommand.cpp:33
 msgctxt "(qtundo-format)"
@@ -153,23 +143,20 @@ msgid "Reorder animations"
 msgstr "Berrordenatu animazioak"
 
 #: part/KPrAboutData.h:21
-#, fuzzy, kde-format
-#| msgid "Configure Stage..."
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Stage"
-msgstr "Stage konfiguratu..."
+msgstr "Calligra Stage"
 
 #: part/KPrAboutData.h:23
-#, fuzzy, kde-format
-#| msgid "Calligra Presentation Tool"
+#, kde-format
 msgid "Presentation Tool"
-msgstr "Calligra-ren aurkezpenetarako tresna"
+msgstr "Aurkezteko tresna"
 
 #: part/KPrAboutData.h:25
-#, fuzzy, kde-format
-#| msgid "(c) 1998-2013, The Stage Team"
+#, kde-format
 msgid "Copyright 1998-%1, The Stage Team"
-msgstr "(c) 1998-2013, Stage taldea"
+msgstr "Copyright 1998-%1, «Stage» taldea"
 
 #: part/KPrAboutData.h:33 part/KPrAboutData.h:34
 #, kde-format
@@ -436,7 +423,7 @@ msgstr "Uneko diapositiba: %1/%2"
 #: part/KPrPresenterViewInterface.cpp:91
 #, kde-format
 msgid "End of Slide Show"
-msgstr "Diaporamaren amaiera"
+msgstr "Diapositiba emanaldiaren bukaera"
 
 #: part/KPrShapeAnimations.cpp:168
 #: part/tools/animationtool/KPrEditAnimationsWidget.cpp:217
@@ -598,7 +585,7 @@ msgstr "Sortu agerpen-animazio bat"
 #: part/KPrView.cpp:264
 #, kde-format
 msgid "Edit Custom Slide Shows..."
-msgstr "Diaporama pertsonalizatuak editatu..."
+msgstr "Editatu neurrira egindako diapositiba emanaldiak..."
 
 #: part/KPrView.cpp:268
 #, kde-format
@@ -616,10 +603,9 @@ msgid "From First Slide"
 msgstr "Lehenengo diapositibatik"
 
 #: part/KPrView.cpp:280
-#, fuzzy, kde-format
-#| msgid "Start Presentation"
+#, kde-format
 msgid "Stop presentation"
-msgstr "Hasi aurkezpena"
+msgstr "Gelditu aurkezpena"
 
 #: part/KPrView.cpp:286
 #, kde-format
@@ -639,7 +625,7 @@ msgstr "Egoera-barra erakusten edo ezkutatzen du"
 #: part/KPrView.cpp:297
 #, kde-format
 msgid "Configure Slide Show..."
-msgstr "Diaporama konfiguratu..."
+msgstr "Konfiguratu diapositiba emanaldia..."
 
 #: part/KPrView.cpp:301
 #, kde-format
@@ -674,27 +660,27 @@ msgstr "Diapositiba-sailkatzailea"
 #: part/KPrViewModeSlidesSorter.cpp:74
 #, kde-format
 msgid "Slide Show: "
-msgstr "Diaporama:"
+msgstr "Diapositiba emanaldia:"
 
 #: part/KPrViewModeSlidesSorter.cpp:83
 #, kde-format
 msgid "Add a new custom slide show"
-msgstr "Gehitu beste diaporama pertsonalizatu bat"
+msgstr "Gehitu neurrira egindako diapositiba emanaldi berri bat"
 
 #: part/KPrViewModeSlidesSorter.cpp:88
 #, kde-format
 msgid "Delete current custom slide show"
-msgstr "Ezabatu uneko diaporama pertsonalizatua"
+msgstr "Ezabatu neurrira egindako uneko diapositiba emanaldia"
 
 #: part/KPrViewModeSlidesSorter.cpp:92
 #, kde-format
 msgid "Add slides to current custom slide show"
-msgstr "Gehitu diapositibak uneko diaporamari"
+msgstr "Gehitu diapositibak neurrira egindako uneko diapositiba emanaldian"
 
 #: part/KPrViewModeSlidesSorter.cpp:97
 #, kde-format
 msgid "Remove slides from current custom slide show"
-msgstr "Kendu diapositibak uneko diaporamatik"
+msgstr "Kendu diapositibak neurrira egindako uneko diapositiba emanalditik"
 
 #: part/KPrViewModeSlidesSorter.cpp:173
 #, kde-format
@@ -739,7 +725,7 @@ msgstr "Itsatsi"
 #: part/KPrViewModeSlidesSorter.cpp:639 part/KPrViewModeSlidesSorter.cpp:644
 #, kde-format
 msgid "Slide Show %1"
-msgstr "Diaporama %1"
+msgstr "Diapositiba emanaldia %1"
 
 #: part/KPrViewModeSlidesSorter.cpp:658
 #: part/ui/KPrConfigureSlideShowDialog.cpp:26
@@ -844,31 +830,27 @@ msgstr " s"
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:84
 #, kde-format
 msgid "Manual"
-msgstr ""
+msgstr "Eskuz"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:85
 #, kde-format
 msgid "Automatic"
-msgstr ""
+msgstr "Automatikoa"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:93
-#, fuzzy, kde-format
-#| msgid "Slide Transitions"
+#, kde-format
 msgid "Slide Transition:"
-msgstr "Diapositiba-trantsizioa"
+msgstr "Diapositiba-trantsizioa:"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:104
-#, fuzzy, kde-format
-#| msgid "All slides"
+#, kde-format
 msgid "Apply To All Slides"
-msgstr "Diapositiba guztiak"
+msgstr "Aplikatu diapositiba guztiei"
 
 #: part/tools/animationtool/KPrPageEffectDocker.cpp:265
-#, fuzzy
-#| msgid "All slides"
 msgctxt "(qtundo-format)"
 msgid "Apply Slide Effect to all Slides"
-msgstr "Diapositiba guztiak"
+msgstr "Aplikatu trantsizio efektua diapositiba guztiei"
 
 #: part/tools/animationtool/KPrPredefinedAnimationsLoader.cpp:165
 #, kde-format
@@ -1067,7 +1049,7 @@ msgstr "Konfiguratu aurkezlearen ikuspegia"
 #: part/ui/KPrConfigureSlideShowDialog.cpp:32
 #, kde-format
 msgid "Configure Slide Show"
-msgstr "Konfiguratu diaporama"
+msgstr "Konfiguratu diapositiba emanaldia"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/ui/KPrConfigureSlideShow.ui:19
@@ -1085,7 +1067,7 @@ msgstr "Aurkezpeneko diapositibak:"
 #: part/ui/KPrConfigureSlideShow.ui:54
 #, kde-format
 msgid "Edit Custom Slide Shows ..."
-msgstr "Editatu diaporama pertsonalizatuak..."
+msgstr "Editatu neurrira egindako diapositiba emanaldia..."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KPrHtmlExport)
 #: part/ui/KPrHtmlExport.ui:20
