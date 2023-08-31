@@ -43,6 +43,7 @@
   <summary xml:lang="en-GB">Presentation</summary>
   <summary xml:lang="es">Presentación</summary>
   <summary xml:lang="et">Esitlus</summary>
+  <summary xml:lang="eu">Aurkezpena</summary>
   <summary xml:lang="fi">Esitysgrafiikka</summary>
   <summary xml:lang="fr">Présentation</summary>
   <summary xml:lang="gl">Presentación.</summary>
@@ -77,6 +78,7 @@
     <p xml:lang="en-GB">Calligra Stage is an easy to use yet still flexible presentation application. You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system, so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility of the Calligra content elements are available to Stage.</p>
     <p xml:lang="es">Calligra Stage es un aplicación para presentaciones, fácil de utilizar y flexible. Permite crear fácilmente presentaciones que contengan una amplia variedad de elementos, desde gráficos a texto, desde diagramas a imágenes. Calligra Stage es extensible a través de un sistema de complementos, por lo que es fácil añadir nuevos efectos, nuevos elementos de contenido e incluso nuevas maneras de gestionar las presentaciones. Debido a su integración con Calligra, toda la potencia y flexibilidad de los elementos de contenido de Calligra están disponibles para Stage.</p>
     <p xml:lang="et">Calligra Stage on hõlpsasti kasutatav, aga väga paindlik esitluste rakendus. Selle abil saab vähese vaevaga luua rikkalikult elemente sisaldavaid esitlusi, milles leidub kõike alates graafikast tekstini ja diagrammidest piltideni. Calligra Stage'i saab laiendada pluginate abil, mis võimaldab lihtsalt lisada uusi efekte, uusi sisuelemente või isegi päris uusi viise esitlusi hallata. Calligraga lõimimise tõttu saab Stage paindlikult ära kasutada kõiki Calligra sisuelementide võimalusi.</p>
+    <p xml:lang="eu">«Calligra Stage» erabiltzeko erraza eta aldi berean malgua den aurkezpen aplikazio bat da. Erraz sor ditzakezu era askotako elementuak dituzten aurkezpenak, grafikoak nahiz testua, diagramak nahiz irudiak. «Calligra Stage» plugin sistema baten bidez heda daiteke, horregatik erraza da efektu berriak, eduki-elementu berriak edo baita zure aurkezpenak kudeatzeko era berriak gehitzea. «Calligra»rekiko integrazioaren ondorioz, «Calligra»ko eduki elementuen gaitasun eta malgutasun guztia «Stage»n erabilgarri daude.</p>
     <p xml:lang="fi">Calligra Stage on helppokäyttöinen mutta silti joustava esityssovellus. Voit luoda esityksiä, jotka sisältävät monenlaisia elementtejä grafiikasta tekstiin ja kaavioista valokuviin. Calligra Stagea voi laajentaa liitännäisin, joten uusia tehosteita, uusia sisältöelementtejä tai jopa uusia esityksesi hallinnan tapoja on helppo lisätä. Calligra-integroinnin ansiosta Calligran sisältöelementtien teho ja joustavuus ovat Stagenkin käytössä.</p>
     <p xml:lang="fr">Calligra Stage est une application de présentation à la fois flexible et facile à utiliser. Vous pouvez facilement créer des présentations comprenant une grande variété d'éléments, allant des graphiques au texte, en passant par les diagrammes et les images. Calligra Stage propose un système d'extensions ; il est facile d'ajouter de nouveaux effets, des nouveaux éléments de contenu ou même de nouvelles façons de gérer votre présentation. Du fait de l'intégration avec Calligra, toute la puissance et la flexibilité des contenu de Calligra sont disponibles dans Stage.</p>
     <p xml:lang="gl">Calligra Stage é unha aplicación de presentacións fácil de usar pero flexíbel. Permítelle crear presentacións cunha ampla variedade de elementos, incluíndo texto, gráficos e imaxes. As funcionalidades de Calligra Stage poden ampliarse mediante un sistema de complementos, así que resulta doado engadir efectos e elementos novos, así como novos xeitos de xestionar as presentacións. Grazas á súa integración con Calligra, Stage pode facer uso da potencia e flexibilidade dos elementos de contido dispoñíbeis en Calligra.</p>
@@ -105,6 +107,7 @@
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="et">Omadused:</p>
+    <p xml:lang="eu">Ezaugarriak:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
@@ -135,6 +138,7 @@
       <li xml:lang="en-GB">Multiple master slides</li>
       <li xml:lang="es">Múltiples diapositivas maestras</li>
       <li xml:lang="et">Mitme juhtslaidi kasutamise võimalus</li>
+      <li xml:lang="eu">Hainbat diapositiba eredu nagusi</li>
       <li xml:lang="fi">Useammat pohjadiat</li>
       <li xml:lang="fr">Planches-maîtresses multiples</li>
       <li xml:lang="gl">Varias diapositivas mestre.</li>
@@ -163,6 +167,7 @@
       <li xml:lang="en-GB">Easily switch between slides during a presentation</li>
       <li xml:lang="es">Permite cambiar fácilmente entre diapositivas durante una presentación</li>
       <li xml:lang="et">Hõlpus lülitumine slaidide vahel esitluse ajal</li>
+      <li xml:lang="eu">Aurkezpen batean, diapositiben artean erraz aldatu</li>
       <li xml:lang="fi">Helppo siirtyminen diasta toiseen esityksen aikana</li>
       <li xml:lang="fr">Passage facile d'une planche à une autre pendant une présentation</li>
       <li xml:lang="gl">Permite cambiar facilmente entre diapositivas durante as presentacións.</li>
@@ -192,6 +197,7 @@
       <li xml:lang="en-GB">Add notes for your slide</li>
       <li xml:lang="es">Permite añadir notas a una diapositiva</li>
       <li xml:lang="et">Märkmete lisamine slaididele</li>
+      <li xml:lang="eu">Gehitu zure diapositibarako oharrak</li>
       <li xml:lang="fi">Muistiinpanojen lisäys dioihisi</li>
       <li xml:lang="fr">Ajoutez des notes à vos planches</li>
       <li xml:lang="gl">Permite engadir notas ás presentacións.</li>
@@ -221,6 +227,7 @@
       <li xml:lang="en-GB">Supports most ODF file transitions</li>
       <li xml:lang="es">Implementa la mayoría de las transiciones de archivo de ODF</li>
       <li xml:lang="et">Enamiku ODF-vormingu failiüleminekute toetamine</li>
+      <li xml:lang="eu">ODF fitxategietako trantsizio gehienak onartzen ditu</li>
       <li xml:lang="fi">Useimpien ODF-siirtymien tuki</li>
       <li xml:lang="fr">Prend en charge la plupart des transitions ODF</li>
       <li xml:lang="gl">Compatíbel coa meirande parte das transicións dos ficheiros ODF.</li>
