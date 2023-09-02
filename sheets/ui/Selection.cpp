@@ -1067,6 +1067,8 @@ void Selection::emitChanged(const Region& region)
         extendedRegion.add(masterCells[i].cellPosition(), sheet);
 
     emit changed(extendedRegion);
+
+    emitModified();
 }
 
 void Selection::scrollToCursor()
