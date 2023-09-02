@@ -776,7 +776,7 @@ void CellStorage::loadStyles(const QList<QPair<Region, Style> > &styles)
 
 void CellStorage::invalidateStyleCache()
 {
-    d->styleStorage->invalidateCache();
+    // nothing here
 }
 
 

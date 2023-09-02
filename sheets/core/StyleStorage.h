@@ -164,11 +164,6 @@ public:
      */
     void removeShiftUp(const QRect& rect) override;
 
-    /**
-     * Invalidates all cached styles.
-     */
-    void invalidateCache();
-
     const QVector< QPair<QRectF, SharedSubStyle> > &undoData() const;
 
     void resetUndo() override;
@@ -180,15 +175,9 @@ protected Q_SLOTS:
 protected:
     /**
      * Triggers all necessary actions after a change of \p rect .
-     * Calls invalidateCache() and adds the substyles in
-     * \p rect to the list of possible garbage.
+     * Adds the substyles in \p rect to the list of possible garbage.
      */
     void regionChanged(const QRect& rect);
-
-    /**
-     * Invalidates all cached styles lying in \p rect .
-     */
-    void invalidateCache(const QRect& rect);
 
     /**
      * Composes a style of \p substyles .

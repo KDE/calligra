@@ -21,17 +21,12 @@
 #include "engine/RectStorage.h"
 #include "core/StyleManager.h"
 
-static const int g_maximumCachedStyles = 10000;
-
 using namespace Calligra::Sheets;
 
 class Q_DECL_HIDDEN StyleStorage::Private
 {
 public:
     Private()
-#ifdef CALLIGRA_SHEETS_MT
-//        : cacheMutex(QMutex::Recursive)
-#endif
     {
         m_storingUndo = false;
     }
@@ -39,12 +34,7 @@ public:
     RTree<SharedSubStyle> tree;
     QMap<Style::Key, QList<SharedSubStyle> > subStyles;
     QMap<int, QPair<QRectF, SharedSubStyle> > possibleGarbage;
-//    QCache<QPoint, Style> cache;
-//    Region cachedArea;
     StyleStorageLoaderJob* loader;
-#ifdef CALLIGRA_SHEETS_MT
-//    QMutex cacheMutex;
-#endif
 
     bool m_storingUndo;
     QVector< QPair<QRectF, SharedSubStyle> > m_undoData;
@@ -89,13 +79,6 @@ void StyleStorageLoaderJob::run()
     StyleStorage::Private* d = m_storage->d;
     QList<QPair<Region, SharedSubStyle> > subStyles;
 
-//    {
-#ifdef CALLIGRA_SHEETS_MT
-//        QMutexLocker(&d->cacheMutex);
-#endif
-//        d->cachedArea = Region();
-//        d->cache.clear();
-//    }
     typedef QPair<Region, Style> StyleRegion;
     for (const StyleRegion& styleArea : m_styles) {
         const Region& reg = styleArea.first;
@@ -143,7 +126,6 @@ StyleStorage::StyleStorage(Map* map)
         , d(new Private)
 {
     d->map = map;
-//    d->cache.setMaxCost(g_maximumCachedStyles);
     d->loader = 0;
 }
 
@@ -172,45 +154,15 @@ Style StyleStorage::contains(const QPoint& point) const
 {
     d->ensureLoaded();
 
-//    {
-#ifdef CALLIGRA_SHEETS_MT
-//        QMutexLocker ml(&d->cacheMutex);
-#endif
-        // first, lookup point in the cache
-//        if (d->cache.contains(point)) {
-//            Style st = *d->cache.object(point);
-//            //if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: cached style:"<<point<<':'; st.dump();}
-//            return st;
-//        }
-//    }
-    // not found, lookup in the tree
     QList<SharedSubStyle> subStyles = d->tree.contains(point);
-    //if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: substyles:"<<point<<':'; for (const SharedSubStyle &s : subStyles) {debugSheetsStyle<<s.data()->debugData();}}
     if (subStyles.isEmpty()) {
         Style *style = styleManager()->defaultStyle();
-        // let's try caching empty styles too, the lookup is rather expensive still
-//        {
-#ifdef CALLIGRA_SHEETS_MT
-//            QMutexLocker ml(&d->cacheMutex);
-#endif
-            // insert style into the cache
-//            d->cache.insert(point, style);
-//            d->cachedArea.add(QRect(point, point));
-//        }
 
         return *style;
     }
     Style* style = new Style();
     (*style) = composeStyle(subStyles);
 
-//    {
-#ifdef CALLIGRA_SHEETS_MT
-//        QMutexLocker ml(&d->cacheMutex);
-#endif
-        // insert style into the cache
-//        d->cache.insert(point, style);
-//        d->cachedArea.add(QRect(point, point));
-//    }
     //if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: style:"<<point<<':'; style->dump();}
     return *style;
 }
@@ -378,9 +330,6 @@ void StyleStorage::load(const QList<QPair<Region, Style> >& styles)
 void StyleStorage::insertRows(int position, int number)
 {
     d->ensureLoaded();
-    const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
-    // invalidate the affected, cached styles
-    invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << d->tree.insertRows(position, number);
@@ -390,9 +339,6 @@ void StyleStorage::insertRows(int position, int number)
 void StyleStorage::insertColumns(int position, int number)
 {
     d->ensureLoaded();
-    const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
-    // invalidate the affected, cached styles
-    invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << d->tree.insertColumns(position, number);
@@ -402,9 +348,6 @@ void StyleStorage::insertColumns(int position, int number)
 void StyleStorage::removeRows(int position, int number)
 {
     d->ensureLoaded();
-    const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
-    // invalidate the affected, cached styles
-    invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << d->tree.removeRows(position, number);
@@ -414,9 +357,6 @@ void StyleStorage::removeRows(int position, int number)
 void StyleStorage::removeColumns(int position, int number)
 {
     d->ensureLoaded();
-    const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
-    // invalidate the affected, cached styles
-    invalidateCache(invalidRect);
     // process the tree
     QVector< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << d->tree.removeColumns(position, number);
@@ -461,19 +401,6 @@ void StyleStorage::removeShiftUp(const QRect& rect)
     undoData << d->tree.removeShiftUp(rect);
     regionChanged(invalidRect);
     if (m_storingUndo) d->m_undoData << undoData;
-}
-
-void StyleStorage::invalidateCache()
-{
-    // still busy loading? no cache to invalidate
-    if (d->loader && !d->loader->isFinished())
-        return;
-
-#ifdef CALLIGRA_SHEETS_MT
-//    QMutexLocker ml(&d->cacheMutex);
-#endif
-//    d->cache.clear();
-//    d->cachedArea = Region();
 }
 
 void StyleStorage::garbageCollection()
@@ -599,30 +526,6 @@ void StyleStorage::regionChanged(const QRect& rect)
     d->possibleGarbage = d->tree.intersectingPairs(rect).unite(d->possibleGarbage);
     QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
 */
-    // invalidate cache
-    invalidateCache(rect);
-}
-
-void StyleStorage::invalidateCache(const QRect& rect)
-{
-    // still busy loading? no cache to invalidate
-    if (d->loader && !d->loader->isFinished())
-        return;
-
-#ifdef CALLIGRA_SHEETS_MT
-//    QMutexLocker ml(&d->cacheMutex);
-#endif
-//     debugSheetsStyle <<"StyleStorage: Invalidating" << rect;
-//    const Region region = d->cachedArea.intersected(Region(rect));
-//    d->cachedArea.removeIntersects(rect, nullptr);
-//    for (const QRect& rect : region.rects()) {
-//        for (int col = rect.left(); col <= rect.right(); ++col) {
-//            for (int row = rect.top(); row <= rect.bottom(); ++row) {
-//                 debugSheetsStyle <<"StyleStorage: Removing cached style for" << Cell::name( col, row );
-//                d->cache.remove(QPoint(col, row));     // also deletes it
-//            }
-//        }
-//    }
 }
 
 Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const

@@ -198,6 +198,8 @@ public:
         m_castRoot = dynamic_cast<Node*>(this->m_root);
     }
 
+    QStringList dataDescription() const;
+
 protected:
     class Node;
     class NonLeafNode;
@@ -284,6 +286,8 @@ public:
     QVector<QRectF> childBoundingBox() const {
         return this->m_childBoundingBox;
     }
+    virtual QStringList dataDescription() const = 0;
+
 private:
     // disable copy constructor
     Node(const Node& other);
@@ -325,6 +329,7 @@ public:
     virtual void cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res) override;
     virtual bool validate() override;
     virtual void operator=(const LeafNode& other);
+    virtual QStringList dataDescription() const override;
 private:
     // disable copy constructor
     LeafNode(const LeafNode& other);
@@ -362,6 +367,7 @@ public:
     virtual void cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res) override;
     virtual void operator=(const NonLeafNode& other);
     virtual bool validate() override;
+    virtual QStringList dataDescription() const override;
 private:
     // disable copy constructor
     NonLeafNode(const NonLeafNode& other);
@@ -373,7 +379,8 @@ private:
 //
 template<typename T>
 RTree<T>::RTree()
-        : KoRTree<T>(8, 4)
+//        : KoRTree<T>(8, 4)
+        : KoRTree<T>(128, 64)
 {
     delete this->m_root;
     this->m_root = new LeafNode(this->m_capacity + 1, 0, 0);
@@ -700,6 +707,16 @@ bool RTree<T>::validate()
     return dynamic_cast<Node*>(this->m_root)->validate();
 #else
     return m_castRoot->validate();
+#endif
+}
+
+template<typename T>
+QStringList RTree<T>::dataDescription() const
+{
+#ifdef DYNAMIC_CAST
+    return dynamic_cast<Node*>(this->m_root)->dataDescription();
+#else
+    return m_castRoot->dataDescription();
 #endif
 }
 
@@ -1237,6 +1254,27 @@ void RTree<T>::LeafNode::cutBeforeRow(int row, QVector< QPair<QRectF, T> > &res)
     }
 }
 
+template<typename T>
+QStringList RTree<T>::NonLeafNode::dataDescription() const
+{
+    QRectF rect = this->m_boundingBox;
+    QStringList res;
+    res.append( "- " + QString::number(this->childCount()) + " children at " + QString::number(rect.top())+"/"+QString::number(rect.left()) + " - " + QString::number(rect.bottom())+"/"+QString::number(rect.right()));
+    for (int i = 0; i < this->childCount(); ++i) {
+        QStringList child = dynamic_cast<Node*>(this->m_childs[i])->dataDescription();
+        for (QString s : child) res.append("  " + s);
+    }
+    return res;
+}
+
+template<typename T>
+QStringList RTree<T>::LeafNode::dataDescription() const
+{
+    QRectF rect = this->m_boundingBox;
+    QString res = "- " + QString::number(this->m_counter) + " items at " + QString::number(rect.top())+"/"+QString::number(rect.left()) + " - " + QString::number(rect.bottom())+"/"+QString::number(rect.right());
+
+    return QStringList(res);
+}
 
 
 
