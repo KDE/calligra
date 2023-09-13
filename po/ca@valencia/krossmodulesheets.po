@@ -248,7 +248,7 @@ msgstr "Obri"
 
 #: scripts/csvimport.py:34 scripts/vcardimport.py:47
 msgid "Import to sheet beginning at cell"
-msgstr "Importa a un full començant en la cel·la"
+msgstr "Importa cap a un full començant en la cel·la"
 
 #: scripts/csvimport.py:72 scripts/vcardimport.py:60
 msgid "No current sheet."
