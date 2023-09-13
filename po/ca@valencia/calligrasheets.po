@@ -12198,7 +12198,7 @@ msgid ""
 msgstr ""
 "La funció ERRORTYPE() convertix un error en un número. Si el valor no és un "
 "error, retorna un error. Si no ho és, retorna un codi numèric. Els errors "
-"numèrics es modelen a l'Excel."
+"numèrics es modelen a Excel."
 
 #: functions/information.xml:16
 #, kde-format
