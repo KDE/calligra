@@ -412,17 +412,17 @@ msgstr "Y:"
 #: defaulttool/ShapeMoveStrategy.cpp:53
 #, kde-format
 msgid "Press ALT to hold x- or y-position."
-msgstr "Premeu Alt per a mantindre les posicions X o Y."
+msgstr "Premeu «Alt» per a mantindre les posicions X o Y."
 
 #: defaulttool/ShapeResizeStrategy.cpp:92
 #, kde-format
 msgid "Press CTRL to resize from center."
-msgstr "Premeu Ctrl per a redimensionar des del centre."
+msgstr "Premeu «Ctrl» per a redimensionar des del centre."
 
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr "Premeu Alt per a girar en passos de 45 graus."
+msgstr "Premeu «Alt» per a girar en passos de 45 graus."
 
 #: defaulttool/ShapeShearStrategy.cpp:169
 msgctxt "(qtundo-format)"
