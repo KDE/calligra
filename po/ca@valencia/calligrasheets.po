@@ -7938,8 +7938,9 @@ msgid ""
 "Since the result is an array, you need to use Ctrl+Alt+Enter (instead of "
 "just Enter) to display the array elements in separate cells."
 msgstr ""
-"Com que el resultat és una matriu, cal utilitzar Ctrl+Alt+Retorn (en lloc de "
-"només Retorn) per a mostrar els elements de la matriu en cel·les separades."
+"Com que el resultat és una matriu, cal utilitzar «Ctrl+Alt+Retorn» (en lloc "
+"de només «Retorn») per a mostrar els elements de la matriu en cel·les "
+"separades."
 
 #: functions/math.xml:1240
 #, kde-format
@@ -9284,8 +9285,8 @@ msgid ""
 "elements in separate cells. "
 msgstr ""
 "Cal tindre en compte que les dades cal que estiga en columnes i com que el "
-"resultat és una matriu de columnes, cal utilitzar Ctrl+Alt+Retorn (en lloc "
-"de només Retorn) per a mostrar els elements de la matriu en cel·les "
+"resultat és una matriu de columnes, cal utilitzar «Ctrl+Alt+Retorn» (en lloc "
+"de només «Retorn») per a mostrar els elements de la matriu en cel·les "
 "separades. "
 
 #: functions/statistical.xml:422
@@ -10505,8 +10506,8 @@ msgid ""
 "Since the result is an array, use Ctrl+Alt+Enter (instead of just Enter) to "
 "display the values in separate cells."
 msgstr ""
-"Com que el resultat és una matriu, cal utilitzar Ctrl+Alt+Retorn (en lloc de "
-"només Retorn) per a mostrar els valors en cel·les separades."
+"Com que el resultat és una matriu, cal utilitzar «Ctrl+Alt+Retorn» (en lloc "
+"de només «Retorn») per a mostrar els valors en cel·les separades."
 
 #: functions/statistical.xml:1437
 #, kde-format
@@ -13141,7 +13142,7 @@ msgstr ""
 #: part/dialogs/InterfaceOptionsWidget.ui:17
 #, kde-format
 msgid "Cursor movement after pressing Enter:"
-msgstr "Moviment del cursor després de pressionar Retorn:"
+msgstr "Moviment del cursor després de pressionar «Retorn»:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_cursorMovement)
 #: part/dialogs/InterfaceOptionsWidget.ui:27
@@ -13150,7 +13151,7 @@ msgid ""
 "When you have selected a cell, pressing the Enter key will move the cell "
 "cursor one cell left, right, up or down, as determined by this setting."
 msgstr ""
-"Quan seleccioneu una cel·la, prenent la tecla Retorn moureu el cursor de "
+"Quan seleccioneu una cel·la, prenent la tecla «Retorn» moureu el cursor de "
 "cel·la una cel·la a l'esquerra, dreta, amunt o avall, segons estiga "
 "determinat ací."
 

@@ -111,12 +111,12 @@ msgstr "Arrossegueu l'ansa per a canviar l'inici del desplaçament."
 #: ArtisticTextTool.cpp:307
 #, kde-format
 msgid "Press escape to finish editing."
-msgstr "Premeu Esc per a acabar l'edició."
+msgstr "Premeu «Esc» per a acabar l'edició."
 
 #: ArtisticTextTool.cpp:489
 #, kde-format
 msgid "Press return to finish editing."
-msgstr "Premeu Retorn per a acabar l'edició."
+msgstr "Premeu «Retorn» per a acabar l'edició."
 
 #: ArtisticTextTool.cpp:583
 msgctxt "(qtundo-format)"

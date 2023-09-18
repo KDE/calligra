@@ -72,7 +72,7 @@ msgstr "Latitud"
 #: KoRdfLocationEditWidgetMarble.ui:60
 #, kde-format
 msgid "Longitude"
-msgstr "Llargària"
+msgstr "Longitud"
 
 #: KoRdfLocationTreeWidgetItem.cpp:42
 #, kde-format
