@@ -1,0 +1,258 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author
+><firstname
+>Neil</firstname
+> <surname
+>Lucock</surname
+> <affiliation
+> <address
+><email
+>neil@nlucock.freeserve.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Krishna</firstname
+> <surname
+>Tateneni</surname
+> <affiliation
+> <address
+><email
+>tateneni@pluto.njcc.com</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Brad</firstname
+> <surname
+>Hards</surname
+> <affiliation
+> <address
+><email
+>bradh@frogmouth.net</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Danny</firstname
+> <surname
+>Allen</surname
+> <affiliation
+> <address
+><email
+>danny@dannyallen.co.uk</email
+></address>
+</affiliation>
+</author>
+<author
+><firstname
+>Anne-Marie</firstname
+> <surname
+>Mahfouf</surname
+> <affiliation
+> <address
+><email
+>annemarie.mahfouf@free.fr</email
+></address>
+</affiliation>
+</author>
+
+&traducteurGerardDelafond; &traducteurFrederickAngelique; 
+</authorgroup>
+</chapterinfo>
+<title
+>Guides détaillés</title>
+
+<para
+>Ce chapitre décrit comment effectuer certaines tâches habituelles dans &stage;.</para>
+
+<sect1 id="html-wizard">
+<title
+>Créer un diaporama <acronym
+>HTML</acronym
+></title>
+
+<para
+>Mettre en forme une présentation existante dans des pages standards <acronym
+>HTML</acronym
+> incluant des aides à la navigation.</para>
+
+<para
+>Créez une nouvelle présentation, ou ouvrez-en une existante. Ensuite, cliquez sur <menuchoice
+><guimenu
+>Fichier</guimenu
+><guimenuitem
+>Exporter en HTML...</guimenuitem
+></menuchoice
+></para>
+<para
+>Vous obtenez alors une boîte de dialogue qui vous demande quelques détails : </para>
+
+<screenshot>
+<screeninfo
+>Renseignez des détails pour votre diaporama <acronym
+>HTML</acronym
+>.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Renseignez des détails pour votre diaporama <acronym
+>HTML</acronym
+>.</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Remplissez les champs <guilabel
+>Titre</guilabel
+> et <guilabel
+>Auteur</guilabel
+>. Sélectionnez les diapositives à exporter. Si vous voulez changer un nom utilisé dans la page <acronym
+>HTML</acronym
+> pour chaque diapositive, faites un double-clic sur le nom et modifiez-le.</para>
+
+<para
+>Dans l'encadré <guilabel
+>Aperçu de la sortie</guilabel
+>, les diapositives redimensionnées sont affichées. Ainsi vous pouvez vérifier si leur ordre d'apparition est correct et naviguer dans votre présentation avec les boutons <guiicon
+>&lt;</guiicon
+> et <guiicon
+>&gt;</guiicon
+>. </para>
+
+<para
+>Maintenant, vous pouvez sélectionner une feuille de style avec la configuration des options <acronym
+>HTML</acronym
+>.</para>
+
+<para
+>Pour exporter votre présentation en <acronym
+>HTML</acronym
+>, cliquez sur le bouton <guibutton
+>Exporter</guibutton
+> et sélectionnez un dossier.</para>
+
+<para
+>Ce que nous avons maintenant sont les dossiers <filename
+>html/</filename
+> et <filename
+>pics/</filename
+> créés là où nous avons précédemment choisi l'emplacement.</para>
+
+<screenshot>
+<screeninfo
+>Les dossiers de diaporama <acronym
+>HTML</acronym
+> nouvellement créés</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Les dossiers de diaporama <acronym
+>HTML</acronym
+> nouvellement créés</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Il y a aussi un fichier <filename
+>index.html</filename
+> pour lancer votre diaporama web.</para>
+
+<para
+>Vous pouvez voir comment cela fonctionne en utilisant votre gestionnaire de fichiers ou navigateur web pour ouvrir le fichier <filename
+>index.html</filename
+>. Cliquez sur le bon emplacement et la première diapositive de votre présentation sera affichée. Cela fonctionne ensuite comme un diaporama &stage;.</para>
+
+<para
+>Chaque clic sur l'icône flèche vous amène à la prochaine diapositive ou la diapositive précédente. Pour revenir au début du diaporama, cliquez sur l'icône de diaporama.</para>
+
+<tip
+><para
+>Pour partager votre présentation avec le monde entier, transférez les fichiers nouvellement créés vers un emplacement réseau accessible (un espace web par exemple), en vous souvenant de conserver intact la structure du dossier.</para
+></tip>
+</sect1>
+
+<sect1 id="creating-templates">
+<title
+>Création de modèles &stage;</title>
+
+<para
+>Il est vraiment facile d'ajouter de nouveaux modèles à la bibliothèque de &stage;.</para>
+
+<para
+>Si vous avez fait une présentation dans un style que vous voudriez utiliser à nouveau, vous pouvez l'enregistrer comme modèle.</para>
+
+<para
+>Ce tutoriel vous explique comment nous faisons un nouveau modèle et l'enregistrons.</para>
+
+<para
+>Ouvrez &stage; et créez un nouveau document.</para>
+
+<para
+>Pour ajouter un peu de pétillant à la diapositive vide, nous pouvons modifier le fond, en sélectionnant <guilabel
+>Outil d'édition de l'arrière plan</guilabel
+> situé dans le panneau Outils.</para>
+
+<para
+>Nous voulons que le fond soit attractif, donc vous pouvez utiliser une image en tant que fond en cliquant sur le bouton <guibutton
+>Paramètres image</guibutton
+>. N'hésitez pas à expérimenter mais que cela soit magnifique !</para>
+
+<screenshot>
+<screeninfo
+>Choix d'un fond de diapositive</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject
+><phrase
+>Choix d'un fond de diapositive</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>La page devrait maintenant avoir le fond que vous avez choisi. Double-cliquez dans la boîte de texte pour ajouter un titre à votre diapositive.</para>
+
+<screenshot>
+<screeninfo
+>Ajout d'un titre au nouveau modèle</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject
+><phrase
+>Ajout d'un titre au nouveau modèle</phrase
+></textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Lorsque vous êtes satisfait de votre modèle, cliquez sur <menuchoice
+><guimenu
+>Fichier</guimenu
+> <guimenuitem
+>Enregistrer sous</guimenuitem
+></menuchoice
+> dans la barre de menus et choisissez le filtre <guilabel
+>Modèle de présentation OpenDocument</guilabel
+> dans la boîte de dialogue.</para>
+
+</sect1>
+
+</chapter>
