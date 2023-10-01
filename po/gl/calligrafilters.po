@@ -123,12 +123,12 @@ msgstr "Non se atopou o espazo de nome «%1»"
 #: libmsooxml/MsooXmlImport.cpp:102
 #, kde-format
 msgid "Could not open the requested file %1"
-msgstr "Non se puido ler o ficheiro requirido %1."
+msgstr "Non foi posíbel ler o ficheiro requirido %1."
 
 #: libmsooxml/MsooXmlImport.cpp:125
 #, kde-format
 msgid "Could not read ZIP directory of the requested file %1"
-msgstr "Non se puido ler o cartafol ZIP do ficheiro %1 requirido"
+msgstr "Non foi posíbel ler o cartafol ZIP do ficheiro %1 requirido"
 
 #: libmsooxml/MsooXmlImport.cpp:342 libmsooxml/MsooXmlImport.cpp:455
 #, kde-format
@@ -150,7 +150,7 @@ msgstr ""
 #: libmsooxml/MsooXmlImport.cpp:633
 #, kde-format
 msgid "Could not find path for type %1"
-msgstr "Non se puido atopar a ruta para o tipo %1"
+msgstr "Non foi posíbel atopar a ruta para o tipo %1"
 
 #: libmsooxml/MsooXmlReader.cpp:135
 #, kde-format
@@ -195,18 +195,18 @@ msgstr "Non se atopou ningún dos elementos esperados: %1"
 #: libmsooxml/MsooXmlRelationships.cpp:90
 #, kde-format
 msgid "Could not find target for id \"%1\" in file \"%2\""
-msgstr "Non se puido atopar o destino para a id «%1» no ficheiro «%2»"
+msgstr "Non foi posíbel atopar o destino para a id «%1» no ficheiro «%2»"
 
 #: libmsooxml/MsooXmlRelationships.cpp:94
 #: libmsooxml/MsooXmlRelationships.cpp:114
 #, kde-format
 msgid "Could not find relationships file \"%1\""
-msgstr "Non se puido atopar o ficheiro de relacións «%1»"
+msgstr "Non foi posíbel atopar o ficheiro de relacións «%1»"
 
 #: libmsooxml/MsooXmlRelationships.cpp:109
 #, kde-format
 msgid "Could not find target for relationship \"%1\" in file \"%2\""
-msgstr "Non se puido atopar o destino para a relación «%1» no ficheiro «%2»"
+msgstr "Non foi posíbel atopar o destino para a relación «%1» no ficheiro «%2»"
 
 #: libmsooxml/MsooXmlUtils.cpp:168
 #, kde-format
@@ -231,13 +231,13 @@ msgstr "A entrada «%1» non é un ficheiro."
 #: libmsooxml/MsooXmlUtils.cpp:388
 #, kde-format
 msgid "Could not open entry \"%1\" for writing."
-msgstr "Non se puido abrir para escribir a entrada «%1»."
+msgstr "Non foi posíbel abrir para escribir a entrada «%1»."
 
 #: libmsooxml/MsooXmlUtils.cpp:315 libmsooxml/MsooXmlUtils.cpp:355
 #: libmsooxml/MsooXmlUtils.cpp:399
 #, kde-format
 msgid "Could not write block"
-msgstr "Non se puido escribir o bloque"
+msgstr "Non foi posíbel escribir o bloque"
 
 #: sheets/csv/csvexport.cc:269
 #, kde-format
@@ -265,7 +265,7 @@ msgstr "Outra (%1)"
 #: sheets/csv/csvexportdialog.cpp:274 words/ascii/ImportDialog.cc:94
 #, kde-format
 msgid "Cannot find encoding: %1"
-msgstr "Non se pode atopar a codificación: %1"
+msgstr "Non é posíbel atopar a codificación: %1"
 
 #: sheets/csv/csvimport.cc:82
 #, kde-format
@@ -422,7 +422,7 @@ msgstr "O formato de ficheiro non se permite."
 #: sheets/dbase/dbaseimport.cc:49
 #, kde-format
 msgid "Could not read from file."
-msgstr "Non se puido ler do ficheiro."
+msgstr "Non foi posíbel ler do ficheiro."
 
 #: sheets/html/exportdialog.cc:24
 #, kde-format
@@ -532,7 +532,7 @@ msgstr ""
 #: sheets/html/exportwidget.ui:145
 #, kde-format
 msgid "Use &external stylesheet:"
-msgstr "Utilizar unha folla de estilo &externa:"
+msgstr "Usar unha folla de estilo &externa:"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, mCustomURL)
 #: sheets/html/exportwidget.ui:155
@@ -824,14 +824,14 @@ msgid ""
 "Unable to open password protected files.\n"
 "The password algorithm has not been published"
 msgstr ""
-"Non se pode abrir ficheiros protexidos con contrasinais.\n"
-"O algoritmo utilizado non é público"
+"Non é posíbel abrir ficheiros protexidos con contrasinais.\n"
+"O algoritmo usado non é público"
 
 #: sheets/xlsx/XlsxImport.cpp:557 stage/pptx/PptxImport.cpp:1078
 #: words/docx/import/DocxImport.cpp:151
 #, kde-format
 msgid "Unable to find part for type %1"
-msgstr "Non se pode atopar a parte para o tipo %1"
+msgstr "Non é posíbel atopar a parte para o tipo %1"
 
 #: sheets/xlsx/XlsxXmlSharedStringsReader.cpp:169
 #, kde-format
@@ -860,7 +860,7 @@ msgid ""
 "The data could not be loaded completely because the maximum size of sheet "
 "was exceeded."
 msgstr ""
-"Non se puideron cargar os datos xa que se excedeu o tamaño máximo da folla."
+"Non foi posíbel cargar os datos xa que se excedeu o tamaño máximo da folla."
 
 #: sheets/xlsx/XlsxXmlWorksheetReader.cpp:1423
 #, kde-format
@@ -955,7 +955,8 @@ msgstr "Táboa %1"
 #: words/rtf/import/rtfimport.cpp:55
 #, kde-format
 msgid "The file cannot be loaded, as it seems not to be an RTF document."
-msgstr "Non se pode cargar o ficheiro xa que non parece ser un documento RTF."
+msgstr ""
+"Non é posíbel cargar o ficheiro xa que non parece ser un documento RTF."
 
 #: words/rtf/import/rtfimport.cpp:56 words/rtf/import/rtfimport.cpp:70
 #: words/rtf/import/rtfimport.cpp:80
@@ -966,7 +967,7 @@ msgstr "Filtro de importación de RTF de Words"
 #: words/rtf/import/rtfimport.cpp:69 words/rtf/import/rtfimport.cpp:79
 #, kde-format
 msgid "The file cannot be loaded."
-msgstr "Non se pode cargar o ficheiro."
+msgstr "Non é posíbel cargar o ficheiro."
 
 #~ msgid "Failed to read data."
 #~ msgstr "Non se puideron ler os datos."

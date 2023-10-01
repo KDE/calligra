@@ -76,7 +76,7 @@ msgstr "Ficheiro de saída"
 #: calligraconverter.cpp:160
 #, kde-format
 msgid "Make a backup of the destination file"
-msgstr "Facer unha copia de seguridade do ficheiro de destino"
+msgstr "Facer unha salvagarda do ficheiro de destino"
 
 #: calligraconverter.cpp:161
 #, kde-format

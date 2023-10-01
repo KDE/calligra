@@ -256,13 +256,13 @@ msgid ""
 "Processing is not possible, because some cells are locked as elements of a "
 "matrix."
 msgstr ""
-"Non se pode procesar xa que algunhas celas están bloqueadas coma elementos "
+"Non é posíbel procesar xa que algunhas celas están bloqueadas coma elementos "
 "da matriz."
 
 #: commands/AbstractRegionCommand.cpp:150
 #, kde-format
 msgid "Processing is not possible, because some cells are protected."
-msgstr "Non se pode procesar xa que hai celas protexidas."
+msgstr "Non é posíbel procesar xa que hai celas protexidas."
 
 #: commands/ApplyFilterCommand.cpp:26
 msgctxt "(qtundo-format)"
@@ -3903,17 +3903,17 @@ msgstr "Escolla o estilo de folla a aplicar:"
 #: dialogs/AutoFormatDialog.cpp:120
 #, kde-format
 msgid "Could not find image %1."
-msgstr "Non se puido atopar a imaxe %1."
+msgstr "Non foi posíbel atopar a imaxe %1."
 
 #: dialogs/AutoFormatDialog.cpp:127
 #, kde-format
 msgid "Could not load image %1."
-msgstr "Non se puido cargar a imaxe %1."
+msgstr "Non foi posíbel cargar a imaxe %1."
 
 #: dialogs/AutoFormatDialog.cpp:138
 #, kde-format
 msgid "Could not find sheet-style XML file '%1'."
-msgstr "Non se puido atopar a folla de estilo do ficheiro XML «%1»."
+msgstr "Non foi posíbel atopar a folla de estilo do ficheiro XML «%1»."
 
 #: dialogs/AutoFormatDialog.cpp:149
 #, kde-format
@@ -4250,7 +4250,7 @@ msgstr "Texto a columnas"
 #: dialogs/CSVDialog.cpp:101
 #, kde-format
 msgid "Cannot open input file."
-msgstr "Non se pode abrir o ficheiro de entrada."
+msgstr "Non é posíbel abrir o ficheiro de entrada."
 
 #: dialogs/CSVDialog.cpp:164
 msgctxt "(qtundo-format)"
@@ -4519,7 +4519,7 @@ msgstr "Esta base de datos non contén táboas"
 #: dialogs/DatabaseDialog.cpp:646
 #, kde-format
 msgid "Driver could not be loaded"
-msgstr "Non se puido cargar o controlador"
+msgstr "Non foi posíbel cargar o controlador"
 
 #: dialogs/DatabaseDialog.cpp:657
 #, kde-format
@@ -6956,7 +6956,7 @@ msgstr "Para cada cambio en:"
 #: dialogs/SubtotalWidget.ui:45
 #, kde-format
 msgid "Use function:"
-msgstr "Utilizar a función:"
+msgstr "Usar a función:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_addSubtotalToLabel)
 #: dialogs/SubtotalWidget.ui:55
@@ -13334,7 +13334,7 @@ msgid ""
 "COUNT(12;5;12.5)."
 msgstr ""
 "Esta función devolve o número de valores enteiros ou decimais. Podes contar "
-"utilizando un intervalo: COUNT(A1:B5) ou unha lista de valores como: "
+"usando un intervalo: COUNT(A1:B5) ou unha lista de valores como: "
 "COUNT(12;5;12,5)."
 
 #: functions/math.xml:297
@@ -13360,7 +13360,7 @@ msgid ""
 "COUNTA(12;5;12.5)."
 msgstr ""
 "Esta función devolve o número de parámetros non baleiros pasados. Pode "
-"contar utilizando un intervalo: COUNTA(A1:B5) ou unha lista de valores como: "
+"contar usando un intervalo: COUNTA(A1:B5) ou unha lista de valores como: "
 "COUNTA (12;5;12,5)."
 
 #: functions/math.xml:315
@@ -16399,9 +16399,9 @@ msgid ""
 "zero, and cells with text will be ignored."
 msgstr ""
 "A función MEDIAN() calcula a mediana de todos os valores pasados como "
-"parámetros. Pode calcular a mediana dun intervalo, utilizando MEDIAN(A1:B5), "
-"ou dunha lista de valores, utilizando MEDIAN(12; 5; 12.5). As celas en "
-"branco han considerarse como cero, e as celas con texto hanse ignorar."
+"parámetros. Pode calcular a mediana dun intervalo, usando MEDIAN(A1:B5), ou "
+"dunha lista de valores, usando MEDIAN(12; 5; 12.5). As celas en branco han "
+"considerarse como cero, e as celas con texto hanse ignorar."
 
 #: functions/statistical.xml:773
 #, kde-format
@@ -17828,7 +17828,7 @@ msgstr ""
 "SUBSTITUTE() substitúe novo_texto por texto_antigo nunha cadea de texto. Se "
 "indica num_instancia, só se substitúe esa instancia de texto_antigo. En caso "
 "contrario, todas as aparicións de texto_antigo cambiaranse por novo_texto. "
-"Utilice SUBSTITUTE cando queira substituír texto específico, e REPLACE cando "
+"Use SUBSTITUTE cando queira substituír texto específico, e REPLACE cando "
 "queira substituír todo o texto que ocorra nunha localización dada."
 
 #: functions/text.xml:71
@@ -19727,8 +19727,8 @@ msgid ""
 "Check this box if you want some backup files created. This is checked per "
 "default."
 msgstr ""
-"Marca esta opción se queres crear ficheiros de copia de seguridade. Esta "
-"opción está marcada de maneira predeterminada."
+"Marca esta opción se queres crear ficheiros de salvagarda. Esta opción está "
+"marcada de maneira predeterminada."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/InterfaceOptionsWidget.ui:17
@@ -20446,7 +20446,7 @@ msgstr "Conflito no formato de ficheiro"
 #: part/Doc.cpp:338
 #, kde-format
 msgid "Styles cannot be loaded."
-msgstr "Non se poden cargar os estilos."
+msgstr "Non é posíbel cargar os estilos."
 
 #: part/Doc.cpp:346
 #, kde-format
@@ -20489,7 +20489,7 @@ msgstr "A área é grande de máis."
 #: part/PrintJob.cpp:87
 #, kde-format
 msgid "Sheet %1 could not be found for printing"
-msgstr "Non se puido atopar a folla %1 para ser impresa"
+msgstr "Non foi posíbel atopar a folla %1 para ser impresa"
 
 #: part/PrintJob.cpp:307
 #, kde-format

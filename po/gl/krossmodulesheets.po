@@ -72,7 +72,7 @@ msgstr ""
 #: ScriptingPart.cpp:73
 #, kde-format
 msgid "Failed to execute scriptfile \"%1\""
-msgstr "Non se puido executar o ficheiro do guión «%1»"
+msgstr "Non foi posíbel executar o ficheiro do guión «%1»"
 
 #: ScriptingPart.cpp:76
 #, kde-format
@@ -320,7 +320,7 @@ msgstr "Non é posíbel ler o ficheiro «%1», non existe."
 
 #: scripts/htmlexport.py:230
 msgid "Failed to open the file \"%1\"."
-msgstr "Non se puido abrir o ficheiro «%1»."
+msgstr "Non foi posíbel abrir o ficheiro «%1»."
 
 #: scripts/htmlexport.py:236
 msgid "No sheets which could be exported to HTML."
@@ -331,7 +331,7 @@ msgid ""
 "Failed to create HTML file \"%1\":\n"
 "%2"
 msgstr ""
-"Non se puido crear o ficheiro HTML «%1»:\n"
+"Non foi posíbel crear o ficheiro HTML «%1»:\n"
 "%2"
 
 #: scripts/htmlexport.py:366
@@ -449,18 +449,18 @@ msgid ""
 "Failed to write Log File \"%1\":\n"
 "%2"
 msgstr ""
-"Non se puido escribir o ficheiro de rexistro «%1»:\n"
+"Non foi posíbel escribir o ficheiro de rexistro «%1»:\n"
 "%2"
 
 #: scripts/logger.py:50
 msgid "Failed to create listener for sheetname '%1' and range '%2'"
 msgstr ""
-"Non se puido crear un proceso de escoita para a filla «%1» e o intervalo "
+"Non foi posíbel crear un proceso de escoita para a filla «%1» e o intervalo "
 "«%2»."
 
 #: scripts/myorca.py:86
 msgid "Failed to create listener"
-msgstr "Non se puido crear un proceso de escoita."
+msgstr "Non foi posíbel crear un proceso de escoita."
 
 #: scripts/myorca.py:96
 msgid "Sheet name changed"
@@ -508,7 +508,7 @@ msgstr "Calligra Spreadsheet"
 
 #: scripts/myorca.py:198
 msgid "Failed to connect with the Orca HTTP-Server."
-msgstr "Non se puido conectar co servidor HTTP de Orca."
+msgstr "Non foi posíbel conectar co servidor HTTP de Orca."
 
 #: scripts/myorca.py:201
 msgid "Url:"
@@ -1442,11 +1442,11 @@ msgstr "Ficheiros de OpenDocument"
 
 #: scripts/xmlviewer.py:57
 msgid "Failed to read the manifest"
-msgstr "Non se puido ler o manifesto."
+msgstr "Non foi posíbel ler o manifesto."
 
 #: scripts/xmlviewer.py:168 scripts/xmlviewer.py:265
 msgid "Failed to extract \"%1\" to \"%2\""
-msgstr "Non se puido extraer «%1» de «%2»."
+msgstr "Non foi posíbel extraer «%1» de «%2»."
 
 #: scripts/xmlviewer.py:175
 msgid "<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>"

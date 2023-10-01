@@ -311,14 +311,14 @@ msgstr "Disposición"
 #, kde-format
 msgid "Can not find needed text component, Calligra Stage will quit now."
 msgstr ""
-"Non se poden atopar os compoñentes de texto que se precisan polo que se "
+"Non é posíbel atopar os compoñentes de texto que se precisan polo que se "
 "sairá de Calligra Stage."
 
 #: part/KPrPart.cpp:74
 #, kde-format
 msgid "Can not find needed picture component, Calligra Stage will quit now."
 msgstr ""
-"Non se poden atopar os compoñentes de imaxe que se precisan polo que se "
+"Non é posíbel atopar os compoñentes de imaxe que se precisan polo que se "
 "sairá de Calligra Stage."
 
 #: part/KPrPart.cpp:87
