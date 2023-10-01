@@ -1199,7 +1199,7 @@ msgstr "O marcador non existe."
 #: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
-msgstr "Estase a obter o título. Progreso: 0%."
+msgstr "Obtendo o título. Progreso: 0%."
 
 #: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
@@ -1209,7 +1209,7 @@ msgstr "Esgotouse o tempo límite para obter o título."
 #: dialogs/LinkInsertionDialog.cpp:268
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
-msgstr "Estase a obter o título. Progreso: %1%."
+msgstr "Obtendo o título. Progreso: %1%."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
 #: dialogs/LinkInsertionDialog.ui:14

@@ -812,7 +812,7 @@ msgstr "Intervalo de garda automática:"
 #: main/config/KoConfigDocumentPage.cpp:69
 #, kde-format
 msgid "Create backup file:"
-msgstr "Crear un ficheiro de copia de seguridade:"
+msgstr "Crear un ficheiro de salvagarda:"
 
 #: main/config/KoConfigGridPage.cpp:55
 #: pageapp/dialogs/KoPAConfigureDialog.cpp:38
@@ -967,7 +967,7 @@ msgid ""
 "This might be an installation issue.\n"
 "Try restarting or reinstalling."
 msgstr ""
-"Non se puideron atopar compoñentes esenciais da aplicación.\n"
+"Non foi posíbel atopar compoñentes esenciais da aplicación.\n"
 "Pode que se trate dun problema de instalación.\n"
 "Probe a reiniciar ou reinstalar a aplicación."
 
@@ -984,7 +984,7 @@ msgstr "Atopáronse demasiados modelos para: %1"
 #: main/KoApplication.cpp:537 main/KoApplication.cpp:555
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr "Non se puido cargar o modelo %1."
+msgstr "Non foi posíbel cargar o modelo %1."
 
 #: main/KoApplication.cpp:545
 #, kde-format
@@ -1022,12 +1022,12 @@ msgstr "Usar sempre este modelo"
 #: main/KoDocument.cpp:549
 #, kde-format
 msgid "Making backup..."
-msgstr "Creando unha copia de seguridade…"
+msgstr "Creando unha salvagarda…"
 
 #: main/KoDocument.cpp:564
 #, kde-format
 msgid "Saving..."
-msgstr "Estase a gardar…"
+msgstr "Gardando…"
 
 #: main/KoDocument.cpp:592
 #, kde-format
@@ -1035,7 +1035,7 @@ msgid ""
 "Could not save\n"
 "%1"
 msgstr ""
-"Non se puido gardar\n"
+"Non foi posíbel gardar\n"
 "%1"
 
 #: main/KoDocument.cpp:594
@@ -1044,7 +1044,7 @@ msgid ""
 "Could not save %1\n"
 "Reason: %2"
 msgstr ""
-"Non se puido gardar %1\n"
+"Non foi posíbel gardar %1\n"
 "Motivo: %2"
 
 #: main/KoDocument.cpp:623
@@ -1074,7 +1074,7 @@ msgstr "Erro durante a garda automática! Estará a partición chea?"
 #: main/KoDocument.cpp:820
 #, kde-format
 msgid "Could not create the file for saving"
-msgstr "Non se puido crear o ficheiro para gardalo"
+msgstr "Non foi posíbel crear o ficheiro para gardalo"
 
 #: main/KoDocument.cpp:864 main/KoDocument.cpp:886 main/KoDocument.cpp:917
 #: main/KoDocument.cpp:951
@@ -1085,7 +1085,7 @@ msgstr "Non foi posíbel escribir «%1». Estará a partición chea?"
 #: main/KoDocument.cpp:871
 #, kde-format
 msgid "Not able to write RDF metadata. Partition full?"
-msgstr "Non se puideron escribir os metadatos de RDF. Estará a partición chea?"
+msgstr "Non foi posíbel escribir os metadatos de RDF. Estará a partición chea?"
 
 #: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
 #, kde-format
@@ -1123,12 +1123,12 @@ msgstr "Abrindo o documento"
 #: main/KoDocument.cpp:1479
 #, kde-format
 msgid "Could not create the filter plugin"
-msgstr "Non se puido crear o complemento de filtro."
+msgstr "Non foi posíbel crear o complemento de filtro."
 
 #: main/KoDocument.cpp:1482
 #, kde-format
 msgid "Could not create the output document"
-msgstr "Non se puido crear o documento de saída."
+msgstr "Non foi posíbel crear o documento de saída."
 
 #: main/KoDocument.cpp:1485
 #, kde-format
@@ -1138,7 +1138,7 @@ msgstr "Ficheiro non atopado"
 #: main/KoDocument.cpp:1488
 #, kde-format
 msgid "Cannot create storage"
-msgstr "Non se pode crear o almacenamento"
+msgstr "Non é posíbel crear o almacenamento"
 
 #: main/KoDocument.cpp:1491
 #, kde-format
@@ -1198,7 +1198,7 @@ msgstr "Intentouse cargar nun tipo de documento incorrecto."
 #: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Failed to download remote file"
-msgstr "Non se puido descargar o ficheiro remoto."
+msgstr "Non foi posíbel descargar o ficheiro remoto."
 
 #: main/KoDocument.cpp:1535
 #, kde-format
@@ -1212,7 +1212,7 @@ msgid ""
 "Reason: %1.\n"
 "%3"
 msgstr ""
-"Non se puido abrir %2.\n"
+"Non foi posíbel abrir %2.\n"
 "Motivo: %1.\n"
 "%3"
 
@@ -1224,7 +1224,7 @@ msgstr "Documento <i>%1</i> cargado"
 #: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
-msgstr "Non se puido atopar %1"
+msgstr "Non foi posíbel atopar %1"
 
 #: main/KoDocument.cpp:1674
 #, kde-format
@@ -1244,12 +1244,12 @@ msgstr "%1 non é un ficheiro."
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr ""
-"Non se puido abrir o ficheiro para lectura (comprobe permisos de lectura)."
+"Non foi posíbel abrir o ficheiro para lectura (comprobe permisos de lectura)."
 
 #: main/KoDocument.cpp:1721
 #, kde-format
 msgid "Could not read the beginning of the file."
-msgstr "Non se puido ler o inicio do ficheiro."
+msgstr "Non foi posíbel ler o inicio do ficheiro."
 
 #: main/KoDocument.cpp:1751
 #, kde-format
@@ -1303,7 +1303,7 @@ msgid ""
 "Could not open\n"
 "%1"
 msgstr ""
-"Non se puido abrir\n"
+"Non foi posíbel abrir\n"
 "%1"
 
 #: main/KoDocument.cpp:2208
@@ -1312,7 +1312,7 @@ msgid ""
 "Could not open %1\n"
 "Reason: %2"
 msgstr ""
-"Non se puido abrir %1\n"
+"Non foi posíbel abrir %1\n"
 "Motivo: %2"
 
 #: main/KoDocument.cpp:2265
@@ -1372,7 +1372,7 @@ msgstr "Si"
 #: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
 #, kde-format
 msgid "Could not export file."
-msgstr "Non se puido exportar o ficheiro."
+msgstr "Non foi posíbel exportar o ficheiro."
 
 #: main/KoFilterManager.cpp:215 main/KoFilterManager.cpp:224
 #, kde-format
@@ -1385,7 +1385,7 @@ msgid ""
 "Could not import file of type\n"
 "%1"
 msgstr ""
-"Non se puido importar o ficheiro do tipo\n"
+"Non foi posíbel importar o ficheiro do tipo\n"
 "%1"
 
 #: main/KoFilterManager.cpp:520
@@ -1570,7 +1570,7 @@ msgstr "Exportar a PDF"
 #: main/KoMainWindow.cpp:1456
 #, kde-format
 msgid "Cannot export to the specified file"
-msgstr "Non se pode exportar o ficheiro indicado"
+msgstr "Non é posíbel exportar o ficheiro indicado"
 
 #: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
@@ -1768,7 +1768,7 @@ msgstr "Retirar o Modelo"
 #: main/KoTemplateCreateDia.cpp:507
 #, kde-format
 msgid "Could not load picture."
-msgstr "Non se puido abrir a imaxe."
+msgstr "Non foi posíbel abrir a imaxe."
 
 #: main/KoTemplateCreateDia.cpp:510
 #, kde-format
@@ -1818,7 +1818,7 @@ msgstr "&Abrir"
 #: main/KoVersionDialog.cpp:120
 #, kde-format
 msgid "A new version could not be added"
-msgstr "Non se puido engadir unha nova versión"
+msgstr "Non foi posíbel engadir unha nova versión"
 
 #: main/KoVersionDialog.cpp:227 main/KoVersionDialog.cpp:229
 #, kde-format
@@ -2368,7 +2368,7 @@ msgstr "Eliminar a capa"
 #, kde-format
 msgid "Could not delete all layers. At least one layer is required."
 msgstr ""
-"Non se puideron eliminar todas as capas. Requírese como mínimo unha capa."
+"Non foi posíbel eliminar todas as capas. Requírese como mínimo unha capa."
 
 #: pageapp/KoPADocumentStructureDocker.cpp:344
 #, kde-format
@@ -2529,7 +2529,7 @@ msgid ""
 "Could not import\n"
 "%1"
 msgstr ""
-"Non se puido importar\n"
+"Non foi posíbel importar\n"
 "%1"
 
 #: pageapp/KoPAView.cpp:666
@@ -4345,7 +4345,7 @@ msgstr ""
 #: widgets/KoCsvImportDialog.cpp:758
 #, kde-format
 msgid "Cannot find encoding: %1"
-msgstr "Non se pode atopar a codificación: %1"
+msgstr "Non é posíbel atopar a codificación: %1"
 
 #. i18n: ectx: attribute (title), widget (QWidget, m_dataTab)
 #: widgets/KoCsvImportDialog.ui:52
@@ -4797,7 +4797,7 @@ msgstr "Paleta de cores de Gimp (*.gpl)"
 #, kde-format
 msgid "Cannot write to palette file %1. Maybe it is read-only. "
 msgstr ""
-"Non se pode escribir no ficheiro de paleta %1. Pode que só sexa de lectura."
+"Non é posíbel escribir no ficheiro de paleta %1. Pode que só sexa de lectura."
 
 #: widgets/KoEditColorSetDialog.cpp:187
 #, kde-format
@@ -5162,7 +5162,7 @@ msgstr "Etiquetas"
 #: widgets/KoResourceTaggingManager.cpp:143
 #, kde-format
 msgid "Unable to undelete tag"
-msgstr "Non se pode recuperar a etiqueta eliminada"
+msgstr "Non é posíbel recuperar a etiqueta eliminada"
 
 #: widgets/KoResourceTaggingManager.cpp:144
 #, kde-format

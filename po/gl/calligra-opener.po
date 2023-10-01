@@ -50,7 +50,7 @@ msgid ""
 "filename>.<nl/>Do you want to open the file using default application "
 "<application>%2</application>?"
 msgstr ""
-"Non se puido atopar unha aplicación de Calligra axeitada para abrir "
+"Non foi posíbel atopar unha aplicación de Calligra axeitada para abrir "
 "<filename>%1</filename>.<nl/>Quere abrir o ficheiro usando a aplicación "
 "predeterminada <application>%2</application>?"
 
