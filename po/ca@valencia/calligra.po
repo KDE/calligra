@@ -917,7 +917,7 @@ msgstr "Exporta només cap a PDF i ix"
 #: main/KoApplication.cpp:203
 #, kde-format
 msgid "Filename for export-pdf"
-msgstr "Nom de fitxer per a l'exportació a pdf"
+msgstr "Nom de fitxer per a l'exportació cap a pdf"
 
 #: main/KoApplication.cpp:204
 #, kde-format
@@ -1402,7 +1402,7 @@ msgstr "Falta el filtre d'importació"
 #: main/KoFilterManager_p.cpp:30
 #, kde-format
 msgid "Choose Filter"
-msgstr "Seleccioneu el filtre"
+msgstr "Seleccioneu un filtre"
 
 #: main/KoFindText.cpp:46
 #, kde-format

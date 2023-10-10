@@ -26,7 +26,7 @@ msgstr ""
 #: karbon/image/ImageExport.cpp:90
 #, kde-format
 msgid "%1 Export Options"
-msgstr "Opcions d'exportació a %1"
+msgstr "Opcions d'exportació cap a %1"
 
 #: karbon/image/ImageExportOptionsWidget.cpp:47
 #, kde-format
@@ -460,7 +460,7 @@ msgstr ""
 #: sheets/html/exportwidget.ui:57
 #, kde-format
 msgid "Sheet Selection"
-msgstr "Seleccioneu el full"
+msgstr "Seleccioneu un full"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mSelectAllButton)
 #. i18n: ectx: property (whatsThis), widget (QPushButton, mDeselectAllButton)
@@ -589,7 +589,7 @@ msgstr "Dalt"
 #: sheets/latex/export/latexexportdialog.cc:139
 #, kde-format
 msgid "Latex Export Filter Configuration"
-msgstr "Configureu el filtre d'exportació a LaTeX"
+msgstr "Configureu el filtre d'exportació cap a LaTeX"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Widget2)
 #: sheets/latex/export/latexexportwidget.ui:24

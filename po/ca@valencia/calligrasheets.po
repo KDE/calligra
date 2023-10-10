@@ -3946,12 +3946,13 @@ msgstr "No s'ha pogut trobar el fitxer d'estil de full XML «%1»."
 #: dialogs/AutoFormatDialog.cpp:149
 #, kde-format
 msgid "Parsing error in sheet-style XML file %1."
-msgstr "S'ha produït un error d'anàlisi en el fitxer XML d'estil de full %1."
+msgstr ""
+"S'ha produït un error d'anàlisi en el fitxer en XML d'estil de full %1."
 
 #: dialogs/CharacterSelectDialog.cpp:35 dialogs/CharacterSelectDialog.cpp:53
 #, kde-format
 msgid "Select Character"
-msgstr "Seleccioneu el caràcter"
+msgstr "Seleccioneu un caràcter"
 
 #: dialogs/CharacterSelectDialog.cpp:45 dialogs/CharacterSelectDialog.cpp:62
 #, kde-format
@@ -19953,7 +19954,7 @@ msgstr "Full"
 #: part/dialogs/PageLayoutSheetPage.ui:35
 #, kde-format
 msgid "Print settings"
-msgstr "Configuració de la impressió"
+msgstr "Configureu la impressió"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gridCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:41
@@ -22032,7 +22033,7 @@ msgstr "Edita o selecciona àrees amb nom"
 #: ui/CellToolBase.cpp:726
 #, kde-format
 msgid "Formula Selection"
-msgstr "Seleccioneu la fórmula"
+msgstr "Seleccioneu una fórmula"
 
 #: ui/CellToolBase.cpp:728
 #, kde-format
