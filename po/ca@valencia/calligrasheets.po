@@ -13270,7 +13270,7 @@ msgstr "Full"
 #: part/dialogs/PageLayoutSheetPage.ui:35
 #, kde-format
 msgid "Print settings"
-msgstr "Configuració de la impressió"
+msgstr "Configureu la impressió"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gridCheckBox)
 #: part/dialogs/PageLayoutSheetPage.ui:41
