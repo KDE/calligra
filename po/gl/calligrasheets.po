@@ -4283,7 +4283,7 @@ msgid ""
 "User name:\n"
 "(if necessary)"
 msgstr ""
-"Nome de usuario:\n"
+"Nome de usuaria:\n"
 "(de ser necesario)"
 
 #: dialogs/DatabaseDialog.cpp:78
