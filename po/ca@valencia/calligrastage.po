@@ -541,12 +541,12 @@ msgstr "Diapositiva anterior"
 #: part/KPrView.cpp:91 part/KPrView.cpp:92
 #, kde-format
 msgid "Go to previous slide"
-msgstr "Ves a la diapositiva anterior"
+msgstr "Ves fins a la diapositiva anterior"
 
 #: part/KPrView.cpp:94 part/KPrView.cpp:95
 #, kde-format
 msgid "Go to next slide"
-msgstr "Ves a la diapositiva següent"
+msgstr "Ves fins a la diapositiva següent"
 
 #: part/KPrView.cpp:96
 #, kde-format
@@ -556,7 +556,7 @@ msgstr "Primera diapositiva"
 #: part/KPrView.cpp:97 part/KPrView.cpp:98
 #, kde-format
 msgid "Go to first slide"
-msgstr "Ves a la primera diapositiva"
+msgstr "Ves fins a la primera diapositiva"
 
 #: part/KPrView.cpp:99
 #, kde-format
@@ -566,7 +566,7 @@ msgstr "Última diapositiva"
 #: part/KPrView.cpp:100 part/KPrView.cpp:101
 #, kde-format
 msgid "Go to last slide"
-msgstr "Ves a l'última diapositiva"
+msgstr "Ves fins a l'última diapositiva"
 
 #: part/KPrView.cpp:102
 #, kde-format

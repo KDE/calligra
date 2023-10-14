@@ -5140,7 +5140,7 @@ msgstr "Valor actual:"
 #: dialogs/GotoDialog.cpp:33
 #, kde-format
 msgid "Goto Cell"
-msgstr "Ves a la cel·la"
+msgstr "Ves fins a la cel·la"
 
 #: dialogs/GotoDialog.cpp:43
 #, kde-format
@@ -5718,7 +5718,7 @@ msgstr "Fitxer"
 #: dialogs/LinkDialog.cpp:103
 #, kde-format
 msgid "Link to File"
-msgstr "Enllaç cap a fitxer"
+msgstr "Enllaç cap a un fitxer"
 
 #: dialogs/LinkDialog.cpp:109
 #, kde-format
@@ -11361,8 +11361,8 @@ msgid ""
 "The example shows the interest to pay in the last year of a three year loan. "
 "The interest rate is 10 percent."
 msgstr ""
-"L'exemple mostra l'interés a pagar al últim any d'un préstec de tres anys. "
-"La taxa de l'interés és del 10 per cent."
+"L'exemple mostra l'interés que s'ha de pagar en l'últim any d'un préstec de "
+"tres anys. La taxa de l'interés és del 10 per cent."
 
 #: functions/financial.xml:666
 #, kde-format
@@ -20780,7 +20780,7 @@ msgstr "Següent"
 #: part/View.cpp:362
 #, kde-format
 msgid "Move to the next sheet"
-msgstr "Mou al següent full"
+msgstr "Mou cap al següent full"
 
 #: part/View.cpp:367
 #, kde-format
@@ -20796,7 +20796,7 @@ msgstr "Anterior"
 #: part/View.cpp:369
 #, kde-format
 msgid "Move to the previous sheet"
-msgstr "Mou al full anterior"
+msgstr "Mou cap al full anterior"
 
 #: part/View.cpp:374
 #, kde-format
@@ -20812,7 +20812,7 @@ msgstr "Primer"
 #: part/View.cpp:376
 #, kde-format
 msgid "Move to the first sheet"
-msgstr "Mou al primer full"
+msgstr "Mou cap al primer full"
 
 #: part/View.cpp:380
 #, kde-format
@@ -20829,7 +20829,7 @@ msgstr "Últim"
 #: part/View.cpp:382
 #, kde-format
 msgid "Move to the last sheet"
-msgstr "Mou a l'últim full"
+msgstr "Mou cap a l'últim full"
 
 # msgid "Show column as &numbers"
 #: part/View.cpp:388
@@ -22098,7 +22098,7 @@ msgstr "Selecciona totes les cel·les del full actual"
 #: ui/CellToolBase.cpp:783
 #, kde-format
 msgid "Goto Cell..."
-msgstr "Ves a la cel·la..."
+msgstr "Ves fins a la cel·la..."
 
 # msgid "Goto Cell"
 #: ui/CellToolBase.cpp:784
@@ -22109,7 +22109,7 @@ msgstr "Ves"
 #: ui/CellToolBase.cpp:788
 #, kde-format
 msgid "Move to a particular cell"
-msgstr "Mou a una cel·la en particular"
+msgstr "Mou cap a una cel·la en particular"
 
 #: ui/CellToolBase.cpp:791
 #, kde-format

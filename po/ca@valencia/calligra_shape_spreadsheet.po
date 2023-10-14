@@ -56,7 +56,7 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
-"Este document conté un enllaç extern a un document remot\n"
+"Este document conté un enllaç extern cap a un document remot\n"
 "%1"
 
 #: TableShape.cpp:301
