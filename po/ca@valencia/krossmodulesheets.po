@@ -324,7 +324,7 @@ msgstr "No s'ha pogut obrir el fitxer «%1»."
 
 #: scripts/htmlexport.py:236
 msgid "No sheets which could be exported to HTML."
-msgstr "No hi ha fulls que es puguen exportar a HTML."
+msgstr "No hi ha fulls que es puguen exportar cap a HTML."
 
 #: scripts/htmlexport.py:309
 msgid ""
@@ -520,7 +520,7 @@ msgid ""
 "</qt>"
 msgstr ""
 "<qt>No s'ha pogut importar el mòdul de Python ODFPY.<br><br>Per a utilitzar "
-"este script en Python odfpyexport.py per a exportar a OpenDocument cal "
+"este script en Python odfpyexport.py per a exportar cap a OpenDocument cal "
 "instal·lar el mòdul de Python <a href=\"http://opendocumentfellowship.org/"
 "projects/odfpy\">ODFPY</a>.</qt>"
 

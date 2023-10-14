@@ -4477,8 +4477,8 @@ msgid ""
 "The example shows the interest to pay in the last year of a three year loan. "
 "The interest rate is 10 percent."
 msgstr ""
-"L'exemple mostra l'interés a pagar al últim any d'un préstec de tres anys. "
-"La taxa de l'interés és del 10 per cent."
+"L'exemple mostra l'interés que s'ha de pagar en l'últim any d'un préstec de "
+"tres anys. La taxa de l'interés és del 10 per cent."
 
 #: functions/financial.xml:666
 #, kde-format
@@ -14128,7 +14128,7 @@ msgstr "Següent"
 #: part/View.cpp:326
 #, kde-format
 msgid "Move to the next sheet"
-msgstr "Mou al següent full"
+msgstr "Mou cap al següent full"
 
 #: part/View.cpp:331
 #, kde-format
@@ -14144,7 +14144,7 @@ msgstr "Anterior"
 #: part/View.cpp:333
 #, kde-format
 msgid "Move to the previous sheet"
-msgstr "Mou al full anterior"
+msgstr "Mou cap al full anterior"
 
 #: part/View.cpp:338
 #, kde-format
@@ -14160,7 +14160,7 @@ msgstr "Primer"
 #: part/View.cpp:340
 #, kde-format
 msgid "Move to the first sheet"
-msgstr "Mou al primer full"
+msgstr "Mou cap al primer full"
 
 #: part/View.cpp:344
 #, kde-format
@@ -14177,7 +14177,7 @@ msgstr "Últim"
 #: part/View.cpp:346
 #, kde-format
 msgid "Move to the last sheet"
-msgstr "Mou a l'últim full"
+msgstr "Mou cap a l'últim full"
 
 # msgid "Show column as &numbers"
 #: part/View.cpp:352

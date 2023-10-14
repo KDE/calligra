@@ -1541,7 +1541,7 @@ msgid ""
 "want to export to this format?</qt>"
 msgstr ""
 "<qt>Exportar com a %1 pot resultar en pèrdua de format.<p> Segur que voleu "
-"exportar a este format?</qt>"
+"exportar cap a este format?</qt>"
 
 #: main/KoMainWindow.cpp:870
 #, kde-format

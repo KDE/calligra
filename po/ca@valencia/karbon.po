@@ -574,7 +574,7 @@ msgstr "Exclou els camins"
 #: ui/KarbonView.cpp:980
 #, kde-format
 msgid "Snap Path to Grid"
-msgstr "Ajusta el camí a la quadrícula"
+msgstr "Ajusta el camí cap a la quadrícula"
 
 #: ui/KarbonView.cpp:988
 #, kde-format

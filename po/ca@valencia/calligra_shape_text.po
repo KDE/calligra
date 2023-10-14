@@ -1229,8 +1229,8 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
-"Inserix enllaços a documents web. Podeu proporcionar un URL i una etiqueta "
-"per a l'enllaç,\n"
+"Inserix enllaços cap a documents web. Podeu proporcionar un URL i una "
+"etiqueta per a l'enllaç,\n"
 " o introduïu només l'URL i premeu «Recupera el títol des d'un URL»"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
@@ -1279,7 +1279,7 @@ msgstr " Text:"
 #: dialogs/LinkInsertionDialog.ui:113
 #, kde-format
 msgid "Link To Bookmark"
-msgstr "Enllaç cap a adreça d'interés"
+msgstr "Enllaç a una adreça d'interés"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:117
@@ -3069,7 +3069,7 @@ msgid ""
 "Malicious programs can harm your computer. Are you sure that you want to run "
 "this program?"
 msgstr ""
-"Este enllaç apunta a un programa o script «%1».\n"
+"Este enllaç apunta cap a un programa o script «%1».\n"
 "Els programes maliciosos poden fer malbé el vostre ordinador. Segur que "
 "voleu executar este programa?"
 

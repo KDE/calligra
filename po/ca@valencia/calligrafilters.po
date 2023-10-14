@@ -542,7 +542,7 @@ msgid ""
 "point to a stylesheet on disk, or to somewhere on the Internet."
 msgstr ""
 "En este camp, podeu introduir un URL per al vostre estil de full. Es pot "
-"apuntar a un estil al disc, o a algun lloc en Internet."
+"apuntar cap a un estil en el disc, o a algun lloc en Internet."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: sheets/html/exportwidget.ui:165

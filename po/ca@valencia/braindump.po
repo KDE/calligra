@@ -226,13 +226,13 @@ msgstr "Duplica la pissarra seleccionada actualment"
 #: src/forms/wdgsectionsbox.ui:106
 #, kde-format
 msgid "Move whiteboard down"
-msgstr "Mou la pissarra avall"
+msgstr "Mou la pissarra cap avall"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: src/forms/wdgsectionsbox.ui:131
 #, kde-format
 msgid "Move whiteboard up"
-msgstr "Mou la pissarra amunt"
+msgstr "Mou la pissarra cap amunt"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: src/forms/wdgsectionsbox.ui:172
