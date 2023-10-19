@@ -1,0 +1,316 @@
+---
+name: calligra
+confinement: strict
+grade: stable
+base: core22
+adopt-info: calligra
+apps:
+    calligra:
+        # extensions:
+        # - kde-neon
+        command: usr/bin/calligra
+        plugs:
+        - home
+        - desktop
+        - desktop-legacy
+        - opengl
+        - wayland
+        - x11
+        - audio-playback
+        - unity7
+        - network
+        - network-bind
+        - removable-media
+    calligrawords:
+        # extensions:
+        # - kde-neon
+        common-id: org.kde.calligrawords.desktop
+        desktop: usr/share/applications/org.kde.calligrawords.desktop
+        command: usr/bin/calligrawords
+        plugs:
+        - home
+        - desktop
+        - desktop-legacy
+        - opengl
+        - wayland
+        - x11
+        - audio-playback
+        - unity7
+        - network
+        - network-bind
+        - removable-media
+        - cups
+    calligrastage:
+        # extensions:
+        # - kde-neon
+        common-id: org.kde.calligrastage.desktop
+        desktop: usr/share/applications/org.kde.calligrastage.desktop
+        command: usr/bin/calligrastage
+        plugs:
+        - home
+        - desktop
+        - desktop-legacy
+        - opengl
+        - wayland
+        - x11
+        - audio-playback
+        - unity7
+        - network
+        - network-bind
+        - removable-media
+        - cups
+    calligrasheets:
+        # extensions:
+        # - kde-neon
+        common-id: org.kde.calligrasheets.desktop
+        desktop: usr/share/applications/org.kde.calligrasheets.desktop
+        command: usr/bin/calligrasheets
+        plugs:
+        - home
+        - desktop
+        - desktop-legacy
+        - opengl
+        - wayland
+        - x11
+        - audio-playback
+        - unity7
+        - network
+        - network-bind
+        - removable-media
+        - cups
+    karbon:
+        # extensions:
+        # - kde-neon
+        common-id: org.kde.karbon.desktop
+        desktop: usr/share/applications/org.kde.karbon.desktop
+        command: usr/bin/karbon
+        plugs:
+        - home
+        - desktop
+        - desktop-legacy
+        - opengl
+        - wayland
+        - x11
+        - audio-playback
+        - unity7
+        - network
+        - network-bind
+        - cups
+        command-chain:
+        - snap/command-chain/desktop-launch
+    calligragemini:
+        # extensions:
+        # - kde-neon
+        common-id: org.kde.calligragemini.desktop
+        desktop: usr/share/applications/org.kde.calligragemini.desktop
+        command: usr/bin/calligragemini
+        plugs:
+        - home
+        - desktop
+        - desktop-legacy
+        - opengl
+        - wayland
+        - x11
+        - audio-playback
+        - unity7
+        - network
+        - network-bind
+        - cups
+        command-chain:
+        - snap/command-chain/desktop-launch
+assumes:
+- snapd2.58.3
+compression: lzo
+plugs:
+    desktop:
+        mount-host-font-cache: false
+    icon-themes:
+        interface: content
+        target: $SNAP/data-dir/icons
+        default-provider: gtk-common-themes
+    sound-themes:
+        interface: content
+        target: $SNAP/data-dir/sounds
+        default-provider: gtk-common-themes
+    kf5-5-110-qt-5-15-11-core22:
+        content: kf5-5-110-qt-5-15-11-core22-all
+        interface: content
+        default-provider: kf5-5-110-qt-5-15-11-core22
+        target: $SNAP/kf5
+    foo-install-cups:
+        interface: content
+        content: foo
+        default-provider: cups
+        target: $SNAP_DATA/foo
+environment:
+    SNAP_DESKTOP_RUNTIME: $SNAP/kf5
+    GST_PLUGIN_PATH: "$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/gstreamer-1.0"
+    GST_PLUGIN_SYSTEM_PATH: "$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/gstreamer-1.0"
+    GST_PLUGIN_SCANNER: "$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner"
+hooks:
+    configure:
+        plugs:
+        - desktop
+        command-chain:
+        - snap/command-chain/hooks-configure-desktop
+layout:
+    "/usr/lib/$CRAFT_ARCH_TRIPLET/alsa-lib":
+        symlink: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/alsa-lib"
+    "/usr/share/alsa":
+        symlink: "$SNAP/usr/share/alsa"
+    /usr/share/X11:
+        symlink: $SNAP/kf5/usr/share/X11
+slots:
+    session-dbus-interface:
+        interface: dbus
+        name: org.kde.calligra
+        bus: session
+package-repositories:
+-   type: apt
+    components:
+    - main
+    suites:
+    - jammy
+    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
+    url: http://origin.archive.neon.kde.org/user
+    key-server: keyserver.ubuntu.com
+parts:
+    kde-neon:
+        source: /snap/snapcraft/current/share/snapcraft/extensions/desktop/kde-neon
+        source-type: local
+        plugin: make
+        make-parameters:
+        - PLATFORM_PLUG=kf5-5-110-qt-5-15-11-core22
+        build-snaps:
+        - kf5-5-110-qt-5-15-11-core22-sdk
+        build-environment:
+        - &id001
+            PATH: /snap/kf5-5-110-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
+        - &id002
+            XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-110-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
+        - &id003
+            XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-110-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
+        - &id004
+            CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-110-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
+    patches:
+        after:
+        - kde-neon
+        source: .
+        source-type: local
+        plugin: dump
+        stage:
+        - patches/text.diff
+    calligra:
+        after:
+        - patches
+        - kde-neon
+        plugin: cmake
+        build-packages:
+        - libboost-dev
+        - libboost-system-dev
+        - libeigen3-dev
+        - libetonyek-dev
+        - libfontconfig1-dev
+        - libfreetype6-dev
+        - libgit2-dev
+        - libgsl-dev
+        - libicu-dev
+        - libjpeg-dev
+        - libkchart-dev
+        - libkgantt-dev
+        - libkproperty3-dev
+        - libkreport3-dev
+        - libkf5doctools-dev
+        - liblcms2-dev
+        - libmarble-dev
+        - libopenexr-dev
+        - libopenjp2-7-dev
+        - libphonon4qt5-dev
+        - libphonon4qt5experimental-dev
+        - libpng-dev
+        - libpoppler-private-dev
+        - libpoppler-qt5-dev
+        - libqca-qt5-2-dev
+        - libspnav-dev
+        - libvisio-dev
+        - libwpd-dev
+        - libwpg-dev
+        - libwps-dev
+        - libxbase64-dev
+        - libxml2-dev
+        - pkg-config
+        - pkg-kde-tools
+        - pstoedit
+        - shared-mime-info
+        - zlib1g-dev
+        - libkf5calendarcore-dev
+        - libkf5akonadi-dev
+        - libkf5akonadicontact-dev
+        - libkf5contacts-dev
+        - okular-dev
+        - cauchy-dev
+        - qtdeclarative5-dev
+        stage-packages:
+        - libqca-qt5-2
+        - libetonyek-0.1-1
+        - libgsl27
+        - libgslcblas0
+        - libilmbase25
+        - libkchart2
+        - liblangtag1
+        - libodfgen-0.1-1
+        - libphonon4qt5experimental4
+        - librevenge-0.0-0
+        - libspnav0
+        - libvisio-0.1-1
+        - libwpd-0.10-10
+        - libwpg-0.3-3
+        - libwps-0.4-4
+        - libfontconfig1
+        - libcauchy0.0v5
+        - libkf5js5
+        - libkf5jsapi5
+        - libm2mml0.0v5
+        - libokular5core9
+        parse-info:
+        - usr/share/metainfo/org.kde.calligrawords.appdata.xml
+        - usr/share/metainfo/org.kde.calligrasheets.appdata.xml
+        - usr/share/metainfo/org.kde.calligrastage.appdata.xml
+        - usr/share/metainfo/org.kde.karbon.appdata.xml
+        - usr/share/metainfo/org.kde.calligragemini.appdata.xml
+        source: .
+        source-type: local
+        override-pull: |
+            craftctl default
+            patch -p1 < ../../patches/src/snap/local/patches/text.diff
+        build-environment:
+        - *id001
+        - *id002
+        - *id003
+        - *id004
+        - CXXFLAGS: -std=c++17
+        cmake-parameters:
+        - "-DCMAKE_INSTALL_PREFIX=/usr"
+        - "-DCMAKE_BUILD_TYPE=Release"
+        - "-DENABLE_TESTING=OFF"
+        - "-DBUILD_TESTING=OFF"
+        - "-DKDE_SKIP_TEST_SETTINGS=ON"
+        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-110-qt-5-15-11-core22-sdk/current"
+        prime:
+        - "-usr/lib/*/cmake/*"
+        - "-usr/include/*"
+        - "-usr/share/ECM/*"
+        - "-usr/share/doc/*"
+        - "-usr/share/man/*"
+        - "-usr/share/icons/breeze-dark*"
+        - "-usr/bin/X11"
+        - "-usr/lib/gcc/$CRAFT_ARCH_TRIPLET/6.0.0"
+        - "-usr/lib/aspell/*"
+        - "-etc/alsa/conf.d/99-pulse.conf"
+    cleanup:
+        after:
+        - calligra
+        plugin: nil
+        override-prime: |
+            set -eux
+           # unused libs found in linters
