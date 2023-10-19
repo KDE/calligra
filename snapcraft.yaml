@@ -203,7 +203,7 @@ parts:
         source-type: local
         plugin: dump
         stage:
-        - patches/text.diff
+        - snap/local/patches/text.diff
     calligra:
         after:
         - patches
