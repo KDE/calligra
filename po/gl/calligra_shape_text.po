@@ -3074,8 +3074,8 @@ msgid ""
 "this program?"
 msgstr ""
 "Este enlace apunta ao programa ou guión %1.\n"
-"Hai programas maliciosos que poden danar o computador. Está seguro de que "
-"quere executar este programa?"
+"Hai programas maliciosos que poden danar o computador. Seguro que quere "
+"executar este programa?"
 
 #: TextTool.cpp:2917
 #, kde-format
