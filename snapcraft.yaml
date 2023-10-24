@@ -197,13 +197,11 @@ parts:
         - &id004
             CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-110-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
     patches:
-        after:
-        - kde-neon
+        plugin: dump
         source: .
         source-type: local
-        plugin: dump
-        stage:
-        - snap/local/patches/text.diff
+        prime:
+        - ".*"
     calligra:
         after:
         - patches
