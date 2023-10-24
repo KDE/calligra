@@ -282,9 +282,9 @@ parts:
         - usr/share/metainfo/org.kde.calligragemini.appdata.xml
         source: .
         source-type: local
-        override-pull: |
-            craftctl default
-            patch -p1 < ../../patches/src/snap/local/patches/text.diff
+        # override-pull: |
+        #     craftctl default
+        #     patch -p1 < ../../patches/src/snap/local/patches/text.diff
         build-environment:
         - *id001
         - *id002
