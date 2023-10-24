@@ -201,7 +201,7 @@ parts:
         source: .
         source-type: local
         prime:
-        - ".*"
+        - "snap/local/patches"
     calligra:
         after:
         - patches
