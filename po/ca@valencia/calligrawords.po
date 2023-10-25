@@ -424,7 +424,7 @@ msgstr "Parà&graf"
 #: part/dialogs/KWInsertImage.ui:40
 #, kde-format
 msgid "&To Character"
-msgstr "&Al caràcter"
+msgstr "&En el caràcter"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWInsertImage.ui:47

@@ -1281,8 +1281,8 @@ msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
-"El document <i>%1</i> conté moltes versions. Aneu a «Fitxer -> Versions» per "
-"a obrir una versió anterior."
+"El document <i>%1</i> conté moltes versions. Aneu fins a «Fitxer -> "
+"Versions» per a obrir una versió anterior."
 
 #: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
