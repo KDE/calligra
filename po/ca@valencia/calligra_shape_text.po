@@ -3005,17 +3005,17 @@ msgstr "S'està donant format"
 #: TextTool.cpp:593
 #, kde-format
 msgid "Ctrl+click to go to link "
-msgstr "Ctrl+clic per a anar a l'enllaç "
+msgstr "«Ctrl+fer clic» per a anar fins a l'enllaç "
 
 #: TextTool.cpp:600
 #, kde-format
 msgid "Ctrl+click to go to the note "
-msgstr "Ctrl+clic per a anar a la nota "
+msgstr "«Ctrl+fer clic» per a anar fins a la nota "
 
 #: TextTool.cpp:606
 #, kde-format
 msgid "Ctrl+click to go to the note reference"
-msgstr "Ctrl+clic per a anar a la referència de la nota"
+msgstr "«Ctrl+fer clic» per a anar fins a la referència de la nota"
 
 #: TextTool.cpp:707
 #, kde-format
