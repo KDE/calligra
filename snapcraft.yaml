@@ -208,6 +208,9 @@ parts:
         - kde-neon
         plugin: cmake
         build-packages:
+        - cauchy-dev
+        - cmake
+        - kross-dev
         - libboost-dev
         - libboost-system-dev
         - libeigen3-dev
@@ -219,19 +222,23 @@ parts:
         - libicu-dev
         - libjpeg-dev
         - libkchart-dev
+        - libkf5akonadi-dev
+        - libkf5akonadicontact-dev
+        - libkf5calendarcore-dev
+        - libkf5contacts-dev
+        - libkf5doctools-dev
+        - libkf5holidays-dev
         - libkgantt-dev
         - libkproperty3-dev
         - libkreport3-dev
-        - libkf5doctools-dev
         - liblcms2-dev
         - libmarble-dev
+        - libodfgen-dev
         - libopenexr-dev
-        - libopenjp2-7-dev
+        - libopenjpeg-dev
         - libphonon4qt5-dev
         - libphonon4qt5experimental-dev
         - libpng-dev
-        - libpoppler-private-dev
-        - libpoppler-qt5-dev
         - libqca-qt5-2-dev
         - libspnav-dev
         - libvisio-dev
@@ -241,39 +248,32 @@ parts:
         - libxbase64-dev
         - libxml2-dev
         - pkg-config
-        - pkg-kde-tools
         - pstoedit
         - shared-mime-info
+        - vc-dev
         - zlib1g-dev
-        - libkf5calendarcore-dev
-        - libkf5akonadi-dev
-        - libkf5akonadicontact-dev
-        - libkf5contacts-dev
-        - okular-dev
-        - cauchy-dev
-        - qtdeclarative5-dev
         stage-packages:
-        - libqca-qt5-2
-        - libetonyek-0.1-1
         - libgsl27
-        - libgslcblas0
-        - libilmbase25
-        - libkchart2
-        - liblangtag1
-        - libodfgen-0.1-1
-        - libphonon4qt5experimental4
-        - librevenge-0.0-0
+        - zlib1g
+        - libfontconfig1
+        - libfreetype6
+        - libimath-3-1-29
+        - libkchart5-2
+        - libkf5krosscore5
+        - libkf5krossui5
+        - liblcms2-2
+        - libm2mml0.0v5
+        - libqca-qt5-2
         - libspnav0
-        - libvisio-0.1-1
+        - qt5-phonon
+        - libetonyek-0.1-1
+        - libodfgen-0.1-1
+        - librevenge-0.0-0
         - libwpd-0.10-10
         - libwpg-0.3-3
+        - libpoppler132
+        - libvisio-0.1-1
         - libwps-0.4-4
-        - libfontconfig1
-        - libcauchy0.0v5
-        - libkf5js5
-        - libkf5jsapi5
-        - libm2mml0.0v5
-        - libokular5core9
         parse-info:
         - usr/share/metainfo/org.kde.calligrawords.appdata.xml
         - usr/share/metainfo/org.kde.calligrasheets.appdata.xml
