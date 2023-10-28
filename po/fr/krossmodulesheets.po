@@ -4,7 +4,7 @@
 # Daniel Durand <durand.d@9online.fr>, 2008.
 # Durand Daniel <daniel@durand-amd.net>, 2010.
 # Durand Daniel <durand.d@9online.fr>, 2010, 2012.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013.
+# SPDX-FileCopyrightText: 2012, 2013, 2023 xavier <xavier.besnard@neuf.fr>
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2014.
 #
 msgid ""
@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: krossmodulekspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2014-10-08 21:35+0200\n"
-"Last-Translator: Thomas Vergnaud <thomas.vergnaud@gmx.fr>\n"
-"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-10-26 17:48+0200\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 23.08.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -1304,7 +1304,7 @@ msgstr "Fonctions de formules de scripts"
 #: scripts/scripts.rc:31
 #, kde-format
 msgid "R-Project"
-msgstr "R-Project"
+msgstr "Projet R"
 
 #. i18n: tag script attribute comment
 #: scripts/scripts.rc:31
