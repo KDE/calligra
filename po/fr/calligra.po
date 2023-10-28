@@ -4,7 +4,7 @@
 # Stanislas Zeller <uncensored.assault@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2020, 2021, 2022.
+# SPDX-FileCopyrightText: 2012, 2020, 2021, 2022, 2023 xavier <xavier.besnard@neuf.fr>
 # Daniel Durand <durand.d@9online.fr>, 2012, 2013.
 # Sebastien Renard <renard@kde.org>, 2013, 2014, 2015.
 # Vincent PINON <vpinon@kde.org>, 2014.
@@ -17,15 +17,15 @@ msgstr ""
 "Project-Id-Version: kplatomodels\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-25 00:51+0000\n"
-"PO-Revision-Date: 2023-03-14 07:21+0100\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"PO-Revision-Date: 2023-10-26 17:45+0200\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -33,7 +33,7 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Geoffay Levasseur, Daniel Durand, Vincent Pinon"
+msgstr "Geoffray Levasseur, Daniel Durand, Vincent Pinon"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -75,7 +75,7 @@ msgstr "Ligne"
 #: basicflakes/tools/KoPencilTool.cpp:273
 #, kde-format
 msgid "Precision:"
-msgstr "Precision : "
+msgstr "Précision : "
 
 #: basicflakes/tools/KoPencilTool.cpp:275
 #, kde-format
@@ -903,7 +903,7 @@ msgstr "Uniquement imprimer et quitter"
 #, kde-format
 msgid "Open a new document based on the given template (desktopfile name)"
 msgstr ""
-"Ouvrir un nouveau document à partir d'un modèle donné (nom desktopfile)"
+"Ouvrir un nouveau document à partir d'un modèle donné (nom « desktopfile »)"
 
 #: main/KoApplication.cpp:201
 #, kde-format
@@ -1895,7 +1895,7 @@ msgstr "ISO A5"
 #, kde-format
 msgctxt "Page size"
 msgid "US Letter"
-msgstr "US Letter"
+msgstr "Lettre US"
 
 #: odf/KoPageFormat.cpp:57
 #, kde-format
@@ -5299,12 +5299,12 @@ msgstr ""
 "para><para>In-/exclusion d'ensembles d'autres étiquettes :"
 "<br><icode>[Nom_étiquette]</icode> ou <icode>![Nom_étiquette]</icode>.</"
 "para><para>In-/exclusion correspondant au nom complet et sensible à la "
-"casse :<br><icode>\"CorrespondanceExacte\"</icode> ou <icode>!"
-"\"CorrespondanceExacte\"</icode>.</para>Les résultats du filtrage ne peuvent "
-"pas être enregistrés pour la vue <interface>Tous les préréglages</interface>."
-"<br>Dans cette vue, appuyer sur <interface>Entrée</interface> ou effacer la "
-"zone de saisie restaurera tous les éléments.<br>Veuillez créer et/ou "
-"basculer vers une étiquette différente si vous voulez enregistrer les "
+"casse :<br><icode> « CorrespondanceExacte » </icode> ou <icode> ! "
+"« CorrespondanceExacte » </icode>.</para>Les résultats du filtrage ne "
+"peuvent pas être enregistrés pour la vue <interface>Tous les préréglages</"
+"interface>.<br>Dans cette vue, appuyer sur <interface>Entrée</interface> ou "
+"effacer la zone de saisie restaurera tous les éléments.<br>Veuillez créer et/"
+"ou basculer vers une étiquette différente si vous voulez enregistrer les "
 "ressources filtrées dans un ensemble nommé.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:53
