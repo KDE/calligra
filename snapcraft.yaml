@@ -235,7 +235,7 @@ parts:
         - libmarble-dev
         - libodfgen-dev
         - libopenexr-dev
-        - libopenjpeg-dev
+        - libopenjp2-7-dev
         - libphonon4qt5-dev
         - libphonon4qt5experimental-dev
         - libpng-dev
