@@ -258,7 +258,7 @@ parts:
         - libfontconfig1
         - libfreetype6
         - libimath-3-1-29
-        - libkchart5-2
+        - libkchart2
         - libkf5krosscore5
         - libkf5krossui5
         - liblcms2-2
