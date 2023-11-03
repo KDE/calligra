@@ -265,7 +265,7 @@ parts:
         - libm2mml0.0v5
         - libqca-qt5-2
         - libspnav0
-        - qt5-phonon
+        - libphonon4qt5-4
         - libetonyek-0.1-1
         - libodfgen-0.1-1
         - librevenge-0.0-0
