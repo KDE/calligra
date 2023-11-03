@@ -16,7 +16,7 @@
 # Vincent PINON <vpinon@kde.org>, 2013, 2014.
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2014, 2015, 2016, 2022.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2020.
-# Xavier Besnard <xavier.besnard@neuf.fr>, 2020, 2022.
+# SPDX-FileCopyrightText: 2020, 2022, 2023 Xavier Besnard <xavier.besnard@neuf.fr>
 # Xavier BESNARD <xavier.besnard@neuf.fr>, 2023.
 #
 msgid ""
@@ -24,15 +24,15 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-31 00:47+0000\n"
-"PO-Revision-Date: 2023-04-29 09:49+0200\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"PO-Revision-Date: 2023-11-01 16:02+0100\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.2\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -4990,7 +4990,7 @@ msgstr " 4 \t365 jours dans une année, nombre actuel de jours dans les mois"
 #: functions/financial.xml:1094
 #, kde-format
 msgid "  5       European method, 12 months, each month has 30 days"
-msgstr " 5 \tMéthode européenne, 12 mois, chaque mois a 30 jours"
+msgstr " 5 \t Méthode européenne, 12 mois, chaque mois a 30 jours"
 
 #: functions/financial.xml:1095
 #, kde-format
@@ -7530,14 +7530,14 @@ msgid ""
 msgstr ""
 "La fonction FLOOR () arrondit x à la valeur inférieure (vers zéro) vers le "
 "plus proche multiple de « signification ».\n"
-"\tLa valeur par défaut de « signification » est 1 si x est positif. Elle est "
-"de -1 si la valeur est négative,\n"
-"\tce qui signifie arrondir vers l'entier le plus proche.\n"
-"\tSi le paramètre « mode » est fourni avec une valeur différente de zéro, le "
-"montant de x est arrondi en se rapprochant de zéro vers un multiple\n"
-"\tde « signification » et ensuite le signe est appliqué. Sinon, il est "
+"\t La valeur par défaut de « signification » est 1 si x est positif. Elle "
+"est de -1 si la valeur est négative,\n"
+"\t Ce qui signifie arrondir vers l'entier le plus proche.\n"
+"\t Si le paramètre « mode » est fourni avec une valeur différente de zéro, "
+"le montant de x est arrondi en se rapprochant de zéro vers un multiple\n"
+"\t de « signification » et ensuite le signe est appliqué. Sinon, il est "
 "arrondi vers l'infini négatif.\n"
-"\tSi aucun des deux paramètres x ou si « signification » vaut zéro, le "
+"\t Si aucun des deux paramètres x ou si « signification » vaut zéro, le "
 "résultat est zéro."
 
 #: functions/math.xml:900
@@ -15448,11 +15448,6 @@ msgid ""
 "Just like you can drag down numbers you can also drag down dates and the "
 "next cells will also get datetimes."
 msgstr ""
-"Pour saisir une date et une heure, vous devriez la saisir sous l'un des "
-"formats définis dans le menu Centre de configuration / Apparence et "
-"comportement globaux / Internationalisation /  Pays & langue / Date et "
-"heure ». Deux formats de date sont définis ici : un format de date et un "
-"format court de date.\n"
 "De la même façon qu'avec les nombres, vous pouvez faire glisser des dates "
 "vers d'autres cellules en utilisant la souris et les cellules passeront "
 "alors au format de date."
