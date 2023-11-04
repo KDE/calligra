@@ -33,7 +33,6 @@ Comment[sl]=Sidrišče za Karbon
 Comment[sv]=Dockningsfönster för Karbon
 Comment[tr]=Karbon için Docker
 Comment[uk]=Бічна панель Karbon
-Comment[x-test]=xxDocker for Karbonxx
 Comment[zh_CN]=Karbon 停靠栏
 [PropertyDef::X-KDE-PluginInfo-Name]
 Type=QString

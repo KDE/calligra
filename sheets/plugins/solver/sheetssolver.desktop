@@ -29,7 +29,6 @@ Name[sl]=Vstavek za vrtenje slike
 Name[sv]=Lösnings-insticksprogram för Sheets
 Name[tr]=Tablolar Çözücü Eklentisi
 Name[uk]=Додаток розв’язання задач для Sheets
-Name[x-test]=xxSheets Solver Pluginxx
 X-KDE-ServiceTypes=Sheets/ViewPlugin
 Type=Service
 X-KDE-Library=sheetssolver

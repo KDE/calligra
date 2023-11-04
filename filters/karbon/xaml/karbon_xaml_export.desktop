@@ -34,7 +34,6 @@ Name[sl]=Izvozni filter WVG za Karbon
 Name[sv]=Karbon WVG-exportfilter
 Name[tr]=Karbon WVG Dışa Aktarma Süzgeci
 Name[uk]=Фільтр експорту WVG для Karbon
-Name[x-test]=xxKarbon WVG Export Filterxx
 Name[zh_CN]=Karbon WVG 导出过滤器
 X-KDE-ServiceTypes=Calligra/Filter
 Type=Service

@@ -26,7 +26,6 @@ Name[sl]=Vtičnik sidrišča Calligra šablon
 Name[sv]=Calligra-dockningsinsticksprogram för schabloner
 Name[tr]=Calligra Marka Kalıpları Docker eklentisi
 Name[uk]=Додаток панелі шаблонів для Calligra
-Name[x-test]=xxCalligra Stencils Docker pluginxx
 Name[zh_CN]=Calligra 模板坞插件
 X-KDE-ServiceTypes=Calligra/Dock
 Type=Service

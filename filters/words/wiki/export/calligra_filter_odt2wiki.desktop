@@ -31,7 +31,6 @@ Name[sl]=Izvozni filter za Words Wiki
 Name[sv]=Words Wiki-exportfilter
 Name[tr]=Sözcükler Viki Dışa Aktarma Süzgeci
 Name[uk]=Фільтр експорту вікі для Words
-Name[x-test]=xxWords Wiki Export Filterxx
 Name[zh_CN]=Words 的 Wiki 导出过滤器
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/wiki
