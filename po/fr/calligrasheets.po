@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-31 00:47+0000\n"
-"PO-Revision-Date: 2023-11-01 16:02+0100\n"
+"PO-Revision-Date: 2023-11-03 17:54+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -2509,8 +2509,7 @@ msgid ""
 "(nautical mile), ang (Angstrom), parsec, lightyear."
 msgstr ""
 "Unités de distance gérées : m (mètre), in (inch=pouce), ft (feet=pied), mi "
-"(mile), Nmi (mile nautique), ang (Angstrom), parsec, lightyear (année "
-"lumière)."
+"(mile), Nm (mile nautique), ang (Angstrom), parsec, année lumière."
 
 #: functions/engineering.xml:132
 #, kde-format
@@ -2565,7 +2564,7 @@ msgid ""
 msgstr ""
 "Unités de volume gérées parmi l (litre), tsp (cuiller à café), tbs (cuiller "
 "à soupe), oz (once de liquide), cup, pt (pinte), qt (quart), gal (gallon), "
-"baril (baril), m3 (mètre cube), mi3 (mile cubique), Nmi3 (mile nautique "
+"baril (baril), m3 (mètre cube), mi3 (mile cubique), Nm3 (mile nautique "
 "cubique), in3 (pouce cube), ft3 (pied cube), yd3 (yard cube)."
 
 #: functions/engineering.xml:139
@@ -2575,9 +2574,9 @@ msgid ""
 "Nautical mile), in2 (square inch), ft2 (square foot), yd2 (square yard), "
 "acre, ha (hectare)."
 msgstr ""
-"Unités de surface gérées parmi m2 (mètre carré), mi2 (mile carré), Nmi2 "
-"(mile nautique carré), in2 (pouce carré), ft2 (pied carré), yd2 (yard "
-"carré), acre, ha (hectare)."
+"Unités de surface gérées parmi m2 (mètre carré), mi2 (mile carré), Nm2 (mile "
+"nautique carré), in2 (pouce carré), ft2 (pied carré), yd2 (yard carré), "
+"acre, ha (hectare)."
 
 #: functions/engineering.xml:140
 #, kde-format
@@ -8055,9 +8054,9 @@ msgid ""
 "Since the result is an array, you need to use Ctrl+Alt+Enter (instead of "
 "just Enter) to display the array elements in separate cells."
 msgstr ""
-"Étant donné que le résultat est un tableau, you devez utiliser Ctrl+Alt"
-"+Entée (et pas seulement Entrée) pour afficher les éléments du tableau dans "
-"des cellules séparées."
+"Étant donné que le résultat est un tableau, vous devez utiliser les touches "
+"« Ctrl » + « Alt » + « Entrée » (et pas seulement « Entrée ») pour afficher "
+"les éléments du tableau dans des cellules séparées."
 
 #: functions/math.xml:1240
 #, kde-format
@@ -10644,10 +10643,10 @@ msgid ""
 "parameter to TRUE or 1 (the default) allows the best-fit line to intersect "
 "the vertical axis at a non-zero value of Y. "
 msgstr ""
-"Il est possible de forcer la ligne de regression à correspondre à l'origine "
-"(X=0, Y=0) en fixant le quatrième paramètre, allowOffset, à FALSE ou 0. Si "
-"ce paramètre est fixé à TRUE ou 1 (valeur par défaut), la ligne pourra "
-"croisée l'axe vertical avec une valeur de Y non nulle."
+"Il est possible de forcer la ligne de régression à correspondre à l'origine "
+"(X=0, Y=0) en fixant le quatrième paramètre « allowOffset » à la valeur "
+"« FAUX » ou 0. Si ce paramètre est fixé à « VRAI » ou 1 (valeur par défaut), "
+"la ligne pourra croiser l'axe vertical avec une valeur de Y non nulle."
 
 #: functions/statistical.xml:1434
 #, kde-format
@@ -11286,8 +11285,8 @@ msgstr "SUBSTITUTE (texte ; ancien texte ; nouveau texte ; nombre d'instance)
 #, kde-format
 msgid "SUBSTITUTE(\"Cost Data\";\"Cost\";\"Sales\") returns \"Sales Data\""
 msgstr ""
-"La fonction SUBSTITUTE (« Cost Data » ; « Cost » ; « Sales ») renvoie "
-"« Sales Data »"
+"La fonction SUBSTITUTE (« Données de coût » ; « coût » ; « ventes ») renvoie "
+"« Données de ventes »"
 
 #: functions/text.xml:73
 #, kde-format
@@ -11670,7 +11669,7 @@ msgstr "FIND (texte cherché ; dans le texte ; numéro de départ)"
 #: functions/text.xml:305
 #, kde-format
 msgid "FIND(\"Cal\";\"Calligra\") returns 1"
-msgstr "La fonction FIND(« Cal » ; « Calligra ») renvoie 1"
+msgstr "La fonction FIND(« Petit » ; « Petite ») renvoie 1"
 
 #: functions/text.xml:306
 #, kde-format
@@ -13827,14 +13826,15 @@ msgid ""
 "normal form B3. This does not seem to be of much use at the moment."
 msgstr ""
 "Si cette option est sélectionnée, la référence de la cellule, affichée à "
-"gauche de la barre de formule, sera en mode LC au lieu du mode normal (par "
-"exemple : L2C3 au lieu de B3). Cela ne semble pas être d'un grand intérêt."
+"gauche de la barre de formule, sera en mode « LC » au lieu du mode normal "
+"(par exemple : L2C3 au lieu de B3). Cela ne semble pas être d'un grand "
+"intérêt."
 
 #. i18n: ectx: property (text), widget (QCheckBox, useLCModeCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:123
 #, kde-format
 msgid "Use &LC mode"
-msgstr "Utiliser le mode &LC"
+msgstr "Utiliser le mode « &LC »"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:130
@@ -13968,7 +13968,7 @@ msgstr ""
 #: part/dialogs/SheetPropertiesWidget.ui:203
 #, kde-format
 msgid "&Automatic recalculation"
-msgstr "Recalcul &automatique"
+msgstr "Re-calcul &automatique"
 
 #: part/dialogs/SheetSelectPage.cpp:19
 #, kde-format
