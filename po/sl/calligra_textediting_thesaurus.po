@@ -1,6 +1,6 @@
 # Translation of thesaurus_tool.po to Slovenian
 # Copyright (C) 2002,2003, 2004 Free Software Foundation, Inc.
-# $Id: calligra_textediting_thesaurus.po 1599248 2021-04-25 01:08:01Z scripty $
+# $Id: calligra_textediting_thesaurus.po 1664120 2023-11-05 13:15:21Z scripty $
 # $Source$
 #
 # Gregor Rakar <gregor.rakar@kiss.si>, 2002, 2003, 2004.
@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: thesaurus_tool\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2021-04-25 00:18+0000\n"
+"POT-Creation-Date: 2023-11-05 12:33+0000\n"
 "PO-Revision-Date: 2020-11-02 10:14+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
