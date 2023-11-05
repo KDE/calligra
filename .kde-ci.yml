@@ -32,6 +32,6 @@ Dependencies:
     'frameworks/kwidgetsaddons': '@latest'
     'frameworks/kwindowsystem': '@latest'
     'frameworks/kxmlgui': '@latest'
-    'frameworks/kactivities': '@latest'
     'frameworks/threadweaver': '@latest'
     'graphics/kdiagram': '@latest'
+    'plasma/kactivities': '@latest'
