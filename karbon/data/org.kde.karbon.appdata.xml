@@ -35,6 +35,7 @@
   <name xml:lang="sv">Karbon</name>
   <name xml:lang="tr">Karbon</name>
   <name xml:lang="uk">Karbon</name>
+  <name xml:lang="x-test">xxKarbonxx</name>
   <name xml:lang="zh-CN">Karbon</name>
   <summary>Scalable Graphics</summary>
   <summary xml:lang="bs">Grafika koja se može skalirati</summary>
@@ -67,6 +68,7 @@
   <summary xml:lang="sv">Skalbar grafik</summary>
   <summary xml:lang="tr">Ölçeklenebilir Grafikler</summary>
   <summary xml:lang="uk">Програма для роботи з масштабованою графікою</summary>
+  <summary xml:lang="x-test">xxScalable Graphicsxx</summary>
   <summary xml:lang="zh-CN">矢量图形绘制工具</summary>
   <description>
     <p>
@@ -99,6 +101,7 @@
     <p xml:lang="sv">Karbon är ett vektorritprogram med ett användargränssnitt som är lätt att använda, ytterst anpassningsbart och utökningsbart. Det gör Karbon till ett utmärkt program för användare som börjar utforska vektorgrafikvärlden samt för konstnärer som vill skapa hänförande vektorkonst.</p>
     <p xml:lang="tr">Karbon, kullanımı kolay, son derece özelleştirilebilir ve genişletilebilir bir kullanıcı arayüzüne sahip bir vektör çizim uygulamasıdır. Bu, Karbon'u vektör grafikleri dünyasını keşfetmeye başlayan kullanıcılar ve nefes kesici vektör sanatı yaratmak isteyen sanatçılar için harika bir uygulama haline getiriyor.</p>
     <p xml:lang="uk">Karbon — програма для векторного малювання з простим, гнучким та придатним до розширення інтерфейсом користувача. Це робить Karbon чудовою програмою для користувачів, які починають знайомитися зі світом векторної графіки, а також для художників, які хочуть створити захопливі векторні твори.</p>
+    <p xml:lang="x-test">xxKarbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.xx</p>
     <p xml:lang="zh-CN">Karbon 是一款矢量绘图程序，具有易用、高度可定制和可扩展的用户界面。它既适合初次接触矢量图形的新手小试牛刀，也适合经验丰富的画师绘制精美的作品。</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
@@ -131,6 +134,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <ul>
       <li>
@@ -164,6 +168,7 @@
       <li xml:lang="sv">Stöd för att läsa in ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="tr">ODG, SVG, WPG, WMF, EPS/PS için yükleme desteği</li>
       <li xml:lang="uk">Підтримка завантаження даних ODG, SVG, WPG, WMF, EPS/PS.</li>
+      <li xml:lang="x-test">xxLoading support for ODG, SVG, WPG, WMF, EPS/PSxx</li>
       <li xml:lang="zh-CN">支持加载 ODG、SVG、WPG、WMF、EPS/PS 等图像格式</li>
       <li>
         Writing support for ODG, SVG, PNG, PDF, WMF
@@ -196,6 +201,7 @@
       <li xml:lang="sv">Stöd för att skriva ut ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="tr">ODG, SVG, PNG, PDF, WMF için yazma desteği</li>
       <li xml:lang="uk">Підтримка запису у форматах ODG, SVG, PNG, PDF, WMF.</li>
+      <li xml:lang="x-test">xxWriting support for ODG, SVG, PNG, PDF, WMFxx</li>
       <li xml:lang="zh-CN">写入支持 ODG，SVG，PNG，PDF，WMF</li>
       <li>
         Customizable user interface with freely placeable toolbars and dockers
@@ -226,6 +232,7 @@
       <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
       <li xml:lang="tr">Serbestçe konumlandırılabilir araç çubukları ve rıhtımlar ile özelliştirilebilir kullanıcı arayüzü</li>
       <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
+      <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockersxx</li>
       <li xml:lang="zh-CN">可自定义的用户界面，工具栏和面板可以自由放置</li>
       <li>
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
@@ -254,6 +261,7 @@
       <li xml:lang="sv">Lagerpanel för enkel hantering av komplexa dokument inklusive miniatyrbilder för förhandsgranskning, stöd för att gruppera former via drag och släpp, styra eller låsning synlighet av former</li>
       <li xml:lang="tr">Önizleme küçük görselleri, sürükle ve bırak yoluyla şekilleri gruplandırma desteği, şekillerin görünürlüğünü denetleme veya kilitleme içerilmek üzere karmaşık belgelerin kolay kullanımı için katman rıhtımı</li>
       <li xml:lang="uk">Панель шарів для полегшення обробки складних документів з мініатюрами об’єктів, підтримка групування форм перетягуванням зі скиданням, керування показом форм та блокуванням.</li>
+      <li xml:lang="x-test">xxLayer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via drag and drop, controlling visibility of shapes or lockingxx</li>
       <li xml:lang="zh-CN">图层面板可用于处理复杂的图形，支持缩略图预览、拖拽组合形状、显示/隐藏或者锁定形状</li>
       <li>
         Advanced path editing tool with great on-canvas editing capabilities
@@ -281,6 +289,7 @@
       <li xml:lang="sv">Avancerat konturredigeringsverktyg med utmärkta redigeringsmöjligheter direkt på duken</li>
       <li xml:lang="tr">Harika tuval üzerinde düzenleme özelliklerine sahip gelişmiş yol düzenleme aracı</li>
       <li xml:lang="uk">Інструмент редагування контурів з чудовими можливостями редагування безпосередньо на полотні.</li>
+      <li xml:lang="x-test">xxAdvanced path editing tool with great on-canvas editing capabilitiesxx</li>
       <li xml:lang="zh-CN">高级路径编辑工具可直接在画布上对图形进行深度操作</li>
       <li>
         Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool
@@ -308,6 +317,7 @@
       <li xml:lang="sv">Diverse ritverktyg för att skapa konturformer som inkluderar ett konturritverktyg, ett pennverktyg samt ett kalligrafiskt ritverktyg</li>
       <li xml:lang="tr">Yol çizme aracı, kurşun kalem aracı ve hat çizim aracı dahil olmak üzere yol şekilleri oluşturmak için çeşitli çizim araçları</li>
       <li xml:lang="uk">Різноманітні інструменти малювання для створення контурів, зокрема інструмент малювання контуру, олівець та інструмент каліграфічного малювання.</li>
+      <li xml:lang="x-test">xxVarious drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing toolxx</li>
       <li xml:lang="zh-CN">多种绘图工具可用于创建路径形状，包括路径绘制工具、铅笔工具和西文书法工具等</li>
       <li>
         Gradient and pattern tools for easy on-canvas editing of gradient and pattern styles
@@ -335,6 +345,7 @@
       <li xml:lang="sv">Tonings- och mönsterverktyg för enkelt redigering av tonings- och mönsterstilar direkt på duken</li>
       <li xml:lang="tr">Gradyan ve desen stillerinin tuval üzerinde kolay düzenlenmesi için gradyan ve desen araçları</li>
       <li xml:lang="uk">Інструменти градієнта і візерунка для полегшення редагування на полотні областей з заповненням градієнтом і візерунком.</li>
+      <li xml:lang="x-test">xxGradient and pattern tools for easy on-canvas editing of gradient and pattern stylesxx</li>
       <li xml:lang="zh-CN">渐变和图案工具可以轻松地在画布上编辑渐变和图案样式</li>
       <li>
         Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes,
@@ -363,6 +374,7 @@
       <li xml:lang="sv">Väldigt bra låsfunktioner för att rita och redigera med styrning (t.ex. låsa till rutnät, styrlinjer, konturnoder, omgivande rutor, ortogonala positioner, korsningar av konturformer eller förlängningar av linjer och konturer)</li>
       <li xml:lang="tr">Kılavuzlu çizim ve düzenleme için birinci sınıf yapıştırma olanakları (örneğin ızgaraya, kılavuz çizgilere, yol düğümlerine, sınırlayıcı kutulara, ortogonal konumlara, yol şekillerinin kesişimlerine veya çizgilerin ve yolların uzantılarına yapıştırma)</li>
       <li xml:lang="uk">Можливості використання прилипання та малювання за напрямними (прилипання до сітки, напрямні, вузли контурів, обмежувальні рамки, ортогональне розташування, перетини та розширення ліній і контурів).</li>
+      <li xml:lang="x-test">xxTop notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes, orthogonal positions, intersections of path shapes or extensions of lines and paths)xx</li>
       <li xml:lang="zh-CN">强大的吸附功能，可用于辅助绘制和编辑 (例如吸附到网格、参考线、路径节点、外框、正交位置、路径交点或线段的延长线等)</li>
       <li>
         Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image
@@ -392,6 +404,7 @@
       <li xml:lang="sv">Innehåller många fördefinierade former inklusive grundläggande former som stjärnor, cirkel/ellips, rektangel, bild</li>
       <li xml:lang="tr">Yıldızlar, daire/elips, dikdörtgen, görüntü gibi temel şekiller dahil olmak üzere önceden tanımlanmış birçok şekil içerir</li>
       <li xml:lang="uk">Передбачено багато готових форм, зокрема базові форми зірки, кола або еліпса, прямокутника та зображення.</li>
+      <li xml:lang="x-test">xxIncludes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, imagexx</li>
       <li xml:lang="zh-CN">包含大量预制形状，如星形、圆形、椭圆形、矩形、图像等</li>
       <li>
         Artistic text shape with support for following path outlines (i.e. text on path)
@@ -419,6 +432,7 @@
       <li xml:lang="sv">Artistisk textform med stöd för att följa konturlinjer (t.ex. text på en kontur)</li>
       <li xml:lang="tr">Aşağıdaki yol ana hatlarını destekleyen sanatsal metin şekli (örn. yol üzerindeki metin)</li>
       <li xml:lang="uk">Форма художнього тексту для розташування тексту вздовж контуру.</li>
+      <li xml:lang="x-test">xxArtistic text shape with support for following path outlines (i.e. text on path)xx</li>
       <li xml:lang="zh-CN">艺术字形状支持文本跟随路径</li>
       <li>
         Complex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effects
@@ -446,6 +460,7 @@
       <li xml:lang="sv">Komplexa konturoperationer och effekter som Booleska mängdoperationer, konturutplattning, rundning och förfining samt virvla- och klämeffekter</li>
       <li xml:lang="tr">Boole küme işlemleri, yol düzleştirme, yuvarlama ve iyileştirme gibi karmaşık yol işlemleri ve efektleri ile burma/kıstırma efektleri</li>
       <li xml:lang="uk">Складні дії над контурами та ефекти, зокрема набір булівських операцій, спрощення контуру, заокруглення та покращення, ефекти вихору та втягування</li>
+      <li xml:lang="x-test">xxComplex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effectsxx</li>
       <li xml:lang="zh-CN">复杂路径操作和特效，例如布尔运算、路径扁平化、简化和优化，以及旋转和揉捏特效等</li>
       <li>
         Extensible by writing plugins for new tools, shapes and dockers
@@ -474,6 +489,7 @@
       <li xml:lang="sv">Utökningsbart genom att skriva insticksprogram för nya verktyg, former och paneler</li>
       <li xml:lang="tr">Yeni araçlar, şekiller ve rıhtımlar için eklentiler yazarak genişletilebilir</li>
       <li xml:lang="uk">Можливість розширення додатками нових інструментів, форм та панелей.</li>
+      <li xml:lang="x-test">xxExtensible by writing plugins for new tools, shapes and dockersxx</li>
       <li xml:lang="zh-CN">可通过自行编写插件制作新工具、形状和面板</li>
     </ul>
   </description>

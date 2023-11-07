@@ -35,6 +35,7 @@
   <name xml:lang="sv">Braindump</name>
   <name xml:lang="tr">Braindump</name>
   <name xml:lang="uk">Braindump</name>
+  <name xml:lang="x-test">xxBraindumpxx</name>
   <name xml:lang="zh-CN">Braindump</name>
   <summary>Notes and ideas gathering</summary>
   <summary xml:lang="bs">Sakupljanje poruka i ideja</summary>
@@ -65,6 +66,7 @@
   <summary xml:lang="sv">Anteckningar och idéinsamling</summary>
   <summary xml:lang="tr">Notları ve fikirleri toplama</summary>
   <summary xml:lang="uk">Програма для впорядковування нотаток та ідей</summary>
+  <summary xml:lang="x-test">xxNotes and ideas gatheringxx</summary>
   <summary xml:lang="zh-CN">笔记和思路速记工具</summary>
   <description>
     <p>
@@ -96,6 +98,7 @@
     <p xml:lang="sv">Braindump är ett verktyg för att hämta och organisera innehållet i din hjärna (idéer, ritningar, bilder, texter …) på datorn. Det fungerar genom att låta dig skapa och redigera skrivtavlor, som är oändliga ytor där du kan lägga till texter, bilder, diagram, ritningar, etc.</p>
     <p xml:lang="tr">Braindump, aklınızdaki içerikleri (fikirler, çizimler, görseller, metinler…) bilgisayarına dökmenize ve organize etmenize yardımcı olan bir araçtır. Metin, görsel, çizelge, çizimler, vb. ekleyebileceğiniz sonsuz tuval olan beyaz tahtalar oluşturup düzenlemenize izin vererek çalışır.</p>
     <p xml:lang="uk">Braindump — програма для запису та упорядкування ваших думок (ідей, креслень, зображень, фрагментів тексту…) за допомогою вашого комп’ютера. У цій програмі ви можете створювати та редагувати так звані «дошки» — нескінченні полотна, на які можна додавати фрагменти тексту, зображення, діаграми, креслення тощо.</p>
+    <p xml:lang="x-test">xxBraindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer. It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.xx</p>
     <p xml:lang="zh-CN">Braindump 是一款用于快速记录和组织思路和信息的工具。您可以创建和编辑白板，在无限大小的画布中随意添加文字、图像、图表、绘图等。</p>
   </description>
   <url type="homepage">http://www.calligra.org/braindump/</url>

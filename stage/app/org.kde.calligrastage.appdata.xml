@@ -32,6 +32,7 @@
   <name xml:lang="sv">Calligra Stage</name>
   <name xml:lang="tr">Calligra Sahne</name>
   <name xml:lang="uk">Calligra Stage</name>
+  <name xml:lang="x-test">xxCalligra Stagexx</name>
   <name xml:lang="zh-CN">Calligra Stage</name>
   <summary>Presentation</summary>
   <summary xml:lang="bs">Prezentacija</summary>
@@ -63,6 +64,7 @@
   <summary xml:lang="sv">Presentation</summary>
   <summary xml:lang="tr">Sunum</summary>
   <summary xml:lang="uk">Презентації</summary>
+  <summary xml:lang="x-test">xxPresentationxx</summary>
   <summary xml:lang="zh-CN">演示文稿制作软件</summary>
   <description>
     <p>
@@ -96,6 +98,7 @@
     <p xml:lang="sv">Calligra Stage är ett lättanvänt men ändå flexibelt presentationsprogram. Du kan enkelt skapa presentationer som innehåller en rik variation av element, från grafik till text, från diagram till bilder. Calligra Stage är utökningsbar via ett insticksprogramsystem, så det är lätt att lägga till nya effekter, nya innehållselement eller till och med nya sätt att hantera presentationer. På grund av integration med Calligra är de kraftfulla och flexibla innehållselementen i Calligra tillgängliga för Stage.</p>
     <p xml:lang="tr">Calligra Sahne, kullanımı kolay ve aynı zamanda esnek bir sunum uygulamasıdır. Grafikten metne, çizelgelerden görsellere kadar birçok zengin nesne çeşitliliği içeren sunumlar oluşturabilirsiniz. Calligra Sahne'yi bir eklenti sistemi ile genişletebilirsiniz; böylece yeni efektler, yeni içerik nesneleri ve hatta sunumunuzu yönetmenin yeni yollarını eklemek çok kolaydır. Calligra ile olan tümleştirmeden dolayı, Calligra içerik ögelerinin tüm gücü ve esnekliği, Calligra Sahne ile kullanılabilir.</p>
     <p xml:lang="uk">Calligra Stage — проста, але потужна програма для роботи з презентаціями. За її допомогою ви без проблем зможете створити презентацію з багатим набором елементів, від графіки до тексту, від діаграм до зображень. Можливості Calligra Stage можна розширити за допомогою системи додатків: ви можете додати нові ефекти, нові елементи вмісту і навіть нові способи керування презентацією. Через тісну інтеграцію з рештою програм Calligra ви можете скористатися усіма потужними та гнучкими елементами решти програм Calligra безпосередньо у Stage.</p>
+    <p xml:lang="x-test">xxCalligra Stage is an easy to use yet still flexible presentation application. You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system, so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility of the Calligra content elements are available to Stage.xx</p>
     <p xml:lang="zh-CN">Calligra Stage 是一款易学易用却又不失强大的演示文稿制作与展示程序。您可以使用它方便地制作样式美观，包含文字、图形、图像、图表在内的演示文稿。Calligra Stage 可以通过插件进行扩展，可以方便地添加更多特效、视觉元素和演示文稿管理手段。Calligra Stage 是 Callibra 办公套件的组成部分。所有其他 Calligra 组件的功能和内容都可在 Calligra Stage 中使用。</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
@@ -127,6 +130,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <ul>
       <li>Multiple master slides</li>
@@ -157,6 +161,7 @@
       <li xml:lang="sv">Flera förlagssidor</li>
       <li xml:lang="tr">Birden çok ana slayt</li>
       <li xml:lang="uk">Використання декількох основних слайдів.</li>
+      <li xml:lang="x-test">xxMultiple master slidesxx</li>
       <li xml:lang="zh-CN">多张主幻灯片</li>
       <li>Easily switch between slides during a presentation</li>
       <li xml:lang="bs">Lako prebacujte između slajdova tokom prezentacije</li>
@@ -186,6 +191,7 @@
       <li xml:lang="sv">Enkelt byte mellan bilder under presentationer</li>
       <li xml:lang="tr">Bir sunum sırasında slaytlar arasında kolaylıkla geçiş yapın</li>
       <li xml:lang="uk">Просте перемикання між слайдами під час презентації.</li>
+      <li xml:lang="x-test">xxEasily switch between slides during a presentationxx</li>
       <li xml:lang="zh-CN">演示时可以在多张幻灯片之间轻松切换</li>
       <li>Add notes for your slide</li>
       <li xml:lang="bs">Dodajte zabilješke za vaš slajd</li>
@@ -217,6 +223,7 @@
       <li xml:lang="sv">Lägg till anteckningar för bilder</li>
       <li xml:lang="tr">Slaytlarınız için not ekleyin</li>
       <li xml:lang="uk">Додавання нотаток до слайдів.</li>
+      <li xml:lang="x-test">xxAdd notes for your slidexx</li>
       <li xml:lang="zh-CN">向幻灯片添加备注</li>
       <li>Supports most ODF file transitions</li>
       <li xml:lang="bs">Podržava većinu tranzicija ODF datoteka</li>
@@ -247,6 +254,7 @@
       <li xml:lang="sv">Stöder de flesta ODF-filövergångar</li>
       <li xml:lang="tr">Çoğu ODF dosya geçişlerini destekler</li>
       <li xml:lang="uk">Підтримка більшості переходів у файлах ODF.</li>
+      <li xml:lang="x-test">xxSupports most ODF file transitionsxx</li>
       <li xml:lang="zh-CN">支持大多数 ODF 转场过渡效果</li>
     </ul>
   </description>
