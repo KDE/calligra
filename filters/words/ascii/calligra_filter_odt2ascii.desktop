@@ -34,6 +34,7 @@ Name[sl]=Izvozni filter ASCII za Words
 Name[sv]=Words ASCII-exportfilter
 Name[tr]=Sözcükler ASCII Dışa Aktarma Süzgeci
 Name[uk]=Фільтр імпортування даних ASCII для Words
+Name[x-test]=xxWords ASCII Export Filterxx
 Name[zh_CN]=Words ASCII 导出过滤器
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/plain

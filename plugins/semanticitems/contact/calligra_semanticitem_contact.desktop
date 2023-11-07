@@ -31,6 +31,7 @@ Name[sl]=Vtičnik za stike RDF
 Name[sv]=Insticksprogram för RDF-kontakt
 Name[tr]=RDF Kişi Eklentisi
 Name[uk]=Додаток контактів RDF
+Name[x-test]=xxRDF Contact Pluginxx
 Name[zh_CN]=RDF 联系插件
 Comment=A plugin to map contact items between document and RDF database
 Comment[bs]=Dodatak za mapiranje kontaktnih stavki između dokumenta i RDF baze podataka
@@ -61,6 +62,7 @@ Comment[sl]=Vtičnik za preslikavo kontaktnih elementov med zbirko dokumentov in
 Comment[sv]=Ett insticksprogram för att avbilda kontaktobjekt mellan dokument och en RDF-databas
 Comment[tr]=Belgeler ile RDF veritabanı arasında nesneleri eşleyen eklenti
 Comment[uk]=Додаток для створення зв’язку між записами контактів у документі та у базі даних RDF
+Comment[x-test]=xxA plugin to map contact items between document and RDF databasexx
 Comment[zh_CN]=映射文档和 RDF 数据库之间联系项的插件
 
 Type=Service

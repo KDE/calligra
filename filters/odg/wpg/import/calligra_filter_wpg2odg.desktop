@@ -32,6 +32,7 @@ Name[sl]=Uvozni filter za WPG
 Name[sv]=Flow WPG-importfilter
 Name[tr]=Flow WPG İçe Aktarma Süzgeci
 Name[uk]=Фільтр імпортування WPG до Flow
+Name[x-test]=xxFlow WPG Import Filterxx
 Name[zh_CN]=Flow 的 DPG 导入过滤器
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/x-wpg
