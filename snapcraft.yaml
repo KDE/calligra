@@ -247,6 +247,7 @@ parts:
         - libwps-dev
         - libxbase64-dev
         - libxml2-dev
+        - okular-dev
         - pkg-config
         - pstoedit
         - shared-mime-info
@@ -274,6 +275,7 @@ parts:
         - libpoppler132
         - libvisio-0.1-1
         - libwps-0.4-4
+        - okular-backends
         parse-info:
         - usr/share/metainfo/org.kde.calligrawords.appdata.xml
         - usr/share/metainfo/org.kde.calligrasheets.appdata.xml
