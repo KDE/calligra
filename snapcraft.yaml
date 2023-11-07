@@ -238,6 +238,8 @@ parts:
         - libopenjp2-7-dev
         - libphonon4qt5-dev
         - libphonon4qt5experimental-dev
+        - libpoppler-qt5-dev
+        - libpoppler-dev
         - libpng-dev
         - libqca-qt5-2-dev
         - libspnav-dev
@@ -273,6 +275,7 @@ parts:
         - libwpd-0.10-10
         - libwpg-0.3-3
         - libpoppler132
+        - libpoppler-qt5-1
         - libvisio-0.1-1
         - libwps-0.4-4
         - okular-backends
