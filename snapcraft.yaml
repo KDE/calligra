@@ -240,8 +240,14 @@ parts:
         - libphonon4qt5experimental-dev
         - libpoppler-qt5-dev
         - libpoppler-dev
+        - libpoppler-cpp-dev
+        - libpoppler-glib-dev
+        - libpoppler-private-dev
+        - libpoppler-cil-dev
+        - libpopplerkit-dev
         - libpng-dev
         - libqca-qt5-2-dev
+        - qtdeclarative5-dev
         - libspnav-dev
         - libvisio-dev
         - libwpd-dev
