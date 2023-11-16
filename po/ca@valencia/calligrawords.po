@@ -1563,7 +1563,7 @@ msgid ""
 "printing characters."
 msgstr ""
 "Activa o desactiva la visualització dels caràcters no imprimibles. <br/><br/"
-">Quan està seleccionada, Words mostra les tabulacions, els espais, els salts "
+">Quan se selecciona, Words mostrarà les tabulacions, els espais, els salts "
 "de línia i altres caràcters no imprimibles."
 
 #: part/KWView.cpp:301
@@ -1623,7 +1623,7 @@ msgid ""
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
 "Activa o desactiva la visualització de les vores de la taula. <br/><br/>Quan "
-"està activat, Words mostra totes les vores invisibles de la taula amb una "
+"se selecciona, Words mostrarà totes les vores invisibles de la taula amb una "
 "fina línia grisa."
 
 #: part/KWView.cpp:328
@@ -1642,8 +1642,8 @@ msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
-"Alterna la visualització dels límits de les seccions. <br/><br/>Quan està "
-"activat, qualsevol límit de secció s'indicarà amb parèntesis horitzontals "
+"Alterna la visualització dels límits de les seccions. <br/><br/>Quan se "
+"selecciona, qualsevol límit de secció s'indicarà amb parèntesis horitzontals "
 "grisos i fins."
 
 #: part/KWView.cpp:337
