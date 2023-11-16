@@ -4953,7 +4953,7 @@ msgstr "Color:"
 #: dialogs/FontWidget.ui:97
 #, kde-format
 msgid "If this is checked, the current cell text will be underlined."
-msgstr "Si açò està activat, el text de la cel·la actual se subratllarà."
+msgstr "Si se selecciona, se subratllarà el text de la cel·la actual."
 
 #. i18n: ectx: property (text), widget (QCheckBox, underline)
 #: dialogs/FontWidget.ui:100 ui/CellToolBase.cpp:209
@@ -4995,7 +4995,7 @@ msgstr ""
 #: dialogs/FontWidget.ui:138
 #, kde-format
 msgid "This will strike out the current cell text if this is checked."
-msgstr "Barrarà el text de la cel·la actual si està marcat."
+msgstr "Barrarà el text de la cel·la actual si se selecciona."
 
 #. i18n: ectx: property (text), widget (QCheckBox, strike)
 #: dialogs/FontWidget.ui:141
@@ -6266,7 +6266,7 @@ msgid ""
 "come back to their original size as before the merging. It has the same "
 "effect as Format -> Dissociate Cells."
 msgstr ""
-"Quan està marcada, té el mateix efecte que Format ->Fusiona cel·les. Heu de "
+"Quan se selecciona, té el mateix efecte que Format ->Fusiona cel·les. Heu de "
 "tindre seleccionades almenys dues cel·les consecutives. Llavors estes es "
 "fusionen en una de sola més gran.\n"
 "Quan està seleccionada una cel·la fusionada i desmarqueu açò, totes les "
@@ -6300,7 +6300,7 @@ msgid ""
 "If checked, the default height will be used for the cell instead of the "
 "value above."
 msgstr ""
-"Si està marcada, s'utilitzarà l'alçària predeterminada per a la cel·la en "
+"Si se selecciona, s'utilitzarà l'alçària predeterminada per a la cel·la en "
 "lloc del valor de dalt."
 
 #. i18n: ectx: property (text), widget (QCheckBox, defaultHeight)
@@ -6328,7 +6328,7 @@ msgid ""
 "If checked, the default width will be used for the cell instead of the value "
 "above."
 msgstr ""
-"Si està marcada, s'utilitzarà l'amplària predeterminada per a la cel·la en "
+"Si se selecciona, s'utilitzarà l'amplària predeterminada per a la cel·la en "
 "comptes del valor de dalt."
 
 #. i18n: ectx: property (text), widget (QCheckBox, defaultWidth)
@@ -6355,7 +6355,7 @@ msgid ""
 msgstr ""
 "Només estarà disponible si la rotació és de 0°.\n"
 "Ajusta el text, l'ajusta de manera que encaixe en la mida prèvia de cel·la. "
-"Si no està marcada, el text es quedarà en una línia i s'ajustarà la mida de "
+"Si no se selecciona, el text es quedarà en una línia i s'ajustarà la mida de "
 "la cel·la per a encabir el text.\n"
 "Text vertical disposa el vostre text verticalment."
 
@@ -6425,8 +6425,9 @@ msgid ""
 "checked (default), the cell content will be printed.\n"
 "Note that you can print it even if the cell is protected"
 msgstr ""
-"Si està marcada, el contingut de la cel·la no s'imprimirà. Si no està "
-"marcada (de manera predeterminada), el contingut de la cel·la s'imprimirà.\n"
+"Si se selecciona, no s'imprimirà el contingut de la cel·la. Si no se "
+"selecciona (de manera predeterminada), el contingut de la cel·la "
+"s'imprimirà.\n"
 "Cal tindre present que podeu imprimir encara que la cel·la estiga protegida."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_bDontPrint)
@@ -6467,7 +6468,7 @@ msgid ""
 "manual for more details in the Advanced Calligra Sheets chapter. When a cell "
 "is protected, its content cannot be changed."
 msgstr ""
-"Si està marcada, es protegirà el contingut de la cel·la. Este és el "
+"Si se selecciona, es protegirà el contingut de la cel·la. Este és el "
 "comportament predeterminat. Heu de protegir tot el full amb el menú Eines-> "
 "Protegix document -> Protegix full... per tal que funcione la protecció de "
 "la cel·la individual. Per a més detalls, vegeu el manual, al capítol Sheets "
@@ -6489,7 +6490,7 @@ msgid ""
 "contain formulae so the user cannot view the formula. And the sheet must be "
 "protected for this to work."
 msgstr ""
-"Quan està marcada, la cel·la encara és visible. En canvi, els seus "
+"Quan se selecciona, la cel·la encara serà visible. En canvi, els seus "
 "continguts no apareixeran en la barra de fórmula. Oculta fórmula només "
 "funciona amb cel·les que contenen fórmules, de manera que l'usuari no pot "
 "veure-la. I el full ha d'estar protegit perquè açò funcione."
@@ -19820,7 +19821,7 @@ msgid ""
 "Check this box if you want some backup files created. This is checked per "
 "default."
 msgstr ""
-"Marqueu esta casella si voleu crear fitxers de seguretat. De manera "
+"Seleccioneu esta casella si voleu crear fitxers de seguretat. De manera "
 "predeterminada, està marcat."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -20229,8 +20230,8 @@ msgid ""
 "If this box is checked cells containing comments will be marked by a small "
 "red triangle at the top right corner."
 msgstr ""
-"Si esta casella està marcada, les cel·les que tenen comentaris es marcaran "
-"amb un xicotet triangle roig en el cantó superior dret."
+"Si se selecciona, les cel·les que tenen comentaris es marcaran amb un "
+"xicotet triangle roig en el cantó superior dret."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showCommentIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:113
@@ -20246,10 +20247,9 @@ msgid ""
 "Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its "
 "normal form B3. This does not seem to be of much use at the moment."
 msgstr ""
-"Si esta casella està marcada, la cel·la de referència mostrada al final "
-"esquerra de la barra de fórmula es presentarà en mode LC (per exemple L2C3) "
-"en comptes de la manera normal, B3. Açò no pareix que servisca de gaire, de "
-"moment."
+"Si se selecciona, la cel·la de referència mostrada al final esquerra de la "
+"barra de fórmula es presentarà en mode LC (per exemple L2C3) en comptes de "
+"la manera normal, B3. Açò no pareix que servisca de gaire, de moment."
 
 #. i18n: ectx: property (text), widget (QCheckBox, useLCModeCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:123
@@ -20265,9 +20265,9 @@ msgid ""
 "sheet. Per default the page borders are not displayed. It is useful to see "
 "the page borders if you want to print your sheet."
 msgstr ""
-"Si marqueu esta opció, es dibuixaran les vores de la pàgina del full actual. "
-"De manera predeterminada, les vores de la pàgina no es mostren. Açò és útil "
-"per a veure les vores de la pàgina si voleu imprimir el vostre full."
+"Si seleccioneu esta opció, es dibuixaran les vores de la pàgina del full "
+"actual. De manera predeterminada, les vores de la pàgina no es mostren. Açò "
+"és útil per a veure les vores de la pàgina si voleu imprimir el vostre full."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showPageOutlineCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:133
@@ -20282,8 +20282,8 @@ msgid ""
 "Check this box and the first letter of any text you type in will "
 "automatically be converted to uppercase."
 msgstr ""
-"Marqueu esta casella i la primera lletra de qualsevol text que escriviu es "
-"convertirà en majúscula."
+"Seleccioneu esta casella i la primera lletra de qualsevol text que escriviu "
+"es convertirà en majúscula."
 
 #. i18n: ectx: property (text), widget (QCheckBox, capitalizeFirstLetterCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:143
@@ -20297,8 +20297,8 @@ msgstr "Con&vertix la primera lletra a majúscula"
 msgid ""
 "If this box is checked any cell containing the value zero will appear blank."
 msgstr ""
-"Si esta casella està marcada, qualsevol cel·la que continga el valor zero "
-"eixirà en blanc."
+"Si se selecciona, qualsevol cel·la que continga el valor zero eixirà en "
+"blanc."
 
 #. i18n: ectx: property (text), widget (QCheckBox, hideZeroCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:153
@@ -20313,8 +20313,8 @@ msgid ""
 "If this box is checked Calligra Sheets will display the actual formulae in "
 "cells rather than the results."
 msgstr ""
-"Si esta casella està marcada, Sheets de Calligra mostrarà la fórmula real en "
-"les cel·les en comptes dels resultats."
+"Si se selecciona, Sheets de Calligra mostrarà la fórmula real en les cel·les "
+"en comptes dels resultats."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:163
@@ -20329,8 +20329,8 @@ msgid ""
 "If this box is checked the column headings will show as numbers rather than "
 "as letters. Letters are default."
 msgstr ""
-"Si esta casella està marcada, les capçaleres de les columnes es mostraran "
-"com a números. De manera predeterminada, són lletres."
+"Si se selecciona, les capçaleres de les columnes es mostraran com a números. "
+"De manera predeterminada, són lletres."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showColumnAsNumbersCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:173
@@ -20346,9 +20346,9 @@ msgid ""
 "the bottom left corner of cells containing formulae. This is useful if you "
 "want to protect cells with formulae."
 msgstr ""
-"Si esta casella està marcada, Sheets de Calligra mostrarà un xicotet "
-"triangle blau en el cantó inferior esquerre de les cel·les que continguen "
-"una fórmula. Açò és útil si voleu protegir les cel·les amb fórmules."
+"Si se selecciona, Sheets de Calligra mostrarà un xicotet triangle blau en el "
+"cantó inferior esquerre de les cel·les que continguen una fórmula. Açò és "
+"útil si voleu protegir les cel·les amb fórmules."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showFormulaIndicatorCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:183
@@ -20363,9 +20363,9 @@ msgid ""
 "If checked, the grid (the cell limits) will be shown. This is the default. "
 "If unchecked, the grid will be hidden."
 msgstr ""
-"Si està marcada, es mostraran els límits de la quadrícula (els límits de les "
-"cel·les). Este és el valor predeterminat. Si el desmarqueu, s'ocultarà la "
-"quadrícula."
+"Si se selecciona, es mostraran els límits de la quadrícula (els límits de "
+"les cel·les). Este és el valor predeterminat. Si el desmarqueu, s'ocultarà "
+"la quadrícula."
 
 #. i18n: ectx: property (text), widget (QCheckBox, showGridCheckBox)
 #: part/dialogs/SheetPropertiesWidget.ui:193
