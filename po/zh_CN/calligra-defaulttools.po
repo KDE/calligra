@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-11-11 07:24\n"
+"PO-Revision-Date: 2023-11-19 03:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -410,7 +410,7 @@ msgstr "按下 CTRL 从中心调整大小。"
 #: defaulttool/ShapeRotateStrategy.cpp:49
 #, kde-format
 msgid "Press ALT to rotate in 45 degree steps."
-msgstr "按下 ALT 以 45 度旋转。"
+msgstr "按下 ALT 以每步 45 度旋转。"
 
 #: defaulttool/ShapeShearStrategy.cpp:169
 msgctxt "(qtundo-format)"
