@@ -152,7 +152,7 @@ QDateTime Localization::readDateTime(const QString &str, bool *ok) const
     QDateTime res;
 
     // Try all the formats.
-    for (const QString &format : qAsConst(d->dateTimeFormats)) {
+    for (const QString &format : std::as_const(d->dateTimeFormats)) {
         res = readDateTime(str, format, ok);
         if (res.isValid())
             break;
@@ -176,7 +176,7 @@ QDate Localization::readDate(const QString &str, bool *ok) const
     if (ok) *ok = false;
 
     // Try all the formats.
-    for (const auto &format : qAsConst(d->dateFormats)) {
+    for (const auto &format : std::as_const(d->dateFormats)) {
         res = readDate(str, format, ok);
         if (res.isValid())
             break;
@@ -202,7 +202,7 @@ Time Localization::readTime(const QString &str, bool *ok) const
     if (ok) *ok = false;
 
     // Try all the formats.
-    for (const auto &format : qAsConst(d->timeFormats)) {
+    for (const auto &format : std::as_const(d->timeFormats)) {
         res = readTime(str, format, ok);
         if (res.isValid()) {
             break;
