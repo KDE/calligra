@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-10-21 13:54\n"
+"PO-Revision-Date: 2023-11-19 03:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -415,17 +415,17 @@ msgstr "无法创建图像形状。"
 #: ui/KarbonView.cpp:612
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
-msgstr "水平镜像"
+msgstr "翻转 (水平)"
 
 #: ui/KarbonView.cpp:614
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
-msgstr "垂直镜像"
+msgstr "翻转 (垂直)"
 
 #: ui/KarbonView.cpp:616
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
-msgstr "水平和垂直镜像"
+msgstr "翻转 (水平/垂直)"
 
 #: ui/KarbonView.cpp:671
 msgctxt "(qtundo-format)"
@@ -516,12 +516,12 @@ msgstr "取消修剪对象(&U)"
 #: ui/KarbonView.cpp:921
 #, kde-format
 msgid "Mirror Vertically"
-msgstr "垂直镜像"
+msgstr "翻转 (垂直)"
 
 #: ui/KarbonView.cpp:925
 #, kde-format
 msgid "Mirror Horizontally"
-msgstr "水平镜像"
+msgstr "翻转 (水平)"
 
 #: ui/KarbonView.cpp:932
 #, kde-format
