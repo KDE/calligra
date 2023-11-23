@@ -1202,7 +1202,7 @@ msgstr "S'està recuperant el títol: 0% complet"
 #: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
 msgid "Fetch timed out"
-msgstr "La recuperació ha excedit el temps límit"
+msgstr "La recuperació ha excedit el temps"
 
 #: dialogs/LinkInsertionDialog.cpp:268
 #, no-c-format, kde-format
