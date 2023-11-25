@@ -34,4 +34,4 @@ Dependencies:
     'frameworks/kxmlgui': '@latest'
     'frameworks/threadweaver': '@latest'
     'graphics/kdiagram': '@latest'
-    'plasma/kactivities': '@latest'
+    'plasma/plasma-activities': '@latest'
