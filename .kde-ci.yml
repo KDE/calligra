@@ -34,4 +34,7 @@ Dependencies:
     'frameworks/kxmlgui': '@latest'
     'frameworks/threadweaver': '@latest'
     'graphics/kdiagram': '@latest'
+
+- 'on': ['Linux', 'FreeBSD']
+  'require':
     'plasma/plasma-activities': '@latest'
