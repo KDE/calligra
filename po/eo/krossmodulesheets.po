@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"PO-Revision-Date: 2023-11-26 20:12+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -63,7 +63,7 @@ msgstr ""
 #: ScriptingPart.cpp:72
 #, kde-format
 msgid "Scriptfile \"%1\" is in a temporary directory. Execution denied."
-msgstr "Skriptdosiero \"%1\" estas en provizora dosierujo. Ekzekuto neita."
+msgstr "Skriptdosiero \"%1\" estas en provizora dosierujo. Efektivigo neita."
 
 #: ScriptingPart.cpp:77
 #, kde-format
@@ -1431,7 +1431,7 @@ msgstr "Malsukcesis ĉerpi \"%1\" al \"%2\""
 
 #: scripts/xmlviewer.py:175
 msgid "<qt>Failed to execute program:<br><br>%1 \"%2\"</qt>"
-msgstr "<qt>Malsukcesis ekzekuti programon:<br><br>%1 \"%2\"</qt>"
+msgstr "<qt>Malsukcesis efektivigi programon:<br><br>%1 \"%2\"</qt>"
 
 #: scripts/xmlviewer.py:187
 msgid "Open with..."

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"PO-Revision-Date: 2023-11-26 20:12+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -108,7 +108,7 @@ msgstr ""
 #: Thesaurus.cpp:429
 #, kde-format
 msgid "<b>Error:</b> Failed to execute grep."
-msgstr "<b>Eraro:</b> Malsukcesis ekzekuti grep."
+msgstr "<b>Eraro:</b> Malsukcesis lanĉi grep."
 
 #: Thesaurus.cpp:581
 #, kde-format
