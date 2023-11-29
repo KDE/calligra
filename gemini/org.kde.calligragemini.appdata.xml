@@ -11,6 +11,7 @@
   <name xml:lang="de">Gemini</name>
   <name xml:lang="el">Gemini</name>
   <name xml:lang="en-GB">Gemini</name>
+  <name xml:lang="eo">Gemini</name>
   <name xml:lang="es">Gemini</name>
   <name xml:lang="et">Gemini</name>
   <name xml:lang="eu">Gemini</name>
@@ -41,6 +42,7 @@
   <summary xml:lang="de">Büroprogramme</summary>
   <summary xml:lang="el">Σουίτα γραφείου</summary>
   <summary xml:lang="en-GB">Office Suite</summary>
+  <summary xml:lang="eo">Oficeja Programaro</summary>
   <summary xml:lang="es">Suite ofimática</summary>
   <summary xml:lang="et">Kontoritöö komplekt</summary>
   <summary xml:lang="eu">Bulegorako suitea</summary>
@@ -70,6 +72,7 @@
     <p xml:lang="ca-valencia">La suite d'oficina de KDE per a dispositius 2 en 1.</p>
     <p xml:lang="el">Η σουίτα γραφείου του KDE για 2-σε-1 συσκευές.</p>
     <p xml:lang="en-GB">The KDE Office suite for 2-in-1 devices.</p>
+    <p xml:lang="eo">La KDE Office-serio por 2-en-1 aparatoj.</p>
     <p xml:lang="es">La suite ofimática de KDE para dispositivos 2 en 1.</p>
     <p xml:lang="et">KDE kontoritöö komplekt kaks-ühes seadmetele.</p>
     <p xml:lang="eu">KDEren Bulegorako suitea, 2-1ean diren gailuetarako.</p>
@@ -202,6 +205,7 @@
       <li xml:lang="ca-valencia">Característiques comunes</li>
       <li xml:lang="el">Κοινά χαρακτηριστικά</li>
       <li xml:lang="en-GB">Common Features</li>
+      <li xml:lang="eo">Komunaj Trajtoj</li>
       <li xml:lang="es">Características comunes</li>
       <li xml:lang="et">Ühised omadused</li>
       <li xml:lang="eu">Ezaugarri komunak</li>
@@ -257,6 +261,7 @@
       <li xml:lang="ca-valencia">Objectes incrustables</li>
       <li xml:lang="el">Ενσωματώσιμα αντικείμενα</li>
       <li xml:lang="en-GB">Embeddable Objects</li>
+      <li xml:lang="eo">Enkonstrueblaj Objektoj</li>
       <li xml:lang="es">Objetos incrustables</li>
       <li xml:lang="et">Põimitavad objektid</li>
       <li xml:lang="eu">Objektu txertagarriak</li>
@@ -314,6 +319,7 @@
       <li xml:lang="de">Standard-Dateiformat</li>
       <li xml:lang="el">Πρότυπος τύπος αποθήκευσης αρχείων</li>
       <li xml:lang="en-GB">Standard file format</li>
+      <li xml:lang="eo">Norma dosierformato</li>
       <li xml:lang="es">Formato de archivos estándar</li>
       <li xml:lang="et">Standardne failivorming</li>
       <li xml:lang="eu">Fitxategi-formatu estandarra</li>
@@ -374,6 +380,7 @@
       <caption xml:lang="ca-valencia">Una presentació carregada directament des del DropBox, en mode d'edició</caption>
       <caption xml:lang="el">Μια παρουσίαση φορτώθηκε απευθείας από το DropBox, σε λειτουργία επεξεργασίας</caption>
       <caption xml:lang="en-GB">A presentation loaded directly from DropBox, in Edit mode</caption>
+      <caption xml:lang="eo">Prezento ŝargita rekte de DropBox, en Redakta reĝimo</caption>
       <caption xml:lang="es">Una presentación cargada directamente de DropBox, en modo de edición</caption>
       <caption xml:lang="et">Otse DropBoxist laaditud esitlus muutmisrežiimis</caption>
       <caption xml:lang="eu">Zuzenean «DropBox»etik zamatutako aurkezpen bat, Editatzeko moduan</caption>
@@ -403,6 +410,7 @@
       <caption xml:lang="ca-valencia">Un document de text en la IU d'estil d'escriptori tradicional (mode creació)</caption>
       <caption xml:lang="el">Ένα έγγραφο κειμένοθστο παραδοσιακό στιλ επιφάνειας εργασίας (λειτουργία δημιουργίας)</caption>
       <caption xml:lang="en-GB">A text document in the traditional desktop style UI (Create mode)</caption>
+      <caption xml:lang="eo">Teksta dokumento en la tradicia labortablostila UI (Kreo-reĝimo)</caption>
       <caption xml:lang="es">Un documento de texto con la interfaz de estilo de escritorio tradicional (en modo de creación)</caption>
       <caption xml:lang="et">Tekstidokument tavapärases töölauastiilis kasutajaliideses (dokumendi loomise režiim)</caption>
       <caption xml:lang="eu">Testu dokumentu bat mahaigaineko erabiltzaile-interfaze estilo tradizionalean (Sortzeko modua)</caption>
@@ -432,6 +440,7 @@
       <caption xml:lang="ca-valencia">Un document de text en mode creació mostrant el quadro de les notes</caption>
       <caption xml:lang="el">Ένα έγγραφο κειμένου σε λειτουργία δημιουργίας με τον πίνακα σημειώσεων</caption>
       <caption xml:lang="en-GB">A text document in Create mode with the notes panel shown</caption>
+      <caption xml:lang="eo">Teksta dokumento en Kreo-reĝimo kun la notopanelo montrata</caption>
       <caption xml:lang="es">Un documento de texto en el modo de creación que muestra el panel de notas</caption>
       <caption xml:lang="et">Tekstidokument loomisrežiimis, näha on märkmete paneel</caption>
       <caption xml:lang="eu">Testu dokumentu bat Sortzeko moduan, oharren panela ikusten dela</caption>

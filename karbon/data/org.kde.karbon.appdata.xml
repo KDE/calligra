@@ -12,6 +12,7 @@
   <name xml:lang="de">Karbon</name>
   <name xml:lang="el">Karbon</name>
   <name xml:lang="en-GB">Karbon</name>
+  <name xml:lang="eo">Karbon</name>
   <name xml:lang="es">Karbon</name>
   <name xml:lang="et">Karbon</name>
   <name xml:lang="eu">Karbon</name>
@@ -44,6 +45,7 @@
   <summary xml:lang="de">Skalierbare Vektorgrafik</summary>
   <summary xml:lang="el">Κλιμακούμενα γραφικά</summary>
   <summary xml:lang="en-GB">Scalable Graphics</summary>
+  <summary xml:lang="eo">Skaleblaj Grafikaĵoj</summary>
   <summary xml:lang="es">Gráficos escalables</summary>
   <summary xml:lang="et">Vektorgraafika</summary>
   <summary xml:lang="eu">Grafiko eskalagarriak</summary>
@@ -109,6 +111,7 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="eo">Trajtoj:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="et">Omadused:</p>
     <p xml:lang="eu">Ezaugarriak:</p>
@@ -143,6 +146,7 @@
       <li xml:lang="de">Unterstützung für das Laden von ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="el">Υποστήριξη φόρτωσης για ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="en-GB">Loading support for ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="eo">Subteno por ŝargado de ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="es">Admite la carga de ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="et">ODG, SVG, WPG, WMF, EPS/PS laadimise toetamine</li>
       <li xml:lang="eu">ODG, SVG, WPG, WMF, EPS/PS zamatzeko euskarria</li>
@@ -176,6 +180,7 @@
       <li xml:lang="de">Unterstützung für das Schreiben von ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="el">Υποστήριξη εγγραφής για ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="en-GB">Writing support for ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="eo">Skriba subteno por ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="es">Admite la escritura de ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="et">ODG, SVG, PNG, PDF, WMF kirjutamine toetamine</li>
       <li xml:lang="eu">ODG, SVG, PNG, PDF, WMF idazteko euskarria</li>
@@ -209,6 +214,7 @@
       <li xml:lang="de">Anpassungsfähige Bedienungsoberfläche mit frei platzierbaren Werkzeugleisten und andockbaren Fenstern</li>
       <li xml:lang="el">Προσαρμόσιμο περιβάλλον χρήστη με ελεύθερη τοποθέτηση γραμμών εργαλείων και προσαρτήσεων</li>
       <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers</li>
+      <li xml:lang="eo">Agordigebla uzantinterfaco kun libere lokeblaj ilobretoj kaj dokeroj</li>
       <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y paneles que se pueden posicionar libremente en cualquier lugar.</li>
       <li xml:lang="et">Kohandatav kasutajaliides vabalt liigutatavate tööriistaribade ja dokkidega</li>
       <li xml:lang="eu">Norbere gustura egokigarria den erabiltzaile-interfazea, askatasunez koka daitezkeen tresna-barra eta zamaketariekin</li>
@@ -268,6 +274,7 @@
       <li xml:lang="ca-valencia">Eina avançada d'edició de camins amb una gran capacitat d'edició en el llenç</li>
       <li xml:lang="el">Προηγμένο εργαλείο επεξεργασίας διαδρομών με εξαιρετικές δυνατότητες επεξεργασίας στον καμβά</li>
       <li xml:lang="en-GB">Advanced path editing tool with great on-canvas editing capabilities</li>
+      <li xml:lang="eo">Altnivela vojoredaktilo kun bonegaj surkanvasaj redaktaj kapabloj</li>
       <li xml:lang="es">Herramienta de edición avanzada de rutas con grandes capacidades de edición en el lienzo</li>
       <li xml:lang="et">Täiustatud kompleksjoone muutmise tööriist suurepäraste otse lõuendil redigeerimise võimalustega</li>
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
@@ -468,6 +475,7 @@
       <li xml:lang="de">Erweiterbar durch das Schreiben von Modulen für neue Werkzeuge, Objekte und andockbaren Dialogen</li>
       <li xml:lang="el">Επεκτάσιμο με τη συγγραφή προσθέτων για νέα εργαλεία, σχήματα και συστατικά προσάρτησης</li>
       <li xml:lang="en-GB">Extensible by writing plugins for new tools, shapes and dockers</li>
+      <li xml:lang="eo">Etendebla skribante kromaĵojn por novaj iloj, formoj kaj dockers</li>
       <li xml:lang="es">Extensible mediante la escritura de complementos para nuevas herramientas, formas y paneles</li>
       <li xml:lang="et">Laiendamisvõimalus pluginate kirjutamise abil uute tööriistade, kujundite ja dokkide tarbeks</li>
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
