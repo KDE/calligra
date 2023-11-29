@@ -1,13 +1,16 @@
-# Translation of PluginShape into esperanto.
+# Translation of calligra_shape_plugin.pot into esperanto.
+# Copyright (C) 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2010.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PluginShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2010-06-20 20:01+0200\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -24,20 +27,14 @@ msgstr "Nekonata"
 #: PluginShape.cpp:40
 #, kde-format
 msgid "Plugin of mimetype: %1"
-msgstr ""
+msgstr "Kromaĵo de MIME-tipo: %1"
 
 #: PluginShapeFactory.cpp:22
 #, kde-format
 msgid "Plugin Placeholder"
-msgstr ""
+msgstr "Kromprograma Lokokupilo"
 
 #: PluginShapeFactory.cpp:24
 #, kde-format
 msgid "Plugin Placeholder, embedded or fullscreen"
-msgstr ""
-
-#, fuzzy
-#~| msgid "Unknown"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Unknown"
-#~ msgstr "Nekonata"
+msgstr "Kromprograma Lokokupilo, enkorpigita aŭ plenekrana"

@@ -1,45 +1,48 @@
 # Translation of koconverter into esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: koconverter\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: pology\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Axel Rousseau"
+msgstr "Axel Rousseau,Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "axel@esperanto-jeunes.org"
+msgstr "axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
 
 #: calligraconverter.cpp:144
 #, kde-format
 msgid "CalligraConverter"
-msgstr ""
+msgstr "CalligraConverter"
 
 #: calligraconverter.cpp:146
 #, kde-format
 msgid "Calligra Document Converter"
-msgstr ""
+msgstr "Calligra Dokumenta Konvertilo"
 
 #: calligraconverter.cpp:148
 #, kde-format
 msgid "Copyright 2001-%1 Calligra developers"
-msgstr ""
+msgstr "Kopirajto 2001-%1 Calligra programistoj"
 
 #: calligraconverter.cpp:149
 #, kde-format
@@ -69,103 +72,59 @@ msgstr "Eligdosiero"
 #: calligraconverter.cpp:160
 #, kde-format
 msgid "Make a backup of the destination file"
-msgstr ""
+msgstr "Fari sekurkopion de la celdosiero"
 
 #: calligraconverter.cpp:161
 #, kde-format
 msgid "Batch mode: do not show dialogs"
-msgstr ""
+msgstr "Stapla reĝimo: ne montri dialogojn"
 
 #: calligraconverter.cpp:162
 #, kde-format
 msgid "Interactive mode: show dialogs (default)"
-msgstr ""
+msgstr "Interaga reĝimo: montri dialogojn (defaŭlto)"
 
 #: calligraconverter.cpp:163
 #, kde-format
 msgid "Mimetype of the output file"
-msgstr ""
+msgstr "Mimetipo de la eligdosiero"
 
 #: calligraconverter.cpp:166
 #, kde-format
 msgid "The print orientation. This could be either Portrait or Landscape."
-msgstr ""
+msgstr "La presa orientiĝo. Ĉi tio povus esti aŭ Portreto aŭ Pejzaĝo."
 
 #: calligraconverter.cpp:167
 #, kde-format
 msgid "The paper size. A4, Legal, Letter, ..."
-msgstr ""
+msgstr "La papera grandeco. A4, Legal, Letter, ..."
 
 #: calligraconverter.cpp:168
 #, kde-format
 msgid "The size of the paper margin. By default this is 0.2."
-msgstr ""
+msgstr "La grandeco de la papera rando. Defaŭlte ĉi tio estas 0.2."
 
 #: calligraconverter.cpp:175
 #, kde-format
 msgid "Two arguments required"
-msgstr ""
+msgstr "Du argumentoj necesas"
 
 #: calligraconverter.cpp:203
 #, kde-format
 msgid "Mimetype for input file %1 not found!"
-msgstr ""
+msgstr "Mimetipo por eniga dosiero %1 ne trovita!"
 
 #: calligraconverter.cpp:212
 #, kde-format
 msgid "Mimetype not found %1"
-msgstr ""
+msgstr "Mimetipo ne trovita %1"
 
 #: calligraconverter.cpp:218
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr ""
+msgstr "Mimetype ne trovita, provu uzi la -mimetype opcion"
 
 #: calligraconverter.cpp:242
 #, kde-format
 msgid "*** The conversion failed! ***"
-msgstr ""
-
-#, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Axel Rousseau"
-
-#, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "axel@esperanto-jeunes.org"
-
-#, fuzzy
-#~| msgid "David Faure"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "David Faure"
-#~ msgstr "David FAURE"
-
-#, fuzzy
-#~| msgid "Nicolas Goutte"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Nicolas Goutte"
-#~ msgstr "Nicolas Goutte"
-
-#, fuzzy
-#~| msgid "Dan Leinir Turthra Jensen"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dan Leinir Turthra Jensen"
-#~ msgstr "Dan Leinir Turthra Jensen"
-
-#, fuzzy
-#~| msgid "Input file"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Input file"
-#~ msgstr "Enigdosiero"
-
-#, fuzzy
-#~| msgid "Output file"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Output file"
-#~ msgstr "Eligdosiero"
+msgstr "*** La konvertiĝo malsukcesis! ***"

@@ -1,15 +1,17 @@
-# translation of kword.po to Esperanto
+# translation of calligrawords.pot to Esperanto
 # Copyright (C) 2002 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Steffen Pietsch <Steffen.Pietsch@BerlinOnline.de>, 2002.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 # Minuskloj: ĉ ĝ ĵ ĥ ŝ ŭ   Majuskloj: Ĉ Ĝ Ĵ Ĥ Ŝ Ŭ
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: kword\n"
+"Project-Id-Version: calligrawords\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2007-10-31 23:31+0100\n"
+"PO-Revision-Date: 2023-06-15 21:48+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -29,7 +31,7 @@ msgstr "&Dosiero"
 #: part/calligrawords.rc:11 part/calligrawords_readonly.rc:7
 #, kde-format
 msgid "&Edit"
-msgstr "&Redakti"
+msgstr "R&edakti"
 
 #. i18n: ectx: Menu (view)
 #: part/calligrawords.rc:30 part/calligrawords_readonly.rc:13
@@ -42,21 +44,19 @@ msgstr "&Rigardi"
 #: part/calligrawords.rc:32 part/calligrawords_readonly.rc:15
 #, kde-format
 msgid "&Display Mode"
-msgstr ""
+msgstr "&Vidiga Reĝimo"
 
 #. i18n: ectx: Menu (semantic)
 #: part/calligrawords.rc:62
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Semantics"
-msgstr "Statistiko"
+msgstr "Semantiko"
 
 #. i18n: ectx: Menu (format)
 #: part/calligrawords.rc:74
-#, fuzzy, kde-format
-#| msgid "&Page Mode"
+#, kde-format
 msgid "S&tyles"
-msgstr "&Paĝmoduso"
+msgstr "S&tiloj"
 
 #. i18n: ectx: Menu (settings)
 #: part/calligrawords.rc:78
@@ -68,7 +68,7 @@ msgstr "&Agordo"
 #: part/calligrawords.rc:79
 #, kde-format
 msgid "Spellcheck"
-msgstr "Literumado"
+msgstr "Literumkontrolo"
 
 #. i18n: ectx: ToolBar (edit_toolbar)
 #: part/calligrawords.rc:92
@@ -80,14 +80,13 @@ msgstr "Redakti"
 #: part/calligrawords.rc:148
 #, kde-format
 msgid "Spell Check Result"
-msgstr "Rezulto de literumado"
+msgstr "Rezulto de literumkontrolo"
 
 #. i18n: ectx: Menu (variable_list)
 #: part/calligrawords.rc:175
-#, fuzzy, kde-format
-#| msgid "&Variable"
+#, kde-format
 msgid "Change Variable To"
-msgstr "&Variablo"
+msgstr "Ŝanĝi Variablon Al"
 
 #. i18n: ectx: Menu (tools)
 #: part/calligrawords_readonly.rc:30
@@ -96,45 +95,35 @@ msgid "&Tools"
 msgstr "&Iloj"
 
 #: part/commands/KWChangePageStyleCommand.cpp:11
-#, fuzzy
-#| msgid "&Page Mode"
 msgctxt "(qtundo-format)"
 msgid "Set Page Style"
-msgstr "&Paĝmoduso"
+msgstr "Agordu Paĝan Stilon"
 
 #: part/commands/KWNewPageStyleCommand.cpp:12
-#, fuzzy
-#| msgid "Insert Page"
 msgctxt "(qtundo-format)"
 msgid "Insert Page Style"
-msgstr "Enmeti paĝon"
+msgstr "Enigu Paĝan Stilon"
 
 #: part/commands/KWPageStylePropertiesCommand.cpp:16
-#, fuzzy
-#| msgid "Frame Properties"
 msgctxt "(qtundo-format)"
 msgid "Page Properties"
-msgstr "Kadroagordo"
+msgstr "Paĝaj Ecoj"
 
 #: part/commands/KWShapeCreateCommand.cpp:42
-#, fuzzy
-#| msgid "Create Text Frame"
 msgctxt "(qtundo-format)"
 msgid "Create shape"
-msgstr "Kreu tekstkadron"
+msgstr "Krei formon"
 
 #: part/dialogs/KWAnchoringProperties.cpp:422
-#, fuzzy, kde-format
-#| msgid "Frame is inline"
+#, kde-format
 msgid "Baseline"
-msgstr "Kadro estas enlinia"
+msgstr "Bazlinio"
 
 #: part/dialogs/KWAnchoringProperties.cpp:423
 #: part/dialogs/KWAnchoringProperties.cpp:434
-#, fuzzy, kde-format
-#| msgid "Create"
+#, kde-format
 msgid "Character"
-msgstr "Krei"
+msgstr "Signo"
 
 #: part/dialogs/KWAnchoringProperties.cpp:426
 #, kde-format
@@ -143,112 +132,103 @@ msgstr "Linio"
 
 #: part/dialogs/KWAnchoringProperties.cpp:427
 #: part/dialogs/KWAnchoringProperties.cpp:435
-#, fuzzy, kde-format
-#| msgid "Provide main text area"
+#, kde-format
 msgid "Page (entire) area"
-msgstr "Doni ĉefan tekstareon"
+msgstr "Paĝa (tuta) areo"
 
 #: part/dialogs/KWAnchoringProperties.cpp:428
 #: part/dialogs/KWAnchoringProperties.cpp:436
-#, fuzzy, kde-format
-#| msgid "Provide main text area"
+#, kde-format
 msgid "Page text area"
-msgstr "Doni ĉefan tekstareon"
+msgstr "Paĝa tekstareo"
 
 #: part/dialogs/KWAnchoringProperties.cpp:429
 #: part/dialogs/KWAnchoringProperties.cpp:443
-#, fuzzy, kde-format
-#| msgid "Paragraph"
+#, kde-format
 msgid "Paragraph area"
-msgstr "Paragrafo"
+msgstr "Alinea areo"
 
 #: part/dialogs/KWAnchoringProperties.cpp:430
 #: part/dialogs/KWAnchoringProperties.cpp:444
-#, fuzzy, kde-format
-#| msgid "Provide main text area"
+#, kde-format
 msgid "Paragraph text area"
-msgstr "Doni ĉefan tekstareon"
+msgstr "Alinea tekstareo"
 
 #: part/dialogs/KWAnchoringProperties.cpp:437
-#, fuzzy, kde-format
-#| msgid "Frame &Borders"
+#, kde-format
 msgid "Left page border"
-msgstr "Kadro&limoj"
+msgstr "Maldekstra paĝa rando"
 
 #: part/dialogs/KWAnchoringProperties.cpp:438
-#, fuzzy, kde-format
-#| msgid "Frame &Borders"
+#, kde-format
 msgid "Right page border"
-msgstr "Kadro&limoj"
+msgstr "Dekstra paĝa rando"
 
 #: part/dialogs/KWAnchoringProperties.cpp:445
-#, fuzzy, kde-format
-#| msgid "Frame &Borders"
+#, kde-format
 msgid "Right paragraph border"
-msgstr "Kadro&limoj"
+msgstr "Dekstra alinea limo"
 
 #: part/dialogs/KWAnchoringProperties.cpp:446
-#, fuzzy, kde-format
-#| msgid "Frame &Borders"
+#, kde-format
 msgid "Left paragraph border"
-msgstr "Kadro&limoj"
+msgstr "Maldekstra alinea limo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWAnchoringProperties.ui:17
 #, kde-format
 msgid "Shape relation to text is:"
-msgstr ""
+msgstr "Forma rilato al teksto estas:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:23
 #, kde-format
 msgid "Inline with text (behaves as a character)"
-msgstr ""
+msgstr "Konforma al teksto (kondutas kiel signo)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWAnchoringProperties.ui:30
 #, kde-format
 msgid "Floating, but anchored to a character position"
-msgstr ""
+msgstr "Flosanta, sed ankrita al signa pozicio"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWAnchoringProperties.ui:37
 #, kde-format
 msgid "Floating, but anchored to a paragraph"
-msgstr ""
+msgstr "Flosanta, sed ankrita al alineo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWAnchoringProperties.ui:44
 #, kde-format
 msgid "Floating free (not anchored to text)"
-msgstr ""
+msgstr "Flosante libera (ne ankrita al teksto)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVert)
 #: part/dialogs/KWAnchoringProperties.ui:54
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Vertical Positioning"
-msgstr "Pozicio"
+msgstr "Vertikala Pozicio"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rTop)
 #: part/dialogs/KWAnchoringProperties.ui:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Top align with:"
-msgstr "Dekstre"
+msgstr "Supre vicigi kun:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVCenter)
 #. i18n: ectx: property (text), widget (QRadioButton, rHCenter)
 #: part/dialogs/KWAnchoringProperties.ui:77
 #: part/dialogs/KWAnchoringProperties.ui:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Center align with:"
-msgstr "Dekstre"
+msgstr "Centre vicigi kun:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rBottom)
 #: part/dialogs/KWAnchoringProperties.ui:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bottom align with:"
-msgstr "Dekstre"
+msgstr "Malsupre vicigi kun:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rVOffset)
 #. i18n: ectx: property (text), widget (QRadioButton, rHOffset)
@@ -262,78 +242,71 @@ msgstr "Deŝovo"
 #. i18n: ectx: property (text), widget (QLabel, lHOffset)
 #: part/dialogs/KWAnchoringProperties.ui:119
 #: part/dialogs/KWAnchoringProperties.ui:228
-#, fuzzy, kde-format
-#| msgid "From:"
+#, kde-format
 msgid "from:"
-msgstr "De:"
+msgstr "de:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHoriz)
 #: part/dialogs/KWAnchoringProperties.ui:163
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Horizontal Positioning"
-msgstr "Pozicio"
+msgstr "Horizontala Pozicio"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rLeft)
 #: part/dialogs/KWAnchoringProperties.ui:169
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left align with:"
-msgstr "Dekstre"
+msgstr "Maldekstre vicigi kun:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rRight)
 #: part/dialogs/KWAnchoringProperties.ui:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right align with:"
-msgstr "Dekstre"
+msgstr "Dekstre vicigi kun:"
 
 #: part/dialogs/KWConfigureDialog.cpp:28
-#, fuzzy, kde-format
-#| msgid "Configure..."
+#, kde-format
 msgid "Configure"
-msgstr "Agordi..."
+msgstr "Agordi"
 
 #: part/dialogs/KWConfigureDialog.cpp:32 part/dialogs/KWConfigureDialog.cpp:33
 #, kde-format
 msgid "Misc"
-msgstr ""
+msgstr "Misc"
 
 #: part/dialogs/KWConfigureDialog.cpp:37 part/dialogs/KWConfigureDialog.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Style name"
-#| msgid "Grid 1"
+#, kde-format
 msgid "Grid"
-msgstr "Krado 1"
+msgstr "Krado"
 
 #: part/dialogs/KWConfigureDialog.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab Document settings page"
 msgid "Document"
 msgstr "Dokumento"
 
 #: part/dialogs/KWConfigureDialog.cpp:45
-#, fuzzy, kde-format
-#| msgid "Store Settings"
+#, kde-format
 msgid "Document Settings"
-msgstr "Konservi agordon"
+msgstr "Dokumentaj Agordoj"
 
 #: part/dialogs/KWConfigureDialog.cpp:49
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
-msgstr ""
+msgstr "Aŭtoro"
 
 #: part/dialogs/KWConfigureDialog.cpp:50
 #, kde-format
 msgid "Author"
-msgstr ""
+msgstr "Aŭtoro"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, CreateBookmark)
 #: part/dialogs/KWCreateBookmark.ui:13
 #: part/dialogs/KWCreateBookmarkDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Create a new page"
+#, kde-format
 msgid "Create New Bookmark"
-msgstr "Krei novan paĝon"
+msgstr "Krei Novan Legomarkon"
 
 #. i18n: ectx: property (text), widget (QLabel, lExplain)
 #: part/dialogs/KWCreateBookmark.ui:20
@@ -342,6 +315,8 @@ msgid ""
 "Bookmarks allow you to jump between parts of your document.\n"
 "Please provide the name of your bookmark."
 msgstr ""
+"Legosignoj permesas vin salti inter partoj de via dokumento.\n"
+"Bonvolu doni la nomon de via legosigno."
 
 #. i18n: ectx: property (text), widget (QLabel, lName)
 #: part/dialogs/KWCreateBookmark.ui:38
@@ -362,15 +337,14 @@ msgid "Column spacing:"
 msgstr "Kolumnointerspaco:"
 
 #: part/dialogs/KWFrameConnectSelector.cpp:101
-#, fuzzy, kde-format
-#| msgid "Fra&mes"
+#, kde-format
 msgid "frameset"
-msgstr "&Kadroj"
+msgstr "kadraro"
 
 #: part/dialogs/KWFrameConnectSelector.cpp:126
 #, kde-format
 msgid "No framesets in document"
-msgstr ""
+msgstr "Neniuj kadraroj en la dokumento"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: part/dialogs/KWFrameConnectSelector.ui:67
@@ -380,16 +354,15 @@ msgstr "Nomo de la kadraro:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: part/dialogs/KWFrameConnectSelector.ui:82
-#, fuzzy, kde-format
-#| msgid "Create a new frameset"
+#, kde-format
 msgid "Create a new frameset:"
-msgstr "Kreu novan kadraron"
+msgstr "Krei novan kadraron:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, existingRadio)
 #: part/dialogs/KWFrameConnectSelector.ui:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select existing frameset to connect to:"
-msgstr "Elektu ekzistantan kadraron por ligi la kadron al"
+msgstr "Elekti ekzistantan kadraron al kiu konekti:"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, framesList)
 #: part/dialogs/KWFrameConnectSelector.ui:122
@@ -398,10 +371,9 @@ msgid "Frameset Name"
 msgstr "Kadraronomo"
 
 #: part/dialogs/KWFrameDialog.cpp:29
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Smart Positioning"
-msgstr "Pozicio"
+msgstr "Inteligenta Poziciado"
 
 #: part/dialogs/KWFrameDialog.cpp:33 part/dialogs/KWShapeConfigFactory.cpp:62
 #, kde-format
@@ -414,156 +386,141 @@ msgid "Connect Text Frames"
 msgstr "Kunligi tekstkadrojn"
 
 #: part/dialogs/KWFrameDialog.cpp:66
-#, fuzzy
-#| msgid "Frame Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Shape Properties"
-msgstr "Kadroagordo"
+msgstr "Ŝanĝi Formajn Trajtojn"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAnchor)
 #: part/dialogs/KWInsertImage.ui:17
 #, kde-format
 msgid "Anchor to..."
-msgstr ""
+msgstr "Ankri al..."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorPage)
 #: part/dialogs/KWInsertImage.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Page"
 msgstr "&Paĝo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorParagraph)
 #: part/dialogs/KWInsertImage.ui:30
-#, fuzzy, kde-format
-#| msgid "Paragraph"
+#, kde-format
 msgid "Para&graph"
-msgstr "Paragrafo"
+msgstr "Ali&neo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorToCharacter)
 #: part/dialogs/KWInsertImage.ui:40
-#, fuzzy, kde-format
-#| msgid "Create"
+#, kde-format
 msgid "&To Character"
-msgstr "Krei"
+msgstr "&Al Signo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAnchorAsCharacter)
 #: part/dialogs/KWInsertImage.ui:47
-#, fuzzy, kde-format
-#| msgid "Create"
+#, kde-format
 msgid "&As Character"
-msgstr "Krei"
+msgstr "&Kiel Signo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpHAlign)
 #: part/dialogs/KWInsertImage.ui:59
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Horizontal Alignment"
-msgstr "Pozicio"
+msgstr "Horizontala Vicigo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignLeft)
 #: part/dialogs/KWInsertImage.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Left"
-msgstr "Maldekstre"
+msgstr "&Maldekstre"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignCenter)
 #: part/dialogs/KWInsertImage.ui:75
 #, kde-format
 msgid "&Center"
-msgstr ""
+msgstr "&Centre"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignRight)
 #: part/dialogs/KWInsertImage.ui:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Right"
-msgstr "Dekstre"
+msgstr "&Dekstre"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpVAlign)
 #: part/dialogs/KWInsertImage.ui:92
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Vertical Alignment"
-msgstr "Pozicio"
+msgstr "Vertikala vicigo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignTop)
 #: part/dialogs/KWInsertImage.ui:98
 #, kde-format
 msgid "&Top"
-msgstr ""
+msgstr "&Supro"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignMiddle)
 #: part/dialogs/KWInsertImage.ui:105
 #, kde-format
 msgid "&Middle"
-msgstr ""
+msgstr "&Mezo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rAlignBottom)
 #: part/dialogs/KWInsertImage.ui:115
-#, fuzzy, kde-format
-#| msgid "Bottom:"
+#, kde-format
 msgid "&Bottom"
-msgstr "Sube:"
+msgstr "&Malsupro"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpWrap)
 #: part/dialogs/KWInsertImage.ui:127
-#, fuzzy, kde-format
-#| msgid "Text Run Around"
+#, kde-format
 msgid "Text Wrap-around"
-msgstr "Teksto ĉirkaŭfluas"
+msgstr "Teksta ĉirkaŭvolvo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, runThrough)
 #: part/dialogs/KWInsertImage.ui:133 part/dialogs/KWRunAroundProperties.ui:26
-#, fuzzy, kde-format
-#| msgid "Text will run &through this frame"
+#, kde-format
 msgid "Run through this shape"
-msgstr "&Iras tra tiun ĉi kadron"
+msgstr "Ruli tra ĉi tiu formo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRunaround)
 #: part/dialogs/KWInsertImage.ui:140 part/dialogs/KWRunAroundProperties.ui:33
-#, fuzzy, kde-format
-#| msgid "Text will run &through this frame"
+#, kde-format
 msgid "Skip below this shape"
-msgstr "&Iras tra tiun ĉi kadron"
+msgstr "Salti sub ĉi tiun formon"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: part/dialogs/KWInsertImage.ui:147 part/dialogs/KWRunAroundProperties.ui:40
-#, fuzzy, kde-format
-#| msgid "Text will run &through this frame"
+#, kde-format
 msgid "Run on left side of this shape"
-msgstr "&Iras tra tiun ĉi kadron"
+msgstr "Ruli sur la maldekstra flanko de ĉi tiu formo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, right)
 #: part/dialogs/KWInsertImage.ui:154 part/dialogs/KWRunAroundProperties.ui:47
-#, fuzzy, kde-format
-#| msgid "Text will run &through this frame"
+#, kde-format
 msgid "Run on right side of this shape"
-msgstr "&Iras tra tiun ĉi kadron"
+msgstr "Ruli dekstre de ĉi tiu formo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, longest)
 #: part/dialogs/KWInsertImage.ui:161 part/dialogs/KWRunAroundProperties.ui:54
-#, fuzzy, kde-format
-#| msgid "Text will run &through this frame"
+#, kde-format
 msgid "Run on longest side of this shape"
-msgstr "&Iras tra tiun ĉi kadron"
+msgstr "Ruli sur la plej longa flanko de ĉi tiu formo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, both)
 #: part/dialogs/KWInsertImage.ui:168 part/dialogs/KWRunAroundProperties.ui:61
-#, fuzzy, kde-format
-#| msgid "Text will run &through this frame"
+#, kde-format
 msgid "Run on both sides of this shape"
-msgstr "&Iras tra tiun ĉi kadron"
+msgstr "Ruli ambaŭflanke de ĉi tiu formo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, enough)
 #: part/dialogs/KWInsertImage.ui:180 part/dialogs/KWRunAroundProperties.ui:73
 #, kde-format
 msgid "Run on sides that are wider than:"
-msgstr ""
+msgstr "Ruli sur flankoj pli larĝaj ol:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWInsertImage.ui:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Distance Between Shape and Text:"
-msgstr "Distanco inter kadro kaj teksto (%1):"
+msgstr "Distanco Inter Formo kaj Teksto:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, columnsTab)
 #: part/dialogs/KWPageSettingsDialog.cpp:37 part/dialogs/KWStartupWidget.ui:29
@@ -572,110 +529,100 @@ msgid "Columns"
 msgstr "Kolumnoj"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:42
-#, fuzzy, kde-format
-#| msgid "&Page Mode"
+#, kde-format
 msgid "Style"
-msgstr "&Paĝmoduso"
+msgstr "Stilo"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:48
-#, fuzzy, kde-format
-#| msgid "Closing"
+#, kde-format
 msgid "Clone"
-msgstr "Fermanta"
+msgstr "Kloni"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:51 part/KWView.cpp:285
-#, fuzzy, kde-format
-#| msgid "Delete Page"
+#, kde-format
 msgid "Delete"
-msgstr "Forigi paĝon"
+msgstr "Forigi"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:137
-#, fuzzy
-#| msgid "&Page Mode"
 msgctxt "(qtundo-format)"
 msgid "Change Page Style"
-msgstr "&Paĝmoduso"
+msgstr "Ŝanĝi Paĝan Stilon"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:211
 #, kde-format
 msgid "Add a new page style with the name:"
-msgstr ""
+msgstr "Aldoni novan paĝstilon kun la nomo:"
 
 #: part/dialogs/KWPageSettingsDialog.cpp:211
-#, fuzzy, kde-format
-#| msgid "&Page Mode"
+#, kde-format
 msgid "Clone Page Style"
-msgstr "&Paĝmoduso"
+msgstr "Kloni Paĝan Stilon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: part/dialogs/KWRunAroundProperties.ui:17
 #, kde-format
 msgid "Text elsewhere will:"
-msgstr ""
+msgstr "Teksto aliloke:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: part/dialogs/KWRunAroundProperties.ui:105
 #, kde-format
 msgid "The shape affects the text by its:"
-msgstr ""
+msgstr "La formo influas la tekston per sia:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, box)
 #: part/dialogs/KWRunAroundProperties.ui:114
 #, kde-format
 msgid "Bounding box"
-msgstr ""
+msgstr "Limskatolo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, outside)
 #: part/dialogs/KWRunAroundProperties.ui:121
 #, kde-format
 msgid "Contour"
-msgstr ""
+msgstr "Konturo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: part/dialogs/KWRunAroundProperties.ui:131
 #, kde-format
 msgid "Shape and text is separated:"
-msgstr ""
+msgstr "Formo kaj teksto estas apartigitaj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: part/dialogs/KWRunAroundProperties.ui:140
-#, fuzzy, kde-format
-#| msgid "Left:"
+#, kde-format
 msgid "Left by:"
-msgstr "Maldekstre:"
+msgstr "Maldekstre je:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/KWRunAroundProperties.ui:169
 #, kde-format
 msgid "Above by:"
-msgstr ""
+msgstr "Supre je:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: part/dialogs/KWRunAroundProperties.ui:198
 #, kde-format
 msgid "Below by:"
-msgstr ""
+msgstr "Malsupre je:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: part/dialogs/KWRunAroundProperties.ui:227
-#, fuzzy, kde-format
-#| msgid "Right:"
+#, kde-format
 msgid "Right by:"
-msgstr "Dekstre:"
+msgstr "Dekstre je:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: part/dialogs/KWSelectBookmark.ui:20
-#, fuzzy, kde-format
-#| msgid "&Username:"
+#, kde-format
 msgid "&Rename"
-msgstr "&Uzantonomo:"
+msgstr "&Renomi"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: part/dialogs/KWSelectBookmark.ui:27
-#, fuzzy, kde-format
-#| msgid "Delete Page"
+#, kde-format
 msgid "&Delete"
-msgstr "Forigi paĝon"
+msgstr "&Forigi"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:68
 #, kde-format
@@ -685,18 +632,17 @@ msgstr "Alinomi la legosignon"
 #: part/dialogs/KWSelectBookmarkDialog.cpp:69
 #, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr ""
+msgstr "Bonvolu doni novan nomon por la legosigno"
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:77
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr ""
+msgstr "Legosigno kun la nomo \"%1\" jam ekzistas."
 
 #: part/dialogs/KWSelectBookmarkDialog.cpp:109
-#, fuzzy, kde-format
-#| msgid "Rename Bookmark"
+#, kde-format
 msgid "Select Bookmark"
-msgstr "Alinomi la legosignon"
+msgstr "Elekti Legomarkon"
 
 #: part/dialogs/KWShapeConfigFactory.cpp:44
 #, kde-format
@@ -705,10 +651,9 @@ msgstr "Geometrio"
 
 #. i18n: ectx: attribute (title), widget (QWidget, sizeTab)
 #: part/dialogs/KWStartupWidget.ui:24
-#, fuzzy, kde-format
-#| msgid "Page Break"
+#, kde-format
 msgid "Page Size && Margins"
-msgstr "Paĝrompo"
+msgstr "Paĝa Grandeco && Marĝenoj"
 
 #. i18n: ectx: property (text), widget (QPushButton, createButton)
 #: part/dialogs/KWStartupWidget.ui:71 part/KWView.cpp:383
@@ -719,7 +664,7 @@ msgstr "Krei"
 #: part/dockers/KWDebugDocker.cpp:18
 #, kde-format
 msgid "Debug"
-msgstr "Sencimigu"
+msgstr "Sencimigi"
 
 #: part/dockers/KWNavigationDocker.cpp:20
 #, kde-format
@@ -727,19 +672,19 @@ msgid "Navigation"
 msgstr "Navigado"
 
 #: part/dockers/KWNavigationWidget.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page #"
-msgstr "&Paĝo"
+msgstr "Paĝo n-ro"
 
 #: part/dockers/KWNavigationWidget.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Section"
-msgstr "Instrukcioj:"
+msgstr "Sekcio"
 
 #: part/dockers/KWRdfDocker.cpp:39
 #, kde-format
 msgid "RDF"
-msgstr ""
+msgstr "RDF"
 
 #: part/dockers/KWStatisticsDocker.cpp:20
 #, kde-format
@@ -762,16 +707,14 @@ msgid "Syllables:"
 msgstr "Silaboj:"
 
 #: part/dockers/KWStatisticsWidget.cpp:137
-#, fuzzy, kde-format
-#| msgid "Characters including spaces:"
+#, kde-format
 msgid "Characters (spaces):"
-msgstr "Signoj inklude de spacoj:"
+msgstr "Signoj (spacoj):"
 
 #: part/dockers/KWStatisticsWidget.cpp:140
-#, fuzzy, kde-format
-#| msgid "Characters including spaces:"
+#, kde-format
 msgid "Characters (no spaces):"
-msgstr "Signoj inklude de spacoj:"
+msgstr "Signoj (sen spacoj):"
 
 #: part/dockers/KWStatisticsWidget.cpp:143
 #, kde-format
@@ -781,80 +724,71 @@ msgstr "Linioj:"
 #: part/dockers/KWStatisticsWidget.cpp:146
 #, kde-format
 msgid "Readability:"
-msgstr ""
+msgstr "Legebleco:"
 
 #: part/dockers/KWStatisticsWidget.cpp:148
-#, fuzzy, kde-format
-#| msgid "Flesch reading ease:"
+#, kde-format
 msgid "Flesch reading ease"
-msgstr "Legfacileco laŭ Flesch:"
+msgstr "Legfacileco laŭ Flesch"
 
 #: part/dockers/KWStatisticsWidget.cpp:150
-#, fuzzy, kde-format
-#| msgid "&Formatting Characters"
+#, kde-format
 msgid "East asian characters:"
-msgstr "&Formatu signojn"
+msgstr "Orientaziaj signoj:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_words)
 #: part/dockers/StatisticsPreferencesPopup.ui:17
-#, fuzzy, kde-format
-#| msgid "Words:"
+#, kde-format
 msgid "Words"
-msgstr "Vortoj:"
+msgstr "Vortoj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_sentences)
 #: part/dockers/StatisticsPreferencesPopup.ui:24
-#, fuzzy, kde-format
-#| msgid "Sentences:"
+#, kde-format
 msgid "Sentences"
-msgstr "Frazoj:"
+msgstr "Frazoj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_syllables)
 #: part/dockers/StatisticsPreferencesPopup.ui:31
-#, fuzzy, kde-format
-#| msgid "Syllables:"
+#, kde-format
 msgid "Syllables"
-msgstr "Silaboj:"
+msgstr "Silaboj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_lines)
 #: part/dockers/StatisticsPreferencesPopup.ui:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lines"
-msgstr "Listo"
+msgstr "Linioj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charspace)
 #: part/dockers/StatisticsPreferencesPopup.ui:45
-#, fuzzy, kde-format
-#| msgid "Characters without spaces:"
+#, kde-format
 msgid "Characters With Spaces"
-msgstr "Signoj krom spacoj:"
+msgstr "Signoj Kun Spacoj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_charnospace)
 #: part/dockers/StatisticsPreferencesPopup.ui:52
-#, fuzzy, kde-format
-#| msgid "Characters without spaces:"
+#, kde-format
 msgid "Characters without spaces"
-msgstr "Signoj krom spacoj:"
+msgstr "Signoj krom spacoj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_east)
 #: part/dockers/StatisticsPreferencesPopup.ui:59
-#, fuzzy, kde-format
-#| msgid "&Formatting Characters"
+#, kde-format
 msgid "East Asian characters"
-msgstr "&Formatu signojn"
+msgstr "Orientaziaj signoj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, check_flesch)
 #: part/dockers/StatisticsPreferencesPopup.ui:66
-#, fuzzy, kde-format
-#| msgid "Flesch reading ease:"
+#, kde-format
 msgid "Flesch Reading Ease"
-msgstr "Legfacileco laŭ Flesch:"
+msgstr "Flesch Legad-Faciligo"
 
 #: part/i18n/stylenames.cpp:8
 #, kde-format
 msgctxt "Style name"
 msgid "Standard"
-msgstr "Normala"
+msgstr "Norma"
 
 #: part/i18n/stylenames.cpp:9
 #, kde-format
@@ -944,19 +878,19 @@ msgstr "Simpla"
 #, kde-format
 msgctxt "Style name"
 msgid "Borders 1"
-msgstr "Limo 1"
+msgstr "Borderoj 1"
 
 #: part/i18n/stylenames.cpp:26
 #, kde-format
 msgctxt "Style name"
 msgid "Borders 2"
-msgstr "Limo 2"
+msgstr "Borderoj 2"
 
 #: part/i18n/stylenames.cpp:27
 #, kde-format
 msgctxt "Style name"
 msgid "Borders 3"
-msgstr "Limo 3"
+msgstr "Borderoj 3"
 
 #: part/i18n/stylenames.cpp:28
 #, kde-format
@@ -989,13 +923,13 @@ msgid "Black"
 msgstr "Nigra"
 
 #: part/i18n/stylenames.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Light Blue"
-msgstr "Helblua"
+msgstr "Helbluo"
 
 #: part/i18n/stylenames.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Dark Blue"
 msgstr "Malhelblua"
@@ -1019,10 +953,10 @@ msgid "Colorful"
 msgstr "Multkolora"
 
 #: part/i18n/stylenames.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Bluish"
-msgstr "Blueta"
+msgstr "Bluaj"
 
 #: part/i18n/stylenames.cpp:41
 #, kde-format
@@ -1067,16 +1001,16 @@ msgid "Header 4"
 msgstr "Kapo 4"
 
 #: part/i18n/stylenames.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Columns 1"
-msgstr "Kolumno"
+msgstr "Kolumnoj 1"
 
 #: part/i18n/stylenames.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Columns 2"
-msgstr "Kolumno"
+msgstr "Kolumnoj 2"
 
 #: part/i18n/stylenames.cpp:52
 #, kde-format
@@ -1097,73 +1031,71 @@ msgid "Grid 3"
 msgstr "Krado 3"
 
 #: part/i18n/stylenames.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Gray Heading"
-msgstr "Griza Kapo"
+msgstr "Griza Titolo"
 
 #: part/i18n/stylenames.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Blue Heading"
-msgstr "Blua Kapo"
+msgstr "Blua Titolo"
 
 #: part/i18n/stylenames.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Blue Traditional"
 msgstr "Blua Tradicia"
 
 #: part/i18n/stylenames.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Gray Traditional"
 msgstr "Griza Tradicia"
 
 #: part/i18n/stylenames.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Blue Top and Bottom"
-msgstr "Blua supro kaj subo"
+msgstr "Blua Supro kaj Malsupro"
 
 #: part/i18n/stylenames.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Style name"
 msgid "Gray Top and Bottom"
-msgstr "Griza supro kaj subo"
+msgstr "Griza Supre kaj Malsupro"
 
 #: part/KWAboutData.h:20
-#, fuzzy, kde-format
-#| msgid "KOffice Word Processor"
+#, kde-format
 msgctxt "application name"
 msgid "Calligra Words"
-msgstr "KOffice Tekstverkilo"
+msgstr "Calligra Words"
 
 #: part/KWAboutData.h:22
-#, fuzzy, kde-format
-#| msgid "KOffice Word Processor"
+#, kde-format
 msgid "Word processor"
-msgstr "KOffice Tekstverkilo"
+msgstr "Tekstprilaborilo"
 
 #: part/KWAboutData.h:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright 1998-%1, The Words Team"
-msgstr "(c) 1998-2002, La temo de Verkilo"
+msgstr "Kopirajto 1998-%1, The Words Team"
 
 #: part/KWAboutData.h:32 part/KWAboutData.h:33
 #, kde-format
 msgid "Co maintainer"
-msgstr ""
+msgstr "Kuna prizorganto"
 
 #: part/KWAboutData.h:32
 #, kde-format
 msgid "Pierre Ducroquet"
-msgstr ""
+msgstr "Pierre Ducroquet"
 
 #: part/KWAboutData.h:33
 #, kde-format
 msgid "C. Boemann"
-msgstr ""
+msgstr "C. Boemann"
 
 #: part/KWAboutData.h:34 part/KWAboutData.h:35 part/KWAboutData.h:36
 #: part/KWAboutData.h:38
@@ -1174,33 +1106,32 @@ msgstr "Ĉion"
 #: part/KWAboutData.h:34
 #, kde-format
 msgid "Sebastian Sauer"
-msgstr ""
+msgstr "Sebastian Sauer"
 
 #: part/KWAboutData.h:35
 #, kde-format
 msgid "Boudewijn Rempt"
-msgstr ""
+msgstr "Boudewijn Rempt"
 
 #: part/KWAboutData.h:36
 #, kde-format
 msgid "Pierre Stirnweiss"
-msgstr ""
+msgstr "Pierre Stirnweiss"
 
 #: part/KWAboutData.h:37
-#, fuzzy, kde-format
-#| msgid "&Formatting Characters"
+#, kde-format
 msgid "Formatting stuff"
-msgstr "&Formatu signojn"
+msgstr "Formataj aferoj"
 
 #: part/KWAboutData.h:37
 #, kde-format
 msgid "Inge Wallin"
-msgstr ""
+msgstr "Inge Wallin"
 
 #: part/KWAboutData.h:38
 #, kde-format
 msgid "Thorsten Zachmann"
-msgstr ""
+msgstr "Thorsten Zachmann"
 
 #: part/KWAboutData.h:39 part/KWAboutData.h:45 part/KWAboutData.h:46
 #: part/KWAboutData.h:47 part/KWAboutData.h:59 part/KWAboutData.h:60
@@ -1214,74 +1145,72 @@ msgstr "Filtri"
 #: part/KWAboutData.h:39
 #, kde-format
 msgid "Matus Uzak"
-msgstr ""
+msgstr "Matus Uzak"
 
 #: part/KWAboutData.h:40
 #, kde-format
 msgid "Layout and Painting"
-msgstr ""
+msgstr "Aranĝo kaj Pentraĵo"
 
 #: part/KWAboutData.h:40
 #, kde-format
 msgid "Pavol Korinek"
-msgstr ""
+msgstr "Pavol Korinek"
 
 #: part/KWAboutData.h:41
 #, kde-format
 msgid "Shreya Pandit"
-msgstr ""
+msgstr "Shreya Pandit"
 
 #: part/KWAboutData.h:41
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics docker"
-msgstr "Statistiko"
+msgstr "Docker de statistikoj"
 
 #: part/KWAboutData.h:42
 #, kde-format
 msgid "Brijesh Patel"
-msgstr ""
+msgstr "Brijesh Patel"
 
 #: part/KWAboutData.h:42
-#, fuzzy, kde-format
-#| msgid "Footer"
+#, kde-format
 msgid "Foot and endnotes"
-msgstr "Piedo"
+msgstr "Piedo kaj finnotoj"
 
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Bibliography"
-msgstr ""
+msgstr "Bibliografio"
 
 #: part/KWAboutData.h:43
 #, kde-format
 msgid "Smit Patel"
-msgstr ""
+msgstr "Smit Patel"
 
 #: part/KWAboutData.h:44
 #, kde-format
 msgid "Mojtaba Shahi"
-msgstr ""
+msgstr "Mojtaba Shahi"
 
 #: part/KWAboutData.h:44
 #, kde-format
 msgid "Style Manager"
-msgstr ""
+msgstr "Stilo-Manaĝero"
 
 #: part/KWAboutData.h:45
 #, kde-format
 msgid "Lassi Nieminen"
-msgstr ""
+msgstr "Lassi Nieminen"
 
 #: part/KWAboutData.h:46
 #, kde-format
 msgid "Hanzes Matus"
-msgstr ""
+msgstr "Hanzes Matus"
 
 #: part/KWAboutData.h:47
 #, kde-format
 msgid "Lukáš Tvrdý"
-msgstr ""
+msgstr "Lukáš Tvrdý"
 
 #: part/KWAboutData.h:48
 #, kde-format
@@ -1294,15 +1223,14 @@ msgid "Girish Ramakrishnan"
 msgstr "Girish Ramakrishnan"
 
 #: part/KWAboutData.h:49 part/KWAboutData.h:50
-#, fuzzy, kde-format
-#| msgid "Sorting Order"
+#, kde-format
 msgid "ODF Support"
-msgstr "Ordigado laŭ"
+msgstr "Subteno de ODF"
 
 #: part/KWAboutData.h:50
 #, kde-format
 msgid "Robert Mathias Marmorstein"
-msgstr ""
+msgstr "Robert Mathias Marmorstein"
 
 #: part/KWAboutData.h:51
 #, kde-format
@@ -1402,37 +1330,37 @@ msgstr "Michael Johnson"
 #: part/KWAboutData.h:69
 #, kde-format
 msgid "Fatcow Web Hosting"
-msgstr ""
+msgstr "Fatcow Reteja Gastigado"
 
 #: part/KWAboutData.h:69
-#, fuzzy, kde-format
-#| msgid "Page Break"
+#, kde-format
 msgid "Page break icon"
-msgstr "Paĝrompo"
+msgstr "Paĝrompikono"
 
 #. i18n translator strings
 #: part/KWAboutData.h:71
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Wolfram Diestel,Steffen Pietsch"
+msgstr "Wolfram Diestel,Steffen Pietsch,Oliver Kellogg"
 
 #: part/KWAboutData.h:72
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "wolfram@steloj.de,Steffen.Pietsch@BerlinOnline.de"
+msgstr ""
+"wolfram@steloj.de,Steffen.Pietsch@BerlinOnline.de,okellogg@users.sourceforge."
+"net"
 
 #: part/KWDocument.cpp:495
-#, fuzzy, kde-format
-#| msgid "Copy%1-%2"
+#, kde-format
 msgid "Copy"
-msgstr "Kopiu %1 - %2"
+msgstr "Kopii"
 
 #: part/KWDocument.cpp:540 part/KWStatusBar.cpp:146
 #, kde-format
 msgid "Standard"
-msgstr "Normala"
+msgstr "Norma"
 
 #: part/KWDocument.cpp:546
 #, kde-format
@@ -1460,10 +1388,9 @@ msgid "Bullet List"
 msgstr "Bulita listo"
 
 #: part/KWGui.cpp:69
-#, fuzzy, kde-format
-#| msgid "&Tools"
+#, kde-format
 msgid "Tools"
-msgstr "&Iloj"
+msgstr "Iloj"
 
 #: part/KWOdfLoader.cpp:83
 #, kde-format
@@ -1471,9 +1398,10 @@ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
 msgstr "Nevalida OASIS OpenDocument-dosiero. Mankas marko 'office:body'."
 
 #: part/KWOdfLoader.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
-msgstr "Malvalida dokumento. Neniu 'mime'-tipo klarigita."
+msgstr ""
+"Nevalida OASIS OpenDocument-dosiero. Neniu etikedo trovita en office:body."
 
 #: part/KWOdfLoader.cpp:97
 #, kde-format
@@ -1481,23 +1409,24 @@ msgid ""
 "This is not a word processing document, but %1. Please try opening it with "
 "the appropriate application."
 msgstr ""
+"Ĉi tio ne estas tekstprilabora dokumento, sed %1. Bonvolu provi malfermi ĝin "
+"per la taŭga aplikaĵo."
 
 #: part/KWPageManager.cpp:24 part/KWPageManager.cpp:413
-#, fuzzy, kde-format
-#| msgid "Standard"
+#, kde-format
 msgctxt "Default page style display name"
 msgid "Standard"
-msgstr "Normala"
+msgstr "Norma"
 
 #: part/KWPart.cpp:141
 #, kde-format
 msgid "Can not find needed text component, Words will quit now"
-msgstr ""
+msgstr "Ne povas trovi bezonatan tekstkomponenton, Vortoj ĉesos nun"
 
 #: part/KWPart.cpp:142
 #, kde-format
 msgid "Installation Error"
-msgstr ""
+msgstr "Instala eraro"
 
 #: part/KWStatusBar.cpp:35
 #, kde-format
@@ -1505,98 +1434,89 @@ msgid "Modified"
 msgstr "Ŝanĝita"
 
 #: part/KWStatusBar.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saved"
-msgstr "Konservu bildon"
+msgstr "Savita"
 
 #: part/KWStatusBar.cpp:37
-#, fuzzy, kde-format
-#| msgid "Page %1"
+#, kde-format
 msgid "Page %1 of %2"
-msgstr "Paĝo %1"
+msgstr "Paĝo %1 el %2"
 
 #: part/KWStatusBar.cpp:38
-#, fuzzy, kde-format
-#| msgid "Page %1"
+#, kde-format
 msgid "Page %1-%2 of %3"
-msgstr "Paĝo %1"
+msgstr "Paĝo %1-%2 el %3"
 
 #: part/KWStatusBar.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line %1"
-msgstr "Listo"
+msgstr "Linio %1"
 
 #: part/KWStatusBar.cpp:124
-#, fuzzy, kde-format
-#| msgid "Page number:"
+#, kde-format
 msgid "Page Number"
-msgstr "Paĝnumero:"
+msgstr "Paĝa Nombro"
 
 #: part/KWStatusBar.cpp:137
-#, fuzzy, kde-format
-#| msgid "Page number:"
+#, kde-format
 msgid "Line Number"
-msgstr "Paĝnumero:"
+msgstr "Linia Nombro"
 
 #: part/KWStatusBar.cpp:149
-#, fuzzy, kde-format
-#| msgid "&Page Mode"
+#, kde-format
 msgid "Change the page style"
-msgstr "&Paĝmoduso"
+msgstr "Ŝanĝi la paĝan stilon"
 
 #: part/KWStatusBar.cpp:155
-#, fuzzy, kde-format
-#| msgid "&Page Mode"
+#, kde-format
 msgid "Page Style"
-msgstr "&Paĝmoduso"
+msgstr "Paĝa Stilo"
 
 #: part/KWStatusBar.cpp:169
-#, fuzzy, kde-format
-#| msgid "Page Break"
+#, kde-format
 msgid "Page Size"
-msgstr "Paĝrompo"
+msgstr "Paĝa Grandeco"
 
 #: part/KWStatusBar.cpp:184
-#, fuzzy, kde-format
-#| msgid "Modified"
+#, kde-format
 msgid "Saved/Modified"
-msgstr "Ŝanĝita"
+msgstr "Konservita/Modifita"
 
 #: part/KWStatusBar.cpp:197
 #, kde-format
 msgid "Mouse Cursor X:Y"
-msgstr ""
+msgstr "Musa Kursoro X:Y"
 
 #: part/KWStatusBar.cpp:211
 #, kde-format
 msgid "Zoom Controller"
-msgstr ""
+msgstr "Zomo-Regilo"
 
 #: part/KWView.cpp:183
 #, kde-format
 msgid "Exit Fullscreen Mode"
-msgstr ""
+msgstr "Eliri Plenekranan Reĝimon"
 
 #: part/KWView.cpp:260
-#, fuzzy, kde-format
-#| msgid "Frame Properties"
+#, kde-format
 msgid "Shape Properties..."
-msgstr "Kadroagordo"
+msgstr "Formtrajtoj..."
 
 #: part/KWView.cpp:262
 #, kde-format
 msgid "Change how the shape behave"
-msgstr ""
+msgstr "Ŝanĝi kiel la formo kondutu"
 
 #: part/KWView.cpp:271
 #, kde-format
 msgid "Create Template From Document..."
-msgstr ""
+msgstr "Krei Ŝablonon el Dokumento..."
 
 #: part/KWView.cpp:272
 #, kde-format
 msgid "Save this document and use it later as a template"
-msgstr ""
+msgstr "Konservi ĉi tiun dokumenton kaj uzi ĝin poste kiel ŝablonon"
 
 #: part/KWView.cpp:273
 #, kde-format
@@ -1604,42 +1524,39 @@ msgid ""
 "You can save this document as a template.<br><br>You can use this new "
 "template as a starting point for another document."
 msgstr ""
+"Vi povas konservi ĉi tiun dokumenton kiel ŝablonon.<br><br>Vi povas uzi ĉi "
+"tiun novan ŝablonon kiel deirpunkton por alia dokumento."
 
 #: part/KWView.cpp:292
-#, fuzzy, kde-format
-#| msgid "&Formatting Characters"
+#, kde-format
 msgid "Show Formatting Characters"
-msgstr "&Formatu signojn"
+msgstr "Montri Formatajn Signojn"
 
 #: part/KWView.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle the display of non-printing characters"
-msgstr "Ŝanĝu la montradon de ne-printeblaj signoj."
+msgstr "Baskuligi la montradon de nepresaj signoj"
 
 #: part/KWView.cpp:299
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toggle the display of non-printing characters.<br><br>When this is "
-#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
-#| "printing characters."
+#, kde-format
 msgid ""
 "Toggle the display of non-printing characters.<br/><br/>When this is "
 "enabled, Words shows you tabs, spaces, carriage returns and other non-"
 "printing characters."
 msgstr ""
-"Ŝanĝu la montradon de ne-printeblaj signoj. <br> <br> Se enŝaltite, Verkilo "
-"montras al vi tabulatorojn, spacojn, liniofinojn (\\n) kaj aliaj ne-"
-"printeblaj signoj"
+"Baskuligi la montradon de nepreseblaj signoj.<br/><br/>Kiam ĉi tio estas "
+"ebligita, Words montras al vi tabojn, spacojn, kaleŝojn kaj aliajn "
+"nepreseblajn signojn."
 
 #: part/KWView.cpp:301
 #, kde-format
 msgid "Show Field Shadings"
-msgstr ""
+msgstr "Montri Kampajn Ombrigojn"
 
 #: part/KWView.cpp:307
 #, kde-format
 msgid "Toggle the shaded background of fields"
-msgstr ""
+msgstr "Baskuligi la ombritan fonon de kampoj"
 
 #: part/KWView.cpp:308
 #, kde-format
@@ -1647,80 +1564,67 @@ msgid ""
 "Toggle the visualization of fields (variables etc.) by drawing their "
 "background in a contrasting color."
 msgstr ""
+"Baskuligi la bildigon de kampoj (variabloj ktp.) desegnante ilian fonon en "
+"kontrasta koloro."
 
 #: part/KWView.cpp:310
-#, fuzzy, kde-format
-#| msgid "Frame &Borders"
+#, kde-format
 msgid "Show Text Shape Borders"
-msgstr "Kadro&limoj"
+msgstr "Montri Tekstformajn Borderojn"
 
 #: part/KWView.cpp:311
-#, fuzzy, kde-format
+#, kde-format
 msgid "Turns the border display on and off"
-msgstr "Komutu montradon de marĝenoj."
+msgstr "Enŝaltas kaj malŝaltas la randmontradon"
 
 #: part/KWView.cpp:317
-#, fuzzy, kde-format
-#| msgid ""
-#| "Turns the border display on and off.<br><br>The borders are never "
-#| "printed. This option is useful to see how the document will appear on the "
-#| "printed page."
+#, kde-format
 msgid ""
 "Turns the border display on and off.<br/><br/>The borders are never printed. "
 "This option is useful to see how the document will appear on the printed "
 "page."
 msgstr ""
-"Komutu montradon de marĝenoj. <br> <br>La marĝenoj estas neniam printitaj. "
-"Tiu opcio havas sian sencon por montri kiel la printita paĝo aperos."
+"Enŝaltas kaj malŝaltas la randmanieron.<br/><br/>La randoj neniam estas "
+"presitaj. Ĉi tiu opcio estas utila por vidi kiel la dokumento aperos sur la "
+"presita paĝo."
 
 #: part/KWView.cpp:319
-#, fuzzy, kde-format
-#| msgid "Frame &Borders"
+#, kde-format
 msgid "Show Table Borders"
-msgstr "Kadro&limoj"
+msgstr "Montri Tabelajn Bordojn"
 
 #: part/KWView.cpp:325
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle the display of table borders"
-msgstr "Ŝanĝu la montradon de ne-printeblaj signoj."
+msgstr "Baskuligi la montradon de tabelbordoj"
 
 #: part/KWView.cpp:326
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toggle the display of non-printing characters.<br><br>When this is "
-#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
-#| "printing characters."
+#, kde-format
 msgid ""
 "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
 "shows you any invisible table borders with a thin gray line."
 msgstr ""
-"Ŝanĝu la montradon de ne-printeblaj signoj. <br> <br> Se enŝaltite, Verkilo "
-"montras al vi tabulatorojn, spacojn, liniofinojn (\\n) kaj aliaj ne-"
-"printeblaj signoj"
+"Baskuligi la montradon de tabelborderoj.<br/><br/>Kiam tio estas ebligita, "
+"Words montras al vi nevideblajn tabelrandojn kun maldika griza linio."
 
 #: part/KWView.cpp:328
 #, kde-format
 msgid "Show Section Bounds"
-msgstr ""
+msgstr "Montri Sekciajn Limojn"
 
 #: part/KWView.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle the display of section bounds"
-msgstr "Ŝanĝu la montradon de ne-printeblaj signoj."
+msgstr "Baskuligi la montradon de sekcilimoj"
 
 #: part/KWView.cpp:335
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toggle the display of non-printing characters.<br><br>When this is "
-#| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
-#| "printing characters."
+#, kde-format
 msgid ""
 "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
 "section bounds will be indicated with a thin gray horizontal brackets."
 msgstr ""
-"Ŝanĝu la montradon de ne-printeblaj signoj. <br> <br> Se enŝaltite, Verkilo "
-"montras al vi tabulatorojn, spacojn, liniofinojn (\\n) kaj aliaj ne-"
-"printeblaj signoj"
+"Ŝaltu la montradon de sekcilimoj.<br/><br/>Kiam tio estas ebligita, ajnaj "
+"sekcilimoj estos indikitaj per maldikaj grizaj horizontalaj krampoj."
 
 #: part/KWView.cpp:337
 #, kde-format
@@ -1728,63 +1632,57 @@ msgid "Show Rulers"
 msgstr "Montri mezurilojn"
 
 #: part/KWView.cpp:339
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shows or hides rulers"
-msgstr "Montras aŭ kaŝas la mezurilojn."
+msgstr "Montras aŭ kaŝas mezurilojn"
 
 #: part/KWView.cpp:340
-#, fuzzy, kde-format
-#| msgid ""
-#| "The rulers are the white measuring spaces top and left of the document. "
-#| "The rulers show the position and width of pages and of frames and can be "
-#| "used to position tabulators among others.<p>Uncheck this to disable the "
-#| "rulers from being displayed."
+#, kde-format
 msgid ""
 "The rulers are the white measuring spaces top and left of the document. The "
 "rulers show the position and width of pages and of frames and can be used to "
 "position tabulators among others.<p>Uncheck this to disable the rulers from "
 "being displayed.</p>"
 msgstr ""
-"La mezuriloj estas la blankaj mezuraj spacoj supre kaj maldekstre de la "
-"dokumento. La mezuriloj montras la posicion kaj larĝecon de paĝoj kaj kadroj "
-"kaj endas por alĝustigi tabulatorojn inter la aliaj. <p>Elŝaltu - por ne "
-"montri la mezurilon."
+"La mezuriloj estas la blankaj mezurspacoj supre kaj maldekstre de la "
+"dokumento. La mezuriloj montras la pozicion kaj larĝon de paĝoj kaj kadroj "
+"kaj povas esti uzataj por poziciigi tabelulojn inter aliaj.<p>Malmarku ĉi "
+"tion por malebligi la montradon de la mezuriloj.</p>"
 
 #: part/KWView.cpp:351
 #, kde-format
 msgid "Snap to Grid"
-msgstr "Kapti per krado"
+msgstr "Kapti al krado"
 
 #: part/KWView.cpp:359
 #, kde-format
 msgid "Show Status Bar"
-msgstr "Montri Statusan Breton"
+msgstr "Montri Statobreton"
 
 #: part/KWView.cpp:360
-#, fuzzy, kde-format
-#| msgid "Show &status bar"
+#, kde-format
 msgid "Shows or hides the status bar"
-msgstr "Montru &statobreton"
+msgstr "Montras aŭ kaŝas la statusbreton"
 
 #: part/KWView.cpp:366
 #, kde-format
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Plenekrana Reĝimo"
 
 #: part/KWView.cpp:367
 #, kde-format
 msgid "Set view in fullscreen mode"
-msgstr ""
+msgstr "Agordi vidon en plenekrana reĝimo"
 
 #: part/KWView.cpp:374
 #, kde-format
 msgid "Semantic Stylesheets..."
-msgstr ""
+msgstr "Semantikaj stilfolioj..."
 
 #: part/KWView.cpp:376
 #, kde-format
 msgid "Modify and add semantic stylesheets"
-msgstr ""
+msgstr "Modifi kaj aldoni semantikajn stilfoliojn"
 
 #: part/KWView.cpp:377
 #, kde-format
@@ -1792,6 +1690,8 @@ msgid ""
 "Stylesheets are used to format the display of information which is stored in "
 "RDF."
 msgstr ""
+"Stilfolioj estas uzataj por formati la montradon de informoj, kiuj estas "
+"konservitaj en RDF."
 
 #: part/KWView.cpp:392
 #, kde-format
@@ -1804,71 +1704,64 @@ msgid "Page Layout..."
 msgstr "Paĝaranĝo..."
 
 #: part/KWView.cpp:403
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change properties of entire page"
-msgstr "Ŝanĝu ecojn de tuta paĝo."
+msgstr "Ŝanĝi ecojn de tuta paĝo"
 
 #: part/KWView.cpp:404
-#, fuzzy, kde-format
-#| msgid ""
-#| "Change properties of the entire page.<p>Currently you can change paper "
-#| "size, paper orientation, header and footer sizes, and column settings."
+#, kde-format
 msgid ""
 "Change properties of the entire page.<p>Currently you can change paper size, "
 "paper orientation, header and footer sizes, and column settings.</p>"
 msgstr ""
-"Ŝanĝu ecojn de tuta paĝo. <p> Momente vi povas ŝanĝi paperformaton, "
-"paperrotacion, kapo- kaj piedo-larĝecon, kaj linioformaton."
+"Ŝanĝi ecojn de la tuta paĝo.<p>Nuntempe vi povas ŝanĝi papergrandon, "
+"paperorientiĝon, kapliniajn kaj piedliniajn grandecojn kaj kolumnajn "
+"agordojn.</p>"
 
 #: part/KWView.cpp:407
-#, fuzzy, kde-format
-#| msgid "Create Text Frame"
+#, kde-format
 msgid "Create Header"
-msgstr "Kreu tekstkadron"
+msgstr "Krei Kapon"
 
 #: part/KWView.cpp:413
-#, fuzzy, kde-format
-#| msgid "Create Text Frame"
+#, kde-format
 msgid "Create Footer"
-msgstr "Kreu tekstkadron"
+msgstr "Krei Piedon"
 
 #: part/KWView.cpp:420
 #, kde-format
 msgid "Show Comments"
-msgstr ""
+msgstr "Montri Komentojn"
 
 #: part/KWView.cpp:421
 #, kde-format
 msgid "Shows comments in the document"
-msgstr ""
+msgstr "Montras komentojn en la dokumento"
 
 #: part/KWView.cpp:427
 #, kde-format
 msgid "Word Count"
-msgstr ""
+msgstr "Sumo da vortoj"
 
 #: part/KWView.cpp:428
-#, fuzzy, kde-format
-#| msgid "Show &status bar"
+#, kde-format
 msgid "Shows or hides word counting in status bar"
-msgstr "Montru &statobreton"
+msgstr "Montras aŭ kaŝas vortkalkuladon en statusbreto"
 
 #: part/pagetool/KWPageTool.cpp:85
-#, fuzzy, kde-format
-#| msgid "Page Break"
+#, kde-format
 msgid "Page Setup"
-msgstr "Paĝrompo"
+msgstr "Paĝa Agordo"
 
 #: part/pagetool/KWPageTool.cpp:89
-#, fuzzy, kde-format
-#| msgid "Even Pages Footer"
+#, kde-format
 msgid "Header & Footer"
-msgstr "Paraj paĝpiedoj"
+msgstr "Kapo & Piedo"
 
 #: part/pagetool/KWPageToolFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page layout"
-msgstr "Ŝanĝu aranĝon"
+msgstr "Paĝa aranĝo"
 
 #. i18n: ectx: property (text), widget (QToolButton, setup)
 #. i18n: ectx: property (text), widget (QToolButton, insertHeader)
@@ -1884,24 +1777,22 @@ msgstr "..."
 #, kde-format
 msgctxt "Label for the Find text input box"
 msgid "Find:"
-msgstr ""
+msgstr "Trovi:"
 
 #: part/widgets/KoFindToolbar.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Next search result"
 msgid "Next"
-msgstr "Enmetu tabelon"
+msgstr "Sekva"
 
 #: part/widgets/KoFindToolbar.cpp:78
-#, fuzzy, kde-format
-#| msgid "Previous Page"
+#, kde-format
 msgctxt "Previous search result"
 msgid "Previous"
-msgstr "Antaŭa paĝo"
+msgstr "Antaŭa"
 
 #: part/widgets/KoFindToolbar.cpp:87
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "Search options"
 msgid "Options"
 msgstr "Opcioj"
@@ -1910,47 +1801,47 @@ msgstr "Opcioj"
 #, kde-format
 msgctxt "Label for the Replace text input box"
 msgid "Replace:"
-msgstr ""
+msgstr "Anstataŭigi:"
 
 #: part/widgets/KoFindToolbar.cpp:125
 #, kde-format
 msgctxt "Replace the current match"
 msgid "Replace"
-msgstr ""
+msgstr "Anstataŭigi"
 
 #: part/widgets/KoFindToolbar.cpp:131
 #, kde-format
 msgctxt "Replace all found matches"
 msgid "Replace All"
-msgstr ""
+msgstr "Anstataŭigi Ĉion"
 
 #: part/widgets/KoFindToolbar.cpp:139
 #, kde-format
 msgid "Replace"
-msgstr ""
+msgstr "Anstataŭigi"
 
 #: part/widgets/KoFindToolbar.cpp:200
 #, kde-format
 msgctxt "Total number of matches"
 msgid "1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 kongruo trovita"
+msgstr[1] "%1 kongruoj trovitaj"
 
 #: part/widgets/KoFindToolbar.cpp:210
 #, kde-format
 msgid "No matches found"
-msgstr ""
+msgstr "Neniuj kongruoj trovitaj"
 
 #: part/widgets/KoFindToolbar.cpp:216
 #, kde-format
 msgid "Search hit bottom, continuing from top."
-msgstr ""
+msgstr "Serĉo trafis fundon, daŭrigante de supre."
 
 #: part/widgets/KoFindToolbar.cpp:218
 #, kde-format
 msgid "Search hit top, continuing from bottom."
-msgstr ""
+msgstr "Serĉo trafis supre, daŭrigante de malsupre."
 
 #: part/Words.cpp:45
 #, kde-format
@@ -1973,2455 +1864,11 @@ msgid "Even Pages Footer"
 msgstr "Paraj paĝpiedoj"
 
 #: part/Words.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Main text"
-msgstr "Enmetu tekston"
+msgstr "Ĉefa teksto"
 
 #: part/Words.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Other text"
-msgstr "Enmetu tabelon"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Page"
-#~ msgstr "&Paĝo"
-
-#, fuzzy
-#~| msgid "Paragraph"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Para&graph"
-#~ msgstr "Paragrafo"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&To Character"
-#~ msgstr "Krei"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&As Character"
-#~ msgstr "Krei"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Left"
-#~ msgstr "Maldekstre"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Right"
-#~ msgstr "Dekstre"
-
-#, fuzzy
-#~| msgid "Bottom:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Bottom"
-#~ msgstr "Sube:"
-
-#, fuzzy
-#~| msgid "Text Run Around"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text Wrap-around"
-#~ msgstr "Teksto ĉirkaŭfluas"
-
-#, fuzzy
-#~| msgid "Text will run &through this frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Run through this shape"
-#~ msgstr "&Iras tra tiun ĉi kadron"
-
-#, fuzzy
-#~| msgid "Text will run &through this frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Skip below this shape"
-#~ msgstr "&Iras tra tiun ĉi kadron"
-
-#, fuzzy
-#~| msgid "Text will run &through this frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Run on left side of this shape"
-#~ msgstr "&Iras tra tiun ĉi kadron"
-
-#, fuzzy
-#~| msgid "Text will run &through this frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Run on right side of this shape"
-#~ msgstr "&Iras tra tiun ĉi kadron"
-
-#, fuzzy
-#~| msgid "Text will run &through this frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Run on longest side of this shape"
-#~ msgstr "&Iras tra tiun ĉi kadron"
-
-#, fuzzy
-#~| msgid "Text will run &through this frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Run on both sides of this shape"
-#~ msgstr "&Iras tra tiun ĉi kadron"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Distance Between Shape and Text:"
-#~ msgstr "Distanco inter kadro kaj teksto (%1):"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Vertical Positioning"
-#~ msgstr "Pozicio"
-
-#, fuzzy
-#~| msgid "Offset"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Offset"
-#~ msgstr "Deŝovo"
-
-#, fuzzy
-#~| msgid "From:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "from:"
-#~ msgstr "De:"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Horizontal Positioning"
-#~ msgstr "Pozicio"
-
-#, fuzzy
-#~| msgid "Name of frameset:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Name of frameset:"
-#~ msgstr "Nomo de la kadraro:"
-
-#, fuzzy
-#~| msgid "Create a new frameset"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create a new frameset:"
-#~ msgstr "Kreu novan kadraron"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select existing frameset to connect to:"
-#~ msgstr "Elektu ekzistantan kadraron por ligi la kadron al"
-
-#, fuzzy
-#~| msgid "Frameset Name"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Frameset Name"
-#~ msgstr "Kadraronomo"
-
-#, fuzzy
-#~| msgid "&Username:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Rename"
-#~ msgstr "&Uzantonomo:"
-
-#, fuzzy
-#~| msgid "Delete Page"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Delete"
-#~ msgstr "Forigi paĝon"
-
-#, fuzzy
-#~| msgid "Name:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Name:"
-#~ msgstr "Nomo:"
-
-#, fuzzy
-#~| msgid "Page Break"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Size && Margins"
-#~ msgstr "Paĝrompo"
-
-#, fuzzy
-#~| msgid "Left:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Left by:"
-#~ msgstr "Maldekstre:"
-
-#, fuzzy
-#~| msgid "Right:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Right by:"
-#~ msgstr "Dekstre:"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns:"
-#~ msgstr "Kolumnoj:"
-
-#, fuzzy
-#~| msgid "Column spacing:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Column spacing:"
-#~ msgstr "Kolumnointerspaco:"
-
-#, fuzzy
-#~| msgid "Words:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Words"
-#~ msgstr "Vortoj:"
-
-#, fuzzy
-#~| msgid "Sentences:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sentences"
-#~ msgstr "Frazoj:"
-
-#, fuzzy
-#~| msgid "Syllables:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Syllables"
-#~ msgstr "Silaboj:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Lines"
-#~ msgstr "Listo"
-
-#, fuzzy
-#~| msgid "Characters without spaces:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Characters With Spaces"
-#~ msgstr "Signoj krom spacoj:"
-
-#, fuzzy
-#~| msgid "Characters without spaces:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Characters without spaces"
-#~ msgstr "Signoj krom spacoj:"
-
-#, fuzzy
-#~| msgid "&Formatting Characters"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "East Asian characters"
-#~ msgstr "&Formatu signojn"
-
-#, fuzzy
-#~| msgid "Flesch reading ease:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Flesch Reading Ease"
-#~ msgstr "Legfacileco laŭ Flesch:"
-
-#, fuzzy
-#~| msgid "&File"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&File"
-#~ msgstr "&Dosiero"
-
-#, fuzzy
-#~| msgid "&Edit"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Edit"
-#~ msgstr "&Redakti"
-
-#, fuzzy
-#~| msgid "&View"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&View"
-#~ msgstr "&Rigardi"
-
-#, fuzzy
-#~| msgid "Statistics"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Semantics"
-#~ msgstr "Statistiko"
-
-#, fuzzy
-#~| msgid "&Settings"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Settings"
-#~ msgstr "&Agordo"
-
-#, fuzzy
-#~| msgid "Spellcheck"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spellcheck"
-#~ msgstr "Literumado"
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Edit"
-#~ msgstr "Redakti"
-
-#, fuzzy
-#~| msgid "Spell Check Result"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spell Check Result"
-#~ msgstr "Rezulto de literumado"
-
-#, fuzzy
-#~| msgid "&Variable"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change Variable To"
-#~ msgstr "&Variablo"
-
-#, fuzzy
-#~| msgid "..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgid "&Tools"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Tools"
-#~ msgstr "&Iloj"
-
-#, fuzzy
-#~| msgid "Frame is inline"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Baseline"
-#~ msgstr "Kadro estas enlinia"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Character"
-#~ msgstr "Krei"
-
-#, fuzzy
-#~| msgid "Row"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Row"
-#~ msgstr "Linio"
-
-#, fuzzy
-#~| msgid "Provide main text area"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page text area"
-#~ msgstr "Doni ĉefan tekstareon"
-
-#, fuzzy
-#~| msgid "Paragraph"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Paragraph area"
-#~ msgstr "Paragrafo"
-
-#, fuzzy
-#~| msgid "Provide main text area"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Paragraph text area"
-#~ msgstr "Doni ĉefan tekstareon"
-
-#, fuzzy
-#~| msgid "Frame &Borders"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Left page border"
-#~ msgstr "Kadro&limoj"
-
-#, fuzzy
-#~| msgid "Frame &Borders"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Right page border"
-#~ msgstr "Kadro&limoj"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Grid 1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Grid"
-#~ msgstr "Krado 1"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) @title:tab Document settings page"
-#~ msgid "Document"
-#~ msgstr "Dokumento"
-
-#, fuzzy
-#~| msgid "Store Settings"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Document Settings"
-#~ msgstr "Konservi agordon"
-
-#, fuzzy
-#~| msgid "Create a new page"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create New Bookmark"
-#~ msgstr "Krei novan paĝon"
-
-#, fuzzy
-#~| msgid "Fra&mes"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "frameset"
-#~ msgstr "&Kadroj"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Smart Positioning"
-#~ msgstr "Pozicio"
-
-#, fuzzy
-#~| msgid "Text Run Around"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Text Run Around"
-#~ msgstr "Teksto ĉirkaŭfluas"
-
-#, fuzzy
-#~| msgid "Connect Text Frames"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Connect Text Frames"
-#~ msgstr "Kunligi tekstkadrojn"
-
-#, fuzzy
-#~| msgid "Columns"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns"
-#~ msgstr "Kolumnoj"
-
-#, fuzzy
-#~| msgid "Closing"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clone"
-#~ msgstr "Fermanta"
-
-#, fuzzy
-#~| msgid "Delete Page"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete"
-#~ msgstr "Forigi paĝon"
-
-#, fuzzy
-#~| msgid "&Page Mode"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clone Page Style"
-#~ msgstr "&Paĝmoduso"
-
-#, fuzzy
-#~| msgid "Rename Bookmark"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rename Bookmark"
-#~ msgstr "Alinomi la legosignon"
-
-#, fuzzy
-#~| msgid "Geometry"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Geometry"
-#~ msgstr "Geometrio"
-
-#, fuzzy
-#~| msgid "Debug"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Debug"
-#~ msgstr "Sencimigu"
-
-#, fuzzy
-#~| msgid "Navigation"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Navigation"
-#~ msgstr "Navigado"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page #"
-#~ msgstr "&Paĝo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Section"
-#~ msgstr "Instrukcioj:"
-
-#, fuzzy
-#~| msgid "Statistics"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Statistics"
-#~ msgstr "Statistiko"
-
-#, fuzzy
-#~| msgid "Words:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Words:"
-#~ msgstr "Vortoj:"
-
-#, fuzzy
-#~| msgid "Sentences:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sentences:"
-#~ msgstr "Frazoj:"
-
-#, fuzzy
-#~| msgid "Syllables:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Syllables:"
-#~ msgstr "Silaboj:"
-
-#, fuzzy
-#~| msgid "Characters including spaces:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Characters (spaces):"
-#~ msgstr "Signoj inklude de spacoj:"
-
-#, fuzzy
-#~| msgid "Characters including spaces:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Characters (no spaces):"
-#~ msgstr "Signoj inklude de spacoj:"
-
-#, fuzzy
-#~| msgid "Lines:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Lines:"
-#~ msgstr "Linioj:"
-
-#, fuzzy
-#~| msgid "Flesch reading ease:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Flesch reading ease"
-#~ msgstr "Legfacileco laŭ Flesch:"
-
-#, fuzzy
-#~| msgid "&Formatting Characters"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "East asian characters:"
-#~ msgstr "&Formatu signojn"
-
-#, fuzzy
-#~| msgid "Standard"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Standard"
-#~ msgstr "Normala"
-
-#, fuzzy
-#~| msgid "Head 1"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Head 1"
-#~ msgstr "Titolo 1"
-
-#, fuzzy
-#~| msgid "Head 2"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Head 2"
-#~ msgstr "Titolo 2"
-
-#, fuzzy
-#~| msgid "Head 3"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Head 3"
-#~ msgstr "Titolo 3"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Enumerated List"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Enumerated List"
-#~ msgstr "Numerita listo"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Alphabetical List"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Alphabetical List"
-#~ msgstr "Alfabeta listo"
-
-#, fuzzy
-#~| msgid "Bullet List"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Bullet List"
-#~ msgstr "Bulita listo"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Contents Title"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Contents Title"
-#~ msgstr "Enhavotitolo"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Contents Head 1"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Contents Head 1"
-#~ msgstr "Enhavotitolo 1"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Contents Head 2"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Contents Head 2"
-#~ msgstr "Enhavotitolo 2"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Contents Head 3"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Contents Head 3"
-#~ msgstr "Enhavotitolo 3"
-
-#, fuzzy
-#~| msgid "Document Title"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Document Title"
-#~ msgstr "Dokumentotitolo"
-
-#, fuzzy
-#~| msgid "Header"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Header"
-#~ msgstr "Kapo"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Footer"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Footer"
-#~ msgstr "Piedo"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Plain"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Plain"
-#~ msgstr "Simpla"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Borders 1"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Borders 1"
-#~ msgstr "Limo 1"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Borders 2"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Borders 2"
-#~ msgstr "Limo 2"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Borders 3"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Borders 3"
-#~ msgstr "Limo 3"
-
-#, fuzzy
-#~| msgid "Row"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Row"
-#~ msgstr "Linio"
-
-#, fuzzy
-#~| msgid "Column"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Column"
-#~ msgstr "Kolumno"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Light Gray"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Light Gray"
-#~ msgstr "Helgrizo"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Dark Gray"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Dark Gray"
-#~ msgstr "Malhelgrizo"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Black"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Black"
-#~ msgstr "Nigra"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Light Blue"
-#~ msgstr "Helblua"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Dark Blue"
-#~ msgstr "Malhelblua"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Red"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Red"
-#~ msgstr "Ruĝa"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Yellow"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Yellow"
-#~ msgstr "Flava"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Colorful"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Colorful"
-#~ msgstr "Multkolora"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Bluish"
-#~ msgstr "Blueta"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Simple 1"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Simple 1"
-#~ msgstr "Simpla 1"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Simple 2"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Simple 2"
-#~ msgstr "Simpla 2"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Simple 3"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Simple 3"
-#~ msgstr "Simpla 3"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Header 1"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Header 1"
-#~ msgstr "Kapo 1"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Header 2"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Header 2"
-#~ msgstr "Kapo 2"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Header 3"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Header 3"
-#~ msgstr "Kapo 3"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Header 4"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Header 4"
-#~ msgstr "Kapo 4"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Columns 1"
-#~ msgstr "Kolumno"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Columns 2"
-#~ msgstr "Kolumno"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Grid 1"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Grid 1"
-#~ msgstr "Krado 1"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Grid 2"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Grid 2"
-#~ msgstr "Krado 2"
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Grid 3"
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Grid 3"
-#~ msgstr "Krado 3"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Gray Heading"
-#~ msgstr "Griza Kapo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Blue Heading"
-#~ msgstr "Blua Kapo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Blue Traditional"
-#~ msgstr "Blua Tradicia"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Gray Traditional"
-#~ msgstr "Griza Tradicia"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Blue Top and Bottom"
-#~ msgstr "Blua supro kaj subo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Style name"
-#~ msgid "Gray Top and Bottom"
-#~ msgstr "Griza supro kaj subo"
-
-#, fuzzy
-#~| msgid "KOffice Word Processor"
-#~ msgctxt "(qtundo-format) application name"
-#~ msgid "Calligra Words"
-#~ msgstr "KOffice Tekstverkilo"
-
-#, fuzzy
-#~| msgid "KOffice Word Processor"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Word processor"
-#~ msgstr "KOffice Tekstverkilo"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copyright 1998-%1, The Words Team"
-#~ msgstr "(c) 1998-2002, La temo de Verkilo"
-
-#, fuzzy
-#~| msgid "Everything"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Everything"
-#~ msgstr "Ĉion"
-
-#, fuzzy
-#~| msgid "&Formatting Characters"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Formatting stuff"
-#~ msgstr "&Formatu signojn"
-
-#, fuzzy
-#~| msgid "Filter"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Filter"
-#~ msgstr "Filtri"
-
-#, fuzzy
-#~| msgid "Statistics"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Statistics docker"
-#~ msgstr "Statistiko"
-
-#, fuzzy
-#~| msgid "Footer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Foot and endnotes"
-#~ msgstr "Piedo"
-
-#, fuzzy
-#~| msgid "Thomas Zander"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Thomas Zander"
-#~ msgstr "Thomas Zander"
-
-#, fuzzy
-#~| msgid "Girish Ramakrishnan"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Girish Ramakrishnan"
-#~ msgstr "Girish Ramakrishnan"
-
-#, fuzzy
-#~| msgid "David Faure"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "David Faure"
-#~ msgstr "David Faure"
-
-#, fuzzy
-#~| msgid "Laurent Montel"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Laurent Montel"
-#~ msgstr "Laurent Montel"
-
-#, fuzzy
-#~| msgid "Sven Lüppken"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sven Lüppken"
-#~ msgstr "Sven Lüppken"
-
-#, fuzzy
-#~| msgid "Frank Dekervel"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Frank Dekervel"
-#~ msgstr "Frank Dekervel"
-
-#, fuzzy
-#~| msgid "Krister Wicksell Eriksson"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Krister Wicksell Eriksson"
-#~ msgstr "Krister Wicksell Eriksson"
-
-#, fuzzy
-#~| msgid "Dag Andersen"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Dag Andersen"
-#~ msgstr "Dag Andersen"
-
-#, fuzzy
-#~| msgid "Nash Hoogwater"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Nash Hoogwater"
-#~ msgstr "Nash Hoogwater"
-
-#, fuzzy
-#~| msgid "KFormula"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "KFormula"
-#~ msgstr "KFormula"
-
-#, fuzzy
-#~| msgid "Ulrich Kuettler"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ulrich Kuettler"
-#~ msgstr "Ulrich Kuettler"
-
-#, fuzzy
-#~| msgid "Shaheed Haque"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shaheed Haque"
-#~ msgstr "Shaheed Haque"
-
-#, fuzzy
-#~| msgid "Werner Trobin"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Werner Trobin"
-#~ msgstr "Werner Trobin"
-
-#, fuzzy
-#~| msgid "Nicolas Goutte"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Nicolas Goutte"
-#~ msgstr "Nicolas Goutte"
-
-#, fuzzy
-#~| msgid "Ariya Hidayat"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ariya Hidayat"
-#~ msgstr "Ariya Hidayat"
-
-#, fuzzy
-#~| msgid "Clarence Dang"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clarence Dang"
-#~ msgstr "Clarence Dang"
-
-#, fuzzy
-#~| msgid "Robert Jacolin"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Robert Jacolin"
-#~ msgstr "Robert Jacolin"
-
-#, fuzzy
-#~| msgid "Enno Bartels"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Enno Bartels"
-#~ msgstr "Enno Bartels"
-
-#, fuzzy
-#~| msgid "Ewald Snel"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ewald Snel"
-#~ msgstr "Ewald Snel"
-
-#, fuzzy
-#~| msgid "Tomasz Grobelny"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Tomasz Grobelny"
-#~ msgstr "Tomasz Grobelny"
-
-#, fuzzy
-#~| msgid "Michael Johnson"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Michael Johnson"
-#~ msgstr "Michael Johnson"
-
-#, fuzzy
-#~| msgid "Page Break"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page break icon"
-#~ msgstr "Paĝrompo"
-
-#, fuzzy
-#~| msgctxt "NAME OF TRANSLATORS"
-#~| msgid "Your names"
-#~ msgctxt "(qtundo-format) NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Wolfram Diestel,Steffen Pietsch"
-
-#, fuzzy
-#~| msgctxt "EMAIL OF TRANSLATORS"
-#~| msgid "Your emails"
-#~ msgctxt "(qtundo-format) EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "wolfram@steloj.de,Steffen.Pietsch@BerlinOnline.de"
-
-#, fuzzy
-#~| msgid "Copy%1-%2"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Copy"
-#~ msgstr "Kopiu %1 - %2"
-
-#, fuzzy
-#~| msgid "Standard"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Standard"
-#~ msgstr "Normala"
-
-#, fuzzy
-#~| msgid "Document Title"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Document Title"
-#~ msgstr "Dokumentotitolo"
-
-#, fuzzy
-#~| msgid "Head 1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Head 1"
-#~ msgstr "Titolo 1"
-
-#, fuzzy
-#~| msgid "Head 2"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Head 2"
-#~ msgstr "Titolo 2"
-
-#, fuzzy
-#~| msgid "Head 3"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Head 3"
-#~ msgstr "Titolo 3"
-
-#, fuzzy
-#~| msgid "Bullet List"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Bullet List"
-#~ msgstr "Bulita listo"
-
-#, fuzzy
-#~| msgid "&Tools"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Tools"
-#~ msgstr "&Iloj"
-
-#, fuzzy
-#~| msgid "Invalid OASIS OpenDocument file. No office:body tag found."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Invalid OASIS OpenDocument file. No office:body tag found."
-#~ msgstr "Nevalida OASIS OpenDocument-dosiero. Mankas marko 'office:body'."
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Invalid OASIS OpenDocument file. No tag found inside office:body."
-#~ msgstr "Malvalida dokumento. Neniu 'mime'-tipo klarigita."
-
-#, fuzzy
-#~| msgid "Modified"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Modified"
-#~ msgstr "Ŝanĝita"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Saved"
-#~ msgstr "Konservu bildon"
-
-#, fuzzy
-#~| msgid "Page %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page %1 of %2"
-#~ msgstr "Paĝo %1"
-
-#, fuzzy
-#~| msgid "Page %1"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page %1-%2 of %3"
-#~ msgstr "Paĝo %1"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Line %1"
-#~ msgstr "Listo"
-
-#, fuzzy
-#~| msgid "Page number:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Number"
-#~ msgstr "Paĝnumero:"
-
-#, fuzzy
-#~| msgid "Page number:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Line Number"
-#~ msgstr "Paĝnumero:"
-
-#, fuzzy
-#~| msgid "&Page Mode"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Style"
-#~ msgstr "&Paĝmoduso"
-
-#, fuzzy
-#~| msgid "Page Break"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Size"
-#~ msgstr "Paĝrompo"
-
-#, fuzzy
-#~| msgid "Modified"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Saved/Modified"
-#~ msgstr "Ŝanĝita"
-
-#, fuzzy
-#~| msgid "Frame Properties"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shape Properties..."
-#~ msgstr "Kadroagordo"
-
-#, fuzzy
-#~| msgid "&Formatting Characters"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Formatting Characters"
-#~ msgstr "&Formatu signojn"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Toggle the display of non-printing characters"
-#~ msgstr "Ŝanĝu la montradon de ne-printeblaj signoj."
-
-#, fuzzy
-#~| msgid ""
-#~| "Toggle the display of non-printing characters.<br><br>When this is "
-#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
-#~| "printing characters."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Toggle the display of non-printing characters.<br/><br/>When this is "
-#~ "enabled, Words shows you tabs, spaces, carriage returns and other non-"
-#~ "printing characters."
-#~ msgstr ""
-#~ "Ŝanĝu la montradon de ne-printeblaj signoj. <br> <br> Se enŝaltite, "
-#~ "Verkilo montras al vi tabulatorojn, spacojn, liniofinojn (\\n) kaj aliaj "
-#~ "ne-printeblaj signoj"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Turns the border display on and off"
-#~ msgstr "Komutu montradon de marĝenoj."
-
-#, fuzzy
-#~| msgid ""
-#~| "Turns the border display on and off.<br><br>The borders are never "
-#~| "printed. This option is useful to see how the document will appear on "
-#~| "the printed page."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Turns the border display on and off.<br/><br/>The borders are never "
-#~ "printed. This option is useful to see how the document will appear on the "
-#~ "printed page."
-#~ msgstr ""
-#~ "Komutu montradon de marĝenoj. <br> <br>La marĝenoj estas neniam "
-#~ "printitaj. Tiu opcio havas sian sencon por montri kiel la printita paĝo "
-#~ "aperos."
-
-#, fuzzy
-#~| msgid "Frame &Borders"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Table Borders"
-#~ msgstr "Kadro&limoj"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Toggle the display of table borders"
-#~ msgstr "Ŝanĝu la montradon de ne-printeblaj signoj."
-
-#, fuzzy
-#~| msgid ""
-#~| "Toggle the display of non-printing characters.<br><br>When this is "
-#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
-#~| "printing characters."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Toggle the display of table borders.<br/><br/>When this is enabled, Words "
-#~ "shows you any invisible table borders with a thin gray line."
-#~ msgstr ""
-#~ "Ŝanĝu la montradon de ne-printeblaj signoj. <br> <br> Se enŝaltite, "
-#~ "Verkilo montras al vi tabulatorojn, spacojn, liniofinojn (\\n) kaj aliaj "
-#~ "ne-printeblaj signoj"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Toggle the display of section bounds"
-#~ msgstr "Ŝanĝu la montradon de ne-printeblaj signoj."
-
-#, fuzzy
-#~| msgid ""
-#~| "Toggle the display of non-printing characters.<br><br>When this is "
-#~| "enabled, KWord shows you tabs, spaces, carriage returns and other non-"
-#~| "printing characters."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Toggle the display of section bounds.<br/><br/>When this is enabled, any "
-#~ "section bounds will be indicated with a thin gray horizontal brackets."
-#~ msgstr ""
-#~ "Ŝanĝu la montradon de ne-printeblaj signoj. <br> <br> Se enŝaltite, "
-#~ "Verkilo montras al vi tabulatorojn, spacojn, liniofinojn (\\n) kaj aliaj "
-#~ "ne-printeblaj signoj"
-
-#, fuzzy
-#~| msgid "Show Rulers"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Rulers"
-#~ msgstr "Montri mezurilojn"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shows or hides rulers"
-#~ msgstr "Montras aŭ kaŝas la mezurilojn."
-
-#, fuzzy
-#~| msgid ""
-#~| "The rulers are the white measuring spaces top and left of the document. "
-#~| "The rulers show the position and width of pages and of frames and can be "
-#~| "used to position tabulators among others.<p>Uncheck this to disable the "
-#~| "rulers from being displayed."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "The rulers are the white measuring spaces top and left of the document. "
-#~ "The rulers show the position and width of pages and of frames and can be "
-#~ "used to position tabulators among others.<p>Uncheck this to disable the "
-#~ "rulers from being displayed.</p>"
-#~ msgstr ""
-#~ "La mezuriloj estas la blankaj mezuraj spacoj supre kaj maldekstre de la "
-#~ "dokumento. La mezuriloj montras la posicion kaj larĝecon de paĝoj kaj "
-#~ "kadroj kaj endas por alĝustigi tabulatorojn inter la aliaj. <p>Elŝaltu - "
-#~ "por ne montri la mezurilon."
-
-#, fuzzy
-#~| msgid "Snap to Grid"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Snap to Grid"
-#~ msgstr "Kapti per krado"
-
-#, fuzzy
-#~| msgid "Show Status Bar"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Show Status Bar"
-#~ msgstr "Montri Statusan Breton"
-
-#, fuzzy
-#~| msgid "Show &status bar"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shows or hides the status bar"
-#~ msgstr "Montru &statobreton"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create"
-#~ msgstr "Krei"
-
-#, fuzzy
-#~| msgid "Configure..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure..."
-#~ msgstr "Agordi..."
-
-#, fuzzy
-#~| msgid "Page Layout..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Layout..."
-#~ msgstr "Paĝaranĝo..."
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Change properties of entire page"
-#~ msgstr "Ŝanĝu ecojn de tuta paĝo."
-
-#, fuzzy
-#~| msgid ""
-#~| "Change properties of the entire page.<p>Currently you can change paper "
-#~| "size, paper orientation, header and footer sizes, and column settings."
-#~ msgctxt "(qtundo-format)"
-#~ msgid ""
-#~ "Change properties of the entire page.<p>Currently you can change paper "
-#~ "size, paper orientation, header and footer sizes, and column settings.</p>"
-#~ msgstr ""
-#~ "Ŝanĝu ecojn de tuta paĝo. <p> Momente vi povas ŝanĝi paperformaton, "
-#~ "paperrotacion, kapo- kaj piedo-larĝecon, kaj linioformaton."
-
-#, fuzzy
-#~| msgid "Create Text Frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create Header"
-#~ msgstr "Kreu tekstkadron"
-
-#, fuzzy
-#~| msgid "Create Text Frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create Footer"
-#~ msgstr "Kreu tekstkadron"
-
-#, fuzzy
-#~| msgid "Show &status bar"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Shows or hides word counting in status bar"
-#~ msgstr "Montru &statobreton"
-
-#, fuzzy
-#~| msgid "Page Break"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page Setup"
-#~ msgstr "Paĝrompo"
-
-#, fuzzy
-#~| msgid "Even Pages Footer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Header & Footer"
-#~ msgstr "Paraj paĝpiedoj"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Page layout"
-#~ msgstr "Ŝanĝu aranĝon"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Next search result"
-#~ msgid "Next"
-#~ msgstr "Enmetu tabelon"
-
-#, fuzzy
-#~| msgid "Previous Page"
-#~ msgctxt "(qtundo-format) Previous search result"
-#~ msgid "Previous"
-#~ msgstr "Antaŭa paĝo"
-
-#, fuzzy
-#~| msgid "Options"
-#~ msgctxt "(qtundo-format) Search options"
-#~ msgid "Options"
-#~ msgstr "Opcioj"
-
-#, fuzzy
-#~| msgid "Odd Pages Header"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Odd Pages Header"
-#~ msgstr "Malparaj paĝkapoj"
-
-#, fuzzy
-#~| msgid "Even Pages Header"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Even Pages Header"
-#~ msgstr "Paraj paĝkapoj"
-
-#, fuzzy
-#~| msgid "Odd Pages Footer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Odd Pages Footer"
-#~ msgstr "Malparaj paĝpiedoj"
-
-#, fuzzy
-#~| msgid "Even Pages Footer"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Even Pages Footer"
-#~ msgstr "Paraj paĝpiedoj"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Main text"
-#~ msgstr "Enmetu tekston"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Other text"
-#~ msgstr "Enmetu tabelon"
-
-#~ msgid "Book"
-#~ msgstr "Libro"
-
-#, fuzzy
-#~| msgid "KOffice Word Processor"
-#~ msgctxt "application name"
-#~ msgid "Calligra Author"
-#~ msgstr "KOffice Tekstverkilo"
-
-#, fuzzy
-#~ msgid "Copyright 2012-%1, The Author Team"
-#~ msgstr "(c) 1998-2002, La temo de Verkilo"
-
-#, fuzzy
-#~| msgid "Insert Page"
-#~ msgid "Select Cover Image..."
-#~ msgstr "Enmeti paĝon"
-
-#~ msgid "Open..."
-#~ msgstr "Malfermi..."
-
-#, fuzzy
-#~| msgid "Address Selection"
-#~ msgid "Cover selection"
-#~ msgstr "Adreselekto"
-
-#, fuzzy
-#~ msgid "Edit section"
-#~ msgstr "Instrukcioj:"
-
-#~ msgid "None"
-#~ msgstr "Neniu"
-
-#~ msgid "Main"
-#~ msgstr "Ĉefa"
-
-#~ msgid "Neutral"
-#~ msgstr "Neŭtra"
-
-#, fuzzy
-#~| msgid "Enter entry name:"
-#~ msgid "Enter actor's name here"
-#~ msgstr "Donu nomon de ero:"
-
-#~ msgid "Type:"
-#~ msgstr "Tipo:"
-
-#~ msgid "Role:"
-#~ msgstr "Rolo:"
-
-#~ msgid "Age:"
-#~ msgstr "Aĝo:"
-
-#, fuzzy
-#~| msgid "Attention"
-#~ msgid "Actor description:"
-#~ msgstr "Atenton"
-
-#~ msgid "Undo"
-#~ msgstr "Malfari"
-
-#~ msgid "Redo"
-#~ msgstr "Refari"
-
-#~ msgid "Bold"
-#~ msgstr "Grasa"
-
-#~ msgid "Italic"
-#~ msgstr "Kursiva"
-
-#~ msgid "Underline"
-#~ msgstr "Substrekita"
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgid "1st Edit"
-#~ msgstr "Redakti"
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgid "2nd Edit"
-#~ msgstr "Redakti"
-
-#, fuzzy
-#~| msgid "Edit"
-#~ msgid "3rd Edit"
-#~ msgstr "Redakti"
-
-#~ msgid "Finished"
-#~ msgstr "Finita"
-
-#, fuzzy
-#~| msgid "Attention"
-#~ msgid "Author's section"
-#~ msgstr "Atenton"
-
-#, fuzzy
-#~| msgid "&Page Mode"
-#~ msgid "Badge:"
-#~ msgstr "&Paĝmoduso"
-
-#~ msgid "Title:"
-#~ msgstr "Titolo:"
-
-#~ msgid "Status:"
-#~ msgstr "Stato:"
-
-#, fuzzy
-#~ msgctxt "displayname of the semantic item type AuthorSection"
-#~ msgid "Section"
-#~ msgstr "Instrukcioj:"
-
-#~ msgid "File to open"
-#~ msgstr "Malfermenda dosiero"
-
-#, fuzzy
-#~| msgid "Create Text Frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create Frame"
-#~ msgstr "Kreu tekstkadron"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete Frame"
-#~ msgstr "Forigi kadron"
-
-#~ msgid "General"
-#~ msgstr "Ĝenerale"
-
-#~ msgid "Protect size and position"
-#~ msgstr "Sekuri grandecon kaj pozicion"
-
-#~ msgid "Position"
-#~ msgstr "Pozicio"
-
-#~ msgid "X:"
-#~ msgstr "X:"
-
-#~ msgid "Y:"
-#~ msgstr "Y:"
-
-#~ msgid "Width:"
-#~ msgstr "Larĝeco:"
-
-#~ msgid "Height:"
-#~ msgstr "Alteco:"
-
-#~ msgid "Margins"
-#~ msgstr "Marĝenoj"
-
-#~ msgid "Synchronize changes"
-#~ msgstr "Grupa ŝanĝo"
-
-#~ msgid "Bottom:"
-#~ msgstr "Sube:"
-
-#~ msgid "Top:"
-#~ msgstr "Supre:"
-
-#~ msgid "Right:"
-#~ msgstr "Dekstre:"
-
-#~ msgid "Left:"
-#~ msgstr "Maldekstre:"
-
-#~ msgid "Create a new page"
-#~ msgstr "Krei novan paĝon"
-
-#~ msgid "Resize last frame"
-#~ msgstr "Etendi lastan kadron"
-
-#, fuzzy
-#~| msgid "Don't show the extra text"
-#~ msgid "Do not show the extra text"
-#~ msgstr "Ne montri la troan tekston"
-
-#~ msgid "Reconnect frame to current flow"
-#~ msgstr "Religi la kadron al la aktuala fluo"
-
-#~ msgid "Do not create a followup frame"
-#~ msgstr "Ne krei sekvan kadron"
-
-#, fuzzy
-#~| msgid "Place a copy of this frame"
-#~ msgid "Copy this Frame"
-#~ msgstr "Meti kopion de tiu ĉi kadro"
-
-#~ msgid "Protect content"
-#~ msgstr "Sekuri enhavon"
-
-#~ msgid "Frame is a copy of the previous frame"
-#~ msgstr "Kadro estas kopio de la antaŭa kadro"
-
-#~ msgid "Changes will be applied to all frames in frameset"
-#~ msgstr "Ŝanĝoj estos faritaj en ĉiuj kadroj en la kadraro"
-
-#~ msgid "Retain original aspect ratio"
-#~ msgstr "Konservi originan proporcion"
-
-#, fuzzy
-#~| msgid "Select All Frames"
-#~ msgid "Select All Shapes"
-#~ msgstr "Elekti ĉiujn kadrojn"
-
-#~ msgid "Create Linked Copy"
-#~ msgstr "Krei ligitan kopion"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Create Linked Copy"
-#~ msgstr "Krei ligitan kopion"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert Page"
-#~ msgstr "Enmeti paĝon"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove Page"
-#~ msgstr "Forigu eron"
-
-#, fuzzy
-#~| msgid "Bookmarks"
-#~ msgid "Bookmark"
-#~ msgstr "Legosignoj"
-
-#, fuzzy
-#~| msgid "Characters including spaces:"
-#~ msgid "Characters (excluding spaces):"
-#~ msgstr "Signoj inklude de spacoj:"
-
-#, fuzzy
-#~| msgid "Flesch reading ease:"
-#~ msgid "Flesch Reading Ease:"
-#~ msgstr "Legfacileco laŭ Flesch:"
-
-#, fuzzy
-#~| msgid "Sentences:"
-#~ msgid "Preferences"
-#~ msgstr "Frazoj:"
-
-#, fuzzy
-#~| msgid "Automatic"
-#~ msgid "Automatically update"
-#~ msgstr "Aŭtomate"
-
-#, fuzzy
-#~| msgid "KFormula"
-#~ msgid "F&ormat"
-#~ msgstr "KFormula"
-
-#~ msgid "Invalid document. No mimetype specified."
-#~ msgstr "Malvalida dokumento. Neniu 'mime'-tipo klarigita."
-
-#, fuzzy
-#~| msgid ""
-#~| "Invalid document. Expected mimetype application/x-kword or application/"
-#~| "vnd.kde.kword, got %1"
-#~ msgid ""
-#~ "Invalid document. Expected mimetype application/x-words or application/"
-#~ "vnd.kde.words, got %1"
-#~ msgstr ""
-#~ "Malvalida dokumento. Mi atendis 'mime'-tipon application/x-kword aŭ "
-#~ "application/vnd.kde.kword, sed ricevis %1"
-
-#~ msgid "Invalid document. Paper size: %1x%2"
-#~ msgstr "Nevalida dokumento. Papergrandeco: %1x%2"
-
-#, fuzzy
-#~| msgid "Unable to create database object"
-#~ msgid "Unable to locate footnote text"
-#~ msgstr "Ne eblis krei datumbazan objekton"
-
-#, fuzzy
-#~| msgid "Unable to create database object"
-#~ msgid "Unable to locate note-text"
-#~ msgstr "Ne eblis krei datumbazan objekton"
-
-#, fuzzy
-#~| msgid "Raise Frame"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Clip Frame"
-#~ msgstr "Malfonigi kadron"
-
-#, fuzzy
-#~| msgid "Create Text Frame"
-#~ msgid "Create Frame-clip"
-#~ msgstr "Kreu tekstkadron"
-
-#, fuzzy
-#~| msgid "Remove record"
-#~ msgid "Remove Frame-clip"
-#~ msgstr "Forigi rikordon"
-
-#, fuzzy
-#~ msgid "Force the remainder of the text into the next page"
-#~ msgstr "Devigu la finon de teksto en la sekvan kadron."
-
-#, fuzzy
-#~ msgid "All text after this point will be moved into the next page."
-#~ msgstr ""
-#~ "Tio enmetas ne-printeblan signon je nuna kursiloposicio. Ĉiu teksto post "
-#~ "tiu posicio estos devigita en la sekvan kadron de la kadraro."
-
-#, fuzzy
-#~| msgid "KFormula"
-#~ msgid "Form"
-#~ msgstr "KFormula"
-
-#~ msgid "Enable Document Headers"
-#~ msgstr "Ŝalti dokumentkapojn"
-
-#~ msgid "Enable Document Footers"
-#~ msgstr "Ŝalti dokumentpiedojn"
-
-#, fuzzy
-#~| msgid "Words:"
-#~ msgctxt "application name"
-#~ msgid "Words"
-#~ msgstr "Vortoj:"
-
-#~ msgid "Number of pages:"
-#~ msgstr "Nombro da paĝoj:"
-
-#~ msgid "Number of frames:"
-#~ msgstr "Nombro da kadroj:"
-
-#~ msgid "Number of pictures:"
-#~ msgstr "Nombro da bildoj:"
-
-#~ msgid "Number of tables:"
-#~ msgstr "Nombro da tabeloj:"
-
-#~ msgid "Text"
-#~ msgstr "Teksto"
-
-#~ msgid "Characters without spaces:"
-#~ msgstr "Signoj krom spacoj:"
-
-#, fuzzy
-#~| msgid "Characters including spaces:"
-#~ msgid "Characters incl. spaces"
-#~ msgstr "Signoj inklude de spacoj:"
-
-#~ msgid "approximately %1"
-#~ msgstr "proksimume %1"
-
-#~ msgid "Sentence, word and letter counts for this document"
-#~ msgstr "Frazo-, vorto- kaj litero-nombro de tiu ĉi dokumento"
-
-#, fuzzy
-#~| msgid ""
-#~| "Information on the number of letters, words, syllables and sentences for "
-#~| "this document.<p>Evaluates readability using the Flesch reading score."
-#~ msgid ""
-#~ "Information on the number of letters, words, syllables and sentences for "
-#~ "this document.<p>Evaluates readability using the Flesch reading score.</p>"
-#~ msgstr ""
-#~ "Informoj pri nombro de literoj, vortoj, silaboj kaj frazoj por tiu ĉi "
-#~ "dokumento. <p>Kontrolas legeblecon uzanta la metodon de Flesch."
-
-#, fuzzy
-#~ msgid "Shows and hides header display"
-#~ msgstr "Komutas la montradon de kapo."
-
-#, fuzzy
-#~| msgid ""
-#~| "Selecting this option toggles the display of headers in KWord."
-#~| "<br><br>Headers are special frames at the top of each page which can "
-#~| "contain page numbers or other information."
-#~ msgid ""
-#~ "Selecting this option toggles the display of headers in Words.<br/><br/"
-#~ ">Headers are special frames at the top of each page which can contain "
-#~ "page numbers or other information."
-#~ msgstr ""
-#~ "Elekti ĉi tiun opcion komutas la montradon de la kapo en Verkilo. <br> "
-#~ "<br>Kapoj estas specialaj framoj supre de la paĝo, kiuj povas enhavi "
-#~ "paĝnumerojn aŭ aliajn informojn."
-
-#, fuzzy
-#~ msgid "Shows and hides footer display"
-#~ msgstr "Komutas la montradon de piedo."
-
-#, fuzzy
-#~| msgid ""
-#~| "Selecting this option toggles the display of footers in KWord. "
-#~| "<br><br>Footers are special frames at the bottom of each page which can "
-#~| "contain page numbers or other information."
-#~ msgid ""
-#~ "Selecting this option toggles the display of footers in Words. <br/><br/"
-#~ ">Footers are special shapes at the bottom of each page which can contain "
-#~ "page numbers or other information."
-#~ msgstr ""
-#~ "Elekti ĉi tiun opcion komutas la montradon de la piedo en Verkilo. <br> "
-#~ "<br>Piedoj estas specialaj framoj sube de la paĝo, kiuj povas enhavi "
-#~ "paĝnumerojn aŭ aliajn informojn."
-
-#, fuzzy
-#~| msgid "Raise Frame"
-#~ msgid "Raise Shape"
-#~ msgstr "Malfonigi kadron"
-
-#, fuzzy
-#~| msgid ""
-#~| "Raise the currently selected frame so that it appears above all the "
-#~| "other frames"
-#~ msgid ""
-#~ "Raise the currently selected shape so that it appears above all the other "
-#~ "shape"
-#~ msgstr ""
-#~ "Malfonigi elektitan kadron tiel ke ĝi aperos super ĉiuj aliaj kadroj"
-
-#, fuzzy
-#~| msgid ""
-#~| "Raise the currently selected frame so that it appears above all the "
-#~| "other frames. This is only useful if frames overlap each other. If "
-#~| "multiple frames are selected they are all raised in turn."
-#~ msgid ""
-#~ "Raise the currently selected shape so that it appears above all the other "
-#~ "shapes. This is only useful if shapes overlap each other. If multiple "
-#~ "shapes are selected they are all raised in turn."
-#~ msgstr ""
-#~ "Malfonigi elektitan kadron tiel ke ĝi aperos super ĉiuj aliaj kadroj. Tiu "
-#~ "nur havas sencon, se kadroj kovras aliajn kadrojn. Se estas elektitaj pli "
-#~ "ol unu kadro, ĉiuj estas malfonigitaj en unu paŝo.Malfonigu elektitan "
-#~ "kadron tiel ke ĝi aperos super ĉiuj aliaj kadroj. Tiu nur havas sencon, "
-#~ "se kadroj kovras aliajn kadrojn. Se estas elektitaj pli ol unu kadro, "
-#~ "ĉiuj estas malfonigitaj en unu paŝo."
-
-#, fuzzy
-#~| msgid "Lower Frame"
-#~ msgid "Lower Shape"
-#~ msgstr "Fonigi kadron"
-
-#, fuzzy
-#~| msgid ""
-#~| "Lower the currently selected frame so that it disappears under any frame "
-#~| "that overlaps it"
-#~ msgid ""
-#~ "Lower the currently selected shape so that it disappears under any shape "
-#~ "that overlaps it"
-#~ msgstr "Fonigu elektitan kadron tiel ke ĝi kovros sub ĉiuj aliaj kadroj"
-
-#, fuzzy
-#~| msgid ""
-#~| "Lower the currently selected frame so that it disappears under any frame "
-#~| "that overlaps it. If multiple frames are selected they are all lowered "
-#~| "in turn."
-#~ msgid ""
-#~ "Lower the currently selected shape so that it disappears under any shape "
-#~ "that overlaps it. If multiple shape are selected they are all lowered in "
-#~ "turn."
-#~ msgstr ""
-#~ "Fonigu elektitan kadron tiel ke ĝi kovros sub ĉiuj aliaj kadroj. Se estas "
-#~ "elektitaj pli ol unu kadro, ĉiuj estas fonigitaj en unu paŝo."
-
-#~ msgid "Bring to Front"
-#~ msgstr "Malfonigi"
-
-#~ msgid "Send to Back"
-#~ msgstr "Fonigi"
-
-#, fuzzy
-#~| msgid "First Page Header"
-#~ msgid "After last page"
-#~ msgstr "Kapo de la unua paĝo"
-
-#, fuzzy
-#~| msgid "&Page Mode"
-#~ msgid "Page style:"
-#~ msgstr "&Paĝmoduso"
-
-#, fuzzy
-#~| msgid "Insert Page"
-#~ msgctxt "Insert menu"
-#~ msgid "&Insert"
-#~ msgstr "Enmeti paĝon"
-
-#, fuzzy
-#~| msgid "&Variable"
-#~ msgid "Variable"
-#~ msgstr "&Variablo"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgid "As Character"
-#~ msgstr "Krei"
-
-#, fuzzy
-#~| msgid "Create"
-#~ msgid "To Character"
-#~ msgstr "Krei"
-
-#, fuzzy
-#~| msgid "Paragraph"
-#~ msgid "To Paragraph"
-#~ msgstr "Paragrafo"
-
-#, fuzzy
-#~ msgid "To Page"
-#~ msgstr "Forigu eron"
-
-#, fuzzy
-#~ msgid "Page..."
-#~ msgstr "Ŝanĝu aranĝon"
-
-#~ msgid "Delete Page"
-#~ msgstr "Forigi paĝon"
-
-#, fuzzy
-#~| msgid "Insert Page"
-#~ msgid "Insert Image Options"
-#~ msgstr "Enmeti paĝon"
-
-#~ msgid "Disable Document Headers"
-#~ msgstr "Malŝalti dokumentkapojn"
-
-#~ msgid "Disable Document Footers"
-#~ msgstr "Malŝalti dokumentpiedojn"
-
-#, fuzzy
-#~| msgid "Frame &Borders"
-#~ msgid "Page Borders"
-#~ msgstr "Kadro&limoj"
-
-#, fuzzy
-#~| msgid "Show &status bar"
-#~ msgid "Hide Status Bar"
-#~ msgstr "Montru &statobreton"
-
-#~ msgid "Automatic"
-#~ msgstr "Aŭtomate"
-
-#, fuzzy
-#~| msgid "Enno Bartels"
-#~ msgid "Endnote"
-#~ msgstr "Enno Bartels"
-
-#, fuzzy
-#~ msgid "Frame/Frameset Properties"
-#~ msgstr "&Kadro/kadraro..."
-
-#, fuzzy
-#~ msgid "Alter frameset properties"
-#~ msgstr "Ŝanĝu kadraro-agordon."
-
-#, fuzzy
-#~ msgid "Convert current frame to an inline frame"
-#~ msgstr "Ŝanĝu nunan kadron al enmetitan kadron."
-
-#~ msgid ""
-#~ "Convert the current frame to an inline frame.<br><br>Place the inline "
-#~ "frame within the text at the point nearest to the frames current position."
-#~ msgstr ""
-#~ "Ŝanĝu nunan kadron al enmetitan kadron. <br> <br>Enmetas la enan kadron "
-#~ "je tiu ĉi posicio en la teksto, kio estas plej proksime al la nuna "
-#~ "posicio de la kadro"
-
-#, fuzzy
-#~| msgid "Store Settings"
-#~ msgid "Set Floating"
-#~ msgstr "Konservi agordon"
-
-#, fuzzy
-#~| msgid "&Filter output"
-#~ msgid "Filter stuff"
-#~ msgstr "&Filtrilo eligo"
-
-#~ msgid "Fra&mes"
-#~ msgstr "&Kadroj"
-
-#, fuzzy
-#~| msgid "&Table:"
-#~ msgid "Tables"
-#~ msgstr "&Tabelo:"
-
-#, fuzzy
-#~| msgid "Insert Page"
-#~ msgid "Insert"
-#~ msgstr "Enmeti paĝon"
-
-#~ msgid "Layout of Text in Other Frames"
-#~ msgstr "Tekstoformato en aliaj kadroj"
-
-#, fuzzy
-#~| msgid "Text will run &around the frame"
-#~ msgid "Text will run around this frame"
-#~ msgstr "ĉ&irkaŭfluas tiun ĉi kadron"
-
-#, fuzzy
-#~| msgid "Text will &not run around this frame"
-#~ msgid "Text will not run around this frame"
-#~ msgstr "&Ne ĉirkaŭfluas tiun ĉi kadron"
-
-#~ msgid "Run Around Side"
-#~ msgstr "Teksto ĉirkaŭfluas flankon"
-
-#, fuzzy
-#~ msgid "Longest side"
-#~ msgstr "Teksto ĉirkaŭfluas flankon"
-
-#, fuzzy
-#~ msgid "Create custom outline"
-#~ msgstr "Kreu tabelon."
-
-#, fuzzy
-#~ msgid "Create Custom Outline"
-#~ msgstr "Kreu tabelon."
-
-#, fuzzy
-#~ msgid "Create outlines"
-#~ msgstr "Kreu tabelon."
-
-#, fuzzy
-#~| msgctxt "Style name"
-#~| msgid "Borders 1"
-#~ msgid "Borders"
-#~ msgstr "Limo 1"
-
-#, fuzzy
-#~| msgid "Mail Merge - Editor"
-#~ msgid "MailMerge"
-#~ msgstr "Cirkulero - Redaktilo"
-
-#, fuzzy
-#~| msgid "Footer"
-#~ msgid "Font"
-#~ msgstr "Piedo"
-
-#, fuzzy
-#~| msgid "KFormula"
-#~ msgid "Format"
-#~ msgstr "KFormula"
-
-#, fuzzy
-#~| msgid "KFormula"
-#~ msgid "Formula"
-#~ msgstr "KFormula"
-
-#~ msgid "KWord"
-#~ msgstr "KWord"
-
-#, fuzzy
-#~| msgid "Page Break"
-#~ msgid "Page Background"
-#~ msgstr "Paĝrompo"
-
-#~ msgid "If Text is Too Long for Frame"
-#~ msgstr "Se teksto estas tro longa por kadro"
-
-#~ msgid "On New Page Creation"
-#~ msgstr "Je kreo de nova paĝo"
-
-#~ msgid ""
-#~ "Alter frameset properties.<p>Currently you can change the frame "
-#~ "background."
-#~ msgstr "Ŝanĝu kadraro-agordon.<p>Momente vi povas ŝanĝi la kadran vidfonon."
-
-#~ msgid "Show Grid"
-#~ msgstr "Montri kradon"
-
-#, fuzzy
-#~| msgid "Odd Pages Header"
-#~ msgid "Odd Pages Header %1"
-#~ msgstr "Malparaj paĝkapoj"
-
-#, fuzzy
-#~| msgid "Even Pages Header"
-#~ msgid "Even Pages Header %1"
-#~ msgstr "Paraj paĝkapoj"
-
-#, fuzzy
-#~| msgid "Odd Pages Footer"
-#~ msgid "Odd Pages Footer %1"
-#~ msgstr "Malparaj paĝpiedoj"
-
-#, fuzzy
-#~| msgid "Even Pages Footer"
-#~ msgid "Even Pages Footer %1"
-#~ msgstr "Paraj paĝpiedoj"
-
-#~ msgid "Main Text Frameset"
-#~ msgstr "Ĉefteksta kadraro"
-
-#, fuzzy
-#~| msgid "Margins"
-#~ msgid "Matrix"
-#~ msgstr "Marĝenoj"
-
-#, fuzzy
-#~| msgid "Frame &Borders"
-#~ msgid "Configure Frame Border"
-#~ msgstr "Kadro&limoj"
-
-#, fuzzy
-#~| msgid "&Table:"
-#~ msgid "Ta&ble"
-#~ msgstr "&Tabelo:"
-
-#, fuzzy
-#~| msgid "Hello!"
-#~ msgid "Cell"
-#~ msgstr "Saluton!"
-
-#, fuzzy
-#~| msgid "Frame &Borders"
-#~ msgid "Configure Frame Borders"
-#~ msgstr "Kadro&limoj"
-
-#, fuzzy
-#~| msgid "Create a new page"
-#~ msgid "Add a new page"
-#~ msgstr "Krei novan paĝon"
-
-#, fuzzy
-#~ msgid "Delete selected pages"
-#~ msgstr "Forigu la elektitan framon."
-
-#, fuzzy
-#~| msgid "Delete Page"
-#~ msgid "Delete Layer"
-#~ msgstr "Forigi paĝon"
-
-#, fuzzy
-#~ msgid "Information"
-#~ msgstr "Dokumento-&informoj"
-
-#~ msgid "&Available tables:"
-#~ msgstr "&Haveblaj tabeloj:"
-
-#~ msgid "&Fields of the selected table:"
-#~ msgstr "&Kolumnoj de la elektita tabelo:"
-
-#~ msgid "Query Result"
-#~ msgstr "Serĉrezulto"
-
-#~ msgid "&Query:"
-#~ msgstr "&Serĉi:"
-
-#~ msgid "&Execute"
-#~ msgstr "&Lanĉi"
-
-#~ msgid "&Setup"
-#~ msgstr "&Agordo"
-
-#~ msgid "&Table:"
-#~ msgstr "&Tabelo:"
-
-#~ msgid "View or Edit Filter &Rules"
-#~ msgstr "Montri aŭ redakti &filtrilojn"
-
-#~ msgid "&Used database records:"
-#~ msgstr "&Uzitaj datumbazaj rikordoj:"
-
-#~ msgid "&Keep Settings..."
-#~ msgstr "&Konservi agordojn..."
-
-#~ msgid "&Hostname:"
-#~ msgstr "&Komputilnomo:"
-
-#~ msgid "&Driver:"
-#~ msgstr "&Pelilo:"
-
-#~ msgid "Database &name:"
-#~ msgstr "Datumbazo &nomo:"
-
-#~ msgid "&Username:"
-#~ msgstr "&Uzantonomo:"
-
-#~ msgid "&Port:"
-#~ msgstr "&Pordo:"
-
-#~ msgid "default"
-#~ msgstr "apriora"
-
-#~ msgid "&Add >>"
-#~ msgstr "&Aldoni >>"
-
-#~ msgid "<< &Remove"
-#~ msgstr "<< Fo&rigi"
-
-#~ msgid "&Filter on:"
-#~ msgstr "&Filtri ĉe:"
-
-#~ msgid "Name"
-#~ msgstr "Nomo"
-
-#~ msgid "Distribution Lists"
-#~ msgstr "Distribulistoj"
-
-#~ msgid "Address B&ook"
-#~ msgstr "Adreslibr&o"
-
-#~ msgid "&Selected Addresses"
-#~ msgstr "&Selektitaj adresoj"
-
-#~ msgid "Personal"
-#~ msgstr "Persona"
-
-#~ msgid "Hi!"
-#~ msgstr "Hej!"
-
-#~ msgid "Hello!"
-#~ msgstr "Saluton!"
-
-#~ msgid "Bye!"
-#~ msgstr "Ĝis!"
-
-#~ msgid "Good bye"
-#~ msgstr "Adiaŭ"
-
-#~ msgid "Professional"
-#~ msgstr "Profesia"
-
-#~ msgid "Good Morning"
-#~ msgstr "Bonan matenon"
-
-#~ msgid "Good Afternoon"
-#~ msgstr "Bonan tagon"
-
-#~ msgid "Good Evening"
-#~ msgstr "Bonan vesperon"
-
-#~ msgid "Email"
-#~ msgstr "Retpoŝto"
-
-#~ msgid "To:"
-#~ msgstr "Al:"
-
-#~ msgid "Subject:"
-#~ msgstr "Temo:"
-
-#~ msgid "CC:"
-#~ msgstr "Kopio:"
-
-#~ msgid "BCC:"
-#~ msgstr "Kaŝa kopio:"
-
-#~ msgid "Fwd:"
-#~ msgstr "Plu:"
-
-#~ msgid "Best regards,"
-#~ msgstr "Bondezirojn,"
-
-#~ msgid "Best wishes"
-#~ msgstr "Bondeziroj"
-
-#~ msgid "Cordially,"
-#~ msgstr "Kore,"
-
-#~ msgid "Love,"
-#~ msgstr "Amike,"
-
-#~ msgid "Regards,"
-#~ msgstr "Salutojn,"
-
-#~ msgid "Thank you,"
-#~ msgstr "Dankon,"
-
-#~ msgid "Thanks,"
-#~ msgstr "Dankon,"
-
-#~ msgid "Subject"
-#~ msgstr "Temo"
-
-#~ msgid "Dear Sir or Madam:"
-#~ msgstr "Kara:"
-
-#~ msgid "Ladies and Gentlemen:"
-#~ msgstr "Gesinjoroj:"
-
-#~ msgid "Attention"
-#~ msgstr "Atenton"
-
-#~ msgid "Attention:"
-#~ msgstr "Atenton:"
-
-#~ msgid "ATTN:"
-#~ msgstr "ATTN:"
-
-#~ msgid "Instructions"
-#~ msgstr "Instrukcioj"
-
-#~ msgid "CERTIFIED"
-#~ msgstr "CERTIGITA"
-
-#~ msgid "CONFIDENTIAL"
-#~ msgstr "KONFIDENCA"
-
-#~ msgid "PERSONAL"
-#~ msgstr "PERSONA"
-
-#~ msgid "FACSIMILE"
-#~ msgstr "FAKSIMILO"
-
-#~ msgid ">>>Illegal position within datasource<<<"
-#~ msgstr ">>>Malvalida pozicio en datumbazo<<<"
-
-#~ msgid ">>>Field %1 is unknown in the current database query<<<"
-#~ msgstr ">>>Kolumno %1 estas nekonata je la nuna datumbaza serĉo<<<"
-
-#~ msgid "Mail Merge - Editor"
-#~ msgstr "Cirkulero - Redaktilo"
-
-#~ msgid "Please enter the password for the database connection"
-#~ msgstr "Bonvolu doni la kodvorton por ligo al la datumbazo"
-
-#~ msgid "Mail Merge - Setup Database Connection"
-#~ msgstr "Cirkulero - Agordi datumbazan ligon"
-
-#~ msgid "<not saved>"
-#~ msgstr "<ne sekurita>"
-
-#~ msgid "ascending"
-#~ msgstr "pligrandiĝante"
-
-#~ msgid "descending"
-#~ msgstr "malpligrandiĝante"
-
-#~ msgid "contains"
-#~ msgstr "enhavas"
-
-#~ msgid "Field"
-#~ msgstr "Ero"
-
-#~ msgid "Include"
-#~ msgstr "Inkluzivigi"
-
-#~ msgid "Operator"
-#~ msgstr "Operacisigno"
-
-#~ msgid "Condition"
-#~ msgstr "Kondiĉo"
-
-#~ msgid "Value"
-#~ msgstr "Valoro"
-
-#~ msgid "NOT"
-#~ msgstr "NE"
-
-#~ msgid "Unkown mail merge variable: %1"
-#~ msgstr "Nekonata cirkuler-variablonomo: %1"
-
-#~ msgid "no category"
-#~ msgstr "neniu kategorio"
-
-#~ msgid "New Distribution List"
-#~ msgstr "Nova distribulisto"
-
-#~ msgid "Please enter name:"
-#~ msgstr "Bonvolu doni nomon:"
-
-#~ msgid ""
-#~ "<qt>Distribution list with the given name <b>%1</b> already exists. "
-#~ "Please select a different name.</qt>"
-#~ msgstr ""
-#~ "<qt>Distribulisto kun la donita nomo <b>%1</b> jam ekzistas. Bonvolu doni "
-#~ "alian nomon.</qt>"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
-
-#~ msgid "No Value"
-#~ msgstr "Neniu valoro"
-
-#~ msgid "Add record"
-#~ msgstr "Aldoni rikordon"
-
-#~ msgid "Add entry"
-#~ msgstr "Aldoni eron"
-
-#~ msgid "Remove entry"
-#~ msgstr "Forigi eron"
-
-#~ msgid "Add Entry"
-#~ msgstr "Aldoni eron"
-
-#, fuzzy
-#~| msgid "&Hostname:"
-#~ msgid "Host:"
-#~ msgstr "&Komputilnomo:"
-
-#, fuzzy
-#~| msgid "&Port:"
-#~ msgid "Port:"
-#~ msgstr "&Pordo:"
-
-#, fuzzy
-#~| msgid "&Time"
-#~ msgid "Timeout:"
-#~ msgstr "&Tempo"
-
-#, fuzzy
-#~| msgid "Table of Contents"
-#~ msgid "Table of Content"
-#~ msgstr "Enhavtabelo"
-
-#, fuzzy
-#~ msgid "Slots"
-#~ msgstr "Teksto trastrekita"
-
-#, fuzzy
-#~ msgid "Properties"
-#~ msgstr "&Eco"
-
-#, fuzzy
-#~| msgid "&Variable"
-#~ msgid "Variables"
-#~ msgstr "&Variablo"
-
-#, fuzzy
-#~ msgid "HTML Document"
-#~ msgstr "Dokumento"
-
-#, fuzzy
-#~ msgid "Encoded Text"
-#~ msgstr "Teksto trastrekita"
-
-#, fuzzy
-#~ msgid "Delete the currently selected frame(s)"
-#~ msgstr "Forigu la elektitan framon."
-
-#~ msgid "Delete the currently selected frame(s)."
-#~ msgstr "Forigi la aktuale elektita(j)n kadro(j)n."
-
-#~ msgid "First Page Header"
-#~ msgstr "Kapo de la unua paĝo"
-
-#~ msgid "First Page Footer"
-#~ msgstr "Piedo de la unua paĝo"
-
-#, fuzzy
-#~ msgid "Unit:"
-#~ msgstr "Ecoj:"
-
-#, fuzzy
-#~| msgid "Size (%1):"
-#~ msgid "Size:"
-#~ msgstr "Grandeco (%1):"
-
-#, fuzzy
-#~| msgid "Attention:"
-#~ msgid "Orientation:"
-#~ msgstr "Atenton:"
-
-#, fuzzy
-#~ msgid "Single sided"
-#~ msgstr "Teksto ĉirkaŭfluas flankon"
-
-#, fuzzy
-#~| msgid "Document"
-#~ msgid "Whole document:"
-#~ msgstr "Dokumento"
-
-#, fuzzy
-#~ msgid "Right to left"
-#~ msgstr "Helblua"
-
-#, fuzzy
-#~| msgid "Left:"
-#~ msgid "Left Edge:"
-#~ msgstr "Maldekstre:"
-
-#, fuzzy
-#~| msgid "Right:"
-#~ msgid "Right Edge:"
-#~ msgstr "Dekstre:"
-
-#, fuzzy
-#~ msgid "Page spread"
-#~ msgstr "Linirompon"
+msgstr "Alia teksto"

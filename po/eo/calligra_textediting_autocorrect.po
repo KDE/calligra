@@ -1,13 +1,15 @@
-# Translation of AutocorrectPlugin into esperanto.
+# Translation of calligra_textediting_autocorrect.pot to esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: AutocorrectPlugin\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-04 22:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +21,7 @@ msgstr ""
 #: Autocorrect.cpp:25
 #, kde-format
 msgid "Configure &Autocorrection..."
-msgstr ""
+msgstr "Agordi &Aŭtokorektadon..."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, AutocorrectConfig)
 #: Autocorrect.cpp:29 Autocorrect.cpp:78 AutocorrectConfig.ui:14
@@ -30,10 +32,9 @@ msgstr "Aŭtokorektado"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_1)
 #: AutocorrectConfig.ui:24
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "Si&mple Autocorrection"
-msgstr "Aŭtokorektado"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, upperCase)
 #: AutocorrectConfig.ui:30
@@ -209,10 +210,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: AutocorrectConfig.ui:344
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "Ad&vanced Autocorrection"
-msgstr "Aŭtokorektado"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: AutocorrectConfig.ui:352
@@ -253,10 +253,9 @@ msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, replaceLabel)
 #: AutocorrectConfig.ui:414
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Re&place"
-msgstr "Anstataŭigi"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, addButton)
 #. i18n: ectx: property (text), widget (QPushButton, add1)
@@ -348,111 +347,3 @@ msgstr "Elekti literon"
 #, kde-format
 msgid "Autocorrect"
 msgstr "Aŭtomate ĝustigi"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Si&mple Autocorrection"
-#~ msgstr "Aŭtokorektado"
-
-#, fuzzy
-#~| msgid "Default"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Default"
-#~ msgstr "Defaŭlta"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Ad&vanced Autocorrection"
-#~ msgstr "Aŭtokorektado"
-
-#, fuzzy
-#~| msgid "&Find"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Find"
-#~ msgstr "&Trovu"
-
-#, fuzzy
-#~| msgid "..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "..."
-#~ msgstr "..."
-
-#, fuzzy
-#~| msgid "Replace"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Re&place"
-#~ msgstr "Anstataŭigi"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Find"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Find"
-#~ msgstr "Trovi"
-
-#, fuzzy
-#~| msgid "Replace"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Replace"
-#~ msgstr "Anstataŭigi"
-
-#, fuzzy
-#~| msgid "E&xceptions"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "E&xceptions"
-#~ msgstr "Es&ceptoj"
-
-#, fuzzy
-#~| msgid "R&emove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "R&emove"
-#~ msgstr "&Forigi"
-
-#, fuzzy
-#~| msgid "A&dd"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "A&dd"
-#~ msgstr "Al&doni"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure &Autocorrection..."
-#~ msgstr "Aŭtokorektado"
-
-#, fuzzy
-#~| msgid "Autocorrection"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Autocorrection"
-#~ msgstr "Aŭtokorektado"
-
-#, fuzzy
-#~| msgid "&Modify"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Modify"
-#~ msgstr "&Modifi"
-
-#, fuzzy
-#~| msgid "&Add"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Add"
-#~ msgstr "&Aldoni"
-
-#, fuzzy
-#~| msgid "Select Character"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select Character"
-#~ msgstr "Elekti literon"
-
-#, fuzzy
-#~| msgid "Autocorrect"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Autocorrect"
-#~ msgstr "Aŭtomate ĝustigi"

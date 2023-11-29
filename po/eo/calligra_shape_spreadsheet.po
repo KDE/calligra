@@ -1,13 +1,16 @@
-# Translation of TableShape into esperanto.
+# Translation of calligra_shape_spreadsheet.pot to esperanto.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: TableShape\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2009-11-15 12:06+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-04 22:00+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +22,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Axel Rousseau,Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
 
 #: SheetsEditor.cpp:55 SheetsEditor.cpp:117
 #, kde-format
@@ -44,7 +47,7 @@ msgstr "Forigi"
 #: SheetsEditor.cpp:117
 #, kde-format
 msgid "Enter Name:"
-msgstr ""
+msgstr "Enigi Nomon:"
 
 #: TableShape.cpp:300
 #, kde-format
@@ -52,21 +55,23 @@ msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
 msgstr ""
+"Tiu dokumento enhavas eksternan ligon al fora dokumento\n"
+"%1"
 
 #: TableShape.cpp:301
 #, kde-format
 msgid "Confirmation Required"
-msgstr ""
+msgstr "Konfirmo Postulata"
 
 #: TableShape.cpp:301
 #, kde-format
 msgid "Download"
-msgstr ""
+msgstr "Elŝuti"
 
 #: TableShape.cpp:301
 #, kde-format
 msgid "Skip"
-msgstr ""
+msgstr "Salti"
 
 #: TableShapeFactory.cpp:42
 #, kde-format
@@ -76,12 +81,12 @@ msgstr "Kalkultabelo"
 #: TableShapeFactory.cpp:44
 #, kde-format
 msgid "Spreadsheet Shape"
-msgstr ""
+msgstr "Kalkultabela Formo"
 
 #: TableTool.cpp:256
 #, kde-format
 msgid "Import OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "Importi OpenDocument Kalkultabelan Dosieron"
 
 #: TableTool.cpp:257
 #, kde-format
@@ -91,7 +96,7 @@ msgstr "Importi"
 #: TableTool.cpp:261
 #, kde-format
 msgid "Export OpenDocument Spreadsheet File"
-msgstr ""
+msgstr "Eksporti OpenDocument Spreadsheet File"
 
 #: TableTool.cpp:262
 #, kde-format
@@ -101,7 +106,7 @@ msgstr "Eksporti"
 #: TableTool.cpp:742
 #, kde-format
 msgid "Sheets"
-msgstr ""
+msgstr "Folioj"
 
 #: TableTool.cpp:784
 #, kde-format
@@ -111,112 +116,39 @@ msgstr "Tabelo:"
 #: TableTool.cpp:786
 #, kde-format
 msgid "Selected Sheet"
-msgstr ""
+msgstr "Elektita Folio"
 
 #: TableTool.cpp:801
 #, kde-format
 msgid "View Options"
-msgstr ""
+msgstr "Opcioj de Vidigo"
 
 #: TableToolFactory.cpp:21
 #, kde-format
 msgid "Table editing"
-msgstr ""
+msgstr "Tabelredaktado"
 
 #: ToolHeaders.cpp:296 ToolHeaders.cpp:894
 #, kde-format
 msgid "Area is too large."
-msgstr ""
+msgstr "Areo estas tro granda."
 
 #: ToolHeaders.cpp:439
 #, kde-format
 msgid "Hide Row"
-msgstr ""
+msgstr "Kaŝi Vicon"
 
 #: ToolHeaders.cpp:441
 #, kde-format
 msgid "Height: %1 %2"
-msgstr ""
+msgstr "Alteco: %1 %2"
 
 #: ToolHeaders.cpp:1069
-#, fuzzy, kde-format
-#| msgid "Columns:"
+#, kde-format
 msgid "Hide Column"
-msgstr "Kolumnoj:"
+msgstr "Kaŝi Kolumnon"
 
 #: ToolHeaders.cpp:1071
 #, kde-format
 msgid "Width: %1 %2"
-msgstr ""
-
-#~ msgid "Rows:"
-#~ msgstr "Vicoj:"
-
-#, fuzzy
-#~| msgid "Rename"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rename"
-#~ msgstr "Alinomi"
-
-#, fuzzy
-#~| msgid "Add"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Add"
-#~ msgstr "Aldoni"
-
-#, fuzzy
-#~| msgid "Remove"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Remove"
-#~ msgstr "Forigi"
-
-#, fuzzy
-#~| msgid "Spreadsheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet"
-#~ msgstr "Kalkultabelo"
-
-#, fuzzy
-#~| msgid "Spreadsheet"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Spreadsheet Shape"
-#~ msgstr "Kalkultabelo"
-
-#, fuzzy
-#~| msgid "Import"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Import"
-#~ msgstr "Importi"
-
-#, fuzzy
-#~| msgid "Export"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Export"
-#~ msgstr "Eksporti"
-
-#, fuzzy
-#~| msgid "Sheet:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheets"
-#~ msgstr "Tabelo:"
-
-#, fuzzy
-#~| msgid "Sheet:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sheet:"
-#~ msgstr "Tabelo:"
-
-#, fuzzy
-#~| msgid "Columns:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Columns:"
-#~ msgstr "Kolumnoj:"
-
-#, fuzzy
-#~| msgid "Rows:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Rows:"
-#~ msgstr "Vicoj:"
-
-#~ msgid "Table"
-#~ msgstr "Tabelo"
+msgstr "Larĝeco: %1 %2"

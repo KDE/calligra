@@ -1,13 +1,16 @@
-# Translation of VideoShape into esperanto.
+# Translation of calligra_shape_video.pot to esperanto.
+# Copyright (C) 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2010.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: VideoShape\n"
+"Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2010-06-20 20:01+0200\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -19,20 +22,19 @@ msgstr ""
 #: ChangeVideoCommand.cpp:20
 msgctxt "(qtundo-format)"
 msgid "Change video"
-msgstr ""
+msgstr "Ŝanĝi videon"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnVideoFile)
 #: forms/VideoToolWidget.ui:33
 #, kde-format
 msgid "Replace video..."
-msgstr ""
+msgstr "Anstaŭigi videon..."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnPlay)
 #: forms/VideoToolWidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Video"
+#, kde-format
 msgid "Play Video"
-msgstr "Video"
+msgstr "Ludi Videon"
 
 #: FullScreenPlayer.cpp:54 VideoTool.cpp:34
 #, kde-format
@@ -52,17 +54,17 @@ msgstr "Halti"
 #: FullScreenPlayer.cpp:69
 #, kde-format
 msgid "Unmute"
-msgstr ""
+msgstr "Malsilentigi"
 
 #: FullScreenPlayer.cpp:74
 #, kde-format
 msgid "Mute"
-msgstr ""
+msgstr "Silentigi"
 
 #: SelectVideoWidget.cpp:27
 #, kde-format
 msgid "Save as part of document"
-msgstr ""
+msgstr "Konservi kiel parto de dokumento"
 
 #: VideoShapeFactory.cpp:24
 #, kde-format
@@ -72,44 +74,9 @@ msgstr "Video"
 #: VideoShapeFactory.cpp:26
 #, kde-format
 msgid "Video, embedded or fullscreen"
-msgstr ""
+msgstr "Video, enigita aŭ plenekrana"
 
 #: VideoToolFactory.cpp:18
 #, kde-format
 msgid "Video handling"
-msgstr ""
-
-#, fuzzy
-#~| msgid "Video"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Play Video"
-#~ msgstr "Video"
-
-#, fuzzy
-#~| msgid "Play"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Play"
-#~ msgstr "Ludi"
-
-#, fuzzy
-#~| msgid "Pause"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Pause"
-#~ msgstr "Paŭzi"
-
-#, fuzzy
-#~| msgid "Stop"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Stop"
-#~ msgstr "Halti"
-
-#, fuzzy
-#~| msgid "Video"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Video"
-#~ msgstr "Video"
-
-#, fuzzy
-#~| msgid "Video"
-#~ msgid "Video tool"
-#~ msgstr "Video"
+msgstr "Video-pritraktado"

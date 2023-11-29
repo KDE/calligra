@@ -1,0 +1,91 @@
+# translation of calligra-opener.pot to Esperanto
+# Copyright (C) 2011 Free Software Foundation, Inc.
+# This file is distributed under the same license as the calligra package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+# Minuskloj: ĉ ĝ ĵ ĥ ŝ ŭ   Majuskloj: Ĉ Ĝ Ĵ Ĥ Ŝ Ŭ
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: calligra\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-11-21 01:50+0000\n"
+"PO-Revision-Date: 2023-02-26 22:22+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#, kde-format
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Oliver Kellogg"
+
+#, kde-format
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "okellogg@users.sourceforge.net"
+
+#: main.cpp:69
+#, kde-format
+msgctxt "@info"
+msgid "Mimetype for <filename>%1</filename> not found!"
+msgstr "MIMEtipo por <filename>%1</filename> ne trovita!"
+
+#: main.cpp:127
+#, kde-format
+msgctxt "@action:button"
+msgid "Open with <application>%1</application>"
+msgstr "Malfermi per <application>%1</application>"
+
+#: main.cpp:132
+#, kde-format
+msgctxt "@info"
+msgid ""
+"Could not find Calligra application suitable for opening <filename>%1</"
+"filename>.<nl/>Do you want to open the file using default application "
+"<application>%2</application>?"
+msgstr ""
+"Ne povis trovi Calligra-aplikaĵon taŭgan por malfermi <filename>%1</"
+"filename>.<nl/>Ĉu vi volas malfermi la dosieron per defaŭlta aplikaĵo "
+"<application>%2</application>?"
+
+#: main.cpp:135
+#, kde-format
+msgctxt "@title:window"
+msgid "Calligra Application Not Found"
+msgstr "Calligra Apliko Ne Trovita"
+
+#: main.cpp:165
+#, kde-format
+msgid "Calligra Opener"
+msgstr "Calligra Malfermilo"
+
+#: main.cpp:167
+#, kde-format
+msgid "Calligra Document Opener"
+msgstr "Calligra Dokumenta Malfermilo"
+
+#: main.cpp:169
+#, kde-format
+msgid "Copyright 2010-%1 Calligra developers"
+msgstr "Kopirajto 2010-%1 Calligra programistoj"
+
+#: main.cpp:170
+#, kde-format
+msgid "Jarosław Staniek"
+msgstr "Jarosław Staniek"
+
+#: main.cpp:177
+#, kde-format
+msgid "Lists names of all available Calligra applications"
+msgstr "Listigas nomojn de ĉiuj disponeblaj Calligra-aplikoj"
+
+#: main.cpp:178
+#, kde-format
+msgid "Files to open"
+msgstr "Dosieroj malfermendaj"
