@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-06-15 21:48+0100\n"
+"PO-Revision-Date: 2023-11-30 19:39+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1122,7 +1122,7 @@ msgid ""
 "Returns the product of all numeric  values in a column of a database "
 "specified by a set of conditions."
 msgstr ""
-"Liveras la produkton de ĉiuj nombraj valoroj en kolumno de datumbazo "
+"Liveras la produton de ĉiuj nombraj valoroj en kolumno de datumbazo "
 "specifita per aro de kondiĉoj."
 
 #: functions/database.xml:182
@@ -1133,7 +1133,7 @@ msgstr "DPRODUCT(Datumbazo; \"Kapo\"; Kondiĉoj)"
 #: functions/database.xml:183
 #, kde-format
 msgid "DPRODUCT(A1:C5; \"Salary\"; A9:A11)"
-msgstr "DPRODUKTO(A1:C5; \"Salajro\"; A9:A11)"
+msgstr "DPRODUCT(A1:C5; \"Salajro\"; A9:A11)"
 
 #: functions/database.xml:203
 #, kde-format
@@ -1486,7 +1486,7 @@ msgstr "DAY(dato)"
 #: functions/datetime.xml:169
 #, kde-format
 msgid "DAY(\"2/22/2002\") returns 22"
-msgstr "TAG(\"22/2/2002\") liveras 22"
+msgstr "DAY(\"22/2/2002\") liveras 22"
 
 #: functions/datetime.xml:170
 #, kde-format
@@ -1754,7 +1754,7 @@ msgstr "DAYOFYEAR(2000;2;29) redonas 60"
 #: functions/datetime.xml:353
 #, kde-format
 msgid "The DATE() function returns the date formatted with local parameters."
-msgstr "La funkcio date() redonas la daton laŭ landa/lingva konvencio."
+msgstr "La funkcio DATE() redonas la daton laŭ landa/lingva konvencio."
 
 #: functions/datetime.xml:354
 #, kde-format
@@ -1769,7 +1769,7 @@ msgstr "DATE(2000;5;5) redonas \"Vendredo, la 5a de Majo 2000\""
 #: functions/datetime.xml:375
 #, kde-format
 msgid "The TIME() function returns the time formatted with local parameters."
-msgstr "La funkcio time() redonas la tempon laŭ landa/lingva konvencio."
+msgstr "La funkcio TIME() redonas la tempon laŭ landa/lingva konvencio."
 
 #: functions/datetime.xml:376
 #, kde-format
@@ -1795,7 +1795,7 @@ msgstr "TIME(10;-40;0) redonas 9:20:0"
 #, kde-format
 msgid ""
 "The HOURS() function returns the value of the hours in a time expression."
-msgstr "La funkcio hours() redonas la horojn de tempoesprimo."
+msgstr "La funkcio HOURS() redonas la horojn de tempoesprimo."
 
 #: functions/datetime.xml:392
 #, kde-format
@@ -2550,22 +2550,22 @@ msgstr ""
 #: functions/engineering.xml:142
 #, kde-format
 msgid "CONVERT(Number; From Unit; To Unit)"
-msgstr "KONVERTI(Nombro; De Unuo; Al Unuo)"
+msgstr "CONVERT(Nombro; De Unuo; Al Unuo)"
 
 #: functions/engineering.xml:143
 #, kde-format
 msgid "CONVERT(32;\"C\";\"F\") equals 89.6"
-msgstr "KONVERTI(32;\"C\";\"F\") egalas 89.6"
+msgstr "CONVERT(32;\"C\";\"F\") egalas 89.6"
 
 #: functions/engineering.xml:144
 #, kde-format
 msgid "CONVERT(3;\"lbm\";\"kg\") equals 1.3608"
-msgstr "KONVERTI(3;\"lbm\";\"kg\") egalas 1.3608"
+msgstr "CONVERT(3;\"lbm\";\"kg\") egalas 1.3608"
 
 #: functions/engineering.xml:145
 #, kde-format
 msgid "CONVERT(7.9;\"cal\";\"J\") equals 33.0757"
-msgstr "KONVERTI(7.9;\"kal\";\"J\") egalas al 33.0757"
+msgstr "CONVERT(7.9;\"kal\";\"J\") egalas al 33.0757"
 
 #: functions/engineering.xml:153 functions/engineering.xml:172
 #, kde-format
@@ -3393,8 +3393,8 @@ msgstr "IMSUB(1.2;\"1i\") donas \"1.2-i\""
 msgid ""
 "The IMPRODUCT() returns the product of several complex numbers of form x+yi."
 msgstr ""
-"La funkcio IMPRODUCT() redonas la produkton de pluraj komplekaj nombroj de "
-"la formo x+yi."
+"La funkcio IMPRODUCT() redonas la produton de pluraj komplekaj nombroj de la "
+"formo x+yi."
 
 #: functions/engineering.xml:816
 #, kde-format
@@ -4574,7 +4574,7 @@ msgstr ""
 #, kde-format
 msgid "MDURATION( Settlement; Maturity; Coupon; Yield; Frequency; [ Basis=0 ])"
 msgstr ""
-"MIDURADO( Kompromiso; Matureco; Kupono; Rendimento; Ofteco; [ Bazo=0 ])"
+"MDURATION( Kompromiso; Matureco; Kupono; Rendimento; Ofteco; [ Bazo=0 ])"
 
 #: functions/financial.xml:787
 #, kde-format
@@ -6117,7 +6117,7 @@ msgstr ""
 "La funkcio SUBTOTAL() liveras subtuton de donita listo de argumentoj "
 "ignorante aliajn subtotalajn rezultojn tie. Funkcio povas esti unu el la "
 "sekvaj nombroj: 1 - Mezumo, 2 - Kalkulo, 3 - NombriA, 4 - Maksimumo, 5 - "
-"Min, 6 - Produkto, 7 - StDev, 8 - StDevP, 9 - Sumo, 10 - Var, 11 - VarP."
+"Min, 6 - Produto, 7 - StDev, 8 - StDevP, 9 - Sumo, 10 - Var, 11 - VarP."
 
 #: functions/math.xml:20
 #, kde-format
@@ -6779,10 +6779,10 @@ msgid ""
 "list of values like product(12;5;12.5). If no numeric values are found 0 is "
 "returned."
 msgstr ""
-"La funkcio PRODUCT() kalkulas la produkton de ĉiuj valoroj donitaj kiel "
-"parametroj. Vi povas kalkuli la produkton de gamo: PRODUCT(A1:B5) aŭ listo "
-"de valoroj kiel produkto(12;5;12.5). Se neniuj nombraj valoroj estas "
-"trovitaj, 0 estas resendita."
+"La funkcio PRODUCT() kalkulas la produton de ĉiuj valoroj donitaj kiel "
+"parametroj. Vi povas kalkuli la produton de gamo: PRODUCT(A1:B5) aŭ listo de "
+"valoroj kiel produto(12;5;12.5). Se neniuj nombraj valoroj estas trovitaj, 0 "
+"estas resendita."
 
 #: functions/math.xml:459
 #, kde-format
@@ -6807,8 +6807,8 @@ msgid ""
 "list of values like KPRODUCT(12;5;12.5). If no numeric values are found 1 is "
 "returned."
 msgstr ""
-"La funkcio KPRODUCT() kalkulas la produkton de ĉiuj valoroj donitaj kiel "
-"parametroj. Vi povas kalkuli la produkton de gamo: KPRODUCT(A1:B5) aŭ listo "
+"La funkcio KPRODUCT() kalkulas la produton de ĉiuj valoroj donitaj kiel "
+"parametroj. Vi povas kalkuli la produton de gamo: KPRODUCT(A1:B5) aŭ listo "
 "de valoroj kiel KPRODUCT(12;5;12.5). Se neniuj nombraj valoroj estas "
 "trovitaj, 1 estas resendita."
 
@@ -9325,8 +9325,7 @@ msgid ""
 "This is equal to the Nth root of the product of the terms."
 msgstr ""
 "La funkcio GEOMEAN() redonas la geometrian meznombre de la donitaj "
-"argumentoj. Ĉi tio estas egala al la N-a radiko de la produkto de la "
-"terminoj."
+"argumentoj. Ĉi tio estas egala al la N-a radiko de la produto de la terminoj."
 
 #: functions/statistical.xml:518
 #, kde-format
