@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-11-26 20:12+0100\n"
+"PO-Revision-Date: 2023-12-02 07:44+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1547,11 +1547,11 @@ msgstr "Unuoj por temperaturo. f=Fahrenheit kaj c=Celsius"
 
 #: scripts/yweather.py:44
 msgid "YWEATHER(\"=A1\")"
-msgstr "JWEEATHER(\"=A1\")"
+msgstr "YWEATHER(\"=A1\")"
 
 #: scripts/yweather.py:45
 msgid "YWEATHER(\"GMXX0151\";\"c\")"
-msgstr "VETERO(\"GMX 0151\";\"c\")"
+msgstr "YWEATHER(\"GMX 0151\";\"c\")"
 
 #: scripts/yweather.py:55
 msgid "Invalid location"

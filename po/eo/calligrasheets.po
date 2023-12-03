@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-11-30 19:39+0100\n"
+"PO-Revision-Date: 2023-12-02 07:44+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -2163,7 +2163,7 @@ msgid ""
 "DATEDIF(A1;A2;\"m\") A1 is \"1st of January 1995\" and A2 is \"15th of June "
 "1999\" returns number of months 53"
 msgstr ""
-"DATODIF(A1;A2;\"m\") A1 estas \"1a de januaro 1995\" kaj A2 estas \"15a de "
+"DATEDIF(A1;A2;\"m\") A1 estas \"1a de januaro 1995\" kaj A2 estas \"15a de "
 "junio 1999\" donas nombron da monatoj 53"
 
 #: functions/datetime.xml:659
@@ -3810,12 +3810,12 @@ msgstr ""
 #: functions/financial.xml:172
 #, kde-format
 msgid "CONTINOUS(principal;interest;years)"
-msgstr "CONTINOUS(kapitalo;interezo;jaroj)"
+msgstr "CONTINUOUS(kapitalo;interezo;jaroj)"
 
 #: functions/financial.xml:173
 #, kde-format
 msgid "CONTINUOUS(1000;0.1;1) equals 1105.17"
-msgstr "CONTINOUS(1000;0.1;1) estas 1105.17"
+msgstr "CONTINUOUS(1000;0.1;1) estas 1105.17"
 
 #: functions/financial.xml:185 functions/financial.xml:353
 #: functions/financial.xml:448 functions/financial.xml:608
@@ -5545,7 +5545,7 @@ msgstr "ISDATE(x)"
 #: functions/information.xml:151
 #, kde-format
 msgid "ISDATE(\"2000-2-2\") returns True"
-msgstr "ISDATA(\"200-2-2\") donas True"
+msgstr "ISDATE(\"2000-2-2\") liveras True"
 
 #: functions/information.xml:152
 #, kde-format
@@ -6713,8 +6713,8 @@ msgid ""
 "counted as 1."
 msgstr ""
 "La funkcio SUMA() kalkulas la sumon de ĉiuj valoroj donitaj kiel parametroj. "
-"Vi povas kalkuli la sumon de intervalo SUMO(A1:B5) aŭ listo de valoroj kiel "
-"SUMO(12;5;12.5). Se parametro enhavas tekston aŭ la bulean valoron FALSE ĝi "
+"Vi povas kalkuli la sumon de intervalo SUMA(A1:B5) aŭ listo de valoroj kiel "
+"SUMA(12;5;12.5). Se parametro enhavas tekston aŭ la bulean valoron FALSE ĝi "
 "estas kalkulita kiel 0, se parametro taksas TRUE ĝi estas kalkulita kiel 1."
 
 #: functions/math.xml:418
@@ -7013,7 +7013,7 @@ msgid ""
 msgstr ""
 "La funkcio MULTIPLY() multiplikas ĉiujn valorojn donitajn en la parametroj. "
 "Vi povas multobligi valorojn donitajn per gamo MULTIPLY(A1:B5) aŭ listo de "
-"valoroj kiel MULTIPLY(12;5;12.5). Ĝi estas ekvivalenta al PRODUTO."
+"valoroj kiel MULTIPLY(12;5;12.5). Ĝi estas ekvivalenta al PRODUCT."
 
 #: functions/math.xml:626
 #, kde-format
@@ -7389,7 +7389,7 @@ msgstr "FLOOR(-12.5) estas -13"
 #: functions/math.xml:903
 #, kde-format
 msgid "FLOOR(5; 2) equals 4"
-msgstr "ETAĜO(5; 2) egalas al 4"
+msgstr "FLOOR(5; 2) egalas al 4"
 
 #: functions/math.xml:904
 #, kde-format
@@ -8002,7 +8002,7 @@ msgid ""
 "The ADDRESS creates a cell address. Parameter Row is the row number and "
 "Column is the column number."
 msgstr ""
-"La ADDRESO kreas ĉelan adreson. Parametro Vico estas la vico-numero kaj "
+"La ADDRESS kreas ĉelan adreson. Parametro Vico estas la vico-numero kaj "
 "Kolumno estas la kolumnombro."
 
 #: functions/reference.xml:32
@@ -8360,7 +8360,7 @@ msgid ""
 "vector must have the same size. Numeric values, string and boolean values "
 "are recognized. Comparison between strings is case-insensitive."
 msgstr ""
-"La SERĈA funkcio serĉas la unuan parametron en la serĉvektoro. Ĝi liveras "
+"La funkcio LOOKUP serĉas la unuan parametron en la serĉvektoro. Ĝi liveras "
 "valoron en la rezulta Vektoro kun la sama indekso kiel la kongrua valoro en "
 "la serĉvektoro. Se valoro ne estas en la serĉvektoro ĝi prenas la sekvan pli "
 "malaltan. Se neniu valoro en la serĉvektoro kongruas, eraro estas resendita. "
@@ -10588,7 +10588,7 @@ msgstr ""
 #: functions/statistical.xml:1489
 #, kde-format
 msgid "TTEST(x; y; mode; type)"
-msgstr "TESTO(x; y; reĝimo; tipo)"
+msgstr "TTEST(x; y; reĝimo; tipo)"
 
 #: functions/statistical.xml:1518
 #, kde-format
@@ -12434,7 +12434,7 @@ msgstr "Tiu funkcio transformas radian angulon al grada angulo."
 #: functions/trig.xml:245
 #, kde-format
 msgid "DEGREES(Float)"
-msgstr "DEGREES(reelo)"
+msgstr "DEGREES(Float)"
 
 #: functions/trig.xml:246
 #, kde-format
@@ -12449,7 +12449,7 @@ msgstr "DEGREES(1) estas 57.29"
 #: functions/trig.xml:256
 #, kde-format
 msgid "Angle (degrees)"
-msgstr "ANGLE(gradoj)"
+msgstr "Angulo (gradoj)"
 
 #: functions/trig.xml:260
 #, kde-format
