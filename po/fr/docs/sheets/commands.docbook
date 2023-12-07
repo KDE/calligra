@@ -976,7 +976,7 @@ is shown in the upper right corner of the cell.
 <term
 ><menuchoice
 ><guimenu
->Inserer</guimenu
+>Insérer</guimenu
 ><guimenuitem
 >Commentaire</guimenuitem
 > </menuchoice
@@ -1247,7 +1247,7 @@ to insert a picture.
 ><guimenu
 >Format</guimenu
 ><guimenuitem
->Format utomatique</guimenuitem
+>Formater automatiquement</guimenuitem
 > </menuchoice
 ></term>
 <listitem
@@ -1737,7 +1737,7 @@ to insert a picture.
 >Vous pouvez ici exécuter des scripts pour exporter ou importer des données dans différents formats, enregistrer vos logs de &sheets; dans un fichier, utiliser <ulink url="https://live.gnome.org/Orca"
 >Orca speech</ulink
 > pour l'accessibilité, déboguer des scripts Python et Ruby, ou ajouter des fonctions pour afficher des données de stocks ou les conditions météo. Vous pouvez même utiliser des <ulink url="http://www.r-project.org/"
->R functions</ulink
+>fonctions R</ulink
 > (<ulink url="http://rpy.sourceforge.net/rpy.html"
 >le module RPy</ulink
 > doit être installé).</para
@@ -1930,7 +1930,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 ><para
 ><action
 >Choisit le thème de couleur pour la fenêtre de &sheets;</action
->. Vous pouvez choisir l'un des modèles de couleurs prédéfinis, ou sélectioner <guimenuitem
+>. Vous pouvez choisir l'un des modèles de couleurs prédéfinis, ou sélectionner <guimenuitem
 >Configuration...</guimenuitem
 > pour ouvrir le <ulink url="help:/kcontrol/colors"
 >module de sélection de couleurs de la &configurationDuSysteme;</ulink

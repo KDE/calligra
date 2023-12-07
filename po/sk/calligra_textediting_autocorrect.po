@@ -1,19 +1,19 @@
 # translation of calligra_textediting_autocorrect.po to Slovak
 # Richard Fric <Richard.Fric@kdemail.net>, 2007, 2009.
-# Roman Paholik <wizzardsk@gmail.com>, 2016.
+# SPDX-FileCopyrightText: 2016, 2023 Roman Paholik <wizzardsk@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra_textediting_autocorrect\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2016-11-20 19:49+0100\n"
+"PO-Revision-Date: 2023-12-06 18:30+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: Autocorrect.cpp:26
@@ -22,10 +22,9 @@ msgid "Configure &Autocorrection..."
 msgstr "Nastaviť automatické opravy..."
 
 #: Autocorrect.cpp:30
-#, fuzzy, kde-format
-#| msgid "Autocorrection"
+#, kde-format
 msgid "Enable Autocorrection"
-msgstr "Automatické opravy"
+msgstr "Povoliť automatické opravy"
 
 #: AutocorrectFactory.cpp:16
 #, kde-format
