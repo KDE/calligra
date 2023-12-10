@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-11-25 02:28\n"
+"PO-Revision-Date: 2023-12-09 09:26\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -252,7 +252,7 @@ msgstr "切换标题栏显示状态"
 #: src/import/ToolDocker.cpp:78
 #, kde-format
 msgid "Toggles organising the options in tabs or not"
-msgstr "切换是否用标签组织选项"
+msgstr "切换是否用标签页组织选项"
 
 #: src/layouts/ColumnLayout.cpp:125
 #, kde-format

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-11-25 02:28\n"
+"PO-Revision-Date: 2023-12-09 09:26\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2344,7 +2344,7 @@ msgstr "样式"
 #: dialogs/TableOfContentsConfigure.ui:49
 #, kde-format
 msgid "Tab 1"
-msgstr "标签 1"
+msgstr "标签页 1"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitle)
 #: dialogs/TableOfContentsConfigure.ui:57
@@ -2371,7 +2371,7 @@ msgstr "按钮"
 #: dialogs/TableOfContentsConfigure.ui:108
 #, kde-format
 msgid "Tab 2"
-msgstr "标签 2"
+msgstr "标签页 2"
 
 #: dialogs/TableOfContentsEntryModel.cpp:30
 #, kde-format
