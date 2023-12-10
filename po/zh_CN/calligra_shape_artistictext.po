@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-11-25 02:32\n"
+"PO-Revision-Date: 2023-12-09 09:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -41,7 +41,7 @@ msgstr "艺术字"
 #: ArtisticTextTool.cpp:64
 #, kde-format
 msgid "Detach Path"
-msgstr "脱离路径"
+msgstr "分离路径"
 
 #: ArtisticTextTool.cpp:69
 #, kde-format
@@ -156,7 +156,7 @@ msgstr "更改文本偏移"
 #: DetachTextFromPathCommand.cpp:14
 msgctxt "(qtundo-format)"
 msgid "Detach Path"
-msgstr "脱离路径"
+msgstr "分离路径"
 
 #: RemoveTextRangeCommand.cpp:16
 msgctxt "(qtundo-format)"
