@@ -153,7 +153,7 @@
 >éditeur de cellule</guilabel
 > (par exemple <userinput
 >B7:C14</userinput
->) et actionnez &Entrée; ou donnez ces références de cellules dans un format similaire dans la boîte de dialogue amenée par <menuchoice
+>) et actionnez &Enter; ou donnez ces références de cellules dans un format similaire dans la boîte de dialogue amenée par <menuchoice
 ><guimenu
 >Aller</guimenu
 ><guimenuitem
