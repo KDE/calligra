@@ -3,30 +3,31 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
+# SPDX-FileCopyrightText: 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2011-12-01 12:40+0800\n"
-"Last-Translator: Franklin\n"
-"Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2023-12-13 17:26+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Kisaragi Hiu"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "mail@kisaragi-hiu.com"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:80 AxesConfigWidget.cpp:86 LegendConfigWidget.ui:33
@@ -59,16 +60,15 @@ msgstr "顯示格線"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
-#, fuzzy, kde-format
-#| msgid "Show Grid Lines"
+#, kde-format
 msgid "Show Axis"
-msgstr "顯示格線"
+msgstr "顯示軸線"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisScalingButton)
 #: AxesConfigWidget.ui:58
 #, kde-format
 msgid "Scale"
-msgstr ""
+msgstr "縮放"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
 #: AxesConfigWidget.ui:65
@@ -79,10 +79,9 @@ msgstr "標籤"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
-#, fuzzy, kde-format
-#| msgid "Edit Data..."
+#, kde-format
 msgid "Font"
-msgstr "編輯資料..."
+msgstr "字型"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
@@ -156,27 +155,27 @@ msgstr "顯示格線"
 #: AxesConfigWidget.ui:201
 #, kde-format
 msgid "Primary X Axis"
-msgstr ""
+msgstr "主要 X 軸"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:206 DataSetConfigWidget.ui:95
 #, kde-format
 msgid "Primary Y Axis"
-msgstr ""
+msgstr "主要 Y 軸"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:211
 #, kde-format
 msgid "Secondary X Axis"
-msgstr ""
+msgstr "次要 X 軸"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, dataSetAxes)
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:216 DataSetConfigWidget.ui:100
 #, kde-format
 msgid "Secondary Y Axis"
-msgstr ""
+msgstr "次要 Y 軸"
 
 #: ChartShape.cpp:311
 #, kde-format
@@ -259,106 +258,91 @@ msgid "Bar Chart"
 msgstr "長條圖"
 
 #: ChartShapeFactory.cpp:80
-#, fuzzy, kde-format
-#| msgid "Polar Chart"
+#, kde-format
 msgid "Normal bar chart"
-msgstr "極座標圖"
+msgstr "一般長條圖"
 
 #: ChartShapeFactory.cpp:90
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "Stacked Bar Chart"
-msgstr "股票圖"
+msgstr "堆疊長條圖"
 
 #: ChartShapeFactory.cpp:91
-#, fuzzy, kde-format
-#| msgid "Stock Chart"
+#, kde-format
 msgid "Stacked bar chart"
-msgstr "股票圖"
+msgstr "堆疊長條圖"
 
 #: ChartShapeFactory.cpp:101
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent Bar Chart"
-msgstr "長條圖"
+msgstr "百分比長條圖"
 
 #: ChartShapeFactory.cpp:102
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Percent bar chart"
-msgstr "長條圖"
+msgstr "百分比長條圖"
 
 #: ChartShapeFactory.cpp:112 DataSetConfigWidget.cpp:207
 #: PlotAreaConfigWidget.cpp:242
 #, kde-format
 msgid "Line Chart"
-msgstr "線條圖"
+msgstr "折線圖"
 
 #: ChartShapeFactory.cpp:113
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Normal line chart"
-msgstr "線條圖"
+msgstr "一般折線圖"
 
 #: ChartShapeFactory.cpp:123
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Stacked Line Chart"
-msgstr "線條圖"
+msgstr "堆疊折線圖"
 
 #: ChartShapeFactory.cpp:124
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Stacked line chart"
-msgstr "線條圖"
+msgstr "堆疊折線圖"
 
 #: ChartShapeFactory.cpp:134
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Percent Line Chart"
-msgstr "線條圖"
+msgstr "百分比折線圖"
 
 #: ChartShapeFactory.cpp:135
-#, fuzzy, kde-format
-#| msgid "Line Chart"
+#, kde-format
 msgid "Percent line chart"
-msgstr "線條圖"
+msgstr "百分比折線圖"
 
 #: ChartShapeFactory.cpp:145 DataSetConfigWidget.cpp:212
 #: PlotAreaConfigWidget.cpp:248
 #, kde-format
 msgid "Area Chart"
-msgstr "面積圖"
+msgstr "區域圖"
 
 #: ChartShapeFactory.cpp:146
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Normal area chart"
-msgstr "面積圖"
+msgstr "一般區域圖"
 
 #: ChartShapeFactory.cpp:156
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Stacked Area Chart"
-msgstr "面積圖"
+msgstr "堆疊區域圖"
 
 #: ChartShapeFactory.cpp:157
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Stacked area chart"
-msgstr "面積圖"
+msgstr "堆疊區域圖"
 
 #: ChartShapeFactory.cpp:167
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Percent Area Chart"
-msgstr "面積圖"
+msgstr "百分比區域圖"
 
 #: ChartShapeFactory.cpp:168
-#, fuzzy, kde-format
-#| msgid "Area Chart"
+#, kde-format
 msgid "Percent area chart"
-msgstr "面積圖"
+msgstr "百分比區域圖"
 
 #: ChartShapeFactory.cpp:178 DataSetConfigWidget.cpp:217
 #: PlotAreaConfigWidget.cpp:256
@@ -367,8 +351,7 @@ msgid "Pie Chart"
 msgstr "圓餅圖"
 
 #: ChartShapeFactory.cpp:179
-#, fuzzy, kde-format
-#| msgid "Pie Chart"
+#, kde-format
 msgid "Pie chart"
 msgstr "圓餅圖"
 
@@ -379,8 +362,7 @@ msgid "Ring Chart"
 msgstr "環形圖"
 
 #: ChartShapeFactory.cpp:190
-#, fuzzy, kde-format
-#| msgid "Ring Chart"
+#, kde-format
 msgid "Ring chart"
 msgstr "環形圖"
 
@@ -391,8 +373,7 @@ msgid "Bubble Chart"
 msgstr "泡泡圖"
 
 #: ChartShapeFactory.cpp:201
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble chart"
 msgstr "泡泡圖"
 
@@ -403,34 +384,29 @@ msgid "Scatter Chart"
 msgstr "散佈圖"
 
 #: ChartShapeFactory.cpp:212
-#, fuzzy, kde-format
-#| msgid "Scatter Chart"
+#, kde-format
 msgid "Scatter chart"
 msgstr "散佈圖"
 
 #: ChartShapeFactory.cpp:222
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Radar Chart"
-msgstr "長條圖"
+msgstr "雷達圖"
 
 #: ChartShapeFactory.cpp:223
-#, fuzzy, kde-format
-#| msgid "Bar Chart"
+#, kde-format
 msgid "Radar chart"
-msgstr "長條圖"
+msgstr "雷達圖"
 
 #: ChartShapeFactory.cpp:233
-#, fuzzy, kde-format
-#| msgid "Polar Chart"
+#, kde-format
 msgid "Filled Radar Chart"
-msgstr "極座標圖"
+msgstr "填滿式雷達圖"
 
 #: ChartShapeFactory.cpp:234
-#, fuzzy, kde-format
-#| msgid "Polar Chart"
+#, kde-format
 msgid "Filled radar chart"
-msgstr "極座標圖"
+msgstr "填滿式雷達圖"
 
 #: ChartShapeFactory.cpp:244
 #, fuzzy, kde-format
@@ -506,37 +482,37 @@ msgstr "成長率（%）"
 #: ChartShapeFactory.cpp:460
 #, kde-format
 msgid "Share A"
-msgstr ""
+msgstr "股票 A"
 
 #: ChartShapeFactory.cpp:461
 #, kde-format
 msgid "Share B"
-msgstr ""
+msgstr "股票 B"
 
 #: ChartShapeFactory.cpp:462
 #, kde-format
 msgid "Share C"
-msgstr ""
+msgstr "股票 C"
 
 #: ChartShapeFactory.cpp:465
 #, kde-format
 msgid "Open"
-msgstr ""
+msgstr "開啟"
 
 #: ChartShapeFactory.cpp:466
 #, kde-format
 msgid "High"
-msgstr ""
+msgstr "高"
 
 #: ChartShapeFactory.cpp:467
 #, kde-format
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 #: ChartShapeFactory.cpp:468
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "關閉"
 
 #: ChartShapeFactory.cpp:583
 #, fuzzy, kde-format
@@ -576,17 +552,14 @@ msgid "Show Legend"
 msgstr "顯示圖例"
 
 #: ChartTool.cpp:1144
-#, fuzzy
-#| msgid "Show Legend"
 msgctxt "(qtundo-format)"
 msgid "Hide Legend"
-msgstr "顯示圖例"
+msgstr "隱藏圖例"
 
 #: ChartToolFactory.cpp:29
-#, fuzzy, kde-format
-#| msgid "Chart Editing Tool"
+#, kde-format
 msgid "Chart editing"
-msgstr "圖表編輯工具"
+msgstr "圖表編輯"
 
 #: commands/AddRemoveAxisCommand.cpp:37
 #, fuzzy
@@ -617,18 +590,14 @@ msgid "Hide Axis Title"
 msgstr "顯示格線"
 
 #: commands/AxisCommand.cpp:147
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Show Axis"
-msgstr "顯示格線"
+msgstr "顯示軸線"
 
 #: commands/AxisCommand.cpp:149
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis"
-msgstr "顯示格線"
+msgstr "隱藏軸線"
 
 #: commands/AxisCommand.cpp:158
 #, fuzzy
@@ -750,82 +719,62 @@ msgstr "顯示圖例"
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
 msgid "Show Text Shape"
-msgstr ""
+msgstr "顯示文字形狀"
 
 #: commands/ChartTextShapeCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Hide Text Shape"
-msgstr ""
+msgstr "隱藏文字形狀"
 
 #: commands/ChartTypeCommand.cpp:80
-#, fuzzy
-#| msgid "Polar Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Bar Chart"
-msgstr "極座標圖"
+msgstr "一般長條圖"
 
 #: commands/ChartTypeCommand.cpp:83
-#, fuzzy
-#| msgid "Stock Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Bar Chart"
-msgstr "股票圖"
+msgstr "堆疊長條圖"
 
 #: commands/ChartTypeCommand.cpp:86
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Bar Chart"
-msgstr "長條圖"
+msgstr "百分比長條圖"
 
 #: commands/ChartTypeCommand.cpp:95
-#, fuzzy
-#| msgid "Line Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Line Chart"
-msgstr "線條圖"
+msgstr "一般折線圖"
 
 #: commands/ChartTypeCommand.cpp:98
-#, fuzzy
-#| msgid "Line Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Line Chart"
-msgstr "線條圖"
+msgstr "堆疊折線圖"
 
 #: commands/ChartTypeCommand.cpp:101
-#, fuzzy
-#| msgid "Line Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Line Chart"
-msgstr "線條圖"
+msgstr "百分比折線圖"
 
 #: commands/ChartTypeCommand.cpp:110
-#, fuzzy
-#| msgid "Area Chart"
 msgctxt "(qtundo-format)"
 msgid "Normal Area Chart"
-msgstr "面積圖"
+msgstr "一般區域圖"
 
 #: commands/ChartTypeCommand.cpp:113
-#, fuzzy
-#| msgid "Area Chart"
 msgctxt "(qtundo-format)"
 msgid "Stacked Area Chart"
-msgstr "面積圖"
+msgstr "堆疊區域圖"
 
 #: commands/ChartTypeCommand.cpp:116
-#, fuzzy
-#| msgid "Area Chart"
 msgctxt "(qtundo-format)"
 msgid "Percent Area Chart"
-msgstr "面積圖"
+msgstr "百分比區域圖"
 
 #: commands/ChartTypeCommand.cpp:123
-#, fuzzy
-#| msgid "Pie Chart"
 msgctxt "(qtundo-format)"
 msgid "Circle Chart"
-msgstr "圓餅圖"
+msgstr "圓形圖"
 
 #: commands/ChartTypeCommand.cpp:126
 msgctxt "(qtundo-format)"
@@ -838,18 +787,14 @@ msgid "Scatter Chart"
 msgstr "散佈圖"
 
 #: commands/ChartTypeCommand.cpp:132
-#, fuzzy
-#| msgid "Bar Chart"
 msgctxt "(qtundo-format)"
 msgid "Radar Chart"
-msgstr "長條圖"
+msgstr "雷達圖"
 
 #: commands/ChartTypeCommand.cpp:135
-#, fuzzy
-#| msgid "Polar Chart"
 msgctxt "(qtundo-format)"
 msgid "Filled Radar Chart"
-msgstr "極座標圖"
+msgstr "填滿式雷達圖"
 
 #: commands/ChartTypeCommand.cpp:138
 msgctxt "(qtundo-format)"
@@ -1014,12 +959,12 @@ msgstr "方向"
 #: commands/PlotAreaCommand.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Set Horizontal Bars"
-msgstr ""
+msgstr "設定水平線"
 
 #: commands/PlotAreaCommand.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Set Vertical Bars"
-msgstr ""
+msgstr "設定垂直線"
 
 #: DataSet.cpp:262
 #, kde-format
@@ -1027,10 +972,9 @@ msgid "Series %1"
 msgstr "序列 %1"
 
 #: DataSetConfigWidget.cpp:196 PlotAreaConfigWidget.cpp:232
-#, fuzzy, kde-format
-#| msgid "Chart Tool"
+#, kde-format
 msgid "Chart Type"
-msgstr "圖表工具"
+msgstr "圖表類型"
 
 #: DataSetConfigWidget.cpp:203 DataSetConfigWidget.cpp:208
 #: DataSetConfigWidget.cpp:213 DataSetConfigWidget.cpp:221
@@ -1095,7 +1039,7 @@ msgstr ""
 #: widgets/RadarDataSetConfigWidget.cpp:188
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #. i18n: ectx: property (text), widget (QCheckBox, automaticStepWidth)
 #. i18n: ectx: property (text), widget (QCheckBox, automaticSubStepWidth)
@@ -1147,10 +1091,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: DataSetConfigWidget.ui:78
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Attach To Axis"
-msgstr "附加軸"
+msgstr "附加到軸線上"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: DataSetConfigWidget.ui:112 PieConfigWidget.ui:56
@@ -1195,7 +1138,7 @@ msgstr "編號"
 #: DataSetConfigWidget.ui:287
 #, kde-format
 msgid "Error Bars"
-msgstr ""
+msgstr "誤差槓"
 
 #. i18n: ectx: property (text), widget (QPushButton, insertRow)
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
@@ -1502,10 +1445,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChartTableEditor)
 #: dialogs/ChartTableEditor.ui:14
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Data Editor"
-msgstr "附加軸"
+msgstr "資料編輯器"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dataSetsInRows)
 #: dialogs/ChartTableEditor.ui:29
@@ -1531,7 +1473,7 @@ msgstr "顯示圖例"
 #: dialogs/FormatErrorBarDialog.ui:29
 #, kde-format
 msgid "Format Error Bars"
-msgstr ""
+msgstr "格式化誤差槓"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
@@ -1590,13 +1532,13 @@ msgstr "百分比"
 #: dialogs/FormatErrorBarDialog.ui:104
 #, kde-format
 msgid "Error Margin"
-msgstr ""
+msgstr "誤差範圍"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:109
 #, kde-format
 msgid "Standard Deviation"
-msgstr ""
+msgstr "標準差"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:114
@@ -1706,14 +1648,14 @@ msgstr "新增軸"
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&X"
-msgstr ""
+msgstr "&X"
 
 #. i18n: ectx: property (text), widget (QRadioButton, dimensionIsY)
 #: dialogs/NewAxisDialog.ui:56
 #, kde-format
 msgctxt "Axis dimension"
 msgid "&Y"
-msgstr ""
+msgstr "&Y"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/NewAxisDialog.ui:72
