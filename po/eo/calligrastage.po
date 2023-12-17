@@ -97,7 +97,7 @@ msgstr "Forigi diapozitivon"
 msgctxt "(qtundo-format)"
 msgid "Delete slide"
 msgid_plural "Delete slides"
-msgstr[0] ""
+msgstr[0] "Forigi diapozitivon"
 msgstr[1] "Forigi diapozitivojn"
 
 #: part/commands/KPrEditAnimationTimeLineCommand.cpp:37
