@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Xavier BESNARD <ktranslator31@yahoo.fr>, 2011.
+# Xavier Besnard <xavier.besnard@kde.org>, 2011.
 # Sébastien Renard <renard@kde.org>, 2011.
 # Vincent PINON <vpinon@kde.org>, 2013, 2014, 2015, 2016.
 #

@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Stanislas Zeller <uncensored.assault@gmail.com>, 2008.
 # Dupo <Dupop35@yahoo.fr>, 2010.
-# xavier <ktranslator31@yahoo.fr>, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2013.
 #
 msgid ""
 msgstr ""
