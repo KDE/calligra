@@ -198,7 +198,7 @@ msgstr "Xavier Besnard, Vincent Pinon"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "xavier.besnard@neuf.fr, vpinon@kde.org"
+msgstr "xavier.besnard@kde.org, vpinon@kde.org"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/forms/wdgsectionproperties.ui:17

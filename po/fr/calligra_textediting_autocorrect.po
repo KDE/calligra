@@ -4,7 +4,7 @@
 # Stanislas Zeller <uncensored.assault@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2009.
 # Alain Portal <alain.portal@free.fr>, 2010.
-# xavier <xavier.besnard@neuf.fr>, 2013, 2022.
+# Xavier Besnard <xavier.besnard@kde.org>, 2013, 2022.
 #
 msgid ""
 msgstr ""

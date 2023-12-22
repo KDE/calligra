@@ -6,7 +6,7 @@
 # Nicolas Ternisien <nicolast@libertysurf.fr>, 2004.
 # Bieuzent Cyrille <bieuzent@gmail.com>, 2008.
 # Cyrille Bieuzent <bieuzent@gmail.com>, 2009, 2010, 2013.
-# xavier <xavier.besnard@neuf.fr>, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2013.
 # Simon Depiets <sdepiets@gmail.com>, 2018.
 #
 msgid ""
