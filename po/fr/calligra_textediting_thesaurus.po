@@ -8,7 +8,7 @@
 # Robert Jacolin <rjacolin@ifrance.com>, 2003.
 # Joëlle Conavin <jcornavi@kde-france.org>, 2004.
 # Durand Daniel <durand.d@9online.fr>, 2010, 2012.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
 #
 # Durand Daniel, 2010.
 msgid ""

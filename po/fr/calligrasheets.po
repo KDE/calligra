@@ -12,7 +12,7 @@
 # Daniel Durand <durand.d@9online.fr>, 2007, 2008.
 # Durand Daniel <daniel@durand-amd.net>, 2010.
 # Durand Daniel <durand.d@9online.fr>, 2010.
-# Xavier Besnard <xavier.besnard@neuf.fr>, 2012, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
 # Vincent PINON <vpinon@kde.org>, 2013, 2014.
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2014, 2015, 2016, 2022.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2020.
@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
 "PO-Revision-Date: 2023-11-03 17:54+0100\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -19916,7 +19916,7 @@ msgstr "Xavier Besnard, Durand Daniel, Vincent Pinon, Thomas Vergnaud"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"xavier.besnard@neuf.fr, durand.d@9online.fr, vpinon@kde.org, thomas."
+"xavier.besnard@kde.org, durand.d@9online.fr, vpinon@kde.org, thomas."
 "vergnaud@mailo.eu"
 
 #: part/CanvasBase.cpp:776

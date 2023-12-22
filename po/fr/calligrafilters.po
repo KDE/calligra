@@ -4,7 +4,7 @@
 # Joëlle Conavin <jcornavi@kde-france.org>, 2004.
 # Nicolas Ternisien <nicolast@libertysurf.fr>, 2004, 2005.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013, 2020.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013, 2020.
 # Vincent Pinon <vpinon@kde.org>, 2016.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2020.
 # Durand Daniel, 2010.

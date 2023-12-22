@@ -8,7 +8,7 @@
 # Nicolas Ternisien <nicolast@libertysurf.fr>, 2004, 2005.
 # Matthieu Robin <kde@macolu.org>, 2006.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
 # Vincent PINON <vincent.pinon@st.com>, 2013.
 # Thomas Vergnaud <thomas.vergnaud@gmx.fr>, 2015, 2016, 2019, 2022.
 # Simon Depiets <sdepiets@gmail.com>, 2020.
@@ -407,7 +407,7 @@ msgstr ""
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"xavier.besnard@neuf.fr, gerard@delafond.org, kde@macolu.org, geoffray."
+"xavier.besnard@kde.org, gerard@delafond.org, kde@macolu.org, geoffray."
 "levasseurbrandin@numericable.fr, thomas.vergnaud@mailo.eu"
 
 #: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
