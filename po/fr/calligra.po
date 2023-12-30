@@ -4,7 +4,7 @@
 # Stanislas Zeller <uncensored.assault@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011.
-# SPDX-FileCopyrightText: 2012, 2020, 2021, 2022, 2023 xavier <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2012, 2020, 2021, 2022, 2023 Xavier Besnard <xavier.besnard@kde.org>
 # Daniel Durand <durand.d@9online.fr>, 2012, 2013.
 # Sebastien Renard <renard@kde.org>, 2013, 2014, 2015.
 # Vincent PINON <vpinon@kde.org>, 2014.
