@@ -191,10 +191,10 @@ msgid ""
 "English language."
 msgstr ""
 "<b>Error:</b> No s'ha pogut executar el programa WordNet «wn». WordNet ha "
-"d'estar instal·lat al vostre ordinador si voleu utilitzar-lo i, a més a més, "
-"s'ha de trobar en la variable d'entorn PATH. Podeu aconseguir WordNet a <a "
-"href=\"http://www.wordnet.princeton.edu/\">http://www.wordnet.princeton.edu/"
-"</a>. Cal tindre en compte que WordNet només accepta l'anglés."
+"d'estar instal·lat en el vostre ordinador si voleu utilitzar-lo i, a més a "
+"més, s'ha de trobar en la variable d'entorn PATH. Podeu aconseguir WordNet a "
+"<a href=\"http://www.wordnet.princeton.edu/\">http://www.wordnet.princeton."
+"edu/</a>. Cal tindre en compte que WordNet només accepta l'anglés."
 
 #: Thesaurus.cpp:635
 #, kde-format
