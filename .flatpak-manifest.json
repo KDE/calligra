@@ -117,7 +117,7 @@
             "config-opts": [ "-DENABLE_TESTING=OFF" ],
             "name": "kdiagram",
             "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/graphics/kdiagram.git" } ]
+            "sources": [ { "type": "git", "url": "https://invent.kde.org/graphics/kdiagram.git", "branch": "2.8" } ]
         },
         {
             "name": "calligragemini",
