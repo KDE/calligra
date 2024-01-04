@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-12-16 23:54+0100\n"
+"PO-Revision-Date: 2024-01-03 14:57+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -800,7 +800,7 @@ msgstr "Neniu aŭtomata konservado"
 #, kde-format
 msgctxt "unit symbol for minutes, leading space as separator"
 msgid " min"
-msgstr "min"
+msgstr " min"
 
 #: main/config/KoConfigDocumentPage.cpp:65
 #, kde-format
