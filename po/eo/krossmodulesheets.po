@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-12-02 07:44+0100\n"
+"PO-Revision-Date: 2024-01-04 19:38+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -136,7 +136,7 @@ msgstr "Lanĉi"
 
 #: scripts/consoledocker.py:90
 msgid "Open File"
-msgstr "Malfermuidosieron"
+msgstr "Malfermi Dosieron"
 
 #: scripts/consoledocker.py:98
 msgid "<qt>Failed to open file \"%1\"<br><br>%2</qt>"
