@@ -7,35 +7,36 @@
 #
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009, 2010.
+# SPDX-FileCopyrightText: 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: TextShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2015-09-21 18:44+0800\n"
-"Last-Translator: \n"
-"Language-Team: Chinese Traditional <zh-l10n@lists.linux.org.tw>\n"
+"PO-Revision-Date: 2024-01-05 20:05+0900\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Annotation"
-msgstr "註記："
+msgstr "註記"
 
 #: AnnotationTextShapeFactory.cpp:33
 #, kde-format
 msgid "Annotation shape to show annotation content"
-msgstr ""
+msgstr "顯示註記內容的註記元件"
 
 #: AnnotationTextShapeFactory.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Annotation Shape"
-msgstr "註記："
+msgstr "註記元件"
 
 #: commands/AcceptChangeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -590,7 +591,7 @@ msgstr "大寫："
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:185
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Character position"
 msgid "Position:"
 msgstr "位置："
@@ -991,14 +992,14 @@ msgid "From the document:"
 msgstr "從文件："
 
 #: dialogs/DockerStylesComboModel.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Used Styles"
 msgstr "使用樣式"
 
 #: dialogs/DockerStylesComboModel.cpp:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unused Styles"
-msgstr "使用樣式"
+msgstr "未使用樣式"
 
 #. i18n: ectx: property (title), widget (QGroupBox)
 #: dialogs/FontDecorations.ui:17
@@ -1042,7 +1043,6 @@ msgid "Select Font"
 msgstr "選擇字型"
 
 #: dialogs/FontDia.cpp:68
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Font"
 msgstr "字型"
@@ -1185,39 +1185,39 @@ msgstr "快速搜尋："
 #: dialogs/LinkInsertionDialog.cpp:186 dialogs/LinkInsertionDialog.cpp:279
 #, kde-format
 msgid "The URL is invalid"
-msgstr ""
+msgstr "URL 無效"
 
 #: dialogs/LinkInsertionDialog.cpp:88
 #, kde-format
 msgid "Bookmark does not exist"
-msgstr ""
+msgstr "書籤不存在"
 
 #: dialogs/LinkInsertionDialog.cpp:190
 #, no-c-format, kde-format
 msgid "Fetching the title: 0% complete"
-msgstr ""
+msgstr "抓取標題中：已完成 0%"
 
 #: dialogs/LinkInsertionDialog.cpp:213
 #, kde-format
 msgid "Fetch timed out"
-msgstr ""
+msgstr "抓取已逾時"
 
 #: dialogs/LinkInsertionDialog.cpp:268
 #, no-c-format, kde-format
 msgid "Fetching the title: %1% complete"
-msgstr ""
+msgstr "抓取標題中：已完成 %1%"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, LinkInsertionDialog)
 #: dialogs/LinkInsertionDialog.ui:14
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link"
-msgstr "要開啟連結嗎？"
+msgstr "連結"
 
 #. i18n: ectx: attribute (title), widget (QWidget, weblinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Web Link"
-msgstr "要開啟連結嗎？"
+msgstr "網頁連結"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, weblinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:34
@@ -1227,18 +1227,20 @@ msgid ""
 "link,\n"
 " or just enter the URL and hit \"Fetch the title from URL\""
 msgstr ""
+"插入網頁文件的連結。您可以提供網址和連結的標題，也可以\n"
+"只輸入標題之後點擊「從網址抓取標題」"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:42
 #, kde-format
 msgid "The address of your document (Uniform Resource Locator)"
-msgstr ""
+msgstr "文件的位址 (URL)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/LinkInsertionDialog.ui:45
-#, fuzzy, kde-format
+#, kde-format
 msgid " URL:"
-msgstr "網址："
+msgstr " 網址："
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:58
@@ -1246,33 +1248,33 @@ msgstr "網址："
 msgid ""
 "Hit this button to get the title from the URL. Redirections are also "
 "handled. "
-msgstr ""
+msgstr "按下此按鈕來從網址取得標題。會正確處理重新導向。"
 
 #. i18n: ectx: property (text), widget (QPushButton, fetchTitleButton)
 #: dialogs/LinkInsertionDialog.ui:61
 #, kde-format
 msgid "Fetch Title From URL"
-msgstr ""
+msgstr "從網址抓取標題"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_6)
 #: dialogs/LinkInsertionDialog.ui:81 dialogs/LinkInsertionDialog.ui:165
 #, kde-format
 msgid "The text that will be displayed for your link"
-msgstr ""
+msgstr "要為您的連結顯示的文字。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: dialogs/LinkInsertionDialog.ui:84 dialogs/LinkInsertionDialog.ui:168
-#, fuzzy, kde-format
+#, kde-format
 msgid " Text:"
-msgstr "文字"
+msgstr " 文字："
 
 #. i18n: ectx: attribute (title), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "Link To Bookmark"
-msgstr "插入影像"
+msgstr "連結到書籤"
 
 #. i18n: ectx: attribute (toolTip), widget (QWidget, bookmarkLinkInsertionTab)
 #: dialogs/LinkInsertionDialog.ui:117
@@ -1281,18 +1283,20 @@ msgid ""
 "Insert links to Bookmarks. To create bookmarks,\n"
 "click \"Bookmarks\" in the Links and Bookmarks section"
 msgstr ""
+"插入連結到書籤的連結。要建立書籤，請在\n"
+"「連結與書籤」區塊中點擊「書籤」"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:132
 #, kde-format
 msgid "The name of the bookmark to where the link has to point to"
-msgstr ""
+msgstr "連結指向的書籤的名稱"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: dialogs/LinkInsertionDialog.ui:135
-#, fuzzy, kde-format
+#, kde-format
 msgid " Name:"
-msgstr "名稱："
+msgstr " 名稱："
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, ParagraphIndentSpacing)
 #. i18n: ectx: property (whatsThis), widget (QGroupBox)
@@ -1305,24 +1309,21 @@ msgstr "<p><ul><li><b>一行高</b>：一般的間隔</li></ul></p> "
 
 #. i18n: ectx: property (text), widget (QCheckBox, addTabStop)
 #: dialogs/ListLevelWidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Add caption"
+#, kde-format
 msgid "Add tab stop"
-msgstr "新增標題"
+msgstr "新增定位停止點"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:71
-#, fuzzy, kde-format
-#| msgid "Character"
+#, kde-format
 msgid "Tab character"
-msgstr "字元"
+msgstr "定位字元"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:76
-#, fuzzy, kde-format
-#| msgid "Special Characters"
+#, kde-format
 msgid "Space character"
-msgstr "特殊字元"
+msgstr "空白字元"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, labelFollowedBy)
 #: dialogs/ListLevelWidget.ui:81
@@ -1347,13 +1348,13 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:117
 #, kde-format
 msgid "LABEL"
-msgstr ""
+msgstr "文字標籤"
 
 #. i18n: ectx: property (text), widget (QLabel, tabStopLabel)
 #: dialogs/ListLevelWidget.ui:149
 #, kde-format
 msgid "First line separated from label by:"
-msgstr ""
+msgstr "第一行與文字標籤分離："
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #. i18n: ectx: property (text), item, widget (QComboBox, alignment)
@@ -1380,96 +1381,91 @@ msgstr "對齊右邊"
 #: dialogs/ListLevelWidget.ui:300
 #, kde-format
 msgid "Per level increase:"
-msgstr ""
+msgstr "每個等級提升："
 
 #. i18n: ectx: attribute (title), widget (QWidget, numberTab)
 #: dialogs/ListLevelWidget.ui:334
-#, fuzzy, kde-format
-#| msgid "Number:"
+#, kde-format
 msgid "Number"
-msgstr "編號："
+msgstr "編號"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: dialogs/ListLevelWidget.ui:366
-#, fuzzy, kde-format
-#| msgid " Format:"
+#, kde-format
 msgid "Format:"
-msgstr " 格式："
+msgstr "格式："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/ListLevelWidget.ui:429
-#, fuzzy, kde-format
-#| msgid "Display Levels:"
+#, kde-format
 msgid "Display levels above:"
-msgstr "顯示等級："
+msgstr "顯示在此之上的等級："
 
 #. i18n: ectx: property (text), widget (QCheckBox, synchro)
 #: dialogs/ListLevelWidget.ui:436
-#, fuzzy, kde-format
-#| msgid "Letter Synchronization"
+#, kde-format
 msgid "Letter synchronization"
 msgstr "字母同步"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
 #: dialogs/ListLevelWidget.ui:454
-#, fuzzy, kde-format
-#| msgid "No Bullet"
+#, kde-format
 msgid "Bullet"
-msgstr "無圓鈕"
+msgstr "圓鈕"
 
 #. i18n: ectx: attribute (title), widget (QWidget, imageTab)
 #: dialogs/ListLevelWidget.ui:459
 #, kde-format
 msgid "Picture"
-msgstr ""
+msgstr "圖片"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButton)
 #: dialogs/ListLevelWidget.ui:481
 #, kde-format
 msgid "Load Image..."
-msgstr ""
+msgstr "載入影像..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRename)
 #: dialogs/ManageBookmark.ui:20
 #, kde-format
 msgid "&Rename"
-msgstr ""
+msgstr "重新命名(&R)"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDelete)
 #: dialogs/ManageBookmark.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Delete"
-msgstr "刪除"
+msgstr "刪除(&D)"
 
 #: dialogs/ManageBookmarkDialog.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rename Bookmark"
-msgstr "插入影像"
+msgstr "重新命名書籤"
 
 #: dialogs/ManageBookmarkDialog.cpp:70
 #, kde-format
 msgid "Please provide a new name for the bookmark"
-msgstr ""
+msgstr "請提供書籤的新名稱"
 
 #: dialogs/ManageBookmarkDialog.cpp:77 dialogs/ManageBookmarkDialog.cpp:118
 #, kde-format
 msgid "A bookmark with the name \"%1\" already exists."
-msgstr ""
+msgstr "已經有名為 %1 的書籤存在。"
 
 #: dialogs/ManageBookmarkDialog.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Bookmark"
-msgstr "插入影像"
+msgstr "插入書籤"
 
 #: dialogs/ManageBookmarkDialog.cpp:111
 #, kde-format
 msgid "Please provide a name for the bookmark"
-msgstr ""
+msgstr "請提供書籤的名稱"
 
 #: dialogs/ManageBookmarkDialog.cpp:134 ReferencesTool.cpp:193
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage Bookmarks"
-msgstr "書籍"
+msgstr "管理書籤"
 
 #: dialogs/NotesConfigurationDialog.cpp:24
 #, kde-format
@@ -1640,7 +1636,7 @@ msgstr "無"
 #: dialogs/ParagraphBulletsNumbers.cpp:335
 #, kde-format
 msgid "Select a list image"
-msgstr ""
+msgstr "選取列表影像"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphBulletsNumbers.ui:31
@@ -1969,61 +1965,61 @@ msgid "Insert a table"
 msgstr "插入表格"
 
 #: dialogs/SectionFormatDialog.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Section name"
-msgstr "輸入樣式名稱："
+msgstr "區塊名稱"
 
 #: dialogs/SectionFormatDialog.cpp:103 dialogs/SectionsSplitDialog.cpp:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure sections"
-msgstr "組態設定"
+msgstr "設定區塊"
 
 #: dialogs/SectionFormatDialog.cpp:154
 #, kde-format
 msgid "Invalid characters or section with such name exists."
-msgstr ""
+msgstr "無效字元，或是有另一個區塊已經使用該名稱。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/SectionFormatDialog.ui:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Section name:"
-msgstr "輸入樣式名稱："
+msgstr "區塊名稱："
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SectionsSplitDialog)
 #: dialogs/SectionsSplitDialog.ui:6
-#, fuzzy, kde-format
+#, kde-format
 msgid "Split sections"
-msgstr "分割儲存格"
+msgstr "分割區塊"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/SectionsSplitDialog.ui:12
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert paragraph..."
-msgstr "段落..."
+msgstr "插入段落..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/SectionsSplitDialog.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "before start of section:"
-msgstr "插入引用"
+msgstr "在區塊開始前："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/SectionsSplitDialog.ui:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "after end of section:"
-msgstr "插入引用"
+msgstr "在區塊結束後："
 
 #. i18n: ectx: property (text), widget (QToolButton, insertAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Note"
-msgstr "插入表格"
+msgstr "插入註記"
 
 #. i18n: ectx: property (text), widget (QToolButton, removeAnnotation)
 #: dialogs/SimpleAnnotationWidget.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Note"
-msgstr "<< 移除"
+msgstr "移除註記"
 
 #. i18n: ectx: property (text), widget (QToolButton, addCitation)
 #: dialogs/SimpleCaptionsWidget.ui:34
@@ -2086,13 +2082,13 @@ msgstr "來自下方的「參考」及「新增元件」嵌入元件的其他插
 #: dialogs/SimpleLinksWidget.ui:34
 #, kde-format
 msgid "Hyperlinks"
-msgstr ""
+msgstr "超連結"
 
 #. i18n: ectx: property (text), widget (FormattingButton, invokeBookmarkHandler)
 #: dialogs/SimpleLinksWidget.ui:44 ReferencesTool.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bookmarks"
-msgstr "書籍"
+msgstr "書籤"
 
 #: dialogs/SimpleParagraphWidget.cpp:84
 #, kde-format
@@ -2102,12 +2098,12 @@ msgstr "變更段落格式"
 #: dialogs/SimpleParagraphWidget.cpp:292
 #, kde-format
 msgid "Recently Used Level Formats"
-msgstr ""
+msgstr "最近使用的等級格式"
 
 #: dialogs/SimpleParagraphWidget.cpp:297
 #, kde-format
 msgid "Library of Level Formats"
-msgstr ""
+msgstr "等級格式清單"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: dialogs/SimpleParagraphWidget.cpp:301 dialogs/SimpleParagraphWidget.cpp:356
@@ -2119,27 +2115,27 @@ msgstr "刪除"
 #: dialogs/SimpleParagraphWidget.cpp:304 dialogs/SimpleParagraphWidget.cpp:359
 #, kde-format
 msgid "Edit..."
-msgstr ""
+msgstr "編輯..."
 
 #: dialogs/SimpleParagraphWidget.cpp:312
 #, kde-format
 msgid "Define New Level Format..."
-msgstr ""
+msgstr "定義新的等級格式…"
 
 #: dialogs/SimpleParagraphWidget.cpp:313
 #, kde-format
 msgid "Define new bullet or numbering format"
-msgstr ""
+msgstr "定義新的圓鈕或數字格式"
 
 #: dialogs/SimpleParagraphWidget.cpp:333
 #, kde-format
 msgid "Define New List Level Format"
-msgstr ""
+msgstr "定義新的列表等級格式"
 
 #: dialogs/SimpleParagraphWidget.cpp:532
 #, kde-format
 msgid "Edit List Level Format"
-msgstr ""
+msgstr "編輯列表等級格式"
 
 #. i18n: ectx: property (text), widget (FormattingButton, addToC)
 #: dialogs/SimpleTableOfContentsWidget.ui:34
@@ -2449,9 +2445,9 @@ msgid "Configure the Table of Contents"
 msgstr "設定目次"
 
 #: ReferencesTool.cpp:127
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert footnote with auto number"
-msgstr "插入並自動編號"
+msgstr "插入腳註並自動編號"
 
 #: ReferencesTool.cpp:132
 #, kde-format
@@ -2464,9 +2460,9 @@ msgid "Insert with label:"
 msgstr "插入標籤："
 
 #: ReferencesTool.cpp:138
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert endnote with auto number"
-msgstr "插入並自動編號"
+msgstr "插入後註並自動編號"
 
 #: ReferencesTool.cpp:143
 #, kde-format
@@ -2504,50 +2500,50 @@ msgid "Configure the bibliography"
 msgstr "設定參考書目"
 
 #: ReferencesTool.cpp:175
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Link"
-msgstr "插入"
+msgstr "插入連結"
 
 #: ReferencesTool.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert a weblink or link to a bookmark."
-msgstr "在文件中插入參考書目。"
+msgstr "插入網頁連結或是到書籤的連結。"
 
 #: ReferencesTool.cpp:181
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Bookmark"
-msgstr "書籍"
+msgstr "新增書籤"
 
 #: ReferencesTool.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Bookmark :"
-msgstr "書籍"
+msgstr "新增書籤："
 
 #: ReferencesTool.cpp:187
 #, kde-format
 msgid ""
 "Insert a Bookmark. This is useful to create links that point to areas within "
 "the document"
-msgstr ""
+msgstr "插入書籤。這可以用來建立指向文件內的區域的連結"
 
 #: ReferencesTool.cpp:191
 #, kde-format
 msgid ""
 "Display a pop up that hosts the options to add new Bookmark or handle "
 "existing Bookmarks"
-msgstr ""
+msgstr "顯示彈出視窗來新增書籤或是管理現存標籤"
 
 #: ReferencesTool.cpp:195
 #, kde-format
 msgid ""
 "Manage your Bookmarks. Check where are they pointing to, Delete or Rename."
-msgstr ""
+msgstr "管理您的書籤。確認它們指向哪裡、刪除它們或是重新命名它們。"
 
 #: ReferencesTool.cpp:231
 #, kde-format
 msgctxt "as in table of contents, list of pictures, index"
 msgid "Tables, Lists & Indexes"
-msgstr ""
+msgstr "表格、列表、索引"
 
 #: ReferencesTool.cpp:234
 #, kde-format
@@ -2560,32 +2556,32 @@ msgid "Citations and Bibliography"
 msgstr "引用與參考書目"
 
 #: ReferencesTool.cpp:240
-#, fuzzy, kde-format
+#, kde-format
 msgid "Links and Bookmarks"
-msgstr "插入影像"
+msgstr "連結與書籤"
 
 #: ReferencesTool.cpp:366
 #, kde-format
 msgid "Bookmark cannot be empty"
-msgstr ""
+msgstr "書籤不能是空的"
 
 #: ReferencesTool.cpp:373
 #, kde-format
 msgid "Duplicate Name. Click \"Manage Bookmarks\""
-msgstr ""
+msgstr "重複名稱。請點選「管理書籤」"
 
 #: ReferencesTool.cpp:374
 #, kde-format
 msgid "to Rename or Delete Bookmarks"
-msgstr ""
+msgstr "重新命名或刪除書籤"
 
 #: ReviewTool.cpp:53 ReviewTool.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Comment"
-msgstr "註解"
+msgstr "移除註解"
 
 #: ReviewTool.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spell check"
 msgstr "拼字檢查"
 
@@ -2615,19 +2611,19 @@ msgid "Text Shape"
 msgstr "文字元件"
 
 #: TextTool.cpp:201
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure current section"
-msgstr "組態設定"
+msgstr "設定目前區塊"
 
 #: TextTool.cpp:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert new section"
-msgstr "插入引用"
+msgstr "插入新區塊"
 
 #: TextTool.cpp:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert paragraph between sections"
-msgstr "插入引用"
+msgstr "在區塊間插入段落"
 
 #: TextTool.cpp:213
 #, kde-format
@@ -2698,12 +2694,12 @@ msgstr "遞減縮排"
 #: TextTool.cpp:306
 #, kde-format
 msgid "Toggle List or List Level Formatting"
-msgstr ""
+msgstr "切換列表或列表等級格式"
 
 #: TextTool.cpp:307
 #, kde-format
 msgid "Toggle list on/off, or change format of current level"
-msgstr ""
+msgstr "切換列表開關，或是變更目前等級的格式"
 
 #: TextTool.cpp:310
 #, kde-format
@@ -2803,7 +2799,7 @@ msgstr "背景顏色..."
 #: TextTool.cpp:389
 #, kde-format
 msgid "Auto Resize To Content"
-msgstr ""
+msgstr "將大小調整到符合內容"
 
 #: TextTool.cpp:394
 #, kde-format
@@ -2911,15 +2907,16 @@ msgid "Change paragraph margins, text flow, borders, bullets, numbering etc."
 msgstr "變更段落間距、文字流程、邊框、圓鈕、編號等"
 
 #: TextTool.cpp:462
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</"
 "p><p>Select text in multiple paragraphs to change the formatting of all "
 "selected paragraphs.</p><p>If no text is selected, the paragraph where the "
 "cursor is located will be changed.</p>"
 msgstr ""
-"變更段落間距、文字流程、邊框、圓鈕、編號等 <p>選擇多重段落的文字，以變更所有"
-"段落的格式。</p><p>如果沒有選取文字，則會變更目前游標所在位置的段落。</p>"
+"<p>變更段落間距、文字流動、邊框、圓鈕、數字等等。</p><p>在多個段落中選取文字"
+"來為全部所選段落變更格式。</p><p>如果沒有選取任何文字，會修改游標所在的段落。"
+"</p>"
 
 #: TextTool.cpp:465
 #, kde-format
@@ -2932,11 +2929,12 @@ msgid "Change attributes of styles"
 msgstr "變更樣式屬性"
 
 #: TextTool.cpp:468
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can "
 "be changed using the dialog box.</p>"
-msgstr "變更字型與段落樣式的屬性。 <p>您可以用對話框來變更多個樣式。"
+msgstr ""
+"<p>變更樣式的字型與段落屬性。 </p><p>您可以用對話框來變更多個樣式。</p>"
 
 #: TextTool.cpp:475
 #, kde-format
@@ -2959,9 +2957,9 @@ msgid "Repaint"
 msgstr "重新繪製"
 
 #: TextTool.cpp:488
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Comment"
-msgstr "在左方插入欄"
+msgstr "插入註解"
 
 #: TextTool.cpp:574
 #, kde-format

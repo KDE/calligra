@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2024-01-03 14:59+0100\n"
+"PO-Revision-Date: 2024-01-05 21:14+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -15378,7 +15378,7 @@ msgstr ""
 #: ui/dialogs/PositionWidget.ui:54
 #, kde-format
 msgid "Standard"
-msgstr "Normale"
+msgstr "Norma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, center)
 #: ui/dialogs/PositionWidget.ui:68
