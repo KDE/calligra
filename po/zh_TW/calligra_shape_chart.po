@@ -3,13 +3,13 @@
 # Franklin Weng <franklin@goodhorse.idv.tw>, 2010, 2011.
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2008, 2009.
-# SPDX-FileCopyrightText: 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023, 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: ChartShape\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-12-13 17:26+0900\n"
+"PO-Revision-Date: 2024-01-05 19:48+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -33,13 +33,13 @@ msgstr "mail@kisaragi-hiu.com"
 #: AxesConfigWidget.cpp:80 AxesConfigWidget.cpp:86 LegendConfigWidget.ui:33
 #, kde-format
 msgid "Start"
-msgstr ""
+msgstr "開始"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: AxesConfigWidget.cpp:81 AxesConfigWidget.cpp:85 LegendConfigWidget.ui:43
 #, kde-format
 msgid "End"
-msgstr ""
+msgstr "結束"
 
 #: AxesConfigWidget.cpp:83
 #, kde-format
@@ -53,10 +53,9 @@ msgstr ""
 
 #: AxesConfigWidget.cpp:253 AxesConfigWidget.cpp:261 ChartTool.cpp:994
 #: DataSetConfigWidget.cpp:353
-#, fuzzy, kde-format
-#| msgid "Show Grid Lines"
+#, kde-format
 msgid "Axistitle"
-msgstr "顯示格線"
+msgstr "軸線標題"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShow)
 #: AxesConfigWidget.ui:45
@@ -72,10 +71,9 @@ msgstr "縮放"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowLabels)
 #: AxesConfigWidget.ui:65
-#, fuzzy, kde-format
-#| msgid "Labels"
+#, kde-format
 msgid "Show Labels"
-msgstr "標籤"
+msgstr "顯示標籤"
 
 #. i18n: ectx: property (text), widget (QToolButton, axisEditFontButton)
 #: AxesConfigWidget.ui:72
@@ -85,17 +83,15 @@ msgstr "字型"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMajorGridLines)
 #: AxesConfigWidget.ui:81
-#, fuzzy, kde-format
-#| msgid "Show Grid Lines"
+#, kde-format
 msgid "Show Major Grid"
-msgstr "顯示格線"
+msgstr "顯示大格線"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowMinorGridLines)
 #: AxesConfigWidget.ui:88
-#, fuzzy, kde-format
-#| msgid "Show Grid Lines"
+#, kde-format
 msgid "Show Minor Grid"
-msgstr "顯示格線"
+msgstr "顯示小格線"
 
 #. i18n: ectx: property (text), widget (QLabel, barPropertiesLabel)
 #: AxesConfigWidget.ui:119
@@ -146,10 +142,9 @@ msgstr "長條間隔"
 
 #. i18n: ectx: property (text), widget (QCheckBox, axisShowTitle)
 #: AxesConfigWidget.ui:193
-#, fuzzy, kde-format
-#| msgid "Show Grid Lines"
+#, kde-format
 msgid "Show Title"
-msgstr "顯示格線"
+msgstr "顯示標題"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, axes)
 #: AxesConfigWidget.ui:201
@@ -224,7 +219,9 @@ msgstr "頁尾"
 msgid ""
 "This document contains an external link to a remote document\n"
 "%1"
-msgstr "此文件包含連接遠端文件 %1 的外部連結"
+msgstr ""
+"此文件包含一個到遠端文件的外部連結\n"
+"%1"
 
 #: ChartShape.cpp:788
 #, kde-format
@@ -515,10 +512,9 @@ msgid "Close"
 msgstr "關閉"
 
 #: ChartShapeFactory.cpp:583
-#, fuzzy, kde-format
-#| msgid "Growth in %"
+#, kde-format
 msgid "Growth"
-msgstr "成長率（%）"
+msgstr "成長率"
 
 #: ChartTool.cpp:103
 #, kde-format
@@ -531,8 +527,7 @@ msgid "Do something else"
 msgstr "做另外的某事"
 
 #: ChartTool.cpp:277
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgid "Titles"
 msgstr "標題"
 
@@ -562,32 +557,24 @@ msgid "Chart editing"
 msgstr "圖表編輯"
 
 #: commands/AddRemoveAxisCommand.cpp:37
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Add Axis"
-msgstr "附加軸"
+msgstr "新增軸線"
 
 #: commands/AddRemoveAxisCommand.cpp:40
-#, fuzzy
-#| msgid "New Axis"
 msgctxt "(qtundo-format)"
 msgid "Remove Axis"
-msgstr "新增軸"
+msgstr "移除軸線"
 
 #: commands/AxisCommand.cpp:120
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Title"
-msgstr "顯示格線"
+msgstr "顯示軸線標題"
 
 #: commands/AxisCommand.cpp:122
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Title"
-msgstr "顯示格線"
+msgstr "隱藏軸線標題"
 
 #: commands/AxisCommand.cpp:147
 msgctxt "(qtundo-format)"
@@ -600,46 +587,34 @@ msgid "Hide Axis"
 msgstr "隱藏軸線"
 
 #: commands/AxisCommand.cpp:158
-#, fuzzy
-#| msgid "Labels"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Labels"
-msgstr "標籤"
+msgstr "顯示軸線標籤"
 
 #: commands/AxisCommand.cpp:160
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Labels"
-msgstr "顯示格線"
+msgstr "隱藏軸線標籤"
 
 #: commands/AxisCommand.cpp:169
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Major Gridlines"
-msgstr "顯示格線"
+msgstr "顯示軸線的大格線"
 
 #: commands/AxisCommand.cpp:171
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Major Gridlines"
-msgstr "顯示格線"
+msgstr "隱藏軸線的大格線"
 
 #: commands/AxisCommand.cpp:180
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Show Axis Minor Gridlines"
-msgstr "顯示格線"
+msgstr "顯示軸線的小格線"
 
 #: commands/AxisCommand.cpp:182
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Hide Axis Minor Gridlines"
-msgstr "顯示格線"
+msgstr "隱藏軸線的小格線"
 
 #: commands/AxisCommand.cpp:191
 msgctxt "(qtundo-format)"
@@ -647,74 +622,54 @@ msgid "Logarithmic Scaling"
 msgstr "對數調整"
 
 #: commands/AxisCommand.cpp:193
-#, fuzzy
-#| msgid "Logarithmic Scaling"
 msgctxt "(qtundo-format)"
 msgid "Linear Scaling"
-msgstr "對數調整"
+msgstr "線性調整"
 
 #: commands/AxisCommand.cpp:201
-#, fuzzy
-#| msgid "Step Width:"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Step Width"
-msgstr "單步寬度："
+msgstr "設定單步寬度"
 
 #: commands/AxisCommand.cpp:208
-#, fuzzy
-#| msgid "Substep Width:"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Substep Width"
-msgstr "子步驟寬度："
+msgstr "設定子步驟寬度"
 
 #: commands/AxisCommand.cpp:216
-#, fuzzy
-#| msgid "Substep Width:"
 msgctxt "(qtundo-format)"
 msgid "Set Automatic Step Width"
-msgstr "子步驟寬度："
+msgstr "設定自動單步寬度"
 
 #: commands/AxisCommand.cpp:218
-#, fuzzy
-#| msgid "Substep Width:"
 msgctxt "(qtundo-format)"
 msgid "Set Manual Step Width"
-msgstr "子步驟寬度："
+msgstr "設定手動單步寬度"
 
 #: commands/AxisCommand.cpp:227
-#, fuzzy
-#| msgid "Substep Width:"
 msgctxt "(qtundo-format)"
 msgid "Automatic Substep Width"
-msgstr "子步驟寬度："
+msgstr "自動子步驟寬度"
 
 #: commands/AxisCommand.cpp:229
-#, fuzzy
-#| msgid "Substep Width:"
 msgctxt "(qtundo-format)"
 msgid "Manual Substep Width"
-msgstr "子步驟寬度："
+msgstr "手動子步驟寬度"
 
 #: commands/AxisCommand.cpp:237
-#, fuzzy
-#| msgid "Show Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Label Font"
-msgstr "顯示圖例"
+msgstr "設定軸線標籤字型"
 
 #: commands/AxisCommand.cpp:243
-#, fuzzy
-#| msgid "Show Grid Lines"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Position"
-msgstr "顯示格線"
+msgstr "設定軸線位置"
 
 #: commands/AxisCommand.cpp:264
-#, fuzzy
-#| msgid "Show Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Axis Labels Position"
-msgstr "顯示圖例"
+msgstr "設定軸線標籤位置"
 
 #: commands/ChartTextShapeCommand.cpp:36
 msgctxt "(qtundo-format)"
@@ -817,102 +772,74 @@ msgid "Gantt Chart"
 msgstr "甘特圖"
 
 #: commands/DatasetCommand.cpp:144
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Chart Type"
-msgstr "附加軸"
+msgstr "設定資料集圖表類型"
 
 #: commands/DatasetCommand.cpp:152
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Category"
-msgstr "附加軸"
+msgstr "顯示資料集分類"
 
 #: commands/DatasetCommand.cpp:154
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Category"
-msgstr "附加軸"
+msgstr "隱藏資料集分類"
 
 #: commands/DatasetCommand.cpp:163
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Number"
-msgstr "附加軸"
+msgstr "顯示資料集編號"
 
 #: commands/DatasetCommand.cpp:165
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Number"
-msgstr "附加軸"
+msgstr "隱藏資料集編號"
 
 #: commands/DatasetCommand.cpp:174
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Percent"
-msgstr "附加軸"
+msgstr "顯示資料集百分比"
 
 #: commands/DatasetCommand.cpp:176
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Percent"
-msgstr "附加軸"
+msgstr "隱藏資料集百分比"
 
 #: commands/DatasetCommand.cpp:185
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Symbol"
-msgstr "附加軸"
+msgstr "顯示資料集符號"
 
 #: commands/DatasetCommand.cpp:187
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Symbol"
-msgstr "附加軸"
+msgstr "隱藏資料集符號"
 
 #: commands/DatasetCommand.cpp:195
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Brush Color"
-msgstr "附加軸"
+msgstr "設定資料集筆刷色彩"
 
 #: commands/DatasetCommand.cpp:202
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Pen Color"
-msgstr "附加軸"
+msgstr "設定資料集畫筆色彩"
 
 #: commands/DatasetCommand.cpp:211
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Hide Dataset Marker"
-msgstr "附加軸"
+msgstr "隱藏資料集標記"
 
 #: commands/DatasetCommand.cpp:213
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Show Dataset Marker Symbol"
-msgstr "附加軸"
+msgstr "顯示資料集標記符號"
 
 #: commands/DatasetCommand.cpp:221
-#, fuzzy
-#| msgid "Attached Axis"
 msgctxt "(qtundo-format)"
 msgid "Set Dataset Axis"
-msgstr "附加軸"
+msgstr "顯示資料集軸線"
 
 #: commands/GapCommand.cpp:61
 #, fuzzy
@@ -929,32 +856,24 @@ msgid "Set Gap Between Sets"
 msgstr "集合間隔"
 
 #: commands/LegendCommand.cpp:78
-#, fuzzy
-#| msgid "Show Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Title"
-msgstr "顯示圖例"
+msgstr "設定圖例標題"
 
 #: commands/LegendCommand.cpp:86
-#, fuzzy
-#| msgid "Show Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font"
-msgstr "顯示圖例"
+msgstr "設定圖例字型"
 
 #: commands/LegendCommand.cpp:93
-#, fuzzy
-#| msgid "Show Legend"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Font size"
-msgstr "顯示圖例"
+msgstr "設定圖例字型大小"
 
 #: commands/LegendCommand.cpp:100
-#, fuzzy
-#| msgid "Orientation"
 msgctxt "(qtundo-format)"
 msgid "Set Legend Orientation"
-msgstr "方向"
+msgstr "設定圖例方向"
 
 #: commands/PlotAreaCommand.cpp:59
 msgctxt "(qtundo-format)"
@@ -1050,10 +969,9 @@ msgid "Automatic"
 msgstr "自動"
 
 #: DataSetConfigWidget.cpp:248 widgets/RadarDataSetConfigWidget.cpp:87
-#, fuzzy, kde-format
-#| msgid "Show Legend"
+#, kde-format
 msgid "Select"
-msgstr "顯示圖例"
+msgstr "選取"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1065,8 +983,7 @@ msgstr "顯示圖例"
 #: TitlesConfigWidget.ui:66 TitlesConfigWidget.ui:93 TitlesConfigWidget.ui:107
 #: TitlesConfigWidget.ui:134 TitlesConfigWidget.ui:148
 #: widgets/RadarDataSetConfigWidget.cpp:197
-#, fuzzy, kde-format
-#| msgid "Automatic"
+#, kde-format
 msgid "Auto"
 msgstr "自動"
 
@@ -1114,7 +1031,7 @@ msgstr "充填"
 #: widgets/RadarDataSetConfigWidget.ui:122
 #, kde-format
 msgid "Marker"
-msgstr ""
+msgstr "標記"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dataPointShowCategory)
 #. i18n: ectx: property (text), widget (QCheckBox, datasetShowCategory)
@@ -1144,10 +1061,9 @@ msgstr "誤差槓"
 #. i18n: ectx: property (text), widget (QToolButton, formatErrorBar)
 #: DataSetConfigWidget.ui:312 dialogs/PieDataEditor.cpp:61
 #: dialogs/PieDataEditor.ui:33
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert"
-msgstr "插入列"
+msgstr "插入"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, CellRegionDialog)
 #. i18n: ectx: property (windowTitle), widget (QDialog, AxisScalingDialog)
@@ -1175,52 +1091,45 @@ msgid "Substep Width:"
 msgstr "子步驟寬度："
 
 #: dialogs/BubbleDataEditor.cpp:105
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Bubble Data Editor"
-msgstr "附加軸"
+msgstr "泡泡資料編輯器"
 
 #: dialogs/BubbleDataEditor.cpp:111 dialogs/ScatterDataEditor.cpp:117
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column Before"
-msgstr "插入欄"
+msgstr "在前方插入欄"
 
 #: dialogs/BubbleDataEditor.cpp:112 dialogs/ScatterDataEditor.cpp:118
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Column After"
-msgstr "插入欄"
+msgstr "在後方插入欄"
 
 #: dialogs/BubbleDataEditor.cpp:113 dialogs/ScatterDataEditor.cpp:119
 #: dialogs/StockDataEditor.cpp:96
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Above"
-msgstr "插入列"
+msgstr "在上方插入列"
 
 #: dialogs/BubbleDataEditor.cpp:114 dialogs/ScatterDataEditor.cpp:120
 #: dialogs/StockDataEditor.cpp:97
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Row Below"
-msgstr "插入列"
+msgstr "在下方插入列"
 
 #. i18n: ectx: property (text), widget (QPushButton, deleteSelection)
 #: dialogs/BubbleDataEditor.cpp:115 dialogs/PieDataEditor.cpp:62
 #: dialogs/PieDataEditor.ui:46 dialogs/ScatterDataEditor.cpp:121
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete"
-msgstr "刪除列"
+msgstr "刪除"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, ScatterDataEditor)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BubbleDataEditor)
 #: dialogs/BubbleDataEditor.ui:26 dialogs/ScatterDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubbles Editor"
-msgstr "泡泡圖"
+msgstr "泡泡編輯器"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnLeft)
@@ -1228,7 +1137,7 @@ msgstr "泡泡圖"
 #: dialogs/ScatterDataEditor.ui:39
 #, kde-format
 msgid "Insert data column before selected column"
-msgstr ""
+msgstr "在所選欄位之前插入資料欄位"
 
 #. i18n: ectx: property (text), widget (QToolButton, insertColumnBefore)
 #. i18n: ectx: property (text), widget (QToolButton, insertRowBelow)
@@ -1259,14 +1168,14 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:59 dialogs/StockDataEditor.ui:39
 #, kde-format
 msgid "Insert data row below selected row"
-msgstr ""
+msgstr "在所選列下方插入資料列"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertRowAbove)
 #: dialogs/BubbleDataEditor.ui:79 dialogs/ChartTableEditor.ui:65
 #: dialogs/ScatterDataEditor.ui:79 dialogs/StockDataEditor.ui:58
 #, kde-format
 msgid "Insert data row above selected row"
-msgstr ""
+msgstr "在所選列上方插入資料列"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, insertColumnRight)
@@ -1274,21 +1183,20 @@ msgstr ""
 #: dialogs/ScatterDataEditor.ui:99
 #, kde-format
 msgid "Insert data column after selected column"
-msgstr ""
+msgstr "在所選欄位之後插入資料欄位"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/BubbleDataEditor.ui:119 dialogs/ChartTableEditor.ui:104
 #: dialogs/ScatterDataEditor.ui:119
-#, fuzzy, kde-format
-#| msgid "Delete Cells"
+#, kde-format
 msgid "Delete selection"
-msgstr "刪除儲存格"
+msgstr "刪除所選"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, manualControl)
 #: dialogs/BubbleDataEditor.ui:179 dialogs/ScatterDataEditor.ui:179
 #, kde-format
 msgid "Manual control of data sets"
-msgstr ""
+msgstr "資料集的手動控制"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, titlePositioning)
 #. i18n: ectx: property (text), item, widget (QComboBox, titleResize)
@@ -1302,17 +1210,15 @@ msgstr ""
 #: LegendConfigWidget.ui:92 TitlesConfigWidget.ui:57 TitlesConfigWidget.ui:71
 #: TitlesConfigWidget.ui:98 TitlesConfigWidget.ui:112 TitlesConfigWidget.ui:139
 #: TitlesConfigWidget.ui:153
-#, fuzzy, kde-format
-#| msgid "January"
+#, kde-format
 msgid "Manual"
-msgstr "一月"
+msgstr "手動"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, removeDataSet)
 #: dialogs/BubbleDataEditor.ui:192 dialogs/ScatterDataEditor.ui:192
-#, fuzzy, kde-format
-#| msgid "Select a data set"
+#, kde-format
 msgid "Remove data set"
-msgstr "選擇資料集"
+msgstr "移除資料集"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetAfter)
 #. i18n: ectx: property (toolTip), widget (QToolButton, addDataSetBefore)
@@ -1320,48 +1226,44 @@ msgstr "選擇資料集"
 #: dialogs/ScatterDataEditor.ui:212 dialogs/ScatterDataEditor.ui:232
 #, kde-format
 msgid "Add data set after selected data set"
-msgstr ""
+msgstr "在所選資料集後方加入資料集"
 
 #: dialogs/BubbleDataSetTableModel.cpp:103
 #: dialogs/ScatterDataSetTableModel.cpp:103
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Dataset Name"
-msgstr "附加軸"
+msgstr "資料集名稱"
 
 #: dialogs/BubbleDataSetTableModel.cpp:104
 #: dialogs/ScatterDataSetTableModel.cpp:104
-#, fuzzy, kde-format
-#| msgid "X Values:"
+#, kde-format
 msgid "X-Values"
-msgstr "X 值："
+msgstr "X 值"
 
 #: dialogs/BubbleDataSetTableModel.cpp:105
 #: dialogs/ScatterDataSetTableModel.cpp:105
-#, fuzzy, kde-format
-#| msgid "Y Values:"
+#, kde-format
 msgid "Y-Values"
-msgstr "Y 值："
+msgstr "Y 值"
 
 #: dialogs/BubbleDataSetTableModel.cpp:106
-#, fuzzy, kde-format
-#| msgid "Bubble Chart"
+#, kde-format
 msgid "Bubble Size"
-msgstr "泡泡圖"
+msgstr "泡泡大小"
 
 #: dialogs/BubbleDataSetTableModel.cpp:146
 #: dialogs/ScatterDataSetTableModel.cpp:142
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Label: %1"
-msgstr ""
+msgstr "文字標籤：%1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:148
 #: dialogs/ScatterDataSetTableModel.cpp:144
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default label: %1"
-msgstr ""
+msgstr "預設文字標籤：%1"
 
 #: dialogs/BubbleDataSetTableModel.cpp:153
 #: dialogs/ScatterDataSetTableModel.cpp:149
@@ -1378,7 +1280,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Default values used"
-msgstr ""
+msgstr "所使用的預設數值"
 
 #: dialogs/BubbleDataSetTableModel.cpp:160
 #: dialogs/ScatterDataSetTableModel.cpp:156
@@ -1464,10 +1366,9 @@ msgid "Data sets in &columns"
 msgstr "欄的資料集"
 
 #: dialogs/FontEditorDialog.cpp:20
-#, fuzzy, kde-format
-#| msgid "Show Legend"
+#, kde-format
 msgid "Select Font"
-msgstr "顯示圖例"
+msgstr "選擇字型"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, FormatErrorBarDialog)
 #: dialogs/FormatErrorBarDialog.ui:29
@@ -1477,18 +1378,7 @@ msgstr "格式化誤差槓"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: dialogs/FormatErrorBarDialog.ui:69
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-#| "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-#| "size:8pt; font-weight:600;\">Axes</span></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -1509,22 +1399,24 @@ msgstr ""
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
 "\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"size:8pt; font-weight:600;\">軸</span></p></body></html>"
+"weight:600;\">錯誤分類</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-"
+"weight:600;\"></p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:94
 #, kde-format
 msgid "Constant"
-msgstr ""
+msgstr "常數"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:99
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentage"
 msgstr "百分比"
 
@@ -1544,28 +1436,26 @@ msgstr "標準差"
 #: dialogs/FormatErrorBarDialog.ui:114
 #, kde-format
 msgid "Variance"
-msgstr ""
+msgstr "變異數"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, errorType)
 #: dialogs/FormatErrorBarDialog.ui:119
-#, fuzzy, kde-format
-#| msgid "Data Values"
+#, kde-format
 msgid "From Data table"
-msgstr "資料數值"
+msgstr "從資料表"
 
 #. i18n: ectx: property (text), widget (QLabel, valueLabel)
 #: dialogs/FormatErrorBarDialog.ui:144
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Positive "
-msgstr "位置"
+msgstr "正數"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QRadioButton, negIndicator)
 #: dialogs/FormatErrorBarDialog.ui:173 dialogs/FormatErrorBarDialog.ui:338
 #, kde-format
 msgid "Negative"
-msgstr ""
+msgstr "負數"
 
 #. i18n: ectx: property (text), widget (QCheckBox, sameValueForBoth)
 #: dialogs/FormatErrorBarDialog.ui:207
@@ -1575,32 +1465,19 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: dialogs/FormatErrorBarDialog.ui:226 dialogs/PieDataEditor.cpp:33
-#, fuzzy, kde-format
-#| msgid "Y Values:"
+#, kde-format
 msgid "Value"
-msgstr "Y 值："
+msgstr "數值"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, percentageValue)
 #: dialogs/FormatErrorBarDialog.ui:233
-#, fuzzy, no-c-format, kde-format
-#| msgid "%"
+#, no-c-format, kde-format
 msgid " %"
-msgstr "%"
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/FormatErrorBarDialog.ui:303
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
-#| "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
-#| "style=\" font-weight:600;\">Name:</span></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -1618,24 +1495,23 @@ msgstr ""
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
 "\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:10pt; font-"
+"</style></head><body style=\" font-family:'Ubuntu'; font-size:9pt; font-"
 "weight:400; font-style:normal;\">\n"
-"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-"
-"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span "
-"style=\" font-weight:600;\">名稱：</span></p></body></html>"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
+"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+"weight:600;\">錯誤指示器</span></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, posIndicator)
 #: dialogs/FormatErrorBarDialog.ui:325
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Positive"
-msgstr "位置"
+msgstr "正數"
 
 #. i18n: ectx: property (text), widget (QRadioButton, posAndNegIndicator)
 #: dialogs/FormatErrorBarDialog.ui:351
 #, kde-format
 msgid "Both"
-msgstr ""
+msgstr "兩者"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, NewAxisDialog)
 #: dialogs/NewAxisDialog.ui:20
@@ -1664,107 +1540,95 @@ msgid "Title:"
 msgstr "標題："
 
 #: dialogs/PieDataEditor.cpp:55
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Pie Data Editor"
-msgstr "附加軸"
+msgstr "圓餅資料編輯器"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, deleteSelection)
 #: dialogs/PieDataEditor.ui:52
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Del"
-msgstr "刪除列"
+msgstr "Del"
 
 #: dialogs/ScatterDataEditor.cpp:94 widgets/RingConfigWidget.cpp:101
 #, kde-format
 msgid "Row %1"
-msgstr ""
+msgstr "第 %1 列"
 
 #: dialogs/ScatterDataEditor.cpp:111
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Scatter Data Editor"
-msgstr "附加軸"
+msgstr "散佈圖資料編輯器"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, StockDataEditor)
 #: dialogs/StockDataEditor.cpp:88 dialogs/StockDataEditor.ui:26
-#, fuzzy, kde-format
-#| msgid "Attached Axis"
+#, kde-format
 msgid "Stock Data Editor"
-msgstr "附加軸"
+msgstr "股票圖資料編輯器"
 
 #: dialogs/StockDataEditor.cpp:98
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete Row"
 msgstr "刪除列"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, deleteSelection)
 #: dialogs/StockDataEditor.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete Rows"
+#, kde-format
 msgid "Delete row"
 msgstr "刪除列"
 
 #: dialogs/TableEditorDialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Above"
-msgstr "插入列"
+msgstr "在上方插入"
 
 #: dialogs/TableEditorDialog.cpp:59
-#, fuzzy, kde-format
-#| msgid "Insert Rows"
+#, kde-format
 msgid "Insert Below"
-msgstr "插入列"
+msgstr "在下方插入"
 
 #: dialogs/TableEditorDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert Before"
-msgstr "插入欄"
+msgstr "在前方插入"
 
 #: dialogs/TableEditorDialog.cpp:61
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "Insert After"
-msgstr "插入欄"
+msgstr "在後方插入"
 
 #: dialogs/TableEditorDialog.cpp:62
-#, fuzzy, kde-format
-#| msgid "Delete Cells"
+#, kde-format
 msgid "Delete Selection"
-msgstr "刪除儲存格"
+msgstr "刪除所選"
 
 #: dialogs/TableEditorDialog.cpp:169 dialogs/TableEditorDialog.cpp:193
 #, kde-format
 msgid "New Row"
-msgstr ""
+msgstr "新增列"
 
 #: dialogs/TableEditorDialog.cpp:217 dialogs/TableEditorDialog.cpp:241
-#, fuzzy, kde-format
-#| msgid "Insert Columns"
+#, kde-format
 msgid "New Column"
-msgstr "插入欄"
+msgstr "新欄位"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:19
 #, kde-format
 msgid "Vertical"
-msgstr ""
+msgstr "垂直"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendOrientation)
 #: LegendConfigWidget.ui:24
 #, kde-format
 msgid "Horizontal"
-msgstr ""
+msgstr "水平"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendAlignment)
 #: LegendConfigWidget.ui:38
 #, kde-format
 msgid "Center"
-msgstr ""
+msgstr "置中"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:52
@@ -1792,31 +1656,27 @@ msgstr "左端"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:72
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Top-left"
-msgstr "底端"
+msgstr "左上角"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:77
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Top-right"
-msgstr "底端"
+msgstr "右上角"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:82
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Bottom-left"
-msgstr "底端"
+msgstr "左下角"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, legendPosition)
 #: LegendConfigWidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Bottom-right"
-msgstr "底端"
+msgstr "右下角"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: LegendConfigWidget.ui:100
@@ -1838,16 +1698,14 @@ msgstr "方向"
 
 #. i18n: ectx: property (text), widget (QPushButton, legendEditFontButton)
 #: LegendConfigWidget.ui:147
-#, fuzzy, kde-format
-#| msgid "Edit Data..."
+#, kde-format
 msgid "Fonts..."
-msgstr "編輯資料..."
+msgstr "字型..."
 
 #: PieConfigWidget.cpp:101
-#, fuzzy, kde-format
-#| msgid "Data Set %1"
+#, kde-format
 msgid "Data Point %1"
-msgstr "%1 資料集"
+msgstr "%1 資料點"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: PieConfigWidget.ui:29 widgets/RingConfigWidget.ui:137
@@ -1876,13 +1734,13 @@ msgstr "立體"
 #: PlotAreaConfigWidget.ui:69
 #, kde-format
 msgid "Vertical Bars"
-msgstr ""
+msgstr "垂直線"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, chartOrientation)
 #: PlotAreaConfigWidget.ui:74
 #, kde-format
 msgid "Horizontal Bars"
-msgstr ""
+msgstr "水平線"
 
 #. i18n: ectx: property (text), widget (QPushButton, editData)
 #: PlotAreaConfigWidget.ui:82
@@ -1895,7 +1753,7 @@ msgstr "編輯資料..."
 #: PlotAreaConfigWidget.ui:98 PlotAreaConfigWidget.ui:181
 #, kde-format
 msgid "Axes"
-msgstr ""
+msgstr "座標軸"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -1908,16 +1766,15 @@ msgstr "資料集"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: PlotAreaConfigWidget.ui:131
-#, fuzzy, kde-format
-#| msgid "Data Sets"
+#, kde-format
 msgid "Data Points"
-msgstr "資料集"
+msgstr "資料點"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetPenLabel)
 #: StockConfigWidget.ui:18
 #, kde-format
 msgid "Range line"
-msgstr ""
+msgstr "範圍線"
 
 #. i18n: ectx: property (text), widget (QLabel, datasetColorLabel)
 #: StockConfigWidget.ui:47
@@ -1933,23 +1790,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: TitlesConfigWidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "Positioning"
-msgstr "位置"
+msgstr "定位方式"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: TitlesConfigWidget.ui:28
 #, kde-format
 msgid "Resize"
-msgstr ""
+msgstr "調整大小"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: widgets/RingConfigWidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Categories:"
+#, kde-format
 msgid "Categories"
-msgstr "類別："
+msgstr "分類"
 
 #: widgets/StrokeConfigWidget.cpp:91
 #, kde-format
@@ -1994,4 +1849,4 @@ msgstr ""
 #: widgets/StrokeConfigWidget.cpp:211
 #, kde-format
 msgid "Change the color of the line"
-msgstr ""
+msgstr "變更線段的顏色"
