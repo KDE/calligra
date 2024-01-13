@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-12-02 07:44+0100\n"
+"PO-Revision-Date: 2024-01-05 21:14+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -418,7 +418,7 @@ msgstr "Merkredo"
 #: dialogs/SortDialog.cpp:370
 #, kde-format
 msgid "Thursday"
-msgstr "Jaŭdo"
+msgstr "Ĵaŭdo"
 
 #: commands/AutoFillCommand.cpp:151 dialogs/ListDialog.cpp:162
 #: dialogs/SortDialog.cpp:370
@@ -6070,7 +6070,7 @@ msgstr "Horizontala"
 #: dialogs/PositionWidget.ui:54
 #, kde-format
 msgid "Standard"
-msgstr "Normale"
+msgstr "Norma"
 
 #. i18n: ectx: property (text), widget (QRadioButton, left)
 #: dialogs/PositionWidget.ui:61 part/dialogs/PreferenceDialog.cpp:316
@@ -18701,7 +18701,7 @@ msgstr "REGEXP(\"15, 20, 26, 41\";\"([0-9]+), *[0-9]+$\";\"\";1) = \"26\""
 #: functions/text.xml:764
 #, kde-format
 msgid "Replacement"
-msgstr "Septembro"
+msgstr "Anstataŭaĵo"
 
 #: functions/text.xml:768
 #, kde-format
@@ -20203,7 +20203,7 @@ msgstr "&Aŭtomata rekalkulado"
 #: part/dialogs/SheetSelectPage.cpp:22
 #, kde-format
 msgid "Sheets"
-msgstr "Littukoj"
+msgstr "Folioj"
 
 #. i18n: ectx: property (text), widget (QRadioButton, allSheetsButton)
 #: part/dialogs/SheetSelectWidget.ui:40
@@ -20688,12 +20688,12 @@ msgstr "Montri la statusbreton"
 #: part/View.cpp:418
 #, kde-format
 msgid "Tab Bar"
-msgstr "Tab Bar"
+msgstr "Langetobreto"
 
 #: part/View.cpp:419
 #, kde-format
 msgid "Show the tab bar"
-msgstr "Montri la langeton"
+msgstr "Montri la langetbreton"
 
 #: part/View.cpp:425
 #, kde-format
