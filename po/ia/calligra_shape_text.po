@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2016, 2020.
+# Giovanni Sora <g.sora@tiscali.it>, 2013, 2014, 2015, 2016, 2020, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2020-10-14 16:53+0200\n"
+"PO-Revision-Date: 2024-01-17 09:43+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.04.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: AnnotationTextShapeFactory.cpp:31 AnnotationTextShapeFactory.cpp:39
 #, kde-format
@@ -53,13 +53,13 @@ msgstr "Habilita"
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Grow To Fit Width"
 msgid "%1 Grow To Fit Width"
-msgstr ""
+msgstr "%1 accrescimento per adaptar largessa"
 
 #: commands/AutoResizeCommand.cpp:25
 #, kde-format
 msgctxt "(qtundo-format) Enable/Disable Grow To Fit Height"
 msgid "%1 Grow To Fit Height"
-msgstr ""
+msgstr "%1 Accrescimento per adaptar a altessa"
 
 #: commands/AutoResizeCommand.cpp:28
 #, kde-format
@@ -235,17 +235,17 @@ msgstr "Referentias"
 #: dialogs/ChangeConfigureDialog.cpp:136
 #, kde-format
 msgid "This is a line of inserted text."
-msgstr ""
+msgstr "Iste es un linea de texto insertate"
 
 #: dialogs/ChangeConfigureDialog.cpp:142
 #, kde-format
 msgid "This is a line of deleted text."
-msgstr ""
+msgstr "Iste es un linea de texto delite"
 
 #: dialogs/ChangeConfigureDialog.cpp:148
 #, kde-format
 msgid "This is a line of text whose format has been changed."
-msgstr ""
+msgstr "iste es un linea cuje formato ha essite modificate."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ChangeConfigureDialog)
 #: dialogs/ChangeConfigureDialog.ui:17
@@ -263,7 +263,7 @@ msgstr "Preferentias General"
 #: dialogs/ChangeConfigureDialog.ui:37
 #, kde-format
 msgid "Saving Format"
-msgstr "Salvegurdante Formato"
+msgstr "Salveguardante Formato"
 
 #. i18n: ectx: property (text), widget (QRadioButton, odf12RadioButton)
 #: dialogs/ChangeConfigureDialog.ui:44
@@ -532,7 +532,7 @@ msgstr "Sublineante:"
 #: dialogs/CharacterHighlighting.ui:141
 #, kde-format
 msgid "Strikethrough:"
-msgstr ""
+msgstr "Barrate:"
 
 #. i18n: ectx: property (text), widget (QLabel)
 #: dialogs/CharacterHighlighting.ui:172
@@ -1350,7 +1350,7 @@ msgstr ""
 #: dialogs/ListLevelWidget.ui:436
 #, kde-format
 msgid "Letter synchronization"
-msgstr ""
+msgstr "Synchronisation de littera"
 
 #. i18n: ectx: attribute (title), widget (QWidget, bulletTab)
 #: dialogs/ListLevelWidget.ui:454
@@ -1581,7 +1581,7 @@ msgstr "Nihil"
 #: dialogs/ParagraphBulletsNumbers.cpp:335
 #, kde-format
 msgid "Select a list image"
-msgstr ""
+msgstr "Selige un imaine de lista"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: dialogs/ParagraphBulletsNumbers.ui:31
@@ -1611,7 +1611,7 @@ msgstr "Monstra nivellos:"
 #: dialogs/ParagraphBulletsNumbers.ui:148
 #, kde-format
 msgid "Bullet/Number followed by"
-msgstr ""
+msgstr "Puncto/Numero seguite per"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, doubleSpinBox_2)
@@ -1657,7 +1657,7 @@ msgstr "Reinitia numeration a iste paragrapho"
 #: dialogs/ParagraphBulletsNumbers.ui:248
 #, kde-format
 msgid "Letter Synchronization"
-msgstr ""
+msgstr "Synchronisation de littera"
 
 #. i18n: ectx: property (text), widget (QLabel, widthLabel)
 #: dialogs/ParagraphBulletsNumbers.ui:257
@@ -2581,7 +2581,7 @@ msgstr "Sublinea"
 #: TextTool.cpp:236
 #, kde-format
 msgid "Strikethrough"
-msgstr ""
+msgstr "Barrate"
 
 #: TextTool.cpp:242
 #, kde-format
@@ -2736,12 +2736,12 @@ msgstr ""
 #: TextTool.cpp:394
 #, kde-format
 msgid "Grow To Fit Width"
-msgstr ""
+msgstr "Accrescimento per adaptar largessa"
 
 #: TextTool.cpp:399
 #, kde-format
 msgid "Grow To Fit Height"
-msgstr ""
+msgstr "Accrescimento per adaptar a altessa"
 
 #: TextTool.cpp:404
 #, kde-format
