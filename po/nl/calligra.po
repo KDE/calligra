@@ -17,7 +17,7 @@
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Sander Koning <ask@macedon.demon.nl>, 2005.
 # Natalie Koning <nat@switch.demon.nl>, 2006.
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2008, 2009, 2010, 2011, 2012.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
 # Hannie Dumoleyn <hannie@kde.nl>, 2010.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016, 2017, 2019, 2021, 2022, 2023.
 msgid ""
@@ -25,14 +25,14 @@ msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-03-13 10:59+0100\n"
+"PO-Revision-Date: 2024-01-18 09:56+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -2795,7 +2795,7 @@ msgstr "Normaal"
 #: pigment/KoCompositeOpRegistry.cpp:71
 #, kde-format
 msgid "Overlay"
-msgstr "Bedekking"
+msgstr "Overlay"
 
 #: pigment/compositeops/KoCompositeOps.h:102
 #: pigment/KoCompositeOpRegistry.cpp:75
