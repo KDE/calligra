@@ -1,5 +1,5 @@
 # Translation of calligra_shape_chart.po to Catalan (Valencian)
-# Copyright (C) 2008-2021 This_file_is_part_of_KDE
+# Copyright (C) 2008-2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the ChartShape package.
 #
 # Rafael Carreras <rcarreras@caliu.cat>, 2008, 2011.
