@@ -17,7 +17,7 @@
 ><firstname
 >Anne-Marie</firstname
 > <surname
->Mahlouf</surname
+>Mahfouf</surname
 > <affiliation
 > <address
 ><email
@@ -101,7 +101,7 @@
 >Fonction</guilabel
 >.</para>
 <para
->Sélectionnez la fonction que vous voulez utiliser dans la boîte à liste à gauche de la boîte de dialogue, La page donglets <guilabel
+>Sélectionnez la fonction que vous voulez utiliser dans la boîte à liste à gauche de la boîte de dialogue, La page d'onglet <guilabel
 >Aide</guilabel
 > affiche la description, le résultat retourné, la syntaxe, les paramètres de cette fonction. En supplément, la page affiche souvent des liens vers des fonctions en relation. Ensuite actionner le bouton avec la flèche vers le bas pour coller l'expression dans la zone d'édition en bas de la boîte de dialogue.</para>
 <para
@@ -901,7 +901,7 @@
 </imageobject>
 <textobject>
 <phrase
->La boîte de dialogue de déprotection de document</phrase>
+>La boîte de dialogue pour la suppression de la protection de document</phrase>
 </textobject>
 </mediaobject>
 </para>
@@ -1033,7 +1033,7 @@
 ></listitem>
 </itemizedlist>
 <para
->Pour protéger une suite de cellules sélectionnées ou une sélection de cellules non-contigües : </para>
+>Pour protéger une suite de cellules sélectionnées ou une sélection de cellules non-contiguës : </para>
 <itemizedlist>
 <listitem
 ><para
@@ -1109,7 +1109,7 @@
 </mediaobject>
 </para>
 <para
->Pour masquer la formule d'une cellule, sélectionner la cellule ou la zone de cellules contigües avec <keycombo action="simul"
+>Pour masquer la formule d'une cellule, sélectionner la cellule ou la zone de cellules contiguës avec <keycombo action="simul"
 >&Ctrl;</keycombo
 > et, ensuite, choisir le menu <menuchoice
 ><guimenu
@@ -1129,7 +1129,7 @@
 ><guimenuitem
 >Protection de feuille</guimenuitem
 ></menuchoice
-> pour afficher la boîte de dialogue. Saisir un mot de passe valable deux fois pour prévenir contre une déprotection de la feuille. </para>
+> pour afficher la boîte de dialogue. Saisir un mot de passe valable deux fois pour prévenir contre une suppression de la protection de la feuille. </para>
 <para
 >Quand <guilabel
 >Masquer formule</guilabel
@@ -1146,7 +1146,7 @@
 <phrase
 ><guilabel
 >Masquer la formule</guilabel
-> est activé mais la cellule n'est pas protégée, seule la fuille est protégée.</phrase>
+> est activé mais la cellule n'est pas protégée, seule la feuille est protégée.</phrase>
 </textobject>
 </mediaobject>
 </para>
@@ -1218,7 +1218,7 @@
 >Masquer tout</guilabel
 > et <guilabel
 >Protégé</guilabel
-> sont activés dans Proetection de cellule et la feuille est protégée.</phrase>
+> sont activés dans le menu « Protection de cellules » et la feuille est protégée.</phrase>
 </textobject>
 </mediaobject>
 </para>
@@ -1315,9 +1315,9 @@ Remove View</guimenuitem
 > car les noms peuvent être utilisés à la place des références normales aux cellules et ne changent pas quand une cellule qui contient des références est copiée. Quand un nom est utilisé de cette manière, il doit être encadré d'apostrophes.</para>
 <para
 >Par exemple, si la cellule A1 a pour nom <userinput
->fred</userinput
+>jean</userinput
 >, vous pouvez saisir une formule comme <userinput
->='fred' + 2 </userinput
+>='jean' + 2 </userinput
 > dans une autre cellule qui doit toujours additionner la valeur de A1 sans se soucier d'où la formule a été copiée.</para>
 <para
 >Notez que ces noms de cellule et de zone sont traités comme des minuscules.</para>
