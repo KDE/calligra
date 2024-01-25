@@ -97,7 +97,7 @@
 <para
 >La part superior d'aquesta pàgina us permet seleccionar el format a utilitzar per a mostrar valors numèrics, dates o hores. Una subfinestra de <guilabel
 >Vista prèvia</guilabel
-> us permetrà veure l'efecte del nou format. </para>
+> us permetrà veure l'efecte del format nou. </para>
 <para
 >Podeu establir el mateix format de dades per a una fila o columna seleccionant-la i cridant el diàleg <guilabel
 >Format de cel·la</guilabel
@@ -233,7 +233,7 @@
 >Format de la moneda</guiicon
 > a la barra d'eines <guilabel
 >Format</guilabel
-> per establir el format de cel·la perquè mostri la moneda actual: <inlinemediaobject
+> per a establir el format de cel·la perquè mostri la moneda actual: <inlinemediaobject
 ><imageobject>
 <imagedata fileref="hi22-action-money.png" format="PNG"/>
 </imageobject
@@ -337,7 +337,7 @@ better-->
 ></term>
 <listitem
 ><para
->Dona format al contingut de la cel·la com a una data i hora. Per introduir una data i una hora, l'haureu d'introduir en el <guilabel
+>Dona format al contingut de la cel·la com a una data i hora. Per a introduir una data i una hora, l'haureu d'introduir en el <guilabel
 >Format de l'hora</guilabel
 > establert a l'&systemsettings; en <menuchoice
 ><guimenu
@@ -534,7 +534,7 @@ better-->
 <para
 >Des de la pàgina <guilabel
 >Posició</guilabel
-> podreu controlar la posició del text dintre d'una cel·la fent possible seleccions en les àrees <guilabel
+> podreu controlar la posició del text dintre d'una cel·la fent possible les seleccions en les àrees <guilabel
 >Horitzontal</guilabel
 > i <guilabel
 >Vertical</guilabel
@@ -735,7 +735,7 @@ better-->
 >Protecció de la cel·la</guilabel
 >.</para>
 <para
->Per omissió, totes les cel·les es protegeixen (això vol dir que el contingut no es pot canviar) i per activar la protecció de la cel·la també haureu de protegir el full utilitzant el menú <menuchoice
+>Per omissió, totes les cel·les es protegeixen (això vol dir que el contingut no es pot canviar) i per a activar la protecció de la cel·la també haureu de protegir el full utilitzant el menú <menuchoice
 ><guimenu
 >Eines</guimenu
 ><guimenuitem
@@ -870,7 +870,7 @@ better-->
 >Si moveu el cursor del ratolí de manera que el seu consell resti fora de la línia entre dos dels números de fila a l'esquerra de la finestra de &sheets; el cursor canviarà per a mostrar dues línies paral·leles amb una petita fletxa que surt d'aquestes. Quan el cursor està en aquest estat podeu mantenir premut el &BER; i arrossegar la vora entre les dues files, canviant l'alçada de la fila superior. Es pot utilitzar una tècnica similar per a canviar l'amplada d'una columna.</para>
 
 <para
->Per establir l'alçada de la fila o l'amplada de la columna al mínim necessari per a mostrar el contingut, escolliu la fila o la columna i feu clic dret sobre l'etiqueta de fila o de columna. En el menú que aparegui, seleccioneu <guimenuitem
+>Per a establir l'alçada de la fila o l'amplada de la columna al mínim necessari per a mostrar el contingut, escolliu la fila o la columna i feu clic dret sobre l'etiqueta de fila o de columna. En el menú que aparegui, seleccioneu <guimenuitem
 >Ajusta fila</guimenuitem
 > o <guimenuitem
 >Ajusta columna</guimenuitem

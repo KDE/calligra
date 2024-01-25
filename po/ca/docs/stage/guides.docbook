@@ -79,7 +79,7 @@
 >Exporta una presentació existent en pàgines en &HTML; estàndard amb ajudes de navegació.</para>
 
 <para
->Primer, feu una nova presentació, o obriu-ne una d'existent. Llavors, cliqueu a <guimenu
+>Primer, feu una presentació nova, o obriu-ne una d'existent. Llavors, cliqueu a <guimenu
 >Fitxer</guimenu
 ><guimenuitem
 >Exporta com a HTML...</guimenuitem
@@ -89,14 +89,14 @@
 
 <screenshot>
 <screeninfo
->Ompliu amb els details per a la vostra presentació de diapositives en &HTML;</screeninfo>
+>Ompliu amb els detalls per a la vostra presentació de diapositives en &HTML;</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow3.png" format="PNG"/>
 </imageobject>
 <textobject
 ><phrase
->Ompliu amb els details per a la vostra presentació de diapositives en &HTML;</phrase
+>Ompliu amb els detalls per a la vostra presentació de diapositives en &HTML;</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
@@ -126,7 +126,7 @@
 > i seleccioneu una carpeta.</para>
 
 <para
->El que tenim ara són les noves carpetes <filename
+>El que tenim ara són les carpetes noves <filename
 >html/</filename
 > i <filename
 >pics/</filename
@@ -134,14 +134,14 @@
 
 <screenshot>
 <screeninfo
->Les noves carpetes de presentació de diapositives en &HTML;</screeninfo>
+>Les carpetes noves de presentació de diapositives en &HTML;</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="htmlshow9.png" format="PNG"/>
 </imageobject>
 <textobject
 ><phrase
->Les noves carpetes de presentació de diapositives en &HTML;</phrase
+>Les carpetes noves de presentació de diapositives en &HTML;</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
@@ -176,13 +176,13 @@
 >Si heu fet una presentació amb un estil que voleu usar de nou, podeu desar-la com a una plantilla.</para>
 
 <para
->Aquesta guia d'aprenentatge mostrarà com podeu fer una nova plantilla i desar-la.</para>
+>Aquesta guia d'aprenentatge mostrarà com podeu fer una plantilla nova i desar-la.</para>
 
 <para
->Obriu el &stage; i creeu un nou document.</para>
+>Obriu el &stage; i creeu un document nou.</para>
 
 <para
->Per afegir una mica de gràcia a una diapositiva en blanc, podem canviar-li el fons - feu-ho seleccionant l'eina <guilabel
+>Per a afegir una mica de gràcia a una diapositiva en blanc, podem canviar-li el fons - feu-ho seleccionant l'eina <guilabel
 >Fons del document</guilabel
 > a l'acoblador Eines-.</para>
 
@@ -210,14 +210,14 @@
 
 <screenshot>
 <screeninfo
->Afegint una capçalera a la nova plantilla</screeninfo>
+>Afegint una capçalera a la plantilla nova</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="template04.png" format="PNG"/>
 </imageobject>
 <textobject
 ><phrase
->Afegint una capçalera a la nova plantilla</phrase
+>Afegint una capçalera a la plantilla nova</phrase
 ></textobject>
 </mediaobject>
 </screenshot>

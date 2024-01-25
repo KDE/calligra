@@ -75,7 +75,7 @@
 ></term>
 <listitem
 ><para
->Aquesta llista desplegable s'utilitza per escollir el càlcul realitzat per la funció <link linkend="statusbarsum"
+>Aquesta llista desplegable s'utilitza per a escollir el càlcul realitzat per la funció <link linkend="statusbarsum"
 >Resum a la Barra d'estat</link
 >. </para
 ></listitem>
@@ -137,7 +137,7 @@
 >.</para>
 
 <para
->Aquesta secció també permet seleccionar el color de les línies utilitzades per indicar les vores de pàgina impresa quan es marca la casella <guimenuitem
+>Aquesta secció també permet seleccionar el color de les línies utilitzades per a indicar les vores de pàgina impresa quan es marca la casella <guimenuitem
 >Vores de la pàgina</guimenuitem
 > en el menú <guimenu
 >Visualitza</guimenu
@@ -176,7 +176,7 @@
 ><guimenuitem
 >Mostra les vores de pàgina</guimenuitem
 ></menuchoice
->, se us mostraran les vores de pàgina. Feu clic aquí per escollir un altre color per a les vores en comptes del vermell per omissió. </para
+>, se us mostraran les vores de pàgina. Feu clic aquí per a escollir un altre color per a les vores en comptes del vermell per omissió. </para
 ></listitem>
 </varlistentry>
 
@@ -411,7 +411,7 @@ tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTr
 </para>
 
 <para
->Marqueu un connector a la llista per activar-lo. Per a mostrar el diàleg <guilabel
+>Marqueu un connector a la llista per a activar-lo. Per a mostrar el diàleg <guilabel
 >Quant a</guilabel
 >, feu clic al botó d'informació a la part dreta de l'element de la llista. </para>
 
@@ -434,7 +434,7 @@ tables(15468)/kdecore (trader) KServiceTypeTrader::defaultOffers: KServiceTypeTr
 <para
 >Aquesta pàgina permet configurar el comportament del revisor ortogràfic de &sheets;.</para>
 <para
->Per obtenir més informació, consulteu la documentació del <ulink url="help:kcontrol/spellchecking"
+>Per a obtenir més informació, consulteu la documentació del <ulink url="help:kcontrol/spellchecking"
 >corrector ortogràfic</ulink
 >.</para>
 </sect1>
@@ -554,7 +554,7 @@ the title case, for example My Own Spreadsheet or My own spreadsheet. If this is
 <para
 >Trieu un perfil d'autor per al vostre document. </para>
 <para
->Podeu afegir un nou perfil o eliminar el perfil actual utilitzant els botons a la dreta de la llista desplegable perfils. </para>
+>Podeu afegir un perfil nou o eliminar el perfil actual utilitzant els botons a la dreta de la llista desplegable perfils. </para>
 </sect1>
 </chapter>
 

@@ -54,7 +54,7 @@ Be sure to comment it out again when you are done -->
 
 <sect1 id="start-new">
 <title
->Iniciant un nou document</title>
+>Iniciant un document nou</title>
 
 <para
 >Quan engegueu el &stage;, apareix el diàleg habitual d'inici del &calligra;. </para>
@@ -133,46 +133,46 @@ Be sure to comment it out again when you are done -->
 
 <sect1 id="insert-page">
 <title
->Afegir una nova pàgina</title>
+>Afegeix una pàgina nova</title>
 
 <para
->Ara afegirem una nova diapositiva al nostre document. Per a fer-ho, cliqueu el menú <guimenu
+>Ara afegirem una diapositiva nova al nostre document. Per a fer-ho, cliqueu el menú <guimenu
 >Diapositiva</guimenu
 >, i cliqueu a <guimenuitem
 >Insereix una diapositiva</guimenuitem
 >. </para>
 
 <para
->Ara podeu decidir l'aspecte de la nova diapositiva. Aquest cop, seleccioneu una disposició en columnes (ressaltada en blau). </para>
+>Ara podeu decidir l'aspecte de la diapositiva nova. Aquest cop, seleccioneu una disposició en columnes (ressaltada en blau). </para>
 
 <screenshot>
 <screeninfo
->Escollint una disposició per a la nova pàgina</screeninfo>
+>Escollint una disposició per a la pàgina nova</screeninfo>
 <mediaobject>
 <imageobject
 ><imagedata fileref="tut07.png" format="PNG"/></imageobject>
 <textobject
 ><phrase
->Escollint una disposició per a la nova pàgina</phrase
+>Escollint una disposició per a la pàgina nova</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
 
 <para
->La nova disposició de la diapositiva apareixerà ara a la finestra d'edició. Per a canviar entre les pàgines de la vostra presentació, podeu seleccionar les diapositives a la subfinestra de l'esquerra (marcada en blau per a aquesta captura de pantalla). </para>
+>La disposició nova de la diapositiva apareixerà ara a la finestra d'edició. Per a canviar entre les pàgines de la vostra presentació, podeu seleccionar les diapositives a la subfinestra de l'esquerra (marcada en blau per a aquesta captura de pantalla). </para>
 
 <para
->La nova diapositiva té dos quadres de text. N'hi ha un per a un títol i un altre per a posar-hi llistes d'elements. </para>
+>La diapositiva nova té dos quadres de text. N'hi ha un per a un títol i un altre per a posar-hi llistes d'elements. </para>
 
 <screenshot>
 <screeninfo
->La nova diapositiva</screeninfo>
+>La diapositiva nova</screeninfo>
 <mediaobject>
 <imageobject
 ><imagedata fileref="tut09.png" format="PNG"/></imageobject>
 <textobject
 ><phrase
->La nova diapositiva</phrase
+>La diapositiva nova</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
@@ -182,7 +182,7 @@ Be sure to comment it out again when you are done -->
 >Intro</keycap
 > o <keycap
 >Retorn</keycap
->. Tal com aneu escrivint nous paràgrafs, apareixeran nous pics al davant automàticament. </para>
+>. Tal com aneu escrivint paràgrafs nous, apareixeran pics nous al davant automàticament. </para>
 
 <screenshot>
 <screeninfo
@@ -223,10 +223,10 @@ Be sure to comment it out again when you are done -->
 <para
 >Ara seleccioneu una imatge a l'acoblador <guilabel
 >Afegeix una forma</guilabel
-> i feu clic amb el &BER; a on vulgueu posar el logotip amb la seva mida original o dibuixeu un rectangle amb el cursor del ratolí (feu clic amb el &BER; i manteniu-lo premut) per especificar la mida i la posició del logotip. </para>
+> i feu clic amb el &BER; a on vulgueu posar el logotip amb la seva mida original o dibuixeu un rectangle amb el cursor del ratolí (feu clic amb el &BER; i manteniu-lo premut) per a especificar la mida i la posició del logotip. </para>
 
 <para
->Apareixerà un diàleg per a la selecció de fitxers. Per aprendre sobre aquest o d'altres diàlegs estàndards del &kde;, si us plau, consulteu la documentació del &kde;. Podeu navegar-hi clicant les icones de <guiicon
+>Apareixerà un diàleg per a la selecció de fitxers. Per a aprendre sobre aquest o d'altres diàlegs estàndards del &kde;, si us plau, consulteu la documentació del &kde;. Podeu navegar-hi clicant les icones de <guiicon
 >carpeta</guiicon
 > o usant els botons d'estil <guiicon
 >navegador</guiicon
@@ -244,13 +244,13 @@ Be sure to comment it out again when you are done -->
 
 <screenshot>
 <screeninfo
->La nova imatge afegida</screeninfo>
+>La imatge nova afegida</screeninfo>
 <mediaobject>
 <imageobject
 ><imagedata fileref="tut13.png" format="PNG"/></imageobject>
 <textobject
 ><phrase
->La nova imatge afegida</phrase
+>La imatge nova afegida</phrase
 ></textobject>
 </mediaobject>
 </screenshot>
@@ -315,7 +315,7 @@ Be sure to comment it out again when you are done -->
 >Manipulació bàsica de la forma</guibutton
 > i feu clic dintre de qualsevol lloc de l'àrea del diagrama. Ara hauria d'aparèixer una vora ombrejada en diagonal i amb un petit quadrat groc a cada cantonada i al mig de cada vora. </para>
 <para
->Si moveu el cursor sobre qualsevol dels quadrats, aquests haurien de canviar a una fletxa doble. Podeu canviar la mida del diagrama arrossegant un d'aquests quadrats amb el &BER; premut. Per suprimir el diagrama, feu clic <mousebutton
+>Si moveu el cursor sobre qualsevol dels quadrats, aquests haurien de canviar a una fletxa doble. Podeu canviar la mida del diagrama arrossegant un d'aquests quadrats amb el &BER; premut. Per a suprimir el diagrama, feu clic <mousebutton
 >dret</mousebutton
 > sobre un dels quadrats i seleccioneu <guimenuitem
 >Suprimeix</guimenuitem
@@ -329,7 +329,7 @@ Be sure to comment it out again when you are done -->
 >esquerre</mousebutton
 > dintre de l'àrea del diagrama. El diagrama <guilabel
 >Opcions de l'eina</guilabel
-> hauria d'aparèixer a l'acoblador. Podeu usar aquestes eines per editar les propietats del diagrama, com el tipus de diagrama, les etiquetes, els eixos i les dades.</para>
+> hauria d'aparèixer a l'acoblador. Podeu usar aquestes eines per a editar les propietats del diagrama, com el tipus de diagrama, les etiquetes, els eixos i les dades.</para>
 
 <para
 >Cliqueu amb el &BER; fora del diagrama per a tornar a la diapositiva del &stage;.</para>
@@ -523,7 +523,7 @@ Now the title has a shadow!
 >. </para>
 
 <para
->Per sortir de la presentació de diapositives, premeu la tecla &Esc;. </para>
+>Per a sortir de la presentació de diapositives, premeu la tecla &Esc;. </para>
 
 </sect1>
 

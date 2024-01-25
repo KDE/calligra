@@ -77,7 +77,7 @@
 ></important>
 
 <para
->&calligra; és una suite ofimàtica i d'art gràfic integrada per al &kde;. &calligra; consisteix actualment dels següents components: </para>
+>&calligra; és una suite ofimàtica i d'art gràfic integrada per al &kde;. &calligra; consisteix actualment dels components següents: </para>
 
 <itemizedlist>
 <listitem
@@ -135,13 +135,13 @@
 <para
 >Un objectiu del &calligra; també és no sobrecarregar la interfície d'usuari amb característiques que difícilment es poden necessitar. Això ha resultat en una interfície d'usuari magra i lleugera que us permet fer la vostra feina de manera eficient. </para>
 <para
->Que sigui lleuger també vol dir que a vegades aquella funcionalitat específica que us cal no hi és. En aquest cas, sempre l'hi podeu afegir tot estenent el &calligra;. Aquestes característiques sempre es poden fer disponibles mitjançant connectors o scripts, deixant lleuger el &calligra;. </para>
+>Que sigui lleuger també vol dir que a vegades aquella funcionalitat específica que us cal no hi és. En aquest cas, sempre la podeu afegir ampliant el &calligra;. Aquestes característiques addicionals sempre es poden fer disponibles mitjançant connectors o scripts, mantenint lleuger el &calligra;. </para>
 </sect2>
 <sect2 id="featurecompleteness">
 <title
 >Totalitat</title>
 <para
->El &calligra; ofereix un ample abast de components, que cobreixen la majoria de necessitats a casa i a l'oficina. Sempre es poden implementar noves característiques mitjançant scripts i connectors o, fins i tot components sencers basats en l'entorn de treball del &calligra;. </para>
+>El &calligra; ofereix un ample abast de components, que cobreixen la majoria de necessitats a casa i a l'oficina. Sempre es poden implementar característiques noves mitjançant scripts i connectors o, fins i tot components sencers basats en l'entorn de treball del &calligra;. </para>
 </sect2>
 <sect2 id="featurefileformat">
 <title
@@ -167,7 +167,7 @@
 >Configurant &calligra; i el vostre sistema</title>
 
 <para
->Encara que el &calligra; hauria de funcionar bé d'entrada, hi podria haver algunes coses a optimitzar per tal d'obtenir el millor del &calligra;. Aquest capítol us mostra què podríeu voler fer per aconseguir els millors resultats amb la vostra nova suite ofimàtica i fer que aquesta compleixi amb les vostres necessitats. El &calligra; és molt configurable, fins i tot per a detalls de la barra d'eines i la disposició del menú. </para>
+>Encara que el &calligra; hauria de funcionar bé d'entrada, hi podria haver algunes coses a optimitzar per tal d'obtenir el millor del &calligra;. Aquest capítol us mostra què podríeu voler fer per a aconseguir els millors resultats amb la vostra suite ofimàtica nova i fer que aquesta compleixi amb les vostres necessitats. El &calligra; és molt configurable, fins i tot per a detalls de la barra d'eines i la disposició del menú. </para>
 
 <sect1 id="custom-gui">
 <title
@@ -177,7 +177,7 @@
 >Encara que el &calligra; ja ve amb una interfície gràfica d'usuari que ha de complaure la majoria de necessitats de la gent, hi ha bones raons per les quals potser voldreu canviar l'aspecte dels programes. </para>
 
 <para
->La meva mare, per exemple, s'espanta dels botons i les entrades de menú que no entén. Per adaptar el &calligra; a les seves necessitats, vaig reduir la interfície gràfica d'usuari a un mínim de funcionalitats. Com que ella només vol escriure cartes i usar certes plantilles, no calen moltes més funcionalitats que desar, carregar, imprimir, &etc; </para>
+>La meva mare, per exemple, s'espanta dels botons i les entrades de menú que no entén. Per a adaptar el &calligra; a les seves necessitats, vaig reduir la interfície gràfica d'usuari a un mínim de funcionalitats. Com que ella només vol escriure cartes i usar certes plantilles, no calen moltes més funcionalitats que desar, carregar, imprimir, &etc; </para>
 
 <para
 >Gràcies al concepte <quote
@@ -249,7 +249,7 @@
 >Enllaços</title>
 
 <para
->Els següents enllaços haurien de ser útils si esteu cercant més informació sobre el &kde; o el &calligra;. </para>
+>Els enllaços següents haurien de ser útils si esteu cercant més informació sobre el &kde; o el &calligra;. </para>
 
 <itemizedlist>
 <listitem>
@@ -284,7 +284,7 @@
 <title
 >Introducció</title>
 <para
->Si voleu desenvolupar el &calligra;, podeu trobar interessants els següents recursos: </para>
+>Si voleu desenvolupar el &calligra;, podeu trobar interessants els recursos següents: </para>
 
 <itemizedlist>
 <listitem
@@ -300,7 +300,7 @@
 ><para
 >El primer pas per a contribuir en el codi és seguir <ulink url="http://community.kde.org/Calligra/Building/Building_Calligra"
 >aquestes instruccions</ulink
-> per obtenir el codi font i construir-lo. </para
+> per a obtenir el codi font i construir-lo. </para
 ></listitem>
 </itemizedlist>
 </sect1>
