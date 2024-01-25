@@ -83,7 +83,7 @@
 >esquerre</mousebutton
 >, després escriviu el que voleu i premeu &Intro; o useu les tecles de cursor per a moure el punt de selecció cap a una altra cel·la. </para>
 <para
->El que heu introduït pot ser un pressupost senzill pels propers dos mesos, llistant quant pensem gastar en menjar, casa, roba i altres despeses. Ara seleccionem la cel·la B7 (columna B, fila 7), escriviu <userinput
+>El que heu introduït pot ser un pressupost senzill pels pròxims dos mesos, llistant quant pensem gastar en menjar, casa, roba i altres despeses. Ara seleccionem la cel·la B7 (columna B, fila 7), escriviu <userinput
 >=B2+B3+B4+B5</userinput
 > i premeu &Intro;. Com que comença amb un símbol <keycap
 >=</keycap
@@ -97,7 +97,7 @@
 <para
 >També, un full de càlcul us permet jugar al joc de <quote
 >Què passa si?</quote
->. Atès que cada fórmula es recalcula automàticament quan es canvia qualsevol dels valors als que es refereix, podeu veure ràpidament el que succeeix si altereu qualsevol de les dades. Usant el nostre exemple podeu veure l'efecte de reduir la despesa en menjar al desembre simplement introduint un valor nou a la cel·la C2. Si teniu un full de càlcul que modela l'efecte hivernacle de manera adequada veureu l'efecte de reducció d'un 50 per cent en la quantitat de metà dintre de l'atmosfera.</para>
+>. Atès que cada fórmula es recalcula automàticament quan es canvia qualsevol dels valors als quals es refereix, podeu veure ràpidament el que succeeix si altereu qualsevol de les dades. Usant el nostre exemple podeu veure l'efecte de reduir la despesa en menjar al desembre simplement introduint un valor nou a la cel·la C2. Si teniu un full de càlcul que modela l'efecte hivernacle de manera adequada veureu l'efecte de reducció d'un 50 per cent en la quantitat de metà dintre de l'atmosfera.</para>
 </sect1>
 
 <sect1 id="selecting">
@@ -258,7 +258,7 @@
 <para
 >&sheets; usa el format de cel·la <quote
 >Genèric</quote
-> per omissió. Encara que s'usi aquest format, &sheets; detecta automàticament el tipus de dades real segons les dades actuals de la cel·la. Per exemple, si introduïu algun text dintre d'una cel·la i posteriorment introduïu un número dintre de la mateixa cel·la, &sheets; interpretarà automàticament les noves dades com a un número. Si voleu definir el tipus de dades, el podeu establir en el <link linkend="formatdata"
+> per omissió. Encara que s'usi aquest format, &sheets; detecta automàticament el tipus de dades real segons les dades actuals de la cel·la. Per exemple, si introduïu algun text dintre d'una cel·la i posteriorment introduïu un número dintre de la mateixa cel·la, &sheets; interpretarà automàticament les dades noves com a número. Si voleu definir el tipus de dades, el podeu establir en el <link linkend="formatdata"
 >format de cel·la</link
 >. En qualsevol moment podeu retornar al format <quote
 >Genèric</quote
@@ -353,7 +353,7 @@
 <para
 >Una cel·la pot contenir text, un valor o una fórmula, i també pot contenir <link linkend="formatspread"
 >informació de format</link
-> especial per al tipus de lletra, vores o fons. &sheets; té versions especials per enganxar que us permeten manejar aquests elements de diferents maneres.</para>
+> especial per al tipus de lletra, vores o fons. &sheets; té versions especials per a enganxar que us permeten manejar aquests elements de diferents maneres.</para>
 
 <para
 ><menuchoice
@@ -383,7 +383,7 @@
 ><guimenuitem
 >Enganxa amb inserció...</guimenuitem
 ></menuchoice
-> insereix les cel·les copiades dintre del full movent les cel·les, que d'altra manera serien substituïdes, un nombre adequat de files o columnes avall o a la dreta. També es pot usar per inserir files o columnes completes copiades dintre del full de treball.</para>
+> insereix les cel·les copiades dintre del full movent les cel·les, que d'altra manera serien substituïdes, un nombre adequat de files o columnes avall o a la dreta. També es pot usar per a inserir files o columnes completes copiades dintre del full de treball.</para>
 </sect2>
 
 </sect1>
@@ -402,7 +402,7 @@
 ><guimenuitem
 >Continguts</guimenuitem
 > </menuchoice
-> per eliminar el text, valor o fórmula de les cel·les, files o columnes seleccionades sense afectar a res més.</para>
+> per a eliminar el text, valor o fórmula de les cel·les, files o columnes seleccionades sense afectar a res més.</para>
 
 <para
 >Per a suprimir-ho tot en les cel·les, files o columnes seleccionades, incloent-hi comentaris i formats especials, escolliu l'opció <guimenuitem
@@ -417,7 +417,7 @@
 >dret</mousebutton
 > sobre una selecció. </para>
 <para
->Per eliminar completament les files o columnes seleccionades, useu les opcions <guimenuitem
+>Per a eliminar completament les files o columnes seleccionades, useu les opcions <guimenuitem
 >Elimina les files</guimenuitem
 > o <guimenuitem
 >Elimina les columnes</guimenuitem
@@ -425,9 +425,9 @@
 <para
 >Si seleccioneu una cel·la o cel·les i escolliu <guimenuitem
 >Elimina les cel·les...</guimenuitem
-> des del menú emergent del &BDR;, aleshores podreu escollir si les altres cel·les en el full de treball es mouran amunt o a l'esquerra per omplir l'espai deixat per les cel·les que heu escollit per eliminar.</para>
+> des del menú emergent del &BDR;, aleshores podreu escollir si les altres cel·les en el full de treball es mouran amunt o a l'esquerra per a omplir l'espai deixat per les cel·les que heu escollit per eliminar.</para>
 <para
->Si voleu inserir files o columnes buides dintre del full, seleccioneu les files o les columnes en què voleu que les noves cel·les o files se situïn i escolliu l'opció <guimenuitem
+>Si voleu inserir files o columnes buides dintre del full, seleccioneu les files o les columnes en què voleu que les cel·les o files noves se situïn i escolliu l'opció <guimenuitem
 >Insereix files</guimenuitem
 > o <guimenuitem
 >Insereix columnes</guimenuitem
@@ -435,7 +435,7 @@
 <para
 >Podeu inserir cel·les noves dintre del full de treball seleccionant l'àrea a on voleu que apareguin i aleshores escollint l'opció <guimenuitem
 > Insereix cel·les...</guimenuitem
-> des del menú emergent del &BDR;. Aleshores se us demanarà si les cel·les existents en l'àrea seleccionada s'han de moure avall o a la dreta per a fer lloc a les noves cel·les.</para>
+> des del menú emergent del &BDR;. Aleshores se us demanarà si les cel·les existents en l'àrea seleccionada s'han de moure avall o a la dreta per a fer lloc a les cel·les noves.</para>
 
 </sect1>
 
@@ -461,7 +461,7 @@
 >*</keycap
 > per a multiplicar, i <keycap
 >/</keycap
-> per dividir. Els símbols de parèntesis <keycap
+> per a dividir. Els símbols de parèntesis <keycap
 >(</keycap
 > i <keycap
 >)</keycap
@@ -555,7 +555,7 @@
 </mediaobject>
 </para>
 <para
->Poder voleu tenir les dades ordenades pel nom i en ordre alfabètics. Per fer-ho, seleccioneu l'àrea on estan les dades (en aquest cas, A2:C7) i escollir <guimenuitem
+>Poder voleu tenir les dades ordenades pel nom i en ordre alfabètics. Per a fer-ho, seleccioneu l'àrea on estan les dades (en aquest cas, A2:C7) i escollir <guimenuitem
 >Ordena...</guimenuitem
 > des del menú <guimenu
 >Dades</guimenu
@@ -601,7 +601,7 @@ selected area. For more complex sorting select <menuchoice
 <para
 >A l'àrea <guilabel
 >Direcció</guilabel
-> d'aquest quadre de diàleg, seleccioneu-la per ordenar les files o columnes. Si marqueu la casella <guilabel
+> d'aquest quadre de diàleg, seleccioneu-la per a ordenar les files o columnes. Si marqueu la casella <guilabel
 >La primera fila conté les capçaleres de la columna</guilabel
 > o <guilabel
 >La primera columna conté les capçaleres de la fila</guilabel
@@ -615,7 +615,7 @@ selected area. For more complex sorting select <menuchoice
 <para
 >Desmarqueu l'opció <guilabel
 >Distingeix majúscules i minúscules</guilabel
-> per obtenir una ordenació que no depengui de les majúscules i canviar l'ordre d'ordenació entre <guilabel
+> per a obtenir una ordenació que no depengui de les majúscules i canviar l'ordre d'ordenació entre <guilabel
 >Ascendent</guilabel
 > i <guilabel
 >Descendent</guilabel
@@ -771,7 +771,7 @@ selected area. For more complex sorting select <menuchoice
 >~</literal
 > al final del nom de fitxer.</para>
 <para
->&sheets; pot proveir alguna protecció contra la pèrdua del vostre treball per una caiguda del sistema o per haver tancat &sheets; sense desar el document actual. Fa això desant automàticament cada pocs minuts l'última versió del document en la que esteu treballant usant un nom de fitxer modificat. La versió desada automàticament serà eliminada normalment la propera vegada que deseu el document, de manera que tan sols existirà si està més actualitzada que la versió que es va desar manualment. Quan obriu un document, &sheets; comprova per a veure si hi ha una versió desada automàticament, i si en troba una, us ofereix obrir-la en el seu lloc.</para>
+>&sheets; pot proveir alguna protecció contra la pèrdua del vostre treball per una caiguda del sistema o per haver tancat &sheets; sense desar el document actual. Fa això desant automàticament cada pocs minuts l'última versió del document en la que esteu treballant usant un nom de fitxer modificat. La versió desada automàticament serà eliminada normalment la pròxima vegada que deseu el document, de manera que tan sols existirà si està més actualitzada que la versió que es va desar manualment. Quan obriu un document, &sheets; comprova per a veure si hi ha una versió desada automàticament, i si en troba una, us ofereix obrir-la en el seu lloc.</para>
 <para
 >Els documents desats automàticament es desen amb un nom de fitxer de la forma <filename
 >.elvostrefitxer.autosave</filename
@@ -797,19 +797,19 @@ selected area. For more complex sorting select <menuchoice
 ></menuchoice
 >. Fent això s'obrirà el diàleg <guilabel
 >Crea una plantilla</guilabel
->. Introduïu un nom per a la vostra nova plantilla en el quadre de text <guilabel
+>. Introduïu un nom per a la vostra plantilla nova en el quadre de text <guilabel
 >Nom:</guilabel
 > i premeu <guibutton
 >D'acord</guibutton
->. La propera vegada que comenceu un document nou escollint <menuchoice
+>. La pròxima vegada que comenceu un document nou escollint <menuchoice
 ><guimenu
 >Fitxer</guimenu
 ><guimenuitem
 >Nou</guimenuitem
 ></menuchoice
-> o la propera vegada que inicieu &sheets;, el diàleg <guilabel
+> o la pròxima vegada que inicieu &sheets;, el diàleg <guilabel
 >Escull</guilabel
-> us indicarà l'opció de crear el nou document des de la vostra plantilla.</para>
+> us indicarà l'opció de crear el document nou des de la vostra plantilla.</para>
 <para
 >El diàleg <guilabel
 >Crea una plantilla</guilabel
@@ -836,7 +836,7 @@ selected area. For more complex sorting select <menuchoice
 ></menuchoice
 > el qual farà aparèixer el diàleg <guilabel
 >Impressió</guilabel
-> comú del &kde;, on podeu escollir entre altres opcions, la impressora a utilitzar, el nombre de còpies i si s'imprimiran totes o tan sols les pàgines seleccionades.</para>
+> normal del &kde;, on podeu escollir entre altres opcions, la impressora a utilitzar, el nombre de còpies i si s'imprimiran totes o tan sols les pàgines seleccionades.</para>
 <para
 >Per omissió, &sheets; imprimirà tots els elements en el full de treball actual, però ho podeu restringir seleccionant primer l'àrea a imprimir i escollint després <guimenuitem
 >Defineix el rang d'impressió</guimenuitem

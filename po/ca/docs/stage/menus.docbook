@@ -140,7 +140,7 @@ Be sure to comment it out again when you are done -->
 <listitem>
 <para
 ><action
->Comença una nova presentació.</action
+>Comença una presentació nova.</action
 > S'obrirà el diàleg d'inici, que us permet d'escollir una plantilla per a la vostra presentació. </para>
 </listitem>
 </varlistentry>
@@ -220,7 +220,7 @@ Be sure to comment it out again when you are done -->
 <listitem>
 <para>
 <action
->Desa la presentació oberta amb un nou nom.</action>
+>Desa la presentació oberta amb un nom nou.</action>
 </para>
 </listitem>
 </varlistentry>
@@ -285,7 +285,7 @@ Be sure to comment it out again when you are done -->
 <para
 ><action
 >Obre</action
-> un nou missatge d'un nou correu electrònic en el vostre client de correu electrònic seleccionat amb el document actual del &stage; adjuntat. </para>
+> un missatge nou de correu electrònic en el vostre client de correu electrònic seleccionat amb el document actual del &stage; adjuntat. </para>
 </listitem>
 </varlistentry>
 
@@ -783,7 +783,7 @@ slide.</para>
 ><guimenu
 >Visualitza</guimenu
 > <guimenuitem
->Nova vista</guimenuitem
+>Vista nova</guimenuitem
 > </menuchoice
 ></term>
 <listitem>
@@ -1233,7 +1233,7 @@ before or after the currently selected page.
 </term>
 <listitem>
 <para
->Utilitzeu aquest element de menú per inserir una o diverses imatges, cadascuna s'inserirà en una nova diapositiva. Això és útil per a les persones que volen utilitzar &stage; per a crear una presentació de diapositives.</para>
+>Utilitzeu aquest element de menú per a inserir una o diverses imatges, cadascuna s'inserirà en una diapositiva nova. Això és útil per a les persones que volen utilitzar &stage; per a crear una presentació de diapositives.</para>
 </listitem>
 </varlistentry>
 
@@ -2290,7 +2290,7 @@ it would be autocorrected to <userinput
 <listitem>
 <para
 ><action
->Insereix una nova diapositiva després de l'actual.</action
+>Insereix una diapositiva nova després de l'actual.</action
 ></para>
 </listitem>
 </varlistentry>
@@ -2692,7 +2692,7 @@ transition <emphasis
 >Tria el tema de color per a la finestra de &stage;.</action
 > Podeu triar un dels esquemes de colors predefinits o seleccionar <guimenuitem
 >Configuració...</guimenuitem
-> per obrir <ulink url="help:/kcontrol/colors"
+> per a obrir <ulink url="help:/kcontrol/colors"
 >el mòdul per a la selecció de color d'&systemsettings;</ulink
 >. </para
 ></listitem>

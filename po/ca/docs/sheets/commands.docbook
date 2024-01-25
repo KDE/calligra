@@ -193,7 +193,7 @@
 <para
 >Altres opcions en aquest diàleg us permeten definir el <guilabel
 >Format</guilabel
-> de les cel·les del full de càlcul, si s'hauran d'eliminar els caràcters de cometa, i si s'haurà d'ignorar la(es) primera(es) línia(es) del fitxer.</para>
+> de les cel·les del full de càlcul, si s'hauran d'eliminar els caràcters de cometa, i si s'haurà d'ignorar la/es primera/es línia/es del fitxer.</para>
 </listitem>
 </varlistentry>
 
@@ -445,7 +445,7 @@
 >Situa els elements seleccionats dintre del porta-retalls i els elimina de la ubicació original.</action
 > Si després feu una operació <guimenuitem
 >Enganxa</guimenuitem
->, els elements seran inserits a la nova ubicació. </para
+>, els elements seran inserits a la ubicació nova. </para
 ></listitem>
 </varlistentry>
 
@@ -778,7 +778,7 @@
 <listitem
 ><para
 ><action
->Obre una nova instància de &sheets; amb el mateix document.</action>
+>Obre una instància nova de &sheets; amb el mateix document.</action>
 </para
 ></listitem>
 </varlistentry>
@@ -1600,7 +1600,7 @@ to insert a picture.
 <listitem
 ><para
 ><action
->Visualitza o rectifica les sèries especials de paraules que són reconegudes per &sheets;. Aquesta llista es pot utilitzar per inserir <link linkend="series"
+>Visualitza o rectifica les sèries especials de paraules que són reconegudes per &sheets;. Aquesta llista es pot utilitzar per a inserir <link linkend="series"
 >sèries</link
 > especials dintre del full de treball.</action>
 </para
@@ -1736,9 +1736,9 @@ to insert a picture.
 ></term>
 <listitem
 ><para
->Aquí podeu executar l'script per exportar i importar en diversos formats, desar el registre de &sheets; en un fitxer, utilitzeu <ulink url="https://live.gnome.org/Orca"
+>Aquí podeu executar l'script per a exportar i importar en diversos formats, desar el registre de &sheets; en un fitxer, utilitzeu <ulink url="https://live.gnome.org/Orca"
 >Orca speech</ulink
-> per a l'accessibilitat, scripts de Python i Ruby per a la depuració o per afegir funcions per a mostrar els valors de les accions o de les condicions meteorològiques. Fins i tot podeu utilitzar algunes <ulink url="http://www.r-project.org/"
+> per a l'accessibilitat, scripts de Python i Ruby per a la depuració o per a afegir funcions per a mostrar els valors de les accions o de les condicions meteorològiques. Fins i tot podeu utilitzar algunes <ulink url="http://www.r-project.org/"
 >funcions R</ulink
 > (heu de tenir instal·lat el <ulink url="http://rpy.sourceforge.net/rpy.html"
 >mòdul RPy</ulink
@@ -1761,7 +1761,7 @@ to insert a picture.
 >Obre</action
 > el diàleg del <guilabel
 >Gestor de scripts</guilabel
-> per executar, carregar, descarregar, instal·lar, desinstal·la, i obtenir més scripts. </para
+> per a executar, carregar, descarregar, instal·lar, desinstal·la, i obtenir més scripts. </para
 ></listitem>
 </varlistentry>
 
@@ -1934,7 +1934,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 >Tria el tema de color per a la finestra de &sheets;.</action
 > Podeu triar un dels esquemes de colors predefinits o seleccionar <guimenuitem
 >Configuració...</guimenuitem
-> per obrir <ulink url="help:/kcontrol/colors"
+> per a obrir <ulink url="help:/kcontrol/colors"
 >el mòdul de selecció de color d'&systemsettings;</ulink
 >. </para
 ></listitem>
@@ -2287,7 +2287,7 @@ Column Header / Row Header / Horizontal Scrollbar / Vertical Scrollbar
 <listitem
 ><para
 ><action
->Elimina les cel·les seleccionades, movent les altres cel·les per ocupar l'espai deixat per les cel·les eliminades.</action>
+>Elimina les cel·les seleccionades, movent les altres cel·les per a ocupar l'espai deixat per les cel·les eliminades.</action>
 </para
 ></listitem>
 </varlistentry>

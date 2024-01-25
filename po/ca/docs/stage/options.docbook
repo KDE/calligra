@@ -91,7 +91,7 @@
 <varlistentry>
 <term
 ><guilabel
->Proximitat per seleccionar</guilabel
+>Proximitat de selecció</guilabel
 ></term>
 <listitem
 ><para
@@ -116,7 +116,7 @@
 >&Ctrl;<keycap
 >V</keycap
 ></keycombo
->, i la ubiqueu en un lloc on ja hi ha una forma, aquest desplaçament s'utilitzarà per enganxar la nova forma a la part inferior/dreta.</para
+>, i la ubiqueu en un lloc on ja hi ha una forma, aquest desplaçament s'utilitzarà per a enganxar la forma nova a la part inferior/dreta.</para
 ></listitem>
 </varlistentry>
 
@@ -311,7 +311,7 @@
 <para
 >Trieu un perfil d'autor per al vostre document. </para>
 <para
->Podeu afegir un nou perfil o eliminar el perfil actual utilitzant els botons a la dreta de la llista desplegable perfils. </para>
+>Podeu afegir un perfil nou o eliminar el perfil actual utilitzant els botons a la dreta de la llista desplegable perfils. </para>
 </sect2>
 
 </sect1>

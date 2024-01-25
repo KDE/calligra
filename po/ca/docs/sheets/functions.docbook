@@ -12084,7 +12084,7 @@ all changes will be overwritten on the next script run
 <title
 >PV</title>
 <para
->La funció PV() retorna el valor present d'una inversió, és a dir, els diners que heu d'invertir per tenir en un temps determinat, amb un interès determinat, alguns diners determinats. Per exemple, si necessiteu 1166,4 € pel vostre ordinador nou i voleu comprar-lo dins de dos anys i el banc us dona un 8% d'interès, heu de posar al banc PV(1166,4;0,08;2) o 1000 €.</para>
+>La funció PV() retorna el valor present d'una inversió, és a dir, els diners que heu d'invertir per a tenir en un temps determinat, amb un interès determinat, alguns diners determinats. Per exemple, si necessiteu 1166,4 € pel vostre ordinador nou i voleu comprar-lo dins de dos anys i el banc us dona un 8% d'interès, heu de posar al banc PV(1166,4;0,08;2) o 1000 €.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -17483,7 +17483,7 @@ all changes will be overwritten on the next script run
 <title
 >CUR</title>
 <para
->La funció CUR() retorna l'arrel cúbica no negativa d'x.</para>
+>La funció CUR() retorna l'arrel cúbica no negativa de x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -18038,7 +18038,7 @@ all changes will be overwritten on the next script run
 <para
 >Arrodoneix cap avall un nombre x al múltiple més proper del segon paràmetre, Significança.</para>
 <para
->La funció FLOOR() arrodoneix x cap avall (cap al zero) al múltiple significatiu més proper al d'entrada. El valor per defecte per a la Significança és 1, si x és positiu. És -1, si el valor és negatiu, que és arrodonir cap amunt a l'enter més proper. Si es dona un mode no igual que zero, la quantitat d'x s'arrodoneix cap a zero a un múltiple significatiu i llavors s'aplica el signe. Si no, arrodoneix cap a menys infinit. Si algun dels dos paràmetres x o Significança és zero, el resultat és zero.</para>
+>La funció FLOOR() arrodoneix x cap avall (cap al zero) al múltiple significatiu més proper al d'entrada. El valor per defecte per a la Significança és 1, si x és positiu. És -1, si el valor és negatiu, que és arrodonir cap amunt a l'enter més proper. Si es dona un mode no igual que zero, la quantitat de x s'arrodoneix cap a zero a un múltiple significatiu i llavors s'aplica el signe. Si no, arrodoneix cap a menys infinit. Si algun dels dos paràmetres x o Significança és zero, el resultat és zero.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -18696,7 +18696,7 @@ all changes will be overwritten on the next script run
 <title
 >LN</title>
 <para
->La funció LN() retorna el logaritme neperià d'x.</para>
+>La funció LN() retorna el logaritme neperià de x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -18779,7 +18779,7 @@ all changes will be overwritten on the next script run
 <title
 >LOG</title>
 <para
->La funció LOG() retorna el logaritme en base 10 d'x.</para>
+>La funció LOG() retorna el logaritme en base 10 de x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -18953,7 +18953,7 @@ all changes will be overwritten on the next script run
 <title
 >LOG2</title>
 <para
->La funció LOG2() retorna el logaritme en base 2 d'x.</para>
+>La funció LOG2() retorna el logaritme en base 2 de x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -19040,7 +19040,7 @@ all changes will be overwritten on the next script run
 <title
 >LOGN</title>
 <para
->La funció LOGn() retorna el logaritme en base n d'x.</para>
+>La funció LOGn() retorna el logaritme en base n de x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -21084,7 +21084,7 @@ all changes will be overwritten on the next script run
 <title
 >ROOTN</title>
 <para
->La funció ROOTN() retorna l'arrel enèsima no negativa d'x.</para>
+>La funció ROOTN() retorna l'arrel enèsima no negativa de x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -21691,7 +21691,7 @@ all changes will be overwritten on the next script run
 <title
 >SQRTPI</title>
 <para
->La funció SQRTPI() retorna l'arrel quadrada no negativa d'x * PI. Dona un error si l'argument és negatiu.</para>
+>La funció SQRTPI() retorna l'arrel quadrada no negativa de x * PI. Dona un error si l'argument és negatiu.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -23564,7 +23564,7 @@ all changes will be overwritten on the next script run
 <title
 >FISHER</title>
 <para
->La funció FISHER() retorna la transformació de Fisher per a x i crea una funció propera a una distribució normal.</para>
+>La funció FISHER() retorna la transformació de Fisher per a x i crea una funció pròxima a una distribució normal.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -23627,7 +23627,7 @@ all changes will be overwritten on the next script run
 <title
 >FISHERINV</title>
 <para
->La funció FISHERINV() retorna la transformació inversa de Fisher per x i crea una funció propera a la distribució normal.</para>
+>La funció FISHERINV() retorna la transformació inversa de Fisher per x i crea una funció pròxima a la distribució normal.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -29734,7 +29734,7 @@ all changes will be overwritten on the next script run
 >Sintaxi</term>
 <listitem
 ><para
->REPLACE(text;posició;longitud;nou_text)</para
+>REPLACE(text;posició;longitud;text_nou)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -29839,7 +29839,7 @@ all changes will be overwritten on the next script run
 >Sintaxi</term>
 <listitem
 ><para
->REPLACEB(text;PosicióByte;LongitudByte;nou_text)</para
+>REPLACEB(text;PosicióByte;LongitudByte;text_nou)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30160,7 +30160,7 @@ all changes will be overwritten on the next script run
 <para
 >La funció ROT13() xifra el text canviant cada lletra amb la lletra que es troba 13 llocs més enllà en l'alfabet. Si la posició 13 es troba més enllà de la Z, es continua amb la A (rotació).</para>
 <para
->Aplicant la funció de xifrat un altre cop al text resultant, podeu desencriptar el text.</para>
+>Aplicant la funció de xifratge un altre cop al text resultant, podeu desencriptar el text.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30225,7 +30225,7 @@ all changes will be overwritten on the next script run
 <para
 >La funció SEARCH() cerca un text (text_a_cercar) dins d'un altre text (text_on_cercar) i retorna el nombre de l'inici de text_a_cercar, des del caràcter inicial de text_on_cercar.</para>
 <para
->Podeu usar comodins, l'interrogant «?» i l'asterisc «*». Un interrogant val per qualsevol caràcter, un asterisc val per qualsevol seqüència de caràcters.</para>
+>Podeu usar comodins, l'interrogant «?» i l'asterisc «*». Un interrogant coincideix amb qualsevol caràcter individual, un asterisc coincideix amb qualsevol seqüència de caràcters.</para>
 <para
 >El paràmetre caràcter_inici especifica el caràcter en el qual voleu començar a cercar. El primer caràcter és el nombre 1. Si caràcter_inici s'omet, s'assumeix que és 1. SEARCH no distingeix entre majúscules i minúscules.</para>
 <para
@@ -30324,7 +30324,7 @@ all changes will be overwritten on the next script run
 <para
 >La funció SEARCHB() cerca una cadena de text (text_a_cercar) dins d'una altra cadena de text (text_on_cercar) i retorna el nombre de l'inici de text_a_cercar, des del caràcter més a l'esquerra de text_on_cercar usant posicions de byte.</para>
 <para
->Podeu usar comodins, l'interrogant «?» i l'asterisc «*». Un interrogant val per qualsevol caràcter, un asterisc val per qualsevol seqüència de caràcters.</para>
+>Podeu usar comodins, l'interrogant «?» i l'asterisc «*». Un interrogant coincideix amb qualsevol caràcter individual, un asterisc coincideix amb qualsevol seqüència de caràcters.</para>
 <para
 >El paràmetre PosicióByte especifica el caràcter en el qual voleu començar a cercar. El primer caràcter és el nombre 2. Si s'omet PosicióByte, s'assumeix que és 2. SEARCHB no distingeix entre majúscules i minúscules.</para>
 <para
@@ -30370,7 +30370,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Posició de byte específica per començar a cercar</seg
+>Posició de byte específica per a començar a cercar</seg
 ><seg
 >Nombre enter (com 1, 132, 2344)</seg
 ></seglistitem
@@ -30472,7 +30472,7 @@ all changes will be overwritten on the next script run
 <title
 >SUBSTITUTE</title>
 <para
->La funció SUBSTITUTE() substitueix nou_text per text_antic en una cadena de text. Si està especificada instance_num, només es reemplaçarà aquesta instància de text_antic. Useu REPLACE quan vulgueu substituir qualsevol text en una localització específica.</para>
+>La funció SUBSTITUTE() substitueix text_nou per text_antic en una cadena de text. Si està especificada instance_num, només es reemplaçarà aquesta instància de text_antic. Useu REPLACE quan vulgueu substituir qualsevol text en una localització específica.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -30489,7 +30489,7 @@ all changes will be overwritten on the next script run
 >Sintaxi</term>
 <listitem
 ><para
->SUBSTITUTE(text; text_antic; nou_text; instance_num)</para
+>SUBSTITUTE(text; text_antic; text_nou; instance_num)</para
 ></listitem>
 </varlistentry>
 <varlistentry
@@ -30516,7 +30516,7 @@ all changes will be overwritten on the next script run
 ></seglistitem>
 <seglistitem
 ><seg
->Nou text que se substituirà</seg
+>Text nou que se substituirà</seg
 ><seg
 >Text</seg
 ></seglistitem>
@@ -31135,7 +31135,7 @@ all changes will be overwritten on the next script run
 <title
 >ACOS</title>
 <para
->La funció ACOS() retorna l'arc-cosinus en radians. El valor està matemàticament definit entre 0 i PI (inclosos).</para>
+>La funció ACOS() retorna l'arccosinus en radians. El valor està matemàticament definit entre 0 i PI (inclosos).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31340,7 +31340,7 @@ all changes will be overwritten on the next script run
 <title
 >ASIN</title>
 <para
->La funció ASIN() retorna l'arc-sinus en radians. El valor està definit matemàticament entre -PI/2 i PI/2 (inclosos).</para>
+>La funció ASIN() retorna l'arcsinus en radians. El valor està definit matemàticament entre -PI/2 i PI/2 (inclosos).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31415,7 +31415,7 @@ all changes will be overwritten on the next script run
 <title
 >ASINH</title>
 <para
->La funció ASINH() calcula el sinus hiperbòlic invers d'x. És a dir, el valor amb sinus hiperbòlic igual que x.</para>
+>La funció ASINH() calcula el sinus hiperbòlic invers de x. És a dir, el valor amb sinus hiperbòlic igual que x.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31490,7 +31490,7 @@ all changes will be overwritten on the next script run
 <title
 >ATAN</title>
 <para
->La funció ATAN() retorna l'arc-tangent en radians. El valor està definit matemàticament entre -PI/2 i PI/2 (inclosos).</para>
+>La funció ATAN() retorna l'arctangent en radians. El valor està definit matemàticament entre -PI/2 i PI/2 (inclosos).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31569,7 +31569,7 @@ all changes will be overwritten on the next script run
 <title
 >ATAN2</title>
 <para
->Aquesta funció calcula l'arc-tangent de les dues variables x i y. És similar a calcular l'arc-tangent de y/x, excepte que el signe dels arguments s'usa per determinar el quadrant del resultat.</para>
+>Aquesta funció calcula l'arctangent de les dues variables x i y. És similar a calcular l'arctangent de y/x, excepte que el signe dels arguments s'usa per a determinar el quadrant del resultat.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31650,7 +31650,7 @@ all changes will be overwritten on the next script run
 <title
 >ATANH</title>
 <para
->La funció ATANH() calcula la tangent hiperbòlica inversa d'x. És a dir, el valor amb tangent hiperbòlica igual que x. Si el valor absolut d'x és més gran que 1,0, ATANH() retorna un no-nombre (not-a-number (NaN)).</para>
+>La funció ATANH() calcula la tangent hiperbòlica inversa de x. És a dir, el valor amb tangent hiperbòlica igual que x. Si el valor absolut de x és més gran que 1,0, ATANH() retorna un no-nombre (not-a-number (NaN)).</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31879,7 +31879,7 @@ all changes will be overwritten on the next script run
 <title
 >CSC</title>
 <para
->La funció CSC() retorna la cosecant d'x, on x ha d'estar en radians.</para>
+>La funció CSC() retorna la cosecant de x, on x ha d'estar en radians.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -31934,7 +31934,7 @@ all changes will be overwritten on the next script run
 <title
 >CSCH</title>
 <para
->La funció CSCH() retorna la cosecant hiperbòlica d'x, on x ha d'estar en radians.</para>
+>La funció CSCH() retorna la cosecant hiperbòlica de x, on x ha d'estar en radians.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -32182,7 +32182,7 @@ all changes will be overwritten on the next script run
 <title
 >SEC</title>
 <para
->La funció SEC() retorna la secant d'x, on x ha d'estar en radians.</para>
+>La funció SEC() retorna la secant de x, on x ha d'estar en radians.</para>
 <para
 ><segmentedlist
 ><segtitle
@@ -32237,7 +32237,7 @@ all changes will be overwritten on the next script run
 <title
 >SECH</title>
 <para
->La funció SECH() retorna la secant hiperbòlica d'x, on x ha d'estar en radians.</para>
+>La funció SECH() retorna la secant hiperbòlica de x, on x ha d'estar en radians.</para>
 <para
 ><segmentedlist
 ><segtitle

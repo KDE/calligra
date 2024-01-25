@@ -39,7 +39,7 @@
 <para
 >Per a una sèrie curta i simple com 5, 6, 7, 8... el mètode <quote
 >Arrossega i copia</quote
-> és el més simple. Introduïu el valor d'inici dintre de la cel·la d'inici i el següent valor de la sèrie dintre d'una cel·la adjacent. Després seleccioneu ambdues cel·les i moveu el punter del cursor perquè resti sobre el petit quadrat a la cantonada inferior dreta; el cursor canviarà a una doble fletxa diagonal. Després manteniu premut el &BER; mentre arrossegueu les cel·les cap avall o cap al costat tant com calgui.</para>
+> és el més simple. Introduïu el valor d'inici dintre de la cel·la d'inici i el valor següent de la sèrie dintre d'una cel·la adjacent. Després seleccioneu ambdues cel·les i moveu el punter del cursor perquè resti sobre el petit quadrat a la cantonada inferior dreta; el cursor canviarà a una doble fletxa diagonal. Després manteniu premut el &BER; mentre arrossegueu les cel·les cap avall o cap al costat tant com calgui.</para>
 <para
 >La mida del pas es calcula com la diferència entre els dos valors d'inici que heu introduït. Per exemple, si introduïu <userinput
 >4</userinput
@@ -144,7 +144,7 @@
 <title
 >Comparacions lògiques</title>
 <para
->Les funcions lògiques com IF(), AND(), OR() prenen paràmetres que tenen els valors lògics (booleans) Cert o Fals. Aquest tipus de valor es pot produir amb funcions lògiques com ISEVEN() o per comparació dels valors en les cel·les del full de càlcul que estiguin usant les expressions de comparació que es donen en la següent taula.</para>
+>Les funcions lògiques com IF(), AND(), OR() prenen paràmetres que tenen els valors lògics (booleans) Cert o Fals. Aquest tipus de valor es pot produir amb funcions lògiques com ISEVEN() o per comparació dels valors en les cel·les del full de càlcul que estiguin usant les expressions de comparació que es donen en la taula següent.</para>
 
 <informaltable
 ><tgroup cols="3">
@@ -363,7 +363,7 @@
 >Enganxat especial...</guimenuitem
 > <guilabel
 >aplicat</guilabel
-> dintre de les cel·les de la A10 a la D15, s'afegirà 5 a A10:A15, C10:C15, i 10 a B10:B15, D10:D15.</para>
+> dintre de les cel·les de l'A10 a la D15, s'afegirà 5 a A10:A15, C10:C15, i 10 a B10:B15, D10:D15.</para>
 <para
 >Tingueu present que un valor de modificador pot ser tant una fórmula com un valor numèric simple. Si és una fórmula, &sheets; ajustarà les referències de cel·la com per a una operació normal de <guimenuitem
 >Enganxa</guimenuitem
@@ -423,7 +423,7 @@
 >D'acord</guibutton
 > s'iniciaran els càlculs. Quan finalitzi i si s'ha trobat una solució premeu el botó <guibutton
 >D'acord</guibutton
-> per acceptar el resultat o <guibutton
+> per a acceptar el resultat o <guibutton
 >Cancel·la</guibutton
 > per a mantenir el valor original. </para>
 </sect1>
@@ -442,7 +442,7 @@
 >Dades</guimenu
 >. A continuació es mostra un exemple de generació de taula pivot. </para>
    <para
->Suposem que tenim les següents dades. </para>
+>Suposem que tenim les dades següents. </para>
    <para>
      <mediaobject>
        <imageobject>
@@ -517,7 +517,7 @@
      <para
 >El botó <guibutton
 >Afegeix un filtre</guibutton
-> es pot utilitzar per obrir el diàleg de filtratge per filtrar les dades desitjades. Utilitzant aquest quadre podreu definir múltiples filtres basats en l'etiqueta de la columna i la relació entre elles (<guimenuitem
+> es pot utilitzar per a obrir el diàleg de filtratge per a filtrar les dades desitjades. Utilitzant aquest quadre podreu definir múltiples filtres basats en l'etiqueta de la columna i la relació entre elles (<guimenuitem
 >I</guimenuitem
 > o <guimenuitem
 >O</guimenuitem
@@ -545,7 +545,7 @@
 <title
 >Usar més d'un full de treball</title>
 <para
->Quan comenceu un nou document, buit, amb &sheets; es crearan un cert nombre de fulls de treball buits. El nombre de fulls es crea determinat per la plantilla seleccionada.</para>
+>Quan comenceu un document nou, buit, amb &sheets; es crearan un cert nombre de fulls de treball buits. El nombre de fulls es crea determinat per la plantilla seleccionada.</para>
 <para
 ><menuchoice
 ><guimenu
@@ -559,11 +559,11 @@
 >&Ctrl;<keycap
 >Av Pàg</keycap
 ></keycombo
-> per anar al següent full, <keycombo action="simul"
+> per a anar al full següent, <keycombo action="simul"
 >&Ctrl;<keycap
 >Re Pàg</keycap
 ></keycombo
-> per anar cap a l'anterior.</para>
+> per a anar cap a l'anterior.</para>
 <para
 >Els fulls de treball es donen amb els noms per omissió <emphasis
 >Full1</emphasis
@@ -575,7 +575,7 @@
 >Reanomena el full...</guimenuitem
 >.</para>
 <para
->Per eliminar un full del document useu l'opció <guimenuitem
+>Per a eliminar un full del document useu l'opció <guimenuitem
 >Elimina el full</guimenuitem
 > en el menú contextual que apareix en fer clic <mousebutton
 >dret</mousebutton
@@ -690,7 +690,7 @@
 >Manipulació bàsica de la forma</guibutton
 > i feu clic dintre de qualsevol lloc de l'àrea del diagrama. Ara hauria d'aparèixer una vora ombrejada en diagonal i amb un petit quadrat groc a cada cantonada i al mig de cada vora. </para>
 <para
->Si moveu el cursor sobre qualsevol dels quadrats, aquests haurien de canviar a una fletxa doble. Podeu canviar la mida del diagrama arrossegant un d'aquests quadrats amb el &BER; premut. Per suprimir el diagrama, feu clic <mousebutton
+>Si moveu el cursor sobre qualsevol dels quadrats, aquests haurien de canviar a una fletxa doble. Podeu canviar la mida del diagrama arrossegant un d'aquests quadrats amb el &BER; premut. Per a suprimir el diagrama, feu clic <mousebutton
 >dret</mousebutton
 > sobre un dels quadrats i seleccioneu <guimenuitem
 >Suprimeix</guimenuitem
@@ -774,7 +774,7 @@
 ><para
 >Fent clic sobre una cel·la que contingui un enllaç de <guilabel
 >Correu</guilabel
->, s'obrirà el vostre programa per editar correu fent ús de l'adreça introduïda en el quadre de text <guilabel
+>, s'obrirà el vostre programa per a editar correu fent ús de l'adreça introduïda en el quadre de text <guilabel
 >Correu electrònic:</guilabel
 > com al camp A:. Per exemple, <userinput
 >anon@exemple.com</userinput
@@ -816,7 +816,7 @@
 <para
 >&sheets; pot comprovar automàticament la validesa d'una dada introduïda contra un cert nombre de criteris, i mostrar un quadre de missatge si les dades no són vàlides.</para>
 <para
->Per habilitar aquesta característica, seleccioneu la/es cel·la/es a controlar i escolliu <menuchoice
+>Per a habilitar aquesta característica, seleccioneu la/es cel·la/es a controlar i escolliu <menuchoice
 ><guimenu
 >Dades</guimenu
 ><guimenuitem
@@ -932,7 +932,7 @@
 >Protegir el full</title>
 <para
 >Protegir un full vol dir protegir el contingut de totes les cel·les i objectes en un full. Dintre d'un full protegit les cel·les individuals o la selecció de cel·les es poden desprotegir, mireu en la <link linkend="cell-protection"
->següent secció</link
+>secció següent</link
 >.</para>
 <para
 >Per a protegir un full, seleccioneu <menuchoice
@@ -1017,7 +1017,7 @@
 >Oculta-ho tot</guilabel
 > i desmarqueu <guilabel
 >Protegida</guilabel
-> per eliminar la protecció sobre totes les cel·les. Ara totes les cel·les estaran desprotegides. </para
+> per a eliminar la protecció sobre totes les cel·les. Ara totes les cel·les estaran desprotegides. </para
 ></listitem>
 </itemizedlist>
 <para
@@ -1097,7 +1097,7 @@
 </mediaobject>
 </para>
 <para
->Per ocultar les fórmules de les cel·les, seleccioneu la cel·la o l'interval de cel·les o les cel·les no contigües amb <keycombo action="simul"
+>Per a ocultar les fórmules de les cel·les, seleccioneu la cel·la o l'interval de cel·les o les cel·les no contigües amb <keycombo action="simul"
 >&Ctrl;</keycombo
 > i després escolliu el menú <menuchoice
 ><guimenu
@@ -1119,7 +1119,7 @@
 ></menuchoice
 > per a mostrar el diàleg <guilabel
 >Protegeix el full</guilabel
->. Introduïu una contrasenya segura dues vegades per evitar que altra gent pugui manllevar la protecció del full. </para>
+>. Introduïu una contrasenya segura dues vegades per a evitar que altra gent pugui manllevar la protecció del full. </para>
 <para
 >Quan està habilitada <guilabel
 >Oculta la fórmula</guilabel
@@ -1317,7 +1317,7 @@ Remove View</guimenuitem
 <para
 >Una cel·la pot contenir un comentari de text que es pot veure quan s'està treballant sobre el full de càlcul però que no s'imprimiran ni es veuran normalment.</para>
 <para
->Per afegir un comentari seleccioneu la cel·la i escolliu <guimenuitem
+>Per a afegir un comentari seleccioneu la cel·la i escolliu <guimenuitem
 >Comentari...</guimenuitem
 > des del menú del &BDR; o des del menú <guimenu
 >Insereix</guimenu
@@ -1333,7 +1333,7 @@ Remove View</guimenuitem
 >Propietats del full</guilabel
 >, les cel·les que continguin comentaris seran ressaltades amb un petit triangle vermell en la cantonada superior dreta.</para>
 <para
->Per obrir aquest diàleg, feu clic amb el &BDR; sobre la pestanya del full a la part inferior de la finestra principal i seleccioneu <guimenuitem
+>Per a obrir aquest diàleg, feu clic amb el &BDR; sobre la pestanya del full a la part inferior de la finestra principal i seleccioneu <guimenuitem
 >Propietats del full</guimenuitem
 > des del menú emergent. O seleccioneu-lo des del menú <menuchoice
 ><guimenu
@@ -1344,7 +1344,7 @@ Remove View</guimenuitem
 >.</para>
 
 <para
->Per esborrar un comentari d'una cel·la, seleccioneu <guimenuitem
+>Per a esborrar un comentari d'una cel·la, seleccioneu <guimenuitem
 >Elimina el comentari</guimenuitem
 > des del menú al &BDR; o escolliu <menuchoice
 ><guimenu

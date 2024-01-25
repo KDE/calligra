@@ -94,7 +94,7 @@
 >Orientació</guisubmenu
 >. Aquest <guilabel
 >Menú de la barra d'eines</guilabel
-> també de submenús per escollir si la barra d'eines mostra icones, text o ambdues opcions, i la mida de les icones.</para>
+> també de submenús per a escollir si la barra d'eines mostra icones, text o ambdues opcions, i la mida de les icones.</para>
 
 <para
 >Una altra manera de moure una barra d'eines és situant el punter del ratolí sobre les dues barres verticals a l'esquerra de cada barra d'eines i mantenint premut el &BER; mentre arrossegueu la barra d'eines a la posició desitjada. Quan arrossegueu la barra d'eines d'aquesta manera podeu deixar anar el botó del ratolí una vegada esteu a alguna distància de qualsevol dels costats de la finestra de &sheets;, i aleshores obtindreu una barra d'eines flotant, la qual no estarà ancorada a cap part de la finestra de &sheets; i de fet es pot moure fora de la finestra. Per a tornar-la a posar en una de les posicions tradicionals, feu clic <mousebutton
@@ -118,7 +118,7 @@
 >Barra d'eines:</guilabel
 >. A la dreta de la finestra <guilabel
 >Accions actuals:</guilabel
-> se us mostraran els botons presents actualment sobre la barra d'eines. Podeu eliminar un botó seleccionant-lo en aquesta finestra i després prement el botó de la fletxa esquerra, o moveu-lo amunt o avall prement els botons de fletxa amunt i avall. Per afegir un botó nou a la barra d'eines, seleccioneu-lo en la llista <guilabel
+> se us mostraran els botons presents actualment sobre la barra d'eines. Podeu eliminar un botó seleccionant-lo en aquesta finestra i després prement el botó de la fletxa esquerra, o moveu-lo amunt o avall prement els botons de fletxa amunt i avall. Per a afegir un botó nou a la barra d'eines, seleccioneu-lo en la llista <guilabel
 >Accions disponibles:</guilabel
 > i després premeu el botó de fletxa dreta.</para>
 </sect1>
