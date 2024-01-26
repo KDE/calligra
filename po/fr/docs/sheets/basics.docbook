@@ -116,9 +116,9 @@
 ><para
 >Insérer la référence de la cellule (par exemple <userinput
 >B5</userinput
->) dans la boîte de référence des cellules à gauche l'outil <guilabel
+>) dans la boîte de dialogue de référencement de cellules à gauche de l'outil <guilabel
 >Éditeur de cellule</guilabel
-> et appuyej sur &Entree;.</para
+> et appuyez sur &Entree;.</para
 ></listitem>
 <listitem
 ><para
@@ -168,7 +168,7 @@
 > de la souris pour sélectionner le coin opposé.</para>
 
 <para
->Pour sélectionner des cellules non-contigües, cliquer sur la première cellule que vous souhaitez sélectionner, puis maintenir la touche <keycombo action="simul"
+>Pour sélectionner des cellules non-contiguës, cliquer sur la première cellule que vous souhaitez sélectionner, puis maintenir la touche <keycombo action="simul"
 >&Ctrl;</keycombo
 > enfoncée et sélectionner les autres cellules.</para>
 
@@ -179,7 +179,7 @@
 >gauche</mousebutton
 > de la souris enfoncé.</para>
 <para
->Pour sélectionner des lignes ou des colonnes de cellules non-contigües, cliquer sur le premier numéro de ligne ou la lettre de la colonne, puis maintenez la touche <keycombo action="simul"
+>Pour sélectionner des lignes ou des colonnes de cellules non-contiguës, cliquer sur le premier numéro de ligne ou la lettre de la colonne, puis maintenez la touche <keycombo action="simul"
 >&Ctrl;</keycombo
 > enfoncée et sélectionnez les autres lignes ou colonnes de cellules.</para>
 
@@ -260,7 +260,7 @@
 <para
 >&sheets; utilise le format de cellule <quote
 >Générique</quote
-> par défaut. Tant que ce format est utilisé, &sheets; autodétecte les données en fonction du format actuel de la cellule. Par exemple, si vous insérez un texte dans une cellule puis saisissez plus tard un nombre dans la même cellule, &sheets; interprétera automatiquement la nouvelle donnée comme un nombre. Si vous souhaitez définir vous-même le type de données, vous devez le paramétrer dans <link linkend="formatdata"
+> par défaut. Tant que ce format est utilisé, &sheets; détecte automatiquement les données en fonction du format actuel de la cellule. Par exemple, si vous insérez un texte dans une cellule puis saisissez plus tard un nombre dans la même cellule, &sheets; interprétera automatiquement la nouvelle donnée comme un nombre. Si vous souhaitez définir vous-même le type de données, vous devez le paramétrer dans <link linkend="formatdata"
 >format de cellule</link
 >. Vous pouvez modifier de nouveau le format vers <quote
 >Générique</quote
@@ -500,7 +500,7 @@
 >Fonction...</guimenuitem
 > dans le menu <guimenu
 >Insertion</guimenu
-> et jetez un coup d'oeil à la boîte de dialogue <guilabel
+> et jetez un coup d'œil à la boîte de dialogue <guilabel
 >Fonction</guilabel
 > qui sera affichée.</para>
 <para
@@ -518,10 +518,10 @@
 
 <sect2 id="recalc">
 <title
->Recalcul</title>
+>Re-calcul</title>
 <para
 >Si la case <guilabel
->Recalcul automatique</guilabel
+>Re-calcul automatique</guilabel
 > de la page <menuchoice
 ><guimenu
 >Format</guimenu
@@ -533,7 +533,7 @@
 > est cochée, &sheets; recalculera les valeurs des cellules au cas où quelque chose qui les affecte aurait changé.</para>
 <para
 >Quand la case <guilabel
->Recalcul automatique</guilabel
+>Re-calcul automatique</guilabel
 > n'est pas cochée pour la feuille courante, vous pouvez dire à &sheets; d'effectuer un recalcul n'importe quand en utilisant les options <guimenuitem
 >Recalculer la feuille</guimenuitem
 > ou <guimenuitem
@@ -786,7 +786,7 @@ selected area. For more complex sorting select <menuchoice
 >&sheets; peut fournir une certaine protection contre la perte de votre travail du fait d'un arrêt anormal de l'ordinateur ou de la fermeture de &sheets; sans enregistrer le document de travail courant. Il fait cela automatiquement en enregistrant la dernière version du document sur lequel vous travaillez toutes les quelques minutes en utilisant un nom de fichier modifié. La version enregistrée automatiquement est normalement supprimée quand vous enregistrez ensuite votre document, de telle manière qu'il n'existe que s'il est plus à jour que la version enregistrée à la main. Quand vous ouvrez un document, &sheets; vérifie s'il existe une version enregistrée automatiquement, et s'il en trouve une, il offrira de l'ouvrir à la place.</para>
 <para
 >Les documents enregistrés automatiquement sont enregistrés avec un nom de fichier de la forme <filename
->.votrenomdefichier.autosave</filename
+>.votre-nom-de-fichier.autosave</filename
 > (notez le point au début), ainsi <filename
 >spread1.ksp</filename
 > serait enregistré automatiquement sous le nom <filename
