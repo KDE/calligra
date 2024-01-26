@@ -196,10 +196,10 @@
 <para
 >Par exemple, si vous saisissez 2 et fixez le format de cellule à <guilabel
 >Pourcentage</guilabel
->, le nombre deviendra 200 %. Remodifier le format de cellule à <guilabel
+>, le nombre deviendra 200 %. Modifier à nouveau le format de cellule à <guilabel
 >Générique</guilabel
 > <guilabel
->Generic</guilabel
+>Générique</guilabel
 > le ramènera à 2.</para>
 <para
 >Vous pouvez également utiliser l'icône <guiicon
@@ -299,7 +299,7 @@
 ></menuchoice
 >. Il y a deux formats définis ici : le format long de date et le format court de date.</para>
 <para
->Un nombre naturel aléatoire NN sera transformé en date à partir du 30 décembre 1899 (qui est 0) avec le nombre de jours NN ajouté. Par exemple, si vous avez une cellule avec 100 et que vous choisissiez <guilabel
+>Un nombre naturel aléatoire « NN » sera transformé en date à partir du 30 décembre 1899 (qui est 0) avec le nombre de jours NN ajouté. Par exemple, si vous avez une cellule avec 100 et que vous choisissiez <guilabel
 >Format de date</guilabel
 >, « 1900-04-09 » s'affichera, ce qui correspond à 100 jours après le 30 décembre 1899. Cette date de départ est en avance de deux jours sur le calcul, car il y a eu un bug dans Lotus 123, qui est resté ainsi dans Excel pour des raisons de compatibilité. Peu de gens, de toute manière, ont besoin de calculer depuis le 1er janvier 1900 et ajouter 9 jours au 1er novembre 2000 par exemple, vous indiquera le 10 novembre 2000. En fait, tous les calculs de date sont corrects.</para>
 <note
@@ -435,7 +435,7 @@ better-->
 <listitem
 ><para
 >Choisir le style de police pour les cellules sélectionnées. Quand vous sélectionnez plusieurs cellules de différents styles, le style affiché est défini dans <guilabel
->Varriations (Sans changement)</guilabel
+>Variations (Sans changement)</guilabel
 > et accepter cette option vous permet de conserver vos paramètres pour chaque cellule. Modifier en <guilabel
 >Roman</guilabel
 > par exemple modifiera tous les styles des cellules sélectionnées en <guilabel
@@ -494,7 +494,7 @@ better-->
 ></term>
 <listitem
 ><para
->Souligne le texte des cellules sélzctionnées si l'option est cochée. Elle n'est pas cochée par défaut.</para>
+>Souligne le texte des cellules sélectionnées si l'option est cochée. Elle n'est pas cochée par défaut.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -566,7 +566,7 @@ better-->
 >Haut</guilabel
 > signifie que le contenu sera affiché en haut de la cellule.<guilabel
 >Milieu</guilabel
-> signifie que le contenu sera affiché au milieude la cellule.<guilabel
+> signifie que le contenu sera affiché au milieu de la cellule.<guilabel
 >Bas</guilabel
 > signifie que le contenu sera affiché en haut de la cellule.</para>
 </listitem>
@@ -594,7 +594,7 @@ better-->
 ></term>
 <listitem
 ><para
->Votre texte a	pparaîtra orienté selon l'angle que vous avez défini. Des valeurs positives le déplaceront dans le sens contraire aux aiguilles d'une montre et des valeurs négatives dans le sens des aiguilles d'une montre. </para>
+>Votre texte apparaîtra orienté selon l'angle que vous avez défini. Des valeurs positives le déplaceront dans le sens contraire aux aiguilles d'une montre et des valeurs négatives dans le sens des aiguilles d'une montre. </para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -756,7 +756,7 @@ better-->
 >Masquer formules</guilabel
 > sont désactivés. Lorsque la feuille est protégée, <guilabel
 >Masquer tout</guilabel
-> masque le contenu de la cellule et les formules et cela masque et proège le contenu de la cellule.</para>
+> masque le contenu de la cellule et les formules et cela masque et protège le contenu de la cellule.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -766,7 +766,7 @@ better-->
 ></term>
 <listitem
 ><para
->Si l'option est cochée, le contenu de la cellule sera protgé. C'est la situation par défaut. Vous devez protéger la feuille entière en utilisant le menu <menuchoice
+>Si l'option est cochée, le contenu de la cellule sera protégé. C'est la situation par défaut. Vous devez protéger la feuille entière en utilisant le menu <menuchoice
 ><guimenu
 >Outils </guimenu
 ><guimenuitem
@@ -791,7 +791,7 @@ better-->
 <varlistentry>
 <term
 ><guilabel
->Ne pas impri</guilabel
+>Ne pas imprimer le texte</guilabel
 ></term>
 <listitem
 ><para
@@ -980,7 +980,7 @@ better-->
 >Vous pouvez définir différentes propriétés valables pour la feuille courante. Cliquer sur <guibutton
 >Ok</guibutton
 > rendra effectives vos modifications et <guibutton
->Defaut</guibutton
+>Défaut</guibutton
 > restaurera les paramètres initiaux.</para>
 <para>
 <mediaobject>
@@ -1019,11 +1019,11 @@ better-->
 <varlistentry>
 <term
 ><guilabel
->Recalcul automatique</guilabel
+>Re-calcul automatique</guilabel
 ></term>
 <listitem
 ><para
->Ce paramètre vérifie que les formules sont recalculées automatiquement quand la valeur d'une cellule à laquelle elle se réfère est modifiee.</para>
+>Ce paramètre vérifie que les formules sont recalculées automatiquement quand la valeur d'une cellule à laquelle elle se réfère est modifiée.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
