@@ -275,7 +275,7 @@
 <title
 >Referències de cel·la absolutes</title>
 <para
->Si una fórmula conté una referència a cel·la en què la referència se sol canviar quan es copia la cel·la a una altra banda del full de treball. Per evitar aquest comportament situeu un símbol <keysym
+>Si una fórmula conté una referència a cel·la en què la referència se sol canviar quan es copia la cel·la a una altra banda del full de treball. Per a evitar aquest comportament situeu un símbol <keysym
 >$</keysym
 > abans de la lletra de la columna, número de fila o ambdós. </para>
 
