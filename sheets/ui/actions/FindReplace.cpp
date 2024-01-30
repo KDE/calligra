@@ -27,7 +27,7 @@
 using namespace Calligra::Sheets;
 
 
-Find::Find(Actions *actions)
+FindReplaceAction::FindReplaceAction(Actions *actions)
     : CellAction(actions, "edit_find", QString(), QIcon(), QString())
 {
     m_findOptions = 0;
@@ -45,20 +45,20 @@ Find::Find(Actions *actions)
     m_firstSheet = nullptr;
 }
 
-Find::~Find()
+FindReplaceAction::~FindReplaceAction()
 {
     delete m_find;
     delete m_replace;
 }
 
-QAction *Find::createAction() {
+QAction *FindReplaceAction::createAction() {
     QAction *action = KStandardAction::find(nullptr, nullptr, m_actions->tool());
-    connect(action, &QAction::triggered, this, &Find::triggered);
+    connect(action, &QAction::triggered, this, &FindReplaceAction::triggered);
     return action;
 }
 
 
-void Find::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+void FindReplaceAction::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
     FindDlg *dialog = new FindDlg(canvasWidget, "Find", m_findOptions, m_findStrings);
@@ -91,7 +91,7 @@ void Find::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
     delete dialog;
 }
 
-void Find::executeReplace(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+void FindReplaceAction::executeReplace(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
     SearchDlg *dialog = new SearchDlg(canvasWidget, "Replace", m_findOptions, m_findStrings, m_replaceStrings);
@@ -123,7 +123,7 @@ void Find::executeReplace(Selection *selection, Sheet *sheet, QWidget *canvasWid
     m_firstSheet = sheet;
     initFindReplace();
     connect(m_replace, QOverload<const QString &, int, int, int>::of(&KReplace::replace),
-            this, &Find::slotReplace);
+            this, &FindReplaceAction::slotReplace);
 
     m_replaceCommand = new KUndo2Command(kundo2_i18n("Replace"));
 
@@ -134,14 +134,14 @@ void Find::executeReplace(Selection *selection, Sheet *sheet, QWidget *canvasWid
 
 // Initialize a find or replace operation, using m_find or m_replace,
 // and m_findOptions.
-void Find::initFindReplace()
+void FindReplaceAction::initFindReplace()
 {
     KFind* findObj = m_find ? m_find : m_replace;
     Q_ASSERT(findObj);
     connect(findObj, QOverload<const QString &, int, int>::of(&KFind::highlight),
-            this, &Find::slotHighlight);
+            this, &FindReplaceAction::slotHighlight);
     connect(findObj, &KFind::findNext,
-            this, &Find::findNext);
+            this, &FindReplaceAction::findNext);
 
     bool bck = m_findOptions & KFind::FindBackwards;
     Sheet* currentSheet = m_currentSheet;
@@ -167,7 +167,7 @@ void Find::initFindReplace()
     //debugSheets <<"leftcol=" << m_findLeftColumn <<" rightcol=" << m_findRightColumn;
 }
 
-void Find::slotHighlight(const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/)
+void FindReplaceAction::slotHighlight(const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/)
 {
     m_selection->initialize(m_findPos);
     QDialog *dialog = 0;
@@ -181,7 +181,7 @@ void Find::slotHighlight(const QString &/*text*/, int /*matchingIndex*/, int /*m
     KoDialog::avoidArea(dialog, QRect(m_findPos, m_findEnd));
 }
 
-void Find::slotReplace(const QString &newText, int, int, int)
+void FindReplaceAction::slotReplace(const QString &newText, int, int, int)
 {
     if (m_typeValue == FindOption::Value) {
         DataManipulator* command = new DataManipulator(m_replaceCommand);
@@ -197,7 +197,7 @@ void Find::slotReplace(const QString &newText, int, int, int)
     }
 }
 
-Cell Find::nextFindValidCell(int col, int row)
+Cell FindReplaceAction::nextFindValidCell(int col, int row)
 {
     Cell cell = Cell(m_currentSheet, col, row);
     if (cell.isDefault() || cell.isPartOfMerged() || cell.isFormula())
@@ -207,7 +207,7 @@ Cell Find::nextFindValidCell(int col, int row)
     return cell;
 }
 
-Cell Find::findNextCell()
+Cell FindReplaceAction::findNextCell()
 {
     // cellStorage()->firstInRow / cellStorage()->nextInRow would be faster at doing that,
     // but it doesn't seem to be easy to combine it with 'start a column m_find.x()'...
@@ -268,7 +268,7 @@ Cell Find::findNextCell()
     return cell;
 }
 
-void Find::executeFindNext(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+void FindReplaceAction::executeFindNext(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
     KFind* findObj = m_find ? m_find : m_replace;
@@ -280,7 +280,7 @@ void Find::executeFindNext(Selection *selection, Sheet *sheet, QWidget *canvasWi
     findNext();
 }
 
-void Find::executeFindPrevious(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
+void FindReplaceAction::executeFindPrevious(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
     KFind* findObj = m_find ? m_find : m_replace;
@@ -293,7 +293,7 @@ void Find::executeFindPrevious(Selection *selection, Sheet *sheet, QWidget *canv
 }
 
 
-void Find::findNext()
+void FindReplaceAction::findNext()
 {
     KFind* findObj = m_find ? m_find : m_replace;
     if (!findObj) return;
@@ -361,7 +361,7 @@ void Find::findNext()
     }
 }
 
-void Find::findPrevious()
+void FindReplaceAction::findPrevious()
 {
     KFind* findObj = m_find ? m_find : m_replace;
     if (!findObj) return;
@@ -391,12 +391,12 @@ FindAction::~FindAction()
 {
 }
 
-Find *FindAction::findAction()
+FindReplaceAction *FindAction::findAction()
 {
     if (m_findAction) return m_findAction;
     CellAction *action = m_actions->cellAction("edit_find");
     if (!action) return nullptr;   // this shouldn't happen
-    m_findAction = dynamic_cast<Find *>(action);
+    m_findAction = dynamic_cast<FindReplaceAction *>(action);
     return m_findAction;
 }
 
@@ -419,7 +419,7 @@ QAction *FindNext::createAction() {
 
 void FindNext::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
-    Find *find = findAction();
+    FindReplaceAction *find = findAction();
     if (!find) return;
     find->executeFindNext(selection, sheet, canvasWidget);
 }
@@ -442,7 +442,7 @@ QAction *FindPrevious::createAction() {
 
 void FindPrevious::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
-    Find *find = findAction();
+    FindReplaceAction *find = findAction();
     if (!find) return;
     find->executeFindPrevious(selection, sheet, canvasWidget);
 }
@@ -465,7 +465,7 @@ QAction *Replace::createAction() {
 
 void Replace::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
-    Find *find = findAction();
+    FindReplaceAction *find = findAction();
     if (!find) return;
     find->executeReplace(selection, sheet, canvasWidget);
 }

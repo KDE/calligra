@@ -150,7 +150,7 @@ void Actions::createActions()
     addAction(new Fill(this, FillManipulator::Left));
     addAction(new Fill(this, FillManipulator::Right));
     // FindReplace
-    addAction(new Find(this));
+    addAction(new FindReplaceAction(this));
     addAction(new FindNext(this));
     addAction(new FindPrevious(this));
     addAction(new Replace(this));

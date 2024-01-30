@@ -24,11 +24,11 @@ namespace Calligra
 namespace Sheets
 {
 
-class Find : public CellAction {
+class FindReplaceAction : public CellAction {
 Q_OBJECT
 public:
-    Find(Actions *actions);
-    virtual ~Find();
+    FindReplaceAction(Actions *actions);
+    virtual ~FindReplaceAction();
 
     void executeReplace(Selection *selection, Sheet *sheet, QWidget *canvasWidget);
     void executeFindNext(Selection *selection, Sheet *sheet, QWidget *canvasWidget);
@@ -82,7 +82,7 @@ protected:
 };
 
 /**
- * The next three actions rely on a shared find object. We store all the relevant information on the Find action, that the others access.
+ * The next three actions rely on a shared find object. We store all the relevant information on the FindReplaceAction action, that the others access.
  * This base class provides the necessary access methods.
  */
 
@@ -90,11 +90,10 @@ class FindAction : public CellAction {
 public:
     FindAction(Actions *actions, const QString &actionName);
     virtual ~FindAction();
-    Find *findAction();
+    FindReplaceAction *findAction();
 
-    void initFindReplace();
 protected:
-    Find *m_findAction;
+    FindReplaceAction *m_findAction;
 };
 
 class FindNext : public FindAction {
