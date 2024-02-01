@@ -43,10 +43,7 @@ namespace RtfReader
   Reader::~Reader()
   {
     // Clean up any remaining objects
-    while (!m_destinationStack.empty()) {
-      delete m_destinationStack.top();
-      m_destinationStack.pop();
-    }
+    qDeleteAll(m_destinationStack);
   }
 
   bool Reader::open( const QString &filename )
