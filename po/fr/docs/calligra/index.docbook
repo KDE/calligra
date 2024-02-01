@@ -343,7 +343,7 @@
 >&calligra; est le résultat de l'effort commun d'un grand nombre de développeurs. Chaque fichier source de &calligra; est sous copyright des auteurs qui ont écrit ce fichier particulier, et leurs noms peuvent être trouvés au début de chaque fichier source avec la licence qui s'y applique. </para>
 
 <para
->Ce manuel est sous copyright Jost Schenck. Il peut être distribué librement tant que cette notice de copyright y est incluse. Vous pouvez la changer tant que vous m'envoyez les changements ou les incorporez au <acronym
+>Ce manuel est sous licence de Jost Schenck. Il peut être distribué librement tant que cette notice de copyright y est incluse. Vous pouvez la changer tant que vous m'envoyez les changements ou les incorporez au <acronym
 >Git</acronym
 > de &kde;. Je ne suis responsable de rien de ce qui peut se produire en conséquence de l'utilisation de ce manuel. </para>
 
@@ -351,7 +351,7 @@
 >Les autres manuels de &calligra; sont sous copyright de leurs auteurs respectifs. </para>
 
 <para
->Traduction française par Gerard Delafond <email
+>Traduction française par Gérard Delafond <email
 >gerard@delafond.org</email
 > et <email
 >Gregory Marfjan gmarfjan_AT_gmail.com </email
