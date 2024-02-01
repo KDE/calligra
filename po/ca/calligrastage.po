@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-01 01:36+0000\n"
 "PO-Revision-Date: 2023-05-02 16:55+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -76,7 +76,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Crea una animació de forma"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
 msgstr "Edita l'esdeveniment d'activació de l'animació"

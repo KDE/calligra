@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-01 01:36+0000\n"
 "PO-Revision-Date: 2011-06-25 12:31+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -76,7 +76,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Búa til HTML vefkynningu"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
 #, fuzzy
 #| msgid "Create HTML Presentation"
 msgctxt "(qtundo-format)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-01 01:36+0000\n"
 "PO-Revision-Date: 2022-09-27 17:10+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -278,61 +278,61 @@ msgstr "false"
 msgid "Dependency"
 msgstr ""
 
-#: engine/Value.cpp:594
+#: engine/Value.cpp:597
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr "#LINGKARAN!"
 
-#: engine/Value.cpp:602
+#: engine/Value.cpp:605
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr "#BERGANTUNG!"
 
-#: engine/Value.cpp:610
+#: engine/Value.cpp:613
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr "#DIV/0!"
 
-#: engine/Value.cpp:618
+#: engine/Value.cpp:621
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr "#T/A"
 
-#: engine/Value.cpp:626
+#: engine/Value.cpp:629
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr "#NAMA?"
 
-#: engine/Value.cpp:634
+#: engine/Value.cpp:637
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr "#NOM!"
 
-#: engine/Value.cpp:642
+#: engine/Value.cpp:645
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr "#NOL!"
 
-#: engine/Value.cpp:650
+#: engine/Value.cpp:653
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr "#URAI!"
 
-#: engine/Value.cpp:658
+#: engine/Value.cpp:661
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr "#REF!"
 
-#: engine/Value.cpp:666
+#: engine/Value.cpp:669
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"

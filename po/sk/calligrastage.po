@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: stage\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-01 01:36+0000\n"
 "PO-Revision-Date: 2021-11-15 17:29+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -72,7 +72,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Vytvoriť animáciu tvaru"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
 msgstr "Upraviť udalosť spustenia animácie"

@@ -1,7 +1,7 @@
 # translation of kpresenter.po to Slovenian
 # Translation of kpresenter.po to Slovenian
 # Copyright (C) 2001,2003, 2004, 2005, 2006 Free Software Foundation, Inc.
-# $Id: calligrastage.po 1664120 2023-11-05 13:15:21Z scripty $
+# $Id: calligrastage.po 1671812 2024-02-01 02:02:54Z scripty $
 # $Source$
 #
 # Marko Samastur <markos@elite.org>, 1999.
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-01 01:36+0000\n"
 "PO-Revision-Date: 2022-11-15 13:48+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -78,7 +78,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr "Ustvari animacijo oblike"
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
 msgstr "Uredi prožilnik animacije"
