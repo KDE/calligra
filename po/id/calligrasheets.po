@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2022-09-27 17:10+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "Invalid document. Sheet name is empty."
 msgstr ""
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, kde-format
 msgid "Sheet%1"
 msgstr "Lembar%1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2000-06-08 07:00+0100\n"
 "Last-Translator: Dimitar Indovski <dime@gord.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -112,7 +112,7 @@ msgstr ""
 msgid "Invalid document. Sheet name is empty."
 msgstr "Невалидна келија во ПодатокY"
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, fuzzy, kde-format
 msgid "Sheet%1"
 msgstr "Избери"

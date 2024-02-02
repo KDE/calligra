@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2002-10-10 12:25+0200\n"
 "Last-Translator: Lwandle Mgidlana <lwandle@translate.org.za>\n"
 "Language-Team:  <xh@li.org>\n"
@@ -131,7 +131,7 @@ msgstr "Oluxwebhu alinandlela yokwenza imigca."
 msgid "Invalid document. Sheet name is empty."
 msgstr "Uxwebhu olungasebenziyo. Igama lendlela yemigca alinanto"
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, kde-format
 msgid "Sheet%1"
 msgstr "Iphepha%1"

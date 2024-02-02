@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2021-08-22 11:29+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -1208,7 +1208,7 @@ msgstr "'%1' को लिखने में अक्षम. पार्ट�
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "'%1' को लिखने में अक्षम. पार्टीशन पूरा भरा है?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1' को लिखने में त्रुटि. पार्टीशन पूरा भरा है?"
@@ -1231,7 +1231,7 @@ msgstr ""
 "इस दस्तावेज़ के लिए एक स्वचालित सहेजी गई फ़ाइल मौज़ूद है.\n"
 "इसके बजाए क्या आप इसे खोलना चाहेंगे?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "फ़ाइल %1 अस्तित्व में नहीं है."
@@ -1348,12 +1348,12 @@ msgstr ""
 msgid "Document <i>%1</i> loaded"
 msgstr "दस्तावेज़ <i>%1</i> लोड किया गया"
 
-#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 को ढूंढ नहीं सका "
 
-#: main/KoDocument.cpp:1674
+#: main/KoDocument.cpp:1667
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1362,22 +1362,22 @@ msgstr ""
 "%1 में पंक्ति %2, स्तम्भ %3 में पारसिंग त्रुटि\n"
 "त्रुटि संदेश: %4"
 
-#: main/KoDocument.cpp:1695
+#: main/KoDocument.cpp:1688
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 फ़ाइल नहीं है."
 
-#: main/KoDocument.cpp:1710
+#: main/KoDocument.cpp:1703
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "फ़ाइल को पढ़ने के लिए खोला नहीं जा सका (पाठ अनुमतियाँ जांचें)."
 
-#: main/KoDocument.cpp:1721
+#: main/KoDocument.cpp:1714
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "फ़ाइल का प्रारंभ पढ़ा नहीं जा सका."
 
-#: main/KoDocument.cpp:1751
+#: main/KoDocument.cpp:1744
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1386,31 +1386,31 @@ msgstr ""
 "मुख्य दस्तावेज़ की पंक्ति %1 , स्तम्भ %2 में पारसिंग त्रुटि\n"
 "त्रुटि संदेश: %3"
 
-#: main/KoDocument.cpp:1772
+#: main/KoDocument.cpp:1765
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "वह कोई वैध के-ऑफ़िस फ़ाइल: %1 नहीं है."
 
-#: main/KoDocument.cpp:1857
+#: main/KoDocument.cpp:1850
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "अवैध दस्तावेज़: कोई फ़ाइल 'maindoc.xml' नहीं."
 
-#: main/KoDocument.cpp:1881
+#: main/KoDocument.cpp:1874
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
+#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "बिना शीर्षक"
 
-#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1418,12 +1418,12 @@ msgid ""
 msgstr ""
 "<p>दस्तावेज़ <b>'%1'</b> परिवर्धित किया जा चुका है.</p><p>क्या आप इसे सहेजना चाहेंगे?</p>"
 
-#: main/KoDocument.cpp:2168
+#: main/KoDocument.cpp:2161
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "आंतरिक त्रुटि: saveXML लागू नहीं किया गया है"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2198
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1432,7 +1432,7 @@ msgstr ""
 "खोल नहीं सका:\n"
 "%1"
 
-#: main/KoDocument.cpp:2208
+#: main/KoDocument.cpp:2201
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1441,32 +1441,32 @@ msgstr ""
 "%1 को खोल नहीं सका\n"
 "कारण: %2"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2258
 #, kde-format
 msgid "a word processing"
 msgstr "वर्ड प्रोसेसिंग"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2259
 #, kde-format
 msgid "a spreadsheet"
 msgstr "स्प्रेडशीट"
 
-#: main/KoDocument.cpp:2267
+#: main/KoDocument.cpp:2260
 #, kde-format
 msgid "a presentation"
 msgstr "प्रस्तुतीकरण"
 
-#: main/KoDocument.cpp:2268
+#: main/KoDocument.cpp:2261
 #, kde-format
 msgid "a chart"
 msgstr "चार्ट"
 
-#: main/KoDocument.cpp:2269
+#: main/KoDocument.cpp:2262
 #, kde-format
 msgid "a drawing"
 msgstr "ड्राइंग"
 
-#: main/KoDocument.cpp:2584
+#: main/KoDocument.cpp:2577
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1477,7 +1477,7 @@ msgid ""
 msgstr ""
 "<p>दस्तावेज़ <b>'%1'</b> परिवर्धित किया जा चुका है.</p><p>क्या आप इसे सहेजना चाहेंगे?</p>"
 
-#: main/KoDocument.cpp:2586
+#: main/KoDocument.cpp:2579
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgid "Close Document"
@@ -2905,7 +2905,7 @@ msgid "Multiply"
 msgstr ""
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:248
-#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/colorspaces/KoAlphaColorSpace.h:182
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "Alpha mask"

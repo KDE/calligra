@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2023-07-25 00:33+0300\n"
 "Last-Translator: George Stefanakis <george.stefanakis@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-doc@kde.org>\n"
@@ -126,7 +126,7 @@ msgstr "Αυτό το έγγραφο δεν έχει φύλλα (πίνακες)
 msgid "Invalid document. Sheet name is empty."
 msgstr "Μη έγκυρο έγγραφο. Το όνομα φύλλου είναι κενό."
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, kde-format
 msgid "Sheet%1"
 msgstr "Φύλλο%1"

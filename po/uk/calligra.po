@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2023-03-13 08:36+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -1186,7 +1186,7 @@ msgstr "Не вдається записати «%1». Розділ на дис�
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Не вдається записати метадані RDF. Розділ на диску заповнено?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Помилка при записі «%1». Розділ на диску повний?"
@@ -1209,7 +1209,7 @@ msgstr ""
 "Вже існує автоматично збережена копія цього документа.\n"
 "Відкрити натомість її?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не існує."
@@ -1320,12 +1320,12 @@ msgstr ""
 msgid "Document <i>%1</i> loaded"
 msgstr "Документ <i>%1</i> завантажено"
 
-#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Не вдалось знайти %1"
 
-#: main/KoDocument.cpp:1674
+#: main/KoDocument.cpp:1667
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1334,22 +1334,22 @@ msgstr ""
 "Помилка розбору синтаксису в %1, рядок — %2, позиція — %3\n"
 "Повідомлення: %4"
 
-#: main/KoDocument.cpp:1695
+#: main/KoDocument.cpp:1688
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 не є файлом."
 
-#: main/KoDocument.cpp:1710
+#: main/KoDocument.cpp:1703
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Не вдалось відкрити файл для читання (перевірте права доступу)."
 
-#: main/KoDocument.cpp:1721
+#: main/KoDocument.cpp:1714
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Не вдається прочитати початок файла."
 
-#: main/KoDocument.cpp:1751
+#: main/KoDocument.cpp:1744
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1358,17 +1358,17 @@ msgstr ""
 "Помилка розбору синтаксису головного документа в рядку %1, стовпчик %2\n"
 "Повідомлення помилки: %3"
 
-#: main/KoDocument.cpp:1772
+#: main/KoDocument.cpp:1765
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Це не файл Calligra: %1"
 
-#: main/KoDocument.cpp:1857
+#: main/KoDocument.cpp:1850
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Неправильний документ: немає «maindoc.xml»."
 
-#: main/KoDocument.cpp:1881
+#: main/KoDocument.cpp:1874
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1377,25 +1377,25 @@ msgstr ""
 "Документ <i>%1</i> містить декілька версій. Скористайтеся меню «Файл» -> "
 "«Версії», щоб відкрити стару версію."
 
-#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
+#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Без назви"
 
-#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Документ <b>«%1»</b> було змінено.</p><p>Зберегти зміни?</p>"
 
-#: main/KoDocument.cpp:2168
+#: main/KoDocument.cpp:2161
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Внутрішня помилка: saveXML не впроваджено"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2198
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1404,7 +1404,7 @@ msgstr ""
 "Неможливо відкрити\n"
 "%1"
 
-#: main/KoDocument.cpp:2208
+#: main/KoDocument.cpp:2201
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1413,32 +1413,32 @@ msgstr ""
 "Не вдається відкрити %1\n"
 "Причина: %2"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2258
 #, kde-format
 msgid "a word processing"
 msgstr "документ"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2259
 #, kde-format
 msgid "a spreadsheet"
 msgstr "електронна таблиця"
 
-#: main/KoDocument.cpp:2267
+#: main/KoDocument.cpp:2260
 #, kde-format
 msgid "a presentation"
 msgstr "презентація"
 
-#: main/KoDocument.cpp:2268
+#: main/KoDocument.cpp:2261
 #, kde-format
 msgid "a chart"
 msgstr "діаграма"
 
-#: main/KoDocument.cpp:2269
+#: main/KoDocument.cpp:2262
 #, kde-format
 msgid "a drawing"
 msgstr "малюнок"
 
-#: main/KoDocument.cpp:2584
+#: main/KoDocument.cpp:2577
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1447,7 +1447,7 @@ msgstr ""
 "До документа «%1» було внесено зміни.\n"
 "Зберегти ці зміни чи відкинути їх?"
 
-#: main/KoDocument.cpp:2586
+#: main/KoDocument.cpp:2579
 #, kde-format
 msgid "Close Document"
 msgstr "Закриття документа"
@@ -2833,7 +2833,7 @@ msgid "Multiply"
 msgstr "Множення"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:248
-#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/colorspaces/KoAlphaColorSpace.h:182
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "Alpha mask"

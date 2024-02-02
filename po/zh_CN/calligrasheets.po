@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2024-01-21 14:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -116,7 +116,7 @@ msgstr "此文档没有工作表(表格)。"
 msgid "Invalid document. Sheet name is empty."
 msgstr "无效的文档。工作表名称为空。"
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, kde-format
 msgid "Sheet%1"
 msgstr "工作表%1"

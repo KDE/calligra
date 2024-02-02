@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2007-10-28 14:04+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -119,7 +119,7 @@ msgstr "Гэты дакумент не ўтрымоўвае ні аднаго л
 msgid "Invalid document. Sheet name is empty."
 msgstr "Няслушны фармат дакумента. Назоў ліста пустое."
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, fuzzy, kde-format
 msgid "Sheet%1"
 msgstr "Ліст%1"

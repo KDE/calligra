@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2004-09-07 14:22+0100\n"
 "Last-Translator: Kyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -1160,7 +1160,7 @@ msgstr "Methu ysgrifennu 'maindoc.xml'."
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Methu ysgrifennu 'maindoc.xml'."
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
 #, fuzzy, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Methu ysgrifennu 'maindoc.xml'."
@@ -1183,7 +1183,7 @@ msgstr ""
 "Mae ffeil wedi'i hunangadw yn bodoli ar gyfer y ddogfen hon.\n"
 " Ydych chi am ei agor yn ei lle?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Nid yw'r ffeil %1 yn bodoli!."
@@ -1296,12 +1296,12 @@ msgstr ""
 msgid "Document <i>%1</i> loaded"
 msgstr "Teitl Dogfen"
 
-#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Methodd ganfod %1"
 
-#: main/KoDocument.cpp:1674
+#: main/KoDocument.cpp:1667
 #, fuzzy, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1310,22 +1310,22 @@ msgstr ""
 "Gwall dosrannu yn y prif ddogfen wrth linell %1, colofn %2\n"
 "  Neges wall: %3"
 
-#: main/KoDocument.cpp:1695
+#: main/KoDocument.cpp:1688
 #, kde-format
 msgid "%1 is not a file."
 msgstr "Nid ffeil yw %1."
 
-#: main/KoDocument.cpp:1710
+#: main/KoDocument.cpp:1703
 #, fuzzy, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Methodd agor y ffeil i'w ddarllen (gwiriwch y caniatadau darllen)."
 
-#: main/KoDocument.cpp:1721
+#: main/KoDocument.cpp:1714
 #, fuzzy, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Methodd ddarllen dechrau'r ffeil."
 
-#: main/KoDocument.cpp:1751
+#: main/KoDocument.cpp:1744
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1334,30 +1334,30 @@ msgstr ""
 "gwall dosrannu yn y prif ddogfen wrth linell %1, colofn %2\n"
 "Neges wall: %3"
 
-#: main/KoDocument.cpp:1772
+#: main/KoDocument.cpp:1765
 #, fuzzy, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Nid ffeil KOffice dilys yw hwn."
 
-#: main/KoDocument.cpp:1857
+#: main/KoDocument.cpp:1850
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Dogfen annilys: dim ffeil 'maindoc.xml'."
 
-#: main/KoDocument.cpp:1881
+#: main/KoDocument.cpp:1874
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
 "an old version."
 msgstr ""
 
-#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
+#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "Teitl"
 
-#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1365,12 +1365,12 @@ msgid ""
 msgstr ""
 "<p>Mae'r ddogfen <b>'%1'</b> wedi ei haddasu.</p><p>Ydych am ei chadw? </p>"
 
-#: main/KoDocument.cpp:2168
+#: main/KoDocument.cpp:2161
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Gwall mewnol: saveXML heb ei weithredoli"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2198
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1379,7 +1379,7 @@ msgstr ""
 "Methwyd agor\n"
 " %1"
 
-#: main/KoDocument.cpp:2208
+#: main/KoDocument.cpp:2201
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1388,35 +1388,35 @@ msgstr ""
 "Methwyd agor %1\n"
 " Rheswm: %2"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2258
 #, kde-format
 msgid "a word processing"
 msgstr ""
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2259
 #, fuzzy, kde-format
 #| msgid "Page Preview"
 msgid "a spreadsheet"
 msgstr "Rhagolwg Tudalen"
 
-#: main/KoDocument.cpp:2267
+#: main/KoDocument.cpp:2260
 #, fuzzy, kde-format
 msgid "a presentation"
 msgstr "Cyfeiriadaeth H&olltydd"
 
-#: main/KoDocument.cpp:2268
+#: main/KoDocument.cpp:2261
 #, fuzzy, kde-format
 #| msgctxt "color"
 #| msgid "Chartreuse"
 msgid "a chart"
 msgstr "Chartreuse"
 
-#: main/KoDocument.cpp:2269
+#: main/KoDocument.cpp:2262
 #, fuzzy, kde-format
 msgid "a drawing"
 msgstr "Oren Tywyll"
 
-#: main/KoDocument.cpp:2584
+#: main/KoDocument.cpp:2577
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1427,7 +1427,7 @@ msgid ""
 msgstr ""
 "<p>Mae'r ddogfen <b>'%1'</b> wedi ei haddasu.</p><p>Ydych am ei chadw? </p>"
 
-#: main/KoDocument.cpp:2586
+#: main/KoDocument.cpp:2579
 #, fuzzy, kde-format
 #| msgid "Create Document"
 msgid "Close Document"
@@ -2840,7 +2840,7 @@ msgid "Multiply"
 msgstr ""
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:248
-#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/colorspaces/KoAlphaColorSpace.h:182
 #: pigment/KoColorModelStandardIds.cpp:12
 #, fuzzy, kde-format
 msgid "Alpha mask"

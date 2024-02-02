@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2011-01-17 21:09+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -1198,7 +1198,7 @@ msgstr "Dji n' sai scrire « %1 ». Li pårticion est ele rimpleye ?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Dji n' sai scrire les meta-dnêyes RDF. Li pårticion est ele rimpleye ?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr ""
@@ -1223,7 +1223,7 @@ msgstr ""
 "On fitchî ki dj' a schapé tot seu egzistêye po ci documint ci\n"
 "Voloz vs ki djel drove ?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Li fitchî %1 n' egzistêye nén."
@@ -1343,12 +1343,12 @@ msgstr ""
 msgid "Document <i>%1</i> loaded"
 msgstr "Documint <i>%1</i> tcherdjî"
 
-#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Dji n' a savou trover %1"
 
-#: main/KoDocument.cpp:1674
+#: main/KoDocument.cpp:1667
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1357,23 +1357,23 @@ msgstr ""
 "Aroke d' analijhe del sintake dins %1 al roye %2, colone %3\n"
 "Messaedje d' aroke: %4"
 
-#: main/KoDocument.cpp:1695
+#: main/KoDocument.cpp:1688
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 n' est nén on fitchî."
 
-#: main/KoDocument.cpp:1710
+#: main/KoDocument.cpp:1703
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr ""
 "Dji n' a savou drovi l' fitchî pol lére (waitîz les droets d' léjhadje)."
 
-#: main/KoDocument.cpp:1721
+#: main/KoDocument.cpp:1714
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Dji n' a savou lére li cmince do fitchî."
 
-#: main/KoDocument.cpp:1751
+#: main/KoDocument.cpp:1744
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1382,18 +1382,18 @@ msgstr ""
 "aroke d' analijhe del sintake e mwaisse documint al roye %1, colone %2\n"
 "Messaedje d' aroke: %3"
 
-#: main/KoDocument.cpp:1772
+#: main/KoDocument.cpp:1765
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "Fitchî KOffice nén valåbe : %1"
 
-#: main/KoDocument.cpp:1857
+#: main/KoDocument.cpp:1850
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Documint nén valåbe : pont d' fitchî « maindoc.xml »."
 
-#: main/KoDocument.cpp:1881
+#: main/KoDocument.cpp:1874
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1402,25 +1402,25 @@ msgstr ""
 "I gn a sacwantès modêyes dins l' documint <i>%1</i>. Potchîz dins Fitchî-"
 ">Modêyes po drovi ene viye modêye."
 
-#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
+#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Sins no"
 
-#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Li documint <b>«%1»</b> a stî candjî.</p><p>El voloz schaper?</p>"
 
-#: main/KoDocument.cpp:2168
+#: main/KoDocument.cpp:2161
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Divintrinne aroke: saveXML nén co epleminté"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2198
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1429,7 +1429,7 @@ msgstr ""
 "Dji n' a savou drovi\n"
 "%1"
 
-#: main/KoDocument.cpp:2208
+#: main/KoDocument.cpp:2201
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1438,32 +1438,32 @@ msgstr ""
 "Dji n' a savou drovi li fitchî %1\n"
 "Vochal li råjhon: %2"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2258
 #, kde-format
 msgid "a word processing"
 msgstr "on scrijhaedje di tecse"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2259
 #, kde-format
 msgid "a spreadsheet"
 msgstr "on tåvlea"
 
-#: main/KoDocument.cpp:2267
+#: main/KoDocument.cpp:2260
 #, kde-format
 msgid "a presentation"
 msgstr "on prezintaedje"
 
-#: main/KoDocument.cpp:2268
+#: main/KoDocument.cpp:2261
 #, kde-format
 msgid "a chart"
 msgstr "on grafike"
 
-#: main/KoDocument.cpp:2269
+#: main/KoDocument.cpp:2262
 #, kde-format
 msgid "a drawing"
 msgstr "on dessin"
 
-#: main/KoDocument.cpp:2584
+#: main/KoDocument.cpp:2577
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1473,7 +1473,7 @@ msgid ""
 "Do you want to save your changes or discard them?"
 msgstr "<p>Li documint <b>«%1»</b> a stî candjî.</p><p>El voloz schaper?</p>"
 
-#: main/KoDocument.cpp:2586
+#: main/KoDocument.cpp:2579
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgid "Close Document"
@@ -2854,7 +2854,7 @@ msgid "Multiply"
 msgstr "Mopliyî"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:248
-#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/colorspaces/KoAlphaColorSpace.h:182
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "Alpha mask"

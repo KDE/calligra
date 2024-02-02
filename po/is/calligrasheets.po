@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tables\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-01 01:36+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2011-07-07 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team:  <is@li.org>\n"
@@ -117,7 +117,7 @@ msgstr "Í skjalinu er engin tafla."
 msgid "Invalid document. Sheet name is empty."
 msgstr "Ónothæft skjal. Nafn vantar á töfluna"
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, fuzzy, kde-format
 msgid "Sheet%1"
 msgstr "Valið"
