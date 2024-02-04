@@ -4,7 +4,7 @@
 #
 # Rinse de Vries <rinsedevries@kde.nl>, 2007, 2008.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2010.
-# Freek de Kruijf <f.de.kruijf@gmail.com>, 2011, 2015, 2016.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: SpellCheckPlugin\n"
