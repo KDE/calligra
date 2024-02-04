@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: calligrasheets\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-02 01:36+0000\n"
-"PO-Revision-Date: 2024-01-05 21:14+0100\n"
+"PO-Revision-Date: 2024-02-03 20:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -4839,7 +4839,7 @@ msgstr "Baza Kalkula metodo"
 #: functions/financial.xml:1090
 #, kde-format
 msgid "  0       US method, 12 months, each month with 30 days"
-msgstr "0 usona metodo, 12 monatoj, ĉiumonate kun 30 tagoj"
+msgstr "  0       Usona metodo, 12 monatoj, ĉiumonate kun 30 tagoj"
 
 #: functions/financial.xml:1091
 #, kde-format
