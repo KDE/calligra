@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2015-06-01 10:06+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -1084,7 +1084,7 @@ msgstr "Klarer ikke å skrive «%1». Er partisjonen full?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "Klarer ikke å skrive RDF metadata. Er partisjonen full?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1995
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "Feil ved skriving av «%1». Er partisjonen full?"
@@ -1107,7 +1107,7 @@ msgstr ""
 "En autolagret fil finnes for dette dokumentet.\n"
 "Vil du åpne den i stedet?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1688 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Fila %1 finnes ikke."
@@ -1218,12 +1218,12 @@ msgstr ""
 msgid "Document <i>%1</i> loaded"
 msgstr "Dokument <i>%1</i> lastet inn"
 
-#: main/KoDocument.cpp:1662 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "Fant ikke %1"
 
-#: main/KoDocument.cpp:1674
+#: main/KoDocument.cpp:1667
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1232,22 +1232,22 @@ msgstr ""
 "Tolkingsfeil i %1 på linje %2, kolonne %3\n"
 "Feilmelding: %4"
 
-#: main/KoDocument.cpp:1695
+#: main/KoDocument.cpp:1688
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 er ikke en fil."
 
-#: main/KoDocument.cpp:1710
+#: main/KoDocument.cpp:1703
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "Klarte ikke åpne fila for lesing (sjekk leserettighetene)."
 
-#: main/KoDocument.cpp:1721
+#: main/KoDocument.cpp:1714
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "Klarte ikke lese begynnelsen av fila."
 
-#: main/KoDocument.cpp:1751
+#: main/KoDocument.cpp:1744
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1256,17 +1256,17 @@ msgstr ""
 "Tolkingsfeil i fila ved linje %1, kolonne %2\n"
 "Feilmelding: %3"
 
-#: main/KoDocument.cpp:1772
+#: main/KoDocument.cpp:1765
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "Ikke en gyldig Calligra-fil: %1"
 
-#: main/KoDocument.cpp:1857
+#: main/KoDocument.cpp:1850
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "Ugyldig dokument: Fila «maindoc.xml» finnes ikke."
 
-#: main/KoDocument.cpp:1881
+#: main/KoDocument.cpp:1874
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1275,25 +1275,25 @@ msgstr ""
 "Dokumentet <i>%1</i> inneholder flere versjoner. Gå til Fil→Versjoner for å "
 "åpne en gammel versjon."
 
-#: main/KoDocument.cpp:2082 main/KoDocument.cpp:2551 main/KoDocument.cpp:2580
+#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "Uten tittel"
 
-#: main/KoDocument.cpp:2085 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Dokumentet <b>«%1»</b> er endret.</p><p>Vil du lagre det?</p>"
 
-#: main/KoDocument.cpp:2168
+#: main/KoDocument.cpp:2161
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "Intern feil: saveXML er ikke implementert"
 
-#: main/KoDocument.cpp:2205
+#: main/KoDocument.cpp:2198
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1302,7 +1302,7 @@ msgstr ""
 "Klarte ikke åpne\n"
 "%1"
 
-#: main/KoDocument.cpp:2208
+#: main/KoDocument.cpp:2201
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1311,32 +1311,32 @@ msgstr ""
 "Klarte ikke åpne %1\n"
 "Årsak: %2"
 
-#: main/KoDocument.cpp:2265
+#: main/KoDocument.cpp:2258
 #, kde-format
 msgid "a word processing"
 msgstr "en tekstbehandler"
 
-#: main/KoDocument.cpp:2266
+#: main/KoDocument.cpp:2259
 #, kde-format
 msgid "a spreadsheet"
 msgstr "et regneark"
 
-#: main/KoDocument.cpp:2267
+#: main/KoDocument.cpp:2260
 #, kde-format
 msgid "a presentation"
 msgstr "en presentasjon"
 
-#: main/KoDocument.cpp:2268
+#: main/KoDocument.cpp:2261
 #, kde-format
 msgid "a chart"
 msgstr "et diagram"
 
-#: main/KoDocument.cpp:2269
+#: main/KoDocument.cpp:2262
 #, kde-format
 msgid "a drawing"
 msgstr "en tegning"
 
-#: main/KoDocument.cpp:2584
+#: main/KoDocument.cpp:2577
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1345,7 +1345,7 @@ msgstr ""
 "Dokumentet «%1» har endringer som ikke er lagret.\n"
 "Vil du lagre endringene eller forkaste dem?"
 
-#: main/KoDocument.cpp:2586
+#: main/KoDocument.cpp:2579
 #, kde-format
 msgid "Close Document"
 msgstr "Lukk dokumentet"
@@ -2629,7 +2629,7 @@ msgid "Multiply"
 msgstr "Multipliser"
 
 #: pigment/colorspaces/KoAlphaColorSpace.cpp:248
-#: pigment/colorspaces/KoAlphaColorSpace.h:183
+#: pigment/colorspaces/KoAlphaColorSpace.h:182
 #: pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
 msgid "Alpha mask"

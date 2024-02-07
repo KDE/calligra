@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-02 01:36+0000\n"
 "PO-Revision-Date: 2022-05-29 19:18+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -120,7 +120,7 @@ msgstr "Dette dokumentet har ingen ark (tabellar)."
 msgid "Invalid document. Sheet name is empty."
 msgstr "Ugyldig dokument. Arknamnet er tomt."
 
-#: core/Map.cpp:242 engine/MapBase.cpp:187
+#: core/Map.cpp:242 engine/MapBase.cpp:189
 #, kde-format
 msgid "Sheet%1"
 msgstr "Ark%1"
@@ -284,61 +284,61 @@ msgstr ""
 msgid "Dependency"
 msgstr "Avhengig"
 
-#: engine/Value.cpp:594
+#: engine/Value.cpp:597
 #, kde-format
 msgctxt "Error: circular formula dependency"
 msgid "#CIRCLE!"
 msgstr ""
 
-#: engine/Value.cpp:602
+#: engine/Value.cpp:605
 #, kde-format
 msgctxt "Error: broken cell reference"
 msgid "#DEPEND!"
 msgstr ""
 
-#: engine/Value.cpp:610
+#: engine/Value.cpp:613
 #, kde-format
 msgctxt "Error: division by zero"
 msgid "#DIV/0!"
 msgstr ""
 
-#: engine/Value.cpp:618
+#: engine/Value.cpp:621
 #, kde-format
 msgctxt "Error: not available"
 msgid "#N/A"
 msgstr ""
 
-#: engine/Value.cpp:626
+#: engine/Value.cpp:629
 #, kde-format
 msgctxt "Error: unknown function name"
 msgid "#NAME?"
 msgstr ""
 
-#: engine/Value.cpp:634
+#: engine/Value.cpp:637
 #, kde-format
 msgctxt "Error: number out of range"
 msgid "#NUM!"
 msgstr ""
 
-#: engine/Value.cpp:642
+#: engine/Value.cpp:645
 #, kde-format
 msgctxt "Error: empty intersecting area"
 msgid "#NULL!"
 msgstr ""
 
-#: engine/Value.cpp:650
+#: engine/Value.cpp:653
 #, kde-format
 msgctxt "Error: formula not parseable"
 msgid "#PARSE!"
 msgstr ""
 
-#: engine/Value.cpp:658
+#: engine/Value.cpp:661
 #, kde-format
 msgctxt "Error: invalid cell/array reference"
 msgid "#REF!"
 msgstr ""
 
-#: engine/Value.cpp:666
+#: engine/Value.cpp:669
 #, kde-format
 msgctxt "Error: wrong (number of) function argument(s)"
 msgid "#VALUE!"

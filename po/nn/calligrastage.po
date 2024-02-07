@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-02-01 01:36+0000\n"
 "PO-Revision-Date: 2008-08-03 19:25+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -72,7 +72,7 @@ msgctxt "(qtundo-format)"
 msgid "Create shape animation"
 msgstr ""
 
-#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:35
+#: part/commands/KPrAnimationEditNodeTypeCommand.cpp:33
 msgctxt "(qtundo-format)"
 msgid "Edit animation trigger event"
 msgstr ""
