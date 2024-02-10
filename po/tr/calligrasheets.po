@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-02 01:36+0000\n"
-"PO-Revision-Date: 2024-02-08 17:56+0300\n"
+"PO-Revision-Date: 2024-02-09 18:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -92,9 +92,9 @@ msgid ""
 "When you open it with this version of Calligra Sheets, some information may "
 "be lost."
 msgstr ""
-"Bu belge, Calligra Tablolar'ın daha yeni bir sürümü ile oluşturulmuş "
+"Bu belge, Calligra Tablolar’ın daha yeni bir sürümü ile oluşturulmuş "
 "(sözdizim sürümü: %1)\n"
-"Calligra Tablolar'ın bu sürümü ile açarsanız bazı bilgiler kaybolabilir."
+"Calligra Tablolar’ın bu sürümü ile açarsanız bazı bilgiler kaybolabilir."
 
 #: core/ksp/SheetsKspDoc.cpp:53
 #, kde-format
@@ -383,9 +383,9 @@ msgid ""
 "BITAND(12;10) returns 8 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"anded\" with 1010 is 1000, which is integer 8)."
 msgstr ""
-"BITAND(12;10), 8 döndürür (çünkü 12'nin ikilik değeri 1100 ve 10'un ikilik "
-"değeri 1010'dur. 1100 ile 1010'un bit bit ve işlemine tabi tutulması sonucu "
-"1000 eder ve bu da 8'e karşılık gelir)."
+"BITAND(12;10), 8 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
+"değeri 1010’dur. 1100 ile 1010’un bit bit ve işlemine tabi tutulması sonucu "
+"1000 eder ve bu da 8’e karşılık gelir)."
 
 #: functions/bitops.xml:35
 #, kde-format
@@ -451,9 +451,9 @@ msgid ""
 "BITOR(12;10) returns 14 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"ored\" with 1010 is 1110, which is integer 14)."
 msgstr ""
-"BITAND(12;10), 14 döndürür (çünkü 12'nin ikilik değeri 1100 ve 10'un ikilik "
-"değeri 1010'dur. 1100 ile 1010'un bit bit veya işlemine tabi tutulması "
-"sonucu 1110 eder ve bu da 14'e karşılık gelir)."
+"BITAND(12;10), 14 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
+"değeri 1010’dur. 1100 ile 1010’un bit bit veya işlemine tabi tutulması "
+"sonucu 1110 eder ve bu da 14’e karşılık gelir)."
 
 #: functions/bitops.xml:95
 #, kde-format
@@ -475,9 +475,9 @@ msgid ""
 "BITXOR(12;10) returns 6 (because decimal 12 is binary 1100, and decimal 10 "
 "is binary 1010; and 1100 \"xored\" with 1010 is 0110, which is integer 6)."
 msgstr ""
-"BITXOR(12;10) 6 döndürür (çünkü 12'nin ikilik değeri 1100 ve 10'un ikilik "
-"değeri 1010'dur. 1100 ile 1010'un bit bit özel veya işlemine tabi tutulması "
-"sonucu 0110 eder ve bu da 6'ya karşılık gelir)."
+"BITXOR(12;10) 6 döndürür (çünkü 12’nin ikilik değeri 1100 ve 10’un ikilik "
+"değeri 1010’dur. 1100 ile 1010’un bit bit özel veya işlemine tabi tutulması "
+"sonucu 0110 eder ve bu da 6’ya karşılık gelir)."
 
 #: functions/conversion.xml:5
 #, kde-format
@@ -908,7 +908,7 @@ msgid ""
 msgstr ""
 "ROMAN() işlevi, sayıyı Roma biçiminde döndürür. Yalnızca pozitif tamsayılar "
 "dönüştürülebilir. İsteğe bağlı Biçim parametresi kısalık düzeyini belirtir "
-"ve öntanımlı değeri 0'dır."
+"ve öntanımlı değeri 0’dır."
 
 #: functions/conversion.xml:256
 #, kde-format
@@ -1355,7 +1355,7 @@ msgid ""
 "of days elapsed since December 31, 1899."
 msgstr ""
 "DATEVALUE işlevi, günü temsil eden bir sayı döndürür; yani 31 Aralık "
-"1899'dan bugüne kadar geçen gün sayısını."
+"1899’dan bugüne kadar geçen gün sayısını."
 
 #: functions/datetime.xml:76
 #, kde-format
@@ -1673,7 +1673,7 @@ msgstr ""
 "YEARS() işlevi, iki tarih arasındaki yıl farkını hesaplar. Üçüncü parametre "
 "ise hesaplama biçimini gösterir. Eğer bu değer 0 ise, YEARS() bu tarihler "
 "arasında hesaplanabile en yüksek değeri döndürür. Eğer bu değer 0 ise, 01 "
-"Ocak'tan başlayan ve 31 Aralık'ta son bulan, yalnızca tam yılların sayısı "
+"Ocak’tan başlayan ve 31 Aralık’ta son bulan, yalnızca tam yılların sayısı "
 "gönderilir."
 
 #: functions/datetime.xml:290
@@ -2101,7 +2101,7 @@ msgid ""
 "Method is omitted.)"
 msgstr ""
 "WEEKNUM(A1; 1), A1 içeriği \"9 Mart 2008\" olduğunda 11 döndürür. Yıldaki "
-"hafta numarasını Pazar'ı başlangıç alarak döndürür (1, yöntem yazılmadığında "
+"hafta numarasını Pazar’ı başlangıç alarak döndürür (1, yöntem yazılmadığında "
 "öntanımlıdır.)"
 
 #: functions/datetime.xml:614
@@ -2274,7 +2274,7 @@ msgstr ""
 #: functions/datetime.xml:721 functions/datetime.xml:736
 #, kde-format
 msgid "A unix time is the number of seconds after midnight January 1st, 1970."
-msgstr "Unix zamanı 1 Ocak 1970'ten bu yana geçen saniye sayısıdır."
+msgstr "Unix zamanı 1 Ocak 1970’ten bu yana geçen saniye sayısıdır."
 
 #: functions/datetime.xml:722
 #, kde-format
@@ -3528,7 +3528,7 @@ msgid ""
 "defaults to 0."
 msgstr ""
 "DELTA() işlevi, x değeri y değerine eşit olursa 0 döndürür, diğer durumlarda "
-"ise 0. y'nin öntamınlı değeri sıfırdır."
+"ise 0. y’nin öntamınlı değeri sıfırdır."
 
 #: functions/engineering.xml:883
 #, kde-format
@@ -3556,8 +3556,8 @@ msgid ""
 "The GESTEP() function returns 1 if x greater or equals y, otherwise returns "
 "0. y defaults to 0."
 msgstr ""
-"GESTEP() işlevi, x, y'den büyük veya eşitse 1 döndürür, aksi durumda ise 0 "
-"döndürür. y'nin öntanımlı değeri sıfırdır."
+"GESTEP() işlevi, x, y’den büyük veya eşitse 1 döndürür, aksi durumda ise 0 "
+"döndürür. y’nin öntanımlı değeri sıfırdır."
 
 #: functions/engineering.xml:903
 #, kde-format
@@ -3794,7 +3794,7 @@ msgid ""
 msgstr ""
 "Anapara, nominal faiz oranı, birleşik faiz hesaplamanın sıklığı ve zamanı, "
 "COMPOUND() işlevine verildiğinde, yatırımın değerini geri döndürür. Örneğin: "
-"5 yıl için üç aylık evrede hesaplanan %​12'lik faiz ile $5000, COMPOUND(5000; "
+"5 yıl için üç aylık evrede hesaplanan %​12’lik faiz ile $5000, COMPOUND(5000; "
 "0,12; 4; 5) veya $9030,56 olacaktır."
 
 #: functions/financial.xml:150
@@ -4234,7 +4234,7 @@ msgid ""
 "(Italy), LTL (Lithuania), LUF (Luxembourg), LVL (Latvia), MTL (Malta), NLG "
 "(Netherlands), PTE (Portugal), SIT (Slovenia), or SKK (Slovakia)."
 msgstr ""
-"EURO() işlevi, bir Euro'yu Avrupa para birliğinde verilen bir ulusal para "
+"EURO() işlevi, bir Euro’yu Avrupa para birliğinde verilen bir ulusal para "
 "birimine dönüştürür. Para birimi şunlardan biridir: ATS (Avusturya), BEF "
 "(Belçika), CYP (Kıbrıs), DEM (Almanya), EEK (Estonya), ESP (İspanya), EUR "
 "(Euro), FIM (Finlandiya), FRF (Fransa), GRD (Yunanistan), IEP (İrlanda), ITL "
@@ -4302,8 +4302,8 @@ msgid ""
 "interest, after two years you will have FV(1000;0.08;2) or $1166.40."
 msgstr ""
 "FV() işlevi, verim ve geçen süre verildiğinde bir yatırımın gelecek değerini "
-"hesaplar. Eğer hesabınızda %​8 faiz kazanan $1000'ınız varsa iki yıl sonra "
-"FV(1000;0,08;2) veya $1166,40'a sahip olursunuz."
+"hesaplar. Eğer hesabınızda %​8 faiz kazanan $1000’ınız varsa iki yıl sonra "
+"FV(1000;0,08;2) veya $1166,40’a sahip olursunuz."
 
 #: functions/financial.xml:568
 #, kde-format
@@ -4451,7 +4451,7 @@ msgid ""
 "The interest rate is 10 percent."
 msgstr ""
 "Örnek, üç yıllık borcun son yılında ödenecek faizi gösterir. Faiz oranı "
-"yüzde 10'dur."
+"yüzde 10’dur."
 
 #: functions/financial.xml:666
 #, kde-format
@@ -4557,8 +4557,8 @@ msgid ""
 msgstr ""
 "LEVEL_COUPON() işlevi, düzey kuponu bonosunun değerlerini hesaplar. Örneğin; "
 "4 yıl içinde vadesi dolacak, %​10 faiz oranlı ve %​13 oranındaki yarı yıllık "
-"$1000'lık bir tahvilin değeri LEVEL_COUPON(1000;.13;2;4;.1) veya "
-"$1096,95'dır."
+"$1000’lık bir tahvilin değeri LEVEL_COUPON(1000;.13;2;4;.1) veya "
+"$1096,95’dır."
 
 #: functions/financial.xml:752
 #, kde-format
@@ -4901,8 +4901,8 @@ msgid ""
 msgstr ""
 "PV() işlevi, bir yatırımın mevcut döndürür -- faiz oranı veya enflasyon "
 "değeri verildiğinde, gelecekteki paranın toplam değeridir. Örneğin; yeni bir "
-"bilgisayar almak için $1166,40'a gereksiniminiz varsa ve bunu iki yıl içinde "
-"%​8 faiz kazanarak almak istiyorsanız PV(1166,4;0,08;2) veya $1000'la "
+"bilgisayar almak için $1166,40’a gereksiniminiz varsa ve bunu iki yıl içinde "
+"%​8 faiz kazanarak almak istiyorsanız PV(1166,4;0,08;2) veya $1000’la "
 "başlamalısınız."
 
 #: functions/financial.xml:1119
@@ -5256,8 +5256,8 @@ msgid ""
 "matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64."
 msgstr ""
 "ZERO_COUPON() işlevi, bir sıfır kuponlu (iskontolu) tahvilin değerini "
-"hesaplar. Örneğin: %​10 faiz oranı ile 20 yıl vadeli $1000'lık bir tahvilin "
-"değeri ZERO_COUPON(1000;.1;20) veya $148,64'dır."
+"hesaplar. Örneğin: %​10 faiz oranı ile 20 yıl vadeli $1000’lık bir tahvilin "
+"değeri ZERO_COUPON(1000;.1;20) veya $148,64’dır."
 
 #: functions/financial.xml:1521
 #, kde-format
@@ -5299,7 +5299,7 @@ msgid ""
 msgstr ""
 "ERRORTYPE() işlevi, bir hatayı sayıya dönüştürür. Eğer değer bir hata "
 "değilse hata döndürür. Aksi halde, sayısal bir değer döndürülür. Hata "
-"kodları Excel'de modellenmiştir."
+"kodları Excel’de modellenmiştir."
 
 #: functions/information.xml:16
 #, kde-format
@@ -6158,7 +6158,7 @@ msgstr "X, kuvvet serilerinin bağımsız değişkeni"
 #: functions/math.xml:48
 #, kde-format
 msgid "N the initial power to which X is to be raised"
-msgstr "N, X'in ulaşması gereken ilk kuvveti"
+msgstr "N, X’in ulaşması gereken ilk kuvveti"
 
 #: functions/math.xml:52
 #, kde-format
@@ -6195,7 +6195,7 @@ msgid ""
 "values"
 msgstr ""
 "LCM() işlevi, iki veya daha fazla kayan noktalı değişkenler için Ortak "
-"Katların En Küçüğü'nü döndürür"
+"Katların En Küçüğü’nü döndürür"
 
 #: functions/math.xml:80
 #, kde-format
@@ -6327,7 +6327,7 @@ msgid ""
 "The POW(x;y) function returns the value of x raised to the power of y. It's "
 "the same as POWER."
 msgstr ""
-"KUV(x;y) işlevi x'in y'inci kuvvetini döndürür. KUVVET ile aynı işlevi "
+"KUV(x;y) işlevi x’in y’inci kuvvetini döndürür. KUVVET ile aynı işlevi "
 "yerine getirir."
 
 #: functions/math.xml:159
@@ -7079,7 +7079,7 @@ msgid ""
 "The SQRTPI() function returns the non-negative square root of x * PI. It is "
 "an error if the argument is negative."
 msgstr ""
-"SQRTPI() işlevi, x * PI'nin negatif olmayan karekökünü döndürür. Argüman "
+"SQRTPI() işlevi, x * PI’nin negatif olmayan karekökünü döndürür. Argüman "
 "negatif olduğunda hata oluşur."
 
 #: functions/math.xml:675
@@ -7135,7 +7135,7 @@ msgstr "LOGn(12;2) eşittir 3,5849625"
 #: functions/math.xml:733
 #, kde-format
 msgid "The ROOTN() function returns the non-negative nth root of x."
-msgstr "ROOTN() işlevi, x'in n'inci dereceden negatif olmayan kökünü döndürür."
+msgstr "ROOTN() işlevi, x’in n’inci dereceden negatif olmayan kökünü döndürür."
 
 #: functions/math.xml:734
 #, kde-format
@@ -7170,7 +7170,7 @@ msgstr "Sıfırdan büyük bir kayan noktalı sayı"
 #: functions/math.xml:763
 #, kde-format
 msgid "The LOG() function returns the base-10 logarithm of x."
-msgstr "LOG() işlevi, x'in 10 tabanında logaritmasını döndürür."
+msgstr "LOG() işlevi, x’in 10 tabanında logaritmasını döndürür."
 
 #: functions/math.xml:764
 #, kde-format
@@ -7215,7 +7215,7 @@ msgstr "LOG10(0), bir hatadır."
 #: functions/math.xml:801
 #, kde-format
 msgid "The LOG2() function returns the base-2 logarithm of x."
-msgstr "LOG2() işlevi, x'in 2 tabanında logaritmasını döndürür."
+msgstr "LOG2() işlevi, x’in 2 tabanında logaritmasını döndürür."
 
 #: functions/math.xml:802
 #, kde-format
@@ -7260,7 +7260,7 @@ msgid ""
 "The CEIL() function rounds x up to the nearest integer which is greater than "
 "the input, returning that value as a double."
 msgstr ""
-"CEIL() işlevi, x'i, geri dönüş değerini double verecek şekilde, girdiden "
+"CEIL() işlevi, x’i, geri dönüş değerini double verecek şekilde, girdiden "
 "daha büyük olan en yakın tamsayıya yukarı yuvarlar."
 
 #: functions/math.xml:837
@@ -7297,9 +7297,9 @@ msgid ""
 "to the nearest integer. If the Mode parameter is non-zero, the function "
 "rounds away from zero, instead of up towards the positive infinity."
 msgstr ""
-"CEILING() işlevi, x'i girdiden büyük olan Ağırlığın en yakın çarpımına "
+"CEILING() işlevi, x’i girdiden büyük olan Ağırlığın en yakın çarpımına "
 "(sıfırdan uzağa) yukarı yuvarlar. Ağırlığın öntanımlı değeri 1 (veya değer "
-"negatif ise -1)'dir, bu da en yakın tamsayıya yukarı yuvarlandığı anlamına "
+"negatif ise -1)’dir, bu da en yakın tamsayıya yukarı yuvarlandığı anlamına "
 "gelir. Mod paremetresi sıfır değilse işlev pozitif sonsuza yuvarlamak yerine "
 "sıfırdan uzağa yuvarlar."
 
@@ -7351,11 +7351,11 @@ msgid ""
 "                    If any of the two parameters x or Significance is zero, "
 "the result is zero."
 msgstr ""
-"The FLOOR() işlevi, x'i girdiden daha küçük olan Ağırlığın en yakın "
+"The FLOOR() işlevi, x’i girdiden daha küçük olan Ağırlığın en yakın "
 "çarpımına aşağı (sıfıra doğru) yuvarlar.\n"
-"x pozitif ise Ağırlık 1'dir. Eğer değer negatif ise -1'dir,\n"
+"x pozitif ise Ağırlık 1’dir. Eğer değer negatif ise -1’dir,\n"
 "bu da en yakın tamsayıya yukarı doğru yuvarlandığı anlamına gelir.\n"
-"Eğer mod verilmişse ve sıfıra eşit değilse x'in miktarı ağırlığın\n"
+"Eğer mod verilmişse ve sıfıra eşit değilse x’in miktarı ağırlığın\n"
 " bir katına sıfıra doğru yuvarlanır ve daha sonra işaret uygulanır. Aksi "
 "takdirde, negatif sonsuzluğa doğru yuvarlanır.\n"
 "Eğer iki parametreden herhangi biri x veya Ağırlık sıfırsa sonuç sıfırdır."
@@ -7444,7 +7444,7 @@ msgstr "RAND(), örneğin eşittir 0,78309922..."
 #: functions/math.xml:960 functions/math.xml:975
 #, kde-format
 msgid "A floating point value (greater 0)"
-msgstr "Bir kayan noktalı değer (0'dan büyük)"
+msgstr "Bir kayan noktalı değer (0’dan büyük)"
 
 #: functions/math.xml:964
 #, kde-format
@@ -7490,7 +7490,7 @@ msgstr "Bir kayan noktalı değer (0 ve 1 arasında)"
 #: functions/math.xml:998
 #, kde-format
 msgid "Trials (greater 0)"
-msgstr "Denemeler (0'dan büyük)"
+msgstr "Denemeler (0’dan büyük)"
 
 #: functions/math.xml:1002
 #, kde-format
@@ -7513,7 +7513,7 @@ msgstr "RANDBINOM(4)"
 #: functions/math.xml:1018
 #, kde-format
 msgid "Failures (greater 0)"
-msgstr "Başarısızlıklar (0'dan büyük)"
+msgstr "Başarısızlıklar (0’dan büyük)"
 
 #: functions/math.xml:1022
 #, kde-format
@@ -8200,7 +8200,7 @@ msgstr "INDEX(aralık, satır, sütun)"
 #: functions/reference.xml:148
 #, kde-format
 msgid "INDEX(A1:C3;2;2), returns contents of B2"
-msgstr "INDEX(A1:C3;2;2), B2'nin içeriğini döndürür"
+msgstr "INDEX(A1:C3;2;2), B2’nin içeriğini döndürür"
 
 #: functions/reference.xml:149
 #, kde-format
@@ -8355,7 +8355,7 @@ msgstr "LOOKUP(değer; arama vektörü; sonuç vektörü)"
 #: functions/reference.xml:250
 #, kde-format
 msgid "LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1."
-msgstr "LOOKUP(1.232; A1:A6; B1:B6), A1 = 1, A2 = 2 için B1'in döndürür."
+msgstr "LOOKUP(1.232; A1:A6; B1:B6), A1 = 1, A2 = 2 için B1’in döndürür."
 
 #: functions/reference.xml:262 functions/reference.xml:288
 #, kde-format
@@ -8461,9 +8461,9 @@ msgid ""
 "parameters."
 msgstr ""
 "MULTIPLE.OPERATIONS, FormülHücresi ile işaret edilen ve ona bağlı bütün "
-"formülleri yürütürken sırasıyla SatırHücresi'ne yapılan bütün başvuruları "
-"SatırDeğiştirme'ye başvuru ve SütunHücresi'ne yapılan bütün başvuruları "
-"SütunDeğiştirme'ye başvuru olarak değiştirir. İşlev, kolaylıkla iki girdi "
+"formülleri yürütürken sırasıyla SatırHücresi’ne yapılan bütün başvuruları "
+"SatırDeğiştirme’ye başvuru ve SütunHücresi’ne yapılan bütün başvuruları "
+"SütunDeğiştirme’ye başvuru olarak değiştirir. İşlev, kolaylıkla iki girdi "
 "parametresine bağlı ifade tabloları oluşturmak için kullanılabilir."
 
 #: functions/reference.xml:331
@@ -8502,7 +8502,7 @@ msgid ""
 "type is -1, the smallest value that is greater than or equal to the search "
 "value is found, and the search region needs to be sorted in descending order."
 msgstr ""
-"Bir arama değerini arama bölgesinde bulur ve konumunu (1'den başlayarak) "
+"Bir arama değerini arama bölgesinde bulur ve konumunu (1’den başlayarak) "
 "döndürür. Eşleşme türü -1, 0 ya da 1 olabilir ve aramanın nasıl yapıldığına "
 "karar verir. Eğer eşleşme türü 0 ise arama değerine eşit olan ilk değerin "
 "indeksi döndürülür. Eğer eşleşme türü 1 (ya da boş) ise arama değerine eşit "
@@ -8790,7 +8790,7 @@ msgid ""
 "The CHIDIST() function returns the probability value from the indicated Chi "
 "square that a hypothesis is confirmed."
 msgstr ""
-"CHIDIST() işlevi, doğrulanmış bir hipotezle gösterilen bir ki-kare'den "
+"CHIDIST() işlevi, doğrulanmış bir hipotezle gösterilen bir ki-kare’den "
 "olasılık döndürür."
 
 #: functions/statistical.xml:169
@@ -9296,7 +9296,7 @@ msgid ""
 "This is equal to the Nth root of the product of the terms."
 msgstr ""
 "GEOMEAN() işlevi, verilen argümanların geometrik ortalamasını döndürür. Bu "
-"ise ifadelerin çarpımının N'inci köküne eşittir."
+"ise ifadelerin çarpımının N’inci köküne eşittir."
 
 #: functions/statistical.xml:518
 #, kde-format
@@ -9457,7 +9457,7 @@ msgstr "Konum (en büyükten başlayarak)"
 #: functions/statistical.xml:676
 #, kde-format
 msgid "The LARGE() function returns the k-th largest value from the data set."
-msgstr "LARGE() işlevi, veri kümesinden k'ıncı en büyük değeri döndürür."
+msgstr "LARGE() işlevi, veri kümesinden k’ıncı en büyük değeri döndürür."
 
 #: functions/statistical.xml:677
 #, kde-format
@@ -9864,7 +9864,7 @@ msgstr ""
 "PERCENTILE() işlevi, Veri içindeki veri değerlerinin x. örnek yüzdesini "
 "döndürür. Bir yüzde, veri dizisinin en küçük değerinden (alfa=0) en büyük "
 "değerine giden (alfa=1) bir veri dizisi için ölçek döndürür. Alfa = %​25 "
-"için, yüzde ilk dördünü ifade eder; alfa = %​50 ORTANCA'dır. Boş hücreler "
+"için, yüzde ilk dördünü ifade eder; alfa = %​50 ORTANCA’dır. Boş hücreler "
 "sıfır olarak varsayılacak ve metin içeren hücreler yok sayılacaktır."
 
 #: functions/statistical.xml:979
@@ -9982,7 +9982,7 @@ msgid ""
 "The RSQ() function returns the square of the Pearson product moment "
 "correlation coefficient through data points in known_y's and known_x's."
 msgstr ""
-"RSQ() işlevi, bilinen_y ve bilinen_x'deki veri noktaları boyunca Pearson "
+"RSQ() işlevi, bilinen_y ve bilinen_x’deki veri noktaları boyunca Pearson "
 "çarpım momenti bağıntı katsayısının karesini döndürür."
 
 #: functions/statistical.xml:1062
@@ -10058,7 +10058,7 @@ msgstr "Konum (en küçükten başlayarak)"
 #: functions/statistical.xml:1152
 #, kde-format
 msgid "The SMALL() function returns the k-th smallest value from the data set."
-msgstr "SMALL() işlevi, veri kümesinden en küçük k'ıncı değeri döndürür."
+msgstr "SMALL() işlevi, veri kümesinden en küçük k’ıncı değeri döndürür."
 
 #: functions/statistical.xml:1153
 #, kde-format
@@ -10372,9 +10372,9 @@ msgid ""
 "parameter to TRUE or 1 (the default) allows the best-fit line to intersect "
 "the vertical axis at a non-zero value of Y. "
 msgstr ""
-"Regresyon satırı, 4. parametreyi, allowOffset'i, FALSE veya 0'a ayarlayarak "
-"merkezi (X=0, Y=0)'ı kesmeye zorlanabilir. Bu parametreyi TRUE veya "
-"1(öntanımlı değer)'e ayarlamak, en uygun satırını, dikey eksenden Y'nin "
+"Regresyon satırı, 4. parametreyi, allowOffset’i, FALSE veya 0’a ayarlayarak "
+"merkezi (X=0, Y=0)’ı kesmeye zorlanabilir. Bu parametreyi TRUE veya "
+"1(öntanımlı değer)’e ayarlamak, en uygun satırını, dikey eksenden Y’nin "
 "sıfır olmayan bir değerinde kesmeyi sağlar. "
 
 #: functions/statistical.xml:1434
@@ -10464,8 +10464,8 @@ msgid ""
 "type The type of t-test to perform. Set this to 1 for a paired t-test, 2 or "
 "3 for an unpaired t-test."
 msgstr ""
-"type uygulanacak t-test'in türü. Eşli bir t-test için bunu 1'e ayarlayın, "
-"eşli olmayan t-test için 2 veya 3'e ayarlayın."
+"type uygulanacak t-test’in türü. Eşli bir t-test için bunu 1’e ayarlayın, "
+"eşli olmayan t-test için 2 veya 3’e ayarlayın."
 
 #: functions/statistical.xml:1484
 #, kde-format
@@ -10473,7 +10473,7 @@ msgid ""
 "The TTEST() function calculates the probability of a t-test given two ranges "
 "of data to compare."
 msgstr ""
-"TTEST() işlevi, verilen iki veri aralığını karşılaştırmak için t-test'in "
+"TTEST() işlevi, verilen iki veri aralığını karşılaştırmak için t-test’in "
 "olasılığını hesaplar."
 
 #: functions/statistical.xml:1485
@@ -10792,7 +10792,7 @@ msgid ""
 msgstr ""
 "İlk parametre denemelerin sayısı, ikinci parametrenin başarı sayısı, üçüncü "
 "parametre başarı olasılığıdır. Deneme sayısı, başarı sayısından daha büyük "
-"olmalı ve olasılık 1'den küçük veya eşit olmalıdır."
+"olmalı ve olasılık 1’den küçük veya eşit olmalıdır."
 
 #: functions/statistical.xml:1774
 #, kde-format
@@ -10842,7 +10842,7 @@ msgstr ""
 "INVBINO () işlevi, negatif binom dağılımını döndürür. İlk parametre "
 "denemelerin sayısıdır, ikinci parametre arızaların sayısıdır ve üçüncü "
 "arızanın olasılığıdır. Deneme sayısı başarısızlık sayısından daha büyük "
-"olmalı ve olasılık 1'den küçük veya eşit olmalıdır."
+"olmalı ve olasılık 1’den küçük veya eşit olmalıdır."
 
 #: functions/statistical.xml:1814
 #, kde-format
@@ -10973,7 +10973,7 @@ msgid ""
 "SUBSTITUTE when you want to replace specific text, use REPLACE when you want "
 "to replace any text that occurs in a specific location."
 msgstr ""
-"SUBSTITUTE() işlevi, bir metindeki eski_metin'i yeni_metin ile değiştirir. "
+"SUBSTITUTE() işlevi, bir metindeki eski_metin’i yeni_metin ile değiştirir. "
 "Eğer bir_seferlik seçilirse, yalnızca o anki seçili olan eski_metin "
 "değiştirilecektir. Diğer durumda tüm diğer eski_metin değerleri, yeni_metin "
 "ile değiştirilecektir. Belirgin bir metni değişmek için SUBSTITUTE, herhangi "
@@ -11011,7 +11011,7 @@ msgstr "Bulunması istenilen metin"
 #: functions/text.xml:324
 #, kde-format
 msgid "The text which may contain find_text"
-msgstr "Aranılan_metin'i içermesi olası metin"
+msgstr "Aranılan_metin’i içermesi olası metin"
 
 #: functions/text.xml:94
 #, kde-format
@@ -11026,8 +11026,8 @@ msgid ""
 "find_text, from the leftmost character of within_text."
 msgstr ""
 "SEARCH() işlevi, bir metin dizisini (aranılan_metin) başka bir metin "
-"dizisinde arar (ana_metin) ve sonucu aranılan_metin'in en soldaki değerinin "
-"bulunduğu ana_metin'deki yeri sayı olarak döndürür."
+"dizisinde arar (ana_metin) ve sonucu aranılan_metin’in en soldaki değerinin "
+"bulunduğu ana_metin’deki yeri sayı olarak döndürür."
 
 #: functions/text.xml:99 functions/text.xml:127
 #, kde-format
@@ -11081,7 +11081,7 @@ msgid ""
 msgstr ""
 "SEARCHB() işlevi, bir metin karakter dizisini (bulunacak_metin) diğer bir "
 "metin karakter dizisi (metin_içinde) içinde bulur ve bayt konumunu "
-"kullanarak metin_içinde'nin en sol karakterinden, bulunacak_metin'in "
+"kullanarak metin_içinde’nin en sol karakterinden, bulunacak_metin’in "
 "başlangıç noktasının sayısını döndürür."
 
 #: functions/text.xml:128
@@ -11328,7 +11328,7 @@ msgid ""
 msgstr ""
 "FIND() işlevi, bir yazı dizisini (aranılan_metin) başka bir yazı dizisi "
 "(ana_metin) içinde arar ve en soldaki karakterden başlayarak, "
-"aranılan_metin'e ait başlama noktasının sayısını döndürür."
+"aranılan_metin’e ait başlama noktasının sayısını döndürür."
 
 #: functions/text.xml:302
 #, kde-format
@@ -11384,7 +11384,7 @@ msgid ""
 msgstr ""
 "FINDB() işlevi, bir yazı dizisini (find_text) başka bir yazı dizisi "
 "(within_text) içinde arar ve en soldaki karakterden başlayarak, "
-"aranılan_metin'e ait başlama noktasının sayısını bayt konumu kullanarak "
+"aranılan_metin’e ait başlama noktasının sayısını bayt konumu kullanarak "
 "döndürür."
 
 #: functions/text.xml:333
@@ -11612,9 +11612,9 @@ msgid ""
 "less than 0."
 msgstr ""
 "LEFT() işlevi, verilen karakter dizisinin en sol karakterine kadar "
-"'uzunluk'u içeren alt karakter dizisini döner. Eğer 'uzunluk' karakter "
+"’uzunluk’u içeren alt karakter dizisini döner. Eğer ’uzunluk’ karakter "
 "dizisinin uzunluğuna ulaşırsa tüm karakter dizisini döner. Karakter "
-"sayısının 0'dan küçük olması hatadır."
+"sayısının 0’dan küçük olması hatadır."
 
 #: functions/text.xml:531
 #, kde-format
@@ -11645,9 +11645,9 @@ msgid ""
 "of characters to be less than 0."
 msgstr ""
 "LEFTB() işlevi, bayt konumu kullanarak verilen karakter dizisinin en sol "
-"karakterine kadar 'uzunluk'u içeren alt karakter dizisini döner. Eğer "
-"'uzunluk' karakter dizisinin uzunluğuna ulaşırsa tüm karakter dizisini "
-"döner. Karakter sayısının 0'dan küçük olası hatadır."
+"karakterine kadar ’uzunluk’u içeren alt karakter dizisini döner. Eğer "
+"’uzunluk’ karakter dizisinin uzunluğuna ulaşırsa tüm karakter dizisini "
+"döner. Karakter sayısının 0’dan küçük olası hatadır."
 
 #: functions/text.xml:555
 #, kde-format
@@ -11694,7 +11694,7 @@ msgid ""
 "it begins again at A (rotation)."
 msgstr ""
 "ROT13() işlevi, her bir karakteri alfabedeki 13 harf sonrası ile yer "
-"değiştirerek metni şifreler. Eğer 13. konum Z'den sonra ise A'dan yeniden "
+"değiştirerek metni şifreler. Eğer 13. konum Z’den sonra ise A’dan yeniden "
 "başlar (rotasyon)."
 
 #: functions/text.xml:591
@@ -12062,7 +12062,7 @@ msgstr "Trigonometrik"
 #, kde-format
 msgid ""
 "The COS() function returns the cosine of x, where x is given in radians."
-msgstr "COS() işlevi, radyan türünden verilen x'in kosünüsünü döndürür."
+msgstr "COS() işlevi, radyan türünden verilen x’in kosünüsünü döndürür."
 
 #: functions/trig.xml:15
 #, kde-format
@@ -12145,7 +12145,7 @@ msgid ""
 "mathematically defined to be 0 to PI (inclusive)."
 msgstr ""
 "ACOS() işlevi, radyan cinsindeki değerlerin ark kosinüs değerini hesaplar ve "
-"değer matematiksel olarak 0'dan PI'ye olacak biçimde tanımlıdır (içerir)."
+"değer matematiksel olarak 0’dan PI’ye olacak biçimde tanımlıdır (içerir)."
 
 #: functions/trig.xml:80
 #, kde-format
@@ -12169,7 +12169,7 @@ msgid ""
 "mathematically defined to be -PI/2 to PI/2 (inclusive)."
 msgstr ""
 "ASİN() işlevi, radyan türünden verilen değerlerin ark sinüsünü hesaplar ve "
-"değer matematiksel olarak -PI/2'den PI/2'ye olacak biçimde tanımlıdır "
+"değer matematiksel olarak -PI/2’den PI/2’ye olacak biçimde tanımlıdır "
 "(içerir)."
 
 #: functions/trig.xml:96
@@ -12290,7 +12290,7 @@ msgid ""
 "returns not-a-number (NaN) and errno is set."
 msgstr ""
 "ACOSH() işlevi, x değişkenin ters hiperbolik kosinüs değerini hesaplar. Eğer "
-"x değişkeni 1,0'dan küçük ise ACOSH() sayı olmayan değer (NaN) döndürür ve "
+"x değişkeni 1,0’dan küçük ise ACOSH() sayı olmayan değer (NaN) döndürür ve "
 "hata numarası belirtilir."
 
 #: functions/trig.xml:177
@@ -12314,8 +12314,8 @@ msgid ""
 "The ASINH() function calculates the inverse hyperbolic sine of x; that is "
 "the value whose hyperbolic sine is x."
 msgstr ""
-"ASİNH() işlevi, x'in ters hiperbolik sinus değerini hesaplar; bu hiperbolik "
-"sinüs, x'in değeridir."
+"ASİNH() işlevi, x’in ters hiperbolik sinus değerini hesaplar; bu hiperbolik "
+"sinüs, x’in değeridir."
 
 #: functions/trig.xml:193
 #, kde-format
@@ -12339,8 +12339,8 @@ msgid ""
 "the value whose hyperbolic tangent is x. If the absolute value of x is "
 "greater than 1.0, ATANH() returns not-a-number (NaN)."
 msgstr ""
-"ATANH() işlevi, X'in ters hiperbolik tanjant değerini hesaplar; öyle ki bu "
-"sonucun hiperbolik tamjantı X edecektir. Eğer X'in mutlak değeri 1.0'dan "
+"ATANH() işlevi, X’in ters hiperbolik tanjant değerini hesaplar; öyle ki bu "
+"sonucun hiperbolik tamjantı X edecektir. Eğer X’in mutlak değeri 1.0’dan "
 "büyük ise, ATANH() işlevi, sayı olmayan değeri (NaN) döndürür."
 
 #: functions/trig.xml:209
@@ -12365,7 +12365,7 @@ msgid ""
 "similar to calculating the arc tangent of y/x, except that the signs of both "
 "arguments are used to determine the quadrant of the result."
 msgstr ""
-"Bu işlev x ve y değişkenlerinin ark tanjantlarını hesaplar. Bu, x/y'nin ark "
+"Bu işlev x ve y değişkenlerinin ark tanjantlarını hesaplar. Bu, x/y’nin ark "
 "tanjantını hesaplamaya benzerdir; ancak sonucun çeyreğini belirlemede her "
 "iki argüman da kullanılır."
 
@@ -12448,7 +12448,7 @@ msgstr "PI() eşittir 3,141592654..."
 #, kde-format
 msgid ""
 "The CSC() function returns the cosecant of x, where x is given in radians."
-msgstr "CSC() işlevi, radian türünden verilen x'in kotanjantını döndürür."
+msgstr "CSC() işlevi, radian türünden verilen x’in kotanjantını döndürür."
 
 #: functions/trig.xml:287
 #, kde-format
@@ -12466,7 +12466,7 @@ msgid ""
 "The CSCH() function returns the hyperbolic cosecant of x, where x is given "
 "in radians."
 msgstr ""
-"CSCH() işlevi, radyan türünden verilen x'in hiperbolik kotanjantını döndürür."
+"CSCH() işlevi, radyan türünden verilen x’in hiperbolik kotanjantını döndürür."
 
 #: functions/trig.xml:301
 #, kde-format
@@ -14837,7 +14837,7 @@ msgid ""
 "choose the new color."
 msgstr ""
 "Seçili hücre metni için renk seçin. Renk çubuğuna tıklamak yeni renk "
-"seçebileceğiniz KDE Renk Seçicisi'ni getirecektir."
+"seçebileceğiniz KDE Renk Seçicisi’ni getirecektir."
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, strike)
 #: ui/dialogs/FontWidget.ui:139
@@ -15076,7 +15076,7 @@ msgstr ""
 "görüntülenmesini istediğinizi belirleyebilirsiniz. Öntanımlı biçim Sistem "
 "Ayarlarında ayarlanan sistem biçimidir. Hücredeki sayı zaman olarak bir "
 "anlam ifade etmediğinde Calligra Çizelgeleri Sistem Ayarlarında genel biçim "
-"olarak ayarladığınız 00:00'ı görüntüler."
+"olarak ayarladığınız 00:00’ı görüntüler."
 
 #: ui/dialogs/LayoutPage_Float.cpp:90
 #, kde-format
