@@ -327,7 +327,7 @@ bool Bookmarks::valid(U16 &num, const U32 ccpText)
             while (startIt.current()) {
                 ibkl = (startIt.current())->ibkl;
                 //MUST be unique for all FBKFs inside a given PlcfBkf
-                if (ibkls.contains(ibkl) || (ibkl > m_endCP.size())) {
+                if (ibkls.contains(ibkl) || (ibkl >= m_endCP.size())) {
                     m_valid.append(false);
                     ret = false;
                     num++;
