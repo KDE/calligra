@@ -49,6 +49,8 @@ WordsTableHandler::WordsTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainS
 
     m_bodyWriter = bodyWriter; //for writing text content
     m_mainStyles = mainStyles; //for formatting styles
+
+    m_cellOpen = false;
 }
 
 KoXmlWriter * WordsTableHandler::currentWriter() const
