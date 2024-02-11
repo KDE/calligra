@@ -23,6 +23,7 @@
 #include "wvlog.h"
 
 #include <map>
+#include <memory>
 #include <vector>
 #include <string.h>
 #include "wv2_export.h"
@@ -416,13 +417,12 @@ namespace wvWare
     {
     public:
         PLCFMap( U32 length, OLEStreamReader *reader, bool preservePos = false );
-        ~PLCFMap();
 
         T* item( U32 index ) const;
     private:
         U32 calculateCount( U32 length ) const;
 
-        std::map<U32, T*> m_items;
+        std::map<U32, std::unique_ptr<T> > m_items;
     };
 
     template<class T>
@@ -434,25 +434,18 @@ namespace wvWare
         std::vector<U32> indices;
         for ( U32 i = 0; i < count + 1; ++i )  // n+1 CPs/FCs
             indices.push_back( reader->readU32() );
-        for ( U32 i = 0; i < count; ++i )  // n "T"s
-            m_items.insert(std::make_pair( indices[i], new T( reader, false ) ) );
+        for ( U32 i = 0; i < count; ++i ) { // n "T"s
+            m_items.insert(std::make_pair( indices[i], std::make_unique<T>( reader, false ) ) );
+        }
         if ( preservePos )
             reader->pop();
     }
 
     template<class T>
-    PLCFMap<T>::~PLCFMap()
-    {
-        typename std::map<U32, T*>::const_iterator it = m_items.begin();
-        for ( ; it != m_items.end(); ++it )
-            delete it->second;
-    }
-
-    template<class T>
     T* PLCFMap<T>::item( U32 index ) const
     {
-        typename std::map<U32, T*>::const_iterator it( m_items.find( index ) );
-        return it != m_items.end() ? it->second: 0;
+        auto it = m_items.find( index );
+        return it != m_items.end() ? it->second.get(): 0;
     }
 
     template<class T>
