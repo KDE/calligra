@@ -289,7 +289,6 @@ void Bookmarks::check( U32 globalCP )
 
 bool Bookmarks::valid(U16 &num, const U32 ccpText)
 {
-    PLCFIterator<Word97::BKF> startIt(*m_start);
     QList<U16> ibkls;
     bool ret = true;
     U16 ibkl = 0;
@@ -299,63 +298,67 @@ bool Bookmarks::valid(U16 &num, const U32 ccpText)
     U16 n = 1;
 #endif
 
-    if (m_nFib < Word8nFib) {
-        PLCFIterator<Word97::BKL> endIt(*m_end);
-        while (startIt.current()) {
-            if ( !endIt.current() ||
-                 (startIt.currentStart() > endIt.currentStart()) ||
-                 (startIt.currentStart() > ccpText) )
-            {
-                m_valid.append(false);
-                ret = false;
-                num++;
-#ifdef WV2_DEBUG_BOOKMARK
-                wvlog << "bkmk" << n << ": (startCP > endCP) || endCP missing";
-#endif
-            } else {
-                m_valid.append(true);
-            }
-#ifdef WV2_DEBUG_BOOKMARK
-            n++;
-#endif
-            ++startIt;
-            ++endIt;
-        }
-    } else {
-        while (startIt.current()) {
-            ibkl = (startIt.current())->ibkl;
-            //MUST be unique for all FBKFs inside a given PlcfBkf
-            if (ibkls.contains(ibkl) || (ibkl > m_endCP.size())) {
-                m_valid.append(false);
-                ret = false;
-                num++;
-#ifdef WV2_DEBUG_BOOKMARK
-                wvlog << "bkmk" << n << ": ibkl invalid!";
-                n++;
-#endif
-                ++startIt;
-                continue;
-            } else {
-                ibkls.append(ibkl);
-            }
 
-            if ( (startIt.currentStart() > m_endCP[ibkl]) ||
-                 (startIt.currentStart() > ccpText) )
-            {
-                m_valid.append(false);
-                ret = false;
-                num++;
-#ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "bkmk" << n << ": startCP > endCP (" <<
-                    startIt.currentStart() << "|" << m_endCP[ibkl] << ")";
-#endif
-            } else {
-                m_valid.append(true);
+    if (m_start != nullptr) {
+        PLCFIterator<Word97::BKF> startIt(*m_start);
+        if (m_nFib < Word8nFib) {
+            PLCFIterator<Word97::BKL> endIt(*m_end);
+            while (startIt.current()) {
+                if ( !endIt.current() ||
+                    (startIt.currentStart() > endIt.currentStart()) ||
+                    (startIt.currentStart() > ccpText) )
+                {
+                    m_valid.append(false);
+                    ret = false;
+                    num++;
+    #ifdef WV2_DEBUG_BOOKMARK
+                    wvlog << "bkmk" << n << ": (startCP > endCP) || endCP missing";
+    #endif
+                } else {
+                    m_valid.append(true);
+                }
+    #ifdef WV2_DEBUG_BOOKMARK
+                n++;
+    #endif
+                ++startIt;
+                ++endIt;
             }
-#ifdef WV2_DEBUG_BOOKMARK
-            n++;
-#endif
-            ++startIt;
+        } else {
+            while (startIt.current()) {
+                ibkl = (startIt.current())->ibkl;
+                //MUST be unique for all FBKFs inside a given PlcfBkf
+                if (ibkls.contains(ibkl) || (ibkl > m_endCP.size())) {
+                    m_valid.append(false);
+                    ret = false;
+                    num++;
+    #ifdef WV2_DEBUG_BOOKMARK
+                    wvlog << "bkmk" << n << ": ibkl invalid!";
+                    n++;
+    #endif
+                    ++startIt;
+                    continue;
+                } else {
+                    ibkls.append(ibkl);
+                }
+
+                if ( (startIt.currentStart() > m_endCP[ibkl]) ||
+                    (startIt.currentStart() > ccpText) )
+                {
+                    m_valid.append(false);
+                    ret = false;
+                    num++;
+    #ifdef WV2_DEBUG_BOOKMARK
+            wvlog << "bkmk" << n << ": startCP > endCP (" <<
+                        startIt.currentStart() << "|" << m_endCP[ibkl] << ")";
+    #endif
+                } else {
+                    m_valid.append(true);
+                }
+    #ifdef WV2_DEBUG_BOOKMARK
+                n++;
+    #endif
+                ++startIt;
+            }
         }
     }
 
@@ -365,20 +368,22 @@ bool Bookmarks::valid(U16 &num, const U32 ccpText)
             m_name[i] = UString().from(i + 1);
         }
     }
-    if (m_name.size() < m_start->count()) {
-        for (uint i = m_name.size(); i < m_start->count(); i++) {
-            m_name.push_back(UString().from(i + 1));
-        }
+    if (m_start != nullptr) {
+        if (m_name.size() < m_start->count()) {
+            for (uint i = m_name.size(); i < m_start->count(); i++) {
+                m_name.push_back(UString().from(i + 1));
+            }
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Warning: bookmark names missing!  Using custom names.";
-        wvlog << "Num. of bookmark names:" << m_name.size();
+            wvlog << "Warning: bookmark names missing!  Using custom names.";
+            wvlog << "Num. of bookmark names:" << m_name.size();
 
-        std::vector<UString>::const_iterator it = m_name.begin();
-        while(it != m_name.end()) {
-            wvlog << "bkmk name:" << (*it).ascii();
-            ++it;
-        }
+            std::vector<UString>::const_iterator it = m_name.begin();
+            while(it != m_name.end()) {
+                wvlog << "bkmk name:" << (*it).ascii();
+                ++it;
+            }
 #endif
+        }
     }
     return ret;
 }
