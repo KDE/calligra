@@ -816,11 +816,9 @@ bool PptToOdp::DrawClient::placeholderAllowed(const MSO::PlaceholderAtom* pa) co
  * PptToOdp
  * ************************************************
  */
-PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgress)(const int))
+PptToOdp::PptToOdp(ProgressCallback setProgress)
 : p(0),
-  m_filter(filter),
-  m_setProgress(setProgress),
-  m_progress_update(filter && setProgress),
+  m_setProgress(std::move(setProgress)),
   m_currentSlideTexts(0),
   m_currentMaster(0),
   m_currentSlide(0),
@@ -869,8 +867,8 @@ PptToOdp::parse(POLE::Storage& storage)
 KoFilter::ConversionStatus
 PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend storeType)
 {
-    if (m_progress_update) {
-        (m_filter->*m_setProgress)(0);
+    if (m_setProgress) {
+        m_setProgress(0);
     }
 
     // open inputFile
@@ -886,8 +884,8 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
     }
 
     // using an average here, parsing might take longer than conversion
-    if (m_progress_update) {
-        (m_filter->*m_setProgress)(40);
+    if (m_setProgress) {
+        m_setProgress(40);
     }
 
     // create output store
@@ -900,8 +898,8 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
 
     KoFilter::ConversionStatus status = doConversion(storeout);
 
-    if (m_progress_update) {
-        (m_filter->*m_setProgress)(100);
+    if (m_setProgress) {
+        m_setProgress(100);
     }
 
     delete storeout;
@@ -2113,8 +2111,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     defineDefaultPresentationStyle(styles);
     defineDefaultChartStyle(styles);
 
-    if (m_progress_update) {
-        (m_filter->*m_setProgress)(55);
+    if (m_setProgress) {
+        m_setProgress(55);
     }
 
     // NOTE: Stage specific: default graphic style and
@@ -2153,8 +2151,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     defineMasterStyles(styles);
     defineAutomaticDrawingPageStyles(styles);
 
-    if (m_progress_update) {
-        (m_filter->*m_setProgress)(60);
+    if (m_setProgress) {
+        m_setProgress(60);
     }
 
     /*
@@ -2237,8 +2235,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         dateTime.addDateTimeAutoStyles(styles, hasTodayDate, hasUserDate);
     }
 
-    if (m_progress_update) {
-        (m_filter->*m_setProgress)(70);
+    if (m_setProgress) {
+        m_setProgress(70);
     }
 } //end createMainStyles()
 
@@ -2254,11 +2252,11 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     for (int c = 0; c < p->slides.size(); c++) {
         processSlideForBody(c, out);
 
-        if (m_progress_update) {
+        if (m_setProgress) {
             //consider progress interval (70, 100)
             qreal percentage = ((c + 1) / (float)p->slides.size()) * 100;
             int progress = 70 + (int)((percentage * 28) / 100);
-            (m_filter->*m_setProgress)(progress);
+            m_setProgress(progress);
         }
     }
 

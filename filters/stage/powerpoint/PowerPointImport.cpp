@@ -22,7 +22,7 @@ KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, con
     if (to != KoOdf::mimeType(KoOdf::Presentation))
         return KoFilter::NotImplemented;
 
-    PptToOdp ppttoodp(this, &PowerPointImport::setProgress);
+    PptToOdp ppttoodp([this](int progress) { setProgress(progress); });
     return ppttoodp.convert(m_chain->inputFile(), m_chain->outputFile(),
                             KoStore::Zip);
 }

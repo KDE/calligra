@@ -35,7 +35,7 @@ TestRun::convert(QBuffer& buffer, KoStore::Backend backend) {
                                            backend);
     POLE::Storage storage(inputFilePath.toLatin1());
     QVERIFY(storage.open());
-    PptToOdp ppttoodp(0, 0);
+    PptToOdp ppttoodp;
     KoFilter::ConversionStatus status = ppttoodp.convert(storage, output);
     QVERIFY(status == KoFilter::OK);
 }

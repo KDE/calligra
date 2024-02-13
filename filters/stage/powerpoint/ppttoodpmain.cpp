@@ -19,7 +19,7 @@ convert(const QString& in, KoStore* out)
         qDebug() << "Cannot open " << in;
         return KoFilter::StupidError;
     }
-    PptToOdp ppttoodp(0, 0);
+    PptToOdp ppttoodp;
     return ppttoodp.convert(storage, out);
 }
 
@@ -87,7 +87,7 @@ main(int argc, char** argv)
         return KoFilter::FileNotFound;
     }
 
-    PptToOdp ppttoodp(0, 0);
+    PptToOdp ppttoodp;
     int r = ppttoodp.convert(storage, storeout);
     delete storeout;
 

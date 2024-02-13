@@ -27,6 +27,8 @@
 #include <QColor>
 #include <QHash>
 
+#include <functional>
+
 class KoGenStyles;
 class KoGenStyle;
 
@@ -46,13 +48,14 @@ class PptToOdp
 private:
     class DrawClient;
 public:
+    using ProgressCallback = std::function<void(int)>;
+
     /**
      * Constructs a converter.
      *
-     * @param address of the filter instance
-     * @param address of the setProgress member f. of the filter instance
+     * @param setProgress progress callback, optional.
      */
-    PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgress)(const int));
+    PptToOdp(ProgressCallback setProgress = ProgressCallback{});
     /**
      * Destroy the converter.
      */
@@ -622,19 +625,9 @@ private:
     const ParsedPresentation* p;
 
     /**
-     * Pointer to the filter (KoFilter child)
+     * Progress callback
      */
-    PowerPointImport* m_filter;
-
-    /**
-     * Pointer to the progress indication f. defined in PowerPointImport.cpp
-     */
-    void (PowerPointImport::*m_setProgress)(const int);
-
-    /**
-     * Whether to propagate progress updates to the filter
-     */
-    bool m_progress_update;
+    ProgressCallback m_setProgress;
 
     /**
      * name for to use in the style:page-layout-name attribute for master
