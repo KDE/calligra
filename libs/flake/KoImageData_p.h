@@ -22,11 +22,11 @@
 class KoImageCollection;
 class QTemporaryFile;
 
-class KoImageDataPrivate
+class Q_DECL_HIDDEN KoImageDataPrivate
 {
 public:
     explicit KoImageDataPrivate(KoImageData *q);
-    virtual ~KoImageDataPrivate();
+    ~KoImageDataPrivate();
 
     /**
      * Save the image data to the param device.
