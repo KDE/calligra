@@ -15,6 +15,6 @@ macro(add_autocorrect_unittest _source)
 endmacro()
 
 add_autocorrect_unittest(autocorrectiontest.cpp)
-#add_autocorrect_unittest(lineeditwithautocorrectiontest.cpp)
+add_autocorrect_unittest(lineeditwithautocorrectiontest.cpp)
 add_autocorrect_unittest(richtexteditwithautocorrectiontest.cpp)
-#add_autocorrect_unittest(importkmailautocorrectiontest.cpp)
+add_autocorrect_unittest(importkmailautocorrectiontest.cpp)
