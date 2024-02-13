@@ -5,7 +5,7 @@
 */
 
 #include "importkmailautocorrectiontest.h"
-#include "autocorrection/import/importkmailautocorrection.h"
+#include "../import/importkmailautocorrection.h"
 #include <QTest>
 QTEST_MAIN(ImportKMailAutocorrectionTest)
 
@@ -16,7 +16,7 @@ ImportKMailAutocorrectionTest::ImportKMailAutocorrectionTest(QObject *parent)
 
 void ImportKMailAutocorrectionTest::shouldHaveDefaultValues()
 {
-    PimCommon::ImportKMailAutocorrection import;
+    ImportKMailAutocorrection import;
     QVERIFY(import.upperCaseExceptions().isEmpty());
     QVERIFY(import.twoUpperLetterExceptions().isEmpty());
     QVERIFY(import.autocorrectEntries().isEmpty());
@@ -34,7 +34,7 @@ void ImportKMailAutocorrectionTest::shouldHaveDefaultValues()
 void ImportKMailAutocorrectionTest::shouldLoadFile()
 {
     const QString originalFile = QLatin1String(AUTOCORRECTION_DATA_DIR) + QStringLiteral("/custom-fr.xml");
-    PimCommon::ImportKMailAutocorrection import;
+    ImportKMailAutocorrection import;
     QString messageError;
     QVERIFY(import.import(originalFile, messageError));
     QCOMPARE(import.typographicSingleQuotes().begin, QStringLiteral("‘"));

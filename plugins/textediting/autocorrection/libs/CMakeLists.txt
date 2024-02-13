@@ -41,4 +41,5 @@ install(TARGETS autocorrection  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(BUILD_TESTING)
     add_subdirectory(autotests)
+    target_compile_definitions(autocorrection PRIVATE BUILD_TESTING)
 endif()
