@@ -52,6 +52,8 @@ DeleteCommand::DeleteCommand(DeleteMode mode,
     , m_shapeController(shapeController)
     , m_first(true)
     , m_mode(mode)
+    , m_position(0)
+    , m_length(0)
     , m_mergePossible(true)
 {
     setText(kundo2_i18n("Delete"));
