@@ -37,7 +37,9 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::StrongFocus);
     connect(document, &KWDocument::pageSetupChanged, this, &KWCanvas::pageSetupChanged);
-    m_viewConverter = m_view->viewConverter();
+    if (m_view != nullptr) {
+        m_viewConverter = m_view->viewConverter();
+    }
     m_viewMode = KWViewMode::create(viewMode, document);
 }
 
