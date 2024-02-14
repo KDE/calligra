@@ -322,10 +322,10 @@ void VideoData::copyToTemporary(QIODevice &device)
 
 qint64 VideoData::generateKey(const QByteArray &bytes)
 {
-    qint64 answer = 1;
+    quint64 answer = 1;
     const int max = qMin(8, bytes.count());
     for (int x = 0; x < max; ++x)
-        answer += bytes[x] << (8 * x);
+        answer += static_cast<quint64>(bytes[x]) << (8 * x);
     return answer;
 }
 
