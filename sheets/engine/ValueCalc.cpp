@@ -13,6 +13,7 @@
 #include "SheetsDebug.h"
 
 #include <cfloat>
+#include <limits>
 
 using namespace Calligra::Sheets;
 
@@ -49,11 +50,15 @@ static double GammaHelp(double& x, bool& reflect)
 
 static Value toValue(Number value) {
     // Can the result be represented as an integer?
-    int64_t resint = static_cast<int64_t>(value);
-    if ((Number)resint == value)
-        return Value(resint);
-    else
-        return Value(value);
+    const auto min = static_cast<Number>(std::numeric_limits<int64_t>::min());
+    const auto max = static_cast<Number>(std::numeric_limits<int64_t>::max());
+    if (min <= value && value <= max) {
+        int64_t resint = static_cast<int64_t>(value);
+        if ((Number)resint == value) {
+            return Value(resint);
+        }
+    }
+    return Value(value);
 }
 
 
