@@ -24,7 +24,7 @@ namespace KoPageFormat
  * this enum doesn't map to QPrinter::PageSize but KoPageFormat::printerPageSize
  * does the conversion.
  */
-enum Format {
+enum Format : int {
     IsoA3Size,
     IsoA4Size,
     IsoA5Size,
