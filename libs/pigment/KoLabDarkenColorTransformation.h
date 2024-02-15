@@ -9,11 +9,9 @@
 #ifndef _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 #define _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 
-#if !defined _MSC_VER
-#pragma GCC diagnostic ignored "-Wcast-align"
-#endif
-
 #include "KoColorTransformation.h"
+
+#include <cstring>
 
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {
@@ -21,7 +19,7 @@ struct KoLabDarkenColorTransformation : public KoColorTransformation {
 
     }
     void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override {
-        *((quint32 *)dst)=*((const quint32 *)src);
+        memcpy(dst, src, sizeof(quint32));
         QColor c;
 
         for (unsigned int i = 0; i < nPixels*m_colorSpace->pixelSize(); i+=m_colorSpace->pixelSize()) {

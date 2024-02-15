@@ -355,9 +355,9 @@ getComplexData(const B& b)
             if (_c.anon.is<MSO::PVertices>()) {
                 if (_c.anon.get<A>()) {
                     if (b.complexData.size() - offset >= 6) {
-                        a.nElems = *(quint16 *)(pData + offset);
-                        a.nElemsAlloc = *(quint16 *)(pData + offset +2);
-                        a.cbElem = *(quint16 *)(pData + offset + 4);
+                        memcpy(&a.nElems, pData + offset, sizeof(quint16));
+                        memcpy(&a.nElemsAlloc, pData + offset + 2, sizeof(quint16));
+                        memcpy(&a.cbElem, pData + offset + 4, sizeof(quint16));
                         a.data = b.complexData.mid(offset+6, p->op);
                         break;
                     }
@@ -367,9 +367,9 @@ getComplexData(const B& b)
             } else {
                 if (_c.anon.get<A>()) {
                     if (b.complexData.size() - offset >= 6) {
-                        a.nElems = *(quint16 *)(pData + offset);
-                        a.nElemsAlloc = *(quint16 *)(pData + offset +2);
-                        a.cbElem = *(quint16 *)(pData + offset + 4);
+                        memcpy(&a.nElems, pData + offset, sizeof(quint16));
+                        memcpy(&a.nElemsAlloc, pData + offset + 2, sizeof(quint16));
+                        memcpy(&a.cbElem, pData + offset + 4, sizeof(quint16));
                         a.data = b.complexData.mid(offset+6, p->op-6);
                         break;
                     }

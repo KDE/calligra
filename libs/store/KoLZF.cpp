@@ -17,10 +17,12 @@ namespace KoLZF {
 #define HASH_SIZE (1<< HASH_LOG)
 #define HASH_MASK  (HASH_SIZE-1)
 
-#ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wcast-align"
-#endif
-#define UPDATE_HASH(v,p) { v = *((quint16*)p); v ^= *((quint16*)(p+1))^(v>>(16-HASH_LOG)); }
+static void UPDATE_HASH(quint32 &v, const quint8 *p) {
+    quint16 a, b;
+    memcpy(&a, p, sizeof(quint16));
+    memcpy(&b, p + 1, sizeof(quint16));
+    v = a ^ b ^ (a >> (16 - HASH_LOG));
+}
 
 #define MAX_COPY       32
 #define MAX_LEN       264  /* 256 + 8 */
@@ -73,7 +75,7 @@ int compress(const void* input, int length, void* output, int maxout)
             goto literal;
 
         /* is this a match? check the first 2 bytes */
-        if (*((quint16*)ref) != *((quint16*)ip))
+        if (ref[0] != ip[0] || ref[1] != ip[1])
             goto literal;
 
         /* now check the 3rd byte */
