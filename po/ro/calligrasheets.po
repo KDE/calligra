@@ -1,5 +1,5 @@
 # Copyright (C).
-# Sergiu Bivol <sergiu@cip.md>, 2008, 2009, 2012, 2021, 2022.
+# Sergiu Bivol <sergiu@cip.md>, 2008, 2009, 2012, 2021, 2022, 2024.
 # Cristian Oneț <onet.cristian@gmail.com>, 2011.
 #
 msgid ""
@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-02 01:36+0000\n"
-"PO-Revision-Date: 2022-05-05 10:23+0100\n"
+"PO-Revision-Date: 2024-02-24 16:25+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
@@ -14064,16 +14064,14 @@ msgid "Change Sheet Properties"
 msgstr "Stil tabel..."
 
 #: ui/commands/StyleCommand.cpp:36
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
-msgstr "Stil tabel"
+msgstr "Reinițializează stilul"
 
 #: ui/commands/StyleCommand.cpp:38
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Style"
-msgstr "Modifică unghiul"
+msgstr "Schimbă stilul"
 
 #. i18n: ectx: property (whatsThis), widget (QWidget, FontWidget)
 #: ui/dialogs/FontWidget.ui:33
@@ -14105,19 +14103,19 @@ msgstr ""
 #: ui/dialogs/FontWidget.ui:152
 #, kde-format
 msgid "Varying (No Change)"
-msgstr ""
+msgstr "Variază (nicio modificare)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Roman"
 msgstr "Roman"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, style_combo)
 #: ui/dialogs/FontWidget.ui:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Italic"
-msgstr "Tabel"
+msgstr "Cursiv"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, weight_combo)
 #: ui/dialogs/FontWidget.ui:66
@@ -14140,14 +14138,14 @@ msgstr "Normal"
 #: ui/dialogs/FontWidget.ui:83
 #, kde-format
 msgid "Bold"
-msgstr "Bold"
+msgstr "Aldin"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ui/dialogs/FontWidget.ui:91 ui/dialogs/LayoutPage_Border.cpp:324
 #: ui/dialogs/LayoutPage_Pattern.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color:"
-msgstr "Culoare"
+msgstr "Culoare:"
 
 #. i18n: ectx: property (whatsThis), widget (Calligra::Sheets::LayoutCheckbox, underline)
 #: ui/dialogs/FontWidget.ui:98
