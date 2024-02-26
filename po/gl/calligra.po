@@ -1,6 +1,7 @@
 # translation of koffice.po to galician
 # translation of koffice.po to
 #
+# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
 # mvillarino <mvillarino@users.sourceforge.net>, 2006, 2009.
 # Xabi G. Feal <xabigf@gmx.net>, 2006, 2007.
 # Miguel Branco <mgl.branco@gmail.com>, 2007.
@@ -8,21 +9,20 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2008, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2010, 2013, 2014.
 # Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2012, 2015, 2016, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2023-09-03 11:55+0200\n"
+"PO-Revision-Date: 2024-02-25 11:49+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -932,7 +932,7 @@ msgstr "cargar o ficheiro, amosar a xanela e a barra de progreso e saír"
 #, kde-format
 msgid "Filename to write profiling information into."
 msgstr ""
-"Nome do ficheiro para lle rexistrar a información de análise de rendemendo."
+"Nome do ficheiro para lle rexistrar a información de análise de rendemento."
 
 #: main/KoApplication.cpp:207
 #, kde-format
@@ -2930,7 +2930,7 @@ msgstr "Dividir"
 #: pigment/KoCompositeOpRegistry.cpp:66
 #, kde-format
 msgid "Arcus Tangent"
-msgstr "Arcotanxente"
+msgstr "Arco tanxente"
 
 #: pigment/compositeops/KoCompositeOps.h:133
 #: pigment/KoCompositeOpRegistry.cpp:62
@@ -4106,12 +4106,12 @@ msgstr "Definir o aliñamento vertical"
 #: text/KoTextEditor_format.cpp:184 text/KoTextEditor_format.cpp:185
 msgctxt "(qtundo-format)"
 msgid "Decrease Indent"
-msgstr "Diminuír a indentación"
+msgstr "Diminuír o sangrado"
 
 #: text/KoTextEditor_format.cpp:220 text/KoTextEditor_format.cpp:221
 msgctxt "(qtundo-format)"
 msgid "Increase Indent"
-msgstr "Aumentar a indentación"
+msgstr "Aumentar o sangrado"
 
 #: text/KoTextEditor_format.cpp:256 text/KoTextEditor_format.cpp:258
 msgctxt "(qtundo-format)"
@@ -4417,7 +4417,7 @@ msgstr "Espazo"
 #: widgets/KoCsvImportDialog.ui:238
 #, kde-format
 msgid "Text&quote:"
-msgstr "Texto &entrecomiñado:"
+msgstr "&Cita textual:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboQuote)
 #: widgets/KoCsvImportDialog.ui:255
@@ -5183,7 +5183,7 @@ msgstr "Non foi posíbel recuperar a etiqueta eliminada."
 #: widgets/KoRuler.cpp:1266
 #, kde-format
 msgid "First line indent"
-msgstr "Indentación da primeira liña"
+msgstr "Sangrado da primeira liña"
 
 #: widgets/KoRuler.cpp:1267
 #, kde-format
@@ -5284,16 +5284,17 @@ msgid ""
 msgstr ""
 "<qt>Insira termos de busca aquí para engadir ou retirar recursos da vista de "
 "etiquetas actual. <para>Para filtrar por un nome parcial ignorando as "
-"maiúsculas:<br> <icode>nomeparcial</icode> ou <icode>!nomeparcial</icode>.</"
-"para> <para>Inclusión ou exclusión doutros grupos de etiquetas:<br> "
-"<icode>[Nomedeetiqueta]</icode> ou <icode>![Nomedeetiqueta]</icode>.</para> "
-"<para>Inclusión ou exclusión de recursos usando unicamente o nome completo e "
-"distinguindo as maiúsculas:<br> <icode>\"BuscaExacta\"</icode> ou <icode>!"
-"\"BuscaExacta\"</icode>.</para> Os resultados do filtro non poden gardarse "
-"para a vista <interface>Todas as predefinicións</interface>.<br> Nesta "
-"vista, prema <interface>Intro</interface> ou limpe a caixa do filtro para "
-"recuperar todos os elementos.<br> Cree unha nova etiqueta ou cambie a outra "
-"se quere gardar os recursos filtrados nun novo grupo con nome de seu.</qt>"
+"maiúsculas:<br> <icode>nome_parcial</icode> ou <icode>!nome_parcial</icode>."
+"</para> <para>Inclusión ou exclusión doutros grupos de etiquetas:<br> "
+"<icode>[nome_de_etiqueta]</icode> ou <icode>![nome_de_etiqueta]</icode>.</"
+"para> <para>Inclusión ou exclusión de recursos usando unicamente o nome "
+"completo e distinguindo as maiúsculas:<br> <icode>\"BuscaExacta\"</icode> ou "
+"<icode>!\"BuscaExacta\"</icode>.</para> Os resultados do filtro non poden "
+"gardarse para a vista <interface>Todas as predefinicións</interface>.<br> "
+"Nesta vista, prema <interface>Intro</interface> ou limpe a caixa do filtro "
+"para recuperar todos os elementos.<br> Cree unha nova etiqueta ou cambie a "
+"outra se quere gardar os recursos filtrados nun novo grupo con nome de seu.</"
+"qt>"
 
 #: widgets/KoTagFilterWidget.cpp:53
 #, kde-format
@@ -5310,13 +5311,13 @@ msgid ""
 msgstr ""
 "<qt>Insira termos de busca aquí para engadir ou retirar recursos da vista de "
 "etiquetas actual. <para>Para filtrar por un nome parcial ignorando as "
-"maiúsculas:<br> <icode>nomeparcial</icode> ou <icode>!nomeparcial</icode>.</"
-"para> <para>Inclusión ou exclusión doutros grupos de etiquetas:<br> "
-"<icode>[Nomedeetiqueta]</icode> ou <icode>![Nomedeetiqueta]</icode>.</para> "
-"<para>Inclusión ou exclusión de recursos usando unicamente o nome completo e "
-"distinguindo as maiúsculas:<br> <icode>\"BuscaExacta\"</icode> ou <icode>!"
-"\"BuscaExacta\"</icode>.</para> Prema <interface>Intro</interface> ou o "
-"botón <interface>Gardar</interface> para gardar os cambios.</qt>"
+"maiúsculas:<br> <icode>nome_parcial</icode> ou <icode>!nome_parcial</icode>."
+"</para> <para>Inclusión ou exclusión doutros grupos de etiquetas:<br> "
+"<icode>[nome_de_etiqueta]</icode> ou <icode>![nome_de_etiqueta]</icode>.</"
+"para> <para>Inclusión ou exclusión de recursos usando unicamente o nome "
+"completo e distinguindo as maiúsculas:<br> <icode>\"BuscaExacta\"</icode> ou "
+"<icode>!\"BuscaExacta\"</icode>.</para> Prema <interface>Intro</interface> "
+"ou o botón <interface>Gardar</interface> para gardar os cambios.</qt>"
 
 #: widgets/KoTagFilterWidget.cpp:68
 #, kde-format

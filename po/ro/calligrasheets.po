@@ -1,5 +1,5 @@
 # Copyright (C).
-# Sergiu Bivol <sergiu@cip.md>, 2008, 2009, 2012, 2021, 2022.
+# Sergiu Bivol <sergiu@cip.md>, 2008, 2009, 2012, 2021, 2022, 2024.
 # Cristian Oneț <onet.cristian@gmail.com>, 2011.
 #
 msgid ""
@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2022-05-05 10:23+0100\n"
+"PO-Revision-Date: 2024-02-24 16:25+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
@@ -801,16 +801,14 @@ msgid "Correct Misspelled Words"
 msgstr ""
 
 #: commands/StyleCommand.cpp:171
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reset Style"
-msgstr "Stil tabel"
+msgstr "Reinițializează stilul"
 
 #: commands/StyleCommand.cpp:173
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Style"
-msgstr "Modifică unghiul"
+msgstr "Schimbă stilul"
 
 #: commands/ValidityCommand.cpp:49
 #, fuzzy
@@ -5069,20 +5067,20 @@ msgstr ""
 #: dialogs/FontWidget.ui:47 dialogs/FontWidget.ui:72
 #, kde-format
 msgid "Varying (No Change)"
-msgstr ""
+msgstr "Variază (nicio modificare)"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
 #: dialogs/FontWidget.ui:52 dialogs/LayoutDialog.cpp:1895
-#, fuzzy, kde-format
+#, kde-format
 msgid "Roman"
 msgstr "Roman"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, style_combo)
 #: dialogs/FontWidget.ui:57 dialogs/LayoutDialog.cpp:1897
 #: ui/CellToolBase.cpp:204
-#, fuzzy, kde-format
+#, kde-format
 msgid "Italic"
-msgstr "Tabel"
+msgstr "Cursiv"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, weight_combo)
 #: dialogs/FontWidget.ui:65
@@ -5108,14 +5106,14 @@ msgstr "Normal"
 #: ui/CellToolBase.cpp:199
 #, kde-format
 msgid "Bold"
-msgstr "Bold"
+msgstr "Aldin"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: dialogs/FontWidget.ui:90 dialogs/LayoutDialog.cpp:2535
 #: dialogs/LayoutDialog.cpp:3307
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color:"
-msgstr "Culoare"
+msgstr "Culoare:"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, underline)
 #: dialogs/FontWidget.ui:97
@@ -20506,7 +20504,7 @@ msgstr "Modifică culoare margine"
 #: ui/CellToolBase.cpp:338
 #, kde-format
 msgid "Border Color"
-msgstr "Culoare margine"
+msgstr "Culoare contur"
 
 #: ui/CellToolBase.cpp:345
 #, fuzzy, kde-format

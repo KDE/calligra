@@ -1269,7 +1269,7 @@ to insert a picture.
 <listitem
 ><para
 ><action
->Formatera markerade celler automatiskt: En dialogruta låter dig välja mellan två föreslagna format.</action>
+>Autoformat the selected cells: a dialog let you choose between two proposed formats.</action>
 </para
 ></listitem>
 </varlistentry>

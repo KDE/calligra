@@ -1898,7 +1898,7 @@ choosing a color/gradient.</para>
 
 <para
 >This menu modifies selected text and provides a few tools familiar from
-word processing applications for your convienience for when you are making
+word processing applications for your convenience for when you are making
 presentations with large amounts
 of text in them. The <guimenu
 >Text</guimenu
@@ -2489,7 +2489,7 @@ it would be autocorrected to <userinput
 >Du kan ställa in egenskaperna för hela bildspelet här, inklusive om tiden ska visas på skärmen, vilka sidor i presentationen som ska ingå, och flera andra allmänna inställningar.</para>
 </listitem>
 </varlistentry>
-<!--FIXME Configure Presenter Wiew item mising-->
+<!--FIXME Configure Presenter View item missing-->
 <!--
 <varlistentry>
 <term>

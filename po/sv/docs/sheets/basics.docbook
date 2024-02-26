@@ -53,15 +53,15 @@
 >Det här avsnittet försöker förklara, med hjälp av exempel, vad ett kalkylprogram som &sheets; i själva verket gör, och varför det är ett så användbart verktyg när man måste hantera tal. Om du redan har använt ett kalkylprogram, så kanske du vill gå direkt till nästa avsnitt.</para>
 
 <para
->Det första du ska göra, är att starta &sheets;. Du kan göra det genom att <mousebutton
->vänster</mousebutton
->klicka på &sheets; ikon, om det finns en på skrivbordet eller i panelen, eller du kan välja <menuchoice
+>The first thing to do is to start up &sheets;. You can do this by <mousebutton
+>left</mousebutton
+> clicking on a &sheets; icon if there is one on your desktop or panel, or you can select <menuchoice
 ><guimenu
->Kontor</guimenu
+>Office</guimenu
 ><guimenuitem
 >&sheets;</guimenuitem
-></menuchoice
-> i K-menyn.</para>
+> </menuchoice
+> from the application launcher.</para>
 
 <para>
 <mediaobject>
