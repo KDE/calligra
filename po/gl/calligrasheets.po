@@ -1,6 +1,7 @@
 # translation of kspread.po to galician
 # translation of kspread.po to
 #
+# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
 # Xabier García Feal <xabigf@gmx.net>, 2004.
 # Xabi G. Feal <xabigf@gmx.net>, 2006, 2007.
 # mvillarino <mvillarino@users.sourceforge.net>, 2006, 2009.
@@ -10,21 +11,20 @@
 # Marce Villarino <mvillarino@gmail.com>, 2009, 2010, 2012.
 # Marce Villarino <mvillarino@kde-espana.es>, 2012, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-02 01:36+0000\n"
-"PO-Revision-Date: 2023-09-03 12:25+0200\n"
+"PO-Revision-Date: 2024-02-25 14:33+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n:
 #. Please use the same words (even upper/lower case) as in
@@ -469,7 +469,7 @@ msgid ""
 "The BITXOR() function performs a bit-wise exclusive-OR operation for the two "
 "integer parameters. "
 msgstr ""
-"A función BITXOR() realiza unha operación bitwise exclusivamente OR para os "
+"A función BITXOR() realiza unha operación de bits exclusivamente OR para os "
 "dous parámetros enteiros."
 
 #: functions/bitops.xml:96
@@ -573,7 +573,7 @@ msgid ""
 "an integer."
 msgstr ""
 "A función BOOL2INT() devolve un valor enteiro para un valor booleano dado. "
-"Este método está pensado para usar con valores boleanos en métodos que "
+"Este método está pensado para usar con valores booleanos en métodos que "
 "requiran enteiros."
 
 #: functions/conversion.xml:49
@@ -1766,7 +1766,7 @@ msgstr "DAYOFYEAR(2000;2;29) devolve 60"
 #: functions/datetime.xml:353
 #, kde-format
 msgid "The DATE() function returns the date formatted with local parameters."
-msgstr "A función DATE() devolve a data formateada nos parámetros locais."
+msgstr "A función DATE() devolve a data formatada nos parámetros locais."
 
 #: functions/datetime.xml:354
 #, kde-format
@@ -1781,7 +1781,7 @@ msgstr "DATE(2000;5;5) devolve Venres 5 de Maio do 2000"
 #: functions/datetime.xml:375
 #, kde-format
 msgid "The TIME() function returns the time formatted with local parameters."
-msgstr "A función TIME() devolve a hora formateada na forma local habitual."
+msgstr "A función TIME() devolve a hora formatada na forma local habitual."
 
 #: functions/datetime.xml:376
 #, kde-format
@@ -2002,7 +2002,7 @@ msgid ""
 "The NOW() function returns the current date and time. It is identical with "
 "CURRENTDATETIME and provided for compatibility with other applications."
 msgstr ""
-"A función NOW() devolve o valor da data e hora actual. É identica a "
+"A función NOW() devolve o valor da data e hora actual. É idéntica a "
 "CURRENTDATETIME e fornécese por compatibilidade con outras aplicacións."
 
 #: functions/datetime.xml:543
@@ -2036,7 +2036,7 @@ msgid ""
 "The CURRENTTIME() function returns the current time formatted with local "
 "parameters."
 msgstr ""
-"A función CURRENTTIME() devolve a data actual formateada cos parámetros "
+"A función CURRENTTIME() devolve a data actual formatada cos parámetros "
 "locais."
 
 #: functions/datetime.xml:565
@@ -2461,9 +2461,9 @@ msgid ""
 "ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight "
 "(hundredweight)."
 msgstr ""
-"Unidades de masa admitidas: g (grama), sg (partes), lbn (libra), u (masa "
-"atómica), ozn (onza), stone, ton (tonelada), grain, pweight (\"pennyweight"
-"\"), hweight (\"hundred weight\")."
+"Unidades de masa admitidas: g (gramo), sg (partes), lbm (libra), u (masa "
+"atómica), ozm (onza), stone (pedra), ton (tonelada), grain (gran), pweight "
+"(pennyweight), hweight (hundredweight)."
 
 #: functions/engineering.xml:131
 #, kde-format
@@ -2496,7 +2496,7 @@ msgid ""
 "(foot-pound), BTU."
 msgstr ""
 "Unidades de enerxía admitidas: J (Joule), e (erg), c (caloría "
-"termodinámica), cal (caloría IT), eV(electrón-voltio), HPh (Cabalo-vapor/ "
+"termodinámica), cal (caloría IT), eV(electrón-watt), HPh (Cabalo-vapor/ "
 "hora), Wh (Watt/hora), flb (\"foot-pound\"), BTU."
 
 #: functions/engineering.xml:135
@@ -2504,7 +2504,7 @@ msgstr ""
 msgid "Supported power units: W (Watt), HP (horsepower), PS (Pferdestaerke)."
 msgstr ""
 "Unidades de potencia admitidas: W (Watt), CV (cabalo-vapor), PS "
-"(Pferdestrke)."
+"(Pferdestaerke)."
 
 #: functions/engineering.xml:136
 #, kde-format
@@ -2551,6 +2551,7 @@ msgstr ""
 "Unidades de velocidade admitidas: m/s (metros por segundo), m/h (metros por "
 "hora), mph (millas por hora), kn (nó)."
 
+# well-spelled: deca, mili
 #: functions/engineering.xml:141
 #, kde-format
 msgid ""
@@ -3397,7 +3398,7 @@ msgstr "IMSUB(valor;valor;…)"
 #: functions/engineering.xml:786
 #, kde-format
 msgid "IMSUB(1.2;\"3.4+5i\") returns \"-2.2-5i\""
-msgstr "IMSUB(1,2;\"3,4+5i\") devolve «-2,2-5ix"
+msgstr "IMSUB(1,2;\"3,4+5i\") devolve «-2,2-5i»"
 
 #: functions/engineering.xml:787
 #, kde-format
@@ -3419,7 +3420,7 @@ msgstr "IMPRODUCT(valor;valor;…)"
 #: functions/engineering.xml:817
 #, kde-format
 msgid "IMPRODUCT(1.2;\"3.4+5i\") returns \"4.08+6i\""
-msgstr "IMPRODUCT(1,2;\"3,4+5i\") devolve «4,08+6ix"
+msgstr "IMPRODUCT(1,2;\"3,4+5i\") devolve «4,08+6i»"
 
 #: functions/engineering.xml:818
 #, kde-format
@@ -3724,7 +3725,7 @@ msgid ""
 "AMORDEGRC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; "
 "basis)"
 msgstr ""
-"AMORDEGRC(Custo; DatadeCompra; RematedoPrimeiroPeriodo; residual; período; "
+"AMORDEGRC(custo; data de compra; fin do primeiro período; residual; período; "
 "taxa; base)"
 
 #: functions/financial.xml:95
@@ -3754,7 +3755,7 @@ msgid ""
 "AMORLINC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; "
 "basis)"
 msgstr ""
-"AMORLINC( Custo; datadeCompra; rematedoPrimeiroPeriodo; residual; período; "
+"AMORLINC(custo; data de compra; fin do primeiro período; residual; período; "
 "taxa; base)"
 
 #: functions/financial.xml:121
@@ -4042,7 +4043,7 @@ msgstr "DISC(\"28/2/2001\"; \"31/8/2001\"; 12; 14) devolve 0,2841"
 #: functions/financial.xml:380
 #, kde-format
 msgid "Fractional Dollar"
-msgstr "Dólar fraccional"
+msgstr "Dólar fraccionario"
 
 #: functions/financial.xml:384 functions/financial.xml:404
 #: ui/dialogs/LayoutPage_Float.cpp:78
@@ -4126,6 +4127,7 @@ msgstr ""
 "Devolve o número de períodos necesarios por un investimento para conservar "
 "un valor pretendido."
 
+# well-spelled: vp, vf
 #: functions/financial.xml:433
 #, kde-format
 msgid "DURATION(rate; pv; fv)"
@@ -4337,7 +4339,7 @@ msgid ""
 msgstr ""
 "A función FV_ANNUITY() devolve o valor futuro dunha secuencia de pagamentos "
 "dado o valor do pagamento, a taxa de xuro e o número de períodos. Por "
-"exemplo, de receberes 500 € por ano durante 20 anos e o investires ao 8%, o "
+"exemplo, de recibires 500€ por ano durante 20 anos e o investires ao 8%, o "
 "total ao fin de 20 anos será FV_ANNUITY (500;0,08;20) ou 22 880,98€. Esta "
 "función asume que os pagamentos son feitos ao fin de cada período."
 
@@ -4672,6 +4674,7 @@ msgstr "Valor futuro (FV - opcional)"
 msgid "Returns the number of periods of an investment."
 msgstr "Devolve o número de períodos nun investimento."
 
+# well-spelled: vp, vf
 #: functions/financial.xml:859
 #, kde-format
 msgid "NPER(rate;payment;pv;fv;type)"
@@ -5020,8 +5023,8 @@ msgid ""
 "The RRI function calculates the interest rate resulting from the profit "
 "(return) of an investment."
 msgstr ""
-"A función RRI calcula a taxa de interes resultante do beneficio (devolución) "
-"dun investimento."
+"A función RRI calcula a taxa de interese resultante do beneficio "
+"(devolución) dun investimento."
 
 #: functions/financial.xml:1227
 #, kde-format
@@ -5254,8 +5257,8 @@ msgid ""
 "The YIELDMAT function calculates the yield of the security that pays "
 "interest on the maturity date."
 msgstr ""
-"A función YIELDMAT calcula o rendemento dun título de valor que paga interes "
-"na data de vencemento."
+"A función YIELDMAT calcula o rendemento dun título de valor que paga "
+"interese na data de vencemento."
 
 #: functions/financial.xml:1496
 #, kde-format
@@ -6786,7 +6789,7 @@ msgstr ""
 #: functions/math.xml:442
 #, kde-format
 msgid "SUMIF(checkrange;criteria;sumrange)"
-msgstr "SUMIF(intervalodecomprobación;criterio;intervalodesuma)"
+msgstr "SUMIF(intervalo de comprobación; criterio; intervalo de suma)"
 
 #: functions/math.xml:443
 #, kde-format
@@ -7171,7 +7174,7 @@ msgstr "LOGn(12;2) é igual a 3,5849625"
 #: functions/math.xml:733
 #, kde-format
 msgid "The ROOTN() function returns the non-negative nth root of x."
-msgstr "A función ROOTN() devolve a n-ésima raíz non-negativa de x."
+msgstr "A función ROOTN() devolve a enésima raíz non-negativa de x."
 
 #: functions/math.xml:734
 #, kde-format
@@ -7616,7 +7619,7 @@ msgid ""
 "number."
 msgstr ""
 "A función RANDNORM() devolve un número pseudo-aleatorio con distribución "
-"normal (Gausiana)."
+"normal (de Gauss)."
 
 #: functions/math.xml:1062
 #, kde-format
@@ -7813,7 +7816,7 @@ msgstr "ROUNDDOWN(-1,252) é igual a -1"
 #: functions/math.xml:1181
 #, kde-format
 msgid "Nth term"
-msgstr "N-ésimo termo"
+msgstr "Enésimo termo"
 
 #: functions/math.xml:1185
 #, kde-format
@@ -7822,7 +7825,7 @@ msgid ""
 "8, 13, 21...), in which each number, after the first two, is the sum of the "
 "two numbers immediately preceding it. FIB(0) is defined to be 0."
 msgstr ""
-"A función FIB calcula o N-ésimo termo dunha secuencia de Fibonacci (1, 1, 2, "
+"A función FIB calcula o enésimo termo dunha secuencia de Fibonacci (1, 1, 2, "
 "3, 5, 8, 13, 21…), na cal cada número, excepto os dous primeiros, é a suma "
 "dos dous números precedentes. FIB(0) está definido como 0."
 
@@ -8742,7 +8745,7 @@ msgstr "AVERAGEA(valor;valor;…)"
 #: functions/statistical.xml:83
 #, kde-format
 msgid "AVERAGEA(11.4;17.3;\"sometext\";25.9;40.1) equals 18.94"
-msgstr "AVERAGEA(11.4;17.3;\"untexto\";25.9;40.1) devolve 18.94"
+msgstr "AVERAGEA(11.4;17.3; \"un texto\"; 25.9; 40.1) devolve 18.94"
 
 #: functions/statistical.xml:95 functions/statistical.xml:131
 #: functions/statistical.xml:434 functions/statistical.xml:463
@@ -8822,7 +8825,7 @@ msgid ""
 "bounds, otherwise defaulting to 0.0 and 1.0 respectively."
 msgstr ""
 "Os parámetros de comezo e remates son opcionais. Estabelecen os valores "
-"inferior e superior, senón úsanse demaneira predeterminada 0.0 e 1.0 "
+"inferior e superior, senón úsanse de maneira predeterminada 0.0 e 1.0 "
 "respectivamente."
 
 #: functions/statistical.xml:149
@@ -8986,7 +8989,7 @@ msgstr ""
 #: functions/statistical.xml:231
 #, kde-format
 msgid "CONFIDENCE(alpha;stddev;size)"
-msgstr "CONFIDENCE(alfa;desviaciónEstandar;tamaño)"
+msgstr "CONFIDENCE(alfa; desviación estándar; tamaño)"
 
 #: functions/statistical.xml:232
 #, kde-format
@@ -9147,7 +9150,7 @@ msgid ""
 "The FINV() function returns the unique non-negative number x such that "
 "FDIST(x;r1;r2) = p."
 msgstr ""
-"A función FINV() devolve o número x non negativo e únivo tal que cumpre que "
+"A función FINV() devolve o número x non negativo e único tal que cumpre que "
 "FDIST(x;r1;r2) = p."
 
 #: functions/statistical.xml:368
@@ -9364,7 +9367,7 @@ msgid ""
 "This is equal to the Nth root of the product of the terms."
 msgstr ""
 "A función GEOMEAN() devolve a media xeométrica dos argumentos. Este valor é "
-"igual á raíz N-ésima do produto dos termos."
+"igual á raíz enésima do produto dos termos."
 
 #: functions/statistical.xml:518
 #, kde-format
@@ -9525,7 +9528,7 @@ msgstr "Posición (a partir do maior)"
 #: functions/statistical.xml:676
 #, kde-format
 msgid "The LARGE() function returns the k-th largest value from the data set."
-msgstr "A función LARGE() devolve o k-ésimo maior valor do conxunto de datos."
+msgstr "A función LARGE() devolve o k maior valor do conxunto de datos."
 
 #: functions/statistical.xml:677
 #, kde-format
@@ -9578,7 +9581,7 @@ msgstr ""
 #: functions/statistical.xml:721
 #, kde-format
 msgid "LOGINV(p; mean; stdev)"
-msgstr "LOGINV(p; media; desviacionEstandar)"
+msgstr "LOGINV(p; media; desviación estándar)"
 
 #: functions/statistical.xml:722
 #, kde-format
@@ -9602,7 +9605,7 @@ msgstr "A función LOGNORMDIST() devolve a distribución log-normal acumulada."
 #: functions/statistical.xml:743
 #, kde-format
 msgid "LOGNORMDIST(Number;MV;STD)"
-msgstr "LOGNORMDIST(número;valorMedio;desviacionEstandar)"
+msgstr "LOGNORMDIST(número; valor medio; desviación estándar)"
 
 #: functions/statistical.xml:744
 #, kde-format
@@ -9755,7 +9758,7 @@ msgstr "K = 0 calcula a función de densidade; K = 1 calcula a distribución."
 #: functions/statistical.xml:853
 #, kde-format
 msgid "NORMDIST(Number;MV;STD;K)"
-msgstr "NORMDIST(número;valorMedio;desviacionEstandar;K)"
+msgstr "NORMDIST(número; valor medio; desviación estándar; K)"
 
 #: functions/statistical.xml:854
 #, kde-format
@@ -9790,7 +9793,7 @@ msgstr ""
 #: functions/statistical.xml:876
 #, kde-format
 msgid "NORMINV(number;MV;STD)"
-msgstr "NORMINV(número;valorCentral;desviaciónEstandar)"
+msgstr "NORMINV(número; valor central; desviación estándar)"
 
 #: functions/statistical.xml:877
 #, kde-format
@@ -9934,11 +9937,11 @@ msgid ""
 "MEDIAN. Blank cells will be considered as a zero, and cells with text will "
 "be ignored."
 msgstr ""
-"A función PERCENTILE() devolve o x-avo percentil dos valores dos datos en "
-"Datos. Un percentil devolve o valor da escala para unha serie de datos que "
-"estea desde o máis pequeno (alfa=0) ao valor máis grande (alfa=1) dunha "
-"serie de datos. Cunha alfa=25% obtense a media do percentil para o percentil "
-"do primeiro cuartil, cunha alfa=50% obtense a MEDIA. As celas en branco "
+"A función PERCENTILE() devolve o percentil x dos valores dos datos en Datos. "
+"Un percentil devolve o valor da escala para unha serie de datos que estea "
+"desde o máis pequeno (alfa=0) ao valor máis grande (alfa=1) dunha serie de "
+"datos. Cunha alfa=25% obtense a media do percentil para o percentil do "
+"primeiro cuartil, cunha alfa=50% obtense a MEDIA. As celas en branco "
 "consideraranse como cero e as celas con texto ignoráranse."
 
 #: functions/statistical.xml:979
@@ -10136,7 +10139,7 @@ msgstr "Posición (a partir do menor)"
 #: functions/statistical.xml:1152
 #, kde-format
 msgid "The SMALL() function returns the k-th smallest value from the data set."
-msgstr "A función SMALL() devolve o k-ésimo menor valor do conxunto de datos."
+msgstr "A función SMALL() devolve o k menor valor do conxunto de datos."
 
 #: functions/statistical.xml:1153
 #, kde-format
@@ -10171,7 +10174,7 @@ msgstr "A función STANDARIZE() calcula un valor normalizado."
 #: functions/statistical.xml:1175
 #, kde-format
 msgid "STANDARDIZE(x; mean, stdev)"
-msgstr "STANDARIZE(x; media, desviaciónEstandar)"
+msgstr "STANDARIZE(x; media, desviación estándar)"
 
 #: functions/statistical.xml:1176
 #, kde-format
@@ -10409,7 +10412,7 @@ msgstr "CoñecidoX"
 #: functions/statistical.xml:1423
 #, kde-format
 msgid "NumberSequence newX"
-msgstr "NúmerodeSecuencia novoX"
+msgstr "NúmeroDeSecuencia novoX"
 
 #: functions/statistical.xml:1427
 #, kde-format
@@ -10469,7 +10472,7 @@ msgstr ""
 #: functions/statistical.xml:1435
 #, kde-format
 msgid "Constraints: COUNT(knownY) = COUNT(knownX)."
-msgstr "Constricións: COUNT(Ycoñecidos) = COUNT(Xcoñecidos)."
+msgstr "Constricións: COUNT(Y coñecidos) = COUNT(X coñecidos)."
 
 #: functions/statistical.xml:1436
 #, kde-format
@@ -10492,12 +10495,12 @@ msgstr ""
 #: functions/statistical.xml:1448
 #, kde-format
 msgid "dataSet"
-msgstr "conxuntodeDatos"
+msgstr "conxuntoDeDatos"
 
 #: functions/statistical.xml:1452
 #, kde-format
 msgid "cutOffFraction"
-msgstr "fraccionDeCorte"
+msgstr "fracciónDeCorte"
 
 #: functions/statistical.xml:1456
 #, kde-format
@@ -10509,12 +10512,12 @@ msgid ""
 msgstr ""
 "A función TRIMMEAN() calcula a media dun conxunto de datos, omitindo os "
 "valores máis baixos e máis altos. A fracción que indica o número total de "
-"valores para excluír defínese mediante o segundo parámetro (fraccionDeCorte)."
+"valores para excluír defínese mediante o segundo parámetro (fracciónDeCorte)."
 
 #: functions/statistical.xml:1457
 #, kde-format
 msgid "TRIMMEAN(dataSet; cutOffFraction)"
-msgstr "TRIMMEAN(conxuntodeDatos; fraccionDeCorte)"
+msgstr "TRIMMEAN(conxuntoDeDatos; fracciónDeCorte)"
 
 #: functions/statistical.xml:1468
 #, kde-format
@@ -10609,7 +10612,7 @@ msgstr ""
 "correr isto non é posíbel porque unha persoa non pode ser á vez alta e "
 "baixa, e só pode fornecer datos para un grupo ou para o outro. Nestes casos "
 "onde os valores de cada conxunto de datos se toman prestados de distintas "
-"fontes é axeitado un test t non emparellado (tipo = 2 ou typo = 3). Para os "
+"fontes é axeitado un test t non emparellado (tipo = 2 ou tipo = 3). Para os "
 "test desapareados, os intervalos de datos non teñen que ter o mesmo tamaño, "
 "pero para os emparellados requírese que os dous intervalos teñan a mesma "
 "cantidade de celas."
@@ -10825,7 +10828,7 @@ msgstr "media"
 #: functions/statistical.xml:1712
 #, kde-format
 msgid "standardDeviation"
-msgstr "desviaciónEstandar"
+msgstr "desviaciónEstándar"
 
 #: functions/statistical.xml:1716
 #, kde-format
@@ -10847,7 +10850,7 @@ msgid ""
 "using STDEV."
 msgstr ""
 "Realiza unha proba da hipótese nula, de que a mostra é unha mostra real "
-"dunha variábel aleatoria normalmente distribuída con media e desciación "
+"dunha variábel aleatoria normalmente distribuída con media e desviación "
 "estándar. Unha saída con valor 1 indica que se rexeita a hipótese nula, p."
 "ex. a mostra non pertence a unha poboación distribuída baixo a función "
 "normal. Cando se omita sigma hanse estimar a partir da mostra usando STDEV."
@@ -10855,7 +10858,7 @@ msgstr ""
 #: functions/statistical.xml:1719
 #, kde-format
 msgid "ZTEST(x; mean; standardDeviation)"
-msgstr "ZTEST(x; media, Desviaciónestandar)"
+msgstr "ZTEST(x; media; desviación estándar)"
 
 #: functions/statistical.xml:1772
 #, kde-format
@@ -11861,6 +11864,7 @@ msgstr "A función SLEEK() retira todos os espazos do texto."
 msgid "SLEEK(text)"
 msgstr "SLEEK(texto)"
 
+# well-spelled: Istoéuntítulo
 #: functions/text.xml:640
 #, kde-format
 msgid "SLEEK(\"This is   some  text \") returns \"Thisissometext\""
@@ -12055,7 +12059,7 @@ msgid ""
 "The UNICODE() function returns a unicode code point for the first character "
 "in a text string."
 msgstr ""
-"A función UNICODE() devolve un punto do código unicoide para o primeiro "
+"A función UNICODE() devolve un punto do código Unicode para o primeiro "
 "carácter nunha cadea de texto."
 
 #: functions/text.xml:783
@@ -12075,7 +12079,7 @@ msgid ""
 "point."
 msgstr ""
 "A función UNICHAR() devolve o carácter indicado para un punto do código "
-"unicoide."
+"Unicode."
 
 #: functions/text.xml:799
 #, kde-format
@@ -13133,8 +13137,8 @@ msgid ""
 "This drop down selection box can be used to choose the calculation performed "
 "by the Statusbar Summary  function."
 msgstr ""
-"Esta caixiña do menú emerxente serve para escoller o cálculo efectuado pola "
-"función resumo da barra de estado."
+"Esta caixa de selección despregábel serve para escoller o cálculo efectuado "
+"pola función resumo da barra de estado."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: part/dialogs/InterfaceOptionsWidget.ui:51
@@ -14610,7 +14614,7 @@ msgstr "Dom"
 #: ui/commands/AutoFillCommand.cpp:679
 msgctxt "(qtundo-format)"
 msgid "Autofill"
-msgstr "Autorrecheo"
+msgstr "Recreo automático"
 
 #: ui/commands/DataManipulators.cpp:107
 msgctxt "(qtundo-format)"
@@ -15130,10 +15134,10 @@ msgstr ""
 "0,1 poderá cambiarse por 1/8, 2/16, 1/10, etc. O tipo da fracción defínese "
 "escolléndoa no campo da dereita. Se non hai unha fracción exacta no modo de "
 "fracción escollido escollerase a máis próxima.\n"
-"Por exemplo se tivera 1,5 como número se escollera Fracción e 16-avos 1/16, "
-"obter \"1 8/16\", que é unha fracción exacta. Se tivera 1,4 como número na "
-"súa cela, e escolle a Fracción e os 16-avos 1/16, entón a cela amosará \"1 "
-"6/16\", que é a fracción máis próxima a 16-avos."
+"Por exemplo se tivera 1,5 como número se escollera Fracción e 1/16, obter "
+"\"1 8/16\", que é unha fracción exacta. Se tivera 1,4 como número na súa "
+"cela, e escolle a Fracción e 1/16, entón a cela amosará \"1 6/16\", que é a "
+"fracción de 1/16 máis próxima."
 
 #: ui/dialogs/LayoutPage_Float.cpp:83
 #, kde-format
@@ -15321,7 +15325,7 @@ msgstr "Oitavos 1/8"
 #: ui/dialogs/LayoutPage_Float.cpp:286
 #, kde-format
 msgid "Sixteenths 1/16"
-msgstr "Dezaseisavos 1/16"
+msgstr "1/16"
 
 #: ui/dialogs/LayoutPage_Float.cpp:287
 #, kde-format
@@ -15493,13 +15497,13 @@ msgid ""
 "Increase Indent or Decrease Indent actions."
 msgstr ""
 "Permite definir a cantidade de sangría a usar na cela cando se escolles as "
-"accións de aumentar a indentación ou diminuír a indentación."
+"accións de aumentar o sangrado ou diminuír o sangrado."
 
 #. i18n: ectx: property (title), widget (QGroupBox, indentGroup)
 #: ui/dialogs/PositionWidget.ui:168
 #, kde-format
 msgid "Indent"
-msgstr "Sangar"
+msgstr "Sangrar"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox3)
 #: ui/dialogs/PositionWidget.ui:177

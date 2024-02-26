@@ -1,27 +1,27 @@
 # translation of kofficefilters.po to Galician
 # translation of kofficefilters.po to
 #
+# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
 # mvillarino <mvillarino@users.sourceforge.net>, 2006, 2009.
 # Miguel Branco <mgl.branco@gmail.com>, 2007, 2008.
 # Miguel Branco <mgl.branco@gmail.com>, 2008, 2009, 2012.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009.
 # Marce Villarino <mvillarino@kde-espana.es>, 2009, 2010, 2013, 2014.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kofficefilters\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
-"PO-Revision-Date: 2023-06-24 11:53+0200\n"
+"PO-Revision-Date: 2024-02-25 11:55+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: karbon/image/ImageExport.cpp:90
 #, kde-format
@@ -542,7 +542,7 @@ msgid ""
 "point to a stylesheet on disk, or to somewhere on the Internet."
 msgstr ""
 "Neste campo pode inserir un URL para a súa folla de estilo. Pode facer "
-"referencia a unha folla de estilo no seu disco ou nalgures en Internet."
+"referencia a unha folla de estilo no seu disco ou en algures en Internet."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: sheets/html/exportwidget.ui:165
