@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kspread\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2024-02-25 14:33+0100\n"
+"PO-Revision-Date: 2024-02-27 06:39+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -5599,7 +5599,7 @@ msgstr "Bordo"
 #: dialogs/LayoutDialog.cpp:2475
 #, kde-format
 msgid "Preselect"
-msgstr "Preselecionar"
+msgstr "Preseleccionar"
 
 #: dialogs/LayoutDialog.cpp:2506 dialogs/LayoutDialog.cpp:3234
 #, kde-format
