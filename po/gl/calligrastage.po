@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kpresenter\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-01 01:36+0000\n"
-"PO-Revision-Date: 2024-02-25 14:34+0100\n"
+"PO-Revision-Date: 2024-02-27 06:40+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1171,7 +1171,7 @@ msgstr "Ficheiro incorrecto, só .zip ou zip corrompido"
 #: part/ui/KPrHtmlExportDialog.cpp:199
 #, kde-format
 msgid "Zip file need to contain style.css"
-msgstr "O zip precisa conter un ficheiro de estilo .css"
+msgstr "O zip precisa conter un ficheiro «style.css»."
 
 #: part/ui/KPrHtmlExportDialog.cpp:297
 #, kde-format
