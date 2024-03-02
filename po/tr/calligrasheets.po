@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Calligra Suite\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
-"PO-Revision-Date: 2024-02-08 17:56+0300\n"
+"PO-Revision-Date: 2024-03-01 15:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #. i18n: ectx: Menu (file)
 #: calligrasheets.rc:5
@@ -17262,9 +17262,9 @@ msgid ""
 "parameter (cutOffFraction)."
 msgstr ""
 "TRIMMEAN() işlevi, en küçük ve en büyük değerler olası ana hat düzleyicisini "
-"elemek için dışarıda bırakarak bir veri kümesinin ortalamasını hesaplar. "
-"Dışarıda bırakılacak ölçümlerin toplam fraksiyonu ikinci parametre "
-"tarafından ayarlanır (cutOffFraction)."
+"elemek için dışlayarak bir veri kümesinin ortalamasını hesaplar. Dışlanacak "
+"ölçümlerin toplam fraksiyonu ikinci parametre tarafından ayarlanır "
+"(cutOffFraction)."
 
 #: functions/statistical.xml:1457
 #, kde-format
