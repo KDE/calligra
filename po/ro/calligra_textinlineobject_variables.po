@@ -1,7 +1,6 @@
 # translation of VariablesPlugin to Romanian
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the VariablesPlugin package.
-# Laurenţiu Buzdugan <lbuz@rolix.org>, 2008"
 #
 msgid ""
 msgstr ""
@@ -9,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
 "PO-Revision-Date: 2008-03-11 22:00-0500\n"
-"Last-Translator: Laurenţiu Buzdugan <lbuz@rolix.org>,\n"
+"Last-Translator: \n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"

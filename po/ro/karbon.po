@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
 "PO-Revision-Date: 2012-12-22 11:57+0200\n"
-"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -646,94 +646,3 @@ msgstr ""
 #, kde-format
 msgid "Fill:"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Delete selected objects"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~ msgid "Raise selected objects"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~ msgid "Lower selected objects"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~| msgid "&Order"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Order"
-#~ msgstr "&Ordine"
-
-#, fuzzy
-#~| msgid "&Align"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Align"
-#~ msgstr "&Aliniază"
-
-#, fuzzy
-#~| msgid "&File"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&File"
-#~ msgstr "&Fișier"
-
-#, fuzzy
-#~| msgid "&Object"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Object"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~| msgid "&Settings"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Settings"
-#~ msgstr "&Configurări"
-
-#, fuzzy
-#~| msgid "&Object"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Object"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Align"
-#~ msgstr "&Aliniază"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Raise selected objects"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~| msgid "&Object"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Clip Object"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~| msgid "&Object"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "&Unclip Objects"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~| msgid "&Object"
-#~ msgid "&Group Objects"
-#~ msgstr "&Obiect"
-
-#, fuzzy
-#~ msgid "Align Left"
-#~ msgstr "&Aliniază"
-
-#, fuzzy
-#~ msgid "Align Right"
-#~ msgstr "&Aliniază"
-
-#, fuzzy
-#~ msgid "Align Top"
-#~ msgstr "&Aliniază"
-
-#, fuzzy
-#~ msgid "Paste Object"
-#~ msgstr "&Obiect"

@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:33+0000\n"
 "PO-Revision-Date: 2009-01-02 15:32+0200\n"
-"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -115,57 +115,3 @@ msgstr "Data de sfârșit"
 #| msgid "Start Date"
 msgid "Start date:"
 msgstr "Data de început"
-
-#, fuzzy
-#~| msgid "&Insert"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Insert"
-#~ msgstr "&Inserează"
-
-#, fuzzy
-#~| msgid "Start Date"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Start date:"
-#~ msgstr "Data de început"
-
-#, fuzzy
-#~| msgid "End Date"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "End date:"
-#~ msgstr "Data de sfârșit"
-
-#, fuzzy
-#~| msgid "Error"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Error"
-#~ msgstr "Eroare"
-
-#, fuzzy
-#~| msgid "Warning"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Warning"
-#~ msgstr "Avertisment"
-
-#, fuzzy
-#~| msgid "week"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "week"
-#~ msgstr "săptămână"
-
-#, fuzzy
-#~| msgid "Insert Calendar..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Calendar"
-#~ msgstr "Inserare calendar..."
-
-#~ msgid "&Cancel"
-#~ msgstr "&Renunță"
-
-#~ msgid "&Tools"
-#~ msgstr "&Unelte"
-
-#~ msgid "(c) 2005, The KSpread Team"
-#~ msgstr "(c) 2005, Echipa KSpread"
-
-#~ msgid "Raphael Langerhorst"
-#~ msgstr "Raphael Langerhorst"
