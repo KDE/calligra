@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2021-11-21 01:50+0000\n"
 "PO-Revision-Date: 2009-04-26 13:57+0300\n"
-"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@lists.kde.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -44,49 +44,3 @@ msgstr ""
 #, kde-format
 msgid "Add to Dictionary"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Configure &Spell Checking..."
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Configure &Spell Checking..."
-#~ msgstr "&Configurare verificare ortografică..."
-
-#, fuzzy
-#~| msgid "Configure Spell Check"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Auto Spell Check"
-#~ msgstr "Configurează verificarea ortografică"
-
-#, fuzzy
-#~| msgid "Ignore these words"
-#~ msgid "Ignore Word"
-#~ msgstr "Ignoră aceste cuvinte"
-
-#, fuzzy
-#~| msgid "Configure Spell Check"
-#~ msgid "Spell Check"
-#~ msgstr "Configurează verificarea ortografică"
-
-#~ msgid "Spell Check Configuration"
-#~ msgstr "Configurare verificare ortografică"
-
-#~ msgid "Default Language:"
-#~ msgstr "Limba implicită:"
-
-#~ msgid "Options"
-#~ msgstr "Opțiuni"
-
-#~ msgid "Enable &background spellchecking"
-#~ msgstr "Activează verificarea în f&undal a ortografiei"
-
-#~ msgid "Skip all &uppercase words"
-#~ msgstr "Sare peste cuvintele cu &MAJUSCULE"
-
-#~ msgid "S&kip run-together words"
-#~ msgstr "Sare peste cuvintele &compuse"
-
-#~ msgid "&Add"
-#~ msgstr "&Adaugă"
-
-#~ msgid "&Remove"
-#~ msgstr "&Elimină"
