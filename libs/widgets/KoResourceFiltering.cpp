@@ -107,7 +107,7 @@ void KoResourceFiltering::sanitizeExclusionList()
 
 QStringList KoResourceFiltering::tokenizeSearchString(const QString& searchString) const
 {
-    return searchString.split(d->searchTokenizer, QString::SkipEmptyParts);
+    return searchString.split(d->searchTokenizer, Qt::SkipEmptyParts);
 }
 
 void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filteredNames)

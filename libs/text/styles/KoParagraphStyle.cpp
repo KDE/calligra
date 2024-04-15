@@ -1274,7 +1274,7 @@ struct ParagraphBorderData {
 /// Returns the enriched border data on success, the original @p defaultParagraphBorderData on a parsing error
 static ParagraphBorderData parseParagraphBorderData(const QString &dataString, const ParagraphBorderData &defaultParagraphBorderData)
 {
-    const QStringList bv = dataString.split(QLatin1Char(' '), QString::SkipEmptyParts);
+    const QStringList bv = dataString.split(QLatin1Char(' '), Qt::SkipEmptyParts);
     // too many items? ignore complete value
     if (bv.count() > 3) {
         return defaultParagraphBorderData;
@@ -1661,28 +1661,28 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     const QString borderLineWidthLeft(styleStack.property(KoXmlNS::style, "border-line-width", "left"));
     if (!borderLineWidthLeft.isEmpty()) {
-        QStringList blw = borderLineWidthLeft.split(' ', QString::SkipEmptyParts);
+        QStringList blw = borderLineWidthLeft.split(' ', Qt::SkipEmptyParts);
         setLeftInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setLeftBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
         setLeftBorderWidth(KoUnit::parseValue(blw.value(2), 0.1));
     }
     const QString borderLineWidthTop(styleStack.property(KoXmlNS::style, "border-line-width", "top"));
     if (!borderLineWidthTop.isEmpty()) {
-        QStringList blw = borderLineWidthTop.split(' ', QString::SkipEmptyParts);
+        QStringList blw = borderLineWidthTop.split(' ', Qt::SkipEmptyParts);
         setTopInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setTopBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
         setTopBorderWidth(KoUnit::parseValue(blw.value(2), 0.1));
     }
     const QString borderLineWidthRight(styleStack.property(KoXmlNS::style, "border-line-width", "right"));
     if (!borderLineWidthRight.isEmpty()) {
-        QStringList blw = borderLineWidthRight.split(' ', QString::SkipEmptyParts);
+        QStringList blw = borderLineWidthRight.split(' ', Qt::SkipEmptyParts);
         setRightInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setRightBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
         setRightBorderWidth(KoUnit::parseValue(blw.value(2), 0.1));
     }
     const QString borderLineWidthBottom(styleStack.property(KoXmlNS::style, "border-line-width", "bottom"));
     if (!borderLineWidthBottom.isEmpty()) {
-        QStringList blw = borderLineWidthBottom.split(' ', QString::SkipEmptyParts);
+        QStringList blw = borderLineWidthBottom.split(' ', Qt::SkipEmptyParts);
         setBottomInnerBorderWidth(KoUnit::parseValue(blw.value(0), 0.1));
         setBottomBorderSpacing(KoUnit::parseValue(blw.value(1), 1.0));
         setBottomBorderWidth(KoUnit::parseValue(blw.value(2), 0.1));

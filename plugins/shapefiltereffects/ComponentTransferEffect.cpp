@@ -212,7 +212,7 @@ void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &e
     if (typeStr == "table" || typeStr == "discrete") {
         d.function = typeStr == "table" ? Table : Discrete;
         QString valueStr = element.attribute("tableValues");
-        QStringList values = valueStr.split(QRegExp("(\\s+|,)"), QString::SkipEmptyParts);
+        QStringList values = valueStr.split(QRegExp("(\\s+|,)"), Qt::SkipEmptyParts);
         foreach(const QString &v, values) {
             d.tableValues.append(v.toDouble());
         }

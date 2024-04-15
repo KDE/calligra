@@ -267,7 +267,7 @@ bool KoColorSet::loadGpl()
 
     quint32 index = 0;
 
-    QStringList lines = s.split('\n', QString::SkipEmptyParts);
+    QStringList lines = s.split('\n', Qt::SkipEmptyParts);
 
     if (lines.size() < 3) {
         return false;
@@ -297,7 +297,7 @@ bool KoColorSet::loadGpl()
         if (lines[i].startsWith('#')) {
             m_comment += lines[i].mid(1).trimmed() + ' ';
         } else if (!lines[i].isEmpty()) {
-            QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
+            QStringList a = lines[i].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
 
             if (a.count() < 3) {
                 break;
@@ -386,7 +386,7 @@ bool KoColorSet::loadPsp()
     qint32 r, g, b;
 
     QString s = QString::fromUtf8(m_data.data(), m_data.count());
-    QStringList l = s.split('\n', QString::SkipEmptyParts);
+    QStringList l = s.split('\n', Qt::SkipEmptyParts);
     if (l.size() < 4) return false;
     if (l[0] != "JASC-PAL") return false;
     if (l[1] != "0100") return false;
@@ -395,7 +395,7 @@ bool KoColorSet::loadPsp()
 
     for (int i = 0; i < entries; ++i)  {
 
-        QStringList a = l[i + 3].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
+        QStringList a = l[i + 3].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
 
         if (a.count() != 3) {
             continue;

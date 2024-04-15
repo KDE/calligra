@@ -350,7 +350,7 @@ void SvgStyleParser::parseColorStops(QGradient *gradient, const KoXmlElement &e)
             else {
                 // try style attr
                 QString style = stop.attribute("style").simplified();
-                const QStringList substyles = style.split(';', QString::SkipEmptyParts);
+                const QStringList substyles = style.split(';', Qt::SkipEmptyParts);
                 for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {
                     QStringList substyle = it->split(':');
                     QString command = substyle[0].trimmed();
@@ -397,7 +397,7 @@ SvgStyles SvgStyleParser::collectStyles(const KoXmlElement &e)
 
     // collect all css style attributes
     foreach(const QString &style, cssStyles) {
-        const QStringList substyles = style.split(';', QString::SkipEmptyParts);
+        const QStringList substyles = style.split(';', Qt::SkipEmptyParts);
         if (!substyles.count())
             continue;
         for (QStringList::ConstIterator it = substyles.begin(); it != substyles.end(); ++it) {

@@ -1192,7 +1192,7 @@ void KarbonImport::loadText(const KoXmlElement &element)
         QString data = e.attribute("d");
         // check if we have a single line path
         if (exp.exactMatch(data)) {
-            QStringList coords = data.split(QRegExp("[M\\sL]"), QString::SkipEmptyParts);
+            QStringList coords = data.split(QRegExp("[M\\sL]"), Qt::SkipEmptyParts);
             if (coords.size() == 4) {
                 // in old karbon a single line text path was used to specify the direction
                 // of the text, however the length of the path was not required to match

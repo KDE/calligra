@@ -298,7 +298,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             // parse paragraph properties, e.g. <P "Normal" justifyFull  size:14 >
             KoGenStyle paragStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
-            const QStringList typeList = mystr.split(' ', QString::SkipEmptyParts);
+            const QStringList typeList = mystr.split(' ', Qt::SkipEmptyParts);
             Q_FOREACH(const QString& type, typeList) {
                 if (type == "justifyFull") {
                     paragStyle.addAttribute("fo:text-align", "justify");
@@ -383,7 +383,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             //style.addAttribute("style:display-name", styleName);
 
             // split format
-            const QStringList typeList = mystr.split(' ', QString::SkipEmptyParts);
+            const QStringList typeList = mystr.split(' ', Qt::SkipEmptyParts);
             Q_FOREACH(const QString& type, typeList) {
                 //debugAw << "Text formatting:" << type;
                 if (!parseFontProperty(type, style)) {

@@ -314,7 +314,7 @@ KOODF_EXPORT Ko3dScene *load3dScene(const KoXmlElement &element)
 QVector3D odfToVector3D(const QString &string)
 {
     // The string comes into this function in the form "(0 3.5 0.3)".
-    QStringList elements = string.mid(1, string.size() - 2).split(' ', QString::SkipEmptyParts);
+    QStringList elements = string.mid(1, string.size() - 2).split(' ', Qt::SkipEmptyParts);
     if (elements.size() == 3) {
         return QVector3D(elements[0].toDouble(), elements[1].toDouble(), elements[2].toDouble());
     }

@@ -425,7 +425,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     }
 
     QString skew = element.attributeNS(KoXmlNS::draw, "line-skew", QString());
-    QStringList skewValues = skew.simplified().split(' ', QString::SkipEmptyParts);
+    QStringList skewValues = skew.simplified().split(' ', Qt::SkipEmptyParts);
     // TODO apply skew values once we support them
 
     // load the path data if there is any

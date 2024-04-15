@@ -384,7 +384,7 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
         add(rects.at(i));
     }
     d->table = source->get(parser.tableName());
-//     QStringList regionsList = regions.split(' ', QString::SkipEmptyParts);
+//     QStringList regionsList = regions.split(' ', Qt::SkipEmptyParts);
 //     Q_FOREACH(const QString& region, regionsList) {
 //       QString searchStr = QString(region).remove('$');
 //       QRegExp regEx;

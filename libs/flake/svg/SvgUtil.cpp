@@ -103,18 +103,18 @@ QTransform SvgUtil::parseTransform(const QString &transform)
     QTransform result;
 
     // Split string for handling 1 transform statement at a time
-    QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
+    QStringList subtransforms = transform.split(')', Qt::SkipEmptyParts);
     QStringList::ConstIterator it = subtransforms.constBegin();
     QStringList::ConstIterator end = subtransforms.constEnd();
     for (; it != end; ++it) {
-        QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
+        QStringList subtransform = (*it).simplified().split('(', Qt::SkipEmptyParts);
         if (subtransform.count() < 2)
             continue;
 
         subtransform[0] = subtransform[0].trimmed().toLower();
         subtransform[1] = subtransform[1].simplified();
         QRegExp reg("[,( ]");
-        QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
+        QStringList params = subtransform[1].split(reg, Qt::SkipEmptyParts);
 
         if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
             subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);

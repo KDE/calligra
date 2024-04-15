@@ -636,7 +636,7 @@ void Thesaurus::findTermWordnet(const QString &term)
     }
     else {
         // render in a table, each line one row:
-        const QStringList lines = stdoutString.split(QChar('\n'), QString::SkipEmptyParts);
+        const QStringList lines = stdoutString.split(QChar('\n'), Qt::SkipEmptyParts);
         QString result = "<qt><table>\n";
         // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
         // first column is really always quite small):
@@ -717,7 +717,7 @@ QString Thesaurus::formatLine(const QString &line) const
     if (re.indexIn(l) != -1) {
         l = re.cap(1);
         l += re.cap(2);
-        const QStringList links = re.cap(3).split(QChar(';'), QString::SkipEmptyParts);
+        const QStringList links = re.cap(3).split(QChar(';'), Qt::SkipEmptyParts);
         for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {
@@ -737,7 +737,7 @@ QString Thesaurus::formatLine(const QString &line) const
         QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
         l = re.cap(1);
         l += re.cap(2) + ' ';
-        const QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
+        const QStringList links = re.cap(3).split(QChar(','), Qt::SkipEmptyParts);
         for (QStringList::ConstIterator it = links.begin(); it != links.end(); ++it) {
             QString link = (*it);
             if (it != links.begin()) {

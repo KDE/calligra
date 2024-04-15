@@ -245,7 +245,7 @@ void ComponentTransferEffectConfigWidget::offsetChanged(double offset)
 
 void ComponentTransferEffectConfigWidget::tableValuesChanged()
 {
-    QStringList values = m_tableValues->text().split(';', QString::SkipEmptyParts);
+    QStringList values = m_tableValues->text().split(';', Qt::SkipEmptyParts);
     QList<qreal> tableValues;
     foreach(const QString &v, values) {
         tableValues.append(v.toDouble());
@@ -256,7 +256,7 @@ void ComponentTransferEffectConfigWidget::tableValuesChanged()
 
 void ComponentTransferEffectConfigWidget::discreteValuesChanged()
 {
-    QStringList values = m_discreteValues->text().split(';', QString::SkipEmptyParts);
+    QStringList values = m_discreteValues->text().split(';', Qt::SkipEmptyParts);
     QList<qreal> tableValues;
     foreach(const QString &v, values) {
         tableValues.append(v.toDouble());

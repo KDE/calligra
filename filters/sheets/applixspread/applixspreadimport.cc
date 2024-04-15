@@ -328,7 +328,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             int bold = 0, italic = 0, underline = 0, fontsize = 12, fontnr = -1;
             int fg = -1; // fg = foregound
 
-            const QStringList typeCharList = typeCharStr.split(',', QString::SkipEmptyParts);
+            const QStringList typeCharList = typeCharStr.split(',', Qt::SkipEmptyParts);
             Q_FOREACH(const QString& typeChar, typeCharList) {
                 // Output
                 qDebug() << "typeChar: " << typeChar;
@@ -363,7 +363,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
              ********************************************************************/
             int align = 0, valign = 0;
 
-            const QStringList typeFormList = typeFormStr.split(',', QString::SkipEmptyParts);
+            const QStringList typeFormList = typeFormStr.split(',', Qt::SkipEmptyParts);
             Q_FOREACH(const QString& typeFormat, typeFormList) {
                 // Grep horizontal alignment
                 if (typeFormat == "1") {
@@ -404,7 +404,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             int rightbrushstyle = 0, rightbrushcolor = 1, rightfg_bg = 1;
             int bottombrushstyle = 0, bottombrushcolor = 1, bottomfg_bg = 1;
 
-            const QStringList typeCellList = typeCellStr.split(',', QString::SkipEmptyParts);
+            const QStringList typeCellList = typeCellStr.split(',', Qt::SkipEmptyParts);
             Q_FOREACH(/*can't use const QString&*/ QString typeCell, typeCellList) {
 
                 if (typeCell[0] == 'T') {

@@ -101,7 +101,7 @@ QString OAuth::oauth_signature(QString method,QUrl *url,QString oAuthHeader)
 
     oAuthHeader.remove("OAuth ");
     QStringList oAuthParameters =
-        oAuthHeader.split(",", QString::SkipEmptyParts);
+        oAuthHeader.split(",", Qt::SkipEmptyParts);
     foreach(QString oAuthParameter, oAuthParameters)
     {
         QStringList oAuthParameterParts = oAuthParameter.split("=");

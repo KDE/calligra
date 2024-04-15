@@ -146,7 +146,7 @@ public:
                 break;
             case InList:
                 {
-                    QStringList tokens = e.attribute(m_attribute).split(' ', QString::SkipEmptyParts);
+                    QStringList tokens = e.attribute(m_attribute).split(' ', Qt::SkipEmptyParts);
                     return tokens.contains(m_value);
                 }
                 break;
@@ -499,7 +499,7 @@ public:
     {
         SelectorGroup group;
 
-        QStringList selectors = pattern.split(',', QString::SkipEmptyParts);
+        QStringList selectors = pattern.split(',', Qt::SkipEmptyParts);
         for (int i = 0; i < selectors.count(); ++i ) {
             CssSelectorBase * selector = compileSelector(selectors[i].simplified());
             if (selector)
@@ -630,7 +630,7 @@ void SvgCssHelper::parseStylesheet(const KoXmlElement &e)
     commentExp.setMinimal(true); // do not match greedy
     data.remove(commentExp);
 
-    QStringList defs = data.split('}', QString::SkipEmptyParts);
+    QStringList defs = data.split('}', Qt::SkipEmptyParts);
     for (int i = 0; i < defs.count(); ++i) {
         QStringList def = defs[i].split('{');
         if( def.count() != 2 )
@@ -641,7 +641,7 @@ void SvgCssHelper::parseStylesheet(const KoXmlElement &e)
         QString style = def[1].simplified();
         if (style.isEmpty())
             break;
-        QStringList selectors = pattern.split(',', QString::SkipEmptyParts);
+        QStringList selectors = pattern.split(',', Qt::SkipEmptyParts);
         for (int i = 0; i < selectors.count(); ++i ) {
             QString selector = selectors[i].simplified();
             d->cssStyles[selector] = style;

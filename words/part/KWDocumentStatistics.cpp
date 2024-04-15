@@ -242,7 +242,7 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
         // is quite good, as some words get a number that's too high and others get
         // one that's too low.
         // IMPORTANT: please test any changes against the unit test
-        const QStringList wordlist = s.split(space, QString::SkipEmptyParts);
+        const QStringList wordlist = s.split(space, Qt::SkipEmptyParts);
         d->words += wordlist.count();
         for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
             QString word = *it1;
@@ -252,7 +252,7 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
                 continue;
             }
             word.remove(final_e);
-            const QStringList syls = word.split(vowels, QString::SkipEmptyParts);
+            const QStringList syls = word.split(vowels, Qt::SkipEmptyParts);
             int word_syllables = 0;
             for (QStringList::ConstIterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
                 if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {

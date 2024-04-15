@@ -131,7 +131,7 @@ void KoResourceTagStore::delTag(const QString& tag)
 
 QStringList KoResourceTagStore::searchTag(const QString& query) const
 {
-    QStringList tagsList = query.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
+    QStringList tagsList = query.split(QRegExp("[,]\\s*"), Qt::SkipEmptyParts);
     if (tagsList.isEmpty()) {
         return QStringList();
     }

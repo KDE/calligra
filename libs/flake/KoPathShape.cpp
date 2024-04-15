@@ -337,7 +337,7 @@ QRect KoPathShape::loadOdfViewbox(const KoXmlElement & element)
     QString data = element.attributeNS(KoXmlNS::svg, QLatin1String("viewBox"));
     if (! data.isEmpty()) {
         data.replace(QLatin1Char(','), QLatin1Char(' '));
-        const QStringList coordinates = data.simplified().split(QLatin1Char(' '), QString::SkipEmptyParts);
+        const QStringList coordinates = data.simplified().split(QLatin1Char(' '), Qt::SkipEmptyParts);
         if (coordinates.count() == 4) {
             viewbox.setRect(coordinates.at(0).toInt(), coordinates.at(1).toInt(),
                             coordinates.at(2).toInt(), coordinates.at(3).toInt());
