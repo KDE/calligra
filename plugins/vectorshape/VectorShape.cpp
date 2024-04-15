@@ -238,8 +238,8 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
     QImage *cache = render(converter, asynchronous, useCache);
     if (cache) { // paint cached image
         Q_ASSERT(!cache->isNull());
-        QVector<QRect> clipRects = painter.clipRegion().rects();
-        foreach (const QRect &rc, clipRects) {
+        const auto clipRegion = painter.clipRegion();
+        for (const QRect &rc : clipRegion) {
             painter.drawImage(rc.topLeft(), *cache, rc);
         }
     }

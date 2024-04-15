@@ -22,6 +22,7 @@
 #include <QWhatsThis>
 #include <QDebug>
 #include <QPushButton>
+#include <QScreen>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -434,12 +435,12 @@ void KoDialog::keyPressEvent(QKeyEvent *event)
 
 int KoDialog::marginHint()
 {
-    return QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    return QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
 }
 
 int KoDialog::spacingHint()
 {
-    return QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    return QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
 }
 
 int KoDialog::groupSpacingHint()
@@ -535,29 +536,10 @@ void KoDialog::resizeLayout(QLayout *layout, int margin, int spacing)   //static
     }
 }
 
-static QRect screenRect(QWidget *widget, int screen)
+static QRect screenRect(QWidget *widget, int)
 {
-    QDesktopWidget *desktop = QApplication::desktop();
-    KConfig gc("kdeglobals", KConfig::NoGlobals);
-    KConfigGroup cg(&gc, "Windows");
-    if (desktop->isVirtualDesktop() &&
-            cg.readEntry("XineramaEnabled", true) &&
-            cg.readEntry("XineramaPlacementEnabled", true)) {
-
-        if (screen < 0 || screen >= desktop->numScreens()) {
-            if (screen == -1) {
-                screen = desktop->primaryScreen();
-            } else if (screen == -3) {
-                screen = desktop->screenNumber(QCursor::pos());
-            } else {
-                screen = desktop->screenNumber(widget);
-            }
-        }
-
-        return desktop->availableGeometry(screen);
-    } else {
-        return desktop->geometry();
-    }
+    auto screen =  QGuiApplication::primaryScreen();
+    return screen->geometry();
 }
 
 void KoDialog::centerOnScreen(QWidget *widget, int screen)

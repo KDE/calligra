@@ -81,7 +81,7 @@ QSize KoSliderCombo::minimumSizeHint() const
 
     const QFontMetrics &fm = fontMetrics();
 
-    sh.setWidth(5 * fm.width(QLatin1Char('8')));
+    sh.setWidth(5 * fm.boundingRect(QLatin1Char('8')).width());
     sh.setHeight(qMax(fm.lineSpacing(), 14) + 2);
 
     // add style and strut values

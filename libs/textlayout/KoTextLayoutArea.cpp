@@ -1213,7 +1213,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     option.setTabs(qTabs);
 
     // conversion here is required because Qt thinks in device units and we don't
-    option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
+    option.setTabStopDistance(tabStopDistance * qt_defaultDpiY() / 72.);
 
     layout->setTextOption(option);
 
@@ -1286,7 +1286,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 //     startMargin
             } else if (listFormat.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
                  QFontMetrics fm(labelFormat.font(), d->documentLayout->paintDevice());
-                 d->indent += fm.width(' ');
+                 d->indent += fm.boundingRect(' ').width();
             }
             // default needs to be no space so presentationListTabWorkaround above makes us go here
         }

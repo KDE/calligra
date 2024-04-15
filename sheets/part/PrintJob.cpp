@@ -521,6 +521,5 @@ QAbstractPrintDialog::PrintDialogOptions PrintJob::printDialogOptions() const
     return QAbstractPrintDialog::PrintToFile |
            QAbstractPrintDialog::PrintSelection |
            QAbstractPrintDialog::PrintPageRange |
-           QAbstractPrintDialog::PrintCollateCopies |
-           QAbstractPrintDialog::DontUseSheet;
+           QAbstractPrintDialog::PrintCollateCopies;
 }

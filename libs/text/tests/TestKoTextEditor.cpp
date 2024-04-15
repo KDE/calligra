@@ -331,7 +331,7 @@ void TestKoTextEditor::checkSectionModelLevelRecursive(QModelIndex index, TestKo
     QModelIndex parent = index.parent();
     QCOMPARE(parent.data(KoSectionModel::PointerRole).value<KoSection *>(), handle->parent);
     for (int i = 0; i < handle->children.size(); i++) {
-        checkSectionModelLevelRecursive(index.child(i, 0), handle->children[i]);
+        checkSectionModelLevelRecursive(index.model()->index(i, 0, index), handle->children[i]);
     }
 }
 

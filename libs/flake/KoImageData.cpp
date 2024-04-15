@@ -178,7 +178,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         d->temporaryFile = 0;
         d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
-        if (image.byteCount() > MAX_MEMORY_IMAGESIZE) {
+        if (image.sizeInBytes() > MAX_MEMORY_IMAGESIZE) {
             // store image
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);
