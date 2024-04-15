@@ -25,7 +25,7 @@ OAuth::OAuth():
 //    m_consumer_key("8xf1b5hrsgmempk"),
 //    m_consumer_secret("6se47g35sdqsouw")
 {
-    qsrand(QDateTime::currentDateTimeUtc().toTime_t());
+    qsrand(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());
     m_token = "";
     m_secret = "";
 }

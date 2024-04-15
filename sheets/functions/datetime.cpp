@@ -1117,7 +1117,7 @@ Value func_date2unix(valVector args, ValueCalc *calc, FuncExtra *)
 
     const QDateTime datetime(v.asDateTime(calc->settings()));
 
-    return Value(static_cast<int>(datetime.toTime_t()));
+    return Value(static_cast<int>(datetime.toSecsSinceEpoch()));
 }
 
 #include "datetime.moc"

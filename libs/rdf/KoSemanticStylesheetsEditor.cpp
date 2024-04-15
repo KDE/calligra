@@ -290,7 +290,7 @@ void KoSemanticStylesheetsEditor::newStylesheet()
         kDebug(30015) << ssitem;
         hKoRdfSemanticItem si = ssitem->m_si;
         hKoSemanticStylesheet ss = si->createUserStylesheet(
-                                     QString("new stylesheet %1").arg(QDateTime::currentDateTime().toTime_t()), "");
+                                     QString("new stylesheet %1").arg(QDateTime::currentDateTime().toSecsSinceEpoch()), "");
         QTreeWidgetItem *parent = ssitem;
         KoSemanticStylesheetWidgetItem* item =
             new KoSemanticStylesheetWidgetItem(d->m_rdf, ss, si, parent);

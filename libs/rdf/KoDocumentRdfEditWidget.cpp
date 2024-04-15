@@ -414,7 +414,7 @@ void KoDocumentRdfEditWidget::addNamespace()
 {
     KoDocumentRdf *m_rdf = d->m_rdf;
     QTreeWidget *v = d->m_ui->m_namespaceView;
-    QString key = QString("newnamespace%1").arg(QDateTime::currentDateTime().toTime_t());
+    QString key = QString("newnamespace%1").arg(QDateTime::currentDateTime().toSecsSinceEpoch());
     QString value = "http://www.example.com/fixme#";
     KoRdfPrefixMapping *mapping = m_rdf->prefixMapping();
     mapping->insert(key, value);

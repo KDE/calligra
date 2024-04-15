@@ -135,7 +135,7 @@ void MobiHeaderGenerator::generatePalmDataBase()
     // seconds since start of January 1, 1970
     QDateTime date = QDateTime::currentDateTime();
 
-    qint32 pdTime = date.toTime_t();
+    qint32 pdTime = date.toSecsSinceEpoch();
     m_dbHeader->creationDate = pdTime;
     m_dbHeader->modificationDate = pdTime;
 

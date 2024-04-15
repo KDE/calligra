@@ -74,7 +74,7 @@ public:
 };
  
 OoThread::OoThread(QObject* o) :QThread(o), oo(0) {
-    qsrand(QDateTime::currentDateTime().toTime_t());
+    qsrand(QDateTime::currentDateTime().toSecsSinceEpoch());
     running = true;
     start();
 }
