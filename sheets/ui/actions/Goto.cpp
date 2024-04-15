@@ -45,7 +45,7 @@ void Goto::gotoCell(const QString &name)
     Sheet *cursheet = m_selection->activeSheet();
     Region region = cursheet->map()->regionFromName(name, cursheet);
     if (!region.isValid()) {
-        KMessageBox::sorry(m_canvasWidget, i18n("That is not a valid cell."));
+        KMessageBox::error(m_canvasWidget, i18n("That is not a valid cell."));
         return;
     }
 

@@ -64,7 +64,7 @@ void InsertFromFile::execute(Selection *selection, Sheet *sheet, QWidget *canvas
     if (filename.isEmpty()) return;
     QFile in(filename);
     if (!in.open(QIODevice::ReadOnly)) {
-        KMessageBox::sorry(canvasWidget, i18n("Cannot open input file."));
+        KMessageBox::error(canvasWidget, i18n("Cannot open input file."));
         in.close();
         return;
     }

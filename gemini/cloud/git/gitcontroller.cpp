@@ -377,7 +377,7 @@ void GitOpsThread::performPull()
             // If the analysis says we are able to do a normal merge, let's attempt one of those...
             if(GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
             // but only if we're not told to not try and not do fast forwards!
-            KMessageBox::sorry(0, "Fast Forward Only", "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario and you'll need to handle things yourself...");
+            KMessageBox::error(0, "Fast Forward Only", "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario and you'll need to handle things yourself...");
             } else {
                 git_merge(repository, (const git_annotated_commit **) merge_heads, 1, NULL, NULL);
                 git_annotated_commit_free(merge_heads[0]);
@@ -647,7 +647,7 @@ void GitController::commitAndPushCurrentFile()
 
     // Don't allow committing unless the user details are sensible
     if(!d->checkUserDetails()) {
-        KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a username and email set. Please try again, and enter your name and email next time.");
+        KMessageBox::error(0, "I'm sorry, we cannot create commits without a username and email set. Please try again, and enter your name and email next time.");
         return;
     }
 
@@ -674,7 +674,7 @@ void GitController::commitAndPushCurrentFile()
             QThreadPool::globalInstance()->start(d->opThread);
         }
     } else {
-        KMessageBox::sorry(0, QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.").arg(d->currentFile, d->cloneDir));
+        KMessageBox::error(0, QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.").arg(d->currentFile, d->cloneDir));
     }
 }
 
@@ -697,7 +697,7 @@ void GitController::pull()
 
     // Don't allow committing unless the user details are sensible
     if(!d->checkUserDetails()) {
-        KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a name and email set, and we might need to do a merge later, so we are aborting this pull. Please try again, and enter your name and email next time.");
+        KMessageBox::error(0, "I'm sorry, we cannot create commits without a name and email set, and we might need to do a merge later, so we are aborting this pull. Please try again, and enter your name and email next time.");
         return;
     }
 

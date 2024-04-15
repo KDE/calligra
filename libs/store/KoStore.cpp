@@ -164,7 +164,7 @@ KoStore* KoStore::createStore(QWidget* window, const QUrl &url, Mode mode, const
 #endif
     default:
         warnStore << "Unsupported backend requested for KoStore (QUrl) : " << backend;
-        KMessageBox::sorry(window,
+        KMessageBox::error(window,
                            i18n("The directory mode is not supported for remote locations."),
                            i18n("Calligra Storage"));
         return 0;

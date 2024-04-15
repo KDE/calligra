@@ -111,7 +111,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     QpIStream lIn(QFile::encodeName(m_chain->inputFile()));
 
     if (!lIn) {
-        KMessageBox::sorry(0L, i18n("QPRO filter cannot open input file - please report."));
+        KMessageBox::error(0L, i18n("QPRO filter cannot open input file - please report."));
         return KoFilter::FileNotFound;
     }
 
@@ -216,7 +216,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
             break;
 
         case QpPassword:
-            KMessageBox::sorry(0L, i18n("Unable to open password protected files.\n"
+            KMessageBox::error(0L, i18n("Unable to open password protected files.\n"
                                         "The password algorithm has not been published")
                               );
             delete lRec;

@@ -142,7 +142,7 @@ void SubtotalDialog::accept()
 {
     QList<int> cols = columns();
     if (cols.isEmpty()) {
-        KMessageBox::sorry(this, i18n("You need to select at least one column for adding subtotals."));
+        KMessageBox::error(this, i18n("You need to select at least one column for adding subtotals."));
         return;
     }
 

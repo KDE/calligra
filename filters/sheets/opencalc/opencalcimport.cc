@@ -1196,7 +1196,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
     while (!sheet.isNull()) {
         KoXmlElement t = sheet.toElement();
         if (t.isNull()) {
-            KMessageBox::sorry(0, i18n("The file seems to be corrupt. Skipping a table."));
+            KMessageBox::error(0, i18n("The file seems to be corrupt. Skipping a table."));
             sheet = sheet.nextSibling();
             continue;
         }
@@ -1208,7 +1208,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
         SheetBase *btable = m_doc->map()->findSheet(t.attributeNS(ooNS::table, "name", QString()));
         Sheet *table = dynamic_cast<Sheet *>(btable);
         if (!table) {
-            KMessageBox::sorry(0, i18n("Skipping a table."));
+            KMessageBox::error(0, i18n("Skipping a table."));
             sheet = sheet.nextSibling();
             continue;
         }

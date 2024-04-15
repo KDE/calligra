@@ -66,12 +66,12 @@ void StyleFromCell::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
         styleName = styleName.trimmed();
 
         if (styleName.length() < 1) {
-            KMessageBox::sorry(canvasWidget, i18n("The style name cannot be empty."));
+            KMessageBox::error(canvasWidget, i18n("The style name cannot be empty."));
             continue;
         }
 
         if (manager->style(styleName) != 0) {
-            KMessageBox::sorry(canvasWidget, i18n("A style with this name already exists."));
+            KMessageBox::error(canvasWidget, i18n("A style with this name already exists."));
             continue;
         }
         break;

@@ -184,7 +184,7 @@ bool CheckoutCreator::isGitDir(QString directory) const
 QString CheckoutCreator::createClone(QString userVisibleName, QString url, QString localPath, QObject* credentials) const
 {
     if(!d->checkUserDetails()) {
-        KMessageBox::sorry(0, "I'm sorry, we cannot perform git actions without a name and email set, and the git setup on this machine lacks this information. As a result, we are aborting this clone. Please try again, and enter your name and email next time.");
+        KMessageBox::error(0, "I'm sorry, we cannot perform git actions without a name and email set, and the git setup on this machine lacks this information. As a result, we are aborting this clone. Please try again, and enter your name and email next time.");
         git_libgit2_shutdown();
         return QString();
     }
@@ -192,7 +192,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     if(userVisibleName.isEmpty()) {
         // this should normally not be hit, as the form which calls this checks for this
         // anyway, but let's just be sure
-        KMessageBox::sorry(0, "You forgot to name your account. Please do that and try again.");
+        KMessageBox::error(0, "You forgot to name your account. Please do that and try again.");
         git_libgit2_shutdown();
         return QString();
     }
@@ -205,7 +205,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     if(!QFile::exists(d->privateKey) && credentialsOk) { credentialsOk = false; }
     if(!QFile::exists(d->publicKey) && credentialsOk) { credentialsOk = false; }
     if(!credentialsOk) {
-        KMessageBox::sorry(0, "Something is wrong with your security credentials. Please check them and try again. This is likely due to one or another keyfile not existing, or there being no username entered.");
+        KMessageBox::error(0, "Something is wrong with your security credentials. Please check them and try again. This is likely due to one or another keyfile not existing, or there being no username entered.");
         git_libgit2_shutdown();
         return QString();
     }

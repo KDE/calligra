@@ -1858,7 +1858,7 @@ void View::resetPrintRange()
 void View::deleteSheet()
 {
     if (doc()->map()->count() <= 1 || (doc()->map()->visibleSheets().count() <= 1)) {
-        KMessageBox::sorry(this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet"));
+        KMessageBox::error(this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet"));
         return;
     }
     int ret = KMessageBox::warningContinueCancel(this, i18n("You are about to remove the active sheet.\nDo you want to continue?"),
