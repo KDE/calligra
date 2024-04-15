@@ -735,7 +735,7 @@ bool KoEncryptedStore::closeWrite()
     }
 
     // Ask the user to save the password
-    if (passWasAsked && KMessageBox::questionYesNo(d->window, i18n("Do you want to save the password?")) == KMessageBox::Yes) {
+    if (passWasAsked && KMessageBox::questionTwoActions(d->window, i18n("Do you want to save the password?"), {}, KStandardGuiItem::save(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction) {
         savePasswordInKWallet();
     }
 

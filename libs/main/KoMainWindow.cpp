@@ -1179,20 +1179,20 @@ bool KoMainWindow::queryClose()
     // main doc + internally stored child documents
     if (d->rootDocument->isModified()) {
         auto url = d->rootDocument->defaultUrl();
-        int res = KMessageBox::warningYesNoCancel(this,
+        int res = KMessageBox::warningTwoActionsCancel(this,
                                                   i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", url.fileName()),
                                                   QString(),
                                                   KStandardGuiItem::save(),
                                                   KStandardGuiItem::discard());
 
         switch (res) {
-        case KMessageBox::Yes : {
+        case KMessageBox::PrimaryAction : {
             bool isNative = (d->rootDocument->outputMimeType() == d->rootDocument->nativeFormatMimeType());
             if (!saveDocument(!isNative))
                 return false;
             break;
         }
-        case KMessageBox::No :
+        case KMessageBox::SecondaryAction :
             rootDocument()->removeAutoSaveFiles();
             rootDocument()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
@@ -1696,10 +1696,10 @@ void KoMainWindow::slotReloadFile()
     if (!pDoc || pDoc->url().isEmpty() || !pDoc->isModified())
         return;
 
-    bool bOk = KMessageBox::questionYesNo(this,
+    bool bOk = KMessageBox::questionTwoActions(this,
                                           i18n("You will lose all changes made since your last save\n"
                                                "Do you want to continue?"),
-                                          i18n("Warning")) == KMessageBox::Yes;
+                                          i18n("Warning"), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction;
     if (!bOk)
         return;
 

@@ -683,8 +683,7 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
        updateCustomSlideShowsList();
     }
     else {
-        KMessageBox::error(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
-                           KMessageBox::Notify);
+        KMessageBox::error(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"), KMessageBox::Notify);
         updateCustomSlideShowsList();
     }
 }

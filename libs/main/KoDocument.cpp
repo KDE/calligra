@@ -1217,14 +1217,17 @@ bool KoDocument::openUrl(const QUrl &_url)
         if (QFile::exists(asf)) {
             //debugMain <<"asf=" << asf;
             // ## TODO compare timestamps ?
-            int res = KMessageBox::warningYesNoCancel(0,
-                      i18n("An autosaved file exists for this document.\nDo you want to open it instead?"));
+            int res = KMessageBox::warningTwoActionsCancel(nullptr,
+                      i18n("An autosaved file exists for this document.\nDo you want to open it instead?"),
+                      {},
+                      KStandardGuiItem::open(),
+                      KStandardGuiItem::cont());
             switch (res) {
-            case KMessageBox::Yes :
+            case KMessageBox::PrimaryAction :
                 url.setPath(asf);
                 autosaveOpened = true;
                 break;
-            case KMessageBox::No :
+            case KMessageBox::SecondaryAction :
                 QFile::remove(asf);
                 break;
             default: // Cancel
@@ -2074,15 +2077,18 @@ int KoDocument::queryCloseDia()
     if (name.isEmpty())
         name = i18n("Untitled");
 
-    int res = KMessageBox::warningYesNoCancel(0,
-              i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name));
+    int res = KMessageBox::warningTwoActionsCancel(0,
+              i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+              QString{},
+              KStandardGuiItem::save(),
+              KStandardGuiItem::dontSave());
 
     switch (res) {
-    case KMessageBox::Yes :
+    case KMessageBox::PrimaryAction :
         save(); // NOTE: External files always in native format. ###TODO: Handle non-native format
         setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
         break;
-    case KMessageBox::No :
+    case KMessageBox::SecondaryAction :
         removeAutoSaveFiles();
         setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
         break;
@@ -2573,7 +2579,7 @@ bool KoDocument::queryClose()
     if (docName.isEmpty()) docName = i18n( "Untitled" );
 
 
-    int res = KMessageBox::warningYesNoCancel( 0,
+    int res = KMessageBox::warningTwoActionsCancel( 0,
                                                i18n( "The document \"%1\" has been modified.\n"
                                                      "Do you want to save your changes or discard them?" ,  docName ),
                                                i18n( "Close Document" ), KStandardGuiItem::save(), KStandardGuiItem::discard() );
@@ -2582,7 +2588,7 @@ bool KoDocument::queryClose()
     bool handled=false;
 
     switch(res) {
-    case KMessageBox::Yes :
+    case KMessageBox::PrimaryAction :
         if (!handled)
         {
             if (d->m_url.isEmpty())
@@ -2604,7 +2610,7 @@ bool KoDocument::queryClose()
             }
         } else if (abortClose) return false;
         return waitSaveComplete();
-    case KMessageBox::No :
+    case KMessageBox::SecondaryAction :
         return true;
     default : // case KMessageBox::Cancel :
         return false;

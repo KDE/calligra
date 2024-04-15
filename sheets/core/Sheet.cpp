@@ -656,15 +656,15 @@ bool Sheet::onValidationFailed(Validity::Action action, const CellBase *cell, co
 
     switch (action) {
         case Validity::Stop:
-            KMessageBox::error((QWidget*)0, message, title);
+            KMessageBox::error(nullptr, message, title);
             break;
         case Validity::Warning:
-            if (KMessageBox::warningYesNo((QWidget*)0, message, title) == KMessageBox::Yes) {
+            if (KMessageBox::warningTwoActions(nullptr, message, title, KStandardGuiItem::ok(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction) {
                 return true;
             }
             break;
         case Validity::Information:
-            KMessageBox::information((QWidget*)0, message, title);
+            KMessageBox::information(nullptr, message, title);
             return true;
             break;
     }

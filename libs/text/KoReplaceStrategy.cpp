@@ -55,9 +55,9 @@ bool KoReplaceStrategy::foundMatch(QTextCursor &cursor, FindDirection *findDirec
     if ((m_dialog->options() & KReplaceDialog::PromptOnReplace) != 0) {
         findDirection->select(cursor);
         // TODO: not only Yes and No, but Yes, No, All and Cancel
-        int value = KMessageBox::questionYesNo(m_dialog->parentWidget(),
-                                               i18n("Replace %1 with %2?", m_dialog->pattern(), m_dialog->replacement()));
-        if (value != KMessageBox::Yes) {
+        int value = KMessageBox::questionTwoActions(m_dialog->parentWidget(),
+                                               i18n("Replace %1 with %2?", m_dialog->pattern(), m_dialog->replacement()), {}, KStandardGuiItem::ok(), KStandardGuiItem::cancel());
+        if (value != KMessageBox::PrimaryAction) {
             replace = false;
         }
     }

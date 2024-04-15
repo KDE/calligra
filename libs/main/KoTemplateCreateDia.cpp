@@ -305,8 +305,9 @@ void KoTemplateCreateDia::slotOk() {
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(d->m_name->text());
         if(existingTemplate && !existingTemplate->isHidden()) {
-            if(KMessageBox::warningYesNo(this, i18n("Do you really want to overwrite"
-                                                    " the existing '%1' template?",existingTemplate->name()))==KMessageBox::Yes)
+            if(KMessageBox::warningTwoActions(this,
+                    i18n("Do you really want to overwrite the existing '%1' template?", existingTemplate->name()),
+                    QString{}, KStandardGuiItem::overwrite(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction)
                 group->add(t, true);
             else
             {

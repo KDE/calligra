@@ -284,7 +284,7 @@ bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
         } else {
             res = false;
             // For security reasons we need to ask confirmation if the url is remote.
-            int result = KMessageBox::warningYesNoCancel(
+            int result = KMessageBox::warningTwoActionsCancel(
                 0, i18n("This document contains an external link to a remote document\n%1", d->url.url()),
                 i18n("Confirmation Required"), KGuiItem(i18n("Download")), KGuiItem(i18n("Skip")));
 
@@ -292,7 +292,7 @@ bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
                 //d->m_parent->setErrorMessage("USER_CANCELED");
                 return false;
             }
-            if (result == KMessageBox::Yes) {
+            if (result == KMessageBox::PrimaryAction) {
                 res = document()->openUrl(d->url);
             }
         }

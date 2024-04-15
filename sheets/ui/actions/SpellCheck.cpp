@@ -85,7 +85,7 @@ bool SpellChecker::nextSheet() {
 
     // Ask whether we should continue on the next sheet.
     const QString question = i18n("Do you want to check the spelling in the next sheet?");
-    if (KMessageBox::questionYesNo(d->canvas->canvasWidget(), question) != KMessageBox::Yes)
+    if (KMessageBox::questionTwoActions(d->canvas->canvasWidget(), question, {}, KGuiItem(i18nc("@action:button", "Check next sheet")), KStandardGuiItem::close()) != KMessageBox::PrimaryAction)
         return false;
 
     const MapBase *map = d->currentSheet->map();

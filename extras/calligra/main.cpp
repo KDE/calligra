@@ -118,7 +118,7 @@ static int handleUrls(const QStringList& files)
                 KGuiItem openItem(KStandardGuiItem::open());
                 openItem.setText(i18nc("@action:button", "Open with <application>%1</application>",
                                       service->property("Name").toString()));
-                if (KMessageBox::Yes != KMessageBox::questionYesNo(
+                if (KMessageBox::PrimaryAction != KMessageBox::questionTwoActions(
                     0, 
                     i18nc("@info",
                          "Could not find Calligra application suitable for opening <filename>%1</filename>.<nl/>"

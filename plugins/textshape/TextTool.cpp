@@ -2927,13 +2927,13 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
         QString type = db.mimeTypeForUrl(_url).name();
 
         if (KRun::isExecutableFile(_url, type)) {
-            QString question = i18n("This link points to the program or script '%1'.\n"
+            const QString question = i18n("This link points to the program or script '%1'.\n"
                                     "Malicious programs can harm your computer. "
                                     "Are you sure that you want to run this program?", url);
             // this will also start local programs, so adding a "don't warn again"
             // checkbox will probably be too dangerous
-            int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
-            if (choice != KMessageBox::Yes)
+            int choice = KMessageBox::warningTwoActions(nullptr, question, i18n("Open Link?"), KStandardGuiItem::open(), KStandardGuiItem::cancel());
+            if (choice != KMessageBox::PrimaryAction)
                 return;
         }
     }

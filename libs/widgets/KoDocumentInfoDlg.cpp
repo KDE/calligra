@@ -368,7 +368,7 @@ void KoDocumentInfoDlg::saveEncryption()
                         "DecryptSaveMessage");
             return;
         }
-        if (KMessageBox::questionYesNo(
+        if (KMessageBox::questionTwoActions(
                     this,
                     i18n("<qt>To complete the decryption the document needs to be saved."
                          "<p>Do you want to save the document now?</qt>"),
@@ -376,7 +376,7 @@ void KoDocumentInfoDlg::saveEncryption()
                     KStandardGuiItem::save(),
                     KStandardGuiItem::dontSave(),
                     "DecryptSaveConfirmation"
-                    ) != KMessageBox::Yes) {
+                    ) != KMessageBox::PrimaryAction) {
             return;
         }
         // Force saveas so user can decide if overwrite the encrypted file or not
@@ -412,7 +412,7 @@ void KoDocumentInfoDlg::saveEncryption()
                         "EncryptSaveMessage");
             return;
         }
-        if (KMessageBox::questionYesNo(
+        if (KMessageBox::questionTwoActions(
                     this,
                     i18n("<qt>The document has been changed since it was opened. To complete the encryption the document needs to be saved."
                          "<p>Do you want to save the document now?</qt>"),
@@ -420,7 +420,7 @@ void KoDocumentInfoDlg::saveEncryption()
                     KStandardGuiItem::save(),
                     KStandardGuiItem::dontSave(),
                     "EncryptSaveConfirmation"
-                    ) != KMessageBox::Yes) {
+                    ) != KMessageBox::PrimaryAction) {
             return;
         }
         saveas = true; // Force saveas because save will silently fail when doc is not modified

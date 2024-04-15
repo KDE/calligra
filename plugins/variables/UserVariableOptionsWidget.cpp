@@ -161,13 +161,13 @@ void UserVariableOptionsWidget::deleteClicked()
     if (!variableManager()->userVariables().contains(userVariable->name())) {
         return;
     }
-    if (KMessageBox::questionYesNo(this,
+    if (KMessageBox::questionTwoActions(this,
             i18n("Delete variable <b>%1</b>?", userVariable->name()),
             i18n("Delete Variable"),
             KStandardGuiItem::yes(),
             KStandardGuiItem::cancel(),
             QString(),
-            KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::Yes) {
+            KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::PrimaryAction) {
         return;
     }
     variableManager()->remove(userVariable->name());

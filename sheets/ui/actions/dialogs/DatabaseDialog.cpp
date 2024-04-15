@@ -844,10 +844,10 @@ bool DatabaseDialog::optionsDoNext()
         if ((m_operatorValue_1->text().indexOf('*') != -1)
                 || (m_operatorValue_1->text().indexOf('?') != -1)) {
             // xgettext: no-c-format
-            int res = KMessageBox::warningYesNo(this, i18n("'*' or '?' are not valid wildcards in SQL. "
-                                                "The proper replacements are '%' or '_'. Do you want to replace them?"));
+            int res = KMessageBox::warningTwoActions(this, i18n("'*' or '?' are not valid wildcards in SQL. "
+                                                "The proper replacements are '%' or '_'. Do you want to replace them?"), {}, KGuiItem(i18nc("@action:button", "Replace")), KStandardGuiItem::cancel());
 
-            if (res == KMessageBox::Yes)
+            if (res == KMessageBox::PrimaryAction)
                 m_operatorValue_1->setText(exchangeWildcards(m_operatorValue_1->text()));
         }
     }
@@ -856,10 +856,10 @@ bool DatabaseDialog::optionsDoNext()
         if ((m_operatorValue_2->text().indexOf('*') != -1)
                 || (m_operatorValue_2->text().indexOf('?') != -1)) {
             // xgettext: no-c-format
-            int res = KMessageBox::warningYesNo(this, i18n("'*' or '?' are not valid wildcards in SQL. "
-                                                "The proper replacements are '%' or '_'. Do you want to replace them?"));
+            int res = KMessageBox::warningTwoActions(this, i18n("'*' or '?' are not valid wildcards in SQL. "
+                                                "The proper replacements are '%' or '_'. Do you want to replace them?"), {}, KGuiItem(i18nc("@action:button", "Replace")), KStandardGuiItem::cancel());
 
-            if (res == KMessageBox::Yes)
+            if (res == KMessageBox::PrimaryAction)
                 m_operatorValue_2->setText(exchangeWildcards(m_operatorValue_2->text()));
         }
     }
@@ -868,10 +868,10 @@ bool DatabaseDialog::optionsDoNext()
         if ((m_operatorValue_3->text().indexOf('*') != -1)
                 || (m_operatorValue_3->text().indexOf('?') != -1)) {
             // xgettext: no-c-format
-            int res = KMessageBox::warningYesNo(this, i18n("'*' or '?' are not valid wildcards in SQL. "
-                                                "The proper replacements are '%' or '_'. Do you want to replace them?"));
+            int res = KMessageBox::warningTwoActions(this, i18n("'*' or '?' are not valid wildcards in SQL. "
+                                                "The proper replacements are '%' or '_'. Do you want to replace them?"), {}, KGuiItem(i18nc("@action:button", "Replace")), KStandardGuiItem::cancel());
 
-            if (res == KMessageBox::Yes)
+            if (res == KMessageBox::PrimaryAction)
                 m_operatorValue_3->setText(exchangeWildcards(m_operatorValue_3->text()));
         }
     }

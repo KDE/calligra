@@ -721,21 +721,21 @@ bool MainWindow::Private::queryClose()
     if (DocumentManager::instance()->document()->isModified()) {
         auto url = DocumentManager::instance()->document()->defaultUrl();
 
-        int res = KMessageBox::warningYesNoCancel(q,
+        int res = KMessageBox::warningTwoActionsCancel(q,
                   i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", url.fileName()),
                   QString(),
                   KStandardGuiItem::save(),
                   KStandardGuiItem::discard());
 
         switch (res) {
-        case KMessageBox::Yes : {
+        case KMessageBox::PrimaryAction : {
             if (DocumentManager::instance()->isTemporaryFile() && !desktopViewProxy->fileSaveAs())
                 return false;
             if (!DocumentManager::instance()->save())
                 return false;
             break;
         }
-        case KMessageBox::No :
+        case KMessageBox::SecondaryAction :
             DocumentManager::instance()->document()->removeAutoSaveFiles();
             DocumentManager::instance()->document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
@@ -750,16 +750,16 @@ void MainWindow::Private::altSaveQuery()
 {
     if(alternativeSaveAction && alternativeSaveAction->isEnabled())
     {
-        int res = KMessageBox::warningYesNo(q, i18n("<p>The cloud copy of the document is out of date. Do you want to upload a new copy?</p>"));
+        int res = KMessageBox::warningTwoActions(q, i18n("<p>The cloud copy of the document is out of date. Do you want to upload a new copy?</p>"), {}, KGuiItem(i18nc("@action:button", "Upload")), KStandardGuiItem::cancel());
         switch (res) {
-        case KMessageBox::Yes : {
+        case KMessageBox::PrimaryAction : {
             alternativeSaveAction->trigger();
             while(alternativeSaveAction->isEnabled()) {
                 qApp->processEvents();
             }
             break;
         }
-        case KMessageBox::No :
+        case KMessageBox::SecondaryAction :
         default:
             break;
         }

@@ -254,8 +254,8 @@ bool ListDialog::changed() {
 void ListDialog::onApply()
 {
     if (!d->textEdit->toPlainText().isEmpty()) {
-        int ret = KMessageBox::warningYesNo(this, i18n("Entry area is not empty.\nDo you want to continue?"));
-        if (ret == KMessageBox::No) return;
+        int ret = KMessageBox::warningTwoActions(this, i18n("Entry area is not empty.\nDo you want to continue?"), {}, KStandardGuiItem::cont(), KStandardGuiItem::cancel());
+        if (ret == KMessageBox::SecondaryAction) return;
     }
 
     emit saveChanges(customLists());

@@ -85,9 +85,9 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
                                               "Are you sure that you want to run this program?", d->url);
                 // this will also start local programs, so adding a "don't warn again"
                 // checkbox will probably be too dangerous
-                const int answer = KMessageBox::warningYesNo(tool()->canvas()->canvasWidget(), question,
-                                   i18n("Open Link?"));
-                if (answer != KMessageBox::Yes) {
+                const int answer = KMessageBox::warningTwoActions(tool()->canvas()->canvasWidget(), question,
+                                   i18n("Open Link?"), KStandardGuiItem::open(), KStandardGuiItem::cancel());
+                if (answer != KMessageBox::PrimaryAction) {
                     return;
                 }
             }
