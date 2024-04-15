@@ -1245,7 +1245,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                break;
             default:
                 // function outside WMF specification
-                errorVectorImage << "BROKEN WMF file: Record number" << hex << recordType << dec
+                errorVectorImage << "BROKEN WMF file: Record number" << Qt::hex << recordType << Qt::dec
                               << " index " << index;
                 mValid = false;
                 break;

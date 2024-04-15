@@ -406,7 +406,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> mContext.fillColorSet;
                 //mContext.fillColorSet = false;
                 
-                debugVectorImage << "Fill color :" << hex << colorData << dec
+                debugVectorImage << "Fill color :" << Qt::hex << colorData << Qt::dec
                               << '(' << mContext.fillColorSet << ')';
 
                 mContext.fillColor = QColor::fromRgb(colorData);
@@ -430,7 +430,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> mContext.textFillColorSet;
                 
-                debugVectorImage << "Text fill color :" << hex << colorData << dec
+                debugVectorImage << "Text fill color :" << Qt::hex << colorData << Qt::dec
                               << '(' << mContext.textFillColorSet << ')';
 
                 mContext.textFillColor = QColor::fromRgb(colorData);
@@ -504,7 +504,7 @@ bool SvmParser::parse(const QByteArray &data)
         case META_LAYOUTMODE_ACTION:
             {
                 stream >> mContext.layoutMode;
-                debugVectorImage << "New layout mode:" << hex << mContext.layoutMode << dec << "hex";
+                debugVectorImage << "New layout mode:" << Qt::hex << mContext.layoutMode << Qt::dec << "hex";
             }
             break;
         case META_TEXTLANGUAGE_ACTION:
@@ -662,7 +662,7 @@ void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSi
     for (uint i = 0; i < totalSize; ++i) {
         quint8  temp;
         stream >> temp;
-        debugVectorImage << hex << i << temp << dec;
+        debugVectorImage << Qt::hex << i << temp << Qt::dec;
     }
 }
 

@@ -971,7 +971,7 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     }
 
     QFontMetrics  fm = m_painter->fontMetrics();
-    int textWidth  = fm.width(text) + fm.descent(); // fm.width(text) isn't right with Italic text
+    int textWidth  = fm.boundingRect(text).width() + fm.descent(); // fm.width(text) isn't right with Italic text
     int textHeight = fm.height();
 
     // Make (x, y) be the coordinates of the upper left corner of the

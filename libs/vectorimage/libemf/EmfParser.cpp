@@ -784,7 +784,7 @@ bool Parser::readRecord( QDataStream &stream )
                 soakBytes( stream, size-16 ); // because we already took 16.
                 break;
             default:
-                debugVectorImage << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
+                debugVectorImage << "EMR_COMMENT unknown type" << Qt::hex << commentIdentifier << Qt::dec
                               << "datasize =" << dataSize;
                 soakBytes( stream, size-16 ); // because we already took 16.
             }
