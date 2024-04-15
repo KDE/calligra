@@ -49,39 +49,37 @@ ToolRegistry* ToolRegistry::instance()
 
 void ToolRegistry::loadTools()
 {
-    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/tools"));
-    debugSheetsFormula << offers.count() << "tools found.";
+    const auto metaDatas = KoPluginLoader::pluginLoaders(QStringLiteral("calligrasheets/tools"));
+    debugSheetsFormula << metaDatas.count() << "tools found.";
 
     const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
-    foreach (QPluginLoader *loader, offers) {
-        QJsonObject metaData = loader->metaData().value("MetaData").toObject();
+    for (const auto &metaData : metaDatas) {
+        QJsonObject data = metaData.rawData().value("MetaData").toObject();
         int version = metaData.value("X-CalligraSheets-InterfaceVersion").toInt();
         if (version != 0) {
-            debugSheetsFormula << "Skipping" << loader->fileName() << ", because interface version is" << version;
+            debugSheetsFormula << "Skipping" << metaData.fileName() << ", because interface version is" << version;
             continue;
         }
-        QJsonObject pluginData = metaData.value("KPlugin").toObject();
-        QString category = pluginData.value("Category").toString();
+        const QString category = metaData.category();
         if (category != "Tool") {
-            debugSheetsFormula << "Skipping" << loader->fileName() << ", because category is " << category;
+            debugSheetsFormula << "Skipping" << metaData.fileName() << ", because category is " << category;
             continue;
         }
 
-        KPluginFactory* factory = qobject_cast<KPluginFactory *>(loader->instance());
-        if (!factory) {
-            debugSheetsFormula << "Unable to create plugin factory for" << loader->fileName();
+        const auto result = KPluginFactory::instantiatePlugin<QObject>(metaData, this);
+        if (!result.plugin) {
+            debugSheetsFormula << "Unable to create tool factory for" << metaData.fileName();
             continue;
         }
-        QObject *object = factory->create<QObject>(this, QVariantList());
-        CellToolFactory *toolFactory = dynamic_cast<CellToolFactory*>(object);
+        const auto toolFactory = dynamic_cast<CellToolFactory *>(result.plugin);
         if (!toolFactory) {
-            debugSheetsFormula << "Unable to create tool factory for" << loader->fileName();
+            debugSheetsFormula << "Unable to create tool factory for" << metaData.fileName();
             continue;
         }
-        const QString pluginConfigEnableKey = pluginData.value("Id").toString() + QLatin1String("Enabled");
+        const QString pluginConfigEnableKey = metaData.pluginId() + QLatin1String("Enabled");
         const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
             pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
-            pluginData.value("EnabledByDefault").toBool(true);
+            metaData.isEnabledByDefault();
 
         if (isPluginEnabled) {
             // Tool already registered?
@@ -89,9 +87,9 @@ void ToolRegistry::loadTools()
                 continue;
             }
 
-            toolFactory->setIconName(pluginData.value("Icon").toString());
+            toolFactory->setIconName(metaData.iconName());
             toolFactory->setPriority(10);
-            toolFactory->setToolTip(pluginData.value("Description").toString());
+            toolFactory->setToolTip(metaData.description());
             KoToolRegistry::instance()->add(toolFactory);
         } else {
            // Tool not registered?
@@ -102,5 +100,4 @@ void ToolRegistry::loadTools()
            KoToolRegistry::instance()->remove(toolFactory->id());
         }
     }
-    qDeleteAll(offers);
 }

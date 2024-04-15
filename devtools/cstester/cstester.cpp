@@ -44,11 +44,10 @@ KoDocument* openFile(const QString &filename)
 
     KoPart *part;
     QString error;
-    QList<QPluginLoader *> pluginLoaders = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
-    if (!pluginLoaders.isEmpty()) {
+    const auto metaDatas = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
+    if (!metaDatas.isEmpty()) {
         // take first
-        KoDocumentEntry entry(pluginLoaders.takeFirst());
-        qDeleteAll(pluginLoaders);
+        KoDocumentEntry entry(metaDatas.first());
         part = entry.createKoPart(&error);
     } else {
         error = "Could not find component";

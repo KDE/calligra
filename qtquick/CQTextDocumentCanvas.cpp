@@ -223,15 +223,14 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     emit loadingBegun();
 
     KoDocumentEntry entry;
-    QList<QPluginLoader*> pluginLoaders = KoPluginLoader::pluginLoaders("calligra/parts");
-    Q_FOREACH (QPluginLoader *loader, pluginLoaders) {
-        if (loader->fileName().contains(QLatin1String("wordspart"))) {
+    const auto metaDatas = KoPluginLoader::pluginLoaders("calligra/parts");
+    for (const auto metaData : metaDatas) {
+        if (metaData.fileName().contains(QLatin1String("wordspart"))) {
             entry = KoDocumentEntry(loader);
-            pluginLoaders.removeOne(loader);
             break;
         }
     }
-    qDeleteAll(pluginLoaders);
+
     if (entry.isEmpty()) {
         qWarning("Unable to load Words plugin, aborting!");
         return;

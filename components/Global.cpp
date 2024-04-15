@@ -17,6 +17,7 @@
 #include <QPluginLoader>
 
 #include <KoPluginLoader.h>
+#include <KPluginMetaData>
 
 // For the mimetype names
 #include <KWDocument.h>
@@ -59,25 +60,20 @@ int Global::documentType(const QUrl& document)
         QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
         // TODO: see if KoPluginLoader could provide this info via some metadata query instead
-        QList<QPluginLoader*> plugins = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mime.name());
+        const auto metaDatas = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mime.name());
 
-        for (int i = 0; i < plugins.count(); i++) {
-            QPluginLoader* loader = plugins.at(i);
-
-            if(loader->fileName().contains("words")) {
+        for (const auto &metaData : metaDatas) {
+            if(metaData.fileName().contains("words")) {
                 result = DocumentType::TextDocument;
                 break;
-            } else if(loader->fileName().contains("sheets")) {
+            } else if(metaData.fileName().contains("sheets")) {
                 result = DocumentType::Spreadsheet;
                 break;
-            } else if(loader->fileName().contains("stage")) {
+            } else if(metaData.fileName().contains("stage")) {
                 result = DocumentType::Presentation;
                 break;
             }
         }
-
-        // cleanup
-        qDeleteAll(plugins);
 
         // Since we don't actually have a Calligra plugin that handles these...
         if ((result == DocumentType::Unknown) && staticTextTypes.contains(mime.name())) {

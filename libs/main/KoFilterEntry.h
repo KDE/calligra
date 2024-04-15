@@ -11,10 +11,10 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include <QExplicitlySharedDataPointer>
 #include <QList>
 #include <QStringList>
+#include <KPluginMetaData>
 #include "komain_export.h"
 
 class QObject;
-class QPluginLoader;
 class KoFilter;
 class KoFilterChain;
 /**
@@ -30,7 +30,7 @@ public:
     /**
      * @param loader pluginloader for the filter, KoFilterEntry takes ownership
      */
-    explicit KoFilterEntry(QPluginLoader *loader);
+    explicit KoFilterEntry(const KPluginMetaData &metaData);
     ~KoFilterEntry();
 
     KoFilter* createFilter(KoFilterChain* chain, QObject* parent = 0);
@@ -78,7 +78,7 @@ public:
 
 
 private:
-    QPluginLoader * const m_loader;
+    KPluginMetaData const m_metaData;
 };
 
 #endif

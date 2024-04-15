@@ -249,15 +249,13 @@ bool KoApplication::start()
 
     // Find the part component file corresponding to the application instance name
     KoDocumentEntry entry;
-    QList<QPluginLoader*> pluginLoaders = KoPluginLoader::pluginLoaders("calligra/parts", d->nativeMimeType);
-    Q_FOREACH (QPluginLoader *loader, pluginLoaders) {
-        if (loader->fileName().contains(applicationName()+QString("part"))) {
-            entry = KoDocumentEntry(loader);
-            pluginLoaders.removeOne(loader);
+    const auto datas = KoPluginLoader::pluginLoaders("calligra/parts", d->nativeMimeType);
+    for (const auto &data : datas) {
+        if (data.fileName().contains(applicationName()+QString("part"))) {
+            entry = KoDocumentEntry(data);
             break;
         }
     }
-    qDeleteAll(pluginLoaders);
 
     if (entry.isEmpty()) {
         QMessageBox::critical(0, i18n("%1: Critical Error", applicationName()), i18n("Essential application components could not be found.\n"

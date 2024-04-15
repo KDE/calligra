@@ -19,10 +19,10 @@ SPDX-License-Identifier: LGPL-2.0-or-later
 #include <limits.h> // UINT_MAX
 
 
-KoFilterEntry::KoFilterEntry(QPluginLoader *loader)
-        : m_loader(loader)
+KoFilterEntry::KoFilterEntry(const KPluginMetaData &metaData)
+        : m_metaData(metaData)
 {
-    QJsonObject metadata = loader->metaData().value("MetaData").toObject();
+    QJsonObject metadata = metaData.rawData().value("MetaData").toObject();
     import = metadata.value("X-KDE-Import").toVariant().toStringList();
     export_ = metadata.value("X-KDE-Export").toVariant().toStringList();
     int w = metadata.value("X-KDE-Weight").toInt();
@@ -32,30 +32,21 @@ KoFilterEntry::KoFilterEntry(QPluginLoader *loader)
 
 KoFilterEntry::~KoFilterEntry()
 {
-    delete m_loader;
 }
 
 QString KoFilterEntry::fileName() const
 {
-    return m_loader->fileName();
+    return m_metaData.fileName();
 }
 
 QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;
 
-    QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/formatfilters"));
+    const auto datas = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/formatfilters"));
 
-    QList<QPluginLoader *>::ConstIterator it = offers.constBegin();
-    unsigned int max = offers.count();
-    //debugFilter <<"Query returned" << max <<" offers";
-    for (unsigned int i = 0; i < max; i++) {
-        //warnFilter <<"   desktopEntryPath=" << (*it)->metaData()
-        //               << "   library=" << (*it)->fileName() << Qt::endl;
-        // Append converted offer
-        lst.append(KoFilterEntry::Ptr(new KoFilterEntry(*it)));
-        // Next service
-        it++;
+    for (const auto &data : datas) {
+        lst.append(KoFilterEntry::Ptr(new KoFilterEntry(data)));
     }
 
     return lst;
@@ -63,20 +54,12 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 
 KoFilter* KoFilterEntry::createFilter(KoFilterChain* chain, QObject* parent)
 {
-    KLibFactory *factory = qobject_cast<KLibFactory *>(m_loader->instance());
-
-    if (!factory) {
-        warnMain << m_loader->errorString();
-        return 0;
+    auto result = KPluginFactory::instantiatePlugin<KoFilter>(m_metaData, parent);
+    if (!result.plugin) {
+        return nullptr;
     }
 
-    QObject* obj = factory->create<KoFilter>(parent);
-    if (!obj || !obj->inherits("KoFilter")) {
-        delete obj;
-        return 0;
-    }
-
-    KoFilter* filter = static_cast<KoFilter*>(obj);
+    KoFilter* filter = result.plugin;
     filter->m_chain = chain;
     return filter;
 }

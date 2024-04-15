@@ -69,9 +69,7 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
             configChanged = true;
         }
         for(KPluginMetaData metaData : offers) {
-            QJsonObject json = metaData.rawData().value("MetaData").toObject();
-            json = json.value("KPlugin").toObject();
-            const QString pluginName = json.value("Id").toString();
+            const QString pluginName = metaData.pluginId();
             if (pluginName.isEmpty()) {
                 warnPlugin << "Loading plugin" << metaData.fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
@@ -111,9 +109,7 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
     for (KPluginMetaData metaData : serviceNames) {
         auto result = KPluginFactory::instantiatePlugin<QObject >(metaData, owner ? owner : pluginLoaderInstance, {});
         if (result.plugin) {
-            QJsonObject json = metaData.rawData().value("MetaData").toObject();
-            json = json.value("KPlugin").toObject();
-            const QString pluginName = json.value("Id").toString();
+            const QString pluginName = metaData.pluginId();
             whiteList << pluginName;
             debugPlugin << "Loaded plugin" << metaData.fileName() << owner;
             if (!owner) {
@@ -163,7 +159,7 @@ QVector<KPluginMetaData> KoPluginLoader::pluginLoaders(const QString &directory,
 
         if (!mimeType.isEmpty()) {
             QJsonObject pluginData = metaData.rawData().value("KPlugin").toObject();
-            QStringList mimeTypes = pluginData.value("MimeTypes").toVariant().toStringList();
+            QStringList mimeTypes = metaData.mimeTypes();
             mimeTypes += metaData.rawData().value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
             mimeTypes += metaData.rawData().value("X-KDE-NativeMimeType").toString();
             if (! mimeTypes.contains(mimeType)) {

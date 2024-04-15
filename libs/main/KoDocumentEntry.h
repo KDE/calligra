@@ -11,7 +11,7 @@
 #include <QList>
 #include <QString>
 #include <QSharedPointer>
-#include <QPluginLoader>
+#include <KPluginMetaData>
 
 #include "komain_export.h"
 
@@ -33,9 +33,9 @@ public:
     explicit KoDocumentEntry();
     /**
      * Represents a valid entry
-     * @param loader pluginloader for the service, KoDocumentEntry takes ownership
+     * @param metaData plugin metadata for the service
      */
-    explicit KoDocumentEntry(QPluginLoader *loader);
+    explicit KoDocumentEntry(const KPluginMetaData &metaData);
     ~KoDocumentEntry();
 
     QJsonObject metaData() const;
@@ -87,7 +87,7 @@ public:
     static KoDocumentEntry queryByMimeType(const QString & mimetype);
 
 private:
-    QSharedPointer<QPluginLoader> m_loader;
+    KPluginMetaData m_metaData;
 };
 
 #endif

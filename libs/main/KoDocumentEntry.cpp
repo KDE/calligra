@@ -22,12 +22,11 @@
 #include <limits.h> // UINT_MAX
 
 KoDocumentEntry::KoDocumentEntry()
-        : m_loader(0)
 {
 }
 
-KoDocumentEntry::KoDocumentEntry(QPluginLoader *loader)
-        : m_loader(loader)
+KoDocumentEntry::KoDocumentEntry(const KPluginMetaData &metaData)
+        : m_metaData(metaData)
 {
 }
 
@@ -38,37 +37,33 @@ KoDocumentEntry::~KoDocumentEntry()
 
 QJsonObject KoDocumentEntry::metaData() const
 {
-    return m_loader ? m_loader->metaData().value("MetaData").toObject() : QJsonObject();
+    return m_metaData.isValid() ? m_metaData.rawData().value("MetaData").toObject() : QJsonObject();
 }
 
 QString KoDocumentEntry::fileName() const
 {
-    return m_loader ? m_loader->fileName() : QString();
+    return m_metaData.isValid() ? m_metaData.fileName() : QString();
 }
 
 /**
  * @return TRUE if the service pointer is null
  */
 bool KoDocumentEntry::isEmpty() const {
-    return (m_loader == 0);
+    return !m_metaData.isValid();
 }
 
 /**
  * @return name of the associated service
  */
 QString KoDocumentEntry::name() const {
-    QJsonObject json = metaData();
-    json = json.value("KPlugin").toObject();
-    return json.value("Name").toString();
+    return m_metaData.name();
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
 QStringList KoDocumentEntry::mimeTypes() const {
-    QJsonObject json = metaData();
-    QJsonObject pluginData = json.value("KPlugin").toObject();
-    return pluginData.value("MimeTypes").toVariant().toStringList();
+    return m_metaData.mimeTypes();
 }
 
 /**
@@ -80,21 +75,18 @@ bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
 
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
-    if (!m_loader) {
+    if (!m_metaData.isValid()) {
         return 0;
     }
 
-    QObject *obj = m_loader->instance();
-    KPluginFactory *factory = qobject_cast<KPluginFactory *>(obj);
-    KoPart *part = factory->create<KoPart>(0, QVariantList());
-
-    if (!part) {
+    auto result = KPluginFactory::instantiatePlugin<KoPart>(m_metaData, nullptr, {});
+    if (!result.plugin) {
         if (errorMsg)
-            *errorMsg = m_loader->errorString();
-        return 0;
+            *errorMsg = result.errorString;
+        return nullptr;
     }
 
-    return part;
+    return result.plugin;
 }
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
@@ -134,10 +126,10 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
     QList<KoDocumentEntry> lst;
 
     // Query the trader
-    const QList<QPluginLoader *> offers = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
+    const auto metaDatas = KoPluginLoader::pluginLoaders(QStringLiteral("calligra/parts"), mimetype);
 
-    foreach(QPluginLoader *pluginLoader, offers) {
-        lst.append(KoDocumentEntry(pluginLoader));
+    for(const auto &metadata : metaDatas) {
+        lst.append(KoDocumentEntry(metadata));
     }
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {
