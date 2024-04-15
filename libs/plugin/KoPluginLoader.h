@@ -15,6 +15,7 @@
 class QObject;
 class QPluginLoader;
 class KPluginFactory;
+class KPluginMetaData;
 
 /**
  * The pluginloader singleton is responsible for loading the plugins
@@ -108,7 +109,7 @@ namespace KoPluginLoader
      * @param mimeType The string used to identify the plugins.
      * @return a list of plugin loaders from the found plugins matching the mimetype, ownership is transferred to the caller
      */
-    KOPLUGIN_EXPORT QList<QPluginLoader *> pluginLoaders(const QString &directory, const QString &mimeType = QString());
+    KOPLUGIN_EXPORT QVector<KPluginMetaData> pluginLoaders(const QString &directory, const QString &mimeType = QString());
 }
 
 #endif // KO_PLUGIN_LOADER_H
