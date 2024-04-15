@@ -404,7 +404,7 @@ void GitOpsThread::performPull()
 
                     git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature,
                                                 NULL, message.ptr,
-                                                tree, 2, (const git_commit **) parents);
+                                                tree, 2, (git_commit * const*) parents);
                     git_tree_free(tree);
                 }
                 git_index_free(index);
