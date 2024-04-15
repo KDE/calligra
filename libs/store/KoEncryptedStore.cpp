@@ -17,12 +17,11 @@
 #include <QIODevice>
 #include <QWidget>
 #include <QBuffer>
-#include <kpassworddialog.h>
+#include <KPasswordDialog>
 #include <knewpassworddialog.h>
 #include <kwallet.h>
 #include <klocalizedstring.h>
 #include <kfilterdev.h>
-#include <kmessage.h>
 #include <kmessagebox.h>
 #include <kzip.h>
 #include <KoNetAccess.h>
@@ -225,7 +224,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
                         } else {
                             // Checksum type unknown
                             if (!checksumErrorShown) {
-                                KMessage::message(KMessage::Warning, i18n("This document contains an unknown checksum. When you give a password it might not be verified."));
+                                KMessageBox::information(nullptr, i18n("This document contains an unknown checksum. When you give a password it might not be verified."), i18nc("@dialog:title", "Warning"));
                                 checksumErrorShown = true;
                             }
                             encData.checksum = QCA::SecureArray();
@@ -251,7 +250,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
                         encData.initVector = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("initialisation-vector").toLatin1()));
                         if (xmlencattr.toElement().hasAttribute("algorithm-name") && xmlencattr.toElement().attribute("algorithm-name") != "Blowfish CFB") {
                             if (!unreadableErrorShown) {
-                                KMessage::message(KMessage::Warning, i18n("This document contains an unknown encryption method. Some parts may be unreadable."));
+                                KMessageBox::information(nullptr, i18n("This document contains an unknown encryption method. Some parts may be unreadable."), i18nc("@title:dialog", "Warning"));
                                 unreadableErrorShown = true;
                             }
                             encData.initVector = QCA::SecureArray();
@@ -268,7 +267,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
                         }
                         if (xmlencattr.toElement().hasAttribute("key-derivation-name") && xmlencattr.toElement().attribute("key-derivation-name") != "PBKDF2") {
                             if (!unreadableErrorShown) {
-                                KMessage::message(KMessage::Warning, i18n("This document contains an unknown encryption method. Some parts may be unreadable."));
+                                KMessageBox::information(nullptr, i18n("This document contains an unknown encryption method. Some parts may be unreadable."), i18nc("@title:dialog", "Warning"));
                                 unreadableErrorShown = true;
                             }
                             encData.salt = QCA::SecureArray();
@@ -283,7 +282,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
                     m_encryptionData.insert(fullpath, encData);
                     if (!(algorithmFound && keyDerivationFound)) {
                         if (!unreadableErrorShown) {
-                            KMessage::message(KMessage::Warning, i18n("This document contains incomplete encryption data. Some parts may be unreadable."));
+                            KMessageBox::warning(i18n("This document contains incomplete encryption data. Some parts may be unreadable."));
                             unreadableErrorShown = true;
                         }
                     }
@@ -297,7 +296,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
 
         if (isEncrypted() && !(QCA::isSupported("sha1") && QCA::isSupported("pbkdf2(sha1)") && QCA::isSupported("blowfish-cfb"))) {
             d->good = false;
-            KMessage::message(KMessage::Error, i18n("QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can not be opened."));
+            KMessageBox::error(nullptr, i18n("QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can not be opened."));
         }
     }
 }
@@ -327,7 +326,7 @@ bool KoEncryptedStore::doFinalize()
             if (!m_manifestBuffer.isEmpty() && !document.setContent(m_manifestBuffer)) {
                 // Oi! That's fresh XML we should have here!
                 // This is the only case we can't fix
-                KMessage::message(KMessage::Error, i18n("The manifest file seems to be corrupted. It cannot be modified and the document will remain unreadable. Please try and save the document again to prevent losing your work."));
+                KMessageBox::error(nullptr, i18n("The manifest file seems to be corrupted. It cannot be modified and the document will remain unreadable. Please try and save the document again to prevent losing your work."));
                 m_pZip->close();
                 return false;
             }
@@ -425,7 +424,7 @@ bool KoEncryptedStore::doFinalize()
             m_manifestBuffer = document.toByteArray();
             m_pZip->setCompression(KZip::DeflateCompression);
             if (!m_pZip->writeFile(QLatin1String(MANIFEST_FILE), m_manifestBuffer)) {
-                KMessage::message(KMessage::Error, i18n("The manifest file cannot be written. The document will remain unreadable. Please try and save the document again to prevent losing your work."));
+                KMessageBox::error(nullptr, i18n("The manifest file cannot be written. The document will remain unreadable. Please try and save the document again to prevent losing your work."));
                 m_pZip->close();
                 return false;
             }
