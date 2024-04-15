@@ -611,13 +611,14 @@ set_package_properties(SharedMimeInfo PROPERTIES
 ##
 ## Test for Okular
 ##
-macro_optional_find_package(Okular5 0.99.60 QUIET)
-set_package_properties(Okular5 PROPERTIES
-    DESCRIPTION "A unified document viewer"
-    URL "https://okular.kde.org/"
-    PURPOSE "Required to build the plugins for Okular"
-    TYPE OPTIONAL
-    )
+## Disabled since Okular switched to Qt6
+##macro_optional_find_package(Okular5 0.99.60 QUIET)
+##set_package_properties(Okular5 PROPERTIES
+##    DESCRIPTION "A unified document viewer"
+##    URL "https://okular.kde.org/"
+##    PURPOSE "Required to build the plugins for Okular"
+##    TYPE OPTIONAL
+##    )
 
 ##
 ## Test for librevenge
