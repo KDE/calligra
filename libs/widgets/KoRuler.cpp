@@ -72,8 +72,8 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     painter.setBrush(palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
-    qreal x= width()/2;
-    painter.translate(0,-height()/2+5);
+    qreal x= width() / 2.0;
+    painter.translate(0, -height() / 2.0 + 5.0);
 
     switch (m_type) {
     case QTextOption::LeftTab:
@@ -259,9 +259,9 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     // Calc the longest text length
     int textLength = 0;
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
-        int number = qRound((i / numberStepPixel) * numberStep);
+        int number = qRound((i / (qreal)numberStepPixel) * numberStep);
 
-        textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
+        textLength = qMax(textLength, fontMetrics.boundingRect(QString::number(number)).width());
     }
     textLength += 4;  // Add some padding
 
@@ -320,7 +320,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
                 numberText = QString::number(hackyLength - stepCount * numberStep);
             }
             painter.setPen(numberPen);
-            painter.drawText(QPointF(x-fontMetrics.width(numberText)/2.0,
+            painter.drawText(QPointF(x-fontMetrics.boundingRect(numberText).width()/2.0,
                                      rectangle.bottom() -fullStepMarkerLength -measurementTextAboveBelowMargin),
                              numberText);
             painter.setPen(markerPen);
@@ -487,8 +487,8 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     int textLength = 0;
 
     for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
-        int number = qRound((i / numberStepPixel) * numberStep);
-        textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
+        int number = qRound((i / qreal(numberStepPixel)) * numberStep);
+        textLength = qMax(textLength, fontMetrics.boundingRect(QString::number(number)).width());
     }
     textLength += 4;  // Add some padding
 
@@ -537,7 +537,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
             int number = qRound(stepCount * numberStep);
             QString numberText = QString::number(number);
             painter.setPen(numberPen);
-            painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, -measurementTextAboveBelowMargin), numberText);
+            painter.drawText(QPointF(-fontMetrics.boundingRect(numberText).width() / 2.0, -measurementTextAboveBelowMargin), numberText);
             painter.restore();
 
             ++stepCount;
@@ -604,7 +604,7 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
         return;
 
     painter.save();
-    painter.translate(d->offset, d->ruler->height() / 2);
+    painter.translate(d->offset, d->ruler->height() / 2.0);
     painter.setPen(QPen(d->ruler->palette().color(QPalette::Text), 0));
     painter.setBrush(d->ruler->palette().color(QPalette::Text));
 
@@ -617,13 +617,13 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     const QFontMetrics fontMetrics(font);
     QString label = d->unit.toUserStringValue(
             d->viewConverter->viewToDocumentX(line.length())) + ' ' + d->unit.symbol();
-    QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.width(label)/2,
-            midPoint.y() + fontMetrics.ascent()/2);
+    QPointF labelPosition = QPointF(midPoint.x() - fontMetrics.boundingRect(label).width() / 2.0,
+            midPoint.y() + fontMetrics.ascent()/2.0);
     painter.setFont(font);
     painter.drawText(labelPosition, label);
 
     // Draw the arrow lines
-    qreal arrowLength = (line.length() - fontMetrics.width(label)) / 2 - 2;
+    qreal arrowLength = (line.length() - fontMetrics.boundingRect(label).width()) / 2.0 - 2;
     arrowLength = qMax(qreal(0.0), arrowLength);
     QLineF startArrow(line.p1(), line.pointAt(arrowLength / line.length()));
     QLineF endArrow(line.p2(), line.pointAt(1.0 - arrowLength / line.length()));

@@ -74,8 +74,9 @@ bool StyleStorageLoaderJob::isFinished()
 void StyleStorageLoaderJob::run()
 {
     static int total = 0;
-    debugSheetsStyle << "Loading styles:" << endl << m_styles;
-    QTime t; t.start();
+    debugSheetsStyle << "Loading styles:" << Qt::endl << m_styles;
+    QElapsedTimer t;
+    t.start();
     StyleStorage::Private* d = m_storage->d;
     QList<QPair<Region, SharedSubStyle> > subStyles;
 

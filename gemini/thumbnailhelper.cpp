@@ -31,10 +31,6 @@ int main( int argc, char** argv )
     SetErrorMode(SEM_NOGPFAULTERRORBOX); 
 #endif
 
-#if defined HAVE_X11
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
-#endif
-
     // needed as kdelibs4support linking plugins seem to inject activated drkonqi
     // TODO: fix it, that seems very wrong
     KCrash::setDrKonqiEnabled(false);

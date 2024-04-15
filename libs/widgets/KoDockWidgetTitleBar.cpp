@@ -140,7 +140,7 @@ QSize KoDockWidgetTitleBar::sizeHint() const
      * Calculate the width of title and add to the total width of the docker window when collapsed.
      */
     const int titleWidth =
-        (d->textVisibilityMode == FullTextAlwaysVisible) ? (q->fontMetrics().width(q->windowTitle()) + 2*mw) :
+        (d->textVisibilityMode == FullTextAlwaysVisible) ? (q->fontMetrics().boundingRect(q->windowTitle()).width() + 2*mw) :
                                                            0;
 
     if (d->preCollapsedWidth > 0) {

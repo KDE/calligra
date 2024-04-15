@@ -514,7 +514,8 @@ bool Style::operator==(const Style& other) const
 {
     if (other.isEmpty())
         return isEmpty() ? true : false;
-    const QSet<Key> keys = QSet<Key>::fromList(d->subStyles.keys() + other.d->subStyles.keys());
+    const auto list = d->subStyles.keys() + other.d->subStyles.keys();
+    const QSet<Key> keys = QSet<Key>(list.begin(), list.end());
     const QSet<Key>::ConstIterator end = keys.constEnd();
     for (QSet<Key>::ConstIterator it = keys.constBegin(); it != end; ++it) {
         if (!compare(d->subStyles.value(*it).data(), other.d->subStyles.value(*it).data()))
@@ -560,7 +561,8 @@ void Style::merge(const Style& style)
 QSet<Style::Key> Style::difference(const Style& other) const
 {
     QSet<Key> result;
-    const QSet<Key> keys = QSet<Key>::fromList(d->subStyles.keys() + other.d->subStyles.keys());
+    const auto list = d->subStyles.keys() + other.d->subStyles.keys();
+    const QSet<Key> keys = QSet<Key>(list.begin(), list.end());
     const QSet<Key>::ConstIterator end = keys.constEnd();
     for (QSet<Key>::ConstIterator it = keys.constBegin(); it != end; ++it) {
         if (!other.d->subStyles.contains(*it))
@@ -603,8 +605,10 @@ QSet<Style::Key> Style::definedKeys(const StyleManager *styles) const
         // remove substyles already present in named style
         if (namedStyle) keys = difference(*namedStyle);
     }
-    else
-        keys = QSet<Style::Key>::fromList(d->subStyles.keys());
+    else {
+        const auto k = d->subStyles.keys();
+        keys = QSet<Style::Key>(k.begin(), k.end());
+    }
 
     return keys;
 }

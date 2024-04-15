@@ -253,7 +253,7 @@ void KoDualColorButton::mouseMoveEvent( QMouseEvent *event )
       KColorMimeData::createDrag( d->tmpSelection == Foreground ?
                                   d->displayRenderer->toQColor(d->foregroundColor) :
                                   d->displayRenderer->toQColor(d->backgroundColor),
-                                  this )->start();
+                                  this )->exec(Qt::CopyAction);
       d->dragFlag = true;
     }
   }

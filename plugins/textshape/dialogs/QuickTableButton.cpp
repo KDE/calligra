@@ -57,7 +57,7 @@ SizeChooserGrid::SizeChooserGrid(QuickTableButton *button, QAction *action)
 
     QFontMetrics metrics(font());
     m_rowHeight = metrics.height() + 2;
-    m_columnWidth = metrics.width("8x22") + 2;
+    m_columnWidth = metrics.boundingRect("8x22").width() + 2;
 
     auto margins = contentsMargins();
     m_leftMargin = margins.left() + 4;
