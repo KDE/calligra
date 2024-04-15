@@ -1,4 +1,4 @@
 add_subdirectory(dropbox)
-if(SHOULD_BUILD_PLUGIN_CALLIGRAGEMINI_GIT)
+if(TARGET LibGit2::LibGit2)
     add_subdirectory(git)
 endif()

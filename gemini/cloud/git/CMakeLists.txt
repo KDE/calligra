@@ -19,7 +19,7 @@ target_link_libraries(calligrageminigitplugin
     Qt5::Gui
     Qt5::Qml
     Qt5::Quick
-    ${LIBGIT2_LIBRARIES}
+    LibGit2::LibGit2
     komain
     KF5::I18n
 )

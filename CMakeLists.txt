@@ -725,7 +725,7 @@ set_package_properties(PopplerXPDFHeaders PROPERTIES
 ##
 ## Test for libgit2
 ##
-macro_optional_find_package(Libgit2)
+macro_optional_find_package(LibGit2)
 
 ##
 ## Generate a file for prefix information
