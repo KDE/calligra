@@ -5,10 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon )
 
 set(karbon_flattenpath_PART_SRCS FlattenPathPlugin.cpp KarbonPathFlattenCommand.cpp )
 
-
 add_library(karbon_flattenpath MODULE ${karbon_flattenpath_PART_SRCS})
-
-karbon_viewplugin_desktop_to_json(karbon_flattenpath karbon_flattenpath.desktop)
 
 target_link_libraries(karbon_flattenpath karboncommon)
 

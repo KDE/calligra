@@ -174,19 +174,6 @@ endif()
 endfunction()
 
 
-function(karbon_viewplugin_desktop_to_json target desktop)
-
-if(${KF5_VERSION} VERSION_LESS "5.16.0")
-    kcoreaddons_desktop_to_json(${target} ${desktop})
-else()
-    kcoreaddons_desktop_to_json(${target} ${desktop}
-        SERVICE_TYPES ${CMAKE_SOURCE_DIR}/karbon/data/karbon_viewplugin.desktop
-    )
-endif()
-
-endfunction()
-
-
 function(calligrasheets_plugin_desktop_to_json target desktop)
 
 if(${KF5_VERSION} VERSION_LESS "5.16.0")

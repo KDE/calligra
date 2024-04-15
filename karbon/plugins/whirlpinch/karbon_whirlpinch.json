@@ -1,0 +1,40 @@
+{
+    "KPlugin": {
+        "Name": "Karbon Whirl Pinch plugin",
+        "Name[bs]": "Karbon dodatak za koncentričnu distorziju slike",
+        "Name[ca@valencia]": "Connector de gira i pessiga de Karbon",
+        "Name[ca]": "Connector de gira i pessiga del Karbon",
+        "Name[da]": "Plugin til Karbon til hvirvel og knib",
+        "Name[de]": "Karbon Verwirbelungs-Modul",
+        "Name[el]": "Πρόσθετο Whirl Pinch του Karbon",
+        "Name[en_GB]": "Karbon Whirl Pinch plugin",
+        "Name[eo]": "Karbon Whirl Pinch kromaĵo",
+        "Name[es]": "Complemento de punción de Karbon",
+        "Name[et]": "Karboni keerise efekti plugin",
+        "Name[eu]": "Karbon-en atximur biratze plugina",
+        "Name[fi]": "Karbonin pyörrenipistämisliitännäinen",
+        "Name[fr]": "Module externe pour Karbon de tourbillon et pincement",
+        "Name[gl]": "Complemento para Karbon de xiro e picada",
+        "Name[it]": "Estensione Vortice e Pizzico di Karbon",
+        "Name[ja]": "Karbon 回転/つまみ変形プラグイン",
+        "Name[kk]": "Karbon-ның бұрау және қысу плагині",
+        "Name[ko]": "Karbon Whirl Pinch 플러그인",
+        "Name[nb]": "Whirl Pinch-tillegg for Karbon",
+        "Name[nl]": "Plug-in voor Whirl Pinch van Karbon",
+        "Name[pl]": "Wtyczka szczypty zawirowania dla Karbon",
+        "Name[pt]": "'Plugin' de Punção do Karbon",
+        "Name[pt_BR]": "Plugin de punção do Karbon",
+        "Name[ru]": "Модуль кручения и сжатия Karbon",
+        "Name[sk]": "Plugin rozštiepený vír pre Karbon",
+        "Name[sl]": "Vtičnik Whirl Pinch za Karbon",
+        "Name[sv]": "Karbon-insticksprogram för virvla och kläm",
+        "Name[tr]": "Karbon Bur/Kıstır eklentisi",
+        "Name[uk]": "Додаток вихору для Karbon",
+        "Name[x-test]": "xxKarbon Whirl Pinch pluginxx",
+        "Name[zh_CN]": "Karbon 旋转捏插件",
+        "ServiceTypes": [
+            "Karbon/ViewPlugin"
+        ]
+    },
+    "X-Karbon-Version": "28"
+}

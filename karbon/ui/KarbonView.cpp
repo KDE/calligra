@@ -129,6 +129,7 @@
 #include <QImageReader>
 #include <QPluginLoader>
 #include <QLocale>
+#include <QDebug>
 
 #include <unistd.h>
 #include <KConfigGroup>
@@ -207,16 +208,20 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     initActions();
 
     // Load all plugins
-    const QList<KPluginFactory *> pluginFactories =
-        KoPluginLoader::instantiatePluginFactories(QStringLiteral("karbon/extensions"));
-    foreach (KPluginFactory* factory, pluginFactories) {
-        QObject *object = factory->create<QObject>(this, QVariantList());
-        KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);
+    const QVector<KPluginMetaData> availablePlugins = KPluginMetaData::findPlugins(QStringLiteral("karbon/extensions"));
+
+    for (const KPluginMetaData &metaData : availablePlugins) {
+        auto clientPlugin = KPluginFactory::instantiatePlugin<QObject>(metaData, this);
         if (clientPlugin) {
-            insertChildClient(clientPlugin);
+            auto client = dynamic_cast<KXMLGUIClient *>(clientPlugin.plugin);
+            if (client) {
+                insertChildClient(client);
+            } else {
+                clientPlugin.plugin->deleteLater();
+                qWarning() << "Not a valid plugin";
+            }
         } else {
-            // not our/valid plugin, so delete the created object
-            object->deleteLater();
+            qWarning() << "Not a valid plugin";
         }
     }
 
