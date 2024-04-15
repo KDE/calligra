@@ -14,6 +14,7 @@
 #define MSOOXMLCOMMONREADERDRAWINGML_IMPL_H
 
 #include <QTime>
+#include <QRandomGenerator>
 #include <math.h>
 
 #ifndef M_PI
@@ -2525,7 +2526,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             if (m_currentBulletProperties.m_type == MSOOXML::Utils::ParagraphBulletProperties::NumberType) {
 
                 QString xmlId = QString("lvl%1").arg(m_currentListLevel);
-                xmlId.append(QString("_%1").arg(qrand()));
+                xmlId.append(QString("_%1").arg(QRandomGenerator::global()->generate()));
                 body->addAttribute("xml:id", xmlId);
 
                 if (m_continueListNumbering.contains(m_currentListLevel) &&

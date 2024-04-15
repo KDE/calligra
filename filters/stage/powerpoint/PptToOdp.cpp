@@ -32,6 +32,7 @@
 #include <QTime>
 #include <QDir>
 #include <QBuffer>
+#include <QRandomGenerator>
 #include <qmath.h>
 
 //#define DEBUG_PPTTOODP
@@ -2454,7 +2455,7 @@ void PptToOdp::addListElement(KoXmlWriter& out, const QString& listStyle,
     }
     if (pf.fBulletHasAutoNumber()) {
         QString xmlId = QString("lvl%1").arg(level);
-        xmlId.append(QString("_%1").arg(qrand()));
+        xmlId.append(QString("_%1").arg(QRandomGenerator::global()->generate()));
         list.set_xml_id(xmlId);
 
         if (m_continueListNumbering.contains(level) &&

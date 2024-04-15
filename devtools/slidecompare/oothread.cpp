@@ -8,6 +8,7 @@
 #include <QUrl>
 #include <QDebug>
 #include <QDateTime>
+#include <QRandomGenerator>
 #include <cstdio>
 
 #define UNX
@@ -118,7 +119,7 @@ void OoThread::stop() {
 }
 namespace {
     QString tmpname() {
-        return QString::number(qrand());
+        return QString::number(QRandomGenerator::global()->generate());
     }
 }
 QString

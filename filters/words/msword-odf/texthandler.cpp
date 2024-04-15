@@ -39,6 +39,7 @@
 #include <QUrl>
 #include <QBuffer>
 #include <QFontInfo>
+#include <QRandomGenerator>
 
 #include <klocalizedstring.h>
 
@@ -114,7 +115,6 @@ WordsTextHandler::WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
     //set a unique xml:id of a text:list element
-    qsrand(QTime::currentTime().msec());
 }
 
 WordsTextHandler::~WordsTextHandler()
@@ -1959,7 +1959,7 @@ bool WordsTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             writer->addAttribute("text:continue-list", m_numIdXmlIdMap[key]);
         }
         QString xmlId = key;
-        xmlId.append(QString("_%1").arg(qrand())).prepend("lst");
+        xmlId.append(QString("_%1").arg(QRandomGenerator::global()->generate())).prepend("lst");
         writer->addAttribute("xml:id", xmlId);
         m_numIdXmlIdMap[key] = xmlId;
     }

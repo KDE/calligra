@@ -2458,7 +2458,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                         // Keeping the id readable for debugging purpose
                         QString xmlId = key;
                         xmlId.append(QString("_%1").arg(m_numIdXmlId[key].first)).prepend("lst");
-                        xmlId.append(QString("_%1").arg(qrand()));
+                        xmlId.append(QString("_%1").arg(QRandomGenerator::global()->generate()));
                         body->addAttribute("xml:id", xmlId);
 
                         if (m_continueListNum.contains(m_currentNumId)) {

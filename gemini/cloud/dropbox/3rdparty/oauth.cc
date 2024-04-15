@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include <QStringList>
 #include <QDebug>
+#include <QRandomGenerator>
 
 #include <algorithm>
 
@@ -25,7 +26,6 @@ OAuth::OAuth():
 //    m_consumer_key("8xf1b5hrsgmempk"),
 //    m_consumer_secret("6se47g35sdqsouw")
 {
-    qsrand(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());
     m_token = "";
     m_secret = "";
 }
@@ -50,9 +50,9 @@ void OAuth::sign(QString method, QNetworkRequest *nr)
 
 QString OAuth::oauth_timestamp()
 {
-    int currentTimeStamp = QDateTime::currentDateTimeUtc().toTime_t();
+    int currentTimeStamp = QDateTime::currentDateTimeUtc().toSecsSinceEpoch();
     QString strtimestamp("oauth_timestamp=\"%1\",oauth_nonce=\"%2\"");
-    return strtimestamp.arg(currentTimeStamp).arg(qrand());
+    return strtimestamp.arg(currentTimeStamp).arg(QRandomGenerator::global()->generate());
 }
 
 QString OAuth::oauth_consumer_key()
