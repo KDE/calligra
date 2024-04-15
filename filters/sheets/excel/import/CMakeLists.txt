@@ -51,7 +51,6 @@ target_link_libraries(excelimport calligrasheetscore komsooxml komain mso koodf)
 
 set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 add_library(calligra_filter_xls2ods MODULE ${xls2ods_SRCS})
-calligra_filter_desktop_to_json(calligra_filter_xls2ods calligra_filter_xls2ods.desktop)
 target_link_libraries(calligra_filter_xls2ods
                       calligrasheetscore
                       komsooxml mso

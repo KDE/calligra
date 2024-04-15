@@ -1,0 +1,40 @@
+{
+    "KPlugin": {
+        "Name": "Microsoft PowerPoint Import Filter for Stage",
+        "Name[ca@valencia]": "Filtre d'importació Microsoft PowerPoint per a Stage",
+        "Name[ca]": "Filtre d'importació Microsoft PowerPoint per a l'Stage",
+        "Name[cs]": "Importní filtr Microsoft PowerPoint pro Stage",
+        "Name[da]": "Microsoft PowerPoint importfilter til Stage",
+        "Name[de]": "Microsoft-PowerPoint-Importfilter für Stage",
+        "Name[el]": "Φίλτρο εισαγωγής Microsoft PowerPoint για το Stage",
+        "Name[en_GB]": "Microsoft PowerPoint Import Filter for Stage",
+        "Name[eo]": "Importa Filtrilo de Microsoft PowerPoint por Stage",
+        "Name[es]": "Filtro de importación de Microsoft PowerPoint para Stage",
+        "Name[et]": "Stage'i Microsoft PowerPointi impordifilter",
+        "Name[eu]": "Stage-era Microsoft PowerPoint inportatzeko iragazkia",
+        "Name[fi]": "Stagen Microsoft PowerPoint -tuontisuodatin",
+        "Name[fr]": "Filtre d'importation « Microsoft PowerPoint » pour Stage",
+        "Name[gl]": "Filtro de para Stage importación de Microsoft PowerPoint",
+        "Name[it]": "Filtro di importazione Microsoft PowerPoint per Stage",
+        "Name[ka]": "Microsoft PowerPoint -ის შემოტანის ფილტრი Stage-სთვის",
+        "Name[ko]": "Stage용 Microsoft PowerPoint 가져오기 필터",
+        "Name[nl]": "Microsoft Powerpoint importfilter voor Stage",
+        "Name[pl]": "Filtr importu Microsoft PowerPoint dla Sceny",
+        "Name[pt]": "Filtro de Importação do Microsoft PowerPoint para o Stage",
+        "Name[pt_BR]": "Filtro de importação de Microsoft PowerPoint para Stage",
+        "Name[ru]": "Фильтр импорта презентаций Microsoft PowerPoint в Stage",
+        "Name[sk]": "Filter pre import z Microsoft PowerPoint-u pre Stage",
+        "Name[sl]": "Uvozni filter Microsoft PowerPoint za Stage",
+        "Name[sv]": "Microsoft PowerPoint-importfilter för Stage",
+        "Name[tr]": "Sahne Microsoft PowerPoint İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних Microsoft PowerPoint для Stage",
+        "Name[x-test]": "xxMicrosoft PowerPoint Import Filter for Stagexx",
+        "Name[zh_CN]": "Stage 的 Microsoft PowerPoint 导入过滤器",
+        "ServiceTypes": [
+            "Calligra/Filter"
+        ]
+    },
+    "X-KDE-Export": "application/vnd.oasis.opendocument.presentation",
+    "X-KDE-Import": "application/vnd.ms-powerpoint",
+    "X-KDE-Weight": "1"
+}

@@ -26,7 +26,6 @@ set(docx2odt_PART_SRCS
 )
 
 add_library(calligra_filter_docx2odt MODULE ${docx2odt_PART_SRCS})
-calligra_filter_desktop_to_json(calligra_filter_docx2odt calligra_filter_docx2odt.desktop)
 
 target_link_libraries(
     calligra_filter_docx2odt

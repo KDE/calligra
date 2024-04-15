@@ -12,7 +12,6 @@ set(ascii2words_PART_SRCS
 )
 ki18n_wrap_ui(ascii2words_PART_SRCS ImportDialogUI.ui )
 add_library(calligra_filter_ascii2words MODULE ${ascii2words_PART_SRCS})
-calligra_filter_desktop_to_json(calligra_filter_ascii2words calligra_filter_ascii2words.desktop)
 target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate KF5::Codecs)
 install(TARGETS calligra_filter_ascii2words DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
@@ -36,7 +35,6 @@ add_library(calligra_filter_odt2ascii MODULE ${odt2ascii_PART_SRCS})
 target_link_libraries(calligra_filter_odt2ascii koodfreader komain koodf koodf2)
 install(TARGETS calligra_filter_odt2ascii DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
-calligra_filter_desktop_to_json(calligra_filter_odt2ascii calligra_filter_odt2ascii.desktop)
 
 install( PROGRAMS  org.kde.calligrawords_ascii.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
 

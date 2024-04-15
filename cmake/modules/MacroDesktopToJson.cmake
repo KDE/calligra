@@ -18,19 +18,6 @@ endif()
 endfunction()
 
 
-function(calligra_filter_desktop_to_json target desktop)
-
-if(${KF5_VERSION} VERSION_LESS "5.16.0")
-    kcoreaddons_desktop_to_json(${target} ${desktop})
-else()
-    kcoreaddons_desktop_to_json(${target} ${desktop}
-        SERVICE_TYPES ${CMAKE_SOURCE_DIR}/servicetypes/calligra_filter.desktop
-    )
-endif()
-
-endfunction()
-
-
 function(calligra_shape_desktop_to_json target desktop)
 
 if(${KF5_VERSION} VERSION_LESS "5.16.0")

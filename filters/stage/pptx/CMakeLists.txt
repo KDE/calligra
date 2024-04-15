@@ -20,7 +20,6 @@ set(pptx2odp_PART_SRCS
 )
 
 add_library(calligra_filter_pptx2odp MODULE ${pptx2odp_PART_SRCS})
-calligra_filter_desktop_to_json(calligra_filter_pptx2odp calligra_filter_pptx2odp.desktop)
 
 target_link_libraries(
     calligra_filter_pptx2odp

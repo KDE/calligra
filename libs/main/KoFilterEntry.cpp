@@ -50,8 +50,8 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
     unsigned int max = offers.count();
     //debugFilter <<"Query returned" << max <<" offers";
     for (unsigned int i = 0; i < max; i++) {
-        //debugFilter <<"   desktopEntryPath=" << (*it)->entryPath()
-        //               << "   library=" << (*it)->library() << endl;
+        //warnFilter <<"   desktopEntryPath=" << (*it)->metaData()
+        //               << "   library=" << (*it)->fileName() << endl;
         // Append converted offer
         lst.append(KoFilterEntry::Ptr(new KoFilterEntry(*it)));
         // Next service
