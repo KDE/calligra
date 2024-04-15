@@ -193,7 +193,7 @@ void MusicStyle::renderTimeSignatureNumber(QPainter& painter, qreal x, qreal y, 
     QFontMetricsF m(m_font);
     QString txt = QString::number(number);
 
-    renderText(painter, x + (w - m.width(txt))/2, y, txt);
+    renderText(painter, x + (w - m.boundingRect(txt).width())/2, y, txt);
 }
 
 void MusicStyle::renderNoteFlags(QPainter& painter, qreal x, qreal y, Duration duration, bool stemsUp, const QColor& color)

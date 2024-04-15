@@ -656,7 +656,7 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     }
 
     QFontMetrics  fm(mPainter->font(), mTarget);
-    int width  = fm.width(text) + fm.descent();    // fm.width(text) isn't right with Italic text
+    int width  = fm.boundingRect(text).width() + fm.descent();    // fm.width(text) isn't right with Italic text
     int height = fm.height();
 
     // Horizontal align.  These flags are supposed to be mutually exclusive.
