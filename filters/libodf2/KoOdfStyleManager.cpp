@@ -126,7 +126,7 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
 
     // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
     if (!odfStore->open("styles.xml")) {
-        errorOdf2 << "Unable to open input file styles.xml" << endl;
+        errorOdf2 << "Unable to open input file styles.xml" << Qt::endl;
         return false;
     }
 
@@ -143,7 +143,7 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     // Try to open content.xml. Return if it failed.
     //debugOdf2 << "parse content.xml styles";
     if (!odfStore->open("content.xml")) {
-        errorOdf2 << "Unable to open input file content.xml" << endl;
+        errorOdf2 << "Unable to open input file content.xml" << Qt::endl;
         return false;
     }
 

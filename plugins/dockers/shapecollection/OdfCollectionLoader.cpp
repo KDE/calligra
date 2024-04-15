@@ -153,7 +153,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
     if (realBody.isNull()) {
-        qCritical() << "No body tag found!" << endl;
+        qCritical() << "No body tag found!" << Qt::endl;
         emit loadingFailed(i18n("No body tag found in file: %1", path));
         return;
     }
@@ -161,7 +161,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     m_body = KoXml::namedItemNS(realBody, KoXmlNS::office, "drawing");
 
     if (m_body.isNull()) {
-        qCritical() << "No office:drawing tag found!" << endl;
+        qCritical() << "No office:drawing tag found!" << Qt::endl;
         emit loadingFailed(i18n("No office:drawing tag found in file: %1", path));
         return;
     }
@@ -169,7 +169,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     m_page = m_body.firstChild().toElement();
 
     if (m_page.isNull()) {
-        qCritical() << "No shapes found!" << endl;
+        qCritical() << "No shapes found!" << Qt::endl;
         emit loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }
@@ -177,7 +177,7 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     m_shape = m_page.firstChild().toElement();
 
     if (m_shape.isNull()) {
-        qCritical() << "No shapes found!" << endl;
+        qCritical() << "No shapes found!" << Qt::endl;
         emit loadingFailed(i18n("No shapes found in file: %1", path));
         return;
     }

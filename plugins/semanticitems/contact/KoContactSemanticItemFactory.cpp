@@ -106,7 +106,7 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemantic
 #ifndef NDEBUG
     if (semanticItems.empty() && m->statementCount())
     {
-        kDebug(30015) << "foaf() have data, but no foafs!" << endl;
+        kDebug(30015) << "foaf() have data, but no foafs!" << Qt::endl;
         QList<Soprano::Statement> allStatements = m->listStatements().allElements();
         foreach (Soprano::Statement s, allStatements)
         {

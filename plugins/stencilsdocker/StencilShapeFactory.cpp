@@ -53,26 +53,26 @@ createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
     KoOdfReadStore odfStore(store);
     QString errorMessage;
     if (! odfStore.loadAndParse(errorMessage)) {
-        errorStencilBox << "loading and parsing failed:" << errorMessage << endl;
+        errorStencilBox << "loading and parsing failed:" << errorMessage << Qt::endl;
         return 0;
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
-        errorStencilBox << "No body tag found!" << endl;
+        errorStencilBox << "No body tag found!" << Qt::endl;
         return 0;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "drawing");
     if (body.isNull()) {
-        errorStencilBox << "No office:drawing tag found!" << endl;
+        errorStencilBox << "No office:drawing tag found!" << Qt::endl;
         return 0;
     }
 
     KoXmlElement page = KoXml::namedItemNS(body, KoXmlNS::draw, "page");
     if (page.isNull()) {
-        errorStencilBox << "No page found!" << endl;
+        errorStencilBox << "No page found!" << Qt::endl;
         return 0;
     }
 
@@ -80,7 +80,7 @@ createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
     if (shapeElement.isNull()) {
         shapeElement = KoXml::namedItemNS(page, KoXmlNS::draw, "custom-shape");
         if (shapeElement.isNull()) {
-            errorStencilBox << "draw:g or draw:custom-shape element not found!" << endl;
+            errorStencilBox << "draw:g or draw:custom-shape element not found!" << Qt::endl;
             return 0;
         }
     }
@@ -114,7 +114,7 @@ createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
     if (!parsed) {
         debugStencilBox << "Error while parsing file: "
         << "at line " << line << " column: " << col
-        << " message: " << errormessage << endl;
+        << " message: " << errormessage << Qt::endl;
         return 0;
     }
 

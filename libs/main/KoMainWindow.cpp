@@ -1171,7 +1171,7 @@ bool KoMainWindow::queryClose()
     if (rootDocument() == 0)
         return true;
     //debugMain <<"KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
-    //               << " mainWindowCount=" << rootDocument()->mainWindowCount() << endl;
+    //               << " mainWindowCount=" << rootDocument()->mainWindowCount() << Qt::endl;
     if (!d->forQuit && d->rootPart && d->rootPart->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;

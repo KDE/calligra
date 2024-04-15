@@ -211,7 +211,7 @@ Value ValueParser::tryParseNumber(const QString& str, bool *ok) const
         const Number val = readNumber(str.left(str.length() - 1).trimmed(), ok).asFloat();
         if (*ok) {
             //debugSheets <<"ValueParser::tryParseNumber '" << str <<
-            //    "' successfully parsed as percentage: " << val << '%' << endl;
+            //    "' successfully parsed as percentage: " << val << '%' << Qt::endl;
             value = Value(val / 100.0);
             value.setFormat(Value::fmt_Percent);
         }

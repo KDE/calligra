@@ -58,7 +58,7 @@ Solver::Solver(QObject* parent, const QVariantList& args)
     d->dialog = 0;
     d->view = qobject_cast<View*>(parent);
     if (!d->view) {
-        errorSheets << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << endl;
+        errorSheets << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << Qt::endl;
         return;
     }
 

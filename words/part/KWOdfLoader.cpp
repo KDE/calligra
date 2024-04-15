@@ -79,14 +79,14 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
-        errorWords << "No office:body found!" << endl;
+        errorWords << "No office:body found!" << Qt::endl;
         m_document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
         return false;
     }
 
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
     if (body.isNull()) {
-        errorWords << "No office:text found!" << endl;
+        errorWords << "No office:text found!" << Qt::endl;
         KoXmlElement childElem;
         QString localName;
         forEachElement(childElem, realBody)

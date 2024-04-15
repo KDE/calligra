@@ -846,7 +846,7 @@ void KoTextDebug::dumpFrame(const QTextFrame *frame, QTextStream &out)
     depth += INDENT;
 
     dumpIndent(depth);
-    out << "<frame" << frameAttributes(frame->frameFormat()) << '>' << endl;
+    out << "<frame" << frameAttributes(frame->frameFormat()) << '>' << Qt::endl;
 
     QTextFrame::iterator iterator = frame->begin();
 
@@ -867,7 +867,7 @@ void KoTextDebug::dumpFrame(const QTextFrame *frame, QTextStream &out)
     }
 
     dumpIndent(depth);
-    out << "</frame>" << endl;
+    out << "</frame>" << Qt::endl;
     depth -= INDENT;
 }
 
@@ -889,7 +889,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block, QTextStream &out)
     }
 
     dumpIndent(depth);
-    out << "<block" << attrs << '>' << endl;
+    out << "<block" << attrs << '>' << Qt::endl;
 
     QTextBlock::Iterator iterator = block.begin();
     for (; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
@@ -899,7 +899,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block, QTextStream &out)
         }
     }
     dumpIndent(depth);
-    out << "</block>" << endl;
+    out << "</block>" << Qt::endl;
     depth -= INDENT;
     if (block.next().isValid())
         out << ' ';
@@ -914,7 +914,7 @@ void KoTextDebug::dumpTable(const QTextTable *table, QTextStream &out)
     attrs.append(frameAttributes(table->frameFormat())); // include frame attributes too.
 
     dumpIndent(depth);
-    out << "<table" << attrs << '>' << endl;
+    out << "<table" << attrs << '>' << Qt::endl;
 
     // loop through all the cells in the table and dump the cells.
     for (int row = 0; row < table->rows(); ++row) {
@@ -924,7 +924,7 @@ void KoTextDebug::dumpTable(const QTextTable *table, QTextStream &out)
     }
 
     dumpIndent(depth);
-    out << "</table>" << endl;
+    out << "</table>" << Qt::endl;
     depth -= INDENT;
 }
 
@@ -937,7 +937,7 @@ void KoTextDebug::dumpTableCell(const QTextTableCell &cell, QTextStream &out)
     attrs.append(tableCellAttributes(cell.format().toTableCellFormat()));
 
     dumpIndent(depth);
-    out << "<cell" << attrs << '>' << endl;
+    out << "<cell" << attrs << '>' << Qt::endl;
 
     // iterate through the cell content.
     QTextFrame::iterator cellIter = cell.begin();

@@ -34,7 +34,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     wvlog   << endl
             << "   fcPlcfbkf=" << fib.fcPlcfbkf << " lcbPlcfbkf=" << fib.lcbPlcfbkf << endl
             << "   fcPlcfbkl=" << fib.fcPlcfbkl << " lcbPlcfbkl=" << fib.lcbPlcfbkl << endl
-            << "   lcbSttbfbkmk=" << fib.fcSttbfbkmk << " lcbSttbfbkmk=" << fib.lcbSttbfbkmk << endl;
+            << "   lcbSttbfbkmk=" << fib.fcSttbfbkmk << " lcbSttbfbkmk=" << fib.lcbSttbfbkmk << Qt::endl;
 #endif
 
     tableStream->push();
@@ -47,8 +47,8 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
         m_startIt = new PLCFIterator<Word97::BKF>(*m_start);
 
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Num. of bookmarks to start: " << m_start->count() << endl;
-        wvlog << "m_start init done" << endl;
+        wvlog << "Num. of bookmarks to start: " << m_start->count() << Qt::endl;
+        wvlog << "m_start init done" << Qt::endl;
         m_start->dumpCPs();
 #endif
     }
@@ -96,21 +96,21 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
         }
 
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Num. of bookmarks to end: " << count << endl;
-        wvlog << "m_end/m_endCP init done" << endl;
+        wvlog << "Num. of bookmarks to end: " << count << Qt::endl;
+        wvlog << "m_end/m_endCP init done" << Qt::endl;
 
         if ( fib.nFib < Word8nFib ) {
             m_end->dumpCPs();
         } else {
             for ( uint i = 0; i < m_endCP.size(); i++ ) {
-                wvlog << "dumpCPs:   " << m_endCP[i] << endl;
+                wvlog << "dumpCPs:   " << m_endCP[i] << Qt::endl;
             }
         }
 #endif
     }
 
 #ifdef WV2_DEBUG_BOOKMARK
-    wvlog << "Bookmark init done" << endl;
+    wvlog << "Bookmark init done" << Qt::endl;
 #endif
 
     tableStream->pop();
@@ -137,7 +137,7 @@ Bookmarks::~Bookmarks()
 BookmarkData Bookmarks::bookmark( const U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_BOOKMARK
-    wvlog << " globalCP=" << globalCP << endl;
+    wvlog << " globalCP=" << globalCP << Qt::endl;
 #endif
     ok = false;
     if ( (m_startIt && m_startIt->current()) &&
@@ -168,10 +168,10 @@ BookmarkData Bookmarks::bookmark( const U32 globalCP, bool& ok )
         ++m_nameIt;
 
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "start = " << start << endl;
-        wvlog << "end = " << end << endl;
-        wvlog << "name = " << name.ascii() << endl;
-        wvlog << "valid = " << ok << endl;
+        wvlog << "start = " << start << Qt::endl;
+        wvlog << "end = " << end << Qt::endl;
+        wvlog << "name = " << name.ascii() << Qt::endl;
+        wvlog << "valid = " << ok << Qt::endl;
 #endif
         return BookmarkData( start, end, name );
     }

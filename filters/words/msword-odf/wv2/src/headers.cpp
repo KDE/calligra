@@ -43,17 +43,17 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
     uint n = (lcbPlcfhdd / sizeof( U32 )) - 2;
 
 #ifdef WV2_DEBUG_HEADERS
-    wvlog << "ccpHdd=" << ccpHdd << "fc=" << fcPlcfhdd << " lcb=" << lcbPlcfhdd << endl;
-    wvlog << "num. of stories in PlcfHdd:" << n << endl;
+    wvlog << "ccpHdd=" << ccpHdd << "fc=" << fcPlcfhdd << " lcb=" << lcbPlcfhdd << Qt::endl;
+    wvlog << "num. of stories in PlcfHdd:" << n << Qt::endl;
     if ( version == Word8 ) {
-        wvlog << "num. of header/footer stories:" << n - 6 << endl;
+        wvlog << "num. of header/footer stories:" << n - 6 << Qt::endl;
     }
 #endif
     if ( lcbPlcfhdd % sizeof( U32 ) ) {
-        wvlog << "Bug: m_fib.lcbPlcfhdd % 4 != 0!" << endl;
+        wvlog << "Bug: m_fib.lcbPlcfhdd % 4 != 0!" << Qt::endl;
     }
     else if ( (version == Word8) && (n % headerTypes) ) {
-        wvlog << "Bug: #headers % " << headerTypes << " != 0!" << endl;
+        wvlog << "Bug: #headers % " << headerTypes << " != 0!" << Qt::endl;
     }
 
     tableStream->seek( fcPlcfhdd, WV2_SEEK_SET );

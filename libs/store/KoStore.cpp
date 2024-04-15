@@ -102,7 +102,7 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
     case Tar:
         return new KoTarStore(device, mode, appIdentification, writeMimetype);
     case Directory:
-        errorStore << "Can't create a Directory store for a memory buffer!" << endl;
+        errorStore << "Can't create a Directory store for a memory buffer!" << Qt::endl;
         /* fall through */
     case Zip:
 #ifdef QCA2
@@ -137,7 +137,7 @@ KoStore* KoStore::createStore(QWidget* window, const QUrl &url, Mode mode, const
             KIO::NetAccess::download(url, tmpFile, window);
 
         if (!downloaded) {
-            errorStore << "Could not download file!" << endl;
+            errorStore << "Could not download file!" << Qt::endl;
             backend = DefaultFormat; // will create a "bad" store (bad()==true)
         } else if (automatic) {
             QFile file(tmpFile);
@@ -210,7 +210,7 @@ bool KoStore::open(const QString & _name)
     }
 
     if (d->fileName.length() > 512) {
-        errorStore << "KoStore: Filename " << d->fileName << " is too long" << endl;
+        errorStore << "KoStore: Filename " << d->fileName << " is too long" << Qt::endl;
         return false;
     }
 
@@ -281,7 +281,7 @@ QByteArray KoStore::read(qint64 max)
         return data;
     }
     if (d->mode != Read) {
-        errorStore << "KoStore: Can not read from store that is opened for writing" << endl;
+        errorStore << "KoStore: Can not read from store that is opened for writing" << Qt::endl;
         return data;
     }
 
@@ -297,11 +297,11 @@ qint64 KoStore::read(char *_buffer, qint64 _len)
 {
     Q_D(KoStore);
     if (!d->isOpen) {
-        errorStore << "KoStore: You must open before reading" << endl;
+        errorStore << "KoStore: You must open before reading" << Qt::endl;
         return -1;
     }
     if (d->mode != Read) {
-        errorStore << "KoStore: Can not read from store that is opened for writing" << endl;
+        errorStore << "KoStore: Can not read from store that is opened for writing" << Qt::endl;
         return -1;
     }
 
@@ -314,11 +314,11 @@ qint64 KoStore::write(const char* _data, qint64 _len)
     if (_len == 0) return 0;
 
     if (!d->isOpen) {
-        errorStore << "KoStore: You must open before writing" << endl;
+        errorStore << "KoStore: You must open before writing" << Qt::endl;
         return 0;
     }
     if (d->mode != Write) {
-        errorStore << "KoStore: Can not write to store that is opened for reading" << endl;
+        errorStore << "KoStore: Can not write to store that is opened for reading" << Qt::endl;
         return 0;
     }
 

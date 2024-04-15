@@ -468,7 +468,7 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
             nextCell = sheet->fullCellStorage()->nextInRow(j++, row);
         }
         //debugSheetsODF << "Odf::saveCell: empty cell in column" << column
-        //<< "repeated" << repeated << "time(s)" << endl;
+        //<< "repeated" << repeated << "time(s)" << Qt::endl;
 
         if (repeated > 1)
             xmlwriter.addAttribute("table:number-columns-repeated", QString::number(repeated));

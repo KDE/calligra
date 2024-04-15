@@ -1419,7 +1419,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
 
         //debugSheetsRender <<"    painting top border of cell" << name()
         //       << " [" << cx << "," << cx + d->width
-        //       << ": " << cx + d->width - cx << "]" << endl;
+        //       << ": " << cx + d->width - cx << "]" << Qt::endl;
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1440,7 +1440,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
 
         //debugSheetsRender <<"    painting bottom border of cell" << name()
         //       << " [" << cx << "," << cx + d->width
-        //       << ": " << cx + d->width - cx << "]" << endl;
+        //       << ": " << cx + d->width - cx << "]" << Qt::endl;
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.

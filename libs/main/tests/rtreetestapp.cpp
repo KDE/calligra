@@ -55,7 +55,7 @@ void Canvas::updateCanvas()
 
 void Canvas::insert(QRectF & rect)
 {
-    m_out << "i " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << endl;
+    m_out << "i " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << Qt::endl;
     Data * data = new Data(rect);
     m_rects.insert(data);
     m_rtree.insert(rect, data);
@@ -74,7 +74,7 @@ void Canvas::select(QRectF & rect)
 
 void Canvas::remove(QRectF & rect)
 {
-    m_out << "r " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << endl;
+    m_out << "r " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << Qt::endl;
     m_found = QList<Data *>();
     QList<Data *> remove = m_rtree.intersects(rect);
     foreach(Data * data, remove) {
@@ -87,7 +87,7 @@ void Canvas::remove(QRectF & rect)
 
 void Canvas::clear()
 {
-    m_out << "c" << endl;
+    m_out << "c" << Qt::endl;
     m_rtree.clear();
     qDeleteAll(m_rects);
     m_rects.clear();

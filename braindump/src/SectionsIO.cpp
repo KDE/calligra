@@ -195,7 +195,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
 
     QString errorMessage;
     if(! odfStore.loadAndParse(errorMessage)) {
-        qCritical() << "loading and parsing failed:" << errorMessage << endl;
+        qCritical() << "loading and parsing failed:" << errorMessage << Qt::endl;
         return false;
     }
 

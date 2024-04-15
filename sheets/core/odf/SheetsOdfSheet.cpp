@@ -1317,7 +1317,7 @@ void Odf::saveCells(Sheet *sheet, int row, int maxCols, OdfSavingContext& tableC
     do {
 //         debugSheetsODF <<"Odf::saveCells:"
 //                       << " i: " << i
-//                       << " column: " << cell.column() << endl;
+//                       << " column: " << cell.column() << Qt::endl;
         int repeated = 1;
         int column = i;
         saveCell(&cell, repeated, tableContext);

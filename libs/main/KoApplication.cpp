@@ -489,7 +489,7 @@ bool KoApplication::start()
                     doc->setProfileStream(&profileoutput);
                     profileoutput << "KoApplication::start\t"
                                   << appStartTime.msecsTo(QTime::currentTime())
-                                  <<"\t0" << endl;
+                                  <<"\t0" << Qt::endl;
                     doc->setAutoErrorHandlingEnabled(false);
                 }
                 doc->setProfileReferenceTime(appStartTime);
@@ -571,7 +571,7 @@ bool KoApplication::start()
                             if (profileoutput.device()) {
                                 profileoutput << "KoApplication::start\t"
                                             << appStartTime.msecsTo(QTime::currentTime())
-                                            <<"\t100" << endl;
+                                            <<"\t100" << Qt::endl;
                             }
                             QTimer::singleShot(0, this, &KoApplication::benchmarkLoadingFinished);
                             return true; // only load one document!
@@ -590,7 +590,7 @@ bool KoApplication::start()
                 if (profileoutput.device()) {
                     profileoutput << "KoApplication::start\t"
                                   << appStartTime.msecsTo(QTime::currentTime())
-                                  <<"\t100" << endl;
+                                  <<"\t100" << Qt::endl;
                 }
 
             }

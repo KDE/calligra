@@ -19,7 +19,7 @@ void PointStorageTest::testInsertion()
 //     int counter = 1;
 //     for ( int col = 1; col <= 5; ++col )
 //     for ( int row = 1; row <= 5; ++row )
-//     cout << qPrintable( QString( "storage.insert( %1, %2, %3 );" ).arg(col,2).arg(row,2).arg(counter++,2) ) << endl;    storage.insert(  1,  1, 1 );
+//     cout << qPrintable( QString( "storage.insert( %1, %2, %3 );" ).arg(col,2).arg(row,2).arg(counter++,2) ) << Qt::endl;    storage.insert(  1,  1, 1 );
     storage.insert(1,  1,  1);
     storage.insert(1,  2,  2);
     storage.insert(1,  3,  3);

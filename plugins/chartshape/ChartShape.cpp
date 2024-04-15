@@ -1167,7 +1167,7 @@ static void saveOdfDataRow(KoXmlWriter &bodyWriter, QAbstractItemModel *table, i
             break;
         default:
             debugChart <<"ERROR: cell" << row <<"," << col
-                          << " has unknown type." << endl;
+                          << " has unknown type." << Qt::endl;
         }
 
         // Add the value type and the string to the XML tree.

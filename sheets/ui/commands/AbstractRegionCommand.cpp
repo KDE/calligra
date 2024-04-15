@@ -78,7 +78,7 @@ void AbstractRegionCommand::redo()
 #if 0
     if (!m_sheet) {
         warnSheets << "AbstractRegionCommand::redo(): No explicit m_sheet is set. "
-        << "Manipulating all sheets of the region." << endl;
+        << "Manipulating all sheets of the region." << Qt::endl;
     }
 #else
     Q_ASSERT(m_sheet);

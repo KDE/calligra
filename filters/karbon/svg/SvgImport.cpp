@@ -83,7 +83,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
 
     QIODevice* in = new KCompressionDevice(fileIn, compressionType);
     if (!in->open(QIODevice::ReadOnly)) {
-        errorSvg << "Cannot open file! Aborting!" << endl;
+        errorSvg << "Cannot open file! Aborting!" << Qt::endl;
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -101,7 +101,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     if (! parsed) {
         errorSvg << "Error while parsing file: "
         << "at line " << line << " column: " << col
-        << " message: " << errormessage << endl;
+        << " message: " << errormessage << Qt::endl;
         // ### TODO: feedback to the user
         return KoFilter::ParsingError;
     }

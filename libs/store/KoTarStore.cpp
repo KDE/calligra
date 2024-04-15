@@ -23,7 +23,7 @@ KoTarStore::KoTarStore(const QString & _filename, Mode mode, const QByteArray & 
  : KoStore(mode, writeMimetype)
 {
     debugStore << "KoTarStore Constructor filename =" << _filename
-    << " mode = " << int(mode) << endl;
+    << " mode = " << int(mode) << Qt::endl;
     Q_D(KoStore);
 
     d->localFileName = _filename;
@@ -48,7 +48,7 @@ KoTarStore::KoTarStore(QWidget* window, const QUrl &_url, const QString & _filen
 {
     debugStore << "KoTarStore Constructor url=" << _url.url(QUrl::PreferLocalFile)
                   << " filename = " << _filename
-                  << " mode = " << int(mode) << endl;
+                  << " mode = " << int(mode) << Qt::endl;
     Q_D(KoStore);
 
     d->url = _url;

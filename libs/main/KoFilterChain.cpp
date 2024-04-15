@@ -164,7 +164,7 @@ KoStoreDevice* KoFilterChain::storageFile(const QString& name, KoStore::Mode mod
                              &m_outputStorage, &m_outputStorageDevice);
     else {
         warnFilter << "Oooops, how did we get here? You already asked for a"
-        << " different source/destination?" << endl;
+        << " different source/destination?" << Qt::endl;
         return 0;
     }
 }
@@ -320,7 +320,7 @@ void KoFilterChain::finalizeIO()
 bool KoFilterChain::createTempFile(QTemporaryFile** tempFile, bool autoDelete)
 {
     if (*tempFile) {
-        errorFilter << "Ooops, why is there already a temp file???" << endl;
+        errorFilter << "Ooops, why is there already a temp file???" << Qt::endl;
         return false;
     }
     *tempFile = new QTemporaryFile();
@@ -484,14 +484,14 @@ KoDocument* KoFilterChain::createDocument(const QString& file)
     url.setPath(file);
     QMimeType t = QMimeDatabase().mimeTypeForUrl(url);
     if (t.isDefault()) {
-        errorFilter << "No mimetype found for " << file << endl;
+        errorFilter << "No mimetype found for " << file << Qt::endl;
         return 0;
     }
 
     KoDocument *doc = createDocument(t.name().toLatin1());
 
     if (!doc || !doc->loadNativeFormat(file)) {
-        errorFilter << "Couldn't load from the file" << endl;
+        errorFilter << "Couldn't load from the file" << Qt::endl;
         delete doc;
         return 0;
     }
@@ -503,13 +503,13 @@ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimeType);
 
     if (entry.isEmpty()) {
-        errorFilter << "Couldn't find a part that can handle mimetype " << mimeType << endl;
+        errorFilter << "Couldn't find a part that can handle mimetype " << mimeType << Qt::endl;
     }
 
     QString errorMsg;
     KoPart *part = entry.createKoPart(&errorMsg);
     if (!part) {
-        errorFilter << "Couldn't create the document: " << errorMsg << endl;
+        errorFilter << "Couldn't create the document: " << errorMsg << Qt::endl;
         return 0;
     }
     return part->document();

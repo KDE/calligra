@@ -48,7 +48,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
-        errorMobi << "Unable to open input file!" << endl;
+        errorMobi << "Unable to open input file!" << Qt::endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }

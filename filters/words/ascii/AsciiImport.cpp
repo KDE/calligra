@@ -82,7 +82,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
-        errorAsciiImport << "Unable to open input file!" << endl;
+        errorAsciiImport << "Unable to open input file!" << Qt::endl;
         in.close();
         return KoFilter::FileNotFound;
     }

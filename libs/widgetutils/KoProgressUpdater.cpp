@@ -215,7 +215,7 @@ void KoProgressUpdater::Private::logEvents(QTextStream& out,
         if (!p) continue;
         foreach (const KoUpdaterPrivate::TimePoint &tp, p->getPoints()) {
             out << prefix+p->objectName() << '\t'
-                    << startTime.msecsTo(tp.time) << '\t' << tp.value << endl;
+                    << startTime.msecsTo(tp.time) << '\t' << tp.value << Qt::endl;
         }
     }
 }

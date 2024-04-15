@@ -54,7 +54,7 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
-        errorWiki << "Unable to open input file!" << endl;
+        errorWiki << "Unable to open input file!" << Qt::endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -63,7 +63,7 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
     // Create output file.
     QFile outfile(m_chain->outputFile());
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
-        errorWiki << "Unable to open output file!" << endl;
+        errorWiki << "Unable to open output file!" << Qt::endl;
         outfile.close();
         return KoFilter::FileNotFound;
     }

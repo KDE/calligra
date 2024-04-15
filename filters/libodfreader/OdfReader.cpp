@@ -122,7 +122,7 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
     KoStore *odfStore = m_context->odfStore();
 
     if (!odfStore->open("content.xml")) {
-        errorOdfReader << "Unable to open input file content.xml" << endl;
+        errorOdfReader << "Unable to open input file content.xml" << Qt::endl;
         return false;
     }
     debugOdfReader << "open content.xml ok";
@@ -141,7 +141,7 @@ bool OdfReader::readContent(OdfReaderBackend *backend, OdfReaderContext *context
         }
     }
     if (!foundContent) {
-        errorOdfReader << "Couldn't find the content in content.xml" << endl;
+        errorOdfReader << "Couldn't find the content in content.xml" << Qt::endl;
     }
 
     m_backend->elementOfficeDocumentcontent(reader, m_context);

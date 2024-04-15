@@ -591,7 +591,7 @@ void TestDocumentLayout::testLetterSynchronization()
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         QVERIFY(data);
-        // qDebug() << "-> " << data->counterText() << endl;
+        // qDebug() << "-> " << data->counterText() << Qt::endl;
         QCOMPARE(data->counterText(), QString(values[i++]));
 
         block = block.next();

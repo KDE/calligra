@@ -97,7 +97,7 @@ Fields::Fields( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
           << "  endnote: fc=" << fib.fcPlcffldEdn << " lcb=" << fib.lcbPlcffldEdn << endl
           << "  textbox: fc=" << fib.fcPlcffldTxbx << " lcb=" << fib.lcbPlcffldTxbx << endl
           << "  bookmark: fc=" << fib.fcSttbfbkmk << " lcb=" << fib.lcbSttbfbkmk << endl
-          << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << endl;
+          << "  headertextbox: fc=" << fib.fcPlcffldHdrTxbx << " lcb=" << fib.lcbPlcffldHdrTxbx << Qt::endl;
 #endif
     tableStream->seek( fib.fcPlcffldMom, WV2_SEEK_SET ); // to make the sanity check work
     read( fib.fcPlcffldMom, fib.lcbPlcffldMom, tableStream, &m_main );
@@ -142,7 +142,7 @@ const FLD* Fields::fldForCP( Parser::SubDocument subDocument, U32 cp ) const
 {
     switch( subDocument ) {
         case Parser::None:
-            wvlog << "Error: The state of the parser is invalid!" << endl;
+            wvlog << "Error: The state of the parser is invalid!" << Qt::endl;
             return 0;
             break;
         case Parser::Main:
@@ -155,7 +155,7 @@ const FLD* Fields::fldForCP( Parser::SubDocument subDocument, U32 cp ) const
             return fldForCP( m_header, cp );
             break;
         case Parser::Macro:
-            wvlog << "Warning: There shouldn't be any fields in macro text" << endl;
+            wvlog << "Warning: There shouldn't be any fields in macro text" << Qt::endl;
             return 0;
             break;
         case Parser::Annotation:
@@ -188,7 +188,7 @@ void Fields::read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCFMap<FLD>**
 void Fields::sanityCheck( const OLEStreamReader* tableStream, U32 nextFC, U32 lcb ) const
 {
     if ( lcb != 0 && static_cast<U32>( tableStream->tell() ) != nextFC )
-        wvlog << "Warning: Detected a hole within the table stream (next fc=" << nextFC << ")" << endl;
+        wvlog << "Warning: Detected a hole within the table stream (next fc=" << nextFC << ")" << Qt::endl;
 }
 
 const FLD* Fields::fldForCP( const PLCFMap<FLD>* plcf, U32 cp ) const

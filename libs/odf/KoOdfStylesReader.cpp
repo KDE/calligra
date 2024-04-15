@@ -363,7 +363,7 @@ const KoXmlElement* KoOdfStylesReader::findStyleCustomStyle(const QString& style
         const QString styleFamily = style->attributeNS(KoXmlNS::style, "family", QString());
         if (styleFamily != family) {
             warnOdf << "KoOdfStylesReader: was looking for style " << styleName
-                    << " in family " << family << " but got " << styleFamily << endl;
+                    << " in family " << family << " but got " << styleFamily << Qt::endl;
         }
     }
     return style;
@@ -376,7 +376,7 @@ const KoXmlElement* KoOdfStylesReader::findAutoStyleStyle(const QString& styleNa
         const QString styleFamily = style->attributeNS(KoXmlNS::style, "family", QString());
         if (styleFamily != family) {
             warnOdf << "KoOdfStylesReader: was looking for style " << styleName
-                    << " in family " << family << " but got " << styleFamily << endl;
+                    << " in family " << family << " but got " << styleFamily << Qt::endl;
         }
     }
     return style;
@@ -389,7 +389,7 @@ const KoXmlElement* KoOdfStylesReader::findContentAutoStyle(const QString& style
         const QString styleFamily = style->attributeNS(KoXmlNS::style, "family", QString());
         if (styleFamily != family) {
             warnOdf << "KoOdfStylesReader: was looking for style " << styleName
-                    << " in family " << family << " but got " << styleFamily << endl;
+                    << " in family " << family << " but got " << styleFamily << Qt::endl;
         }
     }
     return style;

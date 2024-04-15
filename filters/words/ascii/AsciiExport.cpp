@@ -59,7 +59,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
                                              "", KoStore::Auto);
 
     if (!odfStore->open("mimetype")) {
-        errorAsciiExport << "Unable to open input file!" << endl;
+        errorAsciiExport << "Unable to open input file!" << Qt::endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -68,7 +68,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
     // Create output file.
     QFile outfile(m_chain->outputFile());
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
-        errorAsciiExport << "Unable to open output file!" << endl;
+        errorAsciiExport << "Unable to open output file!" << Qt::endl;
         outfile.close();
         return KoFilter::FileNotFound;
     }

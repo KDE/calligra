@@ -237,7 +237,7 @@ int KoSopranoTableModel::insertStatement(const Soprano::Statement &st)
 {
     QModelIndex parent;
     int newRowNumber = rowCount();
-    kDebug(30015) << "insert, newrow:" << newRowNumber << endl;
+    kDebug(30015) << "insert, newrow:" << newRowNumber << Qt::endl;
     beginInsertRows(parent, newRowNumber, newRowNumber);
     model()->addStatement(st);
     m_statementIndex << st;

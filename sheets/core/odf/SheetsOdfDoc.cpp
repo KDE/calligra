@@ -80,7 +80,7 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
 
     if (body.isNull()) {
-        errorSheetsODF << "No office:spreadsheet found!" << endl;
+        errorSheetsODF << "No office:spreadsheet found!" << Qt::endl;
         KoXmlElement childElem;
         QString localName;
         forEachElement(childElem, realBody) {
@@ -266,7 +266,7 @@ bool Odf::paste(QBuffer &buffer, Map *map)
     QString errorMessage;
     bool ok = odfStore.loadAndParse("content.xml", doc, errorMessage);
     if (!ok) {
-        errorSheetsODF << "Error parsing content.xml: " << errorMessage << endl;
+        errorSheetsODF << "Error parsing content.xml: " << errorMessage << Qt::endl;
     delete store;
         return false;
     }
@@ -290,7 +290,7 @@ bool Odf::paste(QBuffer &buffer, Map *map)
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
 
     if (body.isNull()) {
-        errorSheetsODF << "No office:spreadsheet found!" << endl;
+        errorSheetsODF << "No office:spreadsheet found!" << Qt::endl;
         delete store;
         return false;
     }
@@ -367,7 +367,7 @@ void Odf::loadCalculationSettings(CalculationSettings *settings, const KoXmlElem
                 } else {
                     debugSheets << "CalculationSettings: Error on loading null date."
                     << "Value type """ << valueType << """ not handled"
-                    << ", falling back to default." << endl;
+                    << ", falling back to default." << Qt::endl;
                     // NOTE Stefan: I don't know why different types are possible here!
                     // sebsauer: because according to ODF-specs a zero null date can
                     // mean QDate::currentDate(). Still unclear what a numeric value !=0

@@ -424,10 +424,10 @@ void StyleStorage::garbageCollection()
             !styleManager()->style(static_cast<const NamedStyle*>(currentPair.second.data())->name)) {
         debugSheetsStyle << "removing" << currentPair.second->debugData()
         << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << endl;
+        << "used" << currentPair.second->ref << "times" << Qt::endl;
         qDebug() << "removing" << currentPair.second->debugData()
         << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << endl;
+        << "used" << currentPair.second->ref << "times" << Qt::endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
         d->subStyles[currentPair.second->type()].removeAll(currentPair.second);
         QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
@@ -448,10 +448,10 @@ void StyleStorage::garbageCollection()
             pair.first == currentPair.first) {
         debugSheetsStyle << "removing default style"
         << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << endl;
+        << "used" << currentPair.second->ref << "times" << Qt::endl;
         qDebug() << "removing default style"
         << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << endl;
+        << "used" << currentPair.second->ref << "times" << Qt::endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
         QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
         return; // already done
@@ -485,10 +485,10 @@ void StyleStorage::garbageCollection()
 
             debugSheetsStyle << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
-            << "used" << currentPair.second->ref << "times" << endl;
+            << "used" << currentPair.second->ref << "times" << Qt::endl;
             qDebug() << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
-            << "used" << currentPair.second->ref << "times" << endl;
+            << "used" << currentPair.second->ref << "times" << Qt::endl;
             d->tree.remove(currentPair.first.toRect(), currentPair.second, currentZIndex);
 #if 0
             debugSheetsStyle << "StyleStorage: usage of" << currentPair.second->debugData() << " is" << currentPair.second->ref;

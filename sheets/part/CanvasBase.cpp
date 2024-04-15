@@ -435,7 +435,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
                 // an error occurred
                 debugSheetsUI << "CanvasBase::daragMoveEvent: an error occurred" << endl
                 << "line: " << errorLine << " col: " << errorColumn
-                << ' ' << errorMsg << endl;
+                << ' ' << errorMsg << Qt::endl;
                 dragMarkingRect = QRect(1, 1, 1, 1);
             } else {
                 QDomElement root = doc.documentElement(); // "spreadsheet-snippet"

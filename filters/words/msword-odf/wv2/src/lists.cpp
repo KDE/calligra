@@ -239,7 +239,7 @@ ListLevel::ListLevel( OLEStreamReader* tableStream ) :
           << " fNoRestart=" << static_cast<int>( m_lvlf.fNoRestart ) << " fPrev=" << static_cast<int>( m_lvlf.fPrev )
           << endl << "      fPrevSpace=" << static_cast<int>( m_lvlf.fPrevSpace ) << " fWord6="
           << static_cast<int>( m_lvlf.fWord6 ) << endl << "      cbGrpprlPapx=" << static_cast<int>( m_lvlf.cbGrpprlPapx )
-          << " cbGrpprlChpx=" << static_cast<int>( m_lvlf.cbGrpprlChpx ) << endl;
+          << " cbGrpprlChpx=" << static_cast<int>( m_lvlf.cbGrpprlChpx ) << Qt::endl;
 #endif
 
     if ( m_lvlf.cbGrpprlPapx != 0 ) {
@@ -275,12 +275,12 @@ ListLevel::ListLevel( const Word97::ANLD& anld ) : m_grpprlPapx( 0 ), m_grpprlCh
     // number text
 #ifdef WV2_DEBUG_LIST_PROCESSING
     wvlog << "cxchTextBefore=" << static_cast<int>( anld.cxchTextBefore ) << " cxchTextAfter="
-          << static_cast<int>( anld.cxchTextAfter ) << endl;
+          << static_cast<int>( anld.cxchTextAfter ) << Qt::endl;
 #endif
     if ( anld.cxchTextBefore > 0 && anld.cxchTextBefore <= 32 ) {
         m_numberText = UString( reinterpret_cast<const UChar*>( &anld.rgxch[ 0 ] ), anld.cxchTextBefore );
 #ifdef WV2_DEBUG_LIST_PROCESSING
-        wvlog << "String (before): '" << m_numberText.ascii() << "'" << endl;
+        wvlog << "String (before): '" << m_numberText.ascii() << "'" << Qt::endl;
 #endif
     }
     m_numberText += UString( static_cast<char>( 0 ) ); // we are faking list level 0, so we have
@@ -289,7 +289,7 @@ ListLevel::ListLevel( const Word97::ANLD& anld ) : m_grpprlPapx( 0 ), m_grpprlCh
         int start = anld.cxchTextAfter > anld.cxchTextBefore ? anld.cxchTextBefore : 0;
         m_numberText += UString( reinterpret_cast<const UChar*>( &anld.rgxch[ start ] ), anld.cxchTextAfter - start );
 #ifdef WV2_DEBUG_LIST_PROCESSING
-        wvlog << "String (after): '" << UString( reinterpret_cast<const UChar*>( &anld.rgxch[ start ] ), anld.cxchTextAfter - start ).ascii() << "'" << endl;
+        wvlog << "String (after): '" << UString( reinterpret_cast<const UChar*>( &anld.rgxch[ start ] ), anld.cxchTextAfter - start ).ascii() << "'" << Qt::endl;
 #endif
     }
 
@@ -320,7 +320,7 @@ ListLevel::ListLevel( const Word97::ANLD& anld ) : m_grpprlPapx( 0 ), m_grpprlCh
     m_lvlf.cbGrpprlChpx += writeCharProperty( sprmCHps, anld.hps, &grpprl );
 
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "The CHPX is " << static_cast<int>( m_lvlf.cbGrpprlChpx ) << " bytes long" << endl;
+    wvlog << "The CHPX is " << static_cast<int>( m_lvlf.cbGrpprlChpx ) << " bytes long" << Qt::endl;
 #endif
 }
 
@@ -393,7 +393,7 @@ U16 ListLevel::indent() const
 void ListLevel::applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "cbGrpprlPapx=" << static_cast<int>( m_lvlf.cbGrpprlPapx ) << endl;
+    wvlog << "cbGrpprlPapx=" << static_cast<int>( m_lvlf.cbGrpprlPapx ) << Qt::endl;
 #endif
     if ( m_grpprlPapx )
         pap->apply( m_grpprlPapx, m_lvlf.cbGrpprlPapx, 0, styleSheet, 0, Word8 );
@@ -402,7 +402,7 @@ void ListLevel::applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet 
 void ListLevel::applyGrpprlChpx( Word97::CHP* chp, const Style* style, const StyleSheet* styleSheet ) const
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "cbGrpprlChpx=" << static_cast<int>( m_lvlf.cbGrpprlChpx ) << endl;
+    wvlog << "cbGrpprlChpx=" << static_cast<int>( m_lvlf.cbGrpprlChpx ) << Qt::endl;
 #endif
     if ( m_grpprlChpx )
         chp->apply( m_grpprlChpx, m_lvlf.cbGrpprlChpx, style, styleSheet, 0, Word8 );
@@ -432,7 +432,7 @@ ListData::ListData( OLEStreamReader* tableStream ) : m_lstf( tableStream, false 
     wvlog << "######" << endl
           << " lsid= 0x" << hex << m_lstf.lsid << dec
           << " fSimpleList=" << static_cast<int>( m_lstf.fSimpleList )
-          << " tlpc=" << m_lstf.tplc << endl;
+          << " tlpc=" << m_lstf.tplc << Qt::endl;
 #endif
 }
 
@@ -473,7 +473,7 @@ bool ListData::restartingCounter() const
 void ListData::appendListLevel( ListLevel* listLevel )
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "this=" << hex << reinterpret_cast<int>( this ) << dec << endl;
+    wvlog << "this=" << hex << reinterpret_cast<int>( this ) << dec << Qt::endl;
 #endif
     m_listLevels.push_back( listLevel );
 }
@@ -488,7 +488,7 @@ const ListLevel* ListData::listLevel( U8 level ) const
 void ListData::applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet ) const
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "level=" << static_cast<int>( pap->ilvl ) << endl;
+    wvlog << "level=" << static_cast<int>( pap->ilvl ) << Qt::endl;
 #endif
 
     if ( !pap || pap->ilvl >= maxListLevels || ( m_lstf.fSimpleList && pap->ilvl != 0 ) )
@@ -497,7 +497,7 @@ void ListData::applyGrpprlPapx( Word97::PAP* pap, const StyleSheet* styleSheet )
     if ( lvl )
         lvl->applyGrpprlPapx( pap, styleSheet );
     else
-        wvlog << "Bug: Didn't find the level " << pap->ilvl << " in the LSTF!" << endl;
+        wvlog << "Bug: Didn't find the level " << pap->ilvl << " in the LSTF!" << Qt::endl;
 }
 
 
@@ -550,7 +550,7 @@ void ListFormatOverrideLVL::dump() const
           << "      iStartAt=" << m_lfolvl.iStartAt << " ilvl=" << static_cast<int>( m_lfolvl.ilvl ) << endl
           << "      fStartAt=" << static_cast<int>( m_lfolvl.fStartAt ) << " fFormatting="
           << static_cast<int>( m_lfolvl.fFormatting ) << endl
-          << "done" << endl;
+          << "done" << Qt::endl;
 }
 
 
@@ -558,7 +558,7 @@ ListFormatOverride::ListFormatOverride( OLEStreamReader* tableStream ) : m_lfo( 
 {
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "######" << endl
-          << " lsid= 0x" << hex << m_lfo.lsid << dec << " clfolvl=" << static_cast<int>( m_lfo.clfolvl ) << endl;
+          << " lsid= 0x" << hex << m_lfo.lsid << dec << " clfolvl=" << static_cast<int>( m_lfo.clfolvl ) << Qt::endl;
 #endif
 }
 
@@ -624,7 +624,7 @@ ListInfo::ListInfo( Word97::PAP& pap, Word97::CHP& chp, ListInfoProvider& listIn
         m_restartingCounter = listData->restartingCounter();
         m_lsid = listData->lsid();
     } else {
-        wvlog << "Bug: The ListData is 0!!" << endl;
+        wvlog << "Bug: The ListData is 0!!" << Qt::endl;
     }
 
     m_startAt = listInfoProvider.startAt();
@@ -662,13 +662,13 @@ ListInfo::ListInfo( Word97::PAP& pap, Word97::CHP& chp, ListInfoProvider& listIn
             m_picAutoSize = !m_text.chp->fNoAutoSize;
         }
     } else {
-        wvlog << "Bug: The ListLevel is 0!!" << endl;
+        wvlog << "Bug: The ListLevel is 0!!" << Qt::endl;
     }
 }
 
 void ListInfo::dump() const
 {
-    wvlog << "------------------------------" << endl;
+    wvlog << "------------------------------" << Qt::endl;
     wvlog << "   linkedIstd=" << m_linkedIstd << endl
           << "   restartingCounter=" << m_restartingCounter << " startAt=" << m_startAt.first << endl
           << "   startAtOverridden=" << m_startAt.second << endl
@@ -681,7 +681,7 @@ void ListInfo::dump() const
         wvlog << "<" << static_cast<char>( m_text.text[ i ].low() ) << "/" << m_text.text[ i ].unicode() << ">";
     wvlog << "'" << endl
           << "   followingChar=" << static_cast<int>( m_followingChar ) << endl
-          << "ListInfo::dump() done -------------------------" << endl;
+          << "ListInfo::dump() done -------------------------" << Qt::endl;
 }
 
 
@@ -691,7 +691,7 @@ ListInfoProvider::ListInfoProvider( const StyleSheet* styleSheet )
 {
 #ifdef WV2_DEBUG_LIST_READING
     wvlog << "################################" << endl
-          << " ---> pre-Word 8" << endl;
+          << " ---> pre-Word 8" << Qt::endl;
 #endif
 }
 
@@ -702,7 +702,7 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
     wvlog << "################################" << endl
           << "   fcPlcfLst=" << fib.fcPlcfLst << " lcbPlcfLst=" << fib.lcbPlcfLst << endl
           << "   fcPlfLfo=" << fib.fcPlfLfo << " lcbPlfLfo=" << fib.lcbPlfLfo << endl
-          << "   fcSttbListNames=" << fib.fcSttbListNames << " lcbSttbListNames=" << fib.lcbSttbListNames << endl;
+          << "   fcSttbListNames=" << fib.fcSttbListNames << " lcbSttbListNames=" << fib.lcbSttbListNames << Qt::endl;
 #endif
 
     tableStream->push();
@@ -713,7 +713,7 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
     if ( fib.lcbPlfLfo != 0 ) {
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcPlfLfo ) {
             wvlog << "Found a \"hole\" within the table stream (list data): current="
-                  << tableStream->tell() << " expected=" << fib.fcPlfLfo << endl;
+                  << tableStream->tell() << " expected=" << fib.fcPlfLfo << Qt::endl;
             tableStream->seek( fib.fcPlfLfo, WV2_SEEK_SET );
         }
         readListFormatOverride( tableStream );
@@ -729,7 +729,7 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
         // Check the position and warn about corrupt files
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcSttbListNames ) {
             wvlog << "Found a \"hole\" within the table stream (list format override): current="
-                  << tableStream->tell() << " expected=" << fib.fcSttbListNames << endl;
+                  << tableStream->tell() << " expected=" << fib.fcSttbListNames << Qt::endl;
             tableStream->seek( fib.fcSttbListNames, WV2_SEEK_SET );
         }
         readListNames( tableStream );
@@ -737,7 +737,7 @@ ListInfoProvider::ListInfoProvider( OLEStreamReader* tableStream, const Word97::
     tableStream->pop();
 
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "done ###########################" << endl;
+    wvlog << "done ###########################" << Qt::endl;
 #endif
 }
 
@@ -760,7 +760,7 @@ bool ListInfoProvider::setPAP( Word97::PAP* pap )
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
     wvlog << "nLvlAnm = " << static_cast<int>( pap->nLvlAnm )
-          << " ilfo = " << pap->ilfo << endl;
+          << " ilfo = " << pap->ilfo << Qt::endl;
 #endif
     // Is it a list paragraph at all?
     if ( ( m_version == Word67 ? static_cast<S16>( pap->nLvlAnm ) : pap->ilfo ) < 1 )  {
@@ -780,7 +780,7 @@ bool ListInfoProvider::setPAP( Word97::PAP* pap )
             if ( pap->ilfo == oldStyleIlfo )
                 convertCompatANLD();
             else {
-                wvlog << "Bug: ListInfoProvider::setWord97StylePAP -- out of bounds access (ilfo=" << pap->ilfo << ")" << endl;
+                wvlog << "Bug: ListInfoProvider::setWord97StylePAP -- out of bounds access (ilfo=" << pap->ilfo << ")" << Qt::endl;
                 m_pap = 0;
                 m_currentLfoLVL = 0;
                 m_currentLst = 0;
@@ -796,7 +796,7 @@ void ListInfoProvider::readListData( OLEStreamReader* tableStream, const U32 end
 {
     const U16 count = tableStream->readU16();
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "count=" << count << endl;
+    wvlog << "count=" << count << Qt::endl;
 #endif
     for ( int i = 0; i < count; ++i ) {
         m_listData.push_back( new ListData( tableStream ) );
@@ -805,11 +805,11 @@ void ListInfoProvider::readListData( OLEStreamReader* tableStream, const U32 end
     // NOTE: this is a bug in the spec, but it at least seems to be a "stable" bug ;)
     if ( static_cast<U32>( tableStream->tell() ) != endOfLSTF ) {
         wvlog << "Expected a different size of this plcflst! (expected: "
-              << endOfLSTF << " position: " << tableStream->tell() << ")" << endl;
+              << endOfLSTF << " position: " << tableStream->tell() << ")" << Qt::endl;
     }
 
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "2nd step -- reading the LVLFs" << endl;
+    wvlog << "2nd step -- reading the LVLFs" << Qt::endl;
 #endif
     // Now read in the ListLevels for each ListData. If fSimpleList is true
     // there is only 1 level, else there are 9.
@@ -830,7 +830,7 @@ void ListInfoProvider::readListFormatOverride( OLEStreamReader* tableStream )
 {
     const U32 count = tableStream->readU32();
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "count=" << count << endl;
+    wvlog << "count=" << count << Qt::endl;
 #endif
     for ( U32 i = 0; i < count; ++i ) {
         m_listFormatOverride.push_back( new ListFormatOverride( tableStream ) );
@@ -852,7 +852,7 @@ void ListInfoProvider::readListFormatOverride( OLEStreamReader* tableStream )
 void ListInfoProvider::readListNames( OLEStreamReader* tableStream )
 {
 #ifdef WV2_DEBUG_LIST_READING
-    wvlog << "" << endl;
+    wvlog << "" << Qt::endl;
 #endif
     m_listNames = new STTBF( usLid, tableStream, false );
 #ifdef WV2_DEBUG_LIST_READING
@@ -869,7 +869,7 @@ void ListInfoProvider::eatLeading0xff( OLEStreamReader* tableStream )
 void ListInfoProvider::processOverride( ListFormatOverride* lfo )
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "" << endl;
+    wvlog << "" << Qt::endl;
 #endif
     bool appliedPapx = false;
     // It turns out we need a non-const pointer, as we have to reset the
@@ -878,7 +878,7 @@ void ListInfoProvider::processOverride( ListFormatOverride* lfo )
 
     if ( m_currentLfoLVL ) {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-        wvlog << "      Level " << static_cast<int>( m_pap->ilvl ) << " found:" << endl;
+        wvlog << "      Level " << static_cast<int>( m_pap->ilvl ) << " found:" << Qt::endl;
         m_currentLfoLVL->dump();
 #endif
         if ( m_currentLfoLVL->overridesFormat() && m_currentLfoLVL->listLevel() ) {
@@ -908,7 +908,7 @@ void ListInfoProvider::convertCompatANLD()
     const S32 lsid = createFakeLSID( m_pap->anld );
     m_pap->ilvl = 0;
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "      generated a unique lsid: " << lsid << endl;
+    wvlog << "      generated a unique lsid: " << lsid << Qt::endl;
 #endif
 
     // Does it already exist?
@@ -934,7 +934,7 @@ void ListInfoProvider::convertCompatANLD()
 ListData* ListInfoProvider::findLST( S32 lsid )
 {
 #ifdef WV2_DEBUG_LIST_PROCESSING
-    wvlog << "lsid=" << lsid << endl;
+    wvlog << "lsid=" << lsid << Qt::endl;
 #endif
     std::vector<ListData*>::const_iterator it = m_listData.begin();
     std::vector<ListData*>::const_iterator end = m_listData.end();
@@ -981,7 +981,7 @@ ListText ListInfoProvider::text(const Word97::CHP& chp) const
     // Get the appropriate style for this paragraph
     // const Style* style = m_styleSheet->styleByIndex( m_pap->istd );
     // if ( !style ) {
-    //     wvlog << "Bug: Huh, really obscure error, couldn't find the Style for the current PAP" << endl;
+    //     wvlog << "Bug: Huh, really obscure error, couldn't find the Style for the current PAP" << Qt::endl;
     //     ret.chp = new Word97::CHP;
     // } else {
     //     ret.chp = new Word97::CHP( style->chp() );

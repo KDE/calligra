@@ -954,7 +954,7 @@ int main(int argc, char** argv)
         processRecordForImplementation(e, cppOut);
     }
 
-    cppOut << "void registerRecordClasses()" << endl << "{" << endl;
+    cppOut << "void registerRecordClasses()" << endl << "{" << Qt::endl;
     for (int i = 0; i < records.size(); i++) {
         QDomElement e = records.at(i).toElement();
         cppOut << "    RecordRegistry::registerRecordClass(" << e.attribute("name") << "Record::id, create" << e.attribute("name") << "Record);\n";

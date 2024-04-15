@@ -1117,7 +1117,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::collectStyles(KoStore *odfStore,
     // Try to open content.xml. Return if it failed.
     //debugSharedExport << "parse content.xml styles";
     if (!odfStore->open("content.xml")) {
-        errorSharedExport << "Unable to open input file! content.xml" << endl;
+        errorSharedExport << "Unable to open input file! content.xml" << Qt::endl;
         return KoFilter::FileNotFound;
     }
 
@@ -1143,7 +1143,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::collectStyles(KoStore *odfStore,
 
     // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
     if (!odfStore->open("styles.xml")) {
-        errorSharedExport << "Unable to open input file! style.xml" << endl;
+        errorSharedExport << "Unable to open input file! style.xml" << Qt::endl;
         return KoFilter::FileNotFound;
     }
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {

@@ -53,7 +53,7 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
 
         QString errorMessage;
         if ( ! odfStore.loadAndParse( errorMessage ) ) {
-            qCritical() << "loading and parsing failed:" << errorMessage << endl;
+            qCritical() << "loading and parsing failed:" << errorMessage << Qt::endl;
             delete store;
             return 0;
         }
@@ -62,7 +62,7 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
         KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
 
         if ( realBody.isNull() ) {
-            qCritical() << "No body tag found!" << endl;
+            qCritical() << "No body tag found!" << Qt::endl;
             delete store;
             return 0;
         }
@@ -70,7 +70,7 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
         KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( KoOdf::Text, false ) );
 
         if ( body.isNull() ) {
-            qCritical() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true ) << "tag found!" << endl;
+            qCritical() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true ) << "tag found!" << Qt::endl;
             delete store;
             return 0;
         }

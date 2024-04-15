@@ -60,10 +60,10 @@ namespace
 
         U16 magic = wordDocument->readU16();
         if ( magic != 0xa5ec && magic != 0xa5dc )
-            wvlog << "+++ Attention: Strange magic number: " << magic << endl;
+            wvlog << "+++ Attention: Strange magic number: " << magic << Qt::endl;
 
         U16 nFib = wordDocument->readU16();
-        wvlog << "nFib = 0x" << hex << nFib << dec << "(" << nFib << ")" << endl;
+        wvlog << "nFib = 0x" << hex << nFib << dec << "(" << nFib << ")" << Qt::endl;
         wordDocument->seek( 0 );  // rewind the stream
 
         if ( nFib < 101 ) {
@@ -74,40 +74,40 @@ namespace
         }
         // (0x0065)
         else if ( nFib == 101 ) {
-            wvlog << "Word-6 document found" << endl;
+            wvlog << "Word-6 document found" << Qt::endl;
             return new Parser95( storage, wordDocument );
         }
         // (0x0067, 0x0068)
         else if ( nFib == 103 || nFib == 104 ) {
-            wvlog << "Word-7 (aka Word 95) document found" << endl;
+            wvlog << "Word-7 (aka Word 95) document found" << Qt::endl;
             return new Parser95( storage, wordDocument );
         }
         // (0x00c1)
         else if ( (nFib == Word8nFib) || (nFib == 0x00c0) || (nFib == 0x00c2) )
         {
-            wvlog << "Word-8 (aka Word 97) document found" << endl;
+            wvlog << "Word-8 (aka Word 97) document found" << Qt::endl;
             return new Parser97( storage, wordDocument );
         }
         else {
             // (0x00d9)
             if ( nFib == 217 ) {
                 wvlog << "Looks like a document created by Word-9/Office 2000,"
-                      << "trying with the Word-8 parser." << endl;
+                      << "trying with the Word-8 parser." << Qt::endl;
             }
             // (0x0101)
             else if ( nFib == 257 ) {
                 wvlog << "Looks like a document created by Word-10/Office XP,"
-                      << "trying with the Word-8 parser." << endl;
+                      << "trying with the Word-8 parser." << Qt::endl;
             }
             // (0x010c)
             else if ( nFib == 268 ) {
                 wvlog << "Looks like a document created by Word-11/Office 2003,"
-                      << "trying with the Word-8 parser." << endl;
+                      << "trying with the Word-8 parser." << Qt::endl;
             }
             // (0x0112), ...
             else {
                 wvlog << "A document > Word-8 found,"
-                      << "trying with the Word-8 parser." << endl;
+                      << "trying with the Word-8 parser." << Qt::endl;
             }
             return new Parser97( storage, wordDocument );
         }

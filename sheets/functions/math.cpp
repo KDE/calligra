@@ -1401,12 +1401,12 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
     cell = Cell( sheet, point.pos.x(), point.pos.y() );
     cell->setValue( args[2]->doubleValue() );
     debugSheets <<"Setting value" << args[2]->doubleValue() <<" on cell" << point.pos.x()
-              << ", " << point.pos.y() << endl;
+              << ", " << point.pos.y() << Qt::endl;
 
     cell = Cell( sheet, point2.pos.x(), point.pos.y() );
     cell->setValue( args[4]->doubleValue() );
     debugSheets <<"Setting value" << args[4]->doubleValue() <<" on cell" << point2.pos.x()
-              << ", " << point2.pos.y() << endl;
+              << ", " << point2.pos.y() << Qt::endl;
   }
 
   Cell * cell1 = Cell( sheet, point3.pos.x(), point3.pos.y() );
@@ -1414,7 +1414,7 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 
   double d = cell1->value().asFloat();
   debugSheets <<"Cell:" << point3.pos.x() <<";" << point3.pos.y() <<" with value"
-            << d << endl;
+            << d << Qt::endl;
 
   debugSheets <<"Resetting old values";
 

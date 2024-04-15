@@ -32,7 +32,7 @@ Headers95::Headers95( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd,  U32 fcPlcfsed,
 std::pair<U32, U32> Headers95::findHeader( int sectionNumber, unsigned char mask ) const
 {
     if ( m_grpfIhdt.size() <= sectionNumber ) {
-        wvlog << "Warning: You are trying to access a section that has not been registered yet!" << endl;
+        wvlog << "Warning: You are trying to access a section that has not been registered yet!" << Qt::endl;
         return std::make_pair( 0u, 0u );
     }
 

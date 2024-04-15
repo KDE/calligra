@@ -140,7 +140,7 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(int pageNumber, QFile &in)
     if (! parsed) {
         errorPdf << "Error while parsing file: "
         << "at line " << line << " column: " << col
-        << " message: " << errormessage << endl;
+        << " message: " << errormessage << Qt::endl;
         // ### TODO: feedback to the user
         return KoFilter::ParsingError;
     }

@@ -1666,7 +1666,7 @@ bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlD
     if (!ok) {
         errorMain << "Parsing error in " << filename << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+        << " Error message: " << errorMsg << Qt::endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
                                    , filename  , errorLine, errorColumn ,
                                    QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0));
@@ -1743,7 +1743,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         } else {
             errorMain << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
             << "  Line: " << errorLine << " Column: " << errorColumn << endl
-            << "  Message: " << errorMsg << endl;
+            << "  Message: " << errorMsg << Qt::endl;
             d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
             res = false;
         }
@@ -1849,7 +1849,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
         }
 
     } else {
-        errorMain << "ERROR: No maindoc.xml" << endl;
+        errorMain << "ERROR: No maindoc.xml" << Qt::endl;
         d->lastErrorMessage = i18n("Invalid document: no file 'maindoc.xml'.");
         QApplication::restoreOverrideCursor();
         return false;
@@ -2025,7 +2025,7 @@ void KoDocument::setModified(bool mod)
         return;
 
     if ( !d->readwrite && mod ) {
-        qCritical(/*1000*/) << "Can't set a read-only document to 'modified' !" << endl;
+        qCritical(/*1000*/) << "Can't set a read-only document to 'modified' !" << Qt::endl;
         return;
     }
 
@@ -2163,7 +2163,7 @@ QDomDocument KoDocument::createDomDocument(const QString& appName, const QString
 
 QDomDocument KoDocument::saveXML()
 {
-    errorMain << "not implemented" << endl;
+    errorMain << "not implemented" << Qt::endl;
     d->lastErrorMessage = i18n("Internal error: saveXML not implemented");
     return QDomDocument();
 }
@@ -2445,7 +2445,7 @@ bool KoDocument::saveAs( const QUrl &kurl )
 {
     if (!kurl.isValid())
     {
-        qCritical(/*1000*/) << "saveAs: Malformed URL " << kurl.url() << endl;
+        qCritical(/*1000*/) << "saveAs: Malformed URL " << kurl.url() << Qt::endl;
         return false;
     }
     d->m_duringSaveAs = true;

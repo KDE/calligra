@@ -377,7 +377,7 @@ U16 determineParameterLength( U16 sprm, const U8* in, WordVersion version )
         int index = ( sprm & 0xE000 ) >> 13;
         if ( operandSizes[ index ] != 0 ) {
 #ifdef WV2_DEBUG_SPRMS
-            wvlog << "==> Size of the sprm argument:" << (U16) operandSizes[index] << endl;
+            wvlog << "==> Size of the sprm argument:" << (U16) operandSizes[index] << Qt::endl;
             wvlog << "sgc:" << (U16) ((sprm & 0x1C00) >> 10);
 #endif
             return operandSizes[ index ];
@@ -410,7 +410,7 @@ U16 determineParameterLength( U16 sprm, const U8* in, WordVersion version )
     else { // Word67
         if ( sprm > 255 )
             wvlog << "Error: Trying to get the length of a flaky SPRM (" << sprm << ", 0x" << hex
-                  << sprm << dec << ") via the Word 95 method!" << endl;
+                  << sprm << dec << ") via the Word 95 method!" << Qt::endl;
         return Word95::SPRM::determineParameterLength( static_cast<U8>( sprm ), in );
     }
 }
@@ -441,13 +441,13 @@ void apply(T* const t,
                 sprm = readU16( grpprl );
                 grpprl += 2;
 #ifdef WV2_DEBUG_SPRMS
-                wvlog << "Seems like that's a different SPRM (0x" << hex << sprm << dec << ")... skipping" << endl;
+                wvlog << "Seems like that's a different SPRM (0x" << hex << sprm << dec << ")... skipping" << Qt::endl;
 #endif
             }
             else {
                 sprm = *grpprl++;
 #ifdef WV2_DEBUG_SPRMS
-                wvlog << "Seems like that's a different SPRM (" << sprm << ")... skipping" << endl;
+                wvlog << "Seems like that's a different SPRM (" << sprm << ")... skipping" << Qt::endl;
 #endif
             }
 
@@ -461,7 +461,7 @@ void apply(T* const t,
         }
     }
     if ( safeCount < 0 )
-        wvlog << "Warning: We read past the end of the grpprl, buggy spec?" << endl;
+        wvlog << "Warning: We read past the end of the grpprl, buggy spec?" << Qt::endl;
 }
 
 U16 unzippedOpCode( U8 isprm )
@@ -546,7 +546,7 @@ U16 word6toWord8( U8 sprm )
     else
         s = lut[ sprm ];
     if ( s == sprmNoop )
-        wvlog << "Warning: Got a Word 6 " << static_cast<int>( sprm ) << " and return a noop!" << endl;
+        wvlog << "Warning: Got a Word 6 " << static_cast<int>( sprm ) << " and return a noop!" << Qt::endl;
     return s;
 }
 
@@ -558,7 +558,7 @@ ParagraphProperties* initPAPFromStyle( const U8* exceptions, const StyleSheet* s
     ParagraphProperties* properties = 0;
     if ( exceptions == 0 ) {
         if ( !styleSheet ) {
-            wvlog << "Warning: Couldn't read from the stylesheet." << endl;
+            wvlog << "Warning: Couldn't read from the stylesheet." << Qt::endl;
             return new ParagraphProperties();
         }
         const Style* normal = styleSheet->styleByID( 0 );  // stiNormal == 0x0000
@@ -585,11 +585,11 @@ ParagraphProperties* initPAPFromStyle( const U8* exceptions, const StyleSheet* s
             if ( style ) {
                 properties = new ParagraphProperties( style->paragraphProperties() );
             } else {
-                wvlog << "Warning: Couldn't read from the style, just applying the PAPX." << endl;
+                wvlog << "Warning: Couldn't read from the style, just applying the PAPX." << Qt::endl;
                 properties = new ParagraphProperties();
             }
         } else {
-            wvlog << "Warning: Couldn't read from the stylesheet, just applying the PAPX." << endl;
+            wvlog << "Warning: Couldn't read from the stylesheet, just applying the PAPX." << Qt::endl;
             properties = new ParagraphProperties();
         }
 
@@ -695,19 +695,19 @@ namespace
     typedef std::vector<Word97::TabDescriptor> TabDescVector;
     U8 addTabs( const U8* ptr, TabDescVector& rgdxaTab )
     {
-//         wvlog << "Before adding the tabs: " << (int)rgdxaTab.size() << endl;
+//         wvlog << "Before adding the tabs: " << (int)rgdxaTab.size() << Qt::endl;
         // Remember where the end was
         const TabDescVector::size_type oldSize = rgdxaTab.size();
         // Now append the new ones, we'll then sort the vector using
         // inplace_merge
         const U8 itbdAddMax = *ptr++;
-        //wvlog << "                           itbdAddMax=" << (int)itbdAddMax << endl;
+        //wvlog << "                           itbdAddMax=" << (int)itbdAddMax << Qt::endl;
         for ( U8 i = 0 ; i < itbdAddMax ; ++i ) {
             // #### We should probably add a proper constructor to
             // #### TabDescriptor (Werner)
             TabDescriptor descr;
             descr.dxaTab = readS16( ptr + sizeof( S16 ) * i );
-//             wvlog << "                           dxaPos=" << descr.dxaTab << endl;
+//             wvlog << "                           dxaPos=" << descr.dxaTab << Qt::endl;
             descr.tbd = TBD( readU8( ptr + sizeof( S16 ) * itbdAddMax + i ) );
             rgdxaTab.push_back( descr );
         }
@@ -720,7 +720,7 @@ namespace
         if ( uend != rgdxaTab.end() ) {
             rgdxaTab.erase( uend, rgdxaTab.end() );
         }
-//         wvlog << "After applying sprmPChgTabs(Papx) : " << (int)rgdxaTab.size() << endl;
+//         wvlog << "After applying sprmPChgTabs(Papx) : " << (int)rgdxaTab.size() << Qt::endl;
         return itbdAddMax;
     }
 
@@ -773,20 +773,20 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     U16 sprmLength;
     const U16 sprm( getSPRM( &ptr, version, sprmLength ) );
 #ifdef WV2_DEBUG_SPRMS
-    wvlog << "got a sprm: 0x" << hex << sprm << dec << endl;
+    wvlog << "got a sprm: 0x" << hex << sprm << dec << Qt::endl;
 #endif
 
     // Is it a PAP sprm?
     if ( ( ( sprm & 0x1C00 ) >> 10 ) != 1 ) {
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "Warning: You're trying to apply a non PAP sprm to a PAP. Not necessarily bad." << endl;
+        wvlog << "Warning: You're trying to apply a non PAP sprm to a PAP. Not necessarily bad." << Qt::endl;
 #endif
         return -1;  // tell the caller to try with something else (e.g. applying a TAP)...
     }
     // which one? ;)
     switch ( sprm ) {
         case SPRM::sprmNoop:
-            wvlog << "Huh? Found a sprmNoop..." << endl;
+            wvlog << "Huh? Found a sprmNoop..." << Qt::endl;
             break;
         case SPRM::sprmPIstd:
             istd = readU16( ptr );
@@ -846,7 +846,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             U8 cch = *myPtr++;
             U8 itbdDelMax = *myPtr++;
             std::vector<Word97::TabDescriptor>::iterator tabIt = rgdxaTab.begin();
-            //wvlog << "Applying sprmPChgTabsPapx. itbdDelMax=" << (int)itbdDelMax << endl;
+            //wvlog << "Applying sprmPChgTabsPapx. itbdDelMax=" << (int)itbdDelMax << Qt::endl;
             // First the 'to be deleted' array
             for ( U8 i = 0 ; i < itbdDelMax ; ++i )
             {
@@ -865,10 +865,10 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 
             if ( cch != 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax ) {
                 wvlog << "Offset problem in sprmPChgTabsPapx. cch=" << static_cast<int>( cch ) <<
-                         "data size=" << 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
+                         "data size=" << 1 + 2 * itbdDelMax + 1 + 3 * itbdAddMax << Qt::endl;
             }
 #ifdef WV2_DEBUG_SPRMS
-            wvlog << "After applying sprmPChgTabsPapx : " << (int)rgdxaTab.size() << endl;
+            wvlog << "After applying sprmPChgTabsPapx : " << (int)rgdxaTab.size() << Qt::endl;
             for (uint i = 0; i < rgdxaTab.size(); i++) {
                 wvlog << "rgdxaTab[" << i << "].dxaTab" << rgdxaTab[i].dxaTab;
             }
@@ -928,10 +928,10 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 
             if ( cch != 255 && cch != 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax ) {
                 wvlog << "Offset problem in sprmPChgTabs. cch=" << static_cast<int>( cch ) <<
-                         "data size=" << 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax << endl;
+                         "data size=" << 1 + 4 * itbdDelMax + 1 + 3 * itbdAddMax << Qt::endl;
             }
 #ifdef WV2_DEBUG_SPRMS
-            wvlog << "After applying sprmPChgTabs : " << (int)rgdxaTab.size() << endl;
+            wvlog << "After applying sprmPChgTabs : " << (int)rgdxaTab.size() << Qt::endl;
             for (uint i = 0; i < rgdxaTab.size(); i++) {
                 wvlog << "rgdxaTab[" << i << "].dxaTab" << rgdxaTab[i].dxaTab;
             }
@@ -954,25 +954,25 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             break;
         }
         case SPRM::sprmPBrcTop10:
-            wvlog << "Warning: sprmPBrcTop10 doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmPBrcTop10 doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmPBrcLeft10:
-            wvlog << "Warning: sprmPBrcLeft10 doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmPBrcLeft10 doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmPBrcBottom10:
-            wvlog << "Warning: sprmPBrcBottom10 doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmPBrcBottom10 doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmPBrcRight10:
-            wvlog << "Warning: sprmPBrcRight10 doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmPBrcRight10 doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmPBrcBetween10:
-            wvlog << "Warning: sprmPBrcBetween10 doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmPBrcBetween10 doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmPBrcBar10:
-            wvlog << "Warning: sprmPBrcBar10 doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmPBrcBar10 doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmPDxaFromText10:
-            wvlog << "Warning: sprmPDxaFromText10 doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmPDxaFromText10 doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmPWr:
             wr = *ptr;
@@ -1026,7 +1026,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             fWidowControl = *ptr == 1;
             break;
         case SPRM::sprmPRuler:
-            wvlog << "Warning: sprmPRuler not implemented" << endl;
+            wvlog << "Warning: sprmPRuler not implemented" << Qt::endl;
             break;
         case SPRM::sprmPFKinsoku:
             fKinsoku = *ptr == 1;
@@ -1050,10 +1050,10 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             wAlignFont = readU16( ptr );
             break;
         case SPRM::sprmPFrameTextFlow:
-            wvlog << "Warning: sprmPFrameTextFlow not implemented" << endl;
+            wvlog << "Warning: sprmPFrameTextFlow not implemented" << Qt::endl;
             break;
         case SPRM::sprmPISnapBaseLine:
-            wvlog << "Warning: sprmPISnapBaseLine is obsolete" << endl;
+            wvlog << "Warning: sprmPISnapBaseLine is obsolete" << Qt::endl;
             break;
         case SPRM::sprmPAnld:
             if ( version == Word8 )
@@ -1096,7 +1096,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
                 delete [] grpprl;
             }
             else
-                wvlog << "Error: sprmPHugePapx found, but no data stream!" << endl;
+                wvlog << "Error: sprmPHugePapx found, but no data stream!" << Qt::endl;
             break;
         }
         case SPRM::sprmPFUsePgsuSettings:
@@ -1140,7 +1140,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPUndocumented4:
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -1173,20 +1173,20 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
     U16 sprmLength;
     const U16 sprm( getSPRM( &ptr, version, sprmLength ) );
 #ifdef WV2_DEBUG_SPRMS
-    wvlog << "got a sprm: 0x" << hex << sprm << dec << endl;
+    wvlog << "got a sprm: 0x" << hex << sprm << dec << Qt::endl;
 #endif
 
     // Is it a CHP sprm?
     if ( ( ( sprm & 0x1C00 ) >> 10 ) != 2 ) {
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "Warning: You're trying to apply a non CHP sprm to a CHP. Not necessarily bad." << endl;
+        wvlog << "Warning: You're trying to apply a non CHP sprm to a CHP. Not necessarily bad." << Qt::endl;
 #endif
         return -1;
     }
     // which one? ;)
     switch ( sprm ) {
         case SPRM::sprmNoop:
-            wvlog << "Huh? Found a sprmNoop..." << endl;
+            wvlog << "Huh? Found a sprmNoop..." << Qt::endl;
             break;
         case SPRM::sprmCFRMarkDel:
             fRMarkDel = *ptr == 1;
@@ -1227,7 +1227,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
                 xchSym = *( ptr + 3 );
             }
 #ifdef WV2_DEBUG_SPRMS
-            wvlog << "sprmCSymbol: ftcSym=" << ftcSym << " xchSym=" << xchSym << endl;
+            wvlog << "sprmCSymbol: ftcSym=" << ftcSym << " xchSym=" << xchSym << Qt::endl;
 #endif
             fSpec = 1;
             break;
@@ -1235,7 +1235,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             fOle2 = *ptr == 1;
             break;
         case SPRM::sprmCIdCharType:
-            wvlog << "Warning: sprmCIdCharType doesn't make sense for Word 8" << endl;
+            wvlog << "Warning: sprmCIdCharType doesn't make sense for Word 8" << Qt::endl;
             break;
         case SPRM::sprmCHighlight:
             icoHighlight = *ptr;
@@ -1249,20 +1249,20 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCIstd:
         {
-            wvlog << "######################## old character style = " << istd << endl;
+            wvlog << "######################## old character style = " << istd << Qt::endl;
             istd = readS16( ptr );
             if ( styleSheet ) {
-                wvlog << "Trying to change the character style to " << istd << endl;
+                wvlog << "Trying to change the character style to " << istd << Qt::endl;
                 const Style* style = styleSheet->styleByIndex( istd );
                 if ( style && style->type() == sgcChp ) {
-                    wvlog << "got a character style!" << endl;
+                    wvlog << "got a character style!" << Qt::endl;
                     const UPECHPX& upechpx( style->upechpx() );
                     apply( upechpx.grpprl, upechpx.cb, paragraphStyle, styleSheet, dataStream, version );
                 } else {
-                    wvlog << "Warning: Couldn't find the character style with istd " << istd << endl;
+                    wvlog << "Warning: Couldn't find the character style with istd " << istd << Qt::endl;
                 }
             } else {
-                wvlog << "Warning: Tried to change the character style, but the stylesheet was 0" << endl;
+                wvlog << "Warning: Tried to change the character style, but the stylesheet was 0" << Qt::endl;
             }
             break;
         }
@@ -1314,7 +1314,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fBold = !( paragraphStyle->chp().fBold );
             } else {
-                wvlog << "Warning: sprmCFBold couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFBold couldn't find a style" << Qt::endl;
                 fBold = !fBold;
             }
             break;
@@ -1326,13 +1326,13 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fItalic = !( paragraphStyle->chp().fItalic );
             } else {
-                wvlog << "Warning: sprmCFItalic couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFItalic couldn't find a style" << Qt::endl;
                 fItalic = !fItalic;
             }
             break;
         case SPRM::sprmCFStrike:
 #ifdef WV2_DEBUG_SPRMS
-            wvlog << "sprmCFStrike -- fStrike = " << static_cast<int>( fStrike ) << " *ptr = " << static_cast<int>( *ptr ) << endl;
+            wvlog << "sprmCFStrike -- fStrike = " << static_cast<int>( fStrike ) << " *ptr = " << static_cast<int>( *ptr ) << Qt::endl;
 #endif
             if ( *ptr < 128 ) {
                 fStrike = *ptr == 1;
@@ -1341,11 +1341,11 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fStrike = !( paragraphStyle->chp().fStrike );
             } else {
-                wvlog << "Warning: sprmCFStrike couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFStrike couldn't find a style" << Qt::endl;
                 fStrike = !fStrike;
             }
 #ifdef WV2_DEBUG_SPRMS
-            wvlog << "sprmCFStrike -- fStrike (changed) = " << static_cast<int>( fStrike ) << endl;
+            wvlog << "sprmCFStrike -- fStrike (changed) = " << static_cast<int>( fStrike ) << Qt::endl;
 #endif
             break;
         case SPRM::sprmCFOutline:
@@ -1356,7 +1356,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fOutline = !( paragraphStyle->chp().fOutline );
             } else {
-                wvlog << "Warning: sprmCFOutline couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFOutline couldn't find a style" << Qt::endl;
                 fOutline = !fOutline;
             }
             break;
@@ -1368,7 +1368,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fShadow = !( paragraphStyle->chp().fShadow );
             } else {
-                wvlog << "Warning: sprmCFShadow couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFShadow couldn't find a style" << Qt::endl;
                 fShadow = !fShadow;
             }
             break;
@@ -1380,7 +1380,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fSmallCaps = !( paragraphStyle->chp().fSmallCaps );
             } else {
-                wvlog << "Warning: sprmCFSmallCaps couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFSmallCaps couldn't find a style" << Qt::endl;
                 fSmallCaps = !fSmallCaps;
             }
             break;
@@ -1392,7 +1392,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fCaps = !( paragraphStyle->chp().fCaps );
             } else {
-                wvlog << "Warning: sprmCFCaps couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFCaps couldn't find a style" << Qt::endl;
                 fCaps = !fCaps;
             }
             break;
@@ -1404,13 +1404,13 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fVanish = !( paragraphStyle->chp().fVanish );
             } else {
-                wvlog << "Warning: sprmCFVanish couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFVanish couldn't find a style" << Qt::endl;
                 fVanish = !fVanish;
             }
             break;
         case SPRM::sprmCFtcDefault:
             // We are abusing this SPRM for Word 6 purposes (sprmCFtc, 93)
-            //wvlog << "Error: sprmCFtcDefault only used internally in MS Word" << endl;
+            //wvlog << "Error: sprmCFtcDefault only used internally in MS Word" << Qt::endl;
             ftcAscii = ftcFE = ftcOther = ftc = readS16( ptr );
             break;
         case SPRM::sprmCKul:
@@ -1418,7 +1418,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCSizePos:
             // The hps sprms would be quite hard to implement in a sane way
-            wvlog << "Warning: sprmCSizePos not implemented" << endl;
+            wvlog << "Warning: sprmCSizePos not implemented" << Qt::endl;
             break;
         case SPRM::sprmCDxaSpace:
             dxaSpace = readS16( ptr );
@@ -1426,7 +1426,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
         case SPRM::sprmCLid:
             // We are abusing this SPRM for Word 6 purposes (sprmCLid, 97)
             lidDefault = lidFE = lid = readU16( ptr );
-            //wvlog << "Error: sprmCLid only used internally in MS Word" << endl;
+            //wvlog << "Error: sprmCLid only used internally in MS Word" << Qt::endl;
             break;
         case SPRM::sprmCIco: {
             U16 ico = *ptr;
@@ -1466,14 +1466,14 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCHpsInc:
             // The hps sprms would be quite hard to implement in a sane way
-            wvlog << "Warning: sprmCHpsInc not implemented" << endl;
+            wvlog << "Warning: sprmCHpsInc not implemented" << Qt::endl;
             break;
         case SPRM::sprmCHpsPos:
             hpsPos = readS16( ptr );
             break;
         case SPRM::sprmCHpsPosAdj:
             // The hps sprms would be quite hard to implement in a sane way
-            wvlog << "Warning: sprmCHpsPosAdj not implemented" << endl;
+            wvlog << "Warning: sprmCHpsPosAdj not implemented" << Qt::endl;
             break;
         case SPRM::sprmCMajority:
         case SPRM::sprmCMajority50: // same as sprmCMajority
@@ -1511,7 +1511,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
                     cv = pstyle.cv;
             }
             else
-                wvlog << "Warning: sprmCMajority couldn't find a style" << endl;
+                wvlog << "Warning: sprmCMajority couldn't find a style" << Qt::endl;
             break;
         }
         case SPRM::sprmCIss:
@@ -1519,13 +1519,13 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCHpsNew50:
             if ( *ptr != 2 )
-                wvlog << "Warning: sprmCHpsNew50 has a different length than 2" << endl;
+                wvlog << "Warning: sprmCHpsNew50 has a different length than 2" << Qt::endl;
             else
                 hps = readU16( ptr + 1 );
             break;
         case SPRM::sprmCHpsInc1:
             // The hps sprms would be quite hard to implement in a sane way
-            wvlog << "Warning: sprmCHpsInc1 not implemented" << endl;
+            wvlog << "Warning: sprmCHpsInc1 not implemented" << Qt::endl;
             break;
         case SPRM::sprmCHpsKern:
             hpsKern = readU16( ptr );
@@ -1558,7 +1558,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fDStrike = !( paragraphStyle->chp().fDStrike );
             } else {
-                wvlog << "Warning: sprmCFDStrike couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFDStrike couldn't find a style" << Qt::endl;
                 fDStrike = !fDStrike;
             }
             break;
@@ -1570,7 +1570,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fImprint = !( paragraphStyle->chp().fImprint );
             } else {
-                wvlog << "Warning: sprmCFImprint couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFImprint couldn't find a style" << Qt::endl;
                 fImprint = !fImprint;
             }
             break;
@@ -1582,7 +1582,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fSpec = !( paragraphStyle->chp().fSpec );
             } else {
-                wvlog << "Warning: sprmCFSpec couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFSpec couldn't find a style" << Qt::endl;
                 fSpec = !fSpec;
             }
             break;
@@ -1591,7 +1591,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCPropRMark:
             if ( *ptr != 7 ) {
-                wvlog << "Error: sprmCPropRMark has an unexpected size" << endl;
+                wvlog << "Error: sprmCPropRMark has an unexpected size" << Qt::endl;
             }
             fPropMark = *( ptr + 1 ) == 1;
             ibstPropRMark = readS16( ptr + 2 );
@@ -1605,7 +1605,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fEmboss = !( paragraphStyle->chp().fEmboss );
             } else {
-                wvlog << "Warning: sprmCFEmboss couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFEmboss couldn't find a style" << Qt::endl;
                 fEmboss = !fEmboss;
             }
             break;
@@ -1618,40 +1618,40 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
         // Words is intelligent enough to support BiDi "the right way." (Werner)
         case SPRM::sprmCFBiDi:
             // ###### Undocumented
-            //wvlog << "Warning: sprmCFBiDi not implemented" << endl;
+            //wvlog << "Warning: sprmCFBiDi not implemented" << Qt::endl;
             break;
         case SPRM::sprmCFDiacColor:
             // ###### Undocumented
-            //wvlog << "Warning: sprmCFDiacColor not implemented" << endl;
+            //wvlog << "Warning: sprmCFDiacColor not implemented" << Qt::endl;
             break;
         case SPRM::sprmCFBoldBi:
             // ###### Undocumented
-            //wvlog << "Warning: sprmCFBoldBi not implemented" << endl;
+            //wvlog << "Warning: sprmCFBoldBi not implemented" << Qt::endl;
             break;
         case SPRM::sprmCFItalicBi:
             // ###### Undocumented
-            //wvlog << "Warning: sprmCFItalicBi not implemented" << endl;
+            //wvlog << "Warning: sprmCFItalicBi not implemented" << Qt::endl;
             break;
         case SPRM::sprmCFtcBi:
             // ###### Undocumented
-            //wvlog << "Warning: sprmCFtcBi not implemented" << endl;
+            //wvlog << "Warning: sprmCFtcBi not implemented" << Qt::endl;
             break;
         case SPRM::sprmCLidBi:
             // OOo does something with that flag.
-            wvlog << "Warning: sprmCLidBi not implemented (no documentation available)" << endl;
+            wvlog << "Warning: sprmCLidBi not implemented (no documentation available)" << Qt::endl;
             break;
         case SPRM::sprmCIcoBi:
             // ###### Undocumented
-            //wvlog << "Warning: sprmCIcoBi not implemented" << endl;
+            //wvlog << "Warning: sprmCIcoBi not implemented" << Qt::endl;
             break;
         case SPRM::sprmCHpsBi:
             // OOo does something with that flag.
-            wvlog << "Warning: sprmCHpsBi not implemented (no documentation available)" << endl;
+            wvlog << "Warning: sprmCHpsBi not implemented (no documentation available)" << Qt::endl;
             break;
         case SPRM::sprmCDispFldRMark:
         {
             if ( *ptr != 39 ) {
-                wvlog << "Warning: sprmCDispFldRMark has a different length than 39" << endl;
+                wvlog << "Warning: sprmCDispFldRMark has a different length than 39" << Qt::endl;
             } else {
                 fDispFldRMark = *( ptr + 1 ) == 1;
                 ibstDispFldRMark = readS16( ptr + 2 );
@@ -1688,14 +1688,14 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             } else if ( *ptr == 129 && paragraphStyle ) {
                 fUsePgsuSettings = !( paragraphStyle->chp().fUsePgsuSettings );
             } else {
-                wvlog << "Warning: sprmCFSpec couldn't find a style" << endl;
+                wvlog << "Warning: sprmCFSpec couldn't find a style" << Qt::endl;
                 fUsePgsuSettings = !fUsePgsuSettings;
             }
             break;
         case SPRM::sprmCCpg:
             // Undocumented, no idea what this variable is for. I changed it to chse in
             // the spec as it made more sense. (Werner)
-            //wvlog << "Warning: sprmCCpg not implemented" << endl;
+            //wvlog << "Warning: sprmCCpg not implemented" << Qt::endl;
             break;
         case SPRM::sprmCRgLid0:
         case SPRM::sprmCRgLidUndocumented1: // according to OOo a dup. of sprmCRgLid0
@@ -1731,7 +1731,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             wvlog << "=> fPicBullet:" << fPicBullet << "| fNoAutoSize:" << fNoAutoSize << "| check:" << *ptr;
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -1761,13 +1761,13 @@ S16 PICF::applyPICFSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet
 
     // Is it a PICF sprm?
     if ( ( ( sprm & 0x1C00 ) >> 10 ) != 3 ) {
-        wvlog << "Warning: You're trying to apply a non PICF sprm to a PICF." << endl;
+        wvlog << "Warning: You're trying to apply a non PICF sprm to a PICF." << Qt::endl;
         return -1;
     }
     // which one? ;)
     switch ( sprm ) {
         case SPRM::sprmNoop:
-            wvlog << "Huh? Found a sprmNoop..." << endl;
+            wvlog << "Huh? Found a sprmNoop..." << Qt::endl;
             break;
         case SPRM::sprmPicBrcl:
             brcl = *ptr;
@@ -1775,7 +1775,7 @@ S16 PICF::applyPICFSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet
         case SPRM::sprmPicScale:
             if ( *ptr != 12 )
                 wvlog << "Warning: sprmPicScale has a different size (" << static_cast<int>( *ptr )
-                      << ") than expected (12)." << endl;
+                      << ") than expected (12)." << Qt::endl;
             mx = readU16( ptr + 1 );
             my = readU16( ptr + 3 );
             dxaCropLeft = readU16( ptr + 5 );
@@ -1796,7 +1796,7 @@ S16 PICF::applyPICFSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet
             readBRC( brcRight, ptr, version );
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -1829,13 +1829,13 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
 
     // Is it a SEP sprm?
     if ( ( ( sprm & 0x1C00 ) >> 10 ) != 4 ) {
-        wvlog << "Warning: You're trying to apply a non SEP sprm to a SEP." << endl;
+        wvlog << "Warning: You're trying to apply a non SEP sprm to a SEP." << Qt::endl;
         return -1;
     }
     // which one? ;)
     switch ( sprm ) {
         case SPRM::sprmNoop:
-            wvlog << "Huh? Found a sprmNoop..." << endl;
+            wvlog << "Huh? Found a sprmNoop..." << Qt::endl;
             break;
         case SPRM::sprmScnsPgn:
             cnsPgn = *ptr;
@@ -1850,10 +1850,10 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
                 olstAnm = toWord97( Word95::OLST( ptr + 1 ) );
             break;
         case SPRM::sprmSDxaColWidth:
-            wvlog << "Warning: sprmSDxaColWidth not implemented" << endl;
+            wvlog << "Warning: sprmSDxaColWidth not implemented" << Qt::endl;
             break;
         case SPRM::sprmSDxaColSpacing:
-            wvlog << "Warning: sprmSDxaColSpacing not implemented" << endl;
+            wvlog << "Warning: sprmSDxaColSpacing not implemented" << Qt::endl;
             break;
         case SPRM::sprmSFEvenlySpaced:
             fEvenlySpaced = *ptr == 1;
@@ -1931,7 +1931,7 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             dmOrientPage = *ptr;
             break;
         case SPRM::sprmSBCustomize:
-            wvlog << "Warning: sprmSBCustomize not implemented" << endl;
+            wvlog << "Warning: sprmSBCustomize not implemented" << Qt::endl;
             break;
         case SPRM::sprmSXaPage:
             xaPage = readU16( ptr );
@@ -1963,13 +1963,13 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             dttmPropRMark.readPtr( ptr + 4 );
             break;
         case SPRM::sprmSFBiDi:
-            wvlog << "Warning: sprmSFBiDi not implemented" << endl;
+            wvlog << "Warning: sprmSFBiDi not implemented" << Qt::endl;
             break;
         case SPRM::sprmSFFacingCol:
-            wvlog << "Warning: sprmSFFacingCol not implemented" << endl;
+            wvlog << "Warning: sprmSFFacingCol not implemented" << Qt::endl;
             break;
         case SPRM::sprmSFRTLGutter:
-            wvlog << "Warning: sprmSFRTLGutter not implemented" << endl;
+            wvlog << "Warning: sprmSFRTLGutter not implemented" << Qt::endl;
             break;
         case SPRM::sprmSBrcTop:
             readBRC( brcTop, ptr, version );
@@ -2014,7 +2014,7 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             wTextFlow = readU16( ptr );
             break;
         default:
-            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
+            wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
             break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM
@@ -2041,11 +2041,11 @@ namespace
     void cropIndices( U8& itcFirst, U8& itcLim, U8 size )
     {
         if ( itcFirst >= size ) {
-            wvlog << "Warning: itcFirst out of bounds" << endl;
+            wvlog << "Warning: itcFirst out of bounds" << Qt::endl;
             itcFirst = size - 1;
         }
         if ( itcLim > size ) {
-            wvlog << "Warning: itcLim out of bounds" << endl;
+            wvlog << "Warning: itcLim out of bounds" << Qt::endl;
             itcLim = size;
         }
     }
@@ -2059,8 +2059,8 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     const U16 sprm( getSPRM( &ptr, version, sprmLength ) );
 
 #ifdef WV2_DEBUG_SPRMS
-    wvlog << "sprm: 0x" << hex << sprm << dec << endl;
-    wvlog << "sprmLength: " << sprmLength << endl;
+    wvlog << "sprm: 0x" << hex << sprm << dec << Qt::endl;
+    wvlog << "sprmLength: " << sprmLength << Qt::endl;
 #endif
     // Is it a TAP sprm? Not really an error if it's none, as all TAP sprms
     // live inside PAP grpprls
@@ -2071,14 +2071,14 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     {
 #ifdef WV2_DEBUG_SPRMS
         wvlog << "Warning: You're trying to apply a non TAP sprm to a TAP. Not necessarily bad." 
-              << endl;
+              << Qt::endl;
 #endif
         return -1;
     }
     // which one? ;)
     switch ( sprm ) {
     case SPRM::sprmNoop:
-        wvlog << "Huh? Found a sprmNoop..." << endl;
+        wvlog << "Huh? Found a sprmNoop..." << Qt::endl;
         break;
     case SPRM::sprmTJc:
         jc = readS16( ptr );
@@ -2093,7 +2093,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 
         dxaLeft = readS16( ptr );
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "dxaLeft: " << dxaLeft << endl;
+        wvlog << "dxaLeft: " << dxaLeft << Qt::endl;
 #endif
         break;
     }
@@ -2108,7 +2108,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 
     dxaGapHalf = readS16( ptr );
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "dxaGapHalf: " << dxaGapHalf << endl;
+        wvlog << "dxaGapHalf: " << dxaGapHalf << Qt::endl;
 #endif
         break;
     }
@@ -2137,7 +2137,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     }
     case SPRM::sprmTDefTable10:
-        wvlog << "Warning: sprmTDefTable10 is obsolete" << endl;
+        wvlog << "Warning: sprmTDefTable10 is obsolete" << Qt::endl;
         break;
     case SPRM::sprmTDyaRowHeight:
         dyaRowHeight = readS16( ptr );
@@ -2145,7 +2145,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmTDefTable:
     {
         if ( itcMac != 0 ) {
-            wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
+            wvlog << "Bug: Assumption about sprmTDefTable not true" << Qt::endl;
             break;
         }
         int remainingLength = readU16( ptr ) - 1;
@@ -2153,7 +2153,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
 
         remainingLength -= 2 * ( itcMac + 1 );
         if ( remainingLength < 0 ) {
-            wvlog << "Bug: Not even enough space for the dxas!" << endl;
+            wvlog << "Bug: Not even enough space for the dxas!" << Qt::endl;
             break;
         }
         const U8* myPtr = ptr + 3;
@@ -2163,7 +2163,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             myPtr += 2;
         }
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "rgdxaCenter[0]: " << rgdxaCenter[0] << endl;
+        wvlog << "rgdxaCenter[0]: " << rgdxaCenter[0] << Qt::endl;
 #endif
         const int tcSize = version == Word8 ? Word97::TC::sizeOf : Word95::TC::sizeOf;
         myLim = myPtr + ( remainingLength / tcSize ) * tcSize;
@@ -2215,12 +2215,12 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTDefTableShd2nd:
     {
-        wvlog << "Warning: sprmTDefTableShd2nd not implemented" << endl;
+        wvlog << "Warning: sprmTDefTableShd2nd not implemented" << Qt::endl;
         break;
     }
     case SPRM::sprmTDefTableShd3rd:
     {
-        wvlog << "Warning: sprmTDefTableShd3rd not implemented" << endl;
+        wvlog << "Warning: sprmTDefTableShd3rd not implemented" << Qt::endl;
         break;
     }
     case SPRM::sprmTTlp:
@@ -2258,7 +2258,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         dyaAbs = readS16( ptr );
         break;
     case SPRM::sprmTHTMLProps:
-        wvlog << "Warning: sprmTHTMLProps not implemented" << endl;
+        wvlog << "Warning: sprmTHTMLProps not implemented" << Qt::endl;
         break;
     case SPRM::sprmTSetBrc80:
     {
@@ -2286,12 +2286,12 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     {
         //NOTE: don't process before sprmTDefTable
     if ( itcMac == 0 ) {
-            wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
+            wvlog << "Bug: Assumption about sprmTDefTable not true" << Qt::endl;
             break;
         }
     // Sanity check
         if ( static_cast<std::vector<S16>::size_type>( itcMac ) + 1 != rgdxaCenter.size() ) {
-            wvlog << "Bug: Somehow itcMac and the rgdxaCenter.size() aren't in sync anymore!" << endl;
+            wvlog << "Bug: Somehow itcMac and the rgdxaCenter.size() aren't in sync anymore!" << Qt::endl;
             itcMac = rgdxaCenter.size() - 1;
         }
 
@@ -2303,7 +2303,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             // Shaky, no idea why we would have to subtract ctc here?  The
             // implementation below is a guess from me, but it looks like this
             // never happens in real documents.
-            wvlog << "Warning: sprmTInsert: Debug me ########################################" << endl;
+            wvlog << "Warning: sprmTInsert: Debug me ########################################" << Qt::endl;
 
             S16 runningDxaCol = 0;
             if ( !rgdxaCenter.empty() ) {
@@ -2360,7 +2360,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     {
         //NOTE: don't process before sprmTDefTable
     if ( itcMac == 0 ) {
-            wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
+            wvlog << "Bug: Assumption about sprmTDefTable not true" << Qt::endl;
             break;
         }
 
@@ -2382,7 +2382,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTMerge:
     {
-        wvlog << "Debug me (sprmTMerge) #########################################################" << endl;
+        wvlog << "Debug me (sprmTMerge) #########################################################" << Qt::endl;
         U8 itcFirst = *ptr;
         U8 itcLim = *( ptr + 1 );
         cropIndices( itcFirst, itcLim, rgtc.size() );
@@ -2395,7 +2395,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTSplit:
     {
-        wvlog << "Debug me (sprmTSplit) #########################################################" << endl;
+        wvlog << "Debug me (sprmTSplit) #########################################################" << Qt::endl;
         U8 itcFirst = *ptr;
         U8 itcLim = *( ptr + 1 );
         cropIndices( itcFirst, itcLim, rgtc.size() );
@@ -2409,7 +2409,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     }
     case SPRM::sprmTSetBrc10:
-        wvlog << "Warning: sprmTSetBrc10 doesn't make sense for Word97 structures" << endl;
+        wvlog << "Warning: sprmTSetBrc10 doesn't make sense for Word97 structures" << Qt::endl;
         break;
     case SPRM::sprmTSetShd:
     {
@@ -2436,10 +2436,10 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     }
     case SPRM::sprmTTextFlow:
-        wvlog << "Warning: sprmTTextFlow is undocumented. Please send this document to trobin@kde.org." << endl;
+        wvlog << "Warning: sprmTTextFlow is undocumented. Please send this document to trobin@kde.org." << Qt::endl;
         break;
     case SPRM::sprmTDiagLine:
-        wvlog << "Warning: sprmTDiagLine is undocumented. Please send this document to trobin@kde.org." << endl;
+        wvlog << "Warning: sprmTDiagLine is undocumented. Please send this document to trobin@kde.org." << Qt::endl;
         break;
     case SPRM::sprmTVertMerge:
     {
@@ -2450,7 +2450,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             rgtc[ index ].fVertRestart = ( flags & 0x02 ) >> 1;
         }
         else {
-            wvlog << "Warning: sprmTVertMerge: Out of bounds access" << endl;
+            wvlog << "Warning: sprmTVertMerge: Out of bounds access" << Qt::endl;
         }
         break;
     }
@@ -2536,19 +2536,19 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     }
     case SPRM::sprmTCellPadding:
-        wvlog << "Warning: sprmTCellPadding not implemented" << endl;
+        wvlog << "Warning: sprmTCellPadding not implemented" << Qt::endl;
 //         if ( *ptr == 6 ) {
 //             const U8 itcFirst( *( ptr + 1 ) );
 //             for ( int i = 0; i < 6; ++i )
-//                 wvlog << "    byte " << i << ": " << hex << ( int )*( ptr + i ) << dec << endl;
+//                 wvlog << "    byte " << i << ": " << hex << ( int )*( ptr + i ) << dec << Qt::endl;
 //         }
 //         else {
 //             wvlog << "Warning: sprmTCellPadding with unusual length=" << 
-//                   static_cast<int>( *ptr ) << endl;
+//                   static_cast<int>( *ptr ) << Qt::endl;
 //         }
         break;
     case SPRM::sprmTCellSpacingDefault:
-       wvlog << "Warning: sprmTCellSpacingDefault not implemented" << endl;
+       wvlog << "Warning: sprmTCellSpacingDefault not implemented" << Qt::endl;
        break;
     case SPRM::sprmTCellPaddingDefault:
         if ( *ptr == 6 ) {
@@ -2587,7 +2587,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             }
         } else {
             wvlog << "Warning: sprmTCellPaddingDefault with unusual length=" <<
-                  static_cast<int>( *ptr ) << endl;
+                  static_cast<int>( *ptr ) << Qt::endl;
         }
         break;
     case SPRM::sprmTUndocumented1:
@@ -2595,7 +2595,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         wvlog << "Warning: undocumented SPRM";
         break;
     case SPRM::sprmTSetShdTable:
-        wvlog << "Warning: sprmTSetShdTable not implemented" << endl;
+        wvlog << "Warning: sprmTSetShdTable not implemented" << Qt::endl;
         break;
     case SPRM::sprmTUndocumented10:
     case SPRM::sprmTUndocumented11:
@@ -2627,7 +2627,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmPHugePapx2:
     case SPRM::sprmPTableProps:
     {
-        wvlog << "--> Parsing PrcData" << endl;
+        wvlog << "--> Parsing PrcData" << Qt::endl;
         if ( dataStream ) {
             dataStream->push();
             dataStream->seek( readU32( ptr ), WV2_SEEK_SET );
@@ -2642,13 +2642,13 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             delete [] grpprl;
         }
         else {
-            wvlog << "Error: no data stream!" << endl;
+            wvlog << "Error: no data stream!" << Qt::endl;
         }
-        wvlog << "<-- PrcData parsed successfully" << endl;
+        wvlog << "<-- PrcData parsed successfully" << Qt::endl;
         break;
     }
     default:
-        wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
+        wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << Qt::endl;
         break;
     }
     return static_cast<S16>( sprmLength );  // length of the SPRM

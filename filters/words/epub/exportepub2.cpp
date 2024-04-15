@@ -66,7 +66,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
-        errorEpub << "Unable to open input file!" << endl;
+        errorEpub << "Unable to open input file!" << Qt::endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }

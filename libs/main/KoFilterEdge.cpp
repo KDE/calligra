@@ -29,10 +29,10 @@ void Edge::dump(const QByteArray& indent) const
 {
     if (m_vertex)
         debugFilter << indent << "Edge -> '" << m_vertex->mimeType()
-        << "' (" << m_filterEntry->weight << ")" << endl;
+        << "' (" << m_filterEntry->weight << ")" << Qt::endl;
     else
         debugFilter << indent << "Edge -> '(null)' ("
-        << m_filterEntry->weight << ")" << endl;
+        << m_filterEntry->weight << ")" << Qt::endl;
 }
 
 }

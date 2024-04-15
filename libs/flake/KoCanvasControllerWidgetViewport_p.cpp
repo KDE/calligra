@@ -289,7 +289,7 @@ void Viewport::resetLayout()
 //     debugFlake <<"viewH:" << viewH << endl
 //              << "docH: " << docH << endl
 //              << "viewW: " << viewW << endl
-//              << "docW: " << docW << endl;
+//              << "docW: " << docW << Qt::endl;
 
     if (viewH == docH && viewW == docW) {
         // Do nothing

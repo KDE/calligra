@@ -134,7 +134,7 @@ void GoalSeek::calculate()
 
 //         debugSheets <<"Iteration:" << iterations <<", StartA:" << startA
 //                  << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
-//                  << startB << ", ResultB: " << resultB << endl;
+//                  << startB << ", ResultB: " << resultB << Qt::endl;
 
 
         // find zero with secant method (rough implementation was provided by Franz-Xaver Meier):

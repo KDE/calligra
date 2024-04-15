@@ -73,14 +73,14 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
 
     m_table = storage->createStreamReader( tableStream() );
     if ( !m_table || !m_table->isValid() ) {
-        wvlog << "Error: Couldn't open the table stream (i.e. [0|1]Table or WordDocument)" << endl;
+        wvlog << "Error: Couldn't open the table stream (i.e. [0|1]Table or WordDocument)" << Qt::endl;
         m_okay = false;
         return;
     }
 
     m_data = storage->createStreamReader( "Data" );
     if ( !m_data || !m_data->isValid() ) {
-        wvlog << "Information: Couldn't open the Data stream, no big deal" << endl;
+        wvlog << "Information: Couldn't open the Data stream, no big deal" << Qt::endl;
         delete m_data;
         m_data = 0;
     }
@@ -89,33 +89,33 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
     m_fib.valid();
 
 #ifdef WV2_DUMP_FIB
-    wvlog << "Dumping some parts of the FIB: " << endl;
-    wvlog << "   wIdent=" << m_fib.wIdent << endl;
-    wvlog << "   nFib=0x" << hex << m_fib.nFib << dec << endl;
-    wvlog << "   nFibBack=" << m_fib.nFibBack << endl;
-    wvlog << "   lid=0x" << hex << m_fib.lid << dec << endl;
-    wvlog << "   lidFE=0x" << hex << m_fib.lidFE << dec << endl;
-    wvlog << "   fEncrypted=" << m_fib.fEncrypted << endl;
-    wvlog << "   chs=" << m_fib.chs << endl;
-    wvlog << "   fcMin=" << m_fib.fcMin << endl;
-    wvlog << "   fcMac=" << m_fib.fcMac << endl;
-    wvlog << "   ccpText=" << m_fib.ccpText << endl;
-    wvlog << "   ccpFtn=" << m_fib.ccpFtn << endl;
-    wvlog << "   ccpHdd=" << m_fib.ccpHdd << endl;
-    wvlog << "   ccpMcr=" << m_fib.ccpMcr << endl;
-    wvlog << "   ccpAtn=" << m_fib.ccpAtn << endl;
-    wvlog << "   ccpEdn=" << m_fib.ccpEdn << endl;
-    wvlog << "   ccpTxbx=" << m_fib.ccpTxbx << endl;
-    wvlog << "   ccpHdrTxbx=" << m_fib.ccpHdrTxbx << endl;
-    wvlog << "   pnFbpChpFirst=" << m_fib.pnFbpChpFirst << endl;
-    wvlog << "   pnChpFirst=" << m_fib.pnChpFirst << endl;
-    wvlog << "   cpnBteChp=" << m_fib.cpnBteChp << endl;
-    wvlog << "   pnFbpPapFirst=" << m_fib.pnFbpPapFirst << endl;
-    wvlog << "   pnPapFirst=" << m_fib.pnPapFirst << endl;
-    wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << endl;
-    wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << endl;
-    wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << endl;
-    wvlog << "   cswNew=" << hex << m_fib.cswNew << dec << endl;
+    wvlog << "Dumping some parts of the FIB: " << Qt::endl;
+    wvlog << "   wIdent=" << m_fib.wIdent << Qt::endl;
+    wvlog << "   nFib=0x" << hex << m_fib.nFib << dec << Qt::endl;
+    wvlog << "   nFibBack=" << m_fib.nFibBack << Qt::endl;
+    wvlog << "   lid=0x" << hex << m_fib.lid << dec << Qt::endl;
+    wvlog << "   lidFE=0x" << hex << m_fib.lidFE << dec << Qt::endl;
+    wvlog << "   fEncrypted=" << m_fib.fEncrypted << Qt::endl;
+    wvlog << "   chs=" << m_fib.chs << Qt::endl;
+    wvlog << "   fcMin=" << m_fib.fcMin << Qt::endl;
+    wvlog << "   fcMac=" << m_fib.fcMac << Qt::endl;
+    wvlog << "   ccpText=" << m_fib.ccpText << Qt::endl;
+    wvlog << "   ccpFtn=" << m_fib.ccpFtn << Qt::endl;
+    wvlog << "   ccpHdd=" << m_fib.ccpHdd << Qt::endl;
+    wvlog << "   ccpMcr=" << m_fib.ccpMcr << Qt::endl;
+    wvlog << "   ccpAtn=" << m_fib.ccpAtn << Qt::endl;
+    wvlog << "   ccpEdn=" << m_fib.ccpEdn << Qt::endl;
+    wvlog << "   ccpTxbx=" << m_fib.ccpTxbx << Qt::endl;
+    wvlog << "   ccpHdrTxbx=" << m_fib.ccpHdrTxbx << Qt::endl;
+    wvlog << "   pnFbpChpFirst=" << m_fib.pnFbpChpFirst << Qt::endl;
+    wvlog << "   pnChpFirst=" << m_fib.pnChpFirst << Qt::endl;
+    wvlog << "   cpnBteChp=" << m_fib.cpnBteChp << Qt::endl;
+    wvlog << "   pnFbpPapFirst=" << m_fib.pnFbpPapFirst << Qt::endl;
+    wvlog << "   pnPapFirst=" << m_fib.pnPapFirst << Qt::endl;
+    wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << Qt::endl;
+    wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << Qt::endl;
+    wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << Qt::endl;
+    wvlog << "   cswNew=" << hex << m_fib.cswNew << dec << Qt::endl;
 #endif
     // Initialize all the cached data structures like stylesheets, fonts,
     // textconverter,...
@@ -126,7 +126,7 @@ Parser9x::~Parser9x()
 {
     // Sanity check
     if ( !oldParsingStates.empty() || m_subDocument != None ) {
-        wvlog << "Bug: Someone messed up the save/restore stack!" << endl;
+        wvlog << "Bug: Someone messed up the save/restore stack!" << Qt::endl;
     }
 
     delete m_currentParagraph;
@@ -155,7 +155,7 @@ bool Parser9x::parse()
         // There is some code out there to break this "encryption", do we want
         // to implement that?
         // We could either ask for a password or cheat a bit :-)
-        wvlog << "Error: The document is encrypted." << endl;
+        wvlog << "Error: The document is encrypted." << Qt::endl;
         return false;
     }
 
@@ -229,7 +229,7 @@ void Parser9x::parseHeaders( const HeaderData& data )
 void Parser9x::parseFootnote( const FootnoteData& data )
 {
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Parser9x::parseFootnote() #####################" << endl;
+    wvlog << "Parser9x::parseFootnote() #####################" << Qt::endl;
 #endif
     // shouldn't happen, but well...
     if ( data.limCP - data.startCP == 0 ) {
@@ -248,14 +248,14 @@ void Parser9x::parseFootnote( const FootnoteData& data )
     m_subDocumentHandler->footnoteEnd();
     restoreState();
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "Parser9x::parseFootnote() done ################" << endl;
+    wvlog << "Parser9x::parseFootnote() done ################" << Qt::endl;
 #endif
 }
 
 void Parser9x::parseAnnotation( const AnnotationData& data )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Parser9x::parseAnnotation() #####################" << endl;
+    wvlog << "Parser9x::parseAnnotation() #####################" << Qt::endl;
 #endif
     // shouldn't happen, but well...
     if ( data.limCP - data.startCP == 0 ) {
@@ -271,7 +271,7 @@ void Parser9x::parseAnnotation( const AnnotationData& data )
     m_subDocumentHandler->annotationEnd();
     restoreState();
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Parser9x::parseAnnotation() done ################" << endl;
+    wvlog << "Parser9x::parseAnnotation() done ################" << Qt::endl;
 #endif
 }
 
@@ -279,7 +279,7 @@ void Parser9x::parseTableRow( const TableRowData& data )
 {
 #ifdef WV2_DEBUG_TABLES
     wvlog << "Parser9x::parseTableRow(): startPiece=" << data.startPiece <<
-             " startOffset=" << data.startOffset << " length=" << data.length << endl;
+             " startOffset=" << data.startOffset << " length=" << data.length << Qt::endl;
 #endif
 
     if ( data.length == 0 ) {
@@ -297,7 +297,7 @@ void Parser9x::parseTableRow( const TableRowData& data )
     restoreState();
 
 #ifdef WV2_DEBUG_TABLES
-    wvlog << "Parser9x::parseTableRow() done #####################" << endl;
+    wvlog << "Parser9x::parseTableRow() done #####################" << Qt::endl;
 #endif
 }
 
@@ -373,7 +373,7 @@ bool Parser9x::readPieceTable()
     while ( blockType == wvWare::clxtGrpprl ) {
         U16 size = m_table->readU16();
 #if WV2_DUMP_PIECE_TABLE > 0
-        wvlog << "Found a clxtGrpprl (size=" << size << ")" << endl;
+        wvlog << "Found a clxtGrpprl (size=" << size << ")" << Qt::endl;
 #endif
         m_table->seek( size, WV2_SEEK_CUR );
         blockType = m_table->readU8();
@@ -381,49 +381,49 @@ bool Parser9x::readPieceTable()
     if ( blockType == wvWare::clxtPlcfpcd ) {
         U32 size = m_table->readU32();
 #if WV2_DUMP_PIECE_TABLE > 0
-        wvlog << "Found the clxtPlcfpcd (size=" << size << ")" << endl;
+        wvlog << "Found the clxtPlcfpcd (size=" << size << ")" << Qt::endl;
 #endif
         m_plcfpcd = new PLCF<Word97::PCD>( size, m_table, false );
 
 #if WV2_DUMP_PIECE_TABLE > 1
         PLCFIterator<Word97::PCD> it( *m_plcfpcd );
         for ( int i = 0; it.current(); ++it, ++i ) {
-            wvlog << "Piece Table Entry(" << i << "): " << endl;
-            wvlog << "   start: " << it.currentStart() << endl;
-            wvlog << "   lim: " << it.currentLim() << endl;
-            wvlog << "   complex: " << it.current()->prm.fComplex << endl;
+            wvlog << "Piece Table Entry(" << i << "): " << Qt::endl;
+            wvlog << "   start: " << it.currentStart() << Qt::endl;
+            wvlog << "   lim: " << it.currentLim() << Qt::endl;
+            wvlog << "   complex: " << it.current()->prm.fComplex << Qt::endl;
             if ( it.current()->prm.fComplex )
-                wvlog << "   igrpprl: " << it.current()->prm.toPRM2().igrpprl << endl;
+                wvlog << "   igrpprl: " << it.current()->prm.toPRM2().igrpprl << Qt::endl;
             else
-                wvlog << "   isprm: " << it.current()->prm.isprm << endl;
+                wvlog << "   isprm: " << it.current()->prm.isprm << Qt::endl;
 
             U32 fc = it.current()->fc;
             U32 limit = it.currentRun() << 1;
-            wvlog << "   value: " << fc << endl;
+            wvlog << "   value: " << fc << Qt::endl;
             if ( fc & 0x40000000 ) {
                 fc = ( fc & 0xbfffffff ) >> 1;
                 limit >>= 1;
-                wvlog << "   value (cleared 2nd MSB, div. by 2): " << fc << endl;
+                wvlog << "   value (cleared 2nd MSB, div. by 2): " << fc << Qt::endl;
             }
             m_wordDocument->seek( fc );
-            wvlog << "   position: " << m_wordDocument->tell() << ", limit: " << limit << endl;
+            wvlog << "   position: " << m_wordDocument->tell() << ", limit: " << limit << Qt::endl;
             for ( unsigned int j = 0; j < limit; ++j ) {
                 U8 foo = m_wordDocument->readU8();
                 if ( foo > 31 )
                     wvlog << static_cast<char>( foo );
                 else if ( foo == PARAGRAPH_MARK )
-                    wvlog << endl;
+                    wvlog << Qt::endl;
                 else if ( foo > 0 )
                     wvlog << "{" <<  static_cast<int>( foo ) << "}";
                 else
                     wvlog << "_";
             }
-            wvlog << endl << "   position: " << m_wordDocument->tell() << ", limit: " << limit << endl;
+            wvlog << endl << "   position: " << m_wordDocument->tell() << ", limit: " << limit << Qt::endl;
         }
 #endif
     }
     else {
-        wvlog << "Oooops, couldn't find the piece table." << endl;
+        wvlog << "Oooops, couldn't find the piece table." << Qt::endl;
         return false;
     }
     return true;
@@ -515,7 +515,7 @@ void Parser9x::parseHelper( Position startPos )
                     // Symbol and the Wingdings font. We simply clear these bits to shift the
                     // characters to 0x00XX and hope the correct font is installed.  If the font
                     // isn't there, the user will get some ASCII text instead of symbols :}
-                    //wvlog << "private unicode area detected -- cropping" << endl;
+                    //wvlog << "private unicode area detected -- cropping" << Qt::endl;
                     string[ j ] &= 0x00ff;
                 }
             }
@@ -679,7 +679,7 @@ void Parser9x::processParagraph( U32 fc )
 #ifdef WV2_DEBUG_TABLES
             props->pap().dump();
             wvlog << "Start of a table row: piece=" << m_tableRowStart->piece <<
-                     " offset=" << m_tableRowStart->offset << endl;
+                     " offset=" << m_tableRowStart->offset << Qt::endl;
 
 #endif
         }
@@ -728,7 +728,7 @@ void Parser9x::processParagraph( U32 fc )
         // Get the appropriate style for this paragraph.
         const Style* style = m_properties->styleByIndex( props->pap().istd );
         if ( !style ) {
-            wvlog << "Warning: Huh, really obscure error, couldn't find the Style for the current PAP -- skipping" << endl;
+            wvlog << "Warning: Huh, really obscure error, couldn't find the Style for the current PAP -- skipping" << Qt::endl;
             return;
         }
 
@@ -887,7 +887,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd <<
-                     " disruption=" << disruption << " length=" << length << endl;
+                     " disruption=" << disruption << " length=" << length << Qt::endl;
 #endif
         } else if ( m_bookmarks ) {
             if (m_subDocument == Main) {
@@ -903,7 +903,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 #ifdef WV2_DEBUG_BOOKMARK
             wvlog << "nextBkf=" << nextBkf << "(0x" << hex << nextBkf << ")" <<dec<<
                      "nextBkl=" << nextBkl << "(0x" << hex << nextBkl << ")" <<dec<<
-                     "disruption=" << disruption << "length=" << length << endl;
+                     "disruption=" << disruption << "length=" << length << Qt::endl;
 #endif
             Q_ASSERT (nextBkf <= nextBkl);
         }
@@ -912,7 +912,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 
 #if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
             wvlog << "startCP=" << startCP << " disruption=" << disruption <<
-             " bkmk_length=" << bkmk_length << " length=" << length << endl;
+             " bkmk_length=" << bkmk_length << " length=" << length << Qt::endl;
 #endif
             U32 disLen = disruption - startCP;
             //there's something to be processed before the bookmark
@@ -1068,7 +1068,7 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
             break;
         }
     case TextHandler::FieldEscapeChar:
-        wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
+        wvlog << "Found an escape character ++++++++++++++++++++?" << Qt::endl;
         break;
     case TextHandler::Symbol:
     {
@@ -1078,7 +1078,7 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
     }
     default:
         wvlog << "Parser9x::processSpecialCharacter(): Support for character " << character.unicode()
-              << " not implemented yet." << endl;
+              << " not implemented yet." << Qt::endl;
         break;
     }
 }
@@ -1088,11 +1088,11 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP,
                              U32 /* length */ )
 {
     if ( !m_footnotes ) {
-        wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << endl;
+        wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << Qt::endl;
         return;
     }
 #ifdef WV2_DEBUG_FOOTNOTES
-    wvlog << "######### Footnote found: CP=" << globalCP << endl;
+    wvlog << "######### Footnote found: CP=" << globalCP << Qt::endl;
 #endif
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
@@ -1126,7 +1126,7 @@ void Parser9x::emitBookmark( U32 globalCP )
         data = m_bookmarks->bookmark( globalCP, ok );
 
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Bookmark found: CP=" << globalCP << endl;
+        wvlog << "Bookmark found: CP=" << globalCP << Qt::endl;
 #endif
     }
 }
@@ -1134,7 +1134,7 @@ void Parser9x::emitBookmark( U32 globalCP )
 void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
 {
     if ( !m_annotations ) {
-        wvlog << "Bug: Found an annotation, but m_annotations == 0!" << endl;
+        wvlog << "Bug: Found an annotation, but m_annotations == 0!" << Qt::endl;
         return;
     }
 
@@ -1189,13 +1189,13 @@ QString Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::C
     QString ret;
 
     if (chp->fOle2) {
-        wvlog << "Embedded OLE2 objects not supported." << endl;
+        wvlog << "Embedded OLE2 objects not supported." << Qt::endl;
         return ret;
     }
 
     OLEStreamReader* stream( m_fib.nFib < Word8nFib ? m_wordDocument : m_data );
     if ( !stream || static_cast<unsigned int>( chp->fcPic_fcObj_lTagObj ) >= stream->size() ) {
-        wvlog << "Error: Severe problems when trying to read an image. Skipping." << endl;
+        wvlog << "Error: Severe problems when trying to read an image. Skipping." << Qt::endl;
         return ret;
     }
     stream->push();
@@ -1212,13 +1212,13 @@ QString Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::C
     //[MS-DOC] — v20101219, 419/621
     if ( picf->cbHeader != 0x44 ) {
         wvlog << "Error: Expected size of the PICF structure is 0x44, got " << hex << picf->cbHeader;
-        wvlog << "Skipping the image!" << endl;
+        wvlog << "Skipping the image!" << Qt::endl;
         delete picf;
         return ret;
     }
 
     if ( picf->fError ) {
-        wvlog << "Information: Skipping the image, fError is set" << endl;
+        wvlog << "Information: Skipping the image, fError is set" << Qt::endl;
         delete picf;
         return ret;
     }
@@ -1236,14 +1236,14 @@ QString Parser9x::emitPictureData( const U32 globalCP, SharedPtr<const Word97::C
     {
         U8 cchPicName = stream->readU8();
 #ifdef WV2_DEBUG_PICTURES
-        wvlog << "cchPicName: " << cchPicName << endl;
+        wvlog << "cchPicName: " << cchPicName << Qt::endl;
 #endif
         if (cchPicName) {
             U8* stPicName = new U8[cchPicName + 1];
             stream->read(stPicName, cchPicName);
             stPicName[cchPicName] = '\0';
 #ifdef WV2_DEBUG_PICTURES
-            wvlog << "stPicName: " << stPicName << endl;
+            wvlog << "stPicName: " << stPicName << Qt::endl;
 #endif
             delete [] stPicName;
         }
@@ -1265,7 +1265,7 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 {
 #ifdef WV2_DEBUG_HEADERS
     wvlog << "parsing one header for section " << data.sectionNumber << ": mask=0x"
-            <<  hex << static_cast<int>( mask ) << dec << endl;
+            <<  hex << static_cast<int>( mask ) << dec << Qt::endl;
 #endif
 
     // First we have to determine the CP start/lim for the header text. From what I
@@ -1278,11 +1278,11 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
     int length = range.second - range.first;
 #ifdef WV2_DEBUG_HEADERS
     wvlog << "found a range: start=" << range.first << " lim=" << range.second << endl
-            << "length: " << length << endl;
+            << "length: " << length << Qt::endl;
 #endif
     if ( length < 1 ) {
 #ifdef WV2_DEBUG_HEADERS
-        wvlog << "Warning: Didn't find valid CPs for this header/footer -- ignoring it" << endl;
+        wvlog << "Warning: Didn't find valid CPs for this header/footer -- ignoring it" << Qt::endl;
 #endif
 //         m_subDocumentHandler->headerStart( static_cast<HeaderData::Type>( mask ) );
 //         SharedPtr<const ParagraphProperties> sharedProps( new ParagraphProperties );
@@ -1331,7 +1331,7 @@ void Parser9x::saveState( U32 newRemainingChars, SubDocument newSubDocument, Par
 void Parser9x::restoreState()
 {
     if ( oldParsingStates.empty() ) {
-        wvlog << "Bug: You messed up the save/restore stack! The stack is empty" << endl;
+        wvlog << "Bug: You messed up the save/restore stack! The stack is empty" << Qt::endl;
         return;
     }
 
@@ -1348,7 +1348,7 @@ void Parser9x::restoreState()
     oldParsingStates.pop();
 
     if ( m_tableRowStart ) {
-        wvlog << "Bug: We still have to process the table row." << endl;
+        wvlog << "Bug: We still have to process the table row." << Qt::endl;
     }
     // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
     delete m_tableRowStart;
@@ -1360,13 +1360,13 @@ void Parser9x::restoreState()
     m_table_skimming = ps.tableSkimming;
 
     if ( !m_currentParagraph->empty() ) {
-        wvlog << "Bug: The current paragraph isn't empty." << endl;
+        wvlog << "Bug: The current paragraph isn't empty." << Qt::endl;
     }
     delete m_currentParagraph;
     m_currentParagraph = ps.paragraph;
 
     if ( m_remainingChars != 0 ) {
-        wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << endl;
+        wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << Qt::endl;
     }
     m_remainingChars = ps.remainingChars;
     m_sectionNumber = ps.sectionNumber;
@@ -1409,7 +1409,7 @@ U32 Parser9x::toLocalCP( U32 globalCP ) const
         return globalCP;
     globalCP -= m_fib.ccpHdrTxbx;
 
-    wvlog << "Warning: You aimed " << globalCP << " characters past the end of the text!" << endl;
+    wvlog << "Warning: You aimed " << globalCP << " characters past the end of the text!" << Qt::endl;
     return globalCP;
 }
 

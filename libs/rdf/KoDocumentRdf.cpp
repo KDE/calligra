@@ -191,14 +191,14 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
     QString rdfxmlData(store->device()->readAll());
     Soprano::StatementIterator it = parser->parseString(rdfxmlData, BaseURI, Soprano::SerializationRdfXml);
     QList<Statement> allStatements = it.allElements();
-    RDEBUG << "Found " << allStatements.size() << " triples..." << endl;
+    RDEBUG << "Found " << allStatements.size() << " triples..." << Qt::endl;
     foreach (const Soprano::Statement &s, allStatements) {
         Soprano::Node subj = s.subject();
         Soprano::Node pred = s.predicate();
         Soprano::Node obj  = s.object();
         Error::ErrorCode err = tmpmodel->addStatement(subj, pred, obj, context);
         if (err != Error::ErrorNone) {
-            RDEBUG << "Error adding triple! s:" << subj << " p:" << pred << " o:" << obj << endl;
+            RDEBUG << "Error adding triple! s:" << subj << " p:" << pred << " o:" << obj << Qt::endl;
             ok = false;
             break;
         }

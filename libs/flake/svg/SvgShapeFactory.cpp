@@ -100,7 +100,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
         if (! parsed) {
             errorFlake << "Error while parsing file: "
             << "at line " << line << " column: " << col
-            << " message: " << errormessage << endl;
+            << " message: " << errormessage << Qt::endl;
             return 0;
         }
 

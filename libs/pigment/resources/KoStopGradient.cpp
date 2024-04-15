@@ -637,13 +637,13 @@ bool KoStopGradient::saveToDevice(QIODevice *dev) const
 
     const QString indent = "    ";
 
-    stream << "<svg>" << endl;
+    stream << "<svg>" << Qt::endl;
 
     stream << indent;
     stream << "<linearGradient id=\"" << name() << "\" ";
     stream << "gradientUnits=\"objectBoundingBox\" ";
     stream << spreadMethod[spread()];
-    stream << ">" << endl;
+    stream << ">" << Qt::endl;
 
     QColor color;
 
@@ -654,11 +654,11 @@ bool KoStopGradient::saveToDevice(QIODevice *dev) const
         stream << "<stop stop-color=\"";
         stream << color.name();
         stream << "\" offset=\"" << QString().setNum(stop.first);
-        stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f << "\"" << " />" << endl;
+        stream << "\" stop-opacity=\"" << static_cast<float>(color.alpha()) / 255.0f << "\"" << " />" << Qt::endl;
     }
     stream << indent;
-    stream << "</linearGradient>" << endl;
-    stream << "</svg>" << endl;
+    stream << "</linearGradient>" << Qt::endl;
+    stream << "</svg>" << Qt::endl;
 
     KoResource::saveToDevice(dev);
 

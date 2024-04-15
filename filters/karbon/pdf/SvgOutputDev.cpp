@@ -93,16 +93,16 @@ void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef *xref)
     d->pageSize = QSizeF(state->getPageWidth(), state->getPageHeight());
     debugPdf << "page size =" << d->pageSize;
 
-    *d->body << "<g id=\"" << QString("%1").arg(pageNum, (int)3, (int)10, QLatin1Char('0')) << "\"" << endl;
+    *d->body << "<g id=\"" << QString("%1").arg(pageNum, (int)3, (int)10, QLatin1Char('0')) << "\"" << Qt::endl;
     if (pageNum != 1)
         *d->body << " display=\"none\"";
-    *d->body << ">" << endl;
+    *d->body << ">" << Qt::endl;
 }
 
 void SvgOutputDev::endPage()
 {
     debugPdf << "ending page";
-    *d->body << "</g>" << endl;
+    *d->body << "</g>" << Qt::endl;
 }
 
 void SvgOutputDev::dumpContent()
@@ -111,22 +111,22 @@ void SvgOutputDev::dumpContent()
 
     QTextStream stream(&d->svgFile);
 
-    stream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
+    stream << "<?xml version=\"1.0\" standalone=\"no\"?>" << Qt::endl;
     stream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ";
-    stream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
+    stream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << Qt::endl;
 
     // add some PR.  one line is more than enough.
-    stream << "<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->" << endl;
+    stream << "<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->" << Qt::endl;
 
     stream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
-    stream << "width=\"" << d->pageSize.width() << "px\" height=\"" << d->pageSize.height() << "px\">" << endl;
+    stream << "width=\"" << d->pageSize.width() << "px\" height=\"" << d->pageSize.height() << "px\">" << Qt::endl;
 
-    stream << "<defs>" << endl;
+    stream << "<defs>" << Qt::endl;
     stream << d->defsData;
-    stream << "</defs>" << endl;
+    stream << "</defs>" << Qt::endl;
 
     stream << d->bodyData;
-    stream << "</svg>" << endl;
+    stream << "</svg>" << Qt::endl;
 
     d->svgFile.close();
 }
@@ -139,7 +139,7 @@ void SvgOutputDev::stroke(GfxState * state)
     *d->body << printStroke();
     *d->body << " fill=\"none\"";
     *d->body << " d=\"" << path << "\"";
-    *d->body << "/>" << endl;
+    *d->body << "/>" << Qt::endl;
 }
 
 void SvgOutputDev::fill(GfxState * state)
@@ -150,7 +150,7 @@ void SvgOutputDev::fill(GfxState * state)
     *d->body << printFill();
     *d->body << " fill-rule=\"nonzero\"";
     *d->body << " d=\"" << path << "\"";
-    *d->body << "/>" << endl;
+    *d->body << "/>" << Qt::endl;
 }
 
 void SvgOutputDev::eoFill(GfxState *state)
@@ -161,7 +161,7 @@ void SvgOutputDev::eoFill(GfxState *state)
     *d->body << printFill();
     *d->body << " fill-rule=\"evenodd\"";
     *d->body << " d=\"" << path << "\"";
-    *d->body << "/>" << endl;
+    *d->body << "/>" << Qt::endl;
 }
 
 QString SvgOutputDev::convertPath(const GfxPath *path)
@@ -468,7 +468,7 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
 
     *d->body << ">";
     *d->body << str;
-    *d->body << "</text>" << endl;
+    *d->body << "</text>" << Qt::endl;
 }
 
 void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
@@ -535,7 +535,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
         *d->body << " width=\"" << width << "px\"";
         *d->body << " height=\"" << height << "px\"";
         *d->body << " xlink:href=\"data:image/png;base64," << ba.toBase64() <<  "\"";
-        *d->body << " />" << endl;
+        *d->body << " />" << Qt::endl;
     }
 
     delete image;

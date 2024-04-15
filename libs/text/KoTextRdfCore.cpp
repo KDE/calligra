@@ -130,7 +130,7 @@ void KoTextRdfCore::dumpModel(const QString &msg, QSharedPointer<Soprano::Model>
 {
 #ifndef NDEBUG
     QList<Soprano::Statement> allStatements = m->listStatements().allElements();
-    debugText << "----- " << msg << " ----- model size:" << allStatements.size() << endl;
+    debugText << "----- " << msg << " ----- model size:" << allStatements.size() << Qt::endl;
     foreach (const Soprano::Statement &s, allStatements) {
         debugText << s;
     }

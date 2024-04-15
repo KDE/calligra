@@ -131,9 +131,9 @@ void DTTM::clear() {
 
 void DTTM::dump() const
 {
-    wvlog << "Dumping DTTM:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping DTTM done." << endl;
+    wvlog << "Dumping DTTM:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping DTTM done." << Qt::endl;
 }
 
 std::string DTTM::toString() const
@@ -387,9 +387,9 @@ void SHD::clear() {
 
 void SHD::dump() const
 {
-    wvlog << "Dumping SHD:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping SHD done." << endl;
+    wvlog << "Dumping SHD:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping SHD done." << Qt::endl;
 }
 
 std::string SHD::toString() const
@@ -514,9 +514,9 @@ void PHE::clear() {
 
 void PHE::dump() const
 {
-    wvlog << "Dumping PHE:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping PHE done." << endl;
+    wvlog << "Dumping PHE:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping PHE done." << Qt::endl;
 }
 
 std::string PHE::toString() const
@@ -643,9 +643,9 @@ void BRC::clear() {
 
 void BRC::dump() const
 {
-    wvlog << "Dumping BRC:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping BRC done." << endl;
+    wvlog << "Dumping BRC:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping BRC done." << Qt::endl;
 }
 
 std::string BRC::toString() const
@@ -799,9 +799,9 @@ void TLP::clear() {
 
 void TLP::dump() const
 {
-    wvlog << "Dumping TLP:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping TLP done." << endl;
+    wvlog << "Dumping TLP:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping TLP done." << Qt::endl;
 }
 
 std::string TLP::toString() const
@@ -948,9 +948,9 @@ void TC::clear() {
 
 void TC::dump() const
 {
-    wvlog << "Dumping TC:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping TC done." << endl;
+    wvlog << "Dumping TC:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping TC done." << Qt::endl;
 }
 
 std::string TC::toString() const
@@ -1557,9 +1557,9 @@ void TAP::clear() {
 
 void TAP::dump() const
 {
-    wvlog << "Dumping TAP:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping TAP done." << endl;
+    wvlog << "Dumping TAP:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping TAP done." << Qt::endl;
 }
 
 std::string TAP::toString() const
@@ -1911,9 +1911,9 @@ void ANLD::clear() {
 
 void ANLD::dump() const
 {
-    wvlog << "Dumping ANLD:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping ANLD done." << endl;
+    wvlog << "Dumping ANLD:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping ANLD done." << Qt::endl;
 }
 
 std::string ANLD::toString() const
@@ -2231,9 +2231,9 @@ void ANLV::clear() {
 
 void ANLV::dump() const
 {
-    wvlog << "Dumping ANLV:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping ANLV done." << endl;
+    wvlog << "Dumping ANLV:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping ANLV done." << Qt::endl;
 }
 
 std::string ANLV::toString() const
@@ -2772,9 +2772,9 @@ void CHP::clear() {
 
 void CHP::dump() const
 {
-    wvlog << "Dumping CHP:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping CHP done." << endl;
+    wvlog << "Dumping CHP:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping CHP done." << Qt::endl;
 }
 
 std::string CHP::toString() const
@@ -2988,9 +2988,9 @@ void DCS::clear() {
 
 void DCS::dump() const
 {
-    wvlog << "Dumping DCS:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping DCS done." << endl;
+    wvlog << "Dumping DCS:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping DCS done." << Qt::endl;
 }
 
 std::string DCS::toString() const
@@ -5130,9 +5130,9 @@ void LSPD::clear() {
 
 void LSPD::dump() const
 {
-    wvlog << "Dumping LSPD:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping LSPD done." << endl;
+    wvlog << "Dumping LSPD:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping LSPD done." << Qt::endl;
 }
 
 std::string LSPD::toString() const
@@ -5207,9 +5207,9 @@ void METAFILEPICT::clear() {
 
 void METAFILEPICT::dump() const
 {
-    wvlog << "Dumping METAFILEPICT:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping METAFILEPICT done." << endl;
+    wvlog << "Dumping METAFILEPICT:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping METAFILEPICT done." << Qt::endl;
 }
 
 std::string METAFILEPICT::toString() const
@@ -5386,9 +5386,9 @@ void OLST::clear() {
 
 void OLST::dump() const
 {
-    wvlog << "Dumping OLST:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping OLST done." << endl;
+    wvlog << "Dumping OLST:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping OLST done." << Qt::endl;
 }
 
 std::string OLST::toString() const
@@ -5719,9 +5719,9 @@ void PAP::clear() {
 
 void PAP::dump() const
 {
-    wvlog << "Dumping PAP:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping PAP done." << endl;
+    wvlog << "Dumping PAP:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping PAP done." << Qt::endl;
 }
 
 std::string PAP::toString() const
@@ -6329,9 +6329,9 @@ void PICF::clear() {
 
 void PICF::dump() const
 {
-    wvlog << "Dumping PICF:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping PICF done." << endl;
+    wvlog << "Dumping PICF:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping PICF done." << Qt::endl;
 }
 
 std::string PICF::toString() const
@@ -6665,9 +6665,9 @@ void SEP::clear() {
 
 void SEP::dump() const
 {
-    wvlog << "Dumping SEP:" << endl;
-    wvlog << toString().c_str() << endl;
-    wvlog << "\nDumping SEP done." << endl;
+    wvlog << "Dumping SEP:" << Qt::endl;
+    wvlog << toString().c_str() << Qt::endl;
+    wvlog << "\nDumping SEP done." << Qt::endl;
 }
 
 std::string SEP::toString() const
