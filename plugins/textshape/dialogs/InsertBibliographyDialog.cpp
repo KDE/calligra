@@ -72,7 +72,7 @@ void InsertBibliographyDialog::updateFields()
             spanField->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         }
     }
-    QSet<QString> availableFields = QSet<QString>::fromList(KoOdfBibliographyConfiguration::bibDataFields) - addedFields;
+    QSet<QString> availableFields = QSet<QString>(KoOdfBibliographyConfiguration::bibDataFields.begin(), KoOdfBibliographyConfiguration::bibDataFields.end()) - addedFields;
 
     foreach (const QString &field, availableFields) {
         new QListWidgetItem(field, dialog.availableFields);

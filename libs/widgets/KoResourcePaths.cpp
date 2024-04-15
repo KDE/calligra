@@ -221,18 +221,19 @@ QStringList KoResourcePathsImpl::findAllResourcesInternal(const QString &type,
     ////qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
 
-    foreach(const QString &relative, relatives) {
+    for(const QString &relative : relatives) {
         //qDebug() << "\t\relative:" << relative;
         const QStringList dirs = QStandardPaths::locateAll(location, relative + prefix, QStandardPaths::LocateDirectory);
-        QSet<QString> s = QSet<QString>::fromList(dirs);
+        const QSet<QString> s = QSet<QString>(dirs.begin(), dirs.end());
 
         //qDebug() << "\t\tdirs:" << dirs;
-        Q_FOREACH (const QString &dir, s) {
+        for (const QString &dir : s) {
             resources << filesInDir(dir, filter, noDuplicates, recursive);
         }
     }
 
-    foreach(const QString &absolute, m_absolutes.value(type)) {
+    const auto absolutes = m_absolutes.value(type);
+    for(const QString &absolute : absolutes) {
         const QString dir = absolute + prefix;
         if (QDir(dir).exists()) {
             resources << filesInDir(dir, filter, noDuplicates, recursive);
@@ -240,8 +241,8 @@ QStringList KoResourcePathsImpl::findAllResourcesInternal(const QString &type,
     }
 
     if (noDuplicates) {
-        QSet<QString> s = QSet<QString>::fromList(resources);
-        resources = s.toList();
+        QSet<QString> s = QSet<QString>(resources.begin(), resources.end());
+        resources = s.values();
     }
 
     //qDebug() << "\tresources also from aliases:" << resources.size();
