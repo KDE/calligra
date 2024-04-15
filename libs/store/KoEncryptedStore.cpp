@@ -21,12 +21,12 @@
 #include <knewpassworddialog.h>
 #include <kwallet.h>
 #include <klocalizedstring.h>
-#include <kfilterdev.h>
 #include <kmessagebox.h>
 #include <kzip.h>
 #include <KoNetAccess.h>
 #include <QTemporaryFile>
 #include <StoreDebug.h>
+#include <KCompressionDevice>
 
 struct KoEncryptedStore_EncryptionData {
     // Needed for Key Derivation
@@ -282,7 +282,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
                     m_encryptionData.insert(fullpath, encData);
                     if (!(algorithmFound && keyDerivationFound)) {
                         if (!unreadableErrorShown) {
-                            KMessageBox::warning(i18n("This document contains incomplete encryption data. Some parts may be unreadable."));
+                            KMessageBox::information(nullptr, i18n("This document contains incomplete encryption data. Some parts may be unreadable."), i18nc("@title:dialog", "Warning"));
                             unreadableErrorShown = true;
                         }
                     }
@@ -592,14 +592,14 @@ bool KoEncryptedStore::openRead(const QString& name)
         }
 
         QByteArray *resultArray = new QByteArray(decrypted.toByteArray());
-        KCompressionDevice::CompressionType type = KFilterDev::compressionTypeForMimeType("application/x-gzip");
-        QIODevice *resultDevice = new KCompressionDevice(new QBuffer(resultArray, nullptr), false, type);
+        KCompressionDevice::CompressionType type = KCompressionDevice::compressionTypeForMimeType("application/x-gzip");
+        KCompressionDevice *resultDevice = new KCompressionDevice(new QBuffer(resultArray, nullptr), false, type);
 
         if (!resultDevice) {
             delete resultArray;
             return false;
         }
-        static_cast<KFilterDev*>(resultDevice)->setSkipHeaders();
+        resultDevice->setSkipHeaders();
         d->stream = resultDevice;
         d->size = encData.filesize;
     }
@@ -762,13 +762,13 @@ bool KoEncryptedStore::closeWrite()
 
         // Compress the data
         QBuffer compressedData;
-        KCompressionDevice::CompressionType type = KFilterDev::compressionTypeForMimeType("application/x-gzip");
-        QIODevice *compressDevice = new KCompressionDevice(&compressedData, false, type);
+        KCompressionDevice::CompressionType type = KCompressionDevice::compressionTypeForMimeType("application/x-gzip");
+        KCompressionDevice *compressDevice = new KCompressionDevice(&compressedData, false, type);
 
         if (!compressDevice) {
             return false;
         }
-        static_cast<KFilterDev*>(compressDevice)->setSkipHeaders();
+        compressDevice->setSkipHeaders();
         if (!compressDevice->open(QIODevice::WriteOnly)) {
             delete compressDevice;
             return false;
