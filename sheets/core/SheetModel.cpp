@@ -97,7 +97,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
         // TODO
     } else if (role == Qt::BackgroundRole) {
         return style.backgroundBrush();
-    } else if (role == Qt::BackgroundColor) {
+    } else if (role == Qt::BackgroundRole) {
         return style.backgroundColor();
     } else if (role == Qt::ForegroundRole) {
         return style.fontColor();

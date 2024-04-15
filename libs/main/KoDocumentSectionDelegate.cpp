@@ -272,7 +272,7 @@ QStyleOptionViewItem KoDocumentSectionDelegate::getOptions(const QStyleOptionVie
     v = index.data(Qt::ForegroundRole);
     if (v.isValid())
         option.palette.setColor(QPalette::Text, v.value<QColor>());
-    v = index.data(Qt::BackgroundColor);
+    v = index.data(Qt::BackgroundRole);
     if (v.isValid())
         option.palette.setColor(QPalette::Window, v.value<QColor>());
 

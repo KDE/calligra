@@ -433,7 +433,7 @@ void ModelTest::data()
     }
 
     // General Purpose roles that should return a QColor
-    QVariant colorVariant = model->data(model->index(0, 0), Qt::BackgroundColor);
+    QVariant colorVariant = model->data(model->index(0, 0), Qt::BackgroundRole);
     if (colorVariant.isValid()) {
         Q_ASSERT(colorVariant.canConvert<QColor>());
     }
