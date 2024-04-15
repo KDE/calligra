@@ -18,16 +18,13 @@ set(kpr_pageeffect_iriswipe_SRCS
 
 add_library(kpr_pageeffect_iriswipe MODULE ${kpr_pageeffect_iriswipe_SRCS})
 
-calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_iriswipe kpr_pageeffect_iriswipe.desktop)
-
 target_link_libraries(
     kpr_pageeffect_iriswipe
     calligrastageprivate
     flake
-    
-    
+
     Qt5::Core
-    Qt5::Gui    
-    )
+    Qt5::Gui
+)
 
 install(TARGETS kpr_pageeffect_iriswipe  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

@@ -10,16 +10,12 @@ set(kpr_pageeffect_barwipe_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_barwipe MODULE ${kpr_pageeffect_barwipe_PART_SRCS})
 
-calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_barwipe kpr_pageeffect_barwipe.desktop)
-
 target_link_libraries(
     kpr_pageeffect_barwipe
     calligrastageprivate
-    flake 
-    
-    
+    flake
     Qt5::Core
     Qt5::Gui
-    )
+)
 
 install(TARGETS kpr_pageeffect_barwipe  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

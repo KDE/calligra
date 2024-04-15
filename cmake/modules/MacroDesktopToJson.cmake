@@ -200,19 +200,6 @@ endif()
 endfunction()
 
 
-function(calligrastage_pageeffect_desktop_to_json target desktop)
-
-if(${KF5_VERSION} VERSION_LESS "5.16.0")
-    kcoreaddons_desktop_to_json(${target} ${desktop})
-else()
-    kcoreaddons_desktop_to_json(${target} ${desktop}
-        SERVICE_TYPES ${CMAKE_SOURCE_DIR}/stage/data/kpr_pageeffect.desktop
-    )
-endif()
-
-endfunction()
-
-
 function(calligrastage_tool_desktop_to_json target desktop)
 
 if(${KF5_VERSION} VERSION_LESS "5.16.0")

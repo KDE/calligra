@@ -7,16 +7,13 @@ set(kpr_pageeffect_swapeffect_PART_SRCS Plugin.cpp
 
 add_library(kpr_pageeffect_swapeffect MODULE ${kpr_pageeffect_swapeffect_PART_SRCS})
 
-calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_swapeffect kpr_pageeffect_swapeffect.desktop)
-
 target_link_libraries(
     kpr_pageeffect_swapeffect
     calligrastageprivate
     flake
 
-    
     Qt5::Core
     Qt5::Gui
-    )
+)
 
 install(TARGETS kpr_pageeffect_swapeffect  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

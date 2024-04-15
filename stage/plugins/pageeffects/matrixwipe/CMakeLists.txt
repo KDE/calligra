@@ -35,16 +35,13 @@ set(kpr_pageeffect_matrixwipe_SRCS
 
 add_library(kpr_pageeffect_matrixwipe MODULE ${kpr_pageeffect_matrixwipe_SRCS})
 
-calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_matrixwipe kpr_pageeffect_matrixwipe.desktop)
-
 target_link_libraries(
     kpr_pageeffect_matrixwipe
     calligrastageprivate 
     flake 
-    
-    
+
     Qt5::Core
     Qt5::Gui
-    )
+)
 
 install(TARGETS kpr_pageeffect_matrixwipe  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

@@ -24,16 +24,11 @@ set(kpr_pageeffect_clockwipe_SRCS
 
 add_library(kpr_pageeffect_clockwipe MODULE ${kpr_pageeffect_clockwipe_SRCS})
 
-calligrastage_pageeffect_desktop_to_json(kpr_pageeffect_clockwipe kpr_pageeffect_clockwipe.desktop)
-
-target_link_libraries(
-    kpr_pageeffect_clockwipe 
-    calligrastageprivate 
+target_link_libraries(kpr_pageeffect_clockwipe PRIVATE
+    calligrastageprivate
     flake
-    
-    
     Qt5::Core
     Qt5::Gui
-    )
+)
 
 install(TARGETS kpr_pageeffect_clockwipe  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)
