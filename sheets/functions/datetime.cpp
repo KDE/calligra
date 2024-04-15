@@ -1103,7 +1103,7 @@ Value func_unix2date(valVector args, ValueCalc *calc, FuncExtra *)
 
     QDateTime datetime;
     datetime.setTimeSpec(Qt::UTC);
-    datetime.setTime_t(v.asInteger());
+    datetime.setSecsSinceEpoch(v.asInteger());
 
     return Value(datetime, calc->settings());
 }

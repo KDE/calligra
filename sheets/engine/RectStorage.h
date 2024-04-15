@@ -171,7 +171,7 @@ private:
     MapBase* m_map;
     RTree<T> m_tree;
     Region m_usedArea;
-    QMap<int, QPair<QRectF, T> > m_possibleGarbage;
+    QMultiMap<int, QPair<QRectF, T> > m_possibleGarbage;
     mutable QCache<QPoint, T> m_cache;
 #ifdef CALLIGRA_SHEETS_MT
     mutable QMutex m_mutex;
@@ -500,7 +500,7 @@ void RectStorage<T>::regionChanged(const QRect& rect)
     // mark the possible garbage
     // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
     // has to be inserted most recently, because it should be accessed first.
-    m_possibleGarbage = m_tree.intersectingPairs(rect).unite(m_possibleGarbage);
+    m_possibleGarbage = QMultiMap(m_tree.intersectingPairs(rect)).unite(m_possibleGarbage);
     triggerGarbageCollection();
     // invalidate cache
     invalidateCache(rect);

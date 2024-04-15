@@ -42,10 +42,10 @@ void DependencyManager::Private::dump() const
 
     for(SheetBase* sheet : consumers.keys()) {
         const QList< QPair<QRectF, CellBase> > pairs = consumers[sheet]->intersectingPairs(QRect(1, 1, KS_colMax, KS_rowMax)).values();
-        QHash<QString, QString> table;
+        QMultiHash<QString, QString> table;
         for (int i = 0; i < pairs.count(); ++i) {
             Region tmpRange(pairs[i].first.toRect(), sheet);
-            table.insertMulti(tmpRange.name(), pairs[i].second.name());
+            table.insert(tmpRange.name(), pairs[i].second.name());
         }
         for(const QString &uniqueKey : table.uniqueKeys()) {
             QStringList debugStr(table.values(uniqueKey));

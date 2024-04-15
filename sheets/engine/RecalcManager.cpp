@@ -59,7 +59,7 @@ public:
      * \li depth(A2) = 1
      * \li depth(A3) = 2
      */
-    QMap<int, CellBase> cells;
+    QMultiMap<int, CellBase> cells;
     const MapBase* map;
     bool active;
 };
@@ -78,7 +78,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
     const QSet<CellBase>::ConstIterator end(cells.end());
     for (QSet<CellBase>::ConstIterator it(cells.begin()); it != end; ++it) {
         if ((*it).sheet()->isAutoCalculationEnabled())
-            this->cells.insertMulti(depths[*it], *it);
+            this->cells.insert(depths[*it], *it);
     }
 }
 
@@ -99,13 +99,13 @@ void RecalcManager::Private::cellsToCalculate(SheetBase* sheet)
             sheet = map->sheet(s);
             for (int c = 0; c < sheet->formulaStorage()->count(); ++c) {
                 cell = CellBase(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
-                cells.insertMulti(depths[cell], cell);
+                cells.insert(depths[cell], cell);
             }
         }
     } else { // sheet recalculation
         for (int c = 0; c < sheet->formulaStorage()->count(); ++c) {
             cell = CellBase(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
-            cells.insertMulti(depths[cell], cell);
+            cells.insert(depths[cell], cell);
         }
     }
 }
