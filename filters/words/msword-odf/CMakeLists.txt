@@ -4,6 +4,7 @@ if(NOT WIN32)
 endif()
 
 include_directories(
+    ${ICONV_INCLUDE_DIR}
     ../../libmso
 )
 
@@ -23,7 +24,7 @@ kde_enable_exceptions()
 
 add_library(calligra_filter_doc2odt MODULE ${doc2odt_PART_SRCS})
 
-target_link_libraries(calligra_filter_doc2odt mso kowv2 komain Iconv::Iconv)
+target_link_libraries(calligra_filter_doc2odt mso kowv2 komain)
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
