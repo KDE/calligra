@@ -967,13 +967,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                             m_backend->save();
                             if (widthSrc < 0) {
                                 // negative width => horizontal flip
-                                QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                                m_backend->setMatrix(mDeviceContext, m, true);
+                                QTransform m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                                m_backend->setTransform(mDeviceContext, m, true);
                             }
                             if (heightSrc < 0) {
                                 // negative height => vertical flip
-                                QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                                m_backend->setMatrix(mDeviceContext, m, true);
+                                QTransform m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                                m_backend->setTransform(mDeviceContext, m, true);
                             }
                             m_backend->drawImage(mDeviceContext, leftDst, topDst,
                                                  bmpSrc, leftSrc, topSrc, widthSrc, heightSrc);
@@ -1001,13 +1001,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         m_backend->save();
                         if (widthDst < 0) {
                             // negative width => horizontal flip
-                            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
+                            QTransform m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                            m_backend->setTransform(mDeviceContext, m, true);
                         }
                         if (heightDst < 0) {
                             // negative height => vertical flip
-                            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
+                            QTransform m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                            m_backend->setTransform(mDeviceContext, m, true);
                         }
                         bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
                         // TODO: scale the bitmap : QImage::scale(widthDst, heightDst)
@@ -1053,13 +1053,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         m_backend->save();
                         if (widthDst < 0) {
                             // negative width => horizontal flip
-                            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
+                            QTransform m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                            m_backend->setTransform(mDeviceContext, m, true);
                         }
                         if (heightDst < 0) {
                             // negative height => vertical flip
-                            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
+                            QTransform m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                            m_backend->setTransform(mDeviceContext, m, true);
                         }
                         bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
                         // TODO: scale the bitmap ( QImage::scale(param[ 8 ], param[ 7 ]) is actually too slow )

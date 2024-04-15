@@ -139,7 +139,7 @@ void WMFImportParser::setViewportExt(int width, int height)
     }
 }
 
-void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &/*context*/, const QMatrix &matrix,
+void WMFImportParser::setTransform(Libwmf::WmfDeviceContext &/*context*/, const QTransform &matrix,
                                 bool combine)
 {
     if (combine)

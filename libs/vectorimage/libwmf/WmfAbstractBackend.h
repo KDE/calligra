@@ -18,7 +18,7 @@
 class QString;
 class QColor;
 class QImage;
-class QMatrix;
+class QTransform;
 
 
 /**
@@ -128,7 +128,7 @@ public:
     virtual void  drawText(WmfDeviceContext &context, int x, int y, const QString &s) = 0;
 
     // matrix transformation : only used for bitmap manipulation
-    virtual void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false) = 0;
+    virtual void  setTransform(WmfDeviceContext &context, const QTransform &, bool combine = false) = 0;
 
 protected:
     WmfParser  *m_parser;

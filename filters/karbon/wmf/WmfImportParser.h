@@ -9,7 +9,7 @@
 
 #include <WmfAbstractBackend.h>
 #include <QPainter>
-#include <QMatrix>
+#include <QTransform>
 
 class WmfDeviceContext;
 class KoXmlWriter;
@@ -79,7 +79,7 @@ private:
     void  drawText(Libwmf::WmfDeviceContext &context, int x, int y, const QString &s) override;
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setMatrix(Libwmf::WmfDeviceContext &context, const QMatrix &matrix, bool combine = false) override;
+    void  setTransform(Libwmf::WmfDeviceContext &context, const QTransform &matrix, bool combine = false) override;
 
     //-----------------------------------------------------------------------------
     // Utilities
@@ -110,7 +110,7 @@ private:
     CoordData m_viewport;
     qreal m_scaleX;
     qreal m_scaleY;
-    QMatrix m_matrix;
+    QTransform m_matrix;
 };
 
 #endif // _WMFIMPORTPARSER_H_

@@ -419,13 +419,13 @@ void WmfPainterBackend::setViewportExt( int width, int height )
 }
 
 
-void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, bool combine)
+void WmfPainterBackend::setTransform(WmfDeviceContext &context, const QTransform &wm, bool combine)
 {
     Q_UNUSED(context);
 #if DEBUG_WMFPAINT
     debugVectorImage << wm << " " << combine;
 #endif
-    mPainter->setMatrix(wm, combine);
+    mPainter->setTransform(wm, combine);
 
     recalculateWorldTransform();
 }

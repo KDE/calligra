@@ -112,7 +112,7 @@ private:
     void  drawText(WmfDeviceContext &context, int x, int y, const QString &s) override;
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false) override;
+    void  setTransform(WmfDeviceContext &context, const QTransform &, bool combine = false) override;
 
  private:
     void updateFromDeviceContext(WmfDeviceContext &context);
