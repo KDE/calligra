@@ -14,6 +14,8 @@ else()
 add_library(calligrageminigitplugin SHARED ${git_plugin_SRCS})
 endif()
 
+ecm_setup_version(${LIBGIT2_VERSION} VARIABLE_PREFIX GIT VERSION_HEADER libgit2_version.h)
+
 target_link_libraries(calligrageminigitplugin
     Qt5::Core
     Qt5::Gui

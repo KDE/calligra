@@ -7,6 +7,7 @@
 
 #include "gitcontroller.h"
 #include "documentlistmodel.h"
+#include "libgit2_version.h"
 
 #include <KoIcon.h>
 #include <KLocalizedString>
@@ -402,9 +403,15 @@ void GitOpsThread::performPull()
                     error = git_commit_lookup(&parents[1], repository, git_reference_target(upstream));
                     d->check_error(error, "looking up remote branch");
 
+#if GIT_VERSION >= QT_VERSION_CHECK(1, 8, 0)
+                    git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature,
+                                                NULL, message.ptr,
+                                                tree, 2, (git_commit * const *) parents);
+#else
                     git_commit_create(&commit_id, repository, "HEAD", d->signature, d->signature,
                                                 NULL, message.ptr,
                                                 tree, 2, (const git_commit **) parents);
+#endif
                     git_tree_free(tree);
                 }
                 git_index_free(index);
