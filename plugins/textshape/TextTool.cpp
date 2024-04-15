@@ -1780,7 +1780,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         return QVariant();
 
     switch (query) {
-    case Qt::ImMicroFocus: {
+    case Qt::ImCursorRectangle: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());

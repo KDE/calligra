@@ -240,7 +240,7 @@ void Canvas::updateInputMethodInfo()
 
 QVariant Canvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
-    if (query == Qt::ImMicroFocus) {
+    if (query == Qt::ImCursorRectangle) {
         QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
         QPointF scroll(canvasController()->scrollBarValue());
         rect.translate(documentOrigin() - scroll);

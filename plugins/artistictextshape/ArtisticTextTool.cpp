@@ -931,7 +931,7 @@ QVariant ArtisticTextTool::inputMethodQuery(Qt::InputMethodQuery query, const Ko
         return QVariant();
 
     switch (query) {
-    case Qt::ImMicroFocus: {
+    case Qt::ImCursorRectangle: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = m_textCursorShape.boundingRect();
         rect.moveTop(rect.bottom());
