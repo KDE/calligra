@@ -350,9 +350,8 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
             }
         }
         if (requiredStdInputs.contains("SourceAlpha")) {
-            QImage sourceAlpha = sourceGraphic;
+            QImage sourceAlpha = sourceGraphic.convertToFormat(QImage::Format_Alpha8);
             sourceAlpha.fill(qRgba(0,0,0,255));
-            sourceAlpha.setAlphaChannel(sourceGraphic.alphaChannel());
             imageBuffers.insert("SourceAlpha", sourceAlpha);
         }
         if (requiredStdInputs.contains("FillPaint")) {
