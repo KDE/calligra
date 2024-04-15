@@ -44,10 +44,10 @@ public:
 
     QList< QPair< QRectF, QUrl > > links;
 
-    QList<KoShape*> deepShapeFind(QList<KoShape*> shapes)
+    QList<KoShape*> deepShapeFind(const QList<KoShape*> &shapes)
     {
         QList<KoShape*> allShapes;
-        foreach(KoShape* shape, shapes) {
+        for(KoShape* shape : shapes) {
             allShapes.append(shape);
             KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
             if(container) {
@@ -63,7 +63,8 @@ public:
 
         if(!canvas || !canvas->activeSheet())
             return;
-        foreach(const KoShape* shape, canvas->activeSheet()->shapes()) {
+        const auto shapes = canvas->activeSheet()->shapes();
+        for(const KoShape* shape : shapes) {
             if(!shape->hyperLink().isEmpty()) {
                 QRectF rect = shape->boundingRect();
                 for (KoShapeContainer* parent = shape->parent();
@@ -77,7 +78,7 @@ public:
         QList<QTextDocument*> texts;
         KoFindText::findTextInShapes(canvas->activeSheet()->shapes(), texts);
         QList<KoShape*> allShapes = deepShapeFind(canvas->activeSheet()->shapes());
-        foreach(QTextDocument* text, texts) {
+        for(QTextDocument* text : std::as_const(texts)) {
             QTextBlock block = text->rootFrame()->firstCursorPosition().block();
             for (; block.isValid(); block = block.next()) {
                 block.begin();
@@ -89,7 +90,7 @@ public:
                         if(format.isAnchor()) {
                             // This is an anchor, store target and position...
                             QRectF rect = getFragmentPosition(block, fragment);
-                            foreach(KoShape* shape, allShapes) {
+                            for(KoShape* shape : std::as_const(allShapes)) {
                                 KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
                                 if (!shapeData)
                                     continue;

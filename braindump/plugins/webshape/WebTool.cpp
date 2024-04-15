@@ -82,7 +82,8 @@ void WebTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape*> &
 {
     Q_ASSERT(m_dragMode == NO_DRAG);
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, selection->selectedShapes()) {
+    const auto selectionShapes = selection->selectedShapes();
+    for(KoShape * shape : selectionShapes) {
         m_currentShape = dynamic_cast<WebShape*>(shape);
         if(m_currentShape)
             break;
@@ -105,9 +106,9 @@ void WebTool::mousePressEvent(KoPointerEvent *event)
 {
     WebShape *hit = 0;
     QRectF roi(event->point, QSizeF(1, 1));
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
+    const QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, shapes) {
+    for(KoShape * shape : shapes) {
         hit = dynamic_cast<WebShape*>(shape);
         if(hit) {
             if(hit == m_currentShape) {

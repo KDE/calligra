@@ -45,15 +45,16 @@ StateTool::~StateTool()
 void StateTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape*> &/*shapes*/)
 {
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, selection->selectedShapes()) {
+    const auto shapes = selection->selectedShapes();
+    for(KoShape * shape : shapes) {
         m_currentShape = dynamic_cast<StateShape*>(shape);
         if(m_currentShape)
             break;
     }
-    emit(shapeChanged(m_currentShape));
+    Q_EMIT shapeChanged(m_currentShape);
     if(m_currentShape == 0) {
         // none found
-        emit done();
+        Q_EMIT done();
         return;
     }
     useCursor(QCursor(Qt::ArrowCursor));
@@ -67,10 +68,10 @@ void StateTool::paint(QPainter &painter, const KoViewConverter &converter)
 void StateTool::mousePressEvent(KoPointerEvent *event)
 {
     StateShape *hit = 0;
-    QRectF roi(event->point, QSizeF(1, 1));
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, shapes) {
+    const QRectF roi(event->point, QSizeF(1, 1));
+    const QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
+    const KoSelection *selection = canvas()->shapeManager()->selection();
+    for(KoShape * shape : shapes) {
         hit = dynamic_cast<StateShape*>(shape);
         if(hit) {
             if(hit == m_currentShape) {
