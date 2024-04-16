@@ -205,7 +205,6 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     Parts
     Sonnet
     TextWidgets
-    Wallet
     WidgetsAddons
     WindowSystem
     XmlGui

@@ -36,7 +36,6 @@ target_link_libraries(kostore
     PRIVATE
         Qt5::Gui
         KF5::Archive
-        KF5::Wallet
         KF5::KIOWidgets
         KF5::WidgetsAddons
         KF5::I18n
