@@ -322,6 +322,12 @@ endif()
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 
+find_package(Qt5Keychain)
+set_package_properties(Qt5Keychain PROPERTIES
+    TYPE REQUIRED
+    PURPOSE "Secure storage of account secrets"
+)
+
 add_definitions(-DBOOST_ALL_NO_LIB)
 find_package(Boost REQUIRED) # for pigment and stage
 if (NOT Boost_FOUND)

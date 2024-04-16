@@ -19,7 +19,7 @@
 #include <QBuffer>
 #include <KPasswordDialog>
 #include <knewpassworddialog.h>
-#include <kwallet.h>
+#include <qtkeychain/keychain.h>
 #include <klocalizedstring.h>
 #include <kmessagebox.h>
 #include <kzip.h>
@@ -27,6 +27,8 @@
 #include <QTemporaryFile>
 #include <StoreDebug.h>
 #include <KCompressionDevice>
+
+using namespace QKeychain;
 
 struct KoEncryptedStore_EncryptionData {
     // Needed for Key Derivation
@@ -620,43 +622,28 @@ bool KoEncryptedStore::closeRead()
 void KoEncryptedStore::findPasswordInKWallet()
 {
     Q_D(KoStore);
-    /* About KWallet access
-     *
-     * The choice has been made to postfix every entry in a kwallet concerning passwords for opendocument files with /opendocument
-     * This choice has been made since, at the time of this writing, the author could not find any reference to standardized
-     * naming schemes for entries in the wallet. Since collision of passwords in entries should be avoided and is at least possible,
-     * considering remote files might be both protected by a secured web-area (konqueror makes an entry) and a password (we make an
-     * entry), it seems a good thing to make sure it won't happen.
-     */
-    if (!m_filename.isNull() && !KWallet::Wallet::folderDoesNotExist(KWallet::Wallet::LocalWallet(), KWallet::Wallet::PasswordFolder()) && !KWallet::Wallet::keyDoesNotExist(KWallet::Wallet::LocalWallet(), KWallet::Wallet::PasswordFolder(), m_filename + "/opendocument")) {
-        KWallet::Wallet *wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), d->window ? d->window->winId() : 0);
-        if (wallet) {
-            if (wallet->setFolder(KWallet::Wallet::PasswordFolder())) {
-                QString pass;
-                wallet->readPassword(m_filename + "/opendocument", pass);
-                m_password = QCA::SecureArray(pass.toUtf8());
+
+    if (!m_filename.isNull()) {
+        auto readJob = new ReadPasswordJob(QLatin1String("Calligra"));
+        readJob->setKey(m_filename);
+        QObject::connect(readJob, &ReadPasswordJob::finished, readJob, [this, readJob]() {
+            if (readJob->error() != Error::NoError) {
+                warnStore << "requestPassword: Failed to read password";
+                return;
             }
-            delete wallet;
-        }
+            m_password = QCA::SecureArray(readJob->textData().toUtf8());
+        });
+        readJob->start();
     }
 }
 
 void KoEncryptedStore::savePasswordInKWallet()
 {
     Q_D(KoStore);
-    KWallet::Wallet *wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), d->window ? d->window->winId() : 0);
-    if (wallet) {
-        if (!wallet->hasFolder(KWallet::Wallet::PasswordFolder())) {
-            wallet->createFolder(KWallet::Wallet::PasswordFolder());
-        }
-        if (wallet->setFolder(KWallet::Wallet::PasswordFolder())) {
-            if (wallet->hasEntry(m_filename + "/opendocument")) {
-                wallet->removeEntry(m_filename + "/opendocument");
-            }
-            wallet->writePassword(m_filename + "/opendocument", m_password.toByteArray().constData());
-        }
-        delete wallet;
-    }
+    auto writeJob = new WritePasswordJob(QLatin1String("Calligra"));
+    writeJob->setKey(m_filename);
+    writeJob->setTextData(QString::fromUtf8(m_password.toByteArray()));
+    writeJob->start();
 }
 
 QCA::SecureArray KoEncryptedStore::decryptFile(QCA::SecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QCA::SecureArray & password)

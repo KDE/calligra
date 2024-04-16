@@ -27,7 +27,6 @@ Dependencies:
     'frameworks/kparts': '@latest'
     'frameworks/sonnet': '@latest'
     'frameworks/ktextwidgets': '@latest'
-    'frameworks/kwallet': '@latest'
     'frameworks/kwidgetsaddons': '@latest'
     'frameworks/kwindowsystem': '@latest'
     'frameworks/kxmlgui': '@latest'

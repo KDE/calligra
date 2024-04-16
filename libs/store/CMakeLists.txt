@@ -40,6 +40,7 @@ target_link_libraries(kostore
         KF5::KIOWidgets
         KF5::WidgetsAddons
         KF5::I18n
+        ${QTKEYCHAIN_LIBRARIES}
 )
 if( Qca-qt5_FOUND )
     target_link_libraries(kostore PRIVATE qca-qt5)
