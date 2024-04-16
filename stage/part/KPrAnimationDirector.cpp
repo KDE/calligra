@@ -82,7 +82,7 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
     connect( &m_timeLine, &QTimeLine::valueChanged, this, &KPrAnimationDirector::animate );
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away
     connect( m_canvas, &KoPACanvas::sizeChanged, this, &KPrAnimationDirector::updateZoom );
-    m_timeLine.setCurveShape( QTimeLine::LinearCurve );
+    m_timeLine.setEasingCurve(QEasingCurve(QEasingCurve::Linear));
     m_timeLine.setUpdateInterval( 20 );
     // set the animation strategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), m_animationCache,

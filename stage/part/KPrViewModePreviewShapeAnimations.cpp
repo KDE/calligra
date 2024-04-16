@@ -30,7 +30,7 @@ KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBas
     , m_savedViewMode(0)
 {
     connect(&m_timeLine, &QTimeLine::finished, this, &KPrViewModePreviewShapeAnimations::activateSavedViewMode);
-    m_timeLine.setCurveShape(QTimeLine::LinearCurve);
+    m_timeLine.setEasingCurve(QEasingCurve(QEasingCurve::Linear));
     m_timeLine.setUpdateInterval(20);
 }
 

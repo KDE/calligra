@@ -30,7 +30,7 @@ void KPrPageEffect::setup( const Data &data, QTimeLine &timeLine )
 {
     timeLine.setDuration( m_duration );
     m_strategy->setup( data, timeLine );
-    timeLine.setCurveShape( QTimeLine::LinearCurve );
+    timeLine.setEasingCurve(QEasingCurve(QEasingCurve::Linear));
 }
 
 bool KPrPageEffect::useGraphicsView()
