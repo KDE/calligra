@@ -90,7 +90,6 @@ Name       Conditional compilation flag    Globally used in Calligra?   Public A
 ------------------------------------------------------------------------------------------
 
 flake
-kokross                                                                NO
 kopageapp
 koplugin                                                               NO
 kotext

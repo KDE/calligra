@@ -221,8 +221,6 @@ if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-find_package(KF5Kross ${REQUIRED_KF5_VERSION})
-
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
     Core
@@ -843,12 +841,6 @@ set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
     )
 set(KORDF_LIBS kordf)
 
-if(SHOULD_BUILD_FEATURE_SCRIPTING)
-    set(KOKROSS_INCLUDES
-	${CMAKE_SOURCE_DIR}/libs/kross
-	${CMAKE_BINARY_DIR}/libs/kross)
-endif()
-
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
     ${PIGMENT_INCLUDES}
@@ -891,10 +883,6 @@ endif()
 
 calligra_drop_product_on_bad_condition( FEATURE_RDF
     Soprano_FOUND "Soprano not found"
-    )
-
-calligra_drop_product_on_bad_condition( FEATURE_SCRIPTING
-    KF5Kross_FOUND "KF5Kross not found"
     )
 
 calligra_drop_product_on_bad_condition( PART_SHEETS

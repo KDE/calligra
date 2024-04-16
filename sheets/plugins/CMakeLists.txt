@@ -1,5 +1,2 @@
 add_subdirectory( calendar )
 add_subdirectory( solver )
-if (SHOULD_BUILD_FEATURE_SCRIPTING)
-  add_subdirectory( scripting )
-endif ()

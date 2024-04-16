@@ -21,10 +21,6 @@ if (SHOULD_BUILD_LIB_KOMAIN)
     add_subdirectory( main )
 endif ()
 
-if (SHOULD_BUILD_FEATURE_SCRIPTING)
-    add_subdirectory( kross )
-endif ()
-
 if (SHOULD_BUILD_LIB_KOVECTORIMAGE)
     add_subdirectory( vectorimage )
 endif ()

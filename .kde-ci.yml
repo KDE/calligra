@@ -22,7 +22,6 @@ Dependencies:
     'frameworks/kjobwidgets': '@latest'
     'frameworks/kcmutils': '@latest'
     'frameworks/kio': '@latest'
-    'frameworks/kross': '@latest'
     'frameworks/knotifications': '@latest'
     'frameworks/knotifyconfig': '@latest'
     'frameworks/kparts': '@latest'
