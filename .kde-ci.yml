@@ -38,3 +38,6 @@ Dependencies:
 - 'on': ['Linux', 'FreeBSD']
   'require':
     'plasma/plasma-activities': '@latest'
+
+'Options':
+  'cppcheck-arguments': '--base-dir plugins/formulashape/3rdparty/itexToMML/'
