@@ -3402,7 +3402,7 @@ QString convertToFormat( KoGenStyle::Type formatType, const QString& formatStrin
         case KoGenStyle::NumericDateStyle: {
             QString f = formatString;
             f.replace( QRegExp( "[m{1}]" ), "M" );
-            QDateTime dt = QDateTime(QDate( 1899, 12, 30 ));
+            QDateTime dt = QDate( 1899, 12, 30 ).startOfDay();
             return dt.addDays( value.toInt() ).toString( f );
         }
         case KoGenStyle::NumericTimeStyle: {

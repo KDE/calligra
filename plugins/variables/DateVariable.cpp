@@ -114,8 +114,7 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 const QTime time = QTime::fromString(value, Qt::ISODate);
                 m_datetime = QDateTime(QDate::currentDate(), time);
             } else {
-                const QDate date = QDate::fromString(value, Qt::ISODate);
-                m_datetime = QDateTime(date);
+                m_datetime = QDate::fromString(value, Qt::ISODate).startOfDay();
             }
             m_valueType = DateOrTime;
         }
@@ -213,7 +212,7 @@ void DateVariable::update()
     switch (m_displayType) {
     case Time:
         if (m_definition.isEmpty()) {
-            setValue(target.time().toString(Qt::LocalDate));
+            setValue(QLocale().toString(target.time()));
         }
         else {
             setValue(target.time().toString(m_definition));
@@ -221,7 +220,7 @@ void DateVariable::update()
         break;
     case Date:
         if (m_definition.isEmpty()) {
-            setValue(target.date().toString(Qt::LocalDate));
+            setValue(QLocale().toString(target.date()));
         }
         else {
             setValue(target.toString(m_definition));

@@ -1111,7 +1111,7 @@ static QString convertDate(double serialNo, const QString& valueFormat)
     Q_UNUSED(vf);   //TODO
 
     // reference is midnight 30 Dec 1899
-    QDateTime dt(QDate(1899, 12, 30));
+    QDateTime dt(QDate(1899, 12, 30).startOfDay());
     dt = dt.addMSecs((qint64)(serialNo * 86400 * 1000)); // TODO: we probably need double precision here
 
     //TODO atm we always return a datetime. This works great (time ignored if only date was defined) with Calligra Sheets but probably not with other customers...
