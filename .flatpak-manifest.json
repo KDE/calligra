@@ -44,73 +44,26 @@
             ]
         },
         {
-            "name": "kjs",
+            "name": "qtkeychain",
             "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DENABLE_TESTING=OFF"
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/frankosterfeld/qtkeychain/archive/0.14.2.tar.gz",
+                    "sha256": "cf2e972b783ba66334a79a30f6b3a1ea794a1dc574d6c3bebae5ffd2f0399571",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 4138,
+                        "stable-only": true,
+                        "url-template": "https://github.com/frankosterfeld/qtkeychain/archive/v$version.tar.gz"
+                    }
+                }
             ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://invent.kde.org/frameworks/kjs.git",
-                    "tag": "v5.92.0",
-                    "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
-                    },
-                    "commit": "ff72aaa777fd7cd2df19db699e02b045c07efecb"
-                }
-            ]
-        },
-        {
-            "name": "khtml",
-            "config-opts": [ "-DENABLE_TESTING=OFF" ],
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://invent.kde.org/frameworks/khtml.git",
-                    "tag": "v5.92.0",
-                    "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
-                    },
-                    "commit": "97ac7de4e0a54fab9822e143416e02e348af0290"
-                }
-            ]
-        },
-        {
-            "config-opts": [ "-DENABLE_TESTING=OFF" ],
-            "name": "kross",
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://invent.kde.org/frameworks/kross.git",
-                    "tag": "v5.92.0",
-                    "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
-                    },
-                    "commit": "a855fccda3fb1998517a15902eab3f3694c977d8"
-                }
-            ]
-        },
-        {
-            "config-opts": [ "-DENABLE_TESTING=OFF" ],
-            "name": "kdelibs4support",
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://invent.kde.org/frameworks/kdelibs4support.git",
-                    "tag": "v5.92.0",
-                    "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
-                    },
-                    "commit": "45f261c182f81096d32b010d51dcd7c73462bd0c"
-                }
+            "config-opts": [
+                "-DBUILD_WITH_QT6=OFF",
+                "-DCMAKE_INSTALL_LIBDIR=/app/lib",
+                "-DLIB_INSTALL_DIR=/app/lib",
+                "-DBUILD_TRANSLATIONS=NO"
             ]
         },
         {
