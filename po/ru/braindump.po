@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2015-03-10 08:43+0300\n"
 "Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -111,7 +111,7 @@ msgstr "Объект состояния"
 msgid "A state shape"
 msgstr "Объект состояния"
 
-#: plugins/stateshape/StateTool.cpp:107
+#: plugins/stateshape/StateTool.cpp:108
 #, kde-format
 msgid "State tool options"
 msgstr "Параметры состояния"

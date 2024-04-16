@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2002-08-07 14:16+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga_n@yahoo.com>\n"
 "Language-Team: Thai <th@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: KBabel 0.9.6\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:743
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
@@ -398,202 +398,202 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "donga_n@yahoo.com"
 
-#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:415
 #, fuzzy
 #| msgid "Insert Sinus"
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "แทรกคลื่นไซน์"
 
-#: ui/KarbonView.cpp:346
+#: ui/KarbonView.cpp:351
 #, fuzzy, kde-format
 msgid "Choose Graphic to Add"
 msgstr "สีเส้นการลาก"
 
-#: ui/KarbonView.cpp:381
+#: ui/KarbonView.cpp:386
 #, kde-format
 msgid "Could not load image."
 msgstr ""
 
-#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, fuzzy, kde-format
 #| msgid "Insert Sinus"
 msgid "Import graphic"
 msgstr "แทรกคลื่นไซน์"
 
-#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, kde-format
 msgid "Could not create image shape."
 msgstr ""
 
-#: ui/KarbonView.cpp:612
+#: ui/KarbonView.cpp:617
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr ""
 
-#: ui/KarbonView.cpp:614
+#: ui/KarbonView.cpp:619
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr ""
 
-#: ui/KarbonView.cpp:616
+#: ui/KarbonView.cpp:621
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr ""
 
-#: ui/KarbonView.cpp:671
+#: ui/KarbonView.cpp:676
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "แ&บน"
 
-#: ui/KarbonView.cpp:852
+#: ui/KarbonView.cpp:857
 #, fuzzy, kde-format
 #| msgid "View &Mode"
 msgid "Outline &Mode"
 msgstr "โหมดแ&สดงผล"
 
-#: ui/KarbonView.cpp:860
+#: ui/KarbonView.cpp:865
 #, fuzzy, kde-format
 #| msgid "Insert Sinus"
 msgid "&Import Graphic..."
 msgstr "แทรกคลื่นไซน์"
 
-#: ui/KarbonView.cpp:864
+#: ui/KarbonView.cpp:869
 #, fuzzy, kde-format
 msgid "Edit Guides"
 msgstr "ไล่ระดับสี"
 
-#: ui/KarbonView.cpp:870
+#: ui/KarbonView.cpp:875
 #, fuzzy, kde-format
 #| msgid "&Duplicate"
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&ทำซ้ำ"
 
-#: ui/KarbonView.cpp:875
+#: ui/KarbonView.cpp:880
 #, fuzzy, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "เซ็กเมนต์:"
 
-#: ui/KarbonView.cpp:879
+#: ui/KarbonView.cpp:884
 #, fuzzy, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "เซ็กเมนต์:"
 
-#: ui/KarbonView.cpp:883
+#: ui/KarbonView.cpp:888
 #, fuzzy, kde-format
 msgid "Distribute Left Borders"
 msgstr "ลบวัตถุ"
 
-#: ui/KarbonView.cpp:887
+#: ui/KarbonView.cpp:892
 #, fuzzy, kde-format
 msgid "Distribute Right Borders"
 msgstr "ลบวัตถุ"
 
-#: ui/KarbonView.cpp:891
+#: ui/KarbonView.cpp:896
 #, fuzzy, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "เซ็กเมนต์:"
 
-#: ui/KarbonView.cpp:895
+#: ui/KarbonView.cpp:900
 #, fuzzy, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "เซ็กเมนต์:"
 
-#: ui/KarbonView.cpp:899
+#: ui/KarbonView.cpp:904
 #, fuzzy, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "ลบวัตถุ"
 
-#: ui/KarbonView.cpp:903
+#: ui/KarbonView.cpp:908
 #, fuzzy, kde-format
 msgid "Distribute Top Borders"
 msgstr "ลบวัตถุ"
 
-#: ui/KarbonView.cpp:907
+#: ui/KarbonView.cpp:912
 #, kde-format
 msgid "Show Color Palette"
 msgstr ""
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:914
 #, kde-format
 msgid "Show or hide color palette"
 msgstr ""
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:918
 #, fuzzy, kde-format
 #| msgid "&Object"
 msgid "&Clip Object"
 msgstr "&วัตถุ"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:922
 #, fuzzy, kde-format
 #| msgid "&Ungroup Objects"
 msgid "&Unclip Objects"
 msgstr "&ยกเลิกรวมกลุ่มวัตถุ"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:926
 #, kde-format
 msgid "Mirror Vertically"
 msgstr ""
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:930
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr ""
 
-#: ui/KarbonView.cpp:932
+#: ui/KarbonView.cpp:937
 #, fuzzy, kde-format
 msgid "&Close Path"
 msgstr "สีเส้นการลาก"
 
-#: ui/KarbonView.cpp:938
+#: ui/KarbonView.cpp:943
 #, fuzzy, kde-format
 msgid "Com&bine Path"
 msgstr "แ&บน"
 
-#: ui/KarbonView.cpp:944
+#: ui/KarbonView.cpp:949
 #, fuzzy, kde-format
 msgid "Se&parate Path"
 msgstr "แ&บน"
 
-#: ui/KarbonView.cpp:950
+#: ui/KarbonView.cpp:955
 #, fuzzy, kde-format
 msgid "Re&verse Path"
 msgstr "สีเส้นการลาก"
 
-#: ui/KarbonView.cpp:956
+#: ui/KarbonView.cpp:961
 #, fuzzy, kde-format
 msgid "Intersect Paths"
 msgstr "แ&บน"
 
-#: ui/KarbonView.cpp:962
+#: ui/KarbonView.cpp:967
 #, fuzzy, kde-format
 msgid "Subtract Paths"
 msgstr "แ&บน"
 
-#: ui/KarbonView.cpp:968
+#: ui/KarbonView.cpp:973
 #, fuzzy, kde-format
 msgid "Unite Paths"
 msgstr "แ&บน"
 
-#: ui/KarbonView.cpp:974
+#: ui/KarbonView.cpp:979
 #, kde-format
 msgid "Exclude Paths"
 msgstr ""
 
-#: ui/KarbonView.cpp:980
+#: ui/KarbonView.cpp:985
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr ""
 
-#: ui/KarbonView.cpp:988
+#: ui/KarbonView.cpp:993
 #, fuzzy, kde-format
 msgid "Zoom to Selection"
 msgstr "คุณ&สมบัติการเลือก"
 
-#: ui/KarbonView.cpp:992
+#: ui/KarbonView.cpp:997
 #, fuzzy, kde-format
 msgid "Zoom to Drawing"
 msgstr "คุณ&สมบัติการเลือก"

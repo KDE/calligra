@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2014-06-01 22:13-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:743
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr "ブール演算"
@@ -393,193 +393,193 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "shinobo@leo.bekkoame.ne.jp,ybando@k6.dion.ne.jp"
 
-#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:415
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "グラフィックを挿入"
 
-#: ui/KarbonView.cpp:346
+#: ui/KarbonView.cpp:351
 #, kde-format
 msgid "Choose Graphic to Add"
 msgstr "追加するグラフィックを選択"
 
-#: ui/KarbonView.cpp:381
+#: ui/KarbonView.cpp:386
 #, kde-format
 msgid "Could not load image."
 msgstr "画像を読み込めません。"
 
-#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, kde-format
 msgid "Import graphic"
 msgstr "グラフィックをインポート"
 
-#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, kde-format
 msgid "Could not create image shape."
 msgstr "新しい画像シェイプを作成できませんでした。"
 
-#: ui/KarbonView.cpp:612
+#: ui/KarbonView.cpp:617
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "水平方向に反転"
 
-#: ui/KarbonView.cpp:614
+#: ui/KarbonView.cpp:619
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "垂直方向に反転"
 
-#: ui/KarbonView.cpp:616
+#: ui/KarbonView.cpp:621
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "水平方向と垂直方向に反転"
 
-#: ui/KarbonView.cpp:671
+#: ui/KarbonView.cpp:676
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "パスを分割"
 
-#: ui/KarbonView.cpp:852
+#: ui/KarbonView.cpp:857
 #, kde-format
 msgid "Outline &Mode"
 msgstr "輪郭モード(&M)"
 
-#: ui/KarbonView.cpp:860
+#: ui/KarbonView.cpp:865
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "グラフィックをインポート(&I)..."
 
-#: ui/KarbonView.cpp:864
+#: ui/KarbonView.cpp:869
 #, kde-format
 msgid "Edit Guides"
 msgstr "ガイド線を編集"
 
-#: ui/KarbonView.cpp:870
+#: ui/KarbonView.cpp:875
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "複製(&D)"
 
-#: ui/KarbonView.cpp:875
+#: ui/KarbonView.cpp:880
 #, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "中心を均等配置 (水平方向)"
 
-#: ui/KarbonView.cpp:879
+#: ui/KarbonView.cpp:884
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "すき間を均等配置 (水平方向)"
 
-#: ui/KarbonView.cpp:883
+#: ui/KarbonView.cpp:888
 #, kde-format
 msgid "Distribute Left Borders"
 msgstr "左境界を均等配置"
 
-#: ui/KarbonView.cpp:887
+#: ui/KarbonView.cpp:892
 #, kde-format
 msgid "Distribute Right Borders"
 msgstr "右境界を均等配置"
 
-#: ui/KarbonView.cpp:891
+#: ui/KarbonView.cpp:896
 #, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "中心を均等配置 (垂直方向)"
 
-#: ui/KarbonView.cpp:895
+#: ui/KarbonView.cpp:900
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "すき間を均等配置 (垂直方向)"
 
-#: ui/KarbonView.cpp:899
+#: ui/KarbonView.cpp:904
 #, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "下境界を均等配置"
 
-#: ui/KarbonView.cpp:903
+#: ui/KarbonView.cpp:908
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "上境界を均等配置"
 
-#: ui/KarbonView.cpp:907
+#: ui/KarbonView.cpp:912
 #, kde-format
 msgid "Show Color Palette"
 msgstr "カラーパレットを表示"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:914
 #, kde-format
 msgid "Show or hide color palette"
 msgstr "カラーパレットの表示/非表示を切り替えます"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:918
 #, kde-format
 msgid "&Clip Object"
 msgstr "オブジェクトをクリップ(&C)"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:922
 #, kde-format
 msgid "&Unclip Objects"
 msgstr "オブジェクトのクリップを解除(&U)"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:926
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "垂直方向に反転"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:930
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "水平方向に反転"
 
-#: ui/KarbonView.cpp:932
+#: ui/KarbonView.cpp:937
 #, kde-format
 msgid "&Close Path"
 msgstr "パスを閉じる(&C)"
 
-#: ui/KarbonView.cpp:938
+#: ui/KarbonView.cpp:943
 #, kde-format
 msgid "Com&bine Path"
 msgstr "パスを一体化(&B)"
 
-#: ui/KarbonView.cpp:944
+#: ui/KarbonView.cpp:949
 #, kde-format
 msgid "Se&parate Path"
 msgstr "パスを平坦化(&P)"
 
-#: ui/KarbonView.cpp:950
+#: ui/KarbonView.cpp:955
 #, kde-format
 msgid "Re&verse Path"
 msgstr "パスを反転(&V)"
 
-#: ui/KarbonView.cpp:956
+#: ui/KarbonView.cpp:961
 #, kde-format
 msgid "Intersect Paths"
 msgstr "パスを交差"
 
-#: ui/KarbonView.cpp:962
+#: ui/KarbonView.cpp:967
 #, kde-format
 msgid "Subtract Paths"
 msgstr "パスを前面のパスで型抜き"
 
-#: ui/KarbonView.cpp:968
+#: ui/KarbonView.cpp:973
 #, kde-format
 msgid "Unite Paths"
 msgstr "パスを結合"
 
-#: ui/KarbonView.cpp:974
+#: ui/KarbonView.cpp:979
 #, kde-format
 msgid "Exclude Paths"
 msgstr "パスを排他的に重ねる"
 
-#: ui/KarbonView.cpp:980
+#: ui/KarbonView.cpp:985
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr "パスをグリッドに合わせる"
 
-#: ui/KarbonView.cpp:988
+#: ui/KarbonView.cpp:993
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "選択範囲に合わせる"
 
-#: ui/KarbonView.cpp:992
+#: ui/KarbonView.cpp:997
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr "描画に合わせる"

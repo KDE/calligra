@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2019-08-27 10:19+0700\n"
 "Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -104,7 +104,7 @@ msgstr "Bentuk Keadaan"
 msgid "A state shape"
 msgstr "Sebuah bentuk keadaan"
 
-#: plugins/stateshape/StateTool.cpp:107
+#: plugins/stateshape/StateTool.cpp:108
 #, kde-format
 msgid "State tool options"
 msgstr "Opsi alat keadaan"

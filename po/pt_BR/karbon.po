@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2019-11-06 22:38-0300\n"
 "Last-Translator: André Marcelo Alvarenga <alvarenga@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_br@kde.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 19.04.3\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:743
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr "Operação booleana"
@@ -395,193 +395,193 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "marcus.gama@gmail.com, alvarenga@kde.org"
 
-#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:415
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "Inserir gráfico"
 
-#: ui/KarbonView.cpp:346
+#: ui/KarbonView.cpp:351
 #, kde-format
 msgid "Choose Graphic to Add"
 msgstr "Escolha o gráfico a adicionar"
 
-#: ui/KarbonView.cpp:381
+#: ui/KarbonView.cpp:386
 #, kde-format
 msgid "Could not load image."
 msgstr "Não foi possível carregar a imagem."
 
-#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, kde-format
 msgid "Import graphic"
 msgstr "Importar um gráfico"
 
-#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, kde-format
 msgid "Could not create image shape."
 msgstr "Não foi possível criar a forma da imagem."
 
-#: ui/KarbonView.cpp:612
+#: ui/KarbonView.cpp:617
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "Espelhar horizontalmente"
 
-#: ui/KarbonView.cpp:614
+#: ui/KarbonView.cpp:619
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "Espelhar verticalmente"
 
-#: ui/KarbonView.cpp:616
+#: ui/KarbonView.cpp:621
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "Espelhar horizontal e verticalmente"
 
-#: ui/KarbonView.cpp:671
+#: ui/KarbonView.cpp:676
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "Separar caminhos"
 
-#: ui/KarbonView.cpp:852
+#: ui/KarbonView.cpp:857
 #, kde-format
 msgid "Outline &Mode"
 msgstr "&Modo de Contorno"
 
-#: ui/KarbonView.cpp:860
+#: ui/KarbonView.cpp:865
 #, kde-format
 msgid "&Import Graphic..."
 msgstr "&Importar Gráfico..."
 
-#: ui/KarbonView.cpp:864
+#: ui/KarbonView.cpp:869
 #, kde-format
 msgid "Edit Guides"
 msgstr "Editar guias"
 
-#: ui/KarbonView.cpp:870
+#: ui/KarbonView.cpp:875
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "&Duplicar"
 
-#: ui/KarbonView.cpp:875
+#: ui/KarbonView.cpp:880
 #, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "Distribuir no Centro (Horizontal)"
 
-#: ui/KarbonView.cpp:879
+#: ui/KarbonView.cpp:884
 #, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "Distribuir Lacunas (Horizontal)"
 
-#: ui/KarbonView.cpp:883
+#: ui/KarbonView.cpp:888
 #, kde-format
 msgid "Distribute Left Borders"
 msgstr "Distribuir Bordas Esquerdas"
 
-#: ui/KarbonView.cpp:887
+#: ui/KarbonView.cpp:892
 #, kde-format
 msgid "Distribute Right Borders"
 msgstr "Distribuir Bordas Direitas"
 
-#: ui/KarbonView.cpp:891
+#: ui/KarbonView.cpp:896
 #, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "Distribuir no Centro (Vertical)"
 
-#: ui/KarbonView.cpp:895
+#: ui/KarbonView.cpp:900
 #, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "Distribuir Lacunas (Vertical)"
 
-#: ui/KarbonView.cpp:899
+#: ui/KarbonView.cpp:904
 #, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "Distribuir Bordas Inferiores"
 
-#: ui/KarbonView.cpp:903
+#: ui/KarbonView.cpp:908
 #, kde-format
 msgid "Distribute Top Borders"
 msgstr "Distribuir Bordas Superiores"
 
-#: ui/KarbonView.cpp:907
+#: ui/KarbonView.cpp:912
 #, kde-format
 msgid "Show Color Palette"
 msgstr "Mostrar paleta de cores"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:914
 #, kde-format
 msgid "Show or hide color palette"
 msgstr "Mostra ou oculta a paleta de cores"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:918
 #, kde-format
 msgid "&Clip Object"
 msgstr "Re&cortar objeto"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:922
 #, kde-format
 msgid "&Unclip Objects"
 msgstr "&Retirar recorte do objeto"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:926
 #, kde-format
 msgid "Mirror Vertically"
 msgstr "Espelhar verticalmente"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:930
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr "Espelhar horizontalmente"
 
-#: ui/KarbonView.cpp:932
+#: ui/KarbonView.cpp:937
 #, kde-format
 msgid "&Close Path"
 msgstr "&Fechar Caminho"
 
-#: ui/KarbonView.cpp:938
+#: ui/KarbonView.cpp:943
 #, kde-format
 msgid "Com&bine Path"
 msgstr "Com&binar Caminho"
 
-#: ui/KarbonView.cpp:944
+#: ui/KarbonView.cpp:949
 #, kde-format
 msgid "Se&parate Path"
 msgstr "Se&parar Caminho"
 
-#: ui/KarbonView.cpp:950
+#: ui/KarbonView.cpp:955
 #, kde-format
 msgid "Re&verse Path"
 msgstr "In&verter Caminho"
 
-#: ui/KarbonView.cpp:956
+#: ui/KarbonView.cpp:961
 #, kde-format
 msgid "Intersect Paths"
 msgstr "Cruzar Caminhos"
 
-#: ui/KarbonView.cpp:962
+#: ui/KarbonView.cpp:967
 #, kde-format
 msgid "Subtract Paths"
 msgstr "Subtrair Caminhos"
 
-#: ui/KarbonView.cpp:968
+#: ui/KarbonView.cpp:973
 #, kde-format
 msgid "Unite Paths"
 msgstr "Unir Caminhos"
 
-#: ui/KarbonView.cpp:974
+#: ui/KarbonView.cpp:979
 #, kde-format
 msgid "Exclude Paths"
 msgstr "Excluir Caminhos"
 
-#: ui/KarbonView.cpp:980
+#: ui/KarbonView.cpp:985
 #, kde-format
 msgid "Snap Path to Grid"
 msgstr "Ajustar o caminho à grade"
 
-#: ui/KarbonView.cpp:988
+#: ui/KarbonView.cpp:993
 #, kde-format
 msgid "Zoom to Selection"
 msgstr "Ampliar para Seleção"
 
-#: ui/KarbonView.cpp:992
+#: ui/KarbonView.cpp:997
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr "Ampliar para Desenho"

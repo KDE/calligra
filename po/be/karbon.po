@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2008-01-01 23:14+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
 "%100>=11 && n%100<=14 ? 2 : 3);\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:743
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr ""
@@ -398,196 +398,196 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "serzh.by@gmail.com"
 
-#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:415
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "Уставіць малюнак..."
 
-#: ui/KarbonView.cpp:346
+#: ui/KarbonView.cpp:351
 #, fuzzy, kde-format
 msgid "Choose Graphic to Add"
 msgstr "Вылучыце дадаваную тэкстуру"
 
-#: ui/KarbonView.cpp:381
+#: ui/KarbonView.cpp:386
 #, kde-format
 msgid "Could not load image."
 msgstr ""
 
-#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, fuzzy, kde-format
 msgid "Import graphic"
 msgstr "Уставіць малюнак..."
 
-#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, kde-format
 msgid "Could not create image shape."
 msgstr ""
 
-#: ui/KarbonView.cpp:612
+#: ui/KarbonView.cpp:617
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr ""
 
-#: ui/KarbonView.cpp:614
+#: ui/KarbonView.cpp:619
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr ""
 
-#: ui/KarbonView.cpp:616
+#: ui/KarbonView.cpp:621
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr ""
 
-#: ui/KarbonView.cpp:671
+#: ui/KarbonView.cpp:676
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "Згладзіць крывую"
 
-#: ui/KarbonView.cpp:852
+#: ui/KarbonView.cpp:857
 #, kde-format
 msgid "Outline &Mode"
 msgstr ""
 
-#: ui/KarbonView.cpp:860
+#: ui/KarbonView.cpp:865
 #, fuzzy, kde-format
 msgid "&Import Graphic..."
 msgstr "Уставіць малюнак..."
 
-#: ui/KarbonView.cpp:864
+#: ui/KarbonView.cpp:869
 #, fuzzy, kde-format
 msgid "Edit Guides"
 msgstr "Схаваць сетку"
 
-#: ui/KarbonView.cpp:870
+#: ui/KarbonView.cpp:875
 #, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "Прадубляваць"
 
-#: ui/KarbonView.cpp:875
+#: ui/KarbonView.cpp:880
 #, fuzzy, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "Равноудаленно расставіць цэнтры па гарызанталі"
 
-#: ui/KarbonView.cpp:879
+#: ui/KarbonView.cpp:884
 #, fuzzy, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "Выраўнаваць інтэрвалы паміж аб'ектамі па гарызанталі"
 
-#: ui/KarbonView.cpp:883
+#: ui/KarbonView.cpp:888
 #, fuzzy, kde-format
 msgid "Distribute Left Borders"
 msgstr "Равноудаленно расставіць левыя боку"
 
-#: ui/KarbonView.cpp:887
+#: ui/KarbonView.cpp:892
 #, fuzzy, kde-format
 msgid "Distribute Right Borders"
 msgstr "Равноудаленно расставіць правыя боку"
 
-#: ui/KarbonView.cpp:891
+#: ui/KarbonView.cpp:896
 #, fuzzy, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "Равноудаленно расставіць цэнтры па вертыкалі"
 
-#: ui/KarbonView.cpp:895
+#: ui/KarbonView.cpp:900
 #, fuzzy, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "Выраўнаваць інтэрвалы паміж аб'ектамі па вертыкалі"
 
-#: ui/KarbonView.cpp:899
+#: ui/KarbonView.cpp:904
 #, fuzzy, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "Равноудаленно расставіць ніжнія боку"
 
-#: ui/KarbonView.cpp:903
+#: ui/KarbonView.cpp:908
 #, fuzzy, kde-format
 msgid "Distribute Top Borders"
 msgstr "Равноудаленно расставіць верхнія боку"
 
-#: ui/KarbonView.cpp:907
+#: ui/KarbonView.cpp:912
 #, fuzzy, kde-format
 msgid "Show Color Palette"
 msgstr "Паказаць або схаваць лінейкі."
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:914
 #, fuzzy, kde-format
 msgid "Show or hide color palette"
 msgstr "Паказаць або схаваць лінейкі."
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:918
 #, fuzzy, kde-format
 #| msgid "&Object"
 msgid "&Clip Object"
 msgstr "Аб'ект"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:922
 #, fuzzy, kde-format
 msgid "&Unclip Objects"
 msgstr "Разгрупавать аб'екты"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:926
 #, kde-format
 msgid "Mirror Vertically"
 msgstr ""
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:930
 #, kde-format
 msgid "Mirror Horizontally"
 msgstr ""
 
-#: ui/KarbonView.cpp:932
+#: ui/KarbonView.cpp:937
 #, fuzzy, kde-format
 msgid "&Close Path"
 msgstr "Замкнуць контур"
 
-#: ui/KarbonView.cpp:938
+#: ui/KarbonView.cpp:943
 #, fuzzy, kde-format
 msgid "Com&bine Path"
 msgstr "Замкнуць контур"
 
-#: ui/KarbonView.cpp:944
+#: ui/KarbonView.cpp:949
 #, fuzzy, kde-format
 msgid "Se&parate Path"
 msgstr "Згладзіць крывую"
 
-#: ui/KarbonView.cpp:950
+#: ui/KarbonView.cpp:955
 #, fuzzy, kde-format
 msgid "Re&verse Path"
 msgstr "Замкнуць контур"
 
-#: ui/KarbonView.cpp:956
+#: ui/KarbonView.cpp:961
 #, fuzzy, kde-format
 msgid "Intersect Paths"
 msgstr "Змяніць базавы контур"
 
-#: ui/KarbonView.cpp:962
+#: ui/KarbonView.cpp:967
 #, fuzzy, kde-format
 msgid "Subtract Paths"
 msgstr "Згладзіць крывую"
 
-#: ui/KarbonView.cpp:968
+#: ui/KarbonView.cpp:973
 #, fuzzy, kde-format
 msgid "Unite Paths"
 msgstr "Змяніць базавы контур"
 
-#: ui/KarbonView.cpp:974
+#: ui/KarbonView.cpp:979
 #, kde-format
 msgid "Exclude Paths"
 msgstr ""
 
-#: ui/KarbonView.cpp:980
+#: ui/KarbonView.cpp:985
 #, fuzzy, kde-format
 msgid "Snap Path to Grid"
 msgstr "Прыліпанне да сеткі"
 
-#: ui/KarbonView.cpp:988
+#: ui/KarbonView.cpp:993
 #, kde-format
 msgid "Zoom to Selection"
 msgstr ""
 
-#: ui/KarbonView.cpp:992
+#: ui/KarbonView.cpp:997
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr ""

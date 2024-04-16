@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2020-04-11 21:55+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -106,7 +106,7 @@ msgstr "Forma stato"
 msgid "A state shape"
 msgstr "Una forma stato"
 
-#: plugins/stateshape/StateTool.cpp:107
+#: plugins/stateshape/StateTool.cpp:108
 #, kde-format
 msgid "State tool options"
 msgstr "Opzioni dello strumento stato"

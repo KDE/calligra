@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: braindump\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2014-07-13 00:16-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -106,7 +106,7 @@ msgstr "シェイプの状態"
 msgid "A state shape"
 msgstr "シェイプの状態"
 
-#: plugins/stateshape/StateTool.cpp:107
+#: plugins/stateshape/StateTool.cpp:108
 #, kde-format
 msgid "State tool options"
 msgstr "状態ツールのオプション"

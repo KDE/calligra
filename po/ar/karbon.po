@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: karbon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2007-10-14 16:03+0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: <en@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:738
+#: common/commands/KarbonBooleanCommand.cpp:55 ui/KarbonView.cpp:743
 msgctxt "(qtundo-format)"
 msgid "Boolean Operation"
 msgstr ""
@@ -395,198 +395,198 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "aser@arabeyes.org"
 
-#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:410
+#: ui/KarbonDocumentMergeCommand.cpp:107 ui/KarbonView.cpp:415
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Insert graphics"
 msgstr "ادخل منحنى جيبي"
 
-#: ui/KarbonView.cpp:346
+#: ui/KarbonView.cpp:351
 #, fuzzy, kde-format
 msgid "Choose Graphic to Add"
 msgstr "تدرج"
 
-#: ui/KarbonView.cpp:381
+#: ui/KarbonView.cpp:386
 #, kde-format
 msgid "Could not load image."
 msgstr ""
 
-#: ui/KarbonView.cpp:381 ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, fuzzy, kde-format
 msgid "Import graphic"
 msgstr "استيراد رسم."
 
-#: ui/KarbonView.cpp:386 ui/KarbonView.cpp:393
+#: ui/KarbonView.cpp:391 ui/KarbonView.cpp:398
 #, kde-format
 msgid "Could not create image shape."
 msgstr ""
 
-#: ui/KarbonView.cpp:612
+#: ui/KarbonView.cpp:617
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally"
 msgstr "أفقي:"
 
-#: ui/KarbonView.cpp:614
+#: ui/KarbonView.cpp:619
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Vertically"
 msgstr "أفقي:"
 
-#: ui/KarbonView.cpp:616
+#: ui/KarbonView.cpp:621
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Horizontally and Vertically"
 msgstr "أفقي:"
 
-#: ui/KarbonView.cpp:671
+#: ui/KarbonView.cpp:676
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Separate paths"
 msgstr "منفصل المسار"
 
-#: ui/KarbonView.cpp:852
+#: ui/KarbonView.cpp:857
 #, kde-format
 msgid "Outline &Mode"
 msgstr ""
 
-#: ui/KarbonView.cpp:860
+#: ui/KarbonView.cpp:865
 #, fuzzy, kde-format
 msgid "&Import Graphic..."
 msgstr "استيراد رسم."
 
-#: ui/KarbonView.cpp:864
+#: ui/KarbonView.cpp:869
 #, fuzzy, kde-format
 msgid "Edit Guides"
 msgstr "إخفاء الشبكة"
 
-#: ui/KarbonView.cpp:870
+#: ui/KarbonView.cpp:875
 #, fuzzy, kde-format
 msgctxt "Duplicate selection"
 msgid "&Duplicate"
 msgstr "م&ضاعفة"
 
-#: ui/KarbonView.cpp:875
+#: ui/KarbonView.cpp:880
 #, fuzzy, kde-format
 msgid "Distribute Center (Horizontal)"
 msgstr "توزيع وسط أفقي"
 
-#: ui/KarbonView.cpp:879
+#: ui/KarbonView.cpp:884
 #, fuzzy, kde-format
 msgid "Distribute Gaps (Horizontal)"
 msgstr "توزيع فراغات أفقي"
 
-#: ui/KarbonView.cpp:883
+#: ui/KarbonView.cpp:888
 #, fuzzy, kde-format
 msgid "Distribute Left Borders"
 msgstr "توزيع يسار الحدود"
 
-#: ui/KarbonView.cpp:887
+#: ui/KarbonView.cpp:892
 #, fuzzy, kde-format
 msgid "Distribute Right Borders"
 msgstr "توزيع يمين الحدود"
 
-#: ui/KarbonView.cpp:891
+#: ui/KarbonView.cpp:896
 #, fuzzy, kde-format
 msgid "Distribute Center (Vertical)"
 msgstr "توزيع وسط رأسي"
 
-#: ui/KarbonView.cpp:895
+#: ui/KarbonView.cpp:900
 #, fuzzy, kde-format
 msgid "Distribute Gaps (Vertical)"
 msgstr "توزيع فراغات رأسي"
 
-#: ui/KarbonView.cpp:899
+#: ui/KarbonView.cpp:904
 #, fuzzy, kde-format
 msgid "Distribute Bottom Borders"
 msgstr "توزيع أسفل الحدود"
 
-#: ui/KarbonView.cpp:903
+#: ui/KarbonView.cpp:908
 #, fuzzy, kde-format
 msgid "Distribute Top Borders"
 msgstr "توزيع أعلى الحدود"
 
-#: ui/KarbonView.cpp:907
+#: ui/KarbonView.cpp:912
 #, fuzzy, kde-format
 msgid "Show Color Palette"
 msgstr "المعارض أو"
 
-#: ui/KarbonView.cpp:909
+#: ui/KarbonView.cpp:914
 #, fuzzy, kde-format
 msgid "Show or hide color palette"
 msgstr "المعارض أو"
 
-#: ui/KarbonView.cpp:913
+#: ui/KarbonView.cpp:918
 #, fuzzy, kde-format
 msgid "&Clip Object"
 msgstr "&عنصر"
 
-#: ui/KarbonView.cpp:917
+#: ui/KarbonView.cpp:922
 #, fuzzy, kde-format
 msgid "&Unclip Objects"
 msgstr "تفرقة ال&عناصر"
 
-#: ui/KarbonView.cpp:921
+#: ui/KarbonView.cpp:926
 #, fuzzy, kde-format
 msgid "Mirror Vertically"
 msgstr "أفقي:"
 
-#: ui/KarbonView.cpp:925
+#: ui/KarbonView.cpp:930
 #, fuzzy, kde-format
 msgid "Mirror Horizontally"
 msgstr "أفقي:"
 
-#: ui/KarbonView.cpp:932
+#: ui/KarbonView.cpp:937
 #, fuzzy, kde-format
 msgid "&Close Path"
 msgstr "إغلاق المسار"
 
-#: ui/KarbonView.cpp:938
+#: ui/KarbonView.cpp:943
 #, fuzzy, kde-format
 msgid "Com&bine Path"
 msgstr "دمج المسار"
 
-#: ui/KarbonView.cpp:944
+#: ui/KarbonView.cpp:949
 #, fuzzy, kde-format
 msgid "Se&parate Path"
 msgstr "منفصل المسار"
 
-#: ui/KarbonView.cpp:950
+#: ui/KarbonView.cpp:955
 #, fuzzy, kde-format
 msgid "Re&verse Path"
 msgstr "إغلاق المسار"
 
-#: ui/KarbonView.cpp:956
+#: ui/KarbonView.cpp:961
 #, fuzzy, kde-format
 msgid "Intersect Paths"
 msgstr "تقاطع مسارات"
 
-#: ui/KarbonView.cpp:962
+#: ui/KarbonView.cpp:967
 #, fuzzy, kde-format
 msgid "Subtract Paths"
 msgstr "تقاطع مسارات"
 
-#: ui/KarbonView.cpp:968
+#: ui/KarbonView.cpp:973
 #, fuzzy, kde-format
 msgid "Unite Paths"
 msgstr "إتّحد مسارات"
 
-#: ui/KarbonView.cpp:974
+#: ui/KarbonView.cpp:979
 #, kde-format
 msgid "Exclude Paths"
 msgstr ""
 
-#: ui/KarbonView.cpp:980
+#: ui/KarbonView.cpp:985
 #, fuzzy, kde-format
 msgid "Snap Path to Grid"
 msgstr "انطباق على الشبكة"
 
-#: ui/KarbonView.cpp:988
+#: ui/KarbonView.cpp:993
 #, kde-format
 msgid "Zoom to Selection"
 msgstr ""
 
-#: ui/KarbonView.cpp:992
+#: ui/KarbonView.cpp:997
 #, kde-format
 msgid "Zoom to Drawing"
 msgstr ""

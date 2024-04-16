@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:33+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2016-12-08 08:22+0800\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese <kde-i18n-doc@kde.org>\n"
@@ -106,7 +106,7 @@ msgstr "狀態元件"
 msgid "A state shape"
 msgstr "狀態元件"
 
-#: plugins/stateshape/StateTool.cpp:107
+#: plugins/stateshape/StateTool.cpp:108
 #, kde-format
 msgid "State tool options"
 msgstr "狀態工具選項"

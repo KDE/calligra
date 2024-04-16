@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-02 01:36+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2023-08-27 22:16+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -946,12 +946,12 @@ msgstr ""
 "이 구성을 추천하지 않습니다.\n"
 "x64 빌드를 다운로드하고 실행하는 것을 추천합니다."
 
-#: main/KoApplication.cpp:263
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid "%1: Critical Error"
 msgstr "%1: 치명적인 오류"
 
-#: main/KoApplication.cpp:263
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -962,22 +962,22 @@ msgstr ""
 "설치 문제일 수 있습니다.\n"
 "다시 시작하거나 다시 설치해 보십시오."
 
-#: main/KoApplication.cpp:512
+#: main/KoApplication.cpp:510
 #, kde-format
 msgid "No template found for: %1"
 msgstr "다음의 서식을 찾을 수 없음: %1"
 
-#: main/KoApplication.cpp:515
+#: main/KoApplication.cpp:513
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "다음의 서식이 너무 많음: %1"
 
-#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
+#: main/KoApplication.cpp:535 main/KoApplication.cpp:553
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "서식 %1을(를) 불러올 수 없습니다."
 
-#: main/KoApplication.cpp:545
+#: main/KoApplication.cpp:543
 #, kde-format
 msgid "No template found at: %1"
 msgstr "서식 파일을 찾을 수 없음: %1"
@@ -1078,7 +1078,7 @@ msgstr "'%1'에 쓸 수 없습니다. 파티션이 가득 찼습니까?"
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "RDF 메타데이터를 쓸 수 없습니다. 파티션이 가득 찼습니까?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1991
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1'에 쓰는 동안 오류가 발생했습니다. 파티션이 가득 찼습니까?"
@@ -1101,102 +1101,102 @@ msgstr ""
 "이 문서에는 자동 저장된 파일이 있습니다.\n"
 "대신 열어 보시겠습니까?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "파일 %1이(가) 없습니다."
 
-#: main/KoDocument.cpp:1464
+#: main/KoDocument.cpp:1467
 #, kde-format
 msgid "Opening Document"
 msgstr "문서 여는 중"
 
-#: main/KoDocument.cpp:1479
+#: main/KoDocument.cpp:1482
 #, kde-format
 msgid "Could not create the filter plugin"
 msgstr "필터 플러그인을 만들 수 없음"
 
-#: main/KoDocument.cpp:1482
+#: main/KoDocument.cpp:1485
 #, kde-format
 msgid "Could not create the output document"
 msgstr "출력 문서를 만들 수 없음"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1488
 #, kde-format
 msgid "File not found"
 msgstr "파일을 찾을 수 없음"
 
-#: main/KoDocument.cpp:1488
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Cannot create storage"
 msgstr "저장소를 만들 수 없음"
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Bad MIME type"
 msgstr "잘못된 MIME 형식"
 
-#: main/KoDocument.cpp:1494
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Error in embedded document"
 msgstr "포함된 문서에 오류가 있음"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Format not recognized"
 msgstr "인식할 수 없는 형식"
 
-#: main/KoDocument.cpp:1500
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Not implemented"
 msgstr "구현되지 않음"
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Parsing error"
 msgstr "해석 오류"
 
-#: main/KoDocument.cpp:1506
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Document is password protected"
 msgstr "문서가 암호로 보호되어 있음"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1512
 #, kde-format
 msgid "Invalid file format"
 msgstr "잘못된 파일 형식"
 
-#: main/KoDocument.cpp:1516
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Internal error"
 msgstr "내부 오류"
 
-#: main/KoDocument.cpp:1519
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Out of memory"
 msgstr "메모리 부족"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr "빈 필터 플러그인"
 
-#: main/KoDocument.cpp:1525
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr "잘못된 종류의 문서로 불러오기 시도 중"
 
-#: main/KoDocument.cpp:1528
+#: main/KoDocument.cpp:1531
 #, kde-format
 msgid "Failed to download remote file"
 msgstr "원격 파일을 다운로드할 수 없음"
 
-#: main/KoDocument.cpp:1535
+#: main/KoDocument.cpp:1538
 #, kde-format
 msgid "Unknown error"
 msgstr "알 수 없는 오류"
 
-#: main/KoDocument.cpp:1539
+#: main/KoDocument.cpp:1542
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -1207,17 +1207,17 @@ msgstr ""
 "이유: %1.\n"
 "%3"
 
-#: main/KoDocument.cpp:1597
+#: main/KoDocument.cpp:1600
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "문서 <i>%1</i> 불러옴"
 
-#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1658 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1을(를) 찾을 수 없음"
 
-#: main/KoDocument.cpp:1667
+#: main/KoDocument.cpp:1670
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1226,22 +1226,22 @@ msgstr ""
 "%1의 %2행, %3열에서 해석 오류\n"
 "오류 메시지: %4"
 
-#: main/KoDocument.cpp:1688
+#: main/KoDocument.cpp:1691
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1이(가) 파일이 아닙니다."
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1706
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "읽을 파일을 열 수 없습니다(읽기 권한을 확인하십시오)."
 
-#: main/KoDocument.cpp:1714
+#: main/KoDocument.cpp:1717
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "파일의 시작 부분을 읽을 수 없습니다."
 
-#: main/KoDocument.cpp:1744
+#: main/KoDocument.cpp:1747
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1250,17 +1250,17 @@ msgstr ""
 "주 문서의 %1행, %2열에서 해석 오류\n"
 "오류 메시지: %3"
 
-#: main/KoDocument.cpp:1765
+#: main/KoDocument.cpp:1768
 #, kde-format
 msgid "Not a valid Calligra file: %1"
 msgstr "올바른 Calligra 파일이 아님: %1"
 
-#: main/KoDocument.cpp:1850
+#: main/KoDocument.cpp:1853
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "잘못된 문서: 'maindoc.xml' 파일이 없습니다."
 
-#: main/KoDocument.cpp:1874
+#: main/KoDocument.cpp:1877
 #, kde-format
 msgid ""
 "Document <i>%1</i> contains several versions. Go to File->Versions to open "
@@ -1269,25 +1269,25 @@ msgstr ""
 "<i>%1</i> 문서에는 여러 버전이 들어 있습니다. 파일 -> 버전으로 이동하여 이전 "
 "버전을 열 수 있습니다."
 
-#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
+#: main/KoDocument.cpp:2078 main/KoDocument.cpp:2550 main/KoDocument.cpp:2579
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "제목 없음"
 
-#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>문서 <b>'%1'</b>을(를) 수정했습니다.</p><p>저장하시겠습니까?</p>"
 
-#: main/KoDocument.cpp:2161
+#: main/KoDocument.cpp:2167
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "내부 오류: saveXML이 구현되지 않았습니다"
 
-#: main/KoDocument.cpp:2198
+#: main/KoDocument.cpp:2204
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1296,7 +1296,7 @@ msgstr ""
 "열 수 없습니다\n"
 "%1"
 
-#: main/KoDocument.cpp:2201
+#: main/KoDocument.cpp:2207
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1305,32 +1305,32 @@ msgstr ""
 "%1을(를) 열 수 없습니다.\n"
 "이유: %2"
 
-#: main/KoDocument.cpp:2258
+#: main/KoDocument.cpp:2264
 #, kde-format
 msgid "a word processing"
 msgstr "워드 프로세싱"
 
-#: main/KoDocument.cpp:2259
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a spreadsheet"
 msgstr "스프레드시트"
 
-#: main/KoDocument.cpp:2260
+#: main/KoDocument.cpp:2266
 #, kde-format
 msgid "a presentation"
 msgstr "프레젠테이션"
 
-#: main/KoDocument.cpp:2261
+#: main/KoDocument.cpp:2267
 #, kde-format
 msgid "a chart"
 msgstr "차트"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2268
 #, kde-format
 msgid "a drawing"
 msgstr "그리기"
 
-#: main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2583
 #, kde-format
 msgid ""
 "The document \"%1\" has been modified.\n"
@@ -1341,7 +1341,7 @@ msgstr ""
 "다.\n"
 "변경 사항을 저장하거나 무시하시겠습니까?"
 
-#: main/KoDocument.cpp:2579
+#: main/KoDocument.cpp:2585
 #, kde-format
 msgid "Close Document"
 msgstr "문서 닫기"
@@ -1717,52 +1717,52 @@ msgstr "선택(&S)..."
 msgid "Use the new template as default"
 msgstr "새 서식을 기본값으로 사용"
 
-#: main/KoTemplateCreateDia.cpp:308
+#: main/KoTemplateCreateDia.cpp:309
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr "기존 '%1' 서식에 덮어쓰시겠습니까?"
 
-#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#: main/KoTemplateCreateDia.cpp:422 main/KoTemplateCreateDia.cpp:429
 #, kde-format
 msgid "Add Group"
 msgstr "그룹 추가"
 
-#: main/KoTemplateCreateDia.cpp:421
+#: main/KoTemplateCreateDia.cpp:422
 #, kde-format
 msgid "Enter group name:"
 msgstr "그룹 이름 입력:"
 
-#: main/KoTemplateCreateDia.cpp:428
+#: main/KoTemplateCreateDia.cpp:429
 #, kde-format
 msgid "This name is already used."
 msgstr "같은 이름이 이미 있습니다."
 
-#: main/KoTemplateCreateDia.cpp:452
+#: main/KoTemplateCreateDia.cpp:453
 #, kde-format
 msgid "Do you really want to remove that group?"
 msgstr "이 그룹을 삭제하시겠습니까?"
 
-#: main/KoTemplateCreateDia.cpp:453
+#: main/KoTemplateCreateDia.cpp:454
 #, kde-format
 msgid "Remove Group"
 msgstr "그룹 삭제"
 
-#: main/KoTemplateCreateDia.cpp:455
+#: main/KoTemplateCreateDia.cpp:456
 #, kde-format
 msgid "Do you really want to remove that template?"
 msgstr "이 서식을 삭제하시겠습니까?"
 
-#: main/KoTemplateCreateDia.cpp:456
+#: main/KoTemplateCreateDia.cpp:457
 #, kde-format
 msgid "Remove Template"
 msgstr "서식 삭제"
 
-#: main/KoTemplateCreateDia.cpp:507
+#: main/KoTemplateCreateDia.cpp:508
 #, kde-format
 msgid "Could not load picture."
 msgstr "사진을 불러올 수 없습니다."
 
-#: main/KoTemplateCreateDia.cpp:510
+#: main/KoTemplateCreateDia.cpp:511
 #, kde-format
 msgid "No picture available."
 msgstr "사용할 수 있는 사진이 없습니다."
@@ -1852,175 +1852,175 @@ msgstr ""
 "주 문서의 %1행, %2열에서 해석 오류\n"
 "오류 메시지: %3"
 
-#: odf/KoPageFormat.cpp:53
+#: odf/KoPageFormat.cpp:46
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A3"
 msgstr "ISO A3"
 
-#: odf/KoPageFormat.cpp:54
+#: odf/KoPageFormat.cpp:47
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A4"
 msgstr "ISO A4"
 
-#: odf/KoPageFormat.cpp:55
+#: odf/KoPageFormat.cpp:48
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A5"
 msgstr "ISO A5"
 
-#: odf/KoPageFormat.cpp:56
+#: odf/KoPageFormat.cpp:49
 #, kde-format
 msgctxt "Page size"
 msgid "US Letter"
 msgstr "미국 레터"
 
-#: odf/KoPageFormat.cpp:57
+#: odf/KoPageFormat.cpp:50
 #, kde-format
 msgctxt "Page size"
 msgid "US Legal"
 msgstr "미국 리갈"
 
-#: odf/KoPageFormat.cpp:58
+#: odf/KoPageFormat.cpp:51
 #, kde-format
 msgctxt "Page size"
 msgid "Screen"
 msgstr "화면"
 
-#: odf/KoPageFormat.cpp:59
+#: odf/KoPageFormat.cpp:52
 #, kde-format
 msgctxt "Page size"
 msgid "Custom"
 msgstr "사용자 정의"
 
-#: odf/KoPageFormat.cpp:60
+#: odf/KoPageFormat.cpp:53
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B5"
 msgstr "ISO B5"
 
-#: odf/KoPageFormat.cpp:61
+#: odf/KoPageFormat.cpp:54
 #, kde-format
 msgctxt "Page size"
 msgid "US Executive"
 msgstr "미국 Executive"
 
-#: odf/KoPageFormat.cpp:62
+#: odf/KoPageFormat.cpp:55
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A0"
 msgstr "ISO A0"
 
-#: odf/KoPageFormat.cpp:63
+#: odf/KoPageFormat.cpp:56
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A1"
 msgstr "ISO A1"
 
-#: odf/KoPageFormat.cpp:64
+#: odf/KoPageFormat.cpp:57
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A2"
 msgstr "ISO A2"
 
-#: odf/KoPageFormat.cpp:65
+#: odf/KoPageFormat.cpp:58
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A6"
 msgstr "ISO A6"
 
-#: odf/KoPageFormat.cpp:66
+#: odf/KoPageFormat.cpp:59
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A7"
 msgstr "ISO A7"
 
-#: odf/KoPageFormat.cpp:67
+#: odf/KoPageFormat.cpp:60
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A8"
 msgstr "ISO A8"
 
-#: odf/KoPageFormat.cpp:68
+#: odf/KoPageFormat.cpp:61
 #, kde-format
 msgctxt "Page size"
 msgid "ISO A9"
 msgstr "ISO A9"
 
-#: odf/KoPageFormat.cpp:69
+#: odf/KoPageFormat.cpp:62
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B0"
 msgstr "ISO B0"
 
-#: odf/KoPageFormat.cpp:70
+#: odf/KoPageFormat.cpp:63
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B1"
 msgstr "ISO B1"
 
-#: odf/KoPageFormat.cpp:71
+#: odf/KoPageFormat.cpp:64
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B10"
 msgstr "ISO B10"
 
-#: odf/KoPageFormat.cpp:72
+#: odf/KoPageFormat.cpp:65
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B2"
 msgstr "ISO B2"
 
-#: odf/KoPageFormat.cpp:73
+#: odf/KoPageFormat.cpp:66
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B3"
 msgstr "ISO B3"
 
-#: odf/KoPageFormat.cpp:74
+#: odf/KoPageFormat.cpp:67
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B4"
 msgstr "ISO B4"
 
-#: odf/KoPageFormat.cpp:75
+#: odf/KoPageFormat.cpp:68
 #, kde-format
 msgctxt "Page size"
 msgid "ISO B6"
 msgstr "ISO B6"
 
-#: odf/KoPageFormat.cpp:76
+#: odf/KoPageFormat.cpp:69
 #, kde-format
 msgctxt "Page size"
 msgid "ISO C5"
 msgstr "ISO C5"
 
-#: odf/KoPageFormat.cpp:77
+#: odf/KoPageFormat.cpp:70
 #, kde-format
 msgctxt "Page size"
 msgid "US Common 10"
 msgstr "미국 공용 #10"
 
-#: odf/KoPageFormat.cpp:78
+#: odf/KoPageFormat.cpp:71
 #, kde-format
 msgctxt "Page size"
 msgid "ISO DL"
 msgstr "ISO DL"
 
-#: odf/KoPageFormat.cpp:79
+#: odf/KoPageFormat.cpp:72
 #, kde-format
 msgctxt "Page size"
 msgid "US Folio"
 msgstr "미국 폴리오"
 
-#: odf/KoPageFormat.cpp:80
+#: odf/KoPageFormat.cpp:73
 #, kde-format
 msgctxt "Page size"
 msgid "US Ledger"
 msgstr "미국 레저"
 
-#: odf/KoPageFormat.cpp:81
+#: odf/KoPageFormat.cpp:74
 #, kde-format
 msgctxt "Page size"
 msgid "US Tabloid"
@@ -2737,7 +2737,7 @@ msgstr "알파 어둡게"
 msgid "Behind"
 msgstr "뒤로"
 
-#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/compositeops/KoCompositeOpDissolve.h:49
 #: pigment/KoCompositeOpRegistry.cpp:83
 #, kde-format
 msgid "Dissolve"
@@ -3678,7 +3678,7 @@ msgstr "데이터 종류"
 msgid "Stored In"
 msgstr "저장됨:"
 
-#: store/KoEncryptedStore.cpp:228
+#: store/KoEncryptedStore.cpp:227
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3687,7 +3687,14 @@ msgstr ""
 "이 문서에는 알 수 없는 체크섬이 들어 있습니다. 암호를 입력해도 확인되지 않을 "
 "수 있습니다."
 
-#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#: store/KoEncryptedStore.cpp:227
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@dialog:title"
+msgid "Warning"
+msgstr "경고"
+
+#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3696,7 +3703,15 @@ msgstr ""
 "이 문서에는 알 수 없는 암호화 방법이 들어 있습니다. 몇몇 부분은 읽을 수 없습"
 "니다."
 
-#: store/KoEncryptedStore.cpp:286
+#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:285
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@title:dialog"
+msgid "Warning"
+msgstr "경고"
+
+#: store/KoEncryptedStore.cpp:285
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3705,7 +3720,7 @@ msgstr ""
 "이 문서에는 불완전한 암호화 데이터가 들어 있습니다. 몇몇 부분은 읽을 수 없습"
 "니다."
 
-#: store/KoEncryptedStore.cpp:300
+#: store/KoEncryptedStore.cpp:299
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
@@ -3714,7 +3729,7 @@ msgstr ""
 "QCA는 현재 SHA1을 사용하는 PBKDF2 및 SHA1을 지원하지 않습니다. 문서를 열 수 "
 "없습니다."
 
-#: store/KoEncryptedStore.cpp:330
+#: store/KoEncryptedStore.cpp:329
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3724,7 +3739,7 @@ msgstr ""
 "매니페스트 파일이 손상된 것 같습니다. 수정할 수 없으며 문서는 읽을 수 없는 상"
 "태로 유지됩니다. 작업 손실을 방지하려면 문서를 다시 저장해 주십시오."
 
-#: store/KoEncryptedStore.cpp:428
+#: store/KoEncryptedStore.cpp:427
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3733,17 +3748,17 @@ msgstr ""
 "매니페스트 파일에 쓸 수 없습니다. 문서는 읽을 수 없는 상태로 유지됩니다. 작"
 "업 손실을 방지하려면 문서를 다시 저장해 주십시오."
 
-#: store/KoEncryptedStore.cpp:549
+#: store/KoEncryptedStore.cpp:548
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "이 파일을 열려면 암호를 입력하십시오."
 
-#: store/KoEncryptedStore.cpp:724
+#: store/KoEncryptedStore.cpp:723
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "문서를 암호화할 암호를 입력하십시오."
 
-#: store/KoEncryptedStore.cpp:738
+#: store/KoEncryptedStore.cpp:737
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "암호를 저장하시겠습니까?"
@@ -3753,7 +3768,7 @@ msgstr "암호를 저장하시겠습니까?"
 msgid "File '%1' is not readable"
 msgstr "'%1' 파일을 읽을 수 없습니다"
 
-#: store/KoNetAccess.cpp:390
+#: store/KoNetAccess.cpp:389
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr "오류: 알 수 없는 프로토콜 '%1'"
@@ -3786,14 +3801,14 @@ msgid "Delete"
 msgstr "삭제"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/commands/DeleteCommand.cpp:508 text/KoTextEditor_undo.cpp:74
 #: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
 #: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
 msgctxt "(qtundo-format)"
 msgid "Text"
 msgstr "텍스트"
 
-#: text/commands/DeleteCommand.cpp:57
+#: text/commands/DeleteCommand.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Delete"
 msgstr "삭제"
@@ -4461,28 +4476,28 @@ msgstr "줄 가져오기:"
 msgid "to"
 msgstr "끝"
 
-#: widgets/KoDialog.cpp:247
+#: widgets/KoDialog.cpp:248
 #, kde-format
 msgid "&Try"
 msgstr "시도하기(&T)"
 
-#: widgets/KoDialog.cpp:460
+#: widgets/KoDialog.cpp:461
 #, kde-format
 msgid "modified"
 msgstr "수정됨"
 
-#: widgets/KoDialog.cpp:471
+#: widgets/KoDialog.cpp:472
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr " – "
 
-#: widgets/KoDialog.cpp:846
+#: widgets/KoDialog.cpp:828
 #, kde-format
 msgid "&Details"
 msgstr "자세히(&D)"
 
-#: widgets/KoDialog.cpp:1001
+#: widgets/KoDialog.cpp:983
 #, kde-format
 msgid "Get help..."
 msgstr "도움 받기..."

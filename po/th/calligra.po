@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-02 01:36+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2008-04-29 15:10+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1046,13 +1046,13 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: main/KoApplication.cpp:263
+#: main/KoApplication.cpp:261
 #, fuzzy, kde-format
 #| msgid "Creation error"
 msgid "%1: Critical Error"
 msgstr "การสร้างผิดพลาด"
 
-#: main/KoApplication.cpp:263
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -1060,23 +1060,23 @@ msgid ""
 "Try restarting or reinstalling."
 msgstr ""
 
-#: main/KoApplication.cpp:512
+#: main/KoApplication.cpp:510
 #, fuzzy, kde-format
 #| msgid "No template found for: %1 "
 msgid "No template found for: %1"
 msgstr "ไม่พบเอกสารต้นแบบสำหรับ %1"
 
-#: main/KoApplication.cpp:515
+#: main/KoApplication.cpp:513
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "พบว่ามีเอกสารต้นแบบมากเกินไปสำหรับ %1"
 
-#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
+#: main/KoApplication.cpp:535 main/KoApplication.cpp:553
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "ล้มเหลวในการโหลดเอกสารต้นแบบ %1"
 
-#: main/KoApplication.cpp:545
+#: main/KoApplication.cpp:543
 #, fuzzy, kde-format
 #| msgid "No template found for: %1 "
 msgid "No template found at: %1"
@@ -1180,7 +1180,7 @@ msgstr "ไม่สามารถเขียนแฟ้ม '%1' ได้ �
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "ไม่สามารถเขียนแฟ้ม '%1' ได้ พื้นที่ดิสก์เต็มหรือไม่ ?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1991
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "เกิดข้อผิดพลาดระหว่างเขียนแฟ้ม '%1' พื้นที่ดิสก์เต็มหรือไม่ ?"
@@ -1204,105 +1204,105 @@ msgstr ""
 "มีแฟ้มที่ถูกบันทึกอัตโนมัติของเอกสารนี้อยู่แล้ว\n"
 "คุณต้องการเปิดมันแทน ใช่หรือไม่ ?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "ยังไม่มีแฟ้ม %1"
 
-#: main/KoDocument.cpp:1464
+#: main/KoDocument.cpp:1467
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "เปิดเอกสาร"
 
-#: main/KoDocument.cpp:1479
+#: main/KoDocument.cpp:1482
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "ไม่สามารถสร้างแฟ้มเพื่อทำการบันทึกได้"
 
-#: main/KoDocument.cpp:1482
+#: main/KoDocument.cpp:1485
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "ไม่สามารถสร้างแฟ้มเพื่อทำการบันทึกได้"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1488
 #, kde-format
 msgid "File not found"
 msgstr "ไม่พบแฟ้ม"
 
-#: main/KoDocument.cpp:1488
+#: main/KoDocument.cpp:1491
 #, fuzzy, kde-format
 msgid "Cannot create storage"
 msgstr "ไม่สามารถสร้างพื้นที่จัดเก็บข้อมูลได้"
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Bad MIME type"
 msgstr "ชนิด MIME ใช้ไม่ได้"
 
-#: main/KoDocument.cpp:1494
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Error in embedded document"
 msgstr "เกิดข้อผิดพลาดระหว่างบันทึกเอกสารที่ฝังอยู่"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Format not recognized"
 msgstr "ไม่สามารถจัดการรูปแบบได้"
 
-#: main/KoDocument.cpp:1500
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Not implemented"
 msgstr "ยังไม่มีการจัดเตรียมไว้"
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Parsing error"
 msgstr "การวิเคราะห์ผิดพลาด"
 
-#: main/KoDocument.cpp:1506
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Document is password protected"
 msgstr "เอกสารมีการป้องกันด้วยรหัสผ่าน"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1512
 #, fuzzy, kde-format
 msgid "Invalid file format"
 msgstr "รูปแบบกระดาษ"
 
-#: main/KoDocument.cpp:1516
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Internal error"
 msgstr "ข้อผิดพลาดภายใน"
 
-#: main/KoDocument.cpp:1519
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Out of memory"
 msgstr "หน่วยความจำไม่เพียงพอ"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1525
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1528
+#: main/KoDocument.cpp:1531
 #, fuzzy, kde-format
 msgid "Failed to download remote file"
 msgstr "ไม่สามารถเปิดแฟ้ม %1 ได้"
 
-#: main/KoDocument.cpp:1535
+#: main/KoDocument.cpp:1538
 #, kde-format
 msgid "Unknown error"
 msgstr "ข้อผิดพลาดที่ไม่รู้จัก"
 
-#: main/KoDocument.cpp:1539
+#: main/KoDocument.cpp:1542
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1317,17 +1317,17 @@ msgstr ""
 "%2 ได้\n"
 "เนื่องจาก: %1"
 
-#: main/KoDocument.cpp:1597
+#: main/KoDocument.cpp:1600
 #, kde-format
 msgid "Document <i>%1</i> loaded"
 msgstr "โหลดเอกสาร <i>%1</i> แล้ว"
 
-#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1658 odf/KoOdfReadStore.cpp:98
 #, fuzzy, kde-format
 msgid "Could not find %1"
 msgstr "ไม่สามารถค้นหามอดูล %1 ได้"
 
-#: main/KoDocument.cpp:1667
+#: main/KoDocument.cpp:1670
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1336,22 +1336,22 @@ msgstr ""
 "การวิเคราะห์ใน %1 ผิดพลาดที่บรรทัด %2, คอลัมน์ %3\n"
 "ข้อความผิดพลาดคือ: %4"
 
-#: main/KoDocument.cpp:1688
+#: main/KoDocument.cpp:1691
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 ไม่ใช่แฟ้ม"
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1706
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "ไม่สามารถเปิดแฟ้มเพื่อทำการอ่านได้ (โปรดตรวจสอบสิทธิ์การอ่าน)"
 
-#: main/KoDocument.cpp:1714
+#: main/KoDocument.cpp:1717
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "ไม่สามารถอ่านส่วนเริ่มต้นของแฟ้มได้"
 
-#: main/KoDocument.cpp:1744
+#: main/KoDocument.cpp:1747
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1360,18 +1360,18 @@ msgstr ""
 "การวิเคราะห์ในเอกสารหลักผิดพลาดที่บรรทัด %1, คอลัมน์ %2\n"
 "ข้อความผิดพลาดคือ: %3"
 
-#: main/KoDocument.cpp:1765
+#: main/KoDocument.cpp:1768
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "ไม่ใช่แฟ้มของ KOffice ที่ถูกต้อง: %1"
 
-#: main/KoDocument.cpp:1850
+#: main/KoDocument.cpp:1853
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "เอกสารไม่ถูกต้อง: ไม่มีแฟ้ม 'maindoc.xml'"
 
-#: main/KoDocument.cpp:1874
+#: main/KoDocument.cpp:1877
 #, fuzzy, kde-format
 #| msgid ""
 #| "This document contains several versions. Go to File->Versions to open an "
@@ -1381,25 +1381,25 @@ msgid ""
 "an old version."
 msgstr "เอกสารนี้บรรจุอยู่หลายรุ่น โปรดไปที่เมนู แฟ้ม->รุ่น เพื่อเปิดรุ่นเก่า"
 
-#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
+#: main/KoDocument.cpp:2078 main/KoDocument.cpp:2550 main/KoDocument.cpp:2579
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, fuzzy, kde-format
 msgid "Untitled"
 msgstr "ยังไม่กำหนดชื่อ"
 
-#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>เอกสาร <b>'%1'</b> มีการเปลี่ยนแปลง</p><p>คุณต้องการจะบันทึกมันหรือไม่ ?</p>"
 
-#: main/KoDocument.cpp:2161
+#: main/KoDocument.cpp:2167
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "ข้อผิดพลาดภายใน: ยังไม่มีการกำหนด saveXML"
 
-#: main/KoDocument.cpp:2198
+#: main/KoDocument.cpp:2204
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1408,7 +1408,7 @@ msgstr ""
 "ไม่สามารถเปิด\n"
 "%1 ได้"
 
-#: main/KoDocument.cpp:2201
+#: main/KoDocument.cpp:2207
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1417,32 +1417,32 @@ msgstr ""
 "ไม่สามารถเปิดแฟ้ม %1 ได้\n"
 "เนื่องจาก: %2"
 
-#: main/KoDocument.cpp:2258
+#: main/KoDocument.cpp:2264
 #, kde-format
 msgid "a word processing"
 msgstr "การประมวลผลคำ"
 
-#: main/KoDocument.cpp:2259
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a spreadsheet"
 msgstr "ตารางคำนวณ"
 
-#: main/KoDocument.cpp:2260
+#: main/KoDocument.cpp:2266
 #, kde-format
 msgid "a presentation"
 msgstr "การนำเสนอ"
 
-#: main/KoDocument.cpp:2261
+#: main/KoDocument.cpp:2267
 #, kde-format
 msgid "a chart"
 msgstr "กราฟข้อมูล"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2268
 #, kde-format
 msgid "a drawing"
 msgstr "ภาพวาด"
 
-#: main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2583
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1452,7 +1452,7 @@ msgid ""
 "Do you want to save your changes or discard them?"
 msgstr "<p>เอกสาร <b>'%1'</b> มีการเปลี่ยนแปลง</p><p>คุณต้องการจะบันทึกมันหรือไม่ ?</p>"
 
-#: main/KoDocument.cpp:2579
+#: main/KoDocument.cpp:2585
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgid "Close Document"
@@ -1836,52 +1836,52 @@ msgstr "เลือก..."
 msgid "Use the new template as default"
 msgstr "ใช้เอกสารต้นแบบตัวใหม่เป็นค่าปริยาย"
 
-#: main/KoTemplateCreateDia.cpp:308
+#: main/KoTemplateCreateDia.cpp:309
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr "คุณต้องการเขียนทับเอกสารต้นแบบ '%1' ที่มีอยู่ จริงหรือไม่ ?"
 
-#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#: main/KoTemplateCreateDia.cpp:422 main/KoTemplateCreateDia.cpp:429
 #, kde-format
 msgid "Add Group"
 msgstr "เพิ่มกลุ่ม"
 
-#: main/KoTemplateCreateDia.cpp:421
+#: main/KoTemplateCreateDia.cpp:422
 #, kde-format
 msgid "Enter group name:"
 msgstr "เติมชื่อกลุ่ม"
 
-#: main/KoTemplateCreateDia.cpp:428
+#: main/KoTemplateCreateDia.cpp:429
 #, kde-format
 msgid "This name is already used."
 msgstr "มีชื่อนี้ถูกใช้อยู่แล้ว"
 
-#: main/KoTemplateCreateDia.cpp:452
+#: main/KoTemplateCreateDia.cpp:453
 #, kde-format
 msgid "Do you really want to remove that group?"
 msgstr "คุณต้องการลบกลุ่มนี้ จริงหรือไม่ ?"
 
-#: main/KoTemplateCreateDia.cpp:453
+#: main/KoTemplateCreateDia.cpp:454
 #, kde-format
 msgid "Remove Group"
 msgstr "ลบกลุ่ม"
 
-#: main/KoTemplateCreateDia.cpp:455
+#: main/KoTemplateCreateDia.cpp:456
 #, kde-format
 msgid "Do you really want to remove that template?"
 msgstr "คุณต้องการลบเอกสารต้นแบบนี้ จริงหรือไม่ ?"
 
-#: main/KoTemplateCreateDia.cpp:456
+#: main/KoTemplateCreateDia.cpp:457
 #, kde-format
 msgid "Remove Template"
 msgstr "ลบเอกสารต้นแบบ"
 
-#: main/KoTemplateCreateDia.cpp:507
+#: main/KoTemplateCreateDia.cpp:508
 #, kde-format
 msgid "Could not load picture."
 msgstr "ไม่สามารถโหลดรูปภาพได้"
 
-#: main/KoTemplateCreateDia.cpp:510
+#: main/KoTemplateCreateDia.cpp:511
 #, kde-format
 msgid "No picture available."
 msgstr "ไม่มีรูปภาพอยู่"
@@ -1972,200 +1972,200 @@ msgstr ""
 "การวิเคราะห์คำผิดพลาดที่บรรทัด %1, คอลัมน์ %2\n"
 "ข้อความผิดพลาดคือ: %3"
 
-#: odf/KoPageFormat.cpp:53
+#: odf/KoPageFormat.cpp:46
 #, fuzzy, kde-format
 #| msgid "ISO A3"
 msgctxt "Page size"
 msgid "ISO A3"
 msgstr "เอ 3 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:54
+#: odf/KoPageFormat.cpp:47
 #, fuzzy, kde-format
 #| msgid "ISO A4"
 msgctxt "Page size"
 msgid "ISO A4"
 msgstr "เอ 4 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:55
+#: odf/KoPageFormat.cpp:48
 #, fuzzy, kde-format
 #| msgid "ISO A5"
 msgctxt "Page size"
 msgid "ISO A5"
 msgstr "เอ 5 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:56
+#: odf/KoPageFormat.cpp:49
 #, fuzzy, kde-format
 #| msgid "Tab Leader"
 msgctxt "Page size"
 msgid "US Letter"
 msgstr "นำหน้าแท็บ"
 
-#: odf/KoPageFormat.cpp:57
+#: odf/KoPageFormat.cpp:50
 #, fuzzy, kde-format
 #| msgid "Tab Leader"
 msgctxt "Page size"
 msgid "US Legal"
 msgstr "นำหน้าแท็บ"
 
-#: odf/KoPageFormat.cpp:58
+#: odf/KoPageFormat.cpp:51
 #, fuzzy, kde-format
 #| msgid "Screen"
 msgctxt "Page size"
 msgid "Screen"
 msgstr "จอภาพ"
 
-#: odf/KoPageFormat.cpp:59
+#: odf/KoPageFormat.cpp:52
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgctxt "Page size"
 msgid "Custom"
 msgstr "กำหนดเอง"
 
-#: odf/KoPageFormat.cpp:60
+#: odf/KoPageFormat.cpp:53
 #, fuzzy, kde-format
 #| msgid "ISO B5"
 msgctxt "Page size"
 msgid "ISO B5"
 msgstr "บี 5 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:61
+#: odf/KoPageFormat.cpp:54
 #, fuzzy, kde-format
 msgctxt "Page size"
 msgid "US Executive"
 msgstr "ตัวยก"
 
-#: odf/KoPageFormat.cpp:62
+#: odf/KoPageFormat.cpp:55
 #, fuzzy, kde-format
 #| msgid "ISO A0"
 msgctxt "Page size"
 msgid "ISO A0"
 msgstr "เอ 0 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:63
+#: odf/KoPageFormat.cpp:56
 #, fuzzy, kde-format
 #| msgid "ISO A1"
 msgctxt "Page size"
 msgid "ISO A1"
 msgstr "เอ 1 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:64
+#: odf/KoPageFormat.cpp:57
 #, fuzzy, kde-format
 #| msgid "ISO A2"
 msgctxt "Page size"
 msgid "ISO A2"
 msgstr "เอ 2 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:65
+#: odf/KoPageFormat.cpp:58
 #, fuzzy, kde-format
 #| msgid "ISO A6"
 msgctxt "Page size"
 msgid "ISO A6"
 msgstr "เอ 6 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:66
+#: odf/KoPageFormat.cpp:59
 #, fuzzy, kde-format
 #| msgid "ISO A7"
 msgctxt "Page size"
 msgid "ISO A7"
 msgstr "เอ 7 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:67
+#: odf/KoPageFormat.cpp:60
 #, fuzzy, kde-format
 #| msgid "ISO A8"
 msgctxt "Page size"
 msgid "ISO A8"
 msgstr "เอ 8 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:68
+#: odf/KoPageFormat.cpp:61
 #, fuzzy, kde-format
 #| msgid "ISO A9"
 msgctxt "Page size"
 msgid "ISO A9"
 msgstr "เอ 9 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:69
+#: odf/KoPageFormat.cpp:62
 #, fuzzy, kde-format
 #| msgid "ISO B0"
 msgctxt "Page size"
 msgid "ISO B0"
 msgstr "บี 0 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:70
+#: odf/KoPageFormat.cpp:63
 #, fuzzy, kde-format
 #| msgid "ISO B1"
 msgctxt "Page size"
 msgid "ISO B1"
 msgstr "บี 1 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:71
+#: odf/KoPageFormat.cpp:64
 #, fuzzy, kde-format
 #| msgid "ISO B10"
 msgctxt "Page size"
 msgid "ISO B10"
 msgstr "บี 10 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:72
+#: odf/KoPageFormat.cpp:65
 #, fuzzy, kde-format
 #| msgid "ISO B2"
 msgctxt "Page size"
 msgid "ISO B2"
 msgstr "บี 2 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:73
+#: odf/KoPageFormat.cpp:66
 #, fuzzy, kde-format
 #| msgid "ISO B3"
 msgctxt "Page size"
 msgid "ISO B3"
 msgstr "บี 3 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:74
+#: odf/KoPageFormat.cpp:67
 #, fuzzy, kde-format
 #| msgid "ISO B4"
 msgctxt "Page size"
 msgid "ISO B4"
 msgstr "บี 4 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:75
+#: odf/KoPageFormat.cpp:68
 #, fuzzy, kde-format
 #| msgid "ISO B6"
 msgctxt "Page size"
 msgid "ISO B6"
 msgstr "บี 6 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:76
+#: odf/KoPageFormat.cpp:69
 #, fuzzy, kde-format
 #| msgid "ISO C5"
 msgctxt "Page size"
 msgid "ISO C5"
 msgstr "ซี 5 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:77
+#: odf/KoPageFormat.cpp:70
 #, kde-format
 msgctxt "Page size"
 msgid "US Common 10"
 msgstr ""
 
-#: odf/KoPageFormat.cpp:78
+#: odf/KoPageFormat.cpp:71
 #, fuzzy, kde-format
 #| msgid "ISO A3"
 msgctxt "Page size"
 msgid "ISO DL"
 msgstr "เอ 3 มาตรฐาน"
 
-#: odf/KoPageFormat.cpp:79
+#: odf/KoPageFormat.cpp:72
 #, kde-format
 msgctxt "Page size"
 msgid "US Folio"
 msgstr ""
 
-#: odf/KoPageFormat.cpp:80
+#: odf/KoPageFormat.cpp:73
 #, fuzzy, kde-format
 #| msgid "Tab Leader"
 msgctxt "Page size"
 msgid "US Ledger"
 msgstr "นำหน้าแท็บ"
 
-#: odf/KoPageFormat.cpp:81
+#: odf/KoPageFormat.cpp:74
 #, kde-format
 msgctxt "Page size"
 msgid "US Tabloid"
@@ -2966,7 +2966,7 @@ msgstr "เขียว"
 msgid "Behind"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/compositeops/KoCompositeOpDissolve.h:49
 #: pigment/KoCompositeOpRegistry.cpp:83
 #, kde-format
 msgid "Dissolve"
@@ -3919,35 +3919,50 @@ msgstr "ข้อมูล"
 msgid "Stored In"
 msgstr "หยุดแล้ว"
 
-#: store/KoEncryptedStore.cpp:228
+#: store/KoEncryptedStore.cpp:227
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#: store/KoEncryptedStore.cpp:227
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@dialog:title"
+msgid "Warning"
+msgstr "คำเตือน"
+
+#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:286
+#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:285
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@title:dialog"
+msgid "Warning"
+msgstr "คำเตือน"
+
+#: store/KoEncryptedStore.cpp:285
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:300
+#: store/KoEncryptedStore.cpp:299
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
 "not be opened."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:330
+#: store/KoEncryptedStore.cpp:329
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3955,24 +3970,24 @@ msgid ""
 "prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:428
+#: store/KoEncryptedStore.cpp:427
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
 "Please try and save the document again to prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:549
+#: store/KoEncryptedStore.cpp:548
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "โปรดป้อนรหัสผ่านเพื่อใช้ในการเปิดแฟ้มนี้"
 
-#: store/KoEncryptedStore.cpp:724
+#: store/KoEncryptedStore.cpp:723
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "โปรดป้อนรหัสผ่านเพื่อใช้ในการเข้ารหัสเอกสาร"
 
-#: store/KoEncryptedStore.cpp:738
+#: store/KoEncryptedStore.cpp:737
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "คุณต้องการจะจัดเก็บรหัสผ่านหรือไม่ ?"
@@ -3983,7 +3998,7 @@ msgstr "คุณต้องการจะจัดเก็บรหัสผ
 msgid "File '%1' is not readable"
 msgstr "ยังไม่มีแฟ้ม %1"
 
-#: store/KoNetAccess.cpp:390
+#: store/KoNetAccess.cpp:389
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""
@@ -4019,7 +4034,7 @@ msgid "Delete"
 msgstr "ลบ"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/commands/DeleteCommand.cpp:508 text/KoTextEditor_undo.cpp:74
 #: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
 #: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
 #, fuzzy
@@ -4028,7 +4043,7 @@ msgctxt "(qtundo-format)"
 msgid "Text"
 msgstr "ข้อความ"
 
-#: text/commands/DeleteCommand.cpp:57
+#: text/commands/DeleteCommand.cpp:59
 #, fuzzy
 #| msgid "Delete"
 msgctxt "(qtundo-format)"
@@ -4794,30 +4809,30 @@ msgstr "นำเข้ารูปแบบ"
 msgid "to"
 msgstr "หยุด"
 
-#: widgets/KoDialog.cpp:247
+#: widgets/KoDialog.cpp:248
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:460
+#: widgets/KoDialog.cpp:461
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgid "modified"
 msgstr "แก้ไขเมื่อ:"
 
-#: widgets/KoDialog.cpp:471
+#: widgets/KoDialog.cpp:472
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:846
+#: widgets/KoDialog.cpp:828
 #, fuzzy, kde-format
 #| msgid "Default"
 msgid "&Details"
 msgstr "ค่าปริยาย"
 
-#: widgets/KoDialog.cpp:1001
+#: widgets/KoDialog.cpp:983
 #, kde-format
 msgid "Get help..."
 msgstr ""

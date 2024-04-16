@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-02 01:36+0000\n"
+"POT-Creation-Date: 2024-04-16 01:48+0000\n"
 "PO-Revision-Date: 2007-08-08 15:46+0545\n"
 "Last-Translator: Manisha Sharma <manisha@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1088,13 +1088,13 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: main/KoApplication.cpp:263
+#: main/KoApplication.cpp:261
 #, fuzzy, kde-format
 #| msgid "Creation error"
 msgid "%1: Critical Error"
 msgstr "सिर्जना त्रुटि"
 
-#: main/KoApplication.cpp:263
+#: main/KoApplication.cpp:261
 #, kde-format
 msgid ""
 "Essential application components could not be found.\n"
@@ -1102,23 +1102,23 @@ msgid ""
 "Try restarting or reinstalling."
 msgstr ""
 
-#: main/KoApplication.cpp:512
+#: main/KoApplication.cpp:510
 #, fuzzy, kde-format
 #| msgid "No template found for: %1 "
 msgid "No template found for: %1"
 msgstr "यसका लागि टेम्प्लेट फेला परेन: %1"
 
-#: main/KoApplication.cpp:515
+#: main/KoApplication.cpp:513
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "यसका लागि अति धेरै टेम्प्लेटहरू: %1"
 
-#: main/KoApplication.cpp:537 main/KoApplication.cpp:555
+#: main/KoApplication.cpp:535 main/KoApplication.cpp:553
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "टेम्प्लेट %1 लोड गर्न असफल भयो ।"
 
-#: main/KoApplication.cpp:545
+#: main/KoApplication.cpp:543
 #, fuzzy, kde-format
 #| msgid "No template found for: %1 "
 msgid "No template found at: %1"
@@ -1224,7 +1224,7 @@ msgstr "'%1' लेख्न सकिएन । विभाजन पूरा
 msgid "Not able to write RDF metadata. Partition full?"
 msgstr "'%1' लेख्न सकिएन । विभाजन पूरा छ ?"
 
-#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1988
+#: main/KoDocument.cpp:879 main/KoDocument.cpp:926 main/KoDocument.cpp:1991
 #, kde-format
 msgid "Error while trying to write '%1'. Partition full?"
 msgstr "'%1' लेख्ने प्रयास गर्दा त्रुटि । विभाजन पूरा छ ?"
@@ -1247,106 +1247,106 @@ msgstr ""
 "यो कागजातका लागि एउटा स्वत: बचत गरिएको फाइल अवस्थित छ ।\n"
 "तपाईँ यसलाई सट्टामा खोल्न चाहनुहुन्छ ?"
 
-#: main/KoDocument.cpp:1338 main/KoDocument.cpp:1681 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "फाइल %1 अवस्थित छैन ।"
 
-#: main/KoDocument.cpp:1464
+#: main/KoDocument.cpp:1467
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening Document"
 msgstr "कागजात खोल्नुहोस्।"
 
-#: main/KoDocument.cpp:1479
+#: main/KoDocument.cpp:1482
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the filter plugin"
 msgstr "बचत गर्नका लागि फाइल सिर्जना गर्न सकिएन"
 
-#: main/KoDocument.cpp:1482
+#: main/KoDocument.cpp:1485
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create the output document"
 msgstr "बचत गर्नका लागि फाइल सिर्जना गर्न सकिएन"
 
-#: main/KoDocument.cpp:1485
+#: main/KoDocument.cpp:1488
 #, kde-format
 msgid "File not found"
 msgstr "फाइल फेला परेन"
 
-#: main/KoDocument.cpp:1488
+#: main/KoDocument.cpp:1491
 #, kde-format
 msgid "Cannot create storage"
 msgstr "भण्डारण सिर्जना गर्न सकिएन"
 
-#: main/KoDocument.cpp:1491
+#: main/KoDocument.cpp:1494
 #, kde-format
 msgid "Bad MIME type"
 msgstr "खराब माइम प्रकार"
 
-#: main/KoDocument.cpp:1494
+#: main/KoDocument.cpp:1497
 #, kde-format
 msgid "Error in embedded document"
 msgstr "सम्मिलित कागजातमा त्रुटि"
 
-#: main/KoDocument.cpp:1497
+#: main/KoDocument.cpp:1500
 #, kde-format
 msgid "Format not recognized"
 msgstr "परिचित ढाँचा होइन"
 
-#: main/KoDocument.cpp:1500
+#: main/KoDocument.cpp:1503
 #, kde-format
 msgid "Not implemented"
 msgstr "कार्यान्वयन भएन"
 
-#: main/KoDocument.cpp:1503
+#: main/KoDocument.cpp:1506
 #, kde-format
 msgid "Parsing error"
 msgstr "पद वर्णन त्रुटि"
 
-#: main/KoDocument.cpp:1506
+#: main/KoDocument.cpp:1509
 #, kde-format
 msgid "Document is password protected"
 msgstr "कागजात पासवर्ड सुरक्षित छ।"
 
-#: main/KoDocument.cpp:1509
+#: main/KoDocument.cpp:1512
 #, fuzzy, kde-format
 #| msgid "Locale format"
 msgid "Invalid file format"
 msgstr "लोकेलय ढाँचा"
 
-#: main/KoDocument.cpp:1516
+#: main/KoDocument.cpp:1519
 #, kde-format
 msgid "Internal error"
 msgstr "आन्तरिक त्रुटि"
 
-#: main/KoDocument.cpp:1519
+#: main/KoDocument.cpp:1522
 #, kde-format
 msgid "Out of memory"
 msgstr "स्मृतिभन्दा बाहिर"
 
-#: main/KoDocument.cpp:1522
+#: main/KoDocument.cpp:1525
 #, kde-format
 msgid "Empty Filter Plugin"
 msgstr ""
 
-#: main/KoDocument.cpp:1525
+#: main/KoDocument.cpp:1528
 #, kde-format
 msgid "Trying to load into the wrong kind of document"
 msgstr ""
 
-#: main/KoDocument.cpp:1528
+#: main/KoDocument.cpp:1531
 #, kde-format
 msgid "Failed to download remote file"
 msgstr ""
 
-#: main/KoDocument.cpp:1535
+#: main/KoDocument.cpp:1538
 #, kde-format
 msgid "Unknown error"
 msgstr "अज्ञात त्रुटि"
 
-#: main/KoDocument.cpp:1539
+#: main/KoDocument.cpp:1542
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -1361,18 +1361,18 @@ msgstr ""
 "%2 ।\n"
 "कारण: %1"
 
-#: main/KoDocument.cpp:1597
+#: main/KoDocument.cpp:1600
 #, fuzzy, kde-format
 #| msgid "Document Title"
 msgid "Document <i>%1</i> loaded"
 msgstr "कागजात शीर्षक"
 
-#: main/KoDocument.cpp:1655 odf/KoOdfReadStore.cpp:98
+#: main/KoDocument.cpp:1658 odf/KoOdfReadStore.cpp:98
 #, kde-format
 msgid "Could not find %1"
 msgstr "%1 फेला पार्न सकिएन"
 
-#: main/KoDocument.cpp:1667
+#: main/KoDocument.cpp:1670
 #, kde-format
 msgid ""
 "Parsing error in %1 at line %2, column %3\n"
@@ -1381,22 +1381,22 @@ msgstr ""
 "%1 भित्र रेखा %2, स्तम्भ %3 मा पद वर्णन त्रुटि\n"
 "त्रुटि सन्देश: %4"
 
-#: main/KoDocument.cpp:1688
+#: main/KoDocument.cpp:1691
 #, kde-format
 msgid "%1 is not a file."
 msgstr "%1 फाइल होइन ।"
 
-#: main/KoDocument.cpp:1703
+#: main/KoDocument.cpp:1706
 #, kde-format
 msgid "Could not open the file for reading (check read permissions)."
 msgstr "पढ्नका लागि फाइल खोल्न सकिएन (पढ्ने अनुमति जाँच गर्नुहोस्)।"
 
-#: main/KoDocument.cpp:1714
+#: main/KoDocument.cpp:1717
 #, kde-format
 msgid "Could not read the beginning of the file."
 msgstr "फाइलको सुरुआत पढ्न सकिएन ।"
 
-#: main/KoDocument.cpp:1744
+#: main/KoDocument.cpp:1747
 #, kde-format
 msgid ""
 "parsing error in the main document at line %1, column %2\n"
@@ -1405,18 +1405,18 @@ msgstr ""
 "रेखा %1, स्तम्भ %2 मा मुख्य कागजातमा पद वर्णन त्रुटि\n"
 "त्रुटि सन्देश: %3"
 
-#: main/KoDocument.cpp:1765
+#: main/KoDocument.cpp:1768
 #, fuzzy, kde-format
 #| msgid "Not a valid KOffice file: %1"
 msgid "Not a valid Calligra file: %1"
 msgstr "वैध कडीई कार्यालय फाइल होइन: %1"
 
-#: main/KoDocument.cpp:1850
+#: main/KoDocument.cpp:1853
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
 msgstr "अवैध कागजात: 'maindoc.xml' फाइल होइन ।"
 
-#: main/KoDocument.cpp:1874
+#: main/KoDocument.cpp:1877
 #, fuzzy, kde-format
 #| msgid ""
 #| "This document contains several versions. Go to File->Versions to open an "
@@ -1426,13 +1426,13 @@ msgid ""
 "an old version."
 msgstr "यो कागजातले धेरै संस्करण लिएको छ।पुरानो संस्करण खोल्न फाइल->संस्करणमा जानुहोस् ।"
 
-#: main/KoDocument.cpp:2075 main/KoDocument.cpp:2544 main/KoDocument.cpp:2573
+#: main/KoDocument.cpp:2078 main/KoDocument.cpp:2550 main/KoDocument.cpp:2579
 #: pigment/resources/KoColorSet.cpp:321 pigment/resources/KoColorSet.cpp:419
 #, kde-format
 msgid "Untitled"
 msgstr "शीर्षक नभएको।"
 
-#: main/KoDocument.cpp:2078 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1440,12 +1440,12 @@ msgid ""
 msgstr ""
 "<p>कागजात <b>'%1'</b> परिमार्जन गरियो ।</p><p>तपाईँ यसलाई बचत गर्न चाहनुहुन्छ ?</p>"
 
-#: main/KoDocument.cpp:2161
+#: main/KoDocument.cpp:2167
 #, kde-format
 msgid "Internal error: saveXML not implemented"
 msgstr "आन्तरीक त्रुटि: बचत एक्सएमएल कार्यान्वयन भएन।"
 
-#: main/KoDocument.cpp:2198
+#: main/KoDocument.cpp:2204
 #, kde-format
 msgid ""
 "Could not open\n"
@@ -1454,7 +1454,7 @@ msgstr ""
 "खोल्न सकिएन\n"
 "%1"
 
-#: main/KoDocument.cpp:2201
+#: main/KoDocument.cpp:2207
 #, kde-format
 msgid ""
 "Could not open %1\n"
@@ -1463,32 +1463,32 @@ msgstr ""
 "%1 खोल्न सकिएन\n"
 "कारण: %2"
 
-#: main/KoDocument.cpp:2258
+#: main/KoDocument.cpp:2264
 #, kde-format
 msgid "a word processing"
 msgstr "वर्ड प्रोसेसिङ"
 
-#: main/KoDocument.cpp:2259
+#: main/KoDocument.cpp:2265
 #, kde-format
 msgid "a spreadsheet"
 msgstr "स्प्रेडसिट"
 
-#: main/KoDocument.cpp:2260
+#: main/KoDocument.cpp:2266
 #, kde-format
 msgid "a presentation"
 msgstr "प्रस्तुतिकरण"
 
-#: main/KoDocument.cpp:2261
+#: main/KoDocument.cpp:2267
 #, kde-format
 msgid "a chart"
 msgstr "चित्रपट"
 
-#: main/KoDocument.cpp:2262
+#: main/KoDocument.cpp:2268
 #, kde-format
 msgid "a drawing"
 msgstr "रेखाचित्र"
 
-#: main/KoDocument.cpp:2577
+#: main/KoDocument.cpp:2583
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save "
@@ -1499,7 +1499,7 @@ msgid ""
 msgstr ""
 "<p>कागजात <b>'%1'</b> परिमार्जन गरियो ।</p><p>तपाईँ यसलाई बचत गर्न चाहनुहुन्छ ?</p>"
 
-#: main/KoDocument.cpp:2579
+#: main/KoDocument.cpp:2585
 #, fuzzy, kde-format
 #| msgid "Custom Document"
 msgid "Close Document"
@@ -1896,52 +1896,52 @@ msgstr "चयन..."
 msgid "Use the new template as default"
 msgstr "पूर्वानिर्धारित रूपमा नयाँ टेम्प्लेट प्रयोग गर्नुहोस्"
 
-#: main/KoTemplateCreateDia.cpp:308
+#: main/KoTemplateCreateDia.cpp:309
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
 msgstr "तपाईँ साच्चैकै अवस्थित '%1' टेम्प्लेट अधिलेखन गर्न चाहनुहुन्छ ?"
 
-#: main/KoTemplateCreateDia.cpp:421 main/KoTemplateCreateDia.cpp:428
+#: main/KoTemplateCreateDia.cpp:422 main/KoTemplateCreateDia.cpp:429
 #, kde-format
 msgid "Add Group"
 msgstr "समूह थप्नुहोस्"
 
-#: main/KoTemplateCreateDia.cpp:421
+#: main/KoTemplateCreateDia.cpp:422
 #, kde-format
 msgid "Enter group name:"
 msgstr "समूह नाम प्रविष्ट गर्नुहोस्:"
 
-#: main/KoTemplateCreateDia.cpp:428
+#: main/KoTemplateCreateDia.cpp:429
 #, kde-format
 msgid "This name is already used."
 msgstr "यो नाम पहिल्यै प्रयोग गरिएको छ ।"
 
-#: main/KoTemplateCreateDia.cpp:452
+#: main/KoTemplateCreateDia.cpp:453
 #, kde-format
 msgid "Do you really want to remove that group?"
 msgstr "तपाईँ साँच्चिकै त्यो समूह हटाउन चाहनहुन्छ ?"
 
-#: main/KoTemplateCreateDia.cpp:453
+#: main/KoTemplateCreateDia.cpp:454
 #, kde-format
 msgid "Remove Group"
 msgstr "समूह हटाउनुहोस्"
 
-#: main/KoTemplateCreateDia.cpp:455
+#: main/KoTemplateCreateDia.cpp:456
 #, kde-format
 msgid "Do you really want to remove that template?"
 msgstr "तपाईँ साँच्चिकै त्यो टेम्प्लेट हटाउन चाहनुहुन्छ ?"
 
-#: main/KoTemplateCreateDia.cpp:456
+#: main/KoTemplateCreateDia.cpp:457
 #, kde-format
 msgid "Remove Template"
 msgstr "टेम्प्लेट हटाउनुहोस्"
 
-#: main/KoTemplateCreateDia.cpp:507
+#: main/KoTemplateCreateDia.cpp:508
 #, kde-format
 msgid "Could not load picture."
 msgstr "तस्वीर लोड गर्न सकिएन।"
 
-#: main/KoTemplateCreateDia.cpp:510
+#: main/KoTemplateCreateDia.cpp:511
 #, kde-format
 msgid "No picture available."
 msgstr "कुनै तस्वीर उपलब्ध छैन।"
@@ -2033,203 +2033,203 @@ msgstr ""
 "रेखा %1, स्तम्भ %2 मा मुख्य कागजात भित्र पद वर्णन त्रुटि\n"
 "त्रुटि सन्देश: %3"
 
-#: odf/KoPageFormat.cpp:53
+#: odf/KoPageFormat.cpp:46
 #, fuzzy, kde-format
 #| msgid "ISO A3"
 msgctxt "Page size"
 msgid "ISO A3"
 msgstr "आइएसओ ए३"
 
-#: odf/KoPageFormat.cpp:54
+#: odf/KoPageFormat.cpp:47
 #, fuzzy, kde-format
 #| msgid "ISO A4"
 msgctxt "Page size"
 msgid "ISO A4"
 msgstr "आइएसओ ए४"
 
-#: odf/KoPageFormat.cpp:55
+#: odf/KoPageFormat.cpp:48
 #, fuzzy, kde-format
 #| msgid "ISO A5"
 msgctxt "Page size"
 msgid "ISO A5"
 msgstr "आइएसओ ए५"
 
-#: odf/KoPageFormat.cpp:56
+#: odf/KoPageFormat.cpp:49
 #, fuzzy, kde-format
 #| msgid "US Letter"
 msgctxt "Page size"
 msgid "US Letter"
 msgstr "US अक्षर"
 
-#: odf/KoPageFormat.cpp:57
+#: odf/KoPageFormat.cpp:50
 #, fuzzy, kde-format
 #| msgid "US Legal"
 msgctxt "Page size"
 msgid "US Legal"
 msgstr "US वैध"
 
-#: odf/KoPageFormat.cpp:58
+#: odf/KoPageFormat.cpp:51
 #, fuzzy, kde-format
 #| msgid "Screen"
 msgctxt "Page size"
 msgid "Screen"
 msgstr "पर्दा"
 
-#: odf/KoPageFormat.cpp:59
+#: odf/KoPageFormat.cpp:52
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgctxt "Page size"
 msgid "Custom"
 msgstr "अनुकूल"
 
-#: odf/KoPageFormat.cpp:60
+#: odf/KoPageFormat.cpp:53
 #, fuzzy, kde-format
 #| msgid "ISO B5"
 msgctxt "Page size"
 msgid "ISO B5"
 msgstr "आइएसओ बि5"
 
-#: odf/KoPageFormat.cpp:61
+#: odf/KoPageFormat.cpp:54
 #, fuzzy, kde-format
 #| msgid "US Executive"
 msgctxt "Page size"
 msgid "US Executive"
 msgstr "US कार्यकारिणी"
 
-#: odf/KoPageFormat.cpp:62
+#: odf/KoPageFormat.cpp:55
 #, fuzzy, kde-format
 #| msgid "ISO A0"
 msgctxt "Page size"
 msgid "ISO A0"
 msgstr "आइएसओ एओ"
 
-#: odf/KoPageFormat.cpp:63
+#: odf/KoPageFormat.cpp:56
 #, fuzzy, kde-format
 #| msgid "ISO A1"
 msgctxt "Page size"
 msgid "ISO A1"
 msgstr "आइएसओ ए १"
 
-#: odf/KoPageFormat.cpp:64
+#: odf/KoPageFormat.cpp:57
 #, fuzzy, kde-format
 #| msgid "ISO A2"
 msgctxt "Page size"
 msgid "ISO A2"
 msgstr "आइएसओ ए२ "
 
-#: odf/KoPageFormat.cpp:65
+#: odf/KoPageFormat.cpp:58
 #, fuzzy, kde-format
 #| msgid "ISO A6"
 msgctxt "Page size"
 msgid "ISO A6"
 msgstr "आइएसओ ए६"
 
-#: odf/KoPageFormat.cpp:66
+#: odf/KoPageFormat.cpp:59
 #, fuzzy, kde-format
 #| msgid "ISO A7"
 msgctxt "Page size"
 msgid "ISO A7"
 msgstr "आइएसओ ए७"
 
-#: odf/KoPageFormat.cpp:67
+#: odf/KoPageFormat.cpp:60
 #, fuzzy, kde-format
 #| msgid "ISO A8"
 msgctxt "Page size"
 msgid "ISO A8"
 msgstr "आइएसओ ए८"
 
-#: odf/KoPageFormat.cpp:68
+#: odf/KoPageFormat.cpp:61
 #, fuzzy, kde-format
 #| msgid "ISO A9"
 msgctxt "Page size"
 msgid "ISO A9"
 msgstr "आइएसओ ए९"
 
-#: odf/KoPageFormat.cpp:69
+#: odf/KoPageFormat.cpp:62
 #, fuzzy, kde-format
 #| msgid "ISO B0"
 msgctxt "Page size"
 msgid "ISO B0"
 msgstr "आइएसओ बि०"
 
-#: odf/KoPageFormat.cpp:70
+#: odf/KoPageFormat.cpp:63
 #, fuzzy, kde-format
 #| msgid "ISO B1"
 msgctxt "Page size"
 msgid "ISO B1"
 msgstr "आइएसओ  बि१"
 
-#: odf/KoPageFormat.cpp:71
+#: odf/KoPageFormat.cpp:64
 #, fuzzy, kde-format
 #| msgid "ISO B10"
 msgctxt "Page size"
 msgid "ISO B10"
 msgstr "आइएसओ बि १० "
 
-#: odf/KoPageFormat.cpp:72
+#: odf/KoPageFormat.cpp:65
 #, fuzzy, kde-format
 #| msgid "ISO B2"
 msgctxt "Page size"
 msgid "ISO B2"
 msgstr "आइएसओ बि२"
 
-#: odf/KoPageFormat.cpp:73
+#: odf/KoPageFormat.cpp:66
 #, fuzzy, kde-format
 #| msgid "ISO B3"
 msgctxt "Page size"
 msgid "ISO B3"
 msgstr "आइएसओ बि३"
 
-#: odf/KoPageFormat.cpp:74
+#: odf/KoPageFormat.cpp:67
 #, fuzzy, kde-format
 #| msgid "ISO B4"
 msgctxt "Page size"
 msgid "ISO B4"
 msgstr "आइएसओ बि४"
 
-#: odf/KoPageFormat.cpp:75
+#: odf/KoPageFormat.cpp:68
 #, fuzzy, kde-format
 #| msgid "ISO B6"
 msgctxt "Page size"
 msgid "ISO B6"
 msgstr "आइएसओ बि६"
 
-#: odf/KoPageFormat.cpp:76
+#: odf/KoPageFormat.cpp:69
 #, fuzzy, kde-format
 #| msgid "ISO C5"
 msgctxt "Page size"
 msgid "ISO C5"
 msgstr "आइएसओ सि५"
 
-#: odf/KoPageFormat.cpp:77
+#: odf/KoPageFormat.cpp:70
 #, fuzzy, kde-format
 #| msgid "US Common 10"
 msgctxt "Page size"
 msgid "US Common 10"
 msgstr "US साझा १०"
 
-#: odf/KoPageFormat.cpp:78
+#: odf/KoPageFormat.cpp:71
 #, fuzzy, kde-format
 #| msgid "ISO DL"
 msgctxt "Page size"
 msgid "ISO DL"
 msgstr "आइएसओ डिएल"
 
-#: odf/KoPageFormat.cpp:79
+#: odf/KoPageFormat.cpp:72
 #, fuzzy, kde-format
 #| msgid "US Folio"
 msgctxt "Page size"
 msgid "US Folio"
 msgstr "US फोलियो"
 
-#: odf/KoPageFormat.cpp:80
+#: odf/KoPageFormat.cpp:73
 #, fuzzy, kde-format
 #| msgid "US Ledger"
 msgctxt "Page size"
 msgid "US Ledger"
 msgstr "US खाता"
 
-#: odf/KoPageFormat.cpp:81
+#: odf/KoPageFormat.cpp:74
 #, fuzzy, kde-format
 #| msgid "US Tabloid"
 msgctxt "Page size"
@@ -3072,7 +3072,7 @@ msgstr "अल्फा मास्क"
 msgid "Behind"
 msgstr ""
 
-#: pigment/compositeops/KoCompositeOpDissolve.h:48
+#: pigment/compositeops/KoCompositeOpDissolve.h:49
 #: pigment/KoCompositeOpRegistry.cpp:83
 #, kde-format
 msgid "Dissolve"
@@ -4052,7 +4052,7 @@ msgstr "मिति"
 msgid "Stored In"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:228
+#: store/KoEncryptedStore.cpp:227
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -4061,7 +4061,14 @@ msgstr ""
 "यो कागजातले अपरिचित चेकसम समावेश गरेको छ ।जब तपाईँ यसलाई पासवर्ड दिनुहुनछ,  रूजु भएको "
 "नहुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:254 store/KoEncryptedStore.cpp:271
+#: store/KoEncryptedStore.cpp:227
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@dialog:title"
+msgid "Warning"
+msgstr "चेतावनी"
+
+#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -4069,14 +4076,22 @@ msgid ""
 msgstr ""
 "यो कागजातले अपरिचित गुप्तिकरण विधि समावेश गरेको छ ।केही भाग पढ्न अयोग्य हुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:286
+#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:285
+#, fuzzy, kde-format
+#| msgid "Warning"
+msgctxt "@title:dialog"
+msgid "Warning"
+msgstr "चेतावनी"
+
+#: store/KoEncryptedStore.cpp:285
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr "यो कागजातले अपूर्ण गुप्तिकरण डाटा समावेश गरेको छ । केही भाग पढ्न अयोग्य हुन सक्छ ।"
 
-#: store/KoEncryptedStore.cpp:300
+#: store/KoEncryptedStore.cpp:299
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
@@ -4085,7 +4100,7 @@ msgstr ""
 "क्यूसीएले एसएचए१लाई अथवा एसएचए१ प्रयोग भैरहेको पीबीकेडीएफ२लाई हाल समर्थन गरेको छैन ।"
 "उक्त कागजात खुल्न सक्दैन ।"
 
-#: store/KoEncryptedStore.cpp:330
+#: store/KoEncryptedStore.cpp:329
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -4095,7 +4110,7 @@ msgstr ""
 "देखिएकोेस्ट फाइल अनुपयोगी  देखिन्छ । यो परिमार्जित गर्न सकिँदैन र कागजात पढ्न अयोग्य "
 "रहनेछ । कपून: तपाईँको कार्य हराउनबाट रोपुन क्न प्रयास गर्नुहोस र कागजात बचत गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:428
+#: store/KoEncryptedStore.cpp:427
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -4104,17 +4119,17 @@ msgstr ""
 "देखिएको फाइल लेख्न सकिँदैन।उक्त कागजात पढ्न अयोग्य रहनेछ । कृपया तपाईँको कार्य हराउनबाट "
 "रोक्न फेरि प्रयास गर्नुहोस् र कागजात बचत गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:549
+#: store/KoEncryptedStore.cpp:548
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "कृपया, यो फइल खोल्नका लागि पासवर्ड प्रविष्ट गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:724
+#: store/KoEncryptedStore.cpp:723
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "कृपया कागजातसहित गुप्तिकरण गर्न पासवर्ड प्रविष्ट गर्नुहोस् ।"
 
-#: store/KoEncryptedStore.cpp:738
+#: store/KoEncryptedStore.cpp:737
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "तपाईँ पासवर्ड बचत गर्न  हटाउन चाहनुहुन्छ ?"
@@ -4125,7 +4140,7 @@ msgstr "तपाईँ पासवर्ड बचत गर्न  हटा�
 msgid "File '%1' is not readable"
 msgstr "फाइल %1 अवस्थित छैन ।"
 
-#: store/KoNetAccess.cpp:390
+#: store/KoNetAccess.cpp:389
 #, kde-format
 msgid "ERROR: Unknown protocol '%1'"
 msgstr ""
@@ -4162,7 +4177,7 @@ msgid "Delete"
 msgstr " मेट्नुहोस्"
 
 #: text/commands/ChangeTrackedDeleteCommand.cpp:318
-#: text/commands/DeleteCommand.cpp:506 text/KoTextEditor_undo.cpp:74
+#: text/commands/DeleteCommand.cpp:508 text/KoTextEditor_undo.cpp:74
 #: text/KoTextEditor_undo.cpp:153 text/KoTextEditor_undo.cpp:188
 #: text/KoTextEditor_undo.cpp:205 text/KoTextEditor_undo.cpp:247
 #, fuzzy
@@ -4171,7 +4186,7 @@ msgctxt "(qtundo-format)"
 msgid "Text"
 msgstr "पाठ"
 
-#: text/commands/DeleteCommand.cpp:57
+#: text/commands/DeleteCommand.cpp:59
 #, fuzzy
 #| msgid "Delete"
 msgctxt "(qtundo-format)"
@@ -4950,30 +4965,30 @@ msgstr "यी रेखाहरू आयात गर्नुहोस्:"
 msgid "to"
 msgstr "मा"
 
-#: widgets/KoDialog.cpp:247
+#: widgets/KoDialog.cpp:248
 #, kde-format
 msgid "&Try"
 msgstr ""
 
-#: widgets/KoDialog.cpp:460
+#: widgets/KoDialog.cpp:461
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgid "modified"
 msgstr "परिमार्जित:"
 
-#: widgets/KoDialog.cpp:471
+#: widgets/KoDialog.cpp:472
 #, kde-format
 msgctxt "Document/application separator in titlebar"
 msgid " – "
 msgstr ""
 
-#: widgets/KoDialog.cpp:846
+#: widgets/KoDialog.cpp:828
 #, fuzzy, kde-format
 #| msgid "Default"
 msgid "&Details"
 msgstr "पूर्वनिर्धारित्धारितर्र्र"
 
-#: widgets/KoDialog.cpp:1001
+#: widgets/KoDialog.cpp:983
 #, kde-format
 msgid "Get help..."
 msgstr ""
