@@ -181,11 +181,13 @@ void KoShapePrivate::convertFromShapeCoordinates(KoConnectionPoint &point, const
             break;
         case KoConnectionPoint::AlignRight:
             point.position.rx() -= shapeSize.width();
+            [[fallthrough]];
         case KoConnectionPoint::AlignLeft:
             point.position.ry() = 0.5*shapeSize.height();
             break;
         case KoConnectionPoint::AlignBottom:
             point.position.ry() -= shapeSize.height();
+            [[fallthrough]];
         case KoConnectionPoint::AlignTop:
             point.position.rx() = 0.5*shapeSize.width();
             break;
@@ -217,11 +219,13 @@ void KoShapePrivate::convertToShapeCoordinates(KoConnectionPoint &point, const Q
             break;
         case KoConnectionPoint::AlignRight:
             point.position.rx() += shapeSize.width();
+            [[fallthrough]];
         case KoConnectionPoint::AlignLeft:
             point.position.ry() = 0.5*shapeSize.height();
             break;
         case KoConnectionPoint::AlignBottom:
             point.position.ry() += shapeSize.height();
+            [[fallthrough]];
         case KoConnectionPoint::AlignTop:
             point.position.rx() = 0.5*shapeSize.width();
             break;

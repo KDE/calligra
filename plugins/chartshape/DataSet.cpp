@@ -852,6 +852,7 @@ KChart::DataValueAttributes DataSet::dataValueAttributes(int section /* = -1 */)
                 ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)(d->num % numDefaultMarkerTypes)));
                 ma.setMarkerSize(QSize(10, 10));
                 ma.setVisible(true);
+                [[fallthrough]];
             case NamedSymbol:
                 ma.setMarkerStyle(odf2kdMarker((OdfMarkerStyle)d->symbolID));
                 ma.setVisible(true);

@@ -432,6 +432,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
         case KoFlake::ShapeOnTop:
             if (shape->isSelectable())
                 return shape;
+            [[fallthrough]];
         case KoFlake::Selected:
             if (d->selection->isSelected(shape))
                 return shape;

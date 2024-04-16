@@ -65,6 +65,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             switch (command) {
             case 'm':
                 relative = true;
+                [[fallthrough]];
             case 'M': {
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
@@ -80,6 +81,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'l':
                 relative = true;
+                [[fallthrough]];
             case 'L': {
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
@@ -141,6 +143,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'c':
                 relative = true;
+                [[fallthrough]];
             case 'C': {
                 ptr = getCoord(ptr, x1);
                 ptr = getCoord(ptr, y1);
@@ -170,6 +173,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 's':
                 relative = true;
+                [[fallthrough]];
             case 'S': {
                 ptr = getCoord(ptr, x2);
                 ptr = getCoord(ptr, y2);
@@ -201,6 +205,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'q':
                 relative = true;
+                [[fallthrough]];
             case 'Q': {
                 ptr = getCoord(ptr, x1);
                 ptr = getCoord(ptr, y1);
@@ -227,6 +232,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 't':
                 relative = true;
+                [[fallthrough]];
             case 'T': {
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
@@ -259,6 +265,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'a':
                 relative = true;
+                [[fallthrough]];
             case 'A': {
                 bool largeArc, sweep;
                 qreal angle, rx, ry;
