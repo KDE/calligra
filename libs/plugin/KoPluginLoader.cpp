@@ -158,7 +158,6 @@ QVector<KPluginMetaData> KoPluginLoader::pluginLoaders(const QString &directory,
         }
 
         if (!mimeType.isEmpty()) {
-            QJsonObject pluginData = metaData.rawData().value("KPlugin").toObject();
             QStringList mimeTypes = metaData.mimeTypes();
             mimeTypes += metaData.rawData().value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
             mimeTypes += metaData.rawData().value("X-KDE-NativeMimeType").toString();

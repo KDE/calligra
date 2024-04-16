@@ -103,18 +103,17 @@ void FunctionModuleRegistry::loadFunctionModules()
             debugSheetsFormula << "Skipping" << metaData.fileName() << ", because interface version is" << version;
             continue;
         }
-        QJsonObject pluginData = metaData.rawData().value("KPlugin").toObject();
-        QString category = pluginData.value("Category").toString();
+        QString category = metaData.category();
         if (category != "FunctionModule") {
             debugSheetsFormula << "Skipping" << metaData.fileName() << ", because category is " << category;
             continue;
         }
 
-        const QString pluginId = pluginData.value("Id").toString();
+        const QString pluginId = metaData.pluginId();
         const QString pluginConfigEnableKey = pluginId + QLatin1String("Enabled");
         const bool isPluginEnabled = pluginsConfigGroup.hasKey(pluginConfigEnableKey) ?
             pluginsConfigGroup.readEntry(pluginConfigEnableKey, true) :
-            pluginData.value("EnabledByDefault").toBool(true);
+            metaData.isEnabledByDefault();
 
         if (isPluginEnabled) {
             if(contains(pluginId)) {
