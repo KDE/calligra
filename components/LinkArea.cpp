@@ -34,7 +34,7 @@ LinkArea::LinkArea(QQuickItem* parent)
     : QQuickItem(parent)
     , d(new Private)
 {
-    setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MidButton);
+    setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MiddleButton);
 }
 
 LinkArea::~LinkArea()

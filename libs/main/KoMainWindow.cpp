@@ -80,6 +80,7 @@
 #include <QFontDatabase>
 #include <QMimeDatabase>
 #include <QStatusBar>
+#include <QScreen>
 #include <QMenuBar>
 
 #include "MainDebug.h"
@@ -369,36 +370,25 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentDa
     KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
     QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
     if (!restoreGeometry(geom)) {
-        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-        QRect desk = QApplication::desktop()->availableGeometry(scnum);
-        // if the desktop is virtual then use virtual screen size
-        if (QApplication::desktop()->isVirtualDesktop()) {
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
-        }
+        auto screen = QGuiApplication::primaryScreen();
+        Q_ASSERT(screen);
 
-        quint32 x = desk.x();
-        quint32 y = desk.y();
         quint32 w = 0;
         quint32 h = 0;
 
         // Default size -- maximize on small screens, something useful on big screens
-        const int deskWidth = desk.width();
+        const int deskWidth = screen->availableSize().width();
         if (deskWidth > 1024) {
             // a nice width, and slightly less than total available
             // height to componensate for the window decs
             w = (deskWidth / 3) * 2;
-            h = (desk.height() / 3) * 2;
+            h = (screen->availableSize().height() / 3) * 2;
         }
         else {
-            w = desk.width();
-            h = desk.height();
+            w = screen->availableSize().width();
+            h = screen->availableSize().height();
         }
 
-        x += (desk.width() - w) / 2;
-        y += (desk.height() - h) / 2;
-
-        move(x,y);
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
     restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));

@@ -42,7 +42,7 @@ CQLinkArea::CQLinkArea(QDeclarativeItem* parent)
     , d(new Private)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
-    setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MidButton);
+    setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton | Qt::MiddleButton);
     setAcceptTouchEvents(true);
 }
 

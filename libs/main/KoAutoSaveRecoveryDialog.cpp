@@ -180,7 +180,7 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     m_listView->setItemDelegate(delegate);
 
     QList<FileItem*> fileItems;
-    foreach(const QString &filename, filenames) {
+    for(const QString &filename : filenames) {
 
         FileItem *file = new FileItem();
         file->name = filename;
@@ -202,7 +202,7 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
 
         // get the date
         QDateTime date = QFileInfo(path).lastModified();
-        file->date = "(" + date.toString(Qt::LocalDate) + ")";
+        file->date = "(" + QLocale().toString(date) + ")";
 
         fileItems.append(file);
     }

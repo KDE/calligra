@@ -986,7 +986,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         event->ignore();
     }
 
-    if (event->button() ==  Qt::MidButton) { // Paste
+    if (event->button() ==  Qt::MiddleButton) { // Paste
         const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Selection);
 
         // on windows we do not have data if we try to paste this selection

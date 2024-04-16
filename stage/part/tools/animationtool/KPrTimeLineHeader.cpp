@@ -64,7 +64,7 @@ void KPrTimeLineHeader::paintHeader(QPainter *painter, const int RowHeight)
 {
     int scroll = m_mainView->scrollArea()->horizontalScrollBar()->value();
     QFontMetrics fm(font());
-    int minimumSize = fm.width(QString("W%1W").arg("seconds"));
+    int minimumSize = fm.boundingRect(QString("W%1W").arg("seconds")).width();
     if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - minimumSize)) {
         //Seconds Header
         QRect rect(0, 0, m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);

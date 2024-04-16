@@ -1203,7 +1203,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     bool editableShape = editableShapesCount(select->selectedShapes());
     KoShape::AllowedInteractions interactions = allowedInteractions(select->selectedShapes());
 
-    if (event->buttons() & Qt::MidButton) {
+    if (event->buttons() & Qt::MiddleButton) {
         // change the hot selection position when middle clicking on a handle
         KoFlake::Position newHotPosition = m_hotPosition;
         switch (handle) {
