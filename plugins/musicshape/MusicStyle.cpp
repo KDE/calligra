@@ -56,7 +56,7 @@ qreal MusicStyle::beamLineWidth()
     return 3.0;
 }
 
-void MusicStyle::renderText(QPainter& painter, qreal x, qreal y, const QString& text)
+void MusicStyle::renderText(QPainter& painter, qreal x, qreal y, const QString &text)
 {
     QPointF p(x, y);
     if(m_textAsPath) {
@@ -94,16 +94,16 @@ void MusicStyle::renderNoteHead(QPainter& painter, qreal x, qreal y, Duration du
         case SixteenthNote:
         case EighthNote:
         case QuarterNote:
-            renderText(painter, x, y, QString(0xE125));
+            renderText(painter, x, y, QChar(0xE125));
             break;
         case HalfNote:
-            renderText(painter, x, y, QString(0xE124));
+            renderText(painter, x, y, QChar(0xE124));
             break;
         case WholeNote:
-            renderText(painter, x, y, QString(0xE123));
+            renderText(painter, x, y, QChar(0xE123));
             break;
         case BreveNote:
-            renderText(painter, x, y, QString(0xE122));
+            renderText(painter, x, y, QChar(0xE122));
             break;
     }
 }
@@ -115,31 +115,31 @@ void MusicStyle::renderRest(QPainter& painter, qreal x, qreal y, Duration durati
     QPointF p(x, y);
     switch (duration) {
         case HundredTwentyEighthNote:
-            renderText(painter, x, y, QString(0xE10D));
+            renderText(painter, x, y, QChar(0xE10D));
             break;
         case SixtyFourthNote:
-            renderText(painter, x, y, QString(0xE10C));
+            renderText(painter, x, y, QChar(0xE10C));
             break;
         case ThirtySecondNote:
-            renderText(painter, x, y, QString(0xE10B));
+            renderText(painter, x, y, QChar(0xE10B));
             break;
         case SixteenthNote:
-            renderText(painter, x, y, QString(0xE10A));
+            renderText(painter, x, y, QChar(0xE10A));
             break;
         case EighthNote:
-            renderText(painter, x, y, QString(0xE109));
+            renderText(painter, x, y, QChar(0xE109));
             break;
         case QuarterNote:
-            renderText(painter, x, y, QString(0xE107));
+            renderText(painter, x, y, QChar(0xE107));
             break;
         case HalfNote:
-            renderText(painter, x, y, QString(0xE101));
+            renderText(painter, x, y, QChar(0xE101));
             break;
         case WholeNote:
-            renderText(painter, x, y, QString(0xE100));
+            renderText(painter, x, y, QChar(0xE100));
             break;
         case BreveNote:
-            renderText(painter, x, y, QString(0xE106));
+            renderText(painter, x, y, QChar(0xE106));
             break;
     }
 }
@@ -151,13 +151,13 @@ void MusicStyle::renderClef(QPainter& painter, qreal x, qreal y, Clef::ClefShape
     QPointF p(x, y);
     switch (shape) {
         case Clef::GClef:
-            renderText(painter, x, y, QString(0xE195));
+            renderText(painter, x, y, QChar(0xE195));
             break;
         case Clef::FClef:
-            renderText(painter, x, y, QString(0xE193));
+            renderText(painter, x, y, QChar(0xE193));
             break;
         case Clef::CClef:
-            renderText(painter, x, y, QString(0xE191));
+            renderText(painter, x, y, QChar(0xE191));
             break;
     }
 }
@@ -169,19 +169,19 @@ void MusicStyle::renderAccidental(QPainter& painter, qreal x, qreal y, int accid
     QPointF p(x, y);
     switch (accidental) {
         case 0:
-            renderText(painter, x, y, QString(0xE111));
+            renderText(painter, x, y, QChar(0xE111));
             break;
         case 1:
-            renderText(painter, x, y, QString(0xE10E));
+            renderText(painter, x, y, QChar(0xE10E));
             break;
         case 2:
-            renderText(painter, x, y, QString(0xE116));
+            renderText(painter, x, y, QChar(0xE116));
             break;
         case -1:
-            renderText(painter, x, y, QString(0xE112));
+            renderText(painter, x, y, QChar(0xE112));
             break;
         case -2:
-            renderText(painter, x, y, QString(0xE114));
+            renderText(painter, x, y, QChar(0xE114));
             break;
     }
 }
@@ -204,20 +204,20 @@ void MusicStyle::renderNoteFlags(QPainter& painter, qreal x, qreal y, Duration d
     switch (duration) {
         case HundredTwentyEighthNote:
             // no 128 flag in emmentaler, so stack 16th and 32nd on top of each other...
-            renderText(painter, x, y, QString(stemsUp ? 0xE189 : 0xE18F));
-            renderText(painter, p.x(), p.y() + (stemsUp ? 13 : -13), QString(stemsUp ? 0xE188 : 0xE18E));
+            renderText(painter, x, y, QChar(stemsUp ? 0xE189 : 0xE18F));
+            renderText(painter, p.x(), p.y() + (stemsUp ? 13 : -13), QChar(stemsUp ? 0xE188 : 0xE18E));
             break;
         case SixtyFourthNote:
-            renderText(painter, x, y, QString(stemsUp ? 0xE18A : 0xE190));
+            renderText(painter, x, y, QChar(stemsUp ? 0xE18A : 0xE190));
             break;
         case ThirtySecondNote:
-            renderText(painter, x, y, QString(stemsUp ? 0xE189 : 0xE18F));
+            renderText(painter, x, y, QChar(stemsUp ? 0xE189 : 0xE18F));
             break;
         case SixteenthNote:
-            renderText(painter, x, y, QString(stemsUp ? 0xE188 : 0xE18E));
+            renderText(painter, x, y, QChar(stemsUp ? 0xE188 : 0xE18E));
             break;
         case EighthNote:
-            renderText(painter, x, y, QString(stemsUp ? 0xE187 : 0xE18B));
+            renderText(painter, x, y, QChar(stemsUp ? 0xE187 : 0xE18B));
             break;
         default:
             // no flags

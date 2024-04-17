@@ -15,7 +15,7 @@
 #include <klocalizedstring.h>
 #include <OdfDebug.h>
 #include <QtGlobal>
-
+#include <QLocale>
 
 // ensure the same order as in KoUnit::Unit
 static const char* const unitNameList[KoUnit::TypeCount] =

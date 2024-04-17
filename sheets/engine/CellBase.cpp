@@ -479,7 +479,7 @@ QString CellBase::decodeFormula(const QString &_text) const
             unsigned int oldPos = pos;
             while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
             if (pos != oldPos)
-                col = _text.midRef(oldPos, pos - oldPos).toInt();
+                col = QStringView{_text}.mid(oldPos, pos - oldPos).toInt();
             if (!abs1 && !era1 && (!isNull()))
                 col += column();
             // Skip '#' or '$'
@@ -494,7 +494,7 @@ QString CellBase::decodeFormula(const QString &_text) const
             oldPos = pos;
             while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
             if (pos != oldPos)
-                _row = _text.midRef(oldPos, pos - oldPos).toInt();
+                _row = QStringView{_text}.mid(oldPos, pos - oldPos).toInt();
             if (!abs2 && !era2 && (!isNull()))
                 _row += row();
             // Skip '#' or '$'

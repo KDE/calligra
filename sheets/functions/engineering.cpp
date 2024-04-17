@@ -11,7 +11,7 @@
 #include "engine/Function.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
-
+#include <QRegularExpression>
 
 #ifndef M_LN2l
 #define M_LN2l 0.6931471805599453094172321214581766L
@@ -71,6 +71,10 @@ Value func_oct2dec(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *);
 
+static QRegularExpression numberRegex(QRegularExpression::anchoredPattern("[0-9]+"));
+static QRegularExpression binRegex(QRegularExpression::anchoredPattern("[0-1]+"));
+static QRegularExpression octRegex(QRegularExpression::anchoredPattern("[01234567]+"));
+static QRegularExpression hexRegex(QRegularExpression::anchoredPattern("[0123456789ABCDEFabcdef]+"));
 
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("kspreadengineeringmodule.json", EngineeringModule)
 
@@ -326,13 +330,12 @@ Value func_bessely(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_dec2hex(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[0-9]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (numberRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains decimal digits.
         return calc->base(args[0], 16, 0, minLength);
     } else {
@@ -346,13 +349,12 @@ Value func_dec2hex(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_dec2oct(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[0-9]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (numberRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains decimal digits.
         return calc->base(args[0], 8, 0, minLength);
     } else {
@@ -366,13 +368,12 @@ Value func_dec2oct(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_dec2bin(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[0-9]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (numberRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains decimal digits.
         return calc->base(args[0], 2, 0, minLength);
     } else {
@@ -395,13 +396,12 @@ Value func_bin2dec(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_bin2oct(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[01]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (binRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains 0s and 1s.
         return calc->base(calc->fromBase(args[0], 2), 8, 0, minLength);
     } else {
@@ -415,13 +415,12 @@ Value func_bin2oct(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_bin2hex(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[01]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (binRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains 0s and 1s.
         return calc->base(calc->fromBase(args[0], 2), 16, 0, minLength);
     } else {
@@ -445,13 +444,12 @@ Value func_oct2dec(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[01234567]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (octRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains decimal digits.
         return calc->base(calc->fromBase(args[0], 8), 2, 0, minLength);
     } else {
@@ -465,13 +463,12 @@ Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[01234567]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (octRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains decimal digits.
         return calc->base(calc->fromBase(args[0], 8), 16, 0, minLength);
     } else {
@@ -494,13 +491,12 @@ Value func_hex2dec(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_hex2bin(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[0123456789ABCDEFabcdef]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (hexRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains decimal digits.
         return calc->base(calc->fromBase(args[0], 16), 2, 0, minLength);
     } else {
@@ -514,13 +510,12 @@ Value func_hex2bin(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_hex2oct(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    QRegExp rx("[0123456789ABCDEFabcdef]+");
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
         minLength = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
+    if (hexRegex.match(calc->conv()->asString(args[0]).asString()).hasMatch()) {
         // this only contains decimal digits.
         return calc->base(calc->fromBase(args[0], 16), 8, 0, minLength);
     } else {

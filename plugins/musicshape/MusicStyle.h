@@ -33,7 +33,7 @@ public:
     /**
      * Render text either as text or as path, as specified by the textAsPath value
      */
-    virtual void renderText(QPainter& painter, qreal x, qreal y, const QString& text);
+    virtual void renderText(QPainter& painter, qreal x, qreal y, const QString &text);
     /**
      * Whether to render text as paths. Default value is false (render text as text)
      */

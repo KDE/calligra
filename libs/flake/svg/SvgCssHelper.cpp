@@ -626,8 +626,7 @@ void SvgCssHelper::parseStylesheet(const KoXmlElement &e)
         return;
 
     // remove comments
-    QRegExp commentExp("\\/\\*.*\\*\\/");
-    commentExp.setMinimal(true); // do not match greedy
+    QRegularExpression commentExp(QStringLiteral("\\/\\*.*\\*\\/"), QRegularExpression::DotMatchesEverythingOption | QRegularExpression::InvertedGreedinessOption);
     data.remove(commentExp);
 
     QStringList defs = data.split('}', Qt::SkipEmptyParts);

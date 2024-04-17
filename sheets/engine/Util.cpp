@@ -11,6 +11,9 @@
 #include "SheetsDebug.h"
 
 #include <cmath>
+#include <QRegularExpression>
+
+using namespace Qt::StringLiterals;
 
 int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
 {
@@ -43,9 +46,10 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
 
 int Calligra::Sheets::Util::decodeRowLabelText(const QString &labelText)
 {
-    QRegExp rx("(|\\$)([A-Za-z]+)(|\\$)([0-9]+)");
-    if(rx.exactMatch(labelText))
-        return rx.cap(4).toInt();
+    static QRegularExpression rx(u"^(|\\$)([A-Za-z]+)(|\\$)([0-9]+)$"_s);
+    auto match = rx.match(labelText);
+    if(match.hasMatch())
+        return match.captured(4).toInt();
     return 0;
 }
 
@@ -121,18 +125,19 @@ bool Calligra::Sheets::Util::isCellnameCharacter(const QChar &c)
 static void replaceFormulaReference(int referencedRow, int referencedColumn, int thisRow, int thisColumn, QString &result, int cellReferenceStart, int cellReferenceLength)
 {
     const QString ref = result.mid(cellReferenceStart, cellReferenceLength);
-    QRegExp rx("(|\\$)[A-Za-z]+(|\\$)[0-9]+");
-    if (rx.exactMatch(ref)) {
+    QRegularExpression rx(u"^(|\\$)[A-Za-z]+(|\\$)[0-9]+$"_s);
+    auto match = rx.match(ref);
+    if (match.hasMatch()) {
         int c = Calligra::Sheets::Util::decodeColumnLabelText(ref);
         int r = Calligra::Sheets::Util::decodeRowLabelText(ref);
-        if (rx.cap(1) != "$") // absolute or relative column?
+        if (match.captured(1) != "$") // absolute or relative column?
             c += thisColumn - referencedColumn;
-        if (rx.cap(2) != "$") // absolute or relative row?
+        if (match.captured(2) != "$") // absolute or relative row?
             r += thisRow - referencedRow;
         result.replace(cellReferenceStart,
                        cellReferenceLength,
-                       rx.cap(1) + Calligra::Sheets::CellBase::columnName(c) +
-                       rx.cap(2) + QString::number(r) );
+                       match.captured(1) + Calligra::Sheets::CellBase::columnName(c) +
+                       match.captured(2) + QString::number(r) );
     }
 }
 

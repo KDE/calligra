@@ -12,6 +12,7 @@
 #include "CalculationSettings.h"
 #include "SheetsDebug.h"
 
+#include <QRegularExpression>
 #include <cfloat>
 #include <limits>
 
@@ -2561,19 +2562,20 @@ bool ValueCalc::matches(const Condition &cond, Value val)
             break;
 
         case regexMatch: {
-            QRegExp rx;
-            rx.setPattern(cond.stringValue);
-            rx.setPatternSyntax(QRegExp::RegExp);
-            rx.setCaseSensitivity(Qt::CaseInsensitive);
-            if (rx.exactMatch(d)) return true;
+            QRegularExpression rx(QRegularExpression::anchoredPattern(cond.stringValue), QRegularExpression::CaseInsensitiveOption);
+            const auto match = rx.match(d);
+            if (match.hasMatch()) {
+                return true;
+            }
         } break;
 
         case wildcardMatch: {
-            QRegExp rx;
-            rx.setPattern(cond.stringValue);
-            rx.setPatternSyntax(QRegExp::Wildcard);
-            rx.setCaseSensitivity(Qt::CaseInsensitive);
-            if (rx.exactMatch(d)) return true;
+            auto rx = QRegularExpression::fromWildcard(cond.stringValue);
+            rx.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+            const auto match = rx.match(d);
+            if (match.hasMatch()) {
+                return true;
+            }
         } break;
 
         }

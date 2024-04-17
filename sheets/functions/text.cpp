@@ -15,8 +15,6 @@
 
 // #include <math.h>
 
-// #include <QRegExp>
-
 // #include "SheetsDebug.h"
 // #include "FunctionModuleRegistry.h"
 // #include "ValueFormatter.h"
@@ -480,7 +478,7 @@ Value func_proper(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // ensure that we got a valid regular expression
-    QRegExp exp(calc->conv()->asString(args[1]).asString());
+    QRegularExpression exp(calc->conv()->asString(args[1]).asString());
     if (!exp.isValid())
         return Value::errorVALUE();
 
@@ -496,11 +494,12 @@ Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *)
 
     QString returnValue;
 
-    int pos = exp.indexIn(s);
+    QRegularExpressionMatch match;
+    int pos = s.indexOf(exp, 0, &match);
     if (pos == -1)
         returnValue = defText;
     else
-        returnValue = exp.cap(bkref);
+        returnValue = match.captured(bkref);
 
     return Value(returnValue);
 }
@@ -509,7 +508,7 @@ Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_regexpre(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // ensure that we got a valid regular expression
-    QRegExp exp(calc->conv()->asString(args[1]).asString());
+    QRegularExpression exp(calc->conv()->asString(args[1]).asString());
     if (!exp.isValid())
         return Value::errorVALUE();
 
@@ -517,8 +516,9 @@ Value func_regexpre(valVector args, ValueCalc *calc, FuncExtra *)
     QString str = calc->conv()->asString(args[2]).asString();
 
     int pos = 0;
-    while ((pos = exp.indexIn(s, pos)) != -1) {
-        int i = exp.matchedLength();
+    QRegularExpressionMatch match;
+    while ((pos = s.indexOf(exp, pos, &match)) != -1) {
+        int i = match.capturedLength();
         s = s.replace(pos, i, str);
         pos += str.length();
     }
@@ -598,7 +598,8 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
     if (start_num > (int)within_text.length()) return Value::errorVALUE();
 
     // use globbing feature of QRegExp
-    QRegExp regex(find_text, Qt::CaseInsensitive, QRegExp::Wildcard);
+    auto regex = QRegularExpression::fromWildcard(find_text);
+    regex.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     int pos = within_text.indexOf(regex, start_num - 1);
     if (pos < 0) return Value::errorNA();
 

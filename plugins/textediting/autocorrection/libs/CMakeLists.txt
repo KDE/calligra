@@ -31,6 +31,7 @@ target_link_libraries(autocorrection
     KF6::I18n
     KF6::Archive
     Qt::Gui
+    Qt::Xml
 )
 
 set_target_properties(autocorrection PROPERTIES

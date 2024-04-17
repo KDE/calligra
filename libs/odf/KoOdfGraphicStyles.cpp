@@ -462,7 +462,7 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
         if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
             QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
             if (! opacity.isEmpty() && opacity.right(1) == "%") {
-                float percent = opacity.leftRef(opacity.length() - 1).toFloat();
+                float percent = QStringView{opacity}.left(opacity.length() - 1).toFloat();
                 QColor color = tmpBrush.color();
                 color.setAlphaF(percent / 100.0);
                 tmpBrush.setColor(color);
@@ -702,7 +702,7 @@ QTransform KoOdfGraphicStyles::loadTransformation(const QString &transformation)
 
         subtransform[0] = subtransform[0].trimmed().toLower();
         subtransform[1] = subtransform[1].simplified();
-        QRegExp reg("[,( ]");
+        static QRegularExpression reg("[,( ]");
         QStringList params = subtransform[1].split(reg, Qt::SkipEmptyParts);
 
         if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))

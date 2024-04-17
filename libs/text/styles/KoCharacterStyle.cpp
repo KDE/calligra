@@ -1484,7 +1484,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         if (fontName == "StarSymbol")
             fontName = "OpenSymbol";
 
-        fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
+        fontName.remove(QRegularExpression("\\sCE$")); // Arial CE -> Arial
         setFontFamily(fontName);
     }
 

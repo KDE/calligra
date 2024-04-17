@@ -16,6 +16,7 @@
 
 #include <QFontMetricsF>
 #include <QColor>
+#include <QRegularExpression>
 
 //// Copied from calligra KoUnit.h
 //
@@ -261,11 +262,12 @@ Length AttributeManager::parseUnit( const QString& value,
 
     if (value.isEmpty())
         return length;
-    QRegExp re("(-?[\\d\\.]*) *(px|em|ex|in|cm|pc|mm|pt|%)?", Qt::CaseInsensitive);
-    if (re.indexIn(value) == -1)
+    static QRegularExpression re("(-?[\\d\\.]*) *(px|em|ex|in|cm|pc|mm|pt|%)?", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch match;
+    if (value.indexOf(re, 0, &match) == -1)
         return length;
-    QString real = re.cap(1);
-    QString unit = re.cap(2).toLower();
+    QString real = match.captured(1);
+    QString unit = match.captured(2).toLower();
 
     bool ok;
     qreal number = real.toDouble(&ok);

@@ -95,7 +95,7 @@ int KoColumns::parseSeparatorHeight(const QString &value)
     if (value.endsWith(QLatin1Char('%'))) {
         bool ok = false;
         // try to convert
-        result = value.leftRef(value.length()-1).toInt(&ok);
+        result = QStringView{value}.left(value.length()-1).toInt(&ok);
         // reset to 100% if conversion failed (which sets result to 0)
         if (! ok) {
             result = defaultSeparatorHeight;
