@@ -42,7 +42,7 @@ target_link_libraries(kostore
         ${QTKEYCHAIN_LIBRARIES}
 )
 if( Qca-qt6_FOUND )
-    target_link_libraries(kostore PRIVATE qca-qt5)
+    target_link_libraries(kostore PRIVATE qca-qt6)
 endif()
 
 set_target_properties(kostore PROPERTIES
