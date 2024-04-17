@@ -12,7 +12,7 @@
 
 #include "koodf_export.h"
 
-#include <QPrinter>
+#include <QPagedPaintDevice>
 
 /// The page formats calligra supports
 namespace KoPageFormat
@@ -70,9 +70,9 @@ enum Orientation {
  * If format is 'screen' it will use A4 landscape.
  * If format is 'custom' it will use A4 portrait.
  * (you may want to take care of those cases separately).
- * Usually passed to KPrinter::setPageSize().
+ * Usually passed to QPrinter::setPageSize().
  */
-KOODF_EXPORT QPrinter::PageSize printerPageSize(Format format);
+KOODF_EXPORT QPageSize printerPageSize(Format format);
 
 /**
  * Returns the width (in mm) for a given page format and orientation
