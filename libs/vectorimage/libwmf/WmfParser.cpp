@@ -15,7 +15,6 @@
 #include <VectorImageDebug.h>
 
 #include <QImage>
-#include <QMatrix>
 #include <QDataStream>
 #include <QByteArray>
 #include <QBuffer>

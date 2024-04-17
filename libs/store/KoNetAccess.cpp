@@ -32,7 +32,6 @@
 #include "kio/mkdirjob.h"
 #include "kio/copyjob.h"
 #include "kio/deletejob.h"
-#include "kio/scheduler.h"
 
 namespace KIO
 {
