@@ -119,7 +119,6 @@ protected Q_SLOTS:
     void genericDelimiterChanged(const QString &);
     void ignoreDuplicatesChanged(int);
     void updateClicked();
-    void encodingChanged(const QString &);
 
 private:
     Q_DISABLE_COPY(KoCsvImportDialog)

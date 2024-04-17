@@ -12,7 +12,7 @@
 #include "XFigDocument.h"
 // Qt
 #include <QTextStream>
-#include <QTextCodec>
+#include <QStringDecoder>
 #include <QIODevice>
 #include <QFont>
 #include <QScopedPointer>
@@ -405,8 +405,7 @@ XFigParser::XFigParser( QIODevice* device )
     if( (device == 0) || (m_XFigStreamLineReader.hasError()) )
         return;
 
-    const QTextCodec* codec = QTextCodec::codecForName("ISO 8859-1");
-    m_TextDecoder = codec->makeDecoder();
+    m_TextDecoder = QStringDecoder(QStringDecoder::encodingForName("ISO 8859-1"));
 
     // setup
     if (! parseHeader())
@@ -443,7 +442,6 @@ XFigParser::XFigParser( QIODevice* device )
 
 XFigParser::~XFigParser()
 {
-    delete m_TextDecoder;
     delete m_Document;
 }
 
@@ -1039,8 +1037,7 @@ XFigParser::parseText()
                 if (charValue == 1) {
                     break;
                 }
-                const char encodedChar = static_cast<char>(charValue);
-                text.append( m_TextDecoder->toUnicode(&encodedChar,1) );
+                text.append( m_TextDecoder->decode(QString(QChar(charValue))));
 
                 // digits are consumed
                 i += 3;

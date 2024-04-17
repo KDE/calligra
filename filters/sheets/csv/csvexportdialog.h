@@ -47,7 +47,6 @@ public:
 
     void  fillSheet(Calligra::Sheets::Map * map);
     QString getEndOfLine(void) const;
-    QTextCodec* getCodec(void) const;
 
 private:
     void loadSettings();

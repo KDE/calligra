@@ -13,7 +13,6 @@
 
 #include <QFile>
 #include <QFileInfo>
-#include <QTextCodec>
 #include <QTextStream>
 #include <QByteArray>
 #include <QEventLoop>

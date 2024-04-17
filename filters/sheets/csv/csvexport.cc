@@ -8,7 +8,6 @@
 #include <csvexport.h>
 
 #include <QFile>
-#include <QTextCodec>
 
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
@@ -127,34 +126,21 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         return KoFilter::NotImplemented;
     }
 
-    CSVExportDialog *expDialog = 0;
+    std::unique_ptr<CSVExportDialog> expDialog;
     if (!m_chain->manager()->getBatchMode()) {
-        expDialog = new CSVExportDialog(0);
-
-        if (!expDialog) {
-            qCritical(lcCsvExport) << "Dialog has not been created! Aborting!" << endl;
-            return KoFilter::StupidError;
-        }
+        expDialog = std::make_unique<CSVExportDialog>(nullptr);
         expDialog->fillSheet(ksdoc->map());
 
         if (!expDialog->exec()) {
-            delete expDialog;
             return KoFilter::UserCancelled;
         }
     }
 
-    QTextCodec* codec = 0;
     QChar csvDelimiter;
     if (expDialog) {
-        codec = expDialog->getCodec();
-        if (!codec) {
-            delete expDialog;
-            return KoFilter::StupidError;
-        }
         csvDelimiter = expDialog->getDelimiter();
         m_eol = expDialog->getEndOfLine();
     } else {
-        codec = QTextCodec::codecForName("UTF-8");
         csvDelimiter = ',';
     }
 
@@ -177,7 +163,6 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
 
         if (!view) { // no view if embedded document
-            delete expDialog;
             return KoFilter::StupidError;
         }
 
@@ -314,19 +299,15 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
     QFile out(m_chain->outputFile());
     if (!out.open(QIODevice::WriteOnly)) {
-        qCritical(lcCsvExport) << "Unable to open output file!" << endl;
+        qCritical(lcCsvExport) << "Unable to open output file!" << Qt::endl;
         out.close();
-        delete expDialog;
         return KoFilter::StupidError;
     }
 
     QTextStream outStream(&out);
-    outStream.setCodec(codec);
-
     outStream << str;
-
     out.close();
-    delete expDialog;
+
     return KoFilter::OK;
 }
 

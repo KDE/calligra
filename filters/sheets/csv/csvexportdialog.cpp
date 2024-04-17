@@ -18,7 +18,6 @@
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QGuiApplication>
-#include <QTextCodec>
 
 using namespace Calligra::Sheets;
 
@@ -256,33 +255,6 @@ void CSVExportDialog::selectionOnlyChanged(bool on)
 bool CSVExportDialog::exportSelectionOnly() const
 {
     return m_dialog->m_selectionOnly->isChecked();
-}
-
-QTextCodec* CSVExportDialog::getCodec(void) const
-{
-    const QString strCodec(KCharsets::charsets()->encodingForName(m_dialog->comboBoxEncoding->currentText()));
-    qDebug(lcCsvExport) << "Encoding:" << strCodec;
-
-    bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
-
-    // If QTextCodec has not found a valid encoding, so try with KCharsets.
-    if (codec) {
-        ok = true;
-    } else {
-        codec = KCharsets::charsets()->codecForName(strCodec, ok);
-    }
-
-    // Still nothing?
-    if (!codec || !ok) {
-        // Default: UTF-8
-        qWarning(lcCsvExport) << "Cannot find encoding:" << strCodec;
-        // ### TODO: what parent to use?
-        KMessageBox::error(0, i18n("Cannot find encoding: %1", strCodec));
-        return 0;
-    }
-
-    return codec;
 }
 
 QString CSVExportDialog::getEndOfLine(void) const

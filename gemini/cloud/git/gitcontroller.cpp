@@ -21,7 +21,6 @@
 #include <QDebug>
 #include <QDir>
 #include <QTimer>
-#include <QTextCodec>
 #include <QThreadPool>
 
 #include <git2.h>

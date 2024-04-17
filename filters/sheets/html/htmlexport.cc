@@ -10,7 +10,6 @@
 #include "exportdialog.h"
 
 // #include <QFile>
-#include <QTextCodec>
 // #include <QTextStream>
 // #include <QByteArray>
 // #include <QUrl>
@@ -140,13 +139,12 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
             closePage(str);
             QFile out(file);
             if (!out.open(QIODevice::WriteOnly)) {
-                qWarning(lcHtml) << "Unable to open output file!" << endl;
+                qWarning(lcHtml) << "Unable to open output file!" << Qt::endl;
                 out.close();
                 return KoFilter::FileNotFound;
             }
             QTextStream streamOut(&out);
-            streamOut.setCodec(m_dialog->encoding());
-            streamOut << str << endl;
+            streamOut << str << Qt::endl;
             out.close();
         }
 

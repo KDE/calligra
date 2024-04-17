@@ -46,7 +46,7 @@ namespace RtfReader
     void TextDocumentRtfOutput::appendText( const QByteArray &text )
     {
         static const QRegularExpression controlCharacters(QStringLiteral("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]"));
-        m_cursor->insertText( (m_codec ? m_codec->toUnicode(text) : QString::fromLatin1(text)).remove(controlCharacters) );
+        m_cursor->insertText( (m_encoding != QStringConverter::Utf8 ? QStringDecoder(m_encoding).decode(text) : QString::fromLatin1(text)).remove(controlCharacters) );
     }
 
     void TextDocumentRtfOutput::appendText(const QString &str)
@@ -178,26 +178,26 @@ namespace RtfReader
 
     void TextDocumentRtfOutput::setFont( const int fontIndex )
     {
-	if ( ! m_fontTable.contains( fontIndex ) ) {
-            qCDebug(lcRtf) << "attempted to select fontIndex" << fontIndex << "not in the font table";
-	    return;
-	}
-	FontTableEntry fontEntry = m_fontTable.value( fontIndex );
+        if ( ! m_fontTable.contains( fontIndex ) ) {
+                qCDebug(lcRtf) << "attempted to select fontIndex" << fontIndex << "not in the font table";
+            return;
+        }
+        FontTableEntry fontEntry = m_fontTable.value( fontIndex );
         qCDebug(lcRtf) << "selecting font:" << fontEntry.fontName();
-	m_textCharFormatStack.top().setFontFamily( fontEntry.fontName() );
-	m_cursor->setCharFormat( m_textCharFormatStack.top() );
-	m_codec = fontEntry.codec();
-	m_haveSetFont = true;
+        m_textCharFormatStack.top().setFontFamily( fontEntry.fontName() );
+        m_cursor->setCharFormat( m_textCharFormatStack.top() );
+        m_encoding = fontEntry.encoding();
+        m_haveSetFont = true;
     }
 
     void TextDocumentRtfOutput::setDefaultFont( const int fontIndex )
     {
-	m_defaultFontIndex = fontIndex;
+        m_defaultFontIndex = fontIndex;
     }
 
     void TextDocumentRtfOutput::appendToColourTable( const QColor &colour )
     {
-	m_colourTable.append( colour );
+        m_colourTable.append( colour );
     }
 
     void TextDocumentRtfOutput::insertFontTableEntry( FontTableEntry fontTableEntry, quint32 fontTableIndex )

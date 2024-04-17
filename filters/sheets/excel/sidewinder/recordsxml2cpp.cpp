@@ -403,7 +403,7 @@ static void processFieldElement(const QString &indent, QTextStream& out, QDomEle
                 if (firstByte) out << " + " << firstByte;
                 out << ")";
                 if (bitOffset) out << " >> " << bitOffset;
-                out << ") & 0x" << hex << mask << dec << ")";
+                out << ") & 0x" << Qt::hex << mask << Qt::dec << ")";
                 if (field.attribute("type") == "bool") out << " != 0";
                 if (f.isEnum) out << ")";
                 if (!f.isStringLength) out << ")";
@@ -954,7 +954,7 @@ int main(int argc, char** argv)
         processRecordForImplementation(e, cppOut);
     }
 
-    cppOut << "void registerRecordClasses()" << endl << "{" << Qt::endl;
+    cppOut << "void registerRecordClasses()" << Qt::endl << "{" << Qt::endl;
     for (int i = 0; i < records.size(); i++) {
         QDomElement e = records.at(i).toElement();
         cppOut << "    RecordRegistry::registerRecordClass(" << e.attribute("name") << "Record::id, create" << e.attribute("name") << "Record);\n";

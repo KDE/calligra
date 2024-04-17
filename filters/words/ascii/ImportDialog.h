@@ -18,10 +18,14 @@ class AsciiImportDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit AsciiImportDialog(const QString &encoding, QWidget *parent = 0);
+    enum ParagraphStrategy {
+        EndOfLine,
+        EndOfSentence,
+        EmptyLine,
+    };
+    explicit AsciiImportDialog(QWidget *parent = 0);
     ~AsciiImportDialog() override;
-    QTextCodec *getCodec() const;
-    int getParagraphStrategy() const;
+    ParagraphStrategy getParagraphStrategy() const;
 
 private:
     Ui::ImportDialogUI m_ui;

@@ -56,9 +56,6 @@
 
  */
 
-#include <QTextCodec>
-#include <QTextDecoder>
-
 #ifndef KOXML_USE_QDOM
 
 #include <QtXml>

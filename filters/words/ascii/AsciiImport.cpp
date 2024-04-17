@@ -10,10 +10,10 @@
 
 #include "AsciiImport.h"
 
-#include <QTextCodec>
 #include <QFile>
 #include <QTextDocument>
 #include <QTextCursor>
+#include <QApplication>
 
 #include <kpluginfactory.h>
 #include <kencodingprober.h>
@@ -51,18 +51,6 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(AsciiImportFactory, "calligra_filter_ascii2words.json",
                            registerPlugin<AsciiImport>();)
-
-bool checkEncoding(QTextCodec *codec, QByteArray &data)
-{
-    QTextCodec::ConverterState state(QTextCodec::ConvertInvalidToNull);
-    QString unicode = codec->toUnicode(data.constData(), data.size(), &state);
-    for (int i = 0; i < unicode.size(); ++i) {
-        if (unicode[i] == 0) {
-            return false;
-        }
-    }
-    return true;
-}
 
 AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
 : KoFilter(parent)
@@ -107,30 +95,13 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     // this code is inspired by the kate encoding guessing first try UTF-8
     QByteArray data = in.read(100000);
     in.seek(0);
-    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    if (!checkEncoding(codec, data)) {
-        KEncodingProber prober(KEncodingProber::Universal);
-        prober.feed(data);
-        debugAsciiImport << "guessed" << prober.encoding() << prober.confidence();
-        if (prober.confidence() > 0.5)
-            codec = QTextCodec::codecForName(prober.encoding());
-        if (!codec || !checkEncoding(codec, data )) {
-            codec = QTextCodec::codecForName("ISO 8859-15");
-            if (!checkEncoding(codec, data))
-                codec = QTextCodec::codecForName("UTF-8");
-        }
-    }
 
     int paragraphStrategy = 0;
     if (!m_chain->manager()->getBatchMode()) {
-        QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(codec->name(), QApplication::activeWindow());
-        if (!dialog) { in.close(); return KoFilter::StupidError; }
+        QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(QApplication::activeWindow());
         if (!dialog->exec()) { in.close(); return KoFilter::UserCancelled; }
-        codec = dialog->getCodec();
         paragraphStrategy = dialog->getParagraphStrategy();
     }
-    if (!codec) return KoFilter::StupidError;
-    debugAsciiImport << "Charset used:" << codec->name();
 
 #ifdef OUTPUT_AS_ODT_FILE
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
@@ -192,8 +163,6 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 #endif
 
     QTextStream stream(&in);
-    Q_ASSERT(codec);
-    stream.setCodec(codec);
 
     switch (paragraphStrategy) {
     case 1: { // Sentence: Line-break at the end of a sentence.

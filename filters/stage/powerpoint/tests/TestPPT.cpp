@@ -59,9 +59,7 @@ TestRun::compareFiles(KoStore* input, const QString& path) {
     const QByteArray reference = readFile(path);
 
     QTextStream a(reference, QIODevice::ReadOnly);
-    a.setCodec("UTF-8");
     QTextStream b(created, QIODevice::ReadOnly);
-    b.setCodec("UTF-8");
     while (!a.atEnd()) {
         const QString oldLine = a.readLine();
         const QString newLine = b.readLine();

@@ -11,16 +11,13 @@
 
 // filter
 #include "XFigStreamLineReader.h"
+#include <QStringDecoder>
 
 class XFigDocument;
 class XFigAbstractObject;
 class XFigArrowHead;
-class QTextDecoder;
 class QIODevice;
 struct XFigPoint;
-
-template<typename T> class QVector;
-
 
 class XFigParser
 {
@@ -53,7 +50,7 @@ private:
 
     int m_XFigVersion;
 
-    QTextDecoder* m_TextDecoder;
+    QStringDecoder m_TextDecoder;
     XFigStreamLineReader m_XFigStreamLineReader;
 };
 

@@ -53,49 +53,6 @@ Boston, MA 02110-1301, USA.
       </attribute>
       <layout class="QVBoxLayout">
        <item>
-        <layout class="QHBoxLayout">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="textLabel1_3">
-           <property name="text">
-            <string>E&amp;ncoding:</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="buddy">
-            <cstring>comboBoxEncoding</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KComboBox" name="comboBoxEncoding">
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>106</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
         <widget class="QCheckBox" name="m_firstRowHeader">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">

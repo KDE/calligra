@@ -4,8 +4,7 @@
 #ifndef RTFREADER_FONTTABLEENTRY_H
 #define RTFREADER_FONTTABLEENTRY_H
 #include "rtfreader_export.h"
-
-#include <QTextCodec>
+#include <QStringConverter>
 
 namespace RtfReader
 {
@@ -15,39 +14,39 @@ namespace RtfReader
 
     class RTFREADER_EXPORT FontTableEntry
     {
-      public:	
-	FontTableEntry() : m_fontFamily( Nil ), m_fontPitch( Default )
-	{}
+    public:
+        FontTableEntry() : m_fontFamily( Nil ), m_fontPitch( Default )
+        {}
 
-	enum FontFamily fontFamily() const
-	{ return m_fontFamily; }
+        enum FontFamily fontFamily() const
+        { return m_fontFamily; }
 
-	void setFontFamily( enum FontFamily fontFamily )
-	{ m_fontFamily = fontFamily; }
+        void setFontFamily( enum FontFamily fontFamily )
+        { m_fontFamily = fontFamily; }
 
-	enum FontPitch fontPitch() const
-	{ return m_fontPitch; }
+        enum FontPitch fontPitch() const
+        { return m_fontPitch; }
 
-	void setFontPitch( enum FontPitch fontPitch )
-	{ m_fontPitch = fontPitch; }
+        void setFontPitch( enum FontPitch fontPitch )
+        { m_fontPitch = fontPitch; }
 
-	QString fontName() const
-	{ return m_fontName; }
+        QString fontName() const
+        { return m_fontName; }
 
-	void setFontName( const QString &fontName )
-	{ m_fontName = fontName; }
+        void setFontName( const QString &fontName )
+        { m_fontName = fontName; }
 
-	QTextCodec *codec() const
-	{ return m_codec; }
+        QStringConverter::Encoding encoding() const
+        { return m_encoding; }
 
-	void setCodec(QTextCodec *codec)
-	{ m_codec = codec; }
+        void setEncoding(QStringConverter::Encoding encoding)
+        { m_encoding = encoding; }
 
-      protected:
-	enum FontFamily m_fontFamily;
-	enum FontPitch m_fontPitch;
-	QString m_fontName;
-	QTextCodec *m_codec = nullptr;
+    protected:
+        enum FontFamily m_fontFamily;
+        enum FontPitch m_fontPitch;
+        QString m_fontName;
+        QStringConverter::Encoding m_encoding;
     };
 }
 
