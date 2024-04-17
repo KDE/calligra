@@ -1153,7 +1153,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16  width;              // Average width (not used)
                     qint16  escapement;         // The rotation of the text in 1/10th degrees
                     qint16  orientation;        // The rotation of each character
-                    quint16 weight, property, fixedPitch, arg;
+                    QFont::Weight weight;
+                    quint16 property, fixedPitch, arg;
 
                     KoWmfFontHandle* handle = new KoWmfFontHandle;
 
@@ -1188,7 +1189,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                             // This makes the line cross x=0 at y=50/3.  (x=MS weight, y=Qt weight)
                             //
                             // FIXME: Is this a linear relationship?
-                            weight = (50 + 3 * ((weight * (75-50))/(700-400))) / 3;
+                            weight = static_cast<QFont::Weight>((50 + 3 * ((weight * (75-50))/(700-400))) / 3);
                         }
                         handle->font.setWeight(weight);
                         handle->font.setItalic((property & 0x01));

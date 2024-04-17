@@ -1395,7 +1395,7 @@ qreal OutputPainterStrategy::angularSpan( const qreal startAngle, const qreal en
     return spanAngle;
 }
 
-int OutputPainterStrategy::convertFontWeight( quint32 emfWeight )
+QFont::Weight OutputPainterStrategy::convertFontWeight( quint32 emfWeight )
 {
     // FIXME: See how it's done in the wmf library and check if this is suitable here.
 

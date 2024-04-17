@@ -161,7 +161,7 @@ private:
        This is a bit rough - the EMF spec only says 400 is normal, and 
        700 is bold.
     */
-    int convertFontWeight( quint32 emfWeight );
+    QFont::Weight convertFontWeight( quint32 emfWeight );
 
 
     Header                  *m_header;   // Save to be able to retain scaling.
