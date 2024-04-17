@@ -33,7 +33,7 @@ public:
      * @param pointer the pointer as found on a QTabletEvent
      * @param uniqueTabletId the uniqueId as found on a QTabletEvent
      */
-    explicit KoInputDevice(QPointingDevice::PointerType pointer, qint64 uniqueTabletId = -1);
+    explicit KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId = -1);
 
     /**
      * Constructor for the mouse as input device.
@@ -43,9 +43,14 @@ public:
     ~KoInputDevice();
 
     /**
+     * Return the tablet device used
+     */
+    QTabletEvent::TabletDevice device() const;
+
+    /**
      * Return the pointer used
      */
-    QPointingDevice::PointerType pointer() const;
+    QTabletEvent::PointerType pointer() const;
 
     /**
      * Return the unique tablet id as registered by QTabletEvents.
@@ -79,9 +84,13 @@ Q_DECLARE_METATYPE(KoInputDevice)
 
 FLAKE_EXPORT QDebug operator<<(QDebug debug, const KoInputDevice &device);
 
-inline size_t qHash(const KoInputDevice &key, size_t seed)
+inline uint qHash(const KoInputDevice &key)
 {
-    return qHash(QStringLiteral(":%1:%2:%3").arg(QString::number((int)key.pointer()), QString::number(key.uniqueTabletId()), QString::number(key.isMouse())), seed);
+    return qHash(QString(":%1:%2:%3:%4")
+                 .arg(key.device())
+                 .arg(key.pointer())
+                 .arg(key.uniqueTabletId())
+                 .arg(key.isMouse()));
 }
 
 #endif
