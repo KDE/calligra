@@ -38,6 +38,13 @@ public:
     {
         qFatal("%s", qPrintable(msg));
     }
+
+    fatal& operator<<(qsizetype s)
+    {
+        msg += QString::number(s);
+        return *this;
+    }
+
     template<class T>
     fatal& operator<<(T s)
     {
