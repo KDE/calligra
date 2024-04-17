@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Fade Effect",
+        "Description[ca]": "Efecte d'esvaïment",
+        "Description[nl]": "Vervagingseffect",
+        "Description[tr]": "Soldur Efekti",
+        "Description[uk]": "Ефект згасання",
+        "Description[x-test]": "xxFade Effectxx",
         "Id": "kpr_pageeffect_fade",
         "Name": "Fade",
+        "Name[ca]": "Esvaïment",
+        "Name[nl]": "Opkomen/vervagen",
+        "Name[tr]": "Soldur",
+        "Name[uk]": "Згасання",
+        "Name[x-test]": "xxFadexx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

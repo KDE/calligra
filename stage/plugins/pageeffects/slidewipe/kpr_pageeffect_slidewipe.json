@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Slide Wipe Page Effect",
+        "Description[ca]": "Efectes d'esborrat de diapositiva de la pàgina",
+        "Description[nl]": "Diavegen pagina-effect",
+        "Description[tr]": "Slayt Sil Sayfa Efekti",
+        "Description[uk]": "Ефект ковзного витирання сторінки",
+        "Description[x-test]": "xxSlide Wipe Page Effectxx",
         "Id": "kpr_pageeffect_slidewipe",
         "Name": "Slide Wipe",
+        "Name[ca]": "Esborrat de diapositiva",
+        "Name[nl]": "Diavegen",
+        "Name[tr]": "Slayt Sil",
+        "Name[uk]": "Ковзне витирання",
+        "Name[x-test]": "xxSlide Wipexx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

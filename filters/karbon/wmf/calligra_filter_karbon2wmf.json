@@ -2,6 +2,12 @@
     "KPlugin": {
         "Icon": "",
         "Name": "Karbon WMF Export Filter",
+        "Name[ca]": "Filtre d'exportació WMF del Karbon",
+        "Name[nl]": "WMF-exportfilter voor Karbon",
+        "Name[sl]": "Karbon filter izvoza WMF",
+        "Name[tr]": "Karbon WMF Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту WMF у Karbon",
+        "Name[x-test]": "xxKarbon WMF Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

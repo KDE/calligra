@@ -2,6 +2,12 @@
     "KPlugin": {
         "Icon": "",
         "Name": "KSpread LATEX Export Filter",
+        "Name[ca]": "Filtre d'exportació LaTeX del KSpread",
+        "Name[nl]": "LATEX-exportfilter voor KSpread",
+        "Name[sl]": "KSpread filter izvoza za LATEX",
+        "Name[tr]": "KSpread LaTeX Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту LATEX для KSpread",
+        "Name[x-test]": "xxKSpread LATEX Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Quattro Pro Import Filter for KSpread",
+        "Name[ca]": "Filtre d'importació Quattro Pro per al KSpread",
+        "Name[nl]": "Quattro Pro-importfilter voor KSpread",
+        "Name[sl]": "Quattro Pro filter uvoza za KSpread",
+        "Name[tr]": "KSpread için Quattro Pro İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних Quattro Pro для KSpread",
+        "Name[x-test]": "xxQuattro Pro Import Filter for KSpreadxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

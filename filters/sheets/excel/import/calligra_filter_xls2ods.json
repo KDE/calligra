@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "KSpread Microsoft Excel Import Filter",
+        "Name[ca]": "Filtre d'importació Microsoft Excel del KSpread",
+        "Name[nl]": "Microsoft Excell-importfilter voor KSpread",
+        "Name[sl]": "KSpread filter uvoza Microsoft Excel",
+        "Name[tr]": "KSpread Microsoft Excel İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних Microsoft Excel для KSpread",
+        "Name[x-test]": "xxKSpread Microsoft Excel Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

@@ -51,7 +51,13 @@
         "MimeTypes": [
             "application/vnd.ms-powerpoint"
         ],
-        "Name": "okular"
+        "Name": "okular",
+        "Name[ca]": "Okular",
+        "Name[nl]": "okular",
+        "Name[sl]": "okular",
+        "Name[tr]": "Okular",
+        "Name[uk]": "Okular",
+        "Name[x-test]": "xxokularxx"
     },
     "MimeType": "application/vnd.ms-powerpoint;",
     "NoDisplay": "true",

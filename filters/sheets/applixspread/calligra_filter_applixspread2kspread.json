@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "KSpread Applix Spreadsheet Import Filter",
+        "Name[ca]": "Filtre d'importació de fulls de càlcul Applix del KSpread",
+        "Name[nl]": "Applix Spreadsheet-importfilter voor KSpread",
+        "Name[sl]": "Karbon filter uvoza preglednice Applix",
+        "Name[tr]": "KSpread Applix Hesap Tablosu İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування Applix Spreadsheet для KSpread",
+        "Name[x-test]": "xxKSpread Applix Spreadsheet Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

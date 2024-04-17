@@ -2,6 +2,12 @@
     "KPlugin": {
         "Id": "karbonsvgfilter",
         "Name": "Karbon SVG Import Filter",
+        "Name[ca]": "Filtre d'importació SVG del Karbon",
+        "Name[nl]": "SVG-importfilter voor Karbon",
+        "Name[sl]": "Karbon filter uvoza SVG",
+        "Name[tr]": "Karbon SVG İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування малюнків SVG до Karbon",
+        "Name[x-test]": "xxKarbon SVG Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

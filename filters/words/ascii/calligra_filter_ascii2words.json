@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Words ASCII Import Filter",
+        "Name[ca]": "Filtre d'importació ASCII del Words",
+        "Name[nl]": "ASCII-importfilter voor Words",
+        "Name[sl]": "Words ASCII filter uvoza",
+        "Name[tr]": "Sözcükler ASCII İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних ASCII для Words",
+        "Name[x-test]": "xxWords ASCII Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

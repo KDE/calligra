@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon 1.x Import Filter",
+        "Name[ca]": "Filtre d'importació Karbon 1.x",
+        "Name[nl]": "1.x-importfilter voor Karbon",
+        "Name[sl]": "Karbon filter uvoza 1.x",
+        "Name[tr]": "Karbon 1.x İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних Karbon 1.x",
+        "Name[x-test]": "xxKarbon 1.x Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

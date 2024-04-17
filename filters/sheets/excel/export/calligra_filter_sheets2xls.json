@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "KSpread Microsoft Excel Export Filter",
+        "Name[ca]": "Filtre d'importació Microsoft Excel del KSpread",
+        "Name[nl]": "Microsoft Excell-exportfilter voor KSpread",
+        "Name[sl]": "KSpread filter izvoza Microsoft Excel",
+        "Name[tr]": "KSpread Microsoft Excel Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту до формату Microsoft Excel для KSpread",
+        "Name[x-test]": "xxKSpread Microsoft Excel Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "ODT to Mobi Export Filter",
+        "Name[ca]": "Filtre d'exportació ODT a Mobi",
+        "Name[nl]": "ODT naar Mobi exportfilter",
+        "Name[sl]": "Filter izvoza ODT v Mobi",
+        "Name[tr]": "ODT-Mobi Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту ODT до Mobi",
+        "Name[x-test]": "xxODT to Mobi Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

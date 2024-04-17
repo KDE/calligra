@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon Flatten Path plugin",
+        "Name[ca]": "Connector d'aplanament de camins del Karbon",
+        "Name[nl]": "Plug-in voor pad van Karbon Flatten",
+        "Name[sl]": "Vtičnik Karbon Flatten Path",
+        "Name[tr]": "Karbon Yolu Düzleştir Eklentisi",
+        "Name[uk]": "Додаток спрощення контурів для Karbon",
+        "Name[x-test]": "xxKarbon Flatten Path pluginxx",
         "ServiceTypes": [
             "Karbon/ViewPlugin"
         ]

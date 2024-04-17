@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Matrix wipe Page Effects",
+        "Description[ca]": "Efectes d'esborrat de matriu de la pàgina",
+        "Description[nl]": "Matrixvegen pagina-effecten",
+        "Description[tr]": "Matrix Sil Sayfa Efektleri",
+        "Description[uk]": "Ефект матричного витирання сторінки",
+        "Description[x-test]": "xxMatrix wipe Page Effectsxx",
         "Id": "kpr_pageeffect_matrixwipe",
         "Name": "Matrix wipe",
+        "Name[ca]": "Esborrat de matriu",
+        "Name[nl]": "Matrixvegen",
+        "Name[tr]": "Matrix Sil",
+        "Name[uk]": "Матричне витирання",
+        "Name[x-test]": "xxMatrix wipexx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

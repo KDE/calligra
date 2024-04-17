@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Swap Page Effect",
+        "Description[ca]": "Efecte d'escombrat de pàgina",
+        "Description[nl]": "Pagina-omwisselen-effect",
+        "Description[tr]": "Sayfa Takası Efekti",
+        "Description[uk]": "Ефект перегортання сторінки",
+        "Description[x-test]": "xxSwap Page Effectxx",
         "Id": "kpr_pageeffect_swapeffect",
         "Name": "Swap Effect",
+        "Name[ca]": "Efecte d'escombrat",
+        "Name[nl]": "Omwissel-effect",
+        "Name[tr]": "Takas Efekti",
+        "Name[uk]": "Ефект перегортання",
+        "Name[x-test]": "xxSwap Effectxx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

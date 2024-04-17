@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Iris Wipe Page Effects",
+        "Description[ca]": "Efectes d'esborrat d'iris de la pàgina",
+        "Description[nl]": "Irisvegen pagina-effect",
+        "Description[tr]": "İris Sil Sayfa Efektleri",
+        "Description[uk]": "Ефект витирання сторінки веселкою",
+        "Description[x-test]": "xxIris Wipe Page Effectsxx",
         "Id": "kpr_pageeffect_iriswipe",
         "Name": "Iris Wipe",
+        "Name[ca]": "Esborrat d'iris",
+        "Name[nl]": "Irisvegen",
+        "Name[tr]": "İris Sil",
+        "Name[uk]": "Витирання веселкою",
+        "Name[x-test]": "xxIris Wipexx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

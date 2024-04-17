@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon Whirl Pinch plugin",
+        "Name[ca]": "Connector de gira i pessiga del Karbon",
+        "Name[nl]": "Plug-in voor Whirl Pinch van Karbon",
+        "Name[sl]": "Vtičnik Karbon Whirl Pinch",
+        "Name[tr]": "Karbon Çimdikleyip Döndür Eklentisi",
+        "Name[uk]": "Додаток вихору для Karbon",
+        "Name[x-test]": "xxKarbon Whirl Pinch pluginxx",
         "ServiceTypes": [
             "Karbon/ViewPlugin"
         ]

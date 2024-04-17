@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "OpenOffice.org Calc Export Filter for KSpread",
+        "Name[ca]": "Filtre d'exportació OpenOffice.org Calc per al KSpread",
+        "Name[nl]": "OpenOffice.org Calc-exportfilter voor KSpread",
+        "Name[sl]": "OpenOffice.org Calc filter izvoza za KSpread",
+        "Name[tr]": "KSpread için Apache OpenOffice Calc Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту OpenOffice.org Calc для KSpread",
+        "Name[x-test]": "xxOpenOffice.org Calc Export Filter for KSpreadxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

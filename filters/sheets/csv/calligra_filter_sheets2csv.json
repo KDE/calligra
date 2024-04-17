@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "CSV Export Filter for Calligra Sheets",
+        "Name[ca]": "Filtre d'exportació CSV per al Calligra Sheets",
+        "Name[nl]": "CSV-exportfilter voor Calligra Sheets",
+        "Name[sl]": "Filter izvoza za Calligra Sheets",
+        "Name[tr]": "Calligra Tablolar için Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту CSV для Calligra Sheets",
+        "Name[x-test]": "xxCSV Export Filter for Calligra Sheetsxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

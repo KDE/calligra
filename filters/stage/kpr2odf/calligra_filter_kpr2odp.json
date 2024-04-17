@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Filter to export KPR files to ODP",
+        "Name[ca]": "Filtre per a exportar fitxers KPR a ODP",
+        "Name[nl]": "Filter om KPR-bestanden naar ODP te exporteren",
+        "Name[sl]": "Filter za izvoz datotek KPR v ODP",
+        "Name[tr]": "KPR Dosyalarını ODP Olarak Dışa Aktarmak için Süzgeç",
+        "Name[uk]": "Фільтр для експорту файлів KPR у ODP",
+        "Name[x-test]": "xxFilter to export KPR files to ODPxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

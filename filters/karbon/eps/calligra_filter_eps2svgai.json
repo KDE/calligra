@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon EPS Import Filter",
+        "Name[ca]": "Filtre d'importació EPS del Karbon",
+        "Name[nl]": "EPS-importfilter voor Karbon",
+        "Name[sl]": "Karbon filter uvoza EPS",
+        "Name[tr]": "Karbon EPS İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту EPS для Karbon",
+        "Name[x-test]": "xxKarbon EPS Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

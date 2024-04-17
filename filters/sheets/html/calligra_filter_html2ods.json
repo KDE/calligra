@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "HTML Import Filter for KSpread",
+        "Name[ca]": "Filtre d'importació HTML per al KSpread",
+        "Name[nl]": "HTML-importfilter voor KSpread",
+        "Name[sl]": "HTML filter uvoza za KSpread",
+        "Name[tr]": "KSpread için HTML İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних HTML для KSpread",
+        "Name[x-test]": "xxHTML Import Filter for KSpreadxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

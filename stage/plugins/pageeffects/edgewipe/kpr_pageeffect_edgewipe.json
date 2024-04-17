@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Edge Wipe Page Effects",
+        "Description[ca]": "Efectes d'esborrat de vora de la pàgina",
+        "Description[nl]": "Randvegen pagina-effecten",
+        "Description[tr]": "Kenar Sil Sayfa Efektleri",
+        "Description[uk]": "Ефект витирання сторінки з країв",
+        "Description[x-test]": "xxEdge Wipe Page Effectsxx",
         "Id": "kpr_pageeffect_edgewipe",
         "Name": "Edge wipe",
+        "Name[ca]": "Esborrat de vora",
+        "Name[nl]": "Randvegen",
+        "Name[tr]": "Kenar Sil",
+        "Name[uk]": "Витирання з країв",
+        "Name[x-test]": "xxEdge wipexx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

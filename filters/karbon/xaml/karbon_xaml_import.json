@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon XAML Import Filter",
+        "Name[ca]": "Filtre d'importació XAML del Karbon",
+        "Name[nl]": "XAML-importfilter voor Karbon",
+        "Name[sl]": "Karbon filter uvoza XAML",
+        "Name[tr]": "Karbon XAML İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування XAML до Karbon",
+        "Name[x-test]": "xxKarbon XAML Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

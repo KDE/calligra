@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon Refine Path plugin",
+        "Name[ca]": "Connector de refinament de camins del Karbon",
+        "Name[nl]": "Plug-in voor pad van Karbon Refine",
+        "Name[sl]": "Vtičnik Karbon Refine Path",
+        "Name[tr]": "Karbon Yolu Rafine Et Eklentisi",
+        "Name[uk]": "Додаток покращення контурів для Karbon",
+        "Name[x-test]": "xxKarbon Refine Path pluginxx",
         "ServiceTypes": [
             "Karbon/ViewPlugin"
         ]

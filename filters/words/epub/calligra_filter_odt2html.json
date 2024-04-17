@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "ODT to HTML Export Filter",
+        "Name[ca]": "Filtre d'exportació ODT a HTML",
+        "Name[nl]": "ODT naar HTML exportfilter",
+        "Name[sl]": "Filter izvoza ODT v HTML",
+        "Name[tr]": "ODT-HTML Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту ODT до HTML",
+        "Name[x-test]": "xxODT to HTML Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

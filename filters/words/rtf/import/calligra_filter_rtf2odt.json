@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Words RTF Import Filter",
+        "Name[ca]": "Filtre d'exportació RTF del Words",
+        "Name[nl]": "RTF-importfilter voor Words",
+        "Name[sl]": "Filter uvoza Words RTF",
+        "Name[tr]": "Sözcükler RTF İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту RTF для Words",
+        "Name[x-test]": "xxWords RTF Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

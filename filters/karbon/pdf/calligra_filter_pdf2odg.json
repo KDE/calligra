@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon PDF Import Filter",
+        "Name[ca]": "Filtre d'importació PDF del Karbon",
+        "Name[nl]": "PDF-importfilter voor Karbon",
+        "Name[sl]": "Karbon filter uvoza PDF",
+        "Name[tr]": "Karbon PDF İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування PDF до Karbon",
+        "Name[x-test]": "xxKarbon PDF Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

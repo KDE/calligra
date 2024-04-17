@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Space Rotation Page Effect",
+        "Description[ca]": "Efecte de pàgina de gir de l'espai",
+        "Description[nl]": "Ruimte-rotatie-pagina-effect",
+        "Description[tr]": "Uzay Döndür Sayfa Efekti",
+        "Description[uk]": "Ефект обертання сторінки у просторі",
+        "Description[x-test]": "xxSpace Rotation Page Effectxx",
         "Id": "kpr_pageeffect_spacerotation",
         "Name": "Space Rotation",
+        "Name[ca]": "Gir de l'espai",
+        "Name[nl]": "Ruimte-rotatie",
+        "Name[tr]": "Uzay Dönüşü",
+        "Name[uk]": "Обертання у просторі",
+        "Name[x-test]": "xxSpace Rotationxx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

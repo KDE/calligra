@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "MS Excel 2007 Import Filter for KSpread",
+        "Name[ca]": "Filtre d'importació MS Excel 2007 per al KSpread",
+        "Name[nl]": "MS Excel 2007 importfilter voor KSpread",
+        "Name[sl]": "MS Excel 2007 filter uvoza za KSpread",
+        "Name[tr]": "KSpread için MS Excel 2007 İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту MS Excel 2007 для KSpread",
+        "Name[x-test]": "xxMS Excel 2007 Import Filter for KSpreadxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

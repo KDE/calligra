@@ -1,8 +1,18 @@
 {
     "KPlugin": {
         "Description": "Exploding Page Page Effect",
+        "Description[ca]": "Efecte d'explosió de la pàgina",
+        "Description[nl]": "Exploderende pagina pagina-effect",
+        "Description[tr]": "Patlayan Sayfa Sayfa Efekti",
+        "Description[uk]": "Ефект вибуху сторінки",
+        "Description[x-test]": "xxExploding Page Page Effectxx",
         "Id": "kpr_pageeffect_example",
         "Name": "Exploding Page",
+        "Name[ca]": "Explosió de pàgina",
+        "Name[nl]": "Exploderende pagina",
+        "Name[tr]": "Patlayan Sayfa",
+        "Name[uk]": "Вибух сторінки",
+        "Name[x-test]": "xxExploding Pagexx",
         "ServiceTypes": [
             "CalligraStage/PageEffect"
         ]

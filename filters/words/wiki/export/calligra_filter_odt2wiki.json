@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Words Wiki Export Filter",
+        "Name[ca]": "Filtre d'exportació Wiki del Words",
+        "Name[nl]": "Wiki-exportfilter voor Words",
+        "Name[sl]": "Filter izvoza Words Wiki",
+        "Name[tr]": "Sözcükler Viki Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту вікі для Words",
+        "Name[x-test]": "xxWords Wiki Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

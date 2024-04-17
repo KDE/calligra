@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "Karbon WPG Import Filter",
+        "Name[ca]": "Filtre d'importació WPG del Karbon",
+        "Name[nl]": "WPG-importfilter voor Karbon",
+        "Name[sl]": "Karbon filter uvoza WPG",
+        "Name[tr]": "Karbon WPG İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування WPG до Karbon",
+        "Name[x-test]": "xxKarbon WPG Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

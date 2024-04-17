@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "MS Word DOCX Export Filter",
+        "Name[ca]": "Filtre d'exportació DOCX del Word de MS",
+        "Name[nl]": "DOCX-exportfilter voor MS Word",
+        "Name[sl]": "Words DOCX filter uvoza",
+        "Name[tr]": "MS Word DOCX Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту MS Word DOCX",
+        "Name[x-test]": "xxMS Word DOCX Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

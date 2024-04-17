@@ -1,6 +1,12 @@
 {
     "KPlugin": {
         "Name": "ODT to Epub2 Export Filter",
+        "Name[ca]": "Filtre d'exportació ODT a Epub2",
+        "Name[nl]": "ODT naar Epub2 exportfilter",
+        "Name[sl]": "Filter izvoza ODT v Epub2",
+        "Name[tr]": "ODT-Epub2 Dışa Aktarma Süzgeci",
+        "Name[uk]": "Фільтр експорту ODT до Epub2",
+        "Name[x-test]": "xxODT to Epub2 Export Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]
