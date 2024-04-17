@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-17 01:46+0000\n"
 "PO-Revision-Date: 2023-05-18 11:50+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -691,87 +691,6 @@ msgstr "…"
 msgid "Convert To Path"
 msgstr "Muunna poluksi"
 
-#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
-#, kde-format
-msgid "Scripts"
-msgstr "Komentosarjat"
-
-#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
-#, kde-format
-msgid "Script Manager"
-msgstr "Komentosarjojen hallinta"
-
-#: kross/KoScriptingPart.cpp:78
-#, kde-format
-msgid "Execute Script File..."
-msgstr "Suorita komentosarjatiedosto…"
-
-#: kross/KoScriptingPart.cpp:86
-#, kde-format
-msgid "Script Manager..."
-msgstr "Komentosarjojen hallinta…"
-
-#: kross/KoScriptingPart.cpp:160
-#, kde-format
-msgid "Execute Script File"
-msgstr "Suorita komentosarjatiedosto"
-
-#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
-#, kde-format
-msgid "Save"
-msgstr "Tallenna"
-
-#: kross/KoScriptManagerAdd.cpp:54
-#, kde-format
-msgid ""
-"<qt>This wizard will guide you through the process of adding a new resource "
-"to your scripts.</qt>"
-msgstr ""
-"<qt>Tämä opastettu toiminto auttaa sinua lisäämään uuden lähteen "
-"komentojonoillesi.</qt>"
-
-#: kross/KoScriptManagerAdd.cpp:59
-#, kde-format
-msgid "Add script file"
-msgstr "Lisää komentosarjatiedosto"
-
-#: kross/KoScriptManagerAdd.cpp:64
-#, kde-format
-msgid "Add collection folder"
-msgstr "Lisää kokoelmakansio"
-
-#: kross/KoScriptManagerAdd.cpp:67
-#, kde-format
-msgid "Install script package file"
-msgstr "Asenna komentosarjapaketti tiedostosta"
-
-#: kross/KoScriptManagerAdd.cpp:71
-#, kde-format
-msgid "Install online script package"
-msgstr "Asenna komentosarjapaketti verkosta"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, add)
-#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
-#: widgets/KoEditColorSet.ui:45
-#, kde-format
-msgid "Add"
-msgstr "Lisää"
-
-#: kross/KoScriptManagerAdd.cpp:281
-#, kde-format
-msgid "Script File"
-msgstr "Komentosarjatiedosto"
-
-#: kross/KoScriptManagerAdd.cpp:284
-#, kde-format
-msgid "Script"
-msgstr "Komentosarja"
-
-#: kross/KoScriptManagerAdd.cpp:287
-#, kde-format
-msgid "Collection"
-msgstr "Kokoelma"
-
 #: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
 #, kde-format
 msgctxt "Default text for undo action"
@@ -801,13 +720,13 @@ msgstr "Tee %1 uudelleen"
 msgid "<empty>"
 msgstr "<tyhjä>"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Tee uudelleen"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1153,7 +1072,7 @@ msgstr ""
 "Tästä tiedostosta on automaattisesti tallennettu versio.\n"
 "Haluatko avata sen?"
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Tiedostoa %1 ei ole olemassa."
@@ -1328,7 +1247,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "Nimetön"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1472,93 +1391,98 @@ msgstr "Etsi kohdistimesta alkaen"
 msgid "Start searching from the current cursor"
 msgstr "Aloita haku kohdistimen kohdalta"
 
-#: main/KoMainWindow.cpp:163
+#: main/KoMainWindow.cpp:164
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 tallentamaton tiedosto (%2)"
 
-#: main/KoMainWindow.cpp:272
+#: main/KoMainWindow.cpp:273
 #, kde-format
 msgid "Export as PDF..."
 msgstr "Vie PDF:ksi…"
 
-#: main/KoMainWindow.cpp:282
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Reload"
 msgstr "Lataa uudelleen"
 
-#: main/KoMainWindow.cpp:286
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "Versions..."
 msgstr "Versiot…"
 
-#: main/KoMainWindow.cpp:290
+#: main/KoMainWindow.cpp:291
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Avaa muu asiakirja nimettömänä asiakirjana…"
 
-#: main/KoMainWindow.cpp:294
+#: main/KoMainWindow.cpp:295
 #, kde-format
 msgid "E&xport..."
 msgstr "&Vie…"
 
-#: main/KoMainWindow.cpp:298
+#: main/KoMainWindow.cpp:299
 #, kde-format
 msgid "En&crypt Document"
 msgstr "Salaa &tiedosto"
 
-#: main/KoMainWindow.cpp:303
+#: main/KoMainWindow.cpp:304
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "P&ura kansioon"
 
-#: main/KoMainWindow.cpp:308
+#: main/KoMainWindow.cpp:309
 #, kde-format
 msgid "&New View"
 msgstr "&Uusi näkymä"
 
-#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
 #, kde-format
 msgid "Document Information"
 msgstr "Tiedoston tiedot"
 
-#: main/KoMainWindow.cpp:338
+#: main/KoMainWindow.cpp:339
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Koko näytön tila"
 
-#: main/KoMainWindow.cpp:343
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Show Dockers"
 msgstr "Näytä telakat"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:349
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Näytä telakoiden otsikkopalkit"
 
-#: main/KoMainWindow.cpp:355
+#: main/KoMainWindow.cpp:356
 #, kde-format
 msgid "Dockers"
 msgstr "Telakat"
 
-#: main/KoMainWindow.cpp:660
+#: main/KoMainWindow.cpp:650
 #, kde-format
 msgid "(write protected)"
 msgstr "(kirjoitussuojattu)"
 
-#: main/KoMainWindow.cpp:665
+#: main/KoMainWindow.cpp:655
 #, kde-format
 msgid "Save as %1"
 msgstr "Tallenna nimellä %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:657
+#, kde-format
+msgid "Save"
+msgstr "Tallenna"
+
+#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (tuntematon tiedostotyyppi)"
 
-#: main/KoMainWindow.cpp:855
+#: main/KoMainWindow.cpp:845
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1567,12 +1491,12 @@ msgstr ""
 "<qt>Tiedoston muotoilu saattaa muuttua %1-muotoon tallennettaessa. "
 "<p>Haluatko varmasti muuntaa tähän muotoon?</qt>"
 
-#: main/KoMainWindow.cpp:858
+#: main/KoMainWindow.cpp:848
 #, kde-format
 msgid "Confirm Save"
 msgstr "Vahvista tallennus"
 
-#: main/KoMainWindow.cpp:867
+#: main/KoMainWindow.cpp:857
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1581,52 +1505,52 @@ msgstr ""
 "<qt>Tiedoston muotoilu saattaa muuttua %1-muotoon tallennettaessa."
 "<p>Haluatko varmasti muuntaa tähän muotoon?</qt>"
 
-#: main/KoMainWindow.cpp:870
+#: main/KoMainWindow.cpp:860
 #, kde-format
 msgid "Confirm Export"
 msgstr "Vahvista muuntaminen"
 
-#: main/KoMainWindow.cpp:871
+#: main/KoMainWindow.cpp:861
 #, kde-format
 msgid "Export"
 msgstr "Vie"
 
-#: main/KoMainWindow.cpp:969
+#: main/KoMainWindow.cpp:959
 #, kde-format
 msgid "untitled"
 msgstr "nimetön"
 
-#: main/KoMainWindow.cpp:1245
+#: main/KoMainWindow.cpp:1235
 #, kde-format
 msgid "Open Document"
 msgstr "Avaa tiedosto"
 
-#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "Tuo tiedosto"
 
-#: main/KoMainWindow.cpp:1419
+#: main/KoMainWindow.cpp:1409
 #, kde-format
 msgid "Export as PDF"
 msgstr "Vie PDF:ksi"
 
-#: main/KoMainWindow.cpp:1456
+#: main/KoMainWindow.cpp:1446
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "Annettuun tiedostoon ei voi viedä"
 
-#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "Tiedosto"
 
-#: main/KoMainWindow.cpp:1663
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Document - %1"
 msgstr "Tiedosto – %1"
 
-#: main/KoMainWindow.cpp:1700
+#: main/KoMainWindow.cpp:1690
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1635,17 +1559,17 @@ msgstr ""
 "Kaikki tallennuksen jälkeiset muutokset menetetään.\n"
 "Haluatko varmasti jatkaa?"
 
-#: main/KoMainWindow.cpp:1702
+#: main/KoMainWindow.cpp:1692
 #, kde-format
 msgid "Warning"
 msgstr "Varoitus"
 
-#: main/KoMainWindow.cpp:2067
+#: main/KoMainWindow.cpp:2057
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Näytä työkalurivi %1"
 
-#: main/KoMainWindow.cpp:2069
+#: main/KoMainWindow.cpp:2059
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Piilota työkalurivi %1"
@@ -3791,7 +3715,7 @@ msgstr "Tietotyyppi"
 msgid "Stored In"
 msgstr "Varastossa"
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3800,14 +3724,14 @@ msgstr ""
 "Tiedoston tarkistussumma on tuntematon. Kun annat salasanan, sitä ei kenties "
 "vahvisteta."
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Varoitus"
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3815,15 +3739,15 @@ msgid ""
 msgstr ""
 "Tiedoston salausmenetelmä on tuntematon. Tiedosto voi olla osin lukukelvoton."
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:287
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Varoitus"
 
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3832,7 +3756,7 @@ msgstr ""
 "Tiedoston salausmenetelmän tiedot ovat epätäydellisiä. Tiedosto voi olla "
 "osin lukukelvoton."
 
-#: store/KoEncryptedStore.cpp:299
+#: store/KoEncryptedStore.cpp:301
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
@@ -3841,7 +3765,7 @@ msgstr ""
 "QCA ei toistaiseksi tue SHA1 tai PBKDF2 käyttäen SHA1. Tiedoston avaaminen "
 "epäonnistui."
 
-#: store/KoEncryptedStore.cpp:329
+#: store/KoEncryptedStore.cpp:331
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3852,7 +3776,7 @@ msgstr ""
 "lukukelvottomana. Yritä tallentaa tiedosto uudestaan jotta et menettäisi "
 "työtäsi."
 
-#: store/KoEncryptedStore.cpp:427
+#: store/KoEncryptedStore.cpp:429
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3861,17 +3785,17 @@ msgstr ""
 "Tiedostoa ei voitu kirjoittaa ja tiedosto pysyy lukukelvottomana. Yritä "
 "tallentaa tiedosto uudestaan jotta et menettäisi työtäsi."
 
-#: store/KoEncryptedStore.cpp:548
+#: store/KoEncryptedStore.cpp:550
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Anna salasana tiedoston avaamiseksi."
 
-#: store/KoEncryptedStore.cpp:723
+#: store/KoEncryptedStore.cpp:710
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Anna salasana tiedoston salaamiseksi."
 
-#: store/KoEncryptedStore.cpp:737
+#: store/KoEncryptedStore.cpp:724
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Haluatko tallentaa salasanan?"
@@ -4948,6 +4872,12 @@ msgstr ""
 "<qt>Tiedostoa on muutettu avaamisen jälkeen. Se on tallennettava, jotta "
 "salaus olisi saatettu loppuun.<p>Haluatko tallentaa tiedoston nyt?</qt>"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Lisää"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
 #, kde-format
@@ -5631,6 +5561,49 @@ msgstr "Kaikki tuetut tiedostomuodot"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Scripts"
+#~ msgstr "Komentosarjat"
+
+#~ msgid "Script Manager"
+#~ msgstr "Komentosarjojen hallinta"
+
+#~ msgid "Execute Script File..."
+#~ msgstr "Suorita komentosarjatiedosto…"
+
+#~ msgid "Script Manager..."
+#~ msgstr "Komentosarjojen hallinta…"
+
+#~ msgid "Execute Script File"
+#~ msgstr "Suorita komentosarjatiedosto"
+
+#~ msgid ""
+#~ "<qt>This wizard will guide you through the process of adding a new "
+#~ "resource to your scripts.</qt>"
+#~ msgstr ""
+#~ "<qt>Tämä opastettu toiminto auttaa sinua lisäämään uuden lähteen "
+#~ "komentojonoillesi.</qt>"
+
+#~ msgid "Add script file"
+#~ msgstr "Lisää komentosarjatiedosto"
+
+#~ msgid "Add collection folder"
+#~ msgstr "Lisää kokoelmakansio"
+
+#~ msgid "Install script package file"
+#~ msgstr "Asenna komentosarjapaketti tiedostosta"
+
+#~ msgid "Install online script package"
+#~ msgstr "Asenna komentosarjapaketti verkosta"
+
+#~ msgid "Script File"
+#~ msgstr "Komentosarjatiedosto"
+
+#~ msgid "Script"
+#~ msgstr "Komentosarja"
+
+#~ msgid "Collection"
+#~ msgstr "Kokoelma"
 
 #~ msgid "Key Press"
 #~ msgstr "Näppäinpainallus"

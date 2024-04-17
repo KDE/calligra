@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-17 01:46+0000\n"
 "PO-Revision-Date: 2015-09-26 16:45-0700\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -650,89 +650,6 @@ msgstr "..."
 msgid "Convert To Path"
 msgstr "パスに変換"
 
-#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
-#, kde-format
-msgid "Scripts"
-msgstr "スクリプト"
-
-#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
-#, kde-format
-msgid "Script Manager"
-msgstr "スクリプトマネージャ"
-
-#: kross/KoScriptingPart.cpp:78
-#, kde-format
-msgid "Execute Script File..."
-msgstr "スクリプトファイルを実行..."
-
-#: kross/KoScriptingPart.cpp:86
-#, kde-format
-msgid "Script Manager..."
-msgstr "スクリプトマネージャ..."
-
-#: kross/KoScriptingPart.cpp:160
-#, kde-format
-msgid "Execute Script File"
-msgstr "スクリプトファイルを実行"
-
-#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
-#, kde-format
-msgid "Save"
-msgstr "保存"
-
-#: kross/KoScriptManagerAdd.cpp:54
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>This wizard will guide you through the proccess of adding a new "
-#| "resource to your scripts.</qt>"
-msgid ""
-"<qt>This wizard will guide you through the process of adding a new resource "
-"to your scripts.</qt>"
-msgstr ""
-"<qt>このウィザードを使ってスクリプトに新しいリソースを追加します。</qt>"
-
-#: kross/KoScriptManagerAdd.cpp:59
-#, kde-format
-msgid "Add script file"
-msgstr "スクリプトファイルを追加"
-
-#: kross/KoScriptManagerAdd.cpp:64
-#, kde-format
-msgid "Add collection folder"
-msgstr "コレクションフォルダを追加"
-
-#: kross/KoScriptManagerAdd.cpp:67
-#, kde-format
-msgid "Install script package file"
-msgstr "スクリプトパッケージファイルをインストール"
-
-#: kross/KoScriptManagerAdd.cpp:71
-#, kde-format
-msgid "Install online script package"
-msgstr "オンラインスクリプトパッケージをインストール"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, add)
-#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
-#: widgets/KoEditColorSet.ui:45
-#, kde-format
-msgid "Add"
-msgstr "追加"
-
-#: kross/KoScriptManagerAdd.cpp:281
-#, kde-format
-msgid "Script File"
-msgstr "スクリプトファイル"
-
-#: kross/KoScriptManagerAdd.cpp:284
-#, kde-format
-msgid "Script"
-msgstr "スクリプト"
-
-#: kross/KoScriptManagerAdd.cpp:287
-#, kde-format
-msgid "Collection"
-msgstr "コレクション"
-
 #: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
 #, kde-format
 msgctxt "Default text for undo action"
@@ -763,13 +680,13 @@ msgstr "%1 をやり直す"
 msgid "<empty>"
 msgstr "空"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "やり直す"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1113,7 +1030,7 @@ msgstr ""
 "この文書の自動保存ファイルがあります。\n"
 "それを代わりに開きますか？"
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "ファイル ‘%1’ は存在しません。"
@@ -1287,7 +1204,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "タイトルなし"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1428,93 +1345,98 @@ msgstr "カーソル位置から検索"
 msgid "Start searching from the current cursor"
 msgstr "現在のカーソル位置から検索開始"
 
-#: main/KoMainWindow.cpp:163
+#: main/KoMainWindow.cpp:164
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 未保存の文書 (%2)"
 
-#: main/KoMainWindow.cpp:272
+#: main/KoMainWindow.cpp:273
 #, kde-format
 msgid "Export as PDF..."
 msgstr "PDF にエクスポート..."
 
-#: main/KoMainWindow.cpp:282
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Reload"
 msgstr "再読み込み"
 
-#: main/KoMainWindow.cpp:286
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "Versions..."
 msgstr "バージョン..."
 
-#: main/KoMainWindow.cpp:290
+#: main/KoMainWindow.cpp:291
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "保存済み文書を無題の文書として開く(&I)..."
 
-#: main/KoMainWindow.cpp:294
+#: main/KoMainWindow.cpp:295
 #, kde-format
 msgid "E&xport..."
 msgstr "エクスポート(&X)..."
 
-#: main/KoMainWindow.cpp:298
+#: main/KoMainWindow.cpp:299
 #, kde-format
 msgid "En&crypt Document"
 msgstr "文書を暗号化(&C)"
 
-#: main/KoMainWindow.cpp:303
+#: main/KoMainWindow.cpp:304
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "ディレクトリに展開(&U)"
 
-#: main/KoMainWindow.cpp:308
+#: main/KoMainWindow.cpp:309
 #, kde-format
 msgid "&New View"
 msgstr "新しいビュー(&N)"
 
-#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
 #, kde-format
 msgid "Document Information"
 msgstr "文書情報"
 
-#: main/KoMainWindow.cpp:338
+#: main/KoMainWindow.cpp:339
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "フルスクリーンモード"
 
-#: main/KoMainWindow.cpp:343
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Show Dockers"
 msgstr "ドッキングパネルを表示"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:349
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "ドッキングパネルのタイトルバーを表示"
 
-#: main/KoMainWindow.cpp:355
+#: main/KoMainWindow.cpp:356
 #, kde-format
 msgid "Dockers"
 msgstr "ドッキングパネル"
 
-#: main/KoMainWindow.cpp:660
+#: main/KoMainWindow.cpp:650
 #, kde-format
 msgid "(write protected)"
 msgstr "(書き込み保護)"
 
-#: main/KoMainWindow.cpp:665
+#: main/KoMainWindow.cpp:655
 #, kde-format
 msgid "Save as %1"
 msgstr "%1 として保存"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:657
+#, kde-format
+msgid "Save"
+msgstr "保存"
+
+#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (未知のファイルタイプ)"
 
-#: main/KoMainWindow.cpp:855
+#: main/KoMainWindow.cpp:845
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1523,12 +1445,12 @@ msgstr ""
 "<qt>%1 として保存すると一部の書式が失われる可能性があります。<p>それでもこの"
 "形式で保存しますか？</qt>"
 
-#: main/KoMainWindow.cpp:858
+#: main/KoMainWindow.cpp:848
 #, kde-format
 msgid "Confirm Save"
 msgstr "保存の確認"
 
-#: main/KoMainWindow.cpp:867
+#: main/KoMainWindow.cpp:857
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1537,52 +1459,52 @@ msgstr ""
 "<qt>%1 としてエクスポートすると一部の書式が失われる可能性があります。<p>それ"
 "でもこの形式でエクスポートしますか？</qt>"
 
-#: main/KoMainWindow.cpp:870
+#: main/KoMainWindow.cpp:860
 #, kde-format
 msgid "Confirm Export"
 msgstr "エクスポートを確認"
 
-#: main/KoMainWindow.cpp:871
+#: main/KoMainWindow.cpp:861
 #, kde-format
 msgid "Export"
 msgstr "エクスポート"
 
-#: main/KoMainWindow.cpp:969
+#: main/KoMainWindow.cpp:959
 #, kde-format
 msgid "untitled"
 msgstr "タイトルなし"
 
-#: main/KoMainWindow.cpp:1245
+#: main/KoMainWindow.cpp:1235
 #, kde-format
 msgid "Open Document"
 msgstr "文書を開く"
 
-#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "文書をインポート"
 
-#: main/KoMainWindow.cpp:1419
+#: main/KoMainWindow.cpp:1409
 #, kde-format
 msgid "Export as PDF"
 msgstr "PDF としてエクスポート"
 
-#: main/KoMainWindow.cpp:1456
+#: main/KoMainWindow.cpp:1446
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "指定したファイルにエクスポートできません"
 
-#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "文書"
 
-#: main/KoMainWindow.cpp:1663
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Document - %1"
 msgstr "文書 -%1"
 
-#: main/KoMainWindow.cpp:1700
+#: main/KoMainWindow.cpp:1690
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1591,17 +1513,17 @@ msgstr ""
 "前回の保存以降のすべての変更が失われます。\n"
 "続けますか？"
 
-#: main/KoMainWindow.cpp:1702
+#: main/KoMainWindow.cpp:1692
 #, kde-format
 msgid "Warning"
 msgstr "警告"
 
-#: main/KoMainWindow.cpp:2067
+#: main/KoMainWindow.cpp:2057
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "%1ツールバーを表示"
 
-#: main/KoMainWindow.cpp:2069
+#: main/KoMainWindow.cpp:2059
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "%1ツールバーを隠す"
@@ -3657,7 +3579,7 @@ msgstr "データタイプ"
 msgid "Stored In"
 msgstr "保存場所"
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3666,14 +3588,14 @@ msgstr ""
 "この文書には不明なチェックサムが含まれています。パスワードを与えても検証され"
 "ない可能性があります。"
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "警告"
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3681,15 +3603,15 @@ msgid ""
 msgstr ""
 "この文書には不明な暗号方式が含まれています。一部は読めないかもしれません。"
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:287
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "警告"
 
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3698,7 +3620,7 @@ msgstr ""
 "この文書には不完全な暗号化されたデータが含まれています。一部は読めないかもし"
 "れません。"
 
-#: store/KoEncryptedStore.cpp:299
+#: store/KoEncryptedStore.cpp:301
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
@@ -3707,7 +3629,7 @@ msgstr ""
 "QCA は今のところ SHA1 や SHA1 を使った PBKDF2 をサポートしていません。この文"
 "書は開けません。"
 
-#: store/KoEncryptedStore.cpp:329
+#: store/KoEncryptedStore.cpp:331
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3718,7 +3640,7 @@ msgstr ""
 "書は読み出し不能のままです。作業内容を失わないよう、再び保存を試みてくださ"
 "い。"
 
-#: store/KoEncryptedStore.cpp:427
+#: store/KoEncryptedStore.cpp:429
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3727,17 +3649,17 @@ msgstr ""
 "マニフェストファイルを書き込むことができません。文書は読み出し不能のままで"
 "す。作業内容を失わないよう、再び保存を試みてください。"
 
-#: store/KoEncryptedStore.cpp:548
+#: store/KoEncryptedStore.cpp:550
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "このファイルを開くためのパスワードを入力してください。"
 
-#: store/KoEncryptedStore.cpp:723
+#: store/KoEncryptedStore.cpp:710
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "この文書を暗号化するためのパスワードを入力してください。"
 
-#: store/KoEncryptedStore.cpp:737
+#: store/KoEncryptedStore.cpp:724
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "パスワードを保存しますか？"
@@ -4738,6 +4660,12 @@ msgstr ""
 "<qt>この文書は、開かれてから変更されています。暗号化するには、文書を保存する"
 "必要があります。<p>文書を保存しますか？</qt>"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "追加"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
 #, kde-format
@@ -5455,3 +5383,49 @@ msgstr "サポートされているすべてのフォーマット"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Scripts"
+#~ msgstr "スクリプト"
+
+#~ msgid "Script Manager"
+#~ msgstr "スクリプトマネージャ"
+
+#~ msgid "Execute Script File..."
+#~ msgstr "スクリプトファイルを実行..."
+
+#~ msgid "Script Manager..."
+#~ msgstr "スクリプトマネージャ..."
+
+#~ msgid "Execute Script File"
+#~ msgstr "スクリプトファイルを実行"
+
+#, fuzzy
+#~| msgid ""
+#~| "<qt>This wizard will guide you through the proccess of adding a new "
+#~| "resource to your scripts.</qt>"
+#~ msgid ""
+#~ "<qt>This wizard will guide you through the process of adding a new "
+#~ "resource to your scripts.</qt>"
+#~ msgstr ""
+#~ "<qt>このウィザードを使ってスクリプトに新しいリソースを追加します。</qt>"
+
+#~ msgid "Add script file"
+#~ msgstr "スクリプトファイルを追加"
+
+#~ msgid "Add collection folder"
+#~ msgstr "コレクションフォルダを追加"
+
+#~ msgid "Install script package file"
+#~ msgstr "スクリプトパッケージファイルをインストール"
+
+#~ msgid "Install online script package"
+#~ msgstr "オンラインスクリプトパッケージをインストール"
+
+#~ msgid "Script File"
+#~ msgstr "スクリプトファイル"
+
+#~ msgid "Script"
+#~ msgstr "スクリプト"
+
+#~ msgid "Collection"
+#~ msgstr "コレクション"

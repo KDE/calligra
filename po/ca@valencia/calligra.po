@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-17 01:46+0000\n"
 "PO-Revision-Date: 2023-08-25 19:01+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -648,87 +648,6 @@ msgstr "..."
 msgid "Convert To Path"
 msgstr "Convertix a traç"
 
-#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
-#, kde-format
-msgid "Scripts"
-msgstr "Scripts"
-
-#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
-#, kde-format
-msgid "Script Manager"
-msgstr "Gestor de scripts"
-
-#: kross/KoScriptingPart.cpp:78
-#, kde-format
-msgid "Execute Script File..."
-msgstr "Executa el fitxer de script..."
-
-#: kross/KoScriptingPart.cpp:86
-#, kde-format
-msgid "Script Manager..."
-msgstr "Gestor de scripts..."
-
-#: kross/KoScriptingPart.cpp:160
-#, kde-format
-msgid "Execute Script File"
-msgstr "Executa el fitxer de script"
-
-#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
-#, kde-format
-msgid "Save"
-msgstr "Guarda"
-
-#: kross/KoScriptManagerAdd.cpp:54
-#, kde-format
-msgid ""
-"<qt>This wizard will guide you through the process of adding a new resource "
-"to your scripts.</qt>"
-msgstr ""
-"<qt>Este assistent vos guiarà pel procés d'afegir un recurs nou per als "
-"vostres scripts.</qt>"
-
-#: kross/KoScriptManagerAdd.cpp:59
-#, kde-format
-msgid "Add script file"
-msgstr "Afig un fitxer de script"
-
-#: kross/KoScriptManagerAdd.cpp:64
-#, kde-format
-msgid "Add collection folder"
-msgstr "Afig una carpeta de col·lecció"
-
-#: kross/KoScriptManagerAdd.cpp:67
-#, kde-format
-msgid "Install script package file"
-msgstr "Instal·la el fitxer de paquet de scripts"
-
-#: kross/KoScriptManagerAdd.cpp:71
-#, kde-format
-msgid "Install online script package"
-msgstr "Instal·la un paquet de scripts en línia"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, add)
-#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
-#: widgets/KoEditColorSet.ui:45
-#, kde-format
-msgid "Add"
-msgstr "Afig"
-
-#: kross/KoScriptManagerAdd.cpp:281
-#, kde-format
-msgid "Script File"
-msgstr "Fitxer de script"
-
-#: kross/KoScriptManagerAdd.cpp:284
-#, kde-format
-msgid "Script"
-msgstr "Script"
-
-#: kross/KoScriptManagerAdd.cpp:287
-#, kde-format
-msgid "Collection"
-msgstr "Col·lecció"
-
 #: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
 #, kde-format
 msgctxt "Default text for undo action"
@@ -758,13 +677,13 @@ msgstr "Refés %1"
 msgid "<empty>"
 msgstr "<buit>"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Refés"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1113,7 +1032,7 @@ msgstr ""
 "Ja existix un fitxer de guardada automàtica per a este document.\n"
 "Voleu obrir-lo en comptes d'este?"
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "El fitxer %1 no existix."
@@ -1290,7 +1209,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "Sense títol"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1434,93 +1353,98 @@ msgstr "Busca des del cursor"
 msgid "Start searching from the current cursor"
 msgstr "Inicia la busca des del cursor actual"
 
-#: main/KoMainWindow.cpp:163
+#: main/KoMainWindow.cpp:164
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 document sense guardar (%2)"
 
-#: main/KoMainWindow.cpp:272
+#: main/KoMainWindow.cpp:273
 #, kde-format
 msgid "Export as PDF..."
 msgstr "Exporta com a PDF..."
 
-#: main/KoMainWindow.cpp:282
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Reload"
 msgstr "Torna a carregar"
 
-#: main/KoMainWindow.cpp:286
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "Versions..."
 msgstr "Versions..."
 
-#: main/KoMainWindow.cpp:290
+#: main/KoMainWindow.cpp:291
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Obri un document ex&istent com a document sense títol..."
 
-#: main/KoMainWindow.cpp:294
+#: main/KoMainWindow.cpp:295
 #, kde-format
 msgid "E&xport..."
 msgstr "E&xporta..."
 
-#: main/KoMainWindow.cpp:298
+#: main/KoMainWindow.cpp:299
 #, kde-format
 msgid "En&crypt Document"
 msgstr "En&cripta document"
 
-#: main/KoMainWindow.cpp:303
+#: main/KoMainWindow.cpp:304
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "&Descomprimix en un directori"
 
-#: main/KoMainWindow.cpp:308
+#: main/KoMainWindow.cpp:309
 #, kde-format
 msgid "&New View"
 msgstr "Vista &nova"
 
-#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
 #, kde-format
 msgid "Document Information"
 msgstr "Informació del document"
 
-#: main/KoMainWindow.cpp:338
+#: main/KoMainWindow.cpp:339
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Mode de pantalla completa"
 
-#: main/KoMainWindow.cpp:343
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Show Dockers"
 msgstr "Mostra els acobladors"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:349
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Mostra les barres de títol dels acobladors"
 
-#: main/KoMainWindow.cpp:355
+#: main/KoMainWindow.cpp:356
 #, kde-format
 msgid "Dockers"
 msgstr "Acobladors"
 
-#: main/KoMainWindow.cpp:660
+#: main/KoMainWindow.cpp:650
 #, kde-format
 msgid "(write protected)"
 msgstr "(protegit contra escriptura)"
 
-#: main/KoMainWindow.cpp:665
+#: main/KoMainWindow.cpp:655
 #, kde-format
 msgid "Save as %1"
 msgstr "Anomena i guarda %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:657
+#, kde-format
+msgid "Save"
+msgstr "Guarda"
+
+#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (tipus de fitxer desconegut)"
 
-#: main/KoMainWindow.cpp:855
+#: main/KoMainWindow.cpp:845
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1529,12 +1453,12 @@ msgstr ""
 "<qt>Guardar com a %1 pot resultar en pèrdua de format.<p> Segur que voleu "
 "guardar en este format?</qt>"
 
-#: main/KoMainWindow.cpp:858
+#: main/KoMainWindow.cpp:848
 #, kde-format
 msgid "Confirm Save"
 msgstr "Confirmació del guardada"
 
-#: main/KoMainWindow.cpp:867
+#: main/KoMainWindow.cpp:857
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1543,52 +1467,52 @@ msgstr ""
 "<qt>Exportar com a %1 pot resultar en pèrdua de format.<p> Segur que voleu "
 "exportar cap a este format?</qt>"
 
-#: main/KoMainWindow.cpp:870
+#: main/KoMainWindow.cpp:860
 #, kde-format
 msgid "Confirm Export"
 msgstr "Confirmació d'exportació"
 
-#: main/KoMainWindow.cpp:871
+#: main/KoMainWindow.cpp:861
 #, kde-format
 msgid "Export"
 msgstr "Exporta"
 
-#: main/KoMainWindow.cpp:969
+#: main/KoMainWindow.cpp:959
 #, kde-format
 msgid "untitled"
 msgstr "sense títol"
 
-#: main/KoMainWindow.cpp:1245
+#: main/KoMainWindow.cpp:1235
 #, kde-format
 msgid "Open Document"
 msgstr "Obri document"
 
-#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "Importa document"
 
-#: main/KoMainWindow.cpp:1419
+#: main/KoMainWindow.cpp:1409
 #, kde-format
 msgid "Export as PDF"
 msgstr "Exporta com a PDF"
 
-#: main/KoMainWindow.cpp:1456
+#: main/KoMainWindow.cpp:1446
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "No s'ha pogut exportar cap al fitxer especificat"
 
-#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "Document"
 
-#: main/KoMainWindow.cpp:1663
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Document - %1"
 msgstr "Document - %1"
 
-#: main/KoMainWindow.cpp:1700
+#: main/KoMainWindow.cpp:1690
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1597,17 +1521,17 @@ msgstr ""
 "Es perdran tots els canvis fets des de l'última vegada que vau guardar.\n"
 "Segur que voleu continuar?"
 
-#: main/KoMainWindow.cpp:1702
+#: main/KoMainWindow.cpp:1692
 #, kde-format
 msgid "Warning"
 msgstr "Avís"
 
-#: main/KoMainWindow.cpp:2067
+#: main/KoMainWindow.cpp:2057
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Mostra la barra d'eines %1"
 
-#: main/KoMainWindow.cpp:2069
+#: main/KoMainWindow.cpp:2059
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Oculta la barra d'eines %1"
@@ -3693,7 +3617,7 @@ msgstr "TipusDada"
 msgid "Stored In"
 msgstr "Emmagatzemat a"
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3702,14 +3626,14 @@ msgstr ""
 "Este document conté una suma de verificació desconeguda. Quan en doneu una "
 "contrasenya, no es podrà verificar."
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Avís"
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3718,15 +3642,15 @@ msgstr ""
 "Este document conté un mètode d'encriptació desconegut. Algunes parts poden "
 "no ser llegibles."
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:287
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Avís"
 
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3735,7 +3659,7 @@ msgstr ""
 "Este document conté dades d'encriptació incompletes. Algunes parts poden no "
 "ser llegibles."
 
-#: store/KoEncryptedStore.cpp:299
+#: store/KoEncryptedStore.cpp:301
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
@@ -3744,7 +3668,7 @@ msgstr ""
 "QCA no té suport actualment per a SHA1 o PBKDF2 utilitzant SHA1. El document "
 "no es pot obrir."
 
-#: store/KoEncryptedStore.cpp:329
+#: store/KoEncryptedStore.cpp:331
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3755,7 +3679,7 @@ msgstr ""
 "document romandrà illegible. Proveu de guardar el document de nou per tal de "
 "preveure la pèrdua de la vostra faena."
 
-#: store/KoEncryptedStore.cpp:427
+#: store/KoEncryptedStore.cpp:429
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3765,17 +3689,17 @@ msgstr ""
 "Proveu de guardar el document per tal de preveure la pèrdua de la vostra "
 "faena."
 
-#: store/KoEncryptedStore.cpp:548
+#: store/KoEncryptedStore.cpp:550
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Introduïu la contrasenya per a obrir este fitxer."
 
-#: store/KoEncryptedStore.cpp:723
+#: store/KoEncryptedStore.cpp:710
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Introduïu la contrasenya per a encriptar-hi el document."
 
-#: store/KoEncryptedStore.cpp:737
+#: store/KoEncryptedStore.cpp:724
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Voleu guardar la contrasenya?"
@@ -4772,6 +4696,12 @@ msgstr ""
 "<qt>S'ha modificat el document des que es va obrir. Per a completar "
 "l'encriptació, cal guardar el document.<p>El voleu guardar ara?</qt>"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Afig"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
 #, kde-format
@@ -5481,3 +5411,46 @@ msgstr "Tots els formats acceptats"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Scripts"
+#~ msgstr "Scripts"
+
+#~ msgid "Script Manager"
+#~ msgstr "Gestor de scripts"
+
+#~ msgid "Execute Script File..."
+#~ msgstr "Executa el fitxer de script..."
+
+#~ msgid "Script Manager..."
+#~ msgstr "Gestor de scripts..."
+
+#~ msgid "Execute Script File"
+#~ msgstr "Executa el fitxer de script"
+
+#~ msgid ""
+#~ "<qt>This wizard will guide you through the process of adding a new "
+#~ "resource to your scripts.</qt>"
+#~ msgstr ""
+#~ "<qt>Este assistent vos guiarà pel procés d'afegir un recurs nou per als "
+#~ "vostres scripts.</qt>"
+
+#~ msgid "Add script file"
+#~ msgstr "Afig un fitxer de script"
+
+#~ msgid "Add collection folder"
+#~ msgstr "Afig una carpeta de col·lecció"
+
+#~ msgid "Install script package file"
+#~ msgstr "Instal·la el fitxer de paquet de scripts"
+
+#~ msgid "Install online script package"
+#~ msgstr "Instal·la un paquet de scripts en línia"
+
+#~ msgid "Script File"
+#~ msgstr "Fitxer de script"
+
+#~ msgid "Script"
+#~ msgstr "Script"
+
+#~ msgid "Collection"
+#~ msgstr "Col·lecció"

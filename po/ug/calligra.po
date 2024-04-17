@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-17 01:46+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -744,91 +744,6 @@ msgstr "…"
 msgid "Convert To Path"
 msgstr "يولغا ئۆزگەرت"
 
-#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
-#, kde-format
-msgid "Scripts"
-msgstr "قوليازما"
-
-#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
-#, kde-format
-msgid "Script Manager"
-msgstr "قوليازما باشقۇرغۇ"
-
-#: kross/KoScriptingPart.cpp:78
-#, fuzzy, kde-format
-#| msgid "Script File"
-msgid "Execute Script File..."
-msgstr "قوليازما ھۆججىتى"
-
-#: kross/KoScriptingPart.cpp:86
-#, fuzzy, kde-format
-#| msgid "Script Manager"
-msgid "Script Manager..."
-msgstr "قوليازما باشقۇرغۇ"
-
-#: kross/KoScriptingPart.cpp:160
-#, fuzzy, kde-format
-#| msgid "Script File"
-msgid "Execute Script File"
-msgstr "قوليازما ھۆججىتى"
-
-#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
-#, kde-format
-msgid "Save"
-msgstr "ساقلا"
-
-#: kross/KoScriptManagerAdd.cpp:54
-#, kde-format
-msgid ""
-"<qt>This wizard will guide you through the process of adding a new resource "
-"to your scripts.</qt>"
-msgstr ""
-
-#: kross/KoScriptManagerAdd.cpp:59
-#, fuzzy, kde-format
-#| msgid "Script File"
-msgid "Add script file"
-msgstr "قوليازما ھۆججىتى"
-
-#: kross/KoScriptManagerAdd.cpp:64
-#, kde-format
-msgid "Add collection folder"
-msgstr ""
-
-#: kross/KoScriptManagerAdd.cpp:67
-#, fuzzy, kde-format
-#| msgid "Script Manager"
-msgid "Install script package file"
-msgstr "قوليازما باشقۇرغۇ"
-
-#: kross/KoScriptManagerAdd.cpp:71
-#, fuzzy, kde-format
-#| msgid "Script Manager"
-msgid "Install online script package"
-msgstr "قوليازما باشقۇرغۇ"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, add)
-#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
-#: widgets/KoEditColorSet.ui:45
-#, kde-format
-msgid "Add"
-msgstr "قوش"
-
-#: kross/KoScriptManagerAdd.cpp:281
-#, kde-format
-msgid "Script File"
-msgstr "قوليازما ھۆججىتى"
-
-#: kross/KoScriptManagerAdd.cpp:284
-#, kde-format
-msgid "Script"
-msgstr "قوليازما"
-
-#: kross/KoScriptManagerAdd.cpp:287
-#, kde-format
-msgid "Collection"
-msgstr "توپلام"
-
 #: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
 #, kde-format
 msgctxt "Default text for undo action"
@@ -859,13 +774,13 @@ msgstr "قايتىلا %1"
 msgid "<empty>"
 msgstr "بوش"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "قايتىلا"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1221,7 +1136,7 @@ msgid ""
 "Do you want to open it instead?"
 msgstr ""
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "ھۆججەت %1 مەۋجۇت ئەمەس."
@@ -1397,7 +1312,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "ماۋزۇسىز"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1552,186 +1467,191 @@ msgstr ""
 msgid "Start searching from the current cursor"
 msgstr ""
 
-#: main/KoMainWindow.cpp:163
+#: main/KoMainWindow.cpp:164
 #, fuzzy, kde-format
 #| msgid "Save Document As"
 msgid "%1 unsaved document (%2)"
 msgstr "پۈتۈكنى باشقا ئاتتا ساقلا"
 
-#: main/KoMainWindow.cpp:272
+#: main/KoMainWindow.cpp:273
 #, kde-format
 msgid "Export as PDF..."
 msgstr "PDF چىقار…"
 
-#: main/KoMainWindow.cpp:282
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Reload"
 msgstr "قايتا يۈكلە"
 
-#: main/KoMainWindow.cpp:286
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "Versions..."
 msgstr "نەشرى…"
 
-#: main/KoMainWindow.cpp:290
+#: main/KoMainWindow.cpp:291
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "پۈتۈك ئېچىش"
 
-#: main/KoMainWindow.cpp:294
+#: main/KoMainWindow.cpp:295
 #, kde-format
 msgid "E&xport..."
 msgstr "چىقار(&X)…"
 
-#: main/KoMainWindow.cpp:298
+#: main/KoMainWindow.cpp:299
 #, fuzzy, kde-format
 #| msgid "Recent Documents"
 msgid "En&crypt Document"
 msgstr "يېقىنقى پۈتۈكلەر"
 
-#: main/KoMainWindow.cpp:303
+#: main/KoMainWindow.cpp:304
 #, fuzzy, kde-format
 #| msgid "Import Data"
 msgid "&Uncompress to Directory"
 msgstr "سانلىق-مەلۇمات ئەكىر"
 
-#: main/KoMainWindow.cpp:308
+#: main/KoMainWindow.cpp:309
 #, kde-format
 msgid "&New View"
 msgstr "يېڭى كۆرۈنۈش(&N)"
 
-#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
 #, kde-format
 msgid "Document Information"
 msgstr "پۈتۈك ئۇچۇرى"
 
-#: main/KoMainWindow.cpp:338
+#: main/KoMainWindow.cpp:339
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "پۈتۈن ئېكران ھالىتى"
 
-#: main/KoMainWindow.cpp:343
+#: main/KoMainWindow.cpp:344
 #, fuzzy, kde-format
 #| msgid "Show Rulers"
 msgid "Show Dockers"
 msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:349
 #, fuzzy, kde-format
 #| msgid "Show Rulers"
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr " ‫سىزغۇچ‪لارنى كۆرسەت"
 
-#: main/KoMainWindow.cpp:355
+#: main/KoMainWindow.cpp:356
 #, fuzzy, kde-format
 #| msgid "Save Document"
 msgid "Dockers"
 msgstr "پۈتۈك ساقلا"
 
-#: main/KoMainWindow.cpp:660
+#: main/KoMainWindow.cpp:650
 #, kde-format
 msgid "(write protected)"
 msgstr "(يېزىش چەكلەنگەن)"
 
-#: main/KoMainWindow.cpp:665
+#: main/KoMainWindow.cpp:655
 #, kde-format
 msgid "Save as %1"
 msgstr "%1 سۈپىتىدە ساقلا"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:657
+#, kde-format
+msgid "Save"
+msgstr "ساقلا"
+
+#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (نامەلۇم ھۆججەت تىپى)"
 
-#: main/KoMainWindow.cpp:855
+#: main/KoMainWindow.cpp:845
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
 "want to save in this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:858
+#: main/KoMainWindow.cpp:848
 #, kde-format
 msgid "Confirm Save"
 msgstr "ساقلاشنى جەزملەش"
 
-#: main/KoMainWindow.cpp:867
+#: main/KoMainWindow.cpp:857
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
 "want to export to this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:870
+#: main/KoMainWindow.cpp:860
 #, fuzzy, kde-format
 #| msgid "Confirm Save"
 msgid "Confirm Export"
 msgstr "ساقلاشنى جەزملەش"
 
-#: main/KoMainWindow.cpp:871
+#: main/KoMainWindow.cpp:861
 #, kde-format
 msgid "Export"
 msgstr "ئېكسپورت قىل"
 
-#: main/KoMainWindow.cpp:969
+#: main/KoMainWindow.cpp:959
 #, fuzzy, kde-format
 #| msgid "Untitled"
 msgid "untitled"
 msgstr "ماۋزۇسىز"
 
-#: main/KoMainWindow.cpp:1245
+#: main/KoMainWindow.cpp:1235
 #, kde-format
 msgid "Open Document"
 msgstr "پۈتۈك ئېچىش"
 
-#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
 #, fuzzy, kde-format
 #| msgid "Save Document As"
 msgid "Import Document"
 msgstr "پۈتۈكنى باشقا ئاتتا ساقلا"
 
-#: main/KoMainWindow.cpp:1419
+#: main/KoMainWindow.cpp:1409
 #, fuzzy, kde-format
 #| msgid "Export as PDF..."
 msgid "Export as PDF"
 msgstr "PDF چىقار…"
 
-#: main/KoMainWindow.cpp:1456
+#: main/KoMainWindow.cpp:1446
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "پۈتۈك"
 
-#: main/KoMainWindow.cpp:1663
+#: main/KoMainWindow.cpp:1653
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "Document - %1"
 msgstr "پۈتۈك"
 
-#: main/KoMainWindow.cpp:1700
+#: main/KoMainWindow.cpp:1690
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
 "Do you want to continue?"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1702
+#: main/KoMainWindow.cpp:1692
 #, kde-format
 msgid "Warning"
 msgstr "ئاگاھلاندۇرۇش"
 
-#: main/KoMainWindow.cpp:2067
+#: main/KoMainWindow.cpp:2057
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr ""
 
-#: main/KoMainWindow.cpp:2069
+#: main/KoMainWindow.cpp:2059
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr ""
@@ -3884,50 +3804,50 @@ msgstr "سانلىق-مەلۇمات"
 msgid "Stored In"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "ئاگاھلاندۇرۇش"
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:287
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "ئاگاھلاندۇرۇش"
 
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:299
+#: store/KoEncryptedStore.cpp:301
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
 "not be opened."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:329
+#: store/KoEncryptedStore.cpp:331
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3935,24 +3855,24 @@ msgid ""
 "prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:427
+#: store/KoEncryptedStore.cpp:429
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
 "Please try and save the document again to prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:548
+#: store/KoEncryptedStore.cpp:550
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:723
+#: store/KoEncryptedStore.cpp:710
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:737
+#: store/KoEncryptedStore.cpp:724
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr ""
@@ -5012,6 +4932,12 @@ msgid ""
 "document now?</qt>"
 msgstr ""
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "قوش"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
 #, kde-format
@@ -5741,6 +5667,51 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Scripts"
+#~ msgstr "قوليازما"
+
+#~ msgid "Script Manager"
+#~ msgstr "قوليازما باشقۇرغۇ"
+
+#, fuzzy
+#~| msgid "Script File"
+#~ msgid "Execute Script File..."
+#~ msgstr "قوليازما ھۆججىتى"
+
+#, fuzzy
+#~| msgid "Script Manager"
+#~ msgid "Script Manager..."
+#~ msgstr "قوليازما باشقۇرغۇ"
+
+#, fuzzy
+#~| msgid "Script File"
+#~ msgid "Execute Script File"
+#~ msgstr "قوليازما ھۆججىتى"
+
+#, fuzzy
+#~| msgid "Script File"
+#~ msgid "Add script file"
+#~ msgstr "قوليازما ھۆججىتى"
+
+#, fuzzy
+#~| msgid "Script Manager"
+#~ msgid "Install script package file"
+#~ msgstr "قوليازما باشقۇرغۇ"
+
+#, fuzzy
+#~| msgid "Script Manager"
+#~ msgid "Install online script package"
+#~ msgstr "قوليازما باشقۇرغۇ"
+
+#~ msgid "Script File"
+#~ msgstr "قوليازما ھۆججىتى"
+
+#~ msgid "Script"
+#~ msgstr "قوليازما"
+
+#~ msgid "Collection"
+#~ msgstr "توپلام"
 
 #~ msgid "Key Press"
 #~ msgstr "كۇنۇپكىنىڭ بېسىلىشى"

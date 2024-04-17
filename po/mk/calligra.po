@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
+"POT-Creation-Date: 2024-04-17 01:46+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -685,85 +685,6 @@ msgstr "&Додади група..."
 msgid "Convert To Path"
 msgstr "Создади шаблон"
 
-#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
-#, fuzzy, kde-format
-msgid "Scripts"
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
-#, fuzzy, kde-format
-msgid "Script Manager"
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptingPart.cpp:78
-#, fuzzy, kde-format
-msgid "Execute Script File..."
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptingPart.cpp:86
-#, fuzzy, kde-format
-msgid "Script Manager..."
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptingPart.cpp:160
-#, fuzzy, kde-format
-msgid "Execute Script File"
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
-#, fuzzy, kde-format
-msgid "Save"
-msgstr "&Додади група..."
-
-#: kross/KoScriptManagerAdd.cpp:54
-#, kde-format
-msgid ""
-"<qt>This wizard will guide you through the process of adding a new resource "
-"to your scripts.</qt>"
-msgstr ""
-
-#: kross/KoScriptManagerAdd.cpp:59
-#, fuzzy, kde-format
-msgid "Add script file"
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptManagerAdd.cpp:64
-#, fuzzy, kde-format
-msgid "Add collection folder"
-msgstr "Отстрани група"
-
-#: kross/KoScriptManagerAdd.cpp:67
-#, fuzzy, kde-format
-msgid "Install script package file"
-msgstr "Колони"
-
-#: kross/KoScriptManagerAdd.cpp:71
-#, fuzzy, kde-format
-msgid "Install online script package"
-msgstr "Колони"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, add)
-#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
-#: widgets/KoEditColorSet.ui:45
-#, fuzzy, kde-format
-msgid "Add"
-msgstr "&Додади група..."
-
-#: kross/KoScriptManagerAdd.cpp:281
-#, fuzzy, kde-format
-msgid "Script File"
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptManagerAdd.cpp:284
-#, fuzzy, kde-format
-msgid "Script"
-msgstr "Скрипта за извршување."
-
-#: kross/KoScriptManagerAdd.cpp:287
-#, fuzzy, kde-format
-msgid "Collection"
-msgstr "Зачувај документ како"
-
 #: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
 #, fuzzy, kde-format
 msgctxt "Default text for undo action"
@@ -793,13 +714,13 @@ msgstr "Отстрани приказ"
 msgid "<empty>"
 msgstr ""
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
 #: main/KoUndoStackAction.cpp:33
 #, fuzzy, kde-format
 msgid "Redo"
 msgstr "Отстрани приказ"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
 #: main/KoUndoStackAction.cpp:25
 #, fuzzy, kde-format
 msgid "Undo"
@@ -1136,7 +1057,7 @@ msgid ""
 "Do you want to open it instead?"
 msgstr ""
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr ""
@@ -1303,7 +1224,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "Наслов :"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
 #, fuzzy, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1451,182 +1372,187 @@ msgstr ""
 msgid "Start searching from the current cursor"
 msgstr ""
 
-#: main/KoMainWindow.cpp:163
+#: main/KoMainWindow.cpp:164
 #, fuzzy, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "Зачувај документ како"
 
-#: main/KoMainWindow.cpp:272
+#: main/KoMainWindow.cpp:273
 #, fuzzy, kde-format
 msgid "Export as PDF..."
 msgstr "Отстрани приказ"
 
-#: main/KoMainWindow.cpp:282
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Reload"
 msgstr ""
 
-#: main/KoMainWindow.cpp:286
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "Versions..."
 msgstr ""
 
-#: main/KoMainWindow.cpp:290
+#: main/KoMainWindow.cpp:291
 #, fuzzy, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "&Отвори постоечки документ"
 
-#: main/KoMainWindow.cpp:294
+#: main/KoMainWindow.cpp:295
 #, fuzzy, kde-format
 msgid "E&xport..."
 msgstr "Отстрани приказ"
 
-#: main/KoMainWindow.cpp:298
+#: main/KoMainWindow.cpp:299
 #, fuzzy, kde-format
 msgid "En&crypt Document"
 msgstr "&Отвори документ"
 
-#: main/KoMainWindow.cpp:303
+#: main/KoMainWindow.cpp:304
 #, fuzzy, kde-format
 msgid "&Uncompress to Directory"
 msgstr "&Отвори документ"
 
-#: main/KoMainWindow.cpp:308
+#: main/KoMainWindow.cpp:309
 #, fuzzy, kde-format
 msgid "&New View"
 msgstr "Отстрани приказ"
 
-#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
 #, kde-format
 msgid "Document Information"
 msgstr "Информации за документот"
 
-#: main/KoMainWindow.cpp:338
+#: main/KoMainWindow.cpp:339
 #, kde-format
 msgid "Full Screen Mode"
 msgstr ""
 
-#: main/KoMainWindow.cpp:343
+#: main/KoMainWindow.cpp:344
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgid "Show Dockers"
 msgstr "Покажи %1 алатник"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:349
 #, fuzzy, kde-format
 #| msgid "Show %1 Toolbar"
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Покажи %1 алатник"
 
-#: main/KoMainWindow.cpp:355
+#: main/KoMainWindow.cpp:356
 #, fuzzy, kde-format
 msgid "Dockers"
 msgstr "Насловна линија:"
 
-#: main/KoMainWindow.cpp:660
+#: main/KoMainWindow.cpp:650
 #, fuzzy, kde-format
 msgid "(write protected)"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: main/KoMainWindow.cpp:665
+#: main/KoMainWindow.cpp:655
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "Преглед на страна"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:657
+#, fuzzy, kde-format
+msgid "Save"
+msgstr "&Додади група..."
+
+#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr ""
 
-#: main/KoMainWindow.cpp:855
+#: main/KoMainWindow.cpp:845
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
 "want to save in this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:858
+#: main/KoMainWindow.cpp:848
 #, fuzzy, kde-format
 msgid "Confirm Save"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: main/KoMainWindow.cpp:867
+#: main/KoMainWindow.cpp:857
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
 "want to export to this format?</qt>"
 msgstr ""
 
-#: main/KoMainWindow.cpp:870
+#: main/KoMainWindow.cpp:860
 #, fuzzy, kde-format
 msgid "Confirm Export"
 msgstr ""
 "\n"
 "Ориентација:"
 
-#: main/KoMainWindow.cpp:871
+#: main/KoMainWindow.cpp:861
 #, fuzzy, kde-format
 msgid "Export"
 msgstr "Отстрани приказ"
 
-#: main/KoMainWindow.cpp:969
+#: main/KoMainWindow.cpp:959
 #, fuzzy, kde-format
 msgid "untitled"
 msgstr "Наслов :"
 
-#: main/KoMainWindow.cpp:1245
+#: main/KoMainWindow.cpp:1235
 #, fuzzy, kde-format
 msgid "Open Document"
 msgstr "&Отвори документ"
 
-#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
 #, fuzzy, kde-format
 msgid "Import Document"
 msgstr "&Отвори документ"
 
-#: main/KoMainWindow.cpp:1419
+#: main/KoMainWindow.cpp:1409
 #, fuzzy, kde-format
 msgid "Export as PDF"
 msgstr "Отстрани приказ"
 
-#: main/KoMainWindow.cpp:1456
+#: main/KoMainWindow.cpp:1446
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
 #, fuzzy, kde-format
 msgid "Document"
 msgstr "&Отвори документ"
 
-#: main/KoMainWindow.cpp:1663
+#: main/KoMainWindow.cpp:1653
 #, fuzzy, kde-format
 msgid "Document - %1"
 msgstr "Зачувај документ како"
 
-#: main/KoMainWindow.cpp:1700
+#: main/KoMainWindow.cpp:1690
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
 "Do you want to continue?"
 msgstr ""
 
-#: main/KoMainWindow.cpp:1702
+#: main/KoMainWindow.cpp:1692
 #, kde-format
 msgid "Warning"
 msgstr ""
 
-#: main/KoMainWindow.cpp:2067
+#: main/KoMainWindow.cpp:2057
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Покажи %1 алатник"
 
-#: main/KoMainWindow.cpp:2069
+#: main/KoMainWindow.cpp:2059
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Покажи %1 алатник"
@@ -3721,48 +3647,48 @@ msgstr "Избери..."
 msgid "Stored In"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
 "might not be verified."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
 "unreadable."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:299
+#: store/KoEncryptedStore.cpp:301
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
 "not be opened."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:329
+#: store/KoEncryptedStore.cpp:331
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3770,24 +3696,24 @@ msgid ""
 "prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:427
+#: store/KoEncryptedStore.cpp:429
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
 "Please try and save the document again to prevent losing your work."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:548
+#: store/KoEncryptedStore.cpp:550
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:723
+#: store/KoEncryptedStore.cpp:710
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr ""
 
-#: store/KoEncryptedStore.cpp:737
+#: store/KoEncryptedStore.cpp:724
 #, fuzzy, kde-format
 msgid "Do you want to save the password?"
 msgstr "Навистина ли сакате да го отстраните тој шаблон"
@@ -4840,6 +4766,12 @@ msgid ""
 "document now?</qt>"
 msgstr ""
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: widgets/KoEditColorSet.ui:45
+#, fuzzy, kde-format
+msgid "Add"
+msgstr "&Додади група..."
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
 #, fuzzy, kde-format
@@ -5531,6 +5463,54 @@ msgstr ""
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Scripts"
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Script Manager"
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Execute Script File..."
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Script Manager..."
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Execute Script File"
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Add script file"
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Add collection folder"
+#~ msgstr "Отстрани група"
+
+#, fuzzy
+#~ msgid "Install script package file"
+#~ msgstr "Колони"
+
+#, fuzzy
+#~ msgid "Install online script package"
+#~ msgstr "Колони"
+
+#, fuzzy
+#~ msgid "Script File"
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Script"
+#~ msgstr "Скрипта за извршување."
+
+#, fuzzy
+#~ msgid "Collection"
+#~ msgstr "Зачувај документ како"
 
 #, fuzzy
 #~ msgid "Install Script Package"

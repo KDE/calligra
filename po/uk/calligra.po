@@ -6,20 +6,20 @@
 # Andriy Rysin <rysin@kde.org>, 2002.
 # Eugene Onischenko <oneugene@ukr.net>, 2003.
 # Ivan Petrouchtchak <fr.ivan@ukrainian-orthodox.org>, 2005, 2006, 2007, 2008.
-# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2021, 2022, 2023.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
-"PO-Revision-Date: 2023-03-13 08:36+0200\n"
+"POT-Creation-Date: 2024-04-17 01:46+0000\n"
+"PO-Revision-Date: 2024-04-16 12:11+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language-Team: Ukrainian\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
@@ -746,87 +746,6 @@ msgstr "…"
 msgid "Convert To Path"
 msgstr "Перетворити на контур"
 
-#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
-#, kde-format
-msgid "Scripts"
-msgstr "Скрипти"
-
-#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
-#, kde-format
-msgid "Script Manager"
-msgstr "Менеджер скриптів"
-
-#: kross/KoScriptingPart.cpp:78
-#, kde-format
-msgid "Execute Script File..."
-msgstr "Виконати файл скрипту…"
-
-#: kross/KoScriptingPart.cpp:86
-#, kde-format
-msgid "Script Manager..."
-msgstr "Менеджер скриптів…"
-
-#: kross/KoScriptingPart.cpp:160
-#, kde-format
-msgid "Execute Script File"
-msgstr "Виконати файл скрипту"
-
-#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
-#, kde-format
-msgid "Save"
-msgstr "Зберегти"
-
-#: kross/KoScriptManagerAdd.cpp:54
-#, kde-format
-msgid ""
-"<qt>This wizard will guide you through the process of adding a new resource "
-"to your scripts.</qt>"
-msgstr ""
-"<qt>Цей майстер проведе вас процесом додавання ресурсу до ваших скриптів.</"
-"qt>"
-
-#: kross/KoScriptManagerAdd.cpp:59
-#, kde-format
-msgid "Add script file"
-msgstr "Додати файл скрипту"
-
-#: kross/KoScriptManagerAdd.cpp:64
-#, kde-format
-msgid "Add collection folder"
-msgstr "Додати теку збірки"
-
-#: kross/KoScriptManagerAdd.cpp:67
-#, kde-format
-msgid "Install script package file"
-msgstr "Встановити файл пакунка скрипту"
-
-#: kross/KoScriptManagerAdd.cpp:71
-#, kde-format
-msgid "Install online script package"
-msgstr "Встановити пакунок скрипту у мережі"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, add)
-#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
-#: widgets/KoEditColorSet.ui:45
-#, kde-format
-msgid "Add"
-msgstr "Додати"
-
-#: kross/KoScriptManagerAdd.cpp:281
-#, kde-format
-msgid "Script File"
-msgstr "Файл скрипту"
-
-#: kross/KoScriptManagerAdd.cpp:284
-#, kde-format
-msgid "Script"
-msgstr "Скрипт"
-
-#: kross/KoScriptManagerAdd.cpp:287
-#, kde-format
-msgid "Collection"
-msgstr "Збірка"
-
 #: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
 #, kde-format
 msgctxt "Default text for undo action"
@@ -856,13 +775,13 @@ msgstr "Повторити %1"
 msgid "<empty>"
 msgstr "<порожньо>"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Повторити"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1209,7 +1128,7 @@ msgstr ""
 "Вже існує автоматично збережена копія цього документа.\n"
 "Відкрити натомість її?"
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не існує."
@@ -1383,7 +1302,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "Без назви"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1526,93 +1445,98 @@ msgstr "Шукати від курсора"
 msgid "Start searching from the current cursor"
 msgstr "Почати пошук з поточної позиції курсора"
 
-#: main/KoMainWindow.cpp:163
+#: main/KoMainWindow.cpp:164
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 незбережений документ (%2)"
 
-#: main/KoMainWindow.cpp:272
+#: main/KoMainWindow.cpp:273
 #, kde-format
 msgid "Export as PDF..."
 msgstr "Експортувати до PDF…"
 
-#: main/KoMainWindow.cpp:282
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Reload"
 msgstr "Перезавантажити"
 
-#: main/KoMainWindow.cpp:286
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "Versions..."
 msgstr "Версії…"
 
-#: main/KoMainWindow.cpp:290
+#: main/KoMainWindow.cpp:291
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Відкрити в&же створений документ як документ без назви…"
 
-#: main/KoMainWindow.cpp:294
+#: main/KoMainWindow.cpp:295
 #, kde-format
 msgid "E&xport..."
 msgstr "Е&кспортувати…"
 
-#: main/KoMainWindow.cpp:298
+#: main/KoMainWindow.cpp:299
 #, kde-format
 msgid "En&crypt Document"
 msgstr "За&шифрувати документ"
 
-#: main/KoMainWindow.cpp:303
+#: main/KoMainWindow.cpp:304
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "&Розпакувати до каталогу"
 
-#: main/KoMainWindow.cpp:308
+#: main/KoMainWindow.cpp:309
 #, kde-format
 msgid "&New View"
 msgstr "С&творити нову панель перегляду"
 
-#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
 #, kde-format
 msgid "Document Information"
 msgstr "Інформація про документ"
 
-#: main/KoMainWindow.cpp:338
+#: main/KoMainWindow.cpp:339
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Повноекранний режим"
 
-#: main/KoMainWindow.cpp:343
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Show Dockers"
 msgstr "Показати панелі"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:349
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Показати смужки заголовків панелей"
 
-#: main/KoMainWindow.cpp:355
+#: main/KoMainWindow.cpp:356
 #, kde-format
 msgid "Dockers"
 msgstr "Бічні панелі"
 
-#: main/KoMainWindow.cpp:660
+#: main/KoMainWindow.cpp:650
 #, kde-format
 msgid "(write protected)"
 msgstr "(захист від запису)"
 
-#: main/KoMainWindow.cpp:665
+#: main/KoMainWindow.cpp:655
 #, kde-format
 msgid "Save as %1"
 msgstr "Зберегти як %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:657
+#, kde-format
+msgid "Save"
+msgstr "Зберегти"
+
+#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (невідомий тип файла)"
 
-#: main/KoMainWindow.cpp:855
+#: main/KoMainWindow.cpp:845
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1621,12 +1545,12 @@ msgstr ""
 "<qt>Збереження як %1 може призвести до часткової втрати форматування."
 "<p>Хочете зберегти в цьому форматі, попри все?</qt>"
 
-#: main/KoMainWindow.cpp:858
+#: main/KoMainWindow.cpp:848
 #, kde-format
 msgid "Confirm Save"
 msgstr "Підтвердження збереження"
 
-#: main/KoMainWindow.cpp:867
+#: main/KoMainWindow.cpp:857
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1635,52 +1559,52 @@ msgstr ""
 "<qt>Експортування як %1 може призвести до часткової втрати форматування."
 "<p>Хочете експортувати в цьому форматі, попри все?</qt>"
 
-#: main/KoMainWindow.cpp:870
+#: main/KoMainWindow.cpp:860
 #, kde-format
 msgid "Confirm Export"
 msgstr "Підтвердження експорту"
 
-#: main/KoMainWindow.cpp:871
+#: main/KoMainWindow.cpp:861
 #, kde-format
 msgid "Export"
 msgstr "Експортувати"
 
-#: main/KoMainWindow.cpp:969
+#: main/KoMainWindow.cpp:959
 #, kde-format
 msgid "untitled"
 msgstr "без назви"
 
-#: main/KoMainWindow.cpp:1245
+#: main/KoMainWindow.cpp:1235
 #, kde-format
 msgid "Open Document"
 msgstr "Відкрити документ"
 
-#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "Імпортувати документ"
 
-#: main/KoMainWindow.cpp:1419
+#: main/KoMainWindow.cpp:1409
 #, kde-format
 msgid "Export as PDF"
 msgstr "Експортувати до PDF"
 
-#: main/KoMainWindow.cpp:1456
+#: main/KoMainWindow.cpp:1446
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "Не вдалося експортувати дані до вказаного файла"
 
-#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "Документ"
 
-#: main/KoMainWindow.cpp:1663
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Document - %1"
 msgstr "Документ — %1"
 
-#: main/KoMainWindow.cpp:1700
+#: main/KoMainWindow.cpp:1690
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1689,17 +1613,17 @@ msgstr ""
 "Всі зміни з часу останнього збереження буде втрачено.\n"
 "Хочете продовжити?"
 
-#: main/KoMainWindow.cpp:1702
+#: main/KoMainWindow.cpp:1692
 #, kde-format
 msgid "Warning"
 msgstr "Попередження"
 
-#: main/KoMainWindow.cpp:2067
+#: main/KoMainWindow.cpp:2057
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показати пенал %1"
 
-#: main/KoMainWindow.cpp:2069
+#: main/KoMainWindow.cpp:2059
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Сховати пенал %1"
@@ -3899,7 +3823,7 @@ msgstr "Тип даних"
 msgid "Stored In"
 msgstr "Збережено у"
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3908,14 +3832,13 @@ msgstr ""
 "Цей документ має невідому контрольну суму. Коли ви введете пароль, його, "
 "можливо, не можна буде перевірити."
 
-#: store/KoEncryptedStore.cpp:227
-#, fuzzy, kde-format
-#| msgid "Warning"
+#: store/KoEncryptedStore.cpp:229
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Попередження"
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3924,15 +3847,14 @@ msgstr ""
 "Цей документ зашифровано невідомим методом. Деякі його частини можуть "
 "виявитися непридатними для читання."
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
-#: store/KoEncryptedStore.cpp:285
-#, fuzzy, kde-format
-#| msgid "Warning"
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:287
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Попередження"
 
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3941,7 +3863,7 @@ msgstr ""
 "Цей документ містить неповні дані про шифрування. Деякі його частини можуть "
 "бути непридатними для читання."
 
-#: store/KoEncryptedStore.cpp:299
+#: store/KoEncryptedStore.cpp:301
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
@@ -3950,7 +3872,7 @@ msgstr ""
 "У QCA зараз відсутня підтримка SHA1 або PBKDF2 з використанням SHA1. "
 "Відкрити документ неможливо."
 
-#: store/KoEncryptedStore.cpp:329
+#: store/KoEncryptedStore.cpp:331
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3961,7 +3883,7 @@ msgstr ""
 "залишиться непридатним до читання. Будь ласка, спробуйте зберегти документ "
 "ще раз, щоб запобігти втраті результатів вашої роботи."
 
-#: store/KoEncryptedStore.cpp:427
+#: store/KoEncryptedStore.cpp:429
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3971,17 +3893,17 @@ msgstr ""
 "читання. Будь ласка, спробуйте зберегти документ ще раз, щоб запобігти "
 "втраті результатів вашої роботи."
 
-#: store/KoEncryptedStore.cpp:548
+#: store/KoEncryptedStore.cpp:550
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Будь ласка, введіть пароль, щоб відкрити цей файл."
 
-#: store/KoEncryptedStore.cpp:723
+#: store/KoEncryptedStore.cpp:710
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Будь ласка, введіть пароль для шифрування документа."
 
-#: store/KoEncryptedStore.cpp:737
+#: store/KoEncryptedStore.cpp:724
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Хочете зберегти пароль?"
@@ -5087,6 +5009,12 @@ msgstr ""
 "<qt>З часу відкриття документ було змінено. Щоб завершити шифрування, "
 "документ слід зберегти.<p>Бажаєте зберегти документ зараз?</qt>"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Додати"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
 #, kde-format
@@ -5798,6 +5726,49 @@ msgstr "Усі підтримувані формати"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Scripts"
+#~ msgstr "Скрипти"
+
+#~ msgid "Script Manager"
+#~ msgstr "Менеджер скриптів"
+
+#~ msgid "Execute Script File..."
+#~ msgstr "Виконати файл скрипту…"
+
+#~ msgid "Script Manager..."
+#~ msgstr "Менеджер скриптів…"
+
+#~ msgid "Execute Script File"
+#~ msgstr "Виконати файл скрипту"
+
+#~ msgid ""
+#~ "<qt>This wizard will guide you through the process of adding a new "
+#~ "resource to your scripts.</qt>"
+#~ msgstr ""
+#~ "<qt>Цей майстер проведе вас процесом додавання ресурсу до ваших скриптів."
+#~ "</qt>"
+
+#~ msgid "Add script file"
+#~ msgstr "Додати файл скрипту"
+
+#~ msgid "Add collection folder"
+#~ msgstr "Додати теку збірки"
+
+#~ msgid "Install script package file"
+#~ msgstr "Встановити файл пакунка скрипту"
+
+#~ msgid "Install online script package"
+#~ msgstr "Встановити пакунок скрипту у мережі"
+
+#~ msgid "Script File"
+#~ msgstr "Файл скрипту"
+
+#~ msgid "Script"
+#~ msgstr "Скрипт"
+
+#~ msgid "Collection"
+#~ msgstr "Збірка"
 
 #~ msgid "Key Press"
 #~ msgstr "Натискання клавіші"

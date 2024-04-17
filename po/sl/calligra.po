@@ -1,7 +1,7 @@
 # translation of koffice.po to Slovenian
 # Translation of koffice.po to Slovenian
 # Copyright (C) 2001,2002,2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
-# $Id: calligra.po 1678079 2024-04-16 02:13:26Z scripty $
+# $Id: calligra.po 1678161 2024-04-17 02:11:20Z scripty $
 # $Source$
 #
 #
@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-16 01:48+0000\n"
-"PO-Revision-Date: 2023-04-21 11:49+0200\n"
+"POT-Creation-Date: 2024-04-17 01:46+0000\n"
+"PO-Revision-Date: 2024-04-16 07:18+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Vernekar <andrej.vernekar@gmail.com>\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -656,87 +656,6 @@ msgstr "..."
 msgid "Convert To Path"
 msgstr "Pretvori v pot"
 
-#: kross/KoScriptingDocker.cpp:78 kross/KoScriptingPart.cpp:82
-#, kde-format
-msgid "Scripts"
-msgstr "Skripti"
-
-#: kross/KoScriptingDocker.cpp:113 kross/KoScriptManager.cpp:146
-#, kde-format
-msgid "Script Manager"
-msgstr "Upravljalnik skriptov"
-
-#: kross/KoScriptingPart.cpp:78
-#, kde-format
-msgid "Execute Script File..."
-msgstr "Izvedi skriptno datoteko..."
-
-#: kross/KoScriptingPart.cpp:86
-#, kde-format
-msgid "Script Manager..."
-msgstr "Upravljalnik skript..."
-
-#: kross/KoScriptingPart.cpp:160
-#, kde-format
-msgid "Execute Script File"
-msgstr "Izvedi skriptno datoteko"
-
-#: kross/KoScriptManager.cpp:148 main/KoMainWindow.cpp:667
-#, kde-format
-msgid "Save"
-msgstr "Shrani"
-
-#: kross/KoScriptManagerAdd.cpp:54
-#, kde-format
-msgid ""
-"<qt>This wizard will guide you through the process of adding a new resource "
-"to your scripts.</qt>"
-msgstr ""
-"<qt>Ta čarovnik vas bo vodil skozi postopek dodajanja novega vira v vaše "
-"skripte.</qt>"
-
-#: kross/KoScriptManagerAdd.cpp:59
-#, kde-format
-msgid "Add script file"
-msgstr "Dodaj datoteko s skriptom"
-
-#: kross/KoScriptManagerAdd.cpp:64
-#, kde-format
-msgid "Add collection folder"
-msgstr "Dodaj mapo za nabiranje"
-
-#: kross/KoScriptManagerAdd.cpp:67
-#, kde-format
-msgid "Install script package file"
-msgstr "Namesti datoteko s paketom s skripti"
-
-#: kross/KoScriptManagerAdd.cpp:71
-#, kde-format
-msgid "Install online script package"
-msgstr "Namesti online paket s skripti"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, add)
-#: kross/KoScriptManagerAdd.cpp:274 kross/KoScriptManagerAdd.cpp:277
-#: widgets/KoEditColorSet.ui:45
-#, kde-format
-msgid "Add"
-msgstr "Dodaj"
-
-#: kross/KoScriptManagerAdd.cpp:281
-#, kde-format
-msgid "Script File"
-msgstr "Datoteka s skriptom"
-
-#: kross/KoScriptManagerAdd.cpp:284
-#, kde-format
-msgid "Script"
-msgstr "Skript"
-
-#: kross/KoScriptManagerAdd.cpp:287
-#, kde-format
-msgid "Collection"
-msgstr "Zbirka"
-
 #: kundo2/kundo2group.cpp:359 kundo2/kundo2stack.cpp:1074
 #, kde-format
 msgctxt "Default text for undo action"
@@ -766,13 +685,13 @@ msgstr "Znova uveljavi %1"
 msgid "<empty>"
 msgstr "<prazno>"
 
-#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1476
+#: kundo2/kundo2stack.cpp:1343 main/KoMainWindow.cpp:1466
 #: main/KoUndoStackAction.cpp:33
 #, kde-format
 msgid "Redo"
 msgstr "Znova uveljavi"
 
-#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1475
+#: kundo2/kundo2stack.cpp:1362 main/KoMainWindow.cpp:1465
 #: main/KoUndoStackAction.cpp:25
 #, kde-format
 msgid "Undo"
@@ -1116,7 +1035,7 @@ msgstr ""
 "Za ta dokument obstaja samodejno shranjena datoteka.\n"
 "Želite raje odpreti to?"
 
-#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:705
+#: main/KoDocument.cpp:1341 main/KoDocument.cpp:1684 main/KoMainWindow.cpp:695
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Datoteka %1 ne obstaja."
@@ -1290,7 +1209,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "Brez naslova"
 
-#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1183
+#: main/KoDocument.cpp:2081 main/KoMainWindow.cpp:1173
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -1434,93 +1353,98 @@ msgstr "Išči od kazalke naprej"
 msgid "Start searching from the current cursor"
 msgstr "Začni iskanje s trenutne lokacije kazalke"
 
-#: main/KoMainWindow.cpp:163
+#: main/KoMainWindow.cpp:164
 #, kde-format
 msgid "%1 unsaved document (%2)"
 msgstr "%1 neshranjen dokument (%2)"
 
-#: main/KoMainWindow.cpp:272
+#: main/KoMainWindow.cpp:273
 #, kde-format
 msgid "Export as PDF..."
 msgstr "Izvozi kot PDF ..."
 
-#: main/KoMainWindow.cpp:282
+#: main/KoMainWindow.cpp:283
 #, kde-format
 msgid "Reload"
 msgstr "Znova naloži"
 
-#: main/KoMainWindow.cpp:286
+#: main/KoMainWindow.cpp:287
 #, kde-format
 msgid "Versions..."
 msgstr "Različice ..."
 
-#: main/KoMainWindow.cpp:290
+#: main/KoMainWindow.cpp:291
 #, kde-format
 msgid "Open ex&isting Document as Untitled Document..."
 msgstr "Odpri obstoječi dokument kot dokument brez naslova Untitled..."
 
-#: main/KoMainWindow.cpp:294
+#: main/KoMainWindow.cpp:295
 #, kde-format
 msgid "E&xport..."
 msgstr "&Izvozi ..."
 
-#: main/KoMainWindow.cpp:298
+#: main/KoMainWindow.cpp:299
 #, kde-format
 msgid "En&crypt Document"
 msgstr "Šifriraj dokument"
 
-#: main/KoMainWindow.cpp:303
+#: main/KoMainWindow.cpp:304
 #, kde-format
 msgid "&Uncompress to Directory"
 msgstr "Razpakiraj v mapo"
 
-#: main/KoMainWindow.cpp:308
+#: main/KoMainWindow.cpp:309
 #, kde-format
 msgid "&New View"
 msgstr "&Nov prikaz"
 
-#: main/KoMainWindow.cpp:314 widgets/KoDocumentInfoDlg.cpp:86
+#: main/KoMainWindow.cpp:315 widgets/KoDocumentInfoDlg.cpp:86
 #, kde-format
 msgid "Document Information"
 msgstr "Informacije o dokumentu"
 
-#: main/KoMainWindow.cpp:338
+#: main/KoMainWindow.cpp:339
 #, kde-format
 msgid "Full Screen Mode"
 msgstr "Celozaslonski način"
 
-#: main/KoMainWindow.cpp:343
+#: main/KoMainWindow.cpp:344
 #, kde-format
 msgid "Show Dockers"
 msgstr "Pokaži sidrišča"
 
-#: main/KoMainWindow.cpp:348
+#: main/KoMainWindow.cpp:349
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Show Docker Titlebars"
 msgstr "Pokaži naslovne vrstice sidrišč"
 
-#: main/KoMainWindow.cpp:355
+#: main/KoMainWindow.cpp:356
 #, kde-format
 msgid "Dockers"
 msgstr "Sidrišča"
 
-#: main/KoMainWindow.cpp:660
+#: main/KoMainWindow.cpp:650
 #, kde-format
 msgid "(write protected)"
 msgstr "(zaščita pred pisanjem)"
 
-#: main/KoMainWindow.cpp:665
+#: main/KoMainWindow.cpp:655
 #, kde-format
 msgid "Save as %1"
 msgstr "Shrani kot %1"
 
-#: main/KoMainWindow.cpp:847 widgets/KoDocumentInfoDlg.cpp:390
+#: main/KoMainWindow.cpp:657
+#, kde-format
+msgid "Save"
+msgstr "Shrani"
+
+#: main/KoMainWindow.cpp:837 widgets/KoDocumentInfoDlg.cpp:390
 #, kde-format
 msgid "%1 (unknown file type)"
 msgstr "%1 (neznana vrsta datoteke)"
 
-#: main/KoMainWindow.cpp:855
+#: main/KoMainWindow.cpp:845
 #, kde-format
 msgid ""
 "<qt>Saving as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1529,12 +1453,12 @@ msgstr ""
 "<qt>Shranjevanje kot %1 lahko povzroči nekaj izgub pri oblikovanju. <p>Bi še "
 "vedno radi shranili v tej vrsti?</qt>"
 
-#: main/KoMainWindow.cpp:858
+#: main/KoMainWindow.cpp:848
 #, kde-format
 msgid "Confirm Save"
 msgstr "Potrdi shranjevanje"
 
-#: main/KoMainWindow.cpp:867
+#: main/KoMainWindow.cpp:857
 #, kde-format
 msgid ""
 "<qt>Exporting as a %1 may result in some loss of formatting.<p>Do you still "
@@ -1543,52 +1467,52 @@ msgstr ""
 "<qt>Izvoz kot %1 lahko povzroči nekaj izgub pri oblikovanju. <p>Bi še vedno "
 "radi izvozili v tej vrsti?</qt>"
 
-#: main/KoMainWindow.cpp:870
+#: main/KoMainWindow.cpp:860
 #, kde-format
 msgid "Confirm Export"
 msgstr "Potrdi izvoz"
 
-#: main/KoMainWindow.cpp:871
+#: main/KoMainWindow.cpp:861
 #, kde-format
 msgid "Export"
 msgstr "Izvozi"
 
-#: main/KoMainWindow.cpp:969
+#: main/KoMainWindow.cpp:959
 #, kde-format
 msgid "untitled"
 msgstr "brez naslova"
 
-#: main/KoMainWindow.cpp:1245
+#: main/KoMainWindow.cpp:1235
 #, kde-format
 msgid "Open Document"
 msgstr "Odpri dokument"
 
-#: main/KoMainWindow.cpp:1254 pageapp/KoPAView.cpp:524
+#: main/KoMainWindow.cpp:1244 pageapp/KoPAView.cpp:524
 #, kde-format
 msgid "Import Document"
 msgstr "Uvozi dokument"
 
-#: main/KoMainWindow.cpp:1419
+#: main/KoMainWindow.cpp:1409
 #, kde-format
 msgid "Export as PDF"
 msgstr "Izvoz kot PDF"
 
-#: main/KoMainWindow.cpp:1456
+#: main/KoMainWindow.cpp:1446
 #, kde-format
 msgid "Cannot export to the specified file"
 msgstr "Ni moč izvoziti v podano datoteko"
 
-#: main/KoMainWindow.cpp:1655 pageapp/KoPADocumentStructureDocker.cpp:80
+#: main/KoMainWindow.cpp:1645 pageapp/KoPADocumentStructureDocker.cpp:80
 #, kde-format
 msgid "Document"
 msgstr "Dokument"
 
-#: main/KoMainWindow.cpp:1663
+#: main/KoMainWindow.cpp:1653
 #, kde-format
 msgid "Document - %1"
 msgstr "Dokument - %1"
 
-#: main/KoMainWindow.cpp:1700
+#: main/KoMainWindow.cpp:1690
 #, kde-format
 msgid ""
 "You will lose all changes made since your last save\n"
@@ -1597,17 +1521,17 @@ msgstr ""
 "Izgubili boste vse spremembe po zadnjem shranjevanju.\n"
 "Ali želite nadaljevati?"
 
-#: main/KoMainWindow.cpp:1702
+#: main/KoMainWindow.cpp:1692
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
 
-#: main/KoMainWindow.cpp:2067
+#: main/KoMainWindow.cpp:2057
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Prikaži orodjarno %1"
 
-#: main/KoMainWindow.cpp:2069
+#: main/KoMainWindow.cpp:2059
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skrij orodjarno %1"
@@ -3717,7 +3641,7 @@ msgstr "Vrsta podatka"
 msgid "Stored In"
 msgstr "Shranjen v"
 
-#: store/KoEncryptedStore.cpp:227
+#: store/KoEncryptedStore.cpp:229
 #, kde-format
 msgid ""
 "This document contains an unknown checksum. When you give a password it "
@@ -3726,14 +3650,13 @@ msgstr ""
 "Ta dokument vsebuje neznano kontrolno vsoto. Ko boste podatki geslo, ga ne "
 "bo mogoče preveriti."
 
-#: store/KoEncryptedStore.cpp:227
-#, fuzzy, kde-format
-#| msgid "Warning"
+#: store/KoEncryptedStore.cpp:229
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
 msgstr "Opozorilo"
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
 msgid ""
 "This document contains an unknown encryption method. Some parts may be "
@@ -3742,15 +3665,14 @@ msgstr ""
 "Ta dokument vsebuje neznano metodo šifriranja. Nekateri deli so morda "
 "neberljivi."
 
-#: store/KoEncryptedStore.cpp:253 store/KoEncryptedStore.cpp:270
-#: store/KoEncryptedStore.cpp:285
-#, fuzzy, kde-format
-#| msgid "Warning"
+#: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
+#: store/KoEncryptedStore.cpp:287
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
 msgstr "Opozorilo"
 
-#: store/KoEncryptedStore.cpp:285
+#: store/KoEncryptedStore.cpp:287
 #, kde-format
 msgid ""
 "This document contains incomplete encryption data. Some parts may be "
@@ -3759,7 +3681,7 @@ msgstr ""
 "Ta dokument vsebuje nepopolne podatke o šifriranju. Nekateri deli so morda "
 "neberljivi."
 
-#: store/KoEncryptedStore.cpp:299
+#: store/KoEncryptedStore.cpp:301
 #, kde-format
 msgid ""
 "QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can "
@@ -3768,7 +3690,7 @@ msgstr ""
 "QCA trenutno ne podpira SHA1 ali PBKDF2 z uporabo SHA1. Dokumenta ni mogoče "
 "odpreti."
 
-#: store/KoEncryptedStore.cpp:329
+#: store/KoEncryptedStore.cpp:331
 #, kde-format
 msgid ""
 "The manifest file seems to be corrupted. It cannot be modified and the "
@@ -3779,7 +3701,7 @@ msgstr ""
 "dokument bo ostal neberljiv. Poskusite dokument znova shraniti in preprečiti "
 "izgubo vašega dela."
 
-#: store/KoEncryptedStore.cpp:427
+#: store/KoEncryptedStore.cpp:429
 #, kde-format
 msgid ""
 "The manifest file cannot be written. The document will remain unreadable. "
@@ -3788,17 +3710,17 @@ msgstr ""
 "Datoteke manifesta ni mogoče zapisati. Dokument bo ostal neberljiv. "
 "Poskusite znova shraniti dokument, da preprečite izgubo vašega dela."
 
-#: store/KoEncryptedStore.cpp:548
+#: store/KoEncryptedStore.cpp:550
 #, kde-format
 msgid "Please enter the password to open this file."
 msgstr "Prosimo vnesite geslo da odprete to datoteko."
 
-#: store/KoEncryptedStore.cpp:723
+#: store/KoEncryptedStore.cpp:710
 #, kde-format
 msgid "Please enter the password to encrypt the document with."
 msgstr "Prosimo vnesite geslo za šifriranje te datoteke."
 
-#: store/KoEncryptedStore.cpp:737
+#: store/KoEncryptedStore.cpp:724
 #, kde-format
 msgid "Do you want to save the password?"
 msgstr "Ali želite shraniti geslo?"
@@ -4797,6 +4719,12 @@ msgstr ""
 "<qt> Dokument je bil po odprtju spremenjen. Za dokončanje šifriranja je "
 "dokument treba shraniti.<p>Ali želite shraniti dokument zdaj? </qt>"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, add)
+#: widgets/KoEditColorSet.ui:45
+#, kde-format
+msgid "Add"
+msgstr "Dodaj"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, remove)
 #: widgets/KoEditColorSet.ui:55
 #, kde-format
@@ -5503,3 +5431,46 @@ msgstr "Vsi podprti formati"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
+
+#~ msgid "Scripts"
+#~ msgstr "Skripti"
+
+#~ msgid "Script Manager"
+#~ msgstr "Upravljalnik skriptov"
+
+#~ msgid "Execute Script File..."
+#~ msgstr "Izvedi skriptno datoteko..."
+
+#~ msgid "Script Manager..."
+#~ msgstr "Upravljalnik skript..."
+
+#~ msgid "Execute Script File"
+#~ msgstr "Izvedi skriptno datoteko"
+
+#~ msgid ""
+#~ "<qt>This wizard will guide you through the process of adding a new "
+#~ "resource to your scripts.</qt>"
+#~ msgstr ""
+#~ "<qt>Ta čarovnik vas bo vodil skozi postopek dodajanja novega vira v vaše "
+#~ "skripte.</qt>"
+
+#~ msgid "Add script file"
+#~ msgstr "Dodaj datoteko s skriptom"
+
+#~ msgid "Add collection folder"
+#~ msgstr "Dodaj mapo za nabiranje"
+
+#~ msgid "Install script package file"
+#~ msgstr "Namesti datoteko s paketom s skripti"
+
+#~ msgid "Install online script package"
+#~ msgstr "Namesti online paket s skripti"
+
+#~ msgid "Script File"
+#~ msgstr "Datoteka s skriptom"
+
+#~ msgid "Script"
+#~ msgstr "Skript"
+
+#~ msgid "Collection"
+#~ msgstr "Zbirka"
