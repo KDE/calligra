@@ -249,6 +249,15 @@ Value::Value(int i)
     d->format = fmt_Number;
 }
 
+// create an integer value
+Value::Value(qsizetype i)
+        : d(Private::null())
+{
+    d->type = Integer;
+    d->i = i;
+    d->format = fmt_Number;
+}
+
 // create a floating-point value
 Value::Value(double f)
         : d(Private::null())

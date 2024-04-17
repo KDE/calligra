@@ -104,6 +104,11 @@ public:
     /**
      * Creates an integer value.
      */
+    explicit Value(qsizetype i);
+
+    /**
+     * Creates an integer value.
+     */
     explicit Value(int i);
 
     /**
