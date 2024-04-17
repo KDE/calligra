@@ -1,4 +1,4 @@
-if(Qca-qt5_FOUND)
+if(Qca-qt6_FOUND)
     add_definitions( -DHAVE_QCA2 )
 endif()
 
@@ -46,9 +46,9 @@ target_link_libraries(komsooxml
         koodf2
         komain
     PRIVATE
-        KF5::Archive
+        KF6::Archive
     )
-if(Qca-qt5_FOUND)
+if(Qca-qt6_FOUND)
    target_link_libraries(komsooxml PRIVATE qca-qt5)
 endif()
 

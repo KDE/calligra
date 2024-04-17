@@ -34,7 +34,7 @@ target_link_libraries(koodfreader
     PUBLIC
         koodf2
     PRIVATE
-        KF5::I18n
+        KF6::I18n
 )
 set_target_properties(koodfreader PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION}

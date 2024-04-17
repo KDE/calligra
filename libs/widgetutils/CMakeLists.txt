@@ -19,13 +19,13 @@ generate_export_header(kowidgetutils BASE_NAME kowidgetutils)
 
 target_link_libraries(kowidgetutils
     PUBLIC
-        Qt5::Widgets
-        Qt5::Gui
-        Qt5::Xml
-        Qt5::Core
+        Qt6::Widgets
+        Qt6::Gui
+        Qt6::Xml
+        Qt6::Core
     PRIVATE
-        KF5::I18n
-        KF5::ConfigCore
+        KF6::I18n
+        KF6::ConfigCore
 )
 
 set_target_properties(kowidgetutils

@@ -170,7 +170,7 @@ set (calligrasheetsui_LIB_SRCS
     ${strategy_DIR_SRCS}
 )
 
-if(NOT Qt5Sql_FOUND)
+if(NOT Qt6Sql_FOUND)
     add_definitions(-DQT_NO_SQL)
 endif()
 
@@ -209,13 +209,13 @@ target_link_libraries(calligrasheetsui
         calligrasheetsengine
         calligrasheetscore
         komain
-        KF5::GuiAddons
-        KF5::Notifications
-        KF5::SonnetCore
+        KF6::GuiAddons
+        KF6::Notifications
+        KF6::SonnetCore
 
 )
-if(Qt5Sql_FOUND)
-    target_link_libraries(calligrasheetsui PRIVATE Qt5::Sql)
+if(Qt6Sql_FOUND)
+    target_link_libraries(calligrasheetsui PRIVATE Qt6::Sql)
 endif()
 
 set_target_properties(calligrasheetsui PROPERTIES

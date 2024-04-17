@@ -99,5 +99,5 @@ ki18n_wrap_ui(musicshape_LIB_SRCS
 
 add_library(calligra_shape_music MODULE ${musicshape_LIB_SRCS})
 
-target_link_libraries(calligra_shape_music flake kowidgets KF5::I18n Qt5::Svg)
+target_link_libraries(calligra_shape_music flake kowidgets KF6::I18n Qt6::Svg)
 install(TARGETS calligra_shape_music DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

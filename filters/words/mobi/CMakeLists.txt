@@ -17,6 +17,6 @@ set(odt2mobi_PART_SRCS
 add_library(calligra_filter_odt2mobi MODULE ${odt2mobi_PART_SRCS})
 set_target_properties(calligra_filter_odt2mobi PROPERTIES COMPILE_DEFINITIONS "DEBUG_MOBI=1")
 
-target_link_libraries(calligra_filter_odt2mobi komain Qt5::Svg)
+target_link_libraries(calligra_filter_odt2mobi komain Qt6::Svg)
 
 install(TARGETS calligra_filter_odt2mobi  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

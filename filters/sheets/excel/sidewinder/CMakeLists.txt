@@ -9,7 +9,7 @@ include_directories(
 )
 
 add_executable(recordsxml2cpp recordsxml2cpp.cpp)
-target_link_libraries(recordsxml2cpp Qt5::Core Qt5::Xml)
+target_link_libraries(recordsxml2cpp Qt6::Core Qt6::Xml)
 
 add_custom_command(
     OUTPUT records.cpp
@@ -44,4 +44,4 @@ add_definitions(-DSWINDER_XLS2RAW)
 
 add_executable(sidewinder ${sidewinder_SRCS})
 
-target_link_libraries(sidewinder mso calligrasheetscore Qt5::Core Qt5::Gui koodf)
+target_link_libraries(sidewinder mso calligrasheetscore Qt6::Core Qt6::Gui koodf)

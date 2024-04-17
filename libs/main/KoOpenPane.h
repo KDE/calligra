@@ -16,7 +16,6 @@ class KoDetailsPane;
 class QUrl;
 class QTreeWidgetItem;
 class QString;
-class QStringList;
 
 /// \internal
 class KoOpenPane : public QWidget

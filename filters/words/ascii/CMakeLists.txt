@@ -12,7 +12,7 @@ set(ascii2words_PART_SRCS
 )
 ki18n_wrap_ui(ascii2words_PART_SRCS ImportDialogUI.ui )
 add_library(calligra_filter_ascii2words MODULE ${ascii2words_PART_SRCS})
-target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate KF5::Codecs)
+target_link_libraries(calligra_filter_ascii2words komain kotextlayout wordsprivate KF6::Codecs)
 install(TARGETS calligra_filter_ascii2words DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 endif()

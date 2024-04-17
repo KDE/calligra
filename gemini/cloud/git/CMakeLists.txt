@@ -17,13 +17,13 @@ endif()
 ecm_setup_version(${LIBGIT2_VERSION} VARIABLE_PREFIX GIT VERSION_HEADER libgit2_version.h)
 
 target_link_libraries(calligrageminigitplugin
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Qml
-    Qt5::Quick
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Qml
+    Qt6::Quick
     LibGit2::LibGit2
     komain
-    KF5::I18n
+    KF6::I18n
 )
 
 install(TARGETS calligrageminigitplugin DESTINATION ${KDE_INSTALL_QMLDIR}/Calligra/Gemini/Git)

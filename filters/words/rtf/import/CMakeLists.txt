@@ -11,7 +11,7 @@ target_link_libraries(calligra_filter_rtf2odt RtfReader komain)
 install(TARGETS calligra_filter_rtf2odt  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  words_rtf_thumbnail.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+    install( FILES  words_rtf_thumbnail.desktop  DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_RTF)

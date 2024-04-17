@@ -26,10 +26,10 @@ generate_export_header(autocorrection)
 
 target_link_libraries(autocorrection
     PRIVATE
-    KF5::TextWidgets
-    KF5::ConfigWidgets
-    KF5::I18n
-    KF5::Archive
+    KF6::TextWidgets
+    KF6::ConfigWidgets
+    KF6::I18n
+    KF6::Archive
     Qt::Gui
 )
 

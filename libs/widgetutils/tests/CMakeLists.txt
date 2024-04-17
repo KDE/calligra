@@ -11,11 +11,11 @@ endmacro()
 
 ########### next target ###############
 
-kowidgetutils_add_unit_test(KoPropertiesTest KoPropertiesTest.cpp  LINK_LIBRARIES kowidgetutils Qt5::Test)
+kowidgetutils_add_unit_test(KoPropertiesTest KoPropertiesTest.cpp  LINK_LIBRARIES kowidgetutils Qt6::Test)
 
 ########### next target ###############
 
 set(kofiledialogtester_SRCS KoFileDialogTester.cpp)
-qt5_wrap_ui(kofiledialogtester_SRCS KoFileDialogTester.ui)
+qt_wrap_ui(kofiledialogtester_SRCS KoFileDialogTester.ui)
 add_executable(kofiledialogtester ${kofiledialogtester_SRCS})
 target_link_libraries(kofiledialogtester kowidgetutils)

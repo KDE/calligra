@@ -9,7 +9,7 @@ target_link_libraries(
     kpr_shapeanimation_example 
     calligrastageprivate
     
-    Qt5::Core
+    Qt6::Core
     )
 
 install(TARGETS kpr_shapeanimation_example  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/shapeanimations)

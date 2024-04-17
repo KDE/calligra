@@ -4,7 +4,7 @@ endif()
 
 ########### libkostore ###############
 
-if( Qca-qt5_FOUND )
+if( Qca-qt6_FOUND )
     add_definitions( -DQCA2 )
 endif()
 
@@ -29,19 +29,19 @@ generate_export_header(kostore BASE_NAME kostore)
 
 target_link_libraries(kostore
     PUBLIC
-        Qt5::Xml
-        Qt5::Core
-        Qt5::Widgets
-        KF5::KIOCore
+        Qt6::Xml
+        Qt6::Core
+        Qt6::Widgets
+        KF6::KIOCore
     PRIVATE
-        Qt5::Gui
-        KF5::Archive
-        KF5::KIOWidgets
-        KF5::WidgetsAddons
-        KF5::I18n
+        Qt6::Gui
+        KF6::Archive
+        KF6::KIOWidgets
+        KF6::WidgetsAddons
+        KF6::I18n
         ${QTKEYCHAIN_LIBRARIES}
 )
-if( Qca-qt5_FOUND )
+if( Qca-qt6_FOUND )
     target_link_libraries(kostore PRIVATE qca-qt5)
 endif()
 

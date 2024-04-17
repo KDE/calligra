@@ -25,9 +25,9 @@ add_library(calligra_shape_vector MODULE ${VectorShape_SRCS})
 target_link_libraries(calligra_shape_vector
     flake
     kovectorimage
-    KF5::I18n
-    KF5::KIOFileWidgets
-    Qt5::Svg
+    KF6::I18n
+    KF6::KIOFileWidgets
+    Qt6::Svg
 )
 
 install(TARGETS calligra_shape_vector DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

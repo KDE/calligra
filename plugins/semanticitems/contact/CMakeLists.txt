@@ -16,14 +16,14 @@ ki18n_wrap_ui( calligra_semanticitem_contact_LIB_SRCS
 
 add_library(calligra_semanticitem_contact MODULE ${calligra_semanticitem_contact_LIB_SRCS})
 
-if (KF5Contacts_FOUND AND KF5Akonadi_FOUND)
+if (KF6Contacts_FOUND AND KF6Akonadi_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_contact
-      KF5::Contacts
-      KF5::AkonadiCore
+      KF6::Contacts
+      KF6::AkonadiCore
    )
 endif ()
 
-target_link_libraries(calligra_semanticitem_contact   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
+target_link_libraries(calligra_semanticitem_contact   ${KORDF_LIBS} KF6::I18n KF6::KDELibs4Support)
 
 install(TARGETS calligra_semanticitem_contact  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/semanticitems)

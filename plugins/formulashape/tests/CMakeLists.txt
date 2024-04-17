@@ -14,28 +14,28 @@ endmacro()
 
 formulashape_add_unit_test(AttributeManager
     TestAttributeManager.cpp
-    LINK_LIBRARIES koformula Qt5::Test
+    LINK_LIBRARIES koformula Qt6::Test
 )
 
 ########### Load Test ###############
 
 formulashape_add_unit_test(Load
     TestLoad.cpp
-    LINK_LIBRARIES koformula Qt5::Test
+    LINK_LIBRARIES koformula Qt6::Test
 )
 
 ########### Load and Save Test ###############
 
 formulashape_add_unit_test(LoadAndSave
     TestLoadAndSave.cpp
-    LINK_LIBRARIES koformula Qt5::Test
+    LINK_LIBRARIES koformula Qt6::Test
 )
 
 ########### Layout Test ###############
 
 # formulashape_add_unit_test(Layout
 #     TestLayout.cpp
-#     LINK_LIBRARIES koformula Qt5::Test
+#     LINK_LIBRARIES koformula Qt6::Test
 # )
 
 ########### Cursor Test ###############
@@ -57,11 +57,11 @@ set(TestCursor_SRCS
     ../FormulaCursor.cpp)
 endif()
 
-qt5_wrap_ui( TestCursor_SRCS
+qt_wrap_ui( TestCursor_SRCS
     ../FormulaToolWidget.ui
 )
 
 formulashape_add_unit_test(Cursor
     ${TestCursor_SRCS}
-    LINK_LIBRARIES koformula KF5::KIOWidgets Qt5::Test
+    LINK_LIBRARIES koformula KF6::KIOWidgets Qt6::Test
 )

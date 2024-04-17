@@ -15,7 +15,7 @@ endmacro()
 if (NOT WIN32)
   # This does not link on windows, due to the ../MainDebug.cpp
   set(priorityqueue_test_SRCS priorityqueue_test.cpp ../MainDebug.cpp)
-  komain_add_unit_test(priorityQueueTest ${priorityqueue_test_SRCS}  LINK_LIBRARIES KF5::I18n Qt5::Test)
+  komain_add_unit_test(priorityQueueTest ${priorityqueue_test_SRCS}  LINK_LIBRARIES KF6::I18n Qt6::Test)
 endif()
 ########### next target ###############
 
@@ -30,13 +30,13 @@ komain_add_unit_test(filterGraphTest filter_graph.cpp  LINK_LIBRARIES komain)
 set(rtreetestapp_SRCS rtreetestapp.cpp Tool.cpp )
 add_executable(rtreetestapp ${rtreetestapp_SRCS})
 ecm_mark_as_test(rtreetestapp)
-target_link_libraries(rtreetestapp komain Qt5::Test )
+target_link_libraries(rtreetestapp komain Qt6::Test )
 
 ########### next target ###############
 
-komain_add_unit_test(DocumentStructureTest documentstructuretest.cpp  LINK_LIBRARIES komain Qt5::Test)
+komain_add_unit_test(DocumentStructureTest documentstructuretest.cpp  LINK_LIBRARIES komain Qt6::Test)
 
 ########### next target ###############
 
-komain_add_unit_test(testfindmatch testfindmatch.cpp  LINK_LIBRARIES komain Qt5::Test)
+komain_add_unit_test(testfindmatch testfindmatch.cpp  LINK_LIBRARIES komain Qt6::Test)
 

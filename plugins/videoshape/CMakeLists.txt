@@ -41,11 +41,11 @@ add_library(calligra_shape_video MODULE ${videoshape_LIB_SRCS})
 target_link_libraries(calligra_shape_video
     flake
     kowidgets
-    KF5::KIOFileWidgets
-    Phonon::phonon4qt5
+    KF6::KIOFileWidgets
+    Phonon::phonon4qt6
 )
 if(PHONON_FOUND_EXPERIMENTAL)
-    target_link_libraries(calligra_shape_video Phonon::phonon4qt5experimental)
+    target_link_libraries(calligra_shape_video Phonon::phonon4qt6experimental)
 endif()
 
 install(TARGETS calligra_shape_video DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

@@ -12,7 +12,7 @@ set(updateautocorrection_SRCS
 
 add_executable(updateautocorrection ${updateautocorrection_SRCS})
 
-target_link_libraries(updateautocorrection Qt5::Core Qt::Xml KF5::Archive)
+target_link_libraries(updateautocorrection Qt6::Core Qt::Xml KF6::Archive)
 
 set(AUTOCORRECTIONDATA "${CMAKE_SOURCE_DIR}/plugins/textediting/autocorrection/data")
 message(STATUS "${CMAKE_SOURCE_DIR} ${AUTOCORRECTIONDATA}")

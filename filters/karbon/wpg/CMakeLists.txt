@@ -10,5 +10,5 @@ target_link_libraries(calligra_filter_wpg2svg komain ${LIBWPG_LIBRARIES} ${LIBRE
 install(TARGETS calligra_filter_wpg2svg DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install(FILES karbon_wpg_thumbnail.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+    install(FILES karbon_wpg_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
 endif()

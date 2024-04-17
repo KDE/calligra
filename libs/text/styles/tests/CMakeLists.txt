@@ -15,24 +15,24 @@ endmacro()
 
 ########### next target ###############
 
-kotext_styles_add_unit_test(TestStyles TestStyles.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_styles_add_unit_test(TestStyles TestStyles.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_styles_add_unit_test(TestListStyle TestListStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_styles_add_unit_test(TestListStyle TestListStyle.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_styles_add_unit_test(TestSectionStyle TestSectionStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_styles_add_unit_test(TestSectionStyle TestSectionStyle.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_styles_add_unit_test(TestTableCellStyle TestTableCellStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_styles_add_unit_test(TestTableCellStyle TestTableCellStyle.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_styles_add_unit_test(TestStyleManager TestStyleManager.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_styles_add_unit_test(TestStyleManager TestStyleManager.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-#kotext_styles_add_unit_test(TestOpenDocumentStyle TestOpenDocumentStyle.cpp  LINK_LIBRARIES kotext Qt5::Test)
+#kotext_styles_add_unit_test(TestOpenDocumentStyle TestOpenDocumentStyle.cpp  LINK_LIBRARIES kotext Qt6::Test)

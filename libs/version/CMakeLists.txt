@@ -11,7 +11,7 @@ set(koversion_LIB_SRCS
 )
 
 add_library(koversion SHARED ${koversion_LIB_SRCS})
-target_link_libraries(koversion Qt5::Core)
+target_link_libraries(koversion Qt6::Core)
 generate_export_header(koversion BASE_NAME koversion)
 
 set_target_properties(koversion PROPERTIES

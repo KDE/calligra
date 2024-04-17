@@ -115,20 +115,16 @@ target_link_libraries(kowidgets
         kotext
         pigmentcms
         kowidgetutils
-        KF5::KIOWidgets
+        KF6::KIOWidgets
     PRIVATE
-        KF5::GuiAddons
-        KF5::WidgetsAddons
-        KF5::ConfigCore
-        KF5::Codecs
-        KF5::Completion
-        KF5::CoreAddons
-        KF5::IconThemes
+        KF6::GuiAddons
+        KF6::WidgetsAddons
+        KF6::ConfigCore
+        KF6::Codecs
+        KF6::Completion
+        KF6::CoreAddons
+        KF6::IconThemes
 )
-
-if(X11_FOUND)
-    target_link_libraries(kowidgets PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
-endif()
 
 set_target_properties(kowidgets PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

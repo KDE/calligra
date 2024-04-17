@@ -26,7 +26,6 @@ class QListView;
 class QPushButton;
 class QTabWidget;
 class QTextBrowser;
-class QStringListModel;
 class QSortFilterProxyModel;
 class KComboBox;
 class KLineEdit;

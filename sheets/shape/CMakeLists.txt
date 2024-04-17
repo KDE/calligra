@@ -30,8 +30,8 @@ target_link_libraries(calligra_shape_spreadsheet
         flake
         komain
     PRIVATE
-        Qt5::PrintSupport
-        KF5::Completion
+        Qt6::PrintSupport
+        KF6::Completion
 )
 # target_link_libraries(calligra_shape_spreadsheet flake)
 

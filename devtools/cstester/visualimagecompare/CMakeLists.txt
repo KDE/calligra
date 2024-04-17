@@ -1,4 +1,4 @@
-if (Poppler_Qt5_FOUND)
+if (Poppler_Qt6_FOUND)
     add_definitions(-DHAS_POPPLER)
 
 set(visualimagecompare_SRCS
@@ -10,7 +10,7 @@ set(visualimagecompare_SRCS
 
 add_executable(visualimagecompare ${visualimagecompare_SRCS})
 
-target_link_libraries(visualimagecompare Poppler::Qt5 Qt5::Core Qt5::Widgets)
+target_link_libraries(visualimagecompare Poppler::Qt6 Qt6::Core Qt6::Widgets)
 
 install(TARGETS visualimagecompare ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

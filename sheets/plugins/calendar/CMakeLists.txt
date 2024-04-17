@@ -19,7 +19,7 @@ target_include_directories( kspread_plugin_tool_calendar
 
 target_link_libraries(kspread_plugin_tool_calendar
     PUBLIC
-    Qt5::Core
+    Qt6::Core
     calligrasheetspartlib
 )
 

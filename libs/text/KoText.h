@@ -17,7 +17,6 @@
 #include <QMetaType>
 #include <QTextOption>
 
-class QStringList;
 
 /**
  * Generic namespace of the Calligra Text library for helper methods and data.

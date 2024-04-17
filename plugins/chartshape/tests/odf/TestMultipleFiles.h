@@ -13,7 +13,6 @@
 #include "TestLoadingBase.h"
 
 
-class QStringList;
 
 namespace KoChart {
 

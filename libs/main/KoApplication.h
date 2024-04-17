@@ -18,7 +18,6 @@ class KoApplicationPrivate;
 class KAboutData;
 
 class QWidget;
-class QStringList;
 
 #include <KoFilterManager.h>
 

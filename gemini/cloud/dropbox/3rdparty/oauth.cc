@@ -156,12 +156,12 @@ QString OAuth::SHA1(QString base, QString key)
         opad[i] = opad[i] ^ 0x5c;
 
     QByteArray innerSha1 = QCryptographicHash::hash(
-        ipad + base.toLatin1(),
+        QByteArray(ipad + base.toLatin1()),
         QCryptographicHash::Sha1
         );
 
     QByteArray outerSha1 = QCryptographicHash::hash(
-        opad + innerSha1,
+        QByteArray(opad + innerSha1),
         QCryptographicHash::Sha1
         );
 

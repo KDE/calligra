@@ -27,7 +27,7 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/SheetSelectWidget.ui
 )
 
-if(Qt5DBus_FOUND)
+if(Qt6DBus_FOUND)
 set (interfaces_DIR_SRCS
     MapAdaptor.cpp
     SheetAdaptor.cpp
@@ -61,7 +61,7 @@ set (calligrasheetspartlib_LIB_SRCS
     ${dialogs_DIR_SRCS}
 )
 
-if(Qt5DBus_FOUND)
+if(Qt6DBus_FOUND)
 set (calligrasheetspartlib_LIB_SRCS
     ${calligrasheetspartlib_LIB_SRCS}
     ${interfaces_DIR_SRCS}
@@ -111,8 +111,8 @@ target_link_libraries(calligrasheetspartlib
         calligrasheetsui
         komain
         koplugin
-        KF5::KCMUtils
-        KF5::NotifyConfig
+        KF6::KCMUtils
+        KF6::NotifyConfig
 )
 
 set_target_properties(calligrasheetspartlib PROPERTIES

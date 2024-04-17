@@ -19,7 +19,6 @@
 #include "CellRegion.h"
 
 class KoShape;
-class QStringList;
 
 namespace KoChart {
 

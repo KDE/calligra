@@ -8,11 +8,11 @@ add_library(braindumpcore SHARED ${braindumpcore_LIB_SRCS})
 generate_export_header(braindumpcore)
 target_link_libraries(braindumpcore
     PUBLIC
-        Qt5::Svg
-        Qt5::Core
+        Qt6::Svg
+        Qt6::Core
     PRIVATE
-        KF5::I18n
-        Qt5::Xml
+        KF6::I18n
+        Qt6::Xml
 )
 
 set_target_properties(braindumpcore PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})

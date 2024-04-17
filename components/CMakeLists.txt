@@ -1,6 +1,6 @@
 project(calligracomponentsplugin)
 
-# TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
+# TEMPORARY: for  Qt6/KF6 build porting phase deprecation warnings are only annoying noise
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
 endif ()
@@ -38,10 +38,10 @@ target_include_directories(CalligraComponentsPlugin
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 target_link_libraries( CalligraComponentsPlugin
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Qml
-    Qt5::Quick
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Qml
+    Qt6::Quick
     wordsprivate
     calligrasheetspartlib
     calligrastageprivate

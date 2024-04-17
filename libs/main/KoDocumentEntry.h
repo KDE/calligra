@@ -15,7 +15,6 @@
 
 #include "komain_export.h"
 
-class QStringList;
 class KoDocument;
 class KoPart;
 

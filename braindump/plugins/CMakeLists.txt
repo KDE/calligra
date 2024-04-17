@@ -1,4 +1,4 @@
-if(Qt5WebKit_FOUND)
+if(Qt6WebKit_FOUND)
   add_subdirectory(webshape)
 endif()
 add_subdirectory(stateshape)

@@ -16,20 +16,20 @@ endmacro()
 
 ########### next target ###############
 
-kotext_add_unit_test(TestBorder TestBorder.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_add_unit_test(TestBorder TestBorder.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_add_unit_test(TestKoTableColumnAndRowStyleManager TestKoTableColumnAndRowStyleManager.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_add_unit_test(TestKoTableColumnAndRowStyleManager TestKoTableColumnAndRowStyleManager.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_add_unit_test(TestKoTextEditor TestKoTextEditor.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_add_unit_test(TestKoTextEditor TestKoTextEditor.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_add_unit_test(TestKoBookmarkManager TestKoBookmarkManager.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_add_unit_test(TestKoBookmarkManager TestKoBookmarkManager.cpp  LINK_LIBRARIES kotext Qt6::Test)
 
 ########### next target ###############
 
-kotext_add_unit_test(TestKoInlineTextObjectManager TestKoInlineTextObjectManager.cpp  LINK_LIBRARIES kotext Qt5::Test)
+kotext_add_unit_test(TestKoInlineTextObjectManager TestKoInlineTextObjectManager.cpp  LINK_LIBRARIES kotext Qt6::Test)

@@ -13,5 +13,5 @@ set(TestSpellCheck_SRCS
 ecm_add_test( ${TestSpellCheck_SRCS}
     TEST_NAME "TestSpellCheck"
     NAME_PREFIX "textediting-spellcheck-"
-    LINK_LIBRARIES kotext KF5::SonnetCore Qt5::Test
+    LINK_LIBRARIES kotext KF6::SonnetCore Qt6::Test
 )

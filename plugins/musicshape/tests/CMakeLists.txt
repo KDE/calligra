@@ -27,4 +27,4 @@ set( musicwidgettest_SRCS
 
 add_executable(musicwidgettest ${musicwidgettest_SRCS})
 ecm_mark_as_test(musicwidgettest)
-target_link_libraries(musicwidgettest Qt5::Widgets Qt5::Test Qt5::Core)
+target_link_libraries(musicwidgettest Qt6::Widgets Qt6::Test Qt6::Core)

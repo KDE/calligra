@@ -1,6 +1,6 @@
 project(calligragemini)
 
-# TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
+# TEMPORARY: for  Qt6/KF6 build porting phase deprecation warnings are only annoying noise
 # if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     # add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
 # endif ()
@@ -64,7 +64,7 @@ ecm_add_app_icon(calligragemini_SRCS ICONS ${ICONS_SRCS})
 add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
 target_link_libraries(calligrageminithumbnailhelper
     komain
-    KF5::Crash # needed to explicitly disable drkonqi if any plugin links to kdelibs4support
+    KF6::Crash # needed to explicitly disable drkonqi if any plugin links to kdelibs4support
 )
 
 # Calligra Gemini application
@@ -73,12 +73,12 @@ target_link_libraries(calligrageminithumbnailhelper
 add_executable(calligragemini ${calligragemini_SRCS})
 
 target_link_libraries(calligragemini
-    Qt5::Quick
-    Qt5::QuickWidgets
-    Qt5::Qml
-    Qt5::Gui
-    Qt5::Core
-    KF5::IconThemes
+    Qt6::Quick
+    Qt6::QuickWidgets
+    Qt6::Qml
+    Qt6::Gui
+    Qt6::Core
+    KF6::IconThemes
     komain
     wordsprivate
     calligrastageprivate

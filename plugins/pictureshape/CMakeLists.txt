@@ -29,8 +29,8 @@ add_library(calligra_shape_picture MODULE ${pictureshape_LIB_SRCS})
 
 target_link_libraries(calligra_shape_picture
     flake
-    KF5::I18n
-    KF5::KIOFileWidgets
-    KF5::GuiAddons
+    KF6::I18n
+    KF6::KIOFileWidgets
+    KF6::GuiAddons
 )
 install(TARGETS calligra_shape_picture DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

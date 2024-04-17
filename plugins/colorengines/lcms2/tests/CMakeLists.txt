@@ -35,21 +35,21 @@ endmacro()
 
 colorengine_lcms_add_unit_test(TestKoLcmsColorProfile
     TestKoLcmsColorProfile.cpp
-    LINK_LIBRARIES kowidgets pigmentcms KF5::I18n ${LCMS2_LIBRARIES} Qt5::Test
+    LINK_LIBRARIES kowidgets pigmentcms KF6::I18n ${LCMS2_LIBRARIES} Qt6::Test
 )
 
 ########### next target ###############
 
 colorengine_lcms_add_unit_test(TestKoLcmsColorSpaceRegistry
     TestKoLcmsColorSpaceRegistry.cpp
-    LINK_LIBRARIES kowidgets pigmentcms KF5::I18n ${LCMS2_LIBRARIES} Qt5::Test
+    LINK_LIBRARIES kowidgets pigmentcms KF6::I18n ${LCMS2_LIBRARIES} Qt6::Test
 )
 
 ########### next target ###############
 
 # colorengine_lcms_add_unit_test(TestKoCompositeOps
 #     TestKoCompositeOps.cpp
-#     LINK_LIBRARIES kowidgets pigmentcms Qt5::Test
+#     LINK_LIBRARIES kowidgets pigmentcms Qt6::Test
 # )
 
 

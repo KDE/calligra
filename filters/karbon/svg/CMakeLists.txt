@@ -26,7 +26,7 @@ set(svg2karbon_PART_SRCS
 
 add_library(calligra_filter_svg2karbon MODULE ${svg2karbon_PART_SRCS})
 
-target_link_libraries(calligra_filter_svg2karbon karbonui kopageapp KF5::Archive)
+target_link_libraries(calligra_filter_svg2karbon karbonui kopageapp KF6::Archive)
 
 install(TARGETS calligra_filter_svg2karbon  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 

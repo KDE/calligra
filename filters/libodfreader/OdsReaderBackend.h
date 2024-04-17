@@ -21,7 +21,6 @@
 
 class QByteArray;
 class QSizeF;
-class QStringList;
 class KoStore;
 class OdfReaderContext;
 

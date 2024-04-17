@@ -229,11 +229,11 @@ target_link_libraries(flake
         kundo2
     PRIVATE
         koplugin
-        KF5::IconThemes
-        KF5::ConfigCore
-        KF5::WidgetsAddons
-        KF5::CoreAddons
-        Qt5::Svg
+        KF6::IconThemes
+        KF6::ConfigCore
+        KF6::WidgetsAddons
+        KF6::CoreAddons
+        Qt6::Svg
 )
 
 set_target_properties(flake PROPERTIES

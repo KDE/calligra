@@ -30,56 +30,56 @@ endmacro()
 
 # words_part_add_unit_test(TestPageManager
 #     TestPageManager.cpp
-#     LINK_LIBRARIES wordsprivate Qt5::Test
+#     LINK_LIBRARIES wordsprivate Qt6::Test
 # )
 
 ########### next target ###############
 
 words_part_add_unit_test(TestClipToPage
     TestClipToPage.cpp
-    LINK_LIBRARIES wordsprivate Qt5::Test
+    LINK_LIBRARIES wordsprivate Qt6::Test
 )
 
 ########### next target ###############
 
 words_part_add_unit_test(TestTextStatistics
     TestTextStatistics.cpp
-    LINK_LIBRARIES wordsprivate Qt5::Test
+    LINK_LIBRARIES wordsprivate Qt6::Test
 )
 
 ########### next target ###############
 
 # words_part_add_unit_test(TestViewMode
 #     TestViewMode.cpp
-#     LINK_LIBRARIES wordsprivate Qt5::Test
+#     LINK_LIBRARIES wordsprivate Qt6::Test
 # )
 
 ########### next target ###############
 
 # words_part_add_unit_test(TestPageTextInfo
 #     TestPageTextInfo.cpp
-#     LINK_LIBRARIES wordsprivate Qt5::Test
+#     LINK_LIBRARIES wordsprivate Qt6::Test
 # )
 
 ########### next target ###############
 
 # words_part_frame_add_unit_test(TestFrameLayout
 #     TestFrameLayout.cpp
-#     LINK_LIBRARIES wordsprivate Qt5::Test
+#     LINK_LIBRARIES wordsprivate Qt6::Test
 # )
 
 ########### next target ###############
 
 # words_part_frame_add_unit_test(TestTextFrameSorting
 #     TestTextFrameSorting.cpp
-#     LINK_LIBRARIES wordsprivate Qt5::Test
+#     LINK_LIBRARIES wordsprivate Qt6::Test
 # )
 
 ########### next target ###############
 
 # words_part_frame_add_unit_test(TestTextFrameManagement
 #     TestTextFrameManagement.cpp
-#     LINK_LIBRARIES wordsprivate Qt5::Test
+#     LINK_LIBRARIES wordsprivate Qt6::Test
 # )
 
 ########### next target ###############
@@ -87,7 +87,7 @@ words_part_add_unit_test(TestTextStatistics
 if( SHOULD_BUILD_FEATURE_RDF )
 # words_part_add_unit_test(TestRdf
 #     TestRdf.cpp
-#     LINK_LIBRARIES wordsprivate Qt5::Test
+#     LINK_LIBRARIES wordsprivate Qt6::Test
 # )
 endif()
 

@@ -19,54 +19,54 @@ endmacro()
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoColorSpaceRegistry TestKoColorSpaceRegistry.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestKoColorSpaceRegistry TestKoColorSpaceRegistry.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestColorConversion TestColorConversion.cpp  LINK_LIBRARIES pigmentcms Qt5::Test)
+pigment_add_unit_test(TestColorConversion TestColorConversion.cpp  LINK_LIBRARIES pigmentcms Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoColorSpaceAbstract TestKoColorSpaceAbstract.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestKoColorSpaceAbstract TestKoColorSpaceAbstract.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoColorSpaceMaths TestKoColorSpaceMaths.cpp  LINK_LIBRARIES pigmentcms Qt5::Test)
+pigment_add_unit_test(TestKoColorSpaceMaths TestKoColorSpaceMaths.cpp  LINK_LIBRARIES pigmentcms Qt6::Test)
 
 ########### next target ###############
 set(CCSGraph_GRAPH CCSGraph.cpp)
 add_executable(CCSGraph ${CCSGraph_GRAPH})
 ecm_mark_as_test(CCSGraph)
-target_link_libraries(CCSGraph  pigmentcms KF5::I18n )
+target_link_libraries(CCSGraph  pigmentcms KF6::I18n )
 
 ########### next target ###############
 
-pigment_add_unit_test(TestColorConversionSystem TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestColorConversionSystem TestColorConversionSystem.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoColor TestKoColor.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestKoColor TestKoColor.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoIntegerMaths TestKoIntegerMaths.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestKoIntegerMaths TestKoIntegerMaths.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestConvolutionOpImpl TestConvolutionOpImpl.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestConvolutionOpImpl TestConvolutionOpImpl.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoRgbU8ColorSpaceTester KoRgbU8ColorSpaceTester.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestKoRgbU8ColorSpaceTester KoRgbU8ColorSpaceTester.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoColorSpaceSanity TestKoColorSpaceSanity.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestKoColorSpaceSanity TestKoColorSpaceSanity.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestFallBackColorTransformation TestFallBackColorTransformation.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestFallBackColorTransformation TestFallBackColorTransformation.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-pigment_add_unit_test(TestKoChannelInfo TestKoChannelInfo.cpp  LINK_LIBRARIES pigmentcms KF5::I18n Qt5::Test)
+pigment_add_unit_test(TestKoChannelInfo TestKoChannelInfo.cpp  LINK_LIBRARIES pigmentcms KF6::I18n Qt6::Test)

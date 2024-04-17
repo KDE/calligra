@@ -183,13 +183,13 @@ target_link_libraries(calligra_shape_text
   kotext
   kotextlayout
   kowidgets
-  KF5::KIOCore
-  KF5::KIOFileWidgets
-  KF5::KIOWidgets
-  KF5::ItemViews
-  KF5::WidgetsAddons
-  KF5::Completion
-  Qt5::Network
+  KF6::KIOCore
+  KF6::KIOFileWidgets
+  KF6::KIOWidgets
+  KF6::ItemViews
+  KF6::WidgetsAddons
+  KF6::Completion
+  Qt6::Network
 )
 
 if( SHOULD_BUILD_FEATURE_RDF )

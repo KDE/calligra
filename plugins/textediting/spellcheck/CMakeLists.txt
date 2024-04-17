@@ -22,8 +22,8 @@ add_library(calligra_textediting_spellcheck MODULE ${spellcheck_SRCS})
 target_link_libraries(calligra_textediting_spellcheck
     kotext
     kotextlayout
-    KF5::SonnetCore
-    KF5::SonnetUi
+    KF6::SonnetCore
+    KF6::SonnetUi
 )
 
 install(TARGETS calligra_textediting_spellcheck DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/textediting)

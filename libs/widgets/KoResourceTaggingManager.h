@@ -16,7 +16,6 @@
 #include <QObject>
 
 class QWidget;
-class QStringList;
 class QString;
 class QPoint;
 

@@ -10,7 +10,7 @@ set(opencalc2sheets_PART_SRCS opencalcimport.cc ooutils.cc )
 
 add_library(calligra_filter_opencalc2sheets MODULE ${opencalc2sheets_PART_SRCS})
 
-target_link_libraries(calligra_filter_opencalc2sheets calligrasheetsui kowidgets KF5::Archive)
+target_link_libraries(calligra_filter_opencalc2sheets calligrasheetsui kowidgets KF6::Archive)
 
 install(TARGETS calligra_filter_opencalc2sheets  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 

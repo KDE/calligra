@@ -79,11 +79,11 @@ endif()
 
 target_link_libraries(calligrasheetsengine
     PUBLIC
-        Qt5::Core
-        Qt5::Xml
-        KF5::CoreAddons
-        KF5::ConfigCore
-        KF5::I18n
+        Qt6::Core
+        Qt6::Xml
+        KF6::CoreAddons
+        KF6::ConfigCore
+        KF6::I18n
     PRIVATE
         koplugin
 )

@@ -12,7 +12,6 @@
 
 #include <kowidgets_export.h>
 
-class QStringList;
 
 
 namespace KoResourcePaths

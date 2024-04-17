@@ -1,4 +1,4 @@
-if(Phonon4Qt5_FOUND)
+if(Phonon4Qt6_FOUND)
     add_subdirectory( eventactions )
 endif()
 add_subdirectory( pageeffects )

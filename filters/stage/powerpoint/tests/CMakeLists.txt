@@ -8,5 +8,5 @@ include_directories(
 ecm_add_test( TestPPT.cpp
     TEST_NAME "PPT"
     NAME_PREFIX "filter-ppt2odp-"
-    LINK_LIBRARIES koodf ppttoodplib komain Qt5::Test
+    LINK_LIBRARIES koodf ppttoodplib komain Qt6::Test
 )

@@ -23,7 +23,7 @@ target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 install(TARGETS calligra_filter_ppt2odp  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+    install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPT)

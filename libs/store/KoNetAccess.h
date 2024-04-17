@@ -16,7 +16,6 @@
 #include <kio/udsentry.h>
 #include <kio/jobclasses.h> // for KIO::JobFlags
 
-class QStringList;
 class QWidget;
 
 #include <kostore_export.h>

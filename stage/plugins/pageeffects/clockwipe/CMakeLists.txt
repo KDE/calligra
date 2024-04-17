@@ -27,8 +27,8 @@ add_library(kpr_pageeffect_clockwipe MODULE ${kpr_pageeffect_clockwipe_SRCS})
 target_link_libraries(kpr_pageeffect_clockwipe PRIVATE
     calligrastageprivate
     flake
-    Qt5::Core
-    Qt5::Gui
+    Qt6::Core
+    Qt6::Gui
 )
 
 install(TARGETS kpr_pageeffect_clockwipe  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

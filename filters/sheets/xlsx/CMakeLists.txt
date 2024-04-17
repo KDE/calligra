@@ -42,7 +42,7 @@ install(TARGETS calligra_filter_xlsx2ods DESTINATION ${KDE_INSTALL_PLUGINDIR}/ca
 ########### install files ###############
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
 endif()
 
 ########## unit tests ###################
@@ -55,5 +55,5 @@ set(TestFormulaParser_SRCS
 ecm_add_test( ${TestFormulaParser_SRCS}
     TEST_NAME "FormulaParser"
     NAME_PREFIX "filter-xlsx2ods-"
-    LINK_LIBRARIES komsooxml calligrasheetsui Qt5::Test
+    LINK_LIBRARIES komsooxml calligrasheetsui Qt6::Test
 )

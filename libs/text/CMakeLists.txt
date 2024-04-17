@@ -142,10 +142,10 @@ generate_export_header(kotext BASE_NAME kotext)
 target_link_libraries(kotext
     PUBLIC
         flake
-        KF5::TextWidgets
+        KF6::TextWidgets
     PRIVATE
         koplugin
-        KF5::WindowSystem # KoFind to activate the window with content found
+        KF6::WindowSystem # KoFind to activate the window with content found
 )
 if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(kotext PRIVATE ${SOPRANO_LIBRARIES})

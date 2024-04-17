@@ -17,98 +17,98 @@ endmacro()
 
 sheets_add_unit_test(TestTime
     TestTime.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Cell
     TestCell.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(CellStorage
     TestCellStorage.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Dependencies
     TestDependencies.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Formula
     TestFormula.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Util
     TestUtil.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(OpenFormula
     TestOpenFormula.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(PointStorage
     TestPointStorage.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Region
     TestRegion.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(RTree
     TestRTree.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Sort
     TestSort.cpp
-    LINK_LIBRARIES calligrasheetsui Qt5::Test
+    LINK_LIBRARIES calligrasheetsui Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Selection
     TestSelection.cpp
-    LINK_LIBRARIES calligrasheetspartlib Qt5::Test
+    LINK_LIBRARIES calligrasheetspartlib Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(Value
     TestValue.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(StyleStorage
     TestStyleStorage.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 
@@ -116,77 +116,77 @@ sheets_add_unit_test(StyleStorage
 
 sheets_add_unit_test(BitopsFunctions
     TestBitopsFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(DatabaseFunctions
     TestDatabaseFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### target TestDatetimeFunctions ###############
 
 sheets_add_unit_test(DatetimeFunctions
     TestDatetimeFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(EngineeringFunctions
     TestEngineeringFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(FinancialFunctions
     TestFinancialFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(InformationFunctions
     TestInformationFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(LogicFunctions
     TestLogicFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(MathFunctions
     TestMathFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(StatisticalFunctions
     TestStatisticalFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(TextFunctions
     TestTextFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(TrigFunctions
     TestTrigFunctions.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 # the next tests had this line:
@@ -199,14 +199,14 @@ add_definitions("-DCALLIGRA_SHEETS_UNIT_TEST")
 
 sheets_add_unit_test(ValueFormatter
     TestValueFormatter.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(ValueConverter
     TestValueConverter.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 
 ########### next target ###############
@@ -215,14 +215,14 @@ if(NOT WIN32)
 # TODO find out why this does not compile on windows
 sheets_add_unit_test(ValueParser
     TestValueParser.cpp
-    LINK_LIBRARIES calligrasheetsengine Qt5::Test
+    LINK_LIBRARIES calligrasheetsengine Qt6::Test
 )
 endif()
 ########### next target ###############
 
 sheets_add_unit_test(Sheet
     TestSheet.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 # see comment at respective add_definitions(...)
@@ -239,28 +239,28 @@ target_link_libraries(TestGraphicsView calligrasheetspartlib)
 
 sheets_add_unit_test(RowFormatStorage
     TestRowFormatStorage.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(ColFormatStorage
     TestColFormatStorage.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(DatabaseFilter
     TestDatabaseFilter.cpp
-    LINK_LIBRARIES calligrasheetscore Qt5::Test
+    LINK_LIBRARIES calligrasheetscore Qt6::Test
 )
 
 ########### next target ###############
 
 sheets_add_unit_test(PasteCommand
     TestPasteCommand.cpp
-    LINK_LIBRARIES calligrasheetspartlib Qt5::Test
+    LINK_LIBRARIES calligrasheetspartlib Qt6::Test
 )
 
 ########### Benchmarks ###############
@@ -268,12 +268,12 @@ sheets_add_unit_test(PasteCommand
 set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
 add_executable(BenchmarkPointStorage ${BenchmarkPointStorage_SRCS})
 ecm_mark_as_test(BenchmarkPointStorage)
-target_link_libraries(BenchmarkPointStorage calligrasheetsengine Qt5::Test)
+target_link_libraries(BenchmarkPointStorage calligrasheetsengine Qt6::Test)
 
 ########### next target ###############
 
 set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
 add_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
 ecm_mark_as_test(BenchmarkRTree)
-target_link_libraries(BenchmarkRTree calligrasheetsengine Qt5::Test)
+target_link_libraries(BenchmarkRTree calligrasheetsengine Qt6::Test)
 

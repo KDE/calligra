@@ -12,7 +12,6 @@
 #include <QString>
 #include <QObject>
 
-class QStringList;
 
 namespace Calligra
 {

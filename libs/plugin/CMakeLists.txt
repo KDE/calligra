@@ -8,10 +8,10 @@ generate_export_header(koplugin BASE_NAME koplugin)
 
 target_link_libraries(koplugin
     PUBLIC
-        Qt5::Core
+        Qt6::Core
     PRIVATE
-        KF5::ConfigCore
-        KF5::CoreAddons
+        KF6::ConfigCore
+        KF6::CoreAddons
 )
 
 set_target_properties(koplugin PROPERTIES

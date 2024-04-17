@@ -9,6 +9,6 @@ macro(KORDF_ADD_UNIT_TEST _TEST_NAME)
     )
 endmacro()
 
-kordf_add_unit_test(TestKoDocumentRdf TestKoDocumentRdf.cpp  LINK_LIBRARIES kordf Qt5::Test)
+kordf_add_unit_test(TestKoDocumentRdf TestKoDocumentRdf.cpp  LINK_LIBRARIES kordf Qt6::Test)
 
-kordf_add_unit_test(rdf_test rdf_test.cpp  LINK_LIBRARIES kordf Qt5::Test)
+kordf_add_unit_test(rdf_test rdf_test.cpp  LINK_LIBRARIES kordf Qt6::Test)

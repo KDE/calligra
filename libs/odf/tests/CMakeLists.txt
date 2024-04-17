@@ -11,50 +11,50 @@ endmacro()
 
 ########### next target ###############
 
-koodf_add_unit_test(TestKoGenStyles TestKoGenStyles.cpp  LINK_LIBRARIES koodf KF5::I18n Qt5::Test)
+koodf_add_unit_test(TestKoGenStyles TestKoGenStyles.cpp  LINK_LIBRARIES koodf KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestOdfSettings TestOdfSettings.cpp  LINK_LIBRARIES koodf KF5::I18n Qt5::Test)
+koodf_add_unit_test(TestOdfSettings TestOdfSettings.cpp  LINK_LIBRARIES koodf KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestKoOdfLoadingContext TestKoOdfLoadingContext.cpp  LINK_LIBRARIES koodf KF5::I18n Qt5::Test)
+koodf_add_unit_test(TestKoOdfLoadingContext TestKoOdfLoadingContext.cpp  LINK_LIBRARIES koodf KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestXmlWriter TestXmlWriter.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(TestXmlWriter TestXmlWriter.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestXmlReader TestXmlReader.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(TestXmlReader TestXmlReader.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestXmlReaderWithoutSpaces TestXmlReaderWithoutSpaces.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(TestXmlReaderWithoutSpaces TestXmlReaderWithoutSpaces.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(kodomtest kodomtest.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(kodomtest kodomtest.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestStorage TestStorage.cpp  LINK_LIBRARIES koodf KF5::I18n Qt5::Test)
+koodf_add_unit_test(TestStorage TestStorage.cpp  LINK_LIBRARIES koodf KF6::I18n Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestKoUnit TestKoUnit.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(TestKoUnit TestKoUnit.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestNumberStyle TestNumberStyle.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(TestNumberStyle TestNumberStyle.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestKoElementReference TestKoElementReference.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(TestKoElementReference TestKoElementReference.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### next target ###############
 
-koodf_add_unit_test(TestWriteStyleXml TestWriteStyleXml.cpp  LINK_LIBRARIES koodf Qt5::Test)
+koodf_add_unit_test(TestWriteStyleXml TestWriteStyleXml.cpp  LINK_LIBRARIES koodf Qt6::Test)
 
 ########### end ###############

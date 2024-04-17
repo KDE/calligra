@@ -38,9 +38,9 @@ generate_export_header(kovectorimage BASE_NAME kovectorimage)
 
 target_link_libraries(kovectorimage
     PUBLIC
-        Qt5::Gui
+        Qt6::Gui
     PRIVATE
-        Qt5::PrintSupport
+        Qt6::PrintSupport
 )
 
 set_target_properties(kovectorimage PROPERTIES

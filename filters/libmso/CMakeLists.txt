@@ -31,6 +31,6 @@ target_link_libraries(mso
     PUBLIC
         koodf
     PRIVATE
-        Qt5::Gui
+        Qt6::Gui
         ${ZLIB_LIBRARIES}
 )

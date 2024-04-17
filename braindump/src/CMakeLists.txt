@@ -47,6 +47,6 @@ ecm_add_app_icon( braindump_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(braindump ${braindump_SRCS})
 
-target_link_libraries(braindump braindumpcore komain kowidgets kotext flake koplugin KF5::IconThemes)
+target_link_libraries(braindump braindumpcore komain kowidgets kotext flake koplugin KF6::IconThemes)
 
 install(TARGETS braindump ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

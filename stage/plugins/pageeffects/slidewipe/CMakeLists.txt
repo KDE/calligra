@@ -19,8 +19,8 @@ target_link_libraries(
     kpr_pageeffect_slidewipe
     calligrastageprivate
     flake
-    Qt5::Core
-    Qt5::Gui
+    Qt6::Core
+    Qt6::Gui
 )
 
 install(TARGETS kpr_pageeffect_slidewipe  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

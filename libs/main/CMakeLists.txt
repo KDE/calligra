@@ -12,7 +12,7 @@ include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
-if( Qca-qt5_FOUND )
+if( Qca-qt6_FOUND )
    add_definitions( -DQCA2 )
 endif()
 
@@ -71,7 +71,7 @@ set(komain_LIB_SRCS
     Calligra2Migration.cpp
 )
 
-if( Qt5DBus_FOUND )
+if( Qt6DBus_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         KoApplicationAdaptor.cpp
         KoViewAdaptor.cpp
@@ -84,7 +84,7 @@ ki18n_wrap_ui( komain_LIB_SRCS
    KoDetailsPaneBase.ui
 )
 
-QT5_WRAP_CPP(komain_HEADERS_MOC KoDocumentSectionPropertyAction_p.h)
+qt_wrap_cpp(komain_HEADERS_MOC KoDocumentSectionPropertyAction_p.h)
 
 add_library(komain SHARED ${komain_HEADERS_MOC}  ${komain_LIB_SRCS})
 generate_export_header(komain
@@ -98,14 +98,14 @@ target_link_libraries(komain
         koversion
     PRIVATE
         koplugin
-        KF5::Notifications
-        KF5::CoreAddons
-        KF5::ItemViews
-        KF5::KIOFileWidgets
-        KF5::KIOCore
-        KF5::Completion
-        KF5::IconThemes
-        KF5::DBusAddons
+        KF6::Notifications
+        KF6::CoreAddons
+        KF6::ItemViews
+        KF6::KIOFileWidgets
+        KF6::KIOCore
+        KF6::Completion
+        KF6::IconThemes
+        KF6::DBusAddons
 )
 
 if (APPLE)
@@ -162,7 +162,7 @@ install( FILES
     komain_export.h
 DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
-if( Qt5DBus_FOUND )
+if( Qt6DBus_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h

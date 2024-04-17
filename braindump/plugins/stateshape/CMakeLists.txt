@@ -23,11 +23,11 @@ add_library(braindump_shape_state MODULE ${stateshape_LIB_SRCS})
 target_link_libraries(
     braindump_shape_state
     flake
-    Qt5::Core
-    Qt5::Svg
+    Qt6::Core
+    Qt6::Svg
     braindumpcore
-    KF5::ItemViews
-    KF5::CoreAddons
+    KF6::ItemViews
+    KF6::CoreAddons
     )
 install(TARGETS braindump_shape_state DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 

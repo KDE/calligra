@@ -33,7 +33,7 @@ set(SheetTest_test_SRCS
 
 musicshape_add_unit_test(SheetTest
     ${SheetTest_test_SRCS}
-    LINK_LIBRARIES Qt5::Test
+    LINK_LIBRARIES Qt6::Test
 )
 
 
@@ -61,7 +61,7 @@ set(VoiceBarTest_test_SRCS
 
 musicshape_add_unit_test(VoiceBarTest
     ${VoiceBarTest_test_SRCS}
-    LINK_LIBRARIES Qt5::Test
+    LINK_LIBRARIES Qt6::Test
 )
 
 ########### next target ###############
@@ -89,5 +89,5 @@ set(MusicXmlWriterTest_test_SRCS
 
 musicshape_add_unit_test(MusicXmlWriterTest
     ${MusicXmlWriterTest_test_SRCS}
-    LINK_LIBRARIES koodf Qt5::Test
+    LINK_LIBRARIES koodf Qt6::Test
 )

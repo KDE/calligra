@@ -15,7 +15,6 @@
 
 class KoResourceServerBase;
 class KoResource;
-class QStringList;
 class QString;
 
 class KOWIDGETS_EXPORT KoResourceFiltering

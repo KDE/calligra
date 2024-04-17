@@ -20,11 +20,11 @@ add_library(calligrageminidropboxplugin SHARED ${dropbox_plugin_SRCS} ${dropbox_
 endif()
 
 target_link_libraries(calligrageminidropboxplugin
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::Qml
-    Qt5::Quick
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Qml
+    Qt6::Quick
 )
 
 install(TARGETS calligrageminidropboxplugin DESTINATION ${KDE_INSTALL_QMLDIR}/Calligra/Gemini/Dropbox)

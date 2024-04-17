@@ -135,7 +135,7 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-if(Qt5DBus_FOUND)
+if(Qt6DBus_FOUND)
 set( calligrastageprivate_LIB_SRCS
      ${calligrastageprivate_LIB_SRCS}
      KPrViewAdaptor.cpp
@@ -163,13 +163,13 @@ target_link_libraries(calligrastageprivate
         kowidgets
         kotextlayout
         koplugin
-        KF5::Archive
-        KF5::IconThemes
-        KF5::Completion
-        Qt5::Svg
+        KF6::Archive
+        KF6::IconThemes
+        KF6::Completion
+        Qt6::Svg
 )
 if(HAVE_OPENGL)
-    target_link_libraries(calligrastageprivate PRIVATE Qt5::OpenGL)
+    target_link_libraries(calligrastageprivate PRIVATE Qt6::OpenGL)
 endif()
 
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

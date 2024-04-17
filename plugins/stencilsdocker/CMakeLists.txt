@@ -13,7 +13,7 @@ set(stencilsdocker_PART_SRCS
 add_library(calligra_docker_stencils MODULE ${stencilsdocker_PART_SRCS})
 
 
-target_link_libraries(calligra_docker_stencils komain kowidgets flake KF5::Archive KF5::IconThemes)
+target_link_libraries(calligra_docker_stencils komain kowidgets flake KF6::Archive KF6::IconThemes)
 
 install(TARGETS calligra_docker_stencils DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/dockers)
 

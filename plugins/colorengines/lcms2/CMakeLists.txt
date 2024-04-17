@@ -93,6 +93,6 @@ endif ()
 
 add_library(kolcmsengine MODULE ${lcmsengine_SRCS})
 
-target_link_libraries(kolcmsengine pigmentcms kowidgets KF5::I18n  ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
+target_link_libraries(kolcmsengine pigmentcms kowidgets KF6::I18n  ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
 install(TARGETS kolcmsengine DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/colorspaces)
 

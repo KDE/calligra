@@ -11,16 +11,16 @@ endmacro()
 
 ########### next target ###############
 
-kopageapp_add_unit_test(TestPAPageInsertCommand TestPAPageInsertCommand.cpp  LINK_LIBRARIES kopageapp Qt5::Test)
+kopageapp_add_unit_test(TestPAPageInsertCommand TestPAPageInsertCommand.cpp  LINK_LIBRARIES kopageapp Qt6::Test)
 
 ########### next target ###############
 
-kopageapp_add_unit_test(TestPAPageDeleteCommand TestPAPageDeleteCommand.cpp  LINK_LIBRARIES kopageapp Qt5::Test)
+kopageapp_add_unit_test(TestPAPageDeleteCommand TestPAPageDeleteCommand.cpp  LINK_LIBRARIES kopageapp Qt6::Test)
 
 ########### next target ###############
 
-kopageapp_add_unit_test(TestPAPageMoveCommand TestPAPageMoveCommand.cpp  LINK_LIBRARIES kopageapp Qt5::Test)
+kopageapp_add_unit_test(TestPAPageMoveCommand TestPAPageMoveCommand.cpp  LINK_LIBRARIES kopageapp Qt6::Test)
 
 ########### next target ###############
 
-kopageapp_add_unit_test(TestPACopyPastePage TestPACopyPastePage.cpp  LINK_LIBRARIES kopageapp Qt5::Test)
+kopageapp_add_unit_test(TestPACopyPastePage TestPACopyPastePage.cpp  LINK_LIBRARIES kopageapp Qt6::Test)

@@ -32,4 +32,4 @@ install(TARGETS karbonxamlimport  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/
 
 ########### install files ###############
 
-install( FILES  karbon_xaml_export.desktop karbon_xaml_import.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)
+install( FILES  karbon_xaml_export.desktop karbon_xaml_import.desktop  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra)

@@ -14,12 +14,12 @@ generate_export_header(kundo2 BASE_NAME kundo2)
 
 target_link_libraries(kundo2
     PUBLIC
-        KF5::I18n
-        KF5::XmlGui
-        Qt5::Core
-        Qt5::Widgets
+        KF6::I18n
+        KF6::XmlGui
+        Qt6::Core
+        Qt6::Widgets
     PRIVATE
-        KF5::ConfigWidgets
+        KF6::ConfigWidgets
 )
 
 set_target_properties(kundo2 PROPERTIES

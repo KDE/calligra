@@ -19,47 +19,47 @@ endmacro()
 
 stage_part_add_unit_test(TestShapeAnimations
     TestShapeAnimations.cpp ModelTest.cpp
-    LINK_LIBRARIES calligrastageprivate Qt5::Test
+    LINK_LIBRARIES calligrastageprivate Qt6::Test
 )
 
 ########### next target ###############
 
 stage_part_add_unit_test(TestCustomSlideShows
     TestCustomSlideShows.cpp
-    LINK_LIBRARIES calligrastageprivate Qt5::Test
+    LINK_LIBRARIES calligrastageprivate Qt6::Test
 )
 
 ########### next target ###############
 
 stage_part_add_unit_test(TestEditCustomSlideShowsCommand
     TestEditCustomSlideShowsCommand.cpp
-    LINK_LIBRARIES calligrastageprivate Qt5::Test
+    LINK_LIBRARIES calligrastageprivate Qt6::Test
 )
 
 ########### next target ###############
 
 stage_part_add_unit_test(TestAddCustomSlideShowCommand
     TestAddCustomSlideShowCommand.cpp
-    LINK_LIBRARIES calligrastageprivate Qt5::Test
+    LINK_LIBRARIES calligrastageprivate Qt6::Test
 )
 
 ########### next target ###############
 
 stage_part_add_unit_test(TestDelCustomSlideShowCommand
     TestDelCustomSlideShowCommand.cpp
-    LINK_LIBRARIES calligrastageprivate Qt5::Test
+    LINK_LIBRARIES calligrastageprivate Qt6::Test
 )
 
 ########### next target ###############
 
 stage_part_add_unit_test(TestRenameCustomSlideShowCommand
     TestRenameCustomSlideShowCommand.cpp
-    LINK_LIBRARIES calligrastageprivate Qt5::Test
+    LINK_LIBRARIES calligrastageprivate Qt6::Test
 )
 
 ########### next target ###############
 
 stage_part_add_unit_test(TestDeleteSlidesCommand
     TestDeleteSlidesCommand.cpp
-    LINK_LIBRARIES calligrastageprivate Qt5::Test
+    LINK_LIBRARIES calligrastageprivate Qt6::Test
 )

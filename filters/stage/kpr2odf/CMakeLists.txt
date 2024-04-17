@@ -13,5 +13,5 @@ target_link_libraries(calligra_filter_kpr2odp komain)
 install(TARGETS calligra_filter_kpr2odp DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  stage_kpr_thumbnail.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
+    install( FILES  stage_kpr_thumbnail.desktop  DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/thumbcreator)
 endif()

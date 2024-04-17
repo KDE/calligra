@@ -14,7 +14,7 @@ target_link_libraries(
     kotextlayout
     calligrastageprivate
     
-    Qt5::Core
+    Qt6::Core
     )
 
 install(TARGETS kprvariables  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/textinlineobjects)

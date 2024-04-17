@@ -27,7 +27,7 @@ add_library(calligrastagetoolanimation MODULE ${calligrastagetoolanimation_PART_
 target_link_libraries(
     calligrastagetoolanimation
     calligrastageprivate
-    KF5::IconThemes
+    KF6::IconThemes
 )
 
 install(TARGETS calligrastagetoolanimation  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/tools)

@@ -12,7 +12,6 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KPluginFactory>
-#include <KPluginLoader>
 #include <KPluginMetaData>
 
 #include <QCoreApplication>

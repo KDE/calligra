@@ -14,9 +14,9 @@ target_link_libraries(
     calligrastageeventactions
     calligrastageprivate
     flake
-    KF5::KIOCore
-    Phonon::phonon4qt5
-    Qt5::Gui
+    KF6::KIOCore
+    Phonon::phonon4qt6
+    Qt6::Gui
 )
 
 install(TARGETS calligrastageeventactions  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/presentationeventactions)

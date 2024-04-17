@@ -52,13 +52,13 @@ generate_export_header(koodf BASE_NAME koodf)
 target_link_libraries(koodf
     PUBLIC
         kostore
-        Qt5::PrintSupport
-        Qt5::Xml
+        Qt6::PrintSupport
+        Qt6::Xml
     PRIVATE
         koversion
-        KF5::I18n
-        KF5::ConfigCore
-        KF5::CoreAddons
+        KF6::I18n
+        KF6::ConfigCore
+        KF6::CoreAddons
 )
 
 set_target_properties(koodf PROPERTIES

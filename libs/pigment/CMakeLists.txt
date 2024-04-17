@@ -141,9 +141,9 @@ generate_export_header(pigmentcms
 
 target_link_libraries(pigmentcms
     PUBLIC
-        KF5::I18n
-        Qt5::Xml
-        Qt5::Gui
+        KF6::I18n
+        Qt6::Xml
+        Qt6::Gui
         ${EXTRA_LIBRARIES}
     PRIVATE
         koplugin

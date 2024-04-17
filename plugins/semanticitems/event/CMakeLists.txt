@@ -16,14 +16,14 @@ ki18n_wrap_ui( calligra_semanticitem_event_LIB_SRCS
 
 add_library(calligra_semanticitem_event MODULE ${calligra_semanticitem_event_LIB_SRCS})
 
-if (KF5CalendarCore_FOUND AND KF5Akonadi_FOUND)
+if (KF6CalendarCore_FOUND AND KF6Akonadi_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
    target_link_libraries(calligra_semanticitem_event
-      KF5::CalendarCore
-      KF5::AkonadiCore
+      KF6::CalendarCore
+      KF6::AkonadiCore
    )
 endif ()
 
-target_link_libraries(calligra_semanticitem_event   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
+target_link_libraries(calligra_semanticitem_event   ${KORDF_LIBS} KF6::I18n KF6::KDELibs4Support)
 
 install(TARGETS calligra_semanticitem_event  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/semanticitems)

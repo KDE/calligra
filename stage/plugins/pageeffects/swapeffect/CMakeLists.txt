@@ -12,8 +12,8 @@ target_link_libraries(
     calligrastageprivate
     flake
 
-    Qt5::Core
-    Qt5::Gui
+    Qt6::Core
+    Qt6::Gui
 )
 
 install(TARGETS kpr_pageeffect_swapeffect  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

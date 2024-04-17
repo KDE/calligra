@@ -20,7 +20,7 @@ set(TestDocumentLayout_test_SRCS
  TestDocumentLayout.cpp
  MockRootAreaProvider.cpp
 )
-kotextlayout_add_unit_test(TestDocumentLayout ${TestDocumentLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt5::Test)
+kotextlayout_add_unit_test(TestDocumentLayout ${TestDocumentLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt6::Test)
 
 ########### next target ###############
 
@@ -28,7 +28,7 @@ set(TestBlockLayout_test_SRCS
  TestBlockLayout.cpp
  MockRootAreaProvider.cpp
 )
-kotextlayout_add_unit_test(TestBlockLayout ${TestBlockLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt5::Test)
+kotextlayout_add_unit_test(TestBlockLayout ${TestBlockLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt6::Test)
 
 ########### next target ###############
 
@@ -36,4 +36,4 @@ set(TestTableLayout_test_SRCS
  TestTableLayout.cpp
  MockRootAreaProvider.cpp
 )
-kotextlayout_add_unit_test(TestTableLayout ${TestTableLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt5::Test)
+kotextlayout_add_unit_test(TestTableLayout ${TestTableLayout_test_SRCS}  LINK_LIBRARIES kotext kotextlayout Qt6::Test)

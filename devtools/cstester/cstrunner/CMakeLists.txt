@@ -8,7 +8,7 @@ set(cstrunner_SRCS
 
 add_executable(cstrunner ${cstrunner_SRCS})
 
-target_link_libraries(cstrunner Qt5::Core Qt5::Gui)
+target_link_libraries(cstrunner Qt6::Core Qt6::Gui)
 
 install(TARGETS cstrunner ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

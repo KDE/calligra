@@ -142,17 +142,17 @@ calligra_set_productset(${PRODUCTSET})
 
 ##########################
 ###########################
-## Look for ECM, Qt, KF5 ##
+## Look for ECM, Qt, KF6 ##
 ###########################
 ##########################
-set(REQUIRED_KF5_VERSION "5.76.0")
+set(REQUIRED_KF6_VERSION "5.76.0")
 set(REQUIRED_QT_VERSION "5.12.0")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(ECM ${REQUIRED_KF5_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${REQUIRED_KF6_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 # ECM KDE macros (include first, to have their policies and settings effect all other macros)
@@ -181,7 +181,7 @@ include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
 
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
+find_package(KF6 ${REQUIRED_KF6_VERSION} REQUIRED
     COMPONENTS
     Archive
     Codecs
@@ -209,7 +209,7 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     XmlGui
 )
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
+find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
     Core
     Gui
@@ -220,7 +220,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     Widgets
     Xml
     )
-find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
+find_package(Qt6 ${REQUIRED_QT_VERSION} QUIET
     COMPONENTS
     DBus
     OpenGL
@@ -229,47 +229,35 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
     Sql
 )
 
-set_package_properties(Qt5DBus PROPERTIES
+set_package_properties(Qt6DBus PROPERTIES
     TYPE RECOMMENDED
     )
-set_package_properties(Qt5Declarative PROPERTIES
+set_package_properties(Qt6Declarative PROPERTIES
     PURPOSE "Required for QtQuick1 components"
     TYPE RECOMMENDED
     )
-set_package_properties(Qt5OpenGL PROPERTIES
+set_package_properties(Qt6OpenGL PROPERTIES
     PURPOSE "Required for QtQuick1 components"
     TYPE RECOMMENDED
     )
-set_package_properties(Qt5Quick PROPERTIES
+set_package_properties(Qt6Quick PROPERTIES
     PURPOSE "Required for QtQuick2 components"
     TYPE RECOMMENDED
     )
-set_package_properties(Qt5QuickWidgets PROPERTIES
+set_package_properties(Qt6QuickWidgets PROPERTIES
     PURPOSE "Required for Calligra Gemini"
     TYPE RECOMMENDED
     )
-set_package_properties(Qt5Sql PROPERTIES
+set_package_properties(Qt6Sql PROPERTIES
     PURPOSE "Optional for Sheets' database connection"
     TYPE OPTIONAL
     )
-set_package_properties(Qt5WebKit PROPERTIES
+set_package_properties(Qt6WebKit PROPERTIES
     PURPOSE "Required for Braindump's Web shape"
     TYPE OPTIONAL
     )
 
-set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
-
-find_package(X11)
-if(X11_FOUND)
-    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
-	COMPONENTS
-	X11Extras
-	)
-    set(HAVE_X11 TRUE)
-    add_definitions(-DHAVE_X11)
-else()
-    set(HAVE_X11 FALSE)
-endif()
+set(HAVE_OPENGL ${Qt6OpenGL_FOUND})
 
 # use sane compile flags
 remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
@@ -310,8 +298,8 @@ endif()
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 
-find_package(Qt5Keychain)
-set_package_properties(Qt5Keychain PROPERTIES
+find_package(Qt6Keychain)
+set_package_properties(Qt6Keychain PROPERTIES
     TYPE REQUIRED
     PURPOSE "Secure storage of account secrets"
 )
@@ -356,10 +344,10 @@ macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 
 ##
-## Test for Phonon4Qt5
+## Test for Phonon4Qt6
 ##
-find_package(Phonon4Qt5 QUIET)
-set_package_properties(Phonon4Qt5 PROPERTIES
+find_package(Phonon4Qt6 QUIET)
+set_package_properties(Phonon4Qt6 PROPERTIES
     DESCRIPTION "Abstraction lib for multimedia applications"
     URL "https://www.kde.org/"
     PURPOSE "Required by Stage event actions and Videoshape plugin"
@@ -367,10 +355,10 @@ set_package_properties(Phonon4Qt5 PROPERTIES
     )
 
 ##
-## Test for KF5CalendarCore
+## Test for KF6CalendarCore
 ##
-find_package(KF5CalendarCore CONFIG QUIET)
-set_package_properties(KF5CalendarCore PROPERTIES
+find_package(KF6CalendarCore CONFIG QUIET)
+set_package_properties(KF6CalendarCore PROPERTIES
     DESCRIPTION "KDE Calendar Library"
     URL "https://www.kde.org/"
     PURPOSE "Optionally used by semantic item Event"
@@ -378,10 +366,10 @@ set_package_properties(KF5CalendarCore PROPERTIES
     )
 
 ##
-## Test for KF5Contacts
+## Test for KF6Contacts
 ##
-find_package(KF5Contacts CONFIG QUIET)
-set_package_properties(KF5Contacts PROPERTIES
+find_package(KF6Contacts CONFIG QUIET)
+set_package_properties(KF6Contacts PROPERTIES
     DESCRIPTION "KDE Address book Library"
     URL "https://www.kde.org/"
     PURPOSE "Optionally used by semantic item Contact"
@@ -389,10 +377,10 @@ set_package_properties(KF5Contacts PROPERTIES
     )
 
 ##
-## Test for KF5AkonadiCore
+## Test for KF6AkonadiCore
 ##
-find_package(KF5Akonadi CONFIG QUIET)
-set_package_properties(KF5Akonadi PROPERTIES
+find_package(KF6Akonadi CONFIG QUIET)
+set_package_properties(KF6Akonadi PROPERTIES
     DESCRIPTION "Library for general Access to Akonadi"
     URL "https://www.kde.org/"
     PURPOSE "Optionally used by semantic items Event and Contact"
@@ -402,8 +390,8 @@ set_package_properties(KF5Akonadi PROPERTIES
 ##
 ## Test for KChart
 ##
-macro_optional_find_package(KChart 2.7.0 QUIET)
-set_package_properties(KChart PROPERTIES
+macro_optional_find_package(KChartQt6 2.7.0 QUIET)
+set_package_properties(KChartQt6 PROPERTIES
     DESCRIPTION "Library for creating business charts (part of KDiagram)"
     URL "https://www.kde.org/"
     PURPOSE "Required by Chart shape"
@@ -424,10 +412,10 @@ set_package_properties(Eigen3 PROPERTIES
 ##
 ## Test for QCA2
 ##
-macro_optional_find_package(Qca-qt5 2.1.0 QUIET)
-set_package_properties(Qca-qt5 PROPERTIES
+macro_optional_find_package(Qca-qt6 2.1.0 QUIET)
+set_package_properties(Qca-qt6 PROPERTIES
     DESCRIPTION "Qt Cryptographic Architecture"
-    URL "http:/download.kde.org/stable/qca-qt5"
+    URL "http:/download.kde.org/stable/qca-qt6"
     PURPOSE "Required for encrypted OpenDocument files and encrypted xls files support (available as a module in kdesupport)"
     TYPE OPTIONAL
     )
@@ -435,7 +423,7 @@ set_package_properties(Qca-qt5 PROPERTIES
 ##
 ## Test for soprano
 ##
-# QT5TODO: push for released (and maintained) Qt5 version of Soprano, T462, T461
+# QT5TODO: push for released (and maintained) Qt6 version of Soprano, T462, T461
 # macro_optional_find_package(Soprano)
 set(Soprano_FOUND FALSE)
 set_package_properties(Soprano PROPERTIES
@@ -692,13 +680,13 @@ set_package_properties(LibEtonyek PROPERTIES
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler 0.83.0 COMPONENTS Qt5)
+macro_optional_find_package(Poppler "22.02.0" COMPONENTS Qt6)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"
     PURPOSE "Required by the Karbon PDF import filter and CSTester PDF feature"
     TYPE OPTIONAL
-    )
+)
 
 ##
 ## Test for qt-poppler not-officially-supported XPDF Headers
@@ -707,7 +695,7 @@ set_package_properties(Poppler PROPERTIES
 ##
 macro_optional_find_package(PopplerXPDFHeaders)
 set_package_properties(PopplerXPDFHeaders PROPERTIES
-    DESCRIPTION "XPDF headers in the Poppler Qt5 interface library"
+    DESCRIPTION "XPDF headers in the Poppler Qt6 interface library"
     URL "http://poppler.freedesktop.org"
     PURPOSE "Required by the Karbon PDF import filter"
     TYPE OPTIONAL
@@ -892,11 +880,11 @@ calligra_drop_product_on_bad_condition( OKULAR_GENERATOR_ODT
     )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CHARTSHAPE
-    KChart_FOUND "KChart devel not found"
+    KChartQt6_FOUND "KChart devel not found"
     )
 
 calligra_drop_product_on_bad_condition( PLUGIN_VIDEOSHAPE
-    Phonon4Qt5_FOUND "Phonon4Qt5 devel not found"
+    Phonon4Qt6_FOUND "Phonon4Qt6 devel not found"
     )
 
 calligra_drop_product_on_bad_condition( FILTER_KEY_TO_ODP
@@ -938,7 +926,7 @@ calligra_drop_product_on_bad_condition( FILTER_WPG_TO_ODG
 calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
     NOT_WIN "not supported on Windows"
     PopplerXPDFHeaders_FOUND "poppler xpdf headers not found"
-    Poppler_FOUND "poppler qt5 headers not found"
+    Poppler_FOUND "poppler qt6 headers not found"
     )
 
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
@@ -958,7 +946,7 @@ calligra_drop_product_on_bad_condition( FILTER_KSPREAD_TO_LATEX
 
 calligra_drop_product_on_bad_condition( APP_BRAINDUMP
     NOT_WIN "unmaintained on Windows"
-    Qt5WebKitWidgets_FOUND "QWebPage needed for webpage plugin"
+    Qt6WebKitWidgets_FOUND "QWebPage needed for webpage plugin"
     )
 
 calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
@@ -966,21 +954,17 @@ calligra_drop_product_on_bad_condition( PLUGIN_CALLIGRAGEMINI_GIT
     )
 
 calligra_drop_product_on_bad_condition( PART_QTQUICK
-    Qt5OpenGL_FOUND "Qt OpenGL not found"
-    Qt5Declarative_FOUND "QtDeclarative not found"
+    Qt6OpenGL_FOUND "Qt OpenGL not found"
+    Qt6Declarative_FOUND "QtDeclarative not found"
     )
 
 calligra_drop_product_on_bad_condition( PART_COMPONENTS
-    Qt5Quick_FOUND "QtQuick not found"
+    Qt6Quick_FOUND "QtQuick not found"
     )
 
 calligra_drop_product_on_bad_condition( APP_SLIDECOMPARE
-    Qt5OpenGL_FOUND "Qt OpenGL not found"
-    )
-
-if (Qt5QuickWidgets_FOUND AND Qt5QuickWidgets_VERSION_STRING VERSION_LESS "5.15.0")
-  calligra_disable_product(GEMINI "Gemini depends on Qt 5.15")
-endif ()
+    Qt6OpenGL_FOUND "Qt OpenGL not found"
+)
 
 
 #############################################
@@ -1085,7 +1069,8 @@ if (BUILD_TESTING)
 endif(BUILD_TESTING)
 
 ki18n_install(po)
-if(KF5DocTools_FOUND)
-    kdoctools_install(po)
+if(KF6DocTools_FOUND)
+    #kdoctools_install(po)
+    # Disable for now, since it is failing
 endif()
 

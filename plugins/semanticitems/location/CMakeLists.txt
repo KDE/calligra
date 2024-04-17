@@ -33,6 +33,6 @@ if( Marble_FOUND )
     target_link_libraries(calligra_semanticitem_location Marble)
 endif()
 
-target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
+target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS} KF6::I18n KF6::KDELibs4Support)
 
 install(TARGETS calligra_semanticitem_location  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/semanticitems)

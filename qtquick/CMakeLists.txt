@@ -76,9 +76,9 @@ include_directories(
 add_library(calligraqtquickcomponentsplugin SHARED ${calligraqtquickcomponents_SRCS})
 
 target_link_libraries(calligraqtquickcomponentsplugin
-    Qt5::Declarative
-    Qt5::OpenGL
-    Qt5::Svg
+    Qt6::Declarative
+    Qt6::OpenGL
+    Qt6::Svg
     komain
     kotextlayout
     wordsprivate

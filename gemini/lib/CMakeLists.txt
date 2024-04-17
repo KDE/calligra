@@ -7,10 +7,10 @@ set(gemini_SRCS
 add_library(gemini SHARED ${gemini_SRCS})
 generate_export_header(gemini)
 target_link_libraries(gemini
-    Qt5::Quick
-    Qt5::Gui
-    Qt5::Core
-    Qt5::Widgets
+    Qt6::Quick
+    Qt6::Gui
+    Qt6::Core
+    Qt6::Widgets
 )
 
 set_target_properties(gemini PROPERTIES

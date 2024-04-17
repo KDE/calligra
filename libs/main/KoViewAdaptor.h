@@ -15,7 +15,6 @@
 #include <QDBusAbstractAdaptor>
 
 class QString;
-class QStringList;
 
 #include "komain_export.h"
 

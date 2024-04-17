@@ -35,7 +35,7 @@ set(TestDocumentLayout_test_SRCS
 
 textshape_add_unit_test(TestDocumentLayout
     ${TestDocumentLayout_test_SRCS}
-    LINK_LIBRARIES Qt5::Test
+    LINK_LIBRARIES Qt6::Test
 )
 
 ########### next target ###############
@@ -103,7 +103,7 @@ set(TestChangeListCommand_test_SRCS
 
 textshape_add_unit_test(TestChangeListCommand
     ${TestChangeListCommand_test_SRCS}
-    LINK_LIBRARIES Qt5::Test
+    LINK_LIBRARIES Qt6::Test
 )
 
 ########### next target ###############
@@ -115,7 +115,7 @@ set(TestChangesDatabase_test_SRCS
 )
 textshape_add_unit_test(TestChangesDatabase
     ${TestChangesDatabase_test_SRCS}
-    LINK_LIBRARIES Qt5::Test
+    LINK_LIBRARIES Qt6::Test
 )
 
 ########### next target ###############
@@ -137,7 +137,7 @@ textshape_add_unit_test(TestChangesDatabase
 #)
 #textshape_add_unit_test(TestStylesModel
 #    ${TestStylesModel_test_SRCS}
-#    LINK_LIBRARIES kotext Qt5::Test
+#    LINK_LIBRARIES kotext Qt6::Test
 #)
 
 ########### next target ###############
@@ -158,7 +158,7 @@ set(TestTableLayout_test_SRCS
 )
 textshape_add_unit_test(TestTableLayout
     ${TestTableLayout_test_SRCS}
-    LINK_LIBRARIES kotext Qt5::Test
+    LINK_LIBRARIES kotext Qt6::Test
 )
 
 ########### next target ###############
@@ -179,7 +179,7 @@ set(TestSections_test_SRCS
 )
 textshape_add_unit_test(TestSections
     ${TestSections_test_SRCS}
-    LINK_LIBRARIES kotext Qt5::Test
+    LINK_LIBRARIES kotext Qt6::Test
 )
 
 ########### next target ###############
@@ -251,7 +251,7 @@ set(TestTextTool_test_SRCS
 )
 textshape_add_unit_test(TestTextTool
     ${TestTextTool_test_SRCS}
-    LINK_LIBRARIES Qt5::Test
+    LINK_LIBRARIES Qt6::Test
 )
 
 ########### next target ###############
@@ -324,6 +324,6 @@ set(TestChangeTrackedDelete_test_SRCS
 )
 textshape_add_unit_test(TestChangeTrackedDelete
     ${TestChangeTrackedDelete_test_SRCS}
-    LINK_LIBRARIES kotext Qt5::Test
+    LINK_LIBRARIES kotext Qt6::Test
 )
 
