@@ -57,10 +57,6 @@
 #include <KToolInvocation>
 #endif
 
-#ifdef HAVE_KACTIVITIES
-#include <KActivities/ResourceInstance>
-#endif
-
 //   // qt includes
 #include <QDockWidget>
 #include <QApplication>
@@ -127,9 +123,6 @@ public:
         dockWidgetMenu = 0;
         dockerManager = 0;
         deferredClosingEvent = 0;
-#ifdef HAVE_KACTIVITIES
-        activityResource = 0;
-#endif
 
         m_helpMenu = 0;
 
@@ -229,10 +222,6 @@ public:
     QByteArray m_dockerStateBeforeHiding;
 
     QCloseEvent *deferredClosingEvent;
-
-#ifdef HAVE_KACTIVITIES
-    KActivities::ResourceInstance *activityResource;
-#endif
 
     KoComponentData componentData;
 
@@ -597,12 +586,6 @@ void KoMainWindow::addRecentURL(const QUrl &url)
         }
         saveRecentFiles();
 
-#ifdef HAVE_KACTIVITIES
-        if (!d->activityResource) {
-            d->activityResource = new KActivities::ResourceInstance(winId(), this);
-        }
-        d->activityResource->setUri(url);
-#endif
     }
 }
 

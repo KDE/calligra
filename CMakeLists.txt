@@ -208,17 +208,7 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     WidgetsAddons
     WindowSystem
     XmlGui
-    )
-
-find_package(KF5Activities)
-
-set_package_properties(KF5Activities PROPERTIES
-    TYPE OPTIONAL
-    )
-
-if(KF5Activities_FOUND)
-    set(HAVE_KACTIVITIES TRUE)
-endif()
+)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS

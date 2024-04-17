@@ -108,10 +108,6 @@ target_link_libraries(komain
         KF5::DBusAddons
 )
 
-if( KF5Activities_FOUND )
-    target_link_libraries(komain PRIVATE KF5::Activities)
-endif()
-
 if (APPLE)
     target_link_libraries(komain PRIVATE ${FOUNDATION_LIBRARY})
 endif ()
