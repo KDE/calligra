@@ -9,7 +9,6 @@ set(calligrastageeventactions_PART_SRCS
 
 add_library(calligrastageeventactions MODULE ${calligrastageeventactions_PART_SRCS})
 
-calligra_presentationeventaction_desktop_to_json(calligrastageeventactions calligrastageeventactions.desktop)
 
 target_link_libraries(
     calligrastageeventactions

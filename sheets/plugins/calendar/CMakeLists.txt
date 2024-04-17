@@ -16,7 +16,6 @@ target_include_directories( kspread_plugin_tool_calendar
     ${CMAKE_CURRENT_BINARY_DIR}/../../
 )
 
-calligrasheets_plugin_desktop_to_json(kspread_plugin_tool_calendar kspread_plugin_tool_calendar.desktop)
 
 target_link_libraries(kspread_plugin_tool_calendar
     PUBLIC

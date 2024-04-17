@@ -21,7 +21,6 @@ set ( VectorShape_SRCS
 #)
 
 add_library(calligra_shape_vector MODULE ${VectorShape_SRCS})
-calligra_shape_desktop_to_json(calligra_shape_vector calligra_shape_vector.desktop)
 
 target_link_libraries(calligra_shape_vector
     flake

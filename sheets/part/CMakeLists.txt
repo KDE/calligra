@@ -127,7 +127,6 @@ set (calligrasheetspart_PART_SRCS Factory_init.cpp )
 
 add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
 
-calligra_part_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart 
     PUBLIC

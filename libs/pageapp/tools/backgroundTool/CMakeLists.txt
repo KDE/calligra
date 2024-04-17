@@ -8,7 +8,6 @@ set(kopabackgroundtool_PART_SRCS
 
 
 add_library(kopabackgroundtool MODULE ${kopabackgroundtool_PART_SRCS})
-calligra_pageapptool_desktop_to_json(kopabackgroundtool kopabackgroundtool.desktop)
 
 target_link_libraries(
     kopabackgroundtool

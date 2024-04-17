@@ -15,7 +15,6 @@ set(autocorrect_SRCS
 )
 
 add_library(calligra_textediting_autocorrect MODULE ${autocorrect_SRCS})
-calligra_texteditingplugin_desktop_to_json(calligra_textediting_autocorrect calligra_textediting_autocorrect.desktop)
 
 target_link_libraries(calligra_textediting_autocorrect
     PRIVATE

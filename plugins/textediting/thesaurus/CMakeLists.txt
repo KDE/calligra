@@ -13,7 +13,6 @@ set(thesaurustool_SRCS
 
 
 add_library(calligra_textediting_thesaurus MODULE ${thesaurustool_SRCS})
-calligra_texteditingplugin_desktop_to_json(calligra_textediting_thesaurus calligra_textediting_thesaurus.desktop)
 
 target_link_libraries(calligra_textediting_thesaurus
     kotext

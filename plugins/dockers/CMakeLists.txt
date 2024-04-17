@@ -24,7 +24,6 @@ set(calligradockers_SRCS
 )
 
 add_library(calligra_docker_defaults MODULE ${calligradockers_SRCS})
-calligra_docker_desktop_to_json(calligra_docker_defaults calligra_docker_defaults.desktop)
 
 target_link_libraries(calligra_docker_defaults kowidgets)
 

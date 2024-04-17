@@ -33,7 +33,6 @@ add_subdirectory( templates )
 set(karbonpart_PART_SRCS KarbonFactoryInit.cpp )
 
 add_library(karbonpart MODULE ${karbonpart_PART_SRCS})
-calligra_part_desktop_to_json(karbonpart "${CMAKE_CURRENT_SOURCE_DIR}/data/karbonpart.desktop")
 
 target_link_libraries(karbonpart karbonui)
 

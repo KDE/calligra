@@ -38,7 +38,6 @@ ki18n_wrap_ui( ArtisticTextShape_SRCS
 
 add_library(calligra_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
-calligra_shape_desktop_to_json(calligra_shape_artistictext calligra_shape_artistictext.desktop)
 
 target_link_libraries(calligra_shape_artistictext flake kowidgets)
 

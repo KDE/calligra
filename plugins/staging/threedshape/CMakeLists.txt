@@ -19,7 +19,6 @@ set (threedshape_LIB_SRCS
 )
 
 add_library(calligra_shape_threed MODULE ${threedshape_LIB_SRCS})
-calligra_shape_desktop_to_json(calligra_shape_threed calligra_shape_threed.desktop)
 
 target_link_libraries(calligra_shape_threed flake)
 install(TARGETS calligra_shape_threed DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

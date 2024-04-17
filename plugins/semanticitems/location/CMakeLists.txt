@@ -34,6 +34,5 @@ if( Marble_FOUND )
 endif()
 
 target_link_libraries(calligra_semanticitem_location   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
-calligra_semanticitem_desktop_to_json(calligra_semanticitem_location calligra_semanticitem_location.desktop)
 
 install(TARGETS calligra_semanticitem_location  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/semanticitems)

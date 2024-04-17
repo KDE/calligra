@@ -15,7 +15,6 @@ set (tableshape_LIB_SRCS
    )
 
 add_library(calligra_shape_spreadsheet MODULE ${tableshape_LIB_SRCS})
-calligra_shape_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
 
 target_include_directories( calligra_shape_spreadsheet
     PRIVATE

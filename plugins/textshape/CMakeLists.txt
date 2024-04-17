@@ -178,7 +178,6 @@ ki18n_wrap_ui(textshape_SRCS
 
 add_library(calligra_shape_text MODULE ${textshape_SRCS})
 
-calligra_shape_desktop_to_json(calligra_shape_text calligra_shape_text.desktop)
 
 target_link_libraries(calligra_shape_text
   kotext

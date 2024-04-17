@@ -26,4 +26,3 @@ target_link_libraries(
     )
 install(TARGETS braindump_shape_web DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 
-calligra_shape_desktop_to_json(braindump_shape_web braindump_shape_web.desktop)

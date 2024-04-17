@@ -112,7 +112,6 @@ endif()
 
 
 add_library(calligra_shape_chart MODULE ChartShapeFactory.cpp )
-calligra_shape_desktop_to_json(calligra_shape_chart calligra_shape_chart.desktop)
 
 target_link_libraries(calligra_shape_chart chartshapecore KChart flake KF5::IconThemes)
 install(TARGETS calligra_shape_chart DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

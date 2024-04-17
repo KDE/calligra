@@ -37,7 +37,6 @@ endif()
 
 ki18n_wrap_ui(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 add_library(calligra_shape_video MODULE ${videoshape_LIB_SRCS})
-calligra_shape_desktop_to_json(calligra_shape_video calligra_shape_video.desktop)
 
 target_link_libraries(calligra_shape_video
     flake

@@ -42,7 +42,6 @@ set(calligra_filtereffects_PART_SRCS
 
 add_library(calligra_filtereffects MODULE ${calligra_filtereffects_PART_SRCS})
 
-calligra_filtereffect_desktop_to_json(calligra_filtereffects calligra_filtereffects.desktop)
 
 target_link_libraries(calligra_filtereffects flake kowidgets)
 

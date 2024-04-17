@@ -10,7 +10,6 @@ target_link_libraries(braindumpquickstates ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${
 
 install(TARGETS braindumpquickstates  DESTINATION ${KDE_INSTALL_PLUGINDIR}/braindump/extensions)
 
-braindump_extensions_desktop_to_json(braindumpquickstates braindumpquickstates.desktop)
 
 ########### install files ###############
 
