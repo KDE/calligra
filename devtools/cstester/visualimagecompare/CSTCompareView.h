@@ -13,7 +13,7 @@
 #include <QDir>
 
 #ifdef HAS_POPPLER
-#include <poppler-qt5.h>
+#include <poppler-qt6.h>
 #endif
 
 class CompareView;
@@ -37,7 +37,7 @@ private:
 #ifdef HAS_POPPLER
     bool m_showPdf;
     int m_pdfDelta;
-    Poppler::Document *m_pdfDocument;
+    std::unique_ptr<Poppler::Document> m_pdfDocument;
 #endif
 
     QStringList m_result;

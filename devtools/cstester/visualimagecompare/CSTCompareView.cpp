@@ -22,7 +22,6 @@ CSTCompareView::CSTCompareView(QWidget *parent)
 #ifdef HAS_POPPLER
 , m_showPdf(false)
 , m_pdfDelta(0)
-, m_pdfDocument(0)
 #endif
 , m_currentIndex(0)
 {
@@ -117,8 +116,7 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
 #ifdef HAS_POPPLER
             m_pdfDelta = 0;
             if (m_pdfDocument) {
-                delete(m_pdfDocument);
-                m_pdfDocument = 0;
+                m_pdfDocument.reset();
             }
 #endif
         }
@@ -130,8 +128,7 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
 #ifdef HAS_POPPLER
             m_pdfDelta = 0;
             if (m_pdfDocument) {
-                delete(m_pdfDocument);
-                m_pdfDocument = 0;
+                m_pdfDocument.reset();
             }
 #endif
         }
@@ -231,7 +228,7 @@ void CSTCompareView::updateImage(int index)
         }
 
         if (m_pdfDocument) {
-            Poppler::Page *page = m_pdfDocument->page(m_data[index].toInt() - 1 + m_pdfDelta);
+            auto page = m_pdfDocument->page(m_data[index].toInt() - 1 + m_pdfDelta);
             if (page) {
                 QSizeF pageSize = page->pageSizeF();
                 qreal scale = qMin(72.0 * (image1.width() / pageSize.width()), 72.0 * (image1.height() / pageSize.height()));
