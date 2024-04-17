@@ -255,8 +255,8 @@ void RecalcManager::recalc(Updater *updater)
 
 void RecalcManager::dump() const
 {
-    QMap<int, CellBase>::ConstIterator end(d->cells.constEnd());
-    for (QMap<int, CellBase>::ConstIterator it(d->cells.constBegin()); it != end; ++it) {
+    auto end(d->cells.constEnd());
+    for (auto it(d->cells.constBegin()); it != end; ++it) {
         CellBase cell = it.value();
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');

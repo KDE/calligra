@@ -398,7 +398,7 @@ public:
      * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addStyleChildElement(const QString &elementName, const QString& elementContents) {
-        m_properties[StyleChildElement].insertMulti(elementName, elementContents);
+        m_properties[StyleChildElement].insert(elementName, elementContents);
     }
 
     /**
@@ -407,14 +407,14 @@ public:
      * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
     void addStyleChildElement(const QString &elementName, const QByteArray& elementContents) {
-        m_properties[StyleChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));
+        m_properties[StyleChildElement].insert(elementName, QString::fromUtf8(elementContents));
     }
 
     /**
      * @brief Add a style:map to the style.
      * @param styleMap the attributes for the map, associated as (name,value).
      */
-    void addStyleMap(const QMap<QString, QString> &styleMap);
+    void addStyleMap(const QMultiMap<QString, QString> &styleMap);
 
     /**
      * @return true if the style has no attributes, no properties, no style map etc.
@@ -469,7 +469,7 @@ public:
         if (type == DefaultType) {
             type = m_propertyType;
         }
-        const QMap<QString, QString>::const_iterator it = m_properties[type].constFind(propName);
+        const auto it = m_properties[type].constFind(propName);
         if (it != m_properties[type].constEnd())
             return it.value();
         return QString();
@@ -484,7 +484,7 @@ public:
         if (type == DefaultType) {
             type = m_propertyType;
         }
-        const QMap<QString, QString>::const_iterator it = m_childProperties[type].constFind(propName);
+        const auto it = m_childProperties[type].constFind(propName);
         if (it != m_childProperties[type].constEnd())
             return it.value();
         return QString();
@@ -492,7 +492,7 @@ public:
 
     /// Returns an attribute of this style. In prinicpal this class is meant to be write-only, but some exceptional cases having read-support as well is very useful.
     QString attribute(const QString &propName) const {
-        const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
+        const auto it = m_attributes.constFind(propName);
         if (it != m_attributes.constEnd())
             return it.value();
         return QString();
@@ -519,7 +519,7 @@ private:
     QByteArray m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
-    typedef QMap<QString, QString> StyleMap;
+    typedef QMultiMap<QString, QString> StyleMap;
     StyleMap m_properties[LastPropertyType+1];
     StyleMap m_childProperties[LastPropertyType+1];
     StyleMap m_attributes;

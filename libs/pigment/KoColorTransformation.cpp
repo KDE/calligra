@@ -33,8 +33,7 @@ void KoColorTransformation::setParameter(int id, const QVariant& parameter)
 
 void KoColorTransformation::setParameters(const QHash<QString, QVariant> & parameters)
 {
-    for (QHash<QString, QVariant>::const_iterator it = parameters.begin(); it != parameters.end(); ++it) {
+    for (auto it = parameters.begin(); it != parameters.end(); ++it) {
         setParameter( parameterId(it.key()), it.value());
     }
-
 }
