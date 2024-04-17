@@ -180,7 +180,6 @@ include(ECMGenerateHeaders)
 include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
-include(MacroDesktopToJson)
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     COMPONENTS
