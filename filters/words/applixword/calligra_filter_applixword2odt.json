@@ -2,6 +2,7 @@
     "KPlugin": {
         "Name": "Words Applixword Import Filter",
         "Name[ca]": "Filtre d'importació Applixword del Words",
+        "Name[es]": "Filtro de importación Applixword de Words",
         "Name[nl]": "Applixword-importfilter voor Words",
         "Name[sl]": "Words Applixword filter uvoza",
         "Name[tr]": "Sözcükler Applixword İçe Aktarma Süzgeci",

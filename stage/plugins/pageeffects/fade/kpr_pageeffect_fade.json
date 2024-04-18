@@ -2,6 +2,7 @@
     "KPlugin": {
         "Description": "Fade Effect",
         "Description[ca]": "Efecte d'esvaïment",
+        "Description[es]": "Efecto de atenuación",
         "Description[nl]": "Vervagingseffect",
         "Description[tr]": "Soldur Efekti",
         "Description[uk]": "Ефект згасання",
@@ -9,6 +10,7 @@
         "Id": "kpr_pageeffect_fade",
         "Name": "Fade",
         "Name[ca]": "Esvaïment",
+        "Name[es]": "Atenuar",
         "Name[nl]": "Opkomen/vervagen",
         "Name[tr]": "Soldur",
         "Name[uk]": "Згасання",

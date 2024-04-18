@@ -2,6 +2,7 @@
     "KPlugin": {
         "Name": "Words RTF Import Filter",
         "Name[ca]": "Filtre d'exportació RTF del Words",
+        "Name[es]": "Filtro de importación RTF de Words",
         "Name[nl]": "RTF-importfilter voor Words",
         "Name[sl]": "Filter uvoza Words RTF",
         "Name[tr]": "Sözcükler RTF İçe Aktarma Süzgeci",

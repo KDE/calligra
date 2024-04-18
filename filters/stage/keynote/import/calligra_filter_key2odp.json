@@ -1,6 +1,13 @@
 {
     "KPlugin": {
         "Name": "Stage Apple Keynote Import Filter",
+        "Name[ca]": "Filtre d'importació de l'Apple Keynote de l'Stage",
+        "Name[es]": "Filtro de importación de Stage Apple Keynote",
+        "Name[nl]": "Importfilter van Apple-keynote voor Stage",
+        "Name[sl]": "Filter uvoza Stage Apple Keynote",
+        "Name[tr]": "Sahne Apple Keynote İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування Apple Keynote для Stage",
+        "Name[x-test]": "xxStage Apple Keynote Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

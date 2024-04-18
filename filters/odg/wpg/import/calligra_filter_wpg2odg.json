@@ -1,6 +1,13 @@
 {
     "KPlugin": {
         "Name": "Flow WPG Import Filter",
+        "Name[ca]": "Filtre d'importació WPG del Flow",
+        "Name[es]": "Filtro de importación de Flow WPG",
+        "Name[nl]": "WPG-importfilter voor Flow",
+        "Name[sl]": "Filter uvoza Flow WPG",
+        "Name[tr]": "Flow WPG İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування WPG до Flow",
+        "Name[x-test]": "xxFlow WPG Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

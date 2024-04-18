@@ -1,6 +1,13 @@
 {
     "KPlugin": {
         "Name": "Words WordPerfect Import Filter",
+        "Name[ca]": "Filtre d'importació WordPerfect del Words",
+        "Name[es]": "Filtro de importación WordPerfect de Words",
+        "Name[nl]": "WordPerfect-importfilter voor Words",
+        "Name[sl]": "Filter uvoza WordPerfect",
+        "Name[tr]": "Sözcükler WordPerfect İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних WordPerfect для Words",
+        "Name[x-test]": "xxWords WordPerfect Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]

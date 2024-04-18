@@ -2,6 +2,7 @@
     "KPlugin": {
         "Name": "OpenOffice.org Calc Import Filter for KSpread",
         "Name[ca]": "Filtre d'importació OpenOffice.org Calc per al KSpread",
+        "Name[es]": "Filtro de importación OpenOffice.org Calc para KSpread",
         "Name[nl]": "OpenOffice.org Calc-importfilter voor KSpread",
         "Name[sl]": "OpenOffice.org Calc filter uvoza za KSpread",
         "Name[tr]": "KSpread için Apache OpenOffice Calc İçe Aktarma Süzgeci",

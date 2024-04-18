@@ -2,6 +2,7 @@
     "KPlugin": {
         "Name": "Words ASCII Import Filter",
         "Name[ca]": "Filtre d'importació ASCII del Words",
+        "Name[es]": "Filtro de importación ASCII de Words",
         "Name[nl]": "ASCII-importfilter voor Words",
         "Name[sl]": "Words ASCII filter uvoza",
         "Name[tr]": "Sözcükler ASCII İçe Aktarma Süzgeci",

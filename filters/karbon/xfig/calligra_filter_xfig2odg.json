@@ -2,6 +2,7 @@
     "KPlugin": {
         "Name": "Karbon XFig Import Filter",
         "Name[ca]": "Filtre d'importació XFig del Karbon",
+        "Name[es]": "Filtro de importación XFig de Karbon",
         "Name[nl]": "Xfig-importfilter voor Karbon",
         "Name[sl]": "Karbon filter uvoza XFig",
         "Name[tr]": "Karbon XFig İçe Aktarma Süzgeci",

@@ -2,6 +2,7 @@
     "KPlugin": {
         "Name": "ODT to HTML Export Filter",
         "Name[ca]": "Filtre d'exportació ODT a HTML",
+        "Name[es]": "Filtro de exportación ODT a HTML",
         "Name[nl]": "ODT naar HTML exportfilter",
         "Name[sl]": "Filter izvoza ODT v HTML",
         "Name[tr]": "ODT-HTML Dışa Aktarma Süzgeci",

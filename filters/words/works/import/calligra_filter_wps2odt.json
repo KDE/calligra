@@ -1,6 +1,13 @@
 {
     "KPlugin": {
         "Name": "Flow Visio Import Filter",
+        "Name[ca]": "Filtre d'exportació Visio del Flow",
+        "Name[es]": "Filtro de importación de Flow Visio",
+        "Name[nl]": "Visio-importfilter voor Flow",
+        "Name[sl]": "Filter uvoza Flow Visio",
+        "Name[tr]": "Flow Visio İçe Aktarma Süzgeci",
+        "Name[uk]": "Фільтр імпортування даних Visio для Flow",
+        "Name[x-test]": "xxFlow Visio Import Filterxx",
         "ServiceTypes": [
             "Calligra/Filter"
         ]
