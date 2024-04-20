@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "KSpread Applix Spreadsheet Import Filter",
+        "Name[ca@valencia]": "Filtre d'importació de fulls de càlcul Applix de KSpread",
         "Name[ca]": "Filtre d'importació de fulls de càlcul Applix del KSpread",
         "Name[es]": "Filtro de importación de hoja de cálculo Applix de KSpread",
         "Name[fr]": "Filtre d'importation de tableur « Applix » pour KSpread",

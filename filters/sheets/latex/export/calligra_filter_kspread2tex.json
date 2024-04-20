@@ -2,6 +2,7 @@
     "KPlugin": {
         "Icon": "",
         "Name": "KSpread LATEX Export Filter",
+        "Name[ca@valencia]": "Filtre d'exportació LaTeX de KSpread",
         "Name[ca]": "Filtre d'exportació LaTeX del KSpread",
         "Name[es]": "Filtro de exportación LATEX de KSpread",
         "Name[fr]": "Filtre d'exportation « LaTeX » de KSpread",

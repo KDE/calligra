@@ -2,6 +2,7 @@
     "KPlugin": {
         "Id": "karbonimagefilter",
         "Name": "Karbon JPEG/PNG Export Filter",
+        "Name[ca@valencia]": "Filtre d'exportació JPEG/PNG de Karbon",
         "Name[ca]": "Filtre d'exportació JPEG/PNG del Karbon",
         "Name[es]": "Filtro de exportación JPEG/PNG de Karbon",
         "Name[fr]": "Filtre d'exportation « JPEG » / « PNG » de Karbon",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Slide Wipe Page Effect",
+        "Description[ca@valencia]": "Efectes d'esborrat de diapositiva de la pàgina",
         "Description[ca]": "Efectes d'esborrat de diapositiva de la pàgina",
         "Description[nl]": "Diavegen pagina-effect",
         "Description[tr]": "Slayt Sil Sayfa Efekti",
@@ -8,6 +9,7 @@
         "Description[x-test]": "xxSlide Wipe Page Effectxx",
         "Id": "kpr_pageeffect_slidewipe",
         "Name": "Slide Wipe",
+        "Name[ca@valencia]": "Esborrat de diapositiva",
         "Name[ca]": "Esborrat de diapositiva",
         "Name[nl]": "Diavegen",
         "Name[tr]": "Slayt Sil",

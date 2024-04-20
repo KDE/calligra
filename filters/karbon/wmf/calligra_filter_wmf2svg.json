@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon WMF Import Filter",
+        "Name[ca@valencia]": "Filtre d'importació WMF de Karbon",
         "Name[ca]": "Filtre d'importació WMF del Karbon",
         "Name[es]": "Filtro de importación WMF de Karbon",
         "Name[fr]": "Filtre d'importation « WMF » de Karbon",

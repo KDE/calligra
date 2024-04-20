@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon WPG Import Filter",
+        "Name[ca@valencia]": "Filtre d'importació WPG de Karbon",
         "Name[ca]": "Filtre d'importació WPG del Karbon",
         "Name[es]": "Filtro de importación WPG de Karbon",
         "Name[fr]": "Filtre d'importation « WPG » de Karbon",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon Whirl Pinch plugin",
+        "Name[ca@valencia]": "Connector de gira i pessiga de Karbon",
         "Name[ca]": "Connector de gira i pessiga del Karbon",
         "Name[es]": "Complemento girar al pellizcar de Karbon",
         "Name[nl]": "Plug-in voor Whirl Pinch van Karbon",

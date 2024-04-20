@@ -2,6 +2,7 @@
     "KPlugin": {
         "Icon": "",
         "Name": "Karbon WVG Export Filter",
+        "Name[ca@valencia]": "Filtre d'exportació WVG de Karbon",
         "Name[ca]": "Filtre d'exportació WVG del Karbon",
         "Name[es]": "Filtro de exportación WVG de Karbon",
         "Name[fr]": "Filtre d'exportation « WVG » de Karbon",

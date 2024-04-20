@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Words Wiki Export Filter",
+        "Name[ca@valencia]": "Filtre d'exportació Wiki de Words",
         "Name[ca]": "Filtre d'exportació Wiki del Words",
         "Name[es]": "Filtro de exportación Wiki de Words",
         "Name[fr]": "Filtre d'exportation pour « Words Wiki »",

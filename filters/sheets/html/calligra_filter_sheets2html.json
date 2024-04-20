@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "HTML Export Filter for KSpread",
+        "Name[ca@valencia]": "Filtre d'exportació HTML per a KSpread",
         "Name[ca]": "Filtre d'exportació HTML per al KSpread",
         "Name[es]": "Filtro de exportación HTML para KSpread",
         "Name[fr]": "Filtre d'exportation « HTML » de KSpread",

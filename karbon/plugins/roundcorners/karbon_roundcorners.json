@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon Round Corners plugin",
+        "Name[ca@valencia]": "Connector de cantons arredonits de Karbon",
         "Name[ca]": "Connector de cantonades arrodonides del Karbon",
         "Name[es]": "Complemento redondear esquinas de Karbon",
         "Name[nl]": "Plug-in voor Karbon ronde hoeken",

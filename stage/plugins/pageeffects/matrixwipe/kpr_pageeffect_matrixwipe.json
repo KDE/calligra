@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Matrix wipe Page Effects",
+        "Description[ca@valencia]": "Efectes d'esborrat de matriu de la pàgina",
         "Description[ca]": "Efectes d'esborrat de matriu de la pàgina",
         "Description[nl]": "Matrixvegen pagina-effecten",
         "Description[tr]": "Matrix Sil Sayfa Efektleri",
@@ -8,6 +9,7 @@
         "Description[x-test]": "xxMatrix wipe Page Effectsxx",
         "Id": "kpr_pageeffect_matrixwipe",
         "Name": "Matrix wipe",
+        "Name[ca@valencia]": "Esborrat de matriu",
         "Name[ca]": "Esborrat de matriu",
         "Name[nl]": "Matrixvegen",
         "Name[tr]": "Matrix Sil",

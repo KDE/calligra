@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Clock wipe Page Effects",
+        "Description[ca@valencia]": "Efectes d'esborrat de rellotge de la pàgina",
         "Description[ca]": "Efectes d'esborrat de rellotge de la pàgina",
         "Description[nl]": "Klokvegen pagina-effecten",
         "Description[tr]": "Saat Sil Sayfa Efektleri",
@@ -8,6 +9,7 @@
         "Description[x-test]": "xxClock wipe Page Effectsxx",
         "Id": "kpr_pageeffect_clockwipe",
         "Name": "Clock wipe",
+        "Name[ca@valencia]": "Esborrat de rellotge",
         "Name[ca]": "Esborrat de rellotge",
         "Name[nl]": "Klokvegen",
         "Name[tr]": "Saat Sil",

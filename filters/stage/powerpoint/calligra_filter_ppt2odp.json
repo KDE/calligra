@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Microsoft PowerPoint Import Filter for Stage",
+        "Name[ca@valencia]": "Filtre d'importació Microsoft PowerPoint per a Stage",
         "Name[ca]": "Filtre d'importació Microsoft PowerPoint per a l'Stage",
         "Name[es]": "Filtro de importación Microsoft PowerPoint para Stage",
         "Name[fr]": "Filtre d'importation « Microsoft PowerPoint » pour Stage",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Fade Effect",
+        "Description[ca@valencia]": "Efecte d'esvaïment",
         "Description[ca]": "Efecte d'esvaïment",
         "Description[es]": "Efecto de atenuación",
         "Description[fr]": "Effet de fondu",
@@ -10,6 +11,7 @@
         "Description[x-test]": "xxFade Effectxx",
         "Id": "kpr_pageeffect_fade",
         "Name": "Fade",
+        "Name[ca@valencia]": "Esvaïment",
         "Name[ca]": "Esvaïment",
         "Name[es]": "Atenuar",
         "Name[nl]": "Opkomen/vervagen",

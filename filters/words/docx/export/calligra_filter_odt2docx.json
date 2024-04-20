@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "MS Word DOCX Export Filter",
+        "Name[ca@valencia]": "Filtre d'exportació DOCX de Word de MS",
         "Name[ca]": "Filtre d'exportació DOCX del Word de MS",
         "Name[es]": "Filtro de exportación DOCX de MS Word",
         "Name[fr]": "Filtre d'exportation « Docx » pour MS Word",

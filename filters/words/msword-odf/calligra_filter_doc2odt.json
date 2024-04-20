@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Words MS Word-ODF Import Filter",
+        "Name[ca@valencia]": "Filtre d'importació MS Word-ODF de Words",
         "Name[ca]": "Filtre d'importació MS Word-ODF del Words",
         "Name[es]": "Filtro de importación MS Word-ODF de Words",
         "Name[fr]": "Filtre d'importation « MS Word-ODF » de Words",

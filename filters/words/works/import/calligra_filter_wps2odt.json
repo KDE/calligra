@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Flow Visio Import Filter",
+        "Name[ca@valencia]": "Filtre d'exportació Visio de Flow",
         "Name[ca]": "Filtre d'exportació Visio del Flow",
         "Name[es]": "Filtro de importación de Flow Visio",
         "Name[nl]": "Visio-importfilter voor Flow",

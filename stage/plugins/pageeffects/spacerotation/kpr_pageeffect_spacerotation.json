@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Space Rotation Page Effect",
+        "Description[ca@valencia]": "Efecte de pàgina de gir de l'espai",
         "Description[ca]": "Efecte de pàgina de gir de l'espai",
         "Description[es]": "Efecto de página de rotación espacial",
         "Description[nl]": "Ruimte-rotatie-pagina-effect",
@@ -9,6 +10,7 @@
         "Description[x-test]": "xxSpace Rotation Page Effectxx",
         "Id": "kpr_pageeffect_spacerotation",
         "Name": "Space Rotation",
+        "Name[ca@valencia]": "Gir de l'espai",
         "Name[ca]": "Gir de l'espai",
         "Name[es]": "Rotación espacial",
         "Name[nl]": "Ruimte-rotatie",

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "MS Excel 2007 Import Filter for KSpread",
+        "Name[ca@valencia]": "Filtre d'importació MS Excel 2007 per a KSpread",
         "Name[ca]": "Filtre d'importació MS Excel 2007 per al KSpread",
         "Name[es]": "Filtro de importación MS Excel 2007 para KSpread",
         "Name[fr]": "Filtre d'importation « MS Excel 2007 » pour KSpread",

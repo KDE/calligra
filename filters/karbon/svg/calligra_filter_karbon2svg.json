@@ -3,6 +3,7 @@
         "Icon": "",
         "Id": "karbonsvgfilter",
         "Name": "Karbon SVG Export Filter",
+        "Name[ca@valencia]": "Filtre d'exportació SVG de Karbon",
         "Name[ca]": "Filtre d'exportació SVG del Karbon",
         "Name[es]": "Filtro de exportación SVG de Karbon",
         "Name[fr]": "Filtre d'exportation « SVG » de Karbon",

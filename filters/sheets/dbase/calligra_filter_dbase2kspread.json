@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "KSpread dBASE Import Filter",
+        "Name[ca@valencia]": "Filtre d'importació dBASE de KSpread",
         "Name[ca]": "Filtre d'importació dBASE del KSpread",
         "Name[es]": "Filtro de importación dBASE de KSpread",
         "Name[fr]": "Filtre d'importation « dBASE » de KSpread",

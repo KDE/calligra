@@ -2,6 +2,7 @@
     "KPlugin": {
         "Icon": "",
         "Name": "Karbon WMF Export Filter",
+        "Name[ca@valencia]": "Filtre d'exportació WMF de Karbon",
         "Name[ca]": "Filtre d'exportació WMF del Karbon",
         "Name[es]": "Filtro de exportación WMF de Karbon",
         "Name[fr]": "Filtre d'exportation « WMF » de Karbon",

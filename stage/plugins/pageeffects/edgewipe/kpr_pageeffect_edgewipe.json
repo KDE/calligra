@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Edge Wipe Page Effects",
+        "Description[ca@valencia]": "Efectes d'esborrat de vora de la pàgina",
         "Description[ca]": "Efectes d'esborrat de vora de la pàgina",
         "Description[nl]": "Randvegen pagina-effecten",
         "Description[tr]": "Kenar Sil Sayfa Efektleri",
@@ -8,6 +9,7 @@
         "Description[x-test]": "xxEdge Wipe Page Effectsxx",
         "Id": "kpr_pageeffect_edgewipe",
         "Name": "Edge wipe",
+        "Name[ca@valencia]": "Esborrat de vora",
         "Name[ca]": "Esborrat de vora",
         "Name[nl]": "Randvegen",
         "Name[tr]": "Kenar Sil",

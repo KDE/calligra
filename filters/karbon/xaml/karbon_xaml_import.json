@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Name": "Karbon XAML Import Filter",
+        "Name[ca@valencia]": "Filtre d'importació XAML de Karbon",
         "Name[ca]": "Filtre d'importació XAML del Karbon",
         "Name[es]": "Filtro de importación XAML de Karbon",
         "Name[fr]": "Filtre d'importation « XAML » de Karbon",

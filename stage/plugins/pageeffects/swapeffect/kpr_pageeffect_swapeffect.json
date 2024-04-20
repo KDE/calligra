@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Swap Page Effect",
+        "Description[ca@valencia]": "Efecte d'agranat de pàgina",
         "Description[ca]": "Efecte d'escombrat de pàgina",
         "Description[es]": "Efecto de página de intercambio",
         "Description[nl]": "Pagina-omwisselen-effect",
@@ -9,6 +10,7 @@
         "Description[x-test]": "xxSwap Page Effectxx",
         "Id": "kpr_pageeffect_swapeffect",
         "Name": "Swap Effect",
+        "Name[ca@valencia]": "Efecte d'agranat",
         "Name[ca]": "Efecte d'escombrat",
         "Name[nl]": "Omwissel-effect",
         "Name[tr]": "Takas Efekti",
