@@ -9,25 +9,25 @@
 class Q_DECL_HIDDEN KoInputDevice::Private
 {
 public:
-    Private(QTabletEvent::TabletDevice d, QTabletEvent::PointerType p, qint64 id, bool m)
+    Private(QInputDevice::DeviceType d, QPointingDevice::PointerType p, qint64 id, bool m)
             : device(d),
             pointer(p),
             uniqueTabletId(id),
             mouse(m) {
     }
-    QTabletEvent::TabletDevice device;
-    QTabletEvent::PointerType pointer;
+    QInputDevice::DeviceType device;
+    QPointingDevice::PointerType pointer;
     qint64 uniqueTabletId;
     bool mouse;
 };
 
-KoInputDevice::KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId)
+KoInputDevice::KoInputDevice(QInputDevice::DeviceType device, QPointingDevice::PointerType pointer, qint64 uniqueTabletId)
         : d(new Private(device, pointer, uniqueTabletId, false))
 {
 }
 
 KoInputDevice::KoInputDevice()
-        : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, -1, true))
+        : d(new Private(QInputDevice::DeviceType::Unknown, QPointingDevice::PointerType::Unknown, -1, true))
 {
 }
 
@@ -42,12 +42,12 @@ KoInputDevice::~KoInputDevice()
     delete d;
 }
 
-QTabletEvent::TabletDevice KoInputDevice::device() const
+QInputDevice::DeviceType KoInputDevice::device() const
 {
     return d->device;
 }
 
-QTabletEvent::PointerType KoInputDevice::pointer() const
+QPointingDevice::PointerType KoInputDevice::pointer() const
 {
     return d->pointer;
 }
@@ -62,7 +62,7 @@ bool KoInputDevice::isMouse() const
     // sometimes, the system gives us tablet events with NoDevice or UnknownPointer. This is
     // likely an XInput2 bug. However, assuming that if cannot identify the tablet device we've
     // actually got a mouse is reasonable. See https://bugs.kde.org/show_bug.cgi?id=283130.
-    return d->mouse || d->device == QTabletEvent::NoDevice || d->pointer == QTabletEvent::UnknownPointer;
+    return d->mouse || d->device == QInputDevice::DeviceType::Unknown || d->pointer == QPointingDevice::PointerType::Unknown;
 }
 
 
@@ -89,7 +89,7 @@ KoInputDevice & KoInputDevice::operator=(const KoInputDevice & other)
 // static
 KoInputDevice KoInputDevice::invalid()
 {
-    KoInputDevice id(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer);
+    KoInputDevice id(QInputDevice::DeviceType::Unknown, QPointingDevice::PointerType::Unknown);
     return id;
 }
 
@@ -104,14 +104,14 @@ KoInputDevice KoInputDevice::mouse()
 // static
 KoInputDevice KoInputDevice::stylus()
 {
-    KoInputDevice id(QTabletEvent::Stylus, QTabletEvent::Pen);
+    KoInputDevice id(QInputDevice::DeviceType::Stylus, QPointingDevice::PointerType::Pen);
     return id;
 }
 
 // static
 KoInputDevice KoInputDevice::eraser()
 {
-    KoInputDevice id(QTabletEvent::Stylus, QTabletEvent::Eraser);
+    KoInputDevice id(QInputDevice::DeviceType::Stylus, QPointingDevice::PointerType::Eraser);
     return id;
 }
 
@@ -122,40 +122,55 @@ QDebug operator<<(QDebug dbg, const KoInputDevice &device)
         dbg.nospace() << "mouse";
     else {
         switch (device.pointer()) {
-        case QTabletEvent::UnknownPointer:
+        case QPointingDevice::PointerType::Unknown:
             dbg.nospace() << "unknown pointer";
             break;
-        case QTabletEvent::Pen:
+        case QPointingDevice::PointerType::Pen:
             dbg.nospace() << "pen";
             break;
-        case QTabletEvent::Cursor:
+        case QPointingDevice::PointerType::Cursor:
             dbg.nospace() << "cursor";
             break;
-        case QTabletEvent::Eraser:
+        case QPointingDevice::PointerType::Eraser:
             dbg.nospace() << "eraser";
+            break;
+        case QPointingDevice::PointerType::Finger:
+            dbg.nospace() << "finger";
+            break;
+        case QPointingDevice::PointerType::Generic:
+            dbg.nospace() << "generic";
+            break;
+        case QPointingDevice::PointerType::AllPointerTypes:
+            dbg.nospace() << "allPointerTypes";
             break;
         }
         switch(device.device()) {
-        case QTabletEvent::NoDevice:
+        case QInputDevice::DeviceType::Unknown:
             dbg.space() << "no device";
             break;
-        case QTabletEvent::Puck:
+        case QInputDevice::DeviceType::Puck:
             dbg.space() << "puck";
             break;
-        case QTabletEvent::Stylus:
+        case QInputDevice::DeviceType::Stylus:
             dbg.space() << "stylus";
             break;
-        case QTabletEvent::Airbrush:
+        case QInputDevice::DeviceType::Airbrush:
             dbg.space() << "airbrush";
             break;
-        case QTabletEvent::FourDMouse:
-            dbg.space() << "four2mouse";
+        case QInputDevice::DeviceType::Keyboard:
+            dbg.space() << "keyboard";
             break;
-        case QTabletEvent::RotationStylus:
-            dbg.space() << "rotationstylus";
+        case QInputDevice::DeviceType::Mouse:
+            dbg.space() << "mouse";
             break;
-        case QTabletEvent::XFreeEraser:
-            dbg.space() << "XFreeEraser";
+        case QInputDevice::DeviceType::TouchPad:
+            dbg.space() << "touchpad";
+            break;
+        case QInputDevice::DeviceType::TouchScreen:
+            dbg.space() << "touchscreen";
+            break;
+        case QInputDevice::DeviceType::AllDevices:
+            dbg.space() << "all";
             break;
         }
         dbg.space() << "(id: " << device.uniqueTabletId() << ")";
