@@ -8,17 +8,16 @@
 #include "KoZoomMode.h"
 #include <klocalizedstring.h>
 
-const char* const KoZoomMode::modes[] =
-{
-    I18N_NOOP("%1%"),
-    I18N_NOOP("Fit Page Width"),
-    I18N_NOOP("Fit Page"),
-    nullptr,
-    I18N_NOOP("Actual Pixels"),
-    nullptr,
-    nullptr,
-    nullptr,
-    I18N_NOOP("Fit Text Width")
+const std::vector<std::optional<KLazyLocalizedString>> KoZoomMode::modes = {
+    kli18n("%1%"),
+    kli18n("Fit Page Width"),
+    kli18n("Fit Page"),
+    std::nullopt,
+    kli18n("Actual Pixels"),
+    std::nullopt,
+    std::nullopt,
+    std::nullopt,
+    kli18n("Fit Text Width")
 };
 
 qreal KoZoomMode::minimumZoomValue = 0.2;
@@ -26,18 +25,19 @@ qreal KoZoomMode::maximumZoomValue = 5.0;
 
 QString KoZoomMode::toString(Mode mode)
 {
-    return i18n(modes[mode]);
+    auto m = modes[mode];
+    return m ? m->toString() : QString{};
 }
 
 KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
 {
-    if(mode == i18n(modes[ZOOM_WIDTH]))
+    if(mode == modes[ZOOM_WIDTH]->toString())
         return ZOOM_WIDTH;
-    else if(mode == i18n(modes[ZOOM_PAGE]))
+    else if(mode == modes[ZOOM_PAGE]->toString())
         return ZOOM_PAGE;
-    else if(mode == i18n(modes[ZOOM_PIXELS]))
+    else if(mode == modes[ZOOM_PIXELS]->toString())
         return ZOOM_PIXELS;
-    else if(mode == i18n(modes[ZOOM_TEXT]))
+    else if(mode == modes[ZOOM_TEXT]->toString())
         return ZOOM_TEXT;
     else
        return ZOOM_CONSTANT;

@@ -10,6 +10,7 @@
 
 #include <QString>
 #include <QFlags>
+#include <KLazyLocalizedString>
 #include "kowidgets_export.h"
 
 /**
@@ -83,7 +84,7 @@ public:
     static void setMaximumZoom(qreal zoom);
     
 private:
-    static const char * const modes[];
+    static std::vector<std::optional<KLazyLocalizedString>> const modes;
     static qreal minimumZoomValue;
     static qreal maximumZoomValue;
 };
