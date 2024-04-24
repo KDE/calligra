@@ -132,7 +132,7 @@ QMimeData * KPrCustomSlideShowsModel::mimeData(const QModelIndexList &indexes) c
 
     QMimeData *data = new QMimeData();
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QDataStream stream(&encoded, QIODeviceBase::WriteOnly);
 
     // encode the data & order slides
     QModelIndexList::ConstIterator it = indexes.begin();

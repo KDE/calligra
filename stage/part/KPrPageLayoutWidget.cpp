@@ -56,7 +56,7 @@ KPrPageLayoutWidget::KPrPageLayoutWidget( QWidget* parent)
 
     QGridLayout* layout = new QGridLayout;
     layout->addWidget(m_layoutsView);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
 
     setLayout(layout);
 }

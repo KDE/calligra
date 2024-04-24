@@ -61,7 +61,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrPageSelectStrategyActive.cpp
      KPrDurationParser.cpp
      KPrHtmlExport.cpp
-     KPrHtmlExportUiDelegate.cpp
      KPrPicturesImport.cpp
      KPrPdfPrintJob.cpp
      KPrSlidesSorterDocumentModel.cpp
@@ -186,7 +185,7 @@ target_link_libraries(calligrastagepart calligrastageprivate )
 install(TARGETS calligrastagepart DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/parts)
 
 ### GUI files ###
-install( FILES calligrastage.rc calligrastage_readonly.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/calligrastage)
+install( FILES calligrastage.rc calligrastage_readonly.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/calligrastage)
 
 install( FILES calligrastagerc DESTINATION ${KDE_INSTALL_CONFDIR} )
 

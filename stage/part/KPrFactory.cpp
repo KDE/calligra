@@ -44,10 +44,9 @@ KPrFactory::~KPrFactory()
 }
 
 QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
-                             const QVariantList& args, const QString& keyword )
+                             const QVariantList& args)
 {
     Q_UNUSED( args );
-    Q_UNUSED( keyword );
     KPrPart *part = new KPrPart(parent);
     KPrDocument *doc = new KPrDocument(part);
     doc->setDefaultStylesResourcePath(QLatin1String("calligrastage/styles/"));

@@ -11,6 +11,7 @@
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QUrl>
+#include <QActionGroup>
 
 #include <KSharedConfig>
 #include <klocalizedstring.h>

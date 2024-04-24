@@ -8,17 +8,17 @@
 #include "KPrHtmlExport.h"
 
 #include <QTextStream>
+#include <QDesktopServices>
 #include <QDir>
 #include <QUrl>
 #include <QTemporaryDir>
 #include <QStandardPaths>
 
 #include <kio/copyjob.h>
+#include <KIO/JobUiDelegateFactory>
 #include <kmessagebox.h>
-#include <krun.h>
 #include <kzip.h>
 
-#include "KPrHtmlExportUiDelegate.h"
 #include "KPrView.h"
 #include "KPrPage.h"
 
@@ -124,7 +124,7 @@ void KPrHtmlExport::writeHtmlFileToTmpDir(const QString &fileName, const QString
 {
     const QString filePath = m_tmpDirPath + QLatin1Char('/') + fileName;
     QFile file(filePath);
-    file.open(QIODevice::WriteOnly);
+    file.open(QIODeviceBase::WriteOnly);
     QTextStream stream(&file);
     stream << htmlBody;
 }
@@ -133,7 +133,7 @@ void KPrHtmlExport::copyFromTmpToDest()
 {
     KIO::CopyJob *job = KIO::moveAs(QUrl::fromLocalFile(m_tmpDirPath), m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
-    job->setUiDelegate(new KPrHtmlExportUiDelegate);
+    job->setUiDelegate(KIO::createDefaultJobUiDelegate());
     connect(job, &KJob::result, this, &KPrHtmlExport::moveResult);
     job->exec();
 }
@@ -148,7 +148,7 @@ void KPrHtmlExport::moveResult(KJob *job)
         if(m_parameters.openBrowser){
             QUrl url = m_parameters.destination;
             url.setPath(url.path() + QLatin1String("/index.html"));
-            KRun::runUrl(url, "text/html", m_parameters.kprView, KRun::RunFlags());
+            QDesktopServices::openUrl(url);
         }
     }
 }

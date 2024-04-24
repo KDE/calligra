@@ -108,7 +108,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
 
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     layout->addLayout( optionLayout);
     layout->addWidget( m_subTypeCombo );
     layout->addLayout(transitionLayout);
@@ -130,8 +130,8 @@ void KPrPageEffectDocker::updateSubTypes( const KPrPageEffectFactory * factory )
     if ( factory ) {
         m_subTypeCombo->setEnabled( true );
 
-        const QMap<QString, int> subTypesByName( factory->subTypesByName() );
-        QMap<QString, int>::ConstIterator it( subTypesByName.constBegin() );
+        const QMultiMap<QString, int> subTypesByName( factory->subTypesByName() );
+        auto it( subTypesByName.constBegin() );
         for ( ;it != subTypesByName.constEnd(); ++it ) {
             m_subTypeCombo->addItem( it.key(), it.value() );
         }

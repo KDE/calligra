@@ -151,11 +151,11 @@ QList<QPair<QString, bool> > KPrPageEffectFactory::tags() const
     return d->tags;
 }
 
-QMap<QString, int> KPrPageEffectFactory::subTypesByName() const
+QMultiMap<QString, int> KPrPageEffectFactory::subTypesByName() const
 {
-    QMap<QString, int> nameToType;
+    QMultiMap<QString, int> nameToType;
     foreach( const int subType, d->subTypes ) {
-        nameToType.insertMulti( subTypeName( subType ), subType );
+        nameToType.insert( subTypeName( subType ), subType );
     }
     return nameToType;
 }

@@ -8,7 +8,6 @@
 #include <KPrDocument.h>
 
 #include <KoApplication.h>
-#include <Calligra2Migration.h>
 
 #include <QLoggingCategory>
 
@@ -28,12 +27,6 @@ int main( int argc, char **argv )
 
     KoApplication app(STAGE_MIME_TYPE, QStringLiteral("calligrastage"), newKPresenterAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrastage");
-
-    // Migrate data from kde4 to kf5 locations
-    Calligra2Migration m("calligrastage", "stage");
-    m.setConfigFiles(QStringList() << QStringLiteral("stagerc"));
-    m.setUiFiles(QStringList() << QStringLiteral("stage.rc") << QStringLiteral("stage_readonly.rc"));
-    m.migrate();
 
     if (!app.start()) {
         return 1;

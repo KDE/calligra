@@ -19,24 +19,25 @@
 
 #include "KPrDurationParser.h"
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QGlobalStatic>
 
 // define the regex used as statics
-Q_GLOBAL_STATIC_WITH_ARGS(QRegExp, clockRegEx, ("^(?:(\\d+):)?(\\d{2}):(\\d{2}(?:\\.\\d+)?)$"))
-Q_GLOBAL_STATIC_WITH_ARGS(QRegExp, timecountRegEx, ("^(\\d+(?:\\.\\d+)?)(h|min|s|ms)?$"))
+static const QRegularExpression clockRegEx("^(?:(\\d+):)?(\\d{2}):(\\d{2}(?:\\.\\d+)?)$");
+static const QRegularExpression timecountRegEx("^(\\d+(?:\\.\\d+)?)(h|min|s|ms)?$");
 
 int KPrDurationParser::durationMs(const QString & duration)
 {
     int ms = -1;
-    if (clockRegEx->indexIn(duration) != -1) {
-        QStringList result(clockRegEx->capturedTexts());
+    QRegularExpressionMatch match;
+    if (duration.indexOf(clockRegEx, 0, &match) != -1) {
+        QStringList result(match.capturedTexts());
         bool ok = true;
         ms = qreal(result[1].toInt(&ok, 10) * 3600 + result[2].toInt(&ok, 10) * 60 + result[3].toDouble(&ok)) * 1000;
     }
-    else if (timecountRegEx->indexIn(duration) != -1) {
-        QStringList result(timecountRegEx->capturedTexts());
+    else if (duration.indexOf(timecountRegEx, 0, &match) != -1) {
+        QStringList result(match.capturedTexts());
         QString metric(result[2]);
         // the default (no metric) is s
         qreal factor = 1000;

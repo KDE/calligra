@@ -35,15 +35,15 @@ void KPrPdfPrintJob::startPrinting(RemovePolicy removePolicy)
     zoomHandler.setResolution( m_printer.resolution(), m_printer.resolution() );
     m_printer.setFullPage(true);
     const KoPageLayout & firstLayout = m_pages.at(fromPage)->pageLayout();
-    m_printer.setPaperSize(QSizeF(firstLayout.width,firstLayout.height),QPrinter::Millimeter);
+    m_printer.setPageSize(QPageSize(QSizeF(firstLayout.width,firstLayout.height),QPageSize::Millimeter));
     QPainter painter( &m_printer );
 
     for ( int i = fromPage; i <= toPage; ++i ) {
 
         KoPAPageBase *page = m_pages.at(i);
         const KoPageLayout & layout = page->pageLayout();
-        m_printer.setPaperSize(QSizeF(layout.width,layout.height),QPrinter::Millimeter);
-        QSize size = m_printer.pageRect().size();
+        m_printer.setPageSize(QPageSize(QSizeF(layout.width,layout.height), QPageSize::Millimeter));
+        QSizeF size = m_printer.pageLayout().paintRect().size();
         painter.save();
         if (i != fromPage) {
             m_printer.newPage();

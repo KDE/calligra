@@ -163,7 +163,7 @@ QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexe
     QMimeData *data = new QMimeData();
     QString format = types[0];
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QDataStream stream(&encoded, QIODeviceBase::WriteOnly);
 
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
@@ -230,7 +230,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
     }
 
     QByteArray encoded = data->data("application/x-calligra-sliderssorter");
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QDataStream stream(&encoded, QIODeviceBase::ReadOnly);
     QList<KoPAPageBase *> slides;
 
     // decode the data
@@ -294,7 +294,7 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             seq.chop(1);
             QAction *popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
             popupCopyAction->setIcon(koIcon("edit-copy"));
-            seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
+            seq = QKeySequence( Qt::ControlModifier | Qt::ShiftModifier ).toString();
             seq.chop(1);
             QAction *popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
             popupCancelAction->setIcon(koIcon("process-stop"));

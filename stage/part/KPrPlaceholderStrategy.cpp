@@ -15,6 +15,7 @@
 #include <QTextOption>
 
 #include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include <KoShape.h>
 #include <KoShapeFactoryBase.h>
@@ -29,25 +30,25 @@ static const class PlaceholderData {
     const char * m_presentationClass;
     const char * m_shapeId;
     const char * m_xmlElement;
-    const char * m_text;
+    const KLazyLocalizedString m_text;
 } placeholderData[] = {
-    { "title", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a title" ) },
-    { "outline", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add an outline" ) },
-    { "subtitle", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a text" ) },
-    { "text", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a text" ) },
-    { "notes", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add notes" ) },
+    { "title", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add a title" ) },
+    { "outline", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add an outline" ) },
+    { "subtitle", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add a text" ) },
+    { "text", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add a text" ) },
+    { "notes", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add notes" ) },
     /*
-    { "date-time", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add data/time" ) },
-    { "footer", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add footer" ) },
-    { "header", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add header" ) },
-    { "page-number", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add page number" ) },
+    { "date-time", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add data/time" ) },
+    { "footer", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add footer" ) },
+    { "header", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add header" ) },
+    { "page-number", "TextShapeID", "<draw:text-box/>", kli18n( "Double click to add page number" ) },
     */
     { "graphic", "PictureShape", "<draw:image xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>", 
-                                       I18N_NOOP( "Double click to add a picture" ) },
+                                       kli18n( "Double click to add a picture" ) },
     { "chart", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
-                                       I18N_NOOP( "Double click to add a chart" ) },
+                                       kli18n( "Double click to add a chart" ) },
     { "object", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
-                                       I18N_NOOP( "Double click to add an object" ) }
+                                       kli18n( "Double click to add an object" ) }
 };
 
 static QMap<QString, const PlaceholderData *> s_placeholderMap;
@@ -149,7 +150,7 @@ bool KPrPlaceholderStrategy::loadOdf( const KoXmlElement & element, KoShapeLoadi
 
 QString KPrPlaceholderStrategy::text() const
 {
-    return i18n( m_placeholderData->m_text );
+    return m_placeholderData->m_text.toString();
 }
 
 void KPrPlaceholderStrategy::init(KoDocumentResourceManager *)

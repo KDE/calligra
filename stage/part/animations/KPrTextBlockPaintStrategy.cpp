@@ -8,7 +8,6 @@
 
 #include <QBrush>
 #include <QTransform>
-#include <QMatrix>
 #include <QPainter>
 
 #include "KoTextBlockData.h"
@@ -39,7 +38,7 @@ QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground) co
 void KPrTextBlockPaintStrategy::applyStrategy(QPainter *painter)
 {
     QTransform animationTransform = m_animationCache->value(m_textBlockData, "transform", QTransform()).value<QTransform>();
-    QTransform transform(painter->matrix());
+    QTransform transform(painter->transform());
       if (animationTransform.isScaling()) {
         transform = animationTransform * transform;
     } else {

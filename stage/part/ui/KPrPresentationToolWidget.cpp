@@ -12,7 +12,6 @@
 
 #include <QPainter>
 #include <QPaintEvent>
-#include <QDesktopWidget>
 
 KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
 : QWidget( parent )
@@ -21,9 +20,7 @@ KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     m_uiWidget.setupUi( this );
 
     // Set the size of the icon
-    QDesktopWidget desktop;
-    QRect rect = desktop.screenGeometry( desktop.screenNumber( this ) );
-    QSize size = QSize( rect.width() / 40, rect.width() / 40 );
+    QSize size = QSize( 40, 40 );
     m_uiWidget.penButton->setIconSize( size );
     m_uiWidget.highLightButton->setIconSize( size );
     m_uiWidget.blackButton->setIconSize( size );

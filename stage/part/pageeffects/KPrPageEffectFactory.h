@@ -87,7 +87,7 @@ public:
     /**
      * Get the subtypes sorted by name. This sorts by the i18n'ed name.
      */
-    QMap<QString, int> subTypesByName() const;
+    QMultiMap<QString, int> subTypesByName() const;
 
 protected:
     /**

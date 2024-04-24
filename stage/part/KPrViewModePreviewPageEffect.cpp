@@ -24,6 +24,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QPainter>
+#include <QWidget>
 
 #include <KoPointerEvent.h>
 #include <KoPageApp.h>

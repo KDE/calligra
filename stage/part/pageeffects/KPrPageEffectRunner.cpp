@@ -41,7 +41,7 @@ KPrPageEffectRunner::KPrPageEffectRunner( const QPixmap &oldPage, const QPixmap 
 
         // Do some optimization
         m_data.m_scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-        m_data.m_graphicsView->setOptimizationFlag(QGraphicsView::DontClipPainter, true);
+        // m_data.m_graphicsView->setOptimizationFlag(QGraphicsView::DontClipPainter, true);
         m_data.m_graphicsView->setOptimizationFlag(QGraphicsView::DontSavePainterState, true);
         m_data.m_graphicsView->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
         m_data.m_graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

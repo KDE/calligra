@@ -154,7 +154,7 @@ void KPrSlidesManagerView::focusInEvent(QFocusEvent *event)
 void KPrSlidesManagerView::wheelEvent(QWheelEvent *event)
 {
     if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
-        if (event->delta() > 0) {
+        if (event->angleDelta().y() > 0) {
             emit zoomIn();
         }
         else {

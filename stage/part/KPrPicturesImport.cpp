@@ -19,7 +19,7 @@
 #include "KPrView.h"
 #include "StageDebug.h"
 
-#include <kio/job.h>
+#include <KIO/StoredTransferJob>
 #include <kundo2command.h>
 #include <KoDocumentResourceManager.h>
 

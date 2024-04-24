@@ -23,7 +23,6 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QPainter>
-#include <QDesktopWidget>
 
 #include <kcursor.h>
 
@@ -155,23 +154,17 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_savedParent = m_baseCanvas->parentWidget();
     m_baseCanvas->setParent( ( QWidget* )0, Qt::Window ); // set parent to 0 and
 
-    QDesktopWidget desktop;
 
     KPrDocument *document = static_cast<KPrDocument *>( m_view->kopaDocument() );
     bool presenterViewEnabled = document->isPresenterViewEnabled();
     int presentationscreen = document->presentationMonitor();
 
     // add end off slideshow page
-    m_endOfSlideShowPage = new KPrEndOfSlideShowPage( desktop.screenGeometry( presentationscreen ), document );
+    m_endOfSlideShowPage = new KPrEndOfSlideShowPage( qApp->primaryScreen()->geometry(), document );
     QList<KoPAPageBase*> pages = document->slideShow();
     pages.append( m_endOfSlideShowPage );
 
-    QRect presentationRect = desktop.screenGeometry( presentationscreen );
-
-#ifdef Q_OS_LINUX
-    // This breaks and is not required on Windows platforms
-    m_baseCanvas->setParent(desktop.screen(presentationscreen), Qt::Window); // detach widget to the presentation screen
-#endif
+    QRect presentationRect = qApp->primaryScreen()->geometry();
 
     m_baseCanvas->setWindowFlags( Qt::Window ); // make it a window
 
@@ -192,16 +185,12 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     if ( presenterViewEnabled ) {
 
-        if ( desktop.numScreens() > 1 ) {
-            int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
-            QRect pvRect = desktop.screenGeometry( newscreen );
+        if ( qApp->screens().length() > 1 ) {
+            int newscreen = qApp->screens().length() - presentationscreen - 1; // What if we have > 2 screens?
+            QRect pvRect = qApp->screens().at( newscreen )->geometry();
 
             m_presenterViewCanvas = new KoPACanvas( m_view, document );
             m_presenterViewWidget = new KPrPresenterViewWidget( this, pages, m_presenterViewCanvas );
-#ifdef Q_OS_LINUX
-    // This breaks and is not required on Windows platforms
-            m_presenterViewWidget->setParent( desktop.screen(newscreen), Qt::Window );
-#endif
             m_presenterViewWidget->setGeometry(pvRect);
             m_presenterViewWidget->setWindowState(
                     m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
