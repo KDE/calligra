@@ -196,11 +196,12 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
                     value.setFormat(Value::fmt_Date);
                     res.setValue(value);
                 } else {
+                    QStringView view{t};
                     int pos   = t.indexOf('/');
-                    int year  = t.midRef(0, pos).toInt();
+                    int year  = view.mid(0, pos).toInt();
                     int pos1  = t.indexOf('/', pos + 1);
-                    int month = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
-                    int day   = t.rightRef(t.length() - pos1 - 1).toInt();
+                    int month = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
+                    int day   = view.right(t.length() - pos1 - 1).toInt();
                     QDate date(year, month, day);
                     if (date.isValid())
                         res.setValue(Value(date, sheet->map()->calculationSettings()));
@@ -217,11 +218,12 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
                     int minutes = -1;
                     int second  = -1;
                     int pos, pos1;
+                    QStringView view(t);
                     pos   = t.indexOf(':');
-                    hours = t.midRef(0, pos).toInt();
+                    hours = view.mid(0, pos).toInt();
                     pos1  = t.indexOf(':', pos + 1);
-                    minutes = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
-                    second  = t.rightRef(t.length() - pos1 - 1).toInt();
+                    minutes = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
+                    second  = view.right(t.length() - pos1 - 1).toInt();
                     Time time(hours, minutes, second);
                     if (time.isValid())
                         res.setValue(Value(time));
@@ -346,11 +348,12 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
 
             // date ?
             else if (dataType == "Date") {
+                QStringView view(t);
                 int pos = t.indexOf('/');
-                int year = t.midRef(0, pos).toInt();
+                int year = view.mid(0, pos).toInt();
                 int pos1 = t.indexOf('/', pos + 1);
-                int month = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
-                int day = t.rightRef(t.length() - pos1 - 1).toInt();
+                int month = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
+                int day = view.right(t.length() - pos1 - 1).toInt();
                 cell->setValue(Value(QDate(year, month, day), sett));
                 if (cell->value().asDate(sett).isValid())   // Should always be the case for new docs
                     cell->setUserInput(locale->formatDate(cell->value().asDate(sett), false));
@@ -365,11 +368,12 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 int minutes = -1;
                 int second = -1;
                 int pos, pos1;
+                QStringView view(t);
                 pos = t.indexOf(':');
-                hours = t.midRef(0, pos).toInt();
+                hours = view.mid(0, pos).toInt();
                 pos1 = t.indexOf(':', pos + 1);
-                minutes = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
-                second = t.rightRef(t.length() - pos1 - 1).toInt();
+                minutes = view.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
+                second = view.right(t.length() - pos1 - 1).toInt();
                 cell->setValue(Value(Time(hours, minutes, second)));
                 if (cell->value().asTime().isValid())    // Should always be the case for new docs
                     cell->setUserInput(locale->formatTime(cell->value().asTime(), true));

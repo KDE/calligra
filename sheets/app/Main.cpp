@@ -8,7 +8,6 @@
 #include "core/DocBase.h"
 
 #include <KoApplication.h>
-#include <Calligra2Migration.h>
 
 #include <QLoggingCategory>
 
@@ -33,12 +32,6 @@ int main(int argc, char **argv)
 
     KoApplication app(SHEETS_MIME_TYPE, QStringLiteral("calligrasheets"), newAboutData, argc, argv);
     KLocalizedString::setApplicationDomain("calligrasheets");
-
-    // Migrate data from kde4 to kf5 locations
-    Calligra2Migration m("calligrasheets", "sheets");
-    m.setConfigFiles(QStringList() << QStringLiteral("sheetsrc"));
-    m.setUiFiles(QStringList() << QStringLiteral("sheets.rc") << QStringLiteral("sheets_readonly.rc"));
-    m.migrate();
 
     if (!app.start()) {
         return 1;

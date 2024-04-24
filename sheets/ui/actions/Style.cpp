@@ -71,7 +71,7 @@ void CellStyle::applyStyle()
 QAction *CellStyle::createAction() {
     QAction *res = CellAction::createAction();
     res->setIconText(i18n("Format"));
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_F));
     return res;
 }
 

@@ -38,8 +38,7 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QPointer>
-#ifndef QT_NO_SQL
-#endif
+#include <QActionGroup>
 #include <QScrollBar>
 #include <QStatusBar>
 #include <QTimer>
@@ -281,7 +280,7 @@ void View::Private::initActions()
     actions->recalcWorksheet->setIcon(koIcon("view-refresh"));
     actions->recalcWorksheet->setIconText(i18n("Recalculate"));
     ac->addAction("RecalcWorkSheet", actions->recalcWorksheet);
-    actions->recalcWorksheet->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F9));
+    actions->recalcWorksheet->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F9));
     connect(actions->recalcWorksheet, &QAction::triggered, view, &View::recalcWorkSheet);
     actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
@@ -316,7 +315,7 @@ void View::Private::initActions()
     actions->shapeAnchor->setEnabled(false);
     actions->shapeAnchor->setToolTip(i18n("Switch shape anchoring"));
     ac->addAction("shapeAnchor", actions->shapeAnchor);
-    connect(actions->shapeAnchor, QOverload<const QString &>::of(&KSelectAction::triggered),
+    connect(actions->shapeAnchor, &KSelectAction::textTriggered,
             view, &View::setShapeAnchoring);
 
     // -- navigation actions --
@@ -325,14 +324,14 @@ void View::Private::initActions()
     actions->nextSheet->setIconText(i18n("Next"));
     actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
     ac->addAction("go_next", actions->nextSheet);
-    actions->nextSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
+    actions->nextSheet->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_PageDown));
     connect(actions->nextSheet, &QAction::triggered, view, &View::nextSheet);
 
     actions->prevSheet  = new QAction(koIcon("go-previous"), i18n("Previous Sheet"), view);
     actions->prevSheet->setIconText(i18n("Previous"));
     actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
     ac->addAction("go_previous", actions->prevSheet);
-    actions->prevSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageUp));
+    actions->prevSheet->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_PageUp));
     connect(actions->prevSheet, &QAction::triggered, view, &View::previousSheet);
 
     actions->firstSheet  = new QAction(koIcon("go-first"), i18n("First Sheet"), view);
@@ -700,7 +699,7 @@ Doc* View::doc() const
 void View::initView()
 {
     d->viewLayout = new QGridLayout(this);
-    d->viewLayout->setMargin(0);
+    d->viewLayout->setContentsMargins({});
     d->viewLayout->setSpacing(0);
 
     // Setup the Canvas and its controller.
@@ -787,7 +786,7 @@ void View::initView()
 
     QWidget* bottomPart = new QWidget(this);
     d->tabScrollBarLayout = new QGridLayout(bottomPart);
-    d->tabScrollBarLayout->setMargin(0);
+    d->tabScrollBarLayout->setContentsMargins({});
     d->tabScrollBarLayout->setSpacing(0);
     d->tabScrollBarLayout->setColumnStretch(1, 1);
     d->tabBar = new TabBar(0);
@@ -1820,7 +1819,7 @@ void View::setHeaderMinima()
     QFont font(KoGlobal::defaultFont());
     QFontMetricsF fm(font, 0);
     qreal h = fm.height() + 3;
-    qreal w = fm.width(QString::fromLatin1("99999")) + 3;
+    qreal w = fm.boundingRect(QString::fromLatin1("99999")).width() + 3;
     d->columnHeader->setMinimumHeight(qRound(h));
     d->rowHeader->setMinimumWidth(qRound(w));
     d->selectAllButton->setMinimumHeight(qRound(h));

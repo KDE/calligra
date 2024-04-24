@@ -35,7 +35,6 @@
 
 // Qt
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QLabel>
 #include <QToolTip>
 #include <QStyleOptionGraphicsItem>
@@ -162,25 +161,25 @@ void RowHeaderItem::paintSizeIndicator(int mouseY)
     else
         tmpSize = i18n("Hide Row");
 
-    if (!m_lSize) {
-        int screenNo = 0; //QApplication::desktop()->screenNumber(topLevelWidget());
-        m_lSize = new QLabel(QApplication::desktop()->screen(screenNo) , Qt::ToolTip);
-        m_lSize->setAlignment(Qt::AlignVCenter);
-        m_lSize->setAutoFillBackground(true);
-        m_lSize->setPalette(QToolTip::palette());
-        m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
-        m_lSize->setFrameShape(QFrame::Box);
-        m_lSize->setIndent(1);
-    }
+    //if (!m_lSize) {
+    //    int screenNo = 0; //QApplication::desktop()->screenNumber(topLevelWidget());
+    //    m_lSize = new QLabel(qApp->primaryScreen()-> , Qt::ToolTip);
+    //    m_lSize->setAlignment(Qt::AlignVCenter);
+    //    m_lSize->setAutoFillBackground(true);
+    //    m_lSize->setPalette(QToolTip::palette());
+    //    m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
+    //    m_lSize->setFrameShape(QFrame::Box);
+    //    m_lSize->setIndent(1);
+    //}
 
-    m_lSize->setText(tmpSize);
-    m_lSize->adjustSize();
-    QRectF rcf = static_cast<CanvasItem*>(m_pCanvas)->boundingRect();
-    QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(rcf.width() - m_lSize->width() - 3, (int)y + 3) : QPoint(3, (int)y + 3);
-    pos -= QPoint(0, m_lSize->height());
-    // XXX: Port
-    //m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), m_pCanvas->mapToGlobal(pos).y());
-    m_lSize->show();
+    //m_lSize->setText(tmpSize);
+    //m_lSize->adjustSize();
+    //QRectF rcf = static_cast<CanvasItem*>(m_pCanvas)->boundingRect();
+    //QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(rcf.width() - m_lSize->width() - 3, (int)y + 3) : QPoint(3, (int)y + 3);
+    //pos -= QPoint(0, m_lSize->height());
+    //// XXX: Port
+    ////m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), m_pCanvas->mapToGlobal(pos).y());
+    //m_lSize->show();
 }
 
 void RowHeaderItem::removeSizeIndicator()

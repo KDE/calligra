@@ -173,7 +173,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     refresh_result = true;
 
-    connect(typeFunction, QOverload<const QString &>::of(&KComboBox::activated),
+    connect(typeFunction, &KComboBox::textActivated,
             this, &FormulaDialog::slotActivated);
     /*
         connect( functions, SIGNAL(highlighted(QString)),

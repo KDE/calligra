@@ -150,7 +150,7 @@ void SetStyle::init() {
 QAction *SetStyle::createAction() {
     m_selectAction = new KSelectAction(m_caption, m_actions->tool());
     m_selectAction->setToolTip(m_tooltip);
-    connect(m_selectAction, QOverload<const QString &>::of(&KSelectAction::triggered), this, &SetStyle::triggeredSelect);
+    connect(m_selectAction, &KSelectAction::textTriggered, this, &SetStyle::triggeredSelect);
     return m_selectAction;
 }
 

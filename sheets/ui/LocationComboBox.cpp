@@ -29,7 +29,7 @@ LocationComboBox::LocationComboBox(QWidget *_parent)
     setCompletionObject(&completionList, true);
     setCompletionMode(KCompletion::CompletionAuto);
 
-    connect(this, QOverload<const QString &>::of(&LocationComboBox::activated),
+    connect(this, &LocationComboBox::textActivated,
             this, &LocationComboBox::slotActivateItem);
 }
 

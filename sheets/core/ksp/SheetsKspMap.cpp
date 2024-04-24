@@ -18,7 +18,6 @@
 
 #include <KoXmlReader.h>
 
-#include <kcodecs.h>
 #include <KLocalizedString>
 
 namespace Calligra {
@@ -45,7 +44,7 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
     QByteArray password = map->passwordHash();
     if (!password.isNull()) {
         if (password.size() > 0) {
-            QByteArray str = KCodecs::base64Encode(password);
+            QByteArray str = password.toBase64();
             mymap.setAttribute("protected", QString(str.data()));
         } else {
             mymap.setAttribute("protected", "");

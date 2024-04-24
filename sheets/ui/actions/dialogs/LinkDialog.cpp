@@ -119,16 +119,18 @@ LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
     connect(d->fileText, &QLineEdit::textChanged, this,
             &LinkDialog::setText);
-    connect(recentFile, QOverload<const QString &>::of(&KComboBox::highlighted),
+    connect(recentFile, &KComboBox::textHighlighted,
                      d->fileLink->lineEdit(), &QLineEdit::setText);
 
     // populate recent files
     int index = 0;
-    const QStringList fileList = KRecentDocument::recentDocuments();
-    for (QStringList::ConstIterator it = fileList.constBegin(); it != fileList.constEnd(); ++it) {
-        KDesktopFile f(*it);
-        if (!f.readUrl().isEmpty())
-            recentFile->insertItem(index++, f.readUrl());
+    const auto fileList = KRecentDocument::recentUrls();
+    for (const auto &url : fileList) {
+        if (url.isLocalFile()) {
+            KDesktopFile f(url.toLocalFile());
+            if (!f.readUrl().isEmpty())
+                recentFile->insertItem(index++, f.readUrl());
+        }
     }
     if (recentFile->count() == 0) {
         recentFile->insertItem(0, i18n("No Entries"));
@@ -193,7 +195,7 @@ QString LinkDialog::link() const
         } else {
             str = d->fileText->text();
             if (!str.isEmpty())
-                if (! str.contains(QRegExp("^(file|mailto|http|https|ftp):")))
+                if (! str.contains(QRegularExpression("^(file|mailto|http|https|ftp):")))
                     str.prepend("file://");
         }
     } else if (d->pages->currentPage() == d->p4) {

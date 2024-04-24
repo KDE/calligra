@@ -22,8 +22,7 @@
 
 #include <KConfigGroup>
 #include <KPluginMetaData>
-#include <KPluginInfo>
-#include <KPluginSelector>
+#include <KPluginWidget>
 #include <sonnet/configwidget.h>
 
 #include <KoConfigAuthorPage.h>
@@ -65,7 +64,7 @@ public:
     bool oldCreateBackupFile;
 
     // Plugin Options
-    KPluginSelector* pluginSelector;
+    KPluginWidget* pluginSelector;
 
     // Spellchecker Options
     Sonnet::ConfigWidget* spellCheckPage;
@@ -257,15 +256,9 @@ void PreferenceDialog::Private::resetOpenSaveOptions()
     fileOptions.m_autoSaveDelay->setValue(oldAutoSaveDelay);
 }
 
-QList<KPluginInfo> pluginInfos(const QString &directory)
+QList<KPluginMetaData> pluginInfos(const QString &directory)
 {
-    QList<KPluginInfo> result;
-    QVector<KPluginMetaData> pluginMetaDataList = KPluginLoader::findPlugins(directory);
-    result.reserve(pluginMetaDataList.size());
-    foreach(const KPluginMetaData &metaData, pluginMetaDataList) {
-        result.append(KPluginInfo::fromMetaData(metaData));
-    }
-    return result;
+    return KPluginMetaData::findPlugins(directory);
 }
 
 
@@ -332,13 +325,11 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->resetOpenSaveOptions(); // initialize values
 
     // Plugin Options Widget
-    d->pluginSelector = new KPluginSelector(this);
-    const QList<KPluginInfo> functionPluginInfos = pluginInfos(QStringLiteral("calligrasheets/functions"));
-    const QList<KPluginInfo> toolPluginInfos = pluginInfos(QStringLiteral("calligrasheets/tools"));
-    d->pluginSelector->addPlugins(functionPluginInfos, KPluginSelector::ReadConfigFile,
-                                  i18n("Function Modules"), "FunctionModule");
-    d->pluginSelector->addPlugins(toolPluginInfos, KPluginSelector::ReadConfigFile,
-                                  i18n("Tools"), "Tool");
+    d->pluginSelector = new KPluginWidget(this);
+    const QList<KPluginMetaData> functionPluginInfos = pluginInfos(QStringLiteral("calligrasheets/functions"));
+    const QList<KPluginMetaData> toolPluginInfos = pluginInfos(QStringLiteral("calligrasheets/tools"));
+    d->pluginSelector->addPlugins(functionPluginInfos, i18n("Function Modules"));
+    d->pluginSelector->addPlugins(toolPluginInfos, i18n("Tools"));
     d->pluginSelector->load();
     page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
     page->setIcon(koIcon("preferences-plugin"));

@@ -10,6 +10,7 @@
 #define CALLIGRA_SHEETS_STYLE
 
 #include <QBrush>
+#include <QVariant>
 #include <QColor>
 #include <QPen>
 #include <QSharedDataPointer>

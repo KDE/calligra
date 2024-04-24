@@ -94,7 +94,7 @@ ManageNamedAreas::~ManageNamedAreas()
 
 QAction *ManageNamedAreas::createAction() {
     QAction *res = CellAction::createAction();
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_G));
     res->setIconText(i18n("Named Areas"));
     return res;
 }

@@ -201,7 +201,7 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
     KoPointerEvent *const origEvent = event;
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
-        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+        documentPosition = viewConverter()->viewToDocument(event->position()) + offset();
     } else {
         const QPoint position(width() - event->x(), event->y());
         const QPointF offset(this->offset().x(), this->offset().y());
@@ -224,7 +224,7 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
     if(d->toolProxy) {
         d->toolProxy->mousePressEvent(event);
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
-            showContextMenu(origEvent->globalPos());
+            showContextMenu(origEvent->globalPosition().toPoint());
             origEvent->accept();
         }
     }
@@ -238,7 +238,7 @@ void CanvasBase::mouseReleased(KoPointerEvent* event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
-        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+        documentPosition = viewConverter()->viewToDocument(event->position()) + offset();
     } else {
         const QPoint position(width() - event->x(), event->y());
         const QPointF offset(this->offset().x(), this->offset().y());
@@ -262,7 +262,7 @@ void CanvasBase::mouseMoved(KoPointerEvent* event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
-        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+        documentPosition = viewConverter()->viewToDocument(event->position()) + offset();
     } else {
         const QPoint position(width() - event->x(), event->y());
         const QPointF offset(this->offset().x(), this->offset().y());
@@ -286,7 +286,7 @@ void CanvasBase::mouseDoubleClicked(KoPointerEvent* event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
-        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+        documentPosition = viewConverter()->viewToDocument(event->position()) + offset();
     } else {
         const QPoint position(width() - event->x(), event->y());
         const QPointF offset(this->offset().x(), this->offset().y());

@@ -47,7 +47,6 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include <kcodecs.h>
 
 // This file contains functionality to load/save a Map
 
@@ -281,7 +280,7 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
     QByteArray password = map->passwordHash();
     if (!password.isNull()) {
         xmlWriter.addAttribute("table:structure-protected", "true");
-        QByteArray str = KCodecs::base64Encode(password);
+        QByteArray str = password.toBase64();
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString(str.data()));
     }

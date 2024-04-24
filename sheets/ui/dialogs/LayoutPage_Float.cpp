@@ -210,7 +210,7 @@ LayoutPageFloat::LayoutPageFloat(QWidget* parent, Localization *locale, ValueFor
     connect(precision, QOverload<int>::of(&QSpinBox::valueChanged), this, &LayoutPageFloat::slotChangeValue);
     connect(prefix, &QLineEdit::textChanged, this, &LayoutPageFloat::makeformat);
     connect(postfix, &QLineEdit::textChanged, this, &LayoutPageFloat::makeformat);
-    connect(currency, QOverload<const QString &>::of(&KComboBox::activated), this, &LayoutPageFloat::currencyChanged);
+    connect(currency, &KComboBox::textActivated, this, &LayoutPageFloat::currencyChanged);
     connect(format, QOverload<int>::of(&KComboBox::activated), this, &LayoutPageFloat::formatChanged);
     connect(format, QOverload<int>::of(&KComboBox::activated), this, &LayoutPageFloat::makeformat);
     slotChangeState();

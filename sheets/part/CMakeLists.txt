@@ -138,7 +138,7 @@ target_link_libraries(calligrasheetspart
 
 install(TARGETS calligrasheetspart  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/parts)
 
-install( FILES  calligrasheets.rc calligrasheets_readonly.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/calligrasheets)
+install( FILES  calligrasheets.rc calligrasheets_readonly.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/calligrasheets)
 install( FILES  calligrasheets.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR} )
 install( FILES  calligrasheetsrc DESTINATION ${KDE_INSTALL_CONFDIR})
 

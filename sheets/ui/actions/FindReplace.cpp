@@ -122,7 +122,7 @@ void FindReplaceAction::executeReplace(Selection *selection, Sheet *sheet, QWidg
     m_currentSheet = sheet;
     m_firstSheet = sheet;
     initFindReplace();
-    connect(m_replace, QOverload<const QString &, int, int, int>::of(&KReplace::replace),
+    connect(m_replace, &KReplace::textReplaced,
             this, &FindReplaceAction::slotReplace);
 
     m_replaceCommand = new KUndo2Command(kundo2_i18n("Replace"));
@@ -138,7 +138,7 @@ void FindReplaceAction::initFindReplace()
 {
     KFind* findObj = m_find ? m_find : m_replace;
     Q_ASSERT(findObj);
-    connect(findObj, QOverload<const QString &, int, int>::of(&KFind::highlight),
+    connect(findObj, &KFind::textFound,
             this, &FindReplaceAction::slotHighlight);
     connect(findObj, &KFind::findNext,
             this, &FindReplaceAction::findNext);

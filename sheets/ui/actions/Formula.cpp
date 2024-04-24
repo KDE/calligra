@@ -69,7 +69,7 @@ QAction *FormulaSelection::createAction() {
     selectAction->setItems(functionList);
     selectAction->setComboWidth(80);
     selectAction->setCurrentItem(0);
-    connect(selectAction, QOverload<const QString &>::of(&KSelectAction::triggered), this, &FormulaSelection::triggerFormulaSelection);
+    connect(selectAction, &KSelectAction::textTriggered, this, &FormulaSelection::triggerFormulaSelection);
     return selectAction;
 }
 

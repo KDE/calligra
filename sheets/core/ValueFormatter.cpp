@@ -14,6 +14,7 @@
 #include "ValueConverter.h"
 
 #include <float.h>
+#include <QRegularExpression>
 
 using namespace Calligra::Sheets;
 
@@ -239,11 +240,12 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     int numExpDigits = 0; // QString::number() will be used
     // try to split formatstring into prefix, formatstring and postfix.
     if (!formatString.isEmpty() ) {
-        QRegExp re( QLatin1String( "^([^0#.,E+]*)([0#.,E+]*)(.*)$" ) );
-        if( re.exactMatch( formatString ) ) {
-            prefix = re.cap( 1 );
-            formatString = re.cap( 2 );
-            postfix = re.cap( 3 );
+        QRegularExpression re( QLatin1String( "^([^0#.,E+]*)([0#.,E+]*)(.*)$" ) );
+        QRegularExpressionMatch match = re.match( formatString );
+        if(match.hasMatch()) {
+            prefix = match.captured( 1 );
+            formatString = match.captured( 2 );
+            postfix = match.captured( 3 );
         }
         if (formatString.isEmpty()) {
             return prefix + postfix;

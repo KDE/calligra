@@ -13,7 +13,6 @@
 
 // Qt
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QFrame>
 #include <QLabel>
 #include <QListWidget>
@@ -45,7 +44,7 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
     d->completionPopup->installEventFilter(this);
     d->completionPopup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     QVBoxLayout *layout = new QVBoxLayout(d->completionPopup);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     layout->setSpacing(0);
 
     d->completionListBox = new QListWidget(d->completionPopup);
@@ -181,19 +180,20 @@ void FunctionCompletion::showCompletion(const QStringList &choices)
     d->completionPopup->resize(d->completionListBox->sizeHint() +
                                QSize(d->completionListBox->verticalScrollBar()->width() + 4,
                                      d->completionListBox->horizontalScrollBar()->height() + 4));
-    int h = d->completionListBox->height();
-    int w = d->completionListBox->width();
-
     QPoint pos = d->editor->globalCursorPosition();
 
     // if popup is partially invisible, move to other position
     // FIXME check it if it works in Xinerama multihead
-    int screen_num = QApplication::desktop()->screenNumber(d->completionPopup);
-    QRect screen = QApplication::desktop()->screenGeometry(screen_num);
-    if (pos.y() + h > screen.y() + screen.height())
-        pos.setY(pos.y() - h - d->editor->height());
-    if (pos.x() + w > screen.x() + screen.width())
-        pos.setX(screen.x() + screen.width() - w);
+    // POrt to wayland
+    //
+    // int h = d->completionListBox->height();
+    // int w = d->completionListBox->width();
+    // int screen_num = QApplication::desktop()->screenNumber(d->completionPopup);
+    // QRect screen = QApplication::desktop()->screenGeometry(screen_num);
+    // if (pos.y() + h > screen.y() + screen.height())
+    //     pos.setY(pos.y() - h - d->editor->height());
+    // if (pos.x() + w > screen.x() + screen.width())
+    //     pos.setX(screen.x() + screen.width() - w);
 
     d->completionPopup->move(pos);
     d->completionListBox->setFocus();

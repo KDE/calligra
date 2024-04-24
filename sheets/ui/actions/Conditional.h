@@ -57,7 +57,7 @@ class ConditionCommand : public AbstractRegionCommand
 {
 public:
     ConditionCommand();
-    void setConditionList(const QLinkedList<Conditional>& list);
+    void setConditionList(const QList<Conditional>& list);
 
 protected:
     bool process(Element* element) override;

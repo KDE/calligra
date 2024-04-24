@@ -61,7 +61,7 @@ LayoutPageGeneral::LayoutPageGeneral(QWidget* parent, StyleManager *manager)
 
     m_parentBox = new KComboBox(false, groupBox);
 
-    connect(m_parentBox, QOverload<const QString &>::of(&KComboBox::activated),
+    connect(m_parentBox, &KComboBox::textActivated,
             this, &LayoutPageGeneral::parentChanged);
     connect(m_nameEdit, &QLineEdit::textChanged,
             this, &LayoutPageGeneral::styleNameChanged);

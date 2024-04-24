@@ -13,6 +13,8 @@
 #include "RowColumnManipulators.h"
 
 #include <float.h>
+#include <QWidget>
+#include <QFontMetricsF>
 
 #include "engine/Damages.h"
 #include "engine/MapBase.h"
@@ -418,7 +420,7 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
         // Vertical text.
         qreal width = 0.0;
         for (int i = 0; i < text.length(); i++)
-            width = qMax(width, fontMetrics.width(text.at(i)));
+            width = qMax(width, fontMetrics.boundingRect(text.at(i)).width());
 
         size.setWidth(width);
         size.setHeight((fontMetrics.ascent() + fontMetrics.descent())

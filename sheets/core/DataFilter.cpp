@@ -64,7 +64,7 @@ bool Filter::And::isEmpty() const {
 QMap<QString, AbstractCondition::Comparison> Filter::And::conditions(int fieldNumber) const {
     QMap<QString, AbstractCondition::Comparison> result;
     for (int i = 0; i < list.count(); ++i)
-        result.unite(list[i]->conditions(fieldNumber));
+        result.insert(list[i]->conditions(fieldNumber));
     return result;
 }
 
@@ -133,7 +133,7 @@ bool Filter::Or::isEmpty() const {
 QMap<QString, AbstractCondition::Comparison> Filter::Or::conditions(int fieldNumber) const {
     QMap<QString, AbstractCondition::Comparison> result;
     for (int i = 0; i < list.count(); ++i)
-        result.unite(list[i]->conditions(fieldNumber));
+        result.insert(list[i]->conditions(fieldNumber));
     return result;
 }
 

@@ -45,7 +45,7 @@ public:
     // For "Selection List..." action
     Editor lastEditorWithFocus;
 
-    QHash<int, QString> wordCollection;
+    QMultiHash<int, QString> wordCollection;
     Actions *actions;
 
 public:

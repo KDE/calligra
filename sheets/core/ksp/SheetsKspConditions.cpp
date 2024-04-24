@@ -25,8 +25,8 @@ QDomElement Ksp::saveConditions(Conditions *conds, QDomDocument &doc, ValueConve
     int num = 0;
     QString name;
 
-    const QLinkedList<Conditional> list = conds->conditionList();
-    QLinkedList<Conditional>::const_iterator it;
+    const QList<Conditional> list = conds->conditionList();
+    QList<Conditional>::const_iterator it;
     for (it = list.begin(); it != list.end(); ++it) {
         Conditional condition = *it;
 

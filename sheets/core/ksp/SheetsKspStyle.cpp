@@ -545,7 +545,7 @@ QFont Ksp::toFont(KoXmlElement & element)
 
     const int weight = element.attribute("weight").toInt(&ok);
     if (!ok)
-        f.setWeight(weight);
+        f.setWeight(QFont::Weight(weight));
 
     if (element.hasAttribute("italic") && element.attribute("italic") == "yes")
         f.setItalic(true);

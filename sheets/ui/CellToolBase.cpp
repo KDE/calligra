@@ -65,6 +65,7 @@
 #include <QPainter>
 #include <QStandardPaths>
 #include <QDomDocument>
+#include <QFile>
 
 using namespace Calligra::Sheets;
 
@@ -447,7 +448,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             const QSizeF s1(cell.width(), cell.height());
             const QRectF cellRect = canvas()->viewConverter()->documentToView(QRectF(p1, s1));
             const QRect cellViewRect = cellRect.translated(offsetX, offsetY).toRect();
-            if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellViewRect, event->pos())) {
+            if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellViewRect, event->position().toPoint())) {
                 Database database = cell.database();
                 FilterPopup::showPopup(canvas()->canvasWidget(), cell, cellViewRect, &database);
                 return nullptr; // Act directly; no further strategy needed.
@@ -612,7 +613,7 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
         color = style.backgroundColor();
         if (!color.isValid())
             color = editorPalette.base().color();
-        editorPalette.setColor(QPalette::Background, color);
+        editorPalette.setColor(QPalette::Window, color);
         d->cellEditor->setPalette(editorPalette);
 
         // apply (table shape) offset
@@ -661,7 +662,7 @@ void CellToolBase::populateWordCollection()
       if(val.isString()) {
           QString value = val.asString();
 	if(!d->wordCollection.values(j).contains(value)){
-	    d->wordCollection.insertMulti(j, value);
+	    d->wordCollection.insert(j, value);
 	  }
       }	 
     }

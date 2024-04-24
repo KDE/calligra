@@ -59,7 +59,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     QWidget* leftWidget = new QWidget(splitter);
     splitter->addWidget(leftWidget);
     QVBoxLayout *leftLayout = new QVBoxLayout(leftWidget);
-    leftLayout->setMargin(0);
+    leftLayout->setContentsMargins({});
 
     QVBoxLayout *vboxLayout = new QVBoxLayout();
 

@@ -42,7 +42,7 @@ Inspector::~Inspector()
 
 QAction *Inspector::createAction() {
     QAction *res = CellAction::createAction();
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I));
     return res;
 }
 
@@ -125,7 +125,7 @@ void InspectorDialog::Private::handleCell()
     new QTreeWidgetItem(cellView, QStringList() << "Text (Displayed)" <<
                         cell.displayText().replace(QChar('\n'), "\\n"));
 
-    QTextStream ts(&str, QIODevice::WriteOnly);
+    QTextStream ts(&str, QIODeviceBase::WriteOnly);
     ts << cell.value();
     new QTreeWidgetItem(cellView, QStringList() << "Value" << str);
 

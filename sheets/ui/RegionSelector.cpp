@@ -64,7 +64,7 @@ RegionSelector::RegionSelector(QWidget* parent)
     d->textEdit->setTabChangesFocus(true);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     layout->setSpacing(2);
     layout->addWidget(d->textEdit);
     layout->addWidget(d->button);
@@ -138,7 +138,7 @@ void RegionSelector::switchDisplayMode(bool state)
         d->dialog = new KoDialog(d->parentDialog->parentWidget(), Qt::Tool);
         d->dialog->resize(d->parentDialog->width(), 20);
         d->dialog->move(d->parentDialog->pos());
-        d->dialog->setButtons(0);
+        d->dialog->setButtons({});
         d->dialog->setModal(false);
 
         if (d->selectionMode == SingleCell) {
@@ -149,7 +149,7 @@ void RegionSelector::switchDisplayMode(bool state)
 
         QWidget* widget = new QWidget(d->dialog);
         QHBoxLayout* layout = new QHBoxLayout(widget);
-        layout->setMargin(0);
+        layout->setContentsMargins({});
         layout->setSpacing(0);
         layout->addWidget(d->textEdit);
         layout->addWidget(d->button);

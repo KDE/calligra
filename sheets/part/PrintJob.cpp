@@ -180,7 +180,7 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     const qreal ascent = fontMetrics.ascent();
 
     // print head line left
-    textWidth = fontMetrics.width(headLeft);
+    textWidth = fontMetrics.boundingRect(headLeft).width();
     if (textWidth > 0) {
         painter.drawText(leftMarginDistance,
                          headFootDistance + ascent,
@@ -188,7 +188,7 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     }
 
     // print head line middle
-    textWidth = fontMetrics.width(headMid);
+    textWidth = fontMetrics.boundingRect(headMid).width();
     if (textWidth > 0) {
         painter.drawText((pageLayout.width - textWidth) / 2.0,
                          headFootDistance + ascent,
@@ -196,7 +196,7 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     }
 
     // print head line right
-    textWidth = fontMetrics.width(headRight);
+    textWidth = fontMetrics.boundingRect(headRight).width();
     if (textWidth > 0) {
         painter.drawText(pageLayout.width - textWidth - leftMarginDistance,
                          headFootDistance + ascent,
@@ -204,7 +204,7 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     }
 
     // print foot line left
-    textWidth = fontMetrics.width(footLeft);
+    textWidth = fontMetrics.boundingRect(footLeft).width();
     if (textWidth > 0) {
         painter.drawText(leftMarginDistance,
                          pageLayout.height - headFootDistance,
@@ -212,7 +212,7 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     }
 
     // print foot line middle
-    textWidth = fontMetrics.width(footMid);
+    textWidth = fontMetrics.boundingRect(footMid).width();
     if (textWidth > 0) {
         painter.drawText((pageLayout.width - textWidth) / 2.0,
                          pageLayout.height - headFootDistance,
@@ -220,7 +220,7 @@ void PrintJob::Private::printHeaderFooter(QPainter &painter, Sheet *sheet, int p
     }
 
     // print foot line right
-    textWidth = fontMetrics.width(footRight);
+    textWidth = fontMetrics.boundingRect(footRight).width();
     if (textWidth > 0) {
         painter.drawText(pageLayout.width - textWidth - leftMarginDistance,
                          pageLayout.height - headFootDistance,
@@ -248,14 +248,14 @@ PrintJob::PrintJob(View *view)
     const PrintSettings* settings = sheet->printSettings();
     const KoPageLayout pageLayout = settings->pageLayout();
     const KoPageFormat::Format pageFormat = pageLayout.format;
-    printer().setPaperSize(static_cast<QPrinter::PageSize>(KoPageFormat::printerPageSize(pageFormat)));
+    printer().setPageSize(KoPageFormat::printerPageSize(pageFormat));
     if (pageLayout.orientation == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize)
-        printer().setOrientation(QPrinter::Landscape);
+        printer().pageLayout().setOrientation(QPageLayout::Landscape);
     else
-        printer().setOrientation(QPrinter::Portrait);
-    printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin,
-                             pageLayout.rightMargin, pageLayout.bottomMargin,
-                             QPrinter::Point);
+        printer().pageLayout().setOrientation(QPageLayout::Portrait);
+    printer().setPageMargins({pageLayout.leftMargin, pageLayout.topMargin,
+                             pageLayout.rightMargin, pageLayout.bottomMargin},
+                             QPageLayout::Point);
     printer().setFullPage(true);
 
     //debugSheetsUI <<"Iterating through available sheets and initializing list of available sheets.";
@@ -416,7 +416,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
 
     if (settings->printHeaders()) {
         painter.save();
-        painter.resetMatrix();
+        painter.resetTransform();
         painter.scale(scale, scale); // no zooming; just resolution
         painter.setClipping(false);
         d->printHeaderFooter(painter, sheet, pageNumber);

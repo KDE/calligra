@@ -205,7 +205,7 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
 #endif
             }
         } else if (valuetype == sDate) {
-            QString value = element.attributeNS(KoXmlNS::office, sDateValue, QString());
+            QStringView value = element.attributeNS(KoXmlNS::office, sDateValue, QString());
             // "1980-10-15" or "2001-01-01T19:27:41.123456"
             int year = 0, month = 0, day = 0, hours = 0, minutes = 0;
             Number seconds = 0.0; // seconds may have fractions
@@ -214,29 +214,29 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
 
             int p1 = value.indexOf('-');
             if (p1 > 0) {
-                year  = value.leftRef(p1).toInt(&ok);
+                year  = value.left(p1).toInt(&ok);
                 if (ok) {
                     int p2 = value.indexOf('-', ++p1);
-                    month = value.midRef(p1, p2 - p1).toInt(&ok);
+                    month = value.mid(p1, p2 - p1).toInt(&ok);
                     if (ok) {
                         // the date can optionally have a time attached
                         int p3 = value.indexOf('T', ++p2);
                         if (p3 > 0) {
                             hasTime = true;
-                            day = value.midRef(p2, p3 - p2).toInt(&ok);
+                            day = value.mid(p2, p3 - p2).toInt(&ok);
                             if (ok) {
                                 int p4 = value.indexOf(':', ++p3);
-                                hours = value.midRef(p3, p4 - p3).toInt(&ok);
+                                hours = value.mid(p3, p4 - p3).toInt(&ok);
                                 if (ok) {
                                     int p5 = value.indexOf(':', ++p4);
-                                    minutes = value.midRef(p4, p5 - p4).toInt(&ok);
+                                    minutes = value.mid(p4, p5 - p4).toInt(&ok);
                                     if (ok) {
-                                        seconds = value.rightRef(value.length() - p5 - 1).toDouble(&ok);
+                                        seconds = value.right(value.length() - p5 - 1).toDouble(&ok);
                                     }
                                 }
                             }
                         } else {
-                            day = value.rightRef(value.length() - p2).toInt(&ok);
+                            day = value.right(value.length() - p2).toInt(&ok);
                         }
                     }
                 }
@@ -602,7 +602,7 @@ QString Odf::loadCellTextNodes(Cell *cell, const KoXmlElement& element, int *tex
                 const bool isTextNs = e.namespaceURI() == KoXmlNS::text;
                 if (isTextNs && e.localName() == "s") {
                     const int howmany = qMax(1, e.attributeNS(KoXmlNS::text, "c", QString()).toInt());
-                    cellText += QString().fill(32, howmany);
+                    cellText += QString().fill(u' ', howmany);
                 } else if (isTextNs && e.localName() == "tab") {
                     cellText += '\t';
                 } else if (isTextNs && e.localName() == "line-break") {
@@ -1071,28 +1071,29 @@ QString Odf::decodeFormula(const QString& expression_, const Localization *local
             else if (Formula::isIdentifier(*data)) {
                 // beginning with alphanumeric ?
                 // could be identifier, cell, range, or function...
+                QStringView view(expression);
                 state = InIdentifier;
                 int i = data - start;
                 const static QString errorTypeReplacement("ERRORTYPE");
                 const static QString legacyNormsdistReplacement("LEGACYNORMSDIST");
                 const static QString legacyNormsinvReplacement("LEGACYNORMSINV");
                 const static QString multipleOperations("MULTIPLE.OPERATIONS");
-                if (expression.midRef(i,10).compare(QLatin1String("ERROR.TYPE")) == 0) {
+                if (view.mid(i,10).compare(QLatin1String("ERROR.TYPE")) == 0) {
                     // replace it
                     int outPos = out - outStart;
                     result.replace(outPos, 9, errorTypeReplacement);
                     data += 10; // number of characters in "ERROR.TYPE"
                     out += 9;
                 }
-                else if (expression.midRef(i, 12).compare(QLatin1String("LEGACY.NORMS")) == 0) {
-                    if (expression.midRef(i + 12, 4).compare(QLatin1String("DIST")) == 0) {
+                else if (view.mid(i, 12).compare(QLatin1String("LEGACY.NORMS")) == 0) {
+                    if (view.mid(i + 12, 4).compare(QLatin1String("DIST")) == 0) {
                         // replace it
                         int outPos = out - outStart;
                         result.replace(outPos, 15, legacyNormsdistReplacement);
                         data += 16; // number of characters in "LEGACY.NORMSDIST"
                         out += 15;
                     }
-                    else if (expression.midRef(i + 12, 3).compare(QLatin1String("INV")) == 0) {
+                    else if (view.mid(i + 12, 3).compare(QLatin1String("INV")) == 0) {
                         // replace it
                         int outPos = out - outStart;
                         result.replace(outPos, 14, legacyNormsinvReplacement);
@@ -1100,13 +1101,13 @@ QString Odf::decodeFormula(const QString& expression_, const Localization *local
                         out += 14;
                     }
                 }
-                else if (namespacePrefix == "oooc:" && expression.midRef(i, 5).compare(QLatin1String("TABLE")) == 0 && !Formula::isIdentifier(expression[i+5])) {
+                else if (namespacePrefix == "oooc:" && view.mid(i, 5).compare(QLatin1String("TABLE")) == 0 && !Formula::isIdentifier(expression[i+5])) {
                     int outPos = out - outStart;
                     result.replace(outPos, 19, multipleOperations);
                     data += 5;
                     out += 19;
                 }
-                else if (expression.midRef(i, 3).compare(QLatin1String("NEG")) == 0) {
+                else if (view.mid(i, 3).compare(QLatin1String("NEG")) == 0) {
                     *out = QChar('-', 0);
                     data += 3;
                     ++out;
@@ -1231,7 +1232,7 @@ QString Odf::encodeFormula(const QString& expr, const Localization* locale)
             result.append('[');
             // FIXME Stefan: Hack to get the apostrophes right. Fix and remove!
             const int pos = tokenText.lastIndexOf('!');
-            if (pos != -1 && tokenText.leftRef(pos).contains(' '))
+            if (pos != -1 && QStringView{tokenText}.left(pos).contains(' '))
                 result.append(Odf::saveRegion('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
             else
                 result.append(Odf::saveRegion(tokenText));
@@ -1412,12 +1413,13 @@ QString Odf::convertMSOOXMLFormula(const QString& formula)
                     // such whole column-definitions are only allowed for ranges like
                     // "A:B" but not for single column definitions like "A" or "B".
                     const QString ref = result.mid(qMax(0, cellReferenceStart - 1), i - cellReferenceStart + 2);
-                    QRegExp rxStart(".*(|\\$)[A-Za-z]+\\:");
-                    QRegExp rxEnd("\\:(|\\$)[A-Za-z]+(|(|\\$)[0-9]+).*");
-                    if (rxEnd.exactMatch(ref) && rxEnd.cap(2).isEmpty()) {
+                    QRegularExpression rxStart(".*(|\\$)[A-Za-z]+\\:");
+                    QRegularExpression rxEnd("\\:(|\\$)[A-Za-z]+(|(|\\$)[0-9]+).*");
+                    QRegularExpressionMatch match = rxEnd.match(ref);
+                    if (match.hasMatch() && match.captured(2).isEmpty()) {
                         result.insert(i, "$65536");
                         i += 6;
-                    } else if (rxStart.exactMatch(ref)) {
+                    } else if (rxStart.match(ref).hasMatch()) {
                         result.insert(i, "$1");
                         i += 2;
                     }

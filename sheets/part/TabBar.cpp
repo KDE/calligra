@@ -250,7 +250,7 @@ void TabBarPrivate::drawTab(QPainter& painter, QRect& rect, const QString& text,
     painter.save();
 
     // fill it first
-    QBrush bg = tabbar->palette().background();
+    QBrush bg = tabbar->palette().window();
     if (active)
         bg = tabbar->palette().base();
     painter.setBrush(bg);
@@ -806,7 +806,7 @@ void TabBar::wheelEvent(QWheelEvent * e)
     // The delta required to move one tab is one wheel movement:
     const int deltaRequired = 120;
 
-    d->wheelDelta += e->delta();
+    d->wheelDelta += e->angleDelta().y();
     int tabDelta = - (d->wheelDelta / deltaRequired);
     d->wheelDelta = d->wheelDelta % deltaRequired;
     int numTabs = d->tabs.size();

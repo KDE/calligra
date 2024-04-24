@@ -269,9 +269,9 @@ void SheetView::invalidateRegion(const Region& region)
     }
     // reduce to the cached area
     qregion &= d->cachedArea;
-    QVector<QRect> rects = qregion.rects();
-    for (int i = 0; i < rects.count(); ++i)
-        invalidateRange(rects[i]);
+    for (const auto rect : std::as_const(qregion)) {
+        invalidateRange(rect);
+    }
 }
 
 void SheetView::invalidate()
@@ -533,7 +533,7 @@ void SheetView::invalidateRange(const QRect& range)
     }
     d->cachedArea -= range;
     obscuredRegion &= d->cachedArea;
-    foreach (const QRect& rect, obscuredRegion.rects()) {
+    for (const QRect& rect : std::as_const(obscuredRegion)) {
         invalidateRange(rect);
     }
 }

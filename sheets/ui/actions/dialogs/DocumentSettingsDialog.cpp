@@ -103,7 +103,7 @@ calcSettings::calcSettings(MapBase *map, KoVBox *box)
     m_automaticFindLabelsCheckbox->setChecked(m_cs->automaticFindLabels());
 
     QHBoxLayout *matchModeLayout = new QHBoxLayout();
-    matchModeLayout->setMargin(0);
+    matchModeLayout->setContentsMargins({});
     box->layout()->addItem(matchModeLayout);
     QLabel *matchModeLabel = new QLabel(i18n("String comparison:"), box);
     matchModeLayout->addWidget(matchModeLabel);
@@ -115,7 +115,7 @@ calcSettings::calcSettings(MapBase *map, KoVBox *box)
     m_matchModeCombobox->setCurrentIndex(m_cs->useWildcards() ? 1 : m_cs->useRegularExpressions() ? 2 : 0 );
 
     QHBoxLayout *m_nullYearLayout = new QHBoxLayout();
-    m_nullYearLayout->setMargin(0);
+    m_nullYearLayout->setContentsMargins({});
     box->layout()->addItem(m_nullYearLayout);
     QLabel *m_nullYearLabel = new QLabel(i18n("Null Year:"), box);
     m_nullYearLayout->addWidget(m_nullYearLabel);

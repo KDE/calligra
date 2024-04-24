@@ -32,7 +32,7 @@ ShowTableView::~ShowTableView()
 
 QAction *ShowTableView::createAction() {
     QAction *res = CellAction::createAction();
-    res->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
+    res->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T));
     return res;
 }
 

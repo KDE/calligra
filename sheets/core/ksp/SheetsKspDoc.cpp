@@ -19,7 +19,6 @@
 #include <KoUpdater.h>
 #include <KoXmlReader.h>
 
-#include <kcodecs.h>
 #include <kmessagebox.h>
 
 namespace Calligra {
@@ -159,7 +158,7 @@ void Ksp::loadProtection(ProtectableObject *prot, const KoXmlElement& element)
     if (element.hasAttribute("protected")) {
         const QString passwd = element.attribute("protected");
         QByteArray str(passwd.toUtf8());
-        prot->setProtected (KCodecs::base64Decode(str));
+        prot->setProtected (QByteArray::fromBase64(str));
     }
 }
 

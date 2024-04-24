@@ -21,7 +21,6 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
-#include <kcodecs.h>
 
 #include <KoDocumentInfo.h>
 #include <KoGenStyles.h>
@@ -998,7 +997,7 @@ bool Odf::saveSheet(Sheet *sheet, OdfSavingContext& tableContext)
     QByteArray pwd = sheet->passwordHash();
     if (!pwd.isNull()) {
         xmlWriter.addAttribute("table:protected", "true");
-        QByteArray str = KCodecs::base64Encode(pwd);
+        QByteArray str = pwd.toBase64();
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString(str));
     }

@@ -19,6 +19,8 @@
 
 #include <kxmlguiclient.h>
 
+#include <QActionGroup>
+
 using namespace Calligra::Sheets;
 
 class MapViewModel::Private

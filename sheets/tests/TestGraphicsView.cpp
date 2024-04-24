@@ -49,7 +49,7 @@ int main(int argc, char** argv)
     columnHeader->setPos(0, -columnHeader->height());
 
     Calligra::Sheets::RowHeaderItem* rowHeader = static_cast<Calligra::Sheets::RowHeaderItem*>(canvas->rowHeader());
-    static_cast<QGraphicsWidget*>(rowHeader)->resize(fm.width(QString::fromLatin1("99999")) + 3, size.height());
+    static_cast<QGraphicsWidget*>(rowHeader)->resize(fm.boundingRect(QString::fromLatin1("99999")).width() + 3, size.height());
     rowHeader->setPos(-rowHeader->width(), 0);
 
     columnHeader->toolChanged("PanTool");

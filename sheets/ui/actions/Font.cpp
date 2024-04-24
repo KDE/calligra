@@ -40,7 +40,7 @@ QAction *Font::createAction() {
     m_fontAction = new KFontAction(m_caption, m_actions->tool());
     m_fontAction->setToolTip(m_tooltip);
     m_fontAction->setIconText(i18n("Font"));
-    connect(m_fontAction, QOverload<const QString &>::of(&KFontAction::triggered), this, &Font::triggeredFont);
+    connect(m_fontAction, &KFontAction::textTriggered, this, &Font::triggeredFont);
     return m_fontAction;
 }
 

@@ -39,10 +39,9 @@ Factory::~Factory()
     s_global = 0;
 }
 
-QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args)
 {
     Q_UNUSED(args);
-    Q_UNUSED(keyword);
     Part *part = new Part(parent);
     Doc *doc = new Doc(part);
     part->setDocument(doc);

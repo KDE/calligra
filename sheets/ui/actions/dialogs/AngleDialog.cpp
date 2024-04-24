@@ -29,7 +29,7 @@ AngleDialog::AngleDialog(QWidget* parent, int angle)
     setMainWidget(page);
 
     QVBoxLayout *lay = new QVBoxLayout(page);
-    lay->setMargin(0);
+    lay->setContentsMargins({});
     QLabel *label = new QLabel(i18n("Angle:"), page);
     lay->addWidget(label);
 

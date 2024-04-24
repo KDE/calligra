@@ -7,7 +7,6 @@
 #ifndef CALLIGRA_SHEETS_CONDITION_H
 #define CALLIGRA_SHEETS_CONDITION_H
 
-#include <QLinkedList>
 #include <QSharedData>
 #include <QVariant>
 
@@ -90,12 +89,12 @@ public:
     /**
      * Retrieve the current list of conditions we're checking
      */
-    QLinkedList<Conditional> conditionList() const;
+    QList<Conditional> conditionList() const;
 
     /**
      * Replace the current list of conditions with this new one
      */
-    void setConditionList(const QLinkedList<Conditional> & list);
+    void setConditionList(const QList<Conditional> & list);
 
     /**
       * Add a new condition.

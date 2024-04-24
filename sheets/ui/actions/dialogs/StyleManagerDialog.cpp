@@ -35,7 +35,7 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
     setMainWidget(widget);
 
     QHBoxLayout *hboxLayout = new QHBoxLayout(widget);
-    hboxLayout->setMargin(0);
+    hboxLayout->setContentsMargins({});
 
     QVBoxLayout* layout = new QVBoxLayout();
 

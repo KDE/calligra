@@ -52,7 +52,7 @@ void SetCondition::onSelectionChanged()
     QStringList styles(map->styleManager()->styleNames());
     dlg->setStyleNames(styles);
 
-    QLinkedList<Conditional> conditionList = activeCell().conditions().conditionList();
+    QList<Conditional> conditionList = activeCell().conditions().conditionList();
 
     dlg->clear();
     ValueConverter *converter = map->converter();
@@ -71,7 +71,7 @@ void SetCondition::applyCondition()
     Map *map = m_selection->activeSheet()->fullMap();
 
     ValueParser *parser = map->parser();
-    QLinkedList<Conditional> newList;
+    QList<Conditional> newList;
     int id = 1;
     while (dlg->getType(id) != Validity::None) {
         Conditional newCondition;
@@ -112,7 +112,7 @@ void ClearCondition::execute(Selection *selection, Sheet *sheet, QWidget *)
 {
     ConditionCommand* manipulator = new ConditionCommand();
     manipulator->setSheet(sheet);
-    manipulator->setConditionList(QLinkedList<Conditional>());
+    manipulator->setConditionList({});
     manipulator->add(*selection);
     manipulator->execute(selection->canvas());
 }
@@ -130,7 +130,7 @@ bool ConditionCommand::process(Element* element)
     return true;
 }
 
-void ConditionCommand::setConditionList(const QLinkedList<Conditional>& list)
+void ConditionCommand::setConditionList(const QList<Conditional>& list)
 {
     m_conditions.setConditionList(list);
     if (m_conditions.isEmpty())

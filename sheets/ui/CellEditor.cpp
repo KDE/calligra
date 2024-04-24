@@ -39,7 +39,7 @@ public:
     FormulaEditorHighlighter* highlighter;
     FunctionCompletion*       functionCompletion;
     QTimer*                   functionCompletionTimer;
-    QHash<int, QString>       *wordCollection;
+    QMultiHash<int, QString>       *wordCollection;
     QPoint globalCursorPos;
     QCompleter                *complete;
     bool captureAllKeyEvents : 1;
@@ -214,7 +214,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
 }
 
 
-CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWidget* parent)
+CellEditor::CellEditor(CellToolBase *cellTool,QMultiHash<int,QString> &wordList, QWidget* parent)
         : KTextEdit(parent)
         , d(new Private)
 {
@@ -604,7 +604,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // editor.
 
         if (!textUnderCursor().isEmpty() && !d->wordCollection->values(column).contains(textUnderCursor()))
-            d->wordCollection->insertMulti(column, textUnderCursor());
+            d->wordCollection->insert(column, textUnderCursor());
         event->ignore();
         return;
     case Qt::Key_Return:
@@ -614,7 +614,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
             break; // pass to TextEdit
         }
         if (!textUnderCursor().isEmpty() && !d->wordCollection->values(column).contains(textUnderCursor()))
-            d->wordCollection->insertMulti(column, textUnderCursor());
+            d->wordCollection->insert(column, textUnderCursor());
         event->ignore(); // pass to parent
         return;
     }

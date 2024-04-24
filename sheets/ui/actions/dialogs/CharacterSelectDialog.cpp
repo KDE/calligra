@@ -35,7 +35,7 @@ CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &_fo
     QWidget *page = mainWidget()/*plainPage()*/;
 
     QGridLayout *grid = new QGridLayout(page);
-    grid->setMargin(0);
+    grid->setContentsMargins({});
 
     d->charSelect = new KCharSelect(page, 0);
     d->charSelect->setCurrentChar(QChar(' '));

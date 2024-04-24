@@ -37,7 +37,6 @@
 #include <QToolTip>
 #include <QScrollBar>
 #include <QRubberBand>
-#include <QDesktopWidget>
 #include <QStyle>
 
 // Calligra

@@ -919,7 +919,7 @@ QString Odf::saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& ma
         // no differences and not an automatic style yet?
         if (xmlstyle.isEmpty() &&
                 (keysToStore.count() == 0 ||
-                 (keysToStore.count() == 1 && keysToStore.toList().first() == Style::NamedStyleKey))) {
+                 (keysToStore.count() == 1 && *keysToStore.constBegin() == Style::NamedStyleKey))) {
             return manager->openDocumentName(style->parentName());
         }
     }

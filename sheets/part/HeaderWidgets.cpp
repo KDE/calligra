@@ -35,7 +35,6 @@
 
 // Qt
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QLabel>
 #include <QPainter>
 #include <QRubberBand>
@@ -156,24 +155,25 @@ void RowHeaderWidget::paintSizeIndicator(int mouseY)
     else
         tmpSize = i18n("Hide Row");
 
-    if (!m_lSize) {
-        int screenNo = QApplication::desktop()->screenNumber(this);
-        m_lSize = new QLabel(QApplication::desktop()->screen(screenNo) , Qt::ToolTip);
-        m_lSize->setAlignment(Qt::AlignVCenter);
-        m_lSize->setAutoFillBackground(true);
-        m_lSize->setPalette(QToolTip::palette());
-        m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
-        m_lSize->setFrameShape(QFrame::Box);
-        m_lSize->setIndent(1);
-    }
+    // TODO port to qt6 and wayland
+    // if (!m_lSize) {
+    //     int screenNo = QApplication::desktop()->screenNumber(this);
+    //     m_lSize = new QLabel(QApplication::desktop()->screen(screenNo) , Qt::ToolTip);
+    //     m_lSize->setAlignment(Qt::AlignVCenter);
+    //     m_lSize->setAutoFillBackground(true);
+    //     m_lSize->setPalette(QToolTip::palette());
+    //     m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
+    //     m_lSize->setFrameShape(QFrame::Box);
+    //     m_lSize->setIndent(1);
+    // }
 
-    m_lSize->setText(tmpSize);
-    m_lSize->adjustSize();
-    QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(m_pCanvas->width() - m_lSize->width() - 3, (int)y + 3) :
-                 QPoint(3, (int)y + 3);
-    pos -= QPoint(0, m_lSize->height());
-    m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), m_pCanvas->mapToGlobal(pos).y());
-    m_lSize->show();
+    // m_lSize->setText(tmpSize);
+    // m_lSize->adjustSize();
+    // QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(m_pCanvas->width() - m_lSize->width() - 3, (int)y + 3) :
+    //              QPoint(3, (int)y + 3);
+    // pos -= QPoint(0, m_lSize->height());
+    // m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), m_pCanvas->mapToGlobal(pos).y());
+    // m_lSize->show();
 }
 
 void RowHeaderWidget::removeSizeIndicator()
@@ -326,24 +326,24 @@ void ColumnHeaderWidget::paintSizeIndicator(int mouseX)
     else
         tmpSize = i18n("Hide Column");
 
-    if (!m_lSize) {
-        int screenNo = QApplication::desktop()->screenNumber(this);
-        m_lSize = new QLabel(QApplication::desktop()->screen(screenNo) , Qt::ToolTip);
-        m_lSize->setAlignment(Qt::AlignVCenter);
-        m_lSize->setAutoFillBackground(true);
-        m_lSize->setPalette(QToolTip::palette());
-        m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
-        m_lSize->setFrameShape(QFrame::Box);
-        m_lSize->setIndent(1);
-    }
+    // if (!m_lSize) {
+    //     int screenNo = QApplication::desktop()->screenNumber(this);
+    //     m_lSize = new QLabel(QApplication::desktop()->screen(screenNo) , Qt::ToolTip);
+    //     m_lSize->setAlignment(Qt::AlignVCenter);
+    //     m_lSize->setAutoFillBackground(true);
+    //     m_lSize->setPalette(QToolTip::palette());
+    //     m_lSize->setMargin(1 + style()->pixelMetric(QStyle::PM_ToolTipLabelFrameWidth, 0, m_lSize));
+    //     m_lSize->setFrameShape(QFrame::Box);
+    //     m_lSize->setIndent(1);
+    // }
 
-    m_lSize->setText(tmpSize);
-    m_lSize->adjustSize();
-    QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint((int) x - 3 - m_lSize->width(), 3) :
-                 QPoint((int) x + 3, 3);
-    pos -= QPoint(0, m_lSize->height());
-    m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), mapToGlobal(pos).y());
-    m_lSize->show();
+    // m_lSize->setText(tmpSize);
+    // m_lSize->adjustSize();
+    // QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint((int) x - 3 - m_lSize->width(), 3) :
+    //              QPoint((int) x + 3, 3);
+    // pos -= QPoint(0, m_lSize->height());
+    // m_lSize->move(m_pCanvas->mapToGlobal(pos).x(), mapToGlobal(pos).y());
+    // m_lSize->show();
 }
 
 void ColumnHeaderWidget::removeSizeIndicator()

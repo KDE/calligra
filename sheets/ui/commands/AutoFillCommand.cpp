@@ -22,6 +22,8 @@
 #include "core/Map.h"
 #include "core/Sheet.h"
 
+#include <QRegularExpression>
+
 using namespace Calligra::Sheets;
 
 QStringList *AutoFillCommand::month = nullptr;
@@ -639,10 +641,11 @@ static void fillSequence(const QList<Cell>& _srcList,
                    value.type() == Value::Integer) {
             cell.setCellValue(value);
         } else { // if (value.type() == Value::String)
-            QRegExp number("(\\d+)");
-            int pos = number.indexIn(value.asString());
+            QRegularExpression number("(\\d+)");
+            QRegularExpressionMatch match;
+            int pos = value.asString().indexOf(number, 0, &match);
             if (pos != -1) {
-                const int num = number.cap(1).toInt() + 1;
+                const int num = match.captured(1).toInt() + 1;
                 cell.parseUserInput(value.asString().replace(number, QString::number(num)));
             } else if (!_srcList.at(s).link().isEmpty()) {
                 cell.parseUserInput(value.asString());

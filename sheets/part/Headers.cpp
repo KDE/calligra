@@ -86,7 +86,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
         m_pCanvas->enableAutoScroll();
     }
 
-    double ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->pos().y()) + m_pCanvas->yOffset();
+    double ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->position().y()) + m_pCanvas->yOffset();
     double dHeight = m_pCanvas->zoomHandler()->unzoomItY(height());
     m_bResize = false;
     m_bSelection = false;
@@ -124,7 +124,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
         qreal tmp;
         m_iResizedRow = sheet->topRow(ev_PosY - 1, tmp);
         if (!sheet->isProtected())
-            paintSizeIndicator(_ev->pos().y());
+            paintSizeIndicator(_ev->position().y());
     } else {
         if (_ev->button() != Qt::RightButton) {
             m_bSelection = true;
@@ -172,7 +172,7 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
     if (!sheet)
         return;
 
-    double ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->pos().y()) + m_pCanvas->yOffset();
+    double ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->position().y()) + m_pCanvas->yOffset();
 
     if (m_bResize) {
         // Remove size indicator painted by paintSizeIndicator
@@ -297,13 +297,13 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
     if (!sheet)
         return;
 
-    qreal ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->pos().y()) + m_pCanvas->yOffset();
+    qreal ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->position().y()) + m_pCanvas->yOffset();
     qreal dHeight = m_pCanvas->zoomHandler()->unzoomItY(height());
 
     // The button is pressed and we are resizing ?
     if (m_bResize) {
         if (!sheet->isProtected())
-            paintSizeIndicator(_ev->pos().y());
+            paintSizeIndicator(_ev->position().y());
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
@@ -316,9 +316,9 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
         newCursor.setY(row);
         m_pCanvas->selection()->update(newCursor);
 
-        if (_ev->pos().y() < 0)
+        if (_ev->position().y() < 0)
             m_pCanvas->setVertScrollBarPos(qMax<qreal>(0, ev_PosY));
-        else if (_ev->pos().y() > m_pCanvas->height()) {
+        else if (_ev->position().y() > m_pCanvas->height()) {
             if (row < KS_rowMax) {
                 const qreal rowHeight = sheet->rowFormats()->rowHeight(row + 1);
                 y = sheet->rowPosition(row + 1);
@@ -530,9 +530,9 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
     double ev_PosX;
     double dWidth = m_pCanvas->zoomHandler()->unzoomItX(width());
     if (sheet->layoutDirection() == Qt::RightToLeft)
-        ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+        ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->position().x()) + m_pCanvas->xOffset();
     else
-        ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+        ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->position().x()) + m_pCanvas->xOffset();
     m_bResize = false;
     m_bSelection = false;
 
@@ -606,12 +606,12 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
             // debugSheets <<"RColumn:" << m_iResizedColumn <<", PosX:" << ev_PosX;
 
             if (!sheet->isProtected())
-                paintSizeIndicator(_ev->pos().x());
+                paintSizeIndicator(_ev->position().x());
         } else {
             m_iResizedColumn = sheet->leftColumn(ev_PosX - 1, tmp);
 
             if (!sheet->isProtected())
-                paintSizeIndicator(_ev->pos().x());
+                paintSizeIndicator(_ev->position().x());
         }
 
         // debugSheets <<"Column:" << m_iResizedColumn;
@@ -681,9 +681,9 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
         double x;
 
         if (sheet->layoutDirection() == Qt::RightToLeft)
-            ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+            ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->position().x()) + m_pCanvas->xOffset();
         else
-            ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+            ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->position().x()) + m_pCanvas->xOffset();
 
         x = sheet->columnPosition(m_iResizedColumn);
 
@@ -797,14 +797,14 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
     double dWidth = m_pCanvas->zoomHandler()->unzoomItX(width());
     double ev_PosX;
     if (sheet->layoutDirection() == Qt::RightToLeft)
-        ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+        ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->position().x()) + m_pCanvas->xOffset();
     else
-        ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+        ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->position().x()) + m_pCanvas->xOffset();
 
     // The button is pressed and we are resizing ?
     if (m_bResize) {
         if (!sheet->isProtected())
-            paintSizeIndicator(_ev->pos().x());
+            paintSizeIndicator(_ev->position().x());
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
@@ -819,16 +819,16 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
         m_pCanvas->selection()->update(newCursor);
 
         if (sheet->layoutDirection() == Qt::RightToLeft) {
-            if (_ev->pos().x() < width() - m_pCanvas->width()) {
+            if (_ev->position().x() < width() - m_pCanvas->width()) {
                 double w = sheet->columnFormats()->colWidth(col + 1);
                 x = sheet->columnPosition(col + 1);
                 m_pCanvas->setHorizScrollBarPos(- (int)((ev_PosX + w) - dWidth));
-            } else if (_ev->pos().x() > width())
+            } else if (_ev->position().x() > width())
                 m_pCanvas->setHorizScrollBarPos(- (ev_PosX - dWidth + m_pCanvas->zoomHandler()->unzoomItX(m_pCanvas->width())));
         } else {
-            if (_ev->pos().x() < 0)
+            if (_ev->position().x() < 0)
                 m_pCanvas->setHorizScrollBarPos(ev_PosX);
-            else if (_ev->pos().x() > m_pCanvas->width()) {
+            else if (_ev->position().x() > m_pCanvas->width()) {
                 if (col < KS_colMax) {
                     double w = sheet->columnFormats()->colWidth(col + 1);
                     x = sheet->columnPosition(col + 1);
@@ -1026,7 +1026,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
             fm = QFontMetricsF(font);
         }
 #endif
-        if (width >= fm.width(colText)) {
+        if (width >= fm.boundingRect(colText).width()) {
 #if 0
             switch (x % 3) {
             case 0: colText = QString::number(height) + 'h'; break;

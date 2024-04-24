@@ -49,7 +49,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const CellBase & cell, c
             parent, &FilterPopup::buttonClicked);
 
     QVBoxLayout* layout = new QVBoxLayout(parent);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
     layout->setSpacing(0);
 
     allCheckbox = new QCheckBox(i18n("All"), parent);
@@ -82,7 +82,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const CellBase & cell, c
 
     QWidget* scrollWidget = new QWidget(parent);
     QVBoxLayout* scrollLayout = new QVBoxLayout(scrollWidget);
-    scrollLayout->setMargin(0);
+    scrollLayout->setContentsMargins({});
     scrollLayout->setSpacing(0);
 
     const int fieldNumber = j - (isRowFilter ? range.left() : range.top());

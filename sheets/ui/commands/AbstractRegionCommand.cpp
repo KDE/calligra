@@ -11,7 +11,6 @@
 #include <QApplication>
 
 #include <KLocalizedString>
-#include <KPassivePopup>
 
 #include <KoCanvasBase.h>
 
@@ -169,9 +168,10 @@ bool AbstractRegionCommand::isApproved() const
 
     const QList<Element *> elements = cells();
     if (m_checkLock && m_sheet->fullCellStorage()->hasLockedCells(*this)) {
-        KPassivePopup::message(i18n("Processing is not possible, because some "
-                                    "cells are locked as elements of a matrix."),
-                               QApplication::activeWindow());
+        // TODO Port kf6
+        //KPassivePopup::message(i18n("Processing is not possible, because some "
+        //                            "cells are locked as elements of a matrix."),
+        //                       QApplication::activeWindow());
         return false;
     }
     if (m_sheet->isProtected()) {
@@ -182,9 +182,10 @@ bool AbstractRegionCommand::isApproved() const
                 for (int row = range.top(); row <= range.bottom(); ++row) {
                     Cell cell(m_sheet, col, row);
                     if (!cell.style().notProtected()) {
-                        KPassivePopup::message(i18n("Processing is not possible, "
-                                                    "because some cells are protected."),
-                                               QApplication::activeWindow());
+                        // TODO Port kf6
+                        //KPassivePopup::message(i18n("Processing is not possible, "
+                        //                            "because some cells are protected."),
+                        //                       QApplication::activeWindow());
                         return false;
                     }
                 }

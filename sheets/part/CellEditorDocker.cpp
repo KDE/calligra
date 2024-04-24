@@ -113,7 +113,7 @@ void CellEditorDocker::unsetCanvas()
 
 void CellEditorDocker::resizeEvent(QResizeEvent *event)
 {
-    const int margin = 2 * d->layout->margin();
+    const int margin = d->layout->contentsMargins().left() + d->layout->contentsMargins().right();
     const int newWidth = event->size().width();
     const int minWidth = d->layout->minimumSize().width();
     // The triggering width is the same in both cases, but it is calculated in

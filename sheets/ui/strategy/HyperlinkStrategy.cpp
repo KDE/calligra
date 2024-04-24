@@ -17,7 +17,6 @@
 
 #include <KLocalizedString>
 #include <kmessagebox.h>
-#include <krun.h>
 
 #include <QMimeDatabase>
 
@@ -78,20 +77,20 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     } else {
         const QString type = QMimeDatabase().mimeTypeForUrl(url).name();
         if (!Util::localReferenceAnchor(d->url)) {
-            const bool executable = KRun::isExecutableFile(url, type);
-            if (executable) {
-                const QString question = i18n("This link points to the program or script '%1'.\n"
-                                              "Malicious programs can harm your computer. "
-                                              "Are you sure that you want to run this program?", d->url);
-                // this will also start local programs, so adding a "don't warn again"
-                // checkbox will probably be too dangerous
-                const int answer = KMessageBox::warningTwoActions(tool()->canvas()->canvasWidget(), question,
-                                   i18n("Open Link?"), KStandardGuiItem::open(), KStandardGuiItem::cancel());
-                if (answer != KMessageBox::PrimaryAction) {
-                    return;
-                }
-            }
-            new KRun(url, tool()->canvas()->canvasWidget(), 0);
+            //const bool executable = KRun::isExecutableFile(url, type);
+            //if (executable) {
+            //    const QString question = i18n("This link points to the program or script '%1'.\n"
+            //                                  "Malicious programs can harm your computer. "
+            //                                  "Are you sure that you want to run this program?", d->url);
+            //    // this will also start local programs, so adding a "don't warn again"
+            //    // checkbox will probably be too dangerous
+            //    const int answer = KMessageBox::warningTwoActions(tool()->canvas()->canvasWidget(), question,
+            //                       i18n("Open Link?"), KStandardGuiItem::open(), KStandardGuiItem::cancel());
+            //    if (answer != KMessageBox::PrimaryAction) {
+            //        return;
+            //    }
+            //}
+            //new KRun(url, tool()->canvas()->canvasWidget(), 0);
         }
     }
 

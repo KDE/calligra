@@ -1546,7 +1546,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         Localization* locale = cell.sheet()->map()->calculationSettings()->locale();
 
         // Estimate worst case length to reduce the number of iterations.
-        int start = qRound((len - 4.0 - 1.0 - tmpIndent) / fm.width('.'));
+        int start = qRound((len - 4.0 - 1.0 - tmpIndent) / fm.boundingRect('.').width());
         start = qMin(d->displayText.length(), start);
         int idxOfDecimal = d->displayText.indexOf(locale->decimalSymbol());
         if (idxOfDecimal < 0) idxOfDecimal = d->displayText.length();
@@ -1584,14 +1584,14 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
             }
 
             // 4 equal length of red triangle +1 point.
-            if (fm.width(tmp) + tmpIndent < len - 4.0 - 1.0) {
+            if (fm.boundingRect(tmp).width() + tmpIndent < len - 4.0 - 1.0) {
                 if (style().angle() != 0) {
                     QString tmp2;
                     const qreal rowHeight = cell.fullSheet()->rowFormats()->rowHeight(cell.row());
                     if (d->textHeight > rowHeight) {
                         for (int j = d->displayText.length(); j != 0; j--) {
                             tmp2 = d->displayText.left(j);
-                            if (fm.width(tmp2) < rowHeight - 1.0) {
+                            if (fm.boundingRect(tmp2).width() < rowHeight - 1.0) {
                                 return d->displayText.left(qMin(tmp.length(), tmp2.length()));
                             }
                         }
@@ -1641,7 +1641,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         tmp = d->displayText.left(i);
 
         // 4 equals length of red triangle +1 pixel
-        if (fm.width(tmp) < d->width - 4.0 - 1.0)
+        if (fm.boundingRect(tmp).width() < d->width - 4.0 - 1.0)
             return tmp;
     }
 
@@ -2095,7 +2095,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
     fittingHeight = true;
     fittingWidth = true;
     for (int i = 0; i < textLines.count(); ++i) {
-        textWidth = qMax(textWidth, fontMetrics.width(textLines[i]));
+        textWidth = qMax(textWidth, fontMetrics.boundingRect(textLines[i]).width());
         QTextLayout textLayout(textLines[i], font);
         textLayout.setTextOption(options);
         textLayout.beginLayout();
@@ -2141,7 +2141,7 @@ void CellView::Private::calculateAngledTextSize(const QFont& font, const QFontMe
     const qreal height = fontMetrics.ascent() + fontMetrics.descent() * lines.count();
     qreal width  = 0;
     foreach (const QString& line, lines) {
-        width = qMax(width, fontMetrics.width(line));
+        width = qMax(width, fontMetrics.boundingRect(line).width());
     }
     textHeight = qAbs(height * ::cos(angle * M_PI / 180)) + qAbs(width * ::sin(angle * M_PI / 180));
     textWidth = qAbs(height * ::sin(angle * M_PI / 180)) + qAbs(width * ::cos(angle * M_PI / 180));
@@ -2198,9 +2198,9 @@ void CellView::Private::truncateHorizontalText(const QFont& font, const QFontMet
             if (height > this->height)
                 break;
             int count = 0;
-            while (count < textLines[i].count() && fontMetrics.width(textLines[i].left(count)) <= this->width)
+            while (count < textLines[i].count() && fontMetrics.boundingRect(textLines[i].left(count)).width() <= this->width)
                 ++count;
-            displayText += textLines[i].leftRef(count);
+            displayText += QStringView{textLines[i]}.left(count);
             height += fontMetrics.height();
             if (height <= this->height)
                 displayText += '\n';

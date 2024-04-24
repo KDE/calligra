@@ -40,8 +40,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
-#include <KCodecs>
-
 // This file contains functionality to load/save a DocBase
 
 // Define the protocol used here for embedded documents' URL
@@ -254,7 +252,7 @@ void Odf::loadProtection(ProtectableObject *prot, const KoXmlElement& element)
 
     QByteArray str(p.toUtf8());
     debugSheetsODF <<"Decoding password:" << str;
-    prot->setProtected(KCodecs::base64Decode(str));
+    prot->setProtected(QByteArray::fromBase64(str));
 }
 
 bool Odf::paste(QBuffer &buffer, Map *map)

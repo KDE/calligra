@@ -38,7 +38,7 @@ LayoutPagePosition::LayoutPagePosition(QWidget* parent, KoUnit unit)
     horizontalGroup->addButton(center);
     horizontalGroup->addButton(right);
     horizontalGroup->addButton(standard);
-    connect(horizontalGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &LayoutPagePosition::slotStateChanged);
+    connect(horizontalGroup, &QButtonGroup::idClicked, this, &LayoutPagePosition::slotStateChanged);
 
     QGridLayout *grid2 = new QGridLayout(indentGroup);
     grid2->addItem(new QSpacerItem(0, indentGroup->fontMetrics().height() / 8), 0, 0);  // groupbox title

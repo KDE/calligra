@@ -57,7 +57,7 @@ bool Conditional::operator==(const Conditional &other) const
 class Q_DECL_HIDDEN Conditions::Private : public QSharedData
 {
 public:
-    QLinkedList<Conditional> conditionList;
+    QList<Conditional> conditionList;
     Style defaultStyle;
 };
 
@@ -99,7 +99,7 @@ bool Conditions::currentCondition(const CellBase& cell, Conditional & condition)
     const Value value = cell.value();
     ValueCalc *const calc = cell.sheet()->map()->calc();
 
-    QLinkedList<Conditional>::const_iterator it;
+    QList<Conditional>::const_iterator it;
     for (it = d->conditionList.begin(); it != d->conditionList.end(); ++it) {
         condition = *it;
 //         debugSheets << "Checking condition resulting in applying" << it->styleName;
@@ -246,12 +246,12 @@ bool Conditions::isTrueFormula(const CellBase &cell, const QString &formula, con
     return calc->conv()->asBoolean(val).asBoolean();
 }
 
-QLinkedList<Conditional> Conditions::conditionList() const
+QList<Conditional> Conditions::conditionList() const
 {
     return d->conditionList;
 }
 
-void Conditions::setConditionList(const QLinkedList<Conditional> & list)
+void Conditions::setConditionList(const QList<Conditional> & list)
 {
     d->conditionList = list;
 }
@@ -283,11 +283,11 @@ bool Conditions::operator==(const Conditions& other) const
         return false;
     if (d->conditionList.count() != other.d->conditionList.count())
         return false;
-    QLinkedList<Conditional>::ConstIterator end(d->conditionList.end());
-    for (QLinkedList<Conditional>::ConstIterator it(d->conditionList.begin()); it != end; ++it) {
+    QList<Conditional>::ConstIterator end(d->conditionList.end());
+    for (QList<Conditional>::ConstIterator it(d->conditionList.begin()); it != end; ++it) {
         bool found = false;
-        QLinkedList<Conditional>::ConstIterator otherEnd(other.d->conditionList.end());
-        for (QLinkedList<Conditional>::ConstIterator otherIt(other.d->conditionList.begin()); otherIt != otherEnd; ++otherIt) {
+        QList<Conditional>::ConstIterator otherEnd(other.d->conditionList.end());
+        for (QList<Conditional>::ConstIterator otherIt(other.d->conditionList.begin()); otherIt != otherEnd; ++otherIt) {
             if ((*it) == (*otherIt))
                 found = true;
         }

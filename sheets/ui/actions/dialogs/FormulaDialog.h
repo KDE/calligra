@@ -18,6 +18,7 @@
 #include "ActionDialog.h"
 
 #include <QModelIndex>
+#include <QStringListModel>
 
 class QCloseEvent;
 class QUrl;

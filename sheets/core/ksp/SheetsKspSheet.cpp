@@ -26,7 +26,6 @@
 #include <KoUnit.h>
 #include <KoXmlReader.h>
 
-#include <kcodecs.h>
 
 
 namespace Calligra {
@@ -358,7 +357,7 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     QByteArray pwd = obj->passwordHash();
     if (!pwd.isNull()) {
         if (pwd.size() > 0) {
-            QByteArray str = KCodecs::base64Encode(pwd);
+            QByteArray str = pwd.toBase64();
             sheet.setAttribute("protected", QString(str.data()));
         } else
             sheet.setAttribute("protected", "");
