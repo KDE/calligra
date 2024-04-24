@@ -30,8 +30,6 @@
 #include "RootSection.h"
 #include "SectionsIO.h"
 
-#include <Calligra2Migration.h>
-
 int main(int argc, char **argv)
 {
     /**
@@ -48,12 +46,6 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("braindump");
-
-    // Migrate data from kde4 to kf5 locations
-    Calligra2Migration m("braindump");
-    m.setConfigFiles(QStringList() << QStringLiteral("braindumprc"));
-    m.setUiFiles(QStringList() << QStringLiteral("braindumpview.rc"));
-    m.migrate();
 
     KAboutData about = newBrainDumpAboutData();
     KAboutData::setApplicationData(about);

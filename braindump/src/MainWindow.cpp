@@ -20,7 +20,6 @@
 #include "MainWindow.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QDockWidget>
 #include <QLayout>
 #include <QTabBar>

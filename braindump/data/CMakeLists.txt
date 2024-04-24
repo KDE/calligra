@@ -6,7 +6,7 @@ add_subdirectory(icons)
 # braindump_extensions.desktop
 
 ### GUI files ###
-install( FILES braindumpui.rc braindumpview.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/braindump)
+install( FILES braindumpui.rc braindumpview.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/braindump)
 
 ### desktop files ###
 install( PROGRAMS org.kde.braindump.desktop DESTINATION ${KDE_INSTALL_APPDIR})
