@@ -142,10 +142,10 @@ public:
     Qt::MouseButtons buttons() const;
 
     /// Return the position screen coordinates
-    QPoint globalPos() const;
+    QPointF globalPosition() const;
 
     /// return the position in widget coordinates
-    QPoint pos() const;
+    QPointF position() const;
 
     /**
      * return the pressure (or a default value). The range is 0.0 - 1.0

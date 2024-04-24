@@ -38,6 +38,7 @@
 
 #include <QColor>
 #include <QPainterPath>
+#include <QLinearGradient>
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)

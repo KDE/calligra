@@ -18,9 +18,9 @@
 
 #include <FlakeDebug.h>
 
-uint qHash(const KoShapeLoadingContext::AdditionalAttributeData & attributeData)
+size_t qHash(const KoShapeLoadingContext::AdditionalAttributeData & attributeData, size_t seed)
 {
-    return qHash(attributeData.name);
+    return qHash(attributeData.name, seed);
 }
 
 static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttributes;
@@ -38,9 +38,7 @@ public:
     }
 
     ~Private() {
-        foreach(KoSharedLoadingData * data, sharedData) {
-            delete data;
-        }
+        qDeleteAll(sharedData);
     }
 
     KoOdfLoadingContext &context;
@@ -49,8 +47,8 @@ public:
     QMap<QString, QPair<KoShape *, QVariant> > subIds;
     QMap<QString, KoSharedLoadingData *> sharedData; //FIXME: use QScopedPointer here to auto delete in destructor
     int zIndex;
-    QMap<QString, KoLoadingShapeUpdater*> updaterById;
-    QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
+    QMultiMap<QString, KoLoadingShapeUpdater*> updaterById;
+    QMultiMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
     QObject *documentRdf;
     KoSectionModel *sectionModel;
@@ -95,7 +93,7 @@ void KoShapeLoadingContext::clearLayers()
 void KoShapeLoadingContext::addShapeId(KoShape * shape, const QString & id)
 {
     d->drawIds.insert(id, shape);
-    QMap<QString, KoLoadingShapeUpdater*>::iterator it(d->updaterById.find(id));
+    QMultiMap<QString, KoLoadingShapeUpdater*>::iterator it(d->updaterById.find(id));
     while (it != d->updaterById.end() && it.key() == id) {
         d->updaterByShape.insertMulti(shape, it.value());
         it = d->updaterById.erase(it);
@@ -126,7 +124,7 @@ void KoShapeLoadingContext::updateShape(const QString & id, KoLoadingShapeUpdate
 
 void KoShapeLoadingContext::shapeLoaded(KoShape * shape)
 {
-    QMap<KoShape*, KoLoadingShapeUpdater*>::iterator it(d->updaterByShape.find(shape));
+    QMultiMap<KoShape*, KoLoadingShapeUpdater*>::iterator it(d->updaterByShape.find(shape));
     while (it != d->updaterByShape.end() && it.key() == shape) {
         it.value()->update(shape);
         delete it.value();

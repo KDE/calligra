@@ -26,7 +26,7 @@ public:
     };
 
     /// Constructs a new device event of the given type
-    explicit KoInputDeviceHandlerEvent(Type type);
+    explicit KoInputDeviceHandlerEvent(Type type, const QInputDevice *dev);
 
     ~KoInputDeviceHandlerEvent() override;
 

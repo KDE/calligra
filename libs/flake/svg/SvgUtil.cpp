@@ -11,6 +11,7 @@
 
 #include <QString>
 #include <QRectF>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QFontMetrics>
 
@@ -113,7 +114,7 @@ QTransform SvgUtil::parseTransform(const QString &transform)
 
         subtransform[0] = subtransform[0].trimmed().toLower();
         subtransform[1] = subtransform[1].simplified();
-        QRegExp reg("[,( ]");
+        QRegularExpression reg("[,( ]");
         QStringList params = subtransform[1].split(reg, Qt::SkipEmptyParts);
 
         if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))

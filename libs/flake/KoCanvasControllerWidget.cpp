@@ -541,18 +541,18 @@ void KoCanvasControllerWidget::keyPressEvent(QKeyEvent *event)
 void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
 {
     if (d->zoomWithWheel != ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)) {
-        const qreal zoomCoeff = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
-        zoomRelativeToPoint(event->pos(), zoomCoeff);
+        const qreal zoomCoeff = event->angleDelta().y() > 0 ? sqrt(2.0) : sqrt(0.5);
+        zoomRelativeToPoint(event->position(), zoomCoeff);
 
         event->accept();
     } else
         QAbstractScrollArea::wheelEvent(event);
 }
 
-void KoCanvasControllerWidget::zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff)
+void KoCanvasControllerWidget::zoomRelativeToPoint(const QPointF &widgetPoint, qreal zoomCoeff)
 {
     const QPoint offset = scrollBarValue();
-    const QPoint mousePos(widgetPoint + offset);
+    const QPointF mousePos(widgetPoint + offset);
 
     const bool oldIgnoreScrollSignals = d->ignoreScrollSignals;
     d->ignoreScrollSignals = true;

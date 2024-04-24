@@ -8,6 +8,9 @@
 
 #include "KoShapePaste.h"
 
+#include <QWidget>
+#include <QCursor>
+
 #include <FlakeDebug.h>
 #include <klocalizedstring.h>
 

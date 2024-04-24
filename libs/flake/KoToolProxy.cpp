@@ -84,7 +84,7 @@ void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
     if (!event.isAccepted()) return;
     if (event.buttons() != Qt::LeftButton) return;
 
-    widgetScrollPoint = event.pos();
+    widgetScrollPoint = event.position().toPoint();
 
     if (! scrollTimer.isActive())
         scrollTimer.start();
@@ -223,7 +223,7 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
         event->accept();
     }
 
-    KoInputDevice id(event->device(), event->pointerType(), event->uniqueId());
+    KoInputDevice id(event->device()->type(), event->pointerType(), event->uniqueId());
     KoToolManager::instance()->priv()->switchInputDevice(id);
 
     KoPointerEvent ev(event, point);
@@ -259,12 +259,12 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
     d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->priv()->switchInputDevice(id);
-    d->mouseDownPoint = ev->pos();
+    d->mouseDownPoint = ev->position().toPoint();
 
     if (d->tabletPressed) // refuse to send a press unless there was a release first.
         return;
 
-    QPointF globalPoint = ev->globalPos();
+    QPointF globalPoint = ev->globalPosition();
     if (d->multiClickGlobalPoint != globalPoint) {
         if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
             qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {

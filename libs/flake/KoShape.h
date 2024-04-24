@@ -1244,7 +1244,6 @@ private:
     Q_DECLARE_PRIVATE(KoShape)
 };
 
-Q_DECLARE_METATYPE(KoShape*)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoShape::AllowedInteractions)
 
 #endif

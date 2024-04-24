@@ -100,7 +100,7 @@ public:
      * \param widgetPoint sticky point in widget pixels
      * \param zoomCoeff the zoom coefficient
      */
-    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
+    virtual void zoomRelativeToPoint(const QPointF &widgetPoint, qreal zoomCoeff);
 
     void recenterPreferred() override;
 

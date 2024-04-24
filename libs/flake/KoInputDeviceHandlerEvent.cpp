@@ -19,10 +19,12 @@ public:
     Qt::MouseButtons buttons;
 };
 
-KoInputDeviceHandlerEvent::KoInputDeviceHandlerEvent(Type type)
-        : QInputEvent(static_cast<QEvent::Type>(type)), m_event(0), d(new Private())
+KoInputDeviceHandlerEvent::KoInputDeviceHandlerEvent(Type type, const QInputDevice *dev)
+        : QInputEvent(static_cast<QEvent::Type>(type), dev)
+        , m_event(nullptr)
+        , d(new Private())
 {
-    modState = QApplication::keyboardModifiers();
+    m_modState = QApplication::keyboardModifiers();
 }
 
 KoInputDeviceHandlerEvent::~KoInputDeviceHandlerEvent()

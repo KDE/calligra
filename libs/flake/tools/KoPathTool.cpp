@@ -46,6 +46,7 @@
 #include <QPainterPath>
 #include <QBitmap>
 #include <QTabWidget>
+#include <QActionGroup>
 
 #include <math.h>
 

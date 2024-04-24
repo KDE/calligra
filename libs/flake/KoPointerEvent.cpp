@@ -157,14 +157,14 @@ Qt::MouseButtons KoPointerEvent::buttons() const
     return Qt::NoButton;
 }
 
-QPoint KoPointerEvent::globalPos() const
+QPointF KoPointerEvent::globalPosition() const
 {
     if (d->mouseEvent)
-        return d->mouseEvent->globalPos();
+        return d->mouseEvent->globalPosition();
     else if (d->wheelEvent)
-        return d->wheelEvent->globalPos();
+        return d->wheelEvent->globalPosition();
     else if (d->tabletEvent)
-        return d->tabletEvent->globalPos();
+        return d->tabletEvent->globalPosition();
     else if (d->gsMouseEvent)
         return d->gsMouseEvent->screenPos();
     else if (d->gsWheelEvent)
@@ -173,14 +173,14 @@ QPoint KoPointerEvent::globalPos() const
         return d->globalPos;
 }
 
-QPoint KoPointerEvent::pos() const
+QPointF KoPointerEvent::position() const
 {
     if (d->mouseEvent)
-        return d->mouseEvent->pos();
+        return d->mouseEvent->position();
     else if (d->wheelEvent)
-        return d->wheelEvent->pos();
+        return d->wheelEvent->position();
     else if (d->tabletEvent)
-        return d->tabletEvent->pos();
+        return d->tabletEvent->position();
     else if (d->gsMouseEvent)
         return d->gsMouseEvent->pos().toPoint();
     else if (d->gsWheelEvent)
@@ -218,11 +218,11 @@ int KoPointerEvent::x() const
     if (d->tabletEvent)
         return d->tabletEvent->x();
     if (d->wheelEvent)
-        return d->wheelEvent->x();
+        return d->wheelEvent->position().x();
     else if (d->mouseEvent)
         return d->mouseEvent->x();
     else
-        return pos().x();
+        return position().x();
 }
 
 int KoPointerEvent::xTilt() const
@@ -238,11 +238,11 @@ int KoPointerEvent::y() const
     if (d->tabletEvent)
         return d->tabletEvent->y();
     if (d->wheelEvent)
-        return d->wheelEvent->y();
+        return d->wheelEvent->position().y();
     else if (d->mouseEvent)
         return d->mouseEvent->y();
     else
-        return pos().y();
+        return position().y();
 }
 
 int KoPointerEvent::yTilt() const
@@ -266,7 +266,7 @@ int KoPointerEvent::z() const
 int KoPointerEvent::delta() const
 {
     if (d->wheelEvent)
-        return d->wheelEvent->delta();
+        return d->wheelEvent->angleDelta().y();
     else if (d->gsWheelEvent)
         return d->gsWheelEvent->delta();
     else
@@ -291,7 +291,7 @@ int KoPointerEvent::rotationZ() const
 Qt::Orientation KoPointerEvent::orientation() const
 {
     if (d->wheelEvent)
-        return d->wheelEvent->orientation();
+        return qAbs(d->wheelEvent->angleDelta().y()) > qAbs(d->wheelEvent->angleDelta().x()) ? Qt::Vertical : Qt::Horizontal;
     else if (d->gsWheelEvent)
         return d->gsWheelEvent->orientation();
     else

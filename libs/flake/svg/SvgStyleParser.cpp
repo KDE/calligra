@@ -176,7 +176,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         if (pointSize > 0.0f)
             gc->font.setPointSizeF(pointSize);
     } else if (command == "font-weight") {
-        int weight = QFont::Normal;
+        QFont::Weight weight = QFont::Normal;
 
         // map svg weight to qt weight
         // svg value        qt value
@@ -188,61 +188,17 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
 
         if (params == "bold")
             weight = QFont::Bold;
-        else if (params == "lighter") {
+        else if (params == "lighter" || params == "bolder") {
             weight = gc->font.weight();
-            if (weight <= 17)
-                weight = 1;
-            else if (weight <= 33)
-                weight = 17;
-            else if (weight <= 50)
-                weight = 33;
-            else if (weight <= 58)
-                weight = 50;
-            else if (weight <= 66)
-                weight = 58;
-            else if (weight <= 75)
-                weight = 66;
-            else if (weight <= 87)
-                weight = 75;
-            else if (weight <= 99)
-                weight = 87;
-        } else if (params == "bolder") {
-            weight = gc->font.weight();
-            if (weight >= 87)
-                weight = 99;
-            else if (weight >= 75)
-                weight = 87;
-            else if (weight >= 66)
-                weight = 75;
-            else if (weight >= 58)
-                weight = 66;
-            else if (weight >= 50)
-                weight = 58;
-            else if (weight >= 33)
-                weight = 50;
-            else if (weight >= 17)
-                weight = 50;
-            else if (weight >= 1)
-                weight = 17;
         } else {
             bool ok;
             // try to read numerical weight value
-            weight = params.toInt(&ok, 10);
+            int weightInt = params.toInt(&ok, 10);
 
             if (!ok)
                 return;
 
-            switch (weight) {
-            case 100: weight = 1; break;
-            case 200: weight = 17; break;
-            case 300: weight = 33; break;
-            case 400: weight = 50; break;
-            case 500: weight = 58; break;
-            case 600: weight = 66; break;
-            case 700: weight = 75; break;
-            case 800: weight = 87; break;
-            case 900: weight = 99; break;
-            }
+            weight = static_cast<QFont::Weight>(weightInt);
         }
         gc->font.setWeight(weight);
     } else if (command == "text-decoration") {

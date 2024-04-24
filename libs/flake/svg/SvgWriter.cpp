@@ -117,7 +117,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
     }
 
     // end tag:
-    svgStream << endl << "</svg>" << Qt::endl;
+    svgStream << Qt::endl << "</svg>" << Qt::endl;
 
     return true;
 }

@@ -1789,7 +1789,7 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
         if (! opacity.isEmpty() && opacity.right(1) == "%")
-            shadowColor.setAlphaF(opacity.leftRef(opacity.length() - 1).toFloat() / 100.0);
+            shadowColor.setAlphaF(QStringView{opacity}.left(opacity.length() - 1).toFloat() / 100.0);
         shadow->setColor(shadowColor);
         shadow->setVisible(shadowStyle == "visible");
 
@@ -1953,7 +1953,7 @@ QTransform KoShape::parseOdfTransform(const QString &transform, KoShapeLoadingCo
 
         subtransform[0] = subtransform[0].trimmed().toLower();
         subtransform[1] = subtransform[1].simplified();
-        QRegExp reg("[,( ]");
+        QRegularExpression reg("[,( ]");
         QStringList params = subtransform[1].split(reg, Qt::SkipEmptyParts);
 
         if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))

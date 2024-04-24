@@ -153,7 +153,7 @@ bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSiz
         if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
             QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
             if (! opacity.isEmpty() && opacity.right(1) == "%") {
-                d->opacity = qMin(opacity.leftRef(opacity.length() - 1).toDouble(), 100.0) / 100;
+                d->opacity = qMin(QStringView{opacity}.left(opacity.length() - 1).toDouble(), 100.0) / 100;
             }
         }
 

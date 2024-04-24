@@ -14,8 +14,8 @@
 //Tests so the KoInputDevice created is of tablet type
 void TestInputDevice::testTabletConstructor()
 {
-  QTabletEvent::TabletDevice parameterTabletDevice = QTabletEvent::Stylus;
-  QTabletEvent::PointerType parameterPointerType = QTabletEvent::Eraser; 
+  QInputDevice::DeviceType parameterTabletDevice = QInputDevice::DeviceType::Stylus;
+  QPointingDevice::PointerType parameterPointerType = QPointingDevice::PointerType::Eraser;
   qint64 parameterUniqueTabletId = 0;
   KoInputDevice toTest(parameterTabletDevice, parameterPointerType, parameterUniqueTabletId);
   bool isMouse = toTest.isMouse();
@@ -34,8 +34,8 @@ void TestInputDevice::testNoParameterConstructor()
 //Tests so the single reference constructor can take both a tablet and a mouse as input device and set it correctly
 void TestInputDevice::testConstructorWithSingleReference()
 {
-  QTabletEvent::TabletDevice parameterTabletDevice = QTabletEvent::Stylus;
-  QTabletEvent::PointerType parameterPointerType = QTabletEvent::Eraser; 
+  QInputDevice::DeviceType parameterTabletDevice = QInputDevice::DeviceType::Stylus;
+  QPointingDevice::PointerType parameterPointerType = QPointingDevice::PointerType::Eraser;
   qint64 parameterUniqueTabletId = 0;
   KoInputDevice parameterTabletDevice2(parameterTabletDevice, parameterPointerType, parameterUniqueTabletId);
   KoInputDevice toTest(parameterTabletDevice2);
@@ -49,8 +49,8 @@ void TestInputDevice::testConstructorWithSingleReference()
 //tests so the equality operator is working
 void TestInputDevice::testEqualityCheckOperator()
 {
-  QTabletEvent::TabletDevice parameterTabletDevice = QTabletEvent::Stylus;
-  QTabletEvent::PointerType parameterPointerType = QTabletEvent::Eraser; 
+  QInputDevice::DeviceType parameterTabletDevice = QInputDevice::DeviceType::Stylus;
+  QPointingDevice::PointerType parameterPointerType = QPointingDevice::PointerType::Eraser;
   qint64 parameterUniqueTabletId = 0;
   KoInputDevice parameterTabletDevice2(parameterTabletDevice, parameterPointerType, parameterUniqueTabletId);
   KoInputDevice toTest(parameterTabletDevice2);
@@ -62,26 +62,26 @@ void TestInputDevice::testEqualityCheckOperator()
 //tests that the device is set properly in the constructor 
 void TestInputDevice::testDevice()
 {
-  QTabletEvent::TabletDevice parameterTabletDevice = QTabletEvent::Stylus;
-  QTabletEvent::PointerType parameterPointerType = QTabletEvent::Eraser; 
+  QInputDevice::DeviceType parameterTabletDevice = QInputDevice::DeviceType::Stylus;
+  QPointingDevice::PointerType parameterPointerType = QPointingDevice::PointerType::Eraser;
   qint64 parameterUniqueTabletId = 0;
   KoInputDevice parameterTabletDevice2(parameterTabletDevice, parameterPointerType, parameterUniqueTabletId);
   KoInputDevice toTest(parameterTabletDevice2);
-  QTabletEvent::TabletDevice aTabletDevice = toTest.device();
+  auto aTabletDevice = toTest.device();
 
-  QCOMPARE(aTabletDevice, QTabletEvent::Stylus); 
+  QCOMPARE(aTabletDevice, QInputDevice::DeviceType::Stylus); 
 }
 //tests that the PointerType is set correctly by the constructor
 void TestInputDevice::testPointer()
 {
-  QTabletEvent::TabletDevice parameterTabletDevice = QTabletEvent::Stylus;
-  QTabletEvent::PointerType parameterPointerType = QTabletEvent::Eraser; 
+  QInputDevice::DeviceType parameterTabletDevice = QInputDevice::DeviceType::Stylus;
+  QPointingDevice::PointerType parameterPointerType = QPointingDevice::PointerType::Eraser;
   qint64 parameterUniqueTabletId = 0;
   KoInputDevice parameterTabletDevice2(parameterTabletDevice, parameterPointerType, parameterUniqueTabletId);
   KoInputDevice toTest(parameterTabletDevice2);
-  QTabletEvent::PointerType aTabletDevice = toTest.pointer();
+  auto aTabletDevice = toTest.pointer();
   
-  QCOMPARE(aTabletDevice, QTabletEvent::Eraser);
+  QCOMPARE(aTabletDevice, QPointingDevice::PointerType::Eraser);
 }
 //verifies that the device returned by the mouse() function is indeed a mouse device
 void TestInputDevice::testMouse()
