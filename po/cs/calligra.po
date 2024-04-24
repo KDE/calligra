@@ -3551,11 +3551,10 @@ msgid ""
 msgstr ""
 
 #: store/KoEncryptedStore.cpp:229
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@dialog:title"
 msgid "Warning"
-msgstr "Varování"
+msgstr ""
 
 #: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #, kde-format
@@ -3566,11 +3565,10 @@ msgstr ""
 
 #: store/KoEncryptedStore.cpp:255 store/KoEncryptedStore.cpp:272
 #: store/KoEncryptedStore.cpp:287
-#, fuzzy, kde-format
-#| msgid "Warning"
+#, kde-format
 msgctxt "@title:dialog"
 msgid "Warning"
-msgstr "Varování"
+msgstr ""
 
 #: store/KoEncryptedStore.cpp:287
 #, kde-format
@@ -5287,43 +5285,3 @@ msgstr "Všechny podporované formáty"
 msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
-
-#~ msgid "Scripts"
-#~ msgstr "Skripty"
-
-#~ msgid "Script Manager"
-#~ msgstr "Správce skriptů"
-
-#~ msgid "Execute Script File..."
-#~ msgstr "Spustit soubor se skriptem..."
-
-#~ msgid "Script Manager..."
-#~ msgstr "Správce skriptů..."
-
-#~ msgid "Execute Script File"
-#~ msgstr "Spustit soubor se skriptem"
-
-#~ msgid ""
-#~ "<qt>This wizard will guide you through the process of adding a new "
-#~ "resource to your scripts.</qt>"
-#~ msgstr ""
-#~ "<qt>Tento průvodce vás provede procesem přidání nového zdroje do vašich "
-#~ "skriptů.</qt>"
-
-#~ msgid "Add script file"
-#~ msgstr "Přidat soubor se skriptem"
-
-#~ msgid "Install script package file"
-#~ msgstr "Nainstalovat balíček skriptu"
-
-#~ msgid "Install online script package"
-#~ msgstr "Nainstalovat online balíček skriptu"
-
-#~ msgid "Script File"
-#~ msgstr "Soubor skriptu"
-
-#~ msgid "Script"
-#~ msgstr "Skript"
-
-#~ msgid "Collection"
-#~ msgstr "Sbírka"
