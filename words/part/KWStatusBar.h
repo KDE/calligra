@@ -11,6 +11,7 @@
 
 #include <QPointer>
 #include <QMap>
+#include <QObject>
 
 class QPoint;
 class QAction;

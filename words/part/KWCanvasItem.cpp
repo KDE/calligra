@@ -126,7 +126,7 @@ void KWCanvasItem::keyReleaseEvent(QKeyEvent *e)
 
 void KWCanvasItem::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    QWheelEvent ev(event->pos().toPoint(), event->delta(), event->buttons(), event->modifiers(), event->orientation());
+    QWheelEvent ev(event->pos().toPoint(), event->screenPos(), event->pixelDelta(), event->pixelDelta(), event->buttons(), event->modifiers(), event->phase(), event->isInverted());
     m_toolProxy->wheelEvent(&ev, m_viewMode->viewToDocument(event->pos() + m_documentOffset, m_viewConverter));
     event->setAccepted(ev.isAccepted());
 }

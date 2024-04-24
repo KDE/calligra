@@ -165,7 +165,7 @@ void KWCanvas::tabletEvent(QTabletEvent *e)
 
 void KWCanvas::wheelEvent(QWheelEvent *e)
 {
-    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
+    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->position() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::inputMethodEvent(QInputMethodEvent *event)

@@ -228,7 +228,7 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
         qApp->processEvents();
         d->paragraphs += 1;
         d->charsWithSpace += block.text().length();
-        d->charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
+        d->charsWithoutSpace += block.text().length() - block.text().count(QRegularExpression("\\s"));
         if (block.layout()) {
             d->lines += block.layout()->lineCount();
         }
@@ -319,10 +319,10 @@ int KWDocumentStatistics::countCJKChars(const QString &text)
          * CJK Unified Ideographs: 4E00 - 9FFF (Chinese Traditional & Simplified, Kanji and Hanja
          * Hangul: 0xAC00 - 0xD7AF
          */
-        if ((qChar >= 0x3040 && qChar <= 0x309F)
-                || (qChar >= 0x30A0 && qChar <= 0x30FF)
-                || (qChar >= 0x4E00 && qChar <= 0x9FFF)
-                || (qChar >= 0xAC00 && qChar <= 0xD7AF)) {
+        if ((qChar >= QChar(0x3040) && qChar <= QChar(0x309F))
+                || (qChar >= QChar(0x30A0) && qChar <= QChar(0x30FF))
+                || (qChar >= QChar(0x4E00) && qChar <= QChar(0x9FFF))
+                || (qChar >= QChar(0xAC00) && qChar <= QChar(0xD7AF))) {
             count++;
         }
     }

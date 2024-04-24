@@ -120,7 +120,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     setFocusProxy(m_canvas);
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins({});
     layout->addWidget(m_gui);
 
     setComponentName(KWFactory::componentData().componentName(), KWFactory::componentData().componentDisplayName());
@@ -365,7 +365,7 @@ void KWView::setupActions()
         mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
         tAction = new KToggleAction(i18n("Fullscreen Mode"), this);
         tAction->setToolTip(i18n("Set view in fullscreen mode"));
-        tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+        tAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F));
         actionCollection()->addAction("view_fullscreen", tAction);
         connect(tAction, &QAction::toggled, this, &KWView::setFullscreenMode);
     }

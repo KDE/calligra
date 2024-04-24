@@ -38,7 +38,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 
     QWidget *pageStyleWidget = new QWidget(this);
     QHBoxLayout *pageStyleLayout = new QHBoxLayout(pageStyleWidget);
-    pageStyleLayout->setMargin(0);
+    pageStyleLayout->setContentsMargins({});
     KPageWidgetItem *stylePage = addPage(pageStyleWidget, i18n("Style"));
     m_pageStylesView = new QListWidget(this);
     pageStyleLayout->addWidget(m_pageStylesView, 1);

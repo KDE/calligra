@@ -36,7 +36,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
         m_view(parent)
 {
     QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setMargin(0);
+    gridLayout->setContentsMargins({});
     gridLayout->setSpacing(0);
 
     setMouseTracking(true);

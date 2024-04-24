@@ -49,10 +49,9 @@ KWFactory::~KWFactory()
     s_componentData = 0;
 }
 
-QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args)
 {
     Q_UNUSED(args);
-    Q_UNUSED(keyword);
 
     KWPart *part = new KWPart(parent);
     KWDocument *doc = new KWDocument(part);

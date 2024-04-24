@@ -54,7 +54,7 @@ public:
         addWidget(m_label);
     }
 protected:
-    void enterEvent(QEvent*) override
+    void enterEvent(QEnterEvent*) override
     {
         setCurrentIndex(1);
     }
@@ -115,7 +115,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_statusbar->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     m_pageLabel = new KWStatusBarEditItem();
-    m_pageLabel->setFixedWidth(QFontMetrics(m_pageLabel->m_label->font()).width(i18nPageRange.subs("9999").subs("9999").subs("9999").toString()));
+    m_pageLabel->setFixedWidth(QFontMetrics(m_pageLabel->m_label->font()).boundingRect(i18nPageRange.subs("9999").subs("9999").subs("9999").toString()).width());
     m_statusbar->addWidget(m_pageLabel);
     m_pageLabel->setVisible(document->config().statusBarShowPage());
     connect(m_pageLabel->m_edit, &QLineEdit::returnPressed, this, [this]() { gotoPage(); });
@@ -129,7 +129,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     connect(action, &QAction::toggled, this, &KWStatusBar::showPage);
 
     m_lineLabel = new KWStatusBarEditItem();
-    m_lineLabel->setFixedWidth(QFontMetrics(m_lineLabel->m_label->font()).width(i18nLine.subs("999999").toString()));
+    m_lineLabel->setFixedWidth(QFontMetrics(m_lineLabel->m_label->font()).boundingRect(i18nLine.subs("999999").toString()).width());
     m_statusbar->addWidget(m_lineLabel);
     connect(m_lineLabel->m_edit, &QLineEdit::returnPressed, this, &KWStatusBar::gotoLine);
     m_lineLabel->setVisible(document->config().statusBarShowLineNumber());
@@ -143,7 +143,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
 
     m_pageStyleLabel = new KWStatusBarButtonItem();
     QFontMetrics psfm(m_pageStyleLabel->m_label->font());
-    m_pageStyleLabel->setFixedWidth(psfm.width(I18N_NOOP("Standard")) * 2.5);
+    m_pageStyleLabel->setFixedWidth(psfm.boundingRect(i18n("Standard")).width() * 2.5);
     m_pageStyleLabel->m_button->setMinimumHeight(psfm.height());
     m_pageStyleLabel->m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_pageStyleLabel->setToolTip(i18n("Change the page style"));
@@ -161,7 +161,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
 
     m_pageSizeLabel = new QLabel();
     m_pageSizeLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    m_pageSizeLabel->setMinimumWidth(QFontMetrics(m_pageSizeLabel->font()).width("99999x99999"));
+    m_pageSizeLabel->setMinimumWidth(QFontMetrics(m_pageSizeLabel->font()).boundingRect("99999x99999").width());
     m_statusbar->addWidget(m_pageSizeLabel);
     m_pageSizeLabel->setVisible(document->config().statusBarShowPageSize());
     connect(document, &KWDocument::pageSetupChanged, this, &KWStatusBar::updatePageSize);
@@ -176,7 +176,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_modifiedLabel = new QLabel(m_statusbar);
     m_modifiedLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     QFontMetrics modfm(m_modifiedLabel->font());
-    m_modifiedLabel->setMinimumWidth(qMax(modfm.width(i18nModified.toString()), modfm.width(i18nSaved.toString())));
+    m_modifiedLabel->setMinimumWidth(qMax(modfm.boundingRect(i18nModified.toString()).width(), modfm.boundingRect(i18nSaved.toString()).width()));
     m_statusbar->addWidget(m_modifiedLabel);
     m_modifiedLabel->setVisible(document->config().statusBarShowModified());
     connect(document, &KoDocument::modified, this, &KWStatusBar::setModified);
@@ -190,7 +190,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
 
     m_mousePosLabel = new QLabel(m_statusbar);
     m_mousePosLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    m_mousePosLabel->setMinimumWidth(QFontMetrics(m_mousePosLabel->font()).width("99999:99999"));
+    m_mousePosLabel->setMinimumWidth(QFontMetrics(m_mousePosLabel->font()).boundingRect("99999:99999").width());
     m_statusbar->addWidget(m_mousePosLabel);
     m_mousePosLabel->setVisible(document->config().statusBarShowMouse());
 

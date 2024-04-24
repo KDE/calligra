@@ -58,7 +58,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->searchLine->setCompletedItems(d->searchCompletionItems);
     d->searchLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(d->searchLine, &KHistoryComboBox::editTextChanged, this, [&]() { d->textTimeout->start(); });
-    connect(d->searchLine, QOverload<>::of(&KHistoryComboBox::returnPressed), this, [&]() { d->returnPressed(); });
+    connect(d->searchLine, &KHistoryComboBox::returnPressed, this, [&]() { d->returnPressed(); });
     connect(d->searchLine, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed), d->searchLine, &KHistoryComboBox::addToHistory);
     connect(d->searchLine, &KHistoryComboBox::cleared, finder, &KoFindBase::finished);
     layout->addWidget(d->searchLine, 0, 2);
@@ -118,7 +118,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->replaceLine = new KHistoryComboBox(true, this);
     d->replaceLine->setHistoryItems(d->replaceCompletionItems);
     d->replaceLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(d->replaceLine, QOverload<>::of(&KHistoryComboBox::returnPressed), this, [&]() { d->replace(); });
+    connect(d->replaceLine, &KHistoryComboBox::returnPressed, this, [&]() { d->replace(); });
     layout->addWidget(d->replaceLine, 1, 2);
 
     d->replaceButton = new QToolButton(this);

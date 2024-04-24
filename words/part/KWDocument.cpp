@@ -500,11 +500,12 @@ QString KWDocument::renameFrameSet(const QString &prefix, const QString &base)
     if (! frameSetByName(base))
         return base;
     QString before, after;
-    QRegExp findDigits("\\d+");
-    int pos = findDigits.indexIn(base);
+    QRegularExpression findDigits("\\d+");
+    QRegularExpressionMatch match;
+    int pos = base.indexOf(findDigits, 0, &match);
     if (pos >= 0) {
         before = base.left(pos);
-        after = base.mid(pos + findDigits.matchedLength());
+        after = base.mid(pos + match.capturedLength());
     } else if (prefix.isEmpty())
         before = base + ' ';
     else {

@@ -105,7 +105,7 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
     m_anchorTypeGroup->setId(widget.rAnchorParagraph, KoShapeAnchor::AnchorParagraph);
     m_anchorTypeGroup->addButton(widget.rAnchorPage);
     m_anchorTypeGroup->setId(widget.rAnchorPage, KoShapeAnchor::AnchorPage);
-    connect(m_anchorTypeGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KWAnchoringProperties::anchorTypeChanged);
+    connect(m_anchorTypeGroup, &QButtonGroup::idClicked, this, &KWAnchoringProperties::anchorTypeChanged);
 
     m_vertPosGroup = new QButtonGroup();
     m_vertPosGroup->addButton(widget.rTop);
@@ -116,7 +116,7 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
     m_vertPosGroup->setId(widget.rBottom, KoShapeAnchor::VBottom);
     m_vertPosGroup->addButton(widget.rVOffset);
     m_vertPosGroup->setId(widget.rVOffset, KoShapeAnchor::VFromTop);
-    connect(m_vertPosGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, [this](int i) { vertPosChanged(i); });
+    connect(m_vertPosGroup, &QButtonGroup::idClicked, this, [this](int i) { vertPosChanged(i); });
 
     m_horizPosGroup = new QButtonGroup();
     m_horizPosGroup->addButton(widget.rLeft);
@@ -127,17 +127,17 @@ KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
     m_horizPosGroup->setId(widget.rRight, KoShapeAnchor::HRight);
     m_horizPosGroup->addButton(widget.rHOffset);
     m_horizPosGroup->setId(widget.rHOffset, KoShapeAnchor::HFromLeft);
-    connect(m_horizPosGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, [this](int i) { horizPosChanged(i); });
+    connect(m_horizPosGroup, &QButtonGroup::idClicked, this, [this](int i) { horizPosChanged(i); });
 
-    connect(widget.cTopArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::vertRelChanged);
-    connect(widget.cVCenterArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::vertRelChanged);
-    connect(widget.cBottomArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::vertRelChanged);
-    connect(widget.cVOffsetArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::vertRelChanged);
+    connect(widget.cTopArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::vertRelChanged);
+    connect(widget.cVCenterArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::vertRelChanged);
+    connect(widget.cBottomArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::vertRelChanged);
+    connect(widget.cVOffsetArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::vertRelChanged);
 
-    connect(widget.cLeftArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::horizRelChanged);
-    connect(widget.cHCenterArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::horizRelChanged);
-    connect(widget.cRightArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::horizRelChanged);
-    connect(widget.cHOffsetArea, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KWAnchoringProperties::horizRelChanged);
+    connect(widget.cLeftArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::horizRelChanged);
+    connect(widget.cHCenterArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::horizRelChanged);
+    connect(widget.cRightArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::horizRelChanged);
+    connect(widget.cHOffsetArea, &QComboBox::currentIndexChanged, this, &KWAnchoringProperties::horizRelChanged);
 }
 
 bool KWAnchoringProperties::open(const QList<KoShape *> &shapes)

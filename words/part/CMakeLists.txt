@@ -153,7 +153,7 @@ install(TARGETS calligrawordspart  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra
 
 ########### install files ###############
 
-install( FILES calligrawords.rc calligrawords_readonly.rc  DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/calligrawords)
+install( FILES calligrawords.rc calligrawords_readonly.rc  DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/calligrawords)
 install( FILES calligrawordsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
