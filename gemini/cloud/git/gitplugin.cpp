@@ -21,7 +21,6 @@ void GitPlugin::registerTypes(const char* uri)
     Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Git" ) );
     qmlRegisterType<GitController>("Calligra.Gemini.Git", 1, 0, "GitController");
     qmlRegisterType<GitLogModel>("Calligra.Gemini.Git", 1, 0, "GitLogModel");
-    qmlRegisterType<QAbstractListModel>();
 }
 
 void GitPlugin::initializeEngine(QQmlEngine* engine, const char* uri)

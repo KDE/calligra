@@ -182,7 +182,7 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
     case ModifiedTimeRole: return prettyTime(info.modifiedTime);
     case UUIDRole: return info.uuid;
     case SectionCategoryRole: 
-        return m_groupBy == GroupByName ? info.fileName[0].toUpper() : info.docType;
+        return m_groupBy == GroupByName ? QVariant::fromValue(info.fileName[0].toUpper()) : QVariant(info.docType);
     default: return QVariant();
     }
 }

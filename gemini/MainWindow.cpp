@@ -22,7 +22,6 @@
 #include <QToolButton>
 #include <QMenuBar>
 #include <QAction>
-#include <QDesktopWidget>
 #include <QFileInfo>
 #include <QUrl>
 #include <QStandardPaths>
@@ -239,7 +238,7 @@ public:
         toTouch->setEnabled(false);
         toTouch->setText(tr("Switch to Touch"));
         toTouch->setIcon(koIcon("system-reboot"));
-        toTouch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+        toTouch->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_S);
         //connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchTouchForced()));
         connect(toTouch, &QAction::triggered, q, &MainWindow::switchToTouch);
         desktopView->actionCollection()->addAction("SwitchToTouchView", toTouch);
@@ -280,13 +279,13 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<RecentFilesModel>("org.calligra", 1, 0, "RecentFilesModel");
     qmlRegisterType<TemplatesModel>("org.calligra", 1, 0, "TemplatesModel");
     qmlRegisterType<CloudAccountsModel>("org.calligra", 1, 0, "CloudAccountsModel");
-    qmlRegisterType<KPrViewModePresentation>();
+    qRegisterMetaType<KPrViewModePresentation>();
     qRegisterMetaType<QAction*>();
 
     qApp->setActiveWindow( this );
     setWindowTitle(i18n("Calligra Gemini"));
     setWindowIcon(koIcon("calligragemini"));//gemini"));
-    resize(QApplication::desktop()->availableGeometry().size() * 3/4);
+    resize(qApp->primaryScreen()->availableGeometry().size() * 3/4);
     d->shouldAcceptTouchEvents(this);
 
     foreach(const QString &fileName, fileNames) {
@@ -669,8 +668,7 @@ QObject* MainWindow::desktopKoView() const
 
 int MainWindow::lastScreen() const
 {
-    QDesktopWidget desktop;
-    return desktop.screenCount() - 1;
+    return qApp->screens().size() - 1;
 }
 
 void MainWindow::resourceChanged(int key, const QVariant& v)

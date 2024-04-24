@@ -15,6 +15,7 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QRegularExpression>
 
 struct LogEntry {
 public:
@@ -151,7 +152,7 @@ void GitLogModel::refreshLog()
 
         entry->oid = QString::fromLatin1(git_oid_tostr_s(git_commit_id(commit)));
         entry->message = QString::fromLatin1(git_commit_message(commit));
-        entry->shortMessage = entry->message.left(120).split(QRegExp("(\\r|\\n)")).first();
+        entry->shortMessage = entry->message.left(120).split(QRegularExpression("(\\r|\\n)")).first();
 
         d->entries.append(entry);
 

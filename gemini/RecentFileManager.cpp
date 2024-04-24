@@ -56,7 +56,7 @@ public:
 
             // gemini only handles local files
             // yes, i know the second half here isn't good on windows... but without it we fail on linux, and second part for windows
-            if (!url.isLocalFile() && !value.startsWith('/') && value.midRef(2, 1) != QLatin1String(":")) {
+            if (!url.isLocalFile() && !value.startsWith('/') && QStringView{value}.mid(2, 1) != QLatin1String(":")) {
                 qDebug() << "Not a local file:" << url;
                 continue;
             }
