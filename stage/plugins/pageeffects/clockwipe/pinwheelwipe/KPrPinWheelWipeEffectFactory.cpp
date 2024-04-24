@@ -6,7 +6,7 @@
 
 #include "KPrPinWheelWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrClockWipeStrategy.h"
 
@@ -27,19 +27,19 @@ KPrPinWheelWipeEffectFactory::~KPrPinWheelWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Two Blades Vertical Clockwise" ),
-    I18N_NOOP( "Two Blades Horizontal Clockwise" ),
-    I18N_NOOP( "Four Blades Horizontal Clockwise" ),
-    I18N_NOOP( "Two Blades Vertical Counterclockwise" ),
-    I18N_NOOP( "Two Blades Horizontal Counterclockwise" ),
-    I18N_NOOP( "Four Blades Horizontal Counterclockwise" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Two Blades Vertical Clockwise" ),
+    kli18n( "Two Blades Horizontal Clockwise" ),
+    kli18n( "Four Blades Horizontal Clockwise" ),
+    kli18n( "Two Blades Vertical Counterclockwise" ),
+    kli18n( "Two Blades Horizontal Counterclockwise" ),
+    kli18n( "Four Blades Horizontal Counterclockwise" )
 };
 
 QString KPrPinWheelWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

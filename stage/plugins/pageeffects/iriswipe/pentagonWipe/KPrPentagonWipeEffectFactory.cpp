@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
@@ -49,17 +49,17 @@ KPrPentagonWipeEffectFactory::~KPrPentagonWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Up" ),
-    I18N_NOOP( "Up Reverse" ),
-    I18N_NOOP( "Down" ),
-    I18N_NOOP( "Down Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Up" ),
+    kli18n( "Up Reverse" ),
+    kli18n( "Down" ),
+    kli18n( "Down Reverse" )
 };
 
 QString KPrPentagonWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

@@ -6,7 +6,7 @@
 
 #include "KPrDoubleFanWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrCenterFanWipeStrategy.h"
 #include "KPrSideFanWipeStrategy.h"
@@ -28,19 +28,19 @@ KPrDoubleFanWipeEffectFactory::~KPrDoubleFanWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Fan Out Vertical" ),
-    I18N_NOOP( "Fan Out Horizontal" ),
-    I18N_NOOP( "Fan In Vertical" ),
-    I18N_NOOP( "Fan In Horizontal" ),
-    I18N_NOOP( "Fan In Vertical Reverse" ),
-    I18N_NOOP( "Fan In Horizontal Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Fan Out Vertical" ),
+    kli18n( "Fan Out Horizontal" ),
+    kli18n( "Fan In Vertical" ),
+    kli18n( "Fan In Horizontal" ),
+    kli18n( "Fan In Vertical Reverse" ),
+    kli18n( "Fan In Horizontal Reverse" )
 };
 
 QString KPrDoubleFanWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

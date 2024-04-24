@@ -6,7 +6,7 @@
 
 #include "BarnDoorWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "BarnDoorWipeStrategy.h"
 
@@ -29,21 +29,21 @@ BarnDoorWipeEffectFactory::~BarnDoorWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Vertical" ),
-    I18N_NOOP( "Vertical Reverse" ),
-    I18N_NOOP( "Horizontal" ),
-    I18N_NOOP( "Horizontal Reverse" ),
-    I18N_NOOP( "Diagonal Bottom Left" ),
-    I18N_NOOP( "Diagonal Bottom Left Reverse" ),
-    I18N_NOOP( "Diagonal Top Left" ),
-    I18N_NOOP( "Diagonal Top Left Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Vertical" ),
+    kli18n( "Vertical Reverse" ),
+    kli18n( "Horizontal" ),
+    kli18n( "Horizontal Reverse" ),
+    kli18n( "Diagonal Bottom Left" ),
+    kli18n( "Diagonal Bottom Left Reverse" ),
+    kli18n( "Diagonal Top Left" ),
+    kli18n( "Diagonal Top Left Reverse" )
 };
 
 QString BarnDoorWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

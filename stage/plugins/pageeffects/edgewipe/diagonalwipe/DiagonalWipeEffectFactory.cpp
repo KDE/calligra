@@ -6,7 +6,7 @@
 
 #include "DiagonalWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "DiagonalWipeStrategy.h"
 
@@ -25,17 +25,17 @@ DiagonalWipeEffectFactory::~DiagonalWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "From Top Left" ),
-    I18N_NOOP( "From Bottom Right" ),
-    I18N_NOOP( "From Top Right" ),
-    I18N_NOOP( "From Bottom Left" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "From Top Left" ),
+    kli18n( "From Bottom Right" ),
+    kli18n( "From Top Right" ),
+    kli18n( "From Bottom Left" )
 };
 
 QString DiagonalWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

@@ -6,7 +6,7 @@
 
 #include "KPrDoubleSweepWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrDoubleSweepWipeStrategy.h"
 
@@ -33,25 +33,25 @@ KPrDoubleSweepWipeEffectFactory::~KPrDoubleSweepWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Parallel Vertical" ),
-    I18N_NOOP( "Parallel Diagonal" ),
-    I18N_NOOP( "Opposite Vertical" ),
-    I18N_NOOP( "Opposite Horizontal" ),
-    I18N_NOOP( "Parallel Diagonal Top Left" ),
-    I18N_NOOP( "Parallel Diagonal Bottom Left" ),
-    I18N_NOOP( "Parallel Vertical Reverse" ),
-    I18N_NOOP( "Parallel Diagonal Reverse" ),
-    I18N_NOOP( "Opposite Vertical Reverse" ),
-    I18N_NOOP( "Opposite Horizontal Reverse" ),
-    I18N_NOOP( "Parallel Diagonal Top Left Reverse" ),
-    I18N_NOOP( "Parallel Diagonal Bottom Left Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Parallel Vertical" ),
+    kli18n( "Parallel Diagonal" ),
+    kli18n( "Opposite Vertical" ),
+    kli18n( "Opposite Horizontal" ),
+    kli18n( "Parallel Diagonal Top Left" ),
+    kli18n( "Parallel Diagonal Bottom Left" ),
+    kli18n( "Parallel Vertical Reverse" ),
+    kli18n( "Parallel Diagonal Reverse" ),
+    kli18n( "Opposite Vertical Reverse" ),
+    kli18n( "Opposite Horizontal Reverse" ),
+    kli18n( "Parallel Diagonal Top Left Reverse" ),
+    kli18n( "Parallel Diagonal Bottom Left Reverse" )
 };
 
 QString KPrDoubleSweepWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

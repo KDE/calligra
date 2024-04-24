@@ -6,7 +6,7 @@
 
 #include "KPrSpiralWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrSpiralWipeStrategy.h"
 
@@ -37,29 +37,29 @@ KPrSpiralWipeEffectFactory::~KPrSpiralWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Clockwise Top Left In" ),
-    I18N_NOOP( "Clockwise Top Left Out" ),
-    I18N_NOOP( "Clockwise Top Right In" ),
-    I18N_NOOP( "Clockwise Top Right Out" ),
-    I18N_NOOP( "Clockwise Bottom Left In" ),
-    I18N_NOOP( "Clockwise Bottom Left Out" ),
-    I18N_NOOP( "Clockwise Bottom Right In" ),
-    I18N_NOOP( "Clockwise Bottom Right Out" ),
-    I18N_NOOP( "Counterclockwise Top Left In" ),
-    I18N_NOOP( "Counterclockwise Top Left Out" ),
-    I18N_NOOP( "Counterclockwise Top Right In" ),
-    I18N_NOOP( "Counterclockwise Top Right Out" ),
-    I18N_NOOP( "Counterclockwise Bottom Left In" ),
-    I18N_NOOP( "Counterclockwise Bottom Left Out" ),
-    I18N_NOOP( "Counterclockwise Bottom Right In" ),
-    I18N_NOOP( "Counterclockwise Bottom Right Out" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Clockwise Top Left In" ),
+    kli18n( "Clockwise Top Left Out" ),
+    kli18n( "Clockwise Top Right In" ),
+    kli18n( "Clockwise Top Right Out" ),
+    kli18n( "Clockwise Bottom Left In" ),
+    kli18n( "Clockwise Bottom Left Out" ),
+    kli18n( "Clockwise Bottom Right In" ),
+    kli18n( "Clockwise Bottom Right Out" ),
+    kli18n( "Counterclockwise Top Left In" ),
+    kli18n( "Counterclockwise Top Left Out" ),
+    kli18n( "Counterclockwise Top Right In" ),
+    kli18n( "Counterclockwise Top Right Out" ),
+    kli18n( "Counterclockwise Bottom Left In" ),
+    kli18n( "Counterclockwise Bottom Left Out" ),
+    kli18n( "Counterclockwise Bottom Right In" ),
+    kli18n( "Counterclockwise Bottom Right Out" )
 };
 
 QString KPrSpiralWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

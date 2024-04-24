@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
@@ -83,19 +83,19 @@ KPrStarWipeEffectFactory::~KPrStarWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Four Point Star" ),
-    I18N_NOOP( "Four Point Star Reverse" ),
-    I18N_NOOP( "Five Point Star" ),
-    I18N_NOOP( "Five Point Star Reverse" ),
-    I18N_NOOP( "Six Point Star" ),
-    I18N_NOOP( "Six Point Star Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Four Point Star" ),
+    kli18n( "Four Point Star Reverse" ),
+    kli18n( "Five Point Star" ),
+    kli18n( "Five Point Star Reverse" ),
+    kli18n( "Six Point Star" ),
+    kli18n( "Six Point Star Reverse" )
 };
 
 QString KPrStarWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

@@ -6,7 +6,7 @@
 
 #include "KPrBoxSnakesWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrBoxSnakesWipeStrategy.h"
 
@@ -33,25 +33,25 @@ KPrBoxSnakesWipeEffectFactory::~KPrBoxSnakesWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Two Box Top In" ),
-    I18N_NOOP( "Two Box Bottom In" ),
-    I18N_NOOP( "Two Box Left In" ),
-    I18N_NOOP( "Two Box Right In" ),
-    I18N_NOOP( "Four Box Vertical In" ),
-    I18N_NOOP( "Four Box Horizontal In" ),
-    I18N_NOOP( "Two Box Top Out" ),
-    I18N_NOOP( "Two Box Bottom Out" ),
-    I18N_NOOP( "Two Box Left Out" ),
-    I18N_NOOP( "Two Box Right Out" ),
-    I18N_NOOP( "Four Box Vertical Out" ),
-    I18N_NOOP( "Four Box Horizontal Out" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Two Box Top In" ),
+    kli18n( "Two Box Bottom In" ),
+    kli18n( "Two Box Left In" ),
+    kli18n( "Two Box Right In" ),
+    kli18n( "Four Box Vertical In" ),
+    kli18n( "Four Box Horizontal In" ),
+    kli18n( "Two Box Top Out" ),
+    kli18n( "Two Box Bottom Out" ),
+    kli18n( "Two Box Left Out" ),
+    kli18n( "Two Box Right Out" ),
+    kli18n( "Four Box Vertical Out" ),
+    kli18n( "Four Box Horizontal Out" )
 };
 
 QString KPrBoxSnakesWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

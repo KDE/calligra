@@ -8,6 +8,7 @@
 #include "KPrBarWipeEffectFactory.h"
 
 #include <klocalizedstring.h>
+#include <klazylocalizedstring.h>
 
 #include "KPrBarWipeFromTopStrategy.h"
 #include "KPrBarWipeFromLeftStrategy.h"
@@ -29,17 +30,17 @@ KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "From Left" ),
-    I18N_NOOP( "From Top" ),
-    I18N_NOOP( "From Right" ),
-    I18N_NOOP( "From Bottom" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "From Left" ),
+    kli18n( "From Top" ),
+    kli18n( "From Right" ),
+    kli18n( "From Bottom" )
 };
 
 QString KPrBarWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

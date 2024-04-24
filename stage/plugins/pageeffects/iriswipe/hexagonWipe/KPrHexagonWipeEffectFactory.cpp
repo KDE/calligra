@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
@@ -59,17 +59,17 @@ KPrHexagonWipeEffectFactory::~KPrHexagonWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Horizontal" ),
-    I18N_NOOP( "Horizontal Reverse" ),
-    I18N_NOOP( "Vertical" ),
-    I18N_NOOP( "Vertical Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Horizontal" ),
+    kli18n( "Horizontal Reverse" ),
+    kli18n( "Vertical" ),
+    kli18n( "Vertical Reverse" )
 };
 
 QString KPrHexagonWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

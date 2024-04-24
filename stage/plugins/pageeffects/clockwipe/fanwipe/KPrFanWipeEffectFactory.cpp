@@ -7,6 +7,7 @@
 #include "KPrFanWipeEffectFactory.h"
 
 #include <klocalizedstring.h>
+#include <klazylocalizedstring.h>
 
 #include "KPrCenterFanWipeStrategy.h"
 #include "KPrSideFanWipeStrategy.h"
@@ -35,25 +36,25 @@ KPrFanWipeEffectFactory::~KPrFanWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Center Right" ),
-    I18N_NOOP( "Center Top" ),
-    I18N_NOOP( "Center Left" ),
-    I18N_NOOP( "Center Bottom" ),
-    I18N_NOOP( "Fan Out Top" ),
-    I18N_NOOP( "Fan Out Right" ),
-    I18N_NOOP( "Fan Out Bottom" ),
-    I18N_NOOP( "Fan Out Left" ),
-    I18N_NOOP( "Fan In Top" ),
-    I18N_NOOP( "Fan In Right" ),
-    I18N_NOOP( "Fan In Bottom" ),
-    I18N_NOOP( "Fan In Left" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Center Right" ),
+    kli18n( "Center Top" ),
+    kli18n( "Center Left" ),
+    kli18n( "Center Bottom" ),
+    kli18n( "Fan Out Top" ),
+    kli18n( "Fan Out Right" ),
+    kli18n( "Fan Out Bottom" ),
+    kli18n( "Fan Out Left" ),
+    kli18n( "Fan In Top" ),
+    kli18n( "Fan In Right" ),
+    kli18n( "Fan In Bottom" ),
+    kli18n( "Fan In Left" )
 };
 
 QString KPrFanWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

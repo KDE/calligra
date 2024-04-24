@@ -6,7 +6,7 @@
 
 #include "KPrWaterfallWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrWaterfallWipeTopLeftStrategy.h"
 #include "KPrWaterfallWipeTopRightStrategy.h"
@@ -32,21 +32,21 @@ KPrWaterfallWipeEffectFactory::~KPrWaterfallWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Top Left Vertical" ),
-    I18N_NOOP( "Top Left Horizontal" ),
-    I18N_NOOP( "Top Right Vertical" ),
-    I18N_NOOP( "Top Right Horizontal" ),
-    I18N_NOOP( "Bottom Left Vertical" ),
-    I18N_NOOP( "Bottom Left Horizontal" ),
-    I18N_NOOP( "Bottom Right Vertical" ),
-    I18N_NOOP( "Bottom Right Horizontal" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Top Left Vertical" ),
+    kli18n( "Top Left Horizontal" ),
+    kli18n( "Top Right Vertical" ),
+    kli18n( "Top Right Horizontal" ),
+    kli18n( "Bottom Left Vertical" ),
+    kli18n( "Bottom Left Horizontal" ),
+    kli18n( "Bottom Right Vertical" ),
+    kli18n( "Bottom Right Horizontal" )
 };
 
 QString KPrWaterfallWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

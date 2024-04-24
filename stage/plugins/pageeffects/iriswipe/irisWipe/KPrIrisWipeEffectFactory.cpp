@@ -7,7 +7,7 @@
 #include "KPrIrisWipeEffectFactory.h"
 
 //KF5 includes
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
@@ -43,17 +43,17 @@ KPrIrisWipeEffectFactory::~KPrIrisWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Rectangular" ),
-    I18N_NOOP( "Rectangular Reverse" ),
-    I18N_NOOP( "Diamond" ),
-    I18N_NOOP( "Diamond Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Rectangular" ),
+    kli18n( "Rectangular Reverse" ),
+    kli18n( "Diamond" ),
+    kli18n( "Diamond Reverse" )
 };
 
 QString KPrIrisWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

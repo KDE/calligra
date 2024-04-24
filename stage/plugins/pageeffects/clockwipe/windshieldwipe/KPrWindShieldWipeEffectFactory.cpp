@@ -6,7 +6,7 @@
 
 #include "KPrWindShieldWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrWindShieldWipeStrategy.h"
 
@@ -30,21 +30,21 @@ KPrWindShieldWipeEffectFactory::~KPrWindShieldWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Right" ),
-    I18N_NOOP( "Up" ),
-    I18N_NOOP( "Vertical" ),
-    I18N_NOOP( "Horizontal" ),
-    I18N_NOOP( "Right Reverse" ),
-    I18N_NOOP( "Up Reverse" ),
-    I18N_NOOP( "Vertical Reverse" ),
-    I18N_NOOP( "Horizontal Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Right" ),
+    kli18n( "Up" ),
+    kli18n( "Vertical" ),
+    kli18n( "Horizontal" ),
+    kli18n( "Right Reverse" ),
+    kli18n( "Up Reverse" ),
+    kli18n( "Vertical Reverse" ),
+    kli18n( "Horizontal Reverse" )
 };
 
 QString KPrWindShieldWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

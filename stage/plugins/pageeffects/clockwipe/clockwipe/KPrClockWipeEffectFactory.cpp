@@ -6,7 +6,8 @@
 
 #include "KPrClockWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
+#include <KLazyLocalizedString>
 
 #include "KPrClockWipeStrategy.h"
 
@@ -29,21 +30,21 @@ KPrClockWipeEffectFactory::~KPrClockWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "From Twelve Clockwise" ),
-    I18N_NOOP( "From Three Clockwise" ),
-    I18N_NOOP( "From Six Clockwise" ),
-    I18N_NOOP( "From Nine Clockwise" ),
-    I18N_NOOP( "From Twelve Counterclockwise" ),
-    I18N_NOOP( "From Three Counterclockwise" ),
-    I18N_NOOP( "From Six Counterclockwise" ),
-    I18N_NOOP( "From Nine Counterclockwise" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "From Twelve Clockwise" ),
+    kli18n( "From Three Clockwise" ),
+    kli18n( "From Six Clockwise" ),
+    kli18n( "From Nine Clockwise" ),
+    kli18n( "From Twelve Counterclockwise" ),
+    kli18n( "From Three Counterclockwise" ),
+    kli18n( "From Six Counterclockwise" ),
+    kli18n( "From Nine Counterclockwise" )
 };
 
 QString KPrClockWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

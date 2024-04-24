@@ -6,7 +6,7 @@
 
 #include "FourBoxWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "CornersInWipeStrategy.h"
 #include "CornersOutWipeStrategy.h"
@@ -26,17 +26,17 @@ FourBoxWipeEffectFactory::~FourBoxWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Corners In" ),
-    I18N_NOOP( "Corners In Reverse" ),
-    I18N_NOOP( "Corners Out" ),
-    I18N_NOOP( "Corners Out Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Corners In" ),
+    kli18n( "Corners In Reverse" ),
+    kli18n( "Corners Out" ),
+    kli18n( "Corners Out Reverse" )
 };
 
 QString FourBoxWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

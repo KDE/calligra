@@ -6,7 +6,8 @@
 
 #include "KPrSingleSweepWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
+#include <KLazyLocalizedString>
 
 #include "KPrSingleSweepWipeStrategy.h"
 
@@ -53,29 +54,29 @@ KPrSingleSweepWipeEffectFactory::~KPrSingleSweepWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Clockwise Top" ),
-    I18N_NOOP( "Clockwise Right" ),
-    I18N_NOOP( "Clockwise Bottom" ),
-    I18N_NOOP( "Clockwise Left" ),
-    I18N_NOOP( "Clockwise Top Left" ),
-    I18N_NOOP( "Counterclockwise Bottom Left" ),
-    I18N_NOOP( "Clockwise Bottom Right" ),
-    I18N_NOOP( "Counterclockwise Top Right" ),
-    I18N_NOOP( "Counterclockwise Top" ),
-    I18N_NOOP( "Counterclockwise Right" ),
-    I18N_NOOP( "Counterclockwise Bottom" ),
-    I18N_NOOP( "Counterclockwise Left" ),
-    I18N_NOOP( "Counterclockwise Top Left" ),
-    I18N_NOOP( "Clockwise Bottom Left" ),
-    I18N_NOOP( "Counterclockwise Bottom Right" ),
-    I18N_NOOP( "Clockwise Top Right" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Clockwise Top" ),
+    kli18n( "Clockwise Right" ),
+    kli18n( "Clockwise Bottom" ),
+    kli18n( "Clockwise Left" ),
+    kli18n( "Clockwise Top Left" ),
+    kli18n( "Counterclockwise Bottom Left" ),
+    kli18n( "Clockwise Bottom Right" ),
+    kli18n( "Counterclockwise Top Right" ),
+    kli18n( "Counterclockwise Top" ),
+    kli18n( "Counterclockwise Right" ),
+    kli18n( "Counterclockwise Bottom" ),
+    kli18n( "Counterclockwise Left" ),
+    kli18n( "Counterclockwise Top Left" ),
+    kli18n( "Clockwise Bottom Left" ),
+    kli18n( "Counterclockwise Bottom Right" ),
+    kli18n( "Clockwise Top Right" )
 };
 
 QString KPrSingleSweepWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

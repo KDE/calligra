@@ -4,7 +4,7 @@
 
 #include "KPrMiscShapeWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
@@ -42,17 +42,17 @@ KPrMiscShapeWipeEffectFactory::~KPrMiscShapeWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Heart" ),
-    I18N_NOOP( "Heart Reverse" ),
-    I18N_NOOP( "Keyhole" ),
-    I18N_NOOP( "Keyhole Reverse" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Heart" ),
+    kli18n( "Heart Reverse" ),
+    kli18n( "Keyhole" ),
+    kli18n( "Keyhole Reverse" )
 };
 
 QString KPrMiscShapeWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }

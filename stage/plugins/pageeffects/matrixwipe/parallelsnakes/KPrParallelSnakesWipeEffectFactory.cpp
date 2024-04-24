@@ -6,7 +6,7 @@
 
 #include "KPrParallelSnakesWipeEffectFactory.h"
 
-#include <klocalizedstring.h>
+#include <KLazyLocalizedString>
 
 #include "KPrParallelSnakesWipeVerticalStrategy.h"
 #include "KPrParallelSnakesWipeHorizontalStrategy.h"
@@ -43,33 +43,33 @@ KPrParallelSnakesWipeEffectFactory::~KPrParallelSnakesWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "Vertical Top Same In" ),
-    I18N_NOOP( "Vertical Top Same Out" ),
-    I18N_NOOP( "Vertical Bottom Same In" ),
-    I18N_NOOP( "Vertical Bottom Same Out" ),
-    I18N_NOOP( "Vertical Top Left Opposite In" ),
-    I18N_NOOP( "Vertical Top Left Opposite Out" ),
-    I18N_NOOP( "Vertical Bottom Left Opposite In" ),
-    I18N_NOOP( "Vertical Bottom Left Opposite Out" ),
-    I18N_NOOP( "Horizontal Left Same In" ),
-    I18N_NOOP( "Horizontal Left Same Out" ),
-    I18N_NOOP( "Horizontal Right Same In" ),
-    I18N_NOOP( "Horizontal Right Same Out" ),
-    I18N_NOOP( "Horizontal Top Left Opposite In" ),
-    I18N_NOOP( "Horizontal Top Left Opposite Out" ),
-    I18N_NOOP( "Horizontal Top Right Opposite In" ),
-    I18N_NOOP( "Horizontal Top Right Opposite Out" ),
-    I18N_NOOP( "Diagonal Bottom Left Opposite In" ),
-    I18N_NOOP( "Diagonal Bottom Left Opposite Out" ),
-    I18N_NOOP( "Diagonal Top Left Opposite In" ),
-    I18N_NOOP( "Diagonal Top Left Opposite Out" )
+static const KLazyLocalizedString s_subTypes[] = {
+    kli18n( "Vertical Top Same In" ),
+    kli18n( "Vertical Top Same Out" ),
+    kli18n( "Vertical Bottom Same In" ),
+    kli18n( "Vertical Bottom Same Out" ),
+    kli18n( "Vertical Top Left Opposite In" ),
+    kli18n( "Vertical Top Left Opposite Out" ),
+    kli18n( "Vertical Bottom Left Opposite In" ),
+    kli18n( "Vertical Bottom Left Opposite Out" ),
+    kli18n( "Horizontal Left Same In" ),
+    kli18n( "Horizontal Left Same Out" ),
+    kli18n( "Horizontal Right Same In" ),
+    kli18n( "Horizontal Right Same Out" ),
+    kli18n( "Horizontal Top Left Opposite In" ),
+    kli18n( "Horizontal Top Left Opposite Out" ),
+    kli18n( "Horizontal Top Right Opposite In" ),
+    kli18n( "Horizontal Top Right Opposite Out" ),
+    kli18n( "Diagonal Bottom Left Opposite In" ),
+    kli18n( "Diagonal Bottom Left Opposite Out" ),
+    kli18n( "Diagonal Top Left Opposite In" ),
+    kli18n( "Diagonal Top Left Opposite Out" )
 };
 
 QString KPrParallelSnakesWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return s_subTypes[subType].toString();
     } else {
         return i18n( "Unknown subtype" );
     }
